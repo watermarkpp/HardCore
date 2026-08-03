@@ -1,6 +1,9 @@
 extends Node
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const FIXED_AREA_IDS := [180, 195]
 const STATIONARY_SPECIAL_IDS := [30, 124, 126, 180, 182, 195]
 var _last_summon: Dictionary = {}
@@ -58,6 +61,20 @@ func _run() -> void:
 		assert(enemy.area_attack_rule.get("targetMode", "") == "all_combat_targets", "monsterId=%d 未启用全屏多目标攻击" % monster_id)
 		enemy._physics_process(0.01)
 		enemy._physics_process(0.21)
+		assert(
+			SkillFootprintSnapshotScript.is_valid(enemy._last_attack_footprint_snapshot),
+			"monsterId=%d fixed area attack did not publish an immutable GU footprint" % monster_id,
+		)
+		assert(
+			str(enemy._last_attack_footprint_snapshot.shape_type)
+			== SkillFootprintSnapshotScript.SHAPE_CIRCLE,
+			"monsterId=%d fixed area attack is not resolved by its projected circle" % monster_id,
+		)
+		assert(
+			str(enemy._last_attack_footprint_snapshot.projection_relationship_id)
+			== EnemyActor.PROJECTION_RELATIONSHIP_GROUND_EXACT,
+			"monsterId=%d fixed area attack does not declare ground_exact" % monster_id,
+		)
 		assert(enemy.global_position == position_before and enemy.velocity == Vector2.ZERO, "monsterId=%d 攻击时发生位移" % monster_id)
 		assert(player.current_hp < hp_before, "monsterId=%d 没有命中普通近战范围外的屏内目标" % monster_id)
 

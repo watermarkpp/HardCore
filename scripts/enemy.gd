@@ -9,6 +9,9 @@ const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE_GU := 3.0
 const CROWD_GRID_REFRESH_FRAMES := 3
@@ -28,6 +31,13 @@ const TARGET_RING_FOOTPRINT_SCALE := 1.25
 const PLAYER_MELEE_CONTACT_CONTRACT_ID := "monster.melee_player_contact.ground_gu.v2"
 const BOSS_WARNING_PROJECTION_CONTRACT_ID := "monster.boss.warning.ground_projection.v1"
 const SAFE_ZONE_REFERENCE_CONTRACT_ID := "monster.safe_zone.relative_ground_reference.v1"
+const ATTACK_FOOTPRINT_CONTRACT_ID := (
+	"monster.attack.release_footpoint_projection.v1"
+)
+const PROJECTION_RELATIONSHIP_RELEASE_CONTACT := "release_contact"
+const PROJECTION_RELATIONSHIP_DIRECTED_CORE := "directed_core"
+const PROJECTION_RELATIONSHIP_PROJECTILE_SWEEP := "projectile_sweep"
+const PROJECTION_RELATIONSHIP_GROUND_EXACT := "ground_exact"
 const PLAYER_MELEE_CONTACT_GAP_GU := 0.4375
 const DELAYED_HIT_TOLERANCE_GU := 0.25
 # Existing ranged profiles start at 155px. This guard only selects the moving
@@ -121,6 +131,7 @@ var _boss_phase_two := false
 var _boss_phase_enabled := true
 var _boss_skill_enabled := true
 var _boss_skill_direction_ground := Vector2.DOWN
+var _boss_skill_footprint_snapshot: Dictionary = {}
 var _last_boss_skill_hit := false
 var _boss_health_stage := -1
 var _boss_rage_time := 0.0
@@ -134,6 +145,9 @@ var _leash_multiplier := 1.5
 var _control_anchor_ground_gu := Vector2.INF
 var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
+var _area_attack_footprint_snapshot: Dictionary = {}
+var _last_attack_footprint_snapshot: Dictionary = {}
+var _spatial_release_serial := 0
 var _summon_cooldown := 0.0
 var _summon_warning := 0.0
 var _environment_guard_timer := 0.0
@@ -698,12 +712,84 @@ func _update_pending_attack(delta: float) -> void:
 		return
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
-	_deal_melee_hit(hit_target, damage)
+	_deal_melee_hit(hit_target, damage, DELAYED_HIT_TOLERANCE_GU)
 
 
-func _deal_melee_hit(hit_target: Node2D, dealt_damage: int) -> void:
+func _deal_melee_hit(
+	hit_target: Node2D,
+	dealt_damage: int,
+	center_tolerance_gu := 0.0,
+) -> void:
 	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
+	var target_radius_gu := _target_combat_radius_gu(hit_target)
+	var center_reach_gu := maxf(
+		attack_range_gu,
+		_contact_distance_gu_to_target(hit_target),
+	)
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if (
+		source_ground_gu.distance_to(target_ground_gu)
+		> (
+			center_reach_gu
+			+ maxf(0.0, center_tolerance_gu)
+			+ GroundUnitSpace.EPSILON_GU
+		)
+	):
+		return
+	var snapshot: Dictionary
+	if _uses_ranged_projectile_sweep_contract():
+		# These formal ranged profiles currently bake their projectile into the
+		# monster attack presentation.  Gameplay still receives an exact GU sweep
+		# from release footpoint to target footpoint; no invented visual width is
+		# allowed, so the path radius remains exactly zero.
+		snapshot = SkillFootprintSnapshotScript.create_swept_capsule_path(
+			_monster_attack_id("projectile_sweep"),
+			_next_spatial_release_id("projectile_sweep"),
+			source_ground_gu,
+			target_ground_gu,
+			0.0,
+		)
+		snapshot = _decorate_attack_footprint_snapshot(
+			snapshot,
+			PROJECTION_RELATIONSHIP_PROJECTILE_SWEEP,
+			hit_target,
+			center_reach_gu,
+			center_tolerance_gu,
+		)
+	else:
+		# release_contact starts at the attacker footpoint.  Subtracting the
+		# selected target radius preserves the established centre-reach boundary
+		# when the attack projection is intersected with the target footprint.
+		var contact_projection_radius_gu := maxf(
+			0.0,
+			center_reach_gu
+			+ maxf(0.0, center_tolerance_gu)
+			- target_radius_gu,
+		)
+		snapshot = SkillFootprintSnapshotScript.create_circle(
+			_monster_attack_id("release_contact"),
+			_next_spatial_release_id("release_contact"),
+			source_ground_gu,
+			contact_projection_radius_gu,
+		)
+		snapshot = _decorate_attack_footprint_snapshot(
+			snapshot,
+			PROJECTION_RELATIONSHIP_RELEASE_CONTACT,
+			hit_target,
+			center_reach_gu,
+			center_tolerance_gu,
+		)
+	_last_attack_footprint_snapshot = snapshot
+	if not _snapshot_intersects_target(snapshot, hit_target):
+		return
+	_apply_attack_damage(hit_target, dealt_damage)
+
+
+func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
 	hit_target.take_damage(dealt_damage)
 	apply_life_steal(dealt_damage)
 	if control_on_hit_seconds > 0.0 and hit_target.has_method("apply_control"):
@@ -712,6 +798,56 @@ func _deal_melee_hit(hit_target: Node2D, dealt_damage: int) -> void:
 	var poison_damage_value := int(on_hit.get("poisonDamage", 0))
 	if poison_damage_value > 0 and hit_target.has_method("apply_poison"):
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
+
+
+func _snapshot_intersects_target(snapshot: Dictionary, hit_target: Node2D) -> bool:
+	return (
+		is_instance_valid(hit_target)
+		and SkillFootprintSnapshotScript.is_valid(snapshot)
+		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			snapshot,
+			_screen_position_px_to_ground_position_gu(hit_target.global_position),
+			_target_combat_radius_gu(hit_target),
+		)
+	)
+
+
+func _monster_attack_id(kind: String) -> String:
+	return "monster.%d.%s" % [monster_id, kind]
+
+
+func _next_spatial_release_id(kind: String) -> String:
+	_spatial_release_serial += 1
+	return "monster:%d:instance:%d:%s:release:%d" % [
+		monster_id,
+		get_instance_id(),
+		kind,
+		_spatial_release_serial,
+	]
+
+
+func _decorate_attack_footprint_snapshot(
+	snapshot: Dictionary,
+	projection_relationship_id: String,
+	hit_target: Node2D = null,
+	center_reach_gu := 0.0,
+	center_tolerance_gu := 0.0,
+) -> Dictionary:
+	var decorated: Dictionary = snapshot.duplicate(true)
+	decorated["monster_attack_contract_id"] = ATTACK_FOOTPRINT_CONTRACT_ID
+	decorated["projection_relationship_id"] = projection_relationship_id
+	decorated["source_instance_id"] = get_instance_id()
+	decorated["target_instance_id"] = (
+		hit_target.get_instance_id() if is_instance_valid(hit_target) else 0
+	)
+	decorated["center_reach_gu"] = maxf(0.0, center_reach_gu)
+	decorated["center_tolerance_gu"] = maxf(0.0, center_tolerance_gu)
+	decorated.make_read_only()
+	return decorated
+
+
+func _uses_ranged_projectile_sweep_contract() -> bool:
+	return attack_range_gu >= RANGED_ATTACK_RANGE_FLOOR_GU
 
 
 func _target_is_safe_player(hit_target: Node2D) -> bool:
@@ -724,42 +860,61 @@ func _update_area_attack(delta: float) -> bool:
 	if _area_attack_warning > 0.0:
 		_area_attack_warning -= delta
 		if _area_attack_warning <= 0.0:
-			for victim: Node2D in _area_attack_targets():
-				_deal_melee_hit(victim, _rng.randi_range(attack_min, attack_max))
+			for victim: Node2D in _area_attack_targets(_area_attack_footprint_snapshot):
+				_apply_attack_damage(victim, _rng.randi_range(attack_min, attack_max))
+			_last_attack_footprint_snapshot = _area_attack_footprint_snapshot
+			_area_attack_footprint_snapshot = {}
 			_area_attack_cooldown = _attack_interval
 	elif _area_attack_cooldown > 0.0:
 		_area_attack_cooldown = maxf(0.0, _area_attack_cooldown - delta)
-	elif not _area_attack_targets().is_empty():
-		_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
-		if visual != null:
-			visual.play_attack(maxf(_attack_animation_duration, _area_attack_warning))
+	else:
+		var candidate_snapshot := _create_area_attack_footprint_snapshot()
+		if not _area_attack_targets(candidate_snapshot).is_empty():
+			_area_attack_footprint_snapshot = candidate_snapshot
+			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
+			if visual != null:
+				visual.play_attack(maxf(_attack_animation_duration, _area_attack_warning))
 	return true
 
 
-func _area_attack_targets() -> Array[Node2D]:
-	var result: Array[Node2D] = []
-	var candidates: Array[Node] = []
-	if is_instance_valid(primary_target):
-		candidates.append(primary_target)
-	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
-		if not candidates.has(node):
-			candidates.append(node)
+func _create_area_attack_footprint_snapshot() -> Dictionary:
 	var range_gu := MonsterUnitAdapterScript.range_gu(
 		area_attack_rule,
 		"range_gu",
 		"rangePixels",
 		attack_range_gu,
 	)
+	var snapshot := SkillFootprintSnapshotScript.create_circle(
+		_monster_attack_id("area_circle"),
+		_next_spatial_release_id("area_circle"),
+		_screen_position_px_to_ground_position_gu(global_position),
+		range_gu,
+	)
+	return _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		null,
+		range_gu,
+	)
+
+
+func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	var resolved_snapshot: Dictionary = snapshot
+	if not SkillFootprintSnapshotScript.is_valid(resolved_snapshot):
+		resolved_snapshot = _create_area_attack_footprint_snapshot()
+	var candidates: Array[Node] = []
+	if is_instance_valid(primary_target):
+		candidates.append(primary_target)
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if not candidates.has(node):
+			candidates.append(node)
 	for node: Node in candidates:
 		if (
 			node is Node2D
 			and node.has_method("take_damage")
 			and not _point_inside_safe_zone(node.global_position)
-			and GroundUnitSpace.is_within_range_gu(
-				_screen_position_px_to_ground_position_gu(global_position),
-				_screen_position_px_to_ground_position_gu(node.global_position),
-				range_gu,
-			)
+			and _snapshot_intersects_target(resolved_snapshot, node)
 		):
 			result.append(node)
 	return result
@@ -1230,7 +1385,10 @@ func _draw_boss_warning_ground_projection() -> void:
 	var warning_polygon_px := boss_warning_polygon_px(special)
 	if warning_polygon_px.size() < 3:
 		return
-	var is_cone := str(special.get("shape", "circle")) == "cone"
+	var is_cone := (
+		str(_boss_skill_footprint_snapshot.get("shape_type", ""))
+		== SkillFootprintSnapshotScript.SHAPE_SECTOR_ARC
+	)
 	draw_colored_polygon(
 		warning_polygon_px,
 		Color(0.95, 0.12, 0.04, 0.22) if is_cone else Color(0.95, 0.18, 0.06, 0.16),
@@ -1246,32 +1404,58 @@ func _draw_boss_warning_ground_projection() -> void:
 
 
 func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
+	var snapshot := _boss_skill_footprint_snapshot
+	if not SkillFootprintSnapshotScript.is_valid(snapshot):
+		snapshot = _create_boss_skill_footprint_snapshot(
+			special,
+			"monster:%d:preview" % monster_id,
+		)
+	return SkillFootprintSnapshotScript.project_ground_polygon_to_screen_offsets_px(
+		SkillFootprintSnapshotScript.ground_polygon_gu(snapshot),
+		_screen_position_px_to_ground_position_gu(global_position)
+	)
+
+
+func _create_boss_skill_footprint_snapshot(
+	special: Dictionary,
+	release_id: String,
+) -> Dictionary:
 	var radius_gu := MonsterUnitAdapterScript.range_gu(
 		special,
 		"radius_gu",
 		"radius",
 		MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(155.0),
 	)
-	var result_px := PackedVector2Array()
+	var snapshot: Dictionary
 	if str(special.get("shape", "circle")) == "cone":
-		var half_angle := float(special.get("coneHalfAngleRadians", 0.68))
-		result_px.append(Vector2.ZERO)
-		for index in range(25):
-			var ground_angle := (
-				_boss_skill_direction_ground.angle()
-				- half_angle
-				+ half_angle * 2.0 * float(index) / 24.0
-			)
-			result_px.append(GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				Vector2.from_angle(ground_angle) * radius_gu
-			))
-		return result_px
-	for index in range(48):
-		var ground_angle := TAU * float(index) / 48.0
-		result_px.append(GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-			Vector2.from_angle(ground_angle) * radius_gu
-		))
-	return result_px
+		snapshot = SkillFootprintSnapshotScript.create_sector_arc(
+			_monster_attack_id("boss_sector_arc"),
+			release_id,
+			_screen_position_px_to_ground_position_gu(global_position),
+			_boss_skill_direction_ground,
+			radius_gu,
+			float(special.get("coneHalfAngleRadians", 0.68)),
+			24,
+		)
+		return _decorate_attack_footprint_snapshot(
+			snapshot,
+			PROJECTION_RELATIONSHIP_DIRECTED_CORE,
+			target if is_instance_valid(target) else null,
+			radius_gu,
+		)
+	snapshot = SkillFootprintSnapshotScript.create_circle(
+		_monster_attack_id("boss_circle"),
+		release_id,
+		_screen_position_px_to_ground_position_gu(global_position),
+		radius_gu,
+		48,
+	)
+	return _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		target if is_instance_valid(target) else null,
+		radius_gu,
+	)
 
 
 func health_bar_anchor_y() -> float:
@@ -1361,25 +1545,28 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false
+			var release_snapshot := _boss_skill_footprint_snapshot
+			if not SkillFootprintSnapshotScript.is_valid(release_snapshot):
+				release_snapshot = _create_boss_skill_footprint_snapshot(
+					special,
+					_next_spatial_release_id("boss_fallback"),
+				)
 			if str(special.get("shape", "circle")) == "cone" and is_instance_valid(target):
-				var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
-					global_position,
-					target.global_position,
-				)
-				var in_cone := (
-					fresh_offset_ground_gu.length() <= skill_radius_gu + GroundUnitSpace.EPSILON_GU
-					and fresh_offset_ground_gu.normalized().dot(_boss_skill_direction_ground)
-					>= cos(float(special.get("coneHalfAngleRadians", 0.68)))
-				)
-				if in_cone and not _target_is_safe_player(target):
+				if (
+					_snapshot_intersects_target(release_snapshot, target)
+					and not _target_is_safe_player(target)
+				):
 					target.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
 					_last_boss_skill_hit = true
 			else:
 				var target_mode := str(special.get("targetMode", "current_target"))
 				var victims: Array[Node2D] = []
 				if target_mode == "all_combat_targets":
-					victims = _boss_skill_targets(skill_radius_gu)
-				elif is_instance_valid(target):
+					victims = _boss_skill_targets(skill_radius_gu, release_snapshot)
+				elif (
+					is_instance_valid(target)
+					and _snapshot_intersects_target(release_snapshot, target)
+				):
 					victims.append(target)
 				for victim: Node2D in victims:
 					if _target_is_safe_player(victim):
@@ -1387,6 +1574,8 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 					victim.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
 					_apply_boss_skill_status(victim, special)
 					_last_boss_skill_hit = true
+			_last_attack_footprint_snapshot = release_snapshot
+			_boss_skill_footprint_snapshot = {}
 			_boss_skill_cooldown = float(phase.get("skillCooldownSeconds", special.get("cooldownSeconds", 4.6))) if _boss_phase_two else float(special.get("cooldownSeconds", 4.6))
 	elif _boss_skill_cooldown > 0.0:
 		_boss_skill_cooldown -= delta
@@ -1404,13 +1593,31 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 			if is_instance_valid(target)
 			else GroundUnitSpace.screen_delta_px_to_ground_delta_gu(facing).normalized()
 		)
+		_boss_skill_footprint_snapshot = _create_boss_skill_footprint_snapshot(
+			special,
+			_next_spatial_release_id("boss_special"),
+		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
 		if visual != null:
 			visual.play_attack(float(special.get("animationSeconds", _attack_animation_duration)))
 
 
-func _boss_skill_targets(radius_gu: float) -> Array[Node2D]:
+func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
+	var resolved_snapshot: Dictionary = snapshot
+	if not SkillFootprintSnapshotScript.is_valid(resolved_snapshot):
+		resolved_snapshot = SkillFootprintSnapshotScript.create_circle(
+			_monster_attack_id("boss_circle"),
+			"monster:%d:boss_target_query" % monster_id,
+			_screen_position_px_to_ground_position_gu(global_position),
+			radius_gu,
+		)
+		resolved_snapshot = _decorate_attack_footprint_snapshot(
+			resolved_snapshot,
+			PROJECTION_RELATIONSHIP_GROUND_EXACT,
+			null,
+			radius_gu,
+		)
 	var candidates: Array[Node] = []
 	if is_instance_valid(primary_target):
 		candidates.append(primary_target)
@@ -1422,11 +1629,7 @@ func _boss_skill_targets(radius_gu: float) -> Array[Node2D]:
 			node is Node2D
 			and node.has_method("take_damage")
 			and not _target_is_safe_player(node)
-			and GroundUnitSpace.is_within_range_gu(
-				_screen_position_px_to_ground_position_gu(global_position),
-				_screen_position_px_to_ground_position_gu(node.global_position),
-				radius_gu,
-			)
+			and _snapshot_intersects_target(resolved_snapshot, node)
 		):
 			result.append(node)
 	return result

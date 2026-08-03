@@ -1,5 +1,8 @@
 extends Node
 
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -55,7 +58,36 @@ func _run() -> void:
 	var hp_before := player.current_hp
 	dragon._boss_skill_cooldown = 0.0
 	dragon._update_boss_skill(0.01, 100.0)
+	assert(
+		SkillFootprintSnapshotScript.is_valid(dragon._boss_skill_footprint_snapshot),
+		"boss warning did not freeze the release-time GU footprint",
+	)
+	var warned_release_id := str(dragon._boss_skill_footprint_snapshot.release_id)
+	assert(
+		dragon.boss_warning_polygon_px(dragon.boss_rule.get("specialSkill", {}))
+		== SkillFootprintSnapshotScript.project_ground_polygon_to_screen_offsets_px(
+			SkillFootprintSnapshotScript.ground_polygon_gu(
+				dragon._boss_skill_footprint_snapshot
+			),
+			dragon._screen_position_px_to_ground_position_gu(dragon.global_position)
+		),
+		"boss warning and damage do not read the same footprint snapshot",
+	)
 	dragon._update_boss_skill(0.61, 100.0)
+	assert(
+		str(dragon._last_attack_footprint_snapshot.shape_type)
+		== SkillFootprintSnapshotScript.SHAPE_CIRCLE,
+		"boss circle damage did not consume the warned projection snapshot",
+	)
+	assert(
+		str(dragon._last_attack_footprint_snapshot.release_id) == warned_release_id,
+		"boss warning and delayed damage did not retain one immutable release_id",
+	)
+	assert(
+		str(dragon._last_attack_footprint_snapshot.projection_relationship_id)
+		== EnemyActor.PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		"boss circle warning/damage snapshot does not declare ground_exact",
+	)
 	assert(dragon._last_boss_skill_hit, "触龙神范围攻击没有命中战斗目标")
 	assert(player.current_hp < hp_before, "触龙神范围攻击没有结算主目标伤害")
 
