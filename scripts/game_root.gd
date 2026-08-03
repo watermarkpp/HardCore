@@ -3641,7 +3641,13 @@ func _canonical_target_context(
 		"actual_hp_missing": player.max_hp - player.current_hp,
 		"friendly_missing_hp": [player.max_hp - player.current_hp],
 		"affected_friendly_count": 1,
-		"friendly_targets": [{"level": PlayerState.level}],
+		"friendly_targets": [{
+			"instance_id": player.get_instance_id(),
+			"target_instance_id": player.get_instance_id(),
+			"level": PlayerState.level,
+		}],
+		"friendly_target_instance_ids": [player.get_instance_id()],
+		"affected_friendly_target_instance_ids": [player.get_instance_id()],
 		"map_allows_random_teleport": true,
 		"destination_valid": true,
 		"spawn_tile_valid": true,
@@ -3781,6 +3787,7 @@ func _canonical_target_context(
 			continue
 		nearby.append({
 			"instance_id": node.get_instance_id(),
+			"target_instance_id": node.get_instance_id(),
 			"level": node.level,
 			"is_boss": node.is_boss,
 			"immovable": node.is_boss,
@@ -3821,12 +3828,22 @@ func _canonical_target_context(
 			var actor_current_hp := int(friendly_actor.get("current_hp"))
 			friendly_targets.append({
 				"instance_id": friendly_actor.get_instance_id(),
+				"target_instance_id": friendly_actor.get_instance_id(),
 				"level": actor_level,
 			})
 			friendly_missing_hp.append(maxi(0, actor_max_hp - actor_current_hp))
 		context["friendly_targets"] = friendly_targets
 		context["friendly_missing_hp"] = friendly_missing_hp
 		context["affected_friendly_count"] = friendly_targets.size()
+		var friendly_target_instance_ids: Array[int] = []
+		for friendly_data: Dictionary in friendly_targets:
+			friendly_target_instance_ids.append(int(friendly_data.get(
+				"target_instance_id", 0
+			)))
+		context["friendly_target_instance_ids"] = friendly_target_instance_ids
+		context["affected_friendly_target_instance_ids"] = (
+			friendly_target_instance_ids.duplicate()
+		)
 	return context
 
 
@@ -3983,19 +4000,38 @@ func _apply_canonical_effects(
 			"dedicated_heal":
 				player.restore_health(int(effect.get("actual_hp_restored", 0)))
 			"dedicated_area_heal":
-				var restored_by_target: Array = effect.get("actual_hp_restored_by_target", [])
-				var friendly_targets: Array = target_context.get("friendly_targets", [])
-				for heal_index: int in range(mini(
-					restored_by_target.size(), friendly_targets.size()
-				)):
-					var friendly_data: Dictionary = friendly_targets[heal_index]
-					var friendly_actor := _canonical_friendly_actor(
-						int(friendly_data.get("instance_id", 0))
+				var target_results: Array = effect.get("target_results", [])
+				if not target_results.is_empty():
+					for target_result_value: Variant in target_results:
+						if not target_result_value is Dictionary:
+							continue
+						var target_result: Dictionary = target_result_value
+						_apply_canonical_friendly_heal(
+							_canonical_friendly_actor(int(target_result.get(
+								"target_instance_id", 0
+							))),
+							int(target_result.get("actual_hp_restored", 0))
+						)
+				else:
+					# Explicit legacy adapter for historical test plans. Production
+					# Taoist results carry stable target IDs in target_results.
+					var restored_by_target: Array = effect.get(
+						"actual_hp_restored_by_target", []
 					)
-					_apply_canonical_friendly_heal(
-						friendly_actor,
-						int(restored_by_target[heal_index])
+					var friendly_targets: Array = target_context.get(
+						"friendly_targets", []
 					)
+					for heal_index: int in range(mini(
+						restored_by_target.size(), friendly_targets.size()
+					)):
+						var friendly_data: Dictionary = friendly_targets[heal_index]
+						_apply_canonical_friendly_heal(
+							_canonical_friendly_actor(int(friendly_data.get(
+								"target_instance_id",
+								friendly_data.get("instance_id", 0)
+							))),
+							int(restored_by_target[heal_index])
+						)
 			"adjacent_push":
 				var repulsion_target := _canonical_effect_enemy(effect)
 				if (
@@ -4111,30 +4147,15 @@ func _apply_canonical_effects(
 					hud.show_message("%s：生命%d/%d" % [target.display_name, target.current_hp, target.max_hp], 2.0)
 			"monster_boundary_control":
 				if int(effect.get("trapped_count", 0)) > 0:
-					var boundary_center_screen_px := _canonical_grid_cell_to_screen_px(
-						target_context.get("target_tile", Vector2i.ZERO)
+					var trapped_target_ids: Array = effect.get(
+						"target_instance_ids", []
 					)
-					var boundary_radius_gu := maxf(
-						0.0,
-						float(effect.get("radius_gu", 0.0))
-					)
-					for node: Node in get_tree().get_nodes_in_group("enemies"):
+					for trapped_target_id: int in trapped_target_ids:
+						var node := instance_from_id(trapped_target_id)
 						if (
 							node is EnemyActor
-							and (
-								_skill_snapshot_intersects_enemy(
-									skill_release_snapshot, node
-								)
-								or (
-									not SkillFootprintSnapshotScript.is_valid(
-										skill_release_snapshot
-									)
-									and _ground_circle_intersects_enemy_footprint_gu(
-										boundary_center_screen_px,
-										boundary_radius_gu,
-										node
-									)
-								)
+							and _skill_snapshot_intersects_enemy(
+								skill_release_snapshot, node
 							)
 						):
 							node.apply_control(float(effect.get("duration_seconds", 1)))
