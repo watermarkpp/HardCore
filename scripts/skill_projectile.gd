@@ -4,6 +4,9 @@ extends Node2D
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -14,6 +17,9 @@ const FOOTPRINT_HIT_CONTRACT_ID := (
 )
 const GROUND_UNIT_SETUP_CONTRACT_ID := (
 	"skills.projectile.setup_ground_unit_projectile.v1"
+)
+const RELEASE_FOOTPRINT_CONTRACT_ID := (
+	"skills.projectile.release_swept_path.shared_snapshot.v1"
 )
 
 const VISUAL_PATHS := {
@@ -38,6 +44,8 @@ var effect_strength := 0
 var effect_duration := 0.0
 var projectile_color := Color(0.35, 0.7, 1.0)
 var skill_id := ""
+var release_id := ""
+var skill_footprint_snapshot: Dictionary = {}
 var resolution_skill_id := ""
 var source_actor: Node2D
 var magic_defense_adapter := Callable()
@@ -61,7 +69,8 @@ func setup_ground_unit_projectile(
 	status_effect := "damage",
 	status_strength := 0,
 	status_duration := 0.0,
-	source_skill_id := ""
+	source_skill_id := "",
+	source_release_id := ""
 ) -> void:
 	## The sole production setup boundary. All gameplay motion arrives in GU;
 	## screen PX is retained only for presentation origin and muzzle offset.
@@ -94,6 +103,15 @@ func setup_ground_unit_projectile(
 		elif PlayerState.profession == "道士":
 			skill_id = "taoist.soul_fire_talisman"
 	configure_maximum_travel_distance_gu(maximum_distance_gu)
+	release_id = (
+		source_release_id
+		if not source_release_id.is_empty()
+		else "%s:projectile:%d" % [
+			skill_id if not skill_id.is_empty() else "unbound.projectile",
+			get_instance_id(),
+		]
+	)
+	_build_release_footprint_snapshot()
 
 
 func configure_runtime_resolution(
@@ -113,6 +131,25 @@ func configure_maximum_travel_distance_gu(value_gu: float) -> void:
 	traveled_distance_gu = 0.0
 	if max_travel_distance_gu > 0.0:
 		remaining_travel_distance_gu = max_travel_distance_gu
+
+
+func _build_release_footprint_snapshot() -> void:
+	if max_travel_distance_gu <= 0.0:
+		skill_footprint_snapshot = {}
+		return
+	var origin_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position)
+	)
+	skill_footprint_snapshot = (
+		SkillFootprintSnapshotScript.create_swept_capsule_path(
+			skill_id if not skill_id.is_empty() else "unbound.projectile",
+			release_id,
+			origin_ground_gu,
+			origin_ground_gu
+			+ direction_ground_gu * max_travel_distance_gu,
+			projectile_radius_gu
+		)
+	)
 
 
 func _ready() -> void:
@@ -202,6 +239,20 @@ func _swept_segment_intersects_enemy_footprint(
 	segment_end_screen_px: Vector2,
 	enemy: EnemyActor
 ) -> bool:
+	var enemy_center_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			enemy.global_position
+		)
+	)
+	if (
+		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		and not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			skill_footprint_snapshot,
+			enemy_center_ground_gu,
+			enemy.combat_radius_gu
+		)
+	):
+		return false
 	var segment_start_ground_relative := (
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			segment_start_screen_px - enemy.global_position
@@ -219,6 +270,20 @@ func _swept_segment_intersects_enemy_footprint(
 		segment_end_ground_relative,
 		Vector2.ZERO,
 		contact_radius_gu
+	)
+
+
+func release_snapshot_intersects_target_footprint_ground_gu(
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float
+) -> bool:
+	return (
+		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			skill_footprint_snapshot,
+			target_center_ground_gu,
+			target_combat_radius_gu
+		)
 	)
 
 

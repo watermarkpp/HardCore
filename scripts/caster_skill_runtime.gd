@@ -6,6 +6,10 @@ const CasterSpellGeometryScript := preload(
 	"res://scripts/skills/caster_spell_geometry.gd"
 )
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
+const WorldSpatialRules := preload("res://scripts/world_spatial_rules.gd")
 const SkillDataLoaderScript := preload(
 	"res://scripts/skills/skill_data_loader.gd"
 )
@@ -47,6 +51,17 @@ const DAMAGE_OPERATIONS := {
 	"wizard.ice_storm": ["area_damage", "target_area"],
 	"taoist.soul_fire_talisman": ["projectile_damage", "single"],
 }
+const TARGET_FOOTPRINT_SKILL_IDS := {
+	"wizard.temptation_light": true,
+	"wizard.lightning": true,
+	"wizard.holy_word": true,
+	"taoist.healing": true,
+	"taoist.poison": true,
+	"taoist.revelation": true,
+}
+const TARGET_FOOTPRINT_RELEASE_CONTRACT_ID := (
+	"skills.caster.target_single.release_footprint_snapshot.v1"
+)
 
 
 static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary:
@@ -255,7 +270,8 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 		"damage",
 		0,
 		0.0,
-		str(plan.get("skill_id", ""))
+		str(plan.get("skill_id", "")),
+		str(plan.get("release_id", ""))
 	)
 	return projectile
 
@@ -419,6 +435,7 @@ static func create_cast_nodes(
 
 
 static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
+	var release_id := _release_id(plan, context)
 	var result := {
 		"skill_id": str(plan.get("skill_id", "")),
 		"success": bool(plan.get("success", false)),
@@ -428,6 +445,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		"nodes": [],
 		"adapter_required": "",
 		"runtime_contract": "caster_skill_execution.v1",
+		"release_id": release_id,
+		"skill_footprint_snapshot": {},
 	}
 	if not result.success:
 		return result
@@ -445,6 +464,23 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		return result
 	var caster := context.get("caster") as PlayerCharacter
 	var primary_target := context.get("primary_target") as Node2D
+	var targeted_release_actor: Node2D = primary_target
+	if (
+		targeted_release_actor == null
+		and str(plan.get("skill_id", "")) == "taoist.healing"
+	):
+		targeted_release_actor = caster
+	if (
+		targeted_release_actor != null
+		and TARGET_FOOTPRINT_SKILL_IDS.has(str(plan.get("skill_id", "")))
+	):
+		result.skill_footprint_snapshot = (
+			_create_target_footprint_snapshot(
+				str(plan.get("skill_id", "")),
+				release_id,
+				targeted_release_actor
+			)
+		)
 	var origin := context.get("origin", caster.global_position if caster != null else Vector2.ZERO) as Vector2
 	var direction := context.get("direction", Vector2.DOWN) as Vector2
 	var fallback_direction_ground_gu := (
@@ -468,6 +504,7 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		)
 	) as Vector2
 	var node_plan := plan.duplicate(true)
+	node_plan["release_id"] = release_id
 	node_plan["teleport_arrival_ready"] = (
 		str(plan.get("operation", "")) == "random_home_map_move"
 		and context.has("teleport_destination")
@@ -501,31 +538,48 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	var targets := _runtime_targets(context, primary_target, "affected_targets")
 	var allies := _runtime_targets(context, caster, "affected_allies")
 	match operation:
-		"target_damage", "line_damage", "area_damage":
+		"target_damage":
+			for target: Node2D in targets:
+				if (
+					target is EnemyActor
+					and target == primary_target
+					and _target_matches_release_snapshot(
+						result.skill_footprint_snapshot,
+						target
+					)
+				):
+					_apply_direct_spell_damage(
+						plan,
+						context,
+						result,
+						target,
+						caster,
+						magic_defense_adapter
+					)
+		"line_damage", "area_damage":
 			for target: Node2D in targets:
 				if target is EnemyActor:
-					var raw_damage := int(plan.get("damage_before_evasion", plan.get("damage", 0)))
-					if CombatResolutionRules.anti_magic_eligible(str(plan.get("skill_id", ""))):
-						var anti_magic_roll := int(context.get(
-							"anti_magic_roll",
-							randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
-						))
-						var resolution := CombatResolutionRules.resolve_direct_spell_damage(
-							str(plan.get("skill_id", "")),
-							raw_damage,
-							target.monster_data,
-							anti_magic_roll,
-							magic_defense_adapter
-						)
-						result.target_resolutions.append(resolution)
-						if bool(resolution.magic_evaded):
-							result.evaded_count += 1
-							continue
-						raw_damage = int(resolution.final_damage)
-					if raw_damage > 0:
-						target.take_damage(raw_damage, caster)
-						result.applied_count += 1
-		"heal_target", "heal_area":
+					_apply_direct_spell_damage(
+						plan,
+						context,
+						result,
+						target,
+						caster,
+						magic_defense_adapter
+					)
+		"heal_target":
+			for ally: Node2D in allies:
+				if (
+					ally is PlayerCharacter
+					and ally == targeted_release_actor
+					and _target_matches_release_snapshot(
+						result.skill_footprint_snapshot,
+						ally
+					)
+				):
+					ally.restore_health(int(plan.get("healing", 0)))
+					result.applied_count += 1
+		"heal_area":
 			for ally: Node2D in allies:
 				if ally is PlayerCharacter:
 					ally.restore_health(int(plan.get("healing", 0)))
@@ -558,7 +612,12 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				)
 				result.applied_count += 1
 		"tame_monster":
-			if primary_target is EnemyActor:
+			if (
+				primary_target is EnemyActor
+				and _target_matches_release_snapshot(
+					result.skill_footprint_snapshot, primary_target
+				)
+			):
 				primary_target.apply_charm(float(plan.get("duration_seconds", 0.0)))
 				result.applied_count = 1
 		"magic_shield":
@@ -569,11 +628,21 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				)
 				result.applied_count = 1
 		"execute_undead":
-			if primary_target is EnemyActor:
+			if (
+				primary_target is EnemyActor
+				and _target_matches_release_snapshot(
+					result.skill_footprint_snapshot, primary_target
+				)
+			):
 				primary_target.take_damage(primary_target.current_hp, caster)
 				result.applied_count = 1
 		"poison_health":
-			if primary_target is EnemyActor:
+			if (
+				primary_target is EnemyActor
+				and _target_matches_release_snapshot(
+					result.skill_footprint_snapshot, primary_target
+				)
+			):
 				primary_target.apply_poison(
 					maxi(1, int(plan.get("power", 1))),
 					float(plan.get("duration_seconds", 0.0))
@@ -598,7 +667,12 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					target.apply_control(float(plan.get("duration_seconds", 0.0)))
 					result.applied_count += 1
 		"show_target_health":
-			if primary_target is EnemyActor:
+			if (
+				primary_target is EnemyActor
+				and _target_matches_release_snapshot(
+					result.skill_footprint_snapshot, primary_target
+				)
+			):
 				result.inspected_target = {
 					"display_name": primary_target.display_name,
 					"current_hp": primary_target.current_hp,
@@ -614,9 +688,106 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				operation_adapter.call(plan, context)
 				result.applied_count = 1
 		"poison_armor":
-			operation_adapter.call(plan, context)
-			result.applied_count = 1
+			if (
+				primary_target is EnemyActor
+				and _target_matches_release_snapshot(
+					result.skill_footprint_snapshot, primary_target
+				)
+			):
+				operation_adapter.call(plan, context)
+				result.applied_count = 1
 	return result
+
+
+static func _release_id(plan: Dictionary, context: Dictionary) -> String:
+	for source: Dictionary in [context, plan]:
+		var candidate := str(source.get("release_id", ""))
+		if not candidate.is_empty():
+			return candidate
+	return "%s:cast:%d" % [
+		str(plan.get("skill_id", "unbound.caster")),
+		Time.get_ticks_usec(),
+	]
+
+
+static func _create_target_footprint_snapshot(
+	skill_id: String,
+	release_id: String,
+	target: Node2D
+) -> Dictionary:
+	var center_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target.global_position
+		)
+	)
+	return SkillFootprintSnapshotScript.create_target_footprint(
+		skill_id,
+		release_id,
+		center_ground_gu,
+		_target_combat_radius_gu(target),
+		target.get_instance_id()
+	)
+
+
+static func _target_combat_radius_gu(target: Node2D) -> float:
+	for property: Dictionary in target.get_property_list():
+		if str(property.get("name", "")) == "combat_radius_gu":
+			return maxf(0.0, float(target.get("combat_radius_gu")))
+	if target is PlayerCharacter:
+		return WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(
+			ArtSpec.PLAYER_COLLISION_RADIUS_PX
+		)
+	return 0.0
+
+
+static func _target_matches_release_snapshot(
+	skill_footprint_snapshot: Dictionary,
+	target: Node2D
+) -> bool:
+	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+		return false
+	if int(skill_footprint_snapshot.get("target_instance_id", 0)) != target.get_instance_id():
+		return false
+	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		skill_footprint_snapshot,
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target.global_position
+		),
+		_target_combat_radius_gu(target)
+	)
+
+
+static func _apply_direct_spell_damage(
+	plan: Dictionary,
+	context: Dictionary,
+	result: Dictionary,
+	target: EnemyActor,
+	caster: PlayerCharacter,
+	magic_defense_adapter: Callable
+) -> void:
+	var raw_damage := int(plan.get(
+		"damage_before_evasion", plan.get("damage", 0)
+	))
+	if CombatResolutionRules.anti_magic_eligible(str(plan.get("skill_id", ""))):
+		var anti_magic_roll := int(context.get(
+			"anti_magic_roll",
+			randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
+		))
+		var resolution := CombatResolutionRules.resolve_direct_spell_damage(
+			str(plan.get("skill_id", "")),
+			raw_damage,
+			target.monster_data,
+			anti_magic_roll,
+			magic_defense_adapter
+		)
+		result.target_resolutions.append(resolution)
+		if bool(resolution.magic_evaded):
+			result.evaded_count += 1
+			return
+		raw_damage = int(resolution.final_damage)
+	if raw_damage > 0:
+		target.take_damage(raw_damage, caster)
+		result.applied_count += 1
 
 
 static func fire_wall_positions_ground_gu(
