@@ -5,6 +5,9 @@ const CombatDirectionSpaceScript := preload(
 	"res://scripts/skills/combat_direction_space.gd"
 )
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 const CONTRACT_ID := "skills.visual.geometry_grid_steps.screen_px_projection.v2"
@@ -137,7 +140,9 @@ static func continuous_line_strip_ground_gu(
 	aim_ground_gu: Vector2,
 	fallback_screen_direction_px: Vector2,
 	effect_length_gu: float,
-	effect_width_gu: float
+	effect_width_gu: float,
+	skill_id := "wizard.line",
+	release_id := "geometry_preview"
 ) -> Dictionary:
 	var axis_ground_gu := aim_ground_gu - origin_ground_gu
 	if axis_ground_gu.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
@@ -149,20 +154,33 @@ static func continuous_line_strip_ground_gu(
 	var direction_ground_gu := axis_ground_gu.normalized()
 	var safe_length_gu := maxf(0.0, effect_length_gu)
 	var safe_width_gu := maxf(CONTACT_EPSILON, effect_width_gu)
-	var strip_start_ground_gu := origin_ground_gu
-	var strip_end_ground_gu := GroundUnitSpaceScript.endpoint_ground_gu(
+	var skill_footprint_snapshot := (
+		SkillFootprintSnapshotScript.create_directed_rectangle(
+			skill_id,
+			release_id,
+			origin_ground_gu,
+			direction_ground_gu,
+			safe_length_gu,
+			safe_width_gu
+		)
+	)
+	var strip_start_ground_gu: Vector2 = skill_footprint_snapshot.get(
+		"origin_ground_gu", origin_ground_gu
+	)
+	var strip_end_ground_gu: Vector2 = skill_footprint_snapshot.get(
+		"end_ground_gu",
+		GroundUnitSpaceScript.endpoint_ground_gu(
 		origin_ground_gu,
 		direction_ground_gu,
 		safe_length_gu
+		)
 	)
-	var perpendicular := Vector2(-direction_ground_gu.y, direction_ground_gu.x)
-	var half_width := safe_width_gu * 0.5
-	var polygon := PackedVector2Array([
-		strip_start_ground_gu + perpendicular * half_width,
-		strip_end_ground_gu + perpendicular * half_width,
-		strip_end_ground_gu - perpendicular * half_width,
-		strip_start_ground_gu - perpendicular * half_width,
-	])
+	var half_width_gu := float(skill_footprint_snapshot.get("half_width_gu", 0.0))
+	var polygon_ground_gu := (
+		SkillFootprintSnapshotScript.ground_polygon_gu(
+			skill_footprint_snapshot
+		)
+	)
 	var centerline_points: Array[Vector2] = []
 	for distance: int in range(1, ceili(safe_length_gu) + 1):
 		centerline_points.append(
@@ -177,10 +195,11 @@ static func continuous_line_strip_ground_gu(
 		"direction_ground_gu": direction_ground_gu,
 		"effect_length_gu": safe_length_gu,
 		"effect_width_gu": safe_width_gu,
-		"half_width_gu": half_width,
+		"half_width_gu": half_width_gu,
 		"strip_start_ground_gu": strip_start_ground_gu,
 		"strip_end_ground_gu": strip_end_ground_gu,
-		"strip_polygon_ground_gu": polygon,
+		"strip_polygon_ground_gu": polygon_ground_gu,
+		"skill_footprint_snapshot": skill_footprint_snapshot,
 		"centerline_points_ground_gu": centerline_points,
 		"visual_direction_index": (
 			CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
@@ -198,6 +217,15 @@ static func target_footprint_intersects_continuous_line_ground_gu(
 ) -> bool:
 	if target_footprint_tile_polygon.size() < 3:
 		return false
+	var raw_snapshot: Variant = line_strip.get("skill_footprint_snapshot", {})
+	if (
+		raw_snapshot is Dictionary
+		and SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+	):
+		return SkillFootprintSnapshotScript.intersects_target_polygon_ground_gu(
+			raw_snapshot,
+			target_footprint_tile_polygon
+		)
 	var raw_polygon: Variant = line_strip.get(
 		"strip_polygon_ground_gu", PackedVector2Array()
 	)
@@ -376,6 +404,19 @@ static func visual_context_from_plan(
 	)
 	var raw_screen_points_px: Variant = plan.get("geometry_screen_points_px", [])
 	var raw_grid_cells: Variant = plan.get("geometry_grid_cells", [])
+	var raw_skill_footprint_snapshot: Variant = plan.get(
+		"skill_footprint_snapshot", {}
+	)
+	var skill_footprint_snapshot: Dictionary = (
+		(raw_skill_footprint_snapshot as Dictionary)
+		if (
+			raw_skill_footprint_snapshot is Dictionary
+			and SkillFootprintSnapshotScript.is_valid(
+				raw_skill_footprint_snapshot
+			)
+		)
+		else {}
+	)
 	var screen_points_px: Array[Vector2] = []
 	var screen_offsets_px: Array[Vector2] = []
 	if raw_screen_points_px is Array:
@@ -500,6 +541,17 @@ static func visual_context_from_plan(
 			desired_cross_axis_extent = (
 				_stable_laser_visual_cross_extent(cell_extent)
 			)
+	var formal_core_polygon_screen_offset_px := PackedVector2Array()
+	var formal_core_axis_screen_offset_px := Vector2.ZERO
+	if not skill_footprint_snapshot.is_empty():
+		formal_core_polygon_screen_offset_px = (
+			SkillFootprintSnapshotScript.projected_polygon_screen_offset_px(
+				skill_footprint_snapshot
+			)
+		)
+		formal_core_axis_screen_offset_px = skill_footprint_snapshot.get(
+			"axis_screen_offset_px", Vector2.ZERO
+		)
 	return {
 		"contract_id": VISUAL_CONTRACT_ID,
 		"canonical_geometry_contract": CONTRACT_ID,
@@ -521,6 +573,14 @@ static func visual_context_from_plan(
 		"desired_sprite_axis_extent_px": desired_axis_extent,
 		"desired_sprite_cross_axis_extent_px": desired_cross_axis_extent,
 		"visual_axis_screen_px": visual_axis_screen_px,
+		"skill_footprint_snapshot": skill_footprint_snapshot,
+		"formal_core_polygon_screen_offset_px": (
+			formal_core_polygon_screen_offset_px
+		),
+		"formal_core_axis_screen_offset_px": formal_core_axis_screen_offset_px,
+		"formal_core_contract_id": str(
+			skill_footprint_snapshot.get("contract_id", "")
+		),
 	}
 
 

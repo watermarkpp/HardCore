@@ -2,6 +2,9 @@ class_name CasterSkillVisualEffect
 extends Node2D
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 
 const COMPLETION_GRACE_SECONDS := 0.05
 const MAGIC_SHIELD_SKILL_ID := "wizard.magic_shield"
@@ -18,6 +21,11 @@ const SINGLE_ACTIVE_LASER_VISUAL_GROUP := "wizard_laser_single_active_visual"
 const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
 	"skills.wizard.laser.single_active_visual_per_caster.v1"
 )
+const FORMAL_LINE_VISUAL_CORE_CONTRACT_ID := (
+	"skills.caster.line_visual.projected_footprint_core.v1"
+)
+const LASER_DECORATION_ALPHA := 0.46
+const HELLFIRE_DECORATION_ALPHA := 1.0
 
 var skill_id := ""
 var phase_id := ""
@@ -49,6 +57,11 @@ var _desired_sprite_footprint_px := Vector2.ZERO
 var _desired_sprite_axis_extent_px := 0.0
 var _desired_sprite_cross_axis_extent_px := 0.0
 var _visual_axis_screen_px := Vector2.ZERO
+var _skill_footprint_snapshot: Dictionary = {}
+var _formal_core_polygon_screen_offset_px := PackedVector2Array()
+var _formal_core_axis_screen_offset_px := Vector2.ZERO
+var _formal_core_polygon: Polygon2D
+var _formal_core_glow_layers: Array[Polygon2D] = []
 
 
 func setup(
@@ -87,6 +100,21 @@ func setup(
 	)
 	_visual_axis_screen_px = visual_geometry_context.get(
 		"visual_axis_screen_px", Vector2.ZERO
+	)
+	var raw_snapshot: Variant = visual_geometry_context.get(
+		"skill_footprint_snapshot", {}
+	)
+	if raw_snapshot is Dictionary and SkillFootprintSnapshotScript.is_valid(
+		raw_snapshot
+	):
+		_skill_footprint_snapshot = raw_snapshot
+	var raw_core_polygon: Variant = visual_geometry_context.get(
+		"formal_core_polygon_screen_offset_px", PackedVector2Array()
+	)
+	if raw_core_polygon is PackedVector2Array:
+		_formal_core_polygon_screen_offset_px = raw_core_polygon.duplicate()
+	_formal_core_axis_screen_offset_px = visual_geometry_context.get(
+		"formal_core_axis_screen_offset_px", Vector2.ZERO
 	)
 	for raw_offset: Variant in visual_geometry_context.get("geometry_screen_offsets_px", []):
 		if raw_offset is Vector2:
@@ -147,6 +175,7 @@ func _ready() -> void:
 		# _process() left one rounded frame that could briefly cover the actor.
 		_sync_actor_attachment_position()
 	_playback_strategy = str(render.get("playback_strategy", "frame_sequence"))
+	_install_formal_line_visual_core()
 	lifetime = maxf(
 		lifetime,
 		CasterSkillVisualRegistry.animation_duration(skill_id, phase_id)
@@ -256,6 +285,7 @@ func _install_single() -> void:
 	):
 		sprite.queue_free()
 		return
+	_apply_line_decoration_policy(sprite)
 	add_child(sprite)
 	_sprites.append(sprite)
 
@@ -309,6 +339,7 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 		):
 			sprite.queue_free()
 			continue
+		_apply_line_decoration_policy(sprite)
 		sprite.set_manual_frame(frame_index)
 		sprite.visible = false
 		add_child(sprite)
@@ -371,3 +402,97 @@ func _all_playback_complete() -> bool:
 		if not bool(sprite.get("playback_complete")):
 			return false
 	return true
+
+
+func formal_core_polygon_screen_offset_px() -> PackedVector2Array:
+	return _formal_core_polygon_screen_offset_px.duplicate()
+
+
+func formal_core_axis_screen_offset_px() -> Vector2:
+	return _formal_core_axis_screen_offset_px
+
+
+func _install_formal_line_visual_core() -> void:
+	if (
+		skill_id not in ["wizard.hellfire", "wizard.laser"]
+		or not SkillFootprintSnapshotScript.is_valid(
+			_skill_footprint_snapshot
+		)
+		or _formal_core_polygon_screen_offset_px.size() != 4
+		or _formal_core_axis_screen_offset_px.length_squared() <= 0.000001
+	):
+		return
+	var palette := _formal_core_palette()
+	_formal_core_polygon = Polygon2D.new()
+	_formal_core_polygon.polygon = _formal_core_polygon_screen_offset_px
+	_formal_core_polygon.color = palette.outer_fill
+	_formal_core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	add_child(_formal_core_polygon)
+	# Presentation uses nested fills wholly contained by the authoritative quad.
+	# No edge outline, cross or axis is drawn in the production effect; debug
+	# overlays remain a separate integration concern.
+	for layer_spec: Dictionary in [
+		{"lateral_scale": 0.62, "color": palette.mid_fill},
+		{"lateral_scale": 0.24, "color": palette.inner_fill},
+	]:
+		var glow_layer := Polygon2D.new()
+		glow_layer.polygon = _inset_directed_quad(
+			_formal_core_polygon_screen_offset_px,
+			float(layer_spec.lateral_scale)
+		)
+		glow_layer.color = layer_spec.color
+		glow_layer.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		add_child(glow_layer)
+		_formal_core_glow_layers.append(glow_layer)
+	set_meta("formal_line_visual_core_contract", FORMAL_LINE_VISUAL_CORE_CONTRACT_ID)
+	set_meta("formal_line_snapshot_id", str(
+		_skill_footprint_snapshot.get("snapshot_id", "")
+	))
+
+
+func _formal_core_palette() -> Dictionary:
+	if skill_id == "wizard.hellfire":
+		return {
+			"outer_fill": Color(1.0, 0.18, 0.02, 0.10),
+			"mid_fill": Color(1.0, 0.38, 0.04, 0.16),
+			"inner_fill": Color(1.0, 0.78, 0.24, 0.28),
+		}
+	return {
+		"outer_fill": Color(0.08, 0.42, 1.0, 0.10),
+		"mid_fill": Color(0.20, 0.68, 1.0, 0.18),
+		"inner_fill": Color(0.72, 0.94, 1.0, 0.34),
+	}
+
+
+func _apply_line_decoration_policy(sprite: Sprite2D) -> void:
+	if skill_id not in ["wizard.hellfire", "wizard.laser"]:
+		return
+	var decoration_modulate := sprite.modulate
+	decoration_modulate.a = (
+		HELLFIRE_DECORATION_ALPHA
+		if skill_id == "wizard.hellfire"
+		else LASER_DECORATION_ALPHA
+	)
+	sprite.modulate = decoration_modulate
+	sprite.set_meta("formal_boundary_role", "decoration_only")
+
+
+func _inset_directed_quad(
+	quad_screen_offset_px: PackedVector2Array,
+	lateral_scale: float
+) -> PackedVector2Array:
+	if quad_screen_offset_px.size() != 4:
+		return PackedVector2Array()
+	var safe_scale := clampf(lateral_scale, 0.0, 1.0)
+	var start_center_px := (
+		quad_screen_offset_px[0] + quad_screen_offset_px[3]
+	) * 0.5
+	var end_center_px := (
+		quad_screen_offset_px[1] + quad_screen_offset_px[2]
+	) * 0.5
+	return PackedVector2Array([
+		start_center_px.lerp(quad_screen_offset_px[0], safe_scale),
+		end_center_px.lerp(quad_screen_offset_px[1], safe_scale),
+		end_center_px.lerp(quad_screen_offset_px[2], safe_scale),
+		start_center_px.lerp(quad_screen_offset_px[3], safe_scale),
+	])

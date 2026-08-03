@@ -4,10 +4,10 @@ extends RefCounted
 const CombatDirectionSpaceScript := preload(
 	"res://scripts/skills/combat_direction_space.gd"
 )
-const CombatReleaseGeometryScript := preload(
-	"res://scripts/skills/combat_release_geometry.gd"
-)
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 ## Canonical warrior melee geometry. Every value is expressed in logical map
@@ -22,7 +22,7 @@ const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 	"gameplay.warrior.melee_footprint_intersection.ground_gu_sat.v2"
 )
 const THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID := (
-	"gameplay.warrior.thrust.damage_axis.live_locked_same_visual_sector_gu.v1"
+	"gameplay.warrior.thrust.damage_axis.snapped_visual_8dir_snapshot.v1"
 )
 const TARGET_FOOTPRINT_CONTRACT_ID := (
 	WorldSpatialRulesScript.ACTOR_GROUND_FOOTPRINT_CONTRACT_ID
@@ -347,45 +347,40 @@ static func thrust_damage_axis_plan_ground_gu(
 	var canonical_direction_ground_gu := canonical_ground_direction_gu(
 		resolved_visual_direction_index
 	)
-	var damage_direction_ground_gu := canonical_direction_ground_gu
-	var source := "canonical_visual_direction"
-	var fallback_reason := "no_valid_locked_target_axis"
-	var live_direction_ground_gu: Vector2 = release_geometry.get(
-		"live_locked_target_direction_ground_gu", Vector2.ZERO
-	)
 	var live_direction_index := int(
 		release_geometry.get("live_locked_target_direction_index", -1)
 	)
-	var has_valid_live_axis := (
-		bool(release_geometry.get("locked_target_valid_at_release", false))
-		and int(release_geometry.get("locked_target_instance_id", 0)) > 0
-		and str(release_geometry.get("live_locked_target_axis_contract_id", ""))
-		== CombatReleaseGeometryScript.LIVE_LOCKED_TARGET_AXIS_CONTRACT_ID
-		and live_direction_ground_gu.length_squared() > EPSILON * EPSILON
-		and live_direction_index >= 0
+	var origin_ground_gu: Vector2 = release_geometry.get(
+		"origin_ground_gu", Vector2.ZERO
 	)
-	if has_valid_live_axis:
-		if live_direction_index == resolved_visual_direction_index:
-			damage_direction_ground_gu = live_direction_ground_gu.normalized()
-			source = "live_locked_target_same_visual_sector"
-			fallback_reason = ""
-		else:
-			fallback_reason = "locked_target_crossed_visual_direction"
+	var release_id := str(release_geometry.get(
+		"release_id", "unbound_release"
+	))
+	var skill_footprint_snapshot := (
+		SkillFootprintSnapshotScript.create_directed_rectangle(
+			"warrior.thrusting",
+			release_id,
+			origin_ground_gu,
+			canonical_direction_ground_gu,
+			reach_gu(SKILL_THRUST),
+			THRUST_WIDTH_GU
+		)
+	)
 	return {
 		"contract_id": THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID,
 		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
 		"visual_direction_index": resolved_visual_direction_index,
 		"canonical_visual_direction_ground_gu": canonical_direction_ground_gu,
-		"damage_direction_ground_gu": damage_direction_ground_gu,
-		"damage_axis_source": source,
-		"uses_live_locked_target_axis": (
-			source == "live_locked_target_same_visual_sector"
-		),
-		"fallback_reason": fallback_reason,
+		"damage_direction_ground_gu": canonical_direction_ground_gu,
+		"damage_axis_source": "canonical_visual_direction_snapped",
+		"uses_live_locked_target_axis": false,
+		"fallback_reason": "continuous_target_axis_rejected_by_visual_contract",
 		"live_locked_target_direction_index": live_direction_index,
 		"effect_length_gu": reach_gu(SKILL_THRUST),
 		"effect_width_gu": THRUST_WIDTH_GU,
 		"primary_segment_end_gu": THRUST_PRIMARY_REACH_GU,
+		"release_id": release_id,
+		"skill_footprint_snapshot": skill_footprint_snapshot,
 	}
 
 
@@ -401,11 +396,48 @@ static func thrust_footprint_slot_for_axis_plan_gu(
 		!= THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID
 	):
 		return 0
+	var damage_direction_ground_gu: Vector2 = damage_axis_plan.get(
+		"damage_direction_ground_gu", Vector2.ZERO
+	)
+	if damage_direction_ground_gu.length_squared() <= EPSILON * EPSILON:
+		return 0
+	var target_polygon_ground_gu := target_footprint_polygon_ground_gu(
+		target_center_ground_gu,
+		target_combat_radius_gu
+	)
+	var raw_snapshot: Variant = damage_axis_plan.get(
+		"skill_footprint_snapshot", {}
+	)
+	var effective_snapshot: Dictionary = {}
+	if (
+		raw_snapshot is Dictionary
+		and SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+		and (raw_snapshot.get("origin_ground_gu", Vector2.ZERO) as Vector2)
+		.is_equal_approx(origin_ground_gu)
+		and is_zero_approx(range_bonus_gu)
+	):
+		effective_snapshot = raw_snapshot
+	else:
+		effective_snapshot = (
+			SkillFootprintSnapshotScript.create_directed_rectangle(
+				"warrior.thrusting",
+				str(damage_axis_plan.get("release_id", "unbound_release")),
+				origin_ground_gu,
+				damage_direction_ground_gu,
+				reach_gu(SKILL_THRUST, range_bonus_gu),
+				THRUST_WIDTH_GU
+			)
+		)
+	if not SkillFootprintSnapshotScript.intersects_target_polygon_ground_gu(
+		effective_snapshot,
+		target_polygon_ground_gu
+	):
+		return 0
 	return thrust_footprint_slot_for_direction_ground_gu(
 		origin_ground_gu,
 		target_center_ground_gu,
 		target_combat_radius_gu,
-		damage_axis_plan.get("damage_direction_ground_gu", Vector2.ZERO),
+		damage_direction_ground_gu,
 		range_bonus_gu
 	)
 
