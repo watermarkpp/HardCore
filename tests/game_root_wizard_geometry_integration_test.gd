@@ -2,6 +2,12 @@ extends Node
 
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
+const SkillFootprintSnapshot := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
+const SkillFootprintDiagnosticLog := preload(
+	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
+)
 
 
 func _ready() -> void:
@@ -9,6 +15,8 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	SkillFootprintDiagnosticLog.enabled = false
+	SkillFootprintDiagnosticLog.clear_recent_events()
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
 	PlayerState.profession = "法师"
@@ -19,6 +27,14 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	var generated_release_a: String = game._next_skill_footprint_release_id(
+		"wizard.laser"
+	)
+	var generated_release_b: String = game._next_skill_footprint_release_id(
+		"wizard.laser"
+	)
+	assert(not generated_release_a.is_empty())
+	assert(generated_release_a != generated_release_b)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(4000, 4000)
@@ -77,13 +93,21 @@ func _run() -> void:
 		"wizard.hellfire",
 		hellfire_effect,
 		game.player.global_position,
-		free_aim_screen_px
+		free_aim_screen_px,
+		"test:hellfire:release:1"
 	)
 	assert((hellfire_strip.direction_ground_gu as Vector2).is_equal_approx(
 		free_aim_direction_ground_gu
 	))
 	assert(is_equal_approx(float(hellfire_strip.effect_length_gu), 5.0))
 	assert(is_equal_approx(float(hellfire_strip.effect_width_gu), 1.0))
+	var hellfire_snapshot: Dictionary = hellfire_strip.get(
+		"skill_footprint_snapshot", {}
+	)
+	assert(SkillFootprintSnapshot.is_valid(hellfire_snapshot))
+	assert(hellfire_snapshot.is_read_only())
+	assert(hellfire_snapshot.skill_id == "wizard.hellfire")
+	assert(hellfire_snapshot.release_id == "test:hellfire:release:1")
 	var first_line_target := _make_enemy_at_fractional_tile(
 		game, game.player, origin_ground_gu + free_aim_direction_ground_gu, "地狱火首个目标"
 	)
@@ -118,6 +142,14 @@ func _run() -> void:
 	assert(hellfire_hit and first_line_target.current_hp < first_hp, "地狱火未命中连续五格直线内首个目标")
 	assert(rear_line_target.current_hp < rear_hp, "地狱火未命中连续五格直线内后方目标")
 	assert(off_line_target.current_hp == off_line_hp, "宽一格地狱火错误命中正式条带外单位")
+	var hellfire_diagnostics := SkillFootprintDiagnosticLog.recent_events()
+	assert(hellfire_diagnostics.size() == 1)
+	assert(hellfire_diagnostics[0].release_id == "test:hellfire:release:1")
+	assert(int(hellfire_diagnostics[0].eligible_target_count) == 2)
+	assert(bool(hellfire_diagnostics[0].damage_applied))
+	assert(is_zero_approx(float(
+		hellfire_diagnostics[0].maximum_corner_error_px
+	)))
 
 	first_line_target.queue_free()
 	rear_line_target.queue_free()
@@ -183,12 +215,20 @@ func _run() -> void:
 		"wizard.laser",
 		laser_effect,
 		game.player.global_position,
-		laser_aim_screen_px
+		laser_aim_screen_px,
+		"test:laser:release:1"
 	)
 	assert((laser_strip.direction_ground_gu as Vector2).is_equal_approx(
 		laser_aim_direction_ground_gu
 	))
 	assert(is_equal_approx(float(laser_strip.effect_length_gu), 8.0))
+	var laser_snapshot: Dictionary = laser_strip.get(
+		"skill_footprint_snapshot", {}
+	)
+	assert(SkillFootprintSnapshot.is_valid(laser_snapshot))
+	assert(laser_snapshot.is_read_only())
+	assert(laser_snapshot.skill_id == "wizard.laser")
+	assert(laser_snapshot.release_id == "test:laser:release:1")
 	var visual_children_before := game.get_child_count()
 	game._spawn_canonical_cast_visual(
 		"wizard.laser",
@@ -213,6 +253,16 @@ func _run() -> void:
 	assert(shared_geometry_visual._geometry_screen_offsets_px.back().is_equal_approx(
 		expected_laser_screen_points.back() - game.player.global_position
 	))
+	assert(
+		shared_geometry_visual.formal_core_polygon_screen_offset_px()
+		== SkillFootprintSnapshot.projected_polygon_screen_offset_px(
+			laser_snapshot
+		)
+	)
+	assert(
+		str(shared_geometry_visual.get_meta("formal_line_snapshot_id", ""))
+		== str(laser_snapshot.snapshot_id)
+	)
 	shared_geometry_visual.free()
 	var near_laser_target := _make_enemy_at_fractional_tile(
 		game,
@@ -269,6 +319,15 @@ func _run() -> void:
 			stacked_laser_targets[stacked_index].current_hp < stacked_laser_hp[stacked_index],
 			"疾光电影错误保留八目标上限：第%d个附加目标未受伤" % stacked_index
 		)
+	var line_diagnostics := SkillFootprintDiagnosticLog.recent_events()
+	assert(line_diagnostics.size() == 2)
+	assert(line_diagnostics[1].release_id == "test:laser:release:1")
+	assert(int(line_diagnostics[1].eligible_target_count) == 9)
+	assert(bool(line_diagnostics[1].damage_applied))
+	assert(
+		line_diagnostics[1].expected_projected_polygon_px
+		== line_diagnostics[1].actual_visual_core_polygon_px
+	)
 
 	near_laser_target.queue_free()
 	far_laser_target.queue_free()

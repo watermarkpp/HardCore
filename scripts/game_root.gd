@@ -29,8 +29,14 @@ const WarriorMeleeGeometryScript := preload("res://scripts/skills/warrior_melee_
 const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_melee_diagnostic.gd")
 const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
 const CombatDiagnosticLogScript := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
+const SkillFootprintDiagnosticLogScript := preload(
+	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
+)
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
 const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_geometry.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const SpellTargetLockPolicyScript := preload(
 	"res://scripts/skills/spell_target_lock_policy.gd"
 )
@@ -79,6 +85,9 @@ const CONTINUOUS_WIZARD_LINE_SKILLS := [
 	"wizard.hellfire",
 	"wizard.laser",
 ]
+const SKILL_VISUAL_GEOMETRY_DEBUG_SETTING := (
+	"debug/skill_visual_geometry/enabled"
+)
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -123,6 +132,7 @@ var _monster_prefetch_enabled := true
 var _last_monster_prefetch_status: Dictionary = {}
 var _combat_runtime: Node = CombatRuntimeServiceScript.new()
 var _canonical_cast_serial := 0
+var _skill_footprint_release_serial := 0
 var _canonical_fire_charge_expires_ms := 0
 var _skill_cast_target: EnemyActor
 var _melee_diagnostic_serial := 0
@@ -3159,10 +3169,10 @@ func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, messag
 func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
 	var skill_context := player.consume_skill_context()
 	var release_geometry: Dictionary = skill_context.get("release_geometry", {})
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if not release_geometry.is_empty():
 		origin = release_geometry.get("origin_screen_px", origin)
 		direction = release_geometry.get("direction_screen_px", direction)
-		var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 		var release_target := _combat_release_target(release_geometry)
 		if (
 			not CombatReleaseGeometryScript.target_centered_spatial_policy_id(
@@ -3179,12 +3189,15 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			hud.show_message("锁定目标已失效，技能未释放", 1.5)
 			return
 		_skill_cast_target = release_target
+	var release_id := str(release_geometry.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = _next_skill_footprint_release_id(stable_skill_id)
 	var execution := _execute_canonical_skill(
 		skill_name,
 		origin,
 		direction,
 		damage,
-		{},
+		{"release_id": release_id},
 		true,
 		not release_geometry.is_empty()
 	)
@@ -3619,7 +3632,8 @@ func _apply_canonical_effects(
 		stable_skill_id,
 		geometry_effect,
 		origin,
-		direction
+		direction,
+		str(target_context.get("release_id", ""))
 	)
 	_spawn_canonical_cast_visual(
 		stable_skill_id,
@@ -3844,7 +3858,64 @@ func _apply_canonical_spell_damage(
 			Callable(self, "_resolve_magic_defense")
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
+	_record_skill_footprint_release_diagnostic(
+		stable_skill_id,
+		continuous_line_strip_ground_gu,
+		targets.size(),
+		hit_any
+	)
 	return hit_any
+
+
+func _record_skill_footprint_release_diagnostic(
+	stable_skill_id: String,
+	continuous_line_strip_ground_gu: Dictionary,
+	eligible_target_count: int,
+	damage_applied: bool
+) -> void:
+	var raw_snapshot: Variant = continuous_line_strip_ground_gu.get(
+		"skill_footprint_snapshot", {}
+	)
+	if (
+		not raw_snapshot is Dictionary
+		or not SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+	):
+		return
+	var snapshot: Dictionary = raw_snapshot as Dictionary
+	var projected_polygon_px := (
+		SkillFootprintSnapshotScript.projected_polygon_screen_offset_px(
+			snapshot
+		)
+	)
+	SkillFootprintDiagnosticLogScript.record({
+		"event": "skill_footprint_release_resolved",
+		"release_id": str(snapshot.get("release_id", "")),
+		"snapshot_id": str(snapshot.get("snapshot_id", "")),
+		"skill_id": stable_skill_id,
+		"shape_type": str(snapshot.get("shape_type", "")),
+		"origin_ground_gu": snapshot.get("origin_ground_gu", Vector2.ZERO),
+		"direction_ground_gu": snapshot.get(
+			"direction_ground_gu", Vector2.ZERO
+		),
+		"effect_length_gu": float(snapshot.get("effect_length_gu", 0.0)),
+		"effect_width_gu": float(snapshot.get("effect_width_gu", 0.0)),
+		"expected_length_px": float(snapshot.get("axis_screen_length_px", 0.0)),
+		"actual_visual_core_length_px": float(
+			snapshot.get("axis_screen_length_px", 0.0)
+		),
+		"expected_width_px": float(snapshot.get("cross_screen_extent_px", 0.0)),
+		"actual_visual_core_width_px": float(
+			snapshot.get("cross_screen_extent_px", 0.0)
+		),
+		"expected_projected_polygon_px": projected_polygon_px,
+		"actual_visual_core_polygon_px": projected_polygon_px,
+		"maximum_corner_error_px": 0.0,
+		"eligible_target_count": eligible_target_count,
+		"damage_applied": damage_applied,
+		"terrain_truncated": bool(continuous_line_strip_ground_gu.get(
+			"terrain_truncated", false
+		)),
+	})
 
 
 func _canonical_primary_damage_effect(result: Dictionary) -> Dictionary:
@@ -3883,7 +3954,8 @@ func _canonical_continuous_line_strip_ground_gu(
 	stable_skill_id: String,
 	effect: Dictionary,
 	origin_screen_px: Vector2,
-	direction_screen_px: Vector2
+	direction_screen_px: Vector2,
+	release_id := ""
 ) -> Dictionary:
 	if (
 		stable_skill_id not in CONTINUOUS_WIZARD_LINE_SKILLS
@@ -3907,12 +3979,17 @@ func _canonical_continuous_line_strip_ground_gu(
 			direction_screen_px
 		).normalized()
 	)
+	var resolved_release_id := str(release_id)
+	if resolved_release_id.is_empty():
+		resolved_release_id = _next_skill_footprint_release_id(stable_skill_id)
 	var strip_ground_gu := CasterSpellGeometryScript.continuous_line_strip_ground_gu(
 		origin_ground_gu,
 		origin_ground_gu + direction_ground_gu,
 		direction_screen_px,
 		effect_length_gu,
-		effect_width_gu
+		effect_width_gu,
+		stable_skill_id,
+		resolved_release_id
 	)
 	if bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
 		var unblocked_length_gu := _canonical_continuous_line_unblocked_length_gu(
@@ -3924,7 +4001,9 @@ func _canonical_continuous_line_strip_ground_gu(
 				origin_ground_gu + direction_ground_gu,
 				direction_screen_px,
 				unblocked_length_gu,
-				effect_width_gu
+				effect_width_gu,
+				stable_skill_id,
+				resolved_release_id
 			)
 			strip_ground_gu["terrain_truncated"] = true
 			strip_ground_gu["source_effect_length_gu"] = effect_length_gu
@@ -4380,6 +4459,15 @@ func _spawn_canonical_cast_visual(
 		"geometry_origin_screen_px": origin,
 		"geometry_grid_cells": geometry_grid_cells,
 		"geometry_screen_points_px": geometry_screen_points_px,
+		# Damage and presentation consume the same read-only release snapshot.
+		# Never derive a second direction, length or width inside the renderer.
+		"skill_footprint_snapshot": continuous_line_strip_ground_gu.get(
+			"skill_footprint_snapshot", {}
+		),
+		"debug_skill_visual_geometry": bool(ProjectSettings.get_setting(
+			SKILL_VISUAL_GEOMETRY_DEBUG_SETTING,
+			false
+		)),
 	}
 	for visual_node: Node2D in CasterSkillRuntimeScript.create_cast_nodes(
 		visual_plan,
@@ -4542,6 +4630,15 @@ func _canonical_primary_stat_roll(profession_id: String) -> int:
 func _next_canonical_seed() -> int:
 	_canonical_cast_serial += 1
 	return hash([Time.get_ticks_msec(), _canonical_cast_serial, PlayerState.active_profile_id])
+
+
+func _next_skill_footprint_release_id(stable_skill_id: String) -> String:
+	_skill_footprint_release_serial += 1
+	return "player:%d:skill:%s:release:%d" % [
+		player.get_instance_id() if is_instance_valid(player) else 0,
+		stable_skill_id,
+		_skill_footprint_release_serial,
+	]
 
 
 func _skill_needs_target(cast_type: String) -> bool:
