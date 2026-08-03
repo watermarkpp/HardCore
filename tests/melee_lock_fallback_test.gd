@@ -98,12 +98,11 @@ func _run() -> void:
 	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b]:
 		assert(target.current_hp < target.max_hp, "刺杀遗漏范围内目标：%s" % target.monster_data.get("name", ""))
 
-	# A locked monster near the edge of one 45-degree visual sector must use the
-	# exact release-frame footpoint axis. At short range the old canonical axis
-	# happened to fit inside the 1-GU strip; at the 2.4-GU far segment its lateral
-	# error exceeds the strip and produced the device-only-looking "visual hit,
-	# no damage" regression. Keep the body on the S row, but share one continuous
-	# damage axis between the locked target and every other monster in the strip.
+	# Thrust visual and damage geometry share the same snapped eight-direction
+	# release axis. A locked target near the edge of the S visual sector must not
+	# bend the 2.5 x 1 GU strip toward itself. Other targets covered by the formal
+	# S strip still enter the damage pipeline, including targets whose centers are
+	# outside the strip but whose approved combat footprints touch its boundary.
 	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b]:
 		target.global_position = origin + Vector2(3000, 3000)
 	var off_axis_direction_gu := south_gu.rotated(deg_to_rad(22.0))
@@ -112,10 +111,38 @@ func _run() -> void:
 		"刺杀远端偏轴锁定",
 		origin + _screen_offset_gu(off_axis_direction_gu * 2.4)
 	)
-	var off_axis_near := _make_enemy(
+	var snapped_axis_near := _make_enemy(
 		game,
-		"刺杀同轴近端",
-		origin + _screen_offset_gu(off_axis_direction_gu * 1.0)
+		"刺杀S条带近端",
+		origin + _screen_offset_gu(south_gu * 1.0)
+	)
+	var footprint_boundary_contact := _make_enemy(
+		game,
+		"刺杀占地边界接触",
+		origin
+	)
+	var south_strip_side_gu := Vector2(south_gu.y, -south_gu.x)
+	var boundary_footprint_offsets := (
+		WarriorMeleeGeometry.target_footprint_polygon_ground_gu(
+			Vector2.ZERO,
+			footprint_boundary_contact.combat_radius_gu
+		)
+	)
+	var boundary_lateral_support_gu := 0.0
+	for offset_ground_gu: Vector2 in boundary_footprint_offsets:
+		boundary_lateral_support_gu = maxf(
+			boundary_lateral_support_gu,
+			absf(offset_ground_gu.dot(south_strip_side_gu))
+		)
+	var boundary_contact_center_gu := (
+		south_gu * 1.0
+		+ south_strip_side_gu * (
+			WarriorMeleeGeometry.THRUST_WIDTH_GU * 0.5
+			+ boundary_lateral_support_gu
+		)
+	)
+	footprint_boundary_contact.global_position = (
+		origin + _screen_offset_gu(boundary_contact_center_gu)
 	)
 	var off_axis_release: Dictionary = ReleaseGeometry.resolve(
 		origin,
@@ -128,23 +155,52 @@ func _run() -> void:
 	)
 	assert(int(off_axis_release.visual_direction_index) == 0)
 	assert(int(off_axis_release.live_locked_target_direction_index) == 0)
-	var old_far_slot := WarriorMeleeGeometry.thrust_footprint_slot_gu(
+	var snapped_far_slot := WarriorMeleeGeometry.thrust_footprint_slot_gu(
 		Vector2.ZERO,
 		off_axis_direction_gu * 2.4,
 		off_axis_locked.combat_radius_gu,
 		0
 	)
-	assert(old_far_slot == 0, "测试样本没有复现旧八方向中心线的远端漏判")
+	assert(snapped_far_slot == 0, "22度远端目标本应在正式S条带外")
+	assert(
+		WarriorMeleeGeometry.thrust_slot(
+			Vector2.ZERO,
+			boundary_contact_center_gu,
+			0
+		) == 0,
+		"边界样本的中心点必须在条带外"
+	)
+	assert(
+		WarriorMeleeGeometry.thrust_footprint_slot_gu(
+			Vector2.ZERO,
+			boundary_contact_center_gu,
+			footprint_boundary_contact.combat_radius_gu,
+			0
+		) == 1,
+		"边界样本的占地边界未与正式S条带接触"
+	)
 	_set_attack_context(game, "thrust", "刺杀剑术", off_axis_release)
 	game._on_player_attack(origin, Vector2.DOWN, 20)
-	assert(off_axis_locked.current_hp < off_axis_locked.max_hp, "连续刺杀轴没有命中2.4 GU偏轴锁定目标")
-	assert(off_axis_near.current_hp < off_axis_near.max_hp, "同一次刺杀的近端候选没有复用连续伤害轴")
+	assert(
+		off_axis_locked.current_hp == off_axis_locked.max_hp,
+		"S向刺杀错误命中22度偏轴的2.4 GU锁定目标"
+	)
+	assert(
+		snapped_axis_near.current_hp < snapped_axis_near.max_hp,
+		"S向刺杀没有命中正式S条带内的近端目标"
+	)
+	assert(
+		footprint_boundary_contact.current_hp
+		< footprint_boundary_contact.max_hp,
+		"S向刺杀仅判定中心点，漏掉占地边界接触目标"
+	)
 
 	# Half moon likewise has no target-count cap inside its approved arc.
 	near_a.global_position = origin + _screen_offset_gu(south_gu * 1.0)
 	near_b.global_position = origin + _screen_offset_gu(south_gu * 1.0)
 	off_axis_locked.global_position = origin + Vector2(3000, 3000)
-	off_axis_near.global_position = origin + Vector2(3000, 3000)
+	snapped_axis_near.global_position = origin + Vector2(3000, 3000)
+	footprint_boundary_contact.global_position = origin + Vector2(3000, 3000)
 	_reset_hp([near_a, near_b, half_side_a, half_side_b, half_side_c])
 	game.player.thrusting_enabled = false
 	game.player.half_moon_enabled = true
