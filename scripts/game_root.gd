@@ -20,6 +20,9 @@ const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillGeometryServiceScript := preload(
+	"res://scripts/skills/skill_geometry_service.gd"
+)
 const CombatDirectionSpaceScript := preload("res://scripts/skills/combat_direction_space.gd")
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
@@ -85,6 +88,30 @@ const CONTINUOUS_WIZARD_LINE_SKILLS := [
 	"wizard.hellfire",
 	"wizard.laser",
 ]
+const GROUND_EXACT_SKILL_IDS := {
+	"wizard.repulsion_ring": true,
+	"wizard.exploding_flame": true,
+	"wizard.fire_wall": true,
+	"wizard.hell_lightning": true,
+	"wizard.ice_storm": true,
+	"taoist.mass_invisibility": true,
+	"taoist.magic_defense": true,
+	"taoist.defense": true,
+	"taoist.entrapment": true,
+	"taoist.mass_healing": true,
+}
+const TARGET_FOOTPRINT_SKILL_IDS := {
+	"wizard.lightning": true,
+	"wizard.temptation_light": true,
+	"wizard.holy_word": true,
+	"taoist.healing": true,
+	"taoist.poison": true,
+	"taoist.revelation": true,
+}
+const ATTACHED_STATE_SKILL_IDS := {
+	"wizard.magic_shield": true,
+	"taoist.invisibility": true,
+}
 const SKILL_VISUAL_GEOMETRY_DEBUG_SETTING := (
 	"debug/skill_visual_geometry/enabled"
 )
@@ -2372,7 +2399,7 @@ func _wild_rush_target_is_eligible(target: EnemyActor) -> bool:
 	)
 
 
-func _build_wild_rush_path_plan(target: EnemyActor) -> Dictionary:
+func _build_wild_rush_path_plan(target: EnemyActor, release_id := "") -> Dictionary:
 	var result := {
 		"contract_id": WarriorMeleeGeometryScript.WILD_RUSH_CONTRACT_ID,
 		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
@@ -2417,6 +2444,22 @@ func _build_wild_rush_path_plan(target: EnemyActor) -> Dictionary:
 			0.0 if dynamic_blocked else static_clear_distance_gu
 		),
 	}, true)
+	var resolved_release_id := str(release_id)
+	if resolved_release_id.is_empty():
+		resolved_release_id = _next_skill_footprint_release_id(WILD_RUSH_SKILL_ID)
+	result["release_id"] = resolved_release_id
+	result["skill_footprint_snapshot"] = (
+		WarriorMeleeGeometryScript.wild_rush_release_footprint_snapshot_ground_gu(
+			resolved_release_id,
+			player_ground_gu,
+			player_ground_gu
+			+ direction_ground_gu
+			* float(result.get("resolved_push_distance_gu", 0.0)),
+			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+				ArtSpec.PLAYER_COLLISION_RADIUS_PX
+			)
+		)
+	)
 	return result
 
 
@@ -2513,8 +2556,27 @@ func _apply_wild_rush_displacement(
 	):
 		return false
 	var motion_ground_gu := direction_ground_gu.normalized() * distance_gu
+	var rush_snapshot: Dictionary = target_context.get(
+		"skill_footprint_snapshot", {}
+	)
+	var player_origin_ground_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	if not SkillFootprintSnapshotScript.is_valid(rush_snapshot):
+		return false
+	if (
+		str(rush_snapshot.get("shape_type", ""))
+		!= SkillFootprintSnapshotScript.SHAPE_SWEPT_CAPSULE_PATH
+		or not (rush_snapshot.get(
+			"segment_start_ground_gu", Vector2.INF
+		) as Vector2).is_equal_approx(player_origin_ground_gu)
+		or not (rush_snapshot.get(
+			"segment_end_ground_gu", Vector2.INF
+		) as Vector2).is_equal_approx(player_origin_ground_gu + motion_ground_gu)
+	):
+		return false
 	var player_destination := _canonical_ground_gu_to_screen_px(
-		_canonical_screen_px_to_ground_gu(player.global_position)
+		player_origin_ground_gu
 		+ motion_ground_gu
 	)
 	var target_destination := _canonical_ground_gu_to_screen_px(
@@ -2762,6 +2824,18 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	var selection_mode := str(body_selection.get("mode", WarriorMeleeGeometryScript.SKILL_NORMAL))
 	if Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
 		selection_mode = WarriorMeleeGeometryScript.SKILL_FIRE
+	var melee_release_snapshot := _create_melee_release_footprint_snapshot(
+		origin,
+		direction,
+		selection_mode,
+		release_geometry
+	)
+	release_geometry = release_geometry.duplicate(true)
+	release_geometry["origin_ground_gu"] = _canonical_screen_px_to_ground_gu(origin)
+	release_geometry["release_id"] = str(melee_release_snapshot.get(
+		"release_id", release_geometry.get("release_id", "")
+	))
+	release_geometry["skill_footprint_snapshot"] = melee_release_snapshot
 	var thrust_damage_axis_plan: Dictionary = {}
 	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
 		thrust_damage_axis_plan = (
@@ -2770,12 +2844,14 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				release_geometry
 			)
 		)
+		thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
 	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		selection_mode,
 		release_geometry,
-		thrust_damage_axis_plan
+		thrust_damage_axis_plan,
+		melee_release_snapshot
 	)
 	var eligible_target_count := primary_targets.size()
 	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
@@ -2784,14 +2860,16 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			direction,
 			primary_targets,
 			release_geometry,
-			thrust_damage_axis_plan
+			thrust_damage_axis_plan,
+			melee_release_snapshot
 		).size()
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		eligible_target_count += _half_moon_secondary_targets(
 			origin,
 			direction,
 			primary_targets,
-			release_geometry
+			release_geometry,
+			melee_release_snapshot
 		).size()
 	var has_eligible_target := eligible_target_count > 0
 	var consumes_armed_fire := false
@@ -2819,6 +2897,58 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		}
 	)
 	var effect_mode := str(hit_effect.get("effect_mode", ""))
+	if (
+		effect_mode in [
+			WarriorMeleeGeometryScript.SKILL_NORMAL,
+			WarriorMeleeGeometryScript.SKILL_THRUST,
+			WarriorMeleeGeometryScript.SKILL_HALF_MOON,
+			WarriorMeleeGeometryScript.SKILL_FIRE,
+		]
+		and effect_mode != selection_mode
+	):
+		melee_release_snapshot = _create_melee_release_footprint_snapshot(
+			origin,
+			direction,
+			effect_mode,
+			release_geometry
+		)
+		release_geometry["skill_footprint_snapshot"] = melee_release_snapshot
+		thrust_damage_axis_plan = {}
+		if effect_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+			thrust_damage_axis_plan = (
+				WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+					_melee_direction_index(direction, release_geometry),
+					release_geometry
+				)
+			)
+			thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
+		primary_targets = _physical_primary_targets(
+			origin,
+			direction,
+			effect_mode,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot
+		)
+		eligible_target_count = primary_targets.size()
+		if effect_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+			eligible_target_count += _thrust_secondary_targets(
+				origin,
+				direction,
+				primary_targets,
+				release_geometry,
+				thrust_damage_axis_plan,
+				melee_release_snapshot
+			).size()
+		elif effect_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
+			eligible_target_count += _half_moon_secondary_targets(
+				origin,
+				direction,
+				primary_targets,
+				release_geometry,
+				melee_release_snapshot
+			).size()
+		has_eligible_target = eligible_target_count > 0
 	if consumes_armed_fire and effect_mode == "fire":
 		_set_canonical_fire_charge_expires_at(0)
 	var melee_modifiers := SkillRuntimeRouterScript.resolve_warrior_melee_modifiers({
@@ -2850,7 +2980,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			accuracy_bonus,
 			bool(body_selection.get("direct_toggle_release", false)),
 			release_geometry,
-			thrust_damage_axis_plan
+			thrust_damage_axis_plan,
+			melee_release_snapshot
 		)
 		hit_any = bool(melee_resolution.get("hit_any", false))
 		canonical_resolution = str(melee_resolution.get("resolution", "rejected"))
@@ -3231,13 +3362,17 @@ func _execute_canonical_skill(
 		definition,
 		origin,
 		direction,
-		not authoritative_cast_target
+		not authoritative_cast_target,
+		str(extra_target_context.get("release_id", "")),
+		extra_target_context
 	)
-	target_context.merge(extra_target_context, true)
 	var cast_target := _skill_cast_target
 	var request_facing := _canonical_facing_for_skill(stable_skill_id, direction)
 	if stable_skill_id == WILD_RUSH_SKILL_ID and cast_target != null:
-		var rush_plan := _build_wild_rush_path_plan(cast_target)
+		var rush_plan := _build_wild_rush_path_plan(
+			cast_target,
+			str(target_context.get("release_id", ""))
+		)
 		if bool(rush_plan.get("eligible", false)):
 			target_context.merge(rush_plan, true)
 			request_facing = rush_plan.get("direction_step", request_facing)
@@ -3294,7 +3429,8 @@ func _execute_canonical_melee(
 	accuracy_bonus: int,
 	direct_toggle_release := false,
 	release_geometry: Dictionary = {},
-	thrust_damage_axis_plan: Dictionary = {}
+	thrust_damage_axis_plan: Dictionary = {},
+	melee_release_snapshot: Dictionary = {}
 ) -> Dictionary:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
@@ -3315,7 +3451,8 @@ func _execute_canonical_melee(
 		direction,
 		mode,
 		release_geometry,
-		thrust_damage_axis_plan
+		thrust_damage_axis_plan,
+		melee_release_snapshot
 	)
 	var thrust_secondaries: Array[EnemyActor] = []
 	var half_moon_secondaries: Array[EnemyActor] = []
@@ -3326,7 +3463,8 @@ func _execute_canonical_melee(
 			direction,
 			primary_targets,
 			release_geometry,
-			thrust_damage_axis_plan
+			thrust_damage_axis_plan,
+			melee_release_snapshot
 		)
 		eligible_target_count += thrust_secondaries.size()
 	elif mode == "half_moon":
@@ -3334,7 +3472,8 @@ func _execute_canonical_melee(
 			origin,
 			direction,
 			primary_targets,
-			release_geometry
+			release_geometry,
+			melee_release_snapshot
 		)
 		eligible_target_count += half_moon_secondaries.size()
 	var extra := {
@@ -3422,7 +3561,9 @@ func _canonical_target_context(
 	definition: Dictionary,
 	origin: Vector2,
 	direction: Vector2,
-	allow_auto_target := true
+	allow_auto_target := true,
+	release_id := "",
+	context_overrides: Dictionary = {}
 ) -> Dictionary:
 	var target_contract: Dictionary = definition.get("target", {})
 	var target_mode := str(target_contract.get("mode", ""))
@@ -3476,6 +3617,8 @@ func _canonical_target_context(
 		roundi(fallback_target_ground_gu.x),
 		roundi(fallback_target_ground_gu.y)
 	)
+	if friendly_cast and GROUND_EXACT_SKILL_IDS.has(str(definition.get("skill_id", ""))):
+		fallback_target_tile = _canonical_screen_px_to_grid_cell(origin)
 	if maximum_range_gu > 0.0:
 		fallback_target_tile = Vector2i(
 			roundi(fallback_target_ground_gu.x),
@@ -3524,6 +3667,79 @@ func _canonical_target_context(
 			"target_is_living": target.current_hp > 0,
 			"actual_hp_missing": target.max_hp - target.current_hp,
 		}, true)
+	# Caller-provided authoritative values (for example a server-selected
+	# teleport destination) must be applied before the immutable release
+	# footprint is built.  Merging them afterwards produces a result whose
+	# effect destination and footprint snapshot describe different ground
+	# positions.
+	context.merge(context_overrides, true)
+	var stable_skill_id := str(definition.get("skill_id", ""))
+	var resolved_release_id := str(release_id)
+	if resolved_release_id.is_empty():
+		resolved_release_id = _next_skill_footprint_release_id(stable_skill_id)
+	context["release_id"] = resolved_release_id
+	var exact_geometry_cells: Array[Vector2i] = []
+	var exact_release_snapshot: Dictionary = {}
+	if GROUND_EXACT_SKILL_IDS.has(stable_skill_id):
+		var declared_geometry_cells := SkillGeometryServiceScript.cells(
+			definition,
+			_canonical_screen_px_to_grid_cell(origin),
+			Vector2i(signi(roundi(direction_ground_gu.x)), signi(roundi(direction_ground_gu.y))),
+			context.get("target_tile", Vector2i.ZERO)
+		)
+		exact_geometry_cells = CasterSpellGeometryScript.effective_cells(
+			stable_skill_id,
+			definition.get("geometry", {}),
+			declared_geometry_cells,
+			Callable(self, "_canonical_spell_cell_is_terrain_blocked")
+		)
+		exact_release_snapshot = (
+			CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
+				stable_skill_id,
+				resolved_release_id,
+				origin_ground_gu,
+				exact_geometry_cells
+			)
+		)
+		context["geometry_cells"] = exact_geometry_cells
+		context["skill_footprint_snapshot"] = exact_release_snapshot
+	elif TARGET_FOOTPRINT_SKILL_IDS.has(stable_skill_id):
+		var target_actor: Node2D = target if is_instance_valid(target) else player
+		if is_instance_valid(target_actor):
+			context["skill_footprint_snapshot"] = (
+				SkillFootprintSnapshotScript.create_target_footprint(
+					stable_skill_id,
+					resolved_release_id,
+					_canonical_screen_px_to_ground_gu(target_actor.global_position),
+					_actor_combat_radius_gu(target_actor),
+					target_actor.get_instance_id()
+				)
+			)
+	elif ATTACHED_STATE_SKILL_IDS.has(stable_skill_id) and is_instance_valid(player):
+		context["skill_footprint_snapshot"] = (
+			SkillFootprintSnapshotScript.create_target_footprint(
+				stable_skill_id,
+				resolved_release_id,
+				_canonical_screen_px_to_ground_gu(player.global_position),
+				_actor_combat_radius_gu(player),
+				player.get_instance_id()
+			)
+		)
+	elif stable_skill_id == "wizard.teleport":
+		var teleport_destination_screen_px := _canonical_grid_cell_to_screen_px(
+			context.get("destination_tile", Vector2i.ZERO)
+		)
+		context["skill_footprint_snapshot"] = (
+			SkillFootprintSnapshotScript.create_target_footprint(
+				stable_skill_id,
+				resolved_release_id,
+				_canonical_screen_px_to_ground_gu(
+					teleport_destination_screen_px
+				),
+				_actor_combat_radius_gu(player),
+				player.get_instance_id()
+			)
+		)
 	var nearby: Array[Dictionary] = []
 	var adjacent_ring_cells: Array[Vector2i] = []
 	if str(definition.get("geometry", {}).get("shape", "")) == "adjacent_ring":
@@ -3538,10 +3754,19 @@ func _canonical_target_context(
 		if (
 			not node is EnemyActor
 			or node.is_queued_for_deletion()
-			or not GroundUnitSpaceScript.is_within_range_gu(
-				origin_ground_gu,
-				_canonical_screen_px_to_ground_gu(node.global_position),
-				search_range_gu
+			or (
+				SkillFootprintSnapshotScript.is_valid(exact_release_snapshot)
+				and not _skill_snapshot_intersects_enemy(
+					exact_release_snapshot, node as EnemyActor
+				)
+			)
+			or (
+				not SkillFootprintSnapshotScript.is_valid(exact_release_snapshot)
+				and not GroundUnitSpaceScript.is_within_range_gu(
+					origin_ground_gu,
+					_canonical_screen_px_to_ground_gu(node.global_position),
+					search_range_gu
+				)
 			)
 		):
 			continue
@@ -3573,6 +3798,35 @@ func _canonical_target_context(
 			"within_level_gate": node.level <= PlayerState.level,
 		})
 	context["targets"] = nearby
+	if friendly_cast and SkillFootprintSnapshotScript.is_valid(exact_release_snapshot):
+		var friendly_targets: Array[Dictionary] = []
+		var friendly_missing_hp: Array[int] = []
+		var friendly_actors: Array[Node2D] = [player]
+		for summon_node: Node in get_tree().get_nodes_in_group("summons"):
+			if summon_node is SummonActor and summon_node.owner_player == player:
+				friendly_actors.append(summon_node)
+		for friendly_actor: Node2D in friendly_actors:
+			if not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+				exact_release_snapshot,
+				_canonical_screen_px_to_ground_gu(friendly_actor.global_position),
+				_actor_combat_radius_gu(friendly_actor)
+			):
+				continue
+			var actor_level := (
+				PlayerState.level
+				if friendly_actor == player
+				else int((friendly_actor as SummonActor).owner_level)
+			)
+			var actor_max_hp := int(friendly_actor.get("max_hp"))
+			var actor_current_hp := int(friendly_actor.get("current_hp"))
+			friendly_targets.append({
+				"instance_id": friendly_actor.get_instance_id(),
+				"level": actor_level,
+			})
+			friendly_missing_hp.append(maxi(0, actor_max_hp - actor_current_hp))
+		context["friendly_targets"] = friendly_targets
+		context["friendly_missing_hp"] = friendly_missing_hp
+		context["affected_friendly_count"] = friendly_targets.size()
 	return context
 
 
@@ -3635,6 +3889,34 @@ func _apply_canonical_effects(
 		direction,
 		str(target_context.get("release_id", ""))
 	)
+	var release_id := str(target_context.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = _next_skill_footprint_release_id(stable_skill_id)
+	var skill_release_snapshot: Dictionary = target_context.get(
+		"skill_footprint_snapshot", {}
+	)
+	if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+		skill_release_snapshot = _canonical_skill_release_footprint_snapshot(
+			stable_skill_id,
+			release_id,
+			origin,
+			target_position,
+			target,
+			effective_geometry_cells,
+			geometry_effect,
+			continuous_line_strip_ground_gu
+		)
+	if (
+		SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		and str(skill_release_snapshot.get("shape_type", ""))
+		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
+	):
+		effective_geometry_cells.clear()
+		for raw_cell: Variant in skill_release_snapshot.get(
+			"geometry_cells_grid_steps", []
+		):
+			if raw_cell is Vector2i:
+				effective_geometry_cells.append(raw_cell)
 	_spawn_canonical_cast_visual(
 		stable_skill_id,
 		origin,
@@ -3642,8 +3924,10 @@ func _apply_canonical_effects(
 		target,
 		target_position,
 		effective_geometry_cells,
-		continuous_line_strip_ground_gu
+		continuous_line_strip_ground_gu,
+		skill_release_snapshot
 	)
+	var friendly_effect_index := 0
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
 			continue
@@ -3684,24 +3968,43 @@ func _apply_canonical_effects(
 					target,
 					effective_geometry_cells,
 					effect,
-					continuous_line_strip_ground_gu
+					continuous_line_strip_ground_gu,
+					skill_release_snapshot
 				)
 			"persistent_ground_damage":
 				_spawn_canonical_ground_field(
 					stable_skill_id,
-					result.get("geometry_cells", []),
+					effective_geometry_cells,
 					target_position,
-					effect
+					effect,
+					release_id,
+					skill_release_snapshot
 				)
 			"dedicated_heal":
 				player.restore_health(int(effect.get("actual_hp_restored", 0)))
 			"dedicated_area_heal":
 				var restored_by_target: Array = effect.get("actual_hp_restored_by_target", [])
-				if not restored_by_target.is_empty():
-					player.restore_health(int(restored_by_target[0]))
+				var friendly_targets: Array = target_context.get("friendly_targets", [])
+				for heal_index: int in range(mini(
+					restored_by_target.size(), friendly_targets.size()
+				)):
+					var friendly_data: Dictionary = friendly_targets[heal_index]
+					var friendly_actor := _canonical_friendly_actor(
+						int(friendly_data.get("instance_id", 0))
+					)
+					_apply_canonical_friendly_heal(
+						friendly_actor,
+						int(restored_by_target[heal_index])
+					)
 			"adjacent_push":
 				var repulsion_target := _canonical_effect_enemy(effect)
-				if repulsion_target != null and bool(effect.get("displaced", false)):
+				if (
+					repulsion_target != null
+					and bool(effect.get("displaced", false))
+					and _skill_snapshot_intersects_enemy(
+						skill_release_snapshot, repulsion_target
+					)
+				):
 					var source_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 					var target_ground_gu := _canonical_screen_px_to_ground_gu(
 						repulsion_target.global_position
@@ -3726,29 +4029,85 @@ func _apply_canonical_effects(
 					var destination := _canonical_grid_cell_to_screen_px(
 						effect.get("destination", Vector2i.ZERO)
 					)
-					if _apply_canonical_player_teleport(destination):
+					var destination_ground_gu := _canonical_screen_px_to_ground_gu(
+						destination
+					)
+					var snapshot_destination_ground_gu: Vector2 = (
+						skill_release_snapshot.get(
+							"target_center_ground_gu", Vector2.INF
+						)
+					)
+					if (
+						SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+						and snapshot_destination_ground_gu.is_equal_approx(
+							destination_ground_gu
+						)
+						and _apply_canonical_player_teleport(destination)
+					):
 						_spawn_canonical_teleport_arrival(
 							stable_skill_id,
 							destination,
-							direction
+							direction,
+							skill_release_snapshot
 						)
 			"refreshable_damage_reduction_buff":
 				player.apply_magic_shield(float(effect.get("duration_seconds", 1)), float(effect.get("damage_reduction", 0.0)))
-			"monster_aggro_stealth", "area_monster_aggro_stealth":
+			"monster_aggro_stealth":
 				player.apply_stealth(float(effect.get("duration_seconds", 1)))
+			"area_monster_aggro_stealth":
+				var stealth_target_ids: Array = effect.get(
+					"target_instance_ids", []
+				)
+				if stealth_target_ids.is_empty():
+					for friendly_data: Dictionary in target_context.get(
+						"friendly_targets", []
+					):
+						stealth_target_ids.append(int(friendly_data.get(
+							"instance_id", 0
+						)))
+				for target_instance_id: int in stealth_target_ids:
+					var stealth_actor := _canonical_friendly_actor(target_instance_id)
+					if stealth_actor == player:
+						player.apply_stealth(float(effect.get("duration_seconds", 1)))
 			"friendly_defence_buff":
-				player.apply_defense_buff(float(effect.get("duration_seconds", 1)), int(effect.get("flat_bonus", 1)))
+				var buff_target_id := int(effect.get("target_instance_id", 0))
+				if buff_target_id <= 0:
+					var friendly_targets: Array = target_context.get("friendly_targets", [])
+					if friendly_effect_index < friendly_targets.size():
+						buff_target_id = int((friendly_targets[friendly_effect_index] as Dictionary).get(
+							"instance_id", 0
+						))
+				friendly_effect_index += 1
+				if _canonical_friendly_actor(buff_target_id) == player:
+					player.apply_defense_buff(
+						float(effect.get("duration_seconds", 1)),
+						int(effect.get("flat_bonus", 1))
+					)
 			"poison_resolution":
-				if target != null and not bool(effect.get("resisted", false)):
+				if (
+					target != null
+					and not bool(effect.get("resisted", false))
+					and _skill_snapshot_intersects_enemy(skill_release_snapshot, target)
+				):
 					_apply_canonical_poison(target, effect)
 			"temptation_resolution":
-				if target != null:
+				if target != null and _skill_snapshot_intersects_enemy(
+					skill_release_snapshot, target
+				):
 					_apply_canonical_temptation(target, effect)
 			"holy_word_resolution":
-				if target != null and bool(effect.get("instant_kill", false)):
+				if (
+					target != null
+					and bool(effect.get("instant_kill", false))
+					and _skill_snapshot_intersects_enemy(skill_release_snapshot, target)
+				):
 					_combat_runtime.apply_enemy_physical_damage(target, target.current_hp, player)
 			"hp_information_reveal":
-				if target != null and bool(effect.get("revealed", false)):
+				if (
+					target != null
+					and bool(effect.get("revealed", false))
+					and _skill_snapshot_intersects_enemy(skill_release_snapshot, target)
+				):
 					hud.show_message("%s：生命%d/%d" % [target.display_name, target.current_hp, target.max_hp], 2.0)
 			"monster_boundary_control":
 				if int(effect.get("trapped_count", 0)) > 0:
@@ -3762,15 +4121,25 @@ func _apply_canonical_effects(
 					for node: Node in get_tree().get_nodes_in_group("enemies"):
 						if (
 							node is EnemyActor
-							and _ground_circle_intersects_enemy_footprint_gu(
-								boundary_center_screen_px,
-								boundary_radius_gu,
-								node
+							and (
+								_skill_snapshot_intersects_enemy(
+									skill_release_snapshot, node
+								)
+								or (
+									not SkillFootprintSnapshotScript.is_valid(
+										skill_release_snapshot
+									)
+									and _ground_circle_intersects_enemy_footprint_gu(
+										boundary_center_screen_px,
+										boundary_radius_gu,
+										node
+									)
+								)
 							)
 						):
 							node.apply_control(float(effect.get("duration_seconds", 1)))
 			"main_pet_spawn", "recall_existing_main_pet":
-				_apply_canonical_main_pet(effect, stable_skill_id)
+				_apply_canonical_main_pet(effect, stable_skill_id, release_id)
 			"next_melee_charge":
 				_set_canonical_fire_charge_expires_at(
 					Time.get_ticks_msec() + maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
@@ -3815,8 +4184,15 @@ func _apply_canonical_spell_damage(
 	primary: EnemyActor,
 	raw_geometry_cells: Variant = [],
 	effect: Dictionary = {},
-	continuous_line_strip_ground_gu: Dictionary = {}
+	continuous_line_strip_ground_gu: Dictionary = {},
+	skill_release_snapshot: Dictionary = {}
 ) -> bool:
+	if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+		var raw_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_line_snapshot is Dictionary:
+			skill_release_snapshot = raw_line_snapshot as Dictionary
 	var targets: Array[EnemyActor] = []
 	var has_declared_geometry_cells := (
 		raw_geometry_cells is Array
@@ -3827,11 +4203,23 @@ func _apply_canonical_spell_damage(
 			stable_skill_id,
 			raw_geometry_cells,
 			effect,
-			continuous_line_strip_ground_gu
+			continuous_line_strip_ground_gu,
+			skill_release_snapshot
 		)
-	elif effect_type == "targeted_sky_strike" and primary != null:
+	elif (
+		effect_type == "targeted_sky_strike"
+		and primary != null
+		and _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
+	):
 		targets.append(primary)
-	elif primary != null and effect_type not in ["area_damage", "caster_centered_area_damage"]:
+	elif (
+		primary != null
+		and effect_type not in ["area_damage", "caster_centered_area_damage"]
+		and (
+			not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+			or _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
+		)
+	):
 		targets.append(primary)
 	else:
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
@@ -3842,10 +4230,16 @@ func _apply_canonical_spell_damage(
 			if not node is EnemyActor or node.is_queued_for_deletion():
 				continue
 			var enemy := node as EnemyActor
-			if _ground_circle_intersects_enemy_footprint_gu(
-				origin,
-				radius_gu,
-				enemy
+			if (
+				_skill_snapshot_intersects_enemy(skill_release_snapshot, enemy)
+				or (
+					not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+					and _ground_circle_intersects_enemy_footprint_gu(
+						origin,
+						radius_gu,
+						enemy
+					)
+				)
 			):
 				targets.append(enemy)
 	var hit_any := false
@@ -3861,7 +4255,7 @@ func _apply_canonical_spell_damage(
 		hit_any = bool(resolution.get("success", false)) or hit_any
 	_record_skill_footprint_release_diagnostic(
 		stable_skill_id,
-		continuous_line_strip_ground_gu,
+		skill_release_snapshot,
 		targets.size(),
 		hit_any
 	)
@@ -3870,13 +4264,13 @@ func _apply_canonical_spell_damage(
 
 func _record_skill_footprint_release_diagnostic(
 	stable_skill_id: String,
-	continuous_line_strip_ground_gu: Dictionary,
+	skill_release_snapshot: Dictionary,
 	eligible_target_count: int,
 	damage_applied: bool
 ) -> void:
-	var raw_snapshot: Variant = continuous_line_strip_ground_gu.get(
-		"skill_footprint_snapshot", {}
-	)
+	var raw_snapshot: Variant = skill_release_snapshot
+	if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+		raw_snapshot = skill_release_snapshot.get("skill_footprint_snapshot", {})
 	if (
 		not raw_snapshot is Dictionary
 		or not SkillFootprintSnapshotScript.is_valid(raw_snapshot)
@@ -3913,7 +4307,7 @@ func _record_skill_footprint_release_diagnostic(
 		"maximum_corner_error_px": 0.0,
 		"eligible_target_count": eligible_target_count,
 		"damage_applied": damage_applied,
-		"terrain_truncated": bool(continuous_line_strip_ground_gu.get(
+		"terrain_truncated": bool(skill_release_snapshot.get(
 			"terrain_truncated", false
 		)),
 	})
@@ -3932,6 +4326,93 @@ func _canonical_primary_damage_effect(result: Dictionary) -> Dictionary:
 		]:
 			return effect
 	return {}
+
+
+func _canonical_skill_release_footprint_snapshot(
+	stable_skill_id: String,
+	release_id: String,
+	origin_screen_px: Vector2,
+	target_position_screen_px: Vector2,
+	target: EnemyActor,
+	effective_geometry_cells: Array[Vector2i],
+	effect: Dictionary,
+	continuous_line_strip_ground_gu: Dictionary
+) -> Dictionary:
+	var raw_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
+		"skill_footprint_snapshot", {}
+	)
+	if (
+		raw_line_snapshot is Dictionary
+		and SkillFootprintSnapshotScript.is_valid(raw_line_snapshot)
+	):
+		return raw_line_snapshot as Dictionary
+	if GROUND_EXACT_SKILL_IDS.has(stable_skill_id) and not effective_geometry_cells.is_empty():
+		return CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
+			stable_skill_id,
+			release_id,
+			_canonical_screen_px_to_ground_gu(origin_screen_px),
+			effective_geometry_cells
+		)
+	if TARGET_FOOTPRINT_SKILL_IDS.has(stable_skill_id):
+		var target_actor: Node2D = target if is_instance_valid(target) else player
+		if not is_instance_valid(target_actor):
+			return {}
+		return SkillFootprintSnapshotScript.create_target_footprint(
+			stable_skill_id,
+			release_id,
+			_canonical_screen_px_to_ground_gu(target_actor.global_position),
+			_actor_combat_radius_gu(target_actor),
+			target_actor.get_instance_id()
+		)
+	if ATTACHED_STATE_SKILL_IDS.has(stable_skill_id) and is_instance_valid(player):
+		return SkillFootprintSnapshotScript.create_target_footprint(
+			stable_skill_id,
+			release_id,
+			_canonical_screen_px_to_ground_gu(player.global_position),
+			_actor_combat_radius_gu(player),
+			player.get_instance_id()
+		)
+	var effect_type := str(effect.get("type", ""))
+	var radius_gu := maxf(0.0, float(effect.get("radius_gu", 0.0)))
+	if effect_type in ["area_damage", "caster_centered_area_damage"] and radius_gu > 0.0:
+		var center_screen_px := (
+			target_position_screen_px
+			if effect_type == "area_damage"
+			else origin_screen_px
+		)
+		return SkillFootprintSnapshotScript.create_circle(
+			stable_skill_id,
+			release_id,
+			_canonical_screen_px_to_ground_gu(center_screen_px),
+			radius_gu
+		)
+	return {}
+
+
+func _actor_combat_radius_gu(actor: Node2D) -> float:
+	if not is_instance_valid(actor):
+		return 0.0
+	for property: Dictionary in actor.get_property_list():
+		if str(property.get("name", "")) == "combat_radius_gu":
+			return maxf(0.0, float(actor.get("combat_radius_gu")))
+	return WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
+
+
+func _skill_snapshot_intersects_enemy(
+	skill_release_snapshot: Dictionary,
+	enemy: EnemyActor
+) -> bool:
+	return (
+		is_instance_valid(enemy)
+		and SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			skill_release_snapshot,
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
+			enemy.combat_radius_gu
+		)
+	)
 
 
 func _canonical_effective_spell_geometry_cells(
@@ -4073,7 +4554,8 @@ func _canonical_spell_geometry_targets(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
 	effect: Dictionary,
-	continuous_line_strip_ground_gu: Dictionary = {}
+	continuous_line_strip_ground_gu: Dictionary = {},
+	skill_release_snapshot: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var geometry_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
@@ -4088,11 +4570,7 @@ func _canonical_spell_geometry_targets(
 	# Both canonical line spells affect every intersecting monster. Limiting the
 	# result to the nominal number of cells makes stacked or large-footprint
 	# monsters visually intersect the line without receiving damage.
-	var maximum_targets := (
-		-1
-		if stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
-		else maxi(0, int(effect.get("maximum_targets", geometry_cells.size())))
-	)
+	var maximum_targets := int(effect.get("maximum_targets", -1))
 	if maximum_targets == 0:
 		return targets
 	if (
@@ -4115,9 +4593,19 @@ func _canonical_spell_geometry_targets(
 			):
 				continue
 			var enemy := node as EnemyActor
-			if not CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
-				continuous_line_strip_ground_gu,
-				_enemy_footprint_polygon_ground_gu(enemy)
+			if (
+				SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+				and not _skill_snapshot_intersects_enemy(
+					skill_release_snapshot, enemy
+				)
+			):
+				continue
+			if (
+				not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+				and not CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
+					continuous_line_strip_ground_gu,
+					_enemy_footprint_polygon_ground_gu(enemy)
+				)
 			):
 				continue
 			var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -4145,6 +4633,27 @@ func _canonical_spell_geometry_targets(
 			targets.append(candidate.get("enemy") as EnemyActor)
 			if maximum_targets > 0 and targets.size() >= maximum_targets:
 				break
+		return targets
+	if (
+		SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		and str(skill_release_snapshot.get("shape_type", ""))
+		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
+	):
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if (
+				node is EnemyActor
+				and not node.is_queued_for_deletion()
+				and (node as EnemyActor).current_hp > 0
+				and _skill_snapshot_intersects_enemy(
+					skill_release_snapshot, node as EnemyActor
+				)
+			):
+				targets.append(node as EnemyActor)
+		targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
+			return a.get_instance_id() < b.get_instance_id()
+		)
+		if maximum_targets > 0 and targets.size() > maximum_targets:
+			targets.resize(maximum_targets)
 		return targets
 	var selected_instance_ids := {}
 	for cell: Vector2i in geometry_cells:
@@ -4205,7 +4714,9 @@ func _spawn_canonical_ground_field(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
 	fallback_position: Vector2,
-	effect: Dictionary
+	effect: Dictionary,
+	release_id := "",
+	skill_release_snapshot: Dictionary = {}
 ) -> void:
 	var positions: Array[Vector2] = []
 	var coverage_cells: Array[Vector2i] = []
@@ -4222,7 +4733,9 @@ func _spawn_canonical_ground_field(
 			positions[index],
 			effect,
 			true,
-			coverage_cells[index] if index < coverage_cells.size() else null
+			coverage_cells[index] if index < coverage_cells.size() else null,
+			release_id,
+			skill_release_snapshot
 		)
 
 
@@ -4231,7 +4744,9 @@ func _spawn_canonical_ground_effect(
 	position: Vector2,
 	effect: Dictionary,
 	applies_damage := true,
-	coverage_cell: Variant = null
+	coverage_cell: Variant = null,
+	release_id := "",
+	skill_release_snapshot: Dictionary = {}
 ) -> void:
 	var ground_effect := GroundSkillEffect.new()
 	ground_effect.setup_ground_unit_effect(
@@ -4242,7 +4757,9 @@ func _spawn_canonical_ground_effect(
 		Color(0.45, 0.72, 1.0),
 		stable_skill_id,
 		maxf(0.05, float(effect.get("tick_interval_ms", 1000)) / 1000.0),
-		74.0
+		74.0,
+		release_id,
+		skill_release_snapshot
 	)
 	ground_effect.configure_runtime_resolution(
 		player,
@@ -4253,11 +4770,15 @@ func _spawn_canonical_ground_effect(
 		),
 		applies_damage,
 		(
-			Callable(self, "_canonical_ground_cell_contains_enemy").bind(
-				coverage_cell
+			Callable()
+			if SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+			else (
+				Callable(self, "_canonical_ground_cell_contains_enemy").bind(
+					coverage_cell
+				)
+				if coverage_cell is Vector2i
+				else Callable()
 			)
-			if coverage_cell is Vector2i
-			else Callable()
 		)
 	)
 	add_child(ground_effect)
@@ -4356,10 +4877,37 @@ func _canonical_main_pet() -> SummonActor:
 	return null
 
 
-func _apply_canonical_main_pet(effect: Dictionary, stable_skill_id: String) -> void:
+func _canonical_friendly_actor(instance_id: int) -> Node2D:
+	if instance_id <= 0:
+		return null
+	var actor := instance_from_id(instance_id)
+	if not actor is Node2D or not is_instance_valid(actor):
+		return null
+	if actor == player:
+		return player
+	if actor is SummonActor and actor.owner_player == player:
+		return actor as SummonActor
+	return null
+
+
+func _apply_canonical_friendly_heal(actor: Node2D, amount: int) -> void:
+	if not is_instance_valid(actor) or amount <= 0:
+		return
+	if actor == player:
+		player.restore_health(amount)
+	elif actor is SummonActor:
+		actor.current_hp = mini(actor.max_hp, actor.current_hp + amount)
+
+
+func _apply_canonical_main_pet(
+	effect: Dictionary,
+	stable_skill_id: String,
+	release_id: String
+) -> void:
 	var existing := _canonical_main_pet()
 	if str(effect.get("type", "")) == "recall_existing_main_pet" and existing != null:
 		existing.global_position = _summon_spawn_screen_position_px()
+		existing.configure_spawn_release_footprint(release_id)
 		return
 	if existing != null or not bool(effect.get("spawned", false)):
 		return
@@ -4376,6 +4924,7 @@ func _apply_canonical_main_pet(effect: Dictionary, stable_skill_id: String) -> v
 	summon.set_meta("taoist_main_pet", true)
 	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
 	summon.global_position = _summon_spawn_screen_position_px()
+	summon.configure_spawn_release_footprint(release_id)
 	add_child(summon)
 
 
@@ -4414,7 +4963,8 @@ func _spawn_canonical_cast_visual(
 	target: EnemyActor,
 	target_position: Vector2,
 	raw_geometry_cells: Variant = [],
-	continuous_line_strip_ground_gu: Dictionary = {}
+	continuous_line_strip_ground_gu: Dictionary = {},
+	skill_release_snapshot: Dictionary = {}
 ) -> void:
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
@@ -4462,8 +5012,12 @@ func _spawn_canonical_cast_visual(
 		"geometry_screen_points_px": geometry_screen_points_px,
 		# Damage and presentation consume the same read-only release snapshot.
 		# Never derive a second direction, length or width inside the renderer.
-		"skill_footprint_snapshot": continuous_line_strip_ground_gu.get(
-			"skill_footprint_snapshot", {}
+		"skill_footprint_snapshot": (
+			skill_release_snapshot
+			if SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+			else continuous_line_strip_ground_gu.get(
+				"skill_footprint_snapshot", {}
+			)
 		),
 		"debug_skill_visual_geometry": bool(ProjectSettings.get_setting(
 			SKILL_VISUAL_GEOMETRY_DEBUG_SETTING,
@@ -4487,7 +5041,8 @@ func _spawn_canonical_cast_visual(
 func _spawn_canonical_teleport_arrival(
 	stable_skill_id: String,
 	destination: Vector2,
-	direction: Vector2
+	direction: Vector2,
+	skill_release_snapshot: Dictionary = {}
 ) -> void:
 	if stable_skill_id != "wizard.teleport":
 		return
@@ -4502,6 +5057,7 @@ func _spawn_canonical_teleport_arrival(
 			"arrival"
 		),
 		"visual_radius_px": 72.0,
+		"skill_footprint_snapshot": skill_release_snapshot,
 	}
 	var arrival := CasterSkillRuntimeScript.create_visual(
 		visual_plan,
@@ -4799,19 +5355,44 @@ func _combat_release_target(release_geometry: Dictionary) -> EnemyActor:
 	return candidate as EnemyActor
 
 
+func _create_melee_release_footprint_snapshot(
+	origin_screen_px: Vector2,
+	direction_screen_px: Vector2,
+	mode: String,
+	release_geometry: Dictionary = {}
+) -> Dictionary:
+	var skill_id: String = {
+		WarriorMeleeGeometryScript.SKILL_THRUST: "warrior.thrusting",
+		WarriorMeleeGeometryScript.SKILL_HALF_MOON: "warrior.half_moon",
+		WarriorMeleeGeometryScript.SKILL_FIRE: "warrior.fire_sword",
+	}.get(mode, "warrior.normal_attack")
+	var release_id := str(release_geometry.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = _next_skill_footprint_release_id(skill_id)
+	return WarriorMeleeGeometryScript.attack_release_footprint_snapshot_ground_gu(
+		skill_id,
+		release_id,
+		_canonical_screen_px_to_ground_gu(origin_screen_px),
+		_melee_direction_index(direction_screen_px, release_geometry),
+		mode
+	)
+
+
 func _physical_primary_target(
 	origin: Vector2,
 	direction: Vector2,
 	mode := "normal",
 	release_geometry: Dictionary = {},
-	thrust_damage_axis_plan: Dictionary = {}
+	thrust_damage_axis_plan: Dictionary = {},
+	melee_release_snapshot: Dictionary = {}
 ) -> EnemyActor:
 	var targets := _physical_primary_targets(
 		origin,
 		direction,
 		mode,
 		release_geometry,
-		thrust_damage_axis_plan
+		thrust_damage_axis_plan,
+		melee_release_snapshot
 	)
 	return targets[0] if not targets.is_empty() else null
 
@@ -4821,7 +5402,8 @@ func _physical_primary_targets(
 	direction: Vector2,
 	mode := "normal",
 	release_geometry: Dictionary = {},
-	thrust_damage_axis_plan: Dictionary = {}
+	thrust_damage_axis_plan: Dictionary = {},
+	melee_release_snapshot: Dictionary = {}
 ) -> Array[EnemyActor]:
 	# The attack lock owns facing and priority only. Actual damage rights are
 	# rebuilt from live footpoints and the selected melee geometry at release.
@@ -4839,7 +5421,8 @@ func _physical_primary_targets(
 			origin_ground_gu,
 			direction_index,
 			mode,
-			thrust_damage_axis_plan
+			thrust_damage_axis_plan,
+			melee_release_snapshot
 		):
 			continue
 		result.append(enemy)
@@ -4879,11 +5462,21 @@ func _is_primary_melee_candidate(
 	origin_ground_gu: Vector2,
 	direction_index: int,
 	mode: String,
-	thrust_damage_axis_plan: Dictionary = {}
+	thrust_damage_axis_plan: Dictionary = {},
+	melee_release_snapshot: Dictionary = {}
 ) -> bool:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.current_hp <= 0:
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+	if (
+		SkillFootprintSnapshotScript.is_valid(melee_release_snapshot)
+		and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
+			melee_release_snapshot,
+			target_ground_gu,
+			enemy.combat_radius_gu
+		)
+	):
+		return false
 	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
 		if thrust_damage_axis_plan.is_empty():
 			thrust_damage_axis_plan = (
@@ -4985,7 +5578,8 @@ func _thrust_secondary_targets(
 	direction: Vector2,
 	excluded_targets: Array[EnemyActor],
 	release_geometry: Dictionary = {},
-	thrust_damage_axis_plan: Dictionary = {}
+	thrust_damage_axis_plan: Dictionary = {},
+	melee_release_snapshot: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
@@ -5002,6 +5596,15 @@ func _thrust_secondary_targets(
 			continue
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		if (
+			SkillFootprintSnapshotScript.is_valid(melee_release_snapshot)
+			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
+				melee_release_snapshot,
+				target_ground_gu,
+				enemy.combat_radius_gu
+			)
+		):
+			continue
 		if WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
 			origin_ground_gu,
 			target_ground_gu,
@@ -5018,7 +5621,8 @@ func _half_moon_secondary_targets(
 	origin: Vector2,
 	direction: Vector2,
 	excluded_targets: Array[EnemyActor],
-	release_geometry: Dictionary = {}
+	release_geometry: Dictionary = {},
+	melee_release_snapshot: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
@@ -5028,6 +5632,15 @@ func _half_moon_secondary_targets(
 			continue
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		if (
+			SkillFootprintSnapshotScript.is_valid(melee_release_snapshot)
+			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
+				melee_release_snapshot,
+				target_ground_gu,
+				enemy.combat_radius_gu
+			)
+		):
+			continue
 		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
 			origin_ground_gu,
 			target_ground_gu,
