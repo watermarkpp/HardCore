@@ -229,9 +229,13 @@ static func _resolve_mass_invisibility(
 	trigger: String
 ) -> void:
 	var affected_count := maxi(0, int(context.get("affected_friendly_count", 0)))
+	var target_instance_ids := _instance_ids(
+		context.get("affected_friendly_target_instance_ids", [])
+	)
 	var effect := _stealth_effect(rank, context, rng, "buff.taoist.mass_invisibility")
 	effect["type"] = "area_monster_aggro_stealth"
 	effect["affected_count"] = affected_count
+	effect["target_instance_ids"] = target_instance_ids
 	effect["width_grid_steps"] = 3
 	effect["height_grid_steps"] = 3
 	plan.effects = [effect]
@@ -267,6 +271,7 @@ static func _resolve_defence_buff(
 			"flat_bonus": maxi(1, int(floor(float(target.get("level", 1)) / 7.0))),
 			"duration_seconds": duration_seconds,
 			"stacking_policy": str(mechanics.get("stacking_policy", "")),
+			"target_instance_id": int(target.get("target_instance_id", 0)),
 		})
 	plan.effects = effects
 	plan.effect_success = not effects.is_empty()
@@ -318,6 +323,7 @@ static func _resolve_entrapment(
 ) -> void:
 	var candidates: Array = context.get("targets", [])
 	var trapped_count := 0
+	var trapped_target_instance_ids: Array[int] = []
 	for target_value: Variant in candidates:
 		if not target_value is Dictionary:
 			continue
@@ -329,6 +335,9 @@ static func _resolve_entrapment(
 			and bool(target.get("within_level_gate", true))
 		):
 			trapped_count += 1
+			var target_instance_id := int(target.get("target_instance_id", 0))
+			if target_instance_id > 0:
+				trapped_target_instance_ids.append(target_instance_id)
 	var duration_seconds := maxi(
 		1,
 		Formula.get_power13(rng, rank, 40) + 3 * int(context.get("primary_stat_roll", 0))
@@ -336,6 +345,7 @@ static func _resolve_entrapment(
 	plan.effects = [{
 		"type": "monster_boundary_control",
 		"trapped_count": trapped_count,
+		"target_instance_ids": trapped_target_instance_ids,
 		"duration_seconds": duration_seconds,
 		"footprint": "canonical_3x3_boundary",
 		"prevents_boundary_exit": true,
@@ -359,16 +369,31 @@ static func _resolve_mass_heal(
 	var context: Dictionary = request.get("target_context", {})
 	var raw_heal := _raw_heal(definition, request, rng)
 	var target_missing_hp: Array = context.get("friendly_missing_hp", [])
+	var target_instance_ids := _instance_ids(
+		context.get("friendly_target_instance_ids", [])
+	)
 	var actual_by_target: Array[int] = []
+	var target_results: Array[Dictionary] = []
 	var total_restored := 0
-	for missing_value: Variant in target_missing_hp:
+	for target_index: int in range(target_missing_hp.size()):
+		var missing_value: Variant = target_missing_hp[target_index]
 		var actual := mini(raw_heal, maxi(0, int(missing_value)))
 		actual_by_target.append(actual)
+		target_results.append({
+			"target_instance_id": (
+				int(target_instance_ids[target_index])
+				if target_index < target_instance_ids.size()
+				else 0
+			),
+			"actual_hp_restored": actual,
+		})
 		total_restored += actual
 	plan.effects = [{
 		"type": "dedicated_area_heal",
 		"raw_heal_per_target": raw_heal,
 		"actual_hp_restored_by_target": actual_by_target,
+		"target_instance_ids": target_instance_ids,
+		"target_results": target_results,
 		"total_actual_hp_restored": total_restored,
 		"width_grid_steps": 3,
 		"height_grid_steps": 3,
@@ -377,6 +402,15 @@ static func _resolve_mass_heal(
 	plan.effect_success = total_restored > 0
 	if total_restored > 0:
 		plan.proficiency_event = trigger
+
+
+static func _instance_ids(raw_ids: Variant) -> Array[int]:
+	var result: Array[int] = []
+	if not raw_ids is Array:
+		return result
+	for raw_id: Variant in raw_ids:
+		result.append(int(raw_id))
+	return result
 
 
 static func _base_plan(definition: Dictionary) -> Dictionary:

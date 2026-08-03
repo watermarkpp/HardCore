@@ -95,10 +95,12 @@ func _ready() -> void:
 		"has_target": true,
 		"target_tile": Vector2i(10, 10),
 		"affected_friendly_count": 2,
+		"affected_friendly_target_instance_ids": [101, 102],
 		"primary_stat_roll": 4,
 	})
 	assert(mass_invisibility.geometry_cells.size() == 9)
 	assert(mass_invisibility.effects[0].affected_count == 2)
+	assert(mass_invisibility.effects[0].target_instance_ids == [101, 102])
 	assert(mass_invisibility.resource_commit)
 	assert(mass_invisibility.proficiency_event == "at_least_one_valid_friendly_receives_buff")
 	var empty_mass_invisibility := _execute("taoist.mass_invisibility", {
@@ -111,23 +113,25 @@ func _ready() -> void:
 	var soul_shield := _execute("taoist.magic_defense", {
 		"has_target": true,
 		"target_tile": Vector2i(10, 10),
-		"friendly_targets": [{"level": 35}],
+		"friendly_targets": [{"level": 35, "target_instance_id": 201}],
 		"primary_stat_roll": 4,
 	})
 	assert(soul_shield.geometry_cells.size() == 49)
 	assert(soul_shield.effects[0].stat == "MAC")
 	assert(soul_shield.effects[0].flat_bonus == 5)
 	assert(soul_shield.effects[0].duration_seconds == 10)
+	assert(soul_shield.effects[0].target_instance_id == 201)
 	assert(str(soul_shield.effects[0].stacking_policy).contains("blessed_armour"))
 
 	var blessed_armour := _execute("taoist.defense", {
 		"has_target": true,
 		"target_tile": Vector2i(10, 10),
-		"friendly_targets": [{"level": 35}],
+		"friendly_targets": [{"level": 35, "target_instance_id": 202}],
 		"primary_stat_roll": 4,
 	})
 	assert(blessed_armour.effects[0].stat == "AC")
 	assert(blessed_armour.effects[0].flat_bonus == 5)
+	assert(blessed_armour.effects[0].target_instance_id == 202)
 	assert(str(blessed_armour.effects[0].stacking_policy).contains("soul_shield"))
 
 	var revelation := _execute("taoist.revelation", {
@@ -145,12 +149,21 @@ func _ready() -> void:
 	var entrapment := _execute("taoist.entrapment", {
 		"has_target": true,
 		"targets": [
-			{"hostile_monster": true, "within_level_gate": true},
-			{"hostile_monster": true, "is_boss": true},
+			{
+				"hostile_monster": true,
+				"within_level_gate": true,
+				"target_instance_id": 301,
+			},
+			{
+				"hostile_monster": true,
+				"is_boss": true,
+				"target_instance_id": 302,
+			},
 		],
 		"primary_stat_roll": 3,
 	})
 	assert(entrapment.effects[0].trapped_count == 1)
+	assert(entrapment.effects[0].target_instance_ids == [301])
 	assert(entrapment.effects[0].prevents_boundary_exit)
 	assert(entrapment.effects[0].break_on_any_player_entry)
 	assert(not entrapment.effects[0].generic_root)
@@ -168,11 +181,14 @@ func _ready() -> void:
 		"has_target": true,
 		"target_tile": Vector2i(12, 12),
 		"friendly_missing_hp": [5, 20, 0],
+		"friendly_target_instance_ids": [401, 402, 403],
 		"primary_stat_roll": 6,
 	})
 	assert(mass_healing.geometry_cells.size() == 9)
 	assert(mass_healing.effects[0].type == "dedicated_area_heal")
 	assert(mass_healing.effects[0].total_actual_hp_restored > 0)
+	assert(mass_healing.effects[0].target_instance_ids == [401, 402, 403])
+	assert(mass_healing.effects[0].target_results[1].target_instance_id == 402)
 	assert(not mass_healing.effects[0].negative_damage)
 	assert(mass_healing.proficiency_event == "total_actual_hp_restored_gt_zero")
 
