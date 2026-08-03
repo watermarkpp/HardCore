@@ -2752,11 +2752,20 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	var selection_mode := str(body_selection.get("mode", WarriorMeleeGeometryScript.SKILL_NORMAL))
 	if Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
 		selection_mode = WarriorMeleeGeometryScript.SKILL_FIRE
+	var thrust_damage_axis_plan: Dictionary = {}
+	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+		thrust_damage_axis_plan = (
+			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+				_melee_direction_index(direction, release_geometry),
+				release_geometry
+			)
+		)
 	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		selection_mode,
-		release_geometry
+		release_geometry,
+		thrust_damage_axis_plan
 	)
 	var eligible_target_count := primary_targets.size()
 	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
@@ -2764,7 +2773,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			origin,
 			direction,
 			primary_targets,
-			release_geometry
+			release_geometry,
+			thrust_damage_axis_plan
 		).size()
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		eligible_target_count += _half_moon_secondary_targets(
@@ -2829,7 +2839,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			post_body_damage_bonus,
 			accuracy_bonus,
 			bool(body_selection.get("direct_toggle_release", false)),
-			release_geometry
+			release_geometry,
+			thrust_damage_axis_plan
 		)
 		hit_any = bool(melee_resolution.get("hit_any", false))
 		canonical_resolution = str(melee_resolution.get("resolution", "rejected"))
@@ -3269,7 +3280,8 @@ func _execute_canonical_melee(
 	post_body_damage_bonus: int,
 	accuracy_bonus: int,
 	direct_toggle_release := false,
-	release_geometry: Dictionary = {}
+	release_geometry: Dictionary = {},
+	thrust_damage_axis_plan: Dictionary = {}
 ) -> Dictionary:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
@@ -3278,11 +3290,19 @@ func _execute_canonical_melee(
 	}.get(mode, "")
 	if skill_name.is_empty():
 		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
+	if mode == WarriorMeleeGeometryScript.SKILL_THRUST and thrust_damage_axis_plan.is_empty():
+		thrust_damage_axis_plan = (
+			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+				_melee_direction_index(direction, release_geometry),
+				release_geometry
+			)
+		)
 	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		mode,
-		release_geometry
+		release_geometry,
+		thrust_damage_axis_plan
 	)
 	var thrust_secondaries: Array[EnemyActor] = []
 	var half_moon_secondaries: Array[EnemyActor] = []
@@ -3292,7 +3312,8 @@ func _execute_canonical_melee(
 			origin,
 			direction,
 			primary_targets,
-			release_geometry
+			release_geometry,
+			thrust_damage_axis_plan
 		)
 		eligible_target_count += thrust_secondaries.size()
 	elif mode == "half_moon":
@@ -4682,9 +4703,16 @@ func _physical_primary_target(
 	origin: Vector2,
 	direction: Vector2,
 	mode := "normal",
-	release_geometry: Dictionary = {}
+	release_geometry: Dictionary = {},
+	thrust_damage_axis_plan: Dictionary = {}
 ) -> EnemyActor:
-	var targets := _physical_primary_targets(origin, direction, mode, release_geometry)
+	var targets := _physical_primary_targets(
+		origin,
+		direction,
+		mode,
+		release_geometry,
+		thrust_damage_axis_plan
+	)
 	return targets[0] if not targets.is_empty() else null
 
 
@@ -4692,7 +4720,8 @@ func _physical_primary_targets(
 	origin: Vector2,
 	direction: Vector2,
 	mode := "normal",
-	release_geometry: Dictionary = {}
+	release_geometry: Dictionary = {},
+	thrust_damage_axis_plan: Dictionary = {}
 ) -> Array[EnemyActor]:
 	# The attack lock owns facing and priority only. Actual damage rights are
 	# rebuilt from live footpoints and the selected melee geometry at release.
@@ -4705,7 +4734,13 @@ func _physical_primary_targets(
 		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
-		if not _is_primary_melee_candidate(enemy, origin_ground_gu, direction_index, mode):
+		if not _is_primary_melee_candidate(
+			enemy,
+			origin_ground_gu,
+			direction_index,
+			mode,
+			thrust_damage_axis_plan
+		):
 			continue
 		result.append(enemy)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
@@ -4743,17 +4778,25 @@ func _is_primary_melee_candidate(
 	enemy: EnemyActor,
 	origin_ground_gu: Vector2,
 	direction_index: int,
-	mode: String
+	mode: String,
+	thrust_damage_axis_plan: Dictionary = {}
 ) -> bool:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.current_hp <= 0:
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		return WarriorMeleeGeometryScript.thrust_footprint_slot_gu(
+		if thrust_damage_axis_plan.is_empty():
+			thrust_damage_axis_plan = (
+				WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+					direction_index,
+					{}
+				)
+			)
+		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
 			origin_ground_gu,
 			target_ground_gu,
 			enemy.combat_radius_gu,
-			direction_index
+			thrust_damage_axis_plan
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
@@ -4841,21 +4884,29 @@ func _thrust_secondary_targets(
 	origin: Vector2,
 	direction: Vector2,
 	excluded_targets: Array[EnemyActor],
-	release_geometry: Dictionary = {}
+	release_geometry: Dictionary = {},
+	thrust_damage_axis_plan: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var direction_index := _melee_direction_index(direction, release_geometry)
+	if thrust_damage_axis_plan.is_empty():
+		thrust_damage_axis_plan = (
+			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+				direction_index,
+				release_geometry
+			)
+		)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-		if WarriorMeleeGeometryScript.thrust_footprint_slot_gu(
+		if WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
 			origin_ground_gu,
 			target_ground_gu,
 			enemy.combat_radius_gu,
-			direction_index
+			thrust_damage_axis_plan
 		) != 2:
 			continue
 		result.append(enemy)
