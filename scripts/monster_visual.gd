@@ -26,9 +26,11 @@ const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
 const HEALTH_BAR_BODY_GAP := 8.0
 const CLIENT_RESOURCE_CACHE_CAPACITY := 12
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := 64 * 1024 * 1024
-const VISUAL_ACTIVATION_DISTANCE := 1600.0
-const VISUAL_RELEASE_DISTANCE := 2000.0
+const RESOURCE_RESIDENCY_CONTRACT_ID := "monster.visual.resource_residency.screen_px.v1"
+const VISUAL_ACTIVATION_DISTANCE_PX := 1600.0
+const VISUAL_RELEASE_DISTANCE_PX := 2000.0
 const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
+const MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC := 5.0 / 32.0
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
@@ -122,7 +124,7 @@ func _ready() -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
-	if _inside_visual_distance(VISUAL_ACTIVATION_DISTANCE):
+	if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
 		_activate_resources()
 
 
@@ -159,9 +161,9 @@ func _process(delta: float) -> void:
 	if _resource_residency_timer <= 0.0:
 		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
 		if active_resources.is_empty():
-			if _inside_visual_distance(VISUAL_ACTIVATION_DISTANCE):
+			if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
 				_activate_resources()
-		elif not _inside_visual_distance(VISUAL_RELEASE_DISTANCE):
+		elif not _inside_visual_distance_px(VISUAL_RELEASE_DISTANCE_PX):
 			_release_resources()
 	if active_resources.is_empty() or not visible:
 		return
@@ -171,7 +173,10 @@ func _process(delta: float) -> void:
 		current_state = "attack"
 	elif _hit_remaining > 0.0:
 		current_state = "hit"
-	elif actor.velocity.length_squared() > 25.0:
+	elif (
+		actor.ground_velocity_gu_per_sec().length_squared()
+		> MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC * MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC
+	):
 		current_state = "walk"
 	else:
 		current_state = "idle"
@@ -193,10 +198,16 @@ func _process(delta: float) -> void:
 		_apply_render_state(active_resources[current_state], next_region)
 
 
-func _inside_visual_distance(distance: float) -> bool:
+func _inside_visual_distance_px(distance_px: float) -> bool:
 	if not is_instance_valid(actor) or not is_instance_valid(actor.primary_target):
 		return true
-	return actor.global_position.distance_squared_to(actor.primary_target.global_position) <= distance * distance
+	# This is intentionally a rendering-residency threshold, not combat/AI
+	# geometry. Screen PX is therefore correct here and is explicitly named so
+	# it cannot be mistaken for a gameplay range.
+	return (
+		actor.global_position.distance_squared_to(actor.primary_target.global_position)
+		<= distance_px * distance_px
+	)
 
 
 func _activate_resources() -> void:
@@ -359,14 +370,14 @@ func manual_alignment_replay_displacement() -> Vector2:
 		or _manual_alignment_profile_for_actor().is_empty()
 	):
 		return Vector2.ZERO
-	var authored_spawn_distance := (
-		actor.collision_radius
-		+ ArtSpec.PLAYER_COLLISION_RADIUS
+	var authored_spawn_distance_px := (
+		actor.collision_radius_px
+		+ ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		+ MANUAL_ALIGNMENT_SPAWN_GAP
 	)
 	return (
 		Vector2.DOWN
-		* authored_spawn_distance
+		* authored_spawn_distance_px
 		/ MANUAL_ALIGNMENT_PREVIEW_ZOOM
 	)
 
@@ -1048,8 +1059,8 @@ func fallback_attack_progress() -> float:
 	return clampf(1.0 - _attack_remaining / _action_duration, 0.0, 1.0)
 
 
-func fallback_lunge_offset(direction: Vector2) -> Vector2:
-	return direction.normalized() * sin(fallback_attack_progress() * PI) * 12.0 if is_fallback_attacking() else Vector2.ZERO
+func fallback_lunge_offset_px(direction_px: Vector2) -> Vector2:
+	return direction_px.normalized() * sin(fallback_attack_progress() * PI) * 12.0 if is_fallback_attacking() else Vector2.ZERO
 
 
 func fallback_attack_scale() -> Vector2:
@@ -1058,7 +1069,7 @@ func fallback_attack_scale() -> Vector2:
 	return Vector2(1.0+0.18*pulse,1.0-0.12*pulse)
 
 
-func fallback_attack_angle(direction:Vector2)->float:
+func fallback_attack_angle(direction_px: Vector2) -> float:
 	if not is_fallback_attacking():return 0.0
-	var side:=signf(direction.x) if absf(direction.x)>0.05 else 1.0
+	var side:=signf(direction_px.x) if absf(direction_px.x)>0.05 else 1.0
 	return side*sin(fallback_attack_progress()*TAU)*0.12

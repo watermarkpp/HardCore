@@ -6,9 +6,11 @@ const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/monster_ground_runtime_diagnostic_overlay.gd"
 )
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
-const CROWD_GRID_CELL_SIZE := 96.0
+const CROWD_GRID_CELL_SIZE_GU := 3.0
 const CROWD_GRID_REFRESH_FRAMES := 3
 const CROWD_STEERING_INTERVAL_SECONDS := 0.10
 const FAR_RETARGET_MIN_SECONDS := 0.28
@@ -16,22 +18,27 @@ const FAR_RETARGET_STAGGER_SECONDS := 0.017
 const NEAR_RETARGET_MIN_SECONDS := 0.18
 const NEAR_RETARGET_STAGGER_SECONDS := 0.011
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
-const BACKGROUND_AI_MIN_DISTANCE := 1200.0
+const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
 const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
 const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
 const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
 const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
-const PLAYER_MELEE_CONTACT_CONTRACT_ID := (
-	"monster.melee_player_contact.iso_footprint_fractional_tile.v1"
-)
-const PLAYER_MELEE_CONTACT_REACH_TILES := 1.5
-const PLAYER_MELEE_CONTACT_GAP_PIXELS := 14.0
+const PLAYER_MELEE_CONTACT_CONTRACT_ID := "monster.melee_player_contact.ground_gu.v2"
+const BOSS_WARNING_PROJECTION_CONTRACT_ID := "monster.boss.warning.ground_projection.v1"
+const SAFE_ZONE_REFERENCE_CONTRACT_ID := "monster.safe_zone.relative_ground_reference.v1"
+const PLAYER_MELEE_CONTACT_GAP_GU := 0.4375
+const DELAYED_HIT_TOLERANCE_GU := 0.25
 # Existing ranged profiles start at 155px. This guard only selects the moving
 # contact attackers whose stop point must be compatible with the player's
 # formal 1.5-tile melee geometry; it never shortens or expands ranged attacks.
-const RANGED_ATTACK_RANGE_FLOOR_PIXELS := 128.0
+const RANGED_ATTACK_RANGE_FLOOR_GU := 4.0
+const SPAWN_RETURN_EPSILON_GU := 0.1875
+const SAFE_ZONE_RETURN_EPSILON_GU := 0.125
+const CONTACT_RETREAT_EPSILON_GU := 0.09375
+const CROWD_SEPARATION_GAP_GU := 0.375
+const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -47,7 +54,7 @@ static var _environment_guard_check_count := 0
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
 signal summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int)
-signal relocation_requested(enemy: EnemyActor, radius_cells: int)
+signal relocation_requested(enemy: EnemyActor, radius_gu: float)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -59,9 +66,9 @@ var attack_max := 2
 var agility := WarriorCombatMath.BASE_AGILITY
 var anti_poison := 0
 var level := 1
-var move_speed := 55.0
-var aggro_radius := 384.0 # 12 logical tiles; authored monsters may override.
-var attack_range := 38.0
+var move_speed_gu_per_sec := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(55.0)
+var aggro_radius_gu := 12.0
+var attack_range_gu := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(38.0)
 var target: Node2D
 var primary_target: PlayerCharacter
 var is_boss := false
@@ -70,7 +77,7 @@ var poison_damage := 0
 var control_time := 0.0:
 	set(value):
 		if value > 0.0 and control_time <= 0.0:
-			_control_anchor = global_position
+			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		control_time = value
 var charm_time := 0.0
 var dormant := false
@@ -83,7 +90,10 @@ var visual: MonsterVisual
 var name_label: Label
 var overhead: Variant
 var ground_runtime_diagnostic_overlay: Node2D
-var collision_radius := ArtSpec.MONSTER_COLLISION_RADIUS
+var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+	ArtSpec.MONSTER_COLLISION_RADIUS_PX
+)
+var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
 var environment_blocker: Node
 var _dying := false
 var boss_rule: Dictionary = {}
@@ -110,24 +120,25 @@ var _boss_warning := 0.0
 var _boss_phase_two := false
 var _boss_phase_enabled := true
 var _boss_skill_enabled := true
-var _boss_skill_direction := Vector2.DOWN
+var _boss_skill_direction_ground := Vector2.DOWN
 var _last_boss_skill_hit := false
 var _boss_health_stage := -1
 var _boss_rage_time := 0.0
-var _boss_base_move_speed := 0.0
+var _boss_base_move_speed_gu_per_sec := 0.0
 var _boss_base_attack_interval := 0.0
 var _burrowed := false
 var _rng := RandomNumberGenerator.new()
 var _threat_table := {}
 var _threat_decay_per_second := 4.0
 var _leash_multiplier := 1.5
-var _control_anchor := Vector2.INF
+var _control_anchor_ground_gu := Vector2.INF
 var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _summon_cooldown := 0.0
 var _summon_warning := 0.0
 var _environment_guard_timer := 0.0
-var _last_environment_safe_position := Vector2.INF
+var _last_environment_safe_position_px := Vector2.INF
+var actual_ground_motion_gu := Vector2.ZERO
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
@@ -144,7 +155,9 @@ func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> v
 	agility = maxi(1, int(data.get("agility", data.get("speedPoint", WarriorCombatMath.BASE_AGILITY))))
 	anti_poison = maxi(0, int(data.get("antiPoison", 0)))
 	level = maxi(1, int(data.get("level", 1)))
-	move_speed = 40.0 if is_boss else 58.0
+	move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(
+		40.0 if is_boss else 58.0
+	)
 	if not is_boss and int(data.get("attackIntervalMs", 0)) > 0:
 		_attack_interval = float(data.get("attackIntervalMs")) / 1000.0
 	behavior_profile = MonsterIdentityScript.behavior_profile(data)
@@ -154,14 +167,19 @@ func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> v
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:
-		move_speed = 0.0
+		move_speed_gu_per_sec = 0.0
 
 
 func _apply_behavior_profile() -> void:
-	var projection: Dictionary = behavior_profile.get("runtimeProjection", {})
-	move_speed = float(projection.get("moveSpeed", move_speed))
-	attack_range = float(projection.get("attackRange", attack_range))
-	aggro_radius = float(projection.get("aggroRadius", aggro_radius))
+	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
+		behavior_profile,
+		move_speed_gu_per_sec,
+		attack_range_gu,
+		aggro_radius_gu,
+	)
+	move_speed_gu_per_sec = float(projection_gu.move_speed_gu_per_sec)
+	attack_range_gu = float(projection_gu.attack_range_gu)
+	aggro_radius_gu = float(projection_gu.aggro_radius_gu)
 	var timing: Dictionary = behavior_profile.get("timing", {})
 	if int(timing.get("attackIntervalMs", 0)) > 0:
 		_attack_interval = float(timing.get("attackIntervalMs")) / 1000.0
@@ -173,7 +191,7 @@ func _apply_behavior_profile() -> void:
 	summon_rule = behavior_profile.get("summonRule", {}).duplicate(true)
 	_summon_cooldown = float(summon_rule.get("initialCooldownSeconds", 0.0))
 	if stationary:
-		move_speed = 0.0
+		move_speed_gu_per_sec = 0.0
 	life_steal_ratio = float(behavior_profile.get("lifeStealRatio", life_steal_ratio))
 	dormant = bool(behavior_profile.get("dormant", dormant))
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})
@@ -181,11 +199,16 @@ func _apply_behavior_profile() -> void:
 
 
 func _apply_boss_rule() -> void:
-	var projection: Dictionary = boss_rule.get("runtimeProjection", {})
 	var timing: Dictionary = boss_rule.get("timing", {})
-	move_speed = float(projection.get("moveSpeed", move_speed))
-	attack_range = float(projection.get("attackRange", attack_range))
-	aggro_radius = float(projection.get("aggroRadius", aggro_radius))
+	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
+		boss_rule,
+		move_speed_gu_per_sec,
+		attack_range_gu,
+		aggro_radius_gu,
+	)
+	move_speed_gu_per_sec = float(projection_gu.move_speed_gu_per_sec)
+	attack_range_gu = float(projection_gu.attack_range_gu)
+	aggro_radius_gu = float(projection_gu.aggro_radius_gu)
 	_attack_interval = float(timing.get("attackIntervalMs", 1550)) / 1000.0
 	_attack_animation_duration = float(timing.get("attackAnimationMs", 460)) / 1000.0
 	_attack_hit_delay = float(timing.get("hitDelayMs", 0)) / 1000.0
@@ -201,7 +224,7 @@ func _apply_boss_rule() -> void:
 	var summon: Dictionary = mechanics.get("healthStageSummon", {})
 	var rage: Dictionary = mechanics.get("healthStageRage", {})
 	_boss_health_stage = int(summon.get("stages", rage.get("stages", -1)))
-	_boss_base_move_speed = move_speed
+	_boss_base_move_speed_gu_per_sec = move_speed_gu_per_sec
 	_boss_base_attack_interval = _attack_interval
 
 
@@ -225,12 +248,23 @@ func _ready() -> void:
 	_rng.randomize()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
-	var authored_radius := float(behavior_profile.get("collisionRadius", -1.0))
-	collision_radius = ArtSpec.BOSS_COLLISION_RADIUS if is_boss else (authored_radius if authored_radius > 0.0 else ArtSpec.MONSTER_COLLISION_RADIUS)
-	collision.shape = WorldSpatialRules.actor_footprint_shape(collision_radius)
+	combat_radius_gu = (
+		MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+			ArtSpec.BOSS_COLLISION_RADIUS_PX
+		)
+		if is_boss
+		else MonsterUnitAdapterScript.collision_radius_gu(
+			behavior_profile,
+			ArtSpec.MONSTER_COLLISION_RADIUS_PX,
+		)
+	)
+	collision_radius_px = MonsterUnitAdapterScript.combat_radius_gu_to_footprint_radius_px(
+		combat_radius_gu
+	)
+	collision.shape = WorldSpatialRules.actor_footprint_shape_px(collision_radius_px)
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
-	_last_environment_safe_position = global_position
+	_last_environment_safe_position_px = global_position
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
 	visual = MonsterVisualScript.new()
 	visual.name = "MonsterVisual"
@@ -264,14 +298,21 @@ func _ready() -> void:
 func _resolve_invalid_spawn_overlap() -> void:
 	if not is_instance_valid(primary_target):
 		return
-	var offset := global_position - primary_target.global_position
-	var minimum_distance := collision_radius + ArtSpec.PLAYER_COLLISION_RADIUS + 14.0
-	if offset.length() >= minimum_distance:
+	var offset_px := global_position - primary_target.global_position
+	var offset_ground_gu := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
+	var minimum_distance_gu := (
+		combat_radius_gu
+		+ _target_combat_radius_gu(primary_target)
+		+ PLAYER_MELEE_CONTACT_GAP_GU
+	)
+	if offset_ground_gu.length() >= minimum_distance_gu:
 		return
-	if offset.length_squared() < 0.01:
+	if offset_ground_gu.length_squared() < GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		var angle := float(posmod(get_instance_id(), 32)) / 32.0 * TAU
-		offset = Vector2.from_angle(angle)
-	global_position = primary_target.global_position + offset.normalized() * minimum_distance
+		offset_ground_gu = Vector2.from_angle(angle)
+	global_position = primary_target.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		offset_ground_gu.normalized() * minimum_distance_gu
+	)
 
 
 func set_targeted(value: bool) -> void:
@@ -317,14 +358,16 @@ func _physics_process(delta: float) -> void:
 	# win over the no-target return path after an actor is relocated beyond its
 	# authored spawn leash.
 	if control_time > 0.0 or charm_time > 0.0:
-		if _control_anchor == Vector2.INF:
-			_control_anchor = global_position
+		if _control_anchor_ground_gu == Vector2.INF:
+			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		else:
-			global_position = _control_anchor
+			global_position = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				_control_anchor_ground_gu
+			)
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
-	_control_anchor = Vector2.INF
+	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
 		_return_to_spawn()
 		return
@@ -333,16 +376,30 @@ func _physics_process(delta: float) -> void:
 		_pending_attack_target = null
 		velocity = Vector2.ZERO
 		var spawn_position:Vector2=get_meta("spawn_position",global_position)
-		if _point_inside_safe_zone(global_position) and global_position.distance_to(spawn_position)>4.0:
-			velocity=global_position.direction_to(spawn_position)*move_speed
+		var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			spawn_position,
+		)
+		if _point_inside_safe_zone(global_position) and spawn_delta_ground_gu.length() > SAFE_ZONE_RETURN_EPSILON_GU:
+			velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+				spawn_delta_ground_gu,
+				move_speed_gu_per_sec,
+			)
 			_move_with_spatial_rules(delta)
 		queue_redraw()
 		return
-	var offset := target.global_position - global_position
-	var distance := offset.length()
+	var offset_px := target.global_position - global_position
+	var offset_ground_gu := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
+	var distance_gu := offset_ground_gu.length()
 	if _burrowed:
 		var burrow: Dictionary = boss_rule.get("mechanics", {}).get("burrowAmbush", {})
-		if distance <= float(burrow.get("emergeRange", 128.0)):
+		var emerge_range_gu := MonsterUnitAdapterScript.range_gu(
+			burrow,
+			"emerge_range_gu",
+			"emergeRange",
+			4.0,
+		)
+		if distance_gu <= emerge_range_gu:
 			_burrowed = false
 			dormant = false
 			if bool(burrow.get("healToFullOnEmerge", false)):
@@ -355,44 +412,55 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			return
-	var contact_distance := _contact_distance_to_target(target, offset)
-	var engagement_distance := maxf(attack_range, contact_distance)
-	var engagement_ready := distance <= engagement_distance
-	if _uses_player_melee_contact_contract(target):
-		# The primary Mir source measures proximity in logical tiles with
-		# MAX(abs(dx), abs(dy)). This project intentionally extends ordinary
-		# player melee reach from the source's one tile to the approved 1.5-tile
-		# contract. Screen-space distance may decide when bodies look in contact,
-		# but it may never stop a pursuing melee monster outside that geometry.
-		engagement_ready = (
-			engagement_ready
-			and logical_tile_distance_for_world_offset(offset)
-			<= PLAYER_MELEE_CONTACT_REACH_TILES + 0.0001
-		)
-	if offset.length_squared() > 0.001:
-		facing = offset.normalized()
+	var contact_distance_gu := _contact_distance_gu_to_target(target)
+	var engagement_distance_gu := maxf(attack_range_gu, contact_distance_gu)
+	var engagement_ready := distance_gu <= engagement_distance_gu + GroundUnitSpace.EPSILON_GU
+	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
 	if dormant:
-		var wake_range := float(behavior_profile.get("wakeRange", 190.0))
+		var wake_range_gu := MonsterUnitAdapterScript.range_gu(
+			behavior_profile,
+			"wake_range_gu",
+			"wakeRange",
+			MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(190.0),
+		)
 		var stone_wake: Dictionary = boss_rule.get("mechanics", {}).get("stoneWake", {})
-		wake_range = float(stone_wake.get("wakeRange", wake_range))
-		if distance <= wake_range:
+		wake_range_gu = MonsterUnitAdapterScript.range_gu(
+			stone_wake,
+			"wake_range_gu",
+			"wakeRange",
+			wake_range_gu,
+		)
+		if distance_gu <= wake_range_gu:
 			dormant = false
 		else:
 			velocity = Vector2.ZERO
 			queue_redraw()
 			return
-	if target.has_method("is_stealthed") and target.is_stealthed() and distance > 35.0:
+	if (
+		target.has_method("is_stealthed")
+		and target.is_stealthed()
+		and distance_gu > MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
+	):
 		velocity = Vector2.ZERO
 		return
 	if is_boss and _boss_skill_enabled:
-		_update_boss_skill(delta, distance)
-	if move_speed > 0.0 and distance < contact_distance - 3.0 and distance > 0.01 and not target is PlayerCharacter:
+		_update_boss_skill(delta, distance_gu)
+	if (
+		move_speed_gu_per_sec > 0.0
+		and distance_gu < contact_distance_gu - CONTACT_RETREAT_EPSILON_GU
+		and distance_gu > GroundUnitSpace.EPSILON_GU
+		and not target is PlayerCharacter
+	):
 		# 怪物和召唤物重叠时可以自行分离；玩家普通移动不能迫使怪物后退。
-		velocity = -offset.normalized() * move_speed * 0.72
+		velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+			-offset_ground_gu,
+			move_speed_gu_per_sec * 0.72,
+		)
 	elif engagement_ready:
 		velocity = Vector2.ZERO
 		if _attack_timer <= 0.0:
@@ -406,41 +474,160 @@ func _physics_process(delta: float) -> void:
 				_pending_attack_damage = dealt_damage
 			else:
 				_deal_melee_hit(target, dealt_damage)
-	elif distance <= aggro_radius:
-		var pursuit := offset.normalized()
-		var steering := pursuit + _crowd_separation_for_motion(delta) * 0.72
+	elif distance_gu <= aggro_radius_gu:
+		var pursuit_ground := offset_ground_gu.normalized()
+		var steering_ground := pursuit_ground + _crowd_separation_for_motion(delta) * 0.72
 		# Separation may move sideways but must never reverse a pursuing monster.
 		# Removing the negative forward component eliminates visible rollback.
-		if steering.dot(pursuit) < 0.12:
-			steering += pursuit * (0.12 - steering.dot(pursuit))
-		var desired_velocity := steering.normalized() * move_speed
-		velocity = velocity.lerp(desired_velocity, clampf(delta * 10.0, 0.0, 1.0))
+		if steering_ground.dot(pursuit_ground) < 0.12:
+			steering_ground += pursuit_ground * (
+				0.12 - steering_ground.dot(pursuit_ground)
+			)
+		var desired_velocity_px_per_sec := GroundUnitSpace.desired_screen_velocity_px_per_sec(
+			steering_ground,
+			move_speed_gu_per_sec,
+		)
+		velocity = velocity.lerp(
+			desired_velocity_px_per_sec,
+			clampf(delta * 10.0, 0.0, 1.0),
+		)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, move_speed * 3.0 * delta)
+		var current_ground_velocity_gu_per_sec := (
+			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity)
+		)
+		current_ground_velocity_gu_per_sec = current_ground_velocity_gu_per_sec.move_toward(
+			Vector2.ZERO,
+			move_speed_gu_per_sec * 3.0 * delta,
+		)
+		velocity = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			current_ground_velocity_gu_per_sec
+		)
 	# 零速度时不做碰撞恢复，避免玩家压住碰撞边缘时把怪物挤走。
-	if velocity.length_squared() > 0.01:
+	if (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity).length_squared()
+		> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+	):
 		_move_with_spatial_rules(delta)
-		if get_real_velocity().length_squared() > 9.0:
-			movement_facing = get_real_velocity().normalized()
+		if actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+			movement_facing = _screen_facing_for_ground_direction(actual_ground_motion_gu)
+	else:
+		actual_ground_motion_gu = Vector2.ZERO
 	if is_boss and is_instance_valid(target):
-		var fresh_offset := target.global_position - global_position
-		if fresh_offset.length_squared() > 0.001:
-			facing = fresh_offset.normalized()
+		var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			target.global_position,
+		)
+		if fresh_offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+			facing = _screen_facing_for_ground_direction(fresh_offset_ground_gu)
 	if visual != null and visual.is_fallback_attacking():
 		queue_redraw()
 
 
-func _point_inside_safe_zone(point:Vector2)->bool:
-	return WorldSpatialRulesScript.point_inside_safe_zones(point, get_meta("safe_zones", []))
+static func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(screen_position_px)
+
+
+static func _ground_delta_gu_between_screen_positions(
+	origin_screen_position_px: Vector2,
+	target_screen_position_px: Vector2,
+) -> Vector2:
+	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+		target_screen_position_px - origin_screen_position_px
+	)
+
+
+static func _screen_facing_for_ground_direction(direction_ground: Vector2) -> Vector2:
+	if direction_ground.length_squared() <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		return Vector2.DOWN
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		direction_ground.normalized()
+	).normalized()
+
+
+func ground_velocity_gu_per_sec() -> Vector2:
+	# CharacterBody2D owns a PX/s velocity at the physics boundary. Any gameplay
+	# or animation-state consumer must cross back through the formal GU service.
+	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity)
+
+
+static func _safe_zone_point_ground_gu_from_screen_reference(
+	point_screen_px: Vector2,
+	zone: Dictionary,
+) -> Vector2:
+	# Absolute screen positions include the map design-centre projection, while
+	# GroundUnitSpace only converts deltas. Anchor the conversion to the same
+	# formal safe-zone point in both spaces so the design-centre translation
+	# cancels before any GU geometry is evaluated.
+	if zone.has("center") and zone.has("center_ground_gu"):
+		var center_screen_px: Vector2 = zone.get("center", Vector2.ZERO)
+		var center_ground_gu: Vector2 = zone.get("center_ground_gu", Vector2.ZERO)
+		return center_ground_gu + GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			point_screen_px - center_screen_px
+		)
+	var polygon_screen_px := _packed_vector2_array_from_variant(zone.get("polygon", []))
+	var polygon_ground_gu := _packed_vector2_array_from_variant(zone.get("polygon_ground_gu", []))
+	if not polygon_screen_px.is_empty() and polygon_screen_px.size() == polygon_ground_gu.size():
+		return polygon_ground_gu[0] + GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			point_screen_px - polygon_screen_px[0]
+		)
+	return Vector2.INF
+
+
+static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVector2Array:
+	if raw_points is PackedVector2Array:
+		return raw_points as PackedVector2Array
+	var result := PackedVector2Array()
+	if not raw_points is Array:
+		return result
+	for raw_point: Variant in raw_points:
+		if raw_point is Vector2:
+			result.append(raw_point)
+		elif raw_point is Array and raw_point.size() >= 2:
+			result.append(Vector2(float(raw_point[0]), float(raw_point[1])))
+	return result
+
+
+func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+	var zones: Array = get_meta("safe_zones", [])
+	for zone_variant: Variant in zones:
+		if not zone_variant is Dictionary:
+			continue
+		var zone := zone_variant as Dictionary
+		var point_ground_gu := _safe_zone_point_ground_gu_from_screen_reference(
+			point_screen_px,
+			zone,
+		)
+		var has_formal_shape := zone.has("radius_gu")
+		if str(zone.get("shape", "circle")) == "polygon":
+			has_formal_shape = (
+				_packed_vector2_array_from_variant(zone.get("polygon_ground_gu", [])).size()
+				>= 3
+			)
+		if point_ground_gu == Vector2.INF or not has_formal_shape:
+			continue
+		var formal_zone := zone
+		if str(zone.get("shape", "circle")) == "polygon":
+			formal_zone = zone.duplicate(false)
+			formal_zone["polygon_ground_gu"] = _packed_vector2_array_from_variant(
+				zone.get("polygon_ground_gu", [])
+			)
+		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
+			return true
+	return false
 
 
 func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
 	move_and_slide()
+	actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
+		position_before_move,
+		global_position,
+	)
 	_physics_move_count += 1
 	var entered_safe_zone := not _point_inside_safe_zone(position_before_move) and _point_inside_safe_zone(global_position)
 	if entered_safe_zone:
 		global_position = position_before_move
+		actual_ground_motion_gu = Vector2.ZERO
 		velocity = Vector2.ZERO
 		return
 	# Physics chunks are the per-frame wall authority. The imported occupancy
@@ -448,19 +635,33 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	# of doing five script calls for every moving monster on every physics tick.
 	# A failed sample rolls back to the last verified point, so a rebuilding or
 	# temporarily absent chunk cannot let an actor tunnel through map occupancy.
-	if _last_environment_safe_position == Vector2.INF or position_before_move.distance_squared_to(_last_environment_safe_position) > 4096.0:
-		_last_environment_safe_position = position_before_move
+	if (
+		_last_environment_safe_position_px == Vector2.INF
+		or _ground_delta_gu_between_screen_positions(
+			_last_environment_safe_position_px,
+			position_before_move,
+		).length_squared() > LAST_SAFE_REFRESH_DISTANCE_GU * LAST_SAFE_REFRESH_DISTANCE_GU
+	):
+		_last_environment_safe_position_px = position_before_move
 		_environment_guard_timer = 0.0
 	_environment_guard_timer = maxf(0.0, _environment_guard_timer - maxf(0.0, delta))
 	if _environment_guard_timer > 0.0:
 		return
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
 	_environment_guard_check_count += 1
-	if WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, collision_radius):
-		global_position = _last_environment_safe_position
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+		environment_blocker,
+		global_position,
+		collision_radius_px,
+	):
+		global_position = _last_environment_safe_position_px
+		actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
+			position_before_move,
+			global_position,
+		)
 		velocity = Vector2.ZERO
 	else:
-		_last_environment_safe_position = global_position
+		_last_environment_safe_position_px = global_position
 
 
 func _current_attack_interval() -> float:
@@ -485,12 +686,18 @@ func _update_pending_attack(delta: float) -> void:
 		return
 	if _target_is_safe_player(hit_target):
 		return
-	var offset := hit_target.global_position - global_position
-	var hit_distance := maxf(attack_range, collision_radius + _target_collision_radius(hit_target) + 14.0) + 8.0
-	if offset.length() > hit_distance:
+	var offset_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		hit_target.global_position,
+	)
+	var hit_distance_gu := (
+		maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
+		+ DELAYED_HIT_TOLERANCE_GU
+	)
+	if offset_ground_gu.length() > hit_distance_gu + GroundUnitSpace.EPSILON_GU:
 		return
-	if offset.length_squared() > 0.001:
-		facing = offset.normalized()
+	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	_deal_melee_hit(hit_target, damage)
 
 
@@ -537,13 +744,22 @@ func _area_attack_targets() -> Array[Node2D]:
 	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
 		if not candidates.has(node):
 			candidates.append(node)
-	var range_pixels := float(area_attack_rule.get("rangePixels", attack_range))
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		area_attack_rule,
+		"range_gu",
+		"rangePixels",
+		attack_range_gu,
+	)
 	for node: Node in candidates:
 		if (
 			node is Node2D
 			and node.has_method("take_damage")
 			and not _point_inside_safe_zone(node.global_position)
-			and global_position.distance_to(node.global_position) <= range_pixels
+			and GroundUnitSpace.is_within_range_gu(
+				_screen_position_px_to_ground_position_gu(global_position),
+				_screen_position_px_to_ground_position_gu(node.global_position),
+				range_gu,
+			)
 		):
 			result.append(node)
 	return result
@@ -573,77 +789,37 @@ func _update_behavior_summon(delta: float) -> bool:
 	return true
 
 
-func _target_collision_radius(target_node: Node2D) -> float:
+func _target_combat_radius_gu(target_node: Node2D) -> float:
 	if target_node is PlayerCharacter:
-		return ArtSpec.PLAYER_COLLISION_RADIUS
-	if target_node is EnemyActor:
-		return target_node.collision_radius
-	if target_node is SummonActor:
-		return target_node.collision_radius
-	return 16.0
-
-
-func _contact_distance_to_target(target_node: Node2D, offset: Vector2) -> float:
-	var target_radius := _target_collision_radius(target_node)
-	if target_node is PlayerCharacter:
-		return directional_footprint_contact_distance(
-			collision_radius,
-			target_radius,
-			offset,
-			PLAYER_MELEE_CONTACT_GAP_PIXELS,
+		return WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		)
-	return collision_radius + target_radius + PLAYER_MELEE_CONTACT_GAP_PIXELS
+	if target_node is EnemyActor:
+		return target_node.combat_radius_gu
+	if target_node is SummonActor:
+		return target_node.combat_radius_gu
+	return WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(16.0)
+
+
+func _contact_distance_gu_to_target(target_node: Node2D) -> float:
+	return (
+		combat_radius_gu
+		+ _target_combat_radius_gu(target_node)
+		+ PLAYER_MELEE_CONTACT_GAP_GU
+	)
 
 
 func _uses_player_melee_contact_contract(target_node: Node2D) -> bool:
 	return (
 		target_node is PlayerCharacter
-		and move_speed > 0.0
-		and attack_range < RANGED_ATTACK_RANGE_FLOOR_PIXELS
+		and move_speed_gu_per_sec > 0.0
+		and attack_range_gu < RANGED_ATTACK_RANGE_FLOOR_GU
 	)
-
-
-static func world_offset_to_fractional_tile_delta(offset: Vector2) -> Vector2:
-	# Inverse of the formal 64x32 MapEditorCoordinate projection. Translation by
-	# the current map center cancels for a delta, so no map-specific origin or
-	# fallback pixel grid is allowed into contact geometry.
-	var horizontal := offset.x / MapEditorCoordinate.HALF_TILE_W
-	var vertical := offset.y / MapEditorCoordinate.HALF_TILE_H
-	return Vector2(
-		(horizontal + vertical) * 0.5,
-		(vertical - horizontal) * 0.5,
-	)
-
-
-static func logical_tile_distance_for_world_offset(offset: Vector2) -> float:
-	var tile_delta := world_offset_to_fractional_tile_delta(offset)
-	return maxf(absf(tile_delta.x), absf(tile_delta.y))
-
-
-static func directional_footprint_contact_distance(
-	source_radius: float,
-	target_radius: float,
-	offset: Vector2,
-	gap_pixels := PLAYER_MELEE_CONTACT_GAP_PIXELS,
-) -> float:
-	var direction := offset.normalized() if offset.length_squared() > 0.0001 else Vector2.DOWN
-	return (
-		_footprint_support(source_radius, direction)
-		+ _footprint_support(target_radius, -direction)
-		+ maxf(0.0, gap_pixels)
-	)
-
-
-static func _footprint_support(radius: float, direction: Vector2) -> float:
-	var result := 0.0
-	for point: Vector2 in WorldSpatialRulesScript.actor_footprint_polygon(radius):
-		result = maxf(result, point.dot(direction))
-	return result
 
 
 func _crowd_separation() -> Vector2:
 	_ensure_crowd_grid()
-	var separation := Vector2.ZERO
+	var separation_ground := Vector2.ZERO
 	var center_cell := _crowd_grid_cell(global_position)
 	for offset_y in range(-1, 2):
 		for offset_x in range(-1, 2):
@@ -656,17 +832,26 @@ func _crowd_separation() -> Vector2:
 				if node == self or not node is EnemyActor or node.is_queued_for_deletion():
 					continue
 				var other := node as EnemyActor
-				var away := global_position - other.global_position
-				var desired := collision_radius + other.collision_radius + 12.0
-				var distance := away.length()
-				if distance >= desired:
+				var away_ground_gu := _ground_delta_gu_between_screen_positions(
+					other.global_position,
+					global_position,
+				)
+				var desired_gu := (
+					combat_radius_gu
+					+ other.combat_radius_gu
+					+ CROWD_SEPARATION_GAP_GU
+				)
+				var distance_gu := away_ground_gu.length()
+				if distance_gu >= desired_gu:
 					continue
-				if distance < 0.01:
+				if distance_gu < GroundUnitSpace.EPSILON_GU:
 					var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
-					away = Vector2.from_angle(angle)
-					distance = 1.0
-				separation += away.normalized() * (1.0 - distance / desired)
-	return separation.limit_length(1.0)
+					away_ground_gu = Vector2.from_angle(angle)
+					distance_gu = GroundUnitSpace.EPSILON_GU
+				separation_ground += away_ground_gu.normalized() * (
+					1.0 - distance_gu / desired_gu
+				)
+	return separation_ground.limit_length(1.0)
 
 
 func _crowd_separation_for_motion(delta: float) -> Vector2:
@@ -698,7 +883,11 @@ func _ensure_crowd_grid() -> void:
 
 
 func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
-	return Vector2i(floori(world_position.x / CROWD_GRID_CELL_SIZE), floori(world_position.y / CROWD_GRID_CELL_SIZE))
+	var ground_position_gu := _screen_position_px_to_ground_position_gu(world_position)
+	return Vector2i(
+		floori(ground_position_gu.x / CROWD_GRID_CELL_SIZE_GU),
+		floori(ground_position_gu.y / CROWD_GRID_CELL_SIZE_GU),
+	)
 
 
 static func reset_performance_diagnostics() -> void:
@@ -736,8 +925,17 @@ func _can_use_background_ai() -> bool:
 		return false
 	if _pending_attack_time >= 0.0 or _area_attack_warning > 0.0 or _summon_warning > 0.0:
 		return false
-	var activation_distance := maxf(BACKGROUND_AI_MIN_DISTANCE, aggro_radius + 256.0)
-	return global_position.distance_squared_to(primary_target.global_position) > activation_distance * activation_distance
+	var activation_distance_gu := maxf(
+		BACKGROUND_AI_MIN_DISTANCE_GU,
+		aggro_radius_gu + MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(256.0),
+	)
+	return (
+		_ground_delta_gu_between_screen_positions(
+			global_position,
+			primary_target.global_position,
+		).length_squared()
+		> activation_distance_gu * activation_distance_gu
+	)
 
 
 func apply_life_steal(dealt_damage: int) -> void:
@@ -761,8 +959,13 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
-		move_speed *= float(phase.get("moveSpeedMultiplier", 1.0))
-		attack_range = float(phase.get("attackRange", attack_range))
+		move_speed_gu_per_sec *= float(phase.get("moveSpeedMultiplier", 1.0))
+		attack_range_gu = MonsterUnitAdapterScript.range_gu(
+			phase,
+			"attack_range_gu",
+			"attackRange",
+			attack_range_gu,
+		)
 		_boss_skill_cooldown = minf(_boss_skill_cooldown, float(phase.get("skillCooldownSeconds", _boss_skill_cooldown)))
 	queue_redraw()
 	if current_hp == 0:
@@ -806,7 +1009,7 @@ func apply_control(seconds: float) -> void:
 	# Re-applying control after a scripted relocation must pin the new position,
 	# not an obsolete anchor captured before teleport/knockback resolution.
 	if seconds > 0.0:
-		_control_anchor = global_position
+		_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		_pending_attack_time = -1.0
 		_pending_attack_target = null
 		_pending_attack_damage = 0
@@ -829,7 +1032,7 @@ func _update_status_effects(delta: float) -> void:
 	if _boss_rage_time > 0.0:
 		_boss_rage_time = maxf(0.0, _boss_rage_time - delta)
 		if _boss_rage_time <= 0.0:
-			move_speed = _boss_base_move_speed
+			move_speed_gu_per_sec = _boss_base_move_speed_gu_per_sec
 			_attack_interval = _boss_base_attack_interval
 	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
 		take_damage(poison_damage)
@@ -855,7 +1058,10 @@ func _apply_health_stage_mechanics() -> void:
 		summon_requested.emit(self, ids, count, int(summon.get("maxActive", 30)))
 	if bool(rage.get("enabled", false)):
 		_boss_rage_time = float(rage.get("durationSeconds", 8.0))
-		move_speed = _boss_base_move_speed * float(rage.get("moveSpeedMultiplier", 1.0))
+		move_speed_gu_per_sec = (
+			_boss_base_move_speed_gu_per_sec
+			* float(rage.get("moveSpeedMultiplier", 1.0))
+		)
 		_attack_interval = float(rage.get("attackIntervalSeconds", _boss_base_attack_interval))
 
 
@@ -881,19 +1087,28 @@ func _retarget(delta := 0.0) -> void:
 	var chosen: Node2D
 	var best_score := -INF
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
-	var leash_radius:=aggro_radius*_leash_multiplier
+	var leash_radius_gu := aggro_radius_gu * _leash_multiplier
 	var candidates:Array=[]
 	if is_instance_valid(primary_target):candidates.append(primary_target)
 	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
 		if node is Node2D and is_instance_valid(node) and not candidates.has(node):candidates.append(node)
 	for node:Node2D in candidates:
 		if _point_inside_safe_zone(node.global_position):continue
-		var distance := global_position.distance_to(node.global_position)
-		var spawn_distance:=spawn_position.distance_to(node.global_position)
+		var distance_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			node.global_position,
+		).length()
+		var spawn_distance_gu := _ground_delta_gu_between_screen_positions(
+			spawn_position,
+			node.global_position,
+		).length()
 		var threat:=_threat_for(node)
-		if distance>aggro_radius and threat<=0.0:continue
-		if spawn_distance>leash_radius:continue
-		var distance_score:=maxf(0.0,1.0-distance/aggro_radius)*100.0
+		if distance_gu > aggro_radius_gu and threat <= 0.0:continue
+		if spawn_distance_gu > leash_radius_gu:continue
+		var distance_score := (
+			maxf(0.0, 1.0 - distance_gu / maxf(aggro_radius_gu, GroundUnitSpace.EPSILON_GU))
+			* 100.0
+		)
 		var score:=threat+distance_score
 		if score>best_score:best_score=score;chosen=node
 	target = chosen
@@ -929,58 +1144,66 @@ func _decay_threat(delta:float)->void:
 
 func _return_to_spawn()->void:
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
-	var distance:=global_position.distance_to(spawn_position)
-	if distance<=6.0:velocity=Vector2.ZERO;return
-	var return_direction := global_position.direction_to(spawn_position)
-	velocity=return_direction*move_speed*0.75
+	var return_direction_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		spawn_position,
+	)
+	if return_direction_ground_gu.length() <= SPAWN_RETURN_EPSILON_GU:
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
+		return
+	velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+		return_direction_ground_gu,
+		move_speed_gu_per_sec * 0.75,
+	)
+	var return_facing_px := _screen_facing_for_ground_direction(return_direction_ground_gu)
 	# Walk animation reads movement_facing, not combat facing. Update both before
 	# moving so a monster never spends a frame playing its stale pursuit row and
 	# visibly backing toward its spawn point.
-	facing=return_direction
-	movement_facing=return_direction
+	facing = return_facing_px
+	movement_facing = return_facing_px
 	_move_with_spatial_rules()
-	var actual_motion := get_real_velocity()
-	if actual_motion.length_squared()>9.0:
-		facing=actual_motion.normalized()
+	if actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		facing = _screen_facing_for_ground_direction(actual_ground_motion_gu)
 		movement_facing=facing
 	queue_redraw()
 
 
 func _draw() -> void:
-	var radius := 27.0 if is_boss else 16.0
-	var ground_center := ground_indicator_center()
+	var radius_px := 27.0 if is_boss else 16.0
+	var ground_center_px := ground_indicator_center()
 	var draw_procedural_fallback := should_draw_synthetic_ground_shadow()
 	# Authored WIL actors may briefly wait for their asynchronously loaded
 	# atlases. They already own a direction-aware source shadow, so that waiting
 	# window must not leave a cached procedural ellipse under the final sprite.
 	if draw_procedural_fallback:
-		draw_ellipse_shadow(radius, ground_center)
+		draw_ellipse_shadow(radius_px, ground_center_px)
 	if _dying:
 		return
 	if is_targeted and (visual == null or not visual.uses_final_art()):
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
 		_draw_ground_indicator_ellipse(
-			ground_center,
+			ground_center_px,
 			ground_indicator_radii(),
 			Color(1.0, 0.78, 0.18, 0.78),
 			2.0,
 		)
 	var fallback_attacking := draw_procedural_fallback and visual != null and visual.is_fallback_attacking()
-	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
+	var body_center_px := Vector2(0, -5) + (visual.fallback_lunge_offset_px(facing) if fallback_attacking else Vector2.ZERO)
 	if draw_procedural_fallback:
 		var body_color := Color(0.55, 0.11, 0.09) if is_boss else Color(0.30, 0.48, 0.18)
 		var attack_scale:=visual.fallback_attack_scale() if visual!=null else Vector2.ONE
 		var attack_angle:=visual.fallback_attack_angle(facing) if visual!=null else 0.0
-		draw_set_transform(body_center,attack_angle,attack_scale)
-		draw_circle(Vector2.ZERO, radius, body_color.lightened(0.18) if fallback_attacking else body_color)
+		draw_set_transform(body_center_px,attack_angle,attack_scale)
+		draw_circle(Vector2.ZERO, radius_px, body_color.lightened(0.18) if fallback_attacking else body_color)
 		draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
 		if fallback_attacking:
 			var strike_angle := facing.angle()
-			var progress:=visual.fallback_attack_progress();var tip:=body_center+facing.normalized()*(radius+6.0+sin(progress*PI)*10.0)
-			draw_arc(tip, radius + 8.0, strike_angle - 0.82, strike_angle + 0.82, 12, Color(1.0, 0.78, 0.26, 0.90), 4.0)
-			draw_circle(tip,4.0+sin(progress*PI)*3.0,Color(1.0,0.9,0.5,0.82))
+			var progress:=visual.fallback_attack_progress();var tip_px:=body_center_px+facing.normalized()*(radius_px+6.0+sin(progress*PI)*10.0)
+			draw_arc(tip_px, radius_px + 8.0, strike_angle - 0.82, strike_angle + 0.82, 12, Color(1.0, 0.78, 0.26, 0.90), 4.0)
+			draw_circle(tip_px,4.0+sin(progress*PI)*3.0,Color(1.0,0.9,0.5,0.82))
 	if is_boss and _boss_phase_two:
-		draw_circle(Vector2(0, -5), radius + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
+		draw_circle(Vector2(0, -5), radius_px + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
 	if poison_time > 0.0:
 		# Poison is an overhead three-diamond badge. It stays readable without
 		# creating a green ground ring that can be mistaken for a portal marker.
@@ -992,29 +1215,68 @@ func _draw() -> void:
 				center + Vector2(0, 3), center + Vector2(-3, 0),
 			]), Color(0.36, 0.92, 0.28, 0.90))
 	if control_time > 0.0 or charm_time > 0.0:
-		draw_circle(Vector2(0, -5), radius + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
+		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:
-		draw_circle(Vector2(0, -5), radius + 3.0, Color(0.52, 0.50, 0.46, 0.72))
+		draw_circle(Vector2(0, -5), radius_px + 3.0, Color(0.52, 0.50, 0.46, 0.72))
 	if _boss_warning > 0.0:
-		var special: Dictionary = boss_rule.get("specialSkill", {})
-		var warning_radius := float(special.get("radius", 155.0))
-		if str(special.get("shape", "circle")) == "cone":
-			var half_angle := float(special.get("coneHalfAngleRadians", 0.68))
-			var sector := PackedVector2Array([Vector2.ZERO])
-			for index in range(15):
-				var angle := _boss_skill_direction.angle() - half_angle + half_angle * 2.0 * float(index) / 14.0
-				sector.append(Vector2.from_angle(angle) * warning_radius)
-			draw_colored_polygon(sector, Color(0.95, 0.12, 0.04, 0.22))
-			draw_arc(Vector2.ZERO, warning_radius, _boss_skill_direction.angle() - half_angle, _boss_skill_direction.angle() + half_angle, 24, Color(1.0, 0.34, 0.08, 0.92), 5.0)
-		else:
-			draw_circle(Vector2.ZERO, warning_radius, Color(0.95, 0.18, 0.06, 0.16))
-			draw_circle(Vector2.ZERO, warning_radius, Color(1.0, 0.36, 0.12, 0.85), false, 5.0)
+		_draw_boss_warning_ground_projection()
 	if draw_procedural_fallback:
-		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
-		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
+		draw_circle(body_center_px + Vector2(-radius_px * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
+		draw_circle(body_center_px + Vector2(radius_px * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
+
+
+func _draw_boss_warning_ground_projection() -> void:
+	var special: Dictionary = boss_rule.get("specialSkill", {})
+	var warning_polygon_px := boss_warning_polygon_px(special)
+	if warning_polygon_px.size() < 3:
+		return
+	var is_cone := str(special.get("shape", "circle")) == "cone"
+	draw_colored_polygon(
+		warning_polygon_px,
+		Color(0.95, 0.12, 0.04, 0.22) if is_cone else Color(0.95, 0.18, 0.06, 0.16),
+	)
+	var outline_px := warning_polygon_px.duplicate()
+	outline_px.append(warning_polygon_px[0])
+	draw_polyline(
+		outline_px,
+		Color(1.0, 0.34, 0.08, 0.92) if is_cone else Color(1.0, 0.36, 0.12, 0.85),
+		5.0,
+		true,
+	)
+
+
+func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
+	var radius_gu := MonsterUnitAdapterScript.range_gu(
+		special,
+		"radius_gu",
+		"radius",
+		MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(155.0),
+	)
+	var result_px := PackedVector2Array()
+	if str(special.get("shape", "circle")) == "cone":
+		var half_angle := float(special.get("coneHalfAngleRadians", 0.68))
+		result_px.append(Vector2.ZERO)
+		for index in range(25):
+			var ground_angle := (
+				_boss_skill_direction_ground.angle()
+				- half_angle
+				+ half_angle * 2.0 * float(index) / 24.0
+			)
+			result_px.append(GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				Vector2.from_angle(ground_angle) * radius_gu
+			))
+		return result_px
+	for index in range(48):
+		var ground_angle := TAU * float(index) / 48.0
+		result_px.append(GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			Vector2.from_angle(ground_angle) * radius_gu
+		))
+	return result_px
+
+
 func health_bar_anchor_y() -> float:
-	var radius := 27.0 if is_boss else 16.0
-	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	var radius_px := 27.0 if is_boss else 16.0
+	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius_px - 24.0
 	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
 
 
@@ -1055,37 +1317,42 @@ func ground_indicator_radii() -> Vector2:
 	# small and large monsters/Bosses large without inventing another body-size
 	# or vertical-squash coordinate system.
 	return (
-		WorldSpatialRulesScript.actor_footprint_radii(collision_radius)
+		WorldSpatialRulesScript.actor_footprint_radii_px(collision_radius_px)
 		* TARGET_RING_FOOTPRINT_SCALE
 	)
 
 
 func _draw_ground_indicator_ellipse(
-	center: Vector2,
-	radii: Vector2,
+	center_px: Vector2,
+	radii_px: Vector2,
 	color: Color,
-	width: float,
+	width_px: float,
 ) -> void:
 	var points := PackedVector2Array()
 	for index in range(49):
 		var angle := TAU * float(index) / 48.0
 		points.append(
-			center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			center_px + Vector2(cos(angle) * radii_px.x, sin(angle) * radii_px.y)
 		)
-	draw_polyline(points, color, width, true)
+	draw_polyline(points, color, width_px, true)
 
 
-func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
-	draw_set_transform(center, 0.0, Vector2(1.0, 0.36))
-	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.30))
-	draw_circle(Vector2(0, -radius * 0.08), radius * 0.56, Color(0, 0, 0, 0.58))
+func draw_ellipse_shadow(radius_px: float, center_px := Vector2.ZERO) -> void:
+	draw_set_transform(center_px, 0.0, Vector2(1.0, 0.36))
+	draw_circle(Vector2.ZERO, radius_px, Color(0, 0, 0, 0.30))
+	draw_circle(Vector2(0, -radius_px * 0.08), radius_px * 0.56, Color(0, 0, 0, 0.58))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-func _update_boss_skill(delta: float, distance: float) -> void:
+func _update_boss_skill(delta: float, distance_gu: float) -> void:
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	var phase: Dictionary = boss_rule.get("phaseTwo", {})
-	var skill_radius := float(special.get("radius", 155.0))
+	var skill_radius_gu := MonsterUnitAdapterScript.range_gu(
+		special,
+		"radius_gu",
+		"radius",
+		MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(155.0),
+	)
 	var damage_multiplier := int(special.get("damageMultiplier", 1))
 	if _boss_phase_two:
 		damage_multiplier = int(phase.get("skillDamageMultiplier", damage_multiplier))
@@ -1095,8 +1362,15 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false
 			if str(special.get("shape", "circle")) == "cone" and is_instance_valid(target):
-				var fresh_offset := target.global_position - global_position
-				var in_cone := fresh_offset.length() <= skill_radius and fresh_offset.normalized().dot(_boss_skill_direction) >= cos(float(special.get("coneHalfAngleRadians", 0.68)))
+				var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
+					global_position,
+					target.global_position,
+				)
+				var in_cone := (
+					fresh_offset_ground_gu.length() <= skill_radius_gu + GroundUnitSpace.EPSILON_GU
+					and fresh_offset_ground_gu.normalized().dot(_boss_skill_direction_ground)
+					>= cos(float(special.get("coneHalfAngleRadians", 0.68)))
+				)
 				if in_cone and not _target_is_safe_player(target):
 					target.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
 					_last_boss_skill_hit = true
@@ -1104,7 +1378,7 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 				var target_mode := str(special.get("targetMode", "current_target"))
 				var victims: Array[Node2D] = []
 				if target_mode == "all_combat_targets":
-					victims = _boss_skill_targets(skill_radius)
+					victims = _boss_skill_targets(skill_radius_gu)
 				elif is_instance_valid(target):
 					victims.append(target)
 				for victim: Node2D in victims:
@@ -1116,14 +1390,26 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 			_boss_skill_cooldown = float(phase.get("skillCooldownSeconds", special.get("cooldownSeconds", 4.6))) if _boss_phase_two else float(special.get("cooldownSeconds", 4.6))
 	elif _boss_skill_cooldown > 0.0:
 		_boss_skill_cooldown -= delta
-	elif distance <= float(special.get("triggerRange", 250.0)):
-		_boss_skill_direction = (target.global_position - global_position).normalized() if is_instance_valid(target) else facing
+	else:
+		var trigger_range_gu := MonsterUnitAdapterScript.range_gu(
+			special,
+			"trigger_range_gu",
+			"triggerRange",
+			MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(250.0),
+		)
+		if distance_gu > trigger_range_gu:
+			return
+		_boss_skill_direction_ground = (
+			_ground_delta_gu_between_screen_positions(global_position, target.global_position).normalized()
+			if is_instance_valid(target)
+			else GroundUnitSpace.screen_delta_px_to_ground_delta_gu(facing).normalized()
+		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
 		if visual != null:
 			visual.play_attack(float(special.get("animationSeconds", _attack_animation_duration)))
 
 
-func _boss_skill_targets(radius: float) -> Array[Node2D]:
+func _boss_skill_targets(radius_gu: float) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var candidates: Array[Node] = []
 	if is_instance_valid(primary_target):
@@ -1132,7 +1418,16 @@ func _boss_skill_targets(radius: float) -> Array[Node2D]:
 		if not candidates.has(node):
 			candidates.append(node)
 	for node: Node in candidates:
-		if node is Node2D and node.has_method("take_damage") and not _target_is_safe_player(node) and global_position.distance_to(node.global_position) <= radius:
+		if (
+			node is Node2D
+			and node.has_method("take_damage")
+			and not _target_is_safe_player(node)
+			and GroundUnitSpace.is_within_range_gu(
+				_screen_position_px_to_ground_position_gu(global_position),
+				_screen_position_px_to_ground_position_gu(node.global_position),
+				radius_gu,
+			)
+		):
 			result.append(node)
 	return result
 
@@ -1154,5 +1449,8 @@ func request_surrounded_relocation(blocking_neighbor_count: int) -> bool:
 	var relocation: Dictionary = boss_rule.get("mechanics", {}).get("surroundedRelocation", {})
 	if not bool(relocation.get("enabled", false)) or blocking_neighbor_count < int(relocation.get("blockingNeighbors", 5)):
 		return false
-	relocation_requested.emit(self, int(relocation.get("radiusCells", 4)))
+	relocation_requested.emit(
+		self,
+		MonsterUnitAdapterScript.relocation_radius_gu(relocation, 4.0),
+	)
 	return true

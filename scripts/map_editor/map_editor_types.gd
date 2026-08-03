@@ -1,7 +1,11 @@
 class_name MapEditorTypes
 extends RefCounted
 
-const SCHEMA_VERSION := 4
+const UnitLegacyAdapter := preload(
+	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+)
+
+const SCHEMA_VERSION := 5
 const TILE_SIZE := Vector2i(64, 32)
 const DEFAULT_CHUNK_SIZE := Vector2i(1024, 1024)
 const AUTHORING_CHUNK_SIZE_TILES := Vector2i(16, 16)
@@ -144,7 +148,7 @@ static func validate_document(document: Dictionary) -> Array[String]:
 
 
 static func upgrade_document(document: Dictionary) -> Dictionary:
-	var upgraded := document.duplicate(true)
+	var upgraded := UnitLegacyAdapter.upgrade_editor_document_v4(document)
 	if int(upgraded.get("schema_version", -1)) == SCHEMA_VERSION:
 		var layers: Dictionary = upgraded.get("layers", {})
 		for layer_name: String in LAYER_NAMES:

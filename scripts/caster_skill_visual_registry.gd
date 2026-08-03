@@ -15,6 +15,7 @@ const ROLE_SUMMON_ACTOR := "summon_actor_visual"
 const SCALE_SOURCE_PIXELS := "source_pixels"
 const SCALE_FIT_EXTENT := "fit_extent"
 const DERIVED_READY := "ready"
+const PRIMARY_COMPLETION_GRACE_SECONDS := 0.05
 
 static var _manifest_cache: Dictionary = {}
 
@@ -129,6 +130,42 @@ static func animation_duration(skill_name_or_id: String, phase_id := "") -> floa
 		* float(animation.get("frame_time_ms", 0))
 		/ 1000.0
 	)
+
+
+static func primary_action_completion_seconds(
+	skill_name_or_id: String,
+	phase_id := ""
+) -> float:
+	var render := render_policy(skill_name_or_id, phase_id)
+	if not bool(render.get("movement_lock_to_primary_visual", false)):
+		return 0.0
+	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
+	var animation := animation_profile(skill_id, phase_id)
+	if str(render.get("playback_strategy", "frame_sequence")) == "firegun_trail":
+		var frame_count := maxi(1, int(animation.get("frame_count", 1)))
+		var step_seconds := maxf(
+			0.001,
+			float(render.get("trajectory_step_ms", 50)) / 1000.0
+		)
+		var step_distance := maxf(
+			0.001,
+			float(render.get(
+				"trajectory_dominant_axis_pixels_per_second", 500.0 / 0.9
+			)) * step_seconds
+		)
+		var maximum_dominant_distance := maxf(
+			step_distance,
+			float(render.get("trajectory_max_dominant_axis_pixels", 0.0))
+		)
+		var emission_count := maxi(
+			1,
+			ceili(maximum_dominant_distance / step_distance)
+		)
+		# The first trail sample is emitted immediately. The final sample disappears after
+		# advancing through all source frames, so neither cooldown nor recovery
+		# time is included in this presentation boundary.
+		return float(emission_count + frame_count - 1) * step_seconds
+	return animation_duration(skill_id, phase_id) + PRIMARY_COMPLETION_GRACE_SECONDS
 
 
 static func direction_index(direction: Vector2) -> int:

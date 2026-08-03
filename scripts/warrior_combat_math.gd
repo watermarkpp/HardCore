@@ -91,13 +91,16 @@ static func roll_attack_power(attack_min: int, attack_max: int, total_luck: int,
 
 
 static func slaying_proc_cycle(level_value: int) -> int:
-	# m_btAttackSkillCount := 7 - level；每轮随机选择一个触发点。
+	# 用户定稿表：内部0/1/2/3级分别为1/7、1/6、1/5、1/4。
 	return 7 - clamp_skill_level(level_value)
 
 
+static func slaying_flat_damage_bonus(level_value: int) -> int:
+	return 2 * (clamp_skill_level(level_value) + 1)
+
+
 static func slaying_damage(base_damage: int, level_value: int) -> int:
-	# m_nHitPlus := DEFHIT + level；触发时 Inc(nPower, m_nHitPlus)。
-	return maxi(1, base_damage + BASE_HIT + clamp_skill_level(level_value))
+	return maxi(1, base_damage + slaying_flat_damage_bonus(level_value))
 
 
 static func thrust_secondary_damage(base_damage: int, level_value: int, sword_long_rate := SWORD_LONG_POWER_RATE) -> int:

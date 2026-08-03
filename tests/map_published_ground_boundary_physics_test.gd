@@ -65,10 +65,10 @@ func _assert_canvas_edge(
 	var canvas_top_world := Vector2(center.x, 0.0) - center
 	var canvas_bottom_world := Vector2(center.x, pixel_size.y) - center
 	assert(canvas_top_world.is_equal_approx(
-		MapEditorCoordinate.tile_to_world(Vector2(-0.5, -0.5), design_size)
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(Vector2(-0.5, -0.5), design_size)
 	), "%s top canvas edge mismatch" % map_key)
 	assert(canvas_bottom_world.is_equal_approx(
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(design_size) - Vector2(0.5, 0.5), design_size
 		)
 	), "%s bottom canvas edge mismatch" % map_key)
@@ -94,14 +94,14 @@ func _assert_physics_edge(
 	add_child(body)
 	await get_tree().physics_frame
 	var tile_x := float(design_size.x) * 0.5 - 0.5
-	var visual_edge := MapEditorCoordinate.tile_to_world(
+	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2(tile_x, -0.5), design_size
 	)
 	var visual_polygon := CollisionGeometry.map_inner_boundary_world(design_size)
 	var edge_direction := visual_polygon[1] - visual_polygon[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
-	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
-	var footprint := WorldSpatialRules.actor_footprint_polygon(clearance)
+	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
+	var footprint := WorldSpatialRules.actor_footprint_polygon_px(clearance)
 	var just_inside := visual_edge - outward * 0.5
 	var just_outside := visual_edge + outward * 0.5
 	var empty_collision := {"blocked_tiles": []}
@@ -120,7 +120,7 @@ func _assert_physics_edge(
 	actor.collision_layer = 2
 	actor.collision_mask = 1
 	var actor_shape := CollisionShape2D.new()
-	actor_shape.shape = WorldSpatialRules.actor_footprint_shape(clearance)
+	actor_shape.shape = WorldSpatialRules.actor_footprint_shape_px(clearance)
 	actor.add_child(actor_shape)
 	add_child(actor)
 	actor.global_position = visual_edge - outward * (clearance + 4.0)

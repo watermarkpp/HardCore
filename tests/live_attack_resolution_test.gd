@@ -27,8 +27,9 @@ func _run() -> void:
 	var decoy := _make_enemy(game, "禁止偷换目标", origin_at_input + Vector2(64, 0))
 	game.locked_target = intended
 
-	# The target crosses from E to S during the 170ms windup. Resolution must
-	# use the live feet and the original target, not the input snapshot or decoy.
+	# The target crosses from E to S during the 170ms windup. The body animation
+	# remains E, so melee geometry must remain E as well; silently rotating only
+	# the damage sector to S is the moving-attack desynchronization regression.
 	intended.global_position = game.player.global_position + Vector2(0, 32)
 	game.player._pending_attack_context = {
 		"mode": "normal",
@@ -39,21 +40,22 @@ func _run() -> void:
 			intended.get_instance_id(),
 			intended.global_position,
 			true,
-			true
+			true,
+			ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 		),
 	}
 	var intended_hp := intended.current_hp
 	var decoy_hp := decoy.current_hp
 	game._on_player_attack(origin_at_input, Vector2.RIGHT, 20)
-	assert(intended.current_hp == intended_hp - 20, "命中帧没有使用原锁定目标的实时脚点")
-	assert(decoy.current_hp == decoy_hp, "原锁定目标转向后攻击被偷换给附近怪物")
+	assert(intended.current_hp == intended_hp, "伤害扇区在命中帧背离E向动画而暗转到S")
+	assert(decoy.current_hp == decoy_hp - 20, "E向动画没有命中E向刀锋范围内目标")
 
 	# Locking controls release facing and priority, not exclusive damage rights.
 	# If the original target moves out of reach, the nearest monster actually
 	# covered by the live melee geometry receives the single-target attack.
 	intended.current_hp = intended.max_hp
-	intended.global_position = game.player.global_position + Vector2(0, 100)
-	decoy.global_position = game.player.global_position + Vector2(0, 32)
+	intended.global_position = game.player.global_position + Vector2(128, 0)
+	decoy.global_position = game.player.global_position + Vector2(64, 0)
 	game.player._pending_attack_context = {
 		"mode": "normal",
 		"skill_name": "attack",
@@ -63,7 +65,8 @@ func _run() -> void:
 			intended.get_instance_id(),
 			intended.global_position,
 			true,
-			true
+			true,
+			ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 		),
 	}
 	intended_hp = intended.current_hp
@@ -85,9 +88,9 @@ func _run() -> void:
 		true,
 		true
 	)
-	assert((live_geometry.origin_world as Vector2).is_equal_approx(moved_origin), "职业技能发射帧仍使用旧施法者脚点")
+	assert((live_geometry.origin_screen_px as Vector2).is_equal_approx(moved_origin), "职业技能发射帧仍使用旧施法者脚点")
 	assert(
-		(live_geometry.direction_world as Vector2).is_equal_approx(
+		(live_geometry.direction_screen_px as Vector2).is_equal_approx(
 			moved_origin.direction_to(intended.global_position)
 		),
 		"职业技能发射帧仍使用旧目标方向"
@@ -97,7 +100,7 @@ func _run() -> void:
 	game.queue_free()
 	await get_tree().process_frame
 
-	print("LIVE_ATTACK_RESOLUTION_PASS：实时脚点、原锁定目标与全职业共享发射几何正常")
+	print("LIVE_ATTACK_RESOLUTION_PASS：近战动作/伤害朝向一致，实时脚点及法术追踪策略正常")
 	get_tree().quit(0)
 
 
@@ -157,12 +160,16 @@ func _verify_caster_projectile_release(
 			break
 	assert(projectile != null, "%s没有在释放帧创建正式投射物" % profession)
 	assert(
-		projectile.global_position.is_equal_approx(
-			live_origin + (release_geometry.direction_world as Vector2) * 24.0
-		),
+		projectile.global_position.is_equal_approx(live_origin),
 		"%s投射物仍从旧脚点生成" % profession
 	)
 	assert(
-		projectile.direction.is_equal_approx(live_origin.direction_to(target.global_position)),
+		projectile.visual_muzzle_offset_px.is_equal_approx(
+			(release_geometry.direction_screen_px as Vector2).normalized() * 24.0
+		),
+		"%s projectile muzzle offset escaped PX presentation space" % profession
+	)
+	assert(
+		projectile.direction_screen_px.is_equal_approx(live_origin.direction_to(target.global_position)),
 		"%s投射物仍瞄准旧方向" % profession
 	)

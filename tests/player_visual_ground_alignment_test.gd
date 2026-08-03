@@ -36,8 +36,8 @@ func _ready() -> void:
 	assert(collision.position.is_zero_approx())
 	assert(
 		(collision.shape as ConvexPolygonShape2D).points
-			== WorldSpatialRules.actor_footprint_polygon(
-				ArtSpec.PLAYER_COLLISION_RADIUS
+			== WorldSpatialRules.actor_footprint_polygon_px(
+				ArtSpec.PLAYER_COLLISION_RADIUS_PX
 			)
 	)
 

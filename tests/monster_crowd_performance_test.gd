@@ -1,6 +1,7 @@
 extends Node
 
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const ENEMY_COUNT := 96
 const GROUP_COUNT := 4
 const ENEMIES_PER_GROUP := ENEMY_COUNT / GROUP_COUNT
@@ -42,7 +43,7 @@ func _run() -> void:
 	var far_metrics := EnemyActor.performance_diagnostics()
 	assert(int(far_metrics.retarget_full_scans) <= ENEMY_COUNT * 5, "far retarget scans were not bounded: %s" % far_metrics)
 	var near_enemy: EnemyActor = enemies[0]
-	player.global_position = near_enemy.global_position + Vector2(80, 0)
+	player.global_position = near_enemy.global_position + GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2(2.5, 0.0))
 	near_enemy.target = player
 	near_enemy._retarget_timer = 0.0
 	EnemyActor.reset_performance_diagnostics()
@@ -53,7 +54,7 @@ func _run() -> void:
 
 	# Model a dense tomb room: 96 pursuing actors remain smooth at physics rate,
 	# but collision steering is recomputed at 10 Hz and re-used between ticks.
-	player.global_position = Vector2(108, 54)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2(3.0, 3.0))
 	for enemy: EnemyActor in enemies:
 		enemy.target = player
 		enemy._crowd_steering_timer = EnemyActor.CROWD_STEERING_INTERVAL_SECONDS * float(posmod(enemy.get_instance_id(), 7)) / 7.0
@@ -72,7 +73,7 @@ func _run() -> void:
 	EnemyActor.reset_performance_diagnostics()
 	for step in range(30):
 		for enemy: EnemyActor in enemies:
-			enemy.velocity = Vector2.RIGHT * enemy.move_speed
+			enemy.velocity = GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(Vector2.RIGHT, enemy.move_speed_gu_per_sec)
 			enemy._move_with_spatial_rules(1.0 / 60.0)
 	var movement_metrics := EnemyActor.performance_diagnostics()
 	assert(int(movement_metrics.physics_moves) == ENEMY_COUNT * 30, "moving crowd skipped playable motion ticks: %s" % movement_metrics)
@@ -128,7 +129,11 @@ func _spawn_groups(player: PlayerCharacter, id_offset: int, count := ENEMY_COUNT
 	for index in range(count):
 		var group_index := index / ENEMIES_PER_GROUP
 		var local_index := index % ENEMIES_PER_GROUP
-		var position := Vector2(group_index * 1600 + (local_index % 6) * 36, (local_index / 6) * 36)
+		var ground_position_gu := Vector2(
+			float(group_index) * 50.0 + float(local_index % 6) * 1.125,
+			float(local_index / 6) * 1.125
+		)
+		var position: Vector2 = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(ground_position_gu)
 		var enemy := EnemyActor.new()
 		enemy.setup({"monsterId": -10000 - id_offset - index, "name": "crowd_perf_%d" % (id_offset + index), "hp": 10}, player, false)
 		enemy.global_position = position
@@ -144,8 +149,8 @@ func _naive_separation(enemy: EnemyActor, enemies: Array[EnemyActor]) -> Vector2
 	for other: EnemyActor in enemies:
 		if other == enemy or other.is_queued_for_deletion():
 			continue
-		var away := enemy.global_position - other.global_position
-		var desired := enemy.collision_radius + other.collision_radius + 12.0
+		var away := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(enemy.global_position - other.global_position)
+		var desired := enemy.combat_radius_gu + other.combat_radius_gu + EnemyActor.CROWD_SEPARATION_GAP_GU
 		var distance := away.length()
 		if distance >= desired:
 			continue

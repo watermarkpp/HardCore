@@ -2,6 +2,21 @@ class_name CasterSkillRuntime
 extends RefCounted
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const CasterSpellGeometryScript := preload(
+	"res://scripts/skills/caster_spell_geometry.gd"
+)
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillDataLoaderScript := preload(
+	"res://scripts/skills/skill_data_loader.gd"
+)
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
+const RUNTIME_CONTRACT_ID := "caster_skill_runtime.ground_units.v2"
+const FIRE_WALL_CELL_SPACING_GU := 1.0
+const FIRE_WALL_EFFECT_RADIUS_GU := 0.5
+const FIRE_WALL_VISUAL_RADIUS_PX := 22.08
 
 const SPECIAL_SKILLS := {
 	"wizard.repulsion_ring": true,
@@ -49,12 +64,14 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		"success": true,
 		"cast_type": str(combat_profile.get("cast_type", "")),
 		"target_mode": str(combat_profile.get("target_mode", "single")),
-		"range": float(combat_profile.get("range", 0.0)),
-		"area_radius": float(combat_profile.get("area_radius", 0.0)),
+		"maximum_range_gu": float(combat_profile.get("maximum_range_gu", 0.0)),
+		"search_range_gu": float(combat_profile.get("search_range_gu", 0.0)),
+		"area_radius_gu": float(combat_profile.get("area_radius_gu", 0.0)),
+		"visual_radius_px": float(combat_profile.get("visual_radius_px", 0.0)),
 		"windup_seconds": float(combat_profile.get("windup", 0.0)),
 		"hit_frame": int(combat_profile.get("hit_frame", 0)),
 		"cooldown_seconds": float(combat_profile.get("cooldown", 0.0)),
-		"runtime_contract": "caster_skill_runtime.v1",
+		"runtime_contract": RUNTIME_CONTRACT_ID,
 		"formula_source": "source.original_gameofmir.server_suite",
 		"source_priority": {"lane": "server_rules", "tier": "primary", "order": 0, "weight": 100},
 		"evasion_channel": "anti_poison" if skill_id == "taoist.poison" else ("anti_magic" if CombatResolutionRules.anti_magic_eligible(skill_id) else "none"),
@@ -78,7 +95,7 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 			result.healing = _taoist_healing(skill_id, level, context)
 			result.apply_delay_seconds = 0.8
 			if skill_id.ends_with("mass_healing"):
-				result.area_radius_cells = 1
+				result.area_radius_grid_steps = 1.0
 			return result
 		"taoist.spiritual_warfare":
 			result.operation = "passive_accuracy"
@@ -105,11 +122,13 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		if skill_id == "wizard.fire_wall":
 			result.duration_seconds = WizardCombatMath.fire_wall_duration(level, int(context.get("magic_stat_roll", 0)))
 			result.tick_interval_seconds = 1.0
-			result.cell_size = int(context.get("cell_size", 48))
+			result.cell_spacing_gu = FIRE_WALL_CELL_SPACING_GU
+			result.ground_effect_radius_gu = FIRE_WALL_EFFECT_RADIUS_GU
+			result.visual_radius_px = FIRE_WALL_VISUAL_RADIUS_PX
 		elif skill_id == "wizard.exploding_flame" or skill_id == "wizard.ice_storm":
-			result.area_radius_cells = 1
+			result.area_radius_grid_steps = 1.0
 		elif skill_id == "wizard.hell_lightning":
-			result.area_radius_cells = 2
+			result.area_radius_grid_steps = 2.0
 		return result
 	result.success = false
 	result.failure_reason = "missing_runtime_operation"
@@ -134,27 +153,76 @@ static func create_visual(
 	]:
 		return null
 	var effect := CasterSkillVisualEffect.new()
-	var radius := float(plan.get("area_radius", 72.0))
+	var visual_geometry_context := CasterSpellGeometryScript.visual_context_from_plan(
+		skill_id,
+		plan,
+		position
+	)
+	var visual_radius_px := maxf(0.0, float(plan.get("visual_radius_px", 0.0)))
 	if role == CasterSkillVisualRegistry.ROLE_LINE_EFFECT:
-		var geometry: Dictionary = plan.get("visual", {}).get(
-			"skills_contract", {}
-		).get("geometry", {})
-		var length_tiles := int(geometry.get("length_tiles", 0))
-		radius = (
-			float(length_tiles) * float(plan.get("cell_size", 50))
-			if length_tiles > 0
-			else maxf(radius, float(plan.get("range", 0.0)))
+		var geometry_offsets: Array = visual_geometry_context.get(
+			"geometry_screen_offsets_px", []
 		)
-	elif plan.has("area_radius_cells"):
-		radius = maxf(radius, float(plan.area_radius_cells) * float(plan.get("cell_size", 48)))
+		# A canonical line may be truncated to zero GU by terrain.  Its explicit
+		# empty point list is authoritative and must not fall through to the full
+		# 5/8-GU definition radius: that produced a full visible line while the
+		# shared damage strip contained no area and therefore could hit nothing.
+		var canonical_geometry_was_supplied := (
+			CasterSpellGeometryScript.canonical_geometry_contract_is_supported(
+				str(plan.get("canonical_geometry_contract", ""))
+			)
+			and plan.has("geometry_screen_points_px")
+		)
+		if canonical_geometry_was_supplied and geometry_offsets.is_empty():
+			return null
+		if not geometry_offsets.is_empty():
+			visual_radius_px = 0.0
+			for raw_offset: Variant in geometry_offsets:
+				if raw_offset is Vector2:
+					var geometry_offset: Vector2 = raw_offset
+					visual_radius_px = maxf(
+						visual_radius_px,
+						geometry_offset.length()
+					)
+		else:
+			var geometry: Dictionary = SkillDataLoaderScript.skill(
+				skill_id
+			).get("geometry", {})
+			var effect_length_gu := float(geometry.get("effect_length_gu", 0.0))
+			var direction_ground_gu := (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					direction
+				).normalized()
+			)
+			if effect_length_gu > 0.0:
+				visual_radius_px = (
+					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+						direction_ground_gu * effect_length_gu
+					).length()
+				)
+			else:
+				visual_radius_px = maxf(
+					visual_radius_px,
+					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+						direction_ground_gu
+						* float(plan.get("maximum_range_gu", 0.0))
+					).length()
+				)
+	elif plan.has("area_radius_grid_steps"):
+		visual_radius_px = maxf(
+			visual_radius_px,
+			float(plan.area_radius_grid_steps)
+			* CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
+		)
 	effect.setup(
 		position,
 		skill_id,
-		radius,
+		visual_radius_px,
 		float(plan.get("visual_duration", 0.8)),
 		direction,
 		follow_node,
-		phase_id
+		phase_id,
+		visual_geometry_context
 	)
 	return effect
 
@@ -168,11 +236,21 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 	):
 		return null
 	var projectile := SkillProjectile.new()
-	projectile.setup(
-		origin + direction.normalized() * 24.0,
-		direction,
+	var direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+		.normalized()
+	)
+	var formal_geometry: Dictionary = SkillDataLoaderScript.skill(
+		str(plan.get("skill_id", ""))
+	).get("geometry", {})
+	projectile.setup_ground_unit_projectile(
+		origin,
+		direction_ground_gu,
+		float(formal_geometry.get("maximum_range_gu", 0.0)),
 		int(plan.get("damage_before_evasion", plan.get("damage", 0))),
-		float(plan.get("range", 360.0)),
+		CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU,
+		direction.normalized() * 24.0,
 		color,
 		"damage",
 		0,
@@ -196,18 +274,32 @@ static func create_ground_effects(
 		or not CasterSkillVisualRegistry.is_runtime_ready(str(plan.get("skill_id", "")))
 	):
 		return effects
-	var cell_size := int(plan.get("cell_size", 48))
-	var radius := maxf(20.0, float(cell_size) * 0.46)
-	for effect_position: Vector2 in fire_wall_positions(center, cell_size):
+	var cell_spacing_gu := maxf(
+		0.0,
+		float(plan.get("cell_spacing_gu", FIRE_WALL_CELL_SPACING_GU))
+	)
+	var radius_gu := maxf(
+		0.0,
+		float(plan.get("ground_effect_radius_gu", FIRE_WALL_EFFECT_RADIUS_GU))
+	)
+	var visual_radius_px := maxf(
+		1.0,
+		float(plan.get("visual_radius_px", FIRE_WALL_VISUAL_RADIUS_PX))
+	)
+	for effect_position: Vector2 in fire_wall_positions_ground_gu(
+		center,
+		cell_spacing_gu
+	):
 		var effect := GroundSkillEffect.new()
-		effect.setup(
+		effect.setup_ground_unit_effect(
 			effect_position,
 			int(plan.get("damage", 0)),
-			radius,
+			radius_gu,
 			float(plan.get("duration_seconds", 0.1)),
 			color,
 			str(plan.get("skill_id", "")),
-			float(plan.get("tick_interval_seconds", 0.8))
+			float(plan.get("tick_interval_seconds", 0.8)),
+			visual_radius_px
 		)
 		effect.configure_runtime_source(source_actor)
 		effects.append(effect)
@@ -355,13 +447,24 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	var primary_target := context.get("primary_target") as Node2D
 	var origin := context.get("origin", caster.global_position if caster != null else Vector2.ZERO) as Vector2
 	var direction := context.get("direction", Vector2.DOWN) as Vector2
+	var fallback_direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+		.normalized()
+	)
+	var fallback_target_position_screen_px := (
+		origin
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			fallback_direction_ground_gu
+			* float(plan.get("maximum_range_gu", 0.0))
+		)
+	)
 	var target_position := context.get(
 		"target_position",
 		context.get(
 			"teleport_destination",
 			primary_target.global_position
 			if primary_target != null
-			else origin + direction * float(plan.get("range", 0.0))
+			else fallback_target_position_screen_px
 		)
 	) as Vector2
 	var node_plan := plan.duplicate(true)
@@ -429,10 +532,30 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					result.applied_count += 1
 		"knockback":
 			for target: Node2D in targets:
-				var push_direction := (target.global_position - origin).normalized()
-				if push_direction.length_squared() <= 0.0:
-					push_direction = direction.normalized()
-				target.global_position += push_direction * float(plan.get("push_distance", 0.0))
+				var target_delta_ground_gu := (
+					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+						target.global_position - origin
+					)
+				)
+				var knockback_fallback_direction_ground_gu := (
+					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+				)
+				var push_direction_ground_gu := (
+					GroundUnitSpaceScript.normalized_ground_direction(
+						Vector2.ZERO,
+						target_delta_ground_gu,
+						knockback_fallback_direction_ground_gu
+					)
+				)
+				var push_delta_ground_gu := (
+					push_direction_ground_gu
+					* maxf(0.0, float(plan.get("push_distance_gu", 0.0)))
+				)
+				target.global_position += (
+					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+						push_delta_ground_gu
+					)
+				)
 				result.applied_count += 1
 		"tame_monster":
 			if primary_target is EnemyActor:
@@ -496,12 +619,22 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	return result
 
 
-static func fire_wall_positions(center: Vector2, cell_size := 48) -> Array[Vector2]:
+static func fire_wall_positions_ground_gu(
+	center_screen_px: Vector2,
+	cell_spacing_gu := FIRE_WALL_CELL_SPACING_GU
+) -> Array[Vector2]:
+	var safe_spacing_gu := maxf(0.0, cell_spacing_gu)
 	return [
-		center,
-		center + Vector2(cell_size, 0),
-		center + Vector2(0, cell_size),
-		center + Vector2(cell_size, cell_size),
+		center_screen_px,
+		center_screen_px + GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			Vector2(safe_spacing_gu, 0.0)
+		),
+		center_screen_px + GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			Vector2(0.0, safe_spacing_gu)
+		),
+		center_screen_px + GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			Vector2(safe_spacing_gu, safe_spacing_gu)
+		),
 	]
 
 

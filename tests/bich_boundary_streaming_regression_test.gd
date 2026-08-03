@@ -35,10 +35,10 @@ func _ready() -> void:
 		guard_bounds = guard_bounds.expand(point)
 	var runtime := MapEditorRuntimeBridge.load_bich()
 	var edge_probes := [
-		MapEditorRuntimeBridge.tile_to_world(runtime, [-1.0, 0.0]),
-		MapEditorRuntimeBridge.tile_to_world(runtime, [80.0, 0.0]),
-		MapEditorRuntimeBridge.tile_to_world(runtime, [80.0, 80.0]),
-		MapEditorRuntimeBridge.tile_to_world(runtime, [0.0, 80.0]),
+		MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(-1.0, 0.0)),
+		MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(80.0, 0.0)),
+		MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(80.0, 80.0)),
+		MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(0.0, 80.0)),
 	]
 	for probe: Vector2 in edge_probes:
 		assert(guard_bounds.has_point(probe), "边缘镜头探针未被地表缓冲覆盖：%s" % probe)

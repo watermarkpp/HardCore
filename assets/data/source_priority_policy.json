@@ -30,9 +30,43 @@
     "equipment_attributes_requirements_weights_affinity": "equipment_attributes",
     "vanilla_skill_membership_progression_mp_target_material_formula_geometry_timing_proficiency_state_machine": "skills",
     "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
-    "combat_movement_ai_timing_protocol": "server_rules"
+    "combat_movement_ai_timing_protocol": "server_rules",
+    "combat_movement_ai_projectile_distance_units": "combat_units"
   },
   "lanes": {
+    "combat_units": {
+      "description": "HardCore formal GU/GS/PX unit, metric and 64x32 projection contract for combat, movement, AI and projectiles",
+      "scopeExclusions": {
+        "skills": [
+          "default_distance_metric",
+          "equal_length_geometry_metric",
+          "runtime_distance_units"
+        ],
+        "server_rules": [
+          "runtime_distance_units",
+          "movement_distance_metric",
+          "ai_distance_metric",
+          "projectile_distance_metric"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.combat_unit_contract.v1",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/combat_unit_contract_v1.json",
+          "contractId": "combat.unit.gu_gs_px.v1",
+          "authority": "user_authoritative_override",
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "docs/COMBAT-UNIT-V1.md",
+          "evidenceSha256": "9CA9328169EB92F2925BE5A8DD5D0592C979C807BFA92EA62C1307407AC66DC0",
+          "reason": "The user explicitly approved COMBAT-UNIT-V1.0 on 2026-08-02 to replace mixed Chebyshev, grid-step and screen-pixel runtime distance semantics with Euclidean GU while preserving all accepted art and manual anchors."
+        }
+      ]
+    },
     "skills": {
       "description": "HardCore formal CN MIR2 1.76 Vanilla 33-skill membership, progression, MP, targeting, resource, formula identity, geometry, timing, proficiency and state-machine contract",
       "scopeExclusions": {
@@ -65,9 +99,9 @@
           "authority": "user_authoritative_override",
           "sourceKind": "explicit_user_primary_override",
           "originalPath": "user_authorized_attachment/MIR2_176_33技能唯一真源_Codex_v1.0.1.zip",
-          "evidenceSha256": "DF2199E337F4EDD087CC060C0B59DE1C5839C309FC953EB0DCBD77FAC0ED4FBC",
+          "evidenceSha256": "1FDF28D3C575D18D2E7E0F875B008EB4F6F719752E4974CBCA399C66C62C7C2C",
           "packageEvidenceSha256": "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
-          "contractEvidenceSha256": "DF2199E337F4EDD087CC060C0B59DE1C5839C309FC953EB0DCBD77FAC0ED4FBC",
+          "contractEvidenceSha256": "1FDF28D3C575D18D2E7E0F875B008EB4F6F719752E4974CBCA399C66C62C7C2C",
           "eligibleEvidenceStatuses": [
             "historical_verified",
             "source_formula_reference",

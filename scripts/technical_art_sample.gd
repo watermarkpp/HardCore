@@ -44,7 +44,7 @@ func _build_actor_sample() -> void:
 	sprite.centered = false
 	sprite.position = -Vector2(ArtSpec.CHARACTER_FOOT_ANCHOR)
 	actor.add_child(sprite)
-	actor.add_child(_circle_collision(ArtSpec.PLAYER_COLLISION_RADIUS))
+	actor.add_child(_circle_collision(ArtSpec.PLAYER_COLLISION_RADIUS_PX))
 
 
 func _build_monster_sample() -> void:
@@ -62,7 +62,7 @@ func _build_monster_sample() -> void:
 	sprite.centered = false
 	sprite.position = -Vector2(ArtSpec.MONSTER_FOOT_ANCHOR)
 	monster.add_child(sprite)
-	monster.add_child(_circle_collision(ArtSpec.MONSTER_COLLISION_RADIUS))
+	monster.add_child(_circle_collision(ArtSpec.MONSTER_COLLISION_RADIUS_PX))
 
 
 func _build_world_collision() -> void:

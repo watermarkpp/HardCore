@@ -1,6 +1,8 @@
 extends Node
 
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const WarriorMeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 
 func _ready() -> void:
@@ -30,14 +32,33 @@ func _run() -> void:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
 
 	var origin: Vector2 = game.player.global_position
-	var locked_far := _make_enemy(game, "超距锁定", origin + Vector2(0, 112))
-	var near_a := _make_enemy(game, "近距A", origin + Vector2(0, 32))
-	var near_b := _make_enemy(game, "近距B", origin + Vector2(0, 32))
-	var thrust_far_a := _make_enemy(game, "刺杀远段A", origin + Vector2(0, 64))
-	var thrust_far_b := _make_enemy(game, "刺杀远段B", origin + Vector2(0, 64))
-	var half_side_a := _make_enemy(game, "半月侧面A", origin + Vector2(32, 16))
-	var half_side_b := _make_enemy(game, "半月侧面B", origin + Vector2(-32, 16))
-	var half_side_c := _make_enemy(game, "半月侧面C", origin + Vector2(-64, 0))
+	var south_gu := Vector2(1.0, 1.0).normalized()
+	var locked_far := _make_enemy(
+		game, "超距锁定", origin + _screen_offset_gu(south_gu * 4.0)
+	)
+	var near_a := _make_enemy(
+		game, "近距A", origin + _screen_offset_gu(south_gu * 1.0)
+	)
+	var near_b := _make_enemy(
+		game, "近距B", origin + _screen_offset_gu(south_gu * 1.0)
+	)
+	var thrust_far_a := _make_enemy(
+		game, "刺杀远段A", origin + _screen_offset_gu(south_gu * 2.25)
+	)
+	var thrust_far_b := _make_enemy(
+		game, "刺杀远段B", origin + _screen_offset_gu(south_gu * 2.25)
+	)
+	var half_side_a := _make_enemy(
+		game, "半月侧面A", origin + _screen_offset_gu(Vector2(1.0, 0.0))
+	)
+	var half_side_b := _make_enemy(
+		game, "半月侧面B", origin + _screen_offset_gu(Vector2(0.0, 1.0))
+	)
+	var half_side_c := _make_enemy(
+		game,
+		"半月侧面C",
+		origin + _screen_offset_gu(Vector2(-1.0, 1.0).normalized())
+	)
 	game.locked_target = locked_far
 
 	var release_geometry: Dictionary = ReleaseGeometry.resolve(
@@ -77,7 +98,53 @@ func _run() -> void:
 	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b]:
 		assert(target.current_hp < target.max_hp, "刺杀遗漏范围内目标：%s" % target.monster_data.get("name", ""))
 
+	# A locked monster near the edge of one 45-degree visual sector must use the
+	# exact release-frame footpoint axis. At short range the old canonical axis
+	# happened to fit inside the 1-GU strip; at the 2.4-GU far segment its lateral
+	# error exceeds the strip and produced the device-only-looking "visual hit,
+	# no damage" regression. Keep the body on the S row, but share one continuous
+	# damage axis between the locked target and every other monster in the strip.
+	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b]:
+		target.global_position = origin + Vector2(3000, 3000)
+	var off_axis_direction_gu := south_gu.rotated(deg_to_rad(22.0))
+	var off_axis_locked := _make_enemy(
+		game,
+		"刺杀远端偏轴锁定",
+		origin + _screen_offset_gu(off_axis_direction_gu * 2.4)
+	)
+	var off_axis_near := _make_enemy(
+		game,
+		"刺杀同轴近端",
+		origin + _screen_offset_gu(off_axis_direction_gu * 1.0)
+	)
+	var off_axis_release: Dictionary = ReleaseGeometry.resolve(
+		origin,
+		Vector2.DOWN,
+		off_axis_locked.get_instance_id(),
+		off_axis_locked.global_position,
+		true,
+		true,
+		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
+	)
+	assert(int(off_axis_release.visual_direction_index) == 0)
+	assert(int(off_axis_release.live_locked_target_direction_index) == 0)
+	var old_far_slot := WarriorMeleeGeometry.thrust_footprint_slot_gu(
+		Vector2.ZERO,
+		off_axis_direction_gu * 2.4,
+		off_axis_locked.combat_radius_gu,
+		0
+	)
+	assert(old_far_slot == 0, "测试样本没有复现旧八方向中心线的远端漏判")
+	_set_attack_context(game, "thrust", "刺杀剑术", off_axis_release)
+	game._on_player_attack(origin, Vector2.DOWN, 20)
+	assert(off_axis_locked.current_hp < off_axis_locked.max_hp, "连续刺杀轴没有命中2.4 GU偏轴锁定目标")
+	assert(off_axis_near.current_hp < off_axis_near.max_hp, "同一次刺杀的近端候选没有复用连续伤害轴")
+
 	# Half moon likewise has no target-count cap inside its approved arc.
+	near_a.global_position = origin + _screen_offset_gu(south_gu * 1.0)
+	near_b.global_position = origin + _screen_offset_gu(south_gu * 1.0)
+	off_axis_locked.global_position = origin + Vector2(3000, 3000)
+	off_axis_near.global_position = origin + Vector2(3000, 3000)
 	_reset_hp([near_a, near_b, half_side_a, half_side_b, half_side_c])
 	game.player.thrusting_enabled = false
 	game.player.half_moon_enabled = true
@@ -96,7 +163,11 @@ func _run() -> void:
 	game.player.fire_sword_enabled = false
 	var moved_origin := origin + Vector2(18, -11)
 	game.player.global_position = moved_origin
-	locked_far.global_position = moved_origin + Vector2(0, 48)
+	locked_far.global_position = moved_origin + (
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			Vector2(1.0, 1.0).normalized() * 1.25
+		)
+	)
 	locked_far.current_hp = locked_far.max_hp
 	game.locked_target = locked_far
 	var moving_release_geometry: Dictionary = ReleaseGeometry.resolve(
@@ -137,6 +208,10 @@ func _set_attack_context(
 func _reset_hp(targets: Array) -> void:
 	for target: EnemyActor in targets:
 		target.current_hp = target.max_hp
+
+
+func _screen_offset_gu(delta_ground_gu: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(delta_ground_gu)
 
 
 func _make_enemy(game: Node, display_name: String, position: Vector2) -> EnemyActor:

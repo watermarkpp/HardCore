@@ -27,7 +27,7 @@ func _run() -> void:
 		if node is EnemyActor and node.display_name == "触龙神":
 			dragon = node
 			break
-	assert(dragon != null and dragon.move_speed == 0.0 and dragon.attack_range >= 200.0, "触龙神固定远程配置失效")
+	assert(dragon != null and dragon.move_speed_gu_per_sec == 0.0 and dragon.attack_range_gu >= 200.0 / 32.0, "触龙神固定远程配置失效")
 	dragon.global_position = game.player.global_position + Vector2(80, 0)
 	dragon._attack_timer = 0.0
 	dragon._physics_process(0.1)

@@ -42,6 +42,9 @@ $Suites = @{
 		'tests/skeleton_spirit_boss_test.tscn',
 		'tests/corpse_king_boss_test.tscn',
 		'tests/crowd_grounding_test.tscn',
+		'tests/monster_unit_adapter_test.tscn',
+		'tests/monster_ground_unit_runtime_test.tscn',
+		'tests/monster_melee_contact_geometry_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
     warrior = @(
@@ -51,6 +54,10 @@ $Suites = @{
         'tests/warrior_service_formula_test.tscn',
         'tests/warrior_skill_state_machine_test.tscn',
         'tests/caster_spell_action_timing_test.tscn',
+		'tests/wizard_geometry_visual_alignment_test.tscn',
+		'tests/game_root_wizard_geometry_integration_test.tscn',
+		'tests/game_root_spell_lock_input_integration_test.tscn',
+		'tests/fire_wall_runtime_overlap_test.tscn',
         'tests/skill_runtime_integration_test.tscn',
         'tests/canonical_skill_production_entry_test.tscn',
         'tests/skill_progression_save_integration_test.tscn',
@@ -84,6 +91,8 @@ $Suites = @{
 		'tests/five_layer_architecture_test.tscn',
 		'tests/bich_community_baseline_test.tscn',
 		'tests/map_coordinate_mapping_test.tscn',
+		'tests/map_combat_unit_contract_test.tscn',
+		'tests/game_root_map_unit_integration_test.tscn',
 		'tests/source_collision_chunk_test.tscn',
 		'tests/bich_content_closure_test.tscn',
 		'tests/corpse_king_boss_test.tscn',
@@ -119,7 +128,12 @@ $Suites = @{
         'tests/android_layout_test.tscn'
     )
 }
-$Suites.critical = @($Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster | Select-Object -Unique)
+$Suites.critical = @(
+    'tests/combat_unit_runtime_static_audit_test.tscn'
+) + @(
+    $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
+        Select-Object -Unique
+)
 
 function Stop-TestProcessTree([int]$ProcessId) {
     $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)
@@ -136,10 +150,21 @@ New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
 
 function Get-WorktreeGodotProcesses {
     return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
-        if ($_.ProcessName -notlike 'Godot*' -or -not $_.Path) {
+        if ($_.ProcessName -notlike 'Godot*') {
             return $false
         }
-        return (Split-Path -Parent $_.Path) -eq $GodotDirectory
+        # A process can exit between enumeration and Path access. Snapshot the
+        # value once so Split-Path never receives a raced null value.
+        $candidatePath = $null
+        try {
+            $candidatePath = $_.Path
+        } catch {
+            return $false
+        }
+        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
+            return $false
+        }
+        return [System.IO.Path]::GetDirectoryName($candidatePath) -eq $GodotDirectory
     })
 }
 

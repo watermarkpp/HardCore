@@ -119,12 +119,19 @@ func _run() -> void:
 
 	player._physics_process(player._attack_timer + 0.01)
 	var mana_before_fallback := player.current_mp
-	assert(not player.request_attack_toward(Vector2.RIGHT, true), "烈火冷却时不得降级为其他攻击")
-	assert(is_zero_approx(player._attack_timer) and is_zero_approx(player._attack_action_timer))
-	assert(player.current_mp == mana_before_fallback, "烈火冷却拒绝输入时不得再次扣MP")
+	assert(player.request_attack_toward(Vector2.RIGHT, true), "烈火冷却时必须接受低优先级攻击")
+	await get_tree().create_timer(player.attack_hit_windup + 0.08).timeout
+	assert(player.current_mp == mana_before_fallback, "烈火冷却降级攻击不得再次扣除烈火MP")
+
+	player._physics_process(
+		float(player.skill_cooldown_remaining_ms("warrior.fire_sword")) / 1000.0 + 0.01
+	)
+	assert(player.request_attack_toward(Vector2.RIGHT, true), "烈火冷却结束后攻击输入未恢复")
+	await get_tree().create_timer(player.attack_hit_windup + 0.08).timeout
+	assert(player.current_mp == mana_before_fallback - 7, "烈火冷却结束后没有恢复最高优先级")
 
 	PlayerState.quick_slots_changed.disconnect(_on_assignment_changed)
-	print("SKILL_RUNTIME_INTEGRATION_PASS：v3攻击键+六环、清空、被动排除及烈火单次攻击直释正常")
+	print("SKILL_RUNTIME_INTEGRATION_PASS：烈火冷却回退及冷却结束优先级恢复正常")
 	get_tree().quit(0)
 
 

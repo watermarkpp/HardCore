@@ -397,15 +397,22 @@
       "mechanics": {
         "runtime_family": "melee_proc_modifier",
         "proc_chance_by_rank": [
-          0.1,
-          0.125,
-          0.1666666667,
+          0.14285714285714285,
+          0.16666666666666666,
+          0.2,
           0.25
         ],
-        "flat_dc_bonus_by_rank": [
-          5,
-          6,
+        "proc_denominator_by_rank": [
           7,
+          6,
+          5,
+          4
+        ],
+        "proc_roll_model": "pascal_random_exclusive(denominator) == 0 once per valid melee attack action",
+        "flat_damage_bonus_by_rank": [
+          2,
+          4,
+          6,
           8
         ],
         "flat_accuracy_bonus_by_rank": [
@@ -416,9 +423,13 @@
         ],
         "damage_type": "physical",
         "defence_type": "AC",
-        "trigger_order": "after_valid_swing_before_damage_roll",
+        "accuracy_timing": "always_before_each_physical_melee_hit_check",
+        "proc_timing": "once_per_valid_melee_action_before_target_damage_commits",
+        "damage_bonus_timing": "after_each_selected_body_skill_formula",
+        "modifier_scope": "one_shared_proc_result_applies_to_all_hits_of_normal_thrust_half_moon_or_fire_action",
         "status": "project_canonical",
-        "evidence_note": "CN 1.76文字确认命中率与破坏力随等级提升；具体四档数值按项目表冻结。"
+        "source_status": "explicit_user_primary_override",
+        "evidence_note": "用户定稿表为唯一验收基准：准确常驻；每次近战攻击动作独立按1/7、1/6、1/5、1/4判定一次。触发后，该动作的每个实际命中在主体技能公式之后固定增加+2、+4、+6、+8物理伤害。"
       },
       "proficiency_trigger": {
         "event": "successful_slaying_proc_on_valid_melee_swing",
@@ -446,11 +457,12 @@
         "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
       },
       "migration_from_4b6ea4e0": {
-        "current_behavior": "数据表触发1/10、1/8、1/6、1/4；实际代码1/(7-rank)，且说明/汇总未完整体现准确加成。",
+        "current_behavior": "旧实现数值前三档错误、准确仅在触发时加入且伤害在主体倍率前叠加；已改为每动作一次判定、常驻准确及主体公式后固定增伤。",
         "issue_codes": [
           "P0_NO_PROFICIENCY_PIPELINE",
           "P1_PROC_FORMULA_CONFLICT",
-          "P1_ACCURACY_BONUS_MISSING"
+          "P1_ACCURACY_BONUS_MISSING",
+          "P1_DAMAGE_BONUS_BEFORE_BODY_FORMULA"
         ]
       },
       "required_tests": [
@@ -954,7 +966,12 @@
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
 		"requires_valid_target_at_input": true,
 		"empty_swing_policy": "physical_miss_only",
-		"fallback_to_other_melee_modes": false,
+		"fallback_to_other_melee_modes": true,
+		"fallback_priority_order": [
+		  "warrior.half_moon",
+		  "warrior.thrusting",
+		  "normal"
+		],
 		"raw_pixel_geometry_forbidden": true
       },
       "timing": {
@@ -985,7 +1002,8 @@
           2.2,
           2.6
         ],
-        "consume_on": "next_valid_melee_damage_attempt",
+		"consume_on": "next_valid_melee_damage_attempt",
+		"direct_toggle_cooldown_commit": "only_after_legal_hit_or_miss_resolution",
         "auto_cast": false,
         "refresh_existing_charge": "replace_and_restart_duration",
         "stack_count_max": 1,
@@ -1552,7 +1570,8 @@
         "length_tiles": 5,
         "width_tiles": 1,
         "pierces_units": false,
-        "stops_on_terrain": true
+        "stops_on_terrain": true,
+        "status": "project_canonical"
       },
       "timing": {
         "body_action": "cast_8dir_6f",
@@ -1561,6 +1580,9 @@
         "recovery_ms": 900,
         "total_action_lock_ms": 1500,
         "cooldown_policy": "total_action_lock",
+        "movement_lock_ms": 600,
+        "recast_gate_ms": 900,
+        "timing_contract": "skills.wizard.hellfire.body_600_recast_gate_900_discrete.v1",
         "status": "project_canonical"
       },
       "resource": {

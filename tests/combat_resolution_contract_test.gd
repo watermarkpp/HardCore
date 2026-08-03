@@ -1,6 +1,9 @@
 extends Node
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 const ITEM_COMBAT_FIELDS := ["magicEvasionPoints", "magicEvasionPercent", "attackSpeedTier"]
 
 
@@ -259,7 +262,10 @@ func _run() -> void:
 	var warrior := PlayerCharacter.new()
 	add_child(warrior)
 	assert(is_equal_approx(warrior.attack_cooldown, 0.6), "玩家物理攻击未消费攻速tier")
-	assert(is_equal_approx(warrior.move_speed, 190.0), "攻速tier错误修改移动速度")
+	assert(is_equal_approx(
+		warrior.move_speed_gu_per_sec,
+		CombatUnitLegacyAdapter.PLAYER_MOVE_SPEED_GU_PER_SEC
+	), "攻速tier错误修改GU移动速度")
 	assert(warrior.request_attack(), "攻速tier玩家未能发起普通攻击")
 	assert(is_equal_approx(warrior._attack_timer, 0.6), "物理攻击最小间隔未使用tier公式")
 	assert(is_equal_approx(warrior._attack_action_timer, 0.51), "攻速tier错误缩短物理动作/移动锁")
