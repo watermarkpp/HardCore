@@ -211,6 +211,9 @@ func _verify_common_shape_builders_and_footprint_contact() -> void:
 	)
 	_assert_projected_snapshot(circle, Snapshot.SHAPE_CIRCLE)
 	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
+		circle, Vector2(4.249, -3.0), 0.25
+	))
+	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
 		circle, Vector2(4.25, -3.0), 0.25
 	))
 	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
