@@ -3,9 +3,15 @@ extends Node2D
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const FIRE_WALL_SKILL_ID := "wizard.fire_wall"
 const GROUND_UNIT_SETUP_CONTRACT_ID := (
 	"skills.ground_effect.setup_ground_unit_effect.v1"
+)
+const RELEASE_FOOTPRINT_CONTRACT_ID := (
+	"skills.ground_effect.ground_exact.shared_release_snapshot.v1"
 )
 const RUNTIME_TICK_CLAIM_RETENTION_MSEC := 60000
 
@@ -20,6 +26,8 @@ var duration := 4.0
 var tick_interval := 0.8
 var effect_color := Color(1.0, 0.25, 0.05)
 var skill_id := ""
+var release_id := ""
+var skill_footprint_snapshot: Dictionary = {}
 var source_actor: Node2D
 var runtime_tick_adapter := Callable()
 var runtime_target_filter := Callable()
@@ -39,7 +47,9 @@ func setup_ground_unit_effect(
 	color: Color,
 	source_skill_id := "",
 	tick_interval_value := 0.8,
-	visual_radius_value_px := 72.0
+	visual_radius_value_px := 72.0,
+	source_release_id := "",
+	release_snapshot: Dictionary = {}
 ) -> void:
 	## Sole production setup boundary: gameplay radius arrives in GU while the
 	## screen-space origin and optional visual radius remain explicitly PX.
@@ -53,6 +63,16 @@ func setup_ground_unit_effect(
 	skill_id = ProfessionRules.skill_id(source_skill_id) if not source_skill_id.is_empty() else ""
 	if skill_id.is_empty() and PlayerState != null:
 		skill_id = "wizard.fire_wall" if PlayerState.profession == "法师" else ""
+	release_id = (
+		source_release_id
+		if not source_release_id.is_empty()
+		else "%s:ground:%d" % [
+			skill_id if not skill_id.is_empty() else "unbound.ground_effect",
+			get_instance_id(),
+		]
+	)
+	if SkillFootprintSnapshotScript.is_valid(release_snapshot):
+		skill_footprint_snapshot = release_snapshot
 
 
 func _ready() -> void:
@@ -88,11 +108,24 @@ func runtime_target_is_inside(target: Node2D) -> bool:
 	var target_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 		target.global_position
 	)
+	if SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+		return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			skill_footprint_snapshot,
+			target_ground_gu,
+			_target_combat_radius_gu(target)
+		)
 	return GroundUnitSpaceScript.is_within_range_gu(
 		effect_ground_gu,
 		target_ground_gu,
 		radius_gu
 	)
+
+
+static func _target_combat_radius_gu(target: Node2D) -> float:
+	for property: Dictionary in target.get_property_list():
+		if str(property.get("name", "")) == "combat_radius_gu":
+			return maxf(0.0, float(target.get("combat_radius_gu")))
+	return 0.0
 
 
 func claim_runtime_tick(target: Node) -> bool:
