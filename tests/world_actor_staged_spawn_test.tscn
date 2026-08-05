@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://staged"]
+[ext_resource type="Script" path="res://tests/world_actor_staged_spawn_test.gd" id="1"]
+[node name="Staged" type="Node"]
+script = ExtResource("1")

@@ -1,7 +1,7 @@
 class_name WorldBootstrapCoordinator
 extends RefCounted
 
-# --- P1-B: Staged World Bootstrap Coordinator ---
+# ── P1-B: Staged World Bootstrap Coordinator ──
 
 enum Stage {
 	IDLE,
@@ -17,22 +17,41 @@ enum Stage {
 	FAILED,
 }
 
+const DEFAULT_SLICE_BUDGET_MS := 3.0
+const DEFAULT_MAX_ITEMS_PER_FRAME := 12
+
 var stage := Stage.IDLE
 var generation := 0
 var map_id := -1
 var mode := ""
 var started_at_usec := 0
-var diagnostic: Dictionary = {}
-var actor_plan: Array[Dictionary] = []
+
+# ── queues ──
+var _map_build_queue: Array[Dictionary] = []
+var _collision_build_queue: Array[Dictionary] = []
+var _actor_spawn_queue: Array[Dictionary] = []
+
+# ── resources ──
 var resource_manifest: Dictionary = {}
+var _prefetched_resources: Dictionary = {}
+
+# ── barriers ──
+var loading_frame_barrier: Callable = Callable()
+
+# ── diagnostics ──
+var diagnostic: Dictionary = {}
+var _synchronous_load_during_spawn := 0
+var _slice_count := 0
+var _max_slice_ms := 0.0
+var _total_slice_ms := 0.0
 
 
-func begin_initial_world(map_id_value: int) -> void:
-	_internal_begin(map_id_value, "initial_world")
+func begin_initial_world(_map_id: int) -> void:
+	_internal_begin(_map_id, "initial_world")
 
 
-func begin_map_transition(map_id_value: int) -> void:
-	_internal_begin(map_id_value, "map_transition")
+func begin_map_transition(_map_id: int) -> void:
+	_internal_begin(_map_id, "map_transition")
 
 
 func _internal_begin(_map_id: int, _mode: String) -> void:
@@ -41,28 +60,40 @@ func _internal_begin(_map_id: int, _mode: String) -> void:
 	mode = _mode
 	stage = Stage.IDLE
 	started_at_usec = Time.get_ticks_usec()
-	actor_plan.clear()
+	_map_build_queue.clear()
+	_collision_build_queue.clear()
+	_actor_spawn_queue.clear()
 	resource_manifest.clear()
+	_prefetched_resources.clear()
+	_synchronous_load_during_spawn = 0
+	_slice_count = 0
+	_max_slice_ms = 0.0
+	_total_slice_ms = 0.0
 	diagnostic = _empty_diagnostic()
 
 
 func _empty_diagnostic() -> Dictionary:
 	return {
-		"map_id": -1,
-		"mode": "",
+		"generation": generation,
+		"mode": mode,
+		"map_id": map_id,
 		"stage": "",
 		"success": true,
+		"failure_reason": "",
+		"loading_barrier_completed": false,
+		"resource_count": 0,
+		"prefetch_failure_count": 0,
+		"map_item_count": 0,
+		"collision_count": 0,
 		"planned_actors": 0,
 		"spawned_actors": 0,
+		"duplicate_actors": 0,
 		"failed_actors": 0,
-		"total_duration_ms": 0,
-		"frame_slice_count": 0,
-		"sync_load_count": 0,
+		"sync_load_spawn": 0,
+		"slice_count": 0,
+		"max_slice_ms": 0.0,
+		"avg_slice_ms": 0.0,
 	}
-
-
-func mark_heavy_work_started(gen: int) -> bool:
-	return gen == generation
 
 
 func advance(new_stage: Stage) -> void:
@@ -77,12 +108,81 @@ func finish(success: bool, reason: String) -> Dictionary:
 		stage = Stage.FAILED
 	diagnostic["success"] = success
 	diagnostic["failure_reason"] = reason
+	diagnostic["sync_load_spawn"] = _synchronous_load_during_spawn
+	diagnostic["slice_count"] = _slice_count
+	diagnostic["max_slice_ms"] = _max_slice_ms
+	diagnostic["avg_slice_ms"] = _total_slice_ms / maxf(1.0, float(_slice_count))
 	diagnostic["total_duration_ms"] = (Time.get_ticks_usec() - started_at_usec) / 1000.0
 	return snapshot()
 
 
+func mark_heavy_work_started(gen: int) -> bool:
+	return gen == generation
+
+
+func loading_barrier_completed() -> void:
+	diagnostic["loading_barrier_completed"] = true
+
+
+# ── Resource Collection ──
+
+func collect_map_resources(map_data: Dictionary) -> void:
+	advance(Stage.COLLECT_REQUIREMENTS)
+	resource_manifest.clear()
+	diagnostic["resource_count"] = 0
+
+
+func _register_resource(path: String, kind: String, required: bool, owner_id: String) -> void:
+	if path.is_empty():
+		return
+	if path in resource_manifest:
+		var entry: Dictionary = resource_manifest[path]
+		(entry["owners"] as Array).append(owner_id)
+		entry["required"] = entry["required"] or required
+		return
+	resource_manifest[path] = {
+		"path": path,
+		"kind": kind,
+		"required": required,
+		"owners": [owner_id],
+		"status": "pending",
+	}
+	diagnostic["resource_count"] += 1
+
+
+# ── Frame-Budget Queue Processor ──
+
+func process_queue_with_budget(
+	queue: Array,
+	handler: Callable,
+	max_items: int,
+	budget_ms: float
+) -> void:
+	while not queue.is_empty():
+		var _slice_start := Time.get_ticks_usec()
+		var _processed := 0
+		while not queue.is_empty():
+			var item: Variant = queue.pop_front()
+			if item is Dictionary:
+				handler.call(item as Dictionary)
+			_processed += 1
+			var _elapsed := (Time.get_ticks_usec() - _slice_start) / 1000.0
+			if _processed >= max_items or _elapsed >= budget_ms:
+				break
+		_slice_count += 1
+		var _ms := (Time.get_ticks_usec() - _slice_start) / 1000.0
+		_max_slice_ms = maxf(_max_slice_ms, _ms)
+		_total_slice_ms += _ms
+		if not queue.is_empty():
+			await Engine.get_main_loop().process_frame
+
+
+func record_sync_load() -> void:
+	_synchronous_load_during_spawn += 1
+
+
 func snapshot() -> Dictionary:
 	var d := diagnostic.duplicate(true)
-	d["stage"] = Stage.keys()[stage]
 	d["generation"] = generation
+	d["stage"] = Stage.keys()[stage]
 	return d

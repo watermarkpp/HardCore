@@ -175,6 +175,7 @@ var _pending_melee_diagnostic: Dictionary = {}
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
 var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
+var _world_bootstrap_coordinator := WorldBootstrapCoordinator.new()
 var _gameplay_input_locks: Dictionary = {}
 
 # --- P1-A: Gameplay Input Gate (counted runtime locks) ---
@@ -768,9 +769,12 @@ func _begin_initial_world_bootstrap() -> void:
 		hud.begin_loading_transition("world:bootstrap:initial")
 
 	# P1-B: Ensure Loading renders at least one frame before heavy work.
-	# In test mode, skip the await to avoid headless-renderer stalls.
-	if not PlayerState.test_mode:
+	# Production uses real process_frame; tests inject a controlled barrier.
+	if _world_bootstrap_coordinator.loading_frame_barrier.is_valid():
+		await _world_bootstrap_coordinator.loading_frame_barrier.call()
+	else:
 		await get_tree().process_frame
+	_world_bootstrap_coordinator.loading_barrier_completed()
 
 	# 同步加载主城地图（initial=true 时同步路径）。
 	travel_to_service_home(false, true)
