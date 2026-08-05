@@ -811,6 +811,8 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	if _map_transition_in_progress or not operation.is_valid():
 		return false
 	_map_transition_serial += 1
+	_world_bootstrap_coordinator.begin_map_transition(target_map_id)
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SHOW_LOADING)
 	_active_map_transition_id = "map:%d:%d" % [
 		Time.get_ticks_msec(),
 		_map_transition_serial,
@@ -865,6 +867,8 @@ func _run_map_transition(
 	hud.finish_loading_transition()
 	_active_map_transition_id = ""
 	_map_transition_in_progress = false
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
+	_world_bootstrap_coordinator.finish(true, "map_transition_ready")
 	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 
 

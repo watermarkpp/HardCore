@@ -181,6 +181,68 @@ func record_sync_load() -> void:
 	_synchronous_load_during_spawn += 1
 
 
+
+
+# ── Threaded Resource Prefetch ──
+
+func request_threaded_prefetch() -> int:
+	var _requested := 0
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if not (_entry.get("required", true) as bool):
+			continue
+		var _status := ResourceLoader.load_threaded_request(str(_path))
+		if _status == OK or _status == ERR_ALREADY_IN_USE:
+			_entry["status"] = "requested"
+			_requested += 1
+		else:
+			_entry["status"] = "request_failed"
+			diagnostic["prefetch_failure_count"] += 1
+	return _requested
+
+
+func poll_threaded_prefetch() -> bool:
+	var _pending := 0
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if _entry.get("status", "") != "requested":
+			continue
+
+		var _progress: Array = []
+		var _status := ResourceLoader.load_threaded_get_status(str(_path), _progress)
+		match _status:
+			ResourceLoader.THREAD_LOAD_LOADED:
+				var _res := ResourceLoader.load_threaded_get(str(_path))
+				if _res != null:
+					_prefetched_resources[str(_path)] = _res
+					_entry["status"] = "ready"
+				else:
+					_entry["status"] = "load_failed"
+					if _entry.get("required", true):
+						diagnostic["prefetch_failure_count"] += 1
+			ResourceLoader.THREAD_LOAD_FAILED:
+				_entry["status"] = "load_failed"
+				if _entry.get("required", true):
+					diagnostic["prefetch_failure_count"] += 1
+			_:
+				_pending += 1
+	return _pending == 0
+
+
+func get_prefetched_resource(path: String) -> Resource:
+	var _res: Variant = _prefetched_resources.get(path)
+	if _res is Resource:
+		return _res
+	return null
+
+
+func has_failed_required_resource() -> bool:
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if _entry.get("required", true) and _entry.get("status", "") in ["request_failed", "load_failed"]:
+			return true
+	return false
+
 func snapshot() -> Dictionary:
 	var d := diagnostic.duplicate(true)
 	d["generation"] = generation
