@@ -102,7 +102,8 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
 	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
-		prepare_qa_test_roster_v2()
+		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
+			prepare_qa_test_roster_v2()
 	reset_progress(false)
 	recalculate_stats()
 

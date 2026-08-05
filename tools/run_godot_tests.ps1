@@ -128,9 +128,29 @@ $Suites = @{
         'tests/android_layout_test.tscn'
     )
 }
+
+$Suites.caster_visual_critical = @(
+    'tests/caster_skill_visual_factory_entry_test.tscn',
+    'tests/laser_direction_visual_extent_test.tscn',
+    'tests/caster_skill_animation_routing_test.tscn',
+    'tests/wizard_geometry_visual_alignment_test.tscn',
+    'tests/sky_strike_visual_contract_test.tscn',
+    'tests/lightning_runtime_map_visual_test.tscn',
+    'tests/hell_lightning_self_area_visual_test.tscn',
+    'tests/beam_visual_contract_test.tscn',
+    'tests/beam_runtime_empty_space_test.tscn',
+    'tests/beam_runtime_terrain_cutoff_test.tscn',
+    'tests/beam_single_active_test.tscn',
+    'tests/visual_profile_merge_contract_test.tscn',
+    'tests/fire_wall_runtime_absolute_ground_test.tscn',
+    'tests/fire_wall_single_controller_test.tscn',
+    'tests/player_initial_resource_sync_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
+    $Suites.caster_visual_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
@@ -226,7 +246,7 @@ foreach ($testPath in $SelectedTests) {
         }
         if ($currentOutput -match '[A-Z0-9_]+_PASS') {
             $hasPassMarker = $true
-            break
+            # Do NOT break - wait for natural exit to capture post-PASS failures (HC-P0-006)
         }
         # On Windows the console executable can exit after spawning the real
         # Godot process. Keep waiting while that child is still running instead
