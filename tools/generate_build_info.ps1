@@ -43,7 +43,7 @@ $info = @{
 
 $dest = Join-Path $ROOT "assets/generated"
 New-Item -ItemType Directory -Path $dest -Force | Out-Null
-$info | Out-File (Join-Path $dest "build_info.json") -Encoding UTF8 -NoNewline
+$info | Out-File (Join-Path $dest "build_info.json") -Encoding UTF8NoBOM
 Write-Host "BUILD_INFO: $head ($buildType)"
 Write-Host "Dirty: $dirty"
 Pop-Location
