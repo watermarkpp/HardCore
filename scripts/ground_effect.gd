@@ -239,7 +239,8 @@ func _physics_process(delta: float) -> void:
 				node.take_damage(damage, source_actor)
 	if duration <= 0.0:
 		queue_free()
-	queue_redraw()
+	if _sprite == null:
+		queue_redraw()
 
 
 func _draw() -> void:
