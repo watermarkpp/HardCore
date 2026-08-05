@@ -161,6 +161,8 @@ var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
 var _active_map_transition_id := ""
+# P1-A: map transitions hold the gameplay input lock
+const INPUT_LOCK_MAP_TRANSITION_LOCAL := INPUT_LOCK_MAP_TRANSITION
 var _monster_prefetch_enabled := true
 var _last_monster_prefetch_status: Dictionary = {}
 var _combat_runtime: Node = CombatRuntimeServiceScript.new()
@@ -175,38 +177,51 @@ var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
 var _gameplay_input_locks: Dictionary = {}
 
+# --- P1-A: Gameplay Input Gate (counted runtime locks) ---
 
-# --- P1-A: Gameplay Input Gate (reason-lock system) ---
+const INPUT_LOCK_INITIAL_BOOTSTRAP := &"initial_world_bootstrap"
+const INPUT_LOCK_MAP_TRANSITION := &"map_transition"
+
 
 func gameplay_input_is_enabled() -> bool:
-	return _gameplay_input_locks.is_empty() and is_instance_valid(player)
+	return _player_input_enabled
 
 
 func _acquire_gameplay_input_lock(reason: StringName) -> void:
-	if reason in _gameplay_input_locks:
-		return
-	_gameplay_input_locks[reason] = true
+	var _count: int = int(_gameplay_input_locks.get(reason, 0))
+	_gameplay_input_locks[reason] = _count + 1
 	_refresh_gameplay_input_state()
 	if OS.is_debug_build():
-		print("[GameplayInputGate] enabled=false locks=", _gameplay_input_locks.keys())
+		print("[GameplayInputGate] enabled=false locks=", _gameplay_input_locks)
 
 
 func _release_gameplay_input_lock(reason: StringName) -> void:
-	_gameplay_input_locks.erase(reason)
+	var _count: int = int(_gameplay_input_locks.get(reason, 0))
+	if _count <= 0:
+		push_warning("attempted to release missing gameplay lock: %s" % reason)
+		return
+	if _count == 1:
+		_gameplay_input_locks.erase(reason)
+	else:
+		_gameplay_input_locks[reason] = _count - 1
 	_refresh_gameplay_input_state()
 	if OS.is_debug_build():
-		print("[GameplayInputGate] enabled=", gameplay_input_is_enabled(), " locks=", _gameplay_input_locks.keys())
+		print("[GameplayInputGate] enabled=", gameplay_input_is_enabled(), " locks=", _gameplay_input_locks)
 
 
 func _refresh_gameplay_input_state() -> void:
-	_player_input_enabled = _gameplay_input_locks.is_empty()
+	_player_input_enabled = _gameplay_input_locks.is_empty() and is_instance_valid(player)
 
 
 func gameplay_input_gate_snapshot() -> Dictionary:
+	var _ls: Dictionary = {}
+	for _r: Variant in _gameplay_input_locks:
+		_ls[str(_r)] = int(_gameplay_input_locks[_r])
 	return {
 		"enabled": gameplay_input_is_enabled(),
-		"locks": Array(_gameplay_input_locks.keys()),
+		"locks": _ls,
 		"legacy_enabled": _player_input_enabled,
+		"bootstrap_in_progress": _world_bootstrap_in_progress,
 	}
 
 
@@ -743,7 +758,7 @@ func _begin_initial_world_bootstrap() -> void:
 	if _world_bootstrap_in_progress:
 		return
 	_world_bootstrap_in_progress = true
-	_acquire_gameplay_input_lock("initial_world_bootstrap")
+	_acquire_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
 
 	if (
 		not PlayerState.test_mode
@@ -771,7 +786,7 @@ func _finalise_initial_world_bootstrap() -> void:
 	):
 		hud.finish_loading_transition()
 	_world_bootstrap_in_progress = false
-	_release_gameplay_input_lock("initial_world_bootstrap")
+	_release_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
 
 
 func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
@@ -783,6 +798,7 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 		_map_transition_serial,
 	]
 	_map_transition_in_progress = true
+	_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 	_run_map_transition(_active_map_transition_id, operation, target_map_id)
 	return true
 
@@ -831,6 +847,7 @@ func _run_map_transition(
 	hud.finish_loading_transition()
 	_active_map_transition_id = ""
 	_map_transition_in_progress = false
+	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 
 
 func _monster_ids_for_map(map_id: int) -> Array[int]:
