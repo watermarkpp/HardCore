@@ -767,6 +767,11 @@ func _begin_initial_world_bootstrap() -> void:
 	):
 		hud.begin_loading_transition("world:bootstrap:initial")
 
+	# P1-B: Ensure Loading renders at least one frame before heavy work.
+	# In test mode, skip the await to avoid headless-renderer stalls.
+	if not PlayerState.test_mode:
+		await get_tree().process_frame
+
 	# 同步加载主城地图（initial=true 时同步路径）。
 	travel_to_service_home(false, true)
 	_record_player_world_location()
