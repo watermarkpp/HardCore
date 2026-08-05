@@ -181,6 +181,11 @@ static func create_visual(
 	var skill_id := str(plan.get("skill_id", ""))
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
 		return null
+	var profile := CasterSkillVisualRegistry.profile(skill_id)
+	var visual_profile := CasterSkillVisualRegistry.visual_profile(skill_id)
+	for key: String in visual_profile:
+		if not profile.has(key):
+			profile[key] = visual_profile[key]
 	var role := str(plan.get("visual", {}).get("role", ""))
 	if role in [
 		CasterSkillVisualRegistry.ROLE_PROJECTILE,
@@ -188,7 +193,7 @@ static func create_visual(
 		CasterSkillVisualRegistry.ROLE_SUMMON_ACTOR,
 	]:
 		return null
-	var effect := CasterSkillVisualEffect.new()
+	var effect := CasterSkillVisualFactory.create(profile)
 	var visual_geometry_context := CasterSpellGeometryScript.visual_context_from_plan(
 		skill_id,
 		plan,

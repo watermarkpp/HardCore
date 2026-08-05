@@ -53,7 +53,10 @@ static func create_directed_rectangle(
 	direction_ground_gu: Vector2,
 	effect_length_gu: float,
 	effect_width_gu: float,
-	start_offset_gu := 0.0
+	start_offset_gu := 0.0,
+	declared_effect_length_gu := 0.0,
+	resolved_effect_length_gu := 0.0,
+	laser_projection_policy := ""
 ) -> Dictionary:
 	var resolved_direction_ground_gu := direction_ground_gu
 	if (
@@ -135,6 +138,9 @@ static func create_directed_rectangle(
 		"axis_screen_direction_px": axis_screen_direction_px,
 		"cross_screen_extent_px": cross_screen_extent_px,
 		"polygon_screen_offset_px": polygon_screen_offset_px,
+		"declared_effect_length_gu": declared_effect_length_gu,
+		"resolved_effect_length_gu": resolved_effect_length_gu,
+		"laser_projection_policy": laser_projection_policy,
 		"damage_space": "ground_gu",
 		"visual_space": "screen_px_derived_only",
 	}
