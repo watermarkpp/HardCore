@@ -140,11 +140,11 @@ func _ready() -> void:
 	var second_group := _spawn_beam_node(plan, owner, target, true, "beam_b")
 	await get_tree().process_frame
 	assert(
-		not is_instance_valid(first_group) or not first_group.is_queued_for_deletion(),
+		not first_group.is_queued_for_deletion(),
 		"beam group A should not be removed by group B"
 	)
 	assert(
-		not is_instance_valid(second_group) or not second_group.is_queued_for_deletion(),
+		not second_group.is_queued_for_deletion(),
 		"beam group B should not be removed by group A"
 	)
 
