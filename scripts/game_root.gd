@@ -1005,7 +1005,8 @@ func _bich_home_screen_position_px() -> Vector2:
 	if editor_home != Vector2.ZERO:
 		return editor_home
 	var content := RegionContent.get_map_content(4)
-	return content.get("runtime_home_position", MapCoordinateMapperScript.source_to_world(Vector2(289, 618), Vector2i(700, 700)))
+	push_warning("home position missing in map catalog; using 700x700 fallback — map_id=%d" % current_map_id)
+	return MapCoordinateMapperScript.source_to_world(Vector2(289, 618), Vector2i(700, 700))  # P1-013: fallback until map catalog provides runtime_home_position
 
 
 func _bich_portal_screen_position_px_to(target_map_id: int) -> Vector2:

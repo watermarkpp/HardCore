@@ -857,7 +857,7 @@ func _draw_canonical_ground_overlay(
 		1.0
 	)
 	_add_cross(_overlay_root, foot_origin, Color("#4de1ff"), 9.0)
-	var footprint := WorldSpatialRules.actor_footprint_polygon(
+	var footprint := WorldSpatialRules.actor_footprint_polygon_px(
 		collision_radius, 32
 	)
 	_add_closed_line(_overlay_root, footprint, Color("#ff5c78"), 1.5)

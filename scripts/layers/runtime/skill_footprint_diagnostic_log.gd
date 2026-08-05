@@ -12,7 +12,8 @@ const LOG_PATH := "user://combat_diagnostics/skill_footprint.jsonl"
 const MAX_LOG_BYTES := 8 * 1024 * 1024
 const MAX_RECENT_EVENTS := 256
 
-static var enabled := OS.is_debug_build() and RuntimeDiagnostics.file_output_enabled() and RuntimeDiagnostics.skill_geometry_enabled() and RuntimeDiagnostics.file_output_enabled() and RuntimeDiagnostics.skill_geometry_enabled()
+static func _is_enabled() -> bool:
+	return OS.is_debug_build() and RuntimeDiagnostics.file_output_enabled() and RuntimeDiagnostics.skill_geometry_enabled()
 static var _recent_events: Array[Dictionary] = []
 
 
@@ -25,7 +26,7 @@ static func record(raw_event: Dictionary) -> Dictionary:
 	_recent_events.append(event.duplicate(true))
 	if _recent_events.size() > MAX_RECENT_EVENTS:
 		_recent_events.pop_front()
-	if not enabled:
+	if not _is_enabled():
 		return event
 	var encoded := JSON.stringify(event)
 	print(LOG_PREFIX + encoded)
