@@ -192,7 +192,7 @@ func _acquire_gameplay_input_lock(reason: StringName) -> void:
 	var _count: int = int(_gameplay_input_locks.get(reason, 0))
 	_gameplay_input_locks[reason] = _count + 1
 	_refresh_gameplay_input_state()
-	if OS.is_debug_build():
+	if RuntimeDiagnostics.input_gate_enabled():
 		print("[GameplayInputGate] enabled=false locks=", _gameplay_input_locks)
 
 
@@ -206,7 +206,7 @@ func _release_gameplay_input_lock(reason: StringName) -> void:
 	else:
 		_gameplay_input_locks[reason] = _count - 1
 	_refresh_gameplay_input_state()
-	if OS.is_debug_build():
+	if RuntimeDiagnostics.input_gate_enabled():
 		print("[GameplayInputGate] enabled=", gameplay_input_is_enabled(), " locks=", _gameplay_input_locks)
 
 

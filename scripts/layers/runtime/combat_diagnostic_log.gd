@@ -12,7 +12,7 @@ const LOG_PATH := "user://combat_diagnostics/melee.jsonl"
 const MAX_LOG_BYTES := 8 * 1024 * 1024
 const MAX_RECENT_EVENTS := 256
 
-static var enabled := OS.is_debug_build()
+static var enabled := OS.is_debug_build() and RuntimeDiagnostics.file_output_enabled() and RuntimeDiagnostics.combat_enabled() and RuntimeDiagnostics.file_output_enabled() and RuntimeDiagnostics.combat_enabled()
 static var _recent_events: Array[Dictionary] = []
 
 
