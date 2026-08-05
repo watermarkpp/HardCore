@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/hell_lightning_self_area_visual_test.gd" type="Script" id="1"]
+
+[node name="HellLightningSelfAreaVisualTest" type="Node"]
+script = ExtResource("1")
