@@ -14,6 +14,8 @@ const RELEASE_FOOTPRINT_CONTRACT_ID := (
 	"skills.ground_effect.ground_exact.shared_release_snapshot.v1"
 )
 const RUNTIME_TICK_CLAIM_RETENTION_MSEC := 60000
+const FIRE_WALL_RENDER_Z_INDEX := -1
+const FIRE_WALL_RENDER_ALPHA := 0.78
 
 const VISUAL_PATHS := {
 	"wizard.fire_wall": "res://assets/art/characters/wizard/effects/fire_wall.png",
@@ -32,6 +34,7 @@ var source_actor: Node2D
 var runtime_tick_adapter := Callable()
 var runtime_target_filter := Callable()
 var runtime_damage_enabled := true
+var runtime_screen_to_ground_position_px := Callable()
 var visual_rejection_reason := ""
 var _tick_timer := 0.0
 var _sprite: Sprite2D
@@ -77,6 +80,11 @@ func setup_ground_unit_effect(
 
 func _ready() -> void:
 	add_to_group("zone_content")
+	if skill_id == FIRE_WALL_SKILL_ID:
+		z_index = FIRE_WALL_RENDER_Z_INDEX
+		z_as_relative = true
+	else:
+		z_as_relative = true
 	_install_visual()
 	queue_redraw()
 
@@ -85,12 +93,14 @@ func configure_runtime_resolution(
 	caster: Node2D,
 	tick_adapter: Callable,
 	applies_damage := true,
-	target_filter := Callable()
+	target_filter := Callable(),
+	screen_to_ground_position_px := Callable()
 ) -> void:
 	source_actor = caster
 	runtime_tick_adapter = tick_adapter
 	runtime_damage_enabled = applies_damage
 	runtime_target_filter = target_filter
+	runtime_screen_to_ground_position_px = screen_to_ground_position_px
 
 
 func configure_runtime_source(caster: Node2D) -> void:
@@ -102,12 +112,8 @@ func runtime_target_is_inside(target: Node2D) -> bool:
 		return false
 	if runtime_target_filter.is_valid():
 		return bool(runtime_target_filter.call(target))
-	var effect_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		global_position
-	)
-	var target_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		target.global_position
-	)
+	var effect_ground_gu := _runtime_screen_to_ground_position(global_position)
+	var target_ground_gu := _runtime_screen_to_ground_position(target.global_position)
 	if SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
 		return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_footprint_snapshot,
@@ -118,6 +124,29 @@ func runtime_target_is_inside(target: Node2D) -> bool:
 		effect_ground_gu,
 		target_ground_gu,
 		radius_gu
+	)
+
+
+func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return ground_position_gu
+	# Without a valid map projection, screen positions cannot be converted to
+	# ground coordinates. Treating absolute screen pixels as relative deltas
+	# produces silently wrong results. If a SkillFootprintSnapshot is present,
+	# the caller must inject a proper runtime_target_filter instead.
+	if SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+		push_error(
+			"GroundSkillEffect %s: snapshot present but no valid "
+			+ "screen-to-ground projection — cannot resolve target intersection."
+			% [skill_id if not skill_id.is_empty() else str(get_instance_id())]
+		)
+		return Vector2.INF
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
 	)
 
 
@@ -184,6 +213,8 @@ func _install_visual() -> void:
 		visual_rejection_reason = "ground_animation_failed"
 		candidate.queue_free()
 		return
+	if skill_id == FIRE_WALL_SKILL_ID:
+		candidate.modulate = Color(1.0, 1.0, 1.0, FIRE_WALL_RENDER_ALPHA)
 	_sprite = candidate
 	add_child(_sprite)
 

@@ -4899,7 +4899,9 @@ func _spawn_canonical_ground_effect(
 		),
 		applies_damage,
 		(
-			Callable()
+			Callable(self, "_ground_field_snapshot_contains_enemy").bind(
+				skill_release_snapshot
+			)
 			if SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
 			else (
 				Callable(self, "_canonical_ground_cell_contains_enemy").bind(
@@ -4925,6 +4927,22 @@ func _canonical_ground_cell_contains_enemy(
 			_canonical_screen_px_to_ground_gu(enemy.global_position),
 			enemy.combat_radius_gu
 		).get("intersects", false))
+	)
+
+
+func _ground_field_snapshot_contains_enemy(
+	enemy: EnemyActor,
+	skill_release_snapshot: Dictionary
+) -> bool:
+	if (
+		not is_instance_valid(enemy)
+		or not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+	):
+		return false
+	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		skill_release_snapshot,
+		_canonical_screen_px_to_ground_gu(enemy.global_position),
+		enemy.combat_radius_gu
 	)
 
 
