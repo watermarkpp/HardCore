@@ -26,6 +26,14 @@ static func profile(skill_name_or_id: String) -> Dictionary:
 		return {}
 	var coverage: Dictionary = _manifest().get("skillCoverage", {}).get(skill_id, {})
 	if coverage.is_empty():
+		# Skill not in runtime manifest — fall back to presentation profile
+		# for visual_type routing (sky_strike, beam, impact_area).
+		var fallback := _cached_visual_profile_entry(skill_id)
+		if not fallback.is_empty():
+			var result := fallback.duplicate(true)
+			result["skill_id"] = skill_id
+			result["render"] = _default_render_policy(result)
+			return result
 		return {}
 	var result := coverage.duplicate(true)
 	result["skill_id"] = skill_id
@@ -39,6 +47,14 @@ static func profile(skill_name_or_id: String) -> Dictionary:
 	if declared_render is Dictionary:
 		render.merge(declared_render, true)
 	result["render"] = render
+	# Enrich with presentation-layer fields (visual_type, enable_beam_visual)
+	# so downstream consumers always have a single source of truth.
+	var presentation := _cached_visual_profile_entry(skill_id)
+	if not presentation.is_empty():
+		for key: String in ["visual_type", "enable_beam_visual", "decoration_alpha"]:
+			var value: Variant = presentation.get(key)
+			if value != null and not result.has(key):
+				result[key] = value
 	return result
 
 
