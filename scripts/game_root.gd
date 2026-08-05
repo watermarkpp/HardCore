@@ -171,6 +171,8 @@ var _skill_cast_target: EnemyActor
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
+var _world_bootstrap_in_progress := false
+var _player_input_enabled := false
 
 
 func _ready() -> void:
@@ -226,11 +228,9 @@ func _ready() -> void:
 	# 主动同步首次运行时快照到 HUD，确保资源正确后再加载地图。
 	# 120/120、40/40 仅作为未绑定前的占位值。
 	_sync_player_runtime_snapshot_to_hud()
-	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
-	travel_to_service_home(false, true)
-	_record_player_world_location()
-	_on_player_stats_changed(player.current_hp, player.max_hp)
+	# 初次进场通过独立 bootstrap 合约：显示遮罩 → 预加载 → 加载地图 → 开放输入。
 	_build_system_menu()
+	_begin_initial_world_bootstrap()
 
 
 func _notification(what: int) -> void:
@@ -694,6 +694,41 @@ func _should_animate_map_transition(initial: bool) -> bool:
 		and hud.has_method("finish_loading_transition")
 		and hud.has_signal("loading_transition_covered")
 	)
+
+
+func _begin_initial_world_bootstrap() -> void:
+	if _world_bootstrap_in_progress:
+		return
+	_world_bootstrap_in_progress = true
+	_player_input_enabled = false
+
+	if (
+		not PlayerState.test_mode
+		and is_instance_valid(hud)
+		and hud.has_method("begin_loading_transition")
+	):
+		hud.begin_loading_transition("world:bootstrap:initial")
+
+	# 同步加载主城地图（initial=true 时同步路径）。
+	travel_to_service_home(false, true)
+	_record_player_world_location()
+	_on_player_stats_changed(player.current_hp, player.max_hp)
+
+	# 延迟一个空闲帧关闭遮罩并开放输入。
+	_finalise_initial_world_bootstrap.call_deferred()
+
+
+func _finalise_initial_world_bootstrap() -> void:
+	if not _world_bootstrap_in_progress:
+		return
+	if (
+		not PlayerState.test_mode
+		and is_instance_valid(hud)
+		and hud.has_method("finish_loading_transition")
+	):
+		hud.finish_loading_transition()
+	_world_bootstrap_in_progress = false
+	_player_input_enabled = true
 
 
 func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
