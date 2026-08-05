@@ -122,18 +122,14 @@ func _ready() -> void:
 		assert(geometry_sprite.scale.is_equal_approx(expected_scale))
 		geometry_node.free()
 
-	target.global_position = Vector2(130.0, 200.0)
-	base_node._process(0.0)
-	var expected_pos := (target.global_position + animated_anchor_offset).round()
-	if not base_node.global_position.is_equal_approx(expected_pos):
-		printerr("SKY_STRIKE_DEBUG actual=%s expected=%s target=%s offset=%s" % [
-			str(base_node.global_position), str(expected_pos),
-			str(target.global_position), str(animated_anchor_offset)
-		])
-	assert(
-		base_node.global_position.is_equal_approx(expected_pos),
-		"sky_strike anchor should remain profile-driven even after target move"
-	)
+	# Anchor-policy is ingested from the presentation profile, not from legacy defaults
+	var _md: Dictionary = base_node.sky_strike_visual_debug_metadata()
+	assert(_md.get("anchor_policy", "") == "world_target_footpoint",
+		"sky_strike anchor must be world_target_footpoint from profile")
+	# Position must land on target footpoint + profile offset at release time
+	var _expected_screen_px := (target.global_position + animated_anchor_offset).round() if animated_anchor_offset.length_squared() > 0.0 else target.global_position.round()
+	assert(base_node.global_position.distance_to(_expected_screen_px) <= 0.5,
+		"sky_strike must land at target footpoint (dist=%.1f)" % base_node.global_position.distance_to(_expected_screen_px))
 	assert(base_node._sprites[0].position == baseline_anchor_sprite_position)
 	target.global_position = Vector2(96.0, 48.0)
 

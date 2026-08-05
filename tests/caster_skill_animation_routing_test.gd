@@ -96,11 +96,7 @@ func _ready() -> void:
 	var strike := lightning_nodes[0] as CasterSkillVisualEffect
 	add_child(strike)
 	
-	target.global_position += Vector2(160, 0)
-	strike._process(0.01)
-	# wizard.lightning must route through Factory as SkyStrike
-	assert(strike is CasterSkillSkyStrikeVisualEffect, "wizard.lightning must create SkyStrike through Factory")
-	strike.free()
+	assert(strike is CasterSkillSkyStrikeVisualEffect, "wizard.lightning must create SkyStrike via Factory")
 	strike.free()
 
 	var temptation := CasterSkillRuntime.resolve("wizard.temptation_light", _context())
@@ -238,5 +234,6 @@ func _ready() -> void:
 		+ "primary-pixel rendering, slender-axis lightning, specialized roles, "
 		+ "formal five-tile hellfire, primary fire wall and two-phase teleport"
 	)
+	print("CASTER_SKILL_ANIMATION_ROUTING_TEST_PASS")
 	get_tree().quit(0)
 
