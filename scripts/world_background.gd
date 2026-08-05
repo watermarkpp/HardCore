@@ -32,6 +32,7 @@ const _REGION_ATLAS_PATHS := {
 	"wooma_cave_glow": "res://assets/art/maps/wooma_region/wooma_cave_glow.png",
 	"snake_valley_ground": "res://assets/art/maps/snake_valley/snake_valley_ground_tiles.png",
 	"snake_valley_prop": "res://assets/art/maps/snake_valley/snake_valley_props.png",
+	"snake_mine_glow": "res://assets/art/maps/snake_valley/snake_mine_glow.png",
 }
 
 var _atlas_cache: Dictionary = {}
@@ -54,7 +55,7 @@ func _orc_tomb_ground_atlas() -> Resource: return _region_atlas("orc_tomb_ground
 func _mine_ground_atlas() -> Resource: return _region_atlas("mine_ground")
 # snake_mine kept as preload (single-use)
 # snake_mine_prop kept as preload (single-use)
-const SNAKE_MINE_GLOW := preload("res://assets/art/maps/snake_valley/snake_mine_glow.png")
+# _region_atlas("snake_mine_glow"): see _REGION_ATLAS_PATHS["snake_mine_glow"]
 const BICH_TILE_SIZE := Vector2(64.0, 32.0)
 const BICH_PROP_SIZE := Vector2(96.0, 128.0)
 const ORC_TOMB_TILE_SIZE := Vector2(64.0, 32.0)
@@ -1020,7 +1021,7 @@ func _add_tomb_light(position: Vector2) -> void:
 	elif uses_wooma_cave_art():
 		light_texture = _region_atlas("wooma_cave_glow")
 	elif uses_snake_mine_art():
-		light_texture = SNAKE_MINE_GLOW
+		light_texture = _region_atlas("snake_mine_glow")
 	var glow := Sprite2D.new()
 	glow.texture = light_texture
 	glow.position = position
