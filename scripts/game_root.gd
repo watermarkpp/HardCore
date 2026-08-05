@@ -538,9 +538,15 @@ func _exit_game() -> void:
 
 
 func change_zone(zone_name: String, initial := false) -> void:
+	var target_map_id := -1
+	var map_data: Dictionary = GameData.get_map(zone_name)
+	if zone_name == "比奇城":
+		map_data = GameData.get_map_by_id(GameData.service_runtime_map_id(0))
+	if not map_data.is_empty():
+		target_map_id = int(map_data.get("mapId", -1))
 	var operation := Callable(self, "_change_zone_immediate").bind(zone_name, initial)
 	if _should_animate_map_transition(initial):
-		_begin_map_transition(operation)
+		_begin_map_transition(operation, target_map_id)
 	else:
 		operation.call()
 
@@ -764,7 +770,12 @@ func _begin_initial_world_bootstrap() -> void:
 		return
 	_world_bootstrap_in_progress = true
 	_acquire_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
-	_world_bootstrap_coordinator.begin_initial_world(current_map_id if current_map_id >= 0 else GameData.service_home_runtime_map_id(false))
+	var target_map_id := (
+		current_map_id
+		if current_map_id >= 0
+		else GameData.service_home_runtime_map_id(false)
+	)
+	_world_bootstrap_coordinator.begin_initial_world(target_map_id)
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SHOW_LOADING)
 
 	if (
@@ -782,31 +793,31 @@ func _begin_initial_world_bootstrap() -> void:
 		await get_tree().process_frame
 	_world_bootstrap_coordinator.loading_barrier_completed()
 
-	# 同步加载主城地图（initial=true 时同步路径）。
-	# P1-B: Coordinator tracks stages; full refactor into budget queues
-	# will follow in subsequent commits.
-	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_MAP)
-	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_COLLISION)
-	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
-	travel_to_service_home(false, true)
+	# HC-P1-004: initial world goes through the same staged coordinator
+	# pipeline as map transitions (collect -> prefetch -> map -> collision ->
+	# actors -> READY contract). Input stays locked until READY.
+	var accepted := travel_to_service_home(false, true)
+	if not accepted:
+		_world_bootstrap_coordinator.finish(false, "initial_travel_rejected")
+		_world_bootstrap_in_progress = false
+		return
+	var bootstrap_deadline := Time.get_ticks_msec() + 15000
+	while (
+		(_map_transition_in_progress
+			or _world_bootstrap_coordinator.stage not in [
+				WorldBootstrapCoordinator.Stage.READY,
+				WorldBootstrapCoordinator.Stage.FAILED,
+			])
+		and Time.get_ticks_msec() < bootstrap_deadline
+	):
+		await get_tree().process_frame
+	if _world_bootstrap_coordinator.stage == WorldBootstrapCoordinator.Stage.FAILED:
+		# Keep the input lock and Loading overlay; the bootstrap failed and the
+		# game must not accept gameplay on a half-built world.
+		_world_bootstrap_in_progress = false
+		return
 	_record_player_world_location()
 	_on_player_stats_changed(player.current_hp, player.max_hp)
-
-	# 延迟一个空闲帧关闭遮罩并开放输入。
-	_finalise_initial_world_bootstrap.call_deferred()
-
-
-func _finalise_initial_world_bootstrap() -> void:
-	if not _world_bootstrap_in_progress:
-		return
-	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
-	_world_bootstrap_coordinator.finish(true, "initial_world_ready")
-	if (
-		not PlayerState.test_mode
-		and is_instance_valid(hud)
-		and hud.has_method("finish_loading_transition")
-	):
-		hud.finish_loading_transition()
 	_world_bootstrap_in_progress = false
 	_release_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
 
@@ -833,17 +844,20 @@ func _run_map_transition(
 	target_map_id: int
 ) -> void:
 	hud.begin_loading_transition(transition_id)
-	while _map_transition_in_progress and _active_map_transition_id == transition_id:
-		var request: Dictionary = await hud.loading_transition_covered
-		if (
-			str(request.get("contract_id", "")) == LoadingTransitionOverlay.CONTRACT_ID
-			and str(request.get("transition_id", "")) == transition_id
-		):
-			break
+	if not PlayerState.test_mode:
+		while _map_transition_in_progress and _active_map_transition_id == transition_id:
+			var request: Dictionary = await hud.loading_transition_covered
+			if (
+				str(request.get("contract_id", "")) == LoadingTransitionOverlay.CONTRACT_ID
+				and str(request.get("transition_id", "")) == transition_id
+			):
+				break
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	_last_monster_prefetch_status.clear()
-	if _monster_prefetch_enabled and target_map_id >= 0:
+	if PlayerState.test_mode:
+		_last_monster_prefetch_status = {"complete": true}
+	elif _monster_prefetch_enabled and target_map_id >= 0:
 		_last_monster_prefetch_status = MonsterVisualScript.begin_map_prefetch(
 			_monster_ids_for_map(target_map_id)
 		)
@@ -862,18 +876,193 @@ func _run_map_transition(
 		MonsterVisualScript.release_map_pins()
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
+	# HC-P1-004: stage the world build through the coordinator budget queues
+	# (resource scope -> threaded prefetch -> map items -> collisions). The
+	# operation below only performs zone arrival (content spawn + player
+	# placement); WorldBackground.set_zone_data() skips the rebuild because the
+	# environment was already staged-built for the same map.
+	var built_ok := await _run_world_build_pipeline(target_map_id, transition_id)
+	if not built_ok or not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
 	operation.call()
-	await get_tree().process_frame
-	if DisplayServer.get_name() != "headless":
-		await RenderingServer.frame_post_draw
+	if not PlayerState.test_mode:
+		await get_tree().process_frame
+		if DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
-	hud.finish_loading_transition()
-	_active_map_transition_id = ""
-	_map_transition_in_progress = false
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
-	_world_bootstrap_coordinator.finish(true, "map_transition_ready")
-	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+	if _check_world_ready_contract():
+		hud.finish_loading_transition()
+		if PlayerState.test_mode and hud.loading_transition_overlay != null:
+			# Test-mode fast path hides the fade overlay immediately so tests
+			# can assert the bootstrap completed without waiting the fade tween.
+			hud.loading_transition_overlay.hide()
+			hud.loading_transition_overlay.modulate.a = 1.0
+		_active_map_transition_id = ""
+		_map_transition_in_progress = false
+		_world_bootstrap_coordinator.finish(true, "map_transition_ready")
+		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+	else:
+		# READY contract failed: keep the input lock and Loading overlay so the
+		# player never acts on an incomplete world.
+		_active_map_transition_id = ""
+		_map_transition_in_progress = false
+		_world_bootstrap_coordinator.finish(false, "ready_contract_failed")
+
+
+func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
+	var coordinator := _world_bootstrap_coordinator
+	if coordinator == null or not is_instance_valid(background):
+		return false
+	var generation := coordinator.generation
+	if not coordinator.is_generation_current(generation):
+		return false
+
+	# 1) COLLECT_REQUIREMENTS: background registers only target-map resources
+	# and builds the ordered map/collision descriptors (no SceneTree writes).
+	coordinator.advance(WorldBootstrapCoordinator.Stage.COLLECT_REQUIREMENTS)
+	var target_map_data: Dictionary = {}
+	if map_id >= 0:
+		target_map_data = GameData.get_map_by_id(map_id)
+	if target_map_data.is_empty():
+		target_map_data = {"mapId": map_id, "name": "未命名地图"}
+	var prepared := background.prepare_map_build(
+		map_id, coordinator, target_map_data
+	)
+	if not bool(prepared.get("ok", false)):
+		coordinator.finish(false, "prepare_map_build_failed")
+		return false
+	background.set_pending_arrival_position(_pipeline_arrival_position(map_id))
+	background.submit_staged_build()
+
+	# 2) REQUEST_RESOURCES -> 3) WAIT_RESOURCES
+	coordinator.advance(WorldBootstrapCoordinator.Stage.REQUEST_RESOURCES)
+	coordinator.request_threaded_prefetch()
+	coordinator.advance(WorldBootstrapCoordinator.Stage.WAIT_RESOURCES)
+	if PlayerState.test_mode:
+		if not coordinator.poll_threaded_prefetch_blocking():
+			coordinator.finish(false, "prefetch_timeout")
+			return false
+	else:
+		while not coordinator.poll_threaded_prefetch():
+			if not coordinator.is_generation_current(generation):
+				return false
+			await get_tree().process_frame
+	if coordinator.has_failed_required_resource():
+		coordinator.finish(false, "prefetch_failed_required_resource")
+		return false
+	if not coordinator.is_generation_current(generation):
+		return false
+
+	# 4) BUILD_MAP: one atomic map unit per queue task, frame-budgeted.
+	coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_MAP)
+	var max_items := _bootstrap_max_items_per_frame()
+	var budget_ms := _bootstrap_slice_budget_ms()
+	coordinator.defer_between_slices = not PlayerState.test_mode
+	await coordinator.process_map_queue(
+		Callable(background, "build_one_map_item"), max_items, budget_ms
+	)
+	if not coordinator.is_generation_current(generation):
+		return false
+	if coordinator.has_unexpected_sync_load():
+		coordinator.finish(false, "unexpected_sync_load_during_build_map")
+		return false
+	if coordinator.planned_map_item_count != coordinator.built_map_item_count:
+		coordinator.finish(false, "map_item_count_mismatch")
+		return false
+
+	# 5) BUILD_COLLISION: one atomic collision unit per queue task.
+	coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_COLLISION)
+	await coordinator.process_collision_queue(
+		Callable(background, "build_one_collision"), max_items, budget_ms
+	)
+	if not coordinator.is_generation_current(generation):
+		return false
+	if coordinator.has_unexpected_sync_load():
+		coordinator.finish(false, "unexpected_sync_load_during_build_collision")
+		return false
+	if coordinator.failed_collision_count > 0:
+		coordinator.finish(false, "collision_build_failed")
+		return false
+	if coordinator.planned_collision_count != coordinator.built_collision_count:
+		coordinator.finish(false, "collision_count_mismatch")
+		return false
+
+	# 6) SPAWN_ACTORS: gameplay actors are spawned by the arrival operation
+	# while the coordinator is in this stage.
+	coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
+	background.finish_map_build()
+	return true
+
+
+func _bootstrap_max_items_per_frame() -> int:
+	return int(ProjectSettings.get_setting(
+		"world/loading/max_items_per_frame",
+		WorldBootstrapCoordinator.DEFAULT_MAX_ITEMS_PER_FRAME
+	))
+
+
+func _bootstrap_slice_budget_ms() -> float:
+	return float(ProjectSettings.get_setting(
+		"world/loading/slice_budget_ms",
+		WorldBootstrapCoordinator.DEFAULT_SLICE_BUDGET_MS
+	))
+
+
+func _pipeline_arrival_position(map_id: int) -> Vector2:
+	if map_id == 4:
+		return _bich_home_screen_position_px()
+	return route_arrival_position(map_id, current_map_id)
+
+
+func _check_world_ready_contract() -> bool:
+	var coordinator := _world_bootstrap_coordinator
+	if coordinator == null or not is_instance_valid(background):
+		return false
+	var summary := coordinator.ready_contract_summary()
+	if not coordinator.is_generation_current(int(summary.get("generation", -1))):
+		return false
+	if int(summary.get("map_id", -1)) != current_map_id:
+		return false
+	if background.environment_node_count() <= 0 and background.editor_runtime_chunk_texture_count() <= 0:
+		return false
+	if int(summary.get("planned_map_item_count", 0)) != int(summary.get("built_map_item_count", 0)):
+		return false
+	if int(summary.get("planned_collision_count", 0)) != int(summary.get("built_collision_count", 0)):
+		return false
+	if int(summary.get("failed_collision_count", 0)) != 0:
+		return false
+	if int(summary.get("unexpected_sync_load_count", 0)) != 0:
+		return false
+	if not is_instance_valid(player):
+		return false
+	if background.is_environment_point_blocked(player.global_position):
+		return false
+	if not is_instance_valid(_world_camera):
+		return false
+	if (
+		is_instance_valid(hud)
+		and (int(hud._last_hp) != int(player.current_hp)
+			or int(hud._last_max_hp) != int(player.max_hp))
+	):
+		return false
+	# Necessary gameplay actors / door points must be present when the map
+	# content declares them.
+	var content: Dictionary = {}
+	if MapEditorRuntimeBridgeScript.has_runtime_map(current_map_id):
+		content = MapEditorRuntimeBridgeScript.game_content_for_map(current_map_id)
+	if content.is_empty() and RegionContent.has_map(current_map_id):
+		content = RegionContent.get_map_content(current_map_id)
+	var declares_content: bool = (
+		not (content.get("spawns", []) as Array).is_empty()
+		or not (content.get("bosses", []) as Array).is_empty()
+		or not (content.get("npcs", []) as Array).is_empty()
+		or not (content.get("portals", []) as Array).is_empty()
+	)
+	if declares_content and get_tree().get_nodes_in_group("zone_content").is_empty():
+		return false
+	return true
 
 
 func _monster_ids_for_map(map_id: int) -> Array[int]:
