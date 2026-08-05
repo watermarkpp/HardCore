@@ -7,7 +7,6 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const PlayerCharacter := preload("res://scripts/player.gd")
 
-# 16 compass directions in Godot angle-index order
 const DIR_NAMES: Array[String] = ["E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW","N","NNE","NE","ENE"]
 const DIR_VECS: Array[Vector2] = [
 	Vector2.RIGHT, Vector2(0.924,0.383), Vector2(0.707,0.707), Vector2(0.383,0.924),
@@ -38,12 +37,10 @@ func _run() -> void:
 
 	var results: Array[Dictionary] = []
 
-	# --- Test all 16 sequences ---
 	for seq_idx: int in range(16):
 		var dir_name: String = DIR_NAMES[seq_idx]
 		var dir_vec: Vector2 = DIR_VECS[seq_idx]
 
-		# Formal snapshot
 		var dg: Vector2 = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(dir_vec).normalized()
 		var snapshot: Dictionary = SkillFootprintSnapshotScript.create_directed_rectangle(
 			"wizard.laser", "laser_%s" % dir_name, Vector2.ZERO, dg, 8.0, 1.0, 0.0, 8.0, 8.0, "actual"
@@ -55,7 +52,6 @@ func _run() -> void:
 		var snap_len: float = axis_start.distance_to(axis_end)
 		var axis_unit: Vector2 = (axis_end - axis_start).normalized() if snap_len > 0.001 else dir_vec
 
-		# Create beam
 		var beam := CasterSkillVisualFactory.create(profile)
 		assert(beam != null, "beam seq %d" % seq_idx)
 		beam.setup(owner.global_position, "wizard.laser", 72.0, 0.8, dir_vec, owner, "", {
@@ -66,12 +62,10 @@ func _run() -> void:
 		var sprites: Array = beam.get("_sprites")
 		var sprite := sprites[0] as CasterSkillAnimationPlayer
 
-		# Use AnimationPlayer's built-in transform-aware extent methods
 		var vis_fwd: float = sprite.fitted_visual_forward_extent(axis_unit)
 		var vis_cross: float = sprite.fitted_visual_cross_extent(axis_unit)
 		var bounds: Rect2 = sprite.fitted_visual_bounds()
 
-		# Project all 4 corners onto formal axis
 		var vis_min: float = INF
 		var vis_max: float = -INF
 		for ci: int in range(4):
@@ -81,39 +75,42 @@ func _run() -> void:
 			vis_min = minf(vis_min, proj)
 			vis_max = maxf(vis_max, proj)
 
+		# Defined error metrics
+		var start_err: float = vis_min - 0.0
+		var end_err: float = vis_max - snap_len
+		var extent_err: float = (vis_max - vis_min) - snap_len
+		assert(absf(extent_err - (end_err - start_err)) <= 0.01,
+			"%s: extent_err %.2f != end_err-start_err %.2f" % [dir_name, extent_err, end_err - start_err])
+
 		results.append({
 			"seq": seq_idx, "dir": dir_name,
-			"snap_len": snap_len, "vis_fwd": vis_fwd, "vis_cross": vis_cross,
-			"start_err": vis_min, "end_err": vis_max - snap_len,
-			"total_err": vis_fwd - snap_len,
+			"snap_len": snap_len, "vis_start": vis_min, "vis_end": vis_max,
+			"vis_fwd": vis_fwd, "vis_cross": vis_cross,
+			"start_err": start_err, "end_err": end_err, "extent_err": extent_err,
 			"mod_a": sprite.modulate.a, "self_a": sprite.self_modulate.a,
 		})
 
-	# --- Print table ---
 	print("")
-	print("=== LASER 16-SEQUENCE AXIS-PROJECTED VISIBLE EXTENT ===")
-	print("seq dir | snap_len | vis_fwd | vis_cross | start_err | end_err | total_err | mod.a")
+	print("=== LASER 16-SEQUENCE SEPARATE START/END/EXTENT ERRORS ===")
+	print("seq dir | snap_len | vis_start | vis_end | start_err | end_err | extent_err | mod.a")
 	for e: Dictionary in results:
-		print("%3d %4s | %8.1f | %7.1f | %8.1f | %+8.1f | %+7.1f | %+8.1f | %.4f" % [
-			e.seq, e.dir, e.snap_len, e.vis_fwd, e.vis_cross,
-			e.start_err, e.end_err, e.total_err, e.mod_a,
+		print("%3d %4s | %8.1f | %9.1f | %7.1f | %+8.1f | %+7.1f | %+9.1f | %.4f" % [
+			e.seq, e.dir, e.snap_len, e.vis_start, e.vis_end,
+			e.start_err, e.end_err, e.extent_err, e.mod_a,
 		])
 	print("=== END ===")
 	print("")
 
-	# --- Assertions ---
+	# Assertions: all three errors independently verified
 	for e: Dictionary in results:
 		var lbl: String = "seq %d %s" % [e.seq, e.dir]
 		assert(e.mod_a >= 0.99, "%s: mod.a=%.4f" % [lbl, e.mod_a])
 		assert(e.self_a >= 0.99, "%s: self.a=%.4f" % [lbl, e.self_a])
-		# Length must match snapshot exactly (e.end_err accounts for anchor offset)
-		assert(absf(e.end_err) <= 1.0, "%s: end_err %.1f > 1px (length mismatch)" % [lbl, e.end_err])
-		assert(absf(e.total_err) <= 1.0, "%s: total_err %.1f > 1px (scale error)" % [lbl, e.total_err])
-	# Note: start_err is negative (anchor offset — beam extends behind caster).
-	# This is a Type B anchor error: source bounds center is at sprite origin,
-	# beam extends symmetrically around it. Anchor rebase needed but not a length bug.
+		assert(absf(e.extent_err) <= 1.0, "%s: extent_err %.1f > 1px" % [lbl, e.extent_err])
+		assert(absf(e.start_err) <= 1.0, "%s: start_err %.1f > 1px (anchor behind caster)" % [lbl, e.start_err])
+		assert(absf(e.end_err) <= 1.0, "%s: end_err %.1f > 1px (endpoint misaligned)" % [lbl, e.end_err])
 
-	# Mirror pairs for canonical 8
+	# Mirror pairs
 	var g8: Dictionary = {}
 	for e: Dictionary in results:
 		if e.dir in GAME8_NAMES:
@@ -124,7 +121,8 @@ func _run() -> void:
 		if a.is_empty() or b.is_empty():
 			continue
 		assert(absf(a.snap_len - b.snap_len) <= 0.5, "%s/%s snap_len diff" % [pair[0],pair[1]])
-		assert(absf(a.vis_fwd - b.vis_fwd) <= 1.0, "%s/%s vis_fwd diff" % [pair[0],pair[1]])
+		assert(absf(a.start_err - b.start_err) <= 1.0, "%s/%s start_err diff" % [pair[0],pair[1]])
+		assert(absf(a.end_err - b.end_err) <= 1.0, "%s/%s end_err diff" % [pair[0],pair[1]])
 
-	print("LASER_DIRECTION_VISUAL_EXTENT_PASS: 16 sequences axis-aligned")
+	print("LASER_DIRECTION_VISUAL_EXTENT_PASS")
 	get_tree().quit(0)

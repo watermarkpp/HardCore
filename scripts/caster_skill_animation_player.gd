@@ -7,7 +7,6 @@ const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
 const AXIS_CROSS_FIT_CONTRACT_ID := (
 	"skills.caster.line_visual.frame_alpha_cross_affine.v3"
 )
-
 signal animation_finished(skill_id: String)
 signal skill_frame_changed(frame_index: int)
 
@@ -82,13 +81,40 @@ func configure(
 	if loop_override is bool:
 		_loop = bool(loop_override)
 	var render := CasterSkillVisualRegistry.render_policy(skill_id, phase_id)
+	var visual_type := CasterSkillVisualRegistry.visual_type(skill_id)
+	var visual_width_scale := maxf(
+		0.001,
+		float(
+			render.get(
+				"visual_width_scale",
+				render.get("source_scale_x", 1.0)
+			)
+		)
+	)
+	var visual_height_scale := maxf(
+		0.001,
+		float(
+			render.get(
+				"visual_height_scale",
+				render.get("source_scale_y", 1.0)
+			)
+		)
+	)
 	_anchor_policy = str(render.get("anchor_policy", "top_left_from_world_anchor"))
 	_sequence_bounds = _visual_bounds_for_frames(_frames, _anchor_policy)
-	_sequence_anchor_rebase = (
-		-_sequence_bounds.get_center()
-		if _anchor_policy == "center_sequence_bounds_on_geometry_origin"
-		else Vector2.ZERO
+	# Compute source axis before anchor rebase so the new policy can use it.
+	_source_axis_local = Vector2.UP.rotated(
+		float(direction_index) * TAU / 16.0
+	).normalized()
+	_source_cross_axis_local = Vector2(
+		-_source_axis_local.y, _source_axis_local.x
 	)
+	if _anchor_policy == "align_sequence_visible_axis_start_to_geometry_origin":
+		_sequence_anchor_rebase = _rebase_to_visible_axis_start(_sequence_bounds)
+	elif _anchor_policy == "center_sequence_bounds_on_geometry_origin":
+		_sequence_anchor_rebase = -_sequence_bounds.get_center()
+	else:
+		_sequence_anchor_rebase = Vector2.ZERO
 	var explicit_anchor_rebase: Array = render.get(
 		"anchor_rebase_pixels", [0.0, 0.0]
 	)
@@ -113,13 +139,24 @@ func configure(
 		if fit_axis_world.length_squared() > 0.000001
 		else Vector2.ZERO
 	)
-	_source_axis_local = Vector2.UP.rotated(
-		float(direction_index) * TAU / 16.0
-	).normalized()
-	_source_cross_axis_local = Vector2(
-		-_source_axis_local.y, _source_axis_local.x
-	)
-	if (
+	if visual_type == "sky_strike":
+		var visual_profile: Dictionary = (
+			CasterSkillVisualRegistry.visual_profile(skill_id)
+		)
+		var profile_animation: Dictionary = (
+			visual_profile.get("animation", {}) as Dictionary
+		)
+		if str(profile_animation.get("scale_mode", "")) == "fixed_source":
+			visual_width_scale = maxf(
+				0.001,
+				float(profile_animation.get("width_scale", visual_width_scale))
+			)
+			visual_height_scale = maxf(
+				0.001,
+				float(profile_animation.get("height_scale", visual_height_scale))
+			)
+		scale = Vector2(visual_width_scale, visual_height_scale)
+	elif (
 		_desired_axis_extent > 0.0
 		and not _fit_axis_world.is_zero_approx()
 		and _desired_cross_axis_extent > 0.0
@@ -451,3 +488,27 @@ func _rect_corners(rect: Rect2, anchor_rebase: Vector2) -> Array[Vector2]:
 		maximum,
 		Vector2(minimum.x, maximum.y),
 	]
+
+
+func _rebase_to_visible_axis_start(bounds: Rect2) -> Vector2:
+	# Shift the sequence bounds so the minimum projection onto the source
+	# axis lands at the geometry origin. This prevents the animation from
+	# extending backward (behind the caster) while keeping the forward
+	# extent driven by the desired axis stretch.
+	var source_axis_min: float = INF
+	var cross_min: float = INF
+	var cross_max: float = -INF
+	var corners: PackedVector2Array = PackedVector2Array([
+		bounds.position,
+		bounds.position + Vector2(bounds.size.x, 0.0),
+		bounds.position + bounds.size,
+		bounds.position + Vector2(0.0, bounds.size.y),
+	])
+	for corner: Vector2 in corners:
+		var axis_proj: float = corner.dot(_source_axis_local)
+		source_axis_min = minf(source_axis_min, axis_proj)
+		var cross_proj: float = corner.dot(_source_cross_axis_local)
+		cross_min = minf(cross_min, cross_proj)
+		cross_max = maxf(cross_max, cross_proj)
+	var cross_center: float = (cross_min + cross_max) * 0.5
+	return -source_axis_min * _source_axis_local - cross_center * _source_cross_axis_local

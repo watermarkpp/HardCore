@@ -90,6 +90,18 @@ func _install_single() -> void:
     ):
         sprite.queue_free()
         return
+    # Rebase visible axis start to geometry origin so beam does not
+    # extend behind the caster.
+    if sprite.has_method("_rebase_to_visible_axis_start"):
+        sprite.set("_sequence_anchor_rebase",
+            sprite.call("_rebase_to_visible_axis_start", sprite.get("_sequence_bounds")))
+    # After rebase, recompute longitudinal scale so the forward extent matches
+    # exactly the beam length (not the pre-rebase centered extent).
+    var actual_fwd: float = sprite.fitted_visual_forward_extent(_beam_axis_screen_px)
+    if actual_fwd > 0.001 and _beam_length_px > 0.0:
+        var corr: float = _beam_length_px / actual_fwd
+        sprite.set("_longitudinal_scale", sprite.get("_longitudinal_scale") * corr)
+        sprite.scale *= corr
     _apply_beam_width_scale(sprite)
     sprite.self_modulate = Color(1.0, 1.0, 1.0, 1.0)  # Beam: full opacity; formal core polygon handles low-alpha overlay
     sprite.set_process(true)
