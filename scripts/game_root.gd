@@ -514,7 +514,10 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 func _prepare_safe_logout() -> bool:
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	var home_map_id := GameData.service_home_runtime_map_id(false)
-	var home_screen_position_px := _bich_home_screen_position_px()
+	var resolved := _resolve_bich_home()
+	var home_screen_position_px: Vector2 = resolved.get("position_px", Vector2.ZERO) as Vector2
+	if not bool(resolved.get("valid", false)):
+		push_error("safe logout: home position unresolved — reason=%s" % resolved.get("reason", ""))
 	return PlayerState.save_safe_logout(
 		home_map_id,
 		home_screen_position_px,
@@ -1000,23 +1003,27 @@ func route_next_target(map_id: int) -> Dictionary:
 	return {}
 
 
-func _bich_home_screen_position_px() -> Vector2:
+func _resolve_bich_home() -> Dictionary:
 	var editor_home := MapEditorRuntimeBridgeScript.home_screen_position_px()
 	if editor_home != Vector2.ZERO:
-		return editor_home
+		return {"valid": true, "position_px": editor_home, "source": "runtime_bridge", "reason": ""}
 	var profile: Dictionary = EnvironmentCatalog.get_map_profile(4)
 	var runtime_home: Variant = profile.get("runtime_home_position")
-	if runtime_home is Vector2:
-		return runtime_home as Vector2
-	# Last resort: compute from service_home_coordinate using the map's actual
-	# source_size from the environment profile instead of a hardcoded 700×700.
+	if runtime_home is Vector2 and (runtime_home as Vector2) != Vector2.ZERO:
+		return {"valid": true, "position_px": runtime_home as Vector2, "source": "runtime_home_position", "reason": ""}
 	var home_coord: Variant = profile.get("service_home_coordinate")
-	if home_coord is Vector2i:
-		var source_size: Variant = profile.get("source_size", null)
-		if source_size is Vector2i:
-			return MapCoordinateMapperScript.source_to_world(Vector2(home_coord), source_size as Vector2i)
-	push_error("no home position available from editor, catalog, or map profile for map 4")
-	return Vector2.ZERO
+	var source_size: Variant = profile.get("source_size", null)
+	if home_coord is Vector2i and source_size is Vector2i:
+		return {"valid": true, "position_px": MapCoordinateMapperScript.source_to_world(Vector2(home_coord), source_size as Vector2i), "source": "service_home_coordinate", "reason": ""}
+	push_error("no formal home position available from editor, catalog, or map profile for map 4")
+	return {"valid": false, "position_px": Vector2.ZERO, "source": "", "reason": "missing_bich_home_position"}
+
+
+# Convenience accessor: returns position only if valid, else Vector2.ZERO.
+# Callers that MUST abort on failure should use _resolve_bich_home() directly.
+func _bich_home_screen_position_px() -> Vector2:
+	var resolved: Dictionary = _resolve_bich_home()
+	return resolved.get("position_px", Vector2.ZERO) as Vector2
 
 
 func _bich_portal_screen_position_px_to(target_map_id: int) -> Vector2:
