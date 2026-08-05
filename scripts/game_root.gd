@@ -760,6 +760,8 @@ func _begin_initial_world_bootstrap() -> void:
 		return
 	_world_bootstrap_in_progress = true
 	_acquire_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
+	_world_bootstrap_coordinator.begin_initial_world(current_map_id if current_map_id >= 0 else GameData.service_home_runtime_map_id(false))
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SHOW_LOADING)
 
 	if (
 		not PlayerState.test_mode
@@ -777,6 +779,11 @@ func _begin_initial_world_bootstrap() -> void:
 	_world_bootstrap_coordinator.loading_barrier_completed()
 
 	# 同步加载主城地图（initial=true 时同步路径）。
+	# P1-B: Coordinator tracks stages; full refactor into budget queues
+	# will follow in subsequent commits.
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_MAP)
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_COLLISION)
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
 	travel_to_service_home(false, true)
 	_record_player_world_location()
 	_on_player_stats_changed(player.current_hp, player.max_hp)
@@ -788,6 +795,8 @@ func _begin_initial_world_bootstrap() -> void:
 func _finalise_initial_world_bootstrap() -> void:
 	if not _world_bootstrap_in_progress:
 		return
+	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
+	_world_bootstrap_coordinator.finish(true, "initial_world_ready")
 	if (
 		not PlayerState.test_mode
 		and is_instance_valid(hud)
