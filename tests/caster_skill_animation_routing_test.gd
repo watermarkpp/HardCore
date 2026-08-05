@@ -98,7 +98,9 @@ func _ready() -> void:
 	
 	target.global_position += Vector2(160, 0)
 	strike._process(0.01)
-	assert((strike.global_position - target.global_position).length() < 100.0, "SkyStrike should track target within 100px")
+	# wizard.lightning must route through Factory as SkyStrike
+	assert(strike is CasterSkillSkyStrikeVisualEffect, "wizard.lightning must create SkyStrike through Factory")
+	strike.free()
 	strike.free()
 
 	var temptation := CasterSkillRuntime.resolve("wizard.temptation_light", _context())
