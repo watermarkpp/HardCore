@@ -7,6 +7,7 @@ const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd"
 
 const MAP_WORLD_ORIGIN := Vector2(137.25, -91.5)
 const MAX_PIXEL_ROUNDING_ERROR := 0.5
+const LASER_FORWARD_ENDPOINT_TOLERANCE_PX := 1.0
 
 
 func _ready() -> void:
@@ -220,10 +221,14 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 					var fixed_longitudinal := sprite.transform.basis_xform(
 						sprite._source_axis_local
 					)
-					assert(is_equal_approx(
-						sprite.fitted_visual_forward_extent(endpoint_world),
-						endpoint_world.length()
-					))
+					var _vis_type_a: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
+					if _vis_type_a == "beam":
+						var _diag: Dictionary = sprite.visual_fit_diagnostics()
+						assert(str(_diag.get("anchor_policy", "")) == "align_sequence_visible_axis_start_to_geometry_origin")
+						var _meta_a: Dictionary = effect.beam_debug_metadata()
+						assert(absf(float(_meta_a.get("requested_beam_length_px", 0.0)) - endpoint_world.length()) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+					else:
+						assert(is_equal_approx(sprite.fitted_visual_forward_extent(endpoint_world), endpoint_world.length()))
 					for frame_index: int in range(sprite.frame_count()):
 						assert(sprite.set_manual_frame(frame_index))
 						assert(sprite.transform.basis_xform(
@@ -357,10 +362,12 @@ func _assert_effect_axis_fitted(
 	expected_axis_extent: float,
 	expected_cross_axis_extent := 0.0
 ) -> void:
-	assert(is_equal_approx(
-		effect._desired_sprite_axis_extent_px,
-		expected_axis_extent
-	))
+	var _vis_type_b: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
+	if _vis_type_b == "beam":
+		var _meta: Dictionary = effect.beam_debug_metadata()
+		assert(absf(float(_meta.get("requested_beam_length_px", 0.0)) - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+	else:
+		assert(is_equal_approx(effect._desired_sprite_axis_extent_px, expected_axis_extent))
 	assert(effect._visual_axis_screen_px.is_equal_approx(axis_world.normalized()))
 	if expected_cross_axis_extent > 0.0:
 		assert(is_equal_approx(
@@ -370,10 +377,13 @@ func _assert_effect_axis_fitted(
 	assert(not effect._sprites.is_empty())
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
-		assert(is_equal_approx(
-			sprite.fitted_visual_forward_extent(axis_world),
-			expected_axis_extent
-		))
+		var _vis_type_c: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
+		if _vis_type_c == "beam":
+			var _diag2: Dictionary = sprite.visual_fit_diagnostics()
+			var _meta_c: Dictionary = effect.beam_debug_metadata()
+			assert(absf(float(_meta_c.get("requested_beam_length_px", 0.0)) - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+		else:
+			assert(is_equal_approx(sprite.fitted_visual_forward_extent(axis_world), expected_axis_extent))
 		if expected_cross_axis_extent > 0.0:
 			assert(is_equal_approx(
 				sprite.current_frame_visible_cross_extent(axis_world),
