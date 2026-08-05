@@ -3,6 +3,7 @@ extends Node
 const DiagnosticLog := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
 const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
 const MeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
+const DiagnosticGate := preload("res://scripts/runtime_diagnostics.gd")
 
 
 func _ready() -> void:
@@ -11,13 +12,13 @@ func _ready() -> void:
 
 func _run() -> void:
 	var previous_test_mode := PlayerState.test_mode
-	var previous_log_enabled := DiagnosticLog.enabled
+	var previous_log_enabled: bool = DiagnosticGate.is_enabled()
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	PlayerState.profession = "战士"
 	PlayerState.level = 50
 	PlayerState.recalculate_stats()
-	DiagnosticLog.enabled = false
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, false)
 	DiagnosticLog.clear_recent_events()
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
@@ -164,7 +165,7 @@ func _run() -> void:
 	game.queue_free()
 	await get_tree().process_frame
 	DiagnosticLog.clear_recent_events()
-	DiagnosticLog.enabled = previous_log_enabled
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, previous_log_enabled)
 	PlayerState.test_mode = previous_test_mode
 	print("MELEE_RUNTIME_DIAGNOSTIC_PIPELINE_PASS: accuracy, angle, and footprint-area evidence are observable")
 	get_tree().quit(0)

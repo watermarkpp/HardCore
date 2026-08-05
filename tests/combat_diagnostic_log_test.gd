@@ -1,11 +1,12 @@
 extends Node
 
 const DiagnosticLog := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
+const DiagnosticGate := preload("res://scripts/runtime_diagnostics.gd")
 
 
 func _ready() -> void:
-	var previous_enabled := DiagnosticLog.enabled
-	DiagnosticLog.enabled = false
+	var previous_enabled: bool = DiagnosticGate.is_enabled()
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, false)
 	DiagnosticLog.clear_recent_events()
 	var event := DiagnosticLog.record({
 		"event": "test_attack_release",
@@ -29,6 +30,6 @@ func _ready() -> void:
 	assert(JSON.stringify(event).contains("test_attack_release"))
 	assert(DiagnosticLog.recent_events().size() == 1)
 	DiagnosticLog.clear_recent_events()
-	DiagnosticLog.enabled = previous_enabled
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, previous_enabled)
 	print("COMBAT_DIAGNOSTIC_LOG_PASS：运行时近战诊断事件可JSON序列化且不改变战斗状态")
 	get_tree().quit(0)

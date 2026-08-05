@@ -1070,11 +1070,13 @@ func set_zone_name(zone_name: String) -> void:
 
 func open_shop(display_name: String, stock: Array) -> void:
 	_close_modal_panels()
+	_ensure_shop_panel()
 	shop_panel.open_for(display_name, stock)
 
 
 func open_skill_trainer(display_name: String) -> void:
 	_close_modal_panels()
+	_ensure_skill_panel()
 	skill_panel.open_for(display_name)
 
 
@@ -1119,11 +1121,13 @@ func close_death_screen() -> void:
 
 func open_quest(display_name: String) -> void:
 	_close_modal_panels()
+	_ensure_quest_panel()
 	quest_panel.open_for(display_name)
 
 
 func open_warehouse() -> void:
 	_close_modal_panels()
+	_ensure_warehouse_panel()
 	warehouse_panel.open_panel()
 
 

@@ -15,7 +15,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	SkillFootprintDiagnosticLog.enabled = false
+	ProjectSettings.set_setting(&"hardcore/debug/diagnostics/enabled", false)
 	SkillFootprintDiagnosticLog.clear_recent_events()
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)

@@ -144,8 +144,7 @@ $Suites.caster_visual_critical = @(
     'tests/visual_profile_merge_contract_test.tscn',
     'tests/fire_wall_runtime_absolute_ground_test.tscn',
     'tests/fire_wall_single_controller_test.tscn',
-    'tests/player_initial_resource_sync_test.tscn'
-,
+    'tests/player_initial_resource_sync_test.tscn',
     "tests/gameplay_input_gate_test.tscn",
     "tests/input_release_cleanup_test.tscn",
     "tests/initial_world_input_lock_test.tscn",

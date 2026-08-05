@@ -18,6 +18,8 @@ func _ready() -> void:
 
 func _run() -> void:
 	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
