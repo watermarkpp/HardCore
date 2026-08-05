@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://p1_004_map"]
+[ext_resource type="Script" path="res://tests/world_background_staged_map_build_test.gd" id="1"]
+[node name="StagedMapBuild" type="Node"]
+script = ExtResource("1")

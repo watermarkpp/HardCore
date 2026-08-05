@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://p1_004_nosync"]
+[ext_resource type="Script" path="res://tests/world_background_no_sync_load_test.gd" id="1"]
+[node name="NoSyncLoad" type="Node"]
+script = ExtResource("1")
