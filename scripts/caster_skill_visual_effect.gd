@@ -42,6 +42,7 @@ var direction := Vector2.DOWN
 var target_node: Node2D
 var visual_loaded := false
 var rejection_reason := ""
+var _skip_legacy_laser_single_active := false
 var _elapsed := 0.0
 var _completion_elapsed := 0.0
 var _sprites: Array[Sprite2D] = []
@@ -205,7 +206,7 @@ func setup(
 
 func _ready() -> void:
 	add_to_group("zone_content")
-	if skill_id == "wizard.laser" and is_instance_valid(target_node):
+	if skill_id == "wizard.laser" and is_instance_valid(target_node) and not _skip_legacy_laser_single_active:
 		_replace_existing_laser_visual()
 		add_to_group(SINGLE_ACTIVE_LASER_VISUAL_GROUP)
 		set_meta(
