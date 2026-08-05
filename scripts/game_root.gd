@@ -1005,8 +1005,11 @@ func _bich_home_screen_position_px() -> Vector2:
 	if editor_home != Vector2.ZERO:
 		return editor_home
 	var content := RegionContent.get_map_content(4)
-	push_warning("home position missing in map catalog; using 700x700 fallback — map_id=%d" % current_map_id)
-	return MapCoordinateMapperScript.source_to_world(Vector2(289, 618), Vector2i(700, 700))  # P1-013: fallback until map catalog provides runtime_home_position
+	var runtime_home: Variant = content.get("runtime_home_position")
+	if runtime_home is Vector2:
+		return runtime_home as Vector2
+	push_error("home position unavailable: no editor home and no runtime_home_position in map 4 content — cannot spawn player")
+	return Vector2.ZERO
 
 
 func _bich_portal_screen_position_px_to(target_map_id: int) -> Vector2:
