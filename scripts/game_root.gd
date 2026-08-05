@@ -175,6 +175,22 @@ var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
 
 
+func _gameplay_input_gate() -> bool:
+	return _player_input_enabled and not _world_bootstrap_in_progress
+
+
+func _set_gameplay_input_state(enabled: bool, reason: String) -> void:
+	_player_input_enabled = enabled
+	set_meta("input_gate_reason", reason)
+	set_meta("input_gate_changed_at_ms", Time.get_ticks_msec())
+
+
+func _on_gameplay_movement(value: Vector2) -> void:
+	if not _gameplay_input_gate():
+		return
+	player.set_touch_vector(value)
+
+
 func _ready() -> void:
 	y_sort_enabled = true
 	_rng.randomize()
@@ -205,7 +221,7 @@ func _ready() -> void:
 	player.add_child(_world_camera)
 
 	hud = GameHUD.new()
-	hud.movement_changed.connect(player.set_touch_vector)
+	hud.movement_changed.connect(_on_gameplay_movement)
 	hud.attack_input_started.connect(_on_mobile_attack_input_started)
 	hud.attack_input_ended.connect(_on_mobile_attack_input_ended)
 	hud.attack_input_cancelled.connect(_on_mobile_attack_input_cancelled)
@@ -550,10 +566,12 @@ func _travel_to_service_home_immediate(
 
 
 func travel_to_map(map_id: int) -> void:
+	if not _gameplay_input_gate(): return
 	_request_map_travel(map_id)
 
 
 func _request_map_travel(map_id: int) -> bool:
+	if not _gameplay_input_gate(): return false
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
 		hud.show_message("地图数据不存在：%d" % map_id)
@@ -1607,6 +1625,7 @@ func _on_mobile_attack_input_started(
 	touch_id: int,
 	source: StringName
 ) -> void:
+	if not _gameplay_input_gate(): return
 	if press_token == 0 or _active_mobile_attack_tokens.has(press_token):
 		return
 	var ordinary_attack := PlayerState.skill_name_for_slot(
@@ -1636,6 +1655,7 @@ func _on_mobile_attack_input_ended(
 	touch_id: int,
 	source: StringName
 ) -> void:
+	if not _gameplay_input_gate(): return
 	if not _active_mobile_attack_tokens.has(press_token):
 		_on_skill_input_ended(
 			PlayerState.SKILL_SLOT_GROUP_ATTACK,
@@ -1655,6 +1675,7 @@ func _on_mobile_attack_input_cancelled(
 	source: StringName,
 	reason: StringName
 ) -> void:
+	if not _gameplay_input_gate(): return
 	if not _active_mobile_attack_tokens.has(press_token):
 		_on_skill_input_cancelled(
 			PlayerState.SKILL_SLOT_GROUP_ATTACK,
@@ -1694,6 +1715,7 @@ func _on_skill_input_started(
 	touch_id: int,
 	source: StringName
 ) -> void:
+	if not _gameplay_input_gate(): return
 	if press_token == 0:
 		return
 	var input_key := _skill_input_key(
@@ -1739,6 +1761,7 @@ func _on_skill_input_ended(
 	touch_id: int,
 	_source: StringName
 ) -> void:
+	if not _gameplay_input_gate(): return
 	_active_skill_inputs.erase(
 		_skill_input_key(slot_group, slot_index, press_token, touch_id)
 	)
@@ -1752,6 +1775,7 @@ func _on_skill_input_cancelled(
 	_source: StringName,
 	_reason: StringName
 ) -> void:
+	if not _gameplay_input_gate(): return
 	var input_key := _skill_input_key(
 		slot_group, slot_index, press_token, touch_id
 	)
@@ -1843,6 +1867,7 @@ func _process_magic_shield_auto_refresh(delta: float) -> void:
 
 
 func _on_mobile_attack_pressed() -> void:
+	if not _gameplay_input_gate(): return
 	if _legacy_mobile_attack_token != 0:
 		return
 	_legacy_mobile_attack_token = _allocate_synthetic_attack_token()
@@ -1854,6 +1879,7 @@ func _on_mobile_attack_pressed() -> void:
 
 
 func _on_mobile_attack_released() -> void:
+	if not _gameplay_input_gate(): return
 	if _legacy_mobile_attack_token == 0:
 		_cancel_all_mobile_attack_inputs(false)
 		return
@@ -2287,6 +2313,7 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 
 func _on_player_death_requested() -> void:
+	if not _gameplay_input_gate(): return
 	_cancel_all_combat_targets()
 	_magic_shield_auto_enabled = false
 	if is_instance_valid(hud):
@@ -2674,6 +2701,7 @@ func _update_target_hud() -> void:
 
 
 func _try_interact() -> void:
+	if not _gameplay_input_gate(): return
 	var nearest: Node2D
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
@@ -2700,10 +2728,12 @@ func _try_interact() -> void:
 
 
 func _use_quick_slot(index: int) -> void:
+	if not _gameplay_input_gate(): return
 	_use_skill_slot(PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, index)
 
 
 func _use_skill_slot(slot_group: String, slot_index: int) -> void:
+	if not _gameplay_input_gate(): return
 	var skill_name := PlayerState.skill_name_for_slot(slot_group, slot_index)
 	if skill_name.is_empty():
 		var group_label := (
@@ -2857,6 +2887,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 
 
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
+	if not _gameplay_input_gate(): return
 	var context := player.consume_attack_context()
 	var diagnostic := _pending_melee_diagnostic.duplicate(true)
 	_pending_melee_diagnostic.clear()
@@ -3337,6 +3368,7 @@ func _try_safe_ring_teleport() -> bool:
 
 
 func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, message: String) -> void:
+	if not _gameplay_input_gate(): return
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save(), true)
 	if hud != null:
 		hud.show_message(message, 1.5)
@@ -3344,6 +3376,7 @@ func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, messag
 
 
 func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
+	if not _gameplay_input_gate(): return
 	var skill_context := player.consume_skill_context()
 	var release_geometry: Dictionary = skill_context.get("release_geometry", {})
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
@@ -5931,6 +5964,7 @@ func _sync_player_runtime_snapshot_to_hud() -> void:
 
 
 func _on_consumable_used(item_name: String) -> void:
+	if not _gameplay_input_gate(): return
 	var item := GameData.get_item_record(item_name)
 	var effect := str(item.get("useEffect", ""))
 	var restored_hp := int(item.get("restoreHealth", 0))
@@ -5968,6 +6002,7 @@ func _on_consumable_used(item_name: String) -> void:
 
 
 func _on_scroll_used(item_name: String) -> void:
+	if not _gameplay_input_gate(): return
 	var item := GameData.get_item_record(item_name)
 	var effect := str(item.get("useEffect", ""))
 	if effect in ["town_teleport", "dungeon_escape"] or item_name == "回城卷":
