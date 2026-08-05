@@ -184,7 +184,7 @@ static func create_visual(
 	var profile := CasterSkillVisualRegistry.profile(skill_id)
 	var visual_profile := CasterSkillVisualRegistry.visual_profile(skill_id)
 	for key: String in visual_profile:
-		if not profile.has(key):
+		if not profile.has(key) and key != "animation":
 			profile[key] = visual_profile[key]
 	var role := str(plan.get("visual", {}).get("role", ""))
 	if role in [

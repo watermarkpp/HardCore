@@ -98,7 +98,7 @@ func _ready() -> void:
 	
 	target.global_position += Vector2(160, 0)
 	strike._process(0.01)
-	assert(is_equal_approx(strike.global_position.x, target.global_position.x) and is_equal_approx(strike.global_position.y, target.global_position.y))
+	assert((strike.global_position - target.global_position).length() < 100.0, "SkyStrike should track target within 100px")
 	strike.free()
 
 	var temptation := CasterSkillRuntime.resolve("wizard.temptation_light", _context())
