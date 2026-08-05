@@ -91,7 +91,7 @@ func _install_single() -> void:
         sprite.queue_free()
         return
     _apply_beam_width_scale(sprite)
-    _apply_line_decoration_policy(sprite)
+    sprite.self_modulate = Color(1.0, 1.0, 1.0, 1.0)  # Beam: full opacity; formal core polygon handles low-alpha overlay
     sprite.set_process(true)
     add_child(sprite)
     _sprites.append(sprite)
