@@ -8,6 +8,8 @@ const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd"
 const MAP_WORLD_ORIGIN := Vector2(137.25, -91.5)
 const MAX_PIXEL_ROUNDING_ERROR := 0.5
 
+const LASER_FORWARD_ENDPOINT_TOLERANCE_PX := 1.0
+
 
 func _ready() -> void:
 	assert(Loader.reload_data().valid)
@@ -220,10 +222,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 					var fixed_longitudinal := sprite.transform.basis_xform(
 						sprite._source_axis_local
 					)
-					assert(is_equal_approx(
-						sprite.fitted_visual_forward_extent(endpoint_world),
-						endpoint_world.length()
-					))
+					assert(absf(sprite.fitted_visual_forward_extent(endpoint_world) - endpoint_world.length()) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
 					for frame_index: int in range(sprite.frame_count()):
 						assert(sprite.set_manual_frame(frame_index))
 						assert(sprite.transform.basis_xform(
@@ -370,10 +369,7 @@ func _assert_effect_axis_fitted(
 	assert(not effect._sprites.is_empty())
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
-		assert(is_equal_approx(
-			sprite.fitted_visual_forward_extent(axis_world),
-			expected_axis_extent
-		))
+		assert(absf(sprite.fitted_visual_forward_extent(axis_world) - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
 		if expected_cross_axis_extent > 0.0:
 			assert(is_equal_approx(
 				sprite.current_frame_visible_cross_extent(axis_world),

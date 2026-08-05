@@ -153,8 +153,6 @@ func _apply_sky_strike_profile_context(
 	_visual_profile = _resolve_visual_profile(raw_profile)
 	var animation_profile: Dictionary = _visual_profile.get("animation", {})
 	var anchor_profile: Dictionary = _visual_profile.get("anchor", {})
-	if skill_id == "wizard.lightning":
-		push_warning("ANCHOR_DEBUG visual_profile_keys=%s anchor_raw=%s" % [str(_visual_profile.keys()), str(anchor_profile)])
 	var lifecycle_profile: Dictionary = _visual_profile.get("lifecycle", {})
 	var ground_projection_profile: Dictionary = _visual_profile.get("ground_projection", {})
 	_scale_policy = str(animation_profile.get("scale_mode", "source_pixels"))
