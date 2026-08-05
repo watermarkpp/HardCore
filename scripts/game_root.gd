@@ -564,16 +564,17 @@ func travel_to_service_home(
 	fallback_zone := "",
 	after_arrival := Callable()
 ) -> bool:
+	# P1-002/004: always route through coordinator pipeline
+	var service_map_id := GameData.service_home_map_id(red_name)
+	var runtime_map_id := GameData.service_runtime_map_id(service_map_id)
+	var home_result := _resolve_bich_home()
+	if not bool(home_result.get("valid", false)):
+		push_error("travel_to_service_home: home position unresolved — %s" % home_result.get("reason", ""))
+		return false
 	var operation := Callable(self, "_complete_service_home_travel").bind(
 		red_name, initial, fallback_zone, after_arrival
 	)
-	if _should_animate_map_transition(initial):
-		var service_map_id := GameData.service_home_map_id(red_name)
-		return _begin_map_transition(
-			operation, GameData.service_runtime_map_id(service_map_id)
-		)
-	operation.call()
-	return true
+	return _begin_map_transition(operation, runtime_map_id)
 
 
 func _complete_service_home_travel(

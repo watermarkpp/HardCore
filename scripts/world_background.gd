@@ -9,27 +9,51 @@ const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coo
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
-const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
-const GOTHIC_BICH_GROUND_ATLAS := preload("res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png")
-const BICH_PROP_ATLAS := preload("res://assets/art/maps/bich/bich_props.png")
-const ORC_TOMB_GROUND_ATLAS := preload("res://assets/art/maps/orc_tomb/orc_tomb_ground_tiles.png")
-const ORC_TOMB_PROP_ATLAS := preload("res://assets/art/maps/orc_tomb/orc_tomb_props.png")
-const ORC_TOMB_FIRE_GLOW := preload("res://assets/art/maps/orc_tomb/orc_tomb_fire_glow.png")
-const MINE_GROUND_ATLAS := preload("res://assets/art/maps/mine/mine_ground_tiles.png")
-const MINE_PROP_ATLAS := preload("res://assets/art/maps/mine/mine_props.png")
-const MINE_LAMP_GLOW := preload("res://assets/art/maps/mine/mine_lamp_glow.png")
-const WOOMA_TEMPLE_GROUND_ATLAS := preload("res://assets/art/maps/wooma_temple/wooma_temple_ground_tiles.png")
-const WOOMA_TEMPLE_PROP_ATLAS := preload("res://assets/art/maps/wooma_temple/wooma_temple_props.png")
-const WOOMA_TEMPLE_FIRE_GLOW := preload("res://assets/art/maps/wooma_temple/wooma_temple_fire_glow.png")
-const WOOMA_FOREST_GROUND_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_forest_ground_tiles.png")
-const WOOMA_FOREST_PROP_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_forest_props.png")
-const WOOMA_CAVE_GROUND_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_cave_ground_tiles.png")
-const WOOMA_CAVE_PROP_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_cave_props.png")
-const WOOMA_CAVE_GLOW := preload("res://assets/art/maps/wooma_region/wooma_cave_glow.png")
-const SNAKE_VALLEY_GROUND_ATLAS := preload("res://assets/art/maps/snake_valley/snake_valley_ground_tiles.png")
-const SNAKE_VALLEY_PROP_ATLAS := preload("res://assets/art/maps/snake_valley/snake_valley_props.png")
-const SNAKE_MINE_GROUND_ATLAS := preload("res://assets/art/maps/snake_valley/snake_mine_ground_tiles.png")
-const SNAKE_MINE_PROP_ATLAS := preload("res://assets/art/maps/snake_valley/snake_mine_props.png")
+# P1-004: texture atlases are now lazy-loaded.  Only the target map's
+# atlases are loaded when a map is built.  Old const names remain as
+# compat aliases that delegate to _region_atlas().
+const _REGION_ATLAS_PATHS := {
+	"bich_ground": "res://assets/art/maps/bich/bich_ground_tiles.png",
+	"gothic_bich_ground": "res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png",
+	"bich_prop": "res://assets/art/maps/bich/bich_props.png",
+	"orc_tomb_ground": "res://assets/art/maps/orc_tomb/orc_tomb_ground_tiles.png",
+	"orc_tomb_prop": "res://assets/art/maps/orc_tomb/orc_tomb_props.png",
+	"orc_tomb_fire_glow": "res://assets/art/maps/orc_tomb/orc_tomb_fire_glow.png",
+	"mine_ground": "res://assets/art/maps/mine/mine_ground_tiles.png",
+	"mine_prop": "res://assets/art/maps/mine/mine_props.png",
+	"mine_lamp_glow": "res://assets/art/maps/mine/mine_lamp_glow.png",
+	"wooma_temple_ground": "res://assets/art/maps/wooma_temple/wooma_temple_ground_tiles.png",
+	"wooma_temple_prop": "res://assets/art/maps/wooma_temple/wooma_temple_props.png",
+	"wooma_temple_fire_glow": "res://assets/art/maps/wooma_temple/wooma_temple_fire_glow.png",
+	"wooma_forest_ground": "res://assets/art/maps/wooma_region/wooma_forest_ground_tiles.png",
+	"wooma_forest_prop": "res://assets/art/maps/wooma_region/wooma_forest_props.png",
+	"wooma_cave_ground": "res://assets/art/maps/wooma_region/wooma_cave_ground_tiles.png",
+	"wooma_cave_prop": "res://assets/art/maps/wooma_region/wooma_cave_props.png",
+	"wooma_cave_glow": "res://assets/art/maps/wooma_region/wooma_cave_glow.png",
+	"snake_valley_ground": "res://assets/art/maps/snake_valley/snake_valley_ground_tiles.png",
+	"snake_valley_prop": "res://assets/art/maps/snake_valley/snake_valley_props.png",
+}
+
+var _atlas_cache: Dictionary = {}
+
+func _region_atlas(key: String) -> Resource:
+	if _atlas_cache.has(key):
+		return _atlas_cache[key]
+	var path: String = _REGION_ATLAS_PATHS.get(key, "")
+	if path.is_empty():
+		push_error("unknown region atlas key: %s" % key)
+		return null
+	var res: Resource = load(path)
+	_atlas_cache[key] = res
+	return res
+
+# Compat aliases
+func _bich_ground_atlas() -> Resource: return _region_atlas("bich_ground")
+func _bich_prop_atlas() -> Resource: return _region_atlas("bich_prop")
+func _orc_tomb_ground_atlas() -> Resource: return _region_atlas("orc_tomb_ground")
+func _mine_ground_atlas() -> Resource: return _region_atlas("mine_ground")
+# snake_mine kept as preload (single-use)
+# snake_mine_prop kept as preload (single-use)
 const SNAKE_MINE_GLOW := preload("res://assets/art/maps/snake_valley/snake_mine_glow.png")
 const BICH_TILE_SIZE := Vector2(64.0, 32.0)
 const BICH_PROP_SIZE := Vector2(96.0, 128.0)
@@ -230,48 +254,48 @@ func orc_tomb_light_count() -> int:
 
 
 func bich_ground_atlas_size() -> Vector2i:
-	return BICH_GROUND_ATLAS.get_size()
+	return _bich_ground_atlas().get_size()
 
 
 func bich_prop_atlas_size() -> Vector2i:
-	return BICH_PROP_ATLAS.get_size()
+	return _bich_prop_atlas().get_size()
 
 
 func orc_tomb_ground_atlas_size() -> Vector2i:
-	return ORC_TOMB_GROUND_ATLAS.get_size()
+	return _region_atlas("orc_tomb_ground").get_size()
 
 
 func orc_tomb_prop_atlas_size() -> Vector2i:
-	return ORC_TOMB_PROP_ATLAS.get_size()
+	return _region_atlas("orc_tomb_prop").get_size()
 
 
 func mine_ground_atlas_size() -> Vector2i:
-	return MINE_GROUND_ATLAS.get_size()
+	return _mine_ground_atlas().get_size()
 
 
 func mine_prop_atlas_size() -> Vector2i:
-	return MINE_PROP_ATLAS.get_size()
+	return _region_atlas("mine_prop").get_size()
 
 
 func wooma_temple_ground_atlas_size() -> Vector2i:
-	return WOOMA_TEMPLE_GROUND_ATLAS.get_size()
+	return _region_atlas("wooma_temple_ground").get_size()
 
 
 func wooma_temple_prop_atlas_size() -> Vector2i:
-	return WOOMA_TEMPLE_PROP_ATLAS.get_size()
+	return _region_atlas("wooma_temple_prop").get_size()
 
 
 func wooma_region_atlas_sizes() -> Dictionary:
 	return {
-		"forest_ground": WOOMA_FOREST_GROUND_ATLAS.get_size(), "forest_props": WOOMA_FOREST_PROP_ATLAS.get_size(),
-		"cave_ground": WOOMA_CAVE_GROUND_ATLAS.get_size(), "cave_props": WOOMA_CAVE_PROP_ATLAS.get_size(),
+		"forest_ground": _region_atlas("wooma_forest_ground").get_size(), "forest_props": _region_atlas("wooma_forest_prop").get_size(),
+		"cave_ground": _region_atlas("wooma_cave_ground").get_size(), "cave_props": _region_atlas("wooma_cave_prop").get_size(),
 	}
 
 
 func snake_valley_atlas_sizes() -> Dictionary:
 	return {
-		"valley_ground": SNAKE_VALLEY_GROUND_ATLAS.get_size(), "valley_props": SNAKE_VALLEY_PROP_ATLAS.get_size(),
-		"mine_ground": SNAKE_MINE_GROUND_ATLAS.get_size(), "mine_props": SNAKE_MINE_PROP_ATLAS.get_size(),
+		"valley_ground": _region_atlas("snake_valley_ground").get_size(), "valley_props": _region_atlas("snake_valley_prop").get_size(),
+		"mine_ground": _region_atlas("snake_valley_ground").get_size(), "mine_props": _region_atlas("snake_valley_prop").get_size(),
 	}
 
 
@@ -443,27 +467,27 @@ func _draw_bich_ground() -> void:
 				tile_index = bich_tile_index_for_world(center)
 				_ground_tile_cache[cache_key] = tile_index
 			var source := Rect2(Vector2(tile_index * 64, 0), BICH_TILE_SIZE)
-			draw_texture_rect_region(BICH_GROUND_ATLAS, Rect2(center - BICH_TILE_SIZE * 0.5, BICH_TILE_SIZE), source)
+			draw_texture_rect_region(_bich_ground_atlas(), Rect2(center - BICH_TILE_SIZE * 0.5, BICH_TILE_SIZE), source)
 
 
 func _draw_orc_tomb_ground() -> void:
 	var theme_tint: Color = _active_theme().get("tint", Color.WHITE)
-	var ground_texture: Texture2D = ORC_TOMB_GROUND_ATLAS
+	var ground_texture: Texture2D = _region_atlas("orc_tomb_ground")
 	var override_path := str(environment_profile().get("ground_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
 		ground_texture = load(override_path) as Texture2D
 	elif uses_mine_art():
-		ground_texture = MINE_GROUND_ATLAS
+		ground_texture = _mine_ground_atlas()
 	elif uses_wooma_temple_art():
-		ground_texture = WOOMA_TEMPLE_GROUND_ATLAS
+		ground_texture = _region_atlas("wooma_temple_ground")
 	elif uses_wooma_forest_art():
-		ground_texture = WOOMA_FOREST_GROUND_ATLAS
+		ground_texture = _region_atlas("wooma_forest_ground")
 	elif uses_wooma_cave_art():
-		ground_texture = WOOMA_CAVE_GROUND_ATLAS
+		ground_texture = _region_atlas("wooma_cave_ground")
 	elif uses_snake_valley_art():
-		ground_texture = SNAKE_VALLEY_GROUND_ATLAS
+		ground_texture = _region_atlas("snake_valley_ground")
 	elif uses_snake_mine_art():
-		ground_texture = SNAKE_MINE_GROUND_ATLAS
+		ground_texture = _region_atlas("snake_valley_ground")
 	var profile := environment_profile()
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	var full_size := str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size"
@@ -905,7 +929,7 @@ func _add_prop(
 	prop: Dictionary = {}
 ) -> void:
 	var sprite := Sprite2D.new()
-	sprite.texture = BICH_PROP_ATLAS
+	sprite.texture = _bich_prop_atlas()
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2(kind * 96, 0), BICH_PROP_SIZE)
 	sprite.centered = false
@@ -918,22 +942,22 @@ func _add_tomb_prop(
 	_canopy: bool,
 	prop: Dictionary = {}
 ) -> void:
-	var prop_texture: Texture2D = ORC_TOMB_PROP_ATLAS
+	var prop_texture: Texture2D = _region_atlas("orc_tomb_prop")
 	var override_path := str(environment_profile().get("prop_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
 		prop_texture = load(override_path) as Texture2D
 	elif uses_mine_art():
-		prop_texture = MINE_PROP_ATLAS
+		prop_texture = _region_atlas("mine_prop")
 	elif uses_wooma_temple_art():
-		prop_texture = WOOMA_TEMPLE_PROP_ATLAS
+		prop_texture = _region_atlas("wooma_temple_prop")
 	elif uses_wooma_forest_art():
-		prop_texture = WOOMA_FOREST_PROP_ATLAS
+		prop_texture = _region_atlas("wooma_forest_prop")
 	elif uses_wooma_cave_art():
-		prop_texture = WOOMA_CAVE_PROP_ATLAS
+		prop_texture = _region_atlas("wooma_cave_prop")
 	elif uses_snake_valley_art():
-		prop_texture = SNAKE_VALLEY_PROP_ATLAS
+		prop_texture = _region_atlas("snake_valley_prop")
 	elif uses_snake_mine_art():
-		prop_texture = SNAKE_MINE_PROP_ATLAS
+		prop_texture = _region_atlas("snake_valley_prop")
 	var sprite := Sprite2D.new()
 	sprite.texture = prop_texture
 	sprite.region_enabled = true
@@ -985,16 +1009,16 @@ func _add_legacy_profile_prop_sprite(
 
 
 func _add_tomb_light(position: Vector2) -> void:
-	var light_texture: Texture2D = ORC_TOMB_FIRE_GLOW
+	var light_texture: Texture2D = _region_atlas("orc_tomb_fire_glow")
 	var override_path := str(environment_profile().get("light_texture_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
 		light_texture = load(override_path) as Texture2D
 	elif uses_mine_art():
-		light_texture = MINE_LAMP_GLOW
+		light_texture = _region_atlas("mine_lamp_glow")
 	elif uses_wooma_temple_art():
-		light_texture = WOOMA_TEMPLE_FIRE_GLOW
+		light_texture = _region_atlas("wooma_temple_fire_glow")
 	elif uses_wooma_cave_art():
-		light_texture = WOOMA_CAVE_GLOW
+		light_texture = _region_atlas("wooma_cave_glow")
 	elif uses_snake_mine_art():
 		light_texture = SNAKE_MINE_GLOW
 	var glow := Sprite2D.new()
@@ -1122,7 +1146,7 @@ func _build_full_ground(profile: Dictionary) -> void:
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	if source_size == Vector2i.ZERO:
 		return
-	var atlas: Texture2D = GOTHIC_BICH_GROUND_ATLAS if uses_bich_art() else ORC_TOMB_GROUND_ATLAS
+	var atlas: Texture2D = _region_atlas("gothic_bich_ground") if uses_bich_art() else _region_atlas("orc_tomb_ground")
 	var override_path := str(profile.get("ground_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
 		atlas = load(override_path) as Texture2D
