@@ -4,13 +4,19 @@
     HC-P1-014: binds exported builds to source revision.
 #>
 param(
-    [switch]$AllowDirty
+    [switch]$AllowDirty,
+    [string]$StageRoot,
+    [switch]$SkipDirtyCheck
 )
 
 $ErrorActionPreference = "Stop"
-$ROOT = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ROOT = Split-Path -Parent $ROOT
-Push-Location $ROOT
+if ($StageRoot) {
+    $ROOT = $StageRoot
+} else {
+    $ROOT = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $ROOT = Split-Path -Parent $ROOT
+}
+Push-Location $ROOT -ErrorAction Stop
 
 $head = (git rev-parse HEAD).Trim()
 $branch = (git rev-parse --abbrev-ref HEAD).Trim()
@@ -21,7 +27,7 @@ try {
     $dirty = $true 
 }
 
-if ($dirty -and -not $AllowDirty) {
+if ($dirty -and -not $AllowDirty -and -not $SkipDirtyCheck) {
     Write-Error "Working tree is dirty. Use -AllowDirty for dev builds."
     Pop-Location; exit 1
 }

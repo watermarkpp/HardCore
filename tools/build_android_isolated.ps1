@@ -127,6 +127,13 @@ try {
         $env:ANDROID_SDK_ROOT = Join-Path $AndroidRoot "sdk"
 
         & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
+
+        # P1-014: generate build_info.json before Godot import so it is included in the APK
+        $BuildInfoScript = Join-Path $StageProjectPath "tools/generate_build_info.ps1"
+        if (Test-Path -LiteralPath $BuildInfoScript) {
+            & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -SkipDirtyCheck
+            Write-Output "build_info.json generated in staged project"
+        }
         if ($LASTEXITCODE -ne 0) {
             throw "Godot isolated import failed. Log: $ImportLog"
         }
