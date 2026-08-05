@@ -1,6 +1,9 @@
 extends Node
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const CasterSkillSkyStrikeVisualEffect := preload(
+	"res://scripts/caster_skill_sky_strike_visual_effect.gd"
+)
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 const CombatUnitLegacyAdapter := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
@@ -92,10 +95,10 @@ func _ready() -> void:
 	assert(lightning_nodes.size() == 1)
 	var strike := lightning_nodes[0] as CasterSkillVisualEffect
 	add_child(strike)
-	var strike_position := strike.global_position
+	
 	target.global_position += Vector2(160, 0)
 	strike._process(0.01)
-	assert(strike.global_position == strike_position)
+	assert(is_equal_approx(strike.global_position.x, target.global_position.x) and is_equal_approx(strike.global_position.y, target.global_position.y))
 	strike.free()
 
 	var temptation := CasterSkillRuntime.resolve("wizard.temptation_light", _context())
@@ -135,6 +138,51 @@ func _ready() -> void:
 	assert(trail._hellfire_step_seconds == 0.05)
 	assert(is_equal_approx(trail._hellfire_step_distance, (500.0 / 0.9) * 0.05))
 	trail.free()
+
+	var hell_lightning := CasterSkillRuntime.resolve("wizard.hell_lightning", _context())
+	var hell_lightning_nodes := CasterSkillRuntime.create_cast_nodes(
+		hell_lightning, owner.global_position, target.global_position,
+		Vector2.RIGHT, Color.WHITE, target, owner
+	)
+	assert(hell_lightning_nodes.size() == 1)
+	var hell_lightning_visual := hell_lightning_nodes[0]
+	assert(hell_lightning_visual is CasterSkillVisualEffect)
+	assert(not hell_lightning_visual is CasterSkillSkyStrikeVisualEffect)
+	add_child(hell_lightning_visual)
+	var profile_animation: Dictionary = (
+		CasterSkillVisualRegistry.visual_profile("wizard.hell_lightning").get(
+			"animation", {}
+		)
+	)
+	assert(profile_animation is Dictionary)
+	assert(str(profile_animation.get("scale_mode", "")) != "fixed_source")
+	var sprite := (hell_lightning_visual._sprites[0] as CasterSkillAnimationPlayer)
+	assert(sprite != null)
+	assert(sprite.scale != Vector2.ZERO)
+	var inflated_plan := hell_lightning.duplicate(true)
+	inflated_plan["geometry_screen_points_px"] = [
+		Vector2.ZERO,
+		Vector2(400.0, 640.0),
+		Vector2(320.0, 160.0),
+	]
+	inflated_plan["geometry_screen_offsets_px"] = [
+		Vector2.ZERO,
+		Vector2(400.0, 640.0),
+		Vector2(320.0, 160.0),
+	]
+	var inflated_nodes := CasterSkillRuntime.create_cast_nodes(
+		inflated_plan, owner.global_position, target.global_position,
+		Vector2.RIGHT, Color.WHITE, target, owner
+	)
+	assert(inflated_nodes.size() == 1)
+	add_child(inflated_nodes[0] as Node2D)
+	var inflated_sprite := (
+		inflated_nodes[0]
+	)._sprites[0] as CasterSkillAnimationPlayer
+	assert(inflated_sprite != null)
+	assert(inflated_sprite.scale != Vector2.ZERO)
+	(inflated_nodes[0] as Node2D).free()
+	hell_lightning_visual.free()
 
 	var fire_wall := CasterSkillRuntime.resolve("wizard.fire_wall", _context())
 	var fire_cells := CasterSkillRuntime.create_ground_effects(
@@ -189,3 +237,4 @@ func _ready() -> void:
 		+ "formal five-tile hellfire, primary fire wall and two-phase teleport"
 	)
 	get_tree().quit(0)
+
