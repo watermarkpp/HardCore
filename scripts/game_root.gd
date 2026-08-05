@@ -1004,11 +1004,18 @@ func _bich_home_screen_position_px() -> Vector2:
 	var editor_home := MapEditorRuntimeBridgeScript.home_screen_position_px()
 	if editor_home != Vector2.ZERO:
 		return editor_home
-	var content := RegionContent.get_map_content(4)
-	var runtime_home: Variant = content.get("runtime_home_position")
+	var profile: Dictionary = EnvironmentCatalog.get_map_profile(4)
+	var runtime_home: Variant = profile.get("runtime_home_position")
 	if runtime_home is Vector2:
 		return runtime_home as Vector2
-	push_error("home position unavailable: no editor home and no runtime_home_position in map 4 content — cannot spawn player")
+	# Last resort: compute from service_home_coordinate using the map's actual
+	# source_size from the environment profile instead of a hardcoded 700×700.
+	var home_coord: Variant = profile.get("service_home_coordinate")
+	if home_coord is Vector2i:
+		var source_size: Variant = profile.get("source_size", null)
+		if source_size is Vector2i:
+			return MapCoordinateMapperScript.source_to_world(Vector2(home_coord), source_size as Vector2i)
+	push_error("no home position available from editor, catalog, or map profile for map 4")
 	return Vector2.ZERO
 
 
