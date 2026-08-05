@@ -1,11 +1,6 @@
 extends Node
 
 const Loader := preload("res://scripts/skills/skill_data_loader.gd")
-
-# Tolerance for pixel-level forward endpoint comparisons after anchor rebase.
-# Sequence-visible bounds are discrete per-frame; sub-pixel differences of up
-# to 1.0 px are expected and do not indicate a visual regression.
-const LASER_FORWARD_ENDPOINT_TOLERANCE_PX := 1.0
 const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
 const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
 const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
@@ -130,12 +125,12 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 				1.0
 			)
 			var expected_step: Vector2 = (test_case.expected_step as Vector2).normalized()
-			assert((strip.direction_ground_gu as Vector2).absf(
+			assert((strip.direction_ground_gu as Vector2).is_equal_approx(
 				expected_step
 			))
 			var endpoint: Vector2 = strip.centerline_points_ground_gu.back()
 			assert(endpoint.is_equal_approx(expected_step * length_tiles))
-			assert(absf(
+			assert(is_equal_approx(
 				endpoint.length(),
 				length_tiles
 			), "GU line length changed with direction: %s" % test_case)
@@ -157,7 +152,7 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 			return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 	)
 	assert(world_points.size() == 5)
-	assert(world_points.back().absf(
+	assert(world_points.back().is_equal_approx(
 		DirectionSpace.ground_delta_gu_to_screen_delta_px(
 			Vector2(1.0, 0.5).normalized() * 5.0
 		)
@@ -179,7 +174,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 				1.0
 			)
 			var endpoint_tile: Vector2 = strip.centerline_points_ground_gu.back()
-			assert(absf(
+			assert(is_equal_approx(
 				endpoint_tile.length(),
 				float(skill_case.length_tiles)
 			))
@@ -204,9 +199,6 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			plan["geometry_origin_screen_px"] = Vector2.ZERO
 			plan["geometry_grid_cells"] = []
 			plan["geometry_screen_points_px"] = world_points
-			plan["skill_footprint_snapshot"] = (
-				strip.get("skill_footprint_snapshot", {}).duplicate(true)
-			)
 			var effect := CasterSkillRuntime.create_visual(
 				plan,
 				Vector2.ZERO,
@@ -228,28 +220,16 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 					var fixed_longitudinal := sprite.transform.basis_xform(
 						sprite._source_axis_local
 					)
-					var forward_extent := sprite.fitted_visual_forward_extent(endpoint_world)
-					if not is_equal_approx(forward_extent, endpoint_world.length()):
-						print(
-							"LASER_FORWARD_MISMATCH sample=%d direction=%s desired=%0.4f endpoint=%0.4f axis=%s fit_axis=%s" % [
-								sample_index,
-								str(1, 0, 0),
-								forward_extent -
-								endpoint_world.length(),
-								sprite._source_axis_local,
-								sprite._fit_axis_world
-							]
-						)
-					assert(absf(
-						forward_extent -
-endpoint_world.length()) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX
+					assert(is_equal_approx(
+						sprite.fitted_visual_forward_extent(endpoint_world),
+						endpoint_world.length()
 					))
 					for frame_index: int in range(sprite.frame_count()):
 						assert(sprite.set_manual_frame(frame_index))
 						assert(sprite.transform.basis_xform(
 							sprite._source_axis_local
 						).is_equal_approx(fixed_longitudinal))
-						assert(absf(
+						assert(is_equal_approx(
 							sprite.current_frame_visible_cross_extent(endpoint_world),
 							effect._desired_sprite_cross_axis_extent_px
 						))
@@ -377,44 +357,44 @@ func _assert_effect_axis_fitted(
 	expected_axis_extent: float,
 	expected_cross_axis_extent := 0.0
 ) -> void:
-	assert(absf(
+	assert(is_equal_approx(
 		effect._desired_sprite_axis_extent_px,
 		expected_axis_extent
 	))
 	assert(effect._visual_axis_screen_px.is_equal_approx(axis_world.normalized()))
 	if expected_cross_axis_extent > 0.0:
-		assert(absf(
+		assert(is_equal_approx(
 			effect._desired_sprite_cross_axis_extent_px,
 			expected_cross_axis_extent
 		))
 	assert(not effect._sprites.is_empty())
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
-		assert(absf(
+		assert(is_equal_approx(
 			sprite.fitted_visual_forward_extent(axis_world),
 			expected_axis_extent
 		))
 		if expected_cross_axis_extent > 0.0:
-			assert(absf(
+			assert(is_equal_approx(
 				sprite.current_frame_visible_cross_extent(axis_world),
 				expected_cross_axis_extent
 			))
 
 
 func _verify_release_relative_movement_locks() -> void:
-	assert(absf(
+	assert(is_equal_approx(
 		CasterSkillVisualRegistry.primary_action_completion_seconds(
 			"wizard.hellfire"
 		),
 		0.85
 	))
-	assert(absf(
+	assert(is_equal_approx(
 		CasterSkillVisualRegistry.primary_action_completion_seconds(
 			"wizard.hell_lightning"
 		),
 		0.65
 	))
-	assert(absf(
+	assert(is_equal_approx(
 		CasterSkillVisualRegistry.primary_action_completion_seconds(
 			"wizard.laser"
 		),
