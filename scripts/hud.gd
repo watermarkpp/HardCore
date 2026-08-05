@@ -157,7 +157,7 @@ func _build_approved_hud() -> void:
 	_build_right_utility_stack(root)
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
-	_build_modal_panels(root)
+	# P1-C: panels are now lazy-loaded on first open
 	TouchScrollSupportScript.attach_tree(root)
 	_build_loading_transition()
 
@@ -696,13 +696,28 @@ func _on_skill_input_cancelled(
 	)
 
 
-func _build_modal_panels(root: Control) -> void:
+# P1-C: Lazy-loaded modal panels. Each _ensure_*_panel() creates the
+# panel on first access so HUD startup time and memory peak are reduced.
+
+func _ensure_inventory_panel() -> void:
+	if is_instance_valid(inventory_panel):
+		return
 	inventory_panel = InventoryPanel.new()
 	inventory_panel.hide()
-	root.add_child(inventory_panel)
+	add_child(inventory_panel)
+
+
+func _ensure_shop_panel() -> void:
+	if is_instance_valid(shop_panel):
+		return
 	shop_panel = ShopPanel.new()
 	shop_panel.hide()
-	root.add_child(shop_panel)
+	add_child(shop_panel)
+
+
+func _ensure_skill_panel() -> void:
+	if is_instance_valid(skill_panel):
+		return
 	skill_panel = SkillPanel.new()
 	skill_panel.hide()
 	skill_panel.quick_slot_assignment_requested.connect(
@@ -711,13 +726,28 @@ func _build_modal_panels(root: Control) -> void:
 	skill_panel.skill_button_assignment_requested.connect(
 		func(request: Dictionary) -> void: skill_button_assignment_requested.emit(request)
 	)
-	root.add_child(skill_panel)
+	add_child(skill_panel)
+
+
+func _ensure_quest_panel() -> void:
+	if is_instance_valid(quest_panel):
+		return
 	quest_panel = QuestPanel.new()
 	quest_panel.hide()
-	root.add_child(quest_panel)
+	add_child(quest_panel)
+
+
+func _ensure_profession_panel() -> void:
+	if is_instance_valid(profession_panel):
+		return
 	profession_panel = ProfessionPanel.new()
 	profession_panel.hide()
-	root.add_child(profession_panel)
+	add_child(profession_panel)
+
+
+func _ensure_map_panel() -> void:
+	if is_instance_valid(map_panel):
+		return
 	map_panel = MapPanel.new()
 	map_panel.hide()
 	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
@@ -725,16 +755,26 @@ func _build_modal_panels(root: Control) -> void:
 	map_panel.teleport_availability_requested.connect(
 		func(map_ids: Array) -> void: map_teleport_availability_requested.emit(map_ids)
 	)
-	root.add_child(map_panel)
+	add_child(map_panel)
+
+
+func _ensure_warehouse_panel() -> void:
+	if is_instance_valid(warehouse_panel):
+		return
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
-	root.add_child(warehouse_panel)
+	add_child(warehouse_panel)
+
+
+func _ensure_death_revival_panel() -> void:
+	if is_instance_valid(death_revival_panel):
+		return
 	death_revival_panel = DeathRevivalPanelScript.new()
 	death_revival_panel.hide()
 	death_revival_panel.revival_requested.connect(
 		func(request: Dictionary) -> void: revival_requested.emit(request)
 	)
-	root.add_child(death_revival_panel)
+	add_child(death_revival_panel)
 
 
 func _chassis_source_to_local(source_point: Vector2) -> Vector2:
@@ -854,6 +894,7 @@ func _request_system_menu() -> void:
 
 
 func _toggle_skill_book() -> void:
+	_ensure_skill_panel()
 	if skill_panel.visible:
 		skill_panel.hide()
 	else:
@@ -983,6 +1024,7 @@ func _on_special_action_button() -> void:
 
 
 func _toggle_inventory() -> void:
+	_ensure_inventory_panel()
 	if inventory_panel.visible:
 		inventory_panel.hide()
 	else:
@@ -992,6 +1034,7 @@ func _toggle_inventory() -> void:
 
 
 func _toggle_profession() -> void:
+	_ensure_profession_panel()
 	if profession_panel.visible:
 		profession_panel.hide()
 	else:
@@ -1001,6 +1044,7 @@ func _toggle_profession() -> void:
 
 
 func _toggle_map_panel() -> void:
+	_ensure_map_panel()
 	if map_panel.visible:
 		map_panel.hide()
 	else:
@@ -1043,27 +1087,32 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 
 
 func show_death_screen(context := {}) -> void:
+	_ensure_death_revival_panel()
 	_close_modal_panels()
 	if death_revival_panel != null:
 		death_revival_panel.open_death_screen(context)
 
 
 func set_revival_options(options: Array) -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.set_revival_options(options)
 
 
 func update_revival_option(option_slot: String, state: Dictionary) -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.update_revival_option(option_slot, state)
 
 
 func apply_revival_result(result: Dictionary) -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.apply_revival_result(result)
 
 
 func close_death_screen() -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.close_death_screen()
 
