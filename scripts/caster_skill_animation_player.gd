@@ -47,7 +47,8 @@ func configure(
 	desired_footprint := Vector2.ZERO,
 	desired_axis_extent := 0.0,
 	fit_axis_world := Vector2.ZERO,
-	desired_cross_axis_extent := 0.0
+	desired_cross_axis_extent := 0.0,
+	presentation_overrides: Dictionary = {}
 ) -> bool:
 	skill_id = ProfessionRules.skill_id(source_skill_id)
 	phase_id = requested_phase_id
@@ -100,7 +101,7 @@ func configure(
 			)
 		)
 	)
-	_anchor_policy = str(render.get("anchor_policy", "top_left_from_world_anchor"))
+	_anchor_policy = str(presentation_overrides.get("anchor_policy", str(render.get("anchor_policy", "top_left_from_world_anchor"))))
 	_sequence_bounds = _visual_bounds_for_frames(_frames, _anchor_policy)
 	# Compute source axis before anchor rebase so the new policy can use it.
 	_source_axis_local = Vector2.UP.rotated(
@@ -252,6 +253,20 @@ func animation_duration() -> float:
 
 func frame_count() -> int:
 	return _frames.size()
+
+
+func visual_fit_diagnostics() -> Dictionary:
+	return {
+		"anchor_policy": _anchor_policy,
+		"sequence_index": direction_index,
+		"sequence_bounds": _sequence_bounds,
+		"sequence_anchor_rebase": _sequence_anchor_rebase,
+		"source_axis_local": _source_axis_local,
+		"source_cross_axis_local": _source_cross_axis_local,
+		"longitudinal_scale": _longitudinal_scale,
+		"fitted_forward_extent_px": fitted_visual_forward_extent(_source_axis_local),
+		"fitted_cross_extent_px": fitted_visual_cross_extent(_source_axis_local),
+	}
 
 
 func visual_bounds_center() -> Vector2:
