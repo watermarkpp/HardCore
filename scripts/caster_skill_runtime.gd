@@ -199,6 +199,10 @@ static func create_visual(
 		plan,
 		position
 	)
+	# Inject the presentation profile so SkyStrike/Beam can consume
+	# anchor.type, animation.scale_mode, geometry_binding etc.
+	if not visual_profile.is_empty():
+		visual_geometry_context["visual_profile"] = visual_profile.duplicate(true)
 	var visual_radius_px := maxf(0.0, float(plan.get("visual_radius_px", 0.0)))
 	if role == CasterSkillVisualRegistry.ROLE_LINE_EFFECT:
 		var geometry_offsets: Array = visual_geometry_context.get(
