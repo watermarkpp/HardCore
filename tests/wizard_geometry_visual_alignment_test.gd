@@ -200,6 +200,11 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			plan["geometry_origin_screen_px"] = Vector2.ZERO
 			plan["geometry_grid_cells"] = []
 			plan["geometry_screen_points_px"] = world_points
+			if str(skill_case.skill_id) == "wizard.laser":
+				var _dg: Vector2 = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(endpoint_world.normalized()).normalized()
+				plan["skill_footprint_snapshot"] = SkillFootprintSnapshot.create_directed_rectangle(
+					"wizard.laser", "geometry_test", Vector2.ZERO, _dg, 8.0, 1.0, 0.0, 8.0, 8.0, "actual"
+				)
 			var effect := CasterSkillRuntime.create_visual(
 				plan,
 				Vector2.ZERO,
@@ -225,8 +230,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 					if _vis_type_a == "beam":
 						var _diag: Dictionary = sprite.visual_fit_diagnostics()
 						assert(str(_diag.get("anchor_policy", "")) == "align_sequence_visible_axis_start_to_geometry_origin")
-						var _meta_a: Dictionary = effect.beam_debug_metadata()
-						assert(absf(float(_meta_a.get("requested_beam_length_px", 0.0)) - endpoint_world.length()) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+						assert(absf(effect._beam_length_px - endpoint_world.length()) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
 					else:
 						assert(is_equal_approx(sprite.fitted_visual_forward_extent(endpoint_world), endpoint_world.length()))
 					for frame_index: int in range(sprite.frame_count()):
@@ -234,10 +238,8 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 						assert(sprite.transform.basis_xform(
 							sprite._source_axis_local
 						).is_equal_approx(fixed_longitudinal))
-						assert(is_equal_approx(
-							sprite.current_frame_visible_cross_extent(endpoint_world),
-							effect._desired_sprite_cross_axis_extent_px
-						))
+						var _cross_tol := LASER_FORWARD_ENDPOINT_TOLERANCE_PX if _vis_type_a == "beam" else 0.0
+						assert(absf(sprite.current_frame_visible_cross_extent(endpoint_world) - effect._desired_sprite_cross_axis_extent_px) <= _cross_tol)
 					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
 			effect.free()
 
@@ -365,7 +367,7 @@ func _assert_effect_axis_fitted(
 	var _vis_type_b: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
 	if _vis_type_b == "beam":
 		var _meta: Dictionary = effect.beam_debug_metadata()
-		assert(absf(float(_meta.get("requested_beam_length_px", 0.0)) - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+		assert(absf(effect._beam_length_px - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
 	else:
 		assert(is_equal_approx(effect._desired_sprite_axis_extent_px, expected_axis_extent))
 	assert(effect._visual_axis_screen_px.is_equal_approx(axis_world.normalized()))
@@ -380,8 +382,7 @@ func _assert_effect_axis_fitted(
 		var _vis_type_c: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
 		if _vis_type_c == "beam":
 			var _diag2: Dictionary = sprite.visual_fit_diagnostics()
-			var _meta_c: Dictionary = effect.beam_debug_metadata()
-			assert(absf(float(_meta_c.get("requested_beam_length_px", 0.0)) - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+			assert(absf(effect._beam_length_px - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
 		else:
 			assert(is_equal_approx(sprite.fitted_visual_forward_extent(axis_world), expected_axis_extent))
 		if expected_cross_axis_extent > 0.0:

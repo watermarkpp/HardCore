@@ -58,17 +58,18 @@ func setup(
 
 func _ready() -> void:
     super._ready()
-    _beam_debug_metadata = {
-        "visual_type": "beam",
-        "scale_policy": "axis_scaled",
-        "anchor_policy": "caster_forward",
-        "geometry_driven_scale": true,
-        "lifecycle_mode": _lifecycle_mode,
-        "width_scale": _width_scale,
-        "length_source": _geometry_binding_length_source,
-        "direction_source": _geometry_binding_direction_source,
-        "width_source": _geometry_binding_width_source,
-    }
+    # Merge lifecycle metadata instead of overwriting -- setup() may have
+    # already written snapshot-driven diagnostics (requested_beam_length_px,
+    # beam_length_source) that must be preserved for contract verification.
+    _beam_debug_metadata["visual_type"] = "beam"
+    _beam_debug_metadata["scale_policy"] = "axis_scaled"
+    _beam_debug_metadata["anchor_policy"] = "caster_forward"
+    _beam_debug_metadata["geometry_driven_scale"] = true
+    _beam_debug_metadata["lifecycle_mode"] = _lifecycle_mode
+    _beam_debug_metadata["width_scale"] = _width_scale
+    _beam_debug_metadata["length_source"] = _geometry_binding_length_source
+    _beam_debug_metadata["direction_source"] = _geometry_binding_direction_source
+    _beam_debug_metadata["width_source"] = _geometry_binding_width_source
     _apply_single_active_policy()
     _refresh_beam_debug_state()
 
