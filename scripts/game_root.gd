@@ -36,6 +36,9 @@ const SkillFootprintDiagnosticLogScript := preload(
 	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
 )
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
+const FireWallFieldControllerScript := preload(
+	"res://scripts/fire_wall_field_controller.gd"
+)
 const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_geometry.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
@@ -88,6 +91,9 @@ const CONTINUOUS_WIZARD_LINE_SKILLS := [
 	"wizard.hellfire",
 	"wizard.laser",
 ]
+const CONTINUOUS_AIM_LINE_CONTRACT_ID_LEGACY := (
+	"skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+)
 const GROUND_EXACT_SKILL_IDS := {
 	"wizard.repulsion_ring": true,
 	"wizard.exploding_flame": true,
@@ -213,12 +219,17 @@ func _ready() -> void:
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	add_child(hud)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
-	player.resources_changed.connect(hud.update_resources)
+	player.resources_changed.connect(
+		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:
+			_sync_player_runtime_snapshot_to_hud()
+	)
+	# 主动同步首次运行时快照到 HUD，确保资源正确后再加载地图。
+	# 120/120、40/40 仅作为未绑定前的占位值。
+	_sync_player_runtime_snapshot_to_hud()
 	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
 	travel_to_service_home(false, true)
 	_record_player_world_location()
 	_on_player_stats_changed(player.current_hp, player.max_hp)
-	hud.update_warrior_states(player.warrior_state_snapshot())
 	_build_system_menu()
 
 
@@ -4323,6 +4334,19 @@ func _record_skill_footprint_release_diagnostic(
 		"actual_visual_core_width_px": float(
 			snapshot.get("cross_screen_extent_px", 0.0)
 		),
+		"declared_effect_length_gu": float(
+			snapshot.get(
+				"declared_effect_length_gu",
+				snapshot.get("effect_length_gu", 0.0)
+			)
+		),
+		"resolved_effect_length_gu": float(
+			snapshot.get(
+				"resolved_effect_length_gu",
+				snapshot.get("effect_length_gu", 0.0)
+			)
+		),
+		"projection_policy": str(snapshot.get("laser_projection_policy", "")),
 		"expected_projected_polygon_px": projected_polygon_px,
 		"actual_visual_core_polygon_px": projected_polygon_px,
 		"maximum_corner_error_px": 0.0,
@@ -4453,6 +4477,15 @@ func _canonical_effective_spell_geometry_cells(
 	)
 
 
+func _is_supported_continuous_line_contract(
+	contract_id: String
+) -> bool:
+	return contract_id in [
+		CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID,
+		CONTINUOUS_AIM_LINE_CONTRACT_ID_LEGACY
+	]
+
+
 func _canonical_continuous_line_strip_ground_gu(
 	stable_skill_id: String,
 	effect: Dictionary,
@@ -4462,8 +4495,9 @@ func _canonical_continuous_line_strip_ground_gu(
 ) -> Dictionary:
 	if (
 		stable_skill_id not in CONTINUOUS_WIZARD_LINE_SKILLS
-		or str(effect.get("line_geometry_contract", ""))
-		!= CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
+		or not _is_supported_continuous_line_contract(
+			str(effect.get("line_geometry_contract", ""))
+		)
 	):
 		return {}
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
@@ -4482,6 +4516,16 @@ func _canonical_continuous_line_strip_ground_gu(
 			direction_screen_px
 		).normalized()
 	)
+	var resolved_effect_length_gu := effect_length_gu
+	if stable_skill_id == "wizard.laser" and bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
+		resolved_effect_length_gu = CasterSpellGeometryScript.resolve_laser_effect_length_gu(
+			direction_ground_gu,
+			effect_length_gu
+		)
+	var final_effect_length_gu := resolved_effect_length_gu
+	var laser_projection_policy := ""
+	if stable_skill_id == "wizard.laser":
+		laser_projection_policy = "screen_length_limit_diagonal_reference_v1"
 	var resolved_release_id := str(release_id)
 	if resolved_release_id.is_empty():
 		resolved_release_id = _next_skill_footprint_release_id(stable_skill_id)
@@ -4489,27 +4533,48 @@ func _canonical_continuous_line_strip_ground_gu(
 		origin_ground_gu,
 		origin_ground_gu + direction_ground_gu,
 		direction_screen_px,
-		effect_length_gu,
+		resolved_effect_length_gu,
 		effect_width_gu,
 		stable_skill_id,
-		resolved_release_id
+		resolved_release_id,
+		effect_length_gu,
+		resolved_effect_length_gu,
+		laser_projection_policy
 	)
 	if bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
 		var unblocked_length_gu := _canonical_continuous_line_unblocked_length_gu(
 			strip_ground_gu
 		)
-		if unblocked_length_gu < effect_length_gu:
+		if unblocked_length_gu < resolved_effect_length_gu:
+			final_effect_length_gu = unblocked_length_gu
 			strip_ground_gu = CasterSpellGeometryScript.continuous_line_strip_ground_gu(
 				origin_ground_gu,
 				origin_ground_gu + direction_ground_gu,
 				direction_screen_px,
-				unblocked_length_gu,
+				final_effect_length_gu,
 				effect_width_gu,
 				stable_skill_id,
-				resolved_release_id
+				resolved_release_id,
+				effect_length_gu,
+				final_effect_length_gu,
+				laser_projection_policy
 			)
 			strip_ground_gu["terrain_truncated"] = true
-			strip_ground_gu["source_effect_length_gu"] = effect_length_gu
+			strip_ground_gu["source_effect_length_gu"] = resolved_effect_length_gu
+	if stable_skill_id == "wizard.laser":
+		strip_ground_gu["declared_effect_length_gu"] = effect_length_gu
+		strip_ground_gu["resolved_effect_length_gu"] = final_effect_length_gu
+		strip_ground_gu["laser_projection_policy"] = laser_projection_policy
+		var line_snapshot: Variant = strip_ground_gu.get(
+			"skill_footprint_snapshot", {}
+		)
+		if line_snapshot is Dictionary:
+			var snap := (line_snapshot as Dictionary).duplicate(true)
+			snap["declared_effect_length_gu"] = effect_length_gu
+			snap["resolved_effect_length_gu"] = final_effect_length_gu
+			snap["laser_projection_policy"] = laser_projection_policy
+			snap.make_read_only()
+			strip_ground_gu["skill_footprint_snapshot"] = snap
 	strip_ground_gu["integration_contract_id"] = (
 		"gameplay.wizard.continuous_line.damage_visual_terrain_shared.v1"
 	)
@@ -4597,7 +4662,10 @@ func _canonical_spell_geometry_targets(
 	if (
 		stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
 		and str(continuous_line_strip_ground_gu.get("contract_id", ""))
-		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
+		in [
+			CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID,
+			CONTINUOUS_AIM_LINE_CONTRACT_ID_LEGACY
+		]
 	):
 		var origin_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
 			"origin_ground_gu", Vector2.ZERO
@@ -4748,6 +4816,46 @@ func _spawn_canonical_ground_field(
 				coverage_cells.append(raw_cell)
 	if positions.is_empty():
 		positions.append(fallback_position)
+
+	if stable_skill_id == FIRE_WALL_SKILL_ID:
+		var target_filters: Array[Callable] = []
+		for index: int in range(positions.size()):
+			var target_filter := Callable()
+			if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+				if index < coverage_cells.size():
+					target_filter = (
+						Callable(self, "_canonical_ground_cell_contains_enemy").bind(
+							coverage_cells[index]
+						)
+					)
+			target_filters.append(target_filter)
+		var field_controller := FireWallFieldControllerScript.new()
+		field_controller.setup_fire_wall_field(
+			player,
+			stable_skill_id,
+			effect,
+			positions,
+			coverage_cells,
+			target_filters,
+			Callable(self, "_apply_canonical_ground_tick").bind(stable_skill_id),
+			Callable(self, "_canonical_screen_px_to_ground_gu"),
+			release_id,
+			skill_release_snapshot
+		)
+		add_child(field_controller)
+		if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+			for index: int in range(positions.size()):
+				_spawn_canonical_ground_effect(
+					stable_skill_id,
+					positions[index],
+					effect,
+					false,
+					coverage_cells[index] if index < coverage_cells.size() else null,
+					release_id,
+					skill_release_snapshot
+				)
+		return
+
 	for index: int in range(positions.size()):
 		_spawn_canonical_ground_effect(
 			stable_skill_id,
@@ -4800,7 +4908,8 @@ func _spawn_canonical_ground_effect(
 				if coverage_cell is Vector2i
 				else Callable()
 			)
-		)
+		),
+		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
 	add_child(ground_effect)
 
@@ -5003,7 +5112,10 @@ func _spawn_canonical_cast_visual(
 	var geometry_screen_points_px: Array[Vector2] = []
 	if (
 		str(continuous_line_strip_ground_gu.get("contract_id", ""))
-		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
+		in [
+			CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID,
+			CONTINUOUS_AIM_LINE_CONTRACT_ID_LEGACY
+		]
 	):
 		geometry_screen_points_px = (
 			CasterSpellGeometryScript.continuous_line_screen_points_px(
@@ -5031,6 +5143,9 @@ func _spawn_canonical_cast_visual(
 		"geometry_origin_screen_px": origin,
 		"geometry_grid_cells": geometry_grid_cells,
 		"geometry_screen_points_px": geometry_screen_points_px,
+		"ground_gu_to_screen_position_px": (
+			Callable(self, "_canonical_ground_gu_to_screen_px")
+		),
 		# Damage and presentation consume the same read-only release snapshot.
 		# Never derive a second direction, length or width inside the renderer.
 		"skill_footprint_snapshot": (
@@ -5753,6 +5868,13 @@ func _on_loot_collected(item_name: String) -> void:
 func _on_player_stats_changed(current_hp: int, max_hp: int) -> void:
 	if hud != null:
 		hud.update_hp(current_hp, max_hp)
+
+
+func _sync_player_runtime_snapshot_to_hud() -> void:
+	if hud == null or player == null:
+		return
+	hud.update_resources(player.current_hp, player.max_hp, player.current_mp, player.max_mp)
+	hud.update_warrior_states(player.warrior_state_snapshot())
 
 
 func _on_consumable_used(item_name: String) -> void:
