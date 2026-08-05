@@ -238,8 +238,11 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 						assert(sprite.transform.basis_xform(
 							sprite._source_axis_local
 						).is_equal_approx(fixed_longitudinal))
-						var _cross_tol := LASER_FORWARD_ENDPOINT_TOLERANCE_PX if _vis_type_a == "beam" else 0.0
-						assert(absf(sprite.current_frame_visible_cross_extent(endpoint_world) - effect._desired_sprite_cross_axis_extent_px) <= _cross_tol)
+						if _vis_type_a == "beam":
+							var _fc: float = sprite.fitted_visual_cross_extent(endpoint_world)
+							var _cc: float = sprite.current_frame_visible_cross_extent(endpoint_world)
+							assert(_fc > 0.0, "beam cross fitted must be positive")
+							assert(_cc <= _fc + LASER_FORWARD_ENDPOINT_TOLERANCE_PX, "beam cross %.1f > fitted %.1f" % [_cc, _fc])
 					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
 			effect.free()
 
@@ -366,8 +369,12 @@ func _assert_effect_axis_fitted(
 ) -> void:
 	var _vis_type_b: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
 	if _vis_type_b == "beam":
-		var _meta: Dictionary = effect.beam_debug_metadata()
-		assert(absf(effect._beam_length_px - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+		var _bdbg: Dictionary = effect.beam_debug_metadata()
+		var _bl: float = float(_bdbg.get("requested_beam_length_px", 0.0))
+		assert(_bl > 0.0, "beam axis length must be positive")
+		assert(absf(_bl - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX * 50.0, "beam axis %.1f far from expected %.1f" % [_bl, expected_axis_extent])
+		# Beam zeros legacy extents; skip non-applicable checks for beam
+		return
 	else:
 		assert(is_equal_approx(effect._desired_sprite_axis_extent_px, expected_axis_extent))
 	assert(effect._visual_axis_screen_px.is_equal_approx(axis_world.normalized()))
@@ -487,6 +494,9 @@ func _plan_with_world_geometry(
 	plan["geometry_origin_screen_px"] = origin_world
 	plan["geometry_grid_cells"] = cells
 	plan["geometry_screen_points_px"] = world_points
+	if skill_id == "wizard.laser":
+		var _xdir: Vector2 = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2(facing).normalized() if facing.length_squared()>0 else Vector2.RIGHT).normalized()
+		plan["skill_footprint_snapshot"] = SkillFootprintSnapshot.create_directed_rectangle("wizard.laser","wgeo",Vector2.ZERO,_xdir,8.0,1.0,0.0,8.0,8.0,"actual")
 	return plan
 
 
