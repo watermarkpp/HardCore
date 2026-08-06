@@ -38,6 +38,46 @@ const CONTACT_EPSILON := 0.0001
 const LASER_SCREEN_LENGTH_LIMIT_PER_GU := 28.621670111997307
 
 
+static func snapshot_strict_valid(
+	snapshot: Dictionary,
+	expected_context: Dictionary
+) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		expected_context,
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false))
+
+
+static func snapshot_legacy_valid(
+	snapshot: Dictionary,
+	consumer_name: String,
+	migration_reason: String
+) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		SkillFootprintSnapshotScript.legacy_consumer_context(
+			consumer_name,
+			migration_reason,
+			"world_ground_plane_absolute"
+		),
+		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+	).get("valid", false))
+
+
+static func _plan_validation_policy(plan: Dictionary) -> StringName:
+	var raw_policy: Variant = plan.get(
+		"snapshot_validation_policy",
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	)
+	return raw_policy if raw_policy is StringName else SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+
+
+static func _plan_validation_context(plan: Dictionary) -> Dictionary:
+	var raw_context: Variant = plan.get("snapshot_validation_context", {})
+	return raw_context if raw_context is Dictionary else {}
+
+
 static func canonical_facing_grid_step_from_screen_direction_px(
 	screen_direction_px: Vector2
 ) -> Vector2i:
@@ -124,14 +164,15 @@ static func declared_cells_intersect_actor_footprint(
 	effective_geometry_cells: Array[Vector2i],
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float,
-	skill_footprint_snapshot: Dictionary = {}
+	skill_footprint_snapshot: Dictionary = {},
+	expected_context := {}
 ) -> Dictionary:
 	var footprint_ground_gu := actor_footprint_polygon_ground_gu(
 		target_center_ground_gu,
 		target_combat_radius_gu
 	)
 	var valid_union_snapshot := (
-		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		snapshot_strict_valid(skill_footprint_snapshot, expected_context)
 		and str(skill_footprint_snapshot.get("shape_type", ""))
 		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
 	)
@@ -264,14 +305,15 @@ static func continuous_line_strip_ground_gu(
 
 static func target_footprint_intersects_continuous_line_ground_gu(
 	line_strip: Dictionary,
-	target_footprint_tile_polygon: PackedVector2Array
+	target_footprint_tile_polygon: PackedVector2Array,
+	expected_context := {}
 ) -> bool:
 	if target_footprint_tile_polygon.size() < 3:
 		return false
 	var raw_snapshot: Variant = line_strip.get("skill_footprint_snapshot", {})
 	if (
 		raw_snapshot is Dictionary
-		and SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+		and snapshot_strict_valid(raw_snapshot, expected_context)
 	):
 		return SkillFootprintSnapshotScript.intersects_target_polygon_ground_gu(
 			raw_snapshot,
@@ -518,13 +560,17 @@ static func visual_context_from_plan(
 	var raw_skill_footprint_snapshot: Variant = plan.get(
 		"skill_footprint_snapshot", {}
 	)
+	var validation_policy := _plan_validation_policy(plan)
+	var validation_context := _plan_validation_context(plan)
 	var skill_footprint_snapshot: Dictionary = (
 		(raw_skill_footprint_snapshot as Dictionary)
 		if (
 			raw_skill_footprint_snapshot is Dictionary
-			and SkillFootprintSnapshotScript.is_valid(
-				raw_skill_footprint_snapshot
-			)
+			and bool(SkillFootprintSnapshotScript.validate_for_consumer(
+				raw_skill_footprint_snapshot as Dictionary,
+				validation_context,
+				validation_policy
+			).get("valid", false))
 		)
 		else {}
 	)
@@ -538,7 +584,9 @@ static func visual_context_from_plan(
 	var snapshot_projection_context := snapshot_visual_projection_context(
 		skill_footprint_snapshot,
 		fallback_origin_screen_px,
-		ground_gu_to_screen_position_px
+		ground_gu_to_screen_position_px,
+		validation_context,
+		validation_policy
 	)
 	var raw_plan_visual_context: Variant = plan.get("visual_geometry_context", {})
 	var base_plan_visual_context: Dictionary = (
@@ -791,6 +839,11 @@ static func visual_context_from_plan(
 	}
 	merged_visual_geometry.merge(legacy_visual_geometry, true)
 	result["visual_geometry"] = merged_visual_geometry
+	# Q1-A: propagate the explicit validation policy/context to downstream
+	# visual consumers (CasterSkillVisualEffect, beam) so they never fall back
+	# to a context-free is_valid() gate.
+	result["snapshot_validation_policy"] = validation_policy
+	result["snapshot_validation_context"] = validation_context
 	result.merge(snapshot_projection_context, true)
 	return result
 
@@ -798,9 +851,15 @@ static func visual_context_from_plan(
 static func snapshot_visual_projection_context(
 	skill_footprint_snapshot: Dictionary,
 	fallback_origin_screen_px: Vector2,
-	ground_gu_to_screen_position_px: Callable = Callable()
+	ground_gu_to_screen_position_px: Callable = Callable(),
+	expected_context := {},
+	validation_policy: StringName = SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 ) -> Dictionary:
-	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		skill_footprint_snapshot,
+		expected_context,
+		validation_policy
+	).get("valid", false)):
 		return {}
 	var shape_type := str(skill_footprint_snapshot.get("shape_type", ""))
 	var anchor_ground_gu: Vector2
@@ -947,7 +1006,11 @@ static func _stable_laser_visual_ground_direction(
 	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot", {})
 	if (
 		raw_snapshot is Dictionary
-		and SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+		and bool(SkillFootprintSnapshotScript.validate_for_consumer(
+			raw_snapshot as Dictionary,
+			_plan_validation_context(plan),
+			_plan_validation_policy(plan)
+		).get("valid", false))
 	):
 		direction_ground_gu = raw_snapshot.get("direction_ground_gu", Vector2.ZERO)
 	if direction_ground_gu.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
@@ -1022,7 +1085,11 @@ static func _stable_laser_visual_axis_extent_px(
 	var snapshot_axis_extent_px := 0.0
 	if (
 		raw_snapshot is Dictionary
-		and SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+		and bool(SkillFootprintSnapshotScript.validate_for_consumer(
+			raw_snapshot as Dictionary,
+			_plan_validation_context(plan),
+			_plan_validation_policy(plan)
+		).get("valid", false))
 	):
 		snapshot_axis_extent_px = float(raw_snapshot.get("axis_screen_length_px", 0.0))
 		if snapshot_axis_extent_px > 0.0:
