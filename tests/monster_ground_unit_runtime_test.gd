@@ -14,6 +14,10 @@ const RUNTIME_TEST_MONSTER := {
 }
 
 
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
+
+
 class CombatTarget:
 	extends Node2D
 
@@ -35,6 +39,10 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var enemy := EnemyActor.new()
 	enemy.setup(RUNTIME_TEST_MONSTER, null, false)
+	enemy.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	)
 	enemy.global_position = Vector2.ZERO
 	enemy.set_meta("spawn_position", Vector2.ZERO)
 	enemy.set_meta("safe_zones", [])

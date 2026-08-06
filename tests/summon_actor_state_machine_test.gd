@@ -3,6 +3,10 @@ extends Node
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
 
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -25,6 +29,10 @@ func _run() -> void:
 
 	var skeleton := SummonActor.new()
 	skeleton.setup(player, ProfessionRules.skill_display_name("taoist.summon_skeleton"), 30, 3, "taoist.summon_skeleton", 35)
+	skeleton.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	)
 	skeleton.global_position = player.global_position
 	game.add_child(skeleton)
 	await get_tree().process_frame

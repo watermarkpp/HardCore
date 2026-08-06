@@ -10,12 +10,12 @@ func _ready() -> void:
 
 func _run() -> void:
 	var ctx := Snapshot.make_absolute_runtime_context(
-		"map_1",
+		1,
 		Vector2(5, 5),
 		Vector2(5, 5),
 		Callable(self, "_conv")
 	)
-	ctx["expected_runtime_map_id"] = "map_1"
+	ctx["expected_runtime_map_id"] = 1
 	var non_finite := Snapshot.create_circle(
 		"wizard.hell_lightning",
 		"non-finite:1",

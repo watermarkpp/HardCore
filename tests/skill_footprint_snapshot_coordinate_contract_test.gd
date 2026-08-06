@@ -19,7 +19,7 @@ func _ready() -> void:
 func _run() -> void:
 	# Absolute context snapshot carries runtime_map_id + projection origin.
 	var absolute_context := SnapshotScript.make_absolute_runtime_context(
-		"map_4",
+		4,
 		Vector2(12.5, -8.25),
 		Vector2(12.5, -8.25),
 		Callable(self, "_ground_to_screen")
@@ -44,7 +44,7 @@ func _run() -> void:
 		str(absolute_snapshot.get("coordinate_space", ""))
 		== SnapshotScript.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
 	)
-	assert(str(absolute_snapshot.get("runtime_map_id", "")) == "map_4")
+	assert(int(absolute_snapshot.get("runtime_map_id", -1)) == 4)
 	assert(
 		(absolute_snapshot.get("projection_origin_ground_gu", Vector2.ZERO) as Vector2)
 		== Vector2(12.5, -8.25)

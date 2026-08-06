@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func _run() -> void:
 	var context := SnapshotScript.make_absolute_runtime_context(
-		"map_A",
+		1,
 		Vector2(5, 5),
 		Vector2(5, 5),
 		Callable(self, "_ground_to_screen")
@@ -29,19 +29,19 @@ func _run() -> void:
 		0,
 		context
 	)
-	assert(str(snapshot.get("runtime_map_id", "")) == "map_A")
+	assert(int(snapshot.get("runtime_map_id", -1)) == 1)
 
 	# Same-map consumption passes.
 	var same_map := SnapshotScript.validate(
 		snapshot,
-		{"expected_runtime_map_id": "map_A"}
+		{"expected_runtime_map_id": 1}
 	)
 	assert(bool(same_map.get("valid", false)), "same map must be accepted")
 
 	# Cross-map consumption is rejected without auto-rewriting the map id.
 	var cross_map := SnapshotScript.validate(
 		snapshot,
-		{"expected_runtime_map_id": "map_B"}
+		{"expected_runtime_map_id": 2}
 	)
 	assert(not bool(cross_map.get("valid", false)), "cross-map snapshot must be rejected")
 	assert(
@@ -49,7 +49,7 @@ func _run() -> void:
 		"rejection reason must be runtime_map_id_mismatch"
 	)
 	assert(
-		str(snapshot.get("runtime_map_id", "")) == "map_A",
+		int(snapshot.get("runtime_map_id", -1)) == 1,
 		"consumer must not rewrite the snapshot's runtime map id"
 	)
 

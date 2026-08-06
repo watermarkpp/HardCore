@@ -16,19 +16,19 @@ func _run() -> void:
 		3.0,
 		16,
 		Snapshot.make_absolute_runtime_context(
-			"map_A",
+			1,
 			Vector2(5, 5),
 			Vector2(5, 5),
 			Callable(self, "_conv")
 		)
 	)
 	var cross_map_context := Snapshot.make_absolute_runtime_context(
-		"map_B",
+		2,
 		Vector2(5, 5),
 		Vector2(5, 5),
 		Callable(self, "_conv")
 	)
-	cross_map_context["expected_runtime_map_id"] = "map_B"
+	cross_map_context["expected_runtime_map_id"] = 2
 	assert(
 		not CasterGeometry.snapshot_strict_valid(snapshot, cross_map_context),
 		"geometry consumer must reject a snapshot declared on another runtime map"

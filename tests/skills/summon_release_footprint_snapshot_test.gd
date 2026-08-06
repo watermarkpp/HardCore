@@ -5,6 +5,17 @@ const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const Summon := preload("res://scripts/summon_actor.gd")
 
 
+func _configure_summon_map(summon: Summon) -> void:
+	summon.configure_runtime_map_projection(
+		9001,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	_verify_spawn_destination_footprints()
 	_verify_skeleton_release_contact()
@@ -27,6 +38,7 @@ func _verify_spawn_destination_footprints() -> void:
 			Vector2(6.5, -4.25)
 		)
 		summon.setup(owner, skill_id, 20, 3, skill_id, 35)
+		_configure_summon_map(summon)
 		summon.configure_spawn_release_footprint("%s:release:4" % skill_id)
 		var snapshot: Dictionary = summon.summon_spawn_footprint_snapshot
 		assert(Snapshot.has_legacy_base_contract(snapshot))
@@ -44,6 +56,7 @@ func _verify_skeleton_release_contact() -> void:
 	var owner := PlayerCharacter.new()
 	var skeleton := Summon.new()
 	skeleton.setup(owner, "skeleton", 20, 3, "taoist.summon_skeleton", 35)
+	_configure_summon_map(skeleton)
 	skeleton.combat_radius_gu = 0.30
 	skeleton.attack_range_gu = 1.00
 	var target := _target_at_ground_gu(Vector2(1.50, 0.0), 0.20)
@@ -73,6 +86,7 @@ func _verify_divine_beast_directed_core() -> void:
 		"taoist.summon_divine_beast",
 		35
 	)
+	_configure_summon_map(divine)
 	divine.combat_radius_gu = 0.45
 	divine.attack_range_gu = 1.55
 	var direction_ground_gu := Vector2(0.6, 0.8).normalized()

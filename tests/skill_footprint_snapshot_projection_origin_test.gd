@@ -23,7 +23,7 @@ func _run() -> void:
 	for direction: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2(1, 1).normalized(), Vector2(-1, 2).normalized()]:
 		var origin := Vector2(23.5, -17.25)
 		var context := SnapshotScript.make_absolute_runtime_context(
-			"map_4",
+			4,
 			origin,
 			origin,
 			Callable(self, "_ground_to_screen")

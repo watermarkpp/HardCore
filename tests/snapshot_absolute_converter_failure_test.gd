@@ -14,7 +14,7 @@ func _ready() -> void:
 func _run() -> void:
 	var bad_position := Callable(self, "_bad_position_converter")
 	var bad_context := Snapshot.make_absolute_runtime_context(
-		"map_1",
+		1,
 		Vector2(5, 5),
 		Vector2(5, 5),
 		bad_position
@@ -53,14 +53,14 @@ func _run() -> void:
 		3.0,
 		16,
 		Snapshot.make_absolute_runtime_context(
-			"map_1",
+			1,
 			Vector2(5, 5),
 			Vector2(5, 5),
 			Callable(self, "_conv")
 		)
 	)
 	var invalid_converter_context := Snapshot.make_absolute_runtime_context(
-		"map_1",
+		1,
 		Vector2(5, 5),
 		Vector2(5, 5),
 		Callable()

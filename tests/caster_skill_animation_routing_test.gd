@@ -5,9 +5,23 @@ const CasterSkillSkyStrikeVisualEffect := preload(
 	"res://scripts/caster_skill_sky_strike_visual_effect.gd"
 )
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const CombatUnitLegacyAdapter := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+
+
+func _test_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		9001,
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
 
 
 func _context() -> Dictionary:
@@ -183,6 +197,7 @@ func _ready() -> void:
 	hell_lightning_visual.free()
 
 	var fire_wall := CasterSkillRuntime.resolve("wizard.fire_wall", _context())
+	fire_wall["snapshot_coordinate_context"] = _test_absolute_context()
 	var fire_cells := CasterSkillRuntime.create_ground_effects(
 		fire_wall, Vector2(96, 48), Color.WHITE, owner
 	)
@@ -195,6 +210,7 @@ func _ready() -> void:
 		cell.free()
 
 	var skeleton_plan := CasterSkillRuntime.resolve("taoist.summon_skeleton", _context())
+	skeleton_plan["snapshot_coordinate_context"] = _test_absolute_context()
 	var skeleton := CasterSkillRuntime.create_summon_actor(
 		skeleton_plan, owner, 30, 40, owner.global_position
 	)
@@ -236,4 +252,3 @@ func _ready() -> void:
 	)
 	print("CASTER_SKILL_ANIMATION_ROUTING_TEST_PASS")
 	get_tree().quit(0)
-

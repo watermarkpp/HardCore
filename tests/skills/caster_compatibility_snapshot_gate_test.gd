@@ -7,7 +7,7 @@ const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 
 func _test_absolute_context() -> Dictionary:
 	return Snapshot.make_absolute_runtime_context(
-		"test_map",
+		9001,
 		Vector2.ZERO,
 		Vector2.ZERO,
 		Callable(self, "_test_ground_to_screen")

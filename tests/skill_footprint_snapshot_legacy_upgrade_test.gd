@@ -40,7 +40,7 @@ func _run() -> void:
 
 	# Explicit absolute context -> upgrade succeeds with V2 identity.
 	var absolute_context := SnapshotScript.make_absolute_runtime_context(
-		"map_4",
+		4,
 		Vector2(10, -4),
 		Vector2(10, -4),
 		Callable(self, "_ground_to_screen")
@@ -58,7 +58,7 @@ func _run() -> void:
 		str(upgraded_absolute.get("coordinate_space", ""))
 		== SnapshotScript.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
 	)
-	assert(str(upgraded_absolute.get("runtime_map_id", "")) == "map_4")
+	assert(int(upgraded_absolute.get("runtime_map_id", -1)) == 4)
 	assert(str(upgraded_absolute.get("migration_source", "")) == "legacy_v1")
 	assert(bool(SnapshotScript.validate(upgraded_absolute).get("valid", false)))
 

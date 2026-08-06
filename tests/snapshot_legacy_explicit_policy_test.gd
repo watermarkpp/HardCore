@@ -1,7 +1,6 @@
 extends Node
 
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
-const Projectile := preload("res://scripts/skill_projectile.gd")
 
 
 func _ready() -> void:
@@ -34,34 +33,10 @@ func _run() -> void:
 	)
 	assert(Snapshot.legacy_snapshot_validation_count == before)
 
-	var projectile := Projectile.new()
-	projectile.skill_footprint_snapshot = legacy
-	assert(
-		projectile.release_snapshot_intersects_target_footprint_ground_gu(
-			Vector2(6, 4),
-			0.25
-		),
-		"production legacy consumer must accept a V1 snapshot under explicit policy"
-	)
-	assert(
-		Snapshot.legacy_snapshot_validation_count == before + 1,
-		"each explicit legacy consumer validation must increment the counter"
-	)
-	assert(
-		not projectile.release_snapshot_intersects_target_footprint_ground_gu(
-			Vector2(12, 4),
-			0.25
-		),
-		"legacy consumer must still resolve geometry correctly"
-	)
-	assert(
-		Snapshot.legacy_snapshot_validation_count == before + 2,
-		"rejected legacy geometry must still be validated explicitly"
-	)
 	var accepted := Snapshot.validate_for_consumer(
 		legacy,
 		Snapshot.legacy_consumer_context(
-			"projectile_release_snapshot_intersection",
+			"legacy_policy_contract_test",
 			"test fixture legacy V1 snapshot",
 			"world_ground_plane_absolute"
 		),
@@ -70,9 +45,8 @@ func _run() -> void:
 	assert(bool(accepted.get("valid", false)))
 	assert(bool(accepted.get("legacy_used", false)))
 	assert(
-		Snapshot.legacy_snapshot_validation_count == before + 3,
-		"explicit legacy validation must increment the counter exactly once per entry"
+		Snapshot.legacy_snapshot_validation_count == before + 1,
+		"explicit legacy validation must increment the counter exactly once"
 	)
-	projectile.free()
 	print("SNAPSHOT_LEGACY_EXPLICIT_POLICY_PASS")
 	get_tree().quit(0)

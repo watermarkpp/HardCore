@@ -22,7 +22,7 @@ const GROUND_EXACT_SKILLS: Array[String] = [
 
 func _test_absolute_context() -> Dictionary:
 	return Snapshot.make_absolute_runtime_context(
-		"test_map",
+		9001,
 		Vector2.ZERO,
 		Vector2.ZERO,
 		Callable(self, "_test_ground_to_screen")

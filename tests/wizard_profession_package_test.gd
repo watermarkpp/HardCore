@@ -1,6 +1,23 @@
 extends Node
 
 
+const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+
+
+func _test_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		9001,
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	var package := WizardProfessionPackage.new()
 	assert(package.is_valid())
@@ -67,6 +84,7 @@ func _ready() -> void:
 			"spatial_test_adapter_id": (
 				CasterSkillRuntime.NON_PRODUCTION_SPATIAL_ADAPTER_ID
 			),
+			"snapshot_coordinate_context": _test_absolute_context(),
 		})
 		assert(cast_result.accepted, "%s rejected: %s" % [skill_id, cast_result.get("reason", "")])
 		assert(cast_result.package_contract == "caster_profession_package.v1")

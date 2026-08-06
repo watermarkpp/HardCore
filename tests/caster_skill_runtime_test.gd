@@ -13,7 +13,7 @@ var _magic_defense_calls: Array[String] = []
 
 func _test_absolute_context() -> Dictionary:
 	return SkillFootprintSnapshot.make_absolute_runtime_context(
-		"test_map",
+		9001,
 		Vector2.ZERO,
 		Vector2.ZERO,
 		Callable(self, "_test_ground_to_screen")
@@ -76,6 +76,7 @@ func _ready() -> void:
 		else:
 			assert(plan.visual.status == "formal_primary_client_animation", "%s lacks formal visual binding" % skill_id)
 			assert(plan.visual.animation.contract == "caster_skill_animation.v1")
+		plan["snapshot_coordinate_context"] = _test_absolute_context()
 		var cast_nodes := CasterSkillRuntime.create_cast_nodes(
 			plan,
 			Vector2.ZERO,

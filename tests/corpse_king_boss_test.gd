@@ -4,6 +4,10 @@ extends Node
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -28,6 +32,10 @@ func _run() -> void:
 	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 1.5)
 	var boss := EnemyActor.new()
 	boss.setup(GameData.get_monster("尸王"), player, true)
+	boss.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	)
 	add_child(boss)
 	boss.set_physics_process(false)
 	await get_tree().process_frame

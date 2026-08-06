@@ -1,12 +1,24 @@
 extends Node
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
 const FIXED_AREA_IDS := [180, 195]
 const STATIONARY_SPECIAL_IDS := [30, 124, 126, 180, 182, 195]
 var _last_summon: Dictionary = {}
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _configure_enemy_map(enemy: EnemyActor) -> void:
+	enemy.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	)
 
 
 func _ready() -> void:
@@ -52,6 +64,7 @@ func _run() -> void:
 		var enemy := EnemyActor.new()
 		enemy.global_position = Vector2.ZERO
 		enemy.setup(data, player, true)
+		_configure_enemy_map(enemy)
 		add_child(enemy)
 		enemy.set_physics_process(false)
 		await get_tree().process_frame
@@ -93,6 +106,7 @@ func _run() -> void:
 		summoner_data["name"] = "运行时改名固定召唤怪"
 		var summoner := EnemyActor.new()
 		summoner.setup(summoner_data, summoner_player, false)
+		_configure_enemy_map(summoner)
 		add_child(summoner)
 		summoner.set_physics_process(false)
 		summoner.summon_requested.connect(_capture_summon)
@@ -118,6 +132,7 @@ func _run() -> void:
 	var controlled := EnemyActor.new()
 	controlled.global_position = Vector2(640, -64)
 	controlled.setup(GameData.get_monster_by_id(21), control_player, false)
+	_configure_enemy_map(controlled)
 	add_child(controlled)
 	controlled.set_physics_process(false)
 	await get_tree().process_frame
