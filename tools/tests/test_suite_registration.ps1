@@ -69,6 +69,20 @@ $SafeLogoutExpected = @(
     'tests/portal_home_lookup_failure_test.tscn'
 )
 
+$PersistentSuite = 'persistent_ground_effect_critical'
+$PersistentExpected = @(
+    'tests/persistent_ground_effect_hit_parity_test.tscn',
+    'tests/persistent_ground_effect_no_false_negative_test.tscn',
+    'tests/persistent_ground_effect_tick_cadence_test.tscn',
+    'tests/persistent_ground_effect_stacking_claim_test.tscn',
+    'tests/persistent_ground_effect_stable_order_test.tscn',
+    'tests/persistent_ground_effect_runtime_map_isolation_test.tscn',
+    'tests/persistent_ground_effect_lifecycle_test.tscn',
+    'tests/persistent_ground_effect_candidate_reduction_test.tscn',
+    'tests/persistent_ground_effect_no_group_scan_test.tscn',
+    'tests/persistent_ground_effect_spatial_service_reuse_test.tscn'
+)
+
 $missing = @()
 $duplicates = @()
 $gitTracked = @()
@@ -212,10 +226,46 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $slIncluded = ($RunnerSource -match '\$Suites\.safe_logout_critical\s*\+')
 $slValidateSet = ($RunnerSource -match "safe_logout_critical")
 
+# persistent_ground_effect_critical verification
+$pgMissing = @()
+$pgDuplicates = @()
+$pgGitTracked = @()
+foreach ($path in $PersistentExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $pgMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $pgGitTracked += $path
+    }
+}
+$pgDuplicates = @($PersistentExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$pgBlock = $false
+$pgFound = $false
+$pgEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.persistent_ground_effect_critical\s*=') {
+        $pgBlock = $true
+        $pgFound = $true
+        continue
+    }
+    if ($pgBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $pgEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $pgBlock = $false
+            break
+        }
+    }
+}
+$pgIncluded = ($RunnerSource -match '\$Suites\.persistent_ground_effect_critical\s*\+')
+$pgValidateSet = ($RunnerSource -match "persistent_ground_effect_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
 $ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
+$ok = $ok -and $pgFound -and ($pgEntries.Count -eq $PersistentExpected.Count) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -254,6 +304,14 @@ $report = [ordered]@{
     projectile_spatial_not_git_tracked = $projGitTracked
     projectile_spatial_included_in_default_critical = $projIncluded
     projectile_spatial_validate_set = $projValidateSet
+    persistent_ground_effect_suite = $PersistentSuite
+    persistent_ground_effect_expected_count = $PersistentExpected.Count
+    persistent_ground_effect_actual_count = $pgEntries.Count
+    persistent_ground_effect_missing = $pgMissing
+    persistent_ground_effect_duplicates = $pgDuplicates
+    persistent_ground_effect_not_git_tracked = $pgGitTracked
+    persistent_ground_effect_included_in_default_critical = $pgIncluded
+    persistent_ground_effect_validate_set = $pgValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

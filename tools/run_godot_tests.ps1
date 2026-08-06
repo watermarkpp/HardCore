@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -213,6 +213,19 @@ $Suites.safe_logout_critical = @(
     'tests/portal_home_lookup_failure_test.tscn'
 )
 
+$Suites.persistent_ground_effect_critical = @(
+    'tests/persistent_ground_effect_hit_parity_test.tscn',
+    'tests/persistent_ground_effect_no_false_negative_test.tscn',
+    'tests/persistent_ground_effect_tick_cadence_test.tscn',
+    'tests/persistent_ground_effect_stacking_claim_test.tscn',
+    'tests/persistent_ground_effect_stable_order_test.tscn',
+    'tests/persistent_ground_effect_runtime_map_isolation_test.tscn',
+    'tests/persistent_ground_effect_lifecycle_test.tscn',
+    'tests/persistent_ground_effect_candidate_reduction_test.tscn',
+    'tests/persistent_ground_effect_no_group_scan_test.tscn',
+    'tests/persistent_ground_effect_spatial_service_reuse_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -221,6 +234,7 @@ $Suites.critical = @(
     $Suites.snapshot_production_critical +
     $Suites.projectile_spatial_critical +
     $Suites.safe_logout_critical +
+    $Suites.persistent_ground_effect_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
