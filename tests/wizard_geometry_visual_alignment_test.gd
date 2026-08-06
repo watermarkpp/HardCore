@@ -202,8 +202,20 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			plan["geometry_screen_points_px"] = world_points
 			if str(skill_case.skill_id) == "wizard.laser":
 				var _dg: Vector2 = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(endpoint_world.normalized()).normalized()
-				plan["skill_footprint_snapshot"] = SkillFootprintSnapshot.create_directed_rectangle(
-					"wizard.laser", "geometry_test", Vector2.ZERO, _dg, 8.0, 1.0, 0.0, 8.0, 8.0, "actual"
+				plan["skill_footprint_snapshot"] = (
+					SkillFootprintSnapshot.create_directed_rectangle(
+						"wizard.laser", "geometry_test", Vector2.ZERO, _dg, 8.0, 1.0, 0.0, 8.0, 8.0, "actual"
+					)
+				)
+				plan["snapshot_validation_policy"] = (
+					SkillFootprintSnapshot.VALIDATION_EXPLICIT_LEGACY_COMPAT
+				)
+				plan["snapshot_validation_context"] = (
+					SkillFootprintSnapshot.legacy_consumer_context(
+						"wizard_geometry_visual_alignment_test_preview",
+						"geometry alignment test feeds a legacy V1 laser snapshot without runtime map context",
+						"world_ground_plane_absolute"
+					)
 				)
 			var effect := CasterSkillRuntime.create_visual(
 				plan,
@@ -497,6 +509,16 @@ func _plan_with_world_geometry(
 	if skill_id == "wizard.laser":
 		var _xdir: Vector2 = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2(facing).normalized() if facing.length_squared()>0 else Vector2.RIGHT).normalized()
 		plan["skill_footprint_snapshot"] = SkillFootprintSnapshot.create_directed_rectangle("wizard.laser","wgeo",Vector2.ZERO,_xdir,8.0,1.0,0.0,8.0,8.0,"actual")
+		plan["snapshot_validation_policy"] = (
+			SkillFootprintSnapshot.VALIDATION_EXPLICIT_LEGACY_COMPAT
+		)
+		plan["snapshot_validation_context"] = (
+			SkillFootprintSnapshot.legacy_consumer_context(
+				"wizard_geometry_visual_alignment_test_preview",
+				"geometry alignment test feeds a legacy V1 laser snapshot without runtime map context",
+				"world_ground_plane_absolute"
+			)
+		)
 	return plan
 
 

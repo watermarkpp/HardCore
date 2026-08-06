@@ -104,7 +104,7 @@ func _run() -> void:
 	var hellfire_snapshot: Dictionary = hellfire_strip.get(
 		"skill_footprint_snapshot", {}
 	)
-	assert(SkillFootprintSnapshot.is_valid(hellfire_snapshot))
+	assert(game._snapshot_strict_ok(hellfire_snapshot))
 	assert(hellfire_snapshot.is_read_only())
 	assert(hellfire_snapshot.skill_id == "wizard.hellfire")
 	assert(hellfire_snapshot.release_id == "test:hellfire:release:1")
@@ -225,7 +225,7 @@ func _run() -> void:
 	var laser_snapshot: Dictionary = laser_strip.get(
 		"skill_footprint_snapshot", {}
 	)
-	assert(SkillFootprintSnapshot.is_valid(laser_snapshot))
+	assert(game._snapshot_strict_ok(laser_snapshot))
 	assert(laser_snapshot.is_read_only())
 	assert(laser_snapshot.skill_id == "wizard.laser")
 	assert(laser_snapshot.release_id == "test:laser:release:1")

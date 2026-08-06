@@ -6,6 +6,19 @@ const Projectile := preload("res://scripts/skill_projectile.gd")
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 
 
+func _test_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		"test_map",
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	_verify_projectile_release_sweeps()
 	_verify_target_single_release_footprint()
@@ -44,7 +57,7 @@ func _verify_projectile_release_sweeps() -> void:
 			"%s:release:7" % skill_id
 		)
 		var snapshot: Dictionary = projectile.skill_footprint_snapshot
-		assert(Snapshot.is_valid(snapshot))
+		assert(Snapshot.has_legacy_base_contract(snapshot))
 		assert(snapshot.is_read_only())
 		assert(snapshot.shape_type == Snapshot.SHAPE_SWEPT_CAPSULE_PATH)
 		assert(snapshot.skill_id == skill_id)
@@ -71,7 +84,7 @@ func _verify_projectile_release_sweeps() -> void:
 		var segment_snapshot: Dictionary = (
 			projectile.last_segment_footprint_snapshot
 		)
-		assert(Snapshot.is_valid(segment_snapshot))
+		assert(Snapshot.has_legacy_base_contract(segment_snapshot))
 		assert(segment_snapshot.is_read_only())
 		assert(segment_snapshot.parent_snapshot_id == snapshot.snapshot_id)
 		assert(segment_snapshot.segment_index == 0)
@@ -112,10 +125,11 @@ func _verify_target_single_release_footprint() -> void:
 			"primary_target": primary,
 			"affected_targets": [primary, unrelated],
 			"anti_magic_roll": 999,
+			"snapshot_coordinate_context": _test_absolute_context(),
 		}
 	)
 	var snapshot: Dictionary = result.skill_footprint_snapshot
-	assert(Snapshot.is_valid(snapshot))
+	assert(Snapshot.has_legacy_base_contract(snapshot))
 	assert(snapshot.is_read_only())
 	assert(snapshot.shape_type == Snapshot.SHAPE_TARGET_FOOTPRINT)
 	assert(snapshot.target_instance_id == primary.get_instance_id())

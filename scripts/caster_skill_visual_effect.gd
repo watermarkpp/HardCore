@@ -77,6 +77,10 @@ var _snapshot_anchor_screen_px := Vector2.ZERO
 var _snapshot_visual_core_policy := ""
 var _snapshot_visual_projection_contract_id := ""
 var _decoration_sprite_transform_policy := ""
+var _snapshot_validation_context: Dictionary = {}
+var _snapshot_validation_policy: StringName = (
+	SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+)
 var debug_skill_visual_geometry := false
 var _debug_geometry_overlay: Node2D
 var _debug_geometry_lines: Array[Line2D] = []
@@ -123,9 +127,23 @@ func setup(
 	var raw_snapshot: Variant = visual_geometry_context.get(
 		"skill_footprint_snapshot", {}
 	)
-	if raw_snapshot is Dictionary and SkillFootprintSnapshotScript.is_valid(
-		raw_snapshot
-	):
+	_snapshot_validation_context = (
+		visual_geometry_context.get("snapshot_validation_context", {})
+		if visual_geometry_context.get(
+			"snapshot_validation_context", {}
+		) is Dictionary
+		else {}
+	)
+	var raw_policy: Variant = visual_geometry_context.get(
+		"snapshot_validation_policy",
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	)
+	_snapshot_validation_policy = (
+		raw_policy
+		if raw_policy is StringName
+		else SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	)
+	if raw_snapshot is Dictionary and _snapshot_ok(raw_snapshot):
 		_skill_footprint_snapshot = raw_snapshot
 	_snapshot_shape_type = str(visual_geometry_context.get(
 		"snapshot_shape_type", ""
@@ -534,12 +552,20 @@ func snapshot_visual_projection_metadata() -> Dictionary:
 	}
 
 
+func _snapshot_ok(snapshot: Dictionary) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_snapshot_validation_context,
+		_snapshot_validation_policy
+	).get("valid", false))
+
+
 func skill_visual_geometry_debug_metadata() -> Dictionary:
 	return _debug_geometry_metadata.duplicate(true)
 
 
 func _install_formal_snapshot_visual_core() -> void:
-	if not SkillFootprintSnapshotScript.is_valid(_skill_footprint_snapshot):
+	if not _snapshot_ok(_skill_footprint_snapshot):
 		return
 	set_meta(
 		"snapshot_visual_projection_contract",
@@ -595,9 +621,7 @@ func _install_formal_snapshot_visual_core() -> void:
 func _install_formal_line_visual_core() -> void:
 	if (
 		skill_id not in ["wizard.hellfire", "wizard.laser"]
-		or not SkillFootprintSnapshotScript.is_valid(
-			_skill_footprint_snapshot
-		)
+		or not _snapshot_ok(_skill_footprint_snapshot)
 		or _formal_core_polygon_screen_offset_px.size() != 4
 		or _formal_core_axis_screen_offset_px.length_squared() <= 0.000001
 	):
@@ -661,9 +685,7 @@ func _apply_line_decoration_policy(sprite: Sprite2D) -> void:
 func _install_debug_skill_visual_geometry_overlay() -> void:
 	if (
 		not debug_skill_visual_geometry
-		or not SkillFootprintSnapshotScript.is_valid(
-			_skill_footprint_snapshot
-		)
+		or not _snapshot_ok(_skill_footprint_snapshot)
 		or _formal_core_polygon == null
 	):
 		return

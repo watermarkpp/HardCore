@@ -5,6 +5,19 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 
 
+func _test_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		"test_map",
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	_verify_missing_snapshot_is_blocked()
 	_verify_explicit_test_adapter_is_audited()
@@ -66,7 +79,12 @@ func _verify_valid_snapshot_filters_targets() -> void:
 		Vector2.ZERO,
 		Vector2.RIGHT,
 		5.0,
-		1.0
+		1.0,
+		0.0,
+		0.0,
+		0.0,
+		"actual",
+		_test_absolute_context()
 	)
 	var inside := _target_at_ground_gu(Vector2(4.9, 0.45))
 	var outside := _target_at_ground_gu(Vector2(4.9, 0.7))
@@ -78,6 +96,7 @@ func _verify_valid_snapshot_filters_targets() -> void:
 			"affected_targets": [inside, outside],
 			"origin": Vector2.ZERO,
 			"direction": Vector2.RIGHT,
+			"snapshot_coordinate_context": _test_absolute_context(),
 		}
 	)
 	assert(result.adapter_required.is_empty())

@@ -203,7 +203,7 @@ func _resolve_beam_length(visual_geometry_context: Dictionary) -> float:
     var raw_length_source: String = _geometry_binding_length_source
     if (
         raw_snapshot is Dictionary
-        and SkillFootprintSnapshotScript.is_valid(raw_snapshot as Dictionary)
+        and _snapshot_ok(raw_snapshot as Dictionary)
         and raw_length_source == "actual_length"
     ):
         var snapshot := raw_snapshot as Dictionary
@@ -224,7 +224,7 @@ func _resolve_beam_axis_direction(
 ) -> Vector2:
     var raw_snapshot: Variant = visual_geometry_context.get("skill_footprint_snapshot", {})
     var direction_source: String = _geometry_binding_direction_source
-    if raw_snapshot is Dictionary and SkillFootprintSnapshotScript.is_valid(
+    if raw_snapshot is Dictionary and _snapshot_ok(
         raw_snapshot as Dictionary
     ):
         var snapshot := raw_snapshot as Dictionary

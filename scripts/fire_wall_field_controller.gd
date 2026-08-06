@@ -37,7 +37,8 @@ func setup_fire_wall_field(
 	runtime_tick_callback_value: Callable,
 	runtime_screen_to_ground_position_px: Callable,
 	source_release_id := "",
-	release_snapshot: Dictionary = {}
+	release_snapshot: Dictionary = {},
+	snapshot_validation_context: Dictionary = {}
 ) -> void:
 	source_actor = source
 	stable_skill_id = stable_skill_id_value
@@ -78,7 +79,8 @@ func setup_fire_wall_field(
 			tick_interval,
 			74.0,
 			"%s:%s" % [_field_release_id_prefix, index],
-			release_snapshot
+			release_snapshot,
+			snapshot_validation_context
 		)
 		visual_cell.configure_runtime_resolution(
 			source_actor,

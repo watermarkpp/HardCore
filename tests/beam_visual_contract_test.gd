@@ -87,6 +87,19 @@ func _spawn_beam_node(
 			"skill_footprint_snapshot": plan.get("skill_footprint_snapshot", {}),
 			"visual_profile": profile,
 			"visual_type": str(profile.get("visual_type", "")),
+			# Q1-A: the beam contract test feeds a legacy V1 snapshot through an
+			# explicit test/preview legacy policy. Production defaults to
+			# STRICT_V2 and never accepts this path implicitly.
+			"snapshot_validation_policy": (
+				SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+			),
+			"snapshot_validation_context": (
+				SkillFootprintSnapshotScript.legacy_consumer_context(
+					"beam_contract_test_preview",
+					"beam contract test feeds a legacy V1 snapshot without runtime map context",
+					"world_ground_plane_absolute"
+				)
+			),
 		}
 	)
 	add_child(effect)

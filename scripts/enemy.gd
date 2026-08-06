@@ -800,10 +800,30 @@ func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
 
 
+func _legacy_snapshot_ok(
+	snapshot: Dictionary,
+	consumer_name: String,
+	migration_reason: String
+) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		SkillFootprintSnapshotScript.legacy_consumer_context(
+			consumer_name,
+			migration_reason,
+			"world_ground_plane_absolute"
+		),
+		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+	).get("valid", false))
+
+
 func _snapshot_intersects_target(snapshot: Dictionary, hit_target: Node2D) -> bool:
 	return (
 		is_instance_valid(hit_target)
-		and SkillFootprintSnapshotScript.is_valid(snapshot)
+		and _legacy_snapshot_ok(
+			snapshot,
+			"enemy_attack_intersection",
+			"enemy attack footprints are built by the legacy builder without coordinate context"
+		)
 		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			snapshot,
 			_screen_position_px_to_ground_position_gu(hit_target.global_position),
@@ -901,7 +921,11 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not SkillFootprintSnapshotScript.is_valid(resolved_snapshot):
+	if not _legacy_snapshot_ok(
+		resolved_snapshot,
+		"enemy_area_attack_targets",
+		"enemy area-attack footprints are built by the legacy builder without coordinate context"
+	):
 		resolved_snapshot = _create_area_attack_footprint_snapshot()
 	var candidates: Array[Node] = []
 	if is_instance_valid(primary_target):
@@ -1405,7 +1429,11 @@ func _draw_boss_warning_ground_projection() -> void:
 
 func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
 	var snapshot := _boss_skill_footprint_snapshot
-	if not SkillFootprintSnapshotScript.is_valid(snapshot):
+	if not _legacy_snapshot_ok(
+		snapshot,
+		"enemy_boss_warning_preview",
+		"boss warning preview consumes the legacy boss skill footprint snapshot"
+	):
 		snapshot = _create_boss_skill_footprint_snapshot(
 			special,
 			"monster:%d:preview" % monster_id,
@@ -1546,7 +1574,11 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false
 			var release_snapshot := _boss_skill_footprint_snapshot
-			if not SkillFootprintSnapshotScript.is_valid(release_snapshot):
+			if not _legacy_snapshot_ok(
+				release_snapshot,
+				"enemy_boss_skill_release",
+				"boss special release consumes the legacy boss skill footprint snapshot"
+			):
 				release_snapshot = _create_boss_skill_footprint_snapshot(
 					special,
 					_next_spatial_release_id("boss_fallback"),
@@ -1605,7 +1637,11 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not SkillFootprintSnapshotScript.is_valid(resolved_snapshot):
+	if not _legacy_snapshot_ok(
+		resolved_snapshot,
+		"enemy_boss_skill_target_query",
+		"boss skill target query consumes the legacy boss skill footprint snapshot"
+	):
 		resolved_snapshot = SkillFootprintSnapshotScript.create_circle(
 			_monster_attack_id("boss_circle"),
 			"monster:%d:boss_target_query" % monster_id,

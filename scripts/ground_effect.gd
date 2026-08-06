@@ -36,6 +36,7 @@ var runtime_target_filter := Callable()
 var runtime_damage_enabled := true
 var runtime_screen_to_ground_position_px := Callable()
 var visual_rejection_reason := ""
+var _snapshot_validation_context: Dictionary = {}
 var _tick_timer := 0.0
 var _sprite: Sprite2D
 
@@ -52,7 +53,8 @@ func setup_ground_unit_effect(
 	tick_interval_value := 0.8,
 	visual_radius_value_px := 72.0,
 	source_release_id := "",
-	release_snapshot: Dictionary = {}
+	release_snapshot: Dictionary = {},
+	snapshot_validation_context: Dictionary = {}
 ) -> void:
 	## Sole production setup boundary: gameplay radius arrives in GU while the
 	## screen-space origin and optional visual radius remain explicitly PX.
@@ -74,7 +76,12 @@ func setup_ground_unit_effect(
 			get_instance_id(),
 		]
 	)
-	if SkillFootprintSnapshotScript.is_valid(release_snapshot):
+	_snapshot_validation_context = (
+		snapshot_validation_context
+		if snapshot_validation_context is Dictionary
+		else {}
+	)
+	if _snapshot_strict_ok(release_snapshot):
 		skill_footprint_snapshot = release_snapshot
 
 
@@ -114,7 +121,7 @@ func runtime_target_is_inside(target: Node2D) -> bool:
 		return bool(runtime_target_filter.call(target))
 	var effect_ground_gu := _runtime_screen_to_ground_position(global_position)
 	var target_ground_gu := _runtime_screen_to_ground_position(target.global_position)
-	if SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+	if _snapshot_strict_ok(skill_footprint_snapshot):
 		return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_footprint_snapshot,
 			target_ground_gu,
@@ -138,7 +145,9 @@ func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
 	# ground coordinates. Treating absolute screen pixels as relative deltas
 	# produces silently wrong results. If a SkillFootprintSnapshot is present,
 	# the caller must inject a proper runtime_target_filter instead.
-	if SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+	if SkillFootprintSnapshotScript.has_legacy_base_contract(
+		skill_footprint_snapshot
+	):
 		push_error(
 			"GroundSkillEffect %s: snapshot present but no valid "
 			+ "screen-to-ground projection — cannot resolve target intersection."
@@ -148,6 +157,14 @@ func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
 	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 		screen_position_px
 	)
+
+
+func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_snapshot_validation_context,
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false))
 
 
 static func _target_combat_radius_gu(target: Node2D) -> float:

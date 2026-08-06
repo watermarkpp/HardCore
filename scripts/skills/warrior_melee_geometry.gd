@@ -490,7 +490,15 @@ static func thrust_footprint_slot_for_axis_plan_gu(
 	var effective_snapshot: Dictionary = {}
 	if (
 		raw_snapshot is Dictionary
-		and SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+		and bool(SkillFootprintSnapshotScript.validate_for_consumer(
+			raw_snapshot,
+			SkillFootprintSnapshotScript.legacy_consumer_context(
+				"warrior_thrust_damage_axis",
+				"warrior melee snapshots are built by the legacy builder without coordinate context",
+				"world_ground_plane_absolute"
+			),
+			SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+		).get("valid", false))
 		and (raw_snapshot.get("origin_ground_gu", Vector2.ZERO) as Vector2)
 		.is_equal_approx(origin_ground_gu)
 		and is_zero_approx(range_bonus_gu)

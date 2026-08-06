@@ -270,7 +270,10 @@ func _swept_segment_intersects_enemy_footprint(
 		)
 	)
 	if (
-		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		_legacy_snapshot_ok(
+			skill_footprint_snapshot,
+			"projectile_swept_segment_intersection"
+		)
 		and not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_footprint_snapshot,
 			enemy_center_ground_gu,
@@ -278,7 +281,10 @@ func _swept_segment_intersects_enemy_footprint(
 		)
 	):
 		return false
-	if SkillFootprintSnapshotScript.is_valid(last_segment_footprint_snapshot):
+	if _legacy_snapshot_ok(
+		last_segment_footprint_snapshot,
+		"projectile_last_segment_intersection"
+	):
 		return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			last_segment_footprint_snapshot,
 			enemy_center_ground_gu,
@@ -304,12 +310,30 @@ func _swept_segment_intersects_enemy_footprint(
 	)
 
 
+func _legacy_snapshot_ok(
+	snapshot: Dictionary,
+	consumer_name: String
+) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		SkillFootprintSnapshotScript.legacy_consumer_context(
+			consumer_name,
+			"projectile snapshots are built by the legacy builder without coordinate context",
+			"world_ground_plane_absolute"
+		),
+		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+	).get("valid", false))
+
+
 func release_snapshot_intersects_target_footprint_ground_gu(
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float
 ) -> bool:
 	return (
-		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		_legacy_snapshot_ok(
+			skill_footprint_snapshot,
+			"projectile_release_snapshot_intersection"
+		)
 		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_footprint_snapshot,
 			target_center_ground_gu,

@@ -20,6 +20,23 @@ const GROUND_EXACT_SKILLS: Array[String] = [
 ]
 
 
+func _test_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		"test_map",
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _test_screen_to_ground(value: Vector2) -> Vector2:
+	return GroundUnit.screen_delta_px_to_ground_delta_gu(value)
+
+
 func _ready() -> void:
 	_verify_exact_union_builders_preserve_holes()
 	_verify_area_damage_consumes_release_union()
@@ -42,9 +59,10 @@ func _verify_exact_union_builders_preserve_holes() -> void:
 			skill_id,
 			"%s:release:3" % skill_id,
 			Vector2.ZERO,
-			ring_cells
+			ring_cells,
+			_test_absolute_context()
 		)
-		assert(Snapshot.is_valid(snapshot))
+		assert(Snapshot.has_legacy_base_contract(snapshot))
 		assert(snapshot.is_read_only())
 		assert(snapshot.shape_type == Snapshot.SHAPE_CELL_UNION)
 		assert(snapshot.geometry_cells_grid_steps.size() == 8)
@@ -58,7 +76,8 @@ func _verify_exact_union_builders_preserve_holes() -> void:
 			ring_cells,
 			Vector2(0.4, 0.0),
 			0.10,
-			snapshot
+			snapshot,
+			_test_absolute_context()
 		)
 		assert(contact.intersects and contact.snapshot_consumed)
 		assert(contact.skill_footprint_snapshot == snapshot)
@@ -81,9 +100,10 @@ func _verify_area_damage_consumes_release_union() -> void:
 		{
 			"affected_targets": [inside, outside],
 			"anti_magic_roll": 999,
+			"snapshot_coordinate_context": _test_absolute_context(),
 		}
 	)
-	assert(Snapshot.is_valid(result.skill_footprint_snapshot))
+	assert(Snapshot.has_legacy_base_contract(result.skill_footprint_snapshot))
 	assert(result.skill_footprint_snapshot.shape_type == Snapshot.SHAPE_CELL_UNION)
 	assert(result.applied_count == 1)
 	assert(inside.current_hp == 90)
@@ -103,7 +123,8 @@ func _verify_persistent_ground_effect_consumes_shared_union() -> void:
 		"wizard.fire_wall",
 		"wizard.fire_wall:release:9",
 		Vector2(3.0, 4.0),
-		cells
+		cells,
+		_test_absolute_context()
 	)
 	var effect := GroundEffect.new()
 	effect.setup_ground_unit_effect(
@@ -116,7 +137,15 @@ func _verify_persistent_ground_effect_consumes_shared_union() -> void:
 		1.0,
 		22.08,
 		"wizard.fire_wall:release:9",
-		snapshot
+		snapshot,
+		_test_absolute_context()
+	)
+	effect.configure_runtime_resolution(
+		null,
+		Callable(),
+		false,
+		Callable(),
+		Callable(self, "_test_screen_to_ground")
 	)
 	assert(effect.skill_footprint_snapshot == snapshot)
 	var touching := _enemy_at_ground_gu(Vector2(4.6, 5.0), 0.10)

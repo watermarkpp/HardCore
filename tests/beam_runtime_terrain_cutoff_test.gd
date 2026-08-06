@@ -113,6 +113,16 @@ func _spawn_beam(snapshot: Dictionary, direction_screen_px: Vector2) -> CasterSk
 		{
 			"skill_footprint_snapshot": snapshot,
 			"visual_profile": profile,
+			"snapshot_validation_policy": (
+				SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+			),
+			"snapshot_validation_context": (
+				SkillFootprintSnapshotScript.legacy_consumer_context(
+					"beam_runtime_terrain_cutoff_test_preview",
+					"beam runtime test feeds a legacy V1 snapshot without runtime map context",
+					"world_ground_plane_absolute"
+				)
+			),
 		}
 	)
 	add_child(effect)

@@ -56,6 +56,16 @@ func _run() -> void:
 		assert(beam != null, "beam seq %d" % seq_idx)
 		beam.setup(owner.global_position, "wizard.laser", 72.0, 0.8, dir_vec, owner, "", {
 			"visual_type": "beam", "skill_footprint_snapshot": snapshot, "visual_profile": profile,
+			"snapshot_validation_policy": (
+				SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+			),
+			"snapshot_validation_context": (
+				SkillFootprintSnapshotScript.legacy_consumer_context(
+					"laser_direction_visual_extent_test_preview",
+					"laser direction test feeds a legacy V1 snapshot without runtime map context",
+					"world_ground_plane_absolute"
+				)
+			),
 		})
 		add_child(beam)
 

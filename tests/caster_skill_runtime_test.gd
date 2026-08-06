@@ -1,11 +1,27 @@
 extends Node
 
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshot := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const CombatUnitLegacyAdapter := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
 
 var _magic_defense_calls: Array[String] = []
+
+
+func _test_absolute_context() -> Dictionary:
+	return SkillFootprintSnapshot.make_absolute_runtime_context(
+		"test_map",
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
 
 
 func _test_magic_defense(skill_id: String, incoming_damage: int, _target_stats: Dictionary) -> int:
@@ -187,6 +203,7 @@ func _ready() -> void:
 		"direction": Vector2.RIGHT,
 		"anti_magic_roll": 0,
 		"magic_defense_adapter": Callable(self, "_test_magic_defense"),
+		"snapshot_coordinate_context": _test_absolute_context(),
 	})
 	assert(lightning_evaded.evaded_count == 1 and lightning_evaded.applied_count == 0)
 	assert(lightning_target.current_hp == 500 and _magic_defense_calls.is_empty(), "雷电AntiMagic成功后仍进入MAC或伤害")
@@ -206,6 +223,7 @@ func _ready() -> void:
 		"direction": Vector2.RIGHT,
 		"anti_magic_roll": 1,
 		"magic_defense_adapter": Callable(self, "_test_magic_defense"),
+		"snapshot_coordinate_context": _test_absolute_context(),
 	})
 	assert(lightning_execution.runtime_contract == "caster_skill_execution.v1")
 	assert(lightning_execution.applied_count == 1 and lightning_execution.evaded_count == 0)
@@ -226,6 +244,7 @@ func _ready() -> void:
 		"parent": self,
 		"caster": healing_target,
 		"affected_allies": [healing_target],
+		"snapshot_coordinate_context": _test_absolute_context(),
 	})
 	assert(healing_execution.applied_count == 1 and healing_target.current_hp == mini(100, 10 + healing.healing))
 	for node: Node2D in healing_execution.nodes:

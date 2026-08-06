@@ -470,7 +470,15 @@ func attack_release_snapshot_intersects_target(
 	attack_snapshot: Dictionary,
 	target: Node2D
 ) -> bool:
-	if not SkillFootprintSnapshotScript.is_valid(attack_snapshot):
+	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		attack_snapshot,
+		SkillFootprintSnapshotScript.legacy_consumer_context(
+			"summon_attack_intersection",
+			"summon attack snapshots are built by the legacy builder without coordinate context",
+			"world_ground_plane_absolute"
+		),
+		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+	).get("valid", false)):
 		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 		attack_snapshot,

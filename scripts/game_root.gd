@@ -3075,7 +3075,11 @@ func _apply_wild_rush_displacement(
 	var player_origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
 	)
-	if not SkillFootprintSnapshotScript.is_valid(rush_snapshot):
+	if not _snapshot_legacy_ok(
+		rush_snapshot,
+		"wild_rush_displacement",
+		"wild_rush uses the legacy swept-capsule builder without coordinate context"
+	):
 		return false
 	if (
 		str(rush_snapshot.get("shape_type", ""))
@@ -4296,13 +4300,13 @@ func _canonical_target_context(
 			not node is EnemyActor
 			or node.is_queued_for_deletion()
 			or (
-				SkillFootprintSnapshotScript.is_valid(exact_release_snapshot)
+				_snapshot_strict_ok(exact_release_snapshot)
 				and not _skill_snapshot_intersects_enemy(
 					exact_release_snapshot, node as EnemyActor
 				)
 			)
 			or (
-				not SkillFootprintSnapshotScript.is_valid(exact_release_snapshot)
+				not _snapshot_strict_ok(exact_release_snapshot)
 				and not GroundUnitSpaceScript.is_within_range_gu(
 					origin_ground_gu,
 					_canonical_screen_px_to_ground_gu(node.global_position),
@@ -4340,7 +4344,7 @@ func _canonical_target_context(
 			"within_level_gate": node.level <= PlayerState.level,
 		})
 	context["targets"] = nearby
-	if friendly_cast and SkillFootprintSnapshotScript.is_valid(exact_release_snapshot):
+	if friendly_cast and _snapshot_strict_ok(exact_release_snapshot):
 		var friendly_targets: Array[Dictionary] = []
 		var friendly_missing_hp: Array[int] = []
 		var friendly_actors: Array[Node2D] = [player]
@@ -4447,7 +4451,7 @@ func _apply_canonical_effects(
 	var skill_release_snapshot: Dictionary = target_context.get(
 		"skill_footprint_snapshot", {}
 	)
-	if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+	if not _snapshot_strict_ok(skill_release_snapshot):
 		skill_release_snapshot = _canonical_skill_release_footprint_snapshot(
 			stable_skill_id,
 			release_id,
@@ -4459,7 +4463,7 @@ func _apply_canonical_effects(
 			continuous_line_strip_ground_gu
 		)
 	if (
-		SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		_snapshot_strict_ok(skill_release_snapshot)
 		and str(skill_release_snapshot.get("shape_type", ""))
 		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
 	):
@@ -4609,7 +4613,7 @@ func _apply_canonical_effects(
 						)
 					)
 					if (
-						SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+						_snapshot_strict_ok(skill_release_snapshot)
 						and snapshot_destination_ground_gu.is_equal_approx(
 							destination_ground_gu
 						)
@@ -4743,7 +4747,7 @@ func _apply_canonical_spell_damage(
 	continuous_line_strip_ground_gu: Dictionary = {},
 	skill_release_snapshot: Dictionary = {}
 ) -> bool:
-	if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+	if not _snapshot_strict_ok(skill_release_snapshot):
 		var raw_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
 			"skill_footprint_snapshot", {}
 		)
@@ -4772,7 +4776,7 @@ func _apply_canonical_spell_damage(
 		primary != null
 		and effect_type not in ["area_damage", "caster_centered_area_damage"]
 		and (
-			not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+			not _snapshot_strict_ok(skill_release_snapshot)
 			or _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
 		)
 	):
@@ -4789,7 +4793,7 @@ func _apply_canonical_spell_damage(
 			if (
 				_skill_snapshot_intersects_enemy(skill_release_snapshot, enemy)
 				or (
-					not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+					not _snapshot_strict_ok(skill_release_snapshot)
 					and _ground_circle_intersects_enemy_footprint_gu(
 						origin,
 						radius_gu,
@@ -4825,11 +4829,11 @@ func _record_skill_footprint_release_diagnostic(
 	damage_applied: bool
 ) -> void:
 	var raw_snapshot: Variant = skill_release_snapshot
-	if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+	if not _snapshot_strict_ok(skill_release_snapshot):
 		raw_snapshot = skill_release_snapshot.get("skill_footprint_snapshot", {})
 	if (
 		not raw_snapshot is Dictionary
-		or not SkillFootprintSnapshotScript.is_valid(raw_snapshot)
+		or not _snapshot_strict_ok(raw_snapshot)
 	):
 		return
 	var snapshot: Dictionary = raw_snapshot as Dictionary
@@ -4912,7 +4916,7 @@ func _canonical_skill_release_footprint_snapshot(
 	)
 	if (
 		raw_line_snapshot is Dictionary
-		and SkillFootprintSnapshotScript.is_valid(raw_line_snapshot)
+		and _snapshot_strict_ok(raw_line_snapshot)
 	):
 		return raw_line_snapshot as Dictionary
 	if GROUND_EXACT_SKILL_IDS.has(stable_skill_id) and not effective_geometry_cells.is_empty():
@@ -4992,7 +4996,7 @@ func _skill_snapshot_intersects_enemy(
 ) -> bool:
 	return (
 		is_instance_valid(enemy)
-		and SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		and _snapshot_strict_ok(skill_release_snapshot)
 		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_release_snapshot,
 			_canonical_screen_px_to_ground_gu(enemy.global_position),
@@ -5229,14 +5233,14 @@ func _canonical_spell_geometry_targets(
 				continue
 			var enemy := node as EnemyActor
 			if (
-				SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+				_snapshot_strict_ok(skill_release_snapshot)
 				and not _skill_snapshot_intersects_enemy(
 					skill_release_snapshot, enemy
 				)
 			):
 				continue
 			if (
-				not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+				not _snapshot_strict_ok(skill_release_snapshot)
 				and not CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
 					continuous_line_strip_ground_gu,
 					_enemy_footprint_polygon_ground_gu(enemy)
@@ -5270,7 +5274,7 @@ func _canonical_spell_geometry_targets(
 				break
 		return targets
 	if (
-		SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		_snapshot_strict_ok(skill_release_snapshot)
 		and str(skill_release_snapshot.get("shape_type", ""))
 		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
 	):
@@ -5365,9 +5369,14 @@ func _spawn_canonical_ground_field(
 
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
 		var target_filters: Array[Callable] = []
+		var field_snapshot_validation_context := (
+			_canonical_snapshot_validation_context(
+				_canonical_screen_px_to_ground_gu(fallback_position)
+			)
+		)
 		for index: int in range(positions.size()):
 			var target_filter := Callable()
-			if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
+			if not _snapshot_strict_ok(skill_release_snapshot):
 				if index < coverage_cells.size():
 					target_filter = (
 						Callable(self, "_canonical_ground_cell_contains_enemy").bind(
@@ -5386,7 +5395,8 @@ func _spawn_canonical_ground_field(
 			Callable(self, "_apply_canonical_ground_tick").bind(stable_skill_id),
 			Callable(self, "_canonical_screen_px_to_ground_gu"),
 			release_id,
-			skill_release_snapshot
+			skill_release_snapshot,
+			field_snapshot_validation_context
 		)
 		add_child(field_controller)
 		# HC-P1-010: the canonical snapshot owns damage truth, but the formal
@@ -5401,7 +5411,10 @@ func _spawn_canonical_ground_field(
 				false,
 				coverage_cells[index] if index < coverage_cells.size() else null,
 				release_id,
-				skill_release_snapshot
+				skill_release_snapshot,
+				_canonical_snapshot_validation_context(
+					_canonical_screen_px_to_ground_gu(position)
+				)
 			)
 		return
 
@@ -5424,7 +5437,8 @@ func _spawn_canonical_ground_effect(
 	applies_damage := true,
 	coverage_cell: Variant = null,
 	release_id := "",
-	skill_release_snapshot: Dictionary = {}
+	skill_release_snapshot: Dictionary = {},
+	snapshot_validation_context: Dictionary = {}
 ) -> void:
 	var ground_effect := GroundSkillEffect.new()
 	ground_effect.setup_ground_unit_effect(
@@ -5437,7 +5451,8 @@ func _spawn_canonical_ground_effect(
 		maxf(0.05, float(effect.get("tick_interval_ms", 1000)) / 1000.0),
 		74.0,
 		release_id,
-		skill_release_snapshot
+		skill_release_snapshot,
+		snapshot_validation_context
 	)
 	ground_effect.configure_runtime_resolution(
 		player,
@@ -5451,7 +5466,7 @@ func _spawn_canonical_ground_effect(
 			Callable(self, "_ground_field_snapshot_contains_enemy").bind(
 				skill_release_snapshot
 			)
-			if SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+			if _snapshot_strict_ok(skill_release_snapshot)
 			else (
 				Callable(self, "_canonical_ground_cell_contains_enemy").bind(
 					coverage_cell
@@ -5485,7 +5500,7 @@ func _ground_field_snapshot_contains_enemy(
 ) -> bool:
 	if (
 		not is_instance_valid(enemy)
-		or not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+		or not _snapshot_strict_ok(skill_release_snapshot)
 	):
 		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
@@ -5702,6 +5717,15 @@ func _spawn_canonical_cast_visual(
 		"visual": visual_profile,
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
 		"visual_radius_px": 72.0,
+		# Q1-A: the visual consumer validates the release snapshot under
+		# STRICT_V2 with an explicit runtime-map context (projection converter
+		# + expected map id). No context-free is_valid() gate is used here.
+		"snapshot_validation_policy": (
+			SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+		),
+		"snapshot_validation_context": _canonical_snapshot_validation_context(
+			_canonical_screen_px_to_ground_gu(origin)
+		),
 		# Visuals and damage must consume the exact same versioned geometry
 		# contract.  The former local v1 identifier was not recognized by
 		# CasterSpellGeometry.visual_context_from_plan(), so runtime visuals fell
@@ -5717,7 +5741,7 @@ func _spawn_canonical_cast_visual(
 		# Never derive a second direction, length or width inside the renderer.
 		"skill_footprint_snapshot": (
 			skill_release_snapshot
-			if SkillFootprintSnapshotScript.is_valid(skill_release_snapshot)
+			if _snapshot_strict_ok(skill_release_snapshot)
 			else continuous_line_strip_ground_gu.get(
 				"skill_footprint_snapshot", {}
 			)
@@ -5760,6 +5784,12 @@ func _spawn_canonical_teleport_arrival(
 			"arrival"
 		),
 		"visual_radius_px": 72.0,
+		"snapshot_validation_policy": (
+			SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+		),
+		"snapshot_validation_context": _canonical_snapshot_validation_context(
+			_canonical_screen_px_to_ground_gu(destination)
+		),
 		"skill_footprint_snapshot": skill_release_snapshot,
 	}
 	var arrival := CasterSkillRuntimeScript.create_visual(
@@ -5875,6 +5905,41 @@ func _canonical_snapshot_absolute_context(
 		origin_ground_gu,
 		Callable(self, "_canonical_ground_gu_to_screen_px")
 	)
+
+
+func _canonical_snapshot_validation_context(
+	origin_ground_gu: Vector2
+) -> Dictionary:
+	var context := _canonical_snapshot_absolute_context(origin_ground_gu)
+	context["expected_runtime_map_id"] = str(current_map_id)
+	return context
+
+
+func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
+	var origin := Vector2.ZERO
+	if is_instance_valid(player):
+		origin = _canonical_screen_px_to_ground_gu(player.global_position)
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_canonical_snapshot_validation_context(origin),
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false))
+
+
+func _snapshot_legacy_ok(
+	snapshot: Dictionary,
+	consumer_name: String,
+	migration_reason: String
+) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		SkillFootprintSnapshotScript.legacy_consumer_context(
+			consumer_name,
+			migration_reason,
+			"world_ground_plane_absolute"
+		),
+		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+	).get("valid", false))
 
 
 func _canonical_facing(direction: Vector2) -> Vector2i:
@@ -6186,7 +6251,11 @@ func _is_primary_melee_candidate(
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 	if (
-		SkillFootprintSnapshotScript.is_valid(melee_release_snapshot)
+		_snapshot_legacy_ok(
+			melee_release_snapshot,
+			"warrior_primary_melee",
+			"warrior melee uses the legacy geometry builder without coordinate context"
+		)
 		and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
 			melee_release_snapshot,
 			target_ground_gu,
@@ -6314,7 +6383,11 @@ func _thrust_secondary_targets(
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 		if (
-			SkillFootprintSnapshotScript.is_valid(melee_release_snapshot)
+			_snapshot_legacy_ok(
+				melee_release_snapshot,
+				"warrior_thrust_secondary",
+				"warrior melee uses the legacy geometry builder without coordinate context"
+			)
 			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
 				melee_release_snapshot,
 				target_ground_gu,
@@ -6350,7 +6423,11 @@ func _half_moon_secondary_targets(
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 		if (
-			SkillFootprintSnapshotScript.is_valid(melee_release_snapshot)
+			_snapshot_legacy_ok(
+				melee_release_snapshot,
+				"warrior_half_moon_secondary",
+				"warrior melee uses the legacy geometry builder without coordinate context"
+			)
 			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
 				melee_release_snapshot,
 				target_ground_gu,

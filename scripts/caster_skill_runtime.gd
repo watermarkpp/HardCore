@@ -345,7 +345,10 @@ static func create_ground_effects(
 		center,
 		cell_spacing_gu
 	)
-	if not SkillFootprintSnapshotScript.is_valid(release_snapshot):
+	if not _snapshot_strict_ok(
+		release_snapshot,
+		plan.get("snapshot_coordinate_context", {})
+	):
 		var inferred_cells_grid_steps: Array[Vector2i] = []
 		for effect_position: Vector2 in effect_positions:
 			inferred_cells_grid_steps.append(Vector2i(
@@ -374,7 +377,10 @@ static func create_ground_effects(
 			float(plan.get("tick_interval_seconds", 0.8)),
 			visual_radius_px,
 			release_id,
-			release_snapshot
+			release_snapshot,
+			_expected_validation_context(
+				plan.get("snapshot_coordinate_context", {})
+			)
 		)
 		effect.configure_runtime_source(source_actor)
 		effects.append(effect)
@@ -536,6 +542,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		return result
 	var caster := context.get("caster") as PlayerCharacter
 	var primary_target := context.get("primary_target") as Node2D
+	var snapshot_validation_context := _expected_validation_context(
+		context.get("snapshot_coordinate_context", {})
+	)
 	var raw_plan_snapshot: Variant = plan.get("skill_footprint_snapshot", {})
 	if (
 		raw_plan_snapshot is Dictionary
@@ -706,7 +715,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 						bool(result.compatibility_adapter_used)
 						or _target_matches_release_snapshot(
 							result.skill_footprint_snapshot,
-							target
+							target,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -725,7 +735,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					and (
 						bool(result.compatibility_adapter_used)
 						or _target_intersects_release_snapshot(
-							result.skill_footprint_snapshot, target
+							result.skill_footprint_snapshot,
+							target,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -746,7 +758,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 						bool(result.compatibility_adapter_used)
 						or _target_matches_release_snapshot(
 							result.skill_footprint_snapshot,
-							ally
+							ally,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -759,7 +772,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					and (
 						bool(result.compatibility_adapter_used)
 						or _target_intersects_release_snapshot(
-							result.skill_footprint_snapshot, ally
+							result.skill_footprint_snapshot,
+							ally,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -770,7 +785,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				if (
 					not bool(result.compatibility_adapter_used)
 					and not _target_intersects_release_snapshot(
-						result.skill_footprint_snapshot, target
+						result.skill_footprint_snapshot,
+						target,
+						snapshot_validation_context
 					)
 				):
 					continue
@@ -824,7 +841,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			if (
 				primary_target is EnemyActor
 				and _target_matches_release_snapshot(
-					result.skill_footprint_snapshot, primary_target
+					result.skill_footprint_snapshot,
+					primary_target,
+					snapshot_validation_context
 				)
 			):
 				primary_target.apply_charm(float(plan.get("duration_seconds", 0.0)))
@@ -840,7 +859,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			if (
 				primary_target is EnemyActor
 				and _target_matches_release_snapshot(
-					result.skill_footprint_snapshot, primary_target
+					result.skill_footprint_snapshot,
+					primary_target,
+					snapshot_validation_context
 				)
 			):
 				primary_target.take_damage(primary_target.current_hp, caster)
@@ -849,7 +870,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			if (
 				primary_target is EnemyActor
 				and _target_matches_release_snapshot(
-					result.skill_footprint_snapshot, primary_target
+					result.skill_footprint_snapshot,
+					primary_target,
+					snapshot_validation_context
 				)
 			):
 				primary_target.apply_poison(
@@ -869,7 +892,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					and (
 						bool(result.compatibility_adapter_used)
 						or _target_intersects_release_snapshot(
-							result.skill_footprint_snapshot, ally
+							result.skill_footprint_snapshot,
+							ally,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -882,7 +907,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					and (
 						bool(result.compatibility_adapter_used)
 						or _target_intersects_release_snapshot(
-							result.skill_footprint_snapshot, ally
+							result.skill_footprint_snapshot,
+							ally,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -898,7 +925,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					and (
 						bool(result.compatibility_adapter_used)
 						or _target_intersects_release_snapshot(
-							result.skill_footprint_snapshot, target
+							result.skill_footprint_snapshot,
+							target,
+							snapshot_validation_context
 						)
 					)
 				):
@@ -908,7 +937,9 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			if (
 				primary_target is EnemyActor
 				and _target_matches_release_snapshot(
-					result.skill_footprint_snapshot, primary_target
+					result.skill_footprint_snapshot,
+					primary_target,
+					snapshot_validation_context
 				)
 			):
 				result.inspected_target = {
@@ -929,12 +960,37 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			if (
 				primary_target is EnemyActor
 				and _target_matches_release_snapshot(
-					result.skill_footprint_snapshot, primary_target
+					result.skill_footprint_snapshot,
+					primary_target,
+					snapshot_validation_context
 				)
 			):
 				operation_adapter.call(plan, context)
 				result.applied_count = 1
 	return result
+
+
+static func _expected_validation_context(
+	coordinate_context: Dictionary
+) -> Dictionary:
+	var expected_context := coordinate_context.duplicate(true)
+	if expected_context.is_empty():
+		return expected_context
+	expected_context["expected_runtime_map_id"] = str(
+		expected_context.get("runtime_map_id", "")
+	)
+	return expected_context
+
+
+static func _snapshot_strict_ok(
+	snapshot: Dictionary,
+	coordinate_context: Dictionary
+) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_expected_validation_context(coordinate_context),
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false))
 
 
 static func _release_id(plan: Dictionary, context: Dictionary) -> String:
@@ -945,7 +1001,9 @@ static func _release_id(plan: Dictionary, context: Dictionary) -> String:
 	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot", {})
 	if (
 		raw_snapshot is Dictionary
-		and SkillFootprintSnapshotScript.is_valid(raw_snapshot as Dictionary)
+		and SkillFootprintSnapshotScript.has_legacy_base_contract(
+			raw_snapshot as Dictionary
+		)
 	):
 		var snapshot_release_id := str(
 			(raw_snapshot as Dictionary).get("release_id", "")
@@ -970,9 +1028,10 @@ static func _geometry_cells_grid_steps(plan: Dictionary) -> Array[Vector2i]:
 
 static func _target_intersects_release_snapshot(
 	skill_footprint_snapshot: Dictionary,
-	target: Node2D
+	target: Node2D,
+	expected_context: Dictionary = {}
 ) -> bool:
-	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+	if not _snapshot_strict_ok(skill_footprint_snapshot, expected_context):
 		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 		skill_footprint_snapshot,
@@ -989,7 +1048,9 @@ static func _snapshot_matches_release(
 	release_id: String
 ) -> bool:
 	return (
-		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		SkillFootprintSnapshotScript.has_legacy_base_contract(
+			skill_footprint_snapshot
+		)
 		and str(skill_footprint_snapshot.get("skill_id", "")) == skill_id
 		and str(skill_footprint_snapshot.get("release_id", "")) == release_id
 	)
@@ -1052,9 +1113,10 @@ static func _target_combat_radius_gu(target: Node2D) -> float:
 
 static func _target_matches_release_snapshot(
 	skill_footprint_snapshot: Dictionary,
-	target: Node2D
+	target: Node2D,
+	expected_context: Dictionary = {}
 ) -> bool:
-	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+	if not _snapshot_strict_ok(skill_footprint_snapshot, expected_context):
 		return false
 	if int(skill_footprint_snapshot.get("target_instance_id", 0)) != target.get_instance_id():
 		return false
