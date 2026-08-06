@@ -138,13 +138,6 @@ func query_segment_candidates(
 	end_ground_gu: Vector2,
 	expansion_gu: float
 ) -> Array[Dictionary]:
-	index_query_count += 1
-	var result: Array[Dictionary] = []
-	if runtime_map_id < 0:
-		return result
-	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
-	if map_buckets.is_empty():
-		return result
 	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
 	var min_gu := Vector2(
 		minf(start_ground_gu.x, end_ground_gu.x),
@@ -154,8 +147,40 @@ func query_segment_candidates(
 		maxf(start_ground_gu.x, end_ground_gu.x),
 		maxf(start_ground_gu.y, end_ground_gu.y)
 	) + Vector2.ONE * expansion
-	var min_bucket := _bucket_key(min_gu)
-	var max_bucket := _bucket_key(max_gu)
+	return _query_aabb_candidates(
+		runtime_map_id,
+		Rect2(min_gu, max_gu - min_gu)
+	)
+
+
+func query_aabb_candidates(
+	runtime_map_id: int,
+	bounds_ground_gu: Rect2,
+	expansion_gu := 0.0
+) -> Array[Dictionary]:
+	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
+	return _query_aabb_candidates(
+		runtime_map_id,
+		Rect2(
+			bounds_ground_gu.position - Vector2.ONE * expansion,
+			bounds_ground_gu.size + Vector2.ONE * expansion * 2.0
+		)
+	)
+
+
+func _query_aabb_candidates(
+	runtime_map_id: int,
+	bounds_ground_gu: Rect2
+) -> Array[Dictionary]:
+	index_query_count += 1
+	var result: Array[Dictionary] = []
+	if runtime_map_id < 0 or bounds_ground_gu.size.x < 0.0:
+		return result
+	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
+	if map_buckets.is_empty():
+		return result
+	var min_bucket := _bucket_key(bounds_ground_gu.position)
+	var max_bucket := _bucket_key(bounds_ground_gu.end)
 	var seen: Dictionary = {}
 	for bucket_y: int in range(min_bucket.y, max_bucket.y + 1):
 		for bucket_x: int in range(min_bucket.x, max_bucket.x + 1):
