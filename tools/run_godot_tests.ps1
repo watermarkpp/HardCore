@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'safe_logout_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'safe_logout_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -162,7 +162,26 @@ $Suites.snapshot_coordinate_critical = @(
     'tests/snapshot_absolute_converter_failure_test.tscn',
     'tests/snapshot_non_finite_coordinate_test.tscn',
     'tests/snapshot_legacy_explicit_policy_test.tscn',
-    'tests/snapshot_consumer_runtime_map_guard_test.tscn'
+    'tests/snapshot_consumer_runtime_map_guard_test.tscn',
+    'tests/warrior_snapshot_v2_production_test.tscn',
+    'tests/enemy_snapshot_v2_production_test.tscn',
+    'tests/summon_snapshot_v2_production_test.tscn',
+    'tests/projectile_snapshot_v2_production_test.tscn',
+    'tests/ground_effect_snapshot_v2_production_test.tscn',
+    'tests/fire_wall_snapshot_v2_production_test.tscn',
+    'tests/production_snapshot_no_legacy_test.tscn',
+    'tests/canonical_snapshot_identity_production_test.tscn'
+)
+
+$Suites.snapshot_production_critical = @(
+    'tests/warrior_snapshot_v2_production_test.tscn',
+    'tests/enemy_snapshot_v2_production_test.tscn',
+    'tests/summon_snapshot_v2_production_test.tscn',
+    'tests/projectile_snapshot_v2_production_test.tscn',
+    'tests/ground_effect_snapshot_v2_production_test.tscn',
+    'tests/fire_wall_snapshot_v2_production_test.tscn',
+    'tests/production_snapshot_no_legacy_test.tscn',
+    'tests/canonical_snapshot_identity_production_test.tscn'
 )
 
 $Suites.safe_logout_critical = @(
@@ -183,6 +202,7 @@ $Suites.critical = @(
 ) + @(
     $Suites.caster_visual_critical +
     $Suites.snapshot_coordinate_critical +
+    $Suites.snapshot_production_critical +
     $Suites.safe_logout_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
