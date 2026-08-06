@@ -83,6 +83,22 @@ $PersistentExpected = @(
     'tests/persistent_ground_effect_spatial_service_reuse_test.tscn'
 )
 
+$FireWallSuite = 'fire_wall_controller_critical'
+$FireWallExpected = @(
+    'tests/fire_wall_single_query_per_tick_test.tscn',
+    'tests/fire_wall_single_exact_test_per_candidate_test.tscn',
+    'tests/fire_wall_visual_cells_pure_test.tscn',
+    'tests/fire_wall_hit_parity_test.tscn',
+    'tests/fire_wall_tick_claim_parity_test.tscn',
+    'tests/fire_wall_boundary_target_test.tscn',
+    'tests/fire_wall_stacking_parity_test.tscn',
+    'tests/fire_wall_runtime_map_isolation_test.tscn',
+    'tests/fire_wall_visual_cell_lifecycle_test.tscn',
+    'tests/fire_wall_candidate_reduction_test.tscn',
+    'tests/fire_wall_no_group_scan_test.tscn',
+    'tests/fire_wall_canonical_snapshot_identity_test.tscn'
+)
+
 $missing = @()
 $duplicates = @()
 $gitTracked = @()
@@ -261,11 +277,47 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $pgIncluded = ($RunnerSource -match '\$Suites\.persistent_ground_effect_critical\s*\+')
 $pgValidateSet = ($RunnerSource -match "persistent_ground_effect_critical")
 
+# fire_wall_controller_critical verification
+$fwMissing = @()
+$fwDuplicates = @()
+$fwGitTracked = @()
+foreach ($path in $FireWallExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $fwMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $fwGitTracked += $path
+    }
+}
+$fwDuplicates = @($FireWallExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$fwBlock = $false
+$fwFound = $false
+$fwEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.fire_wall_controller_critical\s*=') {
+        $fwBlock = $true
+        $fwFound = $true
+        continue
+    }
+    if ($fwBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $fwEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $fwBlock = $false
+            break
+        }
+    }
+}
+$fwIncluded = ($RunnerSource -match '\$Suites\.fire_wall_controller_critical\s*\+')
+$fwValidateSet = ($RunnerSource -match "fire_wall_controller_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
 $ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
 $ok = $ok -and $pgFound -and ($pgEntries.Count -eq $PersistentExpected.Count) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
+$ok = $ok -and $fwFound -and ($fwEntries.Count -eq $FireWallExpected.Count) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -312,6 +364,14 @@ $report = [ordered]@{
     persistent_ground_effect_not_git_tracked = $pgGitTracked
     persistent_ground_effect_included_in_default_critical = $pgIncluded
     persistent_ground_effect_validate_set = $pgValidateSet
+    fire_wall_controller_suite = $FireWallSuite
+    fire_wall_controller_expected_count = $FireWallExpected.Count
+    fire_wall_controller_actual_count = $fwEntries.Count
+    fire_wall_controller_missing = $fwMissing
+    fire_wall_controller_duplicates = $fwDuplicates
+    fire_wall_controller_not_git_tracked = $fwGitTracked
+    fire_wall_controller_included_in_default_critical = $fwIncluded
+    fire_wall_controller_validate_set = $fwValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -226,6 +226,21 @@ $Suites.persistent_ground_effect_critical = @(
     'tests/persistent_ground_effect_spatial_service_reuse_test.tscn'
 )
 
+$Suites.fire_wall_controller_critical = @(
+    'tests/fire_wall_single_query_per_tick_test.tscn',
+    'tests/fire_wall_single_exact_test_per_candidate_test.tscn',
+    'tests/fire_wall_visual_cells_pure_test.tscn',
+    'tests/fire_wall_hit_parity_test.tscn',
+    'tests/fire_wall_tick_claim_parity_test.tscn',
+    'tests/fire_wall_boundary_target_test.tscn',
+    'tests/fire_wall_stacking_parity_test.tscn',
+    'tests/fire_wall_runtime_map_isolation_test.tscn',
+    'tests/fire_wall_visual_cell_lifecycle_test.tscn',
+    'tests/fire_wall_candidate_reduction_test.tscn',
+    'tests/fire_wall_no_group_scan_test.tscn',
+    'tests/fire_wall_canonical_snapshot_identity_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -235,6 +250,7 @@ $Suites.critical = @(
     $Suites.projectile_spatial_critical +
     $Suites.safe_logout_critical +
     $Suites.persistent_ground_effect_critical +
+    $Suites.fire_wall_controller_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
