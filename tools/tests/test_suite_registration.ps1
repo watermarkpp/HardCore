@@ -99,6 +99,21 @@ $FireWallExpected = @(
     'tests/fire_wall_canonical_snapshot_identity_test.tscn'
 )
 
+$MonsterStreamingSuite = 'monster_streaming_critical'
+$MonsterStreamingExpected = @(
+    'tests/monster_streaming_single_poll_per_frame_test.tscn',
+    'tests/monster_streaming_request_dedup_test.tscn',
+    'tests/monster_streaming_visual_parity_test.tscn',
+    'tests/monster_streaming_animation_continuity_test.tscn',
+    'tests/monster_streaming_registration_lifecycle_test.tscn',
+    'tests/monster_streaming_generation_guard_test.tscn',
+    'tests/monster_streaming_failure_contract_test.tscn',
+    'tests/monster_streaming_no_visual_queue_test.tscn',
+    'tests/monster_streaming_no_sync_load_test.tscn',
+    'tests/monster_streaming_spatial_index_non_regression_test.tscn',
+    'tests/monster_streaming_scaling_test.tscn'
+)
+
 $missing = @()
 $duplicates = @()
 $gitTracked = @()
@@ -312,12 +327,48 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $fwIncluded = ($RunnerSource -match '\$Suites\.fire_wall_controller_critical\s*\+')
 $fwValidateSet = ($RunnerSource -match "fire_wall_controller_critical")
 
+# monster_streaming_critical verification
+$msMissing = @()
+$msDuplicates = @()
+$msGitTracked = @()
+foreach ($path in $MonsterStreamingExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $msMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $msGitTracked += $path
+    }
+}
+$msDuplicates = @($MonsterStreamingExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$msBlock = $false
+$msFound = $false
+$msEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.monster_streaming_critical\s*=') {
+        $msBlock = $true
+        $msFound = $true
+        continue
+    }
+    if ($msBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $msEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $msBlock = $false
+            break
+        }
+    }
+}
+$msIncluded = ($RunnerSource -match '\$Suites\.monster_streaming_critical\s*\+')
+$msValidateSet = ($RunnerSource -match "monster_streaming_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
 $ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
 $ok = $ok -and $pgFound -and ($pgEntries.Count -eq $PersistentExpected.Count) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
 $ok = $ok -and $fwFound -and ($fwEntries.Count -eq $FireWallExpected.Count) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
+$ok = $ok -and $msFound -and ($msEntries.Count -eq $MonsterStreamingExpected.Count) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncluded -and $msValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -372,6 +423,14 @@ $report = [ordered]@{
     fire_wall_controller_not_git_tracked = $fwGitTracked
     fire_wall_controller_included_in_default_critical = $fwIncluded
     fire_wall_controller_validate_set = $fwValidateSet
+    monster_streaming_suite = $MonsterStreamingSuite
+    monster_streaming_expected_count = $MonsterStreamingExpected.Count
+    monster_streaming_actual_count = $msEntries.Count
+    monster_streaming_missing = $msMissing
+    monster_streaming_duplicates = $msDuplicates
+    monster_streaming_not_git_tracked = $msGitTracked
+    monster_streaming_included_in_default_critical = $msIncluded
+    monster_streaming_validate_set = $msValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

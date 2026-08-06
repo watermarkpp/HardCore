@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -241,6 +241,20 @@ $Suites.fire_wall_controller_critical = @(
     'tests/fire_wall_canonical_snapshot_identity_test.tscn'
 )
 
+$Suites.monster_streaming_critical = @(
+    'tests/monster_streaming_single_poll_per_frame_test.tscn',
+    'tests/monster_streaming_request_dedup_test.tscn',
+    'tests/monster_streaming_visual_parity_test.tscn',
+    'tests/monster_streaming_animation_continuity_test.tscn',
+    'tests/monster_streaming_registration_lifecycle_test.tscn',
+    'tests/monster_streaming_generation_guard_test.tscn',
+    'tests/monster_streaming_failure_contract_test.tscn',
+    'tests/monster_streaming_no_visual_queue_test.tscn',
+    'tests/monster_streaming_no_sync_load_test.tscn',
+    'tests/monster_streaming_spatial_index_non_regression_test.tscn',
+    'tests/monster_streaming_scaling_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -251,6 +265,7 @@ $Suites.critical = @(
     $Suites.safe_logout_critical +
     $Suites.persistent_ground_effect_critical +
     $Suites.fire_wall_controller_critical +
+    $Suites.monster_streaming_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
