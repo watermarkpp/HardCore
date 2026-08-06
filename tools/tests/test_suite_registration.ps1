@@ -114,6 +114,20 @@ $MonsterStreamingExpected = @(
     'tests/monster_streaming_scaling_test.tscn'
 )
 
+$SkillPlanSuite = 'skill_execution_plan_critical'
+$SkillPlanExpected = @(
+    'tests/skill_plan_contract_test.tscn',
+    'tests/skill_plan_shadow_parity_test.tscn',
+    'tests/skill_plan_no_side_effect_shadow_test.tscn',
+    'tests/skill_plan_single_resource_commit_test.tscn',
+    'tests/skill_plan_single_cooldown_commit_test.tscn',
+    'tests/skill_plan_single_snapshot_build_test.tscn',
+    'tests/skill_plan_immutable_consumer_test.tscn',
+    'tests/skill_plan_rejection_reason_parity_test.tscn',
+    'tests/caster_runtime_canonical_plan_adapter_test.tscn',
+    'tests/skill_plan_profession_matrix_test.tscn'
+)
+
 $missing = @()
 $duplicates = @()
 $gitTracked = @()
@@ -362,6 +376,41 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $msIncluded = ($RunnerSource -match '\$Suites\.monster_streaming_critical\s*\+')
 $msValidateSet = ($RunnerSource -match "monster_streaming_critical")
 
+# skill_execution_plan_critical verification
+$spMissing = @()
+$spDuplicates = @()
+$spGitTracked = @()
+foreach ($path in $SkillPlanExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $spMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $spGitTracked += $path
+    }
+}
+$spDuplicates = @($SkillPlanExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$spBlock = $false
+$spFound = $false
+$spEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.skill_execution_plan_critical\s*=') {
+        $spBlock = $true
+        $spFound = $true
+        continue
+    }
+    if ($spBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $spEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $spBlock = $false
+            break
+        }
+    }
+}
+$spIncluded = ($RunnerSource -match '\$Suites\.skill_execution_plan_critical\s*\+')
+$spValidateSet = ($RunnerSource -match "skill_execution_plan_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -369,6 +418,7 @@ $ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -a
 $ok = $ok -and $pgFound -and ($pgEntries.Count -eq $PersistentExpected.Count) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
 $ok = $ok -and $fwFound -and ($fwEntries.Count -eq $FireWallExpected.Count) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
 $ok = $ok -and $msFound -and ($msEntries.Count -eq $MonsterStreamingExpected.Count) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncluded -and $msValidateSet
+$ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPlanExpected.Count) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -431,6 +481,14 @@ $report = [ordered]@{
     monster_streaming_not_git_tracked = $msGitTracked
     monster_streaming_included_in_default_critical = $msIncluded
     monster_streaming_validate_set = $msValidateSet
+    skill_execution_plan_suite = $SkillPlanSuite
+    skill_execution_plan_expected_count = $SkillPlanExpected.Count
+    skill_execution_plan_actual_count = $spEntries.Count
+    skill_execution_plan_missing = $spMissing
+    skill_execution_plan_duplicates = $spDuplicates
+    skill_execution_plan_not_git_tracked = $spGitTracked
+    skill_execution_plan_included_in_default_critical = $spIncluded
+    skill_execution_plan_validate_set = $spValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

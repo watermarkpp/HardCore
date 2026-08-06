@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -255,6 +255,19 @@ $Suites.monster_streaming_critical = @(
     'tests/monster_streaming_scaling_test.tscn'
 )
 
+$Suites.skill_execution_plan_critical = @(
+    'tests/skill_plan_contract_test.tscn',
+    'tests/skill_plan_shadow_parity_test.tscn',
+    'tests/skill_plan_no_side_effect_shadow_test.tscn',
+    'tests/skill_plan_single_resource_commit_test.tscn',
+    'tests/skill_plan_single_cooldown_commit_test.tscn',
+    'tests/skill_plan_single_snapshot_build_test.tscn',
+    'tests/skill_plan_immutable_consumer_test.tscn',
+    'tests/skill_plan_rejection_reason_parity_test.tscn',
+    'tests/caster_runtime_canonical_plan_adapter_test.tscn',
+    'tests/skill_plan_profession_matrix_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -266,6 +279,7 @@ $Suites.critical = @(
     $Suites.persistent_ground_effect_critical +
     $Suites.fire_wall_controller_critical +
     $Suites.monster_streaming_critical +
+    $Suites.skill_execution_plan_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
