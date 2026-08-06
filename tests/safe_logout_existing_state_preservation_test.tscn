@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q0b_preserve"]
+[ext_resource type="Script" path="res://tests/safe_logout_existing_state_preservation_test.gd" id="1"]
+[node name="SafeLogoutExistingStatePreservation" type="Node"]
+script = ExtResource("1")
