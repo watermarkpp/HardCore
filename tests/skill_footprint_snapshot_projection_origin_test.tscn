@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://p1_010_proj"]
+[ext_resource type="Script" path="res://tests/skill_footprint_snapshot_projection_origin_test.gd" id="1"]
+[node name="SnapshotProjectionOrigin" type="Node"]
+script = ExtResource("1")

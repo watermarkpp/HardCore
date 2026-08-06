@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://p1_010_legacy"]
+[ext_resource type="Script" path="res://tests/skill_footprint_snapshot_legacy_upgrade_test.gd" id="1"]
+[node name="SnapshotLegacyUpgrade" type="Node"]
+script = ExtResource("1")

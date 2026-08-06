@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://p1_010_propagate"]
+[ext_resource type="Script" path="res://tests/canonical_snapshot_propagation_test.gd" id="1"]
+[node name="CanonicalSnapshotPropagation" type="Node"]
+script = ExtResource("1")
