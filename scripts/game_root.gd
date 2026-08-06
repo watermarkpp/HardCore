@@ -1389,6 +1389,12 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	current_zone = zone_name
 	current_map_data = map_data.duplicate(true)
 	current_map_id = int(map_data.get("mapId", -1)) if not map_data.is_empty() else -1
+	if map_data.is_empty():
+		# Q1-B: legacy zones without a database map entry (for example the
+		# outskirts playground) belong to the client 0.map home realm (runtime
+		# map 4). Snapshot consumers receive a formal runtime map id instead of
+		# -1, so STRICT_V2 absolute snapshots stay valid.
+		current_map_id = GameData.service_runtime_map_id(0)
 	background.set_zone_data(zone_name, current_map_data)
 	hud.set_zone_name("比奇营地 · 安全区" if current_map_id == 4 else zone_name)
 	if zone_name == "比奇城":
@@ -1820,6 +1826,10 @@ func _spawn_enemy(
 	context["respawn_random_seconds"] = maxf(0.0, float(context.get("respawn_random_seconds", 0.0)))
 	var enemy := EnemyActor.new()
 	enemy.setup(monster_data, player, is_boss)
+	enemy.configure_runtime_map_projection(
+		current_map_id,
+		Callable(self, "_canonical_ground_gu_to_screen_px")
+	)
 	enemy.global_position = spawn_position
 	enemy.set_meta("spawn_position", spawn_position)
 	enemy.set_meta("spawn_is_boss", is_boss)
@@ -2970,7 +2980,8 @@ func _build_wild_rush_path_plan(target: EnemyActor, release_id := "") -> Diction
 			* float(result.get("resolved_push_distance_gu", 0.0)),
 			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
 				ArtSpec.PLAYER_COLLISION_RADIUS_PX
-			)
+			),
+			_canonical_snapshot_validation_context(player_ground_gu)
 		)
 	)
 	return result
@@ -3075,11 +3086,7 @@ func _apply_wild_rush_displacement(
 	var player_origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
 	)
-	if not _snapshot_legacy_ok(
-		rush_snapshot,
-		"wild_rush_displacement",
-		"wild_rush uses the legacy swept-capsule builder without coordinate context"
-	):
+	if not _snapshot_strict_ok(rush_snapshot):
 		return false
 	if (
 		str(rush_snapshot.get("shape_type", ""))
@@ -3353,6 +3360,11 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	)
 	release_geometry = release_geometry.duplicate(true)
 	release_geometry["origin_ground_gu"] = _canonical_screen_px_to_ground_gu(origin)
+	release_geometry["snapshot_validation_context"] = (
+		_canonical_snapshot_validation_context(
+			release_geometry["origin_ground_gu"] as Vector2
+		)
+	)
 	release_geometry["release_id"] = str(melee_release_snapshot.get(
 		"release_id", release_geometry.get("release_id", "")
 	))
@@ -3362,7 +3374,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		thrust_damage_axis_plan = (
 			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 				_melee_direction_index(direction, release_geometry),
-				release_geometry
+				release_geometry,
+				release_geometry.get("snapshot_validation_context", {})
 			)
 		)
 		thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
@@ -3439,7 +3452,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			thrust_damage_axis_plan = (
 				WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 					_melee_direction_index(direction, release_geometry),
-					release_geometry
+					release_geometry,
+					release_geometry.get("snapshot_validation_context", {})
 				)
 			)
 			thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
@@ -3965,7 +3979,8 @@ func _execute_canonical_melee(
 		thrust_damage_axis_plan = (
 			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 				_melee_direction_index(direction, release_geometry),
-				release_geometry
+				release_geometry,
+				release_geometry.get("snapshot_validation_context", {})
 			)
 		)
 	var primary_targets := _physical_primary_targets(
@@ -5635,6 +5650,10 @@ func _apply_canonical_main_pet(
 	)
 	summon.set_meta("taoist_main_pet", true)
 	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
+	summon.configure_runtime_map_projection(
+		current_map_id,
+		Callable(self, "_canonical_ground_gu_to_screen_px")
+	)
 	summon.global_position = _summon_spawn_screen_position_px()
 	summon.configure_spawn_release_footprint(release_id)
 	add_child(summon)
@@ -5900,7 +5919,7 @@ func _canonical_snapshot_absolute_context(
 	# projection origin (the skill release origin) and the map projection
 	# callable. Screen offsets are relative to that origin.
 	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
-		str(current_map_id),
+		current_map_id,
 		origin_ground_gu,
 		origin_ground_gu,
 		Callable(self, "_canonical_ground_gu_to_screen_px")
@@ -5911,7 +5930,7 @@ func _canonical_snapshot_validation_context(
 	origin_ground_gu: Vector2
 ) -> Dictionary:
 	var context := _canonical_snapshot_absolute_context(origin_ground_gu)
-	context["expected_runtime_map_id"] = str(current_map_id)
+	context["expected_runtime_map_id"] = current_map_id
 	return context
 
 
@@ -5923,22 +5942,6 @@ func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
 		snapshot,
 		_canonical_snapshot_validation_context(origin),
 		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
-	).get("valid", false))
-
-
-func _snapshot_legacy_ok(
-	snapshot: Dictionary,
-	consumer_name: String,
-	migration_reason: String
-) -> bool:
-	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
-		snapshot,
-		SkillFootprintSnapshotScript.legacy_consumer_context(
-			consumer_name,
-			migration_reason,
-			"world_ground_plane_absolute"
-		),
-		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
 	).get("valid", false))
 
 
@@ -6037,6 +6040,10 @@ func _spawn_projectile(
 		effect_duration,
 		source_skill_id,
 		source_release_id
+	)
+	projectile.configure_runtime_map_projection(
+		current_map_id,
+		Callable(self, "_canonical_ground_gu_to_screen_px")
 	)
 	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
@@ -6151,12 +6158,15 @@ func _create_melee_release_footprint_snapshot(
 	var release_id := str(release_geometry.get("release_id", ""))
 	if release_id.is_empty():
 		release_id = _next_skill_footprint_release_id(skill_id)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
 	return WarriorMeleeGeometryScript.attack_release_footprint_snapshot_ground_gu(
 		skill_id,
 		release_id,
-		_canonical_screen_px_to_ground_gu(origin_screen_px),
+		origin_ground_gu,
 		_melee_direction_index(direction_screen_px, release_geometry),
-		mode
+		mode,
+		0.0,
+		_canonical_snapshot_validation_context(origin_ground_gu)
 	)
 
 
@@ -6251,11 +6261,7 @@ func _is_primary_melee_candidate(
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 	if (
-		_snapshot_legacy_ok(
-			melee_release_snapshot,
-			"warrior_primary_melee",
-			"warrior melee uses the legacy geometry builder without coordinate context"
-		)
+		_snapshot_strict_ok(melee_release_snapshot)
 		and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
 			melee_release_snapshot,
 			target_ground_gu,
@@ -6268,14 +6274,17 @@ func _is_primary_melee_candidate(
 			thrust_damage_axis_plan = (
 				WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 					direction_index,
-					{}
+					{},
+					_canonical_snapshot_validation_context(origin_ground_gu)
 				)
 			)
 		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
 			origin_ground_gu,
 			target_ground_gu,
 			enemy.combat_radius_gu,
-			thrust_damage_axis_plan
+			thrust_damage_axis_plan,
+			0.0,
+			_canonical_snapshot_validation_context(origin_ground_gu)
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
@@ -6374,7 +6383,8 @@ func _thrust_secondary_targets(
 		thrust_damage_axis_plan = (
 			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 				direction_index,
-				release_geometry
+				release_geometry,
+				release_geometry.get("snapshot_validation_context", {})
 			)
 		)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
@@ -6383,11 +6393,7 @@ func _thrust_secondary_targets(
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 		if (
-			_snapshot_legacy_ok(
-				melee_release_snapshot,
-				"warrior_thrust_secondary",
-				"warrior melee uses the legacy geometry builder without coordinate context"
-			)
+			_snapshot_strict_ok(melee_release_snapshot)
 			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
 				melee_release_snapshot,
 				target_ground_gu,
@@ -6399,7 +6405,9 @@ func _thrust_secondary_targets(
 			origin_ground_gu,
 			target_ground_gu,
 			enemy.combat_radius_gu,
-			thrust_damage_axis_plan
+			thrust_damage_axis_plan,
+			0.0,
+			_canonical_snapshot_validation_context(origin_ground_gu)
 		) != 2:
 			continue
 		result.append(enemy)
@@ -6423,11 +6431,7 @@ func _half_moon_secondary_targets(
 		var enemy := node as EnemyActor
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 		if (
-			_snapshot_legacy_ok(
-				melee_release_snapshot,
-				"warrior_half_moon_secondary",
-				"warrior melee uses the legacy geometry builder without coordinate context"
-			)
+			_snapshot_strict_ok(melee_release_snapshot)
 			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
 				melee_release_snapshot,
 				target_ground_gu,

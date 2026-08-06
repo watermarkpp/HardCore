@@ -49,22 +49,6 @@ static func snapshot_strict_valid(
 	).get("valid", false))
 
 
-static func snapshot_legacy_valid(
-	snapshot: Dictionary,
-	consumer_name: String,
-	migration_reason: String
-) -> bool:
-	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
-		snapshot,
-		SkillFootprintSnapshotScript.legacy_consumer_context(
-			consumer_name,
-			migration_reason,
-			"world_ground_plane_absolute"
-		),
-		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
-	).get("valid", false))
-
-
 static func _plan_validation_policy(plan: Dictionary) -> StringName:
 	var raw_policy: Variant = plan.get(
 		"snapshot_validation_policy",

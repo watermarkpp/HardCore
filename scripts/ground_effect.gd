@@ -127,6 +127,13 @@ func runtime_target_is_inside(target: Node2D) -> bool:
 			target_ground_gu,
 			_target_combat_radius_gu(target)
 		)
+	if SkillFootprintSnapshotScript.has_legacy_base_contract(
+		skill_footprint_snapshot
+	):
+		# Q1-B: a present snapshot that fails STRICT_V2 (for example a runtime
+		# map mismatch) must reject the tick instead of silently falling back
+		# to a screen-range guess.
+		return false
 	return GroundUnitSpaceScript.is_within_range_gu(
 		effect_ground_gu,
 		target_ground_gu,

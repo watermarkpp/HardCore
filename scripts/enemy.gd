@@ -82,6 +82,8 @@ var attack_range_gu := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(38
 var target: Node2D
 var primary_target: PlayerCharacter
 var is_boss := false
+var runtime_map_id: int = -1
+var runtime_ground_gu_to_screen_position_px := Callable()
 var poison_time := 0.0
 var poison_damage := 0
 var control_time := 0.0:
@@ -752,6 +754,10 @@ func _deal_melee_hit(
 			source_ground_gu,
 			target_ground_gu,
 			0.0,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+			"",
+			-1,
+			_snapshot_coordinate_context(),
 		)
 		snapshot = _decorate_attack_footprint_snapshot(
 			snapshot,
@@ -775,6 +781,8 @@ func _deal_melee_hit(
 			_next_spatial_release_id("release_contact"),
 			source_ground_gu,
 			contact_projection_radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+			_snapshot_coordinate_context(),
 		)
 		snapshot = _decorate_attack_footprint_snapshot(
 			snapshot,
@@ -800,30 +808,42 @@ func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
 
 
-func _legacy_snapshot_ok(
-	snapshot: Dictionary,
-	consumer_name: String,
-	migration_reason: String
-) -> bool:
+func configure_runtime_map_projection(
+	map_id: int,
+	ground_gu_to_screen_position_px: Callable
+) -> void:
+	runtime_map_id = int(map_id)
+	runtime_ground_gu_to_screen_position_px = (
+		ground_gu_to_screen_position_px
+		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+
+
+func _snapshot_coordinate_context() -> Dictionary:
+	var origin_ground_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
+	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
+		runtime_map_id,
+		origin_ground_gu,
+		origin_ground_gu,
+		runtime_ground_gu_to_screen_position_px
+	)
+
+
+func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
 	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
 		snapshot,
-		SkillFootprintSnapshotScript.legacy_consumer_context(
-			consumer_name,
-			migration_reason,
-			"world_ground_plane_absolute"
-		),
-		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+		_snapshot_coordinate_context(),
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 	).get("valid", false))
 
 
 func _snapshot_intersects_target(snapshot: Dictionary, hit_target: Node2D) -> bool:
 	return (
 		is_instance_valid(hit_target)
-		and _legacy_snapshot_ok(
-			snapshot,
-			"enemy_attack_intersection",
-			"enemy attack footprints are built by the legacy builder without coordinate context"
-		)
+		and _snapshot_strict_ok(snapshot)
 		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			snapshot,
 			_screen_position_px_to_ground_position_gu(hit_target.global_position),
@@ -909,6 +929,8 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 		_next_spatial_release_id("area_circle"),
 		_screen_position_px_to_ground_position_gu(global_position),
 		range_gu,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		_snapshot_coordinate_context(),
 	)
 	return _decorate_attack_footprint_snapshot(
 		snapshot,
@@ -921,11 +943,7 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not _legacy_snapshot_ok(
-		resolved_snapshot,
-		"enemy_area_attack_targets",
-		"enemy area-attack footprints are built by the legacy builder without coordinate context"
-	):
+	if not _snapshot_strict_ok(resolved_snapshot):
 		resolved_snapshot = _create_area_attack_footprint_snapshot()
 	var candidates: Array[Node] = []
 	if is_instance_valid(primary_target):
@@ -1429,11 +1447,7 @@ func _draw_boss_warning_ground_projection() -> void:
 
 func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
 	var snapshot := _boss_skill_footprint_snapshot
-	if not _legacy_snapshot_ok(
-		snapshot,
-		"enemy_boss_warning_preview",
-		"boss warning preview consumes the legacy boss skill footprint snapshot"
-	):
+	if not _snapshot_strict_ok(snapshot):
 		snapshot = _create_boss_skill_footprint_snapshot(
 			special,
 			"monster:%d:preview" % monster_id,
@@ -1464,6 +1478,7 @@ func _create_boss_skill_footprint_snapshot(
 			radius_gu,
 			float(special.get("coneHalfAngleRadians", 0.68)),
 			24,
+			_snapshot_coordinate_context(),
 		)
 		return _decorate_attack_footprint_snapshot(
 			snapshot,
@@ -1477,6 +1492,7 @@ func _create_boss_skill_footprint_snapshot(
 		_screen_position_px_to_ground_position_gu(global_position),
 		radius_gu,
 		48,
+		_snapshot_coordinate_context(),
 	)
 	return _decorate_attack_footprint_snapshot(
 		snapshot,
@@ -1574,11 +1590,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false
 			var release_snapshot := _boss_skill_footprint_snapshot
-			if not _legacy_snapshot_ok(
-				release_snapshot,
-				"enemy_boss_skill_release",
-				"boss special release consumes the legacy boss skill footprint snapshot"
-			):
+			if not _snapshot_strict_ok(release_snapshot):
 				release_snapshot = _create_boss_skill_footprint_snapshot(
 					special,
 					_next_spatial_release_id("boss_fallback"),
@@ -1637,16 +1649,14 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not _legacy_snapshot_ok(
-		resolved_snapshot,
-		"enemy_boss_skill_target_query",
-		"boss skill target query consumes the legacy boss skill footprint snapshot"
-	):
+	if not _snapshot_strict_ok(resolved_snapshot):
 		resolved_snapshot = SkillFootprintSnapshotScript.create_circle(
 			_monster_attack_id("boss_circle"),
 			"monster:%d:boss_target_query" % monster_id,
 			_screen_position_px_to_ground_position_gu(global_position),
 			radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+			_snapshot_coordinate_context(),
 		)
 		resolved_snapshot = _decorate_attack_footprint_snapshot(
 			resolved_snapshot,

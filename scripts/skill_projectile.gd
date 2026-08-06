@@ -47,6 +47,8 @@ var skill_id := ""
 var release_id := ""
 var skill_footprint_snapshot: Dictionary = {}
 var last_segment_footprint_snapshot: Dictionary = {}
+var runtime_map_id: int = -1
+var runtime_ground_gu_to_screen_position_px := Callable()
 var resolution_skill_id := ""
 var source_actor: Node2D
 var magic_defense_adapter := Callable()
@@ -116,6 +118,40 @@ func setup_ground_unit_projectile(
 	_build_release_footprint_snapshot()
 
 
+func configure_runtime_map_projection(
+	map_id: int,
+	ground_gu_to_screen_position_px: Callable
+) -> void:
+	runtime_map_id = int(map_id)
+	runtime_ground_gu_to_screen_position_px = (
+		ground_gu_to_screen_position_px
+		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+	_build_release_footprint_snapshot()
+
+
+func _snapshot_coordinate_context(origin_ground_gu: Vector2) -> Dictionary:
+	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
+		runtime_map_id,
+		origin_ground_gu,
+		origin_ground_gu,
+		runtime_ground_gu_to_screen_position_px
+	)
+
+
+func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_snapshot_coordinate_context(
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				global_position
+			)
+		),
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false))
+
+
 func configure_runtime_resolution(
 	caster: Node2D = null,
 	defense_adapter := Callable(),
@@ -149,7 +185,11 @@ func _build_release_footprint_snapshot() -> void:
 			origin_ground_gu,
 			origin_ground_gu
 			+ direction_ground_gu * max_travel_distance_gu,
-			projectile_radius_gu
+			projectile_radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+			"",
+			-1,
+			_snapshot_coordinate_context(origin_ground_gu)
 		)
 	)
 
@@ -221,12 +261,20 @@ func _physics_process(delta: float) -> void:
 			projectile_radius_gu,
 			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
 			str(skill_footprint_snapshot.get("snapshot_id", "")),
-			_physics_segment_index
+			_physics_segment_index,
+			_snapshot_coordinate_context(segment_start_ground_gu)
 		)
 	)
 	_physics_segment_index += 1
 	global_position = segment_end_screen_px
 	traveled_distance_gu += travel_distance_gu
+	# Q1-B: a segment that no longer validates against the frozen runtime map
+	# (e.g. projection became invalid) stops the projectile immediately. The
+	# snapshot map id never follows the current player map.
+	if not _snapshot_strict_ok(last_segment_footprint_snapshot):
+		remaining_travel_distance_gu = 0.0
+		queue_free()
+		return
 	if remaining_travel_distance_gu >= 0.0:
 		remaining_travel_distance_gu = maxf(
 			0.0,
@@ -270,10 +318,7 @@ func _swept_segment_intersects_enemy_footprint(
 		)
 	)
 	if (
-		_legacy_snapshot_ok(
-			skill_footprint_snapshot,
-			"projectile_swept_segment_intersection"
-		)
+		_snapshot_strict_ok(skill_footprint_snapshot)
 		and not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_footprint_snapshot,
 			enemy_center_ground_gu,
@@ -281,10 +326,7 @@ func _swept_segment_intersects_enemy_footprint(
 		)
 	):
 		return false
-	if _legacy_snapshot_ok(
-		last_segment_footprint_snapshot,
-		"projectile_last_segment_intersection"
-	):
+	if _snapshot_strict_ok(last_segment_footprint_snapshot):
 		return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			last_segment_footprint_snapshot,
 			enemy_center_ground_gu,
@@ -310,30 +352,12 @@ func _swept_segment_intersects_enemy_footprint(
 	)
 
 
-func _legacy_snapshot_ok(
-	snapshot: Dictionary,
-	consumer_name: String
-) -> bool:
-	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
-		snapshot,
-		SkillFootprintSnapshotScript.legacy_consumer_context(
-			consumer_name,
-			"projectile snapshots are built by the legacy builder without coordinate context",
-			"world_ground_plane_absolute"
-		),
-		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
-	).get("valid", false))
-
-
 func release_snapshot_intersects_target_footprint_ground_gu(
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float
 ) -> bool:
 	return (
-		_legacy_snapshot_ok(
-			skill_footprint_snapshot,
-			"projectile_release_snapshot_intersection"
-		)
+		_snapshot_strict_ok(skill_footprint_snapshot)
 		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			skill_footprint_snapshot,
 			target_center_ground_gu,

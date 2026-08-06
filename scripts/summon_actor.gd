@@ -41,6 +41,8 @@ const VISUAL_PATHS := {
 }
 
 var owner_player: PlayerCharacter
+var runtime_map_id: int = -1
+var runtime_ground_gu_to_screen_position_px := Callable()
 var summon_name := "骷髅"
 var summon_id := "skeleton"
 var skill_id := "taoist.summon_skeleton"
@@ -194,8 +196,30 @@ func configure_spawn_release_footprint(source_release_id: String) -> void:
 			summon_release_id,
 			spawn_center_ground_gu,
 			spawn_combat_radius_gu,
-			get_instance_id()
+			get_instance_id(),
+			_snapshot_coordinate_context(spawn_center_ground_gu)
 		)
+	)
+
+
+func configure_runtime_map_projection(
+	map_id: int,
+	ground_gu_to_screen_position_px: Callable
+) -> void:
+	runtime_map_id = int(map_id)
+	runtime_ground_gu_to_screen_position_px = (
+		ground_gu_to_screen_position_px
+		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+
+
+func _snapshot_coordinate_context(origin_ground_gu: Vector2) -> Dictionary:
+	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
+		runtime_map_id,
+		origin_ground_gu,
+		origin_ground_gu,
+		runtime_ground_gu_to_screen_position_px
 	)
 
 
@@ -455,14 +479,21 @@ func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
 				origin_ground_gu, target_ground_gu
 			),
 			reach_from_center_gu,
-			combat_radius_gu * 2.0
+			combat_radius_gu * 2.0,
+			0.0,
+			0.0,
+			0.0,
+			"",
+			_snapshot_coordinate_context(origin_ground_gu)
 		)
 	last_attack_relation = "release_contact"
 	return SkillFootprintSnapshotScript.create_circle(
 		skill_id,
 		release_id,
 		origin_ground_gu,
-		reach_from_center_gu
+		reach_from_center_gu,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		_snapshot_coordinate_context(origin_ground_gu)
 	)
 
 
@@ -472,12 +503,12 @@ func attack_release_snapshot_intersects_target(
 ) -> bool:
 	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
 		attack_snapshot,
-		SkillFootprintSnapshotScript.legacy_consumer_context(
-			"summon_attack_intersection",
-			"summon attack snapshots are built by the legacy builder without coordinate context",
-			"world_ground_plane_absolute"
+		_snapshot_coordinate_context(
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				global_position
+			)
 		),
-		SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 	).get("valid", false)):
 		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(

@@ -348,7 +348,8 @@ static func attack_release_footprint_snapshot_ground_gu(
 	origin_ground_gu: Vector2,
 	direction_index: int,
 	mode: String,
-	range_bonus_gu := 0.0
+	range_bonus_gu := 0.0,
+	coordinate_context := {}
 ) -> Dictionary:
 	var resolved_direction_index := posmod(direction_index, 8)
 	var direction_ground_gu := canonical_ground_direction_gu(
@@ -362,7 +363,12 @@ static func attack_release_footprint_snapshot_ground_gu(
 				origin_ground_gu,
 				direction_ground_gu,
 				reach_gu(SKILL_THRUST, range_bonus_gu),
-				THRUST_WIDTH_GU
+				THRUST_WIDTH_GU,
+				0.0,
+				0.0,
+				0.0,
+				"",
+				coordinate_context
 			)
 		SKILL_HALF_MOON:
 			# The approved four sectors are [-1, 0, +1, +2] relative to
@@ -375,7 +381,8 @@ static func attack_release_footprint_snapshot_ground_gu(
 				direction_ground_gu.rotated(PI / 8.0),
 				reach_gu(SKILL_HALF_MOON, range_bonus_gu),
 				PI / 2.0,
-				96
+				96,
+				coordinate_context
 			)
 		SKILL_NORMAL, SKILL_FIRE:
 			return SkillFootprintSnapshotScript.create_sector_arc(
@@ -385,7 +392,8 @@ static func attack_release_footprint_snapshot_ground_gu(
 				direction_ground_gu,
 				reach_gu(mode, range_bonus_gu),
 				PI / 8.0,
-				24
+				24,
+				coordinate_context
 			)
 	return {}
 
@@ -394,14 +402,19 @@ static func wild_rush_release_footprint_snapshot_ground_gu(
 	release_id: String,
 	segment_start_ground_gu: Vector2,
 	segment_end_ground_gu: Vector2,
-	caster_combat_radius_gu: float
+	caster_combat_radius_gu: float,
+	coordinate_context := {}
 ) -> Dictionary:
 	return SkillFootprintSnapshotScript.create_swept_capsule_path(
 		"warrior.wild_rush",
 		release_id,
 		segment_start_ground_gu,
 		segment_end_ground_gu,
-		maxf(0.0, caster_combat_radius_gu)
+		maxf(0.0, caster_combat_radius_gu),
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		"",
+		-1,
+		coordinate_context
 	)
 
 
@@ -421,7 +434,8 @@ static func release_snapshot_intersects_target_footprint_ground_gu(
 
 static func thrust_damage_axis_plan_ground_gu(
 	visual_direction_index: int,
-	release_geometry: Dictionary
+	release_geometry: Dictionary,
+	coordinate_context := {}
 ) -> Dictionary:
 	var resolved_visual_direction_index := posmod(visual_direction_index, 8)
 	var canonical_direction_ground_gu := canonical_ground_direction_gu(
@@ -442,7 +456,9 @@ static func thrust_damage_axis_plan_ground_gu(
 			release_id,
 			origin_ground_gu,
 			resolved_visual_direction_index,
-			SKILL_THRUST
+			SKILL_THRUST,
+			0.0,
+			coordinate_context
 		)
 	)
 	return {
@@ -468,7 +484,8 @@ static func thrust_footprint_slot_for_axis_plan_gu(
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float,
 	damage_axis_plan: Dictionary,
-	range_bonus_gu := 0.0
+	range_bonus_gu := 0.0,
+	coordinate_context := {}
 ) -> int:
 	if (
 		str(damage_axis_plan.get("contract_id", ""))
@@ -492,12 +509,8 @@ static func thrust_footprint_slot_for_axis_plan_gu(
 		raw_snapshot is Dictionary
 		and bool(SkillFootprintSnapshotScript.validate_for_consumer(
 			raw_snapshot,
-			SkillFootprintSnapshotScript.legacy_consumer_context(
-				"warrior_thrust_damage_axis",
-				"warrior melee snapshots are built by the legacy builder without coordinate context",
-				"world_ground_plane_absolute"
-			),
-			SkillFootprintSnapshotScript.VALIDATION_EXPLICIT_LEGACY_COMPAT
+			coordinate_context,
+			SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 		).get("valid", false))
 		and (raw_snapshot.get("origin_ground_gu", Vector2.ZERO) as Vector2)
 		.is_equal_approx(origin_ground_gu)
@@ -512,7 +525,12 @@ static func thrust_footprint_slot_for_axis_plan_gu(
 				origin_ground_gu,
 				damage_direction_ground_gu,
 				reach_gu(SKILL_THRUST, range_bonus_gu),
-				THRUST_WIDTH_GU
+				THRUST_WIDTH_GU,
+				0.0,
+				0.0,
+				0.0,
+				"",
+				coordinate_context
 			)
 		)
 	if not SkillFootprintSnapshotScript.intersects_target_polygon_ground_gu(

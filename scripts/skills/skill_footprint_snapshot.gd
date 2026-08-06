@@ -81,7 +81,7 @@ static func make_absolute_runtime_context(
 ) -> Dictionary:
 	return {
 		"coordinate_space": COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU,
-		"runtime_map_id": str(runtime_map_id),
+		"runtime_map_id": normalize_runtime_map_id(runtime_map_id),
 		"origin_ground_gu": origin_ground_gu,
 		"projection_origin_ground_gu": projection_origin_ground_gu,
 		"ground_position_gu_to_screen_position_px": ground_to_screen_position,
@@ -96,6 +96,20 @@ static func make_local_delta_context(
 		"ground_delta_gu_to_screen_delta_px": ground_delta_to_screen_delta,
 		"projection_origin_ground_gu": Vector2.ZERO,
 	}
+
+
+## Q1-B: the project's formal runtime map id is int. All V2 snapshots store a
+## normalized int; non-numeric inputs normalize to -1 and fail validation.
+static func normalize_runtime_map_id(value: Variant) -> int:
+	if value is int:
+		return value as int
+	if value is float:
+		return int(value as float)
+	if value is String:
+		var trimmed := (value as String).strip_edges()
+		if trimmed.is_valid_int():
+			return trimmed.to_int()
+	return -1
 
 
 static func _call_vector2_result(
@@ -144,8 +158,8 @@ static func _coordinate_fields_from_context(
 		return {
 			"schema_version": SCHEMA_VERSION,
 			"coordinate_space": coordinate_space,
-			"runtime_map_id": str(
-				coordinate_context.get("runtime_map_id", "")
+			"runtime_map_id": normalize_runtime_map_id(
+				coordinate_context.get("runtime_map_id", -1)
 			),
 			"projection_origin_ground_gu": (
 				coordinate_context.get(
@@ -161,8 +175,8 @@ static func _coordinate_fields_from_context(
 		return {
 			"schema_version": SCHEMA_VERSION,
 			"coordinate_space": coordinate_space,
-			"runtime_map_id": str(
-				coordinate_context.get("runtime_map_id", "")
+			"runtime_map_id": normalize_runtime_map_id(
+				coordinate_context.get("runtime_map_id", -1)
 			),
 			"projection_origin_ground_gu": Vector2.ZERO,
 			"created_by": str(
@@ -923,7 +937,11 @@ static func validate(
 		):
 			problems.append("non_finite_%s" % polygon_key)
 	if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
-		if str(snapshot.get("runtime_map_id", "")).is_empty():
+		var snapshot_map_id: Variant = snapshot.get("runtime_map_id", -1)
+		if (
+			not snapshot_map_id is int
+			or int(snapshot_map_id) < 0
+		):
 			problems.append("absolute_missing_runtime_map_id")
 		var projection_origin: Variant = snapshot.get(
 			"projection_origin_ground_gu", Vector2.INF
@@ -934,14 +952,17 @@ static func validate(
 			or not _vector2_is_finite(projection_origin as Vector2)
 		):
 			problems.append("absolute_missing_projection_origin")
-		var expected_map_id := str(
-			expected_context.get("expected_runtime_map_id", "")
+		var expected_map_id: Variant = expected_context.get(
+			"expected_runtime_map_id", -1
 		)
-		if (
-			not expected_map_id.is_empty()
-			and str(snapshot.get("runtime_map_id", "")) != expected_map_id
-		):
-			problems.append("runtime_map_id_mismatch")
+		if expected_map_id is int and int(expected_map_id) >= 0:
+			if (
+				not snapshot_map_id is int
+				or int(snapshot_map_id) != int(expected_map_id)
+			):
+				problems.append("runtime_map_id_mismatch")
+		elif not expected_map_id is int:
+			problems.append("runtime_map_id_type_mismatch")
 	elif coordinate_space == COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU:
 		var origin: Variant = snapshot.get("origin_ground_gu", Vector2.ZERO)
 		if (
@@ -990,7 +1011,9 @@ static func upgrade_legacy_snapshot(
 	if coordinate_space not in SUPPORTED_COORDINATE_SPACES:
 		return {}
 	if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
-		if str(explicit_context.get("runtime_map_id", "")).is_empty():
+		if normalize_runtime_map_id(
+			explicit_context.get("runtime_map_id", -1)
+		) < 0:
 			return {}
 		var projection_origin: Variant = explicit_context.get(
 			"projection_origin_ground_gu", Vector2.INF

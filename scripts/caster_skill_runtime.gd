@@ -303,6 +303,19 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 		str(plan.get("skill_id", "")),
 		str(plan.get("release_id", ""))
 	)
+	var coordinate_context: Variant = plan.get(
+		"snapshot_coordinate_context", {}
+	)
+	if coordinate_context is Dictionary and not (
+		coordinate_context as Dictionary
+	).is_empty():
+		projectile.configure_runtime_map_projection(
+			int((coordinate_context as Dictionary).get("runtime_map_id", -1)),
+			(coordinate_context as Dictionary).get(
+				"ground_position_gu_to_screen_position_px",
+				Callable()
+			)
+		)
 	return projectile
 
 
@@ -341,13 +354,22 @@ static func create_ground_effects(
 	var release_snapshot: Dictionary = plan.get(
 		"skill_footprint_snapshot", {}
 	)
+	var coordinate_context: Dictionary = (
+		plan.get("snapshot_coordinate_context", {})
+		if plan.get("snapshot_coordinate_context", {}) is Dictionary
+		else {}
+	)
+	if coordinate_context.is_empty():
+		# Q1-B: without an explicit runtime map projection the factory must not
+		# fall back to a V1 snapshot. The caller supplies the coordinate context.
+		return effects
 	var effect_positions := fire_wall_positions_ground_gu(
 		center,
 		cell_spacing_gu
 	)
 	if not _snapshot_strict_ok(
 		release_snapshot,
-		plan.get("snapshot_coordinate_context", {})
+		coordinate_context
 	):
 		var inferred_cells_grid_steps: Array[Vector2i] = []
 		for effect_position: Vector2 in effect_positions:
@@ -362,7 +384,7 @@ static func create_ground_effects(
 				release_id,
 				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(center),
 				inferred_cells_grid_steps,
-				plan.get("snapshot_coordinate_context", {})
+				coordinate_context
 			)
 		)
 	for effect_position: Vector2 in effect_positions:
@@ -379,7 +401,7 @@ static func create_ground_effects(
 			release_id,
 			release_snapshot,
 			_expected_validation_context(
-				plan.get("snapshot_coordinate_context", {})
+				coordinate_context
 			)
 		)
 		effect.configure_runtime_source(source_actor)
@@ -406,6 +428,19 @@ static func create_summon_actor(
 		str(plan.get("skill_id", "")),
 		maxi(1, owner_level)
 	)
+	var coordinate_context: Variant = plan.get(
+		"snapshot_coordinate_context", {}
+	)
+	if coordinate_context is Dictionary and not (
+		coordinate_context as Dictionary
+	).is_empty():
+		summon.configure_runtime_map_projection(
+			int((coordinate_context as Dictionary).get("runtime_map_id", -1)),
+			(coordinate_context as Dictionary).get(
+				"ground_position_gu_to_screen_position_px",
+				Callable()
+			)
+		)
 	summon.configure_spawn_release_footprint(str(plan.get("release_id", "")))
 	return summon
 
@@ -641,6 +676,10 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	var node_plan := plan.duplicate(true)
 	node_plan["release_id"] = release_id
 	node_plan["skill_footprint_snapshot"] = result.skill_footprint_snapshot
+	if context.has("snapshot_coordinate_context"):
+		node_plan["snapshot_coordinate_context"] = (
+			context.get("snapshot_coordinate_context", {})
+		)
 	node_plan["teleport_arrival_ready"] = (
 		str(plan.get("operation", "")) == "random_home_map_move"
 		and context.has("teleport_destination")
@@ -976,8 +1015,8 @@ static func _expected_validation_context(
 	var expected_context := coordinate_context.duplicate(true)
 	if expected_context.is_empty():
 		return expected_context
-	expected_context["expected_runtime_map_id"] = str(
-		expected_context.get("runtime_map_id", "")
+	expected_context["expected_runtime_map_id"] = (
+		expected_context.get("runtime_map_id", -1)
 	)
 	return expected_context
 
