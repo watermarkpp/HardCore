@@ -12,6 +12,9 @@ const MapRuntimeCollisionGeometryScript := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const MonsterVisualStreamingCoordinatorScript := preload(
+	"res://scripts/monster_visual_streaming_coordinator.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
@@ -183,6 +186,7 @@ var _active_map_transition_id := ""
 const INPUT_LOCK_MAP_TRANSITION_LOCAL := INPUT_LOCK_MAP_TRANSITION
 var _monster_prefetch_enabled := true
 var _last_monster_prefetch_status: Dictionary = {}
+var _streaming_coordinator: MonsterVisualStreamingCoordinatorScript
 var _combat_runtime: Node = CombatRuntimeServiceScript.new()
 var _canonical_cast_serial := 0
 var _skill_footprint_release_serial := 0
@@ -260,6 +264,10 @@ func _ready() -> void:
 	_ground_effect_manager = PersistentGroundEffectManagerScript.new(
 		_combat_spatial_index
 	)
+	# Q2-D: one MonsterVisual streaming coordinator; MonsterVisual instances
+	# register needs and the coordinator owns the single global streaming poll.
+	_streaming_coordinator = MonsterVisualStreamingCoordinatorScript.new()
+	MonsterVisualScript.set_streaming_coordinator(_streaming_coordinator)
 	# Q0-B: make the window close request interceptable so a failed safe logout
 	# can cancel the normal shutdown instead of silently quitting.
 	get_tree().auto_accept_quit = false
@@ -354,6 +362,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
+	if _streaming_coordinator != null:
+		_streaming_coordinator.poll_once(Engine.get_process_frames())
 	_expire_canonical_fire_charge_if_needed()
 	_constrain_player_foot_to_runtime_ground()
 	background.set_focus_position(player.global_position)
@@ -1004,8 +1015,10 @@ func _run_map_transition(
 	if PlayerState.test_mode:
 		_last_monster_prefetch_status = {"complete": true}
 	elif _monster_prefetch_enabled and target_map_id >= 0:
-		_last_monster_prefetch_status = MonsterVisualScript.begin_map_prefetch(
-			_monster_ids_for_map(target_map_id)
+		_last_monster_prefetch_status = (
+			_streaming_coordinator.begin_map_prefetch(
+				_monster_ids_for_map(target_map_id)
+			)
 		)
 		var prefetch_deadline := (
 			Time.get_ticks_msec() + MONSTER_PREFETCH_TIMEOUT_MSEC
@@ -1017,9 +1030,11 @@ func _run_map_transition(
 			and Time.get_ticks_msec() < prefetch_deadline
 		):
 			await get_tree().process_frame
-			_last_monster_prefetch_status = MonsterVisualScript.poll_streaming()
+			_last_monster_prefetch_status = (
+				_streaming_coordinator.poll_once(Engine.get_process_frames())
+			)
 	elif _monster_prefetch_enabled:
-		MonsterVisualScript.release_map_pins()
+		_streaming_coordinator.release_map_pins()
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	# HC-P1-004: stage the world build through the coordinator budget queues
