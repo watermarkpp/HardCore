@@ -120,7 +120,7 @@ func _verify_wild_rush_swept_path() -> void:
 
 
 func _assert_snapshot(snapshot: Dictionary, shape_type: String) -> void:
-	assert(Snapshot.is_valid(snapshot))
+	assert(Snapshot.has_legacy_base_contract(snapshot))
 	assert(snapshot.is_read_only())
 	assert(snapshot.shape_type == shape_type)
 	assert(snapshot.damage_space == "ground_gu")

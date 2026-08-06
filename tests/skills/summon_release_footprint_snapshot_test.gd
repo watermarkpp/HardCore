@@ -29,7 +29,7 @@ func _verify_spawn_destination_footprints() -> void:
 		summon.setup(owner, skill_id, 20, 3, skill_id, 35)
 		summon.configure_spawn_release_footprint("%s:release:4" % skill_id)
 		var snapshot: Dictionary = summon.summon_spawn_footprint_snapshot
-		assert(Snapshot.is_valid(snapshot))
+		assert(Snapshot.has_legacy_base_contract(snapshot))
 		assert(snapshot.is_read_only())
 		assert(snapshot.shape_type == Snapshot.SHAPE_TARGET_FOOTPRINT)
 		assert(snapshot.release_id == "%s:release:4" % skill_id)
@@ -48,7 +48,7 @@ func _verify_skeleton_release_contact() -> void:
 	skeleton.attack_range_gu = 1.00
 	var target := _target_at_ground_gu(Vector2(1.50, 0.0), 0.20)
 	var snapshot := skeleton.create_attack_release_footprint_snapshot(target)
-	assert(Snapshot.is_valid(snapshot))
+	assert(Snapshot.has_legacy_base_contract(snapshot))
 	assert(snapshot.shape_type == Snapshot.SHAPE_CIRCLE)
 	assert(skeleton.last_attack_relation == "release_contact")
 	assert(is_equal_approx(float(snapshot.radius_gu), 1.30))
@@ -78,7 +78,7 @@ func _verify_divine_beast_directed_core() -> void:
 	var direction_ground_gu := Vector2(0.6, 0.8).normalized()
 	var target := _target_at_ground_gu(direction_ground_gu * 2.20, 0.20)
 	var snapshot := divine.create_attack_release_footprint_snapshot(target)
-	assert(Snapshot.is_valid(snapshot))
+	assert(Snapshot.has_legacy_base_contract(snapshot))
 	assert(snapshot.shape_type == Snapshot.SHAPE_DIRECTED_RECTANGLE)
 	assert(divine.last_attack_relation == "directed_core")
 	assert(is_equal_approx(float(snapshot.effect_length_gu), 2.0))

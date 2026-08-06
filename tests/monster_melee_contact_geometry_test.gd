@@ -123,7 +123,9 @@ func _run() -> void:
 		enemy._deal_melee_hit(player, 5)
 		assert(player.current_hp < hp_before, "direction %d footprint contact did not deal damage" % direction_index)
 		assert(
-			SkillFootprintSnapshotScript.is_valid(enemy._last_attack_footprint_snapshot),
+			SkillFootprintSnapshotScript.has_legacy_base_contract(
+				enemy._last_attack_footprint_snapshot
+			),
 			"direction %d attack did not publish a GU footprint snapshot" % direction_index,
 		)
 		assert(

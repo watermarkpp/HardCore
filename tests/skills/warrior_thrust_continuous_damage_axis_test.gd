@@ -51,7 +51,7 @@ func _verify_all_eight_visual_axes_are_exactly_snapped() -> void:
 			canonical_axis_ground_gu
 		))
 		var snapshot: Dictionary = plan.skill_footprint_snapshot
-		assert(Snapshot.is_valid(snapshot))
+		assert(Snapshot.has_legacy_base_contract(snapshot))
 		assert(snapshot.is_read_only())
 		assert(snapshot.shape_type == Snapshot.SHAPE_DIRECTED_RECTANGLE)
 		assert((snapshot.direction_ground_gu as Vector2).is_equal_approx(

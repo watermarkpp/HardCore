@@ -48,7 +48,7 @@ func _verify_directed_rectangle_projection_at_angles() -> void:
 			8.0,
 			1.0
 		)
-		assert(Snapshot.is_valid(baseline))
+		assert(Snapshot.has_legacy_base_contract(baseline))
 		assert(baseline.is_read_only())
 		assert(baseline.shape_type == Snapshot.SHAPE_DIRECTED_RECTANGLE)
 		assert(baseline.skill_id == "test.directed_rectangle")
@@ -285,7 +285,7 @@ func _verify_common_shape_builders_and_footprint_contact() -> void:
 		Vector2(0.25, -0.125),
 		[Vector2i(0, 0), Vector2i(2, 0)]
 	)
-	assert(Snapshot.is_valid(cell_union))
+	assert(Snapshot.has_legacy_base_contract(cell_union))
 	assert(cell_union.is_read_only())
 	assert(cell_union.shape_type == Snapshot.SHAPE_CELL_UNION)
 	var union_polygons_ground_gu := Snapshot.ground_polygons_gu(cell_union)
@@ -324,7 +324,7 @@ func _assert_projected_snapshot(
 	snapshot: Dictionary,
 	expected_shape_type: String
 ) -> void:
-	assert(Snapshot.is_valid(snapshot))
+	assert(Snapshot.has_legacy_base_contract(snapshot))
 	assert(snapshot.is_read_only())
 	assert(str(snapshot.shape_type) == expected_shape_type)
 	var polygon_ground_gu := Snapshot.ground_polygon_gu(snapshot)

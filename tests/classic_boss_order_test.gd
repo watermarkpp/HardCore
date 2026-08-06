@@ -59,7 +59,9 @@ func _run() -> void:
 	dragon._boss_skill_cooldown = 0.0
 	dragon._update_boss_skill(0.01, 100.0)
 	assert(
-		SkillFootprintSnapshotScript.is_valid(dragon._boss_skill_footprint_snapshot),
+		SkillFootprintSnapshotScript.has_legacy_base_contract(
+			dragon._boss_skill_footprint_snapshot
+		),
 		"boss warning did not freeze the release-time GU footprint",
 	)
 	var warned_release_id := str(dragon._boss_skill_footprint_snapshot.release_id)

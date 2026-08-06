@@ -62,7 +62,9 @@ func _run() -> void:
 		enemy._physics_process(0.01)
 		enemy._physics_process(0.21)
 		assert(
-			SkillFootprintSnapshotScript.is_valid(enemy._last_attack_footprint_snapshot),
+			SkillFootprintSnapshotScript.has_legacy_base_contract(
+				enemy._last_attack_footprint_snapshot
+			),
 			"monsterId=%d fixed area attack did not publish an immutable GU footprint" % monster_id,
 		)
 		assert(

@@ -27,7 +27,7 @@ func _test_circle_boundary_contact_and_projection() -> void:
 			RADIUS_GU,
 		)
 		assert(snapshot.is_read_only(), "monster circle snapshot must be read-only")
-		assert(SkillFootprintSnapshotScript.is_valid(snapshot))
+		assert(SkillFootprintSnapshotScript.has_legacy_base_contract(snapshot))
 		assert(str(snapshot.release_id) == release_id)
 		for target_radius_gu: float in [0.25, 0.33, 0.50]:
 			var edge_center: Vector2 = (
@@ -112,7 +112,7 @@ func _test_sector_arc_all_directions() -> void:
 			RADIUS_GU,
 			0.68,
 		)
-		assert(SkillFootprintSnapshotScript.is_valid(snapshot))
+		assert(SkillFootprintSnapshotScript.has_legacy_base_contract(snapshot))
 		assert(
 			SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 				snapshot,
