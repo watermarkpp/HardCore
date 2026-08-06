@@ -412,6 +412,156 @@ static func create_ground_effects(
 	return effects
 
 
+## Q3-A / HC-P1-009: read-only adapter that creates cast nodes from a frozen
+## canonical skill execution plan. It consumes ONLY:
+##   release_id, skill_id, runtime_map_id, canonical_snapshot,
+##   projectile/ground/summon descriptors and presentation_actions.
+## It never re-selects targets, never re-quotes resources, never commits
+## cooldowns, never rebuilds the release snapshot and never regenerates a
+## release id. The plan is never mutated.
+static func create_cast_nodes_from_canonical_plan(
+	plan: Dictionary,
+	origin: Vector2,
+	direction := Vector2.DOWN,
+	color := Color.WHITE,
+	target: Node2D = null,
+	owner: PlayerCharacter = null,
+	spiritual_power := 1,
+	owner_level := 1
+) -> Array[Node2D]:
+	var nodes: Array[Node2D] = []
+	var skill_id := str(plan.get("skill_id", ""))
+	var release_id := str(plan.get("release_id", ""))
+	var snapshot: Dictionary = plan.get("canonical_snapshot", {})
+	var coordinate_context := _coordinate_context_from_snapshot(snapshot)
+	for raw_descriptor: Variant in plan.get("projectile_descriptors", []):
+		if not raw_descriptor is Dictionary:
+			continue
+		var descriptor: Dictionary = raw_descriptor
+		var node_plan := {
+			"operation": str(
+				descriptor.get("operation", "projectile_damage")
+			),
+			"success": true,
+			"skill_id": skill_id,
+			"release_id": release_id,
+			"damage": int(descriptor.get("raw_power", 0)),
+			"visual": {"role": CasterSkillVisualRegistry.ROLE_PROJECTILE},
+			"snapshot_coordinate_context": coordinate_context,
+			"skill_footprint_snapshot": snapshot,
+		}
+		var projectile := create_projectile(
+			node_plan,
+			origin,
+			direction,
+			color
+		)
+		if projectile != null:
+			nodes.append(projectile)
+	for raw_descriptor: Variant in plan.get("ground_effect_descriptors", []):
+		if not raw_descriptor is Dictionary:
+			continue
+		var descriptor: Dictionary = raw_descriptor
+		var node_plan := {
+			"operation": str(descriptor.get("operation", "ground_dot")),
+			"success": true,
+			"skill_id": skill_id,
+			"release_id": release_id,
+			"damage": int(descriptor.get("raw_power", 0)),
+			"duration_seconds": float(
+				descriptor.get("duration_seconds", 1.0)
+			),
+			"tick_interval_seconds": float(
+				descriptor.get("tick_interval_ms", 1000)
+			) / 1000.0,
+			"ground_effect_radius_gu": float(
+				descriptor.get("radius_gu", 0.5)
+			),
+			"visual": {"role": CasterSkillVisualRegistry.ROLE_GROUND_EFFECT},
+			"snapshot_coordinate_context": coordinate_context,
+			"skill_footprint_snapshot": snapshot,
+		}
+		for effect: GroundSkillEffect in create_ground_effects(
+			node_plan,
+			origin,
+			color,
+			owner
+		):
+			nodes.append(effect)
+	for raw_descriptor: Variant in plan.get("summon_descriptors", []):
+		if not raw_descriptor is Dictionary:
+			continue
+		var descriptor: Dictionary = raw_descriptor
+		var summon := create_summon_actor(
+			{
+				"operation": "summon",
+				"success": bool(descriptor.get("spawned", true)),
+				"skill_id": skill_id,
+				"release_id": release_id,
+				"display_name": str(descriptor.get("template_id", "")),
+				"skill_level": 0,
+				"template_id": str(descriptor.get("template_id", "")),
+			},
+			owner,
+			spiritual_power,
+			owner_level,
+			origin
+		)
+		if summon != null:
+			nodes.append(summon)
+	for raw_action: Variant in plan.get("presentation_actions", []):
+		if not raw_action is Dictionary:
+			continue
+		var action: Dictionary = raw_action
+		if str(action.get("type", "")) != "visual":
+			continue
+		var role := str(action.get("role", ""))
+		if role in [
+			CasterSkillVisualRegistry.ROLE_PROJECTILE,
+			CasterSkillVisualRegistry.ROLE_GROUND_EFFECT,
+			CasterSkillVisualRegistry.ROLE_SUMMON_ACTOR,
+		]:
+			continue
+		var visual_plan := {
+			"operation": "canonical_visual_only",
+			"success": true,
+			"skill_id": skill_id,
+			"release_id": release_id,
+			"visual": {"role": role},
+			"visual_radius_px": float(action.get("visual_radius_px", 0.0)),
+			"snapshot_coordinate_context": coordinate_context,
+			"skill_footprint_snapshot": snapshot,
+		}
+		var visual := create_visual(
+			visual_plan,
+			origin,
+			direction,
+			target,
+			""
+		)
+		if visual != null:
+			nodes.append(visual)
+	return nodes
+
+
+static func _coordinate_context_from_snapshot(
+	snapshot: Dictionary
+) -> Dictionary:
+	if snapshot.is_empty():
+		return {}
+	return {
+		"coordinate_space": str(snapshot.get("coordinate_space", "")),
+		"runtime_map_id": int(snapshot.get("runtime_map_id", -1)),
+		"origin_ground_gu": snapshot.get("origin_ground_gu", Vector2.ZERO),
+		"projection_origin_ground_gu": snapshot.get(
+			"projection_origin_ground_gu", Vector2.ZERO
+		),
+		"ground_position_gu_to_screen_position_px": snapshot.get(
+			"ground_position_gu_to_screen_position_px", Callable()
+		),
+	}
+
+
 static func create_summon_actor(
 	plan: Dictionary,
 	owner: PlayerCharacter,
