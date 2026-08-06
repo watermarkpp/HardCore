@@ -9,7 +9,13 @@ $Expected = @(
     'tests/skill_footprint_snapshot_map_identity_test.tscn',
     'tests/skill_footprint_snapshot_projection_origin_test.tscn',
     'tests/skill_footprint_snapshot_legacy_upgrade_test.tscn',
-    'tests/canonical_snapshot_propagation_test.tscn'
+    'tests/canonical_snapshot_propagation_test.tscn',
+    'tests/snapshot_strict_consumer_rejection_test.tscn',
+    'tests/snapshot_v2_no_legacy_fallback_test.tscn',
+    'tests/snapshot_absolute_converter_failure_test.tscn',
+    'tests/snapshot_non_finite_coordinate_test.tscn',
+    'tests/snapshot_legacy_explicit_policy_test.tscn',
+    'tests/snapshot_consumer_runtime_map_guard_test.tscn'
 )
 
 $SafeLogoutSuite = 'safe_logout_critical'
