@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2b_spatial_reuse"]
+[ext_resource type="Script" path="res://tests/persistent_ground_effect_spatial_service_reuse_test.gd" id="1"]
+[node name="PersistentGroundEffectSpatialServiceReuse" type="Node"]
+script = ExtResource("1")
