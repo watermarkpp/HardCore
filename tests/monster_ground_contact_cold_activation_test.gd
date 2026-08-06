@@ -2,6 +2,11 @@ extends Node
 
 
 const ASYNC_DEADLINE_MSEC := 20000
+const MonsterVisualStreamingCoordinator := preload(
+	"res://scripts/monster_visual_streaming_coordinator.gd"
+)
+
+var _coordinator
 
 
 func _ready() -> void:
@@ -11,6 +16,8 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	_coordinator = MonsterVisualStreamingCoordinator.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -43,10 +50,10 @@ func _run() -> void:
 			"monsterId=%d authored cold profile exposed a procedural circular shadow" % monster_id,
 		)
 
-		var prefetch := MonsterVisual.begin_map_prefetch([monster_id])
+		var prefetch = _coordinator.begin_map_prefetch([monster_id])
 		var deadline_msec := Time.get_ticks_msec() + ASYNC_DEADLINE_MSEC
 		while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:
-			prefetch = MonsterVisual.poll_streaming()
+			prefetch = _coordinator.poll_once(Engine.get_process_frames())
 			await get_tree().process_frame
 		assert(bool(prefetch.complete) and int(prefetch.failed) == 0, "monsterId=%d cold profile failed" % monster_id)
 		# Prefetch completion and actor activation are separate runtime events.
@@ -59,7 +66,7 @@ func _run() -> void:
 		):
 			enemy.visual._resource_residency_timer = 0.0
 			enemy.visual._process(0.13)
-			MonsterVisual.poll_streaming()
+			_coordinator.poll_once(Engine.get_process_frames())
 			await get_tree().process_frame
 		assert(not enemy.visual.active_resources.is_empty(), "monsterId=%d cold art never activated" % monster_id)
 		assert(enemy.visual.uses_final_art(), "monsterId=%d final texture is not visible" % monster_id)
@@ -88,7 +95,7 @@ func _run() -> void:
 		)
 		enemy.queue_free()
 		await get_tree().process_frame
-		MonsterVisual.release_map_pins()
+		_coordinator.release_map_pins()
 		verified_count += 1
 
 	MonsterVisual.reset_client_resource_cache()

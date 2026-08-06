@@ -17,11 +17,15 @@ func _ready() -> void:
 			seen[monster_id] = true
 	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
 	var covered_index := source.find("hud.loading_transition_covered")
-	var prefetch_index := source.find("MonsterVisualScript.begin_map_prefetch")
+	var prefetch_index := source.find("_streaming_coordinator.begin_map_prefetch")
 	var load_index := source.find("\n\toperation.call()", prefetch_index)
 	assert(covered_index >= 0 and prefetch_index > covered_index)
 	assert(load_index > prefetch_index, "map loaded before monster prefetch")
-	assert("MonsterVisualScript.poll_streaming" in source)
+	assert("_streaming_coordinator.poll_once" in source)
+	assert(
+		"_streaming_coordinator.poll_once(Engine.get_process_frames())" in source,
+		"Q2-D: game_root must own the single formal streaming poll"
+	)
 	print(
 		"GAME_ROOT_MONSTER_PREFETCH_PASS: map ids are unique and Loading "
 		+ "covers bounded async streaming before zone spawn"
