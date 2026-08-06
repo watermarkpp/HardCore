@@ -16,6 +16,9 @@ const WorldSpatialRules := preload("res://scripts/world_spatial_rules.gd")
 const SkillDataLoaderScript := preload(
 	"res://scripts/skills/skill_data_loader.gd"
 )
+const SkillGeometryServiceScript := preload(
+	"res://scripts/skills/skill_geometry_service.gd"
+)
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -607,7 +610,32 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			)
 		)
 	var origin := context.get("origin", caster.global_position if caster != null else Vector2.ZERO) as Vector2
+	var direction := context.get("direction", Vector2.DOWN) as Vector2
 	var geometry_cells_grid_steps := _geometry_cells_grid_steps(plan)
+	if (
+		GROUND_EXACT_SKILL_IDS.has(skill_id)
+		and geometry_cells_grid_steps.is_empty()
+	):
+		# Q1-B.1: the formal ground-exact footprint (for example the Taoist
+		# defense radius-3 cell union) is defined by the skill definition's
+		# synthesized geometry. Derive it through the shared geometry service
+		# instead of leaving the plan without cells and blocking the release
+		# snapshot gate.
+		var target_position_screen_px: Vector2 = context.get(
+			"target_position",
+			context.get(
+				"teleport_destination",
+				primary_target.global_position
+				if primary_target != null
+				else origin
+			)
+		)
+		geometry_cells_grid_steps = _derive_ground_exact_cells(
+			skill_id,
+			origin,
+			direction,
+			target_position_screen_px
+		)
 	if (
 		GROUND_EXACT_SKILL_IDS.has(skill_id)
 		and not geometry_cells_grid_steps.is_empty()
@@ -621,7 +649,6 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				context.get("snapshot_coordinate_context", {})
 			)
 		)
-	var direction := context.get("direction", Vector2.DOWN) as Vector2
 	var fallback_direction_ground_gu := (
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
 		.normalized()
@@ -1063,6 +1090,39 @@ static func _geometry_cells_grid_steps(plan: Dictionary) -> Array[Vector2i]:
 			if raw_cell is Vector2i:
 				result.append(raw_cell)
 	return result
+
+
+static func _derive_ground_exact_cells(
+	skill_id: String,
+	origin_screen_px: Vector2,
+	direction_screen_px: Vector2,
+	target_screen_px: Vector2
+) -> Array[Vector2i]:
+	var definition := SkillDataLoaderScript.skill(skill_id)
+	if definition.is_empty():
+		return []
+	var origin_tile := Vector2i(
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			origin_screen_px
+		).round()
+	)
+	var facing_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		direction_screen_px
+	).round()
+	var facing := Vector2i(facing_ground)
+	if facing == Vector2i.ZERO:
+		facing = Vector2i.DOWN
+	var target_tile := Vector2i(
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target_screen_px
+		).round()
+	)
+	return SkillGeometryServiceScript.cells(
+		definition,
+		origin_tile,
+		facing,
+		target_tile
+	)
 
 
 static func _target_intersects_release_snapshot(

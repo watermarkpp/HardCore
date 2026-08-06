@@ -1,6 +1,23 @@
 extends Node
 
 
+const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+
+
+func _test_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		9001,
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_test_ground_to_screen")
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	var package := TaoistProfessionPackage.new()
 	assert(package.is_valid())
@@ -82,10 +99,64 @@ func _ready() -> void:
 		if is_instance_valid(target):
 			target.free()
 
+	# Q1-B.1: the Taoist defense production entry must emit a schema V2
+	# runtime-map-absolute cell-union snapshot with a typed int map id and an
+	# explicit projection origin.
 	var cooldown_block := package.cast("taoist.healing", _plan_context(), {})
 	assert(not cooldown_block.accepted and cooldown_block.reason == "cooldown")
 	package.tick(10.0)
 	package.restore_mana(100000)
+	var defense_caster := PlayerCharacter.new()
+	defense_caster.global_position = Vector2.ZERO
+	var defense_result := package.cast("taoist.defense", _plan_context(), {
+		"parent": self,
+		"caster": defense_caster,
+		"affected_allies": [defense_caster],
+		"origin": defense_caster.global_position,
+		"target_position": defense_caster.global_position,
+		"direction": Vector2.RIGHT,
+		"defense_bonus": 5,
+		"spiritual_power": 30,
+		"owner_level": 40,
+		"snapshot_coordinate_context": _test_absolute_context(),
+	})
+	assert(
+		defense_result.accepted,
+		"taoist.defense must be accepted: %s"
+		% defense_result.get("reason", "")
+	)
+	var defense_snapshot: Dictionary = (
+		defense_result.execution.skill_footprint_snapshot
+	)
+	assert(
+		int(defense_snapshot.get("schema_version", 0))
+		== Snapshot.SCHEMA_VERSION,
+		"taoist.defense snapshot must be schema V2"
+	)
+	assert(
+		str(defense_snapshot.get("coordinate_space", ""))
+		== Snapshot.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU,
+		"taoist.defense snapshot must be runtime-map absolute"
+	)
+	assert(
+		defense_snapshot.get("runtime_map_id", -1) is int
+		and int(defense_snapshot.get("runtime_map_id", -1)) >= 0,
+		"taoist.defense snapshot must carry a typed int runtime map id"
+	)
+	assert(
+		(defense_snapshot.get(
+			"projection_origin_ground_gu", Vector2.INF
+		) as Vector2).is_finite(),
+		"taoist.defense snapshot must carry a finite projection origin"
+	)
+	assert(
+		int(defense_snapshot.get("geometry_cells_grid_steps", []).size()) == 49,
+		"taoist.defense must emit the formal radius-3 cell union (49 cells)"
+	)
+	for defense_node: Node2D in defense_result.execution.nodes:
+		defense_node.free()
+	defense_caster.free()
+
 	var red_poison_target := EnemyActor.new()
 	red_poison_target.max_hp = 100
 	red_poison_target.current_hp = 100
@@ -98,6 +169,7 @@ func _ready() -> void:
 		"operation_adapters": {
 			"poison_armor": Callable(self, "_apply_armor_poison"),
 		},
+		"snapshot_coordinate_context": _test_absolute_context(),
 	})
 	assert(red_poison.accepted and red_poison_target.get_meta("armor_poison_applied", false))
 	for node: Node2D in red_poison.execution.nodes:

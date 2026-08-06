@@ -35,7 +35,8 @@ $ProductionExpected = @(
     'tests/ground_effect_snapshot_v2_production_test.tscn',
     'tests/fire_wall_snapshot_v2_production_test.tscn',
     'tests/production_snapshot_no_legacy_test.tscn',
-    'tests/canonical_snapshot_identity_production_test.tscn'
+    'tests/canonical_snapshot_identity_production_test.tscn',
+    'tests/taoist_profession_package_test.tscn'
 )
 
 $SafeLogoutSuite = 'safe_logout_critical'
