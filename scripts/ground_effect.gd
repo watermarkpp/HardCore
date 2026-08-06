@@ -34,6 +34,11 @@ var source_actor: Node2D
 var runtime_tick_adapter := Callable()
 var runtime_target_filter := Callable()
 var runtime_damage_enabled := true
+## Q2-B: when true, PersistentGroundEffectManager owns the damage tick path.
+## The node keeps its visual lifecycle only; its own enemy-group scan stays
+## closed so damage is never applied twice. FireWall formal cells never set
+## this flag and keep their historical visual-only scan contract.
+var manager_owned_damage_ticks := false
 var runtime_screen_to_ground_position_px := Callable()
 var visual_rejection_reason := ""
 var _snapshot_validation_context: Dictionary = {}
@@ -245,22 +250,23 @@ func _install_visual() -> void:
 
 func _physics_process(delta: float) -> void:
 	duration -= delta
-	_tick_timer -= delta
-	if _tick_timer <= 0.0:
-		_tick_timer = tick_interval
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if (
-				not node is EnemyActor
-				or node.is_queued_for_deletion()
-				or not runtime_target_is_inside(node)
-			):
-				continue
-			if runtime_damage_enabled and not claim_runtime_tick(node):
-				continue
-			if runtime_tick_adapter.is_valid():
-				runtime_tick_adapter.call(node, damage)
-			else:
-				node.take_damage(damage, source_actor)
+	if not manager_owned_damage_ticks:
+		_tick_timer -= delta
+		if _tick_timer <= 0.0:
+			_tick_timer = tick_interval
+			for node: Node in get_tree().get_nodes_in_group("enemies"):
+				if (
+					not node is EnemyActor
+					or node.is_queued_for_deletion()
+					or not runtime_target_is_inside(node)
+				):
+					continue
+				if runtime_damage_enabled and not claim_runtime_tick(node):
+					continue
+				if runtime_tick_adapter.is_valid():
+					runtime_tick_adapter.call(node, damage)
+				else:
+					node.take_damage(damage, source_actor)
 	if duration <= 0.0:
 		queue_free()
 	if _sprite == null:

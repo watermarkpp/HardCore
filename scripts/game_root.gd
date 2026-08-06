@@ -46,6 +46,9 @@ const SkillFootprintSnapshotScript := preload(
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const PersistentGroundEffectManagerScript := preload(
+	"res://scripts/persistent_ground_effect_manager.gd"
+)
 const SpellTargetLockPolicyScript := preload(
 	"res://scripts/skills/spell_target_lock_policy.gd"
 )
@@ -161,6 +164,8 @@ var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
 var _runtime_spawn_serial := 0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+var _ground_effect_manager: PersistentGroundEffectManagerScript
+var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
@@ -250,6 +255,11 @@ func _ready() -> void:
 	y_sort_enabled = true
 	_rng.randomize()
 	_combat_spatial_index = RuntimeCombatSpatialIndexScript.new()
+	# Q2-B: one scheduler for generic persistent ground effects. It reuses the
+	# shared enemy spatial index; FireWall's formal field path stays outside.
+	_ground_effect_manager = PersistentGroundEffectManagerScript.new(
+		_combat_spatial_index
+	)
 	# Q0-B: make the window close request interceptable so a failed safe logout
 	# can cancel the normal shutdown instead of silently quitting.
 	get_tree().auto_accept_quit = false
@@ -334,6 +344,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_show_system_menu()
 		get_viewport().set_input_as_handled()
+
+
+func _physics_process(delta: float) -> void:
+	# Q2-B: generic persistent ground effects are scheduled once per physics
+	# frame by the shared manager (old per-effect _physics_process cadence).
+	if _ground_effect_manager != null:
+		_ground_effect_manager.tick_frame(delta)
 
 
 func _process(delta: float) -> void:
@@ -1391,6 +1408,10 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	for node: Node in get_tree().get_nodes_in_group("zone_content"):
 		if is_instance_valid(node):
 			node.queue_free()
+	if _ground_effect_manager != null:
+		# Every zone_content node (including ground effect visuals) is freed
+		# above; their manager registrations must not survive into the next map.
+		_ground_effect_manager.clear_all()
 	current_zone = zone_name
 	current_map_data = map_data.duplicate(true)
 	current_map_id = int(map_data.get("mapId", -1)) if not map_data.is_empty() else -1
@@ -5452,6 +5473,13 @@ func _spawn_canonical_ground_field(
 			)
 		return
 
+	# Generic persistent ground effects share one canonical validation context
+	# so the manager can run STRICT_V2 snapshot validation per tick.
+	var generic_snapshot_validation_context := (
+		_canonical_snapshot_validation_context(
+			_canonical_screen_px_to_ground_gu(fallback_position)
+		)
+	)
 	for index: int in range(positions.size()):
 		_spawn_canonical_ground_effect(
 			stable_skill_id,
@@ -5460,7 +5488,8 @@ func _spawn_canonical_ground_field(
 			true,
 			coverage_cells[index] if index < coverage_cells.size() else null,
 			release_id,
-			skill_release_snapshot
+			skill_release_snapshot,
+			generic_snapshot_validation_context
 		)
 
 
@@ -5512,6 +5541,74 @@ func _spawn_canonical_ground_effect(
 		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
 	add_child(ground_effect)
+	if applies_damage:
+		_register_manager_ground_effect(
+			ground_effect,
+			stable_skill_id,
+			release_id,
+			skill_release_snapshot,
+			snapshot_validation_context
+		)
+
+
+func _register_manager_ground_effect(
+	ground_effect: GroundSkillEffect,
+	stable_skill_id: String,
+	release_id: String,
+	skill_release_snapshot: Dictionary,
+	snapshot_validation_context: Dictionary
+) -> void:
+	## Q2-B: the generic damage-bearing ground effect is scheduled by the
+	## manager. The node keeps visuals/lifecycle only; the old per-effect
+	## enemy-group scan must never run again for this node.
+	ground_effect.manager_owned_damage_ticks = true
+	if _ground_effect_manager == null:
+		ground_effect.runtime_damage_enabled = false
+		return
+	_ground_effect_runtime_serial += 1
+	var effect_runtime_id := _ground_effect_runtime_serial
+	var runtime_map_id := int(
+		skill_release_snapshot.get("runtime_map_id", current_map_id)
+	)
+	var registered := _ground_effect_manager.register({
+		"effect_runtime_id": effect_runtime_id,
+		"skill_id": stable_skill_id,
+		"release_id": release_id,
+		"snapshot_id": str(
+			skill_release_snapshot.get("snapshot_id", release_id)
+		),
+		"runtime_map_id": runtime_map_id,
+		"caster_reference": player,
+		"canonical_snapshot": skill_release_snapshot,
+		"expected_context": (
+			snapshot_validation_context
+			if snapshot_validation_context is Dictionary
+			else {}
+		),
+		"tick_interval_s": ground_effect.tick_interval,
+		"expiration_s": ground_effect.duration,
+		"stacking_policy": "per_effect_independent",
+		"claim_policy": "effect_claim_only",
+		"damage_callback": (
+			Callable(self, "_apply_canonical_ground_tick").bind(
+				stable_skill_id
+			)
+		),
+		"lifecycle_callback": (
+			Callable(self, "_manager_ground_effect_ended")
+		),
+		"manager_owned_damage_ticks": true,
+		"effect": ground_effect,
+	})
+	if not registered:
+		# Missing strict V2 snapshot or unavailable manager: never fall back to
+		# the legacy group scan; the visual node stays but damage is refused.
+		ground_effect.runtime_damage_enabled = false
+
+
+func _manager_ground_effect_ended(reason: String, effect: Variant) -> void:
+	if effect is Node and is_instance_valid(effect):
+		(effect as Node).queue_free()
 
 
 func _canonical_ground_cell_contains_enemy(
