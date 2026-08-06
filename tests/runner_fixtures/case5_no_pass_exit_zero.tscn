@@ -1,0 +1,4 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://q0a_case5"]
+[ext_resource type="Script" path="res://tests/runner_fixtures/case5_no_pass_exit_zero.gd" id="1"]
+[node name="Case5NoPassExitZero" type="Node"]
+script = ExtResource("1")

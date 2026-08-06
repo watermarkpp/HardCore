@@ -1,0 +1,4 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://q0a_case4"]
+[ext_resource type="Script" path="res://tests/runner_fixtures/case4_pass_then_hang.gd" id="1"]
+[node name="Case4PassThenHang" type="Node"]
+script = ExtResource("1")
