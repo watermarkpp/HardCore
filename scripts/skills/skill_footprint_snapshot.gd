@@ -45,6 +45,15 @@ const SUPPORTED_COORDINATE_SPACES: Array[String] = [
 ]
 const LEGACY_SCHEMA_VERSION := 1
 
+## Q1-A: explicit validation policies. STRICT_V2 is the only policy for V2
+## coordinate consumers; EXPLICIT_LEGACY_COMPAT requires an explicit legacy
+## context (interpretation + converters + consumer identity) and is the only
+## way a legacy snapshot may enter a consumer.
+const VALIDATION_STRICT_V2 := &"strict_v2"
+const VALIDATION_EXPLICIT_LEGACY_COMPAT := &"explicit_legacy_compat"
+const LEGACY_VALIDATION_COUNTER_KEY := "legacy_snapshot_validation_count"
+static var legacy_snapshot_validation_count := 0
+
 const SHAPE_DIRECTED_RECTANGLE := "directed_rectangle"
 const SHAPE_SECTOR_ARC := "sector_arc"
 const SHAPE_CIRCLE := "circle"
@@ -89,14 +98,40 @@ static func make_local_delta_context(
 	}
 
 
-static func _call_vector2(callable_value: Variant, value: Vector2) -> Vector2:
+static func _call_vector2_result(
+	callable_value: Variant,
+	value: Vector2
+) -> Dictionary:
 	if not callable_value is Callable:
-		return Vector2.ZERO
+		return {
+			"valid": false,
+			"value": Vector2.ZERO,
+			"reason": "invalid_converter",
+		}
 	var callable := callable_value as Callable
 	if not callable.is_valid():
-		return Vector2.ZERO
+		return {
+			"valid": false,
+			"value": Vector2.ZERO,
+			"reason": "invalid_converter",
+		}
 	var result: Variant = callable.call(value)
-	return result if result is Vector2 else Vector2.ZERO
+	if result is Vector2 and _vector2_is_finite(result as Vector2):
+		return {
+			"valid": true,
+			"value": result as Vector2,
+			"reason": "",
+		}
+	return {
+		"valid": false,
+		"value": Vector2.ZERO,
+		"reason": "non_finite_converter_result",
+	}
+
+
+static func _call_vector2(callable_value: Variant, value: Vector2) -> Vector2:
+	var result := _call_vector2_result(callable_value, value)
+	return result.get("value", Vector2.ZERO) as Vector2
 
 
 static func _coordinate_fields_from_context(
@@ -163,41 +198,56 @@ static func project_ground_polygon_to_screen_offsets_px(
 			"ground_position_gu_to_screen_position_px",
 			Callable()
 		)
-		if converter is Callable and (converter as Callable).is_valid():
-			var projection_origin_ground_gu: Vector2 = (
-				coordinate_context.get(
-					"projection_origin_ground_gu",
-					origin_ground_gu
-				) as Vector2
-			)
-			var projection_origin_screen_px := _call_vector2(
-				converter,
-				projection_origin_ground_gu
-			)
-			for point_ground_gu: Vector2 in polygon_ground_gu:
-				result.append(
-					_call_vector2(converter, point_ground_gu)
-					- projection_origin_screen_px
-				)
+		# Q1-A: absolute snapshots may ONLY use the ground-position converter.
+		# An invalid converter is an explicit projection failure (empty result);
+		# it must never fall through to the delta converter.
+		if not converter is Callable or not (converter as Callable).is_valid():
 			return result
+		var projection_origin_ground_gu: Vector2 = (
+			coordinate_context.get(
+				"projection_origin_ground_gu",
+				origin_ground_gu
+			) as Vector2
+		)
+		var projection_origin_result := _call_vector2_result(
+			converter,
+			projection_origin_ground_gu
+		)
+		if not bool(projection_origin_result.get("valid", false)):
+			return result
+		var projection_origin_screen_px := (
+			projection_origin_result.get("value", Vector2.ZERO) as Vector2
+		)
+		for point_ground_gu: Vector2 in polygon_ground_gu:
+			var point_result := _call_vector2_result(converter, point_ground_gu)
+			if not bool(point_result.get("valid", false)):
+				return PackedVector2Array()
+			result.append(
+				(point_result.get("value", Vector2.ZERO) as Vector2)
+				- projection_origin_screen_px
+			)
+		return result
+	# local delta / legacy: only the delta converter is used.
 	var delta_converter: Variant = coordinate_context.get(
 		"ground_delta_gu_to_screen_delta_px",
 		Callable()
 	)
 	for point_ground_gu: Vector2 in polygon_ground_gu:
 		if delta_converter is Callable and (delta_converter as Callable).is_valid():
-			result.append(
-				_call_vector2(
-					delta_converter,
-					point_ground_gu - origin_ground_gu
-				)
+			var point_result := _call_vector2_result(
+				delta_converter,
+				point_ground_gu - origin_ground_gu
 			)
+			if not bool(point_result.get("valid", false)):
+				return PackedVector2Array()
+			result.append(point_result.get("value", Vector2.ZERO) as Vector2)
 		else:
-			result.append(
-				GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-					point_ground_gu - origin_ground_gu
-				)
+			var fallback := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				point_ground_gu - origin_ground_gu
 			)
+			if not _vector2_is_finite(fallback):
+				return PackedVector2Array()
+			result.append(fallback)
 	return result
 
 
@@ -593,7 +643,21 @@ static func create_cell_union(
 	return snapshot
 
 
+## Q1-A: is_valid() is now a strict-V2 delegate. It no longer means "has the
+## old base contract"; coordinate consumers must call validate_for_consumer()
+## with an explicit expected context and policy. Legacy consumers must use
+## has_legacy_base_contract() or the EXPLICIT_LEGACY_COMPAT policy.
 static func is_valid(snapshot: Dictionary) -> bool:
+	return bool(
+		validate_for_consumer(
+			snapshot,
+			{},
+			VALIDATION_STRICT_V2
+		).get("valid", false)
+	)
+
+
+static func has_legacy_base_contract(snapshot: Dictionary) -> bool:
 	return (
 		str(snapshot.get("contract_id", "")) == CONTRACT_ID
 		and str(snapshot.get("shape_type", "")) in SUPPORTED_SHAPE_TYPES
@@ -604,6 +668,208 @@ static func is_valid(snapshot: Dictionary) -> bool:
 		and str(snapshot.get("projection_contract_id", ""))
 		== GroundUnitSpaceScript.PROJECTION_CONTRACT_ID
 	)
+
+
+static func legacy_consumer_context(
+	consumer_name: String,
+	migration_reason: String,
+	coordinate_interpretation: String,
+	converter: Callable = Callable()
+) -> Dictionary:
+	return {
+		"legacy_coordinate_interpretation": coordinate_interpretation,
+		"consumer_name": consumer_name,
+		"migration_reason": migration_reason,
+		"ground_delta_gu_to_screen_delta_px": converter,
+	}
+
+
+## Q1-A: the single formal consumer-facing validation entry. STRICT_V2 rejects
+## legacy/ambiguous snapshots; EXPLICIT_LEGACY_COMPAT requires an explicit
+## legacy context and records a lightweight counter.
+static func validate_for_consumer(
+	snapshot: Dictionary,
+	expected_context: Dictionary,
+	policy: StringName = VALIDATION_STRICT_V2
+) -> Dictionary:
+	if policy == VALIDATION_STRICT_V2:
+		var strict := validate(snapshot, expected_context)
+		if not bool(strict.get("valid", false)):
+			return {
+				"valid": false,
+				"reason": str(strict.get("reason", "invalid_snapshot")),
+				"schema_version": int(snapshot.get("schema_version", 0)),
+				"coordinate_space": str(snapshot.get("coordinate_space", "")),
+				"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+				"policy": VALIDATION_STRICT_V2,
+				"legacy_used": false,
+				"details": strict.get("details", {}),
+			}
+		var coordinate_space := str(snapshot.get("coordinate_space", ""))
+		var position_converter_valid := true
+		var delta_converter_valid := true
+		if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
+			var converter: Variant = expected_context.get(
+				"ground_position_gu_to_screen_position_px", Callable()
+			)
+			position_converter_valid = (
+				converter is Callable
+				and (converter as Callable).is_valid()
+			)
+			if not position_converter_valid:
+				return {
+					"valid": false,
+					"reason": "absolute_position_requires_position_converter",
+					"schema_version": int(
+						snapshot.get("schema_version", 0)
+					),
+					"coordinate_space": coordinate_space,
+					"runtime_map_id": str(
+						snapshot.get("runtime_map_id", "")
+					),
+					"policy": VALIDATION_STRICT_V2,
+					"legacy_used": false,
+					"details": {},
+				}
+		elif coordinate_space == COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU:
+			var delta_converter: Variant = expected_context.get(
+				"ground_delta_gu_to_screen_delta_px", Callable()
+			)
+			delta_converter_valid = (
+				delta_converter is Callable
+				and (delta_converter as Callable).is_valid()
+			)
+			if not delta_converter_valid:
+				return {
+					"valid": false,
+					"reason": "local_delta_requires_delta_converter",
+					"schema_version": int(
+						snapshot.get("schema_version", 0)
+					),
+					"coordinate_space": coordinate_space,
+					"runtime_map_id": str(
+						snapshot.get("runtime_map_id", "")
+					),
+					"policy": VALIDATION_STRICT_V2,
+					"legacy_used": false,
+					"details": {},
+				}
+		return {
+			"valid": true,
+			"reason": "",
+			"schema_version": SCHEMA_VERSION,
+			"coordinate_space": coordinate_space,
+			"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+			"policy": VALIDATION_STRICT_V2,
+			"legacy_used": false,
+			"details": {
+				"position_converter_valid": position_converter_valid,
+				"delta_converter_valid": delta_converter_valid,
+			},
+		}
+	if policy == VALIDATION_EXPLICIT_LEGACY_COMPAT:
+		if not has_legacy_base_contract(snapshot):
+			return {
+				"valid": false,
+				"reason": "legacy_base_contract_missing",
+				"schema_version": int(snapshot.get("schema_version", 0)),
+				"coordinate_space": str(snapshot.get("coordinate_space", "")),
+				"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+				"policy": VALIDATION_EXPLICIT_LEGACY_COMPAT,
+				"legacy_used": false,
+				"details": {},
+			}
+		var interpretation := str(
+			expected_context.get("legacy_coordinate_interpretation", "")
+		)
+		var consumer_name := str(
+			expected_context.get("consumer_name", "")
+		)
+		var migration_reason := str(
+			expected_context.get("migration_reason", "")
+		)
+		if (
+			interpretation.is_empty()
+			or consumer_name.is_empty()
+			or migration_reason.is_empty()
+		):
+			return {
+				"valid": false,
+				"reason": "legacy_context_required",
+				"schema_version": int(snapshot.get("schema_version", 0)),
+				"coordinate_space": str(snapshot.get("coordinate_space", "")),
+				"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+				"policy": VALIDATION_EXPLICIT_LEGACY_COMPAT,
+				"legacy_used": false,
+				"details": {},
+			}
+		var legacy_strict := validate(
+			snapshot,
+			{"allow_legacy_v1": true}
+		)
+		if not bool(legacy_strict.get("valid", false)):
+			return {
+				"valid": false,
+				"reason": str(
+					legacy_strict.get("reason", "legacy_snapshot_invalid")
+				),
+				"schema_version": int(snapshot.get("schema_version", 0)),
+				"coordinate_space": str(snapshot.get("coordinate_space", "")),
+				"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+				"policy": VALIDATION_EXPLICIT_LEGACY_COMPAT,
+				"legacy_used": false,
+				"details": {},
+			}
+		legacy_snapshot_validation_count += 1
+		return {
+			"valid": true,
+			"reason": "",
+			"schema_version": int(snapshot.get("schema_version", 1)),
+			"coordinate_space": str(snapshot.get("coordinate_space", "")),
+			"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+			"policy": VALIDATION_EXPLICIT_LEGACY_COMPAT,
+			"legacy_used": true,
+			"details": {
+				"legacy_consumer": consumer_name,
+				"legacy_reason": migration_reason,
+				"legacy_coordinate_interpretation": interpretation,
+			},
+		}
+	return {
+		"valid": false,
+		"reason": "unsupported_validation_policy",
+		"schema_version": 0,
+		"coordinate_space": "",
+		"runtime_map_id": "",
+		"policy": str(policy),
+		"legacy_used": false,
+		"details": {},
+	}
+
+
+static func validation_diagnostics(result: Dictionary) -> Dictionary:
+	return {
+		"consumer": str(result.get("details", {}).get("legacy_consumer", "")),
+		"policy": str(result.get("policy", "")),
+		"valid": bool(result.get("valid", false)),
+		"reason": str(result.get("reason", "")),
+		"schema_version": int(result.get("schema_version", 0)),
+		"coordinate_space": str(result.get("coordinate_space", "")),
+		"snapshot_runtime_map_id": str(result.get("runtime_map_id", "")),
+		"expected_runtime_map_id": str(
+			result.get("details", {}).get("expected_runtime_map_id", "")
+		),
+		"legacy_used": bool(result.get("legacy_used", false)),
+		"projection_origin_present": bool(
+			result.get("details", {}).get("projection_origin_present", false)
+		),
+		"position_converter_valid": bool(
+			result.get("details", {}).get("position_converter_valid", false)
+		),
+		"delta_converter_valid": bool(
+			result.get("details", {}).get("delta_converter_valid", false)
+		),
+	}
 
 
 static func validate(
@@ -823,7 +1089,7 @@ static func _polygon_is_finite(polygon: PackedVector2Array) -> bool:
 
 
 static func ground_polygon_gu(snapshot: Dictionary) -> PackedVector2Array:
-	if not is_valid(snapshot):
+	if not has_legacy_base_contract(snapshot):
 		return PackedVector2Array()
 	var raw_polygon: Variant = snapshot.get(
 		"polygon_ground_gu", PackedVector2Array()
@@ -839,7 +1105,7 @@ static func ground_polygons_gu(
 	snapshot: Dictionary
 ) -> Array[PackedVector2Array]:
 	var result: Array[PackedVector2Array] = []
-	if not is_valid(snapshot):
+	if not has_legacy_base_contract(snapshot):
 		return result
 	var raw_polygons: Variant = snapshot.get("polygons_ground_gu", [])
 	if raw_polygons is Array:
@@ -856,7 +1122,7 @@ static func ground_polygons_gu(
 static func projected_polygon_screen_offset_px(
 	snapshot: Dictionary
 ) -> PackedVector2Array:
-	if not is_valid(snapshot):
+	if not has_legacy_base_contract(snapshot):
 		return PackedVector2Array()
 	var raw_polygon: Variant = snapshot.get(
 		"polygon_screen_offset_px", PackedVector2Array()
@@ -872,7 +1138,7 @@ static func projected_polygons_screen_offset_px(
 	snapshot: Dictionary
 ) -> Array[PackedVector2Array]:
 	var result: Array[PackedVector2Array] = []
-	if not is_valid(snapshot):
+	if not has_legacy_base_contract(snapshot):
 		return result
 	var raw_polygons: Variant = snapshot.get(
 		"polygons_screen_offset_px", []
@@ -925,7 +1191,7 @@ static func intersects_target_combat_footprint_ground_gu(
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float
 ) -> bool:
-	if not is_valid(snapshot):
+	if not has_legacy_base_contract(snapshot):
 		return false
 	var safe_target_radius_gu := maxf(0.0, target_combat_radius_gu)
 	if str(snapshot.get("shape_type", "")) == SHAPE_SWEPT_CAPSULE_PATH:
