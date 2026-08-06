@@ -4,6 +4,16 @@ extends RefCounted
 ## Q2-A: map-scoped broadphase for projectile swept-segment queries.
 ## Coordinate contract: typed int runtime_map_id + absolute ground GU buckets.
 ## Owned by GameRoot; injected into enemy spawn and projectile spawn.
+##
+## Live-position provider limitation (Q2-A.1):
+## - It is used to read a candidate's current true position before the narrow
+##   phase (removing stale false positives that already left the query range).
+## - It CANNOT discover an actor that has not been registered into the
+##   target bucket, cannot replace explicit index updates, and cannot repair a
+##   new-bucket false negative by itself. Forced position writes must call
+##   set_combat_position() so the index updates in the same transaction;
+##   synchronized index updates prevent false negatives, while live-position
+##   reads prevent stale candidates from producing wrong narrow-phase results.
 
 const BUCKET_SIZE_SETTING := "hardcore/combat/spatial_index_bucket_size_gu"
 const DEFAULT_BUCKET_SIZE_GU := 4.0

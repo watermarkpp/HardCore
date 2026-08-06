@@ -427,8 +427,16 @@ func projectile_broadphase_diagnostics() -> Dictionary:
 		and is_instance_valid(_combat_spatial_index)
 		else {}
 	)
+	var index_available := (
+		_combat_spatial_index != null
+		and is_instance_valid(_combat_spatial_index)
+	)
 	return {
 		"runtime_map_id": runtime_map_id,
+		"spatial_index_available": index_available,
+		"spatial_index_rejection_reason": (
+			"" if index_available else "broadphase_unavailable"
+		),
 		"physics_step_count": _broadphase_physics_step_count,
 		"snapshot_build_count": _broadphase_snapshot_build_count,
 		"broadphase_query_count": _broadphase_query_count,

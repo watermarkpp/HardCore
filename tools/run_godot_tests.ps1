@@ -193,7 +193,11 @@ $Suites.projectile_spatial_critical = @(
     'tests/projectile_broadphase_terrain_cutoff_test.tscn',
     'tests/projectile_broadphase_runtime_map_isolation_test.tscn',
     'tests/projectile_spatial_index_lifecycle_test.tscn',
-    'tests/projectile_snapshot_single_build_per_step_test.tscn'
+    'tests/projectile_snapshot_single_build_per_step_test.tscn',
+    'tests/projectile_spatial_index_same_frame_teleport_test.tscn',
+    'tests/projectile_spatial_index_same_frame_knockback_test.tscn',
+    'tests/projectile_spatial_index_query_before_enemy_tick_test.tscn',
+    'tests/projectile_spatial_index_ready_contract_test.tscn'
 )
 
 $Suites.safe_logout_critical = @(

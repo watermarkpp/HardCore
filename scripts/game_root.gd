@@ -1840,7 +1840,7 @@ func _spawn_enemy(
 		_runtime_spawn_serial
 	)
 	enemy.set_meta("spawn_serial", _runtime_spawn_serial)
-	enemy.global_position = spawn_position
+	enemy.set_combat_position(spawn_position, &"spawn")
 	_combat_spatial_index.register(
 		_runtime_spawn_serial,
 		current_map_id,
@@ -2652,7 +2652,7 @@ func _on_boss_relocation_requested(enemy: EnemyActor, radius_gu: float) -> void:
 	)
 	if destination == enemy.global_position:
 		return
-	enemy.global_position = destination
+	enemy.set_combat_position(destination, &"boss_relocation")
 	enemy.velocity = Vector2.ZERO
 
 

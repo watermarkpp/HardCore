@@ -331,8 +331,12 @@ func _resolve_invalid_spawn_overlap() -> void:
 	if offset_ground_gu.length_squared() < GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		var angle := float(posmod(get_instance_id(), 32)) / 32.0 * TAU
 		offset_ground_gu = Vector2.from_angle(angle)
-	global_position = primary_target.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-		offset_ground_gu.normalized() * minimum_distance_gu
+	set_combat_position(
+		primary_target.global_position
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			offset_ground_gu.normalized() * minimum_distance_gu
+		),
+		&"resolve_spawn_overlap"
 	)
 
 
@@ -383,8 +387,11 @@ func _physics_process(delta: float) -> void:
 		if _control_anchor_ground_gu == Vector2.INF:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		else:
-			global_position = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				_control_anchor_ground_gu
+			set_combat_position(
+				GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+					_control_anchor_ground_gu
+				),
+				&"control_anchor"
 			)
 		velocity = Vector2.ZERO
 		queue_redraw()
@@ -562,6 +569,18 @@ func spatial_index_position() -> Vector2:
 	return _screen_position_px_to_ground_position_gu(global_position)
 
 
+## Q2-A.1: the only sanctioned way to force an enemy's world position. The
+## position write and the spatial-index bucket update happen in the same
+## transaction, so a projectile querying later in the same physics frame can
+## never observe a stale bucket for a forced relocation.
+func set_combat_position(
+	position_px: Vector2,
+	reason: StringName = &""
+) -> void:
+	global_position = position_px
+	_spatial_index_update()
+
+
 static func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
 	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(screen_position_px)
 
@@ -665,7 +684,7 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	_physics_move_count += 1
 	var entered_safe_zone := not _point_inside_safe_zone(position_before_move) and _point_inside_safe_zone(global_position)
 	if entered_safe_zone:
-		global_position = position_before_move
+		set_combat_position(position_before_move, &"safe_zone_revert")
 		actual_ground_motion_gu = Vector2.ZERO
 		velocity = Vector2.ZERO
 		return
@@ -693,7 +712,10 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		global_position,
 		collision_radius_px,
 	):
-		global_position = _last_environment_safe_position_px
+		set_combat_position(
+			_last_environment_safe_position_px,
+			&"environment_revert"
+		)
 		actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
 			position_before_move,
 			global_position,
