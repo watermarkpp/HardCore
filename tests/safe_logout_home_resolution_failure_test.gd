@@ -1,8 +1,14 @@
 extends Node
 
+var _captured_error_reason := ""
+
 
 func _ready() -> void:
 	_run.call_deferred()
+
+
+func _capture_safe_logout_error(action: StringName, reason: String) -> void:
+	_captured_error_reason = "%s:%s" % [str(action), reason]
 
 
 func _run() -> void:
@@ -13,6 +19,9 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	game.set_safe_logout_error_reporter(
+		Callable(self, "_capture_safe_logout_error")
+	)
 
 	# Establish a valid prior safe-logout record.
 	assert(
@@ -45,7 +54,6 @@ func _run() -> void:
 		game.player.global_position == player_position_before,
 		"player position must stay unchanged"
 	)
-
 	game.queue_free()
 	print("SAFE_LOGOUT_HOME_RESOLUTION_FAILURE_TEST_PASS")
 	get_tree().quit(0)

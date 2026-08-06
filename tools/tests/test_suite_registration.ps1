@@ -18,7 +18,12 @@ $SafeLogoutExpected = @(
     'tests/safe_logout_character_select_guard_test.tscn',
     'tests/safe_logout_exit_guard_test.tscn',
     'tests/safe_logout_save_failure_test.tscn',
-    'tests/safe_logout_existing_state_preservation_test.tscn'
+    'tests/safe_logout_existing_state_preservation_test.tscn',
+    'tests/home_resolution_side_effect_guard_test.tscn',
+    'tests/service_home_no_current_position_fallback_test.tscn',
+    'tests/death_revival_home_failure_test.tscn',
+    'tests/map_transition_missing_arrival_test.tscn',
+    'tests/portal_home_lookup_failure_test.tscn'
 )
 
 $missing = @()
