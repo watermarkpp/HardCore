@@ -358,7 +358,8 @@ static func create_ground_effects(
 				str(plan.get("skill_id", "wizard.fire_wall")),
 				release_id,
 				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(center),
-				inferred_cells_grid_steps
+				inferred_cells_grid_steps,
+				plan.get("snapshot_coordinate_context", {})
 			)
 		)
 	for effect_position: Vector2 in effect_positions:
@@ -557,7 +558,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			_create_target_footprint_snapshot(
 				skill_id,
 				release_id,
-				targeted_release_actor
+				targeted_release_actor,
+				context.get("snapshot_coordinate_context", {})
 			)
 		)
 	var origin := context.get("origin", caster.global_position if caster != null else Vector2.ZERO) as Vector2
@@ -571,7 +573,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				skill_id,
 				release_id,
 				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(origin),
-				geometry_cells_grid_steps
+				geometry_cells_grid_steps,
+				context.get("snapshot_coordinate_context", {})
 			)
 		)
 	var direction := context.get("direction", Vector2.DOWN) as Vector2
@@ -608,7 +611,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					target_position
 				),
 				_target_combat_radius_gu(caster),
-				caster.get_instance_id()
+				caster.get_instance_id(),
+				context.get("snapshot_coordinate_context", {})
 			)
 		)
 	var deferred_snapshot_operation := operation in [
@@ -806,7 +810,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 						str(result.skill_footprint_snapshot.get(
 							"snapshot_id", ""
 						)),
-						movement_index
+						movement_index,
+						context.get("snapshot_coordinate_context", {})
 					)
 				)
 				target.global_position += (
@@ -1016,7 +1021,8 @@ static func _use_non_production_spatial_adapter(
 static func _create_target_footprint_snapshot(
 	skill_id: String,
 	release_id: String,
-	target: Node2D
+	target: Node2D,
+	coordinate_context := {}
 ) -> Dictionary:
 	var center_ground_gu := (
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
@@ -1028,7 +1034,8 @@ static func _create_target_footprint_snapshot(
 		release_id,
 		center_ground_gu,
 		_target_combat_radius_gu(target),
-		target.get_instance_id()
+		target.get_instance_id(),
+		coordinate_context
 	)
 
 

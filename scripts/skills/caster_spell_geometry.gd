@@ -165,13 +165,15 @@ static func create_exact_cell_union_release_snapshot(
 	skill_id: String,
 	release_id: String,
 	origin_ground_gu: Vector2,
-	effective_geometry_cells: Array[Vector2i]
+	effective_geometry_cells: Array[Vector2i],
+	coordinate_context := {}
 ) -> Dictionary:
 	return SkillFootprintSnapshotScript.create_cell_union(
 		skill_id,
 		release_id,
 		origin_ground_gu,
-		effective_geometry_cells
+		effective_geometry_cells,
+		coordinate_context
 	)
 
 
@@ -185,7 +187,8 @@ static func continuous_line_strip_ground_gu(
 	release_id := "geometry_preview",
 	declared_effect_length_gu := -1.0,
 	resolved_effect_length_gu := -1.0,
-	laser_projection_policy := ""
+	laser_projection_policy := "",
+	coordinate_context := {}
 ) -> Dictionary:
 	var axis_ground_gu := aim_ground_gu - origin_ground_gu
 	if axis_ground_gu.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
@@ -208,7 +211,8 @@ static func continuous_line_strip_ground_gu(
 			0.0,
 			declared_effect_length_gu,
 			resolved_effect_length_gu,
-			laser_projection_policy
+			laser_projection_policy,
+			coordinate_context
 		)
 	)
 	var strip_start_ground_gu: Vector2 = skill_footprint_snapshot.get(
@@ -862,6 +866,16 @@ static func snapshot_visual_projection_context(
 		visual_core_policy = "target_anchor_and_footprint_no_extra_area"
 	elif shape_type == SkillFootprintSnapshotScript.SHAPE_SWEPT_CAPSULE_PATH:
 		visual_core_policy = "diagnostic_only_do_not_force_capsule_visual"
+	var declared_coordinate_space := str(
+		skill_footprint_snapshot.get(
+			"coordinate_space",
+			SkillFootprintSnapshotScript.COORDINATE_SPACE_LEGACY_GROUND_GU
+		)
+	)
+	var snapshot_is_absolute := (
+		declared_coordinate_space
+		== SkillFootprintSnapshotScript.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
+	)
 	return {
 		"snapshot_visual_projection_contract_id": (
 			SNAPSHOT_VISUAL_PROJECTION_CONTRACT_ID
@@ -870,23 +884,30 @@ static func snapshot_visual_projection_context(
 		"snapshot_shape_type": shape_type,
 		"snapshot_anchor_policy": anchor_policy,
 		"snapshot_anchor_ground_gu": anchor_ground_gu,
-		"coordinate_space": (
-			"runtime_map_absolute_ground_gu"
-			if ground_gu_to_screen_position_px.is_valid()
-			else "ground_delta_gu"
+		"coordinate_space": declared_coordinate_space,
+		"snapshot_coordinate_space": declared_coordinate_space,
+		"snapshot_schema_version": int(
+			skill_footprint_snapshot.get("schema_version", 1)
 		),
-		"snapshot_coordinate_space": (
-			"runtime_map_absolute_ground_gu"
-			if ground_gu_to_screen_position_px.is_valid()
-			else "ground_delta_gu"
+		"snapshot_runtime_map_id": str(
+			skill_footprint_snapshot.get("runtime_map_id", "")
+		),
+		"snapshot_projection_origin_ground_gu": (
+			skill_footprint_snapshot.get(
+				"projection_origin_ground_gu", Vector2.ZERO
+			) as Vector2
+		),
+		"snapshot_id": str(
+			skill_footprint_snapshot.get("snapshot_id", "")
 		),
 		"screen_anchor_source": (
 			"runtime_map_ground_projection"
 			if ground_gu_to_screen_position_px.is_valid()
 			else "runtime_fallback_origin"
 		),
-		"absolute_ground_reprojected_as_delta": not (
-			ground_gu_to_screen_position_px.is_valid()
+		"absolute_ground_reprojected_as_delta": (
+			snapshot_is_absolute
+			and not ground_gu_to_screen_position_px.is_valid()
 		),
 		"snapshot_anchor_screen_px": anchor_screen_px,
 		"snapshot_anchor_offset_from_effect_px": (

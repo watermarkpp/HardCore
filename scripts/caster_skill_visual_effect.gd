@@ -507,6 +507,20 @@ func snapshot_visual_projection_metadata() -> Dictionary:
 	return {
 		"contract_id": _snapshot_visual_projection_contract_id,
 		"snapshot_id": str(_skill_footprint_snapshot.get("snapshot_id", "")),
+		"snapshot_schema_version": int(
+			_skill_footprint_snapshot.get("schema_version", 1)
+		),
+		"snapshot_coordinate_space": str(
+			_skill_footprint_snapshot.get("coordinate_space", "")
+		),
+		"snapshot_runtime_map_id": str(
+			_skill_footprint_snapshot.get("runtime_map_id", "")
+		),
+		"snapshot_projection_origin_ground_gu": (
+			_skill_footprint_snapshot.get(
+				"projection_origin_ground_gu", Vector2.ZERO
+			) as Vector2
+		),
 		"shape_type": _snapshot_shape_type,
 		"anchor_policy": _snapshot_anchor_policy,
 		"anchor_screen_px": _snapshot_anchor_screen_px,

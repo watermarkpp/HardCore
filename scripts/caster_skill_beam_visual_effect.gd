@@ -18,6 +18,7 @@ var _animation_profile: Dictionary = {}
 var _width_scale := DEFAULT_BEAM_WIDTH_SCALE
 var _beam_axis_screen_px := Vector2.RIGHT
 var _beam_length_px := DEFAULT_BEAM_LENGTH_PX
+var _beam_legacy_fallback_used := true
 var _beam_debug_metadata: Dictionary = {}
 var _single_active_enabled := false
 var _single_active_scope := DEFAULT_SINGLE_ACTIVE_SCOPE
@@ -188,6 +189,7 @@ func _resolve_beam_profile_context(visual_geometry_context: Dictionary) -> void:
     _beam_debug_metadata["anchor_policy"] = str(anchor_profile.get("type", "caster_forward"))
     _beam_debug_metadata["requested_beam_length_px"] = _beam_length_px
     _beam_debug_metadata["resolved_beam_axis_screen_px"] = _beam_axis_screen_px
+    _beam_debug_metadata["legacy_fallback_used"] = _beam_legacy_fallback_used
     _beam_debug_metadata["single_active"] = {
         "enabled": _single_active_enabled,
         "scope": _single_active_scope,
@@ -204,11 +206,14 @@ func _resolve_beam_length(visual_geometry_context: Dictionary) -> float:
         and SkillFootprintSnapshotScript.is_valid(raw_snapshot as Dictionary)
         and raw_length_source == "actual_length"
     ):
+        var snapshot := raw_snapshot as Dictionary
         var snapshot_length_px := float(
-            (raw_snapshot as Dictionary).get("axis_screen_length_px", 0.0)
+            snapshot.get("axis_screen_length_px", 0.0)
         )
         if snapshot_length_px > 0.0:
+            _beam_legacy_fallback_used = false
             return snapshot_length_px
+    _beam_legacy_fallback_used = true
     if _beam_length_px > 0.0:
         return _beam_length_px
     return DEFAULT_BEAM_LENGTH_PX
