@@ -4000,6 +4000,10 @@ func _canonical_target_context(
 		"current_pet_count": get_tree().get_nodes_in_group("summons").size(),
 		"caster_max_hp": player.max_hp,
 	}
+	var snapshot_origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
+	context["snapshot_coordinate_context"] = (
+		_canonical_snapshot_absolute_context(snapshot_origin_ground_gu)
+	)
 	var destination := _find_valid_random_teleport_position(origin)
 	context["destination_valid"] = destination != origin
 	context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
@@ -4049,7 +4053,8 @@ func _canonical_target_context(
 				stable_skill_id,
 				resolved_release_id,
 				origin_ground_gu,
-				exact_geometry_cells
+				exact_geometry_cells,
+				_canonical_snapshot_absolute_context(origin_ground_gu)
 			)
 		)
 		context["geometry_cells"] = exact_geometry_cells
@@ -4063,7 +4068,12 @@ func _canonical_target_context(
 					resolved_release_id,
 					_canonical_screen_px_to_ground_gu(target_actor.global_position),
 					_actor_combat_radius_gu(target_actor),
-					target_actor.get_instance_id()
+					target_actor.get_instance_id(),
+					_canonical_snapshot_absolute_context(
+						_canonical_screen_px_to_ground_gu(
+							target_actor.global_position
+						)
+					)
 				)
 			)
 	elif ATTACHED_STATE_SKILL_IDS.has(stable_skill_id) and is_instance_valid(player):
@@ -4073,22 +4083,29 @@ func _canonical_target_context(
 				resolved_release_id,
 				_canonical_screen_px_to_ground_gu(player.global_position),
 				_actor_combat_radius_gu(player),
-				player.get_instance_id()
+				player.get_instance_id(),
+				_canonical_snapshot_absolute_context(
+					_canonical_screen_px_to_ground_gu(player.global_position)
+				)
 			)
 		)
 	elif stable_skill_id == "wizard.teleport":
 		var teleport_destination_screen_px := _canonical_grid_cell_to_screen_px(
 			context.get("destination_tile", Vector2i.ZERO)
 		)
+		var teleport_destination_ground_gu := _canonical_screen_px_to_ground_gu(
+			teleport_destination_screen_px
+		)
 		context["skill_footprint_snapshot"] = (
 			SkillFootprintSnapshotScript.create_target_footprint(
 				stable_skill_id,
 				resolved_release_id,
-				_canonical_screen_px_to_ground_gu(
-					teleport_destination_screen_px
-				),
+				teleport_destination_ground_gu,
 				_actor_combat_radius_gu(player),
-				player.get_instance_id()
+				player.get_instance_id(),
+				_canonical_snapshot_absolute_context(
+					teleport_destination_ground_gu
+				)
 			)
 		)
 	var nearby: Array[Dictionary] = []
@@ -4726,30 +4743,42 @@ func _canonical_skill_release_footprint_snapshot(
 	):
 		return raw_line_snapshot as Dictionary
 	if GROUND_EXACT_SKILL_IDS.has(stable_skill_id) and not effective_geometry_cells.is_empty():
+		var cell_union_origin_ground_gu := (
+			_canonical_screen_px_to_ground_gu(origin_screen_px)
+		)
 		return CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
 			stable_skill_id,
 			release_id,
-			_canonical_screen_px_to_ground_gu(origin_screen_px),
-			effective_geometry_cells
+			cell_union_origin_ground_gu,
+			effective_geometry_cells,
+			_canonical_snapshot_absolute_context(cell_union_origin_ground_gu)
 		)
 	if TARGET_FOOTPRINT_SKILL_IDS.has(stable_skill_id):
 		var target_actor: Node2D = target if is_instance_valid(target) else player
 		if not is_instance_valid(target_actor):
 			return {}
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(
+			target_actor.global_position
+		)
 		return SkillFootprintSnapshotScript.create_target_footprint(
 			stable_skill_id,
 			release_id,
-			_canonical_screen_px_to_ground_gu(target_actor.global_position),
+			target_ground_gu,
 			_actor_combat_radius_gu(target_actor),
-			target_actor.get_instance_id()
+			target_actor.get_instance_id(),
+			_canonical_snapshot_absolute_context(target_ground_gu)
 		)
 	if ATTACHED_STATE_SKILL_IDS.has(stable_skill_id) and is_instance_valid(player):
+		var player_ground_gu := _canonical_screen_px_to_ground_gu(
+			player.global_position
+		)
 		return SkillFootprintSnapshotScript.create_target_footprint(
 			stable_skill_id,
 			release_id,
-			_canonical_screen_px_to_ground_gu(player.global_position),
+			player_ground_gu,
 			_actor_combat_radius_gu(player),
-			player.get_instance_id()
+			player.get_instance_id(),
+			_canonical_snapshot_absolute_context(player_ground_gu)
 		)
 	var effect_type := str(effect.get("type", ""))
 	var radius_gu := maxf(0.0, float(effect.get("radius_gu", 0.0)))
@@ -4759,11 +4788,16 @@ func _canonical_skill_release_footprint_snapshot(
 			if effect_type == "area_damage"
 			else origin_screen_px
 		)
+		var center_ground_gu := _canonical_screen_px_to_ground_gu(
+			center_screen_px
+		)
 		return SkillFootprintSnapshotScript.create_circle(
 			stable_skill_id,
 			release_id,
-			_canonical_screen_px_to_ground_gu(center_screen_px),
-			radius_gu
+			center_ground_gu,
+			radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+			_canonical_snapshot_absolute_context(center_ground_gu)
 		)
 	return {}
 
@@ -4863,6 +4897,9 @@ func _canonical_continuous_line_strip_ground_gu(
 	var resolved_release_id := str(release_id)
 	if resolved_release_id.is_empty():
 		resolved_release_id = _next_skill_footprint_release_id(stable_skill_id)
+	var line_coordinate_context := _canonical_snapshot_absolute_context(
+		origin_ground_gu
+	)
 	var strip_ground_gu := CasterSpellGeometryScript.continuous_line_strip_ground_gu(
 		origin_ground_gu,
 		origin_ground_gu + direction_ground_gu,
@@ -4873,7 +4910,8 @@ func _canonical_continuous_line_strip_ground_gu(
 		resolved_release_id,
 		effect_length_gu,
 		resolved_effect_length_gu,
-		laser_projection_policy
+		laser_projection_policy,
+		line_coordinate_context
 	)
 	if bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
 		var unblocked_length_gu := _canonical_continuous_line_unblocked_length_gu(
@@ -4891,7 +4929,8 @@ func _canonical_continuous_line_strip_ground_gu(
 				resolved_release_id,
 				effect_length_gu,
 				final_effect_length_gu,
-				laser_projection_policy
+				laser_projection_policy,
+				line_coordinate_context
 			)
 			strip_ground_gu["terrain_truncated"] = true
 			strip_ground_gu["source_effect_length_gu"] = resolved_effect_length_gu
@@ -5177,17 +5216,20 @@ func _spawn_canonical_ground_field(
 			skill_release_snapshot
 		)
 		add_child(field_controller)
-		if not SkillFootprintSnapshotScript.is_valid(skill_release_snapshot):
-			for index: int in range(positions.size()):
-				_spawn_canonical_ground_effect(
-					stable_skill_id,
-					positions[index],
-					effect,
-					false,
-					coverage_cells[index] if index < coverage_cells.size() else null,
-					release_id,
-					skill_release_snapshot
-				)
+		# HC-P1-010: the canonical snapshot owns damage truth, but the formal
+		# 2x2 fire-wall presentation must still materialise one visual cell per
+		# covered ground cell. These cells are visual-only (applies_damage=false)
+		# so damage never double-applies with the field controller.
+		for index: int in range(positions.size()):
+			_spawn_canonical_ground_effect(
+				stable_skill_id,
+				positions[index],
+				effect,
+				false,
+				coverage_cells[index] if index < coverage_cells.size() else null,
+				release_id,
+				skill_release_snapshot
+			)
 		return
 
 	for index: int in range(positions.size()):
@@ -5645,6 +5687,20 @@ func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
 	return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
 		runtime,
 		Vector2(tile)
+	)
+
+
+func _canonical_snapshot_absolute_context(
+	origin_ground_gu: Vector2
+) -> Dictionary:
+	# HC-P1-010: absolute snapshots must carry the runtime map id, an explicit
+	# projection origin (the skill release origin) and the map projection
+	# callable. Screen offsets are relative to that origin.
+	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
+		str(current_map_id),
+		origin_ground_gu,
+		origin_ground_gu,
+		Callable(self, "_canonical_ground_gu_to_screen_px")
 	)
 
 
