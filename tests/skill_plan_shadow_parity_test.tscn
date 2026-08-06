@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q3a_shadow_parity"]
+[ext_resource type="Script" path="res://tests/skill_plan_shadow_parity_test.gd" id="1"]
+[node name="SkillPlanShadowParity" type="Node"]
+script = ExtResource("1")
