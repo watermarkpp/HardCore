@@ -163,6 +163,12 @@ var _map_transition_serial := 0
 # Q0-B test hook (inert outside test_mode): forces _resolve_bich_home() to
 # return invalid so safe-logout failure control flow can be reproduced.
 var _test_force_home_failure := false
+# Q0-B.1: injectable safe-logout/home failure reporter. Production default
+# emits push_error; tests may replace it (test_mode only) with a capture
+# callable so expected failures never write engine-log ERROR lines.
+var _safe_logout_error_reporter: Callable = Callable(
+	self, "_report_safe_logout_error_production"
+)
 var _active_map_transition_id := ""
 # P1-A: map transitions hold the gameplay input lock
 const INPUT_LOCK_MAP_TRANSITION_LOCAL := INPUT_LOCK_MAP_TRANSITION
@@ -593,16 +599,58 @@ func _handle_safe_logout_failure(action: StringName, result: Dictionary) -> void
 		"save_performed": bool(result.get("save_performed", false)),
 		"timestamp": Time.get_ticks_msec(),
 	}
-	push_error(
-		"safe logout failed for %s: %s"
-		% [str(action), str(result.get("reason", ""))]
-	)
 	set_meta("safe_logout_failure_diagnostic", diagnostic)
+	_report_safe_logout_error(
+		action,
+		str(result.get("reason", "safe_logout_failed"))
+	)
 	if is_instance_valid(hud) and hud.has_method("show_message"):
 		hud.show_message(
 			"安全退出失败：%s" % str(result.get("reason", "")),
 			2.0
 		)
+
+
+func _handle_home_resolution_failure(
+	action: StringName,
+	result: Dictionary
+) -> void:
+	var diagnostic := {
+		"action": str(action),
+		"reason": str(result.get("reason", "home_resolution_failed")),
+		"home_source": str(result.get("source", "")),
+		"current_map_id": current_map_id,
+		"player_position": (
+			player.global_position if is_instance_valid(player) else Vector2.ZERO
+		),
+		"timestamp": Time.get_ticks_msec(),
+	}
+	set_meta("home_resolution_failure_diagnostic", diagnostic)
+	_report_safe_logout_error(
+		action,
+		str(result.get("reason", "home_resolution_failed"))
+	)
+	if is_instance_valid(hud) and hud.has_method("show_message"):
+		hud.show_message(
+			"目标位置解析失败：%s" % str(result.get("reason", "")),
+			2.0
+		)
+
+
+func _report_safe_logout_error_production(action: StringName, reason: String) -> void:
+	push_error(
+		"safe logout failed for %s: %s" % [str(action), reason]
+	)
+
+
+func _report_safe_logout_error(action: StringName, reason: String) -> void:
+	if _safe_logout_error_reporter.is_valid():
+		_safe_logout_error_reporter.call(action, reason)
+
+
+func set_safe_logout_error_reporter(reporter: Callable) -> void:
+	if PlayerState.test_mode:
+		_safe_logout_error_reporter = reporter
 
 
 func change_zone(zone_name: String, initial := false) -> void:
@@ -624,8 +672,12 @@ func _change_zone_immediate(zone_name: String, initial := false) -> void:
 		# 旧样板把“比奇城”画成独立伪地图；经典客户端中城镇属于0.map的比奇省。
 		# 保留旧调用兼容，但统一进入服务端地图0所映射的运行地图4。
 		var bich_map := GameData.get_map_by_id(GameData.service_runtime_map_id(0))
+		var home := _resolve_bich_home()
+		if not bool(home.get("valid", false)):
+			_handle_home_resolution_failure(&"change_zone_bich", home)
+			return
 		_load_zone(str(bich_map.get("name", "比奇省")), initial, bich_map)
-		player.global_position = _guarded_bich_home_position_px()
+		player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
 		player.velocity = Vector2.ZERO
 		background.set_focus_position(player.global_position)
 		return
@@ -643,7 +695,7 @@ func travel_to_service_home(
 	var runtime_map_id := GameData.service_runtime_map_id(service_map_id)
 	var home_result := _resolve_bich_home()
 	if not bool(home_result.get("valid", false)):
-		push_error("travel_to_service_home: home position unresolved — %s" % home_result.get("reason", ""))
+		_handle_home_resolution_failure(&"travel_to_service_home", home_result)
 		return false
 	var operation := Callable(self, "_complete_service_home_travel").bind(
 		red_name, initial, fallback_zone, after_arrival
@@ -667,6 +719,10 @@ func _travel_to_service_home_immediate(
 	initial := false,
 	fallback_zone := ""
 ) -> void:
+	var home := _resolve_bich_home()
+	if not bool(home.get("valid", false)):
+		_handle_home_resolution_failure(&"service_home_immediate", home)
+		return
 	var service_map_id := GameData.service_home_map_id(red_name)
 	var runtime_map_id := GameData.service_runtime_map_id(service_map_id)
 	var map_data := GameData.get_map_by_id(runtime_map_id)
@@ -674,7 +730,7 @@ func _travel_to_service_home_immediate(
 		_load_zone(str(map_data.get("name", "比奇省")), initial, map_data)
 		if not red_name and service_map_id == 0:
 			# 服务端(289,618)直接进入700×700原MAP统一坐标，不再压缩到场景中心。
-			player.global_position = _guarded_bich_home_position_px()
+			player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
 			player.velocity = Vector2.ZERO
 			background.set_focus_position(player.global_position)
 	else:
@@ -1001,7 +1057,14 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	if not bool(prepared.get("ok", false)):
 		coordinator.finish(false, "prepare_map_build_failed")
 		return false
-	background.set_pending_arrival_position(_pipeline_arrival_position(map_id))
+	var arrival_result := _pipeline_arrival_position(map_id)
+	if not bool(arrival_result.get("valid", false)):
+		_handle_home_resolution_failure(&"world_pipeline_arrival", arrival_result)
+		coordinator.finish(false, "missing_target_arrival")
+		return false
+	background.set_pending_arrival_position(
+		arrival_result.get("position_px", Vector2.ZERO) as Vector2
+	)
 	background.submit_staged_build()
 
 	# 2) REQUEST_RESOURCES -> 3) WAIT_RESOURCES
@@ -1078,10 +1141,15 @@ func _bootstrap_slice_budget_ms() -> float:
 	))
 
 
-func _pipeline_arrival_position(map_id: int) -> Vector2:
+func _pipeline_arrival_position(map_id: int) -> Dictionary:
 	if map_id == 4:
-		return _guarded_bich_home_position_px()
-	return route_arrival_position(map_id, current_map_id)
+		return _resolve_bich_home()
+	return {
+		"valid": true,
+		"position_px": route_arrival_position(map_id, current_map_id),
+		"source": "route_arrival",
+		"reason": "",
+	}
 
 
 func _check_world_ready_contract() -> bool:
@@ -1219,7 +1287,7 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 		if int(portal.get("target_map_id", -1)) == source_map_id:
 			var portal_screen_px: Vector2 = portal.get("position", Vector2.ZERO)
 			var interior_target_screen_px := (
-				_guarded_bich_home_position_px()
+				_bich_home_position_px_if_valid()
 				if destination_map_id == 4
 				else Vector2.ZERO
 			)
@@ -1247,7 +1315,7 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 				portal_ground_gu + inward_direction_ground_gu * arrival_offset_gu
 			)
-	return _guarded_bich_home_position_px() if destination_map_id == 4 else Vector2.ZERO
+	return _bich_home_position_px_if_valid() if destination_map_id == 4 else Vector2.ZERO
 
 
 func route_next_target(map_id: int) -> Dictionary:
@@ -1284,31 +1352,28 @@ func _resolve_bich_home() -> Dictionary:
 	return {"valid": false, "position_px": Vector2.ZERO, "source": "", "reason": "missing_bich_home_position"}
 
 
-# Convenience accessor: returns position only if valid, else Vector2.ZERO.
-# Read-only convenience for tests/debug/display. Production paths that place or
-# move the player must use _guarded_bich_home_position_px() instead so a failed
-# resolution never falls through to Vector2.ZERO.
+# Read-only convenience for tests/debug/display only. Returns the formal Home
+# position when resolvable, else Vector2.ZERO. Production side-effect paths must
+# call _resolve_bich_home() and handle failure explicitly.
 func _bich_home_screen_position_px() -> Vector2:
 	var resolved: Dictionary = _resolve_bich_home()
 	return resolved.get("position_px", Vector2.ZERO) as Vector2
 
 
-func _guarded_bich_home_position_px() -> Vector2:
+# Returns Vector2.INF (explicit no-result sentinel) when Home resolution fails,
+# so callers never consume a source-map current position as a target Home.
+func _bich_home_position_px_if_valid() -> Vector2:
 	var resolved := _resolve_bich_home()
 	if not bool(resolved.get("valid", false)):
-		# Keep the current player position: a placement path must never teleport
-		# the player to Vector2.ZERO just because Home resolution failed.
-		if is_instance_valid(player):
-			return player.global_position
-		return Vector2.ZERO
+		return Vector2.INF
 	return resolved.get("position_px", Vector2.ZERO) as Vector2
 
 
 func _bich_portal_screen_position_px_to(target_map_id: int) -> Vector2:
 	for portal: Dictionary in RegionContent.get_map_content(4).get("portals", []):
 		if int(portal.get("target_map_id", -1)) == target_map_id:
-			return portal.get("position", _guarded_bich_home_position_px())
-	return _guarded_bich_home_position_px()
+			return portal.get("position", Vector2.INF) as Vector2
+	return _bich_home_position_px_if_valid()
 
 
 func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
@@ -1333,7 +1398,16 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		player.global_position = Vector2.ZERO
 		_spawn_outskirts_content()
 	else:
-		player.global_position = _guarded_bich_home_position_px() if current_map_id == 4 else Vector2.ZERO
+		if current_map_id == 4:
+			var home := _resolve_bich_home()
+			if bool(home.get("valid", false)):
+				player.global_position = home.get(
+					"position_px", Vector2.ZERO
+				) as Vector2
+			else:
+				_handle_home_resolution_failure(&"load_zone_arrival", home)
+		else:
+			player.global_position = Vector2.ZERO
 		_spawn_database_zone_content(current_map_data)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
@@ -1498,7 +1572,13 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 
 func _spawn_authored_map_content(content: Dictionary) -> void:
 	var camp_layout := _bich_camp_layout if current_map_id == 4 else {}
-	var camp_home := _guarded_bich_home_position_px()
+	var camp_home := Vector2.ZERO
+	if current_map_id == 4:
+		var home := _resolve_bich_home()
+		if not bool(home.get("valid", false)):
+			_handle_home_resolution_failure(&"camp_spawn", home)
+			return
+		camp_home = home.get("position_px", Vector2.ZERO) as Vector2
 	for spawn: Variant in content.get("spawns", []):
 		if not spawn is Dictionary:
 			continue
@@ -2687,7 +2767,12 @@ func _on_player_death_requested() -> void:
 
 
 func _finish_death_revival() -> void:
-	player.global_position = _guarded_bich_home_position_px()
+	var home := _resolve_bich_home()
+	if not bool(home.get("valid", false)):
+		# Keep the death state; never revive at a source-map current position.
+		_handle_home_resolution_failure(&"death_revival", home)
+		return
+	player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
