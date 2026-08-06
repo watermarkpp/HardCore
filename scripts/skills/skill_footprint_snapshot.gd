@@ -27,6 +27,24 @@ const PROJECTION_API_CONTRACT_ID := (
 	"skills.footprint_snapshot.projection.iso_64x32.v1"
 )
 
+## HC-P1-010: explicit coordinate-space schema V2. Every new formal snapshot
+## declares its coordinate_space; absolute snapshots additionally carry the
+## runtime map id and the explicit projection origin. The old ambiguous
+## "ground_gu" value is only produced by the documented legacy builder entry
+## (create_* without a coordinate_context) and must be upgraded through
+## upgrade_legacy_snapshot() before entering strict consumers.
+const SCHEMA_VERSION := 2
+const COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU := (
+	&"runtime_map_absolute_ground_gu"
+)
+const COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU := &"local_ground_delta_gu"
+const COORDINATE_SPACE_LEGACY_GROUND_GU := &"ground_gu"
+const SUPPORTED_COORDINATE_SPACES: Array[String] = [
+	COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU,
+	COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU,
+]
+const LEGACY_SCHEMA_VERSION := 1
+
 const SHAPE_DIRECTED_RECTANGLE := "directed_rectangle"
 const SHAPE_SECTOR_ARC := "sector_arc"
 const SHAPE_CIRCLE := "circle"
@@ -46,6 +64,143 @@ const CONTACT_EPSILON_GU := 0.0001
 const DEFAULT_CURVE_SEGMENTS := 32
 
 
+static func make_absolute_runtime_context(
+	runtime_map_id: Variant,
+	origin_ground_gu: Vector2,
+	projection_origin_ground_gu: Vector2,
+	ground_to_screen_position: Callable
+) -> Dictionary:
+	return {
+		"coordinate_space": COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU,
+		"runtime_map_id": str(runtime_map_id),
+		"origin_ground_gu": origin_ground_gu,
+		"projection_origin_ground_gu": projection_origin_ground_gu,
+		"ground_position_gu_to_screen_position_px": ground_to_screen_position,
+	}
+
+
+static func make_local_delta_context(
+	ground_delta_to_screen_delta: Callable
+) -> Dictionary:
+	return {
+		"coordinate_space": COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU,
+		"ground_delta_gu_to_screen_delta_px": ground_delta_to_screen_delta,
+		"projection_origin_ground_gu": Vector2.ZERO,
+	}
+
+
+static func _call_vector2(callable_value: Variant, value: Vector2) -> Vector2:
+	if not callable_value is Callable:
+		return Vector2.ZERO
+	var callable := callable_value as Callable
+	if not callable.is_valid():
+		return Vector2.ZERO
+	var result: Variant = callable.call(value)
+	return result if result is Vector2 else Vector2.ZERO
+
+
+static func _coordinate_fields_from_context(
+	coordinate_context: Dictionary
+) -> Dictionary:
+	var coordinate_space := str(
+		coordinate_context.get("coordinate_space", "")
+	)
+	if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
+		return {
+			"schema_version": SCHEMA_VERSION,
+			"coordinate_space": coordinate_space,
+			"runtime_map_id": str(
+				coordinate_context.get("runtime_map_id", "")
+			),
+			"projection_origin_ground_gu": (
+				coordinate_context.get(
+					"projection_origin_ground_gu", Vector2.ZERO
+				)
+				as Vector2
+			),
+			"created_by": str(
+				coordinate_context.get("created_by", "production_absolute")
+			),
+		}
+	if coordinate_space == COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU:
+		return {
+			"schema_version": SCHEMA_VERSION,
+			"coordinate_space": coordinate_space,
+			"runtime_map_id": str(
+				coordinate_context.get("runtime_map_id", "")
+			),
+			"projection_origin_ground_gu": Vector2.ZERO,
+			"created_by": str(
+				coordinate_context.get("created_by", "production_local_delta")
+			),
+		}
+	# Documented legacy compatibility entry: create_* without an explicit
+	# coordinate context keeps the historical ambiguous ground_gu semantics.
+	# Strict consumers must route it through upgrade_legacy_snapshot().
+	return {
+		"schema_version": LEGACY_SCHEMA_VERSION,
+		"coordinate_space": COORDINATE_SPACE_LEGACY_GROUND_GU,
+		"runtime_map_id": "",
+		"projection_origin_ground_gu": Vector2.ZERO,
+		"created_by": "legacy_builder_no_context",
+	}
+
+
+static func project_ground_polygon_to_screen_offsets_px(
+	polygon_ground_gu: PackedVector2Array,
+	origin_ground_gu: Vector2,
+	coordinate_context := {}
+) -> PackedVector2Array:
+	var coordinate_space := str(
+		coordinate_context.get("coordinate_space", "")
+	)
+	var result := PackedVector2Array()
+	if (
+		coordinate_space
+		== COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
+	):
+		var converter: Variant = coordinate_context.get(
+			"ground_position_gu_to_screen_position_px",
+			Callable()
+		)
+		if converter is Callable and (converter as Callable).is_valid():
+			var projection_origin_ground_gu: Vector2 = (
+				coordinate_context.get(
+					"projection_origin_ground_gu",
+					origin_ground_gu
+				) as Vector2
+			)
+			var projection_origin_screen_px := _call_vector2(
+				converter,
+				projection_origin_ground_gu
+			)
+			for point_ground_gu: Vector2 in polygon_ground_gu:
+				result.append(
+					_call_vector2(converter, point_ground_gu)
+					- projection_origin_screen_px
+				)
+			return result
+	var delta_converter: Variant = coordinate_context.get(
+		"ground_delta_gu_to_screen_delta_px",
+		Callable()
+	)
+	for point_ground_gu: Vector2 in polygon_ground_gu:
+		if delta_converter is Callable and (delta_converter as Callable).is_valid():
+			result.append(
+				_call_vector2(
+					delta_converter,
+					point_ground_gu - origin_ground_gu
+				)
+			)
+		else:
+			result.append(
+				GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+					point_ground_gu - origin_ground_gu
+				)
+			)
+	return result
+
+
 static func create_directed_rectangle(
 	skill_id: String,
 	release_id: String,
@@ -56,8 +211,18 @@ static func create_directed_rectangle(
 	start_offset_gu := 0.0,
 	declared_effect_length_gu := 0.0,
 	resolved_effect_length_gu := 0.0,
-	laser_projection_policy := ""
+	laser_projection_policy := "",
+	coordinate_context := {}
 ) -> Dictionary:
+	var coordinate_fields := _coordinate_fields_from_context(
+		coordinate_context
+	)
+	var effective_origin_ground_gu := origin_ground_gu
+	if (
+		str(coordinate_fields.get("coordinate_space", ""))
+		== COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU
+	):
+		effective_origin_ground_gu = Vector2.ZERO
 	var resolved_direction_ground_gu := direction_ground_gu
 	if (
 		resolved_direction_ground_gu.length_squared()
@@ -88,7 +253,8 @@ static func create_directed_rectangle(
 	])
 	var polygon_screen_offset_px := project_ground_polygon_to_screen_offsets_px(
 		polygon_ground_gu,
-		origin_ground_gu
+		origin_ground_gu,
+		coordinate_context
 	)
 	var axis_screen_offset_px := (
 		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
@@ -120,7 +286,7 @@ static func create_directed_rectangle(
 		"skill_id": skill_id,
 		"release_id": release_id,
 		"shape_type": SHAPE_DIRECTED_RECTANGLE,
-		"origin_ground_gu": origin_ground_gu,
+		"origin_ground_gu": effective_origin_ground_gu,
 		"start_offset_gu": safe_start_offset_gu,
 		"start_ground_gu": start_ground_gu,
 		"direction_ground_gu": resolved_direction_ground_gu,
@@ -141,9 +307,12 @@ static func create_directed_rectangle(
 		"declared_effect_length_gu": declared_effect_length_gu,
 		"resolved_effect_length_gu": resolved_effect_length_gu,
 		"laser_projection_policy": laser_projection_policy,
-		"damage_space": "ground_gu",
+		"damage_space": str(
+			coordinate_fields.get("coordinate_space", "ground_gu")
+		),
 		"visual_space": "screen_px_derived_only",
 	}
+	snapshot.merge(coordinate_fields, true)
 	snapshot.make_read_only()
 	return snapshot
 
@@ -155,7 +324,8 @@ static func create_sector_arc(
 	direction_ground_gu: Vector2,
 	radius_gu: float,
 	half_angle_radians: float,
-	arc_segments := DEFAULT_CURVE_SEGMENTS
+	arc_segments := DEFAULT_CURVE_SEGMENTS,
+	coordinate_context := {}
 ) -> Dictionary:
 	var resolved_direction_ground_gu := _normalized_direction_ground_gu(
 		direction_ground_gu
@@ -196,7 +366,8 @@ static func create_sector_arc(
 				2.0 * safe_radius_gu * sin(safe_half_angle_radians)
 			),
 			"arc_segments": safe_arc_segments,
-		}
+		},
+		coordinate_context
 	)
 
 
@@ -205,7 +376,8 @@ static func create_circle(
 	release_id: String,
 	center_ground_gu: Vector2,
 	radius_gu: float,
-	segments := DEFAULT_CURVE_SEGMENTS
+	segments := DEFAULT_CURVE_SEGMENTS,
+	coordinate_context := {}
 ) -> Dictionary:
 	var safe_radius_gu := maxf(0.0, radius_gu)
 	var safe_segments := maxi(8, segments)
@@ -224,7 +396,8 @@ static func create_circle(
 			"effect_length_gu": safe_radius_gu,
 			"effect_width_gu": safe_radius_gu * 2.0,
 			"curve_segments": safe_segments,
-		}
+		},
+		coordinate_context
 	)
 
 
@@ -236,7 +409,8 @@ static func create_swept_capsule_path(
 	path_radius_gu: float,
 	cap_segments := DEFAULT_CURVE_SEGMENTS / 2,
 	parent_snapshot_id := "",
-	segment_index := -1
+	segment_index := -1,
+	coordinate_context := {}
 ) -> Dictionary:
 	var safe_radius_gu := maxf(0.0, path_radius_gu)
 	var segment_ground_gu := (
@@ -298,7 +472,8 @@ static func create_swept_capsule_path(
 			"cap_segments": safe_cap_segments,
 			"parent_snapshot_id": parent_snapshot_id,
 			"segment_index": segment_index,
-		}
+		},
+		coordinate_context
 	)
 
 
@@ -307,7 +482,8 @@ static func create_target_footprint(
 	release_id: String,
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float,
-	target_instance_id := 0
+	target_instance_id := 0,
+	coordinate_context := {}
 ) -> Dictionary:
 	var safe_radius_gu := maxf(0.0, target_combat_radius_gu)
 	var polygon_ground_gu := PackedVector2Array()
@@ -335,7 +511,8 @@ static func create_target_footprint(
 			"target_footprint_contract_id": (
 				WorldSpatialRulesScript.ACTOR_GROUND_FOOTPRINT_CONTRACT_ID
 			),
-		}
+		},
+		coordinate_context
 	)
 
 
@@ -343,8 +520,18 @@ static func create_cell_union(
 	skill_id: String,
 	release_id: String,
 	origin_ground_gu: Vector2,
-	geometry_cells_grid_steps: Array[Vector2i]
+	geometry_cells_grid_steps: Array[Vector2i],
+	coordinate_context := {}
 ) -> Dictionary:
+	var coordinate_fields := _coordinate_fields_from_context(
+		coordinate_context
+	)
+	var effective_origin_ground_gu := origin_ground_gu
+	if (
+		str(coordinate_fields.get("coordinate_space", ""))
+		== COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU
+	):
+		effective_origin_ground_gu = Vector2.ZERO
 	var polygons_ground_gu: Array[PackedVector2Array] = []
 	var polygons_screen_offset_px: Array[PackedVector2Array] = []
 	var copied_cells_grid_steps: Array[Vector2i] = []
@@ -360,7 +547,8 @@ static func create_cell_union(
 		polygons_screen_offset_px.append(
 			project_ground_polygon_to_screen_offsets_px(
 				cell_polygon_ground_gu,
-				origin_ground_gu
+				origin_ground_gu,
+				coordinate_context
 			)
 		)
 		copied_cells_grid_steps.append(cell_grid_steps)
@@ -387,7 +575,7 @@ static func create_cell_union(
 		"skill_id": skill_id,
 		"release_id": release_id,
 		"shape_type": SHAPE_CELL_UNION,
-		"origin_ground_gu": origin_ground_gu,
+		"origin_ground_gu": effective_origin_ground_gu,
 		"geometry_cells_grid_steps": copied_cells_grid_steps,
 		"polygons_ground_gu": polygons_ground_gu,
 		"polygons_screen_offset_px": polygons_screen_offset_px,
@@ -395,9 +583,12 @@ static func create_cell_union(
 		"polygon_screen_offset_px": first_polygon_screen_offset_px,
 		"effect_length_gu": 0.0,
 		"effect_width_gu": 0.0,
-		"damage_space": "ground_gu",
+		"damage_space": str(
+			coordinate_fields.get("coordinate_space", "ground_gu")
+		),
 		"visual_space": "screen_px_derived_only",
 	}
+	snapshot.merge(coordinate_fields, true)
 	snapshot.make_read_only()
 	return snapshot
 
@@ -413,6 +604,222 @@ static func is_valid(snapshot: Dictionary) -> bool:
 		and str(snapshot.get("projection_contract_id", ""))
 		== GroundUnitSpaceScript.PROJECTION_CONTRACT_ID
 	)
+
+
+static func validate(
+	snapshot: Dictionary,
+	expected_context := {}
+) -> Dictionary:
+	var problems: Array[String] = []
+	var schema_version := int(snapshot.get("schema_version", LEGACY_SCHEMA_VERSION))
+	if schema_version not in [LEGACY_SCHEMA_VERSION, SCHEMA_VERSION]:
+		problems.append("unsupported_schema_version")
+	var coordinate_space := str(snapshot.get("coordinate_space", ""))
+	if coordinate_space.is_empty():
+		problems.append("missing_coordinate_space")
+	elif coordinate_space == COORDINATE_SPACE_LEGACY_GROUND_GU:
+		if not bool(expected_context.get("allow_legacy_v1", false)):
+			problems.append("legacy_ambiguous_coordinate_space")
+	elif coordinate_space not in SUPPORTED_COORDINATE_SPACES:
+		problems.append("invalid_coordinate_space")
+	var shape_type := str(snapshot.get("shape_type", ""))
+	if shape_type not in SUPPORTED_SHAPE_TYPES:
+		problems.append("invalid_shape_kind")
+	if str(snapshot.get("skill_id", "")).is_empty():
+		problems.append("missing_skill_id")
+	for length_key: String in [
+		"effect_length_gu",
+		"effect_width_gu",
+		"axis_screen_length_px",
+	]:
+		var value := float(snapshot.get(length_key, 0.0))
+		if not is_finite(value) or value < 0.0:
+			problems.append("invalid_%s" % length_key)
+	for vector_key: String in [
+		"origin_ground_gu",
+		"projection_origin_ground_gu",
+		"direction_ground_gu",
+		"axis_screen_offset_px",
+		"axis_screen_direction_px",
+		"start_ground_gu",
+		"end_ground_gu",
+	]:
+		if snapshot.has(vector_key) and not _vector2_is_finite(
+			snapshot.get(vector_key, Vector2.ZERO) as Vector2
+		):
+			problems.append("non_finite_%s" % vector_key)
+	for polygon_key: String in [
+		"polygon_ground_gu",
+		"polygon_screen_offset_px",
+	]:
+		if snapshot.has(polygon_key) and not _polygon_is_finite(
+			snapshot.get(polygon_key, PackedVector2Array())
+		):
+			problems.append("non_finite_%s" % polygon_key)
+	if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
+		if str(snapshot.get("runtime_map_id", "")).is_empty():
+			problems.append("absolute_missing_runtime_map_id")
+		var projection_origin: Variant = snapshot.get(
+			"projection_origin_ground_gu", Vector2.INF
+		)
+		if (
+			not projection_origin is Vector2
+			or (projection_origin as Vector2) == Vector2.INF
+			or not _vector2_is_finite(projection_origin as Vector2)
+		):
+			problems.append("absolute_missing_projection_origin")
+		var expected_map_id := str(
+			expected_context.get("expected_runtime_map_id", "")
+		)
+		if (
+			not expected_map_id.is_empty()
+			and str(snapshot.get("runtime_map_id", "")) != expected_map_id
+		):
+			problems.append("runtime_map_id_mismatch")
+	elif coordinate_space == COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU:
+		var origin: Variant = snapshot.get("origin_ground_gu", Vector2.ZERO)
+		if (
+			origin is Vector2
+			and (origin as Vector2) != Vector2.ZERO
+		):
+			problems.append("local_delta_must_have_zero_origin")
+	var axis_direction: Variant = snapshot.get(
+		"axis_screen_direction_px", Vector2.ZERO
+	)
+	if (
+		axis_direction is Vector2
+		and (axis_direction as Vector2).length_squared() > 0.000001
+		and not _vector2_is_finite(axis_direction as Vector2)
+	):
+		problems.append("non_finite_axis_screen_direction_px")
+	if problems.is_empty():
+		return {
+			"valid": true,
+			"reason": "",
+			"details": {
+				"schema_version": schema_version,
+				"coordinate_space": coordinate_space,
+				"shape_type": shape_type,
+			},
+		}
+	return {
+		"valid": false,
+		"reason": ";".join(problems),
+		"details": {
+			"schema_version": schema_version,
+			"coordinate_space": coordinate_space,
+			"shape_type": shape_type,
+			"problems": problems.duplicate(),
+		},
+	}
+
+
+static func upgrade_legacy_snapshot(
+	snapshot: Dictionary,
+	explicit_context: Dictionary
+) -> Dictionary:
+	var coordinate_space := str(
+		explicit_context.get("coordinate_space", "")
+	)
+	if coordinate_space not in SUPPORTED_COORDINATE_SPACES:
+		return {}
+	if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
+		if str(explicit_context.get("runtime_map_id", "")).is_empty():
+			return {}
+		var projection_origin: Variant = explicit_context.get(
+			"projection_origin_ground_gu", Vector2.INF
+		)
+		if (
+			not projection_origin is Vector2
+			or (projection_origin as Vector2) == Vector2.INF
+		):
+			return {}
+		var converter: Variant = explicit_context.get(
+			"ground_position_gu_to_screen_position_px",
+			Callable()
+		)
+		if not converter is Callable or not (converter as Callable).is_valid():
+			return {}
+	var upgraded := snapshot.duplicate(true)
+	var coordinate_fields := _coordinate_fields_from_context(explicit_context)
+	coordinate_fields["created_by"] = "legacy_upgrade"
+	coordinate_fields["migration_source"] = "legacy_v1"
+	upgraded.merge(coordinate_fields, true)
+	if (
+		coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
+	):
+		upgraded["origin_ground_gu"] = explicit_context.get(
+			"origin_ground_gu",
+			snapshot.get("origin_ground_gu", Vector2.ZERO)
+		)
+	else:
+		upgraded["origin_ground_gu"] = Vector2.ZERO
+	var raw_polygon: Variant = upgraded.get(
+		"polygon_ground_gu", PackedVector2Array()
+	)
+	if raw_polygon is PackedVector2Array:
+		var polygon := raw_polygon as PackedVector2Array
+		var origin_ground_gu := Vector2.ZERO
+		if coordinate_space == COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU:
+			origin_ground_gu = (
+				upgraded.get("origin_ground_gu", Vector2.ZERO) as Vector2
+			)
+		upgraded["polygon_screen_offset_px"] = (
+			project_ground_polygon_to_screen_offsets_px(
+				polygon,
+				origin_ground_gu,
+				explicit_context
+			)
+		)
+		var raw_polygons: Variant = upgraded.get(
+			"polygons_ground_gu", []
+		)
+		var polygons_screen_offset_px: Array[PackedVector2Array] = []
+		if raw_polygons is Array:
+			for raw_item: Variant in raw_polygons:
+				if raw_item is PackedVector2Array:
+					polygons_screen_offset_px.append(
+						project_ground_polygon_to_screen_offsets_px(
+							raw_item as PackedVector2Array,
+							origin_ground_gu,
+							explicit_context
+						)
+					)
+		if not polygons_screen_offset_px.is_empty():
+			upgraded["polygons_screen_offset_px"] = polygons_screen_offset_px
+	upgraded["damage_space"] = coordinate_space
+	upgraded.make_read_only()
+	return upgraded
+
+
+static func diagnostics(snapshot: Dictionary) -> Dictionary:
+	var validation := validate(snapshot, {"allow_legacy_v1": true})
+	return {
+		"schema_version": int(snapshot.get("schema_version", 1)),
+		"snapshot_id": str(snapshot.get("snapshot_id", "")),
+		"coordinate_space": str(snapshot.get("coordinate_space", "")),
+		"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+		"origin_ground_gu": snapshot.get("origin_ground_gu", Vector2.ZERO),
+		"projection_origin_ground_gu": snapshot.get(
+			"projection_origin_ground_gu", Vector2.ZERO
+		),
+		"axis_screen_length_px": float(
+			snapshot.get("axis_screen_length_px", 0.0)
+		),
+		"valid": bool(validation.get("valid", false)),
+		"validation_reason": str(validation.get("reason", "")),
+	}
+
+
+static func _vector2_is_finite(value: Vector2) -> bool:
+	return is_finite(value.x) and is_finite(value.y)
+
+
+static func _polygon_is_finite(polygon: PackedVector2Array) -> bool:
+	for point: Vector2 in polygon:
+		if not _vector2_is_finite(point):
+			return false
+	return true
 
 
 static func ground_polygon_gu(snapshot: Dictionary) -> PackedVector2Array:
@@ -490,20 +897,6 @@ static func projected_polygon_screen_px(
 	var result := PackedVector2Array()
 	for offset_px: Vector2 in projected_polygon_screen_offset_px(snapshot):
 		result.append(origin_screen_px + offset_px)
-	return result
-
-
-static func project_ground_polygon_to_screen_offsets_px(
-	polygon_ground_gu: PackedVector2Array,
-	origin_ground_gu: Vector2
-) -> PackedVector2Array:
-	var result := PackedVector2Array()
-	for point_ground_gu: Vector2 in polygon_ground_gu:
-		result.append(
-			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-				point_ground_gu - origin_ground_gu
-			)
-		)
 	return result
 
 
@@ -648,11 +1041,22 @@ static func _create_polygon_snapshot(
 	shape_contract_id: String,
 	origin_ground_gu: Vector2,
 	polygon_ground_gu: PackedVector2Array,
-	extra_fields: Dictionary
+	extra_fields: Dictionary,
+	coordinate_context := {}
 ) -> Dictionary:
+	var coordinate_fields := _coordinate_fields_from_context(
+		coordinate_context
+	)
+	var effective_origin_ground_gu := origin_ground_gu
+	if (
+		str(coordinate_fields.get("coordinate_space", ""))
+		== COORDINATE_SPACE_LOCAL_GROUND_DELTA_GU
+	):
+		effective_origin_ground_gu = Vector2.ZERO
 	var polygon_screen_offset_px := project_ground_polygon_to_screen_offsets_px(
 		polygon_ground_gu,
-		origin_ground_gu
+		origin_ground_gu,
+		coordinate_context
 	)
 	var snapshot := {
 		"contract_id": CONTRACT_ID,
@@ -664,10 +1068,12 @@ static func _create_polygon_snapshot(
 		"skill_id": skill_id,
 		"release_id": release_id,
 		"shape_type": shape_type,
-		"origin_ground_gu": origin_ground_gu,
+		"origin_ground_gu": effective_origin_ground_gu,
 		"polygon_ground_gu": polygon_ground_gu,
 		"polygon_screen_offset_px": polygon_screen_offset_px,
-		"damage_space": "ground_gu",
+		"damage_space": str(
+			coordinate_fields.get("coordinate_space", "ground_gu")
+		),
 		"visual_space": "screen_px_derived_only",
 	}
 	var polygons_ground_gu: Array[PackedVector2Array] = [polygon_ground_gu]
@@ -678,6 +1084,7 @@ static func _create_polygon_snapshot(
 	polygons_screen_offset_px.make_read_only()
 	snapshot["polygons_ground_gu"] = polygons_ground_gu
 	snapshot["polygons_screen_offset_px"] = polygons_screen_offset_px
+	snapshot.merge(coordinate_fields, true)
 	snapshot.merge(extra_fields, true)
 	snapshot.make_read_only()
 	return snapshot
