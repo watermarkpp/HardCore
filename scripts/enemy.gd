@@ -12,6 +12,9 @@ const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const RuntimeCombatSpatialIndexScript := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE_GU := 3.0
 const CROWD_GRID_REFRESH_FRAMES := 3
@@ -84,6 +87,8 @@ var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
+var combat_spatial_index: RuntimeCombatSpatialIndexScript
+var spatial_actor_runtime_id: int = -1
 var poison_time := 0.0
 var poison_damage := 0
 var control_time := 0.0:
@@ -348,6 +353,7 @@ func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
+	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
 	_update_pending_attack(delta)
@@ -537,6 +543,23 @@ func _physics_process(delta: float) -> void:
 			facing = _screen_facing_for_ground_direction(fresh_offset_ground_gu)
 	if visual != null and visual.is_fallback_attacking():
 		queue_redraw()
+
+
+func _spatial_index_update() -> void:
+	if (
+		combat_spatial_index == null
+		or not is_instance_valid(combat_spatial_index)
+		or spatial_actor_runtime_id <= 0
+	):
+		return
+	combat_spatial_index.update_actor(
+		spatial_actor_runtime_id,
+		_screen_position_px_to_ground_position_gu(global_position)
+	)
+
+
+func spatial_index_position() -> Vector2:
+	return _screen_position_px_to_ground_position_gu(global_position)
 
 
 static func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
@@ -818,6 +841,20 @@ func configure_runtime_map_projection(
 		if ground_gu_to_screen_position_px is Callable
 		else Callable()
 	)
+
+
+func configure_spatial_index(
+	index: RuntimeCombatSpatialIndexScript,
+	actor_runtime_id: int
+) -> void:
+	combat_spatial_index = index
+	spatial_actor_runtime_id = actor_runtime_id
+
+
+func _exit_tree() -> void:
+	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
+		combat_spatial_index.unregister(spatial_actor_runtime_id)
+	combat_spatial_index = null
 
 
 func _snapshot_coordinate_context() -> Dictionary:

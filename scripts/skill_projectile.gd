@@ -7,6 +7,9 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const RuntimeCombatSpatialIndexScript := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -49,6 +52,7 @@ var skill_footprint_snapshot: Dictionary = {}
 var last_segment_footprint_snapshot: Dictionary = {}
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
+var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var resolution_skill_id := ""
 var source_actor: Node2D
 var magic_defense_adapter := Callable()
@@ -59,6 +63,19 @@ var _sprite: Sprite2D
 var visual_rejection_reason := ""
 var _projectile_role_valid := false
 var _physics_segment_index := 0
+
+var _broadphase_physics_step_count := 0
+var _broadphase_snapshot_build_count := 0
+var _broadphase_query_count := 0
+var _broadphase_total_candidate_count := 0
+var _broadphase_max_candidate_count := 0
+var _broadphase_exact_test_count := 0
+var _broadphase_group_scan_count := 0
+var _broadphase_group_nodes_examined := 0
+var _broadphase_hit_count := 0
+var _broadphase_cross_map_rejection_count := 0
+var _broadphase_stale_candidate_count := 0
+var _broadphase_unavailable_count := 0
 
 
 func setup_ground_unit_projectile(
@@ -129,6 +146,10 @@ func configure_runtime_map_projection(
 		else Callable()
 	)
 	_build_release_footprint_snapshot()
+
+
+func configure_spatial_index(index: RuntimeCombatSpatialIndexScript) -> void:
+	_combat_spatial_index = index
 
 
 func _snapshot_coordinate_context(origin_ground_gu: Vector2) -> Dictionary:
@@ -265,6 +286,7 @@ func _physics_process(delta: float) -> void:
 			_snapshot_coordinate_context(segment_start_ground_gu)
 		)
 	)
+	_broadphase_snapshot_build_count += 1
 	_physics_segment_index += 1
 	global_position = segment_end_screen_px
 	traveled_distance_gu += travel_distance_gu
@@ -280,18 +302,50 @@ func _physics_process(delta: float) -> void:
 			0.0,
 			remaining_travel_distance_gu - travel_distance_gu
 		)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		if not _swept_segment_intersects_enemy_footprint(
-			segment_start_screen_px,
-			segment_end_screen_px,
-			node
-		):
-			continue
-		_apply_hit(node)
-		queue_free()
-		return
+	_broadphase_physics_step_count += 1
+	if (
+		_combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+	):
+		# Q2-A: no fallback to a full enemy-group scan. Reject this frame's
+		# hits and record the failure; production always injects the index.
+		_broadphase_unavailable_count += 1
+	elif runtime_map_id < 0:
+		_broadphase_cross_map_rejection_count += 1
+	else:
+		_broadphase_query_count += 1
+		var candidates: Array[Dictionary] = (
+			_combat_spatial_index.query_segment_candidates(
+				runtime_map_id,
+				segment_start_ground_gu,
+				segment_end_ground_gu,
+				projectile_radius_gu + 0.05
+			)
+		)
+		_broadphase_total_candidate_count += candidates.size()
+		_broadphase_max_candidate_count = maxi(
+			_broadphase_max_candidate_count,
+			candidates.size()
+		)
+		for candidate: Dictionary in candidates:
+			var candidate_node: Variant = candidate.get("node")
+			if not candidate_node is EnemyActor:
+				continue
+			var node := candidate_node as EnemyActor
+			if node.is_queued_for_deletion() or not is_instance_valid(node):
+				_broadphase_stale_candidate_count += 1
+				continue
+			_broadphase_exact_test_count += 1
+			if not _swept_segment_intersects_enemy_footprint(
+				segment_start_screen_px,
+				segment_end_screen_px,
+				node
+			):
+				continue
+			_broadphase_hit_count += 1
+			_apply_hit(node)
+			queue_free()
+			return
 	if (
 		remaining_travel_distance_gu >= 0.0
 		and remaining_travel_distance_gu <= GroundUnitSpaceScript.EPSILON_GU
@@ -364,6 +418,35 @@ func release_snapshot_intersects_target_footprint_ground_gu(
 			target_combat_radius_gu
 		)
 	)
+
+
+func projectile_broadphase_diagnostics() -> Dictionary:
+	var index_diagnostics: Dictionary = (
+		_combat_spatial_index.diagnostics()
+		if _combat_spatial_index != null
+		and is_instance_valid(_combat_spatial_index)
+		else {}
+	)
+	return {
+		"runtime_map_id": runtime_map_id,
+		"physics_step_count": _broadphase_physics_step_count,
+		"snapshot_build_count": _broadphase_snapshot_build_count,
+		"broadphase_query_count": _broadphase_query_count,
+		"total_candidate_count": _broadphase_total_candidate_count,
+		"max_candidate_count": _broadphase_max_candidate_count,
+		"exact_test_count": _broadphase_exact_test_count,
+		"group_scan_count": _broadphase_group_scan_count,
+		"group_nodes_examined": _broadphase_group_nodes_examined,
+		"hit_count": _broadphase_hit_count,
+		"cross_map_candidate_rejection_count": (
+			_broadphase_cross_map_rejection_count
+		),
+		"stale_candidate_count": _broadphase_stale_candidate_count,
+		"broadphase_unavailable_count": _broadphase_unavailable_count,
+		"index_bucket_change_count": int(
+			index_diagnostics.get("index_bucket_change_count", 0)
+		),
+	}
 
 
 static func swept_segment_intersects_footprint_gu(

@@ -39,6 +39,18 @@ $ProductionExpected = @(
     'tests/taoist_profession_package_test.tscn'
 )
 
+$ProjectileSuite = 'projectile_spatial_critical'
+$ProjectileExpected = @(
+    'tests/projectile_broadphase_hit_parity_test.tscn',
+    'tests/projectile_broadphase_no_false_negative_test.tscn',
+    'tests/projectile_broadphase_candidate_reduction_test.tscn',
+    'tests/projectile_broadphase_stable_order_test.tscn',
+    'tests/projectile_broadphase_terrain_cutoff_test.tscn',
+    'tests/projectile_broadphase_runtime_map_isolation_test.tscn',
+    'tests/projectile_spatial_index_lifecycle_test.tscn',
+    'tests/projectile_snapshot_single_build_per_step_test.tscn'
+)
+
 $SafeLogoutSuite = 'safe_logout_critical'
 $SafeLogoutExpected = @(
     'tests/safe_logout_home_resolution_failure_test.tscn',
@@ -126,6 +138,41 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $prodIncluded = ($RunnerSource -match '\$Suites\.snapshot_production_critical\s*\+')
 $prodValidateSet = ($RunnerSource -match "snapshot_production_critical")
 
+# projectile_spatial_critical verification
+$projMissing = @()
+$projDuplicates = @()
+$projGitTracked = @()
+foreach ($path in $ProjectileExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $projMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $projGitTracked += $path
+    }
+}
+$projDuplicates = @($ProjectileExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$projBlock = $false
+$projFound = $false
+$projEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.projectile_spatial_critical\s*=') {
+        $projBlock = $true
+        $projFound = $true
+        continue
+    }
+    if ($projBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $projEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $projBlock = $false
+            break
+        }
+    }
+}
+$projIncluded = ($RunnerSource -match '\$Suites\.projectile_spatial_critical\s*\+')
+$projValidateSet = ($RunnerSource -match "projectile_spatial_critical")
+
 # safe_logout_critical verification
 $slMissing = @()
 $slDuplicates = @()
@@ -163,6 +210,7 @@ $slValidateSet = ($RunnerSource -match "safe_logout_critical")
 
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
+$ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
 $ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
 $result = 'PASS'
 if (-not $ok) {
@@ -194,6 +242,14 @@ $report = [ordered]@{
     snapshot_production_not_git_tracked = $prodGitTracked
     snapshot_production_included_in_default_critical = $prodIncluded
     snapshot_production_validate_set = $prodValidateSet
+    projectile_spatial_suite = $ProjectileSuite
+    projectile_spatial_expected_count = $ProjectileExpected.Count
+    projectile_spatial_actual_count = $projEntries.Count
+    projectile_spatial_missing = $projMissing
+    projectile_spatial_duplicates = $projDuplicates
+    projectile_spatial_not_git_tracked = $projGitTracked
+    projectile_spatial_included_in_default_critical = $projIncluded
+    projectile_spatial_validate_set = $projValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

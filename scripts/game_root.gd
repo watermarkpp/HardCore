@@ -43,6 +43,9 @@ const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_ge
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const RuntimeCombatSpatialIndexScript := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
 const SpellTargetLockPolicyScript := preload(
 	"res://scripts/skills/spell_target_lock_policy.gd"
 )
@@ -157,6 +160,7 @@ var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
 var _runtime_spawn_serial := 0
+var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
@@ -245,6 +249,7 @@ func _on_gameplay_movement(value: Vector2) -> void:
 func _ready() -> void:
 	y_sort_enabled = true
 	_rng.randomize()
+	_combat_spatial_index = RuntimeCombatSpatialIndexScript.new()
 	# Q0-B: make the window close request interceptable so a failed safe logout
 	# can cancel the normal shutdown instead of silently quitting.
 	get_tree().auto_accept_quit = false
@@ -1830,7 +1835,21 @@ func _spawn_enemy(
 		current_map_id,
 		Callable(self, "_canonical_ground_gu_to_screen_px")
 	)
+	enemy.configure_spatial_index(
+		_combat_spatial_index,
+		_runtime_spawn_serial
+	)
+	enemy.set_meta("spawn_serial", _runtime_spawn_serial)
 	enemy.global_position = spawn_position
+	_combat_spatial_index.register(
+		_runtime_spawn_serial,
+		current_map_id,
+		_canonical_screen_px_to_ground_gu(spawn_position),
+		enemy.combat_radius_gu,
+		_runtime_spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position")
+	)
 	enemy.set_meta("spawn_position", spawn_position)
 	enemy.set_meta("spawn_is_boss", is_boss)
 	enemy.set_meta("respawn_seconds", effective_respawn)
@@ -6045,6 +6064,7 @@ func _spawn_projectile(
 		current_map_id,
 		Callable(self, "_canonical_ground_gu_to_screen_px")
 	)
+	projectile.configure_spatial_index(_combat_spatial_index)
 	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
 
@@ -6478,6 +6498,10 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
+	if _combat_spatial_index != null:
+		_combat_spatial_index.unregister(
+			int(enemy.get_meta("spawn_serial", 0))
+		)
 	if enemy == locked_target:
 		_cancel_target()
 	if enemy == magic_locked_target:

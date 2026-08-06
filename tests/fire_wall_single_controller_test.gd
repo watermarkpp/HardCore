@@ -22,6 +22,13 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().physics_frame
+	# Wait for the initial world bootstrap to finish loading the zone. Its
+	# zone_content cleanup would otherwise free the fire wall cells mid-test.
+	for _bootstrap_wait in range(300):
+		if not bool(game.get("_world_bootstrap_in_progress")):
+			break
+		await get_tree().process_frame
+	await get_tree().process_frame
 	game._active_safe_zones = []
 	await get_tree().process_frame
 

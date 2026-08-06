@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'safe_logout_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -185,6 +185,17 @@ $Suites.snapshot_production_critical = @(
     'tests/taoist_profession_package_test.tscn'
 )
 
+$Suites.projectile_spatial_critical = @(
+    'tests/projectile_broadphase_hit_parity_test.tscn',
+    'tests/projectile_broadphase_no_false_negative_test.tscn',
+    'tests/projectile_broadphase_candidate_reduction_test.tscn',
+    'tests/projectile_broadphase_stable_order_test.tscn',
+    'tests/projectile_broadphase_terrain_cutoff_test.tscn',
+    'tests/projectile_broadphase_runtime_map_isolation_test.tscn',
+    'tests/projectile_spatial_index_lifecycle_test.tscn',
+    'tests/projectile_snapshot_single_build_per_step_test.tscn'
+)
+
 $Suites.safe_logout_critical = @(
     'tests/safe_logout_home_resolution_failure_test.tscn',
     'tests/safe_logout_character_select_guard_test.tscn',
@@ -204,6 +215,7 @@ $Suites.critical = @(
     $Suites.caster_visual_critical +
     $Suites.snapshot_coordinate_critical +
     $Suites.snapshot_production_critical +
+    $Suites.projectile_spatial_critical +
     $Suites.safe_logout_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique

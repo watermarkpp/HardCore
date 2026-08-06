@@ -170,9 +170,19 @@ func _ready() -> void:
 		"spatial_test_adapter_id": (
 			CasterSkillRuntime.NON_PRODUCTION_SPATIAL_ADAPTER_ID
 		),
+		"snapshot_coordinate_context": _test_absolute_context(),
 	})
 	assert(repulsion_result.applied_count == 1)
-	assert(repulsion_result.compatibility_adapter_used)
+	# Q1-B.1/Q2-A: repulsion is a formal ground-exact skill; the runtime now
+	# derives its cell-union snapshot, so the production path passes without
+	# the non-production spatial adapter.
+	assert(
+		int(repulsion_result.skill_footprint_snapshot.get(
+			"schema_version", 0
+		)) == SkillFootprintSnapshot.SCHEMA_VERSION,
+		"repulsion production snapshot must be schema V2"
+	)
+	assert(not repulsion_result.compatibility_adapter_used)
 	assert(repulsion_target.global_position.is_equal_approx(
 		repulsion_origin_screen_px
 		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 2.0)
