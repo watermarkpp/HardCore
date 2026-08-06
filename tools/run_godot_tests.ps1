@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -151,13 +151,79 @@ $Suites.caster_visual_critical = @(
     "tests/map_transition_input_lock_test.tscn"
 )
 
+$Suites.snapshot_coordinate_critical = @(
+    'tests/skill_footprint_snapshot_coordinate_contract_test.tscn',
+    'tests/skill_footprint_snapshot_map_identity_test.tscn',
+    'tests/skill_footprint_snapshot_projection_origin_test.tscn',
+    'tests/skill_footprint_snapshot_legacy_upgrade_test.tscn',
+    'tests/canonical_snapshot_propagation_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
     $Suites.caster_visual_critical +
+    $Suites.snapshot_coordinate_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
+
+# ── Q0-A: final judgement contract ──
+# PASS is granted only when every gate below is satisfied. A PASS marker never
+# exempts timeout, non-zero exit, or engine-log failures.
+$FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'
+$PassMarkerPattern = '[A-Z0-9_]+_PASS'
+
+# Minimal, cause-specific allowlist for known non-fatal `ERROR:` lines produced
+# by the current suite. Any other `ERROR:` line fails the test.
+$EngineErrorAllowlist = @(
+    @{
+        pattern = '^ERROR: String formatting error: not all arguments converted during string formatting\.'
+        reason = 'benign Godot String.format warning emitted by monster_melee_contact_geometry_test debug output; test still completes and passes'
+    },
+    @{
+        pattern = '^ERROR: \d+ resources still in use at exit'
+        reason = 'Godot headless emits this at normal engine exit when queue_freed nodes finish releasing after quit; observed across ~42/105 suite tests with varying counts, exit code and PASS marker unaffected'
+    },
+    @{
+        pattern = '^ERROR: \d+ RID allocations? of type ''PN\d+RendererDummy\d+TextureStorage\d+DummyTextureE'' were leaked at exit\.'
+        reason = 'Godot dummy renderer reports leaked RID textures at engine exit in headless visual tests; non-fatal, exit code and PASS marker unaffected'
+    },
+    @{
+        pattern = '^ERROR: Parameter "t" is null\.'
+        reason = 'Godot dummy renderer logs a null texture parameter when a threaded texture lands after scene teardown in headless runs; non-fatal, exit code and PASS marker unaffected (observed in player_movement_respawn / phase1 / android_layout)'
+    }
+)
+
+function Get-FailureLineCount([string]$Text, [string]$Pattern) {
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return 0
+    }
+    return @($Text -split "`r?`n" | Where-Object { $_ -match $Pattern }).Count
+}
+
+function Get-UnallowlistedErrorLineCount([string]$Text) {
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return 0
+    }
+    $count = 0
+    foreach ($line in ($Text -split "`r?`n")) {
+        if ($line -notmatch '^ERROR:') {
+            continue
+        }
+        $allowed = $false
+        foreach ($entry in $EngineErrorAllowlist) {
+            if ($line -match $entry.pattern) {
+                $allowed = $true
+                break
+            }
+        }
+        if (-not $allowed) {
+            $count += 1
+        }
+    }
+    return $count
+}
 
 function Stop-TestProcessTree([int]$ProcessId) {
     $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)
@@ -222,8 +288,7 @@ function Get-NewGodotProcesses {
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
-$failed = @()
-$passed = @()
+$StructuredResults = @()
 foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
     $stdout = Join-Path $LogRoot "$testName.stdout.log"
@@ -231,24 +296,29 @@ foreach ($testPath in $SelectedTests) {
     $engineLog = Join-Path $LogRoot "$testName.godot.log"
     $engineLogArgument = "outputs/test_logs/$testName.godot.log"
     Remove-Item -LiteralPath $stdout, $stderr, $engineLog -Force -ErrorAction SilentlyContinue
-    $process = Start-Process -FilePath $Godot `
-        -ArgumentList @('--headless', '--log-file', $engineLogArgument, '--path', '.', $testPath) `
-        -WorkingDirectory $ProjectRoot -WindowStyle Hidden `
-        -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru
+    # Q0-A 3.2: run through cmd.exe so the final process object exposes the
+    # effective exit code (the Godot console wrapper forwards the engine code,
+    # but Start-Process with -Redirect* loses ExitCode on this host). Output is
+    # redirected inside the command string; polling reads the same files.
+    $launchCommand = '""' + $Godot + '" --headless --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
+    $process = Start-Process -FilePath 'cmd.exe' `
+        -ArgumentList @('/c', $launchCommand) `
+        -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
     $wrapperExitWithoutChildSince = $null
     $earlyFailure = $false
     $hasPassMarker = $false
+    $naturalExit = $false
     while ([DateTime]::UtcNow -lt $deadline) {
         Start-Sleep -Milliseconds 150
         $currentOutput = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
         $currentError = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
-        if ($currentError -match 'SCRIPT ERROR:|Parse Error:|Assertion failed:') {
+        if ($currentError -match $FailurePattern) {
             $earlyFailure = $true
             Stop-TestProcessTree -ProcessId $process.Id
             break
         }
-        if ($currentOutput -match '[A-Z0-9_]+_PASS') {
+        if ($currentOutput -match $PassMarkerPattern) {
             $hasPassMarker = $true
             # Do NOT break - wait for natural exit to capture post-PASS failures (HC-P0-006)
         }
@@ -261,13 +331,15 @@ foreach ($testPath in $SelectedTests) {
             } elseif (
                 ([DateTime]::UtcNow - $wrapperExitWithoutChildSince).TotalMilliseconds -ge 1000
             ) {
+                $naturalExit = $true
                 break
             }
         } else {
             $wrapperExitWithoutChildSince = $null
         }
     }
-    $timedOut = -not $earlyFailure -and -not $hasPassMarker -and [DateTime]::UtcNow -ge $deadline
+    # Q0-A 3.1: reaching the deadline is a timeout regardless of the PASS marker.
+    $timedOut = -not $earlyFailure -and -not $naturalExit -and [DateTime]::UtcNow -ge $deadline
     if ($timedOut) {
         Stop-TestProcessTree -ProcessId $process.Id
     }
@@ -279,24 +351,103 @@ foreach ($testPath in $SelectedTests) {
     Stop-NewGodotProcesses -GraceMilliseconds $graceMilliseconds
     $outText = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
     $errText = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
-    $hasPassMarker = $outText -match '[A-Z0-9_]+_PASS'
-    $hasFailure = $earlyFailure -or $timedOut -or $errText -match 'SCRIPT ERROR:|Parse Error:|Assertion failed:' -or -not $hasPassMarker
-    if ($hasFailure) {
-        $reason = if ($timedOut) { "超时${TimeoutSeconds}s" } elseif ($earlyFailure) { '断言/脚本错误' } elseif (-not $hasPassMarker) { '缺少PASS标记' } else { '脚本错误' }
-        $failed += "$testName ($reason)"
+    $engineText = if (Test-Path -LiteralPath $engineLog) { Get-Content -LiteralPath $engineLog -Raw -ErrorAction SilentlyContinue } else { '' }
+    $hasPassMarker = $outText -match $PassMarkerPattern
+
+    # Q0-A 3.2: effective exit code. The console wrapper forwards the engine's
+    # exit code; without a natural wrapper/child exit the code is unavailable
+    # and the result must not be a strict PASS.
+    $wrapperExitCode = $null
+    if ($process.HasExited) {
+        $process.Refresh()
+        if ($process.HasExited) {
+            $wrapperExitCode = $process.ExitCode
+        }
+    }
+    $childProcessesAlive = @(Get-NewGodotProcesses).Count
+    $childProcessExitState = 'not_observed'
+    if ($earlyFailure -or $timedOut) {
+        $childProcessExitState = 'forced_termination'
+    } elseif ($naturalExit) {
+        $childProcessExitState = 'exited'
+    } elseif ($childProcessesAlive -gt 0) {
+        $childProcessExitState = 'alive'
+    }
+    $finalEffectiveExitCode = $wrapperExitCode
+    if ($null -eq $finalEffectiveExitCode) {
+        $finalEffectiveExitCode = -1
+    }
+    $processExited = $naturalExit
+
+    # Q0-A 3.3: scan stdout, stderr and the engine log.
+    $stdoutFailureCount = (Get-FailureLineCount $outText $FailurePattern) + (Get-UnallowlistedErrorLineCount $outText)
+    $stderrFailureCount = (Get-FailureLineCount $errText $FailurePattern) + (Get-UnallowlistedErrorLineCount $errText)
+    $engineLogFailureCount = (Get-FailureLineCount $engineText $FailurePattern) + (Get-UnallowlistedErrorLineCount $engineText)
+
+    $reasons = @()
+    if (-not $hasPassMarker) { $reasons += 'missing_pass_marker' }
+    if (-not $processExited) { $reasons += 'process_did_not_exit' }
+    if ($timedOut) { $reasons += "timeout_${TimeoutSeconds}s" }
+    if ($earlyFailure) { $reasons += 'early_script_error' }
+    if ($finalEffectiveExitCode -ne 0) {
+        if ($null -eq $wrapperExitCode) { $reasons += 'missing_effective_exit_code' } else { $reasons += "non_zero_exit_code_$finalEffectiveExitCode" }
+    }
+    if ($stdoutFailureCount -gt 0) { $reasons += "stdout_failures_$stdoutFailureCount" }
+    if ($stderrFailureCount -gt 0) { $reasons += "stderr_failures_$stderrFailureCount" }
+    if ($engineLogFailureCount -gt 0) { $reasons += "engine_log_failures_$engineLogFailureCount" }
+
+    $result = 'PASS'
+    if ($reasons.Count -gt 0) {
+        $result = 'FAIL'
+    }
+    $StructuredResults += [ordered]@{
+        test_name = $testName
+        test_path = $testPath
+        pass_marker_found = $hasPassMarker
+        process_exited = $processExited
+        wrapper_exit_code = $wrapperExitCode
+        child_process_exit_state = $childProcessExitState
+        effective_exit_code = $finalEffectiveExitCode
+        timeout = $timedOut
+        stdout_failure_count = $stdoutFailureCount
+        stderr_failure_count = $stderrFailureCount
+        engine_log_failure_count = $engineLogFailureCount
+        result = $result
+        reason = ($reasons -join ';')
+    }
+    if ($result -eq 'FAIL') {
+        $reason = if ($reasons.Count -gt 0) { $reasons -join ';' } else { 'unknown' }
         Write-Host "[FAIL] $testName - $reason" -ForegroundColor Red
         if ($outText) { Write-Host $outText.Trim() }
         if ($errText) { Write-Host $errText.Trim() }
     } else {
-        $passed += $testName
         Write-Host "[PASS] $testName" -ForegroundColor Green
     }
 }
 
-Write-Host "TEST_SUMMARY suite=$Suite passed=$($passed.Count) failed=$($failed.Count)"
+$passedCount = @($StructuredResults | Where-Object { $_.result -eq 'PASS' }).Count
+$failedCount = @($StructuredResults | Where-Object { $_.result -eq 'FAIL' }).Count
+$engineLogErrorTotal = 0
+foreach ($resultEntry in $StructuredResults) {
+    $engineLogErrorTotal += [int]$resultEntry.engine_log_failure_count
+}
+$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $Suite, (Get-Date -Format 'yyyyMMdd_HHmmss'))
+@{
+    suite = $Suite
+    generated_at = (Get-Date -Format o)
+    git_head = (git rev-parse HEAD 2>$null | Out-String).Trim()
+    total = $StructuredResults.Count
+    passed = $passedCount
+    failed = $failedCount
+    engine_log_errors = $engineLogErrorTotal
+    results = $StructuredResults
+} | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $resultsFilePath -Encoding UTF8
+Write-Host "RUNNER_RESULTS_JSON=$resultsFilePath"
+Write-Host "TEST_SUMMARY suite=$Suite passed=$passedCount failed=$failedCount engine_log_errors=$engineLogErrorTotal"
 Stop-NewGodotProcesses
-if ($failed.Count -gt 0) {
-    Write-Host ("FAILED_TESTS=" + ($failed -join '; ')) -ForegroundColor Red
+if ($failedCount -gt 0) {
+    $failedNames = @($StructuredResults | Where-Object { $_.result -eq 'FAIL' } | ForEach-Object { "$($_.test_name) ($($_.reason))" }) -join '; '
+    Write-Host ("FAILED_TESTS=" + $failedNames) -ForegroundColor Red
     exit 1
 }
 exit 0
