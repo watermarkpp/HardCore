@@ -14,7 +14,8 @@ $Cases = @(
     @{ name = 'case4_pass_then_hang'; path = 'tests/runner_fixtures/case4_pass_then_hang.tscn'; expect = 'FAIL'; reason_token = 'timeout' },
     @{ name = 'case5_no_pass_exit_zero'; path = 'tests/runner_fixtures/case5_no_pass_exit_zero.tscn'; expect = 'FAIL'; reason_token = 'missing_pass_marker' },
     @{ name = 'case6_engine_log_fatal'; path = 'tests/runner_fixtures/case6_engine_log_fatal.tscn'; expect = 'FAIL'; reason_token = 'engine_log_failures' },
-    @{ name = 'case7_parse_error'; path = 'tests/runner_fixtures/case7_parse_error.tscn'; expect = 'FAIL'; reason_token = 'early_script_error' }
+    @{ name = 'case7_parse_error'; path = 'tests/runner_fixtures/case7_parse_error.tscn'; expect = 'FAIL'; reason_token = 'early_script_error' },
+    @{ name = 'runner_engine_log_safe_logout_error_fixture'; path = 'tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn'; expect = 'FAIL'; reason_token = 'engine_log_failures' }
 )
 
 function Get-NewestResultsJson {

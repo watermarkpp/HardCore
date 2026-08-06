@@ -164,7 +164,12 @@ $Suites.safe_logout_critical = @(
     'tests/safe_logout_character_select_guard_test.tscn',
     'tests/safe_logout_exit_guard_test.tscn',
     'tests/safe_logout_save_failure_test.tscn',
-    'tests/safe_logout_existing_state_preservation_test.tscn'
+    'tests/safe_logout_existing_state_preservation_test.tscn',
+    'tests/home_resolution_side_effect_guard_test.tscn',
+    'tests/service_home_no_current_position_fallback_test.tscn',
+    'tests/death_revival_home_failure_test.tscn',
+    'tests/map_transition_missing_arrival_test.tscn',
+    'tests/portal_home_lookup_failure_test.tscn'
 )
 
 $Suites.critical = @(
@@ -201,10 +206,6 @@ $EngineErrorAllowlist = @(
     @{
         pattern = '^ERROR: Parameter "t" is null\.'
         reason = 'Godot dummy renderer logs a null texture parameter when a threaded texture lands after scene teardown in headless runs; non-fatal, exit code and PASS marker unaffected (observed in player_movement_respawn / phase1 / android_layout)'
-    },
-    @{
-        pattern = '^ERROR: safe logout failed for '
-        reason = 'Q0-B failure-handler diagnostic intentionally emitted when safe_logout_* tests force home/save failure; expected side effect of the guarded control flow'
     }
 )
 

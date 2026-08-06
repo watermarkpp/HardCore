@@ -1,0 +1,4 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://q0a_case8"]
+[ext_resource type="Script" path="res://tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.gd" id="1"]
+[node name="Case8EngineLogSafeLogoutError" type="Node"]
+script = ExtResource("1")
