@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2c_snapshot_identity"]
+[ext_resource type="Script" path="res://tests/fire_wall_canonical_snapshot_identity_test.gd" id="1"]
+[node name="FireWallCanonicalSnapshotIdentity" type="Node"]
+script = ExtResource("1")
