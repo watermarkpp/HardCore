@@ -5423,22 +5423,42 @@ func _spawn_canonical_ground_field(
 		positions.append(fallback_position)
 
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
-		var target_filters: Array[Callable] = []
 		var field_snapshot_validation_context := (
 			_canonical_snapshot_validation_context(
 				_canonical_screen_px_to_ground_gu(fallback_position)
 			)
 		)
-		for index: int in range(positions.size()):
-			var target_filter := Callable()
-			if not _snapshot_strict_ok(skill_release_snapshot):
-				if index < coverage_cells.size():
-					target_filter = (
-						Callable(self, "_canonical_ground_cell_contains_enemy").bind(
-							coverage_cells[index]
-						)
-					)
-			target_filters.append(target_filter)
+		# Q2-C: the formal release owns exactly ONE canonical 2x2 union
+		# snapshot. Legacy/test callers that omit one get a deterministic
+		# fallback built from the same coverage cells, so the controller never
+		# needs per-cell damage geometry.
+		var canonical_snapshot := skill_release_snapshot
+		if not _snapshot_strict_ok(canonical_snapshot):
+			var canonical_origin_ground_gu := Vector2.ZERO
+			if not positions.is_empty():
+				canonical_origin_ground_gu = (
+					_canonical_screen_px_to_ground_gu(positions[0])
+				)
+			var fallback_release_id := (
+				release_id
+				if not release_id.is_empty()
+				else "wizard.fire_wall:canonical:%d" % Time.get_ticks_usec()
+			)
+			# The union's geometry_cells_grid_steps are ABSOLUTE grid cells
+			# (same convention as the formal release snapshot producer).
+			var canonical_cells := coverage_cells
+			if canonical_cells.is_empty():
+				canonical_cells.append(Vector2i.ZERO)
+			canonical_snapshot = (
+				CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
+					stable_skill_id,
+					fallback_release_id,
+					canonical_origin_ground_gu,
+					canonical_cells,
+					field_snapshot_validation_context
+				)
+			)
+		var empty_target_filters: Array[Callable] = []
 		var field_controller := FireWallFieldControllerScript.new()
 		field_controller.setup_fire_wall_field(
 			player,
@@ -5446,31 +5466,19 @@ func _spawn_canonical_ground_field(
 			effect,
 			positions,
 			coverage_cells,
-			target_filters,
+			empty_target_filters,
 			Callable(self, "_apply_canonical_ground_tick").bind(stable_skill_id),
 			Callable(self, "_canonical_screen_px_to_ground_gu"),
 			release_id,
-			skill_release_snapshot,
-			field_snapshot_validation_context
+			canonical_snapshot,
+			field_snapshot_validation_context,
+			_combat_spatial_index,
+			current_map_id
 		)
 		add_child(field_controller)
-		# HC-P1-010: the canonical snapshot owns damage truth, but the formal
-		# 2x2 fire-wall presentation must still materialise one visual cell per
-		# covered ground cell. These cells are visual-only (applies_damage=false)
-		# so damage never double-applies with the field controller.
-		for index: int in range(positions.size()):
-			_spawn_canonical_ground_effect(
-				stable_skill_id,
-				positions[index],
-				effect,
-				false,
-				coverage_cells[index] if index < coverage_cells.size() else null,
-				release_id,
-				skill_release_snapshot,
-				_canonical_snapshot_validation_context(
-					_canonical_screen_px_to_ground_gu(position)
-				)
-			)
+		# Q2-C: the controller owns the 4 GroundSkillVisualCell presentation
+		# nodes; no additional standalone GroundSkillEffect cells are spawned,
+		# so the base-class enemy-group scan can never run on this path.
 		return
 
 	# Generic persistent ground effects share one canonical validation context

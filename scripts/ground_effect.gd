@@ -210,6 +210,43 @@ func claim_runtime_tick(target: Node) -> bool:
 	return true
 
 
+## Q2-C: FireWallFieldController-owned claim using the SAME frozen claim
+## table, key (caster:skill:target) and window (tick_interval*1000ms). The
+## claim ACTION moves from the visual cell to the controller; storage and
+## contract stay in this shared table.
+static func claim_fire_wall_controller_tick(
+	claim_owner: Node,
+	source: Node2D,
+	skill_id_value: String,
+	tick_interval_value: float,
+	target: Node
+) -> bool:
+	if skill_id_value != FIRE_WALL_SKILL_ID or not is_instance_valid(source):
+		return true
+	if not is_instance_valid(target):
+		return false
+	var now_msec := Time.get_ticks_msec()
+	var claim_key := "%d:%s:%d" % [
+		source.get_instance_id(),
+		skill_id_value,
+		target.get_instance_id(),
+	]
+	var current_claim: Dictionary = _runtime_tick_claims.get(claim_key, {})
+	var owner_effect_id := int(current_claim.get("owner_effect_id", 0))
+	var next_allowed_msec := int(current_claim.get("next_allowed_msec", -1))
+	if (
+		owner_effect_id != claim_owner.get_instance_id()
+		and now_msec < next_allowed_msec
+	):
+		return false
+	_runtime_tick_claims[claim_key] = {
+		"owner_effect_id": claim_owner.get_instance_id(),
+		"next_allowed_msec": now_msec + roundi(tick_interval_value * 1000.0),
+	}
+	_cleanup_runtime_tick_claims(now_msec)
+	return true
+
+
 static func reset_runtime_tick_claims_for_tests() -> void:
 	_runtime_tick_claims.clear()
 
