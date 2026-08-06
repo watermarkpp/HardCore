@@ -12,6 +12,15 @@ $Expected = @(
     'tests/canonical_snapshot_propagation_test.tscn'
 )
 
+$SafeLogoutSuite = 'safe_logout_critical'
+$SafeLogoutExpected = @(
+    'tests/safe_logout_home_resolution_failure_test.tscn',
+    'tests/safe_logout_character_select_guard_test.tscn',
+    'tests/safe_logout_exit_guard_test.tscn',
+    'tests/safe_logout_save_failure_test.tscn',
+    'tests/safe_logout_existing_state_preservation_test.tscn'
+)
+
 $missing = @()
 $duplicates = @()
 $gitTracked = @()
@@ -50,7 +59,43 @@ if (-not $includedInDefaultCritical) {
 }
 $validateSetHasSuite = ($RunnerSource -match "snapshot_coordinate_critical")
 
+# safe_logout_critical verification
+$slMissing = @()
+$slDuplicates = @()
+$slGitTracked = @()
+foreach ($path in $SafeLogoutExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $slMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $slGitTracked += $path
+    }
+}
+$slDuplicates = @($SafeLogoutExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$slBlock = $false
+$slFound = $false
+$slEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.safe_logout_critical\s*=') {
+        $slBlock = $true
+        $slFound = $true
+        continue
+    }
+    if ($slBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $slEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $slBlock = $false
+            break
+        }
+    }
+}
+$slIncluded = ($RunnerSource -match '\$Suites\.safe_logout_critical\s*\+')
+$slValidateSet = ($RunnerSource -match "safe_logout_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
+$ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -65,6 +110,14 @@ $report = [ordered]@{
     not_git_tracked = $gitTracked
     included_in_default_critical = $includedInDefaultCritical
     validate_set_has_suite = $validateSetHasSuite
+    safe_logout_suite = $SafeLogoutSuite
+    safe_logout_expected_count = $SafeLogoutExpected.Count
+    safe_logout_actual_count = $slEntries.Count
+    safe_logout_missing = $slMissing
+    safe_logout_duplicates = $slDuplicates
+    safe_logout_not_git_tracked = $slGitTracked
+    safe_logout_included_in_default_critical = $slIncluded
+    safe_logout_validate_set = $slValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

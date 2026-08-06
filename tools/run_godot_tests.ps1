@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'safe_logout_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -159,11 +159,20 @@ $Suites.snapshot_coordinate_critical = @(
     'tests/canonical_snapshot_propagation_test.tscn'
 )
 
+$Suites.safe_logout_critical = @(
+    'tests/safe_logout_home_resolution_failure_test.tscn',
+    'tests/safe_logout_character_select_guard_test.tscn',
+    'tests/safe_logout_exit_guard_test.tscn',
+    'tests/safe_logout_save_failure_test.tscn',
+    'tests/safe_logout_existing_state_preservation_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
     $Suites.caster_visual_critical +
     $Suites.snapshot_coordinate_critical +
+    $Suites.safe_logout_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
@@ -192,6 +201,10 @@ $EngineErrorAllowlist = @(
     @{
         pattern = '^ERROR: Parameter "t" is null\.'
         reason = 'Godot dummy renderer logs a null texture parameter when a threaded texture lands after scene teardown in headless runs; non-fatal, exit code and PASS marker unaffected (observed in player_movement_respawn / phase1 / android_layout)'
+    },
+    @{
+        pattern = '^ERROR: safe logout failed for '
+        reason = 'Q0-B failure-handler diagnostic intentionally emitted when safe_logout_* tests force home/save failure; expected side effect of the guarded control flow'
     }
 )
 
