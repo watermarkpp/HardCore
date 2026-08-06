@@ -76,9 +76,14 @@ func _run() -> void:
 	assert(bool(fire_wall.get("accepted", false)), "火墙canonical真实入口被拒绝")
 	var fire_wall_visual_count := 0
 	for child: Node in game.get_children():
-		if child is GroundSkillEffect and child.skill_id == "wizard.fire_wall":
+		if not child is FireWallFieldController:
+			continue
+		for cell: GroundSkillVisualCell in (child as FireWallFieldController).visual_cells:
 			fire_wall_visual_count += 1
-			assert(child._sprite != null and child._sprite.frame_count() == 6, "火墙未加载主库1630..1635六帧动画")
+			assert(
+				cell._sprite != null and cell._sprite.frame_count() == 6,
+				"火墙未加载主库1630..1635六帧动画"
+			)
 	assert(fire_wall_visual_count == 4, "火墙canonical真实入口未按主合同创建2×2四格动画")
 
 	PlayerState.learned_skills = {

@@ -2,6 +2,12 @@ extends Node
 
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
+const FireWallFieldController := preload(
+	"res://scripts/fire_wall_field_controller.gd"
+)
+const GroundSkillVisualCell := preload(
+	"res://scripts/ground_skill_visual_cell.gd"
+)
 const SkillFootprintSnapshot := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
@@ -424,13 +430,22 @@ func _run() -> void:
 		}
 	)
 	var formal_cell_fields := 0
+	var shared_snapshot_ids: Dictionary = {}
 	for child: Node in game.get_children():
-		if child is GroundSkillEffect and child.skill_id == "wizard.fire_wall":
-			if child.runtime_target_filter.is_valid():
-				formal_cell_fields += 1
+		if not child is FireWallFieldController:
+			continue
+		var field_controller := child as FireWallFieldController
+		for cell: GroundSkillVisualCell in field_controller.visual_cells:
+			assert(
+				cell.visual_only
+				and cell.damage_owner == GroundSkillVisualCell.DAMAGE_OWNER,
+				"Q2-C: fire-wall cells must be pure visual presentation nodes"
+			)
+			formal_cell_fields += 1
+			shared_snapshot_ids[cell.canonical_snapshot_id] = true
 	assert(
-		formal_cell_fields >= 4,
-		"火墙没有让四个正式格分别承担占位接触判定"
+		formal_cell_fields == 4 and shared_snapshot_ids.size() == 1,
+		"Q2-C: the formal fire wall must keep exactly 4 cells sharing one canonical snapshot id"
 	)
 
 	game.queue_free()

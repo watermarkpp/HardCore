@@ -75,8 +75,15 @@ func _run() -> void:
 		)
 		for visual_cell: GroundSkillVisualCell in fire_wall_controller.visual_cells:
 			assert(
-				visual_cell.runtime_target_filter.is_valid(),
-				"a runtime map-backed fire-wall visual cell should use a runtime target filter"
+				visual_cell.visual_only
+				and visual_cell.damage_owner == GroundSkillVisualCell.DAMAGE_OWNER
+				and not visual_cell.runtime_target_filter.is_valid(),
+				"Q2-C: a fire-wall visual cell must be pure presentation without a per-cell damage filter"
+			)
+			assert(
+				visual_cell.cell_index >= 0
+				and not visual_cell.canonical_snapshot_id.is_empty(),
+				"Q2-C: each visual cell must carry its index and the shared canonical snapshot id"
 			)
 		assert(fire_wall_controller.visual_cells.size() > 0, "fire-wall controller should expose visual cells")
 		fire_wall_origin_position = fire_wall_controller.visual_cells[0].global_position

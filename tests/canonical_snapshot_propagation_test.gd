@@ -81,7 +81,7 @@ func _run() -> void:
 		"lightning visual snapshot runtime_map_id must match the active map"
 	)
 
-	# Fire wall: gameplay result -> controller cells and ground effects.
+	# Fire wall: gameplay result -> one controller owning 4 pure visual cells.
 	game._set_magic_locked_target(target, true)
 	game._skill_cast_target = target
 	var fire_wall: Dictionary = game._execute_canonical_skill(
@@ -109,15 +109,11 @@ func _run() -> void:
 					== str(fire_wall_snapshot.get("snapshot_id", "")),
 					"all fire wall visual cells must share one snapshot id"
 				)
-		elif (
-			child is GroundSkillEffect
-			and child.skill_id == "wizard.fire_wall"
-		):
-			fire_wall_ground_snapshot_ids.append(
-				str(child.skill_footprint_snapshot.get("snapshot_id", ""))
-			)
 	assert(found_controller, "fire wall must create a field controller")
-	assert(fire_wall_ground_snapshot_ids.size() == 4, "fire wall must create 4 ground effects")
+	assert(
+		fire_wall_ground_snapshot_ids.is_empty(),
+		"Q2-C: fire wall must not spawn standalone GroundSkillEffect cells"
+	)
 	assert(
 		not fire_wall_snapshot.is_empty()
 		and bool(SnapshotScript.validate(fire_wall_snapshot).get("valid", false)),
@@ -129,11 +125,6 @@ func _run() -> void:
 		== str(game.current_map_id),
 		"fire wall snapshot runtime_map_id must match the active map"
 	)
-	for ground_snapshot_id: String in fire_wall_ground_snapshot_ids:
-		assert(
-			ground_snapshot_id == str(fire_wall_snapshot.get("snapshot_id", "")),
-			"ground effects must consume the same canonical snapshot id"
-		)
 	assert(
 		str(fire_wall_snapshot.get("snapshot_id", ""))
 		!= str(lightning_metadata.get("snapshot_id", "")),

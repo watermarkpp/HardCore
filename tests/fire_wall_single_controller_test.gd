@@ -8,8 +8,11 @@ const FireWallFieldController := preload(
 const GroundSkillVisualCell := preload(
 	"res://scripts/ground_skill_visual_cell.gd"
 )
+const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
 var _recorded_tick_powers: Array[int] = []
+var _enemy_serial := 0
+var _game: Node
 
 
 func _ready() -> void:
@@ -19,6 +22,7 @@ func _ready() -> void:
 func _run() -> void:
 	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
+	_game = game
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().physics_frame
@@ -63,6 +67,7 @@ func _run() -> void:
 	)
 	var fwc: FireWallFieldController = controllers[0]
 	fwc.runtime_tick_callback = Callable(self, "_record_tick")
+	fwc.set_physics_process(false)
 
 	# Structural assertions.
 	assert(fwc.visual_cells.size() == 4,
@@ -87,12 +92,27 @@ func _run() -> void:
 		"outside"
 	)
 
-	await get_tree().create_timer(1.2).timeout
+	# Q2-C: drive one deterministic controller tick (no wall-clock dependence).
+	fwc._apply_field_tick()
 
 	var diag: Dictionary = fwc.runtime_diagnostics()
-	# Controller must have performed exactly one enemy-group query per tick.
-	assert(diag.get("enemy_group_queries", -1) >= 1,
-		"controller must query enemies at least once")
+	var q2c_diag: Dictionary = fwc.fire_wall_controller_diagnostics()
+	# Q2-C: no enemy-group query at all; one shared-index broadphase query per
+	# tick and at least one canonical exact test against the inside target.
+	assert(diag.get("enemy_group_queries", -1) == 0,
+		"controller must never query the enemies group")
+	assert(
+		int(q2c_diag.get("group_scan_count", -1)) == 0
+		and int(q2c_diag.get("group_nodes_examined", -1)) == 0,
+		"controller must never group-scan enemies"
+	)
+	assert(int(q2c_diag.get("broadphase_query_count", 0)) >= 1,
+		"controller must run one broadphase query per tick")
+	assert(int(q2c_diag.get("controller_exact_test_count", 0)) >= 1,
+		"controller must exact-test candidates through the canonical snapshot: %s"
+		% str(q2c_diag))
+	assert(int(q2c_diag.get("visual_cell_exact_test_count", -1)) == 0,
+		"visual cells must never run exact tests")
 	# At least one damage tick should have fired (target is inside).
 	assert(diag.get("damage_ticks", -1) >= 1,
 		"controller must apply damage to inside targets")
@@ -118,10 +138,42 @@ func _make_enemy(game: Node, pos: Vector2, name_str: String) -> EnemyActor:
 	}, game.player, false)
 	enemy.name = name_str
 	enemy.global_position = pos
+	# Q2-C: the controller queries the shared RuntimeCombatSpatialIndex, so the
+	# test enemy must be registered exactly like a production spawn.
+	_enemy_serial += 1
+	enemy.configure_runtime_map_projection(
+		int(game.get("current_map_id")),
+		Callable(self, "_ground_to_screen")
+	)
+	enemy.configure_spatial_index(
+		game.get("_combat_spatial_index"),
+		_enemy_serial
+	)
+	# Register with the same conversion the enemy's spatial_index_position
+	# provider uses, so the lazy re-home never moves the entry out of range.
+	# Register AFTER add_child: EnemyActor._ready may call set_combat_position
+	# (spawn-overlap resolution) which would otherwise re-home the index entry
+	# into a different coordinate space before the canonical registration.
+	game.add_child(enemy)
+	# The shared index lives in the actor position-provider (delta) space; the
+	# controller converts the canonical snapshot AABB into that same space.
+	var ground_gu := GroundUnit.screen_delta_px_to_ground_delta_gu(pos)
+	game._combat_spatial_index.register(
+		_enemy_serial,
+		int(game.get("current_map_id")),
+		ground_gu,
+		enemy.combat_radius_gu,
+		_enemy_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position")
+	)
 	enemy.set_process(false)
 	enemy.combat_radius_gu = 0.6
 	enemy.set_physics_process(false)
 	enemy.process_mode = Node.PROCESS_MODE_DISABLED
 	enemy.add_to_group("enemies")
-	game.add_child(enemy)
 	return enemy
+
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
