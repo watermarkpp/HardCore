@@ -25,6 +25,36 @@ func _verify_six_frames_and_angle_samples() -> void:
 		for sample_index: int in range(16):
 			var plan := _line_plan(skill_id, effect_length_gu, sample_index)
 			var snapshot: Dictionary = plan.skill_footprint_snapshot
+			# FREEZE-G0: the formal contract is a STRICT_V2 runtime-map-absolute
+			# snapshot. The strip fixture is built with the production absolute
+			# context, so the snapshot must carry schema v2, a typed map id and
+			# an explicit projection origin.
+			assert(
+				int(snapshot.get("schema_version", 0)) == 2,
+				"%s snapshot must be schema v2" % skill_id
+			)
+			assert(
+				str(snapshot.get("coordinate_space", ""))
+					== Snapshot.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU,
+				"%s snapshot coordinate space" % skill_id
+			)
+			assert(
+				snapshot.get("runtime_map_id") is int
+				and int(snapshot.get("runtime_map_id", -1)) >= 0,
+				"%s snapshot must carry a typed runtime map id" % skill_id
+			)
+			assert(
+				snapshot.has("projection_origin_ground_gu"),
+				"%s snapshot must carry an explicit projection origin" % skill_id
+			)
+			assert(
+				bool(Snapshot.validate_for_consumer(
+					snapshot,
+					plan.snapshot_validation_context,
+					Snapshot.VALIDATION_STRICT_V2
+				).get("valid", false)),
+				"%s snapshot must be STRICT_V2 valid" % skill_id
+			)
 			var expected_polygon_px := (
 				Snapshot.projected_polygon_screen_offset_px(snapshot)
 			)
@@ -44,17 +74,26 @@ func _verify_six_frames_and_angle_samples() -> void:
 			)
 			assert(not effect._sprites.is_empty())
 			for raw_sprite: Sprite2D in effect._sprites:
-				var expected_decoration_alpha := (
-					CasterSkillVisualEffect.HELLFIRE_DECORATION_ALPHA
-					if skill_id == "wizard.hellfire"
-					else CasterSkillVisualEffect.LASER_DECORATION_ALPHA
-				)
-				assert(is_equal_approx(
-					raw_sprite.modulate.a,
-					expected_decoration_alpha
-				))
-				assert(raw_sprite.get_meta("formal_boundary_role", "")
-					== "decoration_only")
+				if skill_id == "wizard.laser":
+					# FREEZE-G0: the formal laser presentation is the beam
+					# visual - full-opacity sprites; the formal core overlay owns
+					# the low-alpha decoration layer (the legacy 0.46 decoration
+					# alpha belonged to the pre-beam line visual).
+					assert(
+						is_equal_approx(
+							(raw_sprite as CasterSkillAnimationPlayer)
+							.self_modulate.a,
+							1.0
+						),
+						"laser beam sprite must stay full opacity"
+					)
+				else:
+					assert(is_equal_approx(
+						raw_sprite.modulate.a,
+						CasterSkillVisualEffect.HELLFIRE_DECORATION_ALPHA
+					))
+					assert(raw_sprite.get_meta("formal_boundary_role", "")
+						== "decoration_only")
 			var primary_sprite := (
 				effect._sprites[0] as CasterSkillAnimationPlayer
 			)
@@ -169,6 +208,16 @@ func _line_plan(
 	var direction_ground_gu := Vector2.from_angle(
 		TAU * float(sample_index) / 16.0
 	)
+	# FREEZE-G0: the formal line snapshot is runtime-map-absolute. Build the
+	# strip with the same absolute coordinate context the production chain uses
+	# (GameRoot._canonical_continuous_line_strip_ground_gu) so the formal core
+	# polygon is produced from a STRICT_V2 snapshot, not a legacy strip.
+	var coordinate_context := Snapshot.make_absolute_runtime_context(
+		9001,
+		Vector2.ZERO,
+		Vector2.ZERO,
+		Callable(self, "_ground_to_screen")
+	)
 	var strip := SpellGeometry.continuous_line_strip_ground_gu(
 		Vector2.ZERO,
 		direction_ground_gu,
@@ -176,7 +225,11 @@ func _line_plan(
 		effect_length_gu,
 		1.0,
 		skill_id,
-		"core_%s_%02d_%s" % [skill_id, sample_index, release_suffix]
+		"core_%s_%02d_%s" % [skill_id, sample_index, release_suffix],
+		effect_length_gu,
+		effect_length_gu,
+		"",
+		coordinate_context
 	)
 	var screen_points_px := SpellGeometry.continuous_line_screen_points_px(
 		strip,
@@ -202,4 +255,9 @@ func _line_plan(
 	plan["geometry_grid_cells"] = []
 	plan["geometry_screen_points_px"] = screen_points_px
 	plan["skill_footprint_snapshot"] = strip.skill_footprint_snapshot
+	plan["snapshot_validation_context"] = coordinate_context
 	return plan
+
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
