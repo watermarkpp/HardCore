@@ -117,7 +117,7 @@ $MonsterStreamingExpected = @(
 $SkillPlanSuite = 'skill_execution_plan_critical'
 $SkillPlanExpected = @(
     'tests/skill_plan_contract_test.tscn',
-    'tests/skill_plan_shadow_parity_test.tscn',
+    'tests/skill_plan_golden_parity_test.tscn',
     'tests/skill_plan_no_side_effect_shadow_test.tscn',
     'tests/skill_plan_single_resource_commit_test.tscn',
     'tests/skill_plan_single_cooldown_commit_test.tscn',
@@ -461,6 +461,51 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $pmIncluded = ($RunnerSource -match '\$Suites\.skill_production_migration_critical\s*\+')
 $pmValidateSet = ($RunnerSource -match "skill_production_migration_critical")
 
+# skill_runtime_cleanup_critical verification (Q3-C)
+$CleanupSuite = 'skill_runtime_cleanup_critical'
+$CleanupExpected = @(
+    'tests/skill_runtime_no_legacy_api_test.tscn',
+    'tests/skill_runtime_single_public_entry_test.tscn',
+    'tests/skill_plan_golden_contract_test.tscn',
+    'tests/skill_runtime_no_visual_plan_test.tscn',
+    'tests/skill_runtime_single_result_contract_test.tscn',
+    'tests/skill_runtime_mapped_world_strict_snapshot_test.tscn'
+)
+
+$clMissing = @()
+$clDuplicates = @()
+$clGitTracked = @()
+foreach ($path in $CleanupExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $clMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $clGitTracked += $path
+    }
+}
+$clDuplicates = @($CleanupExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$clBlock = $false
+$clFound = $false
+$clEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.skill_runtime_cleanup_critical\s*=') {
+        $clBlock = $true
+        $clFound = $true
+        continue
+    }
+    if ($clBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $clEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $clBlock = $false
+            break
+        }
+    }
+}
+$clIncluded = ($RunnerSource -match '\$Suites\.skill_runtime_cleanup_critical\s*\+')
+$clValidateSet = ($RunnerSource -match "skill_runtime_cleanup_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -470,6 +515,7 @@ $ok = $ok -and $fwFound -and ($fwEntries.Count -eq $FireWallExpected.Count) -and
 $ok = $ok -and $msFound -and ($msEntries.Count -eq $MonsterStreamingExpected.Count) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncluded -and $msValidateSet
 $ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPlanExpected.Count) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
 $ok = $ok -and $pmFound -and ($pmEntries.Count -eq $ProductionMigrationExpected.Count) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
+$ok = $ok -and $clFound -and ($clEntries.Count -eq $CleanupExpected.Count) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -548,6 +594,14 @@ $report = [ordered]@{
     skill_production_migration_not_git_tracked = $pmGitTracked
     skill_production_migration_included_in_default_critical = $pmIncluded
     skill_production_migration_validate_set = $pmValidateSet
+    skill_runtime_cleanup_suite = $CleanupSuite
+    skill_runtime_cleanup_expected_count = $CleanupExpected.Count
+    skill_runtime_cleanup_actual_count = $clEntries.Count
+    skill_runtime_cleanup_missing = $clMissing
+    skill_runtime_cleanup_duplicates = $clDuplicates
+    skill_runtime_cleanup_not_git_tracked = $clGitTracked
+    skill_runtime_cleanup_included_in_default_critical = $clIncluded
+    skill_runtime_cleanup_validate_set = $clValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4
