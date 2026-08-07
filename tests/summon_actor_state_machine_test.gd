@@ -32,7 +32,7 @@ func _run() -> void:
 	skeleton.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
-	)
+	, GroundUnit.screen_delta_px_to_ground_delta_gu)
 	skeleton.global_position = player.global_position
 	game.add_child(skeleton)
 	await get_tree().process_frame

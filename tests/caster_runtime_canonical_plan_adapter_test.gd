@@ -77,7 +77,21 @@ func _consume(skill_id: String, expected_kind: String) -> Array[Node2D]:
 		null,
 		null,
 		1,
-		1
+		1,
+		Callable(),
+		{
+			# FREEZE-P0.1: mapped adapter tests declare an explicit identity
+			# projection for the nodes they create.
+			"runtime_map_id": 1,
+			"screen_to_ground_position_px": Callable(
+				self,
+				"_screen_to_ground"
+			),
+			"ground_gu_to_screen_position_px": Callable(
+				self,
+				"_ground_to_screen"
+			),
+		}
 	)
 	assert(
 		str(plan.get("plan_hash", "")) == hash_before,
@@ -98,5 +112,9 @@ func _consume(skill_id: String, expected_kind: String) -> Array[Node2D]:
 
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _screen_to_ground(value: Vector2) -> Vector2:
+	return GroundUnit.screen_delta_px_to_ground_delta_gu(value)
 
 const Router := preload("res://scripts/skills/skill_runtime_router.gd")

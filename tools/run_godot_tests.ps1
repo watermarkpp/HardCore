@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -308,6 +308,15 @@ $Suites.combat_absolute_ground_critical = @(
     'tests/combat_absolute_ground_parity_test.tscn'
 )
 
+$Suites.combat_projection_fail_closed_critical = @(
+    'tests/mapped_enemy_missing_projection_rejected_test.tscn',
+    'tests/mapped_projectile_missing_projection_rejected_test.tscn',
+    'tests/mapped_summon_missing_projection_rejected_test.tscn',
+    'tests/mapped_fire_wall_missing_projection_rejected_test.tscn',
+    'tests/mapped_skill_plan_missing_projection_rejected_test.tscn',
+    'tests/mapped_game_root_projection_failure_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -324,6 +333,7 @@ $Suites.critical = @(
     $Suites.skill_runtime_cleanup_critical +
     $Suites.wizard_line_geometry_critical +
     $Suites.combat_absolute_ground_critical +
+    $Suites.combat_projection_fail_closed_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )

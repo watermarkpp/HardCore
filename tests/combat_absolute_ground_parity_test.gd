@@ -99,7 +99,7 @@ func _check_projectile_parity(
 		delta_enemy.configure_runtime_map_projection(
 			MAP_ID,
 			GroundUnit.ground_delta_gu_to_screen_delta_px
-		)
+		, GroundUnit.screen_delta_px_to_ground_delta_gu)
 		var delta_pos := enemy_abs - center
 		delta_enemy.configure_spatial_index(_delta_index, serial)
 		delta_enemy.global_position = (

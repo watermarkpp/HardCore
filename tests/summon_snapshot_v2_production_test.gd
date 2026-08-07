@@ -73,16 +73,26 @@ func _run() -> void:
 
 
 func _absolute_context(map_id: int) -> Dictionary:
-	return Snapshot.make_absolute_runtime_context(
+	var context := Snapshot.make_absolute_runtime_context(
 		map_id,
 		Vector2.ZERO,
 		Vector2.ZERO,
 		Callable(self, "_ground_to_screen")
 	)
+	# FREEZE-P0.1: mapped test context must declare an explicit projection.
+	context["screen_to_ground_position_px"] = Callable(
+		self,
+		"_screen_to_ground"
+	)
+	return context
 
 
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _screen_to_ground(value: Vector2) -> Vector2:
+	return GroundUnit.screen_delta_px_to_ground_delta_gu(value)
 
 
 func _other_target(screen_position: Vector2) -> EnemyActor:

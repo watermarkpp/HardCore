@@ -37,7 +37,7 @@ func _run() -> void:
 	boss.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
-	)
+	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
 	add_child(boss)
 	boss.set_physics_process(false)
 	await get_tree().process_frame

@@ -38,7 +38,7 @@ func _run() -> void:
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
-	)
+	, GroundUnitSpace.screen_delta_px_to_ground_delta_gu)
 	add_child(enemy)
 	enemy.set_physics_process(false)
 	enemy.attack_min = threshold

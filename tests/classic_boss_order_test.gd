@@ -133,7 +133,7 @@ func _boss(monster_id: int, renamed: String, player: PlayerCharacter) -> EnemyAc
 	boss.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
-	)
+	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
 	boss.global_position = Vector2.ZERO
 	add_child(boss)
 	boss.set_physics_process(false)

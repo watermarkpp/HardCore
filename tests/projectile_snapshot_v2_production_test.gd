@@ -73,7 +73,7 @@ func _run() -> void:
 	cross.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen")
-	)
+	, GroundUnit.screen_delta_px_to_ground_delta_gu)
 	add_child(cross)
 	var cross_context := Snapshot.make_absolute_runtime_context(
 		2,

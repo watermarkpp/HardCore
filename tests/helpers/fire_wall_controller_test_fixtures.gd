@@ -106,7 +106,7 @@ static func make_enemy(
 	enemy.configure_runtime_map_projection(
 		map_id,
 		Callable(host, "_ground_to_screen")
-	)
+	, GroundUnit.screen_delta_px_to_ground_delta_gu)
 	enemy.configure_spatial_index(index, serial)
 	enemy.global_position = GroundUnit.ground_delta_gu_to_screen_delta_px(
 		center_ground_gu

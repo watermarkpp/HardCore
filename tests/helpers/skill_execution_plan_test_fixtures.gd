@@ -140,6 +140,19 @@ static func canonical_context(
 		"target_runtime_id": target_id,
 		"input_mode": "canonical_test",
 	}
+	if map_id >= 0:
+		# FREEZE-P0.1: mapped test plans must declare an explicit projection.
+		# Identity converters are a TEST_ONLY explicit policy, never a silent
+		# fallback in production.
+		context["screen_to_ground_position_px"] = Callable(
+			GroundUnitScript,
+			"screen_delta_px_to_ground_delta_gu"
+		)
+		context["ground_gu_to_screen_position_px"] = Callable(
+			GroundUnitScript,
+			"ground_delta_gu_to_screen_delta_px"
+		)
+		context["projection_policy"] = &"test_identity_explicit"
 	if not snapshot.is_empty():
 		context["canonical_snapshot"] = snapshot
 	return context

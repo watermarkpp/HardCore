@@ -68,7 +68,7 @@ static func make_enemy(
 	enemy.configure_runtime_map_projection(
 		map_id,
 		Callable(host, "_ground_to_screen")
-	)
+	, GroundUnit.screen_delta_px_to_ground_delta_gu)
 	enemy.set_meta("spawn_serial", serial)
 	enemy.global_position = position_px
 	host.add_child(enemy)

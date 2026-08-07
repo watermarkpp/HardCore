@@ -9,7 +9,7 @@ func _configure_summon_map(summon: Summon) -> void:
 	summon.configure_runtime_map_projection(
 		9001,
 		Callable(self, "_test_ground_to_screen")
-	)
+	, GroundUnit.screen_delta_px_to_ground_delta_gu)
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:

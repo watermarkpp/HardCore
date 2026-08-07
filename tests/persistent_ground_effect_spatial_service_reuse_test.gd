@@ -97,7 +97,7 @@ func _run() -> void:
 	_projectile.configure_runtime_map_projection(
 		MAP_A,
 		Callable(self, "_ground_to_screen")
-	)
+	, GroundUnit.screen_delta_px_to_ground_delta_gu)
 	_projectile.configure_spatial_index(_index)
 	add_child(_projectile)
 

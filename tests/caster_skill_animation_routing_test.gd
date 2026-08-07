@@ -15,16 +15,26 @@ const Fixtures := preload(
 
 
 func _test_absolute_context() -> Dictionary:
-	return Snapshot.make_absolute_runtime_context(
+	var context := Snapshot.make_absolute_runtime_context(
 		9001,
 		Vector2.ZERO,
 		Vector2.ZERO,
 		Callable(self, "_test_ground_to_screen")
 	)
+	# FREEZE-P0.1: mapped test context declares an explicit identity projection.
+	context["screen_to_ground_position_px"] = Callable(
+		self,
+		"_test_screen_to_ground"
+	)
+	return context
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _test_screen_to_ground(value: Vector2) -> Vector2:
+	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(value)
 
 
 func _context() -> Dictionary:

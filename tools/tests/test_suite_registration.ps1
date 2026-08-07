@@ -595,6 +595,51 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $cbIncluded = ($RunnerSource -match '\$Suites\.combat_absolute_ground_critical\s*\+')
 $cbValidateSet = ($RunnerSource -match "combat_absolute_ground_critical")
 
+# combat_projection_fail_closed_critical verification (FREEZE-P0.1)
+$FailClosedSuite = 'combat_projection_fail_closed_critical'
+$FailClosedExpected = @(
+    'tests/mapped_enemy_missing_projection_rejected_test.tscn',
+    'tests/mapped_projectile_missing_projection_rejected_test.tscn',
+    'tests/mapped_summon_missing_projection_rejected_test.tscn',
+    'tests/mapped_fire_wall_missing_projection_rejected_test.tscn',
+    'tests/mapped_skill_plan_missing_projection_rejected_test.tscn',
+    'tests/mapped_game_root_projection_failure_test.tscn'
+)
+
+$fcMissing = @()
+$fcDuplicates = @()
+$fcGitTracked = @()
+foreach ($path in $FailClosedExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $fcMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $fcGitTracked += $path
+    }
+}
+$fcDuplicates = @($FailClosedExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$fcBlock = $false
+$fcFound = $false
+$fcEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.combat_projection_fail_closed_critical\s*=') {
+        $fcBlock = $true
+        $fcFound = $true
+        continue
+    }
+    if ($fcBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $fcEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $fcBlock = $false
+            break
+        }
+    }
+}
+$fcIncluded = ($RunnerSource -match '\$Suites\.combat_projection_fail_closed_critical\s*\+')
+$fcValidateSet = ($RunnerSource -match "combat_projection_fail_closed_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -607,6 +652,7 @@ $ok = $ok -and $pmFound -and ($pmEntries.Count -eq $ProductionMigrationExpected.
 $ok = $ok -and $clFound -and ($clEntries.Count -eq $CleanupExpected.Count) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
 $ok = $ok -and $wlFound -and ($wlEntries.Count -eq $WizardLineExpected.Count) -and ($wlMissing.Count -eq 0) -and ($wlDuplicates.Count -eq 0) -and ($wlGitTracked.Count -eq 0) -and $wlIncluded -and $wlValidateSet
 $ok = $ok -and $cbFound -and ($cbEntries.Count -eq $CombatExpected.Count) -and ($cbMissing.Count -eq 0) -and ($cbDuplicates.Count -eq 0) -and ($cbGitTracked.Count -eq 0) -and $cbIncluded -and $cbValidateSet
+$ok = $ok -and $fcFound -and ($fcEntries.Count -eq $FailClosedExpected.Count) -and ($fcMissing.Count -eq 0) -and ($fcDuplicates.Count -eq 0) -and ($fcGitTracked.Count -eq 0) -and $fcIncluded -and $fcValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -709,6 +755,14 @@ $report = [ordered]@{
     combat_absolute_ground_not_git_tracked = $cbGitTracked
     combat_absolute_ground_included_in_default_critical = $cbIncluded
     combat_absolute_ground_validate_set = $cbValidateSet
+    combat_projection_fail_closed_suite = $FailClosedSuite
+    combat_projection_fail_closed_expected_count = $FailClosedExpected.Count
+    combat_projection_fail_closed_actual_count = $fcEntries.Count
+    combat_projection_fail_closed_missing = $fcMissing
+    combat_projection_fail_closed_duplicates = $fcDuplicates
+    combat_projection_fail_closed_not_git_tracked = $fcGitTracked
+    combat_projection_fail_closed_included_in_default_critical = $fcIncluded
+    combat_projection_fail_closed_validate_set = $fcValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4
