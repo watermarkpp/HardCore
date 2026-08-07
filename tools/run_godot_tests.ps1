@@ -318,9 +318,11 @@ $Suites.combat_projection_fail_closed_critical = @(
 )
 
 $Suites.formal_map_projection_critical = @(
-    'tests/authored_source_map_projection_test.tscn',
-    'tests/authored_centered_map_projection_test.tscn',
-    'tests/authored_map_cross_system_test.tscn',
+    'tests/implemented_map_runtime_projection_test.tscn',
+    'tests/phase1_network_runtime_coverage_test.tscn',
+    'tests/unbuilt_planned_map_not_playable_test.tscn',
+    'tests/reference_map_not_playable_test.tscn',
+    'tests/legacy_reference_projection_isolation_test.tscn',
     'tests/formal_map_projection_coverage_test.tscn',
     'tests/world_ready_gating_test.tscn',
     'tests/safe_logout_world_location_inf_guard_test.tscn'
