@@ -204,7 +204,7 @@ func _apply_field_tick() -> void:
 	var candidates: Array[Dictionary] = (
 		_combat_spatial_index.query_aabb_candidates(
 			_runtime_map_id,
-			_query_bounds_index_space(),
+			_snapshot_bounds_ground_gu(_canonical_snapshot),
 			EXPANSION_EPSILON_GU
 		)
 	)
@@ -297,41 +297,10 @@ func _snapshot_bounds_ground_gu(snapshot: Dictionary) -> Rect2:
 	return Rect2(min_gu, max_gu - min_gu)
 
 
-## The shared RuntimeCombatSpatialIndex stores actor positions in the index's
-## coordinate space (the actor position provider / delta space). The canonical
-## snapshot AABB is absolute map GU; project its corners through the map
-## projection and back through the screen-delta conversion so the broadphase
-## queries the same space the index lives in. Identity maps are unchanged.
-func _query_bounds_index_space() -> Rect2:
-	var canonical_bounds := _snapshot_bounds_ground_gu(_canonical_snapshot)
-	var ground_to_screen: Callable = (
-		_snapshot_validation_context.get(
-			"ground_position_gu_to_screen_position_px", Callable()
-		)
-		if _snapshot_validation_context is Dictionary
-		else Callable()
-	)
-	if not ground_to_screen.is_valid():
-		return canonical_bounds
-	var top_left_ground := canonical_bounds.position
-	var bottom_right_ground := canonical_bounds.end
-	var top_left_screen: Vector2 = (
-		ground_to_screen.call(top_left_ground) as Vector2
-	)
-	var bottom_right_screen: Vector2 = (
-		ground_to_screen.call(bottom_right_ground) as Vector2
-	)
-	var top_left_index := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			top_left_screen
-		)
-	)
-	var bottom_right_index := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			bottom_right_screen
-		)
-	)
-	return Rect2(top_left_index, bottom_right_index - top_left_index)
+## FREEZE-P0: the shared RuntimeCombatSpatialIndex stores absolute map Ground
+## GU (same space as the canonical Snapshot V2 AABB), so the broadphase queries
+## the canonical bounds directly. The old absolute->screen->raw delta inverse
+## shim was removed; no coordinate compatibility conversion remains here.
 
 
 func fire_wall_controller_diagnostics() -> Dictionary:
