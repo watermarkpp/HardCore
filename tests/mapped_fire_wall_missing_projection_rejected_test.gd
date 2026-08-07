@@ -10,7 +10,7 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
 
-const MAP_ID := 9001
+const MAP_ID := 248
 
 var _index: SpatialIndexScript
 var _enemy: EnemyActor

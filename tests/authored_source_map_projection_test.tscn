@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/authored_source_map_projection_test.gd" type="Script" id="1"]
+
+[node name="AuthoredSourceMapProjectionTest" type="Node"]
+script = ExtResource("1")

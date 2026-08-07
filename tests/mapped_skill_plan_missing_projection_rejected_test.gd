@@ -11,7 +11,7 @@ const PlanContract := preload(
 	"res://scripts/skills/skill_execution_plan_contract.gd"
 )
 
-const MAP_ID := 9001
+const MAP_ID := 248
 
 
 func _ready() -> void:

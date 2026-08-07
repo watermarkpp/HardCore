@@ -640,6 +640,51 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $fcIncluded = ($RunnerSource -match '\$Suites\.combat_projection_fail_closed_critical\s*\+')
 $fcValidateSet = ($RunnerSource -match "combat_projection_fail_closed_critical")
 
+# formal_map_projection_critical verification (FREEZE-P0.2)
+$ProfileSuite = 'formal_map_projection_critical'
+$ProfileExpected = @(
+    'tests/authored_source_map_projection_test.tscn',
+    'tests/authored_centered_map_projection_test.tscn',
+    'tests/authored_map_cross_system_test.tscn',
+    'tests/formal_map_projection_coverage_test.tscn',
+    'tests/world_ready_gating_test.tscn',
+    'tests/safe_logout_world_location_inf_guard_test.tscn'
+)
+
+$pfMissing = @()
+$pfDuplicates = @()
+$pfGitTracked = @()
+foreach ($path in $ProfileExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $pfMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $pfGitTracked += $path
+    }
+}
+$pfDuplicates = @($ProfileExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$pfBlock = $false
+$pfFound = $false
+$pfEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.formal_map_projection_critical\s*=') {
+        $pfBlock = $true
+        $pfFound = $true
+        continue
+    }
+    if ($pfBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $pfEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $pfBlock = $false
+            break
+        }
+    }
+}
+$pfIncluded = ($RunnerSource -match '\$Suites\.formal_map_projection_critical\s*\+')
+$pfValidateSet = ($RunnerSource -match "formal_map_projection_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -653,6 +698,7 @@ $ok = $ok -and $clFound -and ($clEntries.Count -eq $CleanupExpected.Count) -and 
 $ok = $ok -and $wlFound -and ($wlEntries.Count -eq $WizardLineExpected.Count) -and ($wlMissing.Count -eq 0) -and ($wlDuplicates.Count -eq 0) -and ($wlGitTracked.Count -eq 0) -and $wlIncluded -and $wlValidateSet
 $ok = $ok -and $cbFound -and ($cbEntries.Count -eq $CombatExpected.Count) -and ($cbMissing.Count -eq 0) -and ($cbDuplicates.Count -eq 0) -and ($cbGitTracked.Count -eq 0) -and $cbIncluded -and $cbValidateSet
 $ok = $ok -and $fcFound -and ($fcEntries.Count -eq $FailClosedExpected.Count) -and ($fcMissing.Count -eq 0) -and ($fcDuplicates.Count -eq 0) -and ($fcGitTracked.Count -eq 0) -and $fcIncluded -and $fcValidateSet
+$ok = $ok -and $pfFound -and ($pfEntries.Count -eq $ProfileExpected.Count) -and ($pfMissing.Count -eq 0) -and ($pfDuplicates.Count -eq 0) -and ($pfGitTracked.Count -eq 0) -and $pfIncluded -and $pfValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -763,6 +809,14 @@ $report = [ordered]@{
     combat_projection_fail_closed_not_git_tracked = $fcGitTracked
     combat_projection_fail_closed_included_in_default_critical = $fcIncluded
     combat_projection_fail_closed_validate_set = $fcValidateSet
+    formal_map_projection_suite = $ProfileSuite
+    formal_map_projection_expected_count = $ProfileExpected.Count
+    formal_map_projection_actual_count = $pfEntries.Count
+    formal_map_projection_missing = $pfMissing
+    formal_map_projection_duplicates = $pfDuplicates
+    formal_map_projection_not_git_tracked = $pfGitTracked
+    formal_map_projection_included_in_default_critical = $pfIncluded
+    formal_map_projection_validate_set = $pfValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

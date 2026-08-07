@@ -19,11 +19,11 @@ func _run() -> void:
 	)
 	assert(
 		not bool(result.get("success", true)),
-		"mapped GameRoot conversion must fail when the map runtime is missing"
+		"mapped GameRoot conversion must fail when the map has no formal projection profile"
 	)
 	assert(
 		str(result.get("reason", ""))
-		== str(GroundUnit.REASON_MISSING_RUNTIME_PROJECTION),
+		== str(GroundUnit.REASON_UNSUPPORTED_MAP_PROJECTION),
 		"GameRoot failure must use the unified reason"
 	)
 	var raw: Vector2 = game._canonical_screen_px_to_ground_gu(

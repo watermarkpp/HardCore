@@ -2,7 +2,7 @@ extends Node
 
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
-const MAP_ID := 9001
+const MAP_ID := 248
 
 
 func _ready() -> void:

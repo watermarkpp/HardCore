@@ -5,7 +5,7 @@ const SpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 
-const MAP_ID := 9001
+const MAP_ID := 248
 
 var _enemy: EnemyActor
 
