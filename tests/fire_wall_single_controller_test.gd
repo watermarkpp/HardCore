@@ -143,7 +143,8 @@ func _make_enemy(game: Node, pos: Vector2, name_str: String) -> EnemyActor:
 	_enemy_serial += 1
 	enemy.configure_runtime_map_projection(
 		int(game.get("current_map_id")),
-		Callable(self, "_ground_to_screen")
+		Callable(self, "_ground_to_screen"),
+		Callable(game, "_canonical_screen_px_to_ground_gu")
 	)
 	enemy.configure_spatial_index(
 		game.get("_combat_spatial_index"),
@@ -155,9 +156,10 @@ func _make_enemy(game: Node, pos: Vector2, name_str: String) -> EnemyActor:
 	# (spawn-overlap resolution) which would otherwise re-home the index entry
 	# into a different coordinate space before the canonical registration.
 	game.add_child(enemy)
-	# The shared index lives in the actor position-provider (delta) space; the
-	# controller converts the canonical snapshot AABB into that same space.
-	var ground_gu := GroundUnit.screen_delta_px_to_ground_delta_gu(pos)
+	# FREEZE-P0: the shared index and the controller both live in absolute
+	# runtime-map Ground GU; the enemy must register with the same map-aware
+	# conversion its provider uses.
+	var ground_gu: Vector2 = game._canonical_screen_px_to_ground_gu(pos)
 	game._combat_spatial_index.register(
 		_enemy_serial,
 		int(game.get("current_map_id")),

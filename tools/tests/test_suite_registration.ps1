@@ -547,6 +547,54 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $wlIncluded = ($RunnerSource -match '\$Suites\.wizard_line_geometry_critical\s*\+')
 $wlValidateSet = ($RunnerSource -match "wizard_line_geometry_critical")
 
+# combat_absolute_ground_critical verification (FREEZE-P0)
+$CombatSuite = 'combat_absolute_ground_critical'
+$CombatExpected = @(
+    'tests/combat_absolute_ground_roundtrip_test.tscn',
+    'tests/enemy_spatial_index_absolute_coordinate_test.tscn',
+    'tests/projectile_absolute_release_snapshot_test.tscn',
+    'tests/summon_absolute_snapshot_test.tscn',
+    'tests/persistent_ground_effect_absolute_broadphase_test.tscn',
+    'tests/fire_wall_absolute_broadphase_test.tscn',
+    'tests/shared_spatial_index_absolute_contract_test.tscn',
+    'tests/combat_absolute_ground_integration_test.tscn',
+    'tests/combat_absolute_ground_parity_test.tscn'
+)
+
+$cbMissing = @()
+$cbDuplicates = @()
+$cbGitTracked = @()
+foreach ($path in $CombatExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $cbMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $cbGitTracked += $path
+    }
+}
+$cbDuplicates = @($CombatExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$cbBlock = $false
+$cbFound = $false
+$cbEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.combat_absolute_ground_critical\s*=') {
+        $cbBlock = $true
+        $cbFound = $true
+        continue
+    }
+    if ($cbBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $cbEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $cbBlock = $false
+            break
+        }
+    }
+}
+$cbIncluded = ($RunnerSource -match '\$Suites\.combat_absolute_ground_critical\s*\+')
+$cbValidateSet = ($RunnerSource -match "combat_absolute_ground_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -558,6 +606,7 @@ $ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPlanExpected.Count) -an
 $ok = $ok -and $pmFound -and ($pmEntries.Count -eq $ProductionMigrationExpected.Count) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
 $ok = $ok -and $clFound -and ($clEntries.Count -eq $CleanupExpected.Count) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
 $ok = $ok -and $wlFound -and ($wlEntries.Count -eq $WizardLineExpected.Count) -and ($wlMissing.Count -eq 0) -and ($wlDuplicates.Count -eq 0) -and ($wlGitTracked.Count -eq 0) -and $wlIncluded -and $wlValidateSet
+$ok = $ok -and $cbFound -and ($cbEntries.Count -eq $CombatExpected.Count) -and ($cbMissing.Count -eq 0) -and ($cbDuplicates.Count -eq 0) -and ($cbGitTracked.Count -eq 0) -and $cbIncluded -and $cbValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -652,6 +701,14 @@ $report = [ordered]@{
     wizard_line_geometry_not_git_tracked = $wlGitTracked
     wizard_line_geometry_included_in_default_critical = $wlIncluded
     wizard_line_geometry_validate_set = $wlValidateSet
+    combat_absolute_ground_suite = $CombatSuite
+    combat_absolute_ground_expected_count = $CombatExpected.Count
+    combat_absolute_ground_actual_count = $cbEntries.Count
+    combat_absolute_ground_missing = $cbMissing
+    combat_absolute_ground_duplicates = $cbDuplicates
+    combat_absolute_ground_not_git_tracked = $cbGitTracked
+    combat_absolute_ground_included_in_default_critical = $cbIncluded
+    combat_absolute_ground_validate_set = $cbValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

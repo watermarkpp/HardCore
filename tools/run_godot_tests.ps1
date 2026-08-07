@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -296,6 +296,18 @@ $Suites.wizard_line_geometry_critical = @(
     'tests/wizard_line_visual_stability_test.tscn'
 )
 
+$Suites.combat_absolute_ground_critical = @(
+    'tests/combat_absolute_ground_roundtrip_test.tscn',
+    'tests/enemy_spatial_index_absolute_coordinate_test.tscn',
+    'tests/projectile_absolute_release_snapshot_test.tscn',
+    'tests/summon_absolute_snapshot_test.tscn',
+    'tests/persistent_ground_effect_absolute_broadphase_test.tscn',
+    'tests/fire_wall_absolute_broadphase_test.tscn',
+    'tests/shared_spatial_index_absolute_contract_test.tscn',
+    'tests/combat_absolute_ground_integration_test.tscn',
+    'tests/combat_absolute_ground_parity_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -311,6 +323,7 @@ $Suites.critical = @(
     $Suites.skill_production_migration_critical +
     $Suites.skill_runtime_cleanup_critical +
     $Suites.wizard_line_geometry_critical +
+    $Suites.combat_absolute_ground_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
