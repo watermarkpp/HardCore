@@ -225,8 +225,10 @@ func _run() -> void:
 	})
 	assert(poison_success.success and not poison_resisted.success, "施毒没有使用独立AntiPoison门")
 	assert(
-		str(poison_success.get("evasion_channel", "")) == "anti_poison"
-		and not bool(poison_success.get("anti_magic_checked", false)),
+		str(poison_success.get("operation", "")) == "poison_health"
+		and int(poison_success.get("anti_poison_random_bound", -1))
+			== TaoistCombatMath.anti_poison_random_bound(5)
+		and not poison_success.has("anti_magic_checked"),
 		"施毒误用AntiMagic"
 	)
 
@@ -243,7 +245,12 @@ func _run() -> void:
 			"anti_magic_roll": 0,
 			"target_anti_magic_points": 10,
 		})
-		assert(plan.success and not plan.anti_magic_eligible and not plan.anti_magic_checked, "%s误用AntiMagic" % skill_id)
+		assert(
+			plan.success
+			and not bool(plan.get("anti_magic_eligible", false))
+			and not bool(plan.get("anti_magic_checked", false)),
+			"%s误用AntiMagic" % skill_id
+		)
 
 	assert(WarriorCombatMath.PHYSICAL_ATTACK_SPEED_POLICY_ID == "physical.attack_speed.interval_tier.v1")
 	assert(WarriorCombatMath.physical_attack_interval_ms(-1) == 960, "负攻速档公式错误")
