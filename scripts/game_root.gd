@@ -174,6 +174,9 @@ var _active_safe_zones: Array = []
 var _runtime_spawn_serial := 0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var _ground_effect_manager: PersistentGroundEffectManagerScript
+## FREEZE-P0.1: fail-closed canonical projection diagnostics.
+var missing_projection_rejection_count := 0
+var projection_rejection_reason := &""
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
@@ -1860,6 +1863,15 @@ func _spawn_enemy(
 	respawn_seconds := -1.0,
 	spawn_context: Dictionary = {}
 ) -> EnemyActor:
+	if current_map_id >= 0:
+		var spawn_ground_result := _try_canonical_screen_px_to_ground_gu(
+			spawn_position
+		)
+		if not bool(spawn_ground_result.get("success", false)):
+			# FREEZE-P0.1: mapped world without a loadable runtime projection
+			# must never register an enemy at fake/delta coordinates.
+			missing_projection_rejection_count += 1
+			return null
 	_runtime_spawn_serial += 1
 	var context := spawn_context.duplicate(true)
 	var slot_id := str(context.get("spawn_slot_id", context.get("spawn_group_id", "")))
@@ -6133,12 +6145,18 @@ func _ground_position_gu_for_map(
 	map_id: int,
 	screen_position_px: Vector2
 ) -> Vector2:
-	var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
-	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
-			runtime,
-			screen_position_px
+	if map_id >= 0:
+		var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
+		if not runtime.is_empty():
+			return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+				runtime,
+				screen_position_px
+			)
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
 		)
+		return Vector2.INF
 	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 		screen_position_px
 	)
@@ -6147,6 +6165,12 @@ func _ground_position_gu_for_map(
 func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
+		if current_map_id >= 0:
+			missing_projection_rejection_count += 1
+			projection_rejection_reason = (
+				GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+			)
+			return Vector2i(-100000, -100000)
 		# Legacy/no-runtime maps must use the same 64x32 isometric basis as
 		# fractional actor footpoints. The old 48x24 orthogonal fallback made one
 		# world position resolve to two different tiles, separating target-centred
@@ -6172,34 +6196,94 @@ func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
 	)
 
 
-func _canonical_screen_px_to_ground_gu(screen_position_px: Vector2) -> Vector2:
+func _try_canonical_screen_px_to_ground_gu(
+	screen_position_px: Vector2
+) -> Dictionary:
+	## FREEZE-P0.1: explicit fail-closed result. Mapped world with an
+	## unloadable map runtime never falls back to identity/delta.
+	if current_map_id < 0:
+		return GroundUnitSpaceScript.projection_result(
+			true,
+			&"",
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				screen_position_px
+			)
+		)
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
-			runtime,
-			screen_position_px
+		return GroundUnitSpaceScript.projection_result(
+			true,
+			&"",
+			MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+				runtime,
+				screen_position_px
+			)
 		)
-	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		screen_position_px
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
 	)
+	return GroundUnitSpaceScript.projection_result(
+		false,
+		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+	)
+
+
+func _try_canonical_ground_gu_to_screen_px(
+	ground_position_gu: Vector2
+) -> Dictionary:
+	if current_map_id < 0:
+		return GroundUnitSpaceScript.projection_result(
+			true,
+			&"",
+			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				ground_position_gu
+			)
+		)
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if not runtime.is_empty():
+		return GroundUnitSpaceScript.projection_result(
+			true,
+			&"",
+			MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
+				runtime,
+				ground_position_gu
+			)
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+	)
+	return GroundUnitSpaceScript.projection_result(
+		false,
+		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+	)
+
+
+func _canonical_screen_px_to_ground_gu(screen_position_px: Vector2) -> Vector2:
+	var result := _try_canonical_screen_px_to_ground_gu(screen_position_px)
+	if bool(result.get("success", false)):
+		return result.get("value", Vector2.ZERO)
+	return Vector2.INF
 
 
 func _canonical_ground_gu_to_screen_px(ground_position_gu: Vector2) -> Vector2:
-	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
-	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
-			runtime,
-			ground_position_gu
-		)
-	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-		ground_position_gu
-	)
+	var result := _try_canonical_ground_gu_to_screen_px(ground_position_gu)
+	if bool(result.get("success", false)):
+		return result.get("value", Vector2.ZERO)
+	return Vector2.INF
 
 
 func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
 	var tile := Vector2i(grid_cell) if grid_cell is Vector2i else Vector2i.ZERO
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
+		if current_map_id >= 0:
+			missing_projection_rejection_count += 1
+			projection_rejection_reason = (
+				GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+			)
+			return Vector2.INF
 		return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			Vector2(tile)
 		)

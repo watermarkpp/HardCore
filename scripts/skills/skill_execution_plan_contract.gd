@@ -113,6 +113,8 @@ static var release_id_generation_count := 0
 static var snapshot_build_count := 0
 static var resource_commit_count := 0
 static var cooldown_commit_count := 0
+## FREEZE-P0.1: fail-closed projection rejection diagnostics.
+static var missing_projection_rejection_count := 0
 
 
 static func build_canonical_plan(
@@ -174,12 +176,26 @@ static func build_canonical_plan(
 			if raw_cell is Vector2i:
 				effective_cells.append(raw_cell)
 	if accepted and snapshot_required:
+		var runtime_map_id := int(context.get("runtime_map_id", -1))
+		var screen_to_ground: Callable = context.get(
+			"screen_to_ground_position_px", Callable()
+		)
+		if runtime_map_id >= 0 and not screen_to_ground.is_valid():
+			# FREEZE-P0.1: a mapped spatial plan must never project screen
+			# positions through a missing/raw-delta conversion. Reject before
+			# any resource/cooldown commit or node creation.
+			missing_projection_rejection_count += 1
+			accepted = false
+			reason = str(
+				GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+			)
+			snapshot = {}
 		var validation_context: Dictionary = (
 			context.get("snapshot_validation_context", {})
 			if context.get("snapshot_validation_context", {}) is Dictionary
 			else {}
 		)
-		if snapshot.is_empty():
+		if accepted and snapshot.is_empty():
 			snapshot = build_release_snapshot(
 				skill_id,
 				release_id,
@@ -188,15 +204,16 @@ static func build_canonical_plan(
 				line_strip,
 				effective_cells
 			)
-		var snapshot_valid := false
-		if not snapshot.is_empty():
-			snapshot_valid = _snapshot_valid_for_context(
-				snapshot,
-				validation_context
-			)
-		if not snapshot_valid:
-			accepted = false
-			reason = REASON_INVALID_SNAPSHOT
+		if accepted:
+			var snapshot_valid := false
+			if not snapshot.is_empty():
+				snapshot_valid = _snapshot_valid_for_context(
+					snapshot,
+					validation_context
+				)
+			if not snapshot_valid:
+				accepted = false
+				reason = REASON_INVALID_SNAPSHOT
 	if (
 		not snapshot.is_empty()
 		and str(snapshot.get("shape_type", ""))
@@ -338,7 +355,7 @@ static func build_release_snapshot(
 		var origin_screen_px: Vector2 = context.get(
 			"origin_screen_px", Vector2.ZERO
 		)
-		var origin_ground_gu := _project(screen_to_ground, origin_screen_px)
+		var origin_ground_gu := _project(screen_to_ground, origin_screen_px, map_id)
 		var absolute_context := SkillFootprintSnapshotScript.make_absolute_runtime_context(
 			map_id,
 			origin_ground_gu,
@@ -363,10 +380,8 @@ static func build_release_snapshot(
 			target_actor = context.get("fallback_target_actor")
 		if target_actor == null:
 			return {}
-		var target_ground_gu := _project(
-			screen_to_ground,
-			target_actor.global_position
-		)
+		var target_ground_gu := _project(screen_to_ground, target_actor.global_position
+		, map_id)
 		var target_context := SkillFootprintSnapshotScript.make_absolute_runtime_context(
 			map_id,
 			target_ground_gu,
@@ -385,10 +400,8 @@ static func build_release_snapshot(
 		var player_actor: Node2D = context.get("player_actor")
 		if player_actor == null or not is_instance_valid(player_actor):
 			return {}
-		var player_ground_gu := _project(
-			screen_to_ground,
-			player_actor.global_position
-		)
+		var player_ground_gu := _project(screen_to_ground, player_actor.global_position
+		, map_id)
 		var player_context := SkillFootprintSnapshotScript.make_absolute_runtime_context(
 			map_id,
 			player_ground_gu,
@@ -417,10 +430,8 @@ static func build_release_snapshot(
 				spawn_screen_px = summon_player.global_position
 			else:
 				return {}
-		var spawn_center_ground_gu := _project(
-			screen_to_ground,
-			spawn_screen_px
-		)
+		var spawn_center_ground_gu := _project(screen_to_ground, spawn_screen_px
+		, map_id)
 		var summon_template_id := ""
 		for raw_descriptor: Variant in _descriptors_of_kind(
 			legacy_result.get("effects", []),
@@ -470,7 +481,7 @@ static func build_release_snapshot(
 				if effect_type == "area_damage"
 				else context.get("origin_screen_px", Vector2.ZERO)
 			)
-			var center_ground_gu := _project(screen_to_ground, center_screen_px)
+			var center_ground_gu := _project(screen_to_ground, center_screen_px, map_id)
 			var circle_context := SkillFootprintSnapshotScript.make_absolute_runtime_context(
 				map_id,
 				center_ground_gu,
@@ -505,7 +516,7 @@ static func build_release_snapshot(
 		# map, so it must cross the map-aware screen->ground projection (design
 		# center included). Raw screen-delta inversion is reserved for the
 		# direction vector below.
-		var origin_ground_gu := _project(screen_to_ground, origin_screen_px)
+		var origin_ground_gu := _project(screen_to_ground, origin_screen_px, map_id)
 		var direction_screen_px: Vector2 = context.get(
 			"direction_screen_px", Vector2.ZERO
 		)
@@ -644,12 +655,17 @@ static func sentinel_diagnostics() -> Dictionary:
 	}
 
 
-static func _project(callable: Callable, value: Vector2) -> Vector2:
+static func _project(callable: Callable, value: Vector2,
+	runtime_map_id: int
+) -> Vector2:
 	if callable.is_valid():
 		var projected: Variant = callable.call(value)
 		if projected is Vector2:
 			return projected
-	return value
+	if runtime_map_id < 0:
+		return value
+	missing_projection_rejection_count += 1
+	return Vector2.INF
 
 
 static func _snapshot_valid_for_context(

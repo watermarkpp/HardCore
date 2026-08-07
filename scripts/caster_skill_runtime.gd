@@ -18,6 +18,8 @@ const CombatUnitLegacyAdapterScript := preload(
 const FIRE_WALL_CELL_SPACING_GU := 1.0
 const FIRE_WALL_EFFECT_RADIUS_GU := 0.5
 const FIRE_WALL_VISUAL_RADIUS_PX := 22.08
+## FREEZE-P0.1: fail-closed projection rejection diagnostics (canonical adapter).
+static var missing_projection_rejection_count := 0
 static func create_visual(
 	plan: Dictionary,
 	position: Vector2,
@@ -156,8 +158,23 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 	if coordinate_context is Dictionary and not (
 		coordinate_context as Dictionary
 	).is_empty():
+		var mapped_context := int(
+			(coordinate_context as Dictionary).get("runtime_map_id", -1)
+		)
+		var context_screen_to_ground: Callable = (
+			(coordinate_context as Dictionary).get(
+				"screen_to_ground_position_px",
+				Callable()
+			) as Callable
+		)
+		if mapped_context >= 0 and not context_screen_to_ground.is_valid():
+			# FREEZE-P0.1: refuse to create a mapped projectile without a
+			# declared projection; never re-plan, just reject the node.
+			missing_projection_rejection_count += 1
+			projectile.free()
+			return null
 		projectile.configure_runtime_map_projection(
-			int((coordinate_context as Dictionary).get("runtime_map_id", -1)),
+			mapped_context,
 			(coordinate_context as Dictionary).get(
 				"ground_position_gu_to_screen_position_px",
 				Callable()
@@ -568,8 +585,21 @@ static func create_summon_actor(
 	if coordinate_context is Dictionary and not (
 		coordinate_context as Dictionary
 	).is_empty():
+		var mapped_context := int(
+			(coordinate_context as Dictionary).get("runtime_map_id", -1)
+		)
+		var context_screen_to_ground: Callable = (
+			(coordinate_context as Dictionary).get(
+				"screen_to_ground_position_px",
+				Callable()
+			) as Callable
+		)
+		if mapped_context >= 0 and not context_screen_to_ground.is_valid():
+			missing_projection_rejection_count += 1
+			summon.free()
+			return null
 		summon.configure_runtime_map_projection(
-			int((coordinate_context as Dictionary).get("runtime_map_id", -1)),
+			mapped_context,
 			(coordinate_context as Dictionary).get(
 				"ground_position_gu_to_screen_position_px",
 				Callable()
