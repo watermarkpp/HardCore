@@ -22,6 +22,9 @@ const SkillGeometryServiceScript := preload(
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+const SkillExecutionPlanContractScript := preload(
+	"res://scripts/skills/skill_execution_plan_contract.gd"
+)
 
 const RUNTIME_CONTRACT_ID := "caster_skill_runtime.ground_units.v2"
 const EXECUTION_SNAPSHOT_GATE_CONTRACT_ID := (
@@ -89,6 +92,9 @@ const GROUND_EXACT_SKILL_IDS := {
 
 
 static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary:
+	# Q3-B legacy-compat resolver (not formally called; the production chain
+	# consumes canonical plans only). Sentinel proves formal call count = 0.
+	SkillExecutionPlanContractScript.caster_resolve_count += 1
 	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
 	if not skill_id.begins_with("wizard.") and not skill_id.begins_with("taoist."):
 		return {"skill_id": skill_id, "success": false, "failure_reason": "not_caster_skill"}
@@ -427,7 +433,9 @@ static func create_cast_nodes_from_canonical_plan(
 	target: Node2D = null,
 	owner: PlayerCharacter = null,
 	spiritual_power := 1,
-	owner_level := 1
+	owner_level := 1,
+	summon_sink := Callable(),
+	runtime_context: Dictionary = {}
 ) -> Array[Node2D]:
 	var nodes: Array[Node2D] = []
 	var skill_id := str(plan.get("skill_id", ""))
@@ -457,6 +465,7 @@ static func create_cast_nodes_from_canonical_plan(
 			color
 		)
 		if projectile != null:
+			_configure_projectile_runtime(projectile, runtime_context)
 			nodes.append(projectile)
 	for raw_descriptor: Variant in plan.get("ground_effect_descriptors", []):
 		if not raw_descriptor is Dictionary:
@@ -487,11 +496,17 @@ static func create_cast_nodes_from_canonical_plan(
 			color,
 			owner
 		):
+			_configure_ground_runtime(effect, runtime_context)
 			nodes.append(effect)
 	for raw_descriptor: Variant in plan.get("summon_descriptors", []):
 		if not raw_descriptor is Dictionary:
 			continue
 		var descriptor: Dictionary = raw_descriptor
+		if summon_sink.is_valid():
+			# The caller owns summon lifecycle (e.g. GameRoot's main pet); the
+			# adapter hands the frozen descriptor over without creating a node.
+			summon_sink.call(descriptor, plan)
+			continue
 		var summon := create_summon_actor(
 			{
 				"operation": "summon",
@@ -528,20 +543,132 @@ static func create_cast_nodes_from_canonical_plan(
 			"skill_id": skill_id,
 			"release_id": release_id,
 			"visual": {"role": role},
-			"visual_radius_px": float(action.get("visual_radius_px", 0.0)),
+			"visual_duration": action.get(
+				"visual_duration",
+				CasterSkillVisualRegistry.animation_duration(skill_id)
+			),
+			"visual_radius_px": float(
+				action.get("visual_radius_px", 0.0)
+			),
+			"snapshot_validation_policy": (
+				SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+			),
+			"snapshot_validation_context": action.get(
+				"snapshot_validation_context", {}
+			),
+			"canonical_geometry_contract": action.get(
+				"canonical_geometry_contract",
+				CasterSpellGeometryScript.CONTRACT_ID
+			),
+			"geometry_origin_screen_px": action.get(
+				"geometry_origin_screen_px", Vector2.ZERO
+			),
+			"geometry_grid_cells": action.get("geometry_grid_cells", []),
+			"geometry_screen_points_px": action.get(
+				"geometry_screen_points_px", []
+			),
+			"ground_gu_to_screen_position_px": action.get(
+				"ground_gu_to_screen_position_px", Callable()
+			),
 			"snapshot_coordinate_context": coordinate_context,
 			"skill_footprint_snapshot": snapshot,
 		}
+		# Q3-B: the canonical presentation consumer resolves the visual
+		# attachment exactly like the legacy create_cast_nodes entry (same
+		# registry attachment policy), so self/caster visuals keep following
+		# the caster instead of the (possibly null) cast target.
+		var attachment := str(
+			CasterSkillVisualRegistry.render_policy(skill_id).get(
+				"attachment_policy",
+				"world_anchor"
+			)
+		)
+		var visual_position := origin
+		var follow_node: Node2D = null
+		match attachment:
+			"target_actor":
+				follow_node = target
+				visual_position = (
+					target.global_position
+					if is_instance_valid(target)
+					else origin
+				)
+			"caster_actor":
+				follow_node = owner
+				visual_position = (
+					owner.global_position
+					if is_instance_valid(owner)
+					else origin
+				)
+			"world_anchor":
+				visual_position = (
+					origin
+					if role in [
+						CasterSkillVisualRegistry.ROLE_SELF_EFFECT,
+						CasterSkillVisualRegistry.ROLE_SELF_AREA,
+						CasterSkillVisualRegistry.ROLE_LINE_EFFECT,
+					]
+					else (
+						action.get(
+							"target_position_screen_px",
+							origin
+						)
+						if action.get(
+							"target_position_screen_px", Vector2.ZERO
+						) is Vector2
+						and (action.get(
+							"target_position_screen_px", Vector2.ZERO
+						) as Vector2) != Vector2.ZERO
+						else (
+							target.global_position
+							if is_instance_valid(target)
+							else origin
+						)
+					)
+				)
 		var visual := create_visual(
 			visual_plan,
-			origin,
+			visual_position,
 			direction,
-			target,
+			follow_node,
 			""
 		)
 		if visual != null:
 			nodes.append(visual)
 	return nodes
+
+
+static func _configure_projectile_runtime(
+	projectile: SkillProjectile,
+	runtime_context: Dictionary
+) -> void:
+	var spatial_index: Variant = runtime_context.get("combat_spatial_index")
+	if spatial_index != null:
+		projectile.configure_spatial_index(spatial_index)
+	var ground_to_screen: Callable = runtime_context.get(
+		"ground_gu_to_screen_position_px", Callable()
+	)
+	var map_id := int(runtime_context.get("runtime_map_id", -1))
+	if map_id >= 0 and ground_to_screen.is_valid():
+		projectile.configure_runtime_map_projection(
+			map_id,
+			ground_to_screen
+		)
+	var magic_defense_adapter: Callable = runtime_context.get(
+		"magic_defense_adapter", Callable()
+	)
+	var caster: Node2D = runtime_context.get("caster")
+	if magic_defense_adapter.is_valid() and caster != null:
+		projectile.configure_runtime_resolution(caster, magic_defense_adapter)
+
+
+static func _configure_ground_runtime(
+	effect: GroundSkillEffect,
+	runtime_context: Dictionary
+) -> void:
+	# Ground effects read their runtime projection from the snapshot context
+	# already; nothing else is required for the canonical adapter path.
+	pass
 
 
 static func _coordinate_context_from_snapshot(
