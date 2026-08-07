@@ -37,6 +37,8 @@ var _snapshot_validation_context: Dictionary = {}
 var _canonical_snapshot_valid := false
 var _runtime_map_id := -1
 var _combat_spatial_index: SpatialIndexScript
+## FREEZE-P0.1: fail-closed projection diagnostics.
+var missing_projection_rejection_count := 0
 
 var visual_cells: Array[GroundSkillVisualCellScript] = []
 
@@ -201,6 +203,22 @@ func _apply_field_tick() -> void:
 		_rejection_reason = "spatial_index_unavailable"
 		return
 	broadphase_query_count += 1
+	var projection_valid_for_targets := (
+		_runtime_map_id < 0
+		or _runtime_screen_to_ground_position_px.is_valid()
+	)
+	if _runtime_map_id >= 0 and not projection_valid_for_targets:
+		# FREEZE-P0.1: mapped exact-phase target conversion without a projection
+		# must fail closed; the broadphase AABB (absolute snapshot) may still
+		# run, but no candidate is ever exact-tested against fake deltas.
+		missing_projection_rejection_count += 1
+		_rejection_reason = str(
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		for visual_cell: GroundSkillVisualCellScript in visual_cells:
+			if is_instance_valid(visual_cell):
+				visual_cell.queue_redraw()
+		return
 	var candidates: Array[Dictionary] = (
 		_combat_spatial_index.query_aabb_candidates(
 			_runtime_map_id,
@@ -238,9 +256,17 @@ func _apply_field_tick() -> void:
 func _canonical_target_is_inside(enemy: EnemyActor) -> bool:
 	if not is_instance_valid(enemy):
 		return false
+	if _runtime_map_id >= 0 and not _runtime_screen_to_ground_position_px.is_valid():
+		missing_projection_rejection_count += 1
+		_rejection_reason = str(
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		return false
 	var enemy_ground_gu := _runtime_screen_to_ground_position(
 		enemy.global_position
 	)
+	if not enemy_ground_gu.is_finite():
+		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 		_canonical_snapshot,
 		enemy_ground_gu,
@@ -265,9 +291,15 @@ func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
 		)
 		if ground_position_gu is Vector2:
 			return ground_position_gu
-	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		screen_position_px
+	if _runtime_map_id < 0:
+		return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			screen_position_px
+		)
+	missing_projection_rejection_count += 1
+	_rejection_reason = str(
+		GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
 	)
+	return Vector2.INF
 
 
 func _ground_delta_between_screen_positions(
@@ -323,6 +355,7 @@ func fire_wall_controller_diagnostics() -> Dictionary:
 		"group_nodes_examined": group_nodes_examined,
 		"snapshot_rebuild_count": snapshot_rebuild_count,
 		"spatial_index_unavailable_count": spatial_index_unavailable_count,
+		"missing_projection_rejection_count": missing_projection_rejection_count,
 		"expired": expired,
 		"cancelled": cancelled,
 		"rejection_reason": _rejection_reason,

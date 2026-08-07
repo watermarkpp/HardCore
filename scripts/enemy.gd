@@ -90,6 +90,9 @@ var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
 var combat_spatial_index: RuntimeCombatSpatialIndexScript
 var spatial_actor_runtime_id: int = -1
+## FREEZE-P0.1: fail-closed projection diagnostics.
+var missing_projection_rejection_count := 0
+var projection_rejection_reason := &""
 var poison_time := 0.0
 var poison_damage := 0
 var control_time := 0.0:
@@ -580,14 +583,51 @@ func set_combat_position(
 	_spatial_index_update()
 
 
-func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+func try_screen_position_px_to_ground_position_gu(
+	screen_position_px: Vector2
+) -> Dictionary:
+	## FREEZE-P0.1: explicit fail-closed result for the formal position
+	## conversion. Mapped world without a screen_to_ground projection never
+	## falls back to identity.
 	if runtime_screen_to_ground_position_px.is_valid():
 		var ground_position_gu: Variant = (
 			runtime_screen_to_ground_position_px.call(screen_position_px)
 		)
 		if ground_position_gu is Vector2:
-			return ground_position_gu
-	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(screen_position_px)
+			return GroundUnitSpace.projection_result(
+				true,
+				&"",
+				ground_position_gu
+			)
+	if runtime_map_id < 0:
+		return GroundUnitSpace.projection_result(
+			true,
+			&"",
+			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+				screen_position_px
+			)
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+	)
+	return GroundUnitSpace.projection_result(
+		false,
+		GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+	)
+
+
+func projection_ready() -> bool:
+	if runtime_map_id < 0:
+		return true
+	return runtime_screen_to_ground_position_px.is_valid()
+
+
+func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	var result := try_screen_position_px_to_ground_position_gu(screen_position_px)
+	if bool(result.get("success", false)):
+		return result.get("value", Vector2.ZERO)
+	return Vector2.INF
 
 
 func _ground_gu_to_screen_position_px(ground_position_gu: Vector2) -> Vector2:
@@ -597,7 +637,15 @@ func _ground_gu_to_screen_position_px(ground_position_gu: Vector2) -> Vector2:
 		)
 		if screen_position_px is Vector2:
 			return screen_position_px
-	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(ground_position_gu)
+	if runtime_map_id < 0:
+		return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			ground_position_gu
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpace.REASON_MISSING_GROUND_TO_SCREEN_PROJECTION
+	)
+	return Vector2.INF
 
 
 static func _ground_delta_gu_between_screen_positions(
@@ -901,6 +949,12 @@ func _exit_tree() -> void:
 
 
 func _snapshot_coordinate_context() -> Dictionary:
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		return {}
 	var origin_ground_gu := _screen_position_px_to_ground_position_gu(
 		global_position
 	)

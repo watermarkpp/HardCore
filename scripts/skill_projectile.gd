@@ -53,6 +53,9 @@ var last_segment_footprint_snapshot: Dictionary = {}
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
+## FREEZE-P0.1: fail-closed projection diagnostics.
+var missing_projection_rejection_count := 0
+var projection_rejection_reason := &""
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var resolution_skill_id := ""
 var source_actor: Node2D
@@ -152,7 +155,20 @@ func configure_runtime_map_projection(
 		if screen_position_px_to_ground_gu is Callable
 		else Callable()
 	)
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		skill_footprint_snapshot = {}
+		return
 	_build_release_footprint_snapshot()
+
+
+func projection_ready() -> bool:
+	if runtime_map_id < 0:
+		return true
+	return runtime_screen_to_ground_position_px.is_valid()
 
 
 func configure_spatial_index(index: RuntimeCombatSpatialIndexScript) -> void:
@@ -199,6 +215,13 @@ func configure_maximum_travel_distance_gu(value_gu: float) -> void:
 
 func _build_release_footprint_snapshot() -> void:
 	if max_travel_distance_gu <= 0.0:
+		skill_footprint_snapshot = {}
+		return
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
 		skill_footprint_snapshot = {}
 		return
 	var origin_ground_gu := _runtime_screen_to_ground_position(global_position)
@@ -250,6 +273,15 @@ func _install_visual() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not skill_id.is_empty() and not _projectile_role_valid:
+		return
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		# FREEZE-P0.1: mapped projectile without a projection must stop
+		# immediately; no segment snapshot, no broadphase query, no damage.
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		queue_free()
 		return
 	var available_distance_gu := (
 		remaining_travel_distance_gu
@@ -410,9 +442,15 @@ func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
 		)
 		if ground_position_gu is Vector2:
 			return ground_position_gu
-	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		screen_position_px
+	if runtime_map_id < 0:
+		return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			screen_position_px
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
 	)
+	return Vector2.INF
 
 
 func release_snapshot_intersects_target_footprint_ground_gu(

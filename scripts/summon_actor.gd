@@ -44,6 +44,9 @@ var owner_player: PlayerCharacter
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
+## FREEZE-P0.1: fail-closed projection diagnostics.
+var missing_projection_rejection_count := 0
+var projection_rejection_reason := &""
 var summon_name := "骷髅"
 var summon_id := "skeleton"
 var skill_id := "taoist.summon_skeleton"
@@ -178,6 +181,15 @@ func setup(player: PlayerCharacter, display_name: String, power: int, learned_le
 
 
 func configure_spawn_release_footprint(source_release_id: String) -> void:
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		# FREEZE-P0.1: mapped summon without a projection must not create a
+		# formal spawn snapshot at fake/delta coordinates.
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		summon_spawn_footprint_snapshot = {}
+		return
 	summon_release_id = (
 		source_release_id
 		if not source_release_id.is_empty()
@@ -219,6 +231,12 @@ func configure_runtime_map_projection(
 		if screen_position_px_to_ground_gu is Callable
 		else Callable()
 	)
+
+
+func projection_ready() -> bool:
+	if runtime_map_id < 0:
+		return true
+	return runtime_screen_to_ground_position_px.is_valid()
 
 
 func _snapshot_coordinate_context(origin_ground_gu: Vector2) -> Dictionary:
@@ -461,6 +479,13 @@ func spatial_contract_snapshot() -> Dictionary:
 func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
 	if not is_instance_valid(target):
 		return {}
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		last_attack_footprint_snapshot = {}
+		return {}
 	var origin_ground_gu := (
 		_runtime_screen_to_ground_position(global_position)
 	)
@@ -506,6 +531,8 @@ func attack_release_snapshot_intersects_target(
 	attack_snapshot: Dictionary,
 	target: Node2D
 ) -> bool:
+	if attack_snapshot.is_empty():
+		return false
 	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
 		attack_snapshot,
 		_snapshot_coordinate_context(
@@ -528,9 +555,15 @@ func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
 		)
 		if ground_position_gu is Vector2:
 			return ground_position_gu
-	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		screen_position_px
+	if runtime_map_id < 0:
+		return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			screen_position_px
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
 	)
+	return Vector2.INF
 
 
 func distance_gu_to_screen_position_px(target_screen_position_px: Vector2) -> float:
