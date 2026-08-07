@@ -28,6 +28,8 @@ const REASON_MISSING_GROUND_TO_SCREEN_PROJECTION := (
 	&"missing_ground_to_screen_projection"
 )
 const REASON_INVALID_RUNTIME_PROJECTION := &"invalid_runtime_projection"
+## FREEZE-P0.2: a map id that has no formal projection source at all.
+const REASON_UNSUPPORTED_MAP_PROJECTION := &"unsupported_map_projection"
 
 
 static func projection_policy_for(runtime_map_id: int) -> StringName:

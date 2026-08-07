@@ -584,10 +584,22 @@ func _prepare_safe_logout() -> Dictionary:
 	var home_screen_position_px: Vector2 = resolved.get(
 		"position_px", Vector2.ZERO
 	) as Vector2
+	var home_ground_gu := _ground_position_gu_for_map(
+		home_map_id,
+		home_screen_position_px
+	)
+	if not home_ground_gu.is_finite():
+		# FREEZE-P0.2: never write Vector2.INF into the save/PlayerState.
+		return {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_projection_unavailable",
+			"home_source": str(resolved.get("source", "")),
+		}
 	var save_success := PlayerState.save_safe_logout(
 		home_map_id,
 		home_screen_position_px,
-		_ground_position_gu_for_map(home_map_id, home_screen_position_px)
+		home_ground_gu
 	)
 	if not save_success:
 		return {
@@ -789,6 +801,18 @@ func travel_to_map(map_id: int) -> void:
 
 func _request_map_travel(map_id: int) -> bool:
 	if not gameplay_input_is_enabled(): return false
+	# FREEZE-P0.2: refuse travel before the transition when the target map has
+	# no formal projection profile; never load_zone into a half-broken world.
+	var travel_profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		map_id
+	)
+	if not bool(travel_profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+		)
+		hud.show_message("map_projection_unavailable:%d" % map_id)
+		return false
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
 		hud.show_message("地图数据不存在：%d" % map_id)
@@ -1203,6 +1227,18 @@ func _check_world_ready_contract() -> bool:
 	if coordinator == null or not is_instance_valid(background):
 		return false
 	var summary := coordinator.ready_contract_summary()
+	# FREEZE-P0.2: gameplay is only reachable in a projection-ready world. The
+	# formal map profile gate keeps legacy Vector2 wrappers out of broken maps.
+	var ready_profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		current_map_id
+	)
+	if not bool(ready_profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+		)
+		return false
+
 	if not coordinator.is_generation_current(int(summary.get("generation", -1))):
 		return false
 	if int(summary.get("map_id", -1)) != current_map_id:
@@ -6134,10 +6170,17 @@ func _spawn_canonical_teleport_arrival(
 func _record_player_world_location() -> void:
 	if not is_instance_valid(player):
 		return
+	var ground_gu := _ground_position_gu_for_map(
+		current_map_id,
+		player.global_position
+	)
+	if not ground_gu.is_finite():
+		# FREEZE-P0.2: never write Vector2.INF into PlayerState.
+		return
 	PlayerState.update_world_location(
 		current_map_id,
 		player.global_position,
-		_ground_position_gu_for_map(current_map_id, player.global_position)
+		ground_gu
 	)
 
 
@@ -6145,118 +6188,156 @@ func _ground_position_gu_for_map(
 	map_id: int,
 	screen_position_px: Vector2
 ) -> Vector2:
-	if map_id >= 0:
-		var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
-		if not runtime.is_empty():
-			return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
-				runtime,
+	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		map_id
+	)
+	if bool(profile.get("success", false)):
+		var screen_to_ground: Callable = profile.get(
+			"screen_to_ground",
+			Callable()
+		)
+		if screen_to_ground.is_valid():
+			var ground_position_gu: Variant = screen_to_ground.call(
 				screen_position_px
 			)
-		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+			if ground_position_gu is Vector2:
+				return ground_position_gu
+	if map_id < 0:
+		return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			screen_position_px
 		)
-		return Vector2.INF
-	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		screen_position_px
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
 	)
+	return Vector2.INF
 
 
 func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
-	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
-	if runtime.is_empty():
-		if current_map_id >= 0:
-			missing_projection_rejection_count += 1
-			projection_rejection_reason = (
-				GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		current_map_id
+	)
+	if bool(profile.get("success", false)):
+		var screen_to_ground: Callable = profile.get(
+			"screen_to_ground",
+			Callable()
+		)
+		if screen_to_ground.is_valid():
+			var ground_position_gu: Variant = screen_to_ground.call(
+				screen_position_px
 			)
-			return Vector2i(-100000, -100000)
-		# Legacy/no-runtime maps must use the same 64x32 isometric basis as
-		# fractional actor footpoints. The old 48x24 orthogonal fallback made one
-		# world position resolve to two different tiles, separating target-centred
-		# spell geometry from the monster footprint that selected it.
-		var ground_position_gu := (
+			if ground_position_gu is Vector2:
+				return Vector2i(
+					roundi(ground_position_gu.x),
+					roundi(ground_position_gu.y)
+				)
+	if current_map_id < 0:
+		var unmapped_ground_gu := (
 			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 				screen_position_px
 			)
 		)
 		return Vector2i(
-			roundi(ground_position_gu.x),
-			roundi(ground_position_gu.y)
+			roundi(unmapped_ground_gu.x),
+			roundi(unmapped_ground_gu.y)
 		)
-	var ground_position_gu := (
-		MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
-			runtime,
-			screen_position_px
-		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
 	)
-	return Vector2i(
-		roundi(ground_position_gu.x),
-		roundi(ground_position_gu.y)
-	)
+	return Vector2i(-100000, -100000)
 
 
 func _try_canonical_screen_px_to_ground_gu(
 	screen_position_px: Vector2
 ) -> Dictionary:
-	## FREEZE-P0.1: explicit fail-closed result. Mapped world with an
-	## unloadable map runtime never falls back to identity/delta.
-	if current_map_id < 0:
-		return GroundUnitSpaceScript.projection_result(
-			true,
-			&"",
-			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				screen_position_px
-			)
+	## FREEZE-P0.2: explicit fail-closed result driven by the formal map
+	## projection profile (MapEditor runtime / authored source / authored
+	## centered). Never falls back to identity/delta for a mapped id.
+	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		current_map_id
+	)
+	if not bool(profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
 		)
-	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
-	if not runtime.is_empty():
+		return GroundUnitSpaceScript.projection_result(
+			false,
+			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+		)
+	var screen_to_ground: Callable = profile.get(
+		"screen_to_ground",
+		Callable()
+	)
+	if not screen_to_ground.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		return GroundUnitSpaceScript.projection_result(
+			false,
+			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+	var ground_position_gu: Variant = screen_to_ground.call(screen_position_px)
+	if ground_position_gu is Vector2:
 		return GroundUnitSpaceScript.projection_result(
 			true,
 			&"",
-			MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
-				runtime,
-				screen_position_px
-			)
+			ground_position_gu
 		)
 	missing_projection_rejection_count += 1
 	projection_rejection_reason = (
-		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+		GroundUnitSpaceScript.REASON_INVALID_RUNTIME_PROJECTION
 	)
 	return GroundUnitSpaceScript.projection_result(
 		false,
-		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+		GroundUnitSpaceScript.REASON_INVALID_RUNTIME_PROJECTION
 	)
 
 
 func _try_canonical_ground_gu_to_screen_px(
 	ground_position_gu: Vector2
 ) -> Dictionary:
-	if current_map_id < 0:
-		return GroundUnitSpaceScript.projection_result(
-			true,
-			&"",
-			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-				ground_position_gu
-			)
+	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		current_map_id
+	)
+	if not bool(profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
 		)
-	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
-	if not runtime.is_empty():
+		return GroundUnitSpaceScript.projection_result(
+			false,
+			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+		)
+	var ground_to_screen: Callable = profile.get(
+		"ground_to_screen",
+		Callable()
+	)
+	if not ground_to_screen.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MISSING_GROUND_TO_SCREEN_PROJECTION
+		)
+		return GroundUnitSpaceScript.projection_result(
+			false,
+			GroundUnitSpaceScript.REASON_MISSING_GROUND_TO_SCREEN_PROJECTION
+		)
+	var screen_position_px: Variant = ground_to_screen.call(ground_position_gu)
+	if screen_position_px is Vector2:
 		return GroundUnitSpaceScript.projection_result(
 			true,
 			&"",
-			MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
-				runtime,
-				ground_position_gu
-			)
+			screen_position_px
 		)
 	missing_projection_rejection_count += 1
 	projection_rejection_reason = (
-		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+		GroundUnitSpaceScript.REASON_INVALID_RUNTIME_PROJECTION
 	)
 	return GroundUnitSpaceScript.projection_result(
 		false,
-		GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+		GroundUnitSpaceScript.REASON_INVALID_RUNTIME_PROJECTION
 	)
 
 
@@ -6276,21 +6357,29 @@ func _canonical_ground_gu_to_screen_px(ground_position_gu: Vector2) -> Vector2:
 
 func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
 	var tile := Vector2i(grid_cell) if grid_cell is Vector2i else Vector2i.ZERO
-	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
-	if runtime.is_empty():
-		if current_map_id >= 0:
-			missing_projection_rejection_count += 1
-			projection_rejection_reason = (
-				GroundUnitSpaceScript.REASON_MISSING_RUNTIME_PROJECTION
+	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
+		current_map_id
+	)
+	if bool(profile.get("success", false)):
+		var ground_to_screen: Callable = profile.get(
+			"ground_to_screen",
+			Callable()
+		)
+		if ground_to_screen.is_valid():
+			var screen_position_px: Variant = ground_to_screen.call(
+				Vector2(tile)
 			)
-			return Vector2.INF
+			if screen_position_px is Vector2:
+				return screen_position_px
+	if current_map_id < 0:
 		return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			Vector2(tile)
 		)
-	return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
-		runtime,
-		Vector2(tile)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
 	)
+	return Vector2.INF
 
 
 func _canonical_snapshot_absolute_context(
