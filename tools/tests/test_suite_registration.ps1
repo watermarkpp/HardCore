@@ -687,6 +687,48 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $pfIncluded = ($RunnerSource -match '\$Suites\.formal_map_projection_critical\s*\+')
 $pfValidateSet = ($RunnerSource -match "formal_map_projection_critical")
 
+# map_runtime_release_critical verification (FREEZE-P0.3)
+$ReleaseSuite = 'map_runtime_release_critical'
+$ReleaseExpected = @(
+    'tests/map_runtime_release_registry_contract_test.tscn',
+    'tests/release_registry_current_maps_test.tscn',
+    'tests/map_runtime_release_gate_test.tscn'
+)
+
+$rlMissing = @()
+$rlDuplicates = @()
+$rlGitTracked = @()
+foreach ($path in $ReleaseExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $rlMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $rlGitTracked += $path
+    }
+}
+$rlDuplicates = @($ReleaseExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$rlBlock = $false
+$rlFound = $false
+$rlEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.map_runtime_release_critical\s*=') {
+        $rlBlock = $true
+        $rlFound = $true
+        continue
+    }
+    if ($rlBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $rlEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $rlBlock = $false
+            break
+        }
+    }
+}
+$rlIncluded = ($RunnerSource -match '\$Suites\.map_runtime_release_critical\s*\+')
+$rlValidateSet = ($RunnerSource -match "map_runtime_release_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -701,6 +743,7 @@ $ok = $ok -and $wlFound -and ($wlEntries.Count -eq $WizardLineExpected.Count) -a
 $ok = $ok -and $cbFound -and ($cbEntries.Count -eq $CombatExpected.Count) -and ($cbMissing.Count -eq 0) -and ($cbDuplicates.Count -eq 0) -and ($cbGitTracked.Count -eq 0) -and $cbIncluded -and $cbValidateSet
 $ok = $ok -and $fcFound -and ($fcEntries.Count -eq $FailClosedExpected.Count) -and ($fcMissing.Count -eq 0) -and ($fcDuplicates.Count -eq 0) -and ($fcGitTracked.Count -eq 0) -and $fcIncluded -and $fcValidateSet
 $ok = $ok -and $pfFound -and ($pfEntries.Count -eq $ProfileExpected.Count) -and ($pfMissing.Count -eq 0) -and ($pfDuplicates.Count -eq 0) -and ($pfGitTracked.Count -eq 0) -and $pfIncluded -and $pfValidateSet
+$ok = $ok -and $rlFound -and ($rlEntries.Count -eq $ReleaseExpected.Count) -and ($rlMissing.Count -eq 0) -and ($rlDuplicates.Count -eq 0) -and ($rlGitTracked.Count -eq 0) -and $rlIncluded -and $rlValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -819,6 +862,14 @@ $report = [ordered]@{
     formal_map_projection_not_git_tracked = $pfGitTracked
     formal_map_projection_included_in_default_critical = $pfIncluded
     formal_map_projection_validate_set = $pfValidateSet
+    map_runtime_release_suite = $ReleaseSuite
+    map_runtime_release_expected_count = $ReleaseExpected.Count
+    map_runtime_release_actual_count = $rlEntries.Count
+    map_runtime_release_missing = $rlMissing
+    map_runtime_release_duplicates = $rlDuplicates
+    map_runtime_release_not_git_tracked = $rlGitTracked
+    map_runtime_release_included_in_default_critical = $rlIncluded
+    map_runtime_release_validate_set = $rlValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4
