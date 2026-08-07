@@ -30,6 +30,9 @@ const REASON_MISSING_GROUND_TO_SCREEN_PROJECTION := (
 const REASON_INVALID_RUNTIME_PROJECTION := &"invalid_runtime_projection"
 ## FREEZE-P0.2: a map id that has no formal projection source at all.
 const REASON_UNSUPPORTED_MAP_PROJECTION := &"unsupported_map_projection"
+## FREEZE-P0.2R: reference/planned maps that exist in world data but have no
+## MapEditor runtime build and are therefore NOT formally playable.
+const REASON_MAP_NOT_IMPLEMENTED := &"map_not_implemented"
 
 
 static func projection_policy_for(runtime_map_id: int) -> StringName:

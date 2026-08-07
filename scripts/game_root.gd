@@ -808,8 +808,8 @@ func _request_map_travel(map_id: int) -> bool:
 	)
 	if not bool(travel_profile.get("success", false)):
 		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+		projection_rejection_reason = str(
+			travel_profile.get("reason", "")
 		)
 		hud.show_message("map_projection_unavailable:%d" % map_id)
 		return false
@@ -1234,9 +1234,7 @@ func _check_world_ready_contract() -> bool:
 	)
 	if not bool(ready_profile.get("success", false)):
 		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
-		)
+		projection_rejection_reason = str(ready_profile.get("reason", ""))
 		return false
 
 	if not coordinator.is_generation_current(int(summary.get("generation", -1))):
@@ -1459,6 +1457,23 @@ func _bich_portal_screen_position_px_to(target_map_id: int) -> Vector2:
 
 
 func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
+	# FREEZE-P0.2R: formal gameplay only loads implemented (runtime-built)
+	# maps. Reference/planned maps (e.g. 248/338/401/478) must never enter a
+	# half-broken world through the formal loader.
+	var target_map_id := (
+		int(map_data.get("mapId", -1))
+		if not map_data.is_empty()
+		else GameData.service_runtime_map_id(0)
+	)
+	if (
+		target_map_id >= 0
+		and not MapEditorRuntimeBridgeScript.is_formal_playable(target_map_id)
+	):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpaceScript.REASON_MAP_NOT_IMPLEMENTED
+		)
+		return
 	if zone_name == current_zone and not initial:
 		if map_data.is_empty() or int(map_data.get("mapId", -1)) == current_map_id:
 			return
@@ -1512,6 +1527,11 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 		_spawn_outskirts_content()
 		return
 	var map_id := int(map_data.get("mapId", -1))
+	# FREEZE-P0.2R: never seed an unbuilt map with WorldContent/reference
+	# placeholder spawns in formal gameplay; the authored data is preserved for
+	# migration/audit/reference use only.
+	if not MapEditorRuntimeBridgeScript.is_formal_playable(map_id):
+		return
 	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
 		var editor_content := (
 			MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
@@ -6207,9 +6227,7 @@ func _ground_position_gu_for_map(
 			screen_position_px
 		)
 	missing_projection_rejection_count += 1
-	projection_rejection_reason = (
-		GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
-	)
+	projection_rejection_reason = str(profile.get("reason", ""))
 	return Vector2.INF
 
 
@@ -6242,9 +6260,7 @@ func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
 			roundi(unmapped_ground_gu.y)
 		)
 	missing_projection_rejection_count += 1
-	projection_rejection_reason = (
-		GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
-	)
+	projection_rejection_reason = str(profile.get("reason", ""))
 	return Vector2i(-100000, -100000)
 
 
@@ -6259,12 +6275,10 @@ func _try_canonical_screen_px_to_ground_gu(
 	)
 	if not bool(profile.get("success", false)):
 		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
-		)
+		projection_rejection_reason = str(profile.get("reason", ""))
 		return GroundUnitSpaceScript.projection_result(
 			false,
-			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+			str(profile.get("reason", ""))
 		)
 	var screen_to_ground: Callable = profile.get(
 		"screen_to_ground",
@@ -6304,12 +6318,10 @@ func _try_canonical_ground_gu_to_screen_px(
 	)
 	if not bool(profile.get("success", false)):
 		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
-		)
+		projection_rejection_reason = str(profile.get("reason", ""))
 		return GroundUnitSpaceScript.projection_result(
 			false,
-			GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
+			str(profile.get("reason", ""))
 		)
 	var ground_to_screen: Callable = profile.get(
 		"ground_to_screen",
@@ -6376,9 +6388,7 @@ func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
 			Vector2(tile)
 		)
 	missing_projection_rejection_count += 1
-	projection_rejection_reason = (
-		GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION
-	)
+	projection_rejection_reason = str(profile.get("reason", ""))
 	return Vector2.INF
 
 

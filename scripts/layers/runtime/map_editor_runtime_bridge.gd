@@ -9,6 +9,13 @@ const BOSS_RESPAWN_OVERRIDES := {
 	221: 3600.0,
 	1578: 1800.0,
 }
+## FREEZE-P0.2R: formal map implementation states. Only maps with a MapEditor
+## runtime build + ready marker are implemented_playable; world/reference data
+## alone never grants gameplay readiness.
+const IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE := &"implemented_playable"
+const IMPLEMENTATION_STATE_PLANNED_UNBUILT := &"planned_unbuilt"
+const IMPLEMENTATION_STATE_REFERENCE_ONLY := &"reference_only"
+const IMPLEMENTATION_STATE_UNSUPPORTED := &"unsupported"
 const MAP_CONFIG := {
 	4: {
 		"map_key": "bich_province",
@@ -78,6 +85,47 @@ static func has_runtime_map(runtime_map_id: int) -> bool:
 		FileAccess.file_exists(str(config.marker))
 		and FileAccess.file_exists(runtime_path(runtime_map_id))
 	)
+
+
+## FREEZE-P0.2R: a formal runtime build exists (runtime JSON + manual-ready
+## marker). This is the ONLY source of implemented_playable.
+static func is_runtime_built(runtime_map_id: int) -> bool:
+	return has_runtime_map(runtime_map_id)
+
+
+static func is_formal_playable(runtime_map_id: int) -> bool:
+	return is_runtime_built(runtime_map_id)
+
+
+static func implementation_state(runtime_map_id: int) -> Dictionary:
+	if is_runtime_built(runtime_map_id):
+		return {
+			"state": IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE,
+			"runtime_map_id": runtime_map_id,
+			"formal_playable": true,
+		}
+	if WorldContent != null and WorldContent.has_map(runtime_map_id):
+		var content := WorldContent.map_content(runtime_map_id)
+		var has_actor_data := (
+			int(content.get("spawns", []).size()) > 0
+			or int(content.get("bosses", []).size()) > 0
+		)
+		if has_actor_data:
+			return {
+				"state": IMPLEMENTATION_STATE_PLANNED_UNBUILT,
+				"runtime_map_id": runtime_map_id,
+				"formal_playable": false,
+			}
+		return {
+			"state": IMPLEMENTATION_STATE_REFERENCE_ONLY,
+			"runtime_map_id": runtime_map_id,
+			"formal_playable": false,
+		}
+	return {
+		"state": IMPLEMENTATION_STATE_UNSUPPORTED,
+		"runtime_map_id": runtime_map_id,
+		"formal_playable": false,
+	}
 
 
 static func runtime_path(runtime_map_id: int) -> String:
