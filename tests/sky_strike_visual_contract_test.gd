@@ -43,7 +43,7 @@ func _spawn_sky_strike_node(
 	owner: PlayerCharacter,
 	target: Node2D
 ) -> CasterSkillSkyStrikeVisualEffect:
-	var nodes := the legacy cast-node entry_from_canonical_plan(
+	var nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		plan,
 		owner.global_position,
 		Vector2.RIGHT,

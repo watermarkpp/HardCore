@@ -53,7 +53,7 @@ func _run() -> void:
 				)
 				checked += 1
 				continue
-			var nodes := the legacy cast-node entry_from_canonical_plan(
+			var nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 				plan,
 				Vector2.ZERO,
 				Vector2.RIGHT,

@@ -61,7 +61,7 @@ func _ready() -> void:
 		var dir_name: String = DIRECTION_NAMES[dir_index]
 		var dir_vec: Vector2 = DIRECTION_VECTORS[dir_index]
 
-		var nodes := the legacy cast-node entry_from_canonical_plan(
+		var nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 			plan, owner.global_position, dir_vec, Color.WHITE, owner, owner
 		)
 		assert(nodes.size() >= 1, "visual created for %s" % dir_name)

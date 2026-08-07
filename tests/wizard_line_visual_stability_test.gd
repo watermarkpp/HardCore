@@ -233,7 +233,7 @@ func _visual_from_cast_nodes(
 	direction: Vector2,
 	owner: PlayerCharacter
 ) -> CasterSkillVisualEffect:
-	var nodes := the legacy cast-node entry_from_canonical_plan(
+	var nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		plan,
 		Vector2.ZERO,
 		direction,

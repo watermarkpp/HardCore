@@ -1,6 +1,6 @@
 extends Node
 
-## Q3-A: the legacy cast-node entry_from_canonical_plan consumes the
+## Q3-A: the canonical node entry create_cast_nodes_from_canonical_plan consumes the
 ## plan's descriptors and snapshot without re-resolving, re-quoting or
 ## replanning, and never mutates the plan.
 

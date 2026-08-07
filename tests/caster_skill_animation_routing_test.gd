@@ -155,7 +155,7 @@ func _ready() -> void:
 		owner.global_position,
 		target.global_position
 	)
-	var lightning_nodes := the legacy cast-node entry_from_canonical_plan(
+	var lightning_nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		lightning, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
@@ -171,7 +171,7 @@ func _ready() -> void:
 		owner.global_position,
 		target.global_position
 	)
-	var temptation_nodes := the legacy cast-node entry_from_canonical_plan(
+	var temptation_nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		temptation, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
@@ -189,7 +189,7 @@ func _ready() -> void:
 		owner.global_position + Vector2(250, 0)
 	)
 	_inject_line_geometry(hellfire, 5.0, Vector2.RIGHT)
-	var hellfire_nodes := the legacy cast-node entry_from_canonical_plan(
+	var hellfire_nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		hellfire, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
@@ -218,7 +218,7 @@ func _ready() -> void:
 		owner.global_position,
 		target.global_position
 	)
-	var hell_lightning_nodes := the legacy cast-node entry_from_canonical_plan(
+	var hell_lightning_nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		hell_lightning, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
@@ -254,7 +254,7 @@ func _ready() -> void:
 			Vector2(400.0, 640.0),
 			Vector2(320.0, 160.0),
 		]
-	var inflated_nodes := the legacy cast-node entry_from_canonical_plan(
+	var inflated_nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		inflated_plan, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
@@ -323,7 +323,7 @@ func _ready() -> void:
 		owner.global_position,
 		owner.global_position
 	)
-	var teleport_nodes := the legacy cast-node entry_from_canonical_plan(
+	var teleport_nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 		teleport, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
