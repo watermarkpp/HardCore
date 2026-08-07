@@ -1,7 +1,9 @@
 extends Node
 
 const CasterSkillRuntime := preload("res://scripts/caster_skill_runtime.gd")
-const CasterSkillVisualRegistry := preload("res://scripts/caster_skill_visual_registry.gd")
+const CasterSkillVisualRegistry := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
 const CasterSkillVisualFactory := preload("res://scripts/caster_skill_visual_factory.gd")
 const CasterSkillBeamVisualEffect := preload(
 	"res://scripts/caster_skill_beam_visual_effect.gd"
@@ -130,8 +132,11 @@ func _spawn_beam(snapshot: Dictionary, direction_screen_px: Vector2) -> CasterSk
 
 
 func _ready() -> void:
-	var resolved_plan := CasterSkillRuntime.resolve(SKILL_ID, _context())
-	assert(resolved_plan.get("visual", {}).get("role", "") == "line_effect")
+	assert(
+		CasterSkillVisualRegistry.profile(SKILL_ID).get("role", "")
+			== "line_effect",
+		"laser profile role must stay line_effect"
+	)
 	var profile := _beam_profile()
 	assert(profile.get("visual_type", "") == "beam")
 	assert(profile.get("enable_beam_visual", false) == true)

@@ -1,0 +1,108 @@
+{
+  "accepted": true,
+  "cooldown": {
+    "body_action": "cast_8dir_6f",
+    "body_cast_ms": 600.0,
+    "cooldown_policy": "total_action_lock",
+    "effect_resolve_ms_from_cast_start": 600.0,
+    "recovery_ms": 900.0,
+    "release_frame_index": 5.0,
+    "status": "project_canonical",
+    "total_action_lock_ms": 1500.0
+  },
+  "direction": [
+    0,
+    1
+  ],
+  "fixture_contract": "skill_plan_golden.v1",
+  "gameplay_actions": [
+    {
+      "damage_type": "magic",
+      "defence_type": "MAC",
+      "raw_power": 5,
+      "server_authoritative": true,
+      "type": "projectile_damage"
+    }
+  ],
+  "ground_effect_descriptors": [],
+  "input_context": {
+    "caster_level": 50,
+    "facing": [
+      0,
+      1
+    ],
+    "origin_tile": [
+      0,
+      0
+    ],
+    "rank": 3,
+    "release_id": "q3c:golden:wizard.fireball",
+    "resource_context": {
+      "mana": 500,
+      "materials": {}
+    },
+    "runtime_map_id": 1,
+    "target_tile": [
+      1,
+      0
+    ]
+  },
+  "non_spatial_reason": "",
+  "presentation_actions": [
+    {
+      "canonical_geometry_contract": "skills.visual.geometry_grid_steps.screen_px_projection.v2",
+      "geometry_grid_cells": [],
+      "geometry_origin_screen_px": "(0.0, 0.0)",
+      "geometry_screen_points_px": [],
+      "ground_gu_to_screen_position_px": "null::null",
+      "phase": "formal_primary_client_animation",
+      "role": "projectile",
+      "skill_id": "wizard.fireball",
+      "snapshot_validation_context": {},
+      "target_position_screen_px": "(0.0, 0.0)",
+      "type": "visual",
+      "visual_duration": 0.3,
+      "visual_radius_px": 72.0
+    }
+  ],
+  "projectile_descriptors": [
+    {
+      "kind": "projectile",
+      "operation": "projectile_damage",
+      "raw_power": 5,
+      "release_id": "",
+      "skill_id": ""
+    }
+  ],
+  "rejection_reason": "accepted",
+  "resource_cost": {
+    "consume_timing": "",
+    "material_amount": 0,
+    "material_id": "",
+    "mp_cost": 9,
+    "reason": "",
+    "valid": true
+  },
+  "runtime_map_id": 1,
+  "skill_id": "wizard.fireball",
+  "snapshot_contract": {
+    "contract_id": "skills.footprint_snapshot.ground_gu_projection.v1",
+    "coordinate_space": "runtime_map_absolute_ground_gu",
+    "runtime_map_id": 1,
+    "shape_contract_id": "skills.footprint_snapshot.circle.v1",
+    "shape_type": "circle",
+    "skill_id": "wizard.fireball",
+    "snapshot_id": "wizard.fireball:q3c:golden:wizard.fireball"
+  },
+  "snapshot_hash": "2463943819",
+  "snapshot_required": true,
+  "source_baseline_head": "c1bc7a15550e54ec10bce60df7ac7565c45596b3",
+  "source_hash": "q3a_shadow_parity_passed_at_q3b_head",
+  "source_test": "skill_plan_profession_matrix_test",
+  "summon_descriptors": [],
+  "target_semantics": {
+    "mode": "hostile_single",
+    "relation": "hostile",
+    "requires_line_of_sight": true
+  }
+}

@@ -13,10 +13,16 @@ func _run() -> void:
 	var legacy_before := Snapshot.legacy_snapshot_validation_count
 	var owner := PlayerCharacter.new()
 	add_child(owner)
-	var plan := CasterRuntime.resolve("taoist.summon_skeleton", {
+	# Q3-C: legacy the legacy resolver was removed; the summon factory
+	# consumes a frozen canonical node plan.
+	var plan := {
+		"operation": "summon",
+		"success": true,
+		"skill_id": "taoist.summon_skeleton",
+		"release_id": "summon:v2:1",
+		"display_name": "骷髅",
 		"skill_level": 3,
-		"spiritual_stat_roll": 30,
-	})
+	}
 	plan["snapshot_coordinate_context"] = _absolute_context(9001)
 	var summon := CasterRuntime.create_summon_actor(
 		plan, owner, 30, 40, owner.global_position

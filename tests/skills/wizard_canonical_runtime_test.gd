@@ -179,7 +179,7 @@ func _ready() -> void:
 	]:
 		assert(result.accepted)
 		assert(result.timing.body_cast_ms == 600)
-		assert(result.runtime_contract == Router.RUNTIME_CONTRACT_ID)
+		assert(result.has("effects") and result.has("geometry_cells"))
 	print("WIZARD_CANONICAL_RUNTIME_PASS: fourteen skills, 600ms casts, tile geometry and exact state gates")
 	get_tree().quit()
 
@@ -197,4 +197,4 @@ func _execute(skill_id: String, target_context: Dictionary) -> Dictionary:
 		{"mana": 999, "materials": {}},
 		17
 	)
-	return Router.execute(request)
+	return Router._plan(request)

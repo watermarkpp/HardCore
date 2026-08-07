@@ -54,49 +54,39 @@ func _run() -> void:
 
 	var wizard_low_roll := _roll(4, 12, -9, 176)
 	var wizard_high_roll := _roll(4, 12, 9, 176)
-	var wizard_low := CasterSkillRuntime.resolve("wizard.fireball", {
-		"skill_level": 3,
-		"magic_stat_roll": wizard_low_roll,
-		"magic_power_roll": 0,
-		"def_power_roll": 0,
-	})
-	var wizard_high := CasterSkillRuntime.resolve("wizard.fireball", {
-		"skill_level": 3,
-		"magic_stat_roll": wizard_high_roll,
-		"magic_power_roll": 0,
-		"def_power_roll": 0,
-	})
-	assert(wizard_low.damage == 4 and wizard_high.damage == 12, "MC 幸运端点未进入法师伤害公式")
+	# Q3-C: legacy the legacy resolver was removed; the luck endpoints
+	# are asserted through the production formula functions it used.
+	assert(
+		WizardCombatMath.damage_with_rolls(
+			"wizard.fireball", wizard_low_roll, 3, 0, 0, false
+		) == 4
+		and WizardCombatMath.damage_with_rolls(
+			"wizard.fireball", wizard_high_roll, 3, 0, 0, false
+		) == 12,
+		"MC 幸运端点未进入法师伤害公式"
+	)
 
 	var taoist_low_roll := _roll(4, 12, -9, 176)
 	var taoist_high_roll := _roll(4, 12, 9, 176)
-	var talisman_low := CasterSkillRuntime.resolve("taoist.soul_fire_talisman", {
-		"skill_level": 3,
-		"spiritual_stat_roll": taoist_low_roll,
-		"magic_power_roll": 0,
-		"def_power_roll": 0,
-	})
-	var talisman_high := CasterSkillRuntime.resolve("taoist.soul_fire_talisman", {
-		"skill_level": 3,
-		"spiritual_stat_roll": taoist_high_roll,
-		"magic_power_roll": 0,
-		"def_power_roll": 0,
-	})
-	assert(talisman_low.damage == 4 and talisman_high.damage == 12, "SC 幸运端点未进入道士伤害公式")
+	assert(
+		TaoistCombatMath.damage_with_rolls(
+			"taoist.soul_fire_talisman", taoist_low_roll, 3, 0, 0
+		) == 4
+		and TaoistCombatMath.damage_with_rolls(
+			"taoist.soul_fire_talisman", taoist_high_roll, 3, 0, 0
+		) == 12,
+		"SC 幸运端点未进入道士伤害公式"
+	)
 
-	var healing_low := CasterSkillRuntime.resolve("taoist.healing", {
-		"skill_level": 3,
-		"spiritual_stat_roll": taoist_low_roll,
-		"magic_power_roll": 0,
-		"def_power_roll": 0,
-	})
-	var healing_high := CasterSkillRuntime.resolve("taoist.healing", {
-		"skill_level": 3,
-		"spiritual_stat_roll": taoist_high_roll,
-		"magic_power_roll": 0,
-		"def_power_roll": 0,
-	})
-	assert(healing_low.healing == 8 and healing_high.healing == 24, "SC 幸运端点未进入治愈术公式")
+	assert(
+		TaoistCombatMath.healing_with_rolls(
+			"taoist.healing", taoist_low_roll, 3, 0, 0
+		) == 8
+		and TaoistCombatMath.healing_with_rolls(
+			"taoist.healing", taoist_high_roll, 3, 0, 0
+		) == 24,
+		"SC 幸运端点未进入治愈术公式"
+	)
 
 	var holy_word_low := CasterSkillBehavior.resolve("wizard.holy_word", {
 		"skill_level": 3,

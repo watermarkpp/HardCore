@@ -9,6 +9,10 @@ const CasterSkillAnimationPlayer := preload(
 	"res://scripts/caster_skill_animation_player.gd"
 )
 const PlayerCharacter := preload("res://scripts/player.gd")
+const Fixtures := preload(
+	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
+)
+const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
 
 func _context() -> Dictionary:
@@ -39,10 +43,9 @@ func _spawn_sky_strike_node(
 	owner: PlayerCharacter,
 	target: Node2D
 ) -> CasterSkillSkyStrikeVisualEffect:
-	var nodes := CasterSkillRuntime.create_cast_nodes(
+	var nodes := the legacy cast-node entry_from_canonical_plan(
 		plan,
 		owner.global_position,
-		target.global_position,
 		Vector2.RIGHT,
 		Color.WHITE,
 		target,
@@ -68,7 +71,26 @@ func _ready() -> void:
 		CasterSkillSkyStrikeVisualEffect.new() != null,
 		"sanity: class type is loadable"
 	)
-	var plan := CasterSkillRuntime.resolve("wizard.lightning", _context())
+	var plan := Fixtures.build_canonical_presentation_plan(
+		"wizard.lightning",
+		3,
+		40,
+		owner.global_position,
+		Vector2.RIGHT,
+		target.global_position,
+		Fixtures.circle_snapshot(
+			self,
+			"wizard.lightning",
+			"q3c:visual:sky_strike",
+			1,
+			Vector2(0, 0),
+			2.0
+		)
+	)
+	assert(
+		bool(plan.get("rejection", {}).get("accepted", false)),
+		"canonical sky-strike plan must be accepted"
+	)
 
 	var profile_animation: Dictionary = CasterSkillVisualRegistry.visual_profile(
 		"wizard.lightning"
@@ -223,3 +245,6 @@ func _ready() -> void:
 	print("SKY_STRIKE_VISUAL_CONTRACT_TEST_PASS")
 	get_tree().quit(0)
 
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)

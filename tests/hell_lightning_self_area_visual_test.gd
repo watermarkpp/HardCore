@@ -5,6 +5,10 @@ const CasterSkillVisualRegistry := preload("res://scripts/caster_skill_visual_re
 const CasterSkillVisualEffect := preload("res://scripts/caster_skill_visual_effect.gd")
 const CasterSkillSkyStrikeVisualEffect := preload("res://scripts/caster_skill_sky_strike_visual_effect.gd")
 const PlayerCharacter := preload("res://scripts/player.gd")
+const Fixtures := preload(
+	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
+)
+const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
 const DIRECTION_NAMES := ["S", "SW", "W", "NW", "N", "NE", "E", "SE"]
 const DIRECTION_VECTORS: Array[Vector2] = [
@@ -30,8 +34,26 @@ func _ready() -> void:
 	owner.global_position = Vector2(320.0, 240.0)
 	add_child(owner)
 
-	var plan := CasterSkillRuntime.resolve("wizard.hell_lightning", _context())
-	assert(plan != {})
+	var plan := Fixtures.build_canonical_presentation_plan(
+		"wizard.hell_lightning",
+		3,
+		40,
+		owner.global_position,
+		Vector2.RIGHT,
+		owner.global_position,
+		Fixtures.circle_snapshot(
+			self,
+			"wizard.hell_lightning",
+			"q3c:visual:hell_lightning",
+			1,
+			Vector2(0, 0),
+			2.0
+		)
+	)
+	assert(
+		bool(plan.get("rejection", {}).get("accepted", false)),
+		"canonical hell-lightning plan must be accepted"
+	)
 
 	var results: Array[Dictionary] = []
 
@@ -39,9 +61,8 @@ func _ready() -> void:
 		var dir_name: String = DIRECTION_NAMES[dir_index]
 		var dir_vec: Vector2 = DIRECTION_VECTORS[dir_index]
 
-		var nodes := CasterSkillRuntime.create_cast_nodes(
-			plan, owner.global_position, owner.global_position,
-			dir_vec, Color.WHITE, owner, owner
+		var nodes := the legacy cast-node entry_from_canonical_plan(
+			plan, owner.global_position, dir_vec, Color.WHITE, owner, owner
 		)
 		assert(nodes.size() >= 1, "visual created for %s" % dir_name)
 		var node := nodes[0]
@@ -139,6 +160,10 @@ func _ready() -> void:
 
 	print("HELL_LIGHTNING_SELF_AREA_VISUAL_TEST_PASS: all 8 directions invariant")
 	get_tree().quit(0)
+
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
 
 
 func _visible_bounds(sprite: Sprite2D) -> Dictionary:

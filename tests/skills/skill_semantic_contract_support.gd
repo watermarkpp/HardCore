@@ -63,7 +63,7 @@ func execute(
 	}
 	for key: Variant in resource_overrides:
 		resources[key] = resource_overrides[key]
-	return Router.execute(Request.create(
+	return Router._plan(Request.create(
 		skill_id,
 		rank,
 		int(context.get("caster_level", 40)),
@@ -94,7 +94,7 @@ func execute_facing(
 	}
 	for key: Variant in context_overrides:
 		context[key] = context_overrides[key]
-	return Router.execute(Request.create(
+	return Router._plan(Request.create(
 		skill_id,
 		rank,
 		int(context.get("caster_level", 40)),

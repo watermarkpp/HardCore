@@ -17,6 +17,7 @@ const GroundUnitScript := preload("res://scripts/ground_unit_space.gd")
 const SkillDataLoaderScript := preload(
 	"res://scripts/skills/skill_data_loader.gd"
 )
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 
 
 static func _definition_timing(skill_id: String) -> Dictionary:
@@ -142,6 +143,73 @@ static func canonical_context(
 	if not snapshot.is_empty():
 		context["canonical_snapshot"] = snapshot
 	return context
+
+
+static func build_canonical_plan(
+	skill_id: String,
+	rank := 1,
+	level := 35,
+	origin_tile := Vector2i.ZERO,
+	facing := Vector2i.DOWN,
+	target_context := {},
+	resource_context := {},
+	seed := 42,
+	map_id := 1,
+	release_id := "q3c:canonical:1",
+	snapshot: Dictionary = {}
+) -> Dictionary:
+	## Q3-C: canonical plan builder for tests. Routes through the single formal
+	## planner entry (SkillRuntimeRouter.build_canonical_plan) - the legacy
+	## the legacy router entry was removed.
+	var request := make_request(
+		skill_id,
+		rank,
+		level,
+		origin_tile,
+		facing,
+		target_context,
+		resource_context,
+		seed
+	)
+	return Router.build_canonical_plan(
+		request,
+		canonical_context(map_id, release_id, 0, 0, snapshot)
+	)
+
+
+static func build_canonical_presentation_plan(
+	skill_id: String,
+	rank := 3,
+	level := 40,
+	origin_screen_px := Vector2.ZERO,
+	direction_screen_px := Vector2.RIGHT,
+	target_position_screen_px := Vector2.ZERO,
+	snapshot: Dictionary = {},
+	map_id := 1
+) -> Dictionary:
+	## Q3-C: canonical plan for visual-contract tests. Routes through the
+	## single formal planner entry and carries explicit presentation geometry
+	## (origin/direction/target position) so the canonical node adapter places
+	## visuals deterministically.
+	var release_id := "q3c:visual:%s" % skill_id
+	var request := make_request(
+		skill_id,
+		rank,
+		level,
+		Vector2i.ZERO,
+		Vector2i.DOWN,
+		default_target_context(true),
+		default_resource_context(500),
+		42
+	)
+	var context := canonical_context(map_id, release_id, 0, 0, snapshot)
+	context["origin_screen_px"] = origin_screen_px
+	context["direction_screen_px"] = direction_screen_px
+	context["target_position_screen_px"] = target_position_screen_px
+	context["snapshot_validation_context"] = {}
+	context["line_strip_builder"] = Callable()
+	context["effective_cells_builder"] = Callable()
+	return Router.build_canonical_plan(request, context)
 
 
 static func compare_field(

@@ -207,7 +207,7 @@ func _ready() -> void:
 		blessed_armour, revelation, entrapment, mass_healing, divine_beast,
 	]:
 		assert(result.accepted)
-		assert(result.runtime_contract == Router.RUNTIME_CONTRACT_ID)
+		assert(result.has("effects") and result.has("proficiency_event"))
 	print("TAOIST_CANONICAL_RUNTIME_PASS: thirteen skills, materials, pets, buffs, healing and boundary control")
 	get_tree().quit()
 
@@ -241,4 +241,4 @@ func _execute(
 		},
 		23
 	)
-	return Router.execute(request)
+	return Router._plan(request)

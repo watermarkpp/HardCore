@@ -1,7 +1,7 @@
 extends Node
 
-## Q3-A: rejection reasons are normalized to one canonical vocabulary on both
-## the legacy and the canonical planner.
+## Q3-A/Q3-C: rejection reasons are normalized to one canonical vocabulary by
+## the canonical planner (the legacy planner oracle was removed in Q3-C).
 
 const Fixtures := preload(
 	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
@@ -64,25 +64,14 @@ func _rejection_case(
 		target_context,
 		resource_context
 	)
-	var legacy: Dictionary = Router.execute(request)
-	assert(
-		not bool(legacy.get("accepted", true)),
-		"%s must be rejected by the legacy planner" % skill_id
-	)
-	var plan: Dictionary = Plan.build_plan(
+	var plan: Dictionary = Router.build_canonical_plan(
 		request,
 		Fixtures.canonical_context(1, "q3a:reject:%s" % skill_id)
 	)
-	var legacy_normalized := Plan.normalize_reason(
-		str(legacy.get("reason", ""))
-	)
+	var reason := str(plan.get("rejection", {}).get("reason", ""))
 	assert(
-		legacy_normalized == expected_reason,
-		"%s legacy normalized reason mismatch: %s" % [skill_id, legacy_normalized]
-	)
-	assert(
-		str(plan.get("rejection", {}).get("reason", "")) == expected_reason,
-		"%s canonical reason mismatch" % skill_id
+		reason == expected_reason,
+		"%s canonical reason mismatch: %s" % [skill_id, reason]
 	)
 	assert(
 		not bool(plan.get("rejection", {}).get("accepted", true)),

@@ -1,6 +1,9 @@
 extends Node
 
 const CasterSkillRuntime := preload("res://scripts/caster_skill_runtime.gd")
+const CasterSkillVisualRegistry := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
 const CasterSkillVisualFactory := preload("res://scripts/caster_skill_visual_factory.gd")
 const CasterSkillAnimationPlayer := preload("res://scripts/caster_skill_animation_player.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
@@ -30,8 +33,11 @@ func _run() -> void:
 	owner.global_position = Vector2(320.0, 240.0)
 	add_child(owner)
 
-	var plan := CasterSkillRuntime.resolve("wizard.laser", _context())
-	var profile: Dictionary = plan.get("visual", {}).duplicate(true)
+	# Q3-C: legacy the legacy resolver was removed; the visual profile
+	# comes directly from the canonical visual registry.
+	var profile: Dictionary = CasterSkillVisualRegistry.profile(
+		"wizard.laser"
+	).duplicate(true)
 	profile["enable_beam_visual"] = true
 	profile["visual_type"] = "beam"
 

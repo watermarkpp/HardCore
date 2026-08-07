@@ -166,7 +166,7 @@ func _execute(
 		{"mana": mana, "materials": {}},
 		11
 	)
-	return Router.execute(request)
+	return Router._plan(request)
 
 
 func _body_damage(body_mode: String, augmented_base_damage: int) -> int:

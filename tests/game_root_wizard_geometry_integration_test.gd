@@ -14,6 +14,13 @@ const SkillFootprintSnapshot := preload(
 const SkillFootprintDiagnosticLog := preload(
 	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
 )
+const CasterSkillRuntime := preload("res://scripts/caster_skill_runtime.gd")
+const CasterSkillVisualRegistry := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
+const CasterSkillVisualEffect := preload(
+	"res://scripts/caster_skill_visual_effect.gd"
+)
 
 
 func _ready() -> void:
@@ -236,24 +243,80 @@ func _run() -> void:
 	assert(laser_snapshot.skill_id == "wizard.laser")
 	assert(laser_snapshot.release_id == "test:laser:release:1")
 	var visual_children_before := game.get_child_count()
-	game._spawn_canonical_cast_visual(
-		"wizard.laser",
-		game.player.global_position,
-		laser_aim_screen_px,
-		null,
-		game.player.global_position + laser_aim_screen_px,
-		[],
-		laser_strip
-	)
-	assert(game.get_child_count() == visual_children_before + 1)
-	var shared_geometry_visual := game.get_child(game.get_child_count() - 1)
-	assert(shared_geometry_visual is CasterSkillVisualEffect)
+	# Q3-C: the legacy visual spawner was removed; the shared line-strip visual
+	# is created through the canonical node adapter from a frozen
+	# canonical-shaped presentation plan.
 	var expected_laser_screen_points: Array[Vector2] = (
 		SpellGeometry.continuous_line_screen_points_px(
 			laser_strip,
 			Callable(game, "_canonical_ground_gu_to_screen_px")
 		)
 	)
+	var presentation_plan := {
+		"contract": "skill_execution_plan.v1",
+		"release_id": "test:laser:release:1",
+		"skill_id": "wizard.laser",
+		"canonical_snapshot": laser_snapshot,
+		"success": true,
+		"operation": "canonical_visual_only",
+		"visual": CasterSkillVisualRegistry.profile("wizard.laser"),
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+		"canonical_geometry_contract": (
+			SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID
+		),
+		"geometry_origin_screen_px": game.player.global_position,
+		"geometry_grid_cells": [],
+		"geometry_screen_points_px": expected_laser_screen_points,
+		"skill_footprint_snapshot": laser_snapshot,
+		"presentation_actions": [{
+			"type": "visual",
+			"skill_id": "wizard.laser",
+			"role": CasterSkillVisualRegistry.ROLE_LINE_EFFECT,
+			"phase": "",
+			"visual_radius_px": 72.0,
+			"visual_duration": 0.8,
+			"canonical_geometry_contract": (
+				SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID
+			),
+			"geometry_origin_screen_px": game.player.global_position,
+			"target_position_screen_px": (
+				game.player.global_position + laser_aim_screen_px
+			),
+			"geometry_grid_cells": [],
+			"geometry_screen_points_px": expected_laser_screen_points,
+			"ground_gu_to_screen_position_px": (
+				Callable(game, "_canonical_ground_gu_to_screen_px")
+			),
+			"snapshot_validation_context": (
+				game._canonical_snapshot_validation_context(
+					game._canonical_screen_px_to_ground_gu(
+						game.player.global_position
+					)
+				)
+			),
+		}],
+		"gameplay_actions": [],
+		"projectile_descriptors": [],
+		"ground_effect_descriptors": [],
+		"summon_descriptors": [],
+	}
+	var shared_geometry_visuals := (
+		CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
+			presentation_plan,
+			game.player.global_position,
+			laser_aim_screen_px,
+			Color.WHITE,
+			null,
+			game.player
+		)
+	)
+	assert(shared_geometry_visuals.size() == 1)
+	for raw_node: Node2D in shared_geometry_visuals:
+		game.add_child(raw_node)
+	assert(game.get_child_count() == visual_children_before + 1)
+	var shared_geometry_visual := game.get_child(game.get_child_count() - 1)
+	assert(shared_geometry_visual is CasterSkillVisualEffect)
 	assert(not expected_laser_screen_points.is_empty())
 	assert(not shared_geometry_visual._geometry_screen_offsets_px.is_empty())
 	assert(shared_geometry_visual._geometry_screen_offsets_px.back().is_equal_approx(

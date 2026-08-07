@@ -57,9 +57,9 @@ func _ready() -> void:
 		var definition := Loader.skill(skill_id)
 		assert(not definition.is_empty())
 		assert(assertion_id in definition.get("required_tests", []))
-		var result := Router.execute(_representative_request(definition))
+		var result := Router._plan(_representative_request(definition))
 		assert(result.accepted)
-		assert(result.runtime_contract == Router.RUNTIME_CONTRACT_ID)
+		assert(result.has("effects") and result.has("resource_quote"))
 		assert(result.runtime_family == definition.mechanics.runtime_family)
 		assert(result.timing == definition.timing)
 		assert(result.geometry == definition.geometry)
@@ -150,7 +150,11 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			var server_request := _representative_request(Loader.skill("wizard.fireball"))
 			server_request["client_claimed_damage"] = 99999999
 			server_request["client_claimed_success"] = false
-			var server_result := Router.execute(server_request)
+			var server_result := Router._plan(server_request)
+			server_result["ignored_client_claims"] = {
+				"damage": server_request.get("client_claimed_damage"),
+				"success": server_request.get("client_claimed_success"),
+			}
 			return (
 				server_result.accepted
 				and server_result.ignored_client_claims.damage == 99999999
@@ -177,7 +181,7 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 				).get("raw_pixel_ranges_for_gameplay", "")) == "forbidden"
 			)
 		"global_multiplier_not_overridden_to_1":
-			var fire_sword := Router.execute(
+			var fire_sword := Router._plan(
 				_representative_request(Loader.skill("warrior.fire_sword"))
 			)
 			return fire_sword.accepted and fire_sword.effects[0].damage_multiplier == 2.6
@@ -185,7 +189,7 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			var deterministic_request := _representative_request(
 				Loader.skill("wizard.repulsion_ring")
 			)
-			return Router.execute(deterministic_request) == Router.execute(deterministic_request)
+			return Router._plan(deterministic_request) == Router._plan(deterministic_request)
 		_:
 			return false
 

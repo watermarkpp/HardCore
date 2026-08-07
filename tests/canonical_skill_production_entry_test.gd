@@ -31,7 +31,7 @@ func _run() -> void:
 		Vector2.RIGHT,
 		999999
 	)
-	assert(lightning.get("runtime_contract", "") == "skills.runtime_router.cn_mir2_176.v1", "真实入口未经过SkillRuntimeRouter.execute")
+	assert(lightning.get("runtime_contract", "") == "skills.runtime_router.cn_mir2_176.v1", "真实入口必须经过SkillRuntimeRouter.build_canonical_plan")
 	assert(lightning.get("adapter_contract", "") == "skills.production_adaptation.hardcore.v1", "真实入口缺少六类生产适配合同")
 	assert(caster.current_mp == mana_before - 15, "雷电术未按canonical rank3唯一提交15MP")
 	assert(target.current_hp < hp_before and hp_before - target.current_hp < 999999, "GameRoot仍采信客户端伤害或未应用canonical伤害")

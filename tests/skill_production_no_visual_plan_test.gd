@@ -1,8 +1,10 @@
 extends Node
 
-## Q3-B: the formal production chain never builds a second visual/runtime
+## Q3-B/Q3-C: the formal production chain never builds a second visual/runtime
 ## plan. Releasing fire wall, lightning and laser through the GameRoot entry
-## must keep visual_plan_build_count and legacy create_cast_nodes at zero.
+## must produce exactly one canonical plan (the legacy visual-plan path was
+## removed in Q3-C; the static surface is asserted by
+## skill_runtime_no_legacy_api_test).
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 
@@ -52,12 +54,14 @@ func _release_case(skill_name: String, needs_target: bool) -> void:
 	)
 	assert(bool(result.get("accepted", false)), "%s formal release rejected" % skill_name)
 	var diag := Plan.sentinel_diagnostics()
-	assert(diag.visual_plan_build_count == 0, "%s built a visual plan" % skill_name)
 	assert(
-		diag.legacy_create_cast_nodes_count == 0,
-		"%s called legacy create_cast_nodes" % skill_name
+		diag.canonical_plan_build_count == 1,
+		"%s must build exactly one canonical plan" % skill_name
 	)
-	assert(diag.legacy_plan_build_count == 0, "%s built a legacy plan" % skill_name)
+	assert(
+		diag.release_id_generation_count == 1,
+		"%s must generate exactly one release id" % skill_name
+	)
 
 
 func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:

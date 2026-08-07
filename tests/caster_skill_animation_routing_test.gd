@@ -9,6 +9,9 @@ const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const CombatUnitLegacyAdapter := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+const Fixtures := preload(
+	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
+)
 
 
 func _test_absolute_context() -> Dictionary:
@@ -35,6 +38,52 @@ func _context() -> Dictionary:
 		"spiritual_stat_roll": 30,
 		"random_0_to_10": 0,
 	}
+
+
+func _canonical_plan(
+	skill_id: String,
+	origin: Vector2,
+	target_position: Vector2
+) -> Dictionary:
+	# Q3-C: canonical plans for visual routing (legacy resolve removed).
+	return Fixtures.build_canonical_presentation_plan(
+		skill_id,
+		3,
+		40,
+		origin,
+		Vector2.RIGHT,
+		target_position,
+		Fixtures.circle_snapshot(
+			self,
+			skill_id,
+			"q3c:routing:%s" % skill_id,
+			9001,
+			Vector2(0, 0),
+			2.0
+		),
+		9001
+	)
+
+
+func _inject_line_geometry(
+	plan: Dictionary,
+	length_gu: float,
+	direction: Vector2
+) -> void:
+	var actions: Array = plan.get("presentation_actions", [])
+	if actions.is_empty():
+		return
+	var action: Dictionary = actions[0]
+	var direction_ground_gu := (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(direction)
+		.normalized()
+	)
+	var end_screen_px := GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		direction_ground_gu * length_gu
+	)
+	action["geometry_origin_screen_px"] = Vector2.ZERO
+	action["geometry_screen_points_px"] = [Vector2.ZERO, end_screen_px]
+	action["geometry_screen_offsets_px"] = [Vector2.ZERO, end_screen_px]
 
 
 func _ready() -> void:
@@ -101,9 +150,13 @@ func _ready() -> void:
 	add_child(owner)
 	add_child(target)
 
-	var lightning := CasterSkillRuntime.resolve("wizard.lightning", _context())
-	var lightning_nodes := CasterSkillRuntime.create_cast_nodes(
-		lightning, owner.global_position, target.global_position,
+	var lightning := _canonical_plan(
+		"wizard.lightning",
+		owner.global_position,
+		target.global_position
+	)
+	var lightning_nodes := the legacy cast-node entry_from_canonical_plan(
+		lightning, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
 	assert(lightning_nodes.size() == 1)
@@ -113,9 +166,13 @@ func _ready() -> void:
 	assert(strike is CasterSkillSkyStrikeVisualEffect, "wizard.lightning must create SkyStrike via Factory")
 	strike.free()
 
-	var temptation := CasterSkillRuntime.resolve("wizard.temptation_light", _context())
-	var temptation_nodes := CasterSkillRuntime.create_cast_nodes(
-		temptation, owner.global_position, target.global_position,
+	var temptation := _canonical_plan(
+		"wizard.temptation_light",
+		owner.global_position,
+		target.global_position
+	)
+	var temptation_nodes := the legacy cast-node entry_from_canonical_plan(
+		temptation, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
 	assert(temptation_nodes.size() == 1)
@@ -126,9 +183,14 @@ func _ready() -> void:
 	assert(followed.global_position == target.global_position.round())
 	followed.free()
 
-	var hellfire := CasterSkillRuntime.resolve("wizard.hellfire", _context())
-	var hellfire_nodes := CasterSkillRuntime.create_cast_nodes(
-		hellfire, owner.global_position, owner.global_position + Vector2(250, 0),
+	var hellfire := _canonical_plan(
+		"wizard.hellfire",
+		owner.global_position,
+		owner.global_position + Vector2(250, 0)
+	)
+	_inject_line_geometry(hellfire, 5.0, Vector2.RIGHT)
+	var hellfire_nodes := the legacy cast-node entry_from_canonical_plan(
+		hellfire, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
 	assert(hellfire_nodes.size() == 1)
@@ -151,9 +213,13 @@ func _ready() -> void:
 	assert(is_equal_approx(trail._hellfire_step_distance, (500.0 / 0.9) * 0.05))
 	trail.free()
 
-	var hell_lightning := CasterSkillRuntime.resolve("wizard.hell_lightning", _context())
-	var hell_lightning_nodes := CasterSkillRuntime.create_cast_nodes(
-		hell_lightning, owner.global_position, target.global_position,
+	var hell_lightning := _canonical_plan(
+		"wizard.hell_lightning",
+		owner.global_position,
+		target.global_position
+	)
+	var hell_lightning_nodes := the legacy cast-node entry_from_canonical_plan(
+		hell_lightning, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
 	assert(hell_lightning_nodes.size() == 1)
@@ -172,18 +238,24 @@ func _ready() -> void:
 	assert(sprite != null)
 	assert(sprite.scale != Vector2.ZERO)
 	var inflated_plan := hell_lightning.duplicate(true)
-	inflated_plan["geometry_screen_points_px"] = [
-		Vector2.ZERO,
-		Vector2(400.0, 640.0),
-		Vector2(320.0, 160.0),
-	]
-	inflated_plan["geometry_screen_offsets_px"] = [
-		Vector2.ZERO,
-		Vector2(400.0, 640.0),
-		Vector2(320.0, 160.0),
-	]
-	var inflated_nodes := CasterSkillRuntime.create_cast_nodes(
-		inflated_plan, owner.global_position, target.global_position,
+	var inflated_actions: Array = inflated_plan.get(
+		"presentation_actions",
+		[]
+	)
+	if not inflated_actions.is_empty():
+		var inflated_action: Dictionary = inflated_actions[0]
+		inflated_action["geometry_screen_points_px"] = [
+			Vector2.ZERO,
+			Vector2(400.0, 640.0),
+			Vector2(320.0, 160.0),
+		]
+		inflated_action["geometry_screen_offsets_px"] = [
+			Vector2.ZERO,
+			Vector2(400.0, 640.0),
+			Vector2(320.0, 160.0),
+		]
+	var inflated_nodes := the legacy cast-node entry_from_canonical_plan(
+		inflated_plan, owner.global_position,
 		Vector2.RIGHT, Color.WHITE, target, owner
 	)
 	assert(inflated_nodes.size() == 1)
@@ -196,8 +268,22 @@ func _ready() -> void:
 	(inflated_nodes[0] as Node2D).free()
 	hell_lightning_visual.free()
 
-	var fire_wall := CasterSkillRuntime.resolve("wizard.fire_wall", _context())
-	fire_wall["snapshot_coordinate_context"] = _test_absolute_context()
+	# Q3-C: the ground factory consumes a canonical node plan; the legacy
+	# resolve() plan was removed.
+	var fire_wall := {
+		"operation": "ground_dot",
+		"success": true,
+		"skill_id": "wizard.fire_wall",
+		"release_id": "q3c:routing:fire_wall",
+		"damage": 0,
+		"duration_seconds": 1.0,
+		"tick_interval_seconds": 0.8,
+		"ground_effect_radius_gu": 0.5,
+		"visual_radius_px": 22.08,
+		"visual": {"role": CasterSkillVisualRegistry.ROLE_GROUND_EFFECT},
+		"snapshot_coordinate_context": _test_absolute_context(),
+		"skill_footprint_snapshot": {},
+	}
 	var fire_cells := CasterSkillRuntime.create_ground_effects(
 		fire_wall, Vector2(96, 48), Color.WHITE, owner
 	)
@@ -209,8 +295,16 @@ func _ready() -> void:
 		assert(cell._sprite.scale == Vector2.ONE)
 		cell.free()
 
-	var skeleton_plan := CasterSkillRuntime.resolve("taoist.summon_skeleton", _context())
-	skeleton_plan["snapshot_coordinate_context"] = _test_absolute_context()
+	# Q3-C: the summon factory consumes a canonical node plan.
+	var skeleton_plan := {
+		"operation": "summon",
+		"success": true,
+		"skill_id": "taoist.summon_skeleton",
+		"release_id": "q3c:routing:summon",
+		"display_name": "骷髅",
+		"skill_level": 3,
+		"snapshot_coordinate_context": _test_absolute_context(),
+	}
 	var skeleton := CasterSkillRuntime.create_summon_actor(
 		skeleton_plan, owner, 30, 40, owner.global_position
 	)
@@ -221,27 +315,24 @@ func _ready() -> void:
 	assert(int(skeleton._sprite.call("frame_count")) == 4)
 	skeleton.free()
 
-	var teleport := CasterSkillRuntime.resolve("wizard.teleport", _context())
-	var destination := Vector2(320, 160)
-	var teleport_execution := CasterSkillRuntime.execute_cast(
-		teleport,
-		{
-			"parent": self,
-			"caster": owner,
-			"origin": owner.global_position,
-			"direction": Vector2.RIGHT,
-			"teleport_destination": destination,
-		}
+	# Q3-C: the legacy execute_cast was removed. The canonical adapter creates
+	# the teleport departure visual; the arrival phase is covered by the Q3-B
+	# formal production entry test (canonical_skill_production_entry_test).
+	var teleport := _canonical_plan(
+		"wizard.teleport",
+		owner.global_position,
+		owner.global_position
 	)
-	assert(teleport_execution.spawned_count == 2)
-	assert(owner.global_position == destination)
-	var phase_ids: Array[String] = []
-	for node: Node2D in teleport_execution.nodes:
-		assert(node is CasterSkillVisualEffect)
-		phase_ids.append((node as CasterSkillVisualEffect).phase_id)
-		node.free()
-	phase_ids.sort()
-	assert(phase_ids == ["", "arrival"])
+	var teleport_nodes := the legacy cast-node entry_from_canonical_plan(
+		teleport, owner.global_position,
+		Vector2.RIGHT, Color.WHITE, target, owner
+	)
+	assert(teleport_nodes.size() == 1, "teleport departure visual must exist")
+	var teleport_visual := teleport_nodes[0] as CasterSkillVisualEffect
+	assert(teleport_visual != null)
+	add_child(teleport_visual)
+	assert(teleport_visual.phase_id == "")
+	teleport_visual.free()
 
 	owner.free()
 	target.free()

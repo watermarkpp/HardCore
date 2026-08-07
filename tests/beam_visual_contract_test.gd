@@ -110,23 +110,6 @@ func _spawn_beam_node(
 	return effect
 
 
-func _spawn_default_visual(plan: Dictionary, owner: PlayerCharacter) -> CasterSkillVisualEffect:
-	var target := owner
-	var nodes := CasterSkillRuntime.create_cast_nodes(
-		plan,
-		owner.global_position,
-		target.global_position,
-		Vector2.RIGHT,
-		Color.WHITE,
-		target,
-		owner
-	)
-	assert(nodes.size() == 1, "visual spawn count should be 1")
-	var node := nodes[0]
-	assert(node is CasterSkillVisualEffect)
-	return node as CasterSkillVisualEffect
-
-
 func _assert_beam_forward_extent(sprite: CasterSkillAnimationPlayer, axis: Vector2, expected: float) -> void:
 	var axis_unit := (
 		axis.normalized()
@@ -169,7 +152,17 @@ func _ready() -> void:
 
 	# A. Profile should use beam type.
 	# B. Length should come from actual snapshot length and not declared length.
-	var resolved_plan := CasterSkillRuntime.resolve("wizard.laser", _context())
+	# Q3-C: legacy the legacy resolver was removed; the beam contract
+	# feeds a frozen local presentation plan to the factory.
+	var resolved_plan := {
+		"success": true,
+		"skill_id": "wizard.laser",
+		"operation": "canonical_visual_only",
+		"origin": owner.global_position,
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+		"skill_footprint_snapshot": {},
+	}
 	for snapshot_case in [
 		{"declared": 8.0, "resolved": 4.0},
 		{"declared": 8.0, "resolved": 8.0},

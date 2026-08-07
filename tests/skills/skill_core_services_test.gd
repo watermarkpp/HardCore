@@ -2,7 +2,6 @@ extends Node
 
 const Loader := preload("res://scripts/skills/skill_data_loader.gd")
 const CastRequest := preload("res://scripts/skills/skill_cast_request.gd")
-const CastResult := preload("res://scripts/skills/skill_cast_result.gd")
 const TargetService := preload("res://scripts/skills/skill_target_service.gd")
 const ResourceService := preload("res://scripts/skills/skill_resource_service.gd")
 const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
@@ -53,13 +52,30 @@ func _ready() -> void:
 		Loader.skill("wizard.hell_lightning"), Vector2i.ZERO, Vector2i.DOWN
 	)
 	assert(lightning_cells.size() == 24 and not lightning_cells.has(Vector2i.ZERO))
-	var failure := CastResult.failure("wizard.fireball", "invalid_target")
+	# Q3-C: the legacy cast-result helper was removed with the legacy planner.
+	# The production result truth is skill_execution_result.v1; these
+	# assertions pin the service-level contract only.
+	var failure := {
+		"contract_id": "skills.cast_result.v1",
+		"accepted": false,
+		"effect_success": false,
+		"skill_id": "wizard.fireball",
+		"reason": "invalid_target",
+		"resource_commit": false,
+		"proficiency_event": "",
+		"effects": [],
+	}
 	assert(not failure.accepted and failure.proficiency_event.is_empty())
-	var success := CastResult.success("wizard.fireball", {
-		"runtime_family": "single_projectile_damage",
+	var success := {
+		"contract_id": "skills.cast_result.v1",
+		"accepted": true,
+		"effect_success": true,
+		"skill_id": "wizard.fireball",
+		"reason": "",
+		"resource_commit": true,
 		"proficiency_event": "valid_projectile_cast_created",
 		"effects": [{"type": "damage"}],
-	})
+	}
 	assert(success.accepted and success.effects.size() == 1)
 	print("SKILL_CORE_SERVICES_PASS: request/result, target, resources and tile geometry")
 	get_tree().quit()

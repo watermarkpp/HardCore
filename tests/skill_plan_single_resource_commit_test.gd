@@ -79,7 +79,7 @@ func _run() -> void:
 		Vector2(0, 0),
 		2.0
 	)
-	var plan: Dictionary = Plan.build_plan(
+	var plan: Dictionary = Router.build_canonical_plan(
 		request,
 		Fixtures.canonical_context(1, "q3a:mp:1", 0, 0, snapshot)
 	)
@@ -102,3 +102,5 @@ func _cleanup(game: Node, target: EnemyActor) -> void:
 
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")

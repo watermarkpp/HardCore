@@ -40,8 +40,8 @@ func _run() -> void:
 		8,
 		snapshot
 	)
-	var plan_a: Dictionary = Plan.build_plan(request, context)
-	var plan_b: Dictionary = Plan.build_plan(request, context)
+	var plan_a: Dictionary = Router.build_canonical_plan(request, context)
+	var plan_b: Dictionary = Router.build_canonical_plan(request, context)
 	assert(
 		str(plan_a.get("snapshot_id", "")) == str(snapshot.get("snapshot_id", "")),
 		"plan must carry the single frozen snapshot id"
@@ -75,3 +75,5 @@ func _run() -> void:
 
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")

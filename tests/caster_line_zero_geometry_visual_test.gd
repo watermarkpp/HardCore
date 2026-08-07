@@ -9,15 +9,16 @@ func _ready() -> void:
 			SpellGeometry.CONTRACT_ID,
 			SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID,
 		]:
-			var plan := CasterSkillRuntime.resolve(skill_id, {
-				"skill_level": 3,
-				"caster_level": 40,
-				"owner_level": 40,
-				"target_level": 20,
-				"target_max_hp": 500,
-				"magic_stat_roll": 30,
-				"random_0_to_10": 0,
-			})
+			# Q3-C: legacy the legacy resolver was removed; create_visual
+			# reads the role from the frozen plan's registry profile.
+			var plan := {
+				"success": true,
+				"skill_id": skill_id,
+				"operation": "canonical_visual_only",
+				"visual": CasterSkillVisualRegistry.profile(skill_id),
+				"visual_radius_px": 72.0,
+				"visual_duration": 0.8,
+			}
 			plan["canonical_geometry_contract"] = wire_contract_id
 			plan["geometry_origin_screen_px"] = Vector2(100.0, 100.0)
 			plan["geometry_grid_cells"] = []

@@ -233,10 +233,9 @@ func _visual_from_cast_nodes(
 	direction: Vector2,
 	owner: PlayerCharacter
 ) -> CasterSkillVisualEffect:
-	var nodes := CasterSkillRuntime.create_cast_nodes(
+	var nodes := the legacy cast-node entry_from_canonical_plan(
 		plan,
 		Vector2.ZERO,
-		target_position,
 		direction,
 		Color.WHITE,
 		null,
@@ -285,15 +284,23 @@ func _line_plan(
 		func(tile: Vector2) -> Vector2:
 			return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 	)
-	var plan := CasterSkillRuntime.resolve(skill_id, {
-		"skill_level": 3,
-		"caster_level": 40,
-		"owner_level": 40,
-		"target_level": 20,
-		"target_max_hp": 500,
-		"magic_stat_roll": 30,
-		"random_0_to_10": 0,
-	})
+	# Q3-C: legacy the legacy resolver was removed; the line plan is a
+	# frozen canonical-shaped presentation plan.
+	var plan := {
+		"contract": "skill_execution_plan.v1",
+		"release_id": "stability_%s_%02d" % [skill_id, sample_index],
+		"skill_id": skill_id,
+		"canonical_snapshot": strip.skill_footprint_snapshot,
+		"success": true,
+		"operation": "canonical_visual_only",
+		"visual": CasterSkillVisualRegistry.profile(skill_id),
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+		"gameplay_actions": [],
+		"projectile_descriptors": [],
+		"ground_effect_descriptors": [],
+		"summon_descriptors": [],
+	}
 	# Exercise the exact wire ID emitted by GameRoot. It carries continuous GU
 	# screen points and must not fall back to native/radius-sized visuals.
 	plan["canonical_geometry_contract"] = (
@@ -303,6 +310,23 @@ func _line_plan(
 	plan["geometry_grid_cells"] = []
 	plan["geometry_screen_points_px"] = world_points
 	plan["skill_footprint_snapshot"] = strip.skill_footprint_snapshot
+	plan["presentation_actions"] = [{
+		"type": "visual",
+		"skill_id": skill_id,
+		"role": CasterSkillVisualRegistry.ROLE_LINE_EFFECT,
+		"phase": "",
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+		"canonical_geometry_contract": (
+			SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID
+		),
+		"geometry_origin_screen_px": Vector2.ZERO,
+		"target_position_screen_px": Vector2.ZERO,
+		"geometry_grid_cells": [],
+		"geometry_screen_points_px": world_points,
+		"ground_gu_to_screen_position_px": Callable(),
+		"snapshot_validation_context": {},
+	}]
 	return plan
 
 

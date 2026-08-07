@@ -1,6 +1,6 @@
 extends Node
 
-## Q3-A: CasterSkillRuntime.create_cast_nodes_from_canonical_plan consumes the
+## Q3-A: the legacy cast-node entry_from_canonical_plan consumes the
 ## plan's descriptors and snapshot without re-resolving, re-quoting or
 ## replanning, and never mutates the plan.
 
@@ -58,7 +58,7 @@ func _consume(skill_id: String, expected_kind: String) -> Array[Node2D]:
 		Fixtures.default_target_context(true),
 		Fixtures.default_resource_context(500)
 	)
-	var plan: Dictionary = Plan.build_plan(
+	var plan: Dictionary = Router.build_canonical_plan(
 		request,
 		Fixtures.canonical_context(
 			1,
@@ -98,3 +98,5 @@ func _consume(skill_id: String, expected_kind: String) -> Array[Node2D]:
 
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")

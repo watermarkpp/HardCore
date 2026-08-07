@@ -10,6 +10,20 @@ const MAX_PIXEL_ROUNDING_ERROR := 0.5
 const LASER_FORWARD_ENDPOINT_TOLERANCE_PX := 1.0
 
 
+func _presentation_plan(skill_id: String) -> Dictionary:
+	# Q3-C: legacy the legacy resolver was removed; create_visual reads
+	# the geometry contract and profile from the registry, so the plan only
+	# needs the frozen identity fields.
+	return {
+		"success": true,
+		"skill_id": skill_id,
+		"operation": "canonical_visual_only",
+		"visual": CasterSkillVisualRegistry.profile(skill_id),
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+	}
+
+
 func _ready() -> void:
 	assert(Loader.reload_data().valid)
 	_verify_primary_geometry_and_timing()
@@ -187,15 +201,9 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 				func(tile: Vector2) -> Vector2:
 					return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 			)
-			var plan := CasterSkillRuntime.resolve(str(skill_case.skill_id), {
-				"skill_level": 3,
-				"caster_level": 40,
-				"owner_level": 40,
-				"target_level": 20,
-				"target_max_hp": 500,
-				"magic_stat_roll": 30,
-				"random_0_to_10": 0,
-			})
+			# Q3-C: legacy the legacy resolver was removed; create_visual
+			# consumes the geometry contract directly from a frozen plan dict.
+			var plan := _presentation_plan(str(skill_case.skill_id))
 			plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
 			plan["geometry_origin_screen_px"] = Vector2.ZERO
 			plan["geometry_grid_cells"] = []
@@ -487,15 +495,7 @@ func _plan_with_world_geometry(
 	origin_world: Vector2,
 	facing: Vector2i
 ) -> Dictionary:
-	var plan := CasterSkillRuntime.resolve(skill_id, {
-		"skill_level": 3,
-		"caster_level": 40,
-		"owner_level": 40,
-		"target_level": 20,
-		"target_max_hp": 500,
-		"magic_stat_roll": 30,
-		"random_0_to_10": 0,
-	})
+	var plan := _presentation_plan(skill_id)
 	var cells := GeometryService.cells(
 		Loader.skill(skill_id), origin_tile, facing
 	)

@@ -1,6 +1,9 @@
 extends Node
 
 const CasterSkillRuntime := preload("res://scripts/caster_skill_runtime.gd")
+const CasterSkillVisualRegistry := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
 const CasterSkillVisualFactory := preload("res://scripts/caster_skill_visual_factory.gd")
 const CasterSkillVisualEffect := preload("res://scripts/caster_skill_visual_effect.gd")
 const CasterSkillBeamVisualEffect := preload("res://scripts/caster_skill_beam_visual_effect.gd")
@@ -25,8 +28,7 @@ func _context() -> Dictionary:
 
 
 func _beam_profile() -> Dictionary:
-	var plan := CasterSkillRuntime.resolve("wizard.laser", _context())
-	return plan.get("visual", {}).duplicate(true)
+	return CasterSkillVisualRegistry.profile("wizard.laser").duplicate(true)
 
 
 func _build_beam_snapshot(
@@ -120,7 +122,15 @@ func _ready() -> void:
 	add_child(target)
 
 	# 1. Continuous casting keeps one-beam instance.
-	var plan := CasterSkillRuntime.resolve("wizard.laser", _context())
+	var plan := {
+		"success": true,
+		"skill_id": "wizard.laser",
+		"operation": "canonical_visual_only",
+		"origin": Vector2.ZERO,
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+		"skill_footprint_snapshot": {},
+	}
 	plan["skill_footprint_snapshot"] = _build_beam_snapshot(Vector2.RIGHT, 72.0)
 	var first := _spawn_beam_node(plan, owner, target, true, "beam")
 	assert(first != null and first.visible, "first beam should become visible")

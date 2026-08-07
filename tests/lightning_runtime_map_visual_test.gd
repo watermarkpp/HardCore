@@ -40,7 +40,19 @@ func _ready() -> void:
 	add_child(owner)
 	add_child(target)
 
-	var plan := CasterSkillRuntime.resolve("wizard.lightning", _context())
+	# Q3-C: legacy the legacy resolver was removed; create_visual is the
+	# canonical visual helper and consumes the profile from the registry.
+	var plan := {
+		"success": true,
+		"skill_id": "wizard.lightning",
+		"operation": "canonical_visual_only",
+		"visual": CasterSkillVisualRegistry.profile("wizard.lightning"),
+		"visual_radius_px": 72.0,
+		"visual_duration": CasterSkillVisualRegistry.animation_duration(
+			"wizard.lightning"
+		),
+		"skill_footprint_snapshot": {},
+	}
 	var offset: Vector2 = _anchor_offset()
 	var base_node := CasterSkillRuntime.create_visual(
 		plan,

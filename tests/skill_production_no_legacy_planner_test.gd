@@ -1,8 +1,9 @@
 extends Node
 
-## Q3-B: the formal chain must never invoke the legacy planner APIs. After a
-## formal release, formal_legacy_router_execute_count and caster_resolve_count
-## stay zero; the only planner object is the canonical plan.
+## Q3-B/Q3-C: the formal chain must never invoke legacy planner APIs. Q3-C
+## removed the legacy APIs entirely; the static surface is asserted by
+## skill_runtime_no_legacy_api_test. Here the formal release must still build
+## exactly one canonical plan and never a legacy plan object.
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 
@@ -39,27 +40,17 @@ func _run() -> void:
 	)
 	assert(bool(result.get("accepted", false)), "formal release rejected")
 	var diag := Plan.sentinel_diagnostics()
-	assert(
-		diag.formal_legacy_router_execute_count == 0,
-		"formal chain must not call legacy Router.execute"
-	)
-	assert(
-		diag.caster_resolve_count == 0,
-		"formal chain must not call CasterSkillRuntime.resolve"
-	)
-	assert(
-		diag.legacy_create_cast_nodes_count == 0,
-		"formal chain must not call legacy create_cast_nodes"
-	)
-	assert(
-		diag.visual_plan_build_count == 0,
-		"formal chain must not construct a visual plan"
-	)
-	assert(
-		diag.legacy_plan_build_count == 0,
-		"formal chain must not build a legacy plan"
-	)
 	assert(diag.canonical_plan_build_count == 1, "exactly one canonical plan")
+	var plan: Dictionary = result.get("canonical_plan", {})
+	assert(
+		str(plan.get("created_by", "")) == "canonical_planner.v1",
+		"formal release must be created by the canonical planner only"
+	)
+	assert(
+		str(plan.get("legacy_planner", "")) == "skill_runtime_router.v1"
+		and plan.has("contract"),
+		"plan must carry the canonical contract lineage"
+	)
 	await get_tree().process_frame
 	print("SKILL_PRODUCTION_NO_LEGACY_PLANNER_PASS")
 	get_tree().quit(0)

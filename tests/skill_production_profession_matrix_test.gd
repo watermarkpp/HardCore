@@ -9,6 +9,7 @@ const Fixtures := preload(
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 const DataLoader := preload("res://scripts/skills/skill_data_loader.gd")
 
 const MATRIX := [
@@ -302,7 +303,10 @@ func _compare_shadow(
 		Vector2(0, 0),
 		2.0
 	)
-	var shadow: Dictionary = Plan.build_plan(
+	# Q3-C: legacy Plan.build_plan (shadow oracle) was removed with the legacy
+	# planner; the reference plan is the canonical planner output for the same
+	# frozen inputs (which the Q3-A golden parity test pins to fixtures).
+	var shadow: Dictionary = Router.build_canonical_plan(
 		request,
 		Fixtures.canonical_context(
 			1,

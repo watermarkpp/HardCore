@@ -170,7 +170,6 @@ func _ready() -> void:
 	assert(visual_profile.get("geometry_binding", {}).get("direction", "") == "snapshot_axis")
 	assert(profile.get("visual_type", "") == "beam")
 
-	var resolved_plan := CasterSkillRuntime.resolve(SKILL_ID, _context())
 	var direction_vectors: Array[Vector2] = []
 	for direction_index: int in range(8):
 		direction_vectors.append(DirectionSpace.projected_screen_direction_px(direction_index))

@@ -56,10 +56,16 @@ func _run() -> void:
 			produced.append(child.skill_footprint_snapshot)
 			break
 	# Summon production factory.
-	var summon_plan := CasterRuntime.resolve("taoist.summon_skeleton", {
+	# Q3-C: legacy the legacy resolver was removed; the summon factory
+	# consumes a frozen canonical node plan.
+	var summon_plan := {
+		"operation": "summon",
+		"success": true,
+		"skill_id": "taoist.summon_skeleton",
+		"release_id": "no-legacy:summon:1",
+		"display_name": "骷髅",
 		"skill_level": 3,
-		"spiritual_stat_roll": 30,
-	})
+	}
 	summon_plan["snapshot_coordinate_context"] = (
 		Snapshot.make_absolute_runtime_context(
 			9001,
