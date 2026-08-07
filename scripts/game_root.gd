@@ -21,7 +21,14 @@ const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
+const SkillExecutionPlanScript := preload(
+	"res://scripts/skills/skill_execution_plan.gd"
+)
+const SkillExecutionPlanContractScript := preload(
+	"res://scripts/skills/skill_execution_plan_contract.gd"
+)
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
+const SkillCastResultScript := preload("res://scripts/skills/skill_cast_result.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillGeometryServiceScript := preload(
 	"res://scripts/skills/skill_geometry_service.gd"
@@ -3589,6 +3596,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		hit_effect,
 		canonical_resolution
 	):
+		SkillExecutionPlanContractScript.cooldown_commit_count += 1
 		player.commit_fire_sword_cooldown()
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
@@ -3979,7 +3987,24 @@ func _execute_canonical_skill(
 		_next_canonical_seed()
 	)
 	request["client_claimed_damage"] = client_damage
-	var result := SkillRuntimeRouterScript.execute(request)
+	# Q3-B: the single canonical plan comes from the router's formal planner
+	# entry. No second plan object is ever built by GameRoot or the runtime.
+	SkillExecutionPlanContractScript.release_id_generation_count += 1
+	var canonical_context := _canonical_execution_context(
+		stable_skill_id,
+		origin,
+		direction,
+		target_context,
+		cast_target,
+		str(target_context.get("release_id", ""))
+	)
+	var plan := SkillRuntimeRouterScript.build_canonical_plan(
+		request,
+		canonical_context
+	)
+	var plan_rejection: Dictionary = plan.get("rejection", {})
+	var plan_hash_before := str(plan.get("plan_hash", ""))
+	var result := _legacy_result_from_plan(plan)
 	result["adapter_contract"] = SKILL_PRODUCTION_ADAPTER_CONTRACT
 	result["adapter_bindings"] = [
 		"combat_resolution",
@@ -3989,26 +4014,193 @@ func _execute_canonical_skill(
 		"buff_runtime",
 		"taoist_main_pet",
 	]
-	if not bool(result.get("accepted", false)):
+	result["canonical_plan"] = plan
+	result["plan_hash_before"] = plan_hash_before
+	if not bool(plan_rejection.get("accepted", false)):
 		_skill_cast_target = null
+		result["execution_result"] = SkillExecutionPlanScript.build_result(
+			plan,
+			{"accepted": false}
+		)
 		return result
-	if bool(result.get("resource_commit", false)) and not _commit_canonical_resources(result):
+	var resource_quote: Dictionary = plan.get("resource_cost", {})
+	var needs_resource := (
+		int(resource_quote.get("mp_cost", 0)) > 0
+		or int(resource_quote.get("material_amount", 0)) > 0
+	)
+	var resource_committed := true
+	if needs_resource:
+		resource_committed = _commit_canonical_resources(plan)
+	if not resource_committed:
 		result["accepted"] = false
 		result["effect_success"] = false
 		result["reason"] = "resource_commit_failed"
+		result["execution_result"] = SkillExecutionPlanScript.build_result(
+			plan,
+			{
+				"accepted": false,
+				"rejection_reason": "resource_commit_failed",
+			}
+		)
 		_skill_cast_target = null
 		return result
+	var execution_overrides: Dictionary = {}
 	if apply_effects:
-		_apply_canonical_effects(result, origin, direction, target_context, cast_target)
-	var proficiency_event := str(result.get("proficiency_event", ""))
+		execution_overrides = _apply_canonical_effects_from_plan(
+			plan,
+			origin,
+			direction,
+			target_context,
+			cast_target
+		)
+	var proficiency_event := _plan_proficiency_event(plan)
 	if not proficiency_event.is_empty():
 		PlayerState.apply_skill_proficiency_event(
 			stable_skill_id,
 			proficiency_event,
 			_next_canonical_seed()
 		)
+	var execution_result := SkillExecutionPlanScript.build_result(
+		plan,
+		{
+			"accepted": true,
+			"resource_committed": resource_committed,
+			"cooldown_committed": false,
+		}.merged(execution_overrides)
+	)
+	result["execution_result"] = execution_result
+	result["plan_immutable"] = SkillExecutionPlanScript.verify_immutable(
+		plan,
+		plan_hash_before
+	)
 	_skill_cast_target = null
 	return result
+
+
+func _canonical_execution_context(
+	stable_skill_id: String,
+	origin: Vector2,
+	direction: Vector2,
+	target_context: Dictionary,
+	target: EnemyActor,
+	release_id: String
+) -> Dictionary:
+	## Q3-B: frozen inputs for the canonical planner. GameRoot only prepares
+	## world/projection context; the planner builds the single plan/snapshot.
+	var target_position := _canonical_grid_cell_to_screen_px(
+		target_context.get(
+			"target_tile",
+			_canonical_screen_px_to_grid_cell(origin)
+		)
+	)
+	var target_ground_gu := _canonical_screen_px_to_ground_gu(
+		target_position
+	)
+	var context := {
+		"release_id": release_id,
+		"runtime_map_id": current_map_id,
+		"caster_runtime_id": player.get_instance_id(),
+		"target_runtime_id": (
+			target.get_instance_id()
+			if is_instance_valid(target)
+			else 0
+		),
+		"input_mode": "production_canonical",
+		"origin_screen_px": origin,
+		"direction_screen_px": direction,
+		"target_position_screen_px": target_position,
+		"summon_spawn_position_screen_px": _summon_spawn_screen_position_px(),
+		"target": target,
+		"fallback_target_actor": player,
+		"player_actor": player,
+		"player_combat_radius_gu": _actor_combat_radius_gu(player),
+		"target_combat_radius_gu": (
+			_actor_combat_radius_gu(target)
+			if is_instance_valid(target)
+			else _actor_combat_radius_gu(player)
+		),
+		"screen_to_ground_position_px": (
+			Callable(self, "_canonical_screen_px_to_ground_gu")
+		),
+		"ground_gu_to_screen_position_px": (
+			Callable(self, "_canonical_ground_gu_to_screen_px")
+		),
+		"grid_cell_to_screen_position_px": (
+			Callable(self, "_canonical_grid_cell_to_screen_px")
+		),
+		"snapshot_validation_context": _canonical_snapshot_validation_context(
+			_canonical_screen_px_to_ground_gu(origin)
+		),
+		"line_strip_builder": (
+			Callable(self, "_q3b_build_line_strip").bind(
+				stable_skill_id,
+				origin,
+				direction
+			)
+		),
+		"effective_cells_builder": (
+			Callable(self, "_q3b_build_effective_cells").bind(
+				stable_skill_id
+			)
+		),
+	}
+	return context
+
+
+func _q3b_build_line_strip(
+	effect: Dictionary,
+	release_id: String,
+	stable_skill_id: String,
+	origin: Vector2,
+	direction: Vector2
+) -> Dictionary:
+	return _canonical_continuous_line_strip_ground_gu(
+		stable_skill_id,
+		effect,
+		origin,
+		direction,
+		release_id
+	)
+
+
+func _q3b_build_effective_cells(
+	raw_geometry_cells: Variant,
+	effect: Dictionary,
+	stable_skill_id: String
+) -> Array[Vector2i]:
+	return _canonical_effective_spell_geometry_cells(
+		stable_skill_id,
+		raw_geometry_cells,
+		effect
+	)
+
+
+func _legacy_result_from_plan(plan: Dictionary) -> Dictionary:
+	## Compat return shape for existing callers (same fields as SkillCastResult),
+	## sourced entirely from the canonical plan.
+	var rejection: Dictionary = plan.get("rejection", {})
+	var accepted := bool(rejection.get("accepted", false))
+	var skill_id := str(plan.get("skill_id", ""))
+	var result := SkillCastResultScript.failure(
+		skill_id,
+		str(rejection.get("reason", ""))
+	)
+	if accepted:
+		result = SkillCastResultScript.success(
+			skill_id,
+			{
+				"effect_success": true,
+				"effects": plan.get("gameplay_actions", []),
+				"resource_commit": true,
+				"proficiency_event": _plan_proficiency_event(plan),
+			}
+		)
+	result["runtime_contract"] = "skills.runtime_router.cn_mir2_176.v1"
+	return result
+
+
+func _plan_proficiency_event(plan: Dictionary) -> String:
+	return str(plan.get("proficiency_event", ""))
 
 
 func _execute_canonical_melee(
@@ -4080,6 +4272,16 @@ func _execute_canonical_melee(
 			and direct_toggle_release
 		),
 	}
+	# Q3-B: the melee release geometry is frozen before the canonical plan is
+	# built; the plan consumes that same release snapshot instead of treating
+	# warrior melee as non-spatial.
+	if not melee_release_snapshot.is_empty():
+		extra["skill_footprint_snapshot"] = melee_release_snapshot
+		var melee_release_id := str(
+			melee_release_snapshot.get("release_id", "")
+		)
+		if not melee_release_id.is_empty():
+			extra["release_id"] = melee_release_id
 	var result := _execute_canonical_skill(skill_name, origin, direction, base_damage, extra, false)
 	if not bool(result.get("accepted", false)):
 		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
@@ -4472,7 +4674,12 @@ func _canonical_resource_context(stable_skill_id: String) -> Dictionary:
 
 
 func _commit_canonical_resources(result: Dictionary) -> bool:
-	var quote: Dictionary = result.get("resource_quote", {})
+	## Q3-B: consumes the canonical plan's frozen resource_cost (legacy
+	## resource_quote accepted for compat); commits at most once per release.
+	var quote: Dictionary = result.get(
+		"resource_quote",
+		result.get("resource_cost", {})
+	)
 	var mana_cost := maxi(0, int(quote.get("mp_cost", 0)))
 	var material_id := str(quote.get("material_id", ""))
 	var material_amount := maxi(0, int(quote.get("material_amount", 0)))
@@ -4486,6 +4693,7 @@ func _commit_canonical_resources(result: Dictionary) -> bool:
 	if material_amount > 0 and not PlayerState.remove_item(item_name, material_amount):
 		player.restore_mana(mana_cost)
 		return false
+	SkillExecutionPlanContractScript.resource_commit_count += 1
 	return true
 
 
@@ -4496,6 +4704,8 @@ func _apply_canonical_effects(
 	target_context: Dictionary,
 	target: EnemyActor = null
 ) -> void:
+	# Q3-B legacy-only executor (not formally called; sentinel proves it).
+	SkillExecutionPlanContractScript.legacy_plan_build_count += 1
 	var stable_skill_id := str(result.get("skill_id", ""))
 	if not is_instance_valid(target):
 		target = null
@@ -4774,6 +4984,413 @@ func _apply_canonical_effects(
 				_set_canonical_fire_charge_expires_at(
 					Time.get_ticks_msec() + maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
 				)
+
+
+func _apply_canonical_effects_from_plan(
+	plan: Dictionary,
+	origin: Vector2,
+	direction: Vector2,
+	target_context: Dictionary,
+	target: EnemyActor = null
+) -> Dictionary:
+	## Q3-B: commits the canonical plan's gameplay actions. Node creation
+	## (projectile/ground/summon/visual) comes from the plan's descriptors via
+	## create_cast_nodes_from_canonical_plan; this loop only applies direct
+	## damage/status/buff side effects. No second plan is ever built.
+	var stable_skill_id := str(plan.get("skill_id", ""))
+	if not is_instance_valid(target):
+		target = null
+	var target_position := _canonical_grid_cell_to_screen_px(
+		target_context.get(
+			"target_tile",
+			_canonical_screen_px_to_grid_cell(origin)
+		)
+	)
+	var release_id := str(plan.get("release_id", ""))
+	var skill_release_snapshot: Dictionary = plan.get(
+		"canonical_snapshot", {}
+	)
+	var effective_geometry_cells: Array[Vector2i] = []
+	for raw_cell: Variant in plan.get("effective_geometry_cells", []):
+		if raw_cell is Vector2i:
+			effective_geometry_cells.append(raw_cell)
+	var continuous_line_strip_ground_gu: Dictionary = plan.get(
+		"continuous_line_strip_ground_gu", {}
+	)
+	var spawned_nodes: Array[Node2D] = _spawn_canonical_cast_nodes_from_plan(
+		plan,
+		origin,
+		direction,
+		target,
+		target_position
+	)
+	var spawned_projectiles: Array[int] = []
+	var spawned_ground_effects: Array[int] = []
+	var spawned_summons: Array[int] = []
+	var created_visuals: Array[int] = []
+	for node: Node2D in spawned_nodes:
+		if node is SkillProjectile:
+			spawned_projectiles.append(node.get_instance_id())
+		elif node is GroundSkillEffect:
+			spawned_ground_effects.append(node.get_instance_id())
+		elif node is SummonActor:
+			spawned_summons.append(node.get_instance_id())
+		else:
+			created_visuals.append(node.get_instance_id())
+	var friendly_effect_index := 0
+	for raw_effect: Variant in plan.get("gameplay_actions", []):
+		if not raw_effect is Dictionary:
+			continue
+		var effect: Dictionary = raw_effect
+		var effect_type := str(effect.get("type", ""))
+		match effect_type:
+			"projectile_damage", "talisman_projectile_damage", "persistent_ground_damage", "main_pet_spawn", "recall_existing_main_pet":
+				# Node creation is owned by the canonical descriptors (adapter /
+				# summon sink); the gameplay action itself is already committed.
+				pass
+			"targeted_sky_strike", "line_damage", "piercing_line_damage", "area_damage", "caster_centered_area_damage":
+				var raw_power := int(
+					effect.get(
+						"raw_power_after_race",
+						effect.get("raw_power", 0)
+					)
+				)
+				var damage_origin := (
+					_canonical_grid_cell_to_screen_px(
+						target_context.get("target_tile", Vector2i.ZERO)
+					)
+					if effect_type == "area_damage"
+					else origin
+				)
+				_apply_canonical_spell_damage(
+					stable_skill_id,
+					raw_power,
+					damage_origin,
+					direction,
+					effect_type,
+					target,
+					effective_geometry_cells,
+					effect,
+					continuous_line_strip_ground_gu,
+					skill_release_snapshot
+				)
+			"dedicated_heal":
+				player.restore_health(
+					int(effect.get("actual_hp_restored", 0))
+				)
+			"dedicated_area_heal":
+				var target_results: Array = effect.get("target_results", [])
+				if not target_results.is_empty():
+					for target_result_value: Variant in target_results:
+						if not target_result_value is Dictionary:
+							continue
+						var target_result: Dictionary = target_result_value
+						_apply_canonical_friendly_heal(
+							_canonical_friendly_actor(
+								int(target_result.get("target_instance_id", 0))
+							),
+							int(target_result.get("actual_hp_restored", 0))
+						)
+				else:
+					var restored_by_target: Array = effect.get(
+						"actual_hp_restored_by_target", []
+					)
+					var friendly_targets: Array = target_context.get(
+						"friendly_targets", []
+					)
+					for heal_index: int in range(mini(
+						restored_by_target.size(), friendly_targets.size()
+					)):
+						var friendly_data: Dictionary = friendly_targets[heal_index]
+						_apply_canonical_friendly_heal(
+							_canonical_friendly_actor(
+								int(friendly_data.get(
+									"target_instance_id",
+									friendly_data.get("instance_id", 0)
+								))
+							),
+							int(restored_by_target[heal_index])
+						)
+			"adjacent_push":
+				var repulsion_target := _canonical_effect_enemy(effect)
+				if (
+					repulsion_target != null
+					and bool(effect.get("displaced", false))
+					and _skill_snapshot_intersects_enemy(
+						skill_release_snapshot,
+						repulsion_target
+					)
+				):
+					var source_ground_gu := _canonical_screen_px_to_ground_gu(
+						origin
+					)
+					var target_ground_gu := _canonical_screen_px_to_ground_gu(
+						repulsion_target.global_position
+					)
+					var push_direction_ground_gu := (
+						target_ground_gu - source_ground_gu
+					).normalized()
+					_apply_canonical_displacement_screen_px(
+						repulsion_target,
+						GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+							push_direction_ground_gu
+							* float(effect.get("push_distance_gu", 1.0))
+						)
+					)
+			"level_gated_push":
+				if target != null and bool(effect.get("displaced", false)):
+					_apply_wild_rush_displacement(target, effect, target_context)
+			"self_damage":
+				_combat_runtime.apply_damage(
+					player,
+					int(effect.get("amount", 1))
+				)
+			"server_random_teleport":
+				if bool(effect.get("moved", false)):
+					var destination := _canonical_grid_cell_to_screen_px(
+						effect.get("destination", Vector2i.ZERO)
+					)
+					var destination_ground_gu := (
+						_canonical_screen_px_to_ground_gu(destination)
+					)
+					var snapshot_destination_ground_gu: Vector2 = (
+						skill_release_snapshot.get(
+							"target_center_ground_gu", Vector2.INF
+						)
+					)
+					if (
+						_snapshot_strict_ok(skill_release_snapshot)
+						and snapshot_destination_ground_gu.is_equal_approx(
+							destination_ground_gu
+						)
+						and _apply_canonical_player_teleport(destination)
+					):
+						_spawn_canonical_teleport_arrival(
+							stable_skill_id,
+							destination,
+							direction,
+							skill_release_snapshot
+						)
+			"refreshable_damage_reduction_buff":
+				player.apply_magic_shield(
+					float(effect.get("duration_seconds", 1)),
+					float(effect.get("damage_reduction", 0.0))
+				)
+			"monster_aggro_stealth":
+				player.apply_stealth(
+					float(effect.get("duration_seconds", 1))
+				)
+			"area_monster_aggro_stealth":
+				var stealth_target_ids: Array = effect.get(
+					"target_instance_ids", []
+				)
+				if stealth_target_ids.is_empty():
+					for friendly_data: Dictionary in target_context.get(
+						"friendly_targets", []
+					):
+						stealth_target_ids.append(
+							int(friendly_data.get("instance_id", 0))
+						)
+				for target_instance_id: int in stealth_target_ids:
+					var stealth_actor := _canonical_friendly_actor(
+						target_instance_id
+					)
+					if stealth_actor == player:
+						player.apply_stealth(
+							float(effect.get("duration_seconds", 1))
+						)
+			"friendly_defence_buff":
+				var buff_target_id := int(
+					effect.get("target_instance_id", 0)
+				)
+				if buff_target_id <= 0:
+					var friendly_targets: Array = target_context.get(
+						"friendly_targets", []
+					)
+					if friendly_effect_index < friendly_targets.size():
+						buff_target_id = int(
+							(friendly_targets[friendly_effect_index] as Dictionary).get(
+								"instance_id", 0
+							)
+						)
+				friendly_effect_index += 1
+				if _canonical_friendly_actor(buff_target_id) == player:
+					player.apply_defense_buff(
+						float(effect.get("duration_seconds", 1)),
+						int(effect.get("flat_bonus", 1))
+					)
+			"poison_resolution":
+				if (
+					target != null
+					and not bool(effect.get("resisted", false))
+					and _skill_snapshot_intersects_enemy(
+						skill_release_snapshot,
+						target
+					)
+				):
+					_apply_canonical_poison(target, effect)
+			"temptation_resolution":
+				if (
+					target != null
+					and _skill_snapshot_intersects_enemy(
+						skill_release_snapshot,
+						target
+					)
+				):
+					_apply_canonical_temptation(target, effect)
+			"holy_word_resolution":
+				if (
+					target != null
+					and bool(effect.get("instant_kill", false))
+					and _skill_snapshot_intersects_enemy(
+						skill_release_snapshot,
+						target
+					)
+				):
+					_combat_runtime.apply_enemy_physical_damage(
+						target,
+						target.current_hp,
+						player
+					)
+			"hp_information_reveal":
+				if (
+					target != null
+					and bool(effect.get("revealed", false))
+					and _skill_snapshot_intersects_enemy(
+						skill_release_snapshot,
+						target
+					)
+				):
+					hud.show_message(
+						"%s锛氱敓鍛?d/%d" % [
+							target.display_name,
+							target.current_hp,
+							target.max_hp,
+						],
+						2.0
+					)
+			"monster_boundary_control":
+				if int(effect.get("trapped_count", 0)) > 0:
+					var trapped_target_ids: Array = effect.get(
+						"target_instance_ids", []
+					)
+					for trapped_target_id: int in trapped_target_ids:
+						var node := instance_from_id(trapped_target_id)
+						if (
+							node is EnemyActor
+							and _skill_snapshot_intersects_enemy(
+								skill_release_snapshot,
+								node
+							)
+						):
+							node.apply_control(
+								float(effect.get("duration_seconds", 1))
+							)
+			"next_melee_charge":
+				_set_canonical_fire_charge_expires_at(
+					Time.get_ticks_msec()
+					+ maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
+				)
+	return {
+		"spawned_projectile_ids": spawned_projectiles,
+		"spawned_ground_effect_ids": spawned_ground_effects,
+		"spawned_summon_ids": spawned_summons,
+		"created_visual_ids": created_visuals,
+		"side_effect_count": (
+			spawned_projectiles.size()
+			+ spawned_ground_effects.size()
+			+ spawned_summons.size()
+			+ created_visuals.size()
+		),
+	}
+
+
+func _spawn_canonical_cast_nodes_from_plan(
+	plan: Dictionary,
+	origin: Vector2,
+	direction: Vector2,
+	target: EnemyActor,
+	target_position: Vector2
+) -> Array[Node2D]:
+	## Q3-B: the ONLY formal node creation entry - CasterSkillRuntime consumes
+	## the canonical plan (no visual_plan, no legacy create_cast_nodes).
+	var stable_skill_id := str(plan.get("skill_id", ""))
+	if stable_skill_id == FIRE_WALL_SKILL_ID:
+		# Q2-C/Q3-B: the formal fire wall release owns exactly ONE
+		# FireWallFieldController plus its 4 pure-visual cells. Never fall back
+		# to the generic ground-dot factory or standalone GroundSkillEffect
+		# cells; the field controller is the single damage/visual owner.
+		var ground_effect := _canonical_plan_ground_effect(plan)
+		if not ground_effect.is_empty():
+			_spawn_canonical_ground_field(
+				stable_skill_id,
+				plan.get("effective_geometry_cells", []),
+				target_position,
+				ground_effect,
+				str(plan.get("release_id", "")),
+				plan.get("canonical_snapshot", {})
+			)
+		return []
+	if (
+		not stable_skill_id.begins_with("wizard.")
+		and not stable_skill_id.begins_with("taoist.")
+	):
+		return []
+	var nodes: Array[Node2D] = (
+		CasterSkillRuntimeScript.create_cast_nodes_from_canonical_plan(
+			plan,
+			origin,
+			direction,
+			Color.WHITE,
+			target,
+			player,
+			_canonical_primary_stat_roll("taoist"),
+			PlayerState.level,
+			Callable(self, "_apply_canonical_main_pet_from_descriptor"),
+			{
+				"combat_spatial_index": _combat_spatial_index,
+				"runtime_map_id": current_map_id,
+				"ground_gu_to_screen_position_px": (
+					Callable(self, "_canonical_ground_gu_to_screen_px")
+				),
+				"magic_defense_adapter": Callable(
+					self,
+					"_resolve_magic_defense"
+				),
+				"caster": player,
+			}
+		)
+	)
+	for node: Node2D in nodes:
+		if is_instance_valid(node):
+			add_child(node)
+	return nodes
+
+
+func _canonical_plan_ground_effect(plan: Dictionary) -> Dictionary:
+	for raw_effect: Variant in plan.get("gameplay_actions", []):
+		if not raw_effect is Dictionary:
+			continue
+		var effect: Dictionary = raw_effect
+		if str(effect.get("type", "")) == "persistent_ground_damage":
+			return effect
+	return {}
+
+
+func _apply_canonical_main_pet_from_descriptor(
+	descriptor: Dictionary,
+	plan: Dictionary
+) -> void:
+	var effect := {
+		"type": "main_pet_spawn",
+		"template_id": str(descriptor.get("template_id", "")),
+		"spawned": bool(descriptor.get("spawned", true)),
+	}
+	_apply_canonical_main_pet(
+		effect,
+		str(plan.get("skill_id", "")),
+		str(plan.get("release_id", ""))
+	)
 
 
 func _canonical_effect_enemy(effect: Dictionary) -> EnemyActor:
@@ -5836,6 +6453,9 @@ func _spawn_canonical_cast_visual(
 	continuous_line_strip_ground_gu: Dictionary = {},
 	skill_release_snapshot: Dictionary = {}
 ) -> void:
+	# Q3-B legacy visual path (not formally called; sentinels prove it).
+	SkillExecutionPlanContractScript.visual_plan_build_count += 1
+	SkillExecutionPlanContractScript.legacy_create_cast_nodes_count += 1
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
 	var visual_profile := CasterSkillVisualRegistry.profile(stable_skill_id)
