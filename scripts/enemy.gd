@@ -87,6 +87,7 @@ var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
+var runtime_screen_to_ground_position_px := Callable()
 var combat_spatial_index: RuntimeCombatSpatialIndexScript
 var spatial_actor_runtime_id: int = -1
 var poison_time := 0.0
@@ -388,9 +389,7 @@ func _physics_process(delta: float) -> void:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		else:
 			set_combat_position(
-				GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-					_control_anchor_ground_gu
-				),
+				_ground_gu_to_screen_position_px(_control_anchor_ground_gu),
 				&"control_anchor"
 			)
 		velocity = Vector2.ZERO
@@ -581,8 +580,24 @@ func set_combat_position(
 	_spatial_index_update()
 
 
-static func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return ground_position_gu
 	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(screen_position_px)
+
+
+func _ground_gu_to_screen_position_px(ground_position_gu: Vector2) -> Vector2:
+	if runtime_ground_gu_to_screen_position_px.is_valid():
+		var screen_position_px: Variant = (
+			runtime_ground_gu_to_screen_position_px.call(ground_position_gu)
+		)
+		if screen_position_px is Vector2:
+			return screen_position_px
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(ground_position_gu)
 
 
 static func _ground_delta_gu_between_screen_positions(
@@ -855,12 +870,18 @@ func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
 
 func configure_runtime_map_projection(
 	map_id: int,
-	ground_gu_to_screen_position_px: Callable
+	ground_gu_to_screen_position_px: Callable,
+	screen_position_px_to_ground_gu: Callable = Callable()
 ) -> void:
 	runtime_map_id = int(map_id)
 	runtime_ground_gu_to_screen_position_px = (
 		ground_gu_to_screen_position_px
 		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+	runtime_screen_to_ground_position_px = (
+		screen_position_px_to_ground_gu
+		if screen_position_px_to_ground_gu is Callable
 		else Callable()
 	)
 
