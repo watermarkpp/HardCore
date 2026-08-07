@@ -12,6 +12,9 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
+	# FREEZE-P0.2R: legacy source-collision audit runs in explicit reference
+	# mode (maps 401/402 are planned_unbuilt, not formal gameplay).
+	game.reference_audit_mode = true
 	await get_tree().process_frame
 	await get_tree().process_frame
 

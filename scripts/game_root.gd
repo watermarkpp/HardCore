@@ -177,6 +177,11 @@ var _ground_effect_manager: PersistentGroundEffectManagerScript
 ## FREEZE-P0.1: fail-closed canonical projection diagnostics.
 var missing_projection_rejection_count := 0
 var projection_rejection_reason := &""
+## FREEZE-P0.2R: explicit dev/reference audit context. When true, the formal
+## implementation gate is bypassed and reference (authored source/centered)
+## projections are used - allowed ONLY for migration tools, import/reference
+## audits and test/dev preview, never for normal gameplay.
+var reference_audit_mode := false
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
@@ -803,9 +808,7 @@ func _request_map_travel(map_id: int) -> bool:
 	if not gameplay_input_is_enabled(): return false
 	# FREEZE-P0.2: refuse travel before the transition when the target map has
 	# no formal projection profile; never load_zone into a half-broken world.
-	var travel_profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		map_id
-	)
+	var travel_profile := _resolve_projection_profile_for_map(map_id)
 	if not bool(travel_profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(
@@ -1229,9 +1232,7 @@ func _check_world_ready_contract() -> bool:
 	var summary := coordinator.ready_contract_summary()
 	# FREEZE-P0.2: gameplay is only reachable in a projection-ready world. The
 	# formal map profile gate keeps legacy Vector2 wrappers out of broken maps.
-	var ready_profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		current_map_id
-	)
+	var ready_profile := _resolve_projection_profile_for_map(current_map_id)
 	if not bool(ready_profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(ready_profile.get("reason", ""))
@@ -1468,6 +1469,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	if (
 		target_map_id >= 0
 		and not MapEditorRuntimeBridgeScript.is_formal_playable(target_map_id)
+		and not reference_audit_mode
 	):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = (
@@ -1530,7 +1532,10 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 	# FREEZE-P0.2R: never seed an unbuilt map with WorldContent/reference
 	# placeholder spawns in formal gameplay; the authored data is preserved for
 	# migration/audit/reference use only.
-	if not MapEditorRuntimeBridgeScript.is_formal_playable(map_id):
+	if (
+		not MapEditorRuntimeBridgeScript.is_formal_playable(map_id)
+		and not reference_audit_mode
+	):
 		return
 	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
 		var editor_content := (
@@ -6208,9 +6213,7 @@ func _ground_position_gu_for_map(
 	map_id: int,
 	screen_position_px: Vector2
 ) -> Vector2:
-	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		map_id
-	)
+	var profile := _resolve_projection_profile_for_map(map_id)
 	if bool(profile.get("success", false)):
 		var screen_to_ground: Callable = profile.get(
 			"screen_to_ground",
@@ -6232,9 +6235,7 @@ func _ground_position_gu_for_map(
 
 
 func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
-	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		current_map_id
-	)
+	var profile := _resolve_projection_profile_for_map(current_map_id)
 	if bool(profile.get("success", false)):
 		var screen_to_ground: Callable = profile.get(
 			"screen_to_ground",
@@ -6264,15 +6265,27 @@ func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
 	return Vector2i(-100000, -100000)
 
 
+func _resolve_projection_profile_for_map(map_id: int) -> Dictionary:
+	## FREEZE-P0.2R: formal runtime profile in normal gameplay; reference
+	## profile only inside an explicit reference_audit_mode context (migration /
+	## import audit / test-dev preview). Never inferred from WorldContent.
+	if reference_audit_mode:
+		return MapCoordinateMapperScript.resolve_reference_projection_profile(
+			map_id
+		)
+	return MapCoordinateMapperScript.resolve_formal_runtime_projection_profile(
+		map_id
+	)
+
+
 func _try_canonical_screen_px_to_ground_gu(
 	screen_position_px: Vector2
 ) -> Dictionary:
-	## FREEZE-P0.2: explicit fail-closed result driven by the formal map
-	## projection profile (MapEditor runtime / authored source / authored
-	## centered). Never falls back to identity/delta for a mapped id.
-	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		current_map_id
-	)
+	## FREEZE-P0.2R: explicit fail-closed result driven by the current map's
+	## projection profile (formal runtime in normal gameplay; reference profile
+	## only inside an explicit reference_audit_mode context). Never falls back
+	## to identity/delta for a mapped id.
+	var profile := _resolve_projection_profile_for_map(current_map_id)
 	if not bool(profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(profile.get("reason", ""))
@@ -6313,9 +6326,7 @@ func _try_canonical_screen_px_to_ground_gu(
 func _try_canonical_ground_gu_to_screen_px(
 	ground_position_gu: Vector2
 ) -> Dictionary:
-	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		current_map_id
-	)
+	var profile := _resolve_projection_profile_for_map(current_map_id)
 	if not bool(profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(profile.get("reason", ""))
@@ -6369,9 +6380,7 @@ func _canonical_ground_gu_to_screen_px(ground_position_gu: Vector2) -> Vector2:
 
 func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
 	var tile := Vector2i(grid_cell) if grid_cell is Vector2i else Vector2i.ZERO
-	var profile := MapCoordinateMapperScript.resolve_map_projection_profile(
-		current_map_id
-	)
+	var profile := _resolve_projection_profile_for_map(current_map_id)
 	if bool(profile.get("success", false)):
 		var ground_to_screen: Callable = profile.get(
 			"ground_to_screen",
