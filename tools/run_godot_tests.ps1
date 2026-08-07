@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -268,6 +268,20 @@ $Suites.skill_execution_plan_critical = @(
     'tests/skill_plan_profession_matrix_test.tscn'
 )
 
+$Suites.skill_production_migration_critical = @(
+    'tests/skill_production_canonical_entry_test.tscn',
+    'tests/skill_production_no_visual_plan_test.tscn',
+    'tests/skill_production_no_legacy_planner_test.tscn',
+    'tests/skill_production_single_release_id_test.tscn',
+    'tests/skill_production_single_snapshot_test.tscn',
+    'tests/skill_production_single_commit_test.tscn',
+    'tests/skill_execution_result_contract_test.tscn',
+    'tests/skill_production_plan_immutable_test.tscn',
+    'tests/skill_production_profession_matrix_test.tscn',
+    'tests/skill_production_rejection_flow_test.tscn',
+    'tests/skill_production_descriptor_failure_parity_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -280,6 +294,7 @@ $Suites.critical = @(
     $Suites.fire_wall_controller_critical +
     $Suites.monster_streaming_critical +
     $Suites.skill_execution_plan_critical +
+    $Suites.skill_production_migration_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )

@@ -411,6 +411,56 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $spIncluded = ($RunnerSource -match '\$Suites\.skill_execution_plan_critical\s*\+')
 $spValidateSet = ($RunnerSource -match "skill_execution_plan_critical")
 
+# skill_production_migration_critical verification (Q3-B)
+$ProductionMigrationSuite = 'skill_production_migration_critical'
+$ProductionMigrationExpected = @(
+    'tests/skill_production_canonical_entry_test.tscn',
+    'tests/skill_production_no_visual_plan_test.tscn',
+    'tests/skill_production_no_legacy_planner_test.tscn',
+    'tests/skill_production_single_release_id_test.tscn',
+    'tests/skill_production_single_snapshot_test.tscn',
+    'tests/skill_production_single_commit_test.tscn',
+    'tests/skill_execution_result_contract_test.tscn',
+    'tests/skill_production_plan_immutable_test.tscn',
+    'tests/skill_production_profession_matrix_test.tscn',
+    'tests/skill_production_rejection_flow_test.tscn',
+    'tests/skill_production_descriptor_failure_parity_test.tscn'
+)
+
+$pmMissing = @()
+$pmDuplicates = @()
+$pmGitTracked = @()
+foreach ($path in $ProductionMigrationExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $pmMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $pmGitTracked += $path
+    }
+}
+$pmDuplicates = @($ProductionMigrationExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$pmBlock = $false
+$pmFound = $false
+$pmEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.skill_production_migration_critical\s*=') {
+        $pmBlock = $true
+        $pmFound = $true
+        continue
+    }
+    if ($pmBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $pmEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $pmBlock = $false
+            break
+        }
+    }
+}
+$pmIncluded = ($RunnerSource -match '\$Suites\.skill_production_migration_critical\s*\+')
+$pmValidateSet = ($RunnerSource -match "skill_production_migration_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -419,6 +469,7 @@ $ok = $ok -and $pgFound -and ($pgEntries.Count -eq $PersistentExpected.Count) -a
 $ok = $ok -and $fwFound -and ($fwEntries.Count -eq $FireWallExpected.Count) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
 $ok = $ok -and $msFound -and ($msEntries.Count -eq $MonsterStreamingExpected.Count) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncluded -and $msValidateSet
 $ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPlanExpected.Count) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
+$ok = $ok -and $pmFound -and ($pmEntries.Count -eq $ProductionMigrationExpected.Count) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -489,6 +540,14 @@ $report = [ordered]@{
     skill_execution_plan_not_git_tracked = $spGitTracked
     skill_execution_plan_included_in_default_critical = $spIncluded
     skill_execution_plan_validate_set = $spValidateSet
+    skill_production_migration_suite = $ProductionMigrationSuite
+    skill_production_migration_expected_count = $ProductionMigrationExpected.Count
+    skill_production_migration_actual_count = $pmEntries.Count
+    skill_production_migration_missing = $pmMissing
+    skill_production_migration_duplicates = $pmDuplicates
+    skill_production_migration_not_git_tracked = $pmGitTracked
+    skill_production_migration_included_in_default_critical = $pmIncluded
+    skill_production_migration_validate_set = $pmValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4
