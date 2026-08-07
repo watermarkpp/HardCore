@@ -603,5 +603,3 @@ static func fire_wall_positions_ground_gu(
 			Vector2(safe_spacing_gu, safe_spacing_gu)
 		),
 	]
-
-
