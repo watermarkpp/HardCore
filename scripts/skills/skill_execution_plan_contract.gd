@@ -109,11 +109,6 @@ const ACTIONS := ["idle", "walk", "attack", "hit", "death"]
 
 ## Q3-B formal sentinels (read-only; default no per-event logging).
 static var canonical_plan_build_count := 0
-static var legacy_plan_build_count := 0
-static var formal_legacy_router_execute_count := 0
-static var caster_resolve_count := 0
-static var legacy_create_cast_nodes_count := 0
-static var visual_plan_build_count := 0
 static var release_id_generation_count := 0
 static var snapshot_build_count := 0
 static var resource_commit_count := 0
@@ -633,11 +628,6 @@ static func normalize_reason(reason: String) -> String:
 
 static func reset_sentinels_for_tests() -> void:
 	canonical_plan_build_count = 0
-	legacy_plan_build_count = 0
-	formal_legacy_router_execute_count = 0
-	caster_resolve_count = 0
-	legacy_create_cast_nodes_count = 0
-	visual_plan_build_count = 0
 	release_id_generation_count = 0
 	snapshot_build_count = 0
 	resource_commit_count = 0
@@ -647,11 +637,6 @@ static func reset_sentinels_for_tests() -> void:
 static func sentinel_diagnostics() -> Dictionary:
 	return {
 		"canonical_plan_build_count": canonical_plan_build_count,
-		"legacy_plan_build_count": legacy_plan_build_count,
-		"formal_legacy_router_execute_count": formal_legacy_router_execute_count,
-		"caster_resolve_count": caster_resolve_count,
-		"legacy_create_cast_nodes_count": legacy_create_cast_nodes_count,
-		"visual_plan_build_count": visual_plan_build_count,
 		"release_id_generation_count": release_id_generation_count,
 		"snapshot_build_count": snapshot_build_count,
 		"resource_commit_count": resource_commit_count,

@@ -3,7 +3,6 @@ extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
-const SkillCastResultScript := preload("res://scripts/skills/skill_cast_result.gd")
 const SkillTargetServiceScript := preload("res://scripts/skills/skill_target_service.gd")
 const SkillResourceServiceScript := preload("res://scripts/skills/skill_resource_service.gd")
 const SkillGeometryServiceScript := preload("res://scripts/skills/skill_geometry_service.gd")
@@ -20,44 +19,16 @@ const CANONICAL_PRODUCTION_DEFAULT := true
 const WARRIOR_MELEE_MODIFIER_CONTRACT_ID := "gameplay.warrior.melee_modifiers.v2"
 
 
-static func execute(request: Variant) -> Dictionary:
-	## Q3-B legacy-compat wrapper (not formally called; kept for shadow/tests).
-	## The formal chain calls build_canonical_plan() -> _plan() directly, so
-	## this legacy entry is never reached from production.
-	var plan := _plan(request)
-	var skill_id := str(
-		plan.get(
-			"skill_id",
-			SkillDataLoaderScript.stable_skill_id(
-				str(request.get("skill_id", ""))
-			)
-		)
-	)
-	if not bool(plan.get("accepted", false)):
-		return SkillCastResultScript.failure(
-			skill_id,
-			str(plan.get("reason", "runtime_rejected"))
-		)
-	var result := SkillCastResultScript.success(skill_id, plan)
-	result["runtime_contract"] = RUNTIME_CONTRACT_ID
-	result["source_ruleset_id"] = SkillDataLoaderScript.RULESET_ID
-	result["resource_quote"] = plan.get("resource_quote", {})
-	result["geometry_cells"] = plan.get("geometry_cells", [])
-	result["ignored_client_claims"] = {
-		"damage": request.get("client_claimed_damage"),
-		"success": request.get("client_claimed_success"),
-	}
-	return result
-
-
 static func _plan(request: Variant) -> Dictionary:
-	## Q3-B: the SINGLE planner baseline shared by the legacy execute() wrapper
-	## and the formal build_canonical_plan() entry. Pure: no resource commits,
-	## no cooldown commits, no node creation, no release snapshot building.
+	## Q3-C: the SINGLE planner baseline used by the canonical formal entry
+	## build_canonical_plan(). Pure: no resource commits, no cooldown commits,
+	## no node creation, no release snapshot building.
 	var request_validation := SkillCastRequestScript.validate(request)
 	if not bool(request_validation.get("valid", false)):
 		return {
 			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
 			"reason": str(
 				request_validation.get("reason", "invalid_request")
 			),
@@ -65,7 +36,13 @@ static func _plan(request: Variant) -> Dictionary:
 	var skill_id := SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
 	var definition := SkillDataLoaderScript.skill(skill_id)
 	if definition.is_empty():
-		return {"accepted": false, "skill_id": skill_id, "reason": "unknown_skill"}
+		return {
+			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
+			"skill_id": skill_id,
+			"reason": "unknown_skill",
+		}
 	var target_validation := SkillTargetServiceScript.validate(
 		definition,
 		request.get("target_context", {})
@@ -73,6 +50,8 @@ static func _plan(request: Variant) -> Dictionary:
 	if not bool(target_validation.get("valid", false)):
 		return {
 			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
 			"skill_id": skill_id,
 			"reason": str(
 				target_validation.get("reason", "invalid_target")
@@ -87,6 +66,8 @@ static func _plan(request: Variant) -> Dictionary:
 	if not bool(resource_quote.get("valid", false)):
 		return {
 			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
 			"skill_id": skill_id,
 			"reason": str(
 				resource_quote.get("reason", "insufficient_resource")
@@ -104,11 +85,15 @@ static func _plan(request: Variant) -> Dictionary:
 		_:
 			return {
 				"accepted": false,
+				"effect_success": false,
+				"resource_commit": false,
 				"skill_id": skill_id,
 				"reason": "unknown_profession",
 			}
 	plan["skill_id"] = skill_id
 	if not bool(plan.get("accepted", true)):
+		plan["effect_success"] = false
+		plan["resource_commit"] = false
 		plan["reason"] = str(plan.get("reason", "runtime_rejected"))
 		return plan
 	plan["timing"] = definition.get("timing", {}).duplicate(true)
@@ -337,9 +322,9 @@ static func integration_descriptor() -> Dictionary:
 		"warrior_melee_modifier_contract": WARRIOR_MELEE_MODIFIER_CONTRACT_ID,
 		"warrior_melee_modifier_entrypoint": "SkillRuntimeRouter.resolve_warrior_melee_modifiers",
 		"production_default": CANONICAL_PRODUCTION_DEFAULT,
-		"entrypoint": "SkillRuntimeRouter.execute",
+		"entrypoint": "SkillRuntimeRouter.build_canonical_plan",
 		"request_contract": SkillCastRequestScript.CONTRACT_ID,
-		"result_contract": SkillCastResultScript.CONTRACT_ID,
+		"result_contract": "skill_execution_result.v1",
 		"requires_integration_adapters": [
 			"combat_resolution",
 			"inventory_resources",
