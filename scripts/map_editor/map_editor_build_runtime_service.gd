@@ -11,10 +11,20 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const UnitLegacyAdapter := preload(
 	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
 )
+const RuntimeMapService := preload(
+	"res://scripts/map_editor/map_editor_runtime_map_service.gd"
+)
+const RuntimeBridge := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+const JsonCodec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
 
 const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
 const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
 const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
+const DEFAULT_RELEASE_REGISTRY_PATH := (
+	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
+)
 
 
 static func approve_for_runtime(document: Dictionary) -> Dictionary:
@@ -26,6 +36,160 @@ static func approve_for_runtime(document: Dictionary) -> Dictionary:
 	meta["runtime_approved_revision"] = int(meta.get("revision", 1))
 	document["editor_meta"] = meta
 	return {"ok": true, "validation": validation}
+
+
+## FREEZE-P0.3: Publish Runtime Release. Build != Publish: this is the ONLY
+## action that grants implemented_playable for a runtime build. It validates
+## the runtime, reads runtime_map_id/map_key, and writes/updates the Release
+## Registry (atomic temp+rename), recording the approved build hash.
+static func publish_runtime_release(
+	runtime_path: String,
+	runtime_map_id: int,
+	registry_path := DEFAULT_RELEASE_REGISTRY_PATH,
+	map_key_override := ""
+) -> Dictionary:
+	if runtime_map_id <= 0 or runtime_path.is_empty():
+		return {"success": false, "reason": "invalid_publish_args"}
+	var loaded := RuntimeMapService.load_runtime(runtime_path)
+	if not loaded.ok:
+		return {
+			"success": false,
+			"reason": "runtime_invalid",
+			"errors": loaded.errors,
+		}
+	var runtime: Dictionary = loaded.runtime
+	var map_key := (
+		map_key_override
+		if not map_key_override.is_empty()
+		else str(runtime.get("source", {}).get("map_id", ""))
+	)
+	if map_key.is_empty():
+		return {"success": false, "reason": "runtime_map_key_missing"}
+	var registry := _read_registry(registry_path)
+	var maps: Array = registry.get("maps", [])
+	var previous_revision := 0
+	var updated := false
+	for i in range(maps.size()):
+		if int(maps[i].get("runtime_map_id", -1)) == runtime_map_id:
+			previous_revision = int(maps[i].get("approval_revision", 0))
+			maps[i] = _release_entry(
+				runtime_map_id,
+				map_key,
+				runtime,
+				runtime_path,
+				previous_revision
+			)
+			updated = true
+			break
+	if not updated:
+		maps.append(
+			_release_entry(runtime_map_id, map_key, runtime, runtime_path, 0)
+		)
+	registry["maps"] = maps
+	var schema_errors := RuntimeBridge.validate_release_registry(registry)
+	if not schema_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "invalid_release_registry",
+			"errors": schema_errors,
+		}
+	if not _write_registry_atomic(registry_path, registry):
+		return {"success": false, "reason": "registry_write_failed"}
+	RuntimeBridge.invalidate_release_registry()
+	return {
+		"success": true,
+		"runtime_map_id": runtime_map_id,
+		"map_key": map_key,
+		"approved_build_sha256": str(runtime.get("build_sha256", "")),
+		"release_state": "implemented_playable",
+	}
+
+
+static func _release_entry(
+	runtime_map_id: int,
+	map_key: String,
+	runtime: Dictionary,
+	runtime_path: String,
+	previous_revision: int
+) -> Dictionary:
+	return {
+		"runtime_map_id": runtime_map_id,
+		"map_key": map_key,
+		"display_name": map_key,
+		"runtime_path": runtime_path,
+		"release_state": "implemented_playable",
+		"approved_build_sha256": str(runtime.get("build_sha256", "")),
+		"approval_source": "published_via_publish_runtime_release",
+		"approval_revision": previous_revision + 1,
+	}
+
+
+static func _read_registry(registry_path: String) -> Dictionary:
+	if FileAccess.file_exists(registry_path):
+		var file := FileAccess.open(registry_path, FileAccess.READ)
+		var parsed: Variant = (
+			JSON.parse_string(file.get_as_text())
+			if file != null
+			else null
+		)
+		if file != null:
+			file.close()
+		if parsed is Dictionary:
+			return parsed
+	return {
+		"schema_version": 1,
+		"registry_contract_id": "mse.map.runtime.release.v1",
+		"maps": [],
+	}
+
+
+static func _write_registry_atomic(
+	registry_path: String,
+	registry: Dictionary
+) -> bool:
+	var absolute_dst := (
+		ProjectSettings.globalize_path(registry_path)
+		if registry_path.begins_with("res://") or registry_path.begins_with("user://")
+		else registry_path
+	)
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(
+		absolute_dst.get_base_dir()
+	)
+	if mkdir_error != OK:
+		return false
+	var absolute_tmp := absolute_dst + ".tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JsonCodec.encode(registry))
+	file.flush()
+	file.close()
+	var verify_file := FileAccess.open(absolute_tmp, FileAccess.READ)
+	var verify_ok := (
+		verify_file != null
+		and JSON.parse_string(verify_file.get_as_text()) is Dictionary
+	)
+	if verify_file != null:
+		verify_file.close()
+	if not verify_ok:
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	var backup := absolute_dst + ".bak"
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	if FileAccess.file_exists(absolute_dst):
+		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return false
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	return true
 
 
 static func validate_for_runtime(document: Dictionary) -> Dictionary:

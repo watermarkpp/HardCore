@@ -16,93 +16,224 @@ const IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE := &"implemented_playable"
 const IMPLEMENTATION_STATE_PLANNED_UNBUILT := &"planned_unbuilt"
 const IMPLEMENTATION_STATE_REFERENCE_ONLY := &"reference_only"
 const IMPLEMENTATION_STATE_UNSUPPORTED := &"unsupported"
-const MAP_CONFIG := {
-	4: {
-		"map_key": "bich_province",
-		"display_name": "比奇省",
-		"marker": "res://assets/data/runtime/map_editor/bich_province.manual_ready.json",
-	},
-	268: {
-		"map_key": "wooma_forest",
-		"display_name": "沃玛森林",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	313: {
-		"map_key": "wooma_temple_1",
-		"display_name": "沃玛寺庙一层",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	314: {
-		"map_key": "wooma_temple_2",
-		"display_name": "沃玛寺庙二层",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	315: {
-		"map_key": "wooma_temple_3",
-		"display_name": "沃玛教主大厅",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	217: {
-		"map_key": "orc_tomb_1",
-		"display_name": "兽人古墓一层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	218: {
-		"map_key": "orc_tomb_2",
-		"display_name": "兽人古墓二层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	221: {
-		"map_key": "orc_tomb_3",
-		"display_name": "兽人古墓三层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	406: {
-		"map_key": "bich_mine_1",
-		"display_name": "矿区一层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	408: {
-		"map_key": "bich_mine_2",
-		"display_name": "矿区二层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	1578: {
-		"map_key": "corpse_king_hall",
-		"display_name": "尸王殿",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-}
+const RELEASE_REGISTRY_PATH := (
+	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
+)
+const RELEASE_STATE_IMPLEMENTED_PLAYABLE := &"implemented_playable"
+const RELEASE_STATE_IMPLEMENTED_STAGING := &"implemented_staging"
+const IMPLEMENTATION_STATE_IMPLEMENTED_STAGING := &"implemented_staging"
+## FREEZE-P0.3: build-bound release rejection reasons.
+const REASON_RUNTIME_RELEASE_NOT_REGISTERED := &"runtime_release_not_registered"
+const REASON_RUNTIME_RELEASE_NOT_READY := &"runtime_release_not_ready"
+const REASON_RUNTIME_FILE_MISSING := &"runtime_file_missing"
+const REASON_RUNTIME_INVALID := &"runtime_invalid"
+const REASON_RUNTIME_BUILD_NOT_APPROVED := &"runtime_build_not_approved"
+const REASON_RUNTIME_MAP_KEY_MISMATCH := &"runtime_map_key_mismatch"
 
 static var _runtime_cache := {}
+static var _registry_cache: Dictionary = {}
+static var _registry_loaded := false
+static var _registry_override_path := ""
+static var _readiness_result: Dictionary = {}
 
 
-static func has_runtime_map(runtime_map_id: int) -> bool:
-	if not MAP_CONFIG.has(runtime_map_id):
-		return false
-	var config: Dictionary = MAP_CONFIG[runtime_map_id]
+static func _registry_path() -> String:
 	return (
-		FileAccess.file_exists(str(config.marker))
-		and FileAccess.file_exists(runtime_path(runtime_map_id))
+		_registry_override_path
+		if not _registry_override_path.is_empty()
+		else RELEASE_REGISTRY_PATH
 	)
 
 
-## FREEZE-P0.2R: a formal runtime build exists (runtime JSON + manual-ready
-## marker). This is the ONLY source of implemented_playable.
+static func _load_release_registry() -> void:
+	if _registry_loaded:
+		return
+	_registry_cache.clear()
+	var path := _registry_path()
+	if FileAccess.file_exists(path):
+		var file := FileAccess.open(path, FileAccess.READ)
+		var parsed: Variant = (
+			JSON.parse_string(file.get_as_text())
+			if file != null
+			else null
+		)
+		if file != null:
+			file.close()
+		if parsed is Dictionary:
+			for raw_entry: Variant in parsed.get("maps", []):
+				if raw_entry is Dictionary:
+					var mid := int(raw_entry.get("runtime_map_id", -1))
+					if mid > 0:
+						_registry_cache[mid] = raw_entry
+	_registry_loaded = true
+
+
+static func _release_entry(runtime_map_id: int) -> Dictionary:
+	_load_release_registry()
+	return _registry_cache.get(runtime_map_id, {})
+
+
+## FREEZE-P0.3: test/dev seam only - point the registry loader at an alternate
+## registry file and drop all caches. Production never calls this.
+static func test_override_release_registry_path(path: String) -> void:
+	_registry_override_path = path
+	invalidate_release_registry()
+
+
+static func reset_release_registry_override() -> void:
+	_registry_override_path = ""
+	invalidate_release_registry()
+
+
+static func invalidate_release_registry() -> void:
+	_registry_loaded = false
+	_registry_cache.clear()
+	_runtime_cache.clear()
+	_readiness_result.clear()
+
+
+static func released_map_ids() -> Array[int]:
+	_load_release_registry()
+	var ids: Array[int] = []
+	for raw_id: Variant in _registry_cache.keys():
+		ids.append(int(raw_id))
+	ids.sort()
+	return ids
+
+
+## FREEZE-P0.3: schema contract for the Release Registry. Used by tests and by
+## the publish tool before writing.
+static func validate_release_registry(registry: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	if int(registry.get("schema_version", 0)) != 1:
+		errors.append("unsupported_schema_version")
+	if (
+		str(registry.get("registry_contract_id", ""))
+		!= "mse.map.runtime.release.v1"
+	):
+		errors.append("invalid_registry_contract_id")
+	var maps: Array = registry.get("maps", [])
+	var ids: Dictionary = {}
+	var keys: Dictionary = {}
+	for raw_entry: Variant in maps:
+		if not raw_entry is Dictionary:
+			errors.append("invalid_entry")
+			continue
+		var entry: Dictionary = raw_entry
+		var mid := int(entry.get("runtime_map_id", -1))
+		var map_key := str(entry.get("map_key", ""))
+		var runtime_file_path := str(entry.get("runtime_path", ""))
+		var release_state := str(entry.get("release_state", ""))
+		var approved := str(entry.get("approved_build_sha256", ""))
+		if mid <= 0:
+			errors.append("invalid_runtime_map_id")
+		if ids.has(mid):
+			errors.append("duplicate_runtime_map_id")
+		ids[mid] = true
+		if map_key.is_empty():
+			errors.append("missing_map_key")
+		if keys.has(map_key):
+			errors.append("duplicate_map_key")
+		keys[map_key] = true
+		if runtime_file_path.is_empty():
+			errors.append("missing_runtime_path")
+		if approved.is_empty():
+			errors.append("missing_approved_hash")
+		if (
+			release_state != str(RELEASE_STATE_IMPLEMENTED_PLAYABLE)
+			and release_state != str(RELEASE_STATE_IMPLEMENTED_STAGING)
+		):
+			errors.append("unknown_release_state")
+	return errors
+
+
+static func _compute_readiness(runtime_map_id: int) -> Dictionary:
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
+		return {
+			"playable": false,
+			"reason": REASON_RUNTIME_RELEASE_NOT_REGISTERED,
+		}
+	if (
+		str(entry.get("release_state", ""))
+		!= str(RELEASE_STATE_IMPLEMENTED_PLAYABLE)
+	):
+		return {
+			"playable": false,
+			"reason": REASON_RUNTIME_RELEASE_NOT_READY,
+		}
+	var runtime_file_path := str(entry.get("runtime_path", ""))
+	if (
+		runtime_file_path.is_empty()
+		or not FileAccess.file_exists(runtime_file_path)
+	):
+		return {"playable": false, "reason": REASON_RUNTIME_FILE_MISSING}
+	var loaded := MapEditorRuntimeMapService.load_runtime(runtime_file_path)
+	if not loaded.ok:
+		return {"playable": false, "reason": REASON_RUNTIME_INVALID}
+	var runtime: Dictionary = loaded.runtime
+	var approved := str(entry.get("approved_build_sha256", ""))
+	var current := str(runtime.get("build_sha256", ""))
+	if approved != current:
+		return {"playable": false, "reason": REASON_RUNTIME_BUILD_NOT_APPROVED}
+	var map_key := str(entry.get("map_key", ""))
+	var source_map_id := str(runtime.get("source", {}).get("map_id", ""))
+	if source_map_id != map_key:
+		return {"playable": false, "reason": REASON_RUNTIME_MAP_KEY_MISMATCH}
+	return {"playable": true, "reason": &""}
+
+
+static func _readiness(runtime_map_id: int) -> Dictionary:
+	if not _readiness_result.has(runtime_map_id):
+		_readiness_result[runtime_map_id] = _compute_readiness(runtime_map_id)
+	return _readiness_result[runtime_map_id]
+
+
+## FREEZE-P0.3: NOT "file exists". This answers "is the current release valid
+## and approved" - registry entry + implemented_playable + runtime file +
+## load ok + approved build hash match + map key match.
+static func has_runtime_map(runtime_map_id: int) -> bool:
+	return bool(_readiness(runtime_map_id).get("playable", false))
+
+
+static func release_rejection_reason(runtime_map_id: int) -> StringName:
+	return str(_readiness(runtime_map_id).get("reason", &"")) as StringName
+
+
+## Pure artifact existence: the registry entry exists AND its runtime file
+## exists. Does NOT grant readiness.
+static func runtime_artifact_exists(runtime_map_id: int) -> bool:
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
+		return false
+	var runtime_file_path := str(entry.get("runtime_path", ""))
+	return (
+		not runtime_file_path.is_empty()
+		and FileAccess.file_exists(runtime_file_path)
+	)
+
+
 static func is_runtime_built(runtime_map_id: int) -> bool:
 	return has_runtime_map(runtime_map_id)
 
 
 static func is_formal_playable(runtime_map_id: int) -> bool:
-	return is_runtime_built(runtime_map_id)
+	return has_runtime_map(runtime_map_id)
 
 
 static func implementation_state(runtime_map_id: int) -> Dictionary:
-	if is_runtime_built(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if not entry.is_empty():
+		if has_runtime_map(runtime_map_id):
+			return {
+				"state": IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE,
+				"runtime_map_id": runtime_map_id,
+				"formal_playable": true,
+			}
 		return {
-			"state": IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE,
+			"state": IMPLEMENTATION_STATE_IMPLEMENTED_STAGING,
 			"runtime_map_id": runtime_map_id,
-			"formal_playable": true,
+			"formal_playable": false,
 		}
 	if WorldContent != null and WorldContent.has_map(runtime_map_id):
 		var content := WorldContent.map_content(runtime_map_id)
@@ -129,29 +260,29 @@ static func implementation_state(runtime_map_id: int) -> Dictionary:
 
 
 static func runtime_path(runtime_map_id: int) -> String:
-	if not MAP_CONFIG.has(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
 		return ""
-	return (
-		"res://assets/data/runtime/map_editor/%s.runtime.json"
-		% str(MAP_CONFIG[runtime_map_id].map_key)
-	)
+	return str(entry.get("runtime_path", ""))
 
 
 static func ground_manifest_path(runtime_map_id: int) -> String:
-	if not MAP_CONFIG.has(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
 		return ""
 	return (
 		"res://map_editor_workspace/%s/ground/ground_manifest.json"
-		% str(MAP_CONFIG[runtime_map_id].map_key)
+		% str(entry.get("map_key", ""))
 	)
 
 
 static func visual_path(runtime_map_id: int) -> String:
-	if not MAP_CONFIG.has(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
 		return ""
 	return (
 		"res://assets/data/runtime/map_editor/%s.visual.json"
-		% str(MAP_CONFIG[runtime_map_id].map_key)
+		% str(entry.get("map_key", ""))
 	)
 
 
@@ -336,11 +467,11 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	var map_center_screen_position_px := ground_position_gu_to_screen_position_px(
 		runtime, map_center_ground_gu
 	)
-	var config: Dictionary = MAP_CONFIG.get(runtime_map_id, {})
+	var release_entry := _release_entry(runtime_map_id)
 	var result := {
-		"name": str(config.get("display_name", "地图")),
+		"name": str(release_entry.get("display_name", "地图")),
 		"runtime_map_id": runtime_map_id,
-		"runtime_map_key": str(config.get("map_key", "")),
+		"runtime_map_key": str(release_entry.get("map_key", "")),
 		"runtime_output_contract_id": RUNTIME_OUTPUT_CONTRACT_ID,
 		"runtime_home_screen_position_px": home_screen_position_px() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
 		"runtime_home_position_ground_gu": home_position_ground_gu() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
