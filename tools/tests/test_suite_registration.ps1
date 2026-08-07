@@ -506,6 +506,47 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $clIncluded = ($RunnerSource -match '\$Suites\.skill_runtime_cleanup_critical\s*\+')
 $clValidateSet = ($RunnerSource -match "skill_runtime_cleanup_critical")
 
+# wizard_line_geometry_critical verification (FREEZE-G0)
+$WizardLineSuite = 'wizard_line_geometry_critical'
+$WizardLineExpected = @(
+    'tests/wizard_line_footprint_core_test.tscn',
+    'tests/wizard_line_visual_stability_test.tscn'
+)
+
+$wlMissing = @()
+$wlDuplicates = @()
+$wlGitTracked = @()
+foreach ($path in $WizardLineExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $wlMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $wlGitTracked += $path
+    }
+}
+$wlDuplicates = @($WizardLineExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$wlBlock = $false
+$wlFound = $false
+$wlEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.wizard_line_geometry_critical\s*=') {
+        $wlBlock = $true
+        $wlFound = $true
+        continue
+    }
+    if ($wlBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $wlEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $wlBlock = $false
+            break
+        }
+    }
+}
+$wlIncluded = ($RunnerSource -match '\$Suites\.wizard_line_geometry_critical\s*\+')
+$wlValidateSet = ($RunnerSource -match "wizard_line_geometry_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -516,6 +557,7 @@ $ok = $ok -and $msFound -and ($msEntries.Count -eq $MonsterStreamingExpected.Cou
 $ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPlanExpected.Count) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
 $ok = $ok -and $pmFound -and ($pmEntries.Count -eq $ProductionMigrationExpected.Count) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
 $ok = $ok -and $clFound -and ($clEntries.Count -eq $CleanupExpected.Count) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
+$ok = $ok -and $wlFound -and ($wlEntries.Count -eq $WizardLineExpected.Count) -and ($wlMissing.Count -eq 0) -and ($wlDuplicates.Count -eq 0) -and ($wlGitTracked.Count -eq 0) -and $wlIncluded -and $wlValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -602,6 +644,14 @@ $report = [ordered]@{
     skill_runtime_cleanup_not_git_tracked = $clGitTracked
     skill_runtime_cleanup_included_in_default_critical = $clIncluded
     skill_runtime_cleanup_validate_set = $clValidateSet
+    wizard_line_geometry_suite = $WizardLineSuite
+    wizard_line_geometry_expected_count = $WizardLineExpected.Count
+    wizard_line_geometry_actual_count = $wlEntries.Count
+    wizard_line_geometry_missing = $wlMissing
+    wizard_line_geometry_duplicates = $wlDuplicates
+    wizard_line_geometry_not_git_tracked = $wlGitTracked
+    wizard_line_geometry_included_in_default_critical = $wlIncluded
+    wizard_line_geometry_validate_set = $wlValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4
