@@ -501,11 +501,11 @@ static func build_release_snapshot(
 		var origin_screen_px: Vector2 = context.get(
 			"origin_screen_px", Vector2.ZERO
 		)
-		var origin_ground_gu := (
-			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				origin_screen_px
-			)
-		)
+		# FREEZE-P0: a projectile release ORIGIN is a POSITION on the runtime
+		# map, so it must cross the map-aware screen->ground projection (design
+		# center included). Raw screen-delta inversion is reserved for the
+		# direction vector below.
+		var origin_ground_gu := _project(screen_to_ground, origin_screen_px)
 		var direction_screen_px: Vector2 = context.get(
 			"direction_screen_px", Vector2.ZERO
 		)

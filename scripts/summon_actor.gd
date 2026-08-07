@@ -43,6 +43,7 @@ const VISUAL_PATHS := {
 var owner_player: PlayerCharacter
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
+var runtime_screen_to_ground_position_px := Callable()
 var summon_name := "骷髅"
 var summon_id := "skeleton"
 var skill_id := "taoist.summon_skeleton"
@@ -188,7 +189,7 @@ func configure_spawn_release_footprint(source_release_id: String) -> void:
 		)
 	)
 	var spawn_center_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position)
+		_runtime_screen_to_ground_position(global_position)
 	)
 	summon_spawn_footprint_snapshot = (
 		SkillFootprintSnapshotScript.create_target_footprint(
@@ -204,12 +205,18 @@ func configure_spawn_release_footprint(source_release_id: String) -> void:
 
 func configure_runtime_map_projection(
 	map_id: int,
-	ground_gu_to_screen_position_px: Callable
+	ground_gu_to_screen_position_px: Callable,
+	screen_position_px_to_ground_gu: Callable = Callable()
 ) -> void:
 	runtime_map_id = int(map_id)
 	runtime_ground_gu_to_screen_position_px = (
 		ground_gu_to_screen_position_px
 		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+	runtime_screen_to_ground_position_px = (
+		screen_position_px_to_ground_gu
+		if screen_position_px_to_ground_gu is Callable
 		else Callable()
 	)
 
@@ -455,12 +462,10 @@ func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
 	if not is_instance_valid(target):
 		return {}
 	var origin_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position)
+		_runtime_screen_to_ground_position(global_position)
 	)
 	var target_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			target.global_position
-		)
+		_runtime_screen_to_ground_position(target.global_position)
 	)
 	var release_id := "%s:attack:%d:%d" % [
 		skill_id,
@@ -504,19 +509,27 @@ func attack_release_snapshot_intersects_target(
 	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
 		attack_snapshot,
 		_snapshot_coordinate_context(
-			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				global_position
-			)
+			_runtime_screen_to_ground_position(global_position)
 		),
 		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 	).get("valid", false)):
 		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 		attack_snapshot,
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			target.global_position
-		),
+		_runtime_screen_to_ground_position(target.global_position),
 		_target_combat_radius_gu(target)
+	)
+
+
+func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return ground_position_gu
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
 	)
 
 

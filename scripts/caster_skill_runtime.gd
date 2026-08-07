@@ -161,6 +161,10 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 			(coordinate_context as Dictionary).get(
 				"ground_position_gu_to_screen_position_px",
 				Callable()
+			),
+			(coordinate_context as Dictionary).get(
+				"screen_to_ground_position_px",
+				Callable()
 			)
 		)
 	return projectile
@@ -280,6 +284,14 @@ static func create_cast_nodes_from_canonical_plan(
 	var release_id := str(plan.get("release_id", ""))
 	var snapshot: Dictionary = plan.get("canonical_snapshot", {})
 	var coordinate_context := _coordinate_context_from_snapshot(snapshot)
+	if not coordinate_context.is_empty():
+		var screen_to_ground_from_context: Callable = runtime_context.get(
+			"screen_to_ground_position_px", Callable()
+		)
+		if screen_to_ground_from_context.is_valid():
+			coordinate_context["screen_to_ground_position_px"] = (
+				screen_to_ground_from_context
+			)
 	for raw_descriptor: Variant in plan.get("projectile_descriptors", []):
 		if not raw_descriptor is Dictionary:
 			continue
@@ -486,11 +498,15 @@ static func _configure_projectile_runtime(
 	var ground_to_screen: Callable = runtime_context.get(
 		"ground_gu_to_screen_position_px", Callable()
 	)
+	var screen_to_ground: Callable = runtime_context.get(
+		"screen_to_ground_position_px", Callable()
+	)
 	var map_id := int(runtime_context.get("runtime_map_id", -1))
 	if map_id >= 0 and ground_to_screen.is_valid():
 		projectile.configure_runtime_map_projection(
 			map_id,
-			ground_to_screen
+			ground_to_screen,
+			screen_to_ground
 		)
 	var magic_defense_adapter: Callable = runtime_context.get(
 		"magic_defense_adapter", Callable()
@@ -556,6 +572,10 @@ static func create_summon_actor(
 			int((coordinate_context as Dictionary).get("runtime_map_id", -1)),
 			(coordinate_context as Dictionary).get(
 				"ground_position_gu_to_screen_position_px",
+				Callable()
+			),
+			(coordinate_context as Dictionary).get(
+				"screen_to_ground_position_px",
 				Callable()
 			)
 		)

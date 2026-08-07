@@ -1875,7 +1875,8 @@ func _spawn_enemy(
 	enemy.setup(monster_data, player, is_boss)
 	enemy.configure_runtime_map_projection(
 		current_map_id,
-		Callable(self, "_canonical_ground_gu_to_screen_px")
+		Callable(self, "_canonical_ground_gu_to_screen_px"),
+		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
 	enemy.configure_spatial_index(
 		_combat_spatial_index,
@@ -1891,6 +1892,14 @@ func _spawn_enemy(
 		_runtime_spawn_serial,
 		enemy,
 		Callable(enemy, "spatial_index_position")
+	)
+	# FREEZE-P0: the initial register and the live provider must share the
+	# exact same absolute map-ground semantics (within the frozen GU epsilon).
+	assert(
+		_canonical_screen_px_to_ground_gu(spawn_position).distance_to(
+			enemy.spatial_index_position()
+		) <= GroundUnitSpaceScript.EPSILON_GU,
+		"enemy spatial index register/provider coordinate mismatch"
 	)
 	enemy.set_meta("spawn_position", spawn_position)
 	enemy.set_meta("spawn_is_boss", is_boss)
@@ -5071,6 +5080,9 @@ func _spawn_canonical_cast_nodes_from_plan(
 				"ground_gu_to_screen_position_px": (
 					Callable(self, "_canonical_ground_gu_to_screen_px")
 				),
+				"screen_to_ground_position_px": (
+					Callable(self, "_canonical_screen_px_to_ground_gu")
+				),
 				"magic_defense_adapter": Callable(
 					self,
 					"_resolve_magic_defense"
@@ -6033,7 +6045,8 @@ func _apply_canonical_main_pet(
 	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
 	summon.configure_runtime_map_projection(
 		current_map_id,
-		Callable(self, "_canonical_ground_gu_to_screen_px")
+		Callable(self, "_canonical_ground_gu_to_screen_px"),
+		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
 	summon.global_position = _summon_spawn_screen_position_px()
 	summon.configure_spawn_release_footprint(release_id)
@@ -6327,7 +6340,8 @@ func _spawn_projectile(
 	)
 	projectile.configure_runtime_map_projection(
 		current_map_id,
-		Callable(self, "_canonical_ground_gu_to_screen_px")
+		Callable(self, "_canonical_ground_gu_to_screen_px"),
+		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
 	projectile.configure_spatial_index(_combat_spatial_index)
 	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))

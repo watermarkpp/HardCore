@@ -52,6 +52,7 @@ var skill_footprint_snapshot: Dictionary = {}
 var last_segment_footprint_snapshot: Dictionary = {}
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
+var runtime_screen_to_ground_position_px := Callable()
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var resolution_skill_id := ""
 var source_actor: Node2D
@@ -137,12 +138,18 @@ func setup_ground_unit_projectile(
 
 func configure_runtime_map_projection(
 	map_id: int,
-	ground_gu_to_screen_position_px: Callable
+	ground_gu_to_screen_position_px: Callable,
+	screen_position_px_to_ground_gu: Callable = Callable()
 ) -> void:
 	runtime_map_id = int(map_id)
 	runtime_ground_gu_to_screen_position_px = (
 		ground_gu_to_screen_position_px
 		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+	runtime_screen_to_ground_position_px = (
+		screen_position_px_to_ground_gu
+		if screen_position_px_to_ground_gu is Callable
 		else Callable()
 	)
 	_build_release_footprint_snapshot()
@@ -165,9 +172,7 @@ func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
 	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
 		snapshot,
 		_snapshot_coordinate_context(
-			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				global_position
-			)
+			_runtime_screen_to_ground_position(global_position)
 		),
 		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 	).get("valid", false))
@@ -196,9 +201,7 @@ func _build_release_footprint_snapshot() -> void:
 	if max_travel_distance_gu <= 0.0:
 		skill_footprint_snapshot = {}
 		return
-	var origin_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position)
-	)
+	var origin_ground_gu := _runtime_screen_to_ground_position(global_position)
 	skill_footprint_snapshot = (
 		SkillFootprintSnapshotScript.create_swept_capsule_path(
 			skill_id if not skill_id.is_empty() else "unbound.projectile",
@@ -263,15 +266,11 @@ func _physics_process(delta: float) -> void:
 	)
 	var segment_start_screen_px := global_position
 	var segment_end_screen_px := global_position + motion_screen_px
-	var segment_start_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			segment_start_screen_px
-		)
+	var segment_start_ground_gu := _runtime_screen_to_ground_position(
+		segment_start_screen_px
 	)
-	var segment_end_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			segment_end_screen_px
-		)
+	var segment_end_ground_gu := _runtime_screen_to_ground_position(
+		segment_end_screen_px
 	)
 	last_segment_footprint_snapshot = (
 		SkillFootprintSnapshotScript.create_swept_capsule_path(
@@ -367,9 +366,7 @@ func _swept_segment_intersects_enemy_footprint(
 	enemy: EnemyActor
 ) -> bool:
 	var enemy_center_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			enemy.global_position
-		)
+		_runtime_screen_to_ground_position(enemy.global_position)
 	)
 	if (
 		_snapshot_strict_ok(skill_footprint_snapshot)
@@ -403,6 +400,18 @@ func _swept_segment_intersects_enemy_footprint(
 		segment_end_ground_relative,
 		Vector2.ZERO,
 		contact_radius_gu
+	)
+
+
+func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return ground_position_gu
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
 	)
 
 
