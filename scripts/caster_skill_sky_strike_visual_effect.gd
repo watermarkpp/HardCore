@@ -84,6 +84,13 @@ func _ready() -> void:
 	if rejection_reason != "":
 		return
 	_apply_profile_anchor()
+	if (
+		skill_id == "wizard.lightning"
+		and not _impact_started
+		and is_zero_approx(_lifecycle_warning_seconds)
+		and is_zero_approx(_lifecycle_impact_seconds)
+	):
+		_start_sky_strike_playback()
 
 
 func _process(delta: float) -> void:
