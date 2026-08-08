@@ -70,6 +70,16 @@ func _ready() -> void:
 	var saved_target := target_node
 	super._ready()
 	target_node = saved_target
+	# Calling set_process(false) before an AnimationPlayer enters the tree does
+	# not survive Godot's automatic activation of its `_process` callback.  The
+	# lightning sprite therefore completed all six frames while still hidden by
+	# the impact gate and only exposed its effectively empty 4x1 terminal frame.
+	# Re-apply the gate after every child is ready so frame zero remains intact
+	# until the existing SkyStrike lifecycle starts playback.
+	if skill_id == "wizard.lightning" and not _impact_started:
+		for node in _sprites:
+			if node is CasterSkillAnimationPlayer:
+				(node as CasterSkillAnimationPlayer).set_process(false)
 	_refresh_sky_strike_debug_metadata()
 	if rejection_reason != "":
 		return
