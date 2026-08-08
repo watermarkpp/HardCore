@@ -20,6 +20,7 @@ SkillRuntimeRouter → Canonical Skill Plan → Gameplay → CasterSkillRuntime 
 - Gameplay line geometry is continuous/arbitrary-angle and must never be quantized to the character's 8-direction animation or a 16-direction presentation lookup.
 - Presentation must consume the same canonical release origin, projected axis, actual length and centerline. A 16-direction source sequence may select artwork only; its measured visible source axis must be continuously transformed onto the canonical projected axis.
 - Character animation may remain 8-direction. Global lock-on, eligibility, damage, target selection and the semi-transparent gameplay debug band are unchanged by this presentation contract.
+- Hellfire production effects use `maximum_targets = 0` together with `target_limit_policy = all_intersecting_effect_cells`; for a canonical continuous Wizard line this explicit policy takes precedence and means every hostile footprint intersecting the release snapshot is selected. A bare `maximum_targets = 0` without that policy still means no targets.
 
 ## Snapshot
 

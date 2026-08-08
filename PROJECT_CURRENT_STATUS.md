@@ -1,13 +1,13 @@
 # HardCore Current Status
 
-Updated against production HEAD: `348b6809c739ccf9cfbeee121e2ffc5493842cc4`
+Updated against production HEAD: `13821799fced2fee0d50c27d89bba3149464077f`
 Branch: `codex/integration`
 Updated: 2026-08-08
 Purpose: where the project stands right now.
 
 ## Current HEAD
 
-`348b6809c739ccf9cfbeee121e2ffc5493842cc4`
+`13821799fced2fee0d50c27d89bba3149464077f`
 
 ## Current Stage
 
@@ -35,13 +35,18 @@ Purpose: where the project stands right now.
 
 `0`
 
-## Known Unverified Production Regressions
+## Hellfire Damage Regression Fix
 
-- `known_unverified_production_regressions = 1`
-- `HELLFIRE_CANONICAL_TARGET_REGRESSION = PENDING_VERIFICATION`
-  - Repository call-path conflict is proven.
-  - Runtime/player-visible effect has not yet been revalidated.
-  - 该项不是已确认 production blocker，也尚未提升为 new must-fix。
+- `known_unverified_production_regressions = 0`
+- `HELLFIRE_CANONICAL_TARGET_REGRESSION = FIX_IMPLEMENTED`
+- User-visible symptom confirmed: Hellfire animation and geometry released, but no target received damage.
+- Root cause: the canonical target selector interpreted production `maximum_targets = 0` as an empty target set before applying the explicit `target_limit_policy = all_intersecting_effect_cells` contract.
+- Fix commit: `13821799fced2fee0d50c27d89bba3149464077f` (`fix(skills): restore hellfire line damage`).
+- Automated verification:
+  - production-effect regression reproduced before fix and passed after fix: `PASS / 1_OF_1`
+  - wizard canonical/runtime/lock integration: `PASS / 3_OF_3`
+  - `wizard_line_geometry_critical`: `PASS / 3_OF_3`
+- `HELLFIRE_DAMAGE_DEVICE_ACCEPTANCE = PENDING`
 
 ## Closed Recent Bugs
 
@@ -89,9 +94,9 @@ Purpose: where the project stands right now.
 
 ## Next Verification
 
-- `NEXT_VERIFICATION = WIZARD_LINE_PRESENTATION_DEVICE_ACCEPTANCE`
-- `STATUS = NOT_STARTED`
-- After this active device acceptance, `HELLFIRE_CANONICAL_TARGET_REGRESSION` remains a separate queued `PENDING_VERIFICATION`; its `maximum_targets` path was not changed or tested by the presentation task.
+- `NEXT_VERIFICATION = WIZARD_SKILL_DEVICE_ACCEPTANCE`
+- `STATUS = READY_FOR_NEW_APK_DEVICE_ACCEPTANCE`
+- Verify both the Wizard Line presentation alignment and restored Hellfire damage with the newly exported Debug APK.
 
 ## Pending Freeze Quality Gates
 

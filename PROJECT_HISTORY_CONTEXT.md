@@ -2228,6 +2228,25 @@ NOT_A_BUG
 
 因为代码路径冲突已经有直接证据。
 
+2026-08-08 用户随后在当前 Android 实机版本确认了玩家可见现象：地狱火能够释放动画和 Gameplay Geometry，但没有造成伤害。集成测试改用生产 effect 的真实组合：
+
+```text
+maximum_targets = 0
+target_limit_policy = all_intersecting_effect_cells
+```
+
+修复前该测试在“地狱火未命中连续五格直线内首个目标”处稳定失败。提交 `13821799` 在 canonical target selection 中先解析显式 `all_intersecting_effect_cells` 策略，再处理通用 `maximum_targets = 0` 禁用语义。修复后确认：条带内前后两个目标均受伤、条带外目标不受伤；缺少显式策略的 `maximum_targets = 0` 仍返回空目标。
+
+当前分类更新为：
+
+```text
+HELLFIRE_CANONICAL_TARGET_REGRESSION
+=
+FIX_IMPLEMENTED
+AUTOMATED_VERIFICATION_PASS
+DEVICE_ACCEPTANCE_PENDING
+```
+
 ---
 
 # 46. Wizard Line Presentation Alignment
@@ -2264,4 +2283,4 @@ AUTOMATED_ALIGNMENT_PASS
 DEVICE_ACCEPTANCE_PENDING
 ```
 
-`HELLFIRE_CANONICAL_TARGET_REGRESSION`（`maximum_targets`）仍为独立的 `PENDING_VERIFICATION`，本轮未修改、未验证、未关闭。
+Wizard Line Presentation 施工本身没有修改 `maximum_targets`；随后独立提交 `13821799` 已修复其 canonical target-selection 顺序，并通过自动验证。最终仍需新 APK 实机确认伤害恢复。
