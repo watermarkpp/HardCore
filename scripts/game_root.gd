@@ -6141,7 +6141,8 @@ func _apply_canonical_main_pet(
 		maxi(1, _canonical_primary_stat_roll("taoist")),
 		int(effect.get("initial_pet_level", 0)),
 		stable_skill_id,
-		PlayerState.level
+		PlayerState.level,
+		int(effect.get("max_pet_level", -1))
 	)
 	summon.set_meta("taoist_main_pet", true)
 	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")

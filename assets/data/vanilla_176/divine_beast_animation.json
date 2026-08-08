@@ -19,6 +19,9 @@
     32,
     28
   ],
+  "stableBodyTop": 39,
+  "attackReleaseFrameIndex": 5,
+  "attackReleaseMs": 500,
   "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon18.wil",
   "clientLibrarySha256": "eab9850feaecd7a3bf89d3e6274317e3543f5c07ec3e771627e1aa11c4c74bbd",
   "clientLibraryImageCount": 3707,
@@ -2104,5 +2107,390 @@
       ],
       "confidence": "A"
     }
+  },
+  "fire": {
+    "path": "res://assets/art/characters/taoist/effects/divine_beast/divine_beast_fire.png",
+    "framesPerDirection": 5,
+    "frameMs": 100,
+    "frameSize": [
+      416,
+      352
+    ],
+    "footAnchor": [
+      184,
+      200
+    ],
+    "actorGroundOffset": [
+      24,
+      16
+    ],
+    "sourceStart": 821,
+    "sourceDirectionStride": 10,
+    "validatedSourceFrameCount": 40,
+    "missingFrames": [],
+    "sourceFrames": [
+      {
+        "index": 821,
+        "direction": 0,
+        "frame": 0,
+        "drawOffset": [
+          -10,
+          -159
+        ]
+      },
+      {
+        "index": 822,
+        "direction": 0,
+        "frame": 1,
+        "drawOffset": [
+          -18,
+          -190
+        ]
+      },
+      {
+        "index": 823,
+        "direction": 0,
+        "frame": 2,
+        "drawOffset": [
+          -14,
+          -192
+        ]
+      },
+      {
+        "index": 824,
+        "direction": 0,
+        "frame": 3,
+        "drawOffset": [
+          -7,
+          -184
+        ]
+      },
+      {
+        "index": 825,
+        "direction": 0,
+        "frame": 4,
+        "drawOffset": [
+          -4,
+          -196
+        ]
+      },
+      {
+        "index": 831,
+        "direction": 1,
+        "frame": 0,
+        "drawOffset": [
+          41,
+          -134
+        ]
+      },
+      {
+        "index": 832,
+        "direction": 1,
+        "frame": 1,
+        "drawOffset": [
+          41,
+          -156
+        ]
+      },
+      {
+        "index": 833,
+        "direction": 1,
+        "frame": 2,
+        "drawOffset": [
+          66,
+          -153
+        ]
+      },
+      {
+        "index": 834,
+        "direction": 1,
+        "frame": 3,
+        "drawOffset": [
+          87,
+          -149
+        ]
+      },
+      {
+        "index": 835,
+        "direction": 1,
+        "frame": 4,
+        "drawOffset": [
+          101,
+          -154
+        ]
+      },
+      {
+        "index": 841,
+        "direction": 2,
+        "frame": 0,
+        "drawOffset": [
+          57,
+          -66
+        ]
+      },
+      {
+        "index": 842,
+        "direction": 2,
+        "frame": 1,
+        "drawOffset": [
+          53,
+          -75
+        ]
+      },
+      {
+        "index": 843,
+        "direction": 2,
+        "frame": 2,
+        "drawOffset": [
+          80,
+          -75
+        ]
+      },
+      {
+        "index": 844,
+        "direction": 2,
+        "frame": 3,
+        "drawOffset": [
+          120,
+          -70
+        ]
+      },
+      {
+        "index": 845,
+        "direction": 2,
+        "frame": 4,
+        "drawOffset": [
+          146,
+          -65
+        ]
+      },
+      {
+        "index": 851,
+        "direction": 3,
+        "frame": 0,
+        "drawOffset": [
+          43,
+          -31
+        ]
+      },
+      {
+        "index": 852,
+        "direction": 3,
+        "frame": 1,
+        "drawOffset": [
+          41,
+          -34
+        ]
+      },
+      {
+        "index": 853,
+        "direction": 3,
+        "frame": 2,
+        "drawOffset": [
+          56,
+          -20
+        ]
+      },
+      {
+        "index": 854,
+        "direction": 3,
+        "frame": 3,
+        "drawOffset": [
+          84,
+          7
+        ]
+      },
+      {
+        "index": 855,
+        "direction": 3,
+        "frame": 4,
+        "drawOffset": [
+          97,
+          23
+        ]
+      },
+      {
+        "index": 861,
+        "direction": 4,
+        "frame": 0,
+        "drawOffset": [
+          -6,
+          -17
+        ]
+      },
+      {
+        "index": 862,
+        "direction": 4,
+        "frame": 1,
+        "drawOffset": [
+          -14,
+          -18
+        ]
+      },
+      {
+        "index": 863,
+        "direction": 4,
+        "frame": 2,
+        "drawOffset": [
+          -15,
+          10
+        ]
+      },
+      {
+        "index": 864,
+        "direction": 4,
+        "frame": 3,
+        "drawOffset": [
+          -12,
+          44
+        ]
+      },
+      {
+        "index": 865,
+        "direction": 4,
+        "frame": 4,
+        "drawOffset": [
+          6,
+          77
+        ]
+      },
+      {
+        "index": 871,
+        "direction": 5,
+        "frame": 0,
+        "drawOffset": [
+          -88,
+          -31
+        ]
+      },
+      {
+        "index": 872,
+        "direction": 5,
+        "frame": 1,
+        "drawOffset": [
+          -124,
+          -33
+        ]
+      },
+      {
+        "index": 873,
+        "direction": 5,
+        "frame": 2,
+        "drawOffset": [
+          -130,
+          -20
+        ]
+      },
+      {
+        "index": 874,
+        "direction": 5,
+        "frame": 3,
+        "drawOffset": [
+          -126,
+          4
+        ]
+      },
+      {
+        "index": 875,
+        "direction": 5,
+        "frame": 4,
+        "drawOffset": [
+          -129,
+          14
+        ]
+      },
+      {
+        "index": 881,
+        "direction": 6,
+        "frame": 0,
+        "drawOffset": [
+          -121,
+          -67
+        ]
+      },
+      {
+        "index": 882,
+        "direction": 6,
+        "frame": 1,
+        "drawOffset": [
+          -166,
+          -76
+        ]
+      },
+      {
+        "index": 883,
+        "direction": 6,
+        "frame": 2,
+        "drawOffset": [
+          -177,
+          -76
+        ]
+      },
+      {
+        "index": 884,
+        "direction": 6,
+        "frame": 3,
+        "drawOffset": [
+          -172,
+          -71
+        ]
+      },
+      {
+        "index": 885,
+        "direction": 6,
+        "frame": 4,
+        "drawOffset": [
+          -180,
+          -68
+        ]
+      },
+      {
+        "index": 891,
+        "direction": 7,
+        "frame": 0,
+        "drawOffset": [
+          -87,
+          -128
+        ]
+      },
+      {
+        "index": 892,
+        "direction": 7,
+        "frame": 1,
+        "drawOffset": [
+          -114,
+          -152
+        ]
+      },
+      {
+        "index": 893,
+        "direction": 7,
+        "frame": 2,
+        "drawOffset": [
+          -109,
+          -150
+        ]
+      },
+      {
+        "index": 894,
+        "direction": 7,
+        "frame": 3,
+        "drawOffset": [
+          -107,
+          -146
+        ]
+      },
+      {
+        "index": 895,
+        "direction": 7,
+        "frame": 4,
+        "drawOffset": [
+          -106,
+          -151
+        ]
+      }
+    ],
+    "sourceAnchor": "MirClient/AxeMon.pas WARRIORELFFIREBASE=820; TWarriorElfMonster.RunFrameAction frame=5 creates base+direction*10+1, five frames at 100ms from Mon18",
+    "confidence": "A"
   }
 }

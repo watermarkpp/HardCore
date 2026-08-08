@@ -24,6 +24,17 @@
       "stacking_policy": "green_and_red_coexist_same_type_refresh",
       "tick_interval_ms": 2000,
       "type": "poison_resolution"
+    },
+    {
+      "apply_probability": 1.0,
+      "duration_seconds": 20,
+      "extra_durability_loss_per_hit": 1,
+      "flat_ac_reduction": 3,
+      "flat_mac_reduction": 3,
+      "poison_type": "red_poison",
+      "resisted": false,
+      "stacking_policy": "green_and_red_coexist_same_type_refresh",
+      "type": "poison_resolution"
     }
   ],
   "ground_effect_descriptors": [],
@@ -75,9 +86,9 @@
   "rejection_reason": "accepted",
   "resource_cost": {
     "consume_timing": "after_target_eligibility_before_resist_roll",
-    "material_amount": 1,
-    "material_id": "grey_powder",
-    "mp_cost": 5,
+    "material_amount": 0,
+    "material_id": "",
+    "mp_cost": 10,
     "reason": "",
     "valid": true
   },

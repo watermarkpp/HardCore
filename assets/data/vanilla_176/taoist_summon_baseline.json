@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "contract_id": "skills.taoist_summon.original_database_binary_verified.v1",
+  "status": "PROJECT_CANONICAL",
+  "provenance": {
+    "base_stats_status": "ORIGINAL_DATABASE_BINARY_VERIFIED",
+    "base_stats_authority": "explicit_user_authoritative_override",
+    "base_stats_decision_date": "2026-08-09",
+    "binary_sha256": null,
+    "binary_sha256_note": "User formally classified the supplied BoneFamiliar/Shinsu/Shinsu1 records as ORIGINAL_DATABASE_BINARY_VERIFIED; no binary hash was supplied and none is fabricated.",
+    "growth_rule_distribution": "source.original_gameofmir.server_suite",
+    "growth_rule_tier": "primary",
+    "growth_rule_paths": [
+      "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+      "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+      "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas"
+    ]
+  },
+  "growth_contract": {
+    "initial_pet_level_formula": "skill_rank",
+    "maximum_pet_level_formula": "1 + 2 * skill_rank",
+    "maximum_pet_level_by_skill_rank": [1, 3, 5, 7],
+    "growth_credit": "killed_monster_level",
+    "threshold_formula": "15 * base_monster_level + 100 + level_extra[current_pet_level]",
+    "level_extra": [0, 0, 50, 100, 200, 300, 600, 1200],
+    "comparison": "accumulated_growth > threshold",
+    "maximum_level_gains_per_kill_credit": 1,
+    "remainder_policy": "subtract_threshold_and_preserve_remainder",
+    "level_up_current_hp_policy": "preserve_absolute_current_hp_without_healing",
+    "max_hp_formula": "base_hp + round((pet_level * 0.1 + 0.3) * base_hp) * pet_level",
+    "dc_min_formula": "base_dc_min",
+    "dc_max_formula": "base_dc_max + round((pet_level * 0.1 + 0.3) * 3.0 * pet_level)",
+    "unchanged_by_pet_level": ["ac_min", "ac_max", "mac_min", "mac_max", "accuracy", "agility", "monster_level"],
+    "name_color_palette_indices": [255, 254, 147, 154, 229, 168, 180, 252, 249],
+    "persistence": "transient_non_permanent_pet"
+  },
+  "templates": {
+    "skeleton": {
+      "skill_id": "taoist.summon_skeleton",
+      "database_names": ["BoneFamiliar"],
+      "display_name": "变异骷髅",
+      "monster_id": 145,
+      "monster_level": 15,
+      "base_stats": {
+        "hp": 140,
+        "dc_min": 12,
+        "dc_max": 23,
+        "ac_min": 2,
+        "ac_max": 4,
+        "mac_min": 3,
+        "mac_max": 6,
+        "accuracy": 20,
+        "agility": 20
+      },
+      "raw_database_timing_ms": {
+        "attack_interval": 1500,
+        "move_interval": 1500
+      },
+      "effective_timing_ms_by_skill_rank": {
+        "attack_interval": [3000, 2400, 1800, 1200],
+        "move_interval": [1200, 950, 700, 450]
+      },
+      "attack_type": "physical",
+      "levels_0_to_7": [
+        {"level": 0, "hp": 140, "dc_min": 12, "dc_max": 23},
+        {"level": 1, "hp": 196, "dc_min": 12, "dc_max": 24},
+        {"level": 2, "hp": 280, "dc_min": 12, "dc_max": 26},
+        {"level": 3, "hp": 392, "dc_min": 12, "dc_max": 28},
+        {"level": 4, "hp": 532, "dc_min": 12, "dc_max": 31},
+        {"level": 5, "hp": 700, "dc_min": 12, "dc_max": 35},
+        {"level": 6, "hp": 896, "dc_min": 12, "dc_max": 39},
+        {"level": 7, "hp": 1120, "dc_min": 12, "dc_max": 44}
+      ],
+      "visual": {
+        "contract_id": "summon.visual.mutant_skeleton.directional.v1",
+        "direction_mode": "mir2_north_first",
+        "frame_size": [176, 160],
+        "foot_anchor": [43, 87],
+        "actor_ground_offset": [32, 28],
+        "stable_body_top": 36,
+        "actions": {
+          "idle": {"path": "res://assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_idle.png", "frames_per_direction": 4, "frame_ms": 200},
+          "walk": {"path": "res://assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_walk.png", "frames_per_direction": 6, "frame_ms": 160},
+          "attack": {"path": "res://assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_attack.png", "frames_per_direction": 6, "frame_ms": 100},
+          "hit": {"path": "res://assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_hit.png", "frames_per_direction": 2, "frame_ms": 100},
+          "death": {"path": "res://assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_death.png", "frames_per_direction": 10, "frame_ms": 120}
+        }
+      }
+    },
+    "divine_beast": {
+      "skill_id": "taoist.summon_divine_beast",
+      "database_names": ["Shinsu", "Shinsu1"],
+      "display_name": "神兽",
+      "monster_id": 146,
+      "monster_level": 32,
+      "base_stats": {
+        "hp": 160,
+        "dc_min": 7,
+        "dc_max": 25,
+        "ac_min": 8,
+        "ac_max": 8,
+        "mac_min": 5,
+        "mac_max": 5,
+        "accuracy": 17,
+        "agility": 25
+      },
+      "raw_database_timing_ms": {
+        "attack_interval": 1500,
+        "move_interval": 1500
+      },
+      "effective_timing_ms_by_skill_rank": {
+        "attack_interval": [1500, 1400, 1300, 1200],
+        "move_interval": [500, 450, 400, 350]
+      },
+      "attack_type": "fire",
+      "levels_0_to_7": [
+        {"level": 0, "hp": 160, "dc_min": 7, "dc_max": 25},
+        {"level": 1, "hp": 224, "dc_min": 7, "dc_max": 26},
+        {"level": 2, "hp": 320, "dc_min": 7, "dc_max": 28},
+        {"level": 3, "hp": 448, "dc_min": 7, "dc_max": 30},
+        {"level": 4, "hp": 608, "dc_min": 7, "dc_max": 33},
+        {"level": 5, "hp": 800, "dc_min": 7, "dc_max": 37},
+        {"level": 6, "hp": 1024, "dc_min": 7, "dc_max": 41},
+        {"level": 7, "hp": 1280, "dc_min": 7, "dc_max": 46}
+      ],
+      "visual": {
+        "contract_id": "summon.visual.divine_beast.directional.v1",
+        "manifest_path": "res://assets/data/vanilla_176/divine_beast_animation.json",
+        "stable_body_top": 39,
+        "attack_release_frame_index": 5,
+        "attack_release_ms": 500
+      }
+    }
+  }
+}

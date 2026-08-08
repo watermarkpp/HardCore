@@ -24,16 +24,31 @@ func _ready() -> void:
 	assert(ResourceService.committed_context(request.resource_context, fireball_quote).mana == 91)
 	var talisman := Loader.skill("taoist.soul_fire_talisman")
 	var no_amulet := ResourceService.quote(talisman, 3, {"mana": 100, "materials": {"amulet": 0}})
-	assert(not no_amulet.valid and no_amulet.reason == "insufficient_material")
+	assert(no_amulet.valid and no_amulet.material_amount == 0 and no_amulet.material_id == "")
 	var amulet_quote := ResourceService.quote(talisman, 3, {"mana": 100, "materials": {"amulet": 2}})
-	assert(amulet_quote.valid and amulet_quote.material_amount == 1)
+	assert(amulet_quote.valid and amulet_quote.material_amount == 0 and amulet_quote.material_id == "")
 	var poison := Loader.skill("taoist.poison")
-	assert(not ResourceService.quote(poison, 0, {"mana": 100, "materials": {}}).valid)
-	assert(ResourceService.quote(poison, 0, {
-		"mana": 100,
-		"selected_material": "grey_powder",
-		"materials": {"grey_powder": 1},
-	}).valid)
+	var poison_quote := ResourceService.quote(poison, 0, {"mana": 100, "materials": {}})
+	assert(poison_quote.valid)
+	assert(poison_quote.mp_cost == int(poison.get("mp_cost_by_rank", [])[0]) * 2)
+	assert(poison_quote.material_amount == 0 and poison_quote.material_id == "")
+	for skill_id: String in Loader.skill_ids():
+		var definition := Loader.skill(skill_id)
+		if str(definition.get("class", "")) != "taoist":
+			continue
+		var quote := ResourceService.quote(definition, 3, {"mana": 999, "materials": {}})
+		assert(quote.valid, "%s should not require cast materials" % skill_id)
+		assert(quote.material_amount == 0 and quote.material_id == "")
+	var synthetic_wizard_material := {
+		"class": "wizard",
+		"skill_id": "wizard.material_policy_probe",
+		"mp_cost_by_rank": [0, 0, 0, 0],
+		"resource": {"item": "amulet", "amount_by_rank": [1, 1, 1, 1]},
+	}
+	var wizard_material_quote := ResourceService.quote(
+		synthetic_wizard_material, 0, {"mana": 100, "materials": {}}
+	)
+	assert(not wizard_material_quote.valid and wizard_material_quote.reason == "insufficient_material")
 	var hellfire_cells := GeometryService.cells(
 		Loader.skill("wizard.hellfire"), Vector2i.ZERO, Vector2i.RIGHT
 	)

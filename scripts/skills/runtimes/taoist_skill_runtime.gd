@@ -29,7 +29,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			plan.effects = [_spirit_damage_effect(definition, request, rng)]
 			plan.proficiency_event = trigger
 		"taoist.summon_skeleton":
-			_resolve_main_pet(plan, rank, context, trigger, "skeleton", rank + 4)
+			_resolve_main_pet(plan, rank, context, trigger, "skeleton", 1 + 2 * rank)
 		"taoist.invisibility":
 			plan.effects = [_stealth_effect(rank, context, rng, "buff.taoist.invisibility")]
 			plan.proficiency_event = trigger
@@ -95,12 +95,6 @@ static func _resolve_poison(
 	trigger: String
 ) -> void:
 	var context: Dictionary = request.get("target_context", {})
-	var resources: Dictionary = request.get("resource_context", {})
-	var selected: String = str(resources.get("selected_material", ""))
-	if selected not in ["grey_powder", "yellow_powder"]:
-		_reject(plan, "selected_poison_powder")
-		return
-	var poison_type: String = "green_poison" if selected == "grey_powder" else "red_poison"
 	var sc_roll := int(context.get("primary_stat_roll", 0))
 	var resisted: bool = (
 		bool(context.get("force_resist", false))
@@ -114,24 +108,32 @@ static func _resolve_poison(
 	)
 	var duration_seconds: int = int([8, 12, 16, 20][rank]) + int(floor(float(sc_roll) / 5.0))
 	var resist_bound := maxi(1, int(context.get("target_poison_resist", 0)) + 7)
-	var power_base: int = 40 if poison_type == "green_poison" else 30
-	var power: int = Formula.get_power13(rng, rank, power_base) + 2 * sc_roll
-	var effect: Dictionary = {
+	var apply_probability := float(mini(7, resist_bound)) / float(resist_bound)
+	var green_power := Formula.get_power13(rng, rank, 40) + 2 * sc_roll
+	var red_power := Formula.get_power13(rng, rank, 30) + 2 * sc_roll
+	var green_effect: Dictionary = {
 		"type": "poison_resolution",
-		"poison_type": poison_type,
+		"poison_type": "green_poison",
 		"resisted": resisted,
-		"apply_probability": float(mini(7, resist_bound)) / float(resist_bound),
+		"apply_probability": apply_probability,
 		"duration_seconds": duration_seconds,
 		"stacking_policy": "green_and_red_coexist_same_type_refresh",
+		"tick_interval_ms": 2000,
+		"damage_per_tick": maxi(1, int(floor(float(green_power) / 10.0))),
 	}
-	if poison_type == "green_poison":
-		effect["tick_interval_ms"] = 2000
-		effect["damage_per_tick"] = maxi(1, int(floor(float(power) / 10.0)))
-	else:
-		effect["flat_ac_reduction"] = maxi(1, int(floor(float(power) / 10.0)))
-		effect["flat_mac_reduction"] = maxi(1, int(floor(float(power) / 10.0)))
-		effect["extra_durability_loss_per_hit"] = 1
-	plan.effects = [effect]
+	var red_reduction := maxi(1, int(floor(float(red_power) / 10.0)))
+	var red_effect: Dictionary = {
+		"type": "poison_resolution",
+		"poison_type": "red_poison",
+		"resisted": resisted,
+		"apply_probability": apply_probability,
+		"duration_seconds": duration_seconds,
+		"stacking_policy": "green_and_red_coexist_same_type_refresh",
+		"flat_ac_reduction": red_reduction,
+		"flat_mac_reduction": red_reduction,
+		"extra_durability_loss_per_hit": 1,
+	}
+	plan.effects = [green_effect, red_effect]
 	plan.effect_success = not resisted
 	plan.resource_commit = true
 	if not resisted:

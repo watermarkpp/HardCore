@@ -4,7 +4,7 @@ extends CharacterBody2D
 signal summon_state_changed(previous_state: int, current_state: int)
 
 const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
-const CasterAnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const WarriorCombatMathScript := preload("res://scripts/warrior_combat_math.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
@@ -53,12 +53,22 @@ var skill_id := "taoist.summon_skeleton"
 var skill_level := 0
 var summon_level := 0
 var summon_exp_level := 0
+var maximum_pet_level := 1
+var pet_growth_exp := 0
 var summon_count := 1
 var attack_type := "physical"
+var monster_level := 1
 var max_hp := 80
 var current_hp := 80
 var attack_min := 3
 var attack_max := 6
+var ac_min := 0
+var ac_max := 0
+var mac_min := 0
+var mac_max := 0
+var accuracy := 1
+var agility := 1
+var name_color_index := 255
 var attack_interval := 1.25
 var lifetime_seconds := 864000.0
 var remaining_lifetime := 864000.0
@@ -98,6 +108,7 @@ var _attack_timer := 0.0
 var _attack_release_sequence := 0
 var _rng := RandomNumberGenerator.new()
 var _sprite: Sprite2D
+var _fire_sprite: Sprite2D
 var _current_target: EnemyActor
 var _animation_resources: Dictionary = {}
 var _visual_state := "idle"
@@ -109,9 +120,24 @@ var _attack_visual_remaining := 0.0
 var _hit_visual_remaining := 0.0
 var _death_visual_remaining := 0.0
 var _visual_activation_retry := 0.0
+var _pending_attack_target: EnemyActor
+var _pending_attack_snapshot: Dictionary = {}
+var _pending_attack_release_remaining := 0.0
+var _pending_attack_direction := Vector2.DOWN
+var _fire_visual_elapsed := 0.0
+var _fire_visual_remaining := 0.0
+var _health_bar_y := -35.0
 
 
-func setup(player: PlayerCharacter, display_name: String, power: int, learned_level := -1, source_skill_id := "", owner_level_value := -1) -> void:
+func setup(
+	player: PlayerCharacter,
+	display_name: String,
+	power: int,
+	learned_level := -1,
+	source_skill_id := "",
+	owner_level_value := -1,
+	maximum_pet_level_value := -1
+) -> void:
 	owner_player = player
 	var inferred_skill_id := source_skill_id
 	if inferred_skill_id.is_empty():
@@ -127,14 +153,29 @@ func setup(player: PlayerCharacter, display_name: String, power: int, learned_le
 	skill_level = int(profile.get("skill_level", 0))
 	summon_level = int(profile.get("summon_level", skill_level))
 	summon_exp_level = int(profile.get("summon_exp_level", skill_level))
+	maximum_pet_level = (
+		maximum_pet_level_value
+		if maximum_pet_level_value >= 0
+		else int(profile.get("max_pet_level", 1))
+	)
+	maximum_pet_level = clampi(maximum_pet_level, summon_exp_level, 7)
+	pet_growth_exp = int(profile.get("pet_growth_exp", 0))
 	summon_count = int(profile.get("summon_count", 1))
 	summon_id = str(profile.get("summon_id", "skeleton"))
 	summon_name = str(profile.get("display_name", display_name))
 	attack_type = str(profile.get("attack_type", "physical"))
+	monster_level = int(profile.get("monster_level", 1))
 	max_hp = int(profile.get("max_hp", 60 + power * 12))
 	current_hp = max_hp
 	attack_min = int(profile.get("attack_min", maxi(1, int(power / 2))))
 	attack_max = int(profile.get("attack_max", maxi(attack_min, power)))
+	ac_min = int(profile.get("ac_min", 0))
+	ac_max = int(profile.get("ac_max", ac_min))
+	mac_min = int(profile.get("mac_min", 0))
+	mac_max = int(profile.get("mac_max", mac_min))
+	accuracy = int(profile.get("accuracy", 1))
+	agility = int(profile.get("agility", 1))
+	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
 	attack_interval = float(profile.get("attack_interval", 1.25))
 	lifetime_seconds = float(profile.get("lifetime_seconds", 864000.0))
 	remaining_lifetime = lifetime_seconds
@@ -277,10 +318,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if summon_id != "divine_beast":
-		return
 	_attack_visual_remaining = maxf(0.0, _attack_visual_remaining - delta)
 	_hit_visual_remaining = maxf(0.0, _hit_visual_remaining - delta)
+	_update_fire_visual(delta)
 	if state == SummonState.DEAD:
 		_death_visual_remaining = maxf(0.0, _death_visual_remaining - delta)
 		if _death_visual_remaining <= 0.0:
@@ -306,7 +346,9 @@ func _process(delta: float) -> void:
 		_visual_elapsed = 0.0
 	else:
 		_visual_elapsed += delta
-	if velocity.length_squared() > 25.0:
+	if _pending_attack_target != null:
+		_visual_facing = _pending_attack_direction
+	elif velocity.length_squared() > 25.0:
 		_visual_facing = velocity.normalized()
 	elif is_instance_valid(_current_target):
 		var target_offset := _current_target.global_position - global_position
@@ -330,6 +372,7 @@ func _physics_process(delta: float) -> void:
 		actual_ground_motion_gu = Vector2.ZERO
 		return
 	_attack_timer = maxf(0.0, _attack_timer - delta)
+	_update_pending_attack(delta)
 	remaining_lifetime = maxf(0.0, remaining_lifetime - delta)
 	if remaining_lifetime <= 0.0:
 		_expire()
@@ -382,19 +425,8 @@ func _physics_process(delta: float) -> void:
 		) <= attack_range_gu + GroundUnitSpaceScript.EPSILON_GU:
 			_set_state(SummonState.ATTACK_TARGET)
 			velocity = Vector2.ZERO
-			if _attack_timer <= 0.0:
-				_attack_timer = attack_interval
-				last_attack_type = attack_type
-				_attack_visual_remaining = _visual_action_duration("attack")
-				last_attack_footprint_snapshot = (
-					create_attack_release_footprint_snapshot(enemy)
-				)
-				if attack_release_snapshot_intersects_target(
-					last_attack_footprint_snapshot, enemy
-				):
-					enemy.take_damage(
-						_rng.randi_range(attack_min, attack_max), self
-					)
+			if _attack_timer <= 0.0 and _pending_attack_target == null:
+				_begin_attack(enemy)
 		else:
 			_set_state(SummonState.CHASE_TARGET)
 			velocity = _screen_velocity_toward_delta_px(offset_screen_px)
@@ -419,10 +451,81 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 
+func _begin_attack(enemy: EnemyActor) -> void:
+	_attack_timer = attack_interval
+	last_attack_type = attack_type
+	_pending_attack_target = enemy
+	_pending_attack_snapshot = create_attack_release_footprint_snapshot(enemy)
+	last_attack_footprint_snapshot = _pending_attack_snapshot.duplicate(true)
+	_pending_attack_release_remaining = _attack_release_delay_seconds()
+	var target_offset := enemy.global_position - global_position
+	if target_offset.length_squared() > 0.001:
+		_pending_attack_direction = target_offset.normalized()
+	_visual_facing = _pending_attack_direction
+	_attack_visual_remaining = _visual_action_duration("attack")
+	_visual_state = "attack"
+	_visual_elapsed = 0.0
+
+
+func _update_pending_attack(delta: float) -> void:
+	if _pending_attack_target == null:
+		return
+	_pending_attack_release_remaining = maxf(
+		0.0, _pending_attack_release_remaining - delta
+	)
+	if _pending_attack_release_remaining <= 0.0:
+		_release_pending_attack()
+
+
+func _release_pending_attack() -> void:
+	var target := _pending_attack_target
+	var snapshot := _pending_attack_snapshot
+	if summon_id == "divine_beast":
+		_start_fire_visual()
+	if (
+		is_instance_valid(target)
+		and not target.is_queued_for_deletion()
+		and target.current_hp > 0
+		and attack_release_snapshot_intersects_target(snapshot, target)
+		and _attack_hit_succeeds(target)
+	):
+		var hp_before := target.current_hp
+		target.take_damage(_rng.randi_range(attack_min, attack_max), self)
+		if hp_before > 0 and target.current_hp <= 0:
+			gain_growth_from_kill(int(target.monster_data.get("level", 0)))
+	_clear_pending_attack()
+
+
+func _attack_hit_succeeds(target: EnemyActor) -> bool:
+	if attack_type != "physical" or PlayerState.test_mode:
+		return true
+	return WarriorCombatMathScript.roll_hit(accuracy, target.agility, _rng)
+
+
+func _attack_release_delay_seconds() -> float:
+	if not _animation_resources.is_empty():
+		var explicit_ms := int(_animation_resources.get("attack_release_ms", -1))
+		if explicit_ms >= 0:
+			return float(explicit_ms) / 1000.0
+		var release_frame_index := 5
+		var frame_ms := int(
+			_animation_resources.get("frame_ms", {}).get("attack", 100)
+		)
+		return float(release_frame_index * frame_ms) / 1000.0
+	return 0.5
+
+
+func _clear_pending_attack() -> void:
+	_pending_attack_target = null
+	_pending_attack_snapshot = {}
+	_pending_attack_release_remaining = 0.0
+
+
 func _expire() -> void:
 	if state == SummonState.EXPIRED or state == SummonState.DEAD:
 		return
 	_set_state(SummonState.EXPIRED)
+	_clear_pending_attack()
 	velocity = Vector2.ZERO
 	queue_free()
 
@@ -474,6 +577,54 @@ func spatial_contract_snapshot() -> Dictionary:
 		"teleport_range_gu": teleport_range_gu,
 		"follow_distance_gu": follow_distance_gu,
 	}
+
+
+func gain_growth_from_kill(killed_monster_level: int) -> bool:
+	if summon_exp_level >= maximum_pet_level:
+		return false
+	pet_growth_exp += maxi(0, killed_monster_level)
+	var threshold := TaoistCombatMath.summon_growth_threshold(
+		summon_id, summon_exp_level
+	)
+	if pet_growth_exp <= threshold:
+		return false
+	pet_growth_exp -= threshold
+	summon_exp_level = mini(maximum_pet_level, summon_exp_level + 1)
+	_apply_growth_stats_preserving_current_hp()
+	queue_redraw()
+	return true
+
+
+func growth_contract_snapshot() -> Dictionary:
+	return {
+		"contract_id": TaoistCombatMath.summon_baseline_contract_id(),
+		"summon_id": summon_id,
+		"skill_rank": skill_level,
+		"pet_level": summon_exp_level,
+		"maximum_pet_level": maximum_pet_level,
+		"growth_exp": pet_growth_exp,
+		"next_threshold": TaoistCombatMath.summon_growth_threshold(
+			summon_id, summon_exp_level
+		),
+		"name_color_index": name_color_index,
+		"persistence": "transient_non_permanent_pet",
+	}
+
+
+func _apply_growth_stats_preserving_current_hp() -> void:
+	var absolute_hp_before := current_hp
+	var stats := TaoistCombatMath.summon_stats(summon_id, summon_exp_level)
+	max_hp = int(stats.get("max_hp", max_hp))
+	attack_min = int(stats.get("dc_min", attack_min))
+	attack_max = int(stats.get("dc_max", attack_max))
+	ac_min = int(stats.get("ac_min", ac_min))
+	ac_max = int(stats.get("ac_max", ac_max))
+	mac_min = int(stats.get("mac_min", mac_min))
+	mac_max = int(stats.get("mac_max", mac_max))
+	accuracy = int(stats.get("accuracy", accuracy))
+	agility = int(stats.get("agility", agility))
+	current_hp = mini(absolute_hp_before, max_hp)
+	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
 
 
 func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
@@ -620,12 +771,13 @@ func take_damage(amount: int) -> void:
 	if current_hp == 0:
 		_set_state(SummonState.DEAD)
 		velocity = Vector2.ZERO
+		_clear_pending_attack()
 		_hit_visual_remaining = 0.0
 		_attack_visual_remaining = 0.0
 		_death_visual_remaining = _visual_action_duration("death")
 		_visual_state = "death"
 		_visual_elapsed = 0.0
-	elif summon_id == "divine_beast":
+	else:
 		_hit_visual_remaining = _visual_action_duration("hit")
 		_visual_state = "hit"
 		_visual_elapsed = 0.0
@@ -637,39 +789,20 @@ func state_name() -> String:
 
 
 func _install_visual() -> void:
-	if summon_id == "divine_beast":
-		_sprite = Sprite2D.new()
-		_sprite.name = "DivineBeastAnimatedBody"
-		_sprite.centered = false
-		_sprite.region_enabled = true
-		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		add_child(_sprite)
-		activate_visual_resources()
-		return
-	if skill_id == "taoist.summon_skeleton":
-		var skeleton_animation := CasterAnimationPlayerScript.new()
-		if not skeleton_animation.configure(skill_id, Vector2.DOWN, 0.0):
-			skeleton_animation.queue_free()
-			return
-		skeleton_animation.name = "SkeletonPrimaryStandAnimation"
-		_sprite = skeleton_animation
-		add_child(_sprite)
-		return
-	var texture := CasterSkillVisualRegistry.texture(skill_id)
-	if texture == null:
-		return
 	_sprite = Sprite2D.new()
-	_sprite.texture = texture
-	var maximum_dimension := maxf(float(texture.get_width()), float(texture.get_height()))
-	var desired_size := 64.0 if summon_id == "divine_beast" else 50.0
-	_sprite.scale = Vector2.ONE * desired_size / maxf(1.0, maximum_dimension)
-	_sprite.position = Vector2(0, -12)
+	_sprite.name = (
+		"DivineBeastAnimatedBody"
+		if summon_id == "divine_beast"
+		else "MutantSkeletonAnimatedBody"
+	)
+	_sprite.centered = false
+	_sprite.region_enabled = true
+	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(_sprite)
+	activate_visual_resources()
 
 
 func activate_visual_resources() -> bool:
-	if summon_id != "divine_beast":
-		return _sprite != null
 	var profile := SummonVisualRegistryScript.profile(summon_id)
 	if profile.is_empty():
 		return false
@@ -678,7 +811,25 @@ func activate_visual_resources() -> bool:
 	var foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
 	var actor_ground_offset: Vector2i = profile.get("actor_ground_offset", Vector2i.ZERO)
 	_sprite.position = -Vector2(foot_anchor + actor_ground_offset)
+	_health_bar_y = _sprite.position.y + float(profile.get("stable_body_top", 0)) - 7.0
 	_sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
+	if summon_id == "divine_beast" and profile.has("fire"):
+		if _fire_sprite == null:
+			_fire_sprite = Sprite2D.new()
+			_fire_sprite.name = "DivineBeastFire"
+			_fire_sprite.centered = false
+			_fire_sprite.region_enabled = true
+			_fire_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			add_child(_fire_sprite)
+		_fire_sprite.texture = profile.fire
+		_fire_sprite.visible = false
+		var fire_foot_anchor: Vector2i = profile.get(
+			"fire_foot_anchor", Vector2i.ZERO
+		)
+		var fire_ground_offset: Vector2i = profile.get(
+			"fire_actor_ground_offset", Vector2i.ZERO
+		)
+		_fire_sprite.position = -Vector2(fire_foot_anchor + fire_ground_offset)
 	refresh_visual_after_activation()
 	return true
 
@@ -714,6 +865,51 @@ func _visual_action_duration(action_name: String) -> float:
 	return float(frame_count * frame_ms) / 1000.0
 
 
+func _start_fire_visual() -> void:
+	if _fire_sprite == null or _animation_resources.is_empty():
+		return
+	_fire_visual_elapsed = 0.0
+	_fire_visual_remaining = (
+		float(
+			int(_animation_resources.get("fire_frame_count", 0))
+			* int(_animation_resources.get("fire_frame_ms", 100))
+		) / 1000.0
+	)
+	_fire_sprite.visible = _fire_visual_remaining > 0.0
+	_apply_fire_frame()
+
+
+func _update_fire_visual(delta: float) -> void:
+	if _fire_sprite == null or _fire_visual_remaining <= 0.0:
+		return
+	_fire_visual_elapsed += delta
+	_fire_visual_remaining = maxf(0.0, _fire_visual_remaining - delta)
+	if _fire_visual_remaining <= 0.0:
+		_fire_sprite.visible = false
+		return
+	_apply_fire_frame()
+
+
+func _apply_fire_frame() -> void:
+	if _fire_sprite == null:
+		return
+	var frame_size: Vector2i = _animation_resources.get(
+		"fire_frame_size", Vector2i.ZERO
+	)
+	var frame_count := int(_animation_resources.get("fire_frame_count", 1))
+	var frame_ms := int(_animation_resources.get("fire_frame_ms", 100))
+	var frame := mini(
+		frame_count - 1,
+		int(floor(_fire_visual_elapsed * 1000.0 / float(maxi(1, frame_ms))))
+	)
+	_fire_sprite.region_rect = Rect2(
+		frame * frame_size.x,
+		ArtSpec.mir2_client_direction_row(_pending_attack_direction) * frame_size.y,
+		frame_size.x,
+		frame_size.y
+	)
+
+
 func _draw() -> void:
 	var color := Color(0.88, 0.72, 0.35) if summon_name == "神兽" else Color(0.72, 0.74, 0.70)
 	var radius := 21.0 if summon_name == "神兽" else 15.0
@@ -725,5 +921,13 @@ func _draw() -> void:
 		draw_circle(Vector2(0, -4), radius, color)
 		draw_circle(Vector2(-6, -7), 2.5, Color(0.15, 0.75, 0.35))
 		draw_circle(Vector2(6, -7), 2.5, Color(0.15, 0.75, 0.35))
-	draw_rect(Rect2(-22, -35, 44, 4), Color(0.10, 0.03, 0.03, 0.9))
-	draw_rect(Rect2(-22, -35, 44.0 * float(current_hp) / float(max_hp), 4), Color(0.22, 0.72, 0.25))
+	draw_rect(Rect2(-22, _health_bar_y, 44, 4), Color(0.10, 0.03, 0.03, 0.9))
+	draw_rect(
+		Rect2(
+			-22,
+			_health_bar_y,
+			44.0 * float(current_hp) / float(maxi(1, max_hp)),
+			4
+		),
+		Color(0.22, 0.72, 0.25)
+	)

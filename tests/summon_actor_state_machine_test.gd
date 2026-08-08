@@ -82,7 +82,10 @@ func _run() -> void:
 	var enemy_hp := enemy.current_hp
 	skeleton._attack_timer = 0.0
 	skeleton._physics_process(0.016)
-	assert(skeleton.state == SummonActor.SummonState.ATTACK_TARGET and enemy.current_hp < enemy_hp)
+	assert(skeleton.state == SummonActor.SummonState.ATTACK_TARGET and enemy.current_hp == enemy_hp)
+	assert(skeleton._pending_attack_target == enemy, "召唤物攻击未等待客户端命中帧")
+	skeleton._physics_process(0.50)
+	assert(enemy.current_hp < enemy_hp, "召唤物客户端命中帧没有结算伤害")
 	assert(skeleton.last_attack_type == "physical")
 	skeleton.global_position = (
 		player.global_position
@@ -101,7 +104,9 @@ func _run() -> void:
 	divine_beast.setup(player, ProfessionRules.skill_display_name("taoist.summon_divine_beast"), 30, 3, "taoist.summon_divine_beast", 35)
 	assert(divine_beast.skill_id == "taoist.summon_divine_beast" and divine_beast.attack_type == "fire")
 	assert(divine_beast.lifetime_seconds == 864000.0 and divine_beast.recall_existing_on_create_failure)
-	assert(divine_beast.max_hp > skeleton.max_hp and divine_beast.attack_range_gu > skeleton.attack_range_gu)
+	assert(divine_beast.max_hp == 448 and skeleton.max_hp == 392)
+	assert(divine_beast.attack_range_gu > skeleton.attack_range_gu)
+	assert(skeleton.maximum_pet_level == 7 and divine_beast.maximum_pet_level == 7)
 	divine_beast.free()
 	print("SUMMON_ACTOR_STATE_MACHINE_PASS: levels, attacks, ten-day life, owner follow, recall")
 	get_tree().quit(0)

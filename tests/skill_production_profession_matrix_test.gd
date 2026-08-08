@@ -92,7 +92,6 @@ const MATRIX := [
 		"target": false,
 		"expect_mp": 8,
 		"spatial": false,
-		"amulet": true,
 	},
 	{
 		"skill": "taoist.poison",
@@ -101,9 +100,8 @@ const MATRIX := [
 		"learned": {"施毒术": 3},
 		"melee": false,
 		"target": true,
-		"expect_mp": 5,
+		"expect_mp": 10,
 		"spatial": true,
-		"poison": true,
 	},
 	{
 		"skill": "taoist.summon_skeleton",
@@ -114,7 +112,6 @@ const MATRIX := [
 		"target": false,
 		"expect_mp": 24,
 		"spatial": true,
-		"amulet": true,
 		"summon": true,
 	},
 ]
@@ -225,6 +222,8 @@ func _matrix_case(row: Dictionary) -> void:
 	var expected_rank_mp := int(
 		(definition.get("mp_cost_by_rank", [0, 0, 0, 0]) as Array)[3]
 	)
+	if skill_id == "taoist.poison":
+		expected_rank_mp *= 2
 	Fixtures.compare_field(
 		"%s.mp_vs_definition" % skill_id,
 		expected_rank_mp,

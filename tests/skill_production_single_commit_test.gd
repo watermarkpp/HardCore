@@ -58,13 +58,16 @@ func _run() -> void:
 
 	PlayerState.select_profession("道士")
 	PlayerState.learned_skills = {"施毒术": 3}
-	PlayerState.inventory = [{"name": "灰色药粉", "count": 5}]
+	PlayerState.inventory = []
 	PlayerState.recalculate_stats()
 	_caster.current_mp = 500
 	_game._set_magic_locked_target(_target, true)
 	_game._skill_cast_target = _target
 	Plan.reset_sentinels_for_tests()
-	var powder_before := PlayerState.item_count("灰色药粉")
+	var poison_mp_before := _caster.current_mp
+	var poison_cost := int(
+		(DataLoader.skill("taoist.poison").get("mp_cost_by_rank", [0, 0, 0, 0]) as Array)[3]
+	) * 2
 	var poison_result: Dictionary = _game._execute_canonical_skill(
 		"施毒术",
 		_caster.global_position,
@@ -73,17 +76,25 @@ func _run() -> void:
 	)
 	assert(bool(poison_result.get("accepted", false)), "poison release rejected")
 	assert(
-		PlayerState.item_count("灰色药粉") == powder_before - 1,
-		"poison material must be committed exactly once"
+		poison_mp_before - _caster.current_mp == poison_cost,
+		"dual poison MP must be committed exactly once"
 	)
+	assert(PlayerState.inventory.is_empty(), "dual poison must not consume cast materials")
 	assert(
 		Plan.sentinel_diagnostics().resource_commit_count == 1,
 		"poison resource_commit_count must be exactly 1"
 	)
+	var poison_plan: Dictionary = poison_result.get("canonical_plan", {})
+	var poison_actions: Array = poison_plan.get("gameplay_actions", [])
+	assert(poison_actions.size() == 2, "dual poison must produce exactly two gameplay actions")
+	assert(str(poison_actions[0].get("poison_type", "")) == "green_poison")
+	assert(str(poison_actions[1].get("poison_type", "")) == "red_poison")
+	assert(_target.poison_time > 0.0, "green poison must reach the production target")
+	assert(_target.has_meta("canonical_red_poison"), "red poison must reach the production target")
 	await get_tree().process_frame
 	print(
-		"SKILL_PRODUCTION_SINGLE_COMMIT_PASS mp=%d material=1"
-		% fire_wall_cost
+		"SKILL_PRODUCTION_SINGLE_COMMIT_PASS fire_wall_mp=%d poison_mp=%d material=0"
+		% [fire_wall_cost, poison_cost]
 	)
 	get_tree().quit(0)
 

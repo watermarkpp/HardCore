@@ -31,6 +31,11 @@ ACTIONS = {
     "hit": {"start": 320, "frames": 2, "skip": 0, "frame_ms": 100},
     "death": {"start": 340, "frames": 10, "skip": 0, "frame_ms": 120},
 }
+FIRE_START = 821
+FIRE_DIRECTION_STRIDE = 10
+FIRE_FRAMES = 5
+FIRE_FRAME_MS = 100
+FIRE_MAP_DRAW_OFFSET = (24, 16)
 
 
 def sha256(path: Path) -> str:
@@ -106,6 +111,65 @@ def build() -> None:
             "confidence": "A",
         }
 
+    fire_frames: dict[tuple[int, int], tuple[Image.Image, dict, int]] = {}
+    fire_bounds: list[tuple[int, int, int, int]] = []
+    for direction in range(8):
+        for frame in range(FIRE_FRAMES):
+            index = FIRE_START + direction * FIRE_DIRECTION_STRIDE + frame
+            image, meta = decode_sprite(data, offsets[index], palette)
+            image = image.convert("RGBA")
+            alpha_bounds = image.getchannel("A").getbbox()
+            if alpha_bounds is None:
+                raise RuntimeError(
+                    f"fire direction={direction} frame={frame} index={index} is empty"
+                )
+            fire_frames[(direction, frame)] = (image, meta, index)
+            fire_bounds.append(
+                (
+                    int(meta["x"]) + alpha_bounds[0],
+                    int(meta["y"]) + alpha_bounds[1],
+                    int(meta["x"]) + alpha_bounds[2],
+                    int(meta["y"]) + alpha_bounds[3],
+                )
+            )
+    fire_min_x = min(0, min(row[0] for row in fire_bounds))
+    fire_min_y = min(0, min(row[1] for row in fire_bounds))
+    fire_max_x = max(0, max(row[2] for row in fire_bounds))
+    fire_max_y = max(0, max(row[3] for row in fire_bounds))
+    fire_cell_width = ((fire_max_x - fire_min_x + PADDING * 2 + 15) // 16) * 16
+    fire_cell_height = ((fire_max_y - fire_min_y + PADDING * 2 + 15) // 16) * 16
+    fire_foot_anchor = (-fire_min_x + PADDING, -fire_min_y + PADDING)
+    fire_atlas = Image.new(
+        "RGBA",
+        (fire_cell_width * FIRE_FRAMES, fire_cell_height * 8),
+        (0, 0, 0, 0),
+    )
+    fire_source_frames = []
+    for (direction, frame), (image, meta, index) in fire_frames.items():
+        isolated = Image.new(
+            "RGBA", (fire_cell_width, fire_cell_height), (0, 0, 0, 0)
+        )
+        isolated.alpha_composite(
+            image,
+            (
+                fire_foot_anchor[0] + int(meta["x"]),
+                fire_foot_anchor[1] + int(meta["y"]),
+            ),
+        )
+        fire_atlas.alpha_composite(
+            isolated, (frame * fire_cell_width, direction * fire_cell_height)
+        )
+        fire_source_frames.append(
+            {
+                "index": index,
+                "direction": direction,
+                "frame": frame,
+                "drawOffset": [int(meta["x"]), int(meta["y"])],
+            }
+        )
+    fire_target = OUTPUT_DIR / "divine_beast_fire.png"
+    fire_atlas.save(fire_target, optimize=True, compress_level=9)
+
     payload = {
         "schemaVersion": 1,
         "contract_id": "summon.visual.divine_beast.directional.v1",
@@ -118,6 +182,9 @@ def build() -> None:
         "frameSize": [cell_width, cell_height],
         "footAnchor": [foot_anchor[0], foot_anchor[1]],
         "actorGroundOffset": list(ACTOR_GROUND_OFFSET),
+        "stableBodyTop": 39,
+        "attackReleaseFrameIndex": 5,
+        "attackReleaseMs": 500,
         "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon18.wil",
         "clientLibrarySha256": sha256(SOURCE),
         "clientLibraryImageCount": int(library_info["image_count"]),
@@ -127,12 +194,35 @@ def build() -> None:
         "pixelConfidence": "A",
         "mappingConfidence": "A",
         "actions": action_records,
+        "fire": {
+            "path": f"res://{fire_target.relative_to(ROOT).as_posix()}",
+            "framesPerDirection": FIRE_FRAMES,
+            "frameMs": FIRE_FRAME_MS,
+            "frameSize": [fire_cell_width, fire_cell_height],
+            "footAnchor": [fire_foot_anchor[0], fire_foot_anchor[1]],
+            "actorGroundOffset": list(FIRE_MAP_DRAW_OFFSET),
+            "sourceStart": FIRE_START,
+            "sourceDirectionStride": FIRE_DIRECTION_STRIDE,
+            "validatedSourceFrameCount": FIRE_FRAMES * 8,
+            "missingFrames": [],
+            "sourceFrames": sorted(
+                fire_source_frames,
+                key=lambda row: (row["direction"], row["frame"]),
+            ),
+            "sourceAnchor": (
+                "MirClient/AxeMon.pas WARRIORELFFIREBASE=820; "
+                "TWarriorElfMonster.RunFrameAction frame=5 creates "
+                "base+direction*10+1, five frames at 100ms from Mon18"
+            ),
+            "confidence": "A",
+        },
     }
     MANIFEST_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(
         "DIVINE_BEAST_ANIMATION_BUILT "
         f"contract={payload['contract_id']} frame={cell_width}x{cell_height} "
-        f"frames={sum(int(spec['frames']) * 8 for spec in ACTIONS.values())}"
+        f"frames={sum(int(spec['frames']) * 8 for spec in ACTIONS.values())} "
+        f"fire={FIRE_FRAMES * 8}"
     )
 
 

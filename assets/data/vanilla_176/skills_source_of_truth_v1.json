@@ -3487,7 +3487,7 @@
         "recast_if_live_pet_exists": "recall_existing_pet_no_material_and_no_proficiency",
         "new_pet_template": "skeleton",
         "initial_pet_level_formula": "rank",
-        "max_pet_level_formula": "rank + 4",
+        "max_pet_level_formula": "1 + 2 * rank",
         "skill_rank_is_pet_level": false,
         "replacement_policy": "never_delete_live_pet_just_to_create_new_one",
         "status": "source_formula_reference_plus_project_canonical"
