@@ -101,6 +101,9 @@ func _run() -> void:
 		"effect_width_gu": 1.0,
 		"pierces_units": false,
 		"stops_on_terrain": false,
+		"maximum_targets": 0,
+		"target_limit_policy": "all_intersecting_effect_cells",
+		"target_selection_contract": "skills.wizard.hellfire.all_intersecting_5x1.v1",
 	}
 	var hellfire_strip: Dictionary = game._canonical_continuous_line_strip_ground_gu(
 		"wizard.hellfire",
@@ -163,6 +166,19 @@ func _run() -> void:
 	assert(is_zero_approx(float(
 		hellfire_diagnostics[0].maximum_corner_error_px
 	)))
+	var explicitly_disabled_targets: Array[EnemyActor] = (
+		game._canonical_spell_geometry_targets(
+			"wizard.hellfire",
+			[],
+			{"maximum_targets": 0},
+			hellfire_strip,
+			hellfire_snapshot
+		)
+	)
+	assert(
+		explicitly_disabled_targets.is_empty(),
+		"没有 all_intersecting_effect_cells 策略时 maximum_targets=0 必须继续禁用目标"
+	)
 
 	first_line_target.queue_free()
 	rear_line_target.queue_free()

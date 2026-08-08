@@ -5604,7 +5604,14 @@ func _canonical_spell_geometry_targets(
 	# result to the nominal number of cells makes stacked or large-footprint
 	# monsters visually intersect the line without receiving damage.
 	var maximum_targets := int(effect.get("maximum_targets", -1))
-	if maximum_targets == 0:
+	var selects_all_intersecting_effect_cells := (
+		stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
+		and str(effect.get("target_limit_policy", ""))
+		== "all_intersecting_effect_cells"
+	)
+	if selects_all_intersecting_effect_cells:
+		maximum_targets = -1
+	elif maximum_targets == 0:
 		return targets
 	if (
 		stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
