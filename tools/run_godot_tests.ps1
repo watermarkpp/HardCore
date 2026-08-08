@@ -1,6 +1,7 @@
 param(
     [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical')]
     [string]$Suite = 'critical',
+    [ValidateRange(1, 60)]
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
 )
@@ -17,6 +18,42 @@ $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console
 $GodotDirectory = Split-Path -Parent $Godot
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
 $RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
+
+$EffectiveSuite = $Suite
+if ($TestPaths.Count -gt 0) {
+    if ($PSBoundParameters.ContainsKey('Suite')) {
+        throw 'TestPaths is adhoc-only and cannot be combined with an explicit formal Suite.'
+    }
+    $EffectiveSuite = 'adhoc'
+    $testsRoot = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'tests'))
+    $testsRootPrefix = $testsRoot.TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
+    $validatedTestPaths = @()
+    foreach ($candidatePath in $TestPaths) {
+        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
+            throw 'TestPaths entries cannot be empty.'
+        }
+        $normalizedPath = $candidatePath.Replace('\', '/')
+        if ([IO.Path]::IsPathRooted($candidatePath) -or ($normalizedPath -split '/') -contains '..') {
+            throw "TestPaths entry must remain inside tests/: $candidatePath"
+        }
+        if ($normalizedPath -notmatch '^tests/(?:[^/]+/)*[^/]+\.tscn$') {
+            throw "TestPaths entry must match tests/**/*.tscn: $candidatePath"
+        }
+        $fullPath = [IO.Path]::GetFullPath((Join-Path $ProjectRoot ($normalizedPath.Replace('/', [IO.Path]::DirectorySeparatorChar))))
+        if (-not $fullPath.StartsWith($testsRootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+            throw "TestPaths entry resolves outside tests/: $candidatePath"
+        }
+        if (-not (Test-Path -LiteralPath $fullPath -PathType Leaf)) {
+            throw "TestPaths entry does not exist: $candidatePath"
+        }
+        $trackedPaths = @(& git -C $ProjectRoot ls-files -- $normalizedPath 2>$null)
+        if ($trackedPaths -cnotcontains $normalizedPath) {
+            throw "TestPaths entry must be Git tracked with exact path casing: $candidatePath"
+        }
+        $validatedTestPaths += $normalizedPath
+    }
+    $TestPaths = $validatedTestPaths
+}
 
 # Codex desktop may sandbox the normal roaming AppData directory. Godot 4.7
 # crashes in its Windows file logger after a denied user://logs write, even
@@ -361,7 +398,8 @@ $Suites.critical = @(
     $Suites.safe_logout_critical +
     $Suites.persistent_ground_effect_critical +
     $Suites.fire_wall_controller_critical +
-    $Suites.monster_streaming_critical +
+    # Monster Streaming is intentionally excluded from default critical while
+    # PROJECT_CURRENT_STATUS marks it HOLD. Its direct suite remains callable.
     $Suites.skill_execution_plan_critical +
     $Suites.skill_production_migration_critical +
     $Suites.skill_runtime_cleanup_critical +
@@ -640,9 +678,9 @@ $engineLogErrorTotal = 0
 foreach ($resultEntry in $StructuredResults) {
     $engineLogErrorTotal += [int]$resultEntry.engine_log_failure_count
 }
-$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $Suite, (Get-Date -Format 'yyyyMMdd_HHmmss'))
+$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss'))
 @{
-    suite = $Suite
+    suite = $EffectiveSuite
     generated_at = (Get-Date -Format o)
     git_head = (git rev-parse HEAD 2>$null | Out-String).Trim()
     total = $StructuredResults.Count
@@ -652,7 +690,7 @@ $resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $Suite, 
     results = $StructuredResults
 } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $resultsFilePath -Encoding UTF8
 Write-Host "RUNNER_RESULTS_JSON=$resultsFilePath"
-Write-Host "TEST_SUMMARY suite=$Suite passed=$passedCount failed=$failedCount engine_log_errors=$engineLogErrorTotal"
+Write-Host "TEST_SUMMARY suite=$EffectiveSuite passed=$passedCount failed=$failedCount engine_log_errors=$engineLogErrorTotal"
 Stop-NewGodotProcesses
 if ($failedCount -gt 0) {
     $failedNames = @($StructuredResults | Where-Object { $_.result -eq 'FAIL' } | ForEach-Object { "$($_.test_name) ($($_.reason))" }) -join '; '

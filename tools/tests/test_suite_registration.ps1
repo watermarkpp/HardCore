@@ -3,6 +3,14 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $RunnerPath = Join-Path $ProjectRoot 'tools\run_godot_tests.ps1'
 $RunnerSource = Get-Content -LiteralPath $RunnerPath -Raw -Encoding UTF8
 
+function Test-StringSetEqual([string[]]$ExpectedValues, [string[]]$ActualValues) {
+    $expectedSet = @($ExpectedValues | Sort-Object -Unique)
+    $actualSet = @($ActualValues | Sort-Object -Unique)
+    return @(
+        Compare-Object -ReferenceObject $expectedSet -DifferenceObject $actualSet
+    ).Count -eq 0
+}
+
 $Suite = 'snapshot_coordinate_critical'
 $Expected = @(
     'tests/skill_footprint_snapshot_coordinate_contract_test.tscn',
@@ -373,7 +381,10 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
         }
     }
 }
+# Monster Streaming is intentionally excluded from default critical while
+# PROJECT_CURRENT_STATUS marks it HOLD. The direct suite remains registered.
 $msIncluded = ($RunnerSource -match '\$Suites\.monster_streaming_critical\s*\+')
+$msExcludedFromDefaultCritical = -not $msIncluded
 $msValidateSet = ($RunnerSource -match "monster_streaming_critical")
 
 # skill_execution_plan_critical verification
@@ -854,24 +865,24 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $slpIncluded = ($RunnerSource -match '\$Suites\.skill_panel_layout_critical\s*\+')
 $slpValidateSet = ($RunnerSource -match "skill_panel_layout_critical")
 
-$ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
-$ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
-$ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
-$ok = $ok -and $slFound -and ($slEntries.Count -eq $SafeLogoutExpected.Count) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
-$ok = $ok -and $pgFound -and ($pgEntries.Count -eq $PersistentExpected.Count) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
-$ok = $ok -and $fwFound -and ($fwEntries.Count -eq $FireWallExpected.Count) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
-$ok = $ok -and $msFound -and ($msEntries.Count -eq $MonsterStreamingExpected.Count) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncluded -and $msValidateSet
-$ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPlanExpected.Count) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
-$ok = $ok -and $pmFound -and ($pmEntries.Count -eq $ProductionMigrationExpected.Count) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
-$ok = $ok -and $clFound -and ($clEntries.Count -eq $CleanupExpected.Count) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
-$ok = $ok -and $wlFound -and ($wlEntries.Count -eq $WizardLineExpected.Count) -and ($wlMissing.Count -eq 0) -and ($wlDuplicates.Count -eq 0) -and ($wlGitTracked.Count -eq 0) -and $wlIncluded -and $wlValidateSet
-$ok = $ok -and $cbFound -and ($cbEntries.Count -eq $CombatExpected.Count) -and ($cbMissing.Count -eq 0) -and ($cbDuplicates.Count -eq 0) -and ($cbGitTracked.Count -eq 0) -and $cbIncluded -and $cbValidateSet
-$ok = $ok -and $fcFound -and ($fcEntries.Count -eq $FailClosedExpected.Count) -and ($fcMissing.Count -eq 0) -and ($fcDuplicates.Count -eq 0) -and ($fcGitTracked.Count -eq 0) -and $fcIncluded -and $fcValidateSet
-$ok = $ok -and $pfFound -and ($pfEntries.Count -eq $ProfileExpected.Count) -and ($pfMissing.Count -eq 0) -and ($pfDuplicates.Count -eq 0) -and ($pfGitTracked.Count -eq 0) -and $pfIncluded -and $pfValidateSet
-$ok = $ok -and $rlFound -and ($rlEntries.Count -eq $ReleaseExpected.Count) -and ($rlMissing.Count -eq 0) -and ($rlDuplicates.Count -eq 0) -and ($rlGitTracked.Count -eq 0) -and $rlIncluded -and $rlValidateSet
-$ok = $ok -and $rtFound -and ($rtEntries.Count -eq $TransactionExpected.Count) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
-$ok = $ok -and $pvFound -and ($pvEntries.Count -eq $PlayerVisualExpected.Count) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
-$ok = $ok -and $slpFound -and ($slpEntries.Count -eq $SkillPanelExpected.Count) -and ($slpMissing.Count -eq 0) -and ($slpDuplicates.Count -eq 0) -and ($slpGitTracked.Count -eq 0) -and $slpIncluded -and $slpValidateSet
+$ok = $suiteFound -and (Test-StringSetEqual $Expected $suiteEntries) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
+$ok = $ok -and $prodFound -and (Test-StringSetEqual $ProductionExpected $prodEntries) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
+$ok = $ok -and $projFound -and (Test-StringSetEqual $ProjectileExpected $projEntries) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
+$ok = $ok -and $slFound -and (Test-StringSetEqual $SafeLogoutExpected $slEntries) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
+$ok = $ok -and $pgFound -and (Test-StringSetEqual $PersistentExpected $pgEntries) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
+$ok = $ok -and $fwFound -and (Test-StringSetEqual $FireWallExpected $fwEntries) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
+$ok = $ok -and $msFound -and (Test-StringSetEqual $MonsterStreamingExpected $msEntries) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msExcludedFromDefaultCritical -and $msValidateSet
+$ok = $ok -and $spFound -and (Test-StringSetEqual $SkillPlanExpected $spEntries) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
+$ok = $ok -and $pmFound -and (Test-StringSetEqual $ProductionMigrationExpected $pmEntries) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
+$ok = $ok -and $clFound -and (Test-StringSetEqual $CleanupExpected $clEntries) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
+$ok = $ok -and $wlFound -and (Test-StringSetEqual $WizardLineExpected $wlEntries) -and ($wlMissing.Count -eq 0) -and ($wlDuplicates.Count -eq 0) -and ($wlGitTracked.Count -eq 0) -and $wlIncluded -and $wlValidateSet
+$ok = $ok -and $cbFound -and (Test-StringSetEqual $CombatExpected $cbEntries) -and ($cbMissing.Count -eq 0) -and ($cbDuplicates.Count -eq 0) -and ($cbGitTracked.Count -eq 0) -and $cbIncluded -and $cbValidateSet
+$ok = $ok -and $fcFound -and (Test-StringSetEqual $FailClosedExpected $fcEntries) -and ($fcMissing.Count -eq 0) -and ($fcDuplicates.Count -eq 0) -and ($fcGitTracked.Count -eq 0) -and $fcIncluded -and $fcValidateSet
+$ok = $ok -and $pfFound -and (Test-StringSetEqual $ProfileExpected $pfEntries) -and ($pfMissing.Count -eq 0) -and ($pfDuplicates.Count -eq 0) -and ($pfGitTracked.Count -eq 0) -and $pfIncluded -and $pfValidateSet
+$ok = $ok -and $rlFound -and (Test-StringSetEqual $ReleaseExpected $rlEntries) -and ($rlMissing.Count -eq 0) -and ($rlDuplicates.Count -eq 0) -and ($rlGitTracked.Count -eq 0) -and $rlIncluded -and $rlValidateSet
+$ok = $ok -and $rtFound -and (Test-StringSetEqual $TransactionExpected $rtEntries) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
+$ok = $ok -and $pvFound -and (Test-StringSetEqual $PlayerVisualExpected $pvEntries) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
+$ok = $ok -and $slpFound -and (Test-StringSetEqual $SkillPanelExpected $slpEntries) -and ($slpMissing.Count -eq 0) -and ($slpDuplicates.Count -eq 0) -and ($slpGitTracked.Count -eq 0) -and $slpIncluded -and $slpValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -933,6 +944,7 @@ $report = [ordered]@{
     monster_streaming_duplicates = $msDuplicates
     monster_streaming_not_git_tracked = $msGitTracked
     monster_streaming_included_in_default_critical = $msIncluded
+    monster_streaming_excluded_from_default_critical_while_hold = $msExcludedFromDefaultCritical
     monster_streaming_validate_set = $msValidateSet
     skill_execution_plan_suite = $SkillPlanSuite
     skill_execution_plan_expected_count = $SkillPlanExpected.Count
