@@ -3353,6 +3353,21 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if definition.is_empty():
 		return &"rejected"
+	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
+	if (
+		PlayerState.profession == "战士"
+		and stable_skill_id.begins_with("warrior.")
+		and bool(input_metadata.get("toggle", false))
+	):
+		# Warrior toggles only configure the next melee mode. They do not cast,
+		# spend MP, select a target, or commit cooldown/action state here. Keep
+		# Player.request_skill as the authority for dead/control/struck locks.
+		if not player.request_skill(skill_name):
+			if show_failure:
+				hud.show_message("技能动作或冷却尚未结束")
+			return &"busy"
+		_skill_cast_target = null
+		return &"accepted"
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
 	var mana_costs: Array = definition.get("mp_cost_by_rank", [])
