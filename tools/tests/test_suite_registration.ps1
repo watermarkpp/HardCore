@@ -729,6 +729,51 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $rlIncluded = ($RunnerSource -match '\$Suites\.map_runtime_release_critical\s*\+')
 $rlValidateSet = ($RunnerSource -match "map_runtime_release_critical")
 
+# map_runtime_release_transaction_critical verification (FREEZE-P0.3R)
+$TransactionSuite = 'map_runtime_release_transaction_critical'
+$TransactionExpected = @(
+    'tests/build_candidate_does_not_mutate_release_test.tscn',
+    'tests/publish_promotes_candidate_test.tscn',
+    'tests/publish_failure_rollback_test.tscn',
+    'tests/release_registry_consumer_validation_test.tscn',
+    'tests/future_map_build_publish_no_code_edit_test.tscn',
+    'tests/mse_publish_entry_wired_test.tscn'
+)
+
+$rtMissing = @()
+$rtDuplicates = @()
+$rtGitTracked = @()
+foreach ($path in $TransactionExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $rtMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $rtGitTracked += $path
+    }
+}
+$rtDuplicates = @($TransactionExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$rtBlock = $false
+$rtFound = $false
+$rtEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.map_runtime_release_transaction_critical\s*=') {
+        $rtBlock = $true
+        $rtFound = $true
+        continue
+    }
+    if ($rtBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $rtEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $rtBlock = $false
+            break
+        }
+    }
+}
+$rtIncluded = ($RunnerSource -match '\$Suites\.map_runtime_release_transaction_critical\s*\+')
+$rtValidateSet = ($RunnerSource -match "map_runtime_release_transaction_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -744,6 +789,7 @@ $ok = $ok -and $cbFound -and ($cbEntries.Count -eq $CombatExpected.Count) -and (
 $ok = $ok -and $fcFound -and ($fcEntries.Count -eq $FailClosedExpected.Count) -and ($fcMissing.Count -eq 0) -and ($fcDuplicates.Count -eq 0) -and ($fcGitTracked.Count -eq 0) -and $fcIncluded -and $fcValidateSet
 $ok = $ok -and $pfFound -and ($pfEntries.Count -eq $ProfileExpected.Count) -and ($pfMissing.Count -eq 0) -and ($pfDuplicates.Count -eq 0) -and ($pfGitTracked.Count -eq 0) -and $pfIncluded -and $pfValidateSet
 $ok = $ok -and $rlFound -and ($rlEntries.Count -eq $ReleaseExpected.Count) -and ($rlMissing.Count -eq 0) -and ($rlDuplicates.Count -eq 0) -and ($rlGitTracked.Count -eq 0) -and $rlIncluded -and $rlValidateSet
+$ok = $ok -and $rtFound -and ($rtEntries.Count -eq $TransactionExpected.Count) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -870,6 +916,14 @@ $report = [ordered]@{
     map_runtime_release_not_git_tracked = $rlGitTracked
     map_runtime_release_included_in_default_critical = $rlIncluded
     map_runtime_release_validate_set = $rlValidateSet
+    map_runtime_release_transaction_suite = $TransactionSuite
+    map_runtime_release_transaction_expected_count = $TransactionExpected.Count
+    map_runtime_release_transaction_actual_count = $rtEntries.Count
+    map_runtime_release_transaction_missing = $rtMissing
+    map_runtime_release_transaction_duplicates = $rtDuplicates
+    map_runtime_release_transaction_not_git_tracked = $rtGitTracked
+    map_runtime_release_transaction_included_in_default_critical = $rtIncluded
+    map_runtime_release_transaction_validate_set = $rtValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

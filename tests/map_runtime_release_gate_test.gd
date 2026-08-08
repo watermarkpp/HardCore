@@ -113,10 +113,16 @@ func _run() -> void:
 	assert(
 		not Bridge.is_formal_playable(4)
 		and str(Bridge.release_rejection_reason(4))
-			== str(Bridge.REASON_RUNTIME_RELEASE_NOT_REGISTERED),
+			== str(Bridge.REASON_RUNTIME_RELEASE_REGISTRY_MISSING),
 		"marker exists + registry missing must not grant playability"
 	)
 	# Republish restores: publish future v2 over 990123.
+	# FREEZE-P0.3R: redirect formal runtime promotion to a scratch user:// root
+	# so the test never writes the tracked formal runtime directory.
+	Publish.test_formal_runtime_root_override = "user://p0_3r_formal/gate/"
+	# Point the bridge at the work registry before publish so the publish
+	# postcondition verification reads the registry it is about to commit.
+	Bridge.test_override_release_registry_path(WORK_REGISTRY)
 	var published: Dictionary = Publish.publish_runtime_release(
 		"res://tests/fixtures/runtime_release/future_test_map_v2.runtime.json",
 		990123,
@@ -126,7 +132,6 @@ func _run() -> void:
 		bool(published.get("success", false)),
 		"publish must succeed"
 	)
-	Bridge.test_override_release_registry_path(WORK_REGISTRY)
 	assert(
 		Bridge.is_formal_playable(990123),
 		"republish must restore playability"
@@ -172,6 +177,10 @@ func _run() -> void:
 	)
 	future_enemy.queue_free()
 	Bridge.reset_release_registry_override()
+	Publish.test_formal_runtime_root_override = ""
+	Publish.test_fail_runtime_promote = false
+	Publish.test_fail_registry_commit = false
+	Publish.test_fail_post_publish_verify = false
 	_game.queue_free()
 	await get_tree().process_frame
 	print("MAP_RUNTIME_RELEASE_GATE_PASS")

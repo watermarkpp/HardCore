@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -334,6 +334,15 @@ $Suites.map_runtime_release_critical = @(
     'tests/map_runtime_release_gate_test.tscn'
 )
 
+$Suites.map_runtime_release_transaction_critical = @(
+    'tests/build_candidate_does_not_mutate_release_test.tscn',
+    'tests/publish_promotes_candidate_test.tscn',
+    'tests/publish_failure_rollback_test.tscn',
+    'tests/release_registry_consumer_validation_test.tscn',
+    'tests/future_map_build_publish_no_code_edit_test.tscn',
+    'tests/mse_publish_entry_wired_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -353,6 +362,7 @@ $Suites.critical = @(
     $Suites.combat_projection_fail_closed_critical +
     $Suites.formal_map_projection_critical +
     $Suites.map_runtime_release_critical +
+    $Suites.map_runtime_release_transaction_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
