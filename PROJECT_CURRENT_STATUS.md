@@ -1,13 +1,13 @@
 # HardCore Current Status
 
-Updated against HEAD: `4a266acb1ebc61892d228017c465c2c35e8e71b0`
+Updated against HEAD: `9a174d14015268e570bf687ddf3e14aad440f314`
 Branch: `codex/integration`
 Updated: 2026-08-08
 Purpose: where the project stands right now.
 
 ## Current HEAD
 
-`4a266acb1ebc61892d228017c465c2c35e8e71b0`
+`9a174d14015268e570bf687ddf3e14aad440f314`
 
 ## Current Stage
 
@@ -36,6 +36,20 @@ Purpose: where the project stands right now.
   - `InventoryScroll` 存在于真实 HUD 树且触摸有效。
   - 旧测试只扫描 `MobileSafeRoot`，漏掉 HUD 根子节点。
 
+## Runner Allowlist Gate Closure
+
+- `RUNNER ALLOWLIST GATE = CLOSED`
+- 关闭提交：`9a174d14015268e570bf687ddf3e14aad440f314`（`fix(test): harden runner allowlist contract`）
+- public suites：23
+- runner identity isolation：`PASS`
+- `TestPaths`：`adhoc only`
+- timeout hard range：`1..60`
+- `monster_streaming_critical` direct suite remains available。
+- `monster_streaming_critical` excluded from default critical while `HOLD`。
+- formal suite smoke：`player_visual_contract_critical = PASS / 1_OF_1`
+- `confirmed_runner_blockers = 0`
+- registration guard remaining weakness：`NON_BLOCKING_TEST_INFRA_DEBT`
+
 ## Monster Streaming Historical Evidence
 
 - apply-order 历史记录：20-run evidence 17 PASS / 3 FAIL。
@@ -53,10 +67,9 @@ Purpose: where the project stands right now.
 
 ## Pending Freeze Gates
 
-1. Runner allowlist audit
-2. World Actor Spawn performance measurement
-3. Final G1 audit
-4. Android device acceptance
+1. World Actor Spawn performance measurement
+2. Final G1 audit
+3. Android device acceptance
 
 ## Do Not Work On
 

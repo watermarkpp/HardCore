@@ -531,3 +531,10 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 - 验证：法师定向集成 9/9、战士完整回归 25/25、`tests/skills` 13/13、坐标影响回归 6/6 均通过；正式法师视觉源审计为 26 项技能资产、586 帧、0 fallback。
 - 冻结数据未变：`item_236.json=21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`；`item_240.json=81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；怪物人工脚点 `monster_ground_alignment_manual_v1.json=DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`。
 - 正式测试 APK：`outputs/hardcore/HardCore-v59-wizard-targeting-shield-debug.apk`，大小 `244410869` 字节（233.09 MiB），SHA-256 `CF0BA0D715D9B56E0A93A81675F6F96C08DC0A59A771B98FB136B2B03E17D158`；独立 Android 验证通过并已复制到桌面同名文件，源文件与副本哈希一致。
+
+## 2026-08-08 Runner Allowlist Gate 关闭里程碑
+
+- `RUNNER ALLOWLIST GATE = CLOSED`
+- commit：`9a174d14015268e570bf687ddf3e14aad440f314`
+- `confirmed_runner_blockers = 0`
+- `NEXT_GATE = WORLD_ACTOR_SPAWN_PERFORMANCE`
