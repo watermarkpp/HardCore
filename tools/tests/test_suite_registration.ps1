@@ -774,6 +774,46 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $rtIncluded = ($RunnerSource -match '\$Suites\.map_runtime_release_transaction_critical\s*\+')
 $rtValidateSet = ($RunnerSource -match "map_runtime_release_transaction_critical")
 
+# player_visual_contract_critical verification (FREEZE-G0.2-A.1)
+$PlayerVisualSuite = 'player_visual_contract_critical'
+$PlayerVisualExpected = @(
+    'tests/passive_proc_actor_plane_contract_test.tscn'
+)
+
+$pvMissing = @()
+$pvDuplicates = @()
+$pvGitTracked = @()
+foreach ($path in $PlayerVisualExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $pvMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $pvGitTracked += $path
+    }
+}
+$pvDuplicates = @($PlayerVisualExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$pvBlock = $false
+$pvFound = $false
+$pvEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.player_visual_contract_critical\s*=') {
+        $pvBlock = $true
+        $pvFound = $true
+        continue
+    }
+    if ($pvBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $pvEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $pvBlock = $false
+            break
+        }
+    }
+}
+$pvIncluded = ($RunnerSource -match '\$Suites\.player_visual_contract_critical\s*\+')
+$pvValidateSet = ($RunnerSource -match "player_visual_contract_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -790,6 +830,7 @@ $ok = $ok -and $fcFound -and ($fcEntries.Count -eq $FailClosedExpected.Count) -a
 $ok = $ok -and $pfFound -and ($pfEntries.Count -eq $ProfileExpected.Count) -and ($pfMissing.Count -eq 0) -and ($pfDuplicates.Count -eq 0) -and ($pfGitTracked.Count -eq 0) -and $pfIncluded -and $pfValidateSet
 $ok = $ok -and $rlFound -and ($rlEntries.Count -eq $ReleaseExpected.Count) -and ($rlMissing.Count -eq 0) -and ($rlDuplicates.Count -eq 0) -and ($rlGitTracked.Count -eq 0) -and $rlIncluded -and $rlValidateSet
 $ok = $ok -and $rtFound -and ($rtEntries.Count -eq $TransactionExpected.Count) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
+$ok = $ok -and $pvFound -and ($pvEntries.Count -eq $PlayerVisualExpected.Count) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -924,6 +965,14 @@ $report = [ordered]@{
     map_runtime_release_transaction_not_git_tracked = $rtGitTracked
     map_runtime_release_transaction_included_in_default_critical = $rtIncluded
     map_runtime_release_transaction_validate_set = $rtValidateSet
+    player_visual_contract_suite = $PlayerVisualSuite
+    player_visual_contract_expected_count = $PlayerVisualExpected.Count
+    player_visual_contract_actual_count = $pvEntries.Count
+    player_visual_contract_missing = $pvMissing
+    player_visual_contract_duplicates = $pvDuplicates
+    player_visual_contract_not_git_tracked = $pvGitTracked
+    player_visual_contract_included_in_default_critical = $pvIncluded
+    player_visual_contract_validate_set = $pvValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

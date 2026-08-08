@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -343,6 +343,10 @@ $Suites.map_runtime_release_transaction_critical = @(
     'tests/mse_publish_entry_wired_test.tscn'
 )
 
+$Suites.player_visual_contract_critical = @(
+    'tests/passive_proc_actor_plane_contract_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -363,6 +367,7 @@ $Suites.critical = @(
     $Suites.formal_map_projection_critical +
     $Suites.map_runtime_release_critical +
     $Suites.map_runtime_release_transaction_critical +
+    $Suites.player_visual_contract_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
