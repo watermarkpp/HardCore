@@ -814,6 +814,46 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $pvIncluded = ($RunnerSource -match '\$Suites\.player_visual_contract_critical\s*\+')
 $pvValidateSet = ($RunnerSource -match "player_visual_contract_critical")
 
+# skill_panel_layout_critical verification (FREEZE-G0.2-B)
+$SkillPanelSuite = 'skill_panel_layout_critical'
+$SkillPanelExpected = @(
+    'tests/skill_panel_assignment_hint_layout_contract_test.tscn'
+)
+
+$spMissing = @()
+$spDuplicates = @()
+$spGitTracked = @()
+foreach ($path in $SkillPanelExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $spMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $spGitTracked += $path
+    }
+}
+$spDuplicates = @($SkillPanelExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$spBlock = $false
+$spFound = $false
+$spEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.skill_panel_layout_critical\s*=') {
+        $spBlock = $true
+        $spFound = $true
+        continue
+    }
+    if ($spBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $spEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $spBlock = $false
+            break
+        }
+    }
+}
+$spIncluded = ($RunnerSource -match '\$Suites\.skill_panel_layout_critical\s*\+')
+$spValidateSet = ($RunnerSource -match "skill_panel_layout_critical")
+
 $ok = $suiteFound -and ($suiteEntries.Count -eq $Expected.Count) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and ($prodEntries.Count -eq $ProductionExpected.Count) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and ($projEntries.Count -eq $ProjectileExpected.Count) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -831,6 +871,7 @@ $ok = $ok -and $pfFound -and ($pfEntries.Count -eq $ProfileExpected.Count) -and 
 $ok = $ok -and $rlFound -and ($rlEntries.Count -eq $ReleaseExpected.Count) -and ($rlMissing.Count -eq 0) -and ($rlDuplicates.Count -eq 0) -and ($rlGitTracked.Count -eq 0) -and $rlIncluded -and $rlValidateSet
 $ok = $ok -and $rtFound -and ($rtEntries.Count -eq $TransactionExpected.Count) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
 $ok = $ok -and $pvFound -and ($pvEntries.Count -eq $PlayerVisualExpected.Count) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
+$ok = $ok -and $spFound -and ($spEntries.Count -eq $SkillPanelExpected.Count) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -973,6 +1014,14 @@ $report = [ordered]@{
     player_visual_contract_not_git_tracked = $pvGitTracked
     player_visual_contract_included_in_default_critical = $pvIncluded
     player_visual_contract_validate_set = $pvValidateSet
+    skill_panel_layout_suite = $SkillPanelSuite
+    skill_panel_layout_expected_count = $SkillPanelExpected.Count
+    skill_panel_layout_actual_count = $spEntries.Count
+    skill_panel_layout_missing = $spMissing
+    skill_panel_layout_duplicates = $spDuplicates
+    skill_panel_layout_not_git_tracked = $spGitTracked
+    skill_panel_layout_included_in_default_critical = $spIncluded
+    skill_panel_layout_validate_set = $spValidateSet
     result = $result
 }
 $report | ConvertTo-Json -Depth 4
