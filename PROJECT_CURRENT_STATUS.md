@@ -1,13 +1,13 @@
 # HardCore Current Status
 
-Updated against HEAD: `9a174d14015268e570bf687ddf3e14aad440f314`
+Updated against production HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
 Branch: `codex/integration`
 Updated: 2026-08-08
 Purpose: where the project stands right now.
 
 ## Current HEAD
 
-`9a174d14015268e570bf687ddf3e14aad440f314`
+`ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
 
 ## Current Stage
 
@@ -15,11 +15,19 @@ Purpose: where the project stands right now.
 
 ## Confirmed Production Blockers
 
-`0`
+`confirmed_production_blockers = 0`
 
 ## New Must-Fix
 
 `0`
+
+## Known Unverified Production Regressions
+
+- `known_unverified_production_regressions = 1`
+- `HELLFIRE_CANONICAL_TARGET_REGRESSION = PENDING_VERIFICATION`
+  - Repository call-path conflict is proven.
+  - Runtime/player-visible effect has not yet been revalidated.
+  - 该项不是已确认 production blocker，也尚未提升为 new must-fix。
 
 ## Closed Recent Bugs
 
@@ -65,11 +73,19 @@ Purpose: where the project stands right now.
 
 - Orc Tomb headless dummy renderer shutdown：20/20 standalone PASS；批跑偶发关闭期 RID 噪声。
 
-## Pending Freeze Gates
+## Next Verification
 
-1. World Actor Spawn performance measurement
-2. Final G1 audit
-3. Android device acceptance
+- `NEXT_VERIFICATION = HELLFIRE_CANONICAL_TARGET_REGRESSION`
+- `STATUS = NOT_STARTED`
+- 这是 bug verification，不是 Freeze quality gate；当前不授权运行正式释放测试或修改生产代码。
+
+## Pending Freeze Quality Gates
+
+1. `NEXT_FREEZE_QUALITY_GATE = WORLD_ACTOR_SPAWN_PERFORMANCE` — `NOT_STARTED`
+2. Final G1 audit — `NOT_STARTED`
+3. Android device acceptance — `NOT_STARTED`
+
+用户当前已暂停全部 Freeze 工作；上述 verification 与 quality gates 均未开始。
 
 ## Do Not Work On
 

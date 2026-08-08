@@ -3,7 +3,18 @@
 Generated from HEAD: `7e3d5fde42e5aeedf422a5eb1d54905e12649ec0`
 Branch: `codex/integration`
 Generated: 2026-08-08
-Purpose: first-read navigation for model handoff. Read this file before anything else.
+Purpose: subsystem/path navigation for model handoff. Read it after current status and historical decisions.
+
+Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
+
+## Required Context Order
+
+1. `PROJECT_CURRENT_STATUS.md` — 当前阶段、已关闭 Gate、HOLD 与下一正式 Gate。
+2. `PROJECT_HISTORY_CONTEXT.md` — 历史整改、已裁决方案、被否决路线与 Accepted Debt。
+3. `PROJECT_INDEX.md` — 当前代码位置、文件职责与 subsystem 入口。
+4. `PROJECT_CORE_CONTRACTS.md` — 仅在涉及 Frozen 核心合同时追加读取。
+
+在上述导航足以定位目标时，禁止默认扫描全仓；先按本索引进入目标 subsystem，再用精确 symbol/caller/callee 搜索扩展调用链。
 
 ## Quick Start
 
@@ -24,6 +35,7 @@ tools/tests/test_suite_registration.ps1
 | 任务 | 第一批必读文件 |
 | --- | --- |
 | 技能释放 | `scripts/game_root.gd`、`scripts/skills/skill_runtime_router.gd`、`scripts/skills/skill_execution_plan_contract.gd`、`scripts/caster_skill_runtime.gd` |
+| Wizard Hellfire target-selection regression verification | `scripts/skills/runtimes/wizard_skill_runtime.gd`、`scripts/game_root.gd`（`_canonical_spell_geometry_targets`）、`scripts/skills/caster_spell_geometry.gd`、`assets/data/vanilla_176/skills_source_of_truth_v1.json`（`wizard.hellfire`） |
 | Projectile | `scripts/skill_projectile.gd`、`scripts/runtime_combat_spatial_index.gd`、`scripts/skills/skill_footprint_snapshot.gd` |
 | 地面持续效果 | `scripts/persistent_ground_effect_manager.gd`、`scripts/ground_effect.gd` |
 | FireWall | `scripts/fire_wall_field_controller.gd`、`scripts/ground_skill_visual_cell.gd` |
