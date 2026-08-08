@@ -13,6 +13,14 @@ SkillRuntimeRouter → Canonical Skill Plan → Gameplay → CasterSkillRuntime 
 
 禁止第二个 Planner；旧 Chinese-name 路由与 legacy skill API 已删除。
 
+## Wizard Line Geometry / Presentation
+
+- Hellfire: `5 x 1 GU`; Laser: `8 x 1 GU` (or the same snapshot's clipped `actual_length`).
+- Direction source: the current valid locked target, frozen into the canonical release snapshot.
+- Gameplay line geometry is continuous/arbitrary-angle and must never be quantized to the character's 8-direction animation or a 16-direction presentation lookup.
+- Presentation must consume the same canonical release origin, projected axis, actual length and centerline. A 16-direction source sequence may select artwork only; its measured visible source axis must be continuously transformed onto the canonical projected axis.
+- Character animation may remain 8-direction. Global lock-on, eligibility, damage, target selection and the semi-transparent gameplay debug band are unchanged by this presentation contract.
+
 ## Snapshot
 
 - Schema V2；消费端仅 `STRICT_V2`；`runtime_map_id` 为 typed int；absolute 上下文必须携带 `runtime_map_absolute_ground_gu`。

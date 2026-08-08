@@ -174,13 +174,15 @@ absolute ground position
 
 ---
 
-## 地狱火 / 疾光电影
+## 地狱火 / 疾光电影（历史决策，已被后续正式设计取代）
 
 最终决定：
 
 ```text
 按玩家当前面向方向释放
 ```
+
+`SUPERSEDED BY CURRENT DEVICE-ACCEPTED DESIGN`：该段只保留为历史记录，不再代表当前 Gameplay 或 Presentation 方向合同。当前正式合同见本文件第 46 节与 `PROJECT_CORE_CONTRACTS.md`。
 
 不做全系统16方向改造。
 
@@ -2225,3 +2227,41 @@ NOT_A_BUG
 ```
 
 因为代码路径冲突已经有直接证据。
+
+---
+
+# 46. Wizard Line Presentation Alignment
+
+2026-08-08 的当前正式设计取代了“地狱火 / 疾光电影按玩家面向方向释放”的旧决策：
+
+```text
+Hellfire / Laser:
+Target-Aligned Continuous Canonical Geometry
+
+Direction source:
+current valid locked target
+
+Gameplay:
+continuous / arbitrary direction
+
+Presentation:
+must consume the same canonical release geometry
+
+Character animation:
+may remain 8-direction
+
+Gameplay line geometry:
+must not be quantized to character directions
+```
+
+本轮专业提交 `14bb52f5` 只修正 Presentation：地狱火去除源帧世界锚点偏移，疾光电影用 16 路源素材的逐帧可见 alpha 轴作为源基底，再连续映射到同一 canonical snapshot 的投影轴、起点与实际长度。Gameplay origin / axis / length / width、锁定、目标选择、伤害和半透明 Geometry Debug Band 均未修改。
+
+当前自动验证：focused arbitrary-angle alignment `PASS`；既有 wizard line suite 与相关 caster visual tests `PASS`。最终状态仍需新的 Debug APK 实机肉眼验收，因此当前为：
+
+```text
+IMPLEMENTATION_PRESENT
+AUTOMATED_ALIGNMENT_PASS
+DEVICE_ACCEPTANCE_PENDING
+```
+
+`HELLFIRE_CANONICAL_TARGET_REGRESSION`（`maximum_targets`）仍为独立的 `PENDING_VERIFICATION`，本轮未修改、未验证、未关闭。

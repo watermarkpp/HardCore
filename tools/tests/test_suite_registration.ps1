@@ -521,7 +521,8 @@ $clValidateSet = ($RunnerSource -match "skill_runtime_cleanup_critical")
 $WizardLineSuite = 'wizard_line_geometry_critical'
 $WizardLineExpected = @(
     'tests/wizard_line_footprint_core_test.tscn',
-    'tests/wizard_line_visual_stability_test.tscn'
+    'tests/wizard_line_visual_stability_test.tscn',
+    'tests/wizard_line_presentation_alignment_test.tscn'
 )
 
 $wlMissing = @()

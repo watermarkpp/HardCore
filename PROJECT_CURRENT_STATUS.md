@@ -1,17 +1,31 @@
 # HardCore Current Status
 
-Updated against production HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
+Updated against production HEAD: `348b6809c739ccf9cfbeee121e2ffc5493842cc4`
 Branch: `codex/integration`
 Updated: 2026-08-08
 Purpose: where the project stands right now.
 
 ## Current HEAD
 
-`ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
+`348b6809c739ccf9cfbeee121e2ffc5493842cc4`
 
 ## Current Stage
 
 **CORE STABILITY FREEZE**（`FREEZE-G0.3 = CLOSED`）
+
+## Active Wizard Line Presentation Alignment
+
+- `WIZARD-LINE-PRESENTATION-ALIGNMENT = DEVICE_ACCEPTANCE_PENDING`
+- Professional implementation commit: `14bb52f5`（merged into integration as `348b6809`）
+- Formal design: Hellfire / Laser use target-aligned continuous canonical geometry; Presentation consumes the same release snapshot and must not quantize Gameplay to character or source-art directions.
+- Automated verification:
+  - focused arbitrary-angle alignment: `PASS`（Hellfire 126 samples + Laser 126 samples）
+  - `wizard_line_geometry_critical`: `PASS / 3_OF_3`
+  - related caster visual tests: `PASS / 4_OF_4`
+  - suite registration guard: `PASS`
+- Single authorized default Critical run: every completed entry before the outer 900-second command cutoff passed, including `wizard_line_geometry_critical`; no final runner JSON / `TEST_SUMMARY` was produced, so this is `PARTIAL`, not a formal full-Critical PASS. Do not rerun automatically.
+- Gameplay origin / axis / length / width, lock-on, target selection, damage and Geometry Debug Band were not modified.
+- Final closure requires a newly exported Debug APK and device visual acceptance.
 
 ## Confirmed Production Blockers
 
@@ -75,9 +89,9 @@ Purpose: where the project stands right now.
 
 ## Next Verification
 
-- `NEXT_VERIFICATION = HELLFIRE_CANONICAL_TARGET_REGRESSION`
+- `NEXT_VERIFICATION = WIZARD_LINE_PRESENTATION_DEVICE_ACCEPTANCE`
 - `STATUS = NOT_STARTED`
-- 这是 bug verification，不是 Freeze quality gate；当前不授权运行正式释放测试或修改生产代码。
+- After this active device acceptance, `HELLFIRE_CANONICAL_TARGET_REGRESSION` remains a separate queued `PENDING_VERIFICATION`; its `maximum_targets` path was not changed or tested by the presentation task.
 
 ## Pending Freeze Quality Gates
 
