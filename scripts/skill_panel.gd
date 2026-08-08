@@ -292,12 +292,18 @@ func _build_assignment_section() -> void:
 	var hint := Label.new()
 	hint.name = "AssignmentHint"
 	hint.text = "主动技能可配置到攻击主键或六个环形技能位\n被动技能仅在技能列表中展示"
+	## FREEZE-G0.2-B (FREEZE-B038): word-smart autowrap keeps the hint width
+	## inside the designed 286px slot (parent-derived: 334 - 2*24) and lets the
+	## height grow with the wrapped text. The muted-label variation must be
+	## applied before sizing so the 14pt minimum width never clamps the slot
+	## wider than the parent (previously size was assigned at the 16pt default,
+	## clamping to 320px -> right edge 10px past the parent).
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.theme_type_variation = "GothicMutedLabel"
 	hint.position = Vector2(24, 442)
 	hint.size = Vector2(286, 72)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hint.autowrap_mode = TextServer.AUTOWRAP_OFF
-	hint.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(hint)
 
 
