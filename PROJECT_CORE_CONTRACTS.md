@@ -40,7 +40,8 @@ SkillRuntimeRouter → Canonical Skill Plan → Gameplay → CasterSkillRuntime 
 ## Monster Streaming
 
 - 一个全局 StreamingCoordinator poll（`poll_once`）；`MonsterVisual` 不得 per-instance 全局 poll。
-- 注：apply-order 竞态（约 15%）仍待 Freeze 裁决（PRODUCTION_RACE 已登记）。
+- apply-order 历史证据保留：20-run 为 17 PASS / 3 FAIL。
+- 当前状态：Monster Streaming = `HOLD`；不是 active must-fix，不自动启动 20-run。除非更晚的正式状态明确重新激活，否则不得为此修改生产代码。
 
 ## Map
 

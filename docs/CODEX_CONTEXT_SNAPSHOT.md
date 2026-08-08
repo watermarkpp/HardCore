@@ -1,5 +1,12 @@
 # Codex 精简上下文快照
 
+## 2026-08-08：FREEZE-G0.3 关闭与状态同步
+
+- `FREEZE-G0.3 = CLOSED`；`confirmed_production_blockers = 0`；`new_must_fix = 0`。
+- B004 = `CONFIRMED_TEST_INFRA`：生产触摸滚动有效；旧测试调用了被 `STABLE_ID` 策略禁用的 `launcher._input` 路径。
+- B037 = `CONFIRMED_TEST_INFRA`：`InventoryScroll` 存在于真实 HUD 树且触摸有效；旧测试只扫描 `MobileSafeRoot`，漏掉 HUD 根子节点。
+- Monster Streaming = `HOLD`：保留 20-run 17 PASS / 3 FAIL 的历史证据；不是 next gate 或 active must-fix，不授权自动 20-run 或生产修改。
+
 ## 2026-08-03：全攻击/技能地面投影统一与 Android v64
 
 - 固定构建提交为 `551b21d8b19c1e62ac24b28d4dd8dc1ed6f780e0`；隔离构建 APK 为 `outputs/hardcore/HardCore-v64-spatial-projection-debug.apk`，桌面同字节副本为 `C:/Users/Administrator/Desktop/HardCore-v64-spatial-projection-debug.apk`，大小 `244,568,111` 字节，SHA-256 `D4CB03DA88EAA2FD41F41E31FB575DE9EE8A9BCEB7F6BF134C0CA8F077D351E5`。包信息：`versionCode=64`、`versionName=1.18.1-spatial-projection`、`HardCore`、`com.personal.mafaoffline`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名和运行时资源探针通过。构建完成时 ADB 没有枚举到设备，因此未覆盖安装。
