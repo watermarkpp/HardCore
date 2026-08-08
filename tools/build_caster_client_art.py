@@ -244,24 +244,124 @@ def icon_metrics(image: Image.Image) -> dict[str, float | int]:
     }
 
 
-def visible_cross_extent(image: Image.Image, direction_index: int) -> float:
-    """Measure the non-transparent pixel-square envelope across a Mir16 axis."""
-    angle = direction_index * math.tau / 16.0
-    cross_x = math.cos(angle)
-    cross_y = math.sin(angle)
-    minimum = math.inf
-    maximum = -math.inf
+def _visible_alpha_samples(
+    image: Image.Image,
+    top_left_from_world_anchor: list[int] | list[float],
+) -> list[tuple[float, float, float]]:
+    """Return visible pixel centres in source world-anchor coordinates."""
     alpha = image.getchannel("A")
+    origin_x = float(top_left_from_world_anchor[0])
+    origin_y = float(top_left_from_world_anchor[1])
+    result: list[tuple[float, float, float]] = []
     for y in range(image.height):
         for x in range(image.width):
-            if alpha.getpixel((x, y)) <= 0:
+            alpha_value = alpha.getpixel((x, y))
+            if alpha_value <= 0:
                 continue
-            projection = (x + 0.5) * cross_x + (y + 0.5) * cross_y
-            minimum = min(minimum, projection)
-            maximum = max(maximum, projection)
-    if not math.isfinite(minimum):
-        return 1.0
-    return maximum - minimum + abs(cross_x) + abs(cross_y)
+            result.append((
+                origin_x + x + 0.5,
+                origin_y + y + 0.5,
+                float(alpha_value) / 255.0,
+            ))
+    return result
+
+
+def _principal_visible_axis(
+    samples: list[tuple[float, float, float]],
+    fallback_axis: tuple[float, float],
+) -> tuple[float, float]:
+    """Measure the alpha-weighted major axis and retain the intended direction."""
+    total_weight = sum(sample[2] for sample in samples)
+    if total_weight <= 0.0:
+        return fallback_axis
+    mean_x = sum(x * weight for x, _y, weight in samples) / total_weight
+    mean_y = sum(y * weight for _x, y, weight in samples) / total_weight
+    covariance_xx = sum(
+        weight * (x - mean_x) * (x - mean_x) for x, _y, weight in samples
+    ) / total_weight
+    covariance_xy = sum(
+        weight * (x - mean_x) * (y - mean_y) for x, y, weight in samples
+    ) / total_weight
+    covariance_yy = sum(
+        weight * (y - mean_y) * (y - mean_y) for _x, y, weight in samples
+    ) / total_weight
+    angle = 0.5 * math.atan2(
+        2.0 * covariance_xy,
+        covariance_xx - covariance_yy,
+    )
+    axis = (math.cos(angle), math.sin(angle))
+    if axis[0] * fallback_axis[0] + axis[1] * fallback_axis[1] < 0.0:
+        axis = (-axis[0], -axis[1])
+    return axis
+
+
+def _visible_projection_metadata(
+    samples: list[tuple[float, float, float]],
+    source_axis: tuple[float, float],
+) -> dict[str, object]:
+    cross_axis = (-source_axis[1], source_axis[0])
+    axis_projections = [
+        x * source_axis[0] + y * source_axis[1] for x, y, _weight in samples
+    ]
+    cross_projections = [
+        x * cross_axis[0] + y * cross_axis[1] for x, y, _weight in samples
+    ]
+    if not axis_projections or not cross_projections:
+        return {
+            "visible_axis_local": [source_axis[0], source_axis[1]],
+            "visible_axis_start_pixels": 0.0,
+            "visible_axis_extent_pixels": 1.0,
+            "visible_cross_center_pixels": 0.0,
+            "visible_cross_extent_pixels": 1.0,
+        }
+    axis_pixel_support = abs(source_axis[0]) + abs(source_axis[1])
+    cross_pixel_support = abs(cross_axis[0]) + abs(cross_axis[1])
+    axis_minimum = min(axis_projections) - axis_pixel_support * 0.5
+    axis_maximum = max(axis_projections) + axis_pixel_support * 0.5
+    cross_minimum = min(cross_projections) - cross_pixel_support * 0.5
+    cross_maximum = max(cross_projections) + cross_pixel_support * 0.5
+    return {
+        "visible_axis_local": [round(source_axis[0], 9), round(source_axis[1], 9)],
+        "visible_axis_start_pixels": round(axis_minimum, 6),
+        "visible_axis_extent_pixels": round(axis_maximum - axis_minimum, 6),
+        "visible_cross_center_pixels": round(
+            (cross_minimum + cross_maximum) * 0.5, 6
+        ),
+        "visible_cross_extent_pixels": round(cross_maximum - cross_minimum, 6),
+    }
+
+
+def annotate_laser_sequence_presentation(sequence: dict[str, object]) -> None:
+    """Attach reproducible source-art calibration without regenerating geometry."""
+    direction_index = int(sequence.get("direction_index", 0))
+    angle = direction_index * math.tau / 16.0
+    fallback_axis = (math.sin(angle), -math.cos(angle))
+    aggregate_samples: list[tuple[float, float, float]] = []
+    frame_samples: list[list[tuple[float, float, float]]] = []
+    frames = sequence.get("frames", [])
+    if not isinstance(frames, list):
+        return
+    for frame in frames:
+        if not isinstance(frame, dict):
+            frame_samples.append([])
+            continue
+        image = Image.open(ROOT / str(frame["path"])).convert("RGBA")
+        samples = _visible_alpha_samples(
+            image,
+            frame.get("top_left_from_world_anchor", [0, 0]),
+        )
+        frame_samples.append(samples)
+        aggregate_samples.extend(samples)
+    sequence_axis = _principal_visible_axis(aggregate_samples, fallback_axis)
+    sequence["source_axis_local"] = [
+        round(sequence_axis[0], 9),
+        round(sequence_axis[1], 9),
+    ]
+    for frame, samples in zip(frames, frame_samples):
+        if not isinstance(frame, dict):
+            continue
+        frame_axis = _principal_visible_axis(samples, sequence_axis)
+        frame.update(_visible_projection_metadata(samples, frame_axis))
 
 
 def icon_score(
@@ -505,27 +605,19 @@ def main() -> None:
                     "source_draw_offset": [sprite["x"], sprite["y"]],
                     "top_left_from_world_anchor": top_left,
                     "pixel_size": [sprite["width"], sprite["height"]],
-                    **(
-                        {
-                            "visible_cross_extent_pixels": round(
-                                visible_cross_extent(image, canonical_direction), 6
-                            )
-                        }
-                        if asset_id == "laser"
-                        else {}
-                    ),
                     "path": rel(frame_path),
                     "png_sha256": digest(frame_path),
                 }
                 frames.append(record)
                 candidate_frames.append((image, record, icon_metrics(image)))
-            sequences.append(
-                {
-                    "source_direction_slot": direction_index,
-                    "direction_index": canonical_direction,
-                    "frames": frames,
-                }
-            )
+            sequence = {
+                "source_direction_slot": direction_index,
+                "direction_index": canonical_direction,
+                "frames": frames,
+            }
+            if asset_id == "laser":
+                annotate_laser_sequence_presentation(sequence)
+            sequences.append(sequence)
 
         maximum_opaque = max(int(candidate[2]["opaque_pixels"]) for candidate in candidate_frames)
         maximum_bbox_area = max(int(candidate[2]["bbox_area"]) for candidate in candidate_frames)

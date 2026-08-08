@@ -80,16 +80,9 @@ func _run() -> void:
 
 		var vis_fwd: float = sprite.fitted_visual_forward_extent(axis_unit)
 		var vis_cross: float = sprite.fitted_visual_cross_extent(axis_unit)
-		var bounds: Rect2 = sprite.fitted_visual_bounds()
-
-		var vis_min: float = INF
-		var vis_max: float = -INF
-		for ci: int in range(4):
-			var lx: float = bounds.position.x + (bounds.size.x if ci & 1 else 0.0)
-			var ly: float = bounds.position.y + (bounds.size.y if ci & 2 else 0.0)
-			var proj: float = (Vector2(lx, ly) - axis_start).dot(axis_unit)
-			vis_min = minf(vis_min, proj)
-			vis_max = maxf(vis_max, proj)
+		var visible_interval := _visible_forward_interval(sprite, axis_unit)
+		var vis_min := float(visible_interval.minimum) - axis_start.dot(axis_unit)
+		var vis_max := float(visible_interval.maximum) - axis_start.dot(axis_unit)
 
 		# Defined error metrics
 		var start_err: float = vis_min - 0.0
@@ -142,3 +135,39 @@ func _run() -> void:
 
 	print("LASER_DIRECTION_VISUAL_EXTENT_PASS")
 	get_tree().quit(0)
+
+
+func _visible_forward_interval(
+	sprite: CasterSkillAnimationPlayer,
+	axis_unit: Vector2
+) -> Dictionary:
+	var image := sprite.texture.get_image()
+	var minimum := INF
+	var maximum := -INF
+	var half_texture := Vector2(
+		float(image.get_width()) * 0.5,
+		float(image.get_height()) * 0.5
+	)
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a <= 0.0:
+				continue
+			var local_center := (
+				sprite.offset
+				+ Vector2(float(x) + 0.5, float(y) + 0.5)
+				- half_texture
+			)
+			var projection := sprite.transform.basis_xform(
+				local_center
+			).dot(axis_unit)
+			minimum = minf(minimum, projection)
+			maximum = maxf(maximum, projection)
+	assert(is_finite(minimum) and is_finite(maximum))
+	var pixel_support := 0.5 * (
+		absf(sprite.transform.x.dot(axis_unit))
+		+ absf(sprite.transform.y.dot(axis_unit))
+	)
+	return {
+		"minimum": minimum - pixel_support,
+		"maximum": maximum + pixel_support,
+	}
