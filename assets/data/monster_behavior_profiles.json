@@ -31,6 +31,16 @@
     "moth_control": {"onHit": {"controlSeconds": 1.2}},
     "zuma_archer": {"runtimeProjection": {"moveSpeed": 44.0, "attackRange": 205.0}},
     "zuma_dormant": {"dormant": true},
+    "zuma_guard_holy_word": {
+      "dormant": true,
+      "serviceBehavior": {
+        "undead": true,
+        "undeadAuthority": "user_authoritative_override",
+        "undeadDecisionDate": "2026-08-08",
+        "undeadRuleSource": "original_gameofmir/M2Server/Magic.pas MagTurnUndead requires LA_UNDEAD",
+        "undeadDecisionReason": "User-directed Holy Word repair for Zuma Guard monsterIds 156..159"
+      }
+    },
     "stationary_demon": {
       "specialClassification": "fixed_body_full_area_attacker",
       "movement": {"stationary": true},
@@ -90,7 +100,7 @@
     "128": "moth_control", "168": "moth_control", "169": "moth_control",
     "150": "zuma_archer", "151": "zuma_archer", "152": "zuma_archer",
     "153": "zuma_dormant", "154": "zuma_dormant", "155": "zuma_dormant",
-    "156": "zuma_dormant", "157": "zuma_dormant", "158": "zuma_dormant", "159": "zuma_dormant",
+    "156": "zuma_guard_holy_word", "157": "zuma_guard_holy_word", "158": "zuma_guard_holy_word", "159": "zuma_guard_holy_word",
     "180": "stationary_demon", "182": "stationary_spider",
     "193": "rainbow_demon", "195": "millennium_tree",
     "206": "skeleton_archer", "207": "skeleton_archer",
@@ -123,7 +133,7 @@
     "楔蛾": "moth_control", "月魔蜘蛛": "moth_control", "月魔蜘蛛0": "moth_control",
     "祖玛弓箭手": "zuma_archer", "祖玛弓箭手0": "zuma_archer", "祖玛弓箭手3": "zuma_archer",
     "祖玛雕像": "zuma_dormant", "祖玛雕像0": "zuma_dormant", "祖玛雕像3": "zuma_dormant",
-    "祖玛卫士": "zuma_dormant", "祖玛卫士0": "zuma_dormant", "祖玛卫士3": "zuma_dormant", "祖玛卫士00": "zuma_dormant",
+    "祖玛卫士": "zuma_guard_holy_word", "祖玛卫士0": "zuma_guard_holy_word", "祖玛卫士3": "zuma_guard_holy_word", "祖玛卫士00": "zuma_guard_holy_word",
     "赤月恶魔": "stationary_demon", "幻影蜘蛛": "stationary_spider",
     "虹魔教主": "rainbow_demon", "千年树妖": "millennium_tree",
     "骷髅弓箭手": "skeleton_archer", "骷髅弓箭手0": "skeleton_archer",
