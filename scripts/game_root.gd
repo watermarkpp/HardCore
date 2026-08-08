@@ -4547,12 +4547,19 @@ func _canonical_target_context(
 	context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
 	if target != null:
 		var monster_data: Dictionary = target.monster_data
+		var service_behavior: Dictionary = target.behavior_profile.get(
+			"serviceBehavior", {}
+		)
+		var target_is_undead := bool(service_behavior.get(
+			"undead",
+			monster_data.get("undead", monster_data.get("isUndead", false))
+		))
 		context.merge({
 			"target_level": int(monster_data.get("level", target.level)),
 			"target_is_boss": target.is_boss,
 			"target_immovable": target.is_boss,
 			"target_is_monster": true,
-			"target_is_undead": bool(monster_data.get("undead", monster_data.get("isUndead", false))),
+			"target_is_undead": target_is_undead,
 			"target_tameable": not target.is_boss,
 			"target_has_other_master": false,
 			"target_max_hp": target.max_hp,

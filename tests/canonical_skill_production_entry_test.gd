@@ -37,6 +37,41 @@ func _run() -> void:
 	assert(target.current_hp < hp_before and hp_before - target.current_hp < 999999, "GameRoot仍采信客户端伤害或未应用canonical伤害")
 	assert(_has_formal_visual(game, "wizard.lightning"), "雷电术canonical真实入口未创建稳定source_skill_id正式视觉")
 
+	PlayerState.learned_skills = {
+		SkillDataLoader.display_name("wizard.holy_word"): 3,
+	}
+	caster.current_mp = 100
+	var zuma_guard_data := GameData.get_monster_by_id(156).duplicate(true)
+	var zuma_guard := EnemyActor.new()
+	zuma_guard.setup(zuma_guard_data, caster, false)
+	zuma_guard.global_position = caster.global_position + Vector2(80, 0)
+	game.add_child(zuma_guard)
+	game._set_magic_locked_target(zuma_guard, true)
+	game._skill_cast_target = zuma_guard
+	var holy_word: Dictionary = game._execute_canonical_skill(
+		"wizard.holy_word",
+		caster.global_position,
+		Vector2.RIGHT,
+		0,
+		{"force_success": true}
+	)
+	assert(bool(holy_word.get("accepted", false)), "祖玛卫士未进入圣言术正式资格判定")
+	assert(bool(holy_word.get("effect_success", false)), "强制成功的祖玛卫士圣言术没有生效")
+	assert(zuma_guard.current_hp == 0, "圣言术成功后没有将祖玛卫士生命归零")
+
+	game._set_magic_locked_target(target, true)
+	game._skill_cast_target = target
+	var living_hp_before := target.current_hp
+	var rejected_holy_word: Dictionary = game._execute_canonical_skill(
+		"wizard.holy_word",
+		caster.global_position,
+		Vector2.RIGHT,
+		0,
+		{"force_success": true}
+	)
+	assert(not bool(rejected_holy_word.get("accepted", true)), "普通活物被错误加入圣言术资格")
+	assert(target.current_hp == living_hp_before, "圣言术资格失败后仍对普通活物造成伤害")
+
 	PlayerState.learned_skills = {"瞬息移动": 3, "火墙": 3}
 	caster.current_mp = 100
 	var teleport_origin := caster.global_position
