@@ -29,10 +29,19 @@ const REASON_RUNTIME_FILE_MISSING := &"runtime_file_missing"
 const REASON_RUNTIME_INVALID := &"runtime_invalid"
 const REASON_RUNTIME_BUILD_NOT_APPROVED := &"runtime_build_not_approved"
 const REASON_RUNTIME_MAP_KEY_MISMATCH := &"runtime_map_key_mismatch"
+const REASON_RUNTIME_RELEASE_REGISTRY_MISSING := (
+	&"runtime_release_registry_missing"
+)
+const REASON_RUNTIME_RELEASE_REGISTRY_INVALID := (
+	&"runtime_release_registry_invalid"
+)
 
 static var _runtime_cache := {}
 static var _registry_cache: Dictionary = {}
 static var _registry_loaded := false
+static var _registry_load_valid := false
+static var _registry_load_reason := &""
+static var _registry_load_errors: Array[String] = []
 static var _registry_override_path := ""
 static var _readiness_result: Dictionary = {}
 
@@ -49,27 +58,50 @@ static func _load_release_registry() -> void:
 	if _registry_loaded:
 		return
 	_registry_cache.clear()
+	_registry_load_valid = false
+	_registry_load_reason = &""
+	_registry_load_errors = []
 	var path := _registry_path()
-	if FileAccess.file_exists(path):
-		var file := FileAccess.open(path, FileAccess.READ)
-		var parsed: Variant = (
-			JSON.parse_string(file.get_as_text())
-			if file != null
-			else null
-		)
-		if file != null:
-			file.close()
-		if parsed is Dictionary:
-			for raw_entry: Variant in parsed.get("maps", []):
-				if raw_entry is Dictionary:
-					var mid := int(raw_entry.get("runtime_map_id", -1))
-					if mid > 0:
-						_registry_cache[mid] = raw_entry
+	if not FileAccess.file_exists(path):
+		## FREEZE-P0.3R: missing registry -> whole formal release fail-closed.
+		_registry_load_reason = REASON_RUNTIME_RELEASE_REGISTRY_MISSING
+		_registry_loaded = true
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	var parsed: Variant = (
+		JSON.parse_string(file.get_as_text())
+		if file != null
+		else null
+	)
+	if file != null:
+		file.close()
+	if not parsed is Dictionary:
+		## FREEZE-P0.3R: unparseable registry -> fail-closed.
+		_registry_load_reason = REASON_RUNTIME_RELEASE_REGISTRY_INVALID
+		_registry_load_errors = ["runtime_json_invalid"]
+		_registry_loaded = true
+		return
+	## FREEZE-P0.3R: production load must run the SAME schema validator used by
+	## publish/tests. Invalid schema -> fail-closed, no partial entry load.
+	var schema_errors := validate_release_registry(parsed)
+	if not schema_errors.is_empty():
+		_registry_load_reason = REASON_RUNTIME_RELEASE_REGISTRY_INVALID
+		_registry_load_errors = schema_errors
+		_registry_loaded = true
+		return
+	for raw_entry: Variant in parsed.get("maps", []):
+		if raw_entry is Dictionary:
+			var mid := int(raw_entry.get("runtime_map_id", -1))
+			if mid > 0:
+				_registry_cache[mid] = raw_entry
+	_registry_load_valid = true
 	_registry_loaded = true
 
 
 static func _release_entry(runtime_map_id: int) -> Dictionary:
 	_load_release_registry()
+	if not _registry_load_valid:
+		return {}
 	return _registry_cache.get(runtime_map_id, {})
 
 
@@ -88,12 +120,17 @@ static func reset_release_registry_override() -> void:
 static func invalidate_release_registry() -> void:
 	_registry_loaded = false
 	_registry_cache.clear()
+	_registry_load_valid = false
+	_registry_load_reason = &""
+	_registry_load_errors = []
 	_runtime_cache.clear()
 	_readiness_result.clear()
 
 
 static func released_map_ids() -> Array[int]:
 	_load_release_registry()
+	if not _registry_load_valid:
+		return []
 	var ids: Array[int] = []
 	for raw_id: Variant in _registry_cache.keys():
 		ids.append(int(raw_id))
@@ -193,11 +230,28 @@ static func _readiness(runtime_map_id: int) -> Dictionary:
 ## and approved" - registry entry + implemented_playable + runtime file +
 ## load ok + approved build hash match + map key match.
 static func has_runtime_map(runtime_map_id: int) -> bool:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return false
 	return bool(_readiness(runtime_map_id).get("playable", false))
 
 
 static func release_rejection_reason(runtime_map_id: int) -> StringName:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return _registry_load_reason
 	return str(_readiness(runtime_map_id).get("reason", &"")) as StringName
+
+
+## FREEZE-P0.3R: global registry load state (valid / reason / errors). Read-only
+## diagnostic for tests, evidence and MSE status display.
+static func registry_load_state() -> Dictionary:
+	_load_release_registry()
+	return {
+		"valid": _registry_load_valid,
+		"reason": str(_registry_load_reason),
+		"errors": _registry_load_errors.duplicate(),
+	}
 
 
 ## Pure artifact existence: the registry entry exists AND its runtime file
@@ -222,6 +276,15 @@ static func is_formal_playable(runtime_map_id: int) -> bool:
 
 
 static func implementation_state(runtime_map_id: int) -> Dictionary:
+	_load_release_registry()
+	if not _registry_load_valid:
+		## FREEZE-P0.3R: invalid/missing registry -> every formal map
+		## fail-closed; no entry may be treated as playable.
+		return {
+			"state": IMPLEMENTATION_STATE_UNSUPPORTED,
+			"runtime_map_id": runtime_map_id,
+			"formal_playable": false,
+		}
 	var entry := _release_entry(runtime_map_id)
 	if not entry.is_empty():
 		if has_runtime_map(runtime_map_id):

@@ -32,6 +32,7 @@ var wall_loop_max_y: SpinBox
 var size_label: Label
 var path_label: Label
 var status_label: Label
+var _last_build_candidate: Dictionary = {}
 var preview: MapEditorCanvasPreview
 var asset_tree: Tree
 var brush_label: Label
@@ -216,7 +217,8 @@ func _build_ui() -> void:
 	var semantic_update_button := Button.new(); semantic_update_button.text = "更新当前选中的功能标注"; semantic_update_button.pressed.connect(_on_update_selected_semantic_pressed); sidebar.add_child(semantic_update_button)
 	var door_note := Label.new(); door_note.text = "入口与出口必须分别手工标注：先摆放墙门美术，再选“地图入口”或“地图出口”点在门的位置。入口美术不会自动生成门点。安全区左键逐点，Enter 闭合，右键取消。"; door_note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART; door_note.modulate=Color("b8c3cf"); sidebar.add_child(door_note)
 	var bake_button := Button.new(); bake_button.text = "烘焙 Dirty Chunk 预览"; bake_button.pressed.connect(_on_bake_dirty_pressed); sidebar.add_child(bake_button)
-	var build_runtime_button := Button.new(); build_runtime_button.text = "批准并构建 Runtime 快照"; build_runtime_button.pressed.connect(_on_approve_and_build_runtime_pressed); sidebar.add_child(build_runtime_button)
+	var build_candidate_button := Button.new(); build_candidate_button.text = "构建 Runtime 候选"; build_candidate_button.pressed.connect(_on_build_candidate_pressed); sidebar.add_child(build_candidate_button)
+	var publish_release_button := Button.new(); publish_release_button.text = "发布为正式地图"; publish_release_button.pressed.connect(_on_publish_runtime_pressed); sidebar.add_child(publish_release_button)
 	var calibration_title := Label.new(); calibration_title.text = "素材校准（Expansion覆盖）"; calibration_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(calibration_title)
 	calibration_anchor_x = _spin_field(sidebar, "锚点 X", 0, 2048)
 	calibration_anchor_y = _spin_field(sidebar, "锚点 Y", 0, 2048)
@@ -1457,13 +1459,62 @@ func _on_tile_hovered(tile: Vector2i) -> void:
 		status_label.text = "Tile (%d, %d)｜左键绘制，拖动连续绘制" % [tile.x, tile.y]
 
 
-func _on_approve_and_build_runtime_pressed() -> void:
+## FREEZE-P0.3R step 1: Build Runtime Candidate. Never touches the formal
+## release artifact, the Release Registry or formal playable state.
+func _on_build_candidate_pressed() -> void:
+	if current_document.is_empty():
+		status_label.text = "请先创建或打开地图"
+		return
 	var approval := MapEditorBuildRuntimeService.approve_for_runtime(current_document)
 	if not approval.ok:
 		status_label.text = "Runtime 审核未通过：%s" % approval.get("errors", [])
 		return
-	var build := MapEditorBuildRuntimeService.build(current_document)
-	status_label.text = "Runtime 快照已构建：%s" % build.get("path", "") if build.ok else "Runtime 构建失败：%s" % build.get("errors", [])
+	var candidate := MapEditorBuildRuntimeService.build_candidate(current_document)
+	if not candidate.ok:
+		status_label.text = "Runtime 候选构建失败：%s" % candidate.get("errors", [])
+		return
+	_last_build_candidate = candidate
+	status_label.text = (
+		"候选已构建：%s\nbuild hash：%s\n校验通过：%s"
+		% [
+			candidate.get("candidate_path", ""),
+			candidate.get("build_sha256", ""),
+			str(bool(candidate.get("validation", {}).get("ok", false))),
+		]
+	)
+
+
+## FREEZE-P0.3R step 2: Publish Runtime Release. Only enabled by a current
+## valid candidate and always calls the formal publish_runtime_release().
+func _on_publish_runtime_pressed() -> void:
+	var candidate: Dictionary = _last_build_candidate
+	if candidate.is_empty():
+		status_label.text = "无有效候选：请先构建 Runtime 候选"
+		return
+	var candidate_path := str(candidate.get("candidate_path", ""))
+	if not FileAccess.file_exists(candidate_path):
+		status_label.text = "候选文件不存在：%s" % candidate_path
+		return
+	var runtime_map_id := int(current_document.get("runtime_map_id", -1))
+	var result := MapEditorBuildRuntimeService.publish_runtime_release(
+		candidate_path, runtime_map_id
+	)
+	if not result.get("success", false):
+		status_label.text = "发布失败：%s %s" % [
+			result.get("reason", ""),
+			str(result.get("errors", [])),
+		]
+		return
+	status_label.text = (
+		"已发布：map_id=%d key=%s\nhash=%s revision=%d formal_playable=%s"
+		% [
+			int(result.get("runtime_map_id", -1)),
+			result.get("map_key", ""),
+			result.get("approved_build_sha256", ""),
+			int(result.get("approval_revision", 0)),
+			str(bool(result.get("formal_playable", false))),
+		]
+	)
 
 
 func _on_bake_dirty_pressed() -> void:
