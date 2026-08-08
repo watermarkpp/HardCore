@@ -583,6 +583,11 @@ func _install_formal_snapshot_visual_core() -> void:
 		# Projectile children consume their capsule snapshots in collision and
 		# diagnostics. A generic world effect must not force a visible capsule.
 		return
+	if skill_id == "wizard.hell_lightning":
+		# Hell Lightning's primary animation already presents the self-area impact.
+		# Keep the exact cell-union snapshot for gameplay and diagnostics without
+		# manufacturing a translucent ground-range polygon in production.
+		return
 	if skill_id in ["wizard.hellfire", "wizard.laser"]:
 		_install_formal_line_visual_core()
 		return

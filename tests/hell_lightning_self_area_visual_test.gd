@@ -9,6 +9,9 @@ const Fixtures := preload(
 	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshot := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 
 const DIRECTION_NAMES := ["S", "SW", "W", "NW", "N", "NE", "E", "SE"]
 const DIRECTION_VECTORS: Array[Vector2] = [
@@ -34,6 +37,11 @@ func _ready() -> void:
 	owner.global_position = Vector2(320.0, 240.0)
 	add_child(owner)
 
+	var ring_cells: Array[Vector2i] = []
+	for y: int in range(-2, 3):
+		for x: int in range(-2, 3):
+			if x != 0 or y != 0:
+				ring_cells.append(Vector2i(x, y))
 	var plan := Fixtures.build_canonical_presentation_plan(
 		"wizard.hell_lightning",
 		3,
@@ -41,19 +49,30 @@ func _ready() -> void:
 		owner.global_position,
 		Vector2.RIGHT,
 		owner.global_position,
-		Fixtures.circle_snapshot(
+		Fixtures.cell_union_snapshot(
 			self,
 			"wizard.hell_lightning",
 			"q3c:visual:hell_lightning",
 			1,
 			Vector2(0, 0),
-			2.0
+			ring_cells
 		)
 	)
 	assert(
 		bool(plan.get("rejection", {}).get("accepted", false)),
 		"canonical hell-lightning plan must be accepted"
 	)
+	var snapshot_validation_context := (
+		SkillFootprintSnapshot.make_absolute_runtime_context(
+			1,
+			Vector2.ZERO,
+			Vector2.ZERO,
+			Callable(self, "_ground_to_screen")
+		)
+	)
+	plan["snapshot_validation_context"] = snapshot_validation_context
+	for action: Dictionary in plan.get("presentation_actions", []):
+		action["snapshot_validation_context"] = snapshot_validation_context
 
 	var results: Array[Dictionary] = []
 
@@ -69,6 +88,14 @@ func _ready() -> void:
 		assert(node is CasterSkillVisualEffect, "node is visual effect for %s" % dir_name)
 		assert(not (node is CasterSkillSkyStrikeVisualEffect), "not sky_strike for %s" % dir_name)
 		add_child(node)
+		assert(
+			(node.get("_formal_core_polygons") as Array).is_empty(),
+			"hell lightning must not render a translucent range polygon for %s" % dir_name
+		)
+		assert(
+			not node.has_meta("formal_snapshot_visual_core_contract"),
+			"hell lightning must not publish a visible formal range core for %s" % dir_name
+		)
 
 		var sprites: Array = node.get("_sprites")
 		assert(sprites.size() > 0, "sprites exist for %s" % dir_name)
