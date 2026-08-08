@@ -5,6 +5,15 @@
 - 快速启动时，在完整读取本文件并运行 `tools/agent_bootstrap.ps1 -Compact` 后，依次读取 `PROJECT_CURRENT_STATUS.md`、`PROJECT_HISTORY_CONTEXT.md`、`PROJECT_INDEX.md`；涉及 Frozen 核心合同时再读取 `PROJECT_CORE_CONTRACTS.md`。随后必须按索引定向读取目标 subsystem，禁止在这些导航足以定位目标时无证据全仓扫描或重复运行已通过测试。`docs/CODEX_CONTEXT_SNAPSHOT.md` 作为基线、工作树状态和既有验收的补充导航；任何将被修改、合并、构建或删除的对象仍须用当前 Git、文件内容和专项测试核实。每次重要集成里程碑后由 `codex/integration` 更新快照。
 - Godot 自动化测试必须优先通过 `tools/run_godot_tests.ps1` 运行；不得启动 `Godot_v4.7-stable_win64.exe` GUI 版，也不得在受控环境中直接启动未指定项目内日志/用户数据目录的 Godot。该入口固定使用 console/headless、项目内 `outputs/test_logs` 与当前工作树 `.godot/runtime_appdata`，用于避免 Godot 4.7 在 `%APPDATA%` 日志写入被拒绝后触发 `c0000005` 退出崩溃弹窗。
 
+## DeepSeek 最高级直连与调度降级规则
+
+- 本节适用于所有 HardCore 对话、主任务、子代理和专业工作树。DeepSeek 实质施工分析、代码建议、复杂审查和返工审查默认采用当前宿主机的无代理直连入口 `C:\Users\Administrator\.codex\agents\invoke-deepseek-direct.ps1`，正式参数固定为 `-Model deepseek-v4-pro -ThinkingMode enabled -ReasoningEffort max -MaxOutputTokens 384000 -TimeoutMinutes 30`。不得为了节省额度而改用 Flash、关闭 thinking、降低 reasoning effort、缩小已经证明必要的上下文或降低输出上限；用户要求以最终效果优先，不以 DeepSeek 用量为优化目标。
+- 该直连入口必须保持 `HttpClientHandler.UseProxy=false`，不得读取、继承、注入或转发系统代理、`HTTP_PROXY`、`HTTPS_PROXY` 或其他代理链。DeepSeek 服务位于国内；遇到失败时先按直连响应、HTTP 状态、`finish_reason`、token 用量和超时证据分类，禁止无证据改走代理。API Key 只允许来自进程级或用户级 `DEEPSEEK_API_KEY` 环境变量，绝对不得写入仓库、提示词、聊天、命令行文本、补丁或日志。
+- Codex 内置 `deepseek_worker` 若返回精确状态 `DEEPSEEK_DISPATCH_NOT_READY`，只分类为宿主子代理调度不可用；这不代表 DeepSeek API 无响应、上下文不足、余额不足或网络/代理失败。同一任务不得反复空转调用该不可用调度通道，必须立即切换到上述 V4 Pro / max / 384K 无代理直连入口继续工作，不得把内部调度故障转交用户处理。
+- 无代理直连入口是文本施工与审查通道，本身不直接写工作树。Codex 主控必须先给出精确目标、允许文件、冻结对象、现有 dirty、验收标准和必要代码/diff，再把完整、边界明确的工作包交给 DeepSeek；获得结果后由 Codex 主控审查建议、纠正错误、使用 `apply_patch` 落地，并在真实集成态运行专项测试。DeepSeek 返回的 `PASS` 或补丁建议不是最终验收，主控仍是唯一写入控制者、风险裁决者和最终验收者。
+- 调用最高推理时允许长时间运行，但主控必须使用可续等的后台执行单元并按不超过 60 秒的间隔分段读取状态、向用户提供简短进度；不得因宿主单次 60 秒等待上限杀死仍在正常运行的 DeepSeek 请求。只有直连接口实际达到配置的 30 分钟超时或返回明确错误，才可判定该次请求失败。
+- DeepSeek V4 当前项目适配基线为 1M 上下文、最大 384K 输出。`max_tokens` 是包含 thinking 推理与最终回答的生成上限；若返回 `finish_reason=length` 且最终 `content` 为空，优先检查本地调用是否仍错误限制为 32768 或更低。当前正式直连脚本已经移除旧 32768 上限，并必须在结果中记录 `model`、`finish_reason`、`input_tokens`、`output_tokens`、`reasoning_tokens`、`max_output_tokens`、`thinking_mode` 与 `transport=direct_no_proxy`，禁止把空最终输出伪报为完成。
+
 ## 用户验收冻结硬规则
 
 - 用户明确说“已修改好”“已完成”“已通过”“不要再动”的项目、素材、映射、坐标、缩放、存档或数据，立即成为只读冻结对象。除非用户之后明确点名该精确对象并授权重新修改，否则任何主任务、专业工作树、生成器、校准工具、旧合同、旧缓存或批处理都不得改写、重建、重新映射或回退它。
