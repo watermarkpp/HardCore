@@ -243,9 +243,6 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			else:
 				for raw_sprite: Sprite2D in effect._sprites:
 					var sprite := raw_sprite as CasterSkillAnimationPlayer
-					var fixed_longitudinal := sprite.transform.basis_xform(
-						sprite._source_axis_local
-					)
 					var _vis_type_a: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
 					if _vis_type_a == "beam":
 						var _diag: Dictionary = sprite.visual_fit_diagnostics()
@@ -257,8 +254,12 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 						assert(sprite.set_manual_frame(frame_index))
 						assert(sprite.transform.basis_xform(
 							sprite._source_axis_local
-						).is_equal_approx(fixed_longitudinal))
+						).normalized().is_equal_approx(endpoint_world.normalized()))
 						if _vis_type_a == "beam":
+							assert(absf(
+								sprite.fitted_visual_forward_extent(endpoint_world)
+								- endpoint_world.length()
+							) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
 							var _fc: float = sprite.fitted_visual_cross_extent(endpoint_world)
 							var _cc: float = sprite.current_frame_visible_cross_extent(endpoint_world)
 							assert(_fc > 0.0, "beam cross fitted must be positive")

@@ -437,7 +437,8 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 			_desired_sprite_footprint_px,
 			_desired_sprite_axis_extent_px,
 			_visual_axis_screen_px,
-			_desired_sprite_cross_axis_extent_px
+			_desired_sprite_cross_axis_extent_px,
+			{"anchor_policy": "center_sequence_bounds_on_geometry_origin"}
 		):
 			sprite.queue_free()
 			continue

@@ -57,6 +57,7 @@ func configure(
 	texture = null
 	transform = Transform2D.IDENTITY
 	offset = Vector2.ZERO
+	_sequence_anchor_rebase = Vector2.ZERO
 	_axis_cross_fit_active = false
 	_longitudinal_scale = 1.0
 	_target_cross_axis = Vector2.RIGHT
@@ -104,14 +105,20 @@ func configure(
 	_anchor_policy = str(presentation_overrides.get("anchor_policy", str(render.get("anchor_policy", "top_left_from_world_anchor"))))
 	_sequence_bounds = _visual_bounds_for_frames(_frames, _anchor_policy)
 	# Compute source axis before anchor rebase so the new policy can use it.
-	_source_axis_local = Vector2.UP.rotated(
+	var fallback_source_axis := Vector2.UP.rotated(
 		float(direction_index) * TAU / 16.0
+	).normalized()
+	_source_axis_local = _vector2_pair(
+		selected.get("source_axis_local", []), fallback_source_axis
 	).normalized()
 	_source_cross_axis_local = Vector2(
 		-_source_axis_local.y, _source_axis_local.x
 	)
 	if _anchor_policy == "align_sequence_visible_axis_start_to_geometry_origin":
-		_sequence_anchor_rebase = _rebase_to_visible_axis_start(_sequence_bounds)
+		_apply_frame_source_axis(_frames[0])
+		_sequence_anchor_rebase = _visible_axis_anchor_rebase(
+			_frames[0], _rebase_to_visible_axis_start(_sequence_bounds)
+		)
 	elif _anchor_policy == "center_sequence_bounds_on_geometry_origin":
 		_sequence_anchor_rebase = -_sequence_bounds.get_center()
 	else:
@@ -160,23 +167,31 @@ func configure(
 	elif (
 		_desired_axis_extent > 0.0
 		and not _fit_axis_world.is_zero_approx()
-		and _desired_cross_axis_extent > 0.0
 	):
-		# Each primary Laser sequence already owns a correct 16-way source
-		# orientation. Map its longitudinal source axis onto the exact continuous
-		# aim axis, then fit the visual thickness independently from the damage
-		# strip. A direction-dependent isometric projection changed apparent width
-		# by about 2x, before per-frame alpha-envelope variance was considered.
-		var native_forward_extent := _rect_forward_projection_extent(
-			_sequence_bounds, _sequence_anchor_rebase, _source_axis_local
-		)
+		# Mir16 selects the nearest available source artwork only. Its visible alpha
+		# axis is measured per frame in source-anchor coordinates; mapping that real
+		# basis onto the exact snapshot axis removes source-art quantization without
+		# changing canonical gameplay geometry. Length and thickness are fitted from
+		# the same frame's visible alpha envelope.
+		var native_forward_extent := _frame_visible_axis_extent(_frames[0])
+		if native_forward_extent <= 0.0:
+			native_forward_extent = _rect_forward_projection_extent(
+				_sequence_bounds, _sequence_anchor_rebase, _source_axis_local
+			)
 		_longitudinal_scale = (
 			_desired_axis_extent / maxf(0.001, native_forward_extent)
 		)
+		if _desired_cross_axis_extent <= 0.0:
+			# Beam profiles historically supplied only a geometry-owned length.
+			# Preserve their first frame's native aspect ratio while still giving
+			# every frame one explicit target cross extent to normalize against.
+			_desired_cross_axis_extent = (
+				_frame_visible_cross_extent(_frames[0]) * _longitudinal_scale
+			)
 		_target_cross_axis = Vector2(-_fit_axis_world.y, _fit_axis_world.x)
 		_axis_cross_fit_active = true
-		# Length uses one sequence-stable mapping. Only the cross component is
-		# recomputed per formal frame from its alpha envelope.
+		# Per-frame alpha calibration keeps the animated visible start, end and
+		# centreline stable even when the source frame bounds change.
 		_apply_axis_cross_transform(_frames[0])
 	elif (
 		_desired_axis_extent > 0.0
@@ -290,6 +305,16 @@ func fitted_visual_axis_extent(axis_world: Vector2) -> float:
 func fitted_visual_forward_extent(axis_world: Vector2) -> float:
 	if axis_world.length_squared() <= 0.000001:
 		return 0.0
+	if _axis_cross_fit_active and current_frame_index >= 0:
+		var visible_extent := _frame_visible_axis_extent(
+			_frames[current_frame_index]
+		)
+		if visible_extent > 0.0:
+			return visible_extent * absf(
+				transform.basis_xform(_source_axis_local).dot(
+					axis_world.normalized()
+				)
+			)
 	return _transformed_rect_forward_projection_extent(
 		_sequence_bounds,
 		_sequence_anchor_rebase,
@@ -315,6 +340,16 @@ func current_frame_visual_forward_extent(axis_world: Vector2) -> float:
 		or current_frame_index >= _frames.size()
 	):
 		return 0.0
+	if _axis_cross_fit_active:
+		var visible_extent := _frame_visible_axis_extent(
+			_frames[current_frame_index]
+		)
+		if visible_extent > 0.0:
+			return visible_extent * absf(
+				transform.basis_xform(_source_axis_local).dot(
+					axis_world.normalized()
+				)
+			)
 	var frame_rect := _visual_rect_for_frame(
 		_frames[current_frame_index], _anchor_policy
 	)
@@ -362,6 +397,16 @@ func _apply_frame(frame_index: int) -> bool:
 
 
 func _apply_axis_cross_transform(frame: Dictionary) -> void:
+	_apply_frame_source_axis(frame)
+	if _anchor_policy == "align_sequence_visible_axis_start_to_geometry_origin":
+		_sequence_anchor_rebase = _visible_axis_anchor_rebase(
+			frame, _rebase_to_visible_axis_start(_sequence_bounds)
+		)
+	var visible_axis_extent := _frame_visible_axis_extent(frame)
+	if visible_axis_extent > 0.0:
+		_longitudinal_scale = (
+			_desired_axis_extent / maxf(0.001, visible_axis_extent)
+		)
 	var native_cross_extent := _frame_visible_cross_extent(frame)
 	var cross_scale := (
 		_desired_cross_axis_extent / maxf(0.001, native_cross_extent)
@@ -377,6 +422,36 @@ func _apply_axis_cross_transform(frame: Dictionary) -> void:
 	transform = Transform2D(basis_x, basis_y, Vector2.ZERO)
 
 
+func _apply_frame_source_axis(frame: Dictionary) -> void:
+	var frame_axis := _vector2_pair(
+		frame.get("visible_axis_local", []), _source_axis_local
+	)
+	if frame_axis.length_squared() <= 0.000001:
+		return
+	_source_axis_local = frame_axis.normalized()
+	_source_cross_axis_local = Vector2(
+		-_source_axis_local.y, _source_axis_local.x
+	)
+
+
+func _visible_axis_anchor_rebase(
+	frame: Dictionary,
+	fallback: Vector2
+) -> Vector2:
+	var axis_start := float(frame.get("visible_axis_start_pixels", INF))
+	var cross_center := float(frame.get("visible_cross_center_pixels", INF))
+	if not is_finite(axis_start) or not is_finite(cross_center):
+		return fallback
+	return (
+		-axis_start * _source_axis_local
+		- cross_center * _source_cross_axis_local
+	)
+
+
+func _frame_visible_axis_extent(frame: Dictionary) -> float:
+	return maxf(0.0, float(frame.get("visible_axis_extent_pixels", 0.0)))
+
+
 func _frame_visible_cross_extent(frame: Dictionary) -> float:
 	var formal_alpha_extent := float(frame.get("visible_cross_extent_pixels", 0.0))
 	if formal_alpha_extent > 0.0:
@@ -385,6 +460,17 @@ func _frame_visible_cross_extent(frame: Dictionary) -> float:
 		_visual_rect_for_frame(frame, _anchor_policy),
 		_source_cross_axis_local
 	)
+
+
+func _vector2_pair(raw_value: Variant, fallback: Vector2) -> Vector2:
+	if raw_value is Array and raw_value.size() >= 2:
+		var candidate := Vector2(
+			float(raw_value[0]),
+			float(raw_value[1])
+		)
+		if candidate.length_squared() > 0.000001:
+			return candidate
+	return fallback
 
 
 func _visual_rect_for_frame(frame: Dictionary, anchor_policy: String) -> Rect2:

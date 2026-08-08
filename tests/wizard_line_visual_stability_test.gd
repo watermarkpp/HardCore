@@ -98,11 +98,9 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 		# beam_single_active_test (which injects the enabled profile).
 		assert(close_effect.visible)
 
-		# All six primary frames retain one longitudinal transform. Their cross
-		# scales differ only enough to normalize each formal alpha envelope.
-		var expected_longitudinal := far_sprite.transform.basis_xform(
-			far_sprite._source_axis_local
-		)
+		# All six primary frames retain the exact snapshot axis and visible
+		# endpoint. Their per-frame source bases and scales may differ because the
+		# formal alpha envelope, not the transparent rectangle, is calibrated.
 		for frame_index: int in range(far_sprite.frame_count()):
 			assert(far_sprite.set_manual_frame(frame_index))
 			var declared_alpha_extent := float(
@@ -120,7 +118,11 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 			))
 			assert(far_sprite.transform.basis_xform(
 				far_sprite._source_axis_local
-			).is_equal_approx(expected_longitudinal))
+			).normalized().is_equal_approx(aim_axis))
+			assert(absf(
+				far_sprite.fitted_visual_forward_extent(aim_axis)
+				- endpoint.length()
+			) <= 0.01)
 			assert(
 				far_sprite.current_frame_visible_cross_extent(aim_axis) > 0.0,
 				"beam frame cross extent must stay positive"
