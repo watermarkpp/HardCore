@@ -56,6 +56,27 @@ func _run() -> void:
 	var legacy_rule := MonsterIdentityScript.boss_rule({"name": "尸王"}, rules)
 	assert(int(legacy_rule.get("monsterId", -1)) == 89, "旧名称Boss规则兼容入口失效")
 
+	for monster_id: int in [156, 157, 158, 159]:
+		var guard_profile := MonsterIdentityScript.behavior_profile({
+			"monsterId": monster_id,
+			"name": "本地化祖玛守卫",
+		})
+		var guard_service: Dictionary = guard_profile.get("serviceBehavior", {})
+		assert(bool(guard_profile.get("dormant", false)), "祖玛卫士%d丢失休眠行为" % monster_id)
+		assert(bool(guard_service.get("undead", false)), "祖玛卫士%d未进入圣言术不死系资格" % monster_id)
+		assert(str(guard_service.get("undeadAuthority", "")) == "user_authoritative_override", "祖玛卫士不死系覆盖缺少正式授权")
+		assert(str(guard_service.get("undeadDecisionDate", "")) == "2026-08-08", "祖玛卫士不死系覆盖缺少决策日期")
+		assert(str(guard_service.get("undeadRuleSource", "")).contains("MagTurnUndead requires LA_UNDEAD"), "祖玛卫士不死系覆盖缺少圣言术规则来源")
+
+	var legacy_guard_profile := MonsterIdentityScript.behavior_profile({"name": "祖玛卫士"})
+	assert(bool(legacy_guard_profile.get("serviceBehavior", {}).get("undead", false)), "祖玛卫士旧名称兼容入口未读取圣言术资格")
+	for statue_id: int in [153, 154, 155]:
+		var statue_profile := MonsterIdentityScript.behavior_profile({"monsterId": statue_id})
+		assert(bool(statue_profile.get("dormant", false)), "祖玛雕像%d休眠行为被破坏" % statue_id)
+		assert(not bool(statue_profile.get("serviceBehavior", {}).get("undead", false)), "祖玛雕像%d被本轮错误加入圣言术覆盖" % statue_id)
+	var zuma_boss_profile := MonsterIdentityScript.behavior_profile({"monsterId": 160})
+	assert(not bool(zuma_boss_profile.get("serviceBehavior", {}).get("undead", false)), "祖玛教主被本轮错误加入圣言术覆盖")
+
 	renamed_yeti.queue_free()
 	renamed_boss.queue_free()
 	player.queue_free()
