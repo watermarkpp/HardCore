@@ -6332,25 +6332,10 @@ func _canonical_friendly_candidates() -> Array:
 			summon.current_hp,
 			summon.max_hp,
 			_canonical_screen_px_to_ground_gu(summon.global_position),
-			maxi(1, _summon_owner_level(summon)),
+			maxi(1, summon.owner_level),
 			"summon"
 		))
 	return result
-
-
-func _summon_owner_level(summon: SummonActor) -> int:
-	## The defence-growth contract keys off the owner level at summon time
-	## (legacy production path reads SummonActor.owner_level). The frozen actor
-	## does not declare the property, so the spawner records it as metadata.
-	## Fall back to the owner's current level when it was not recorded.
-	var owner_level_value := 0
-	if summon.has_meta("owner_level"):
-		var owner_level_raw: Variant = summon.get_meta("owner_level", 0)
-		if owner_level_raw is int:
-			owner_level_value = int(owner_level_raw)
-	if owner_level_value <= 0 and is_instance_valid(summon.owner_player):
-		owner_level_value = PlayerState.level
-	return maxi(1, owner_level_value)
 
 
 func _select_taoist_heal_target(center_ground_gu: Vector2) -> Dictionary:

@@ -166,7 +166,7 @@ func _verify_release_footpoint_and_reselect() -> void:
 
 func _verify_area_effects_and_defence() -> void:
 	_reset_cast_state()
-	var own_summon := _make_summon(Vector2(1, 0), player)
+	var own_summon := _make_summon(Vector2(1, 0), player, 21, 7)
 	own_summon.current_hp = own_summon.max_hp
 	var other_owner := PlayerCharacter.new()
 	var other_summon := _make_summon(Vector2(0, 1), other_owner)
@@ -190,7 +190,11 @@ func _verify_area_effects_and_defence() -> void:
 	PlayerState.learned_skills.erase(_display("taoist.magic_defense"))
 	PlayerState.recalculate_stats()
 	PlayerState._skill_progression.load_snapshot(PlayerState.learned_skills)
-	own_summon.set_meta("owner_level", 21)
+	assert(own_summon.owner_level == 21)
+	assert(
+		own_summon.summon_exp_level != own_summon.owner_level,
+		"pet level must stay independent of the frozen owner level"
+	)
 	player.defense_buff = 0
 	player.defense_buff_time = 0.0
 	player.mac_buff = 0
@@ -574,7 +578,9 @@ func _verify_player_defence_separation() -> void:
 
 func _make_summon(
 	ground_offset_gu: Vector2,
-	owner: PlayerCharacter
+	owner: PlayerCharacter,
+	owner_level_value := 19,
+	maximum_pet_level := 1
 ) -> SummonActor:
 	var summon := SummonActor.new()
 	summon.setup(
@@ -583,8 +589,8 @@ func _make_summon(
 		1,
 		0,
 		"taoist.summon_skeleton",
-		19,
-		1
+		owner_level_value,
+		maximum_pet_level
 	)
 	summon.configure_runtime_map_projection(
 		-1,
