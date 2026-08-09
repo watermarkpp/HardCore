@@ -261,14 +261,39 @@ func _install_visual() -> void:
 		return
 	var render := CasterSkillVisualRegistry.render_policy(skill_id)
 	var desired_extent := maxf(1.0, float(render.get("fit_extent", 34.0)))
+	var presentation_overrides := {}
+	if skill_id == "taoist.soul_fire_talisman":
+		## The talisman source frames carry a hand-relative draw offset
+		## (source_draw_offset) rather than a top-left world anchor. Anchoring
+		## at the actor foot/hand and dropping the 24px direction muzzle lets
+		## the paper fly from the character's body along the target direction
+		## while gameplay release origin stays canonical.
+		presentation_overrides["anchor_policy"] = (
+			"source_draw_offset_from_actor_foot"
+		)
 	var candidate := AnimationPlayerScript.new()
-	if not candidate.configure(skill_id, direction_screen_px, desired_extent):
+	if not candidate.configure(
+		skill_id,
+		direction_screen_px,
+		desired_extent,
+		null,
+		"",
+		Vector2.ZERO,
+		0.0,
+		Vector2.ZERO,
+		0.0,
+		presentation_overrides
+	):
 		visual_rejection_reason = "projectile_animation_failed"
 		candidate.queue_free()
 		return
 	_sprite = candidate
 	add_child(_sprite)
-	_sprite.position = visual_muzzle_offset_px
+	_sprite.position = (
+		Vector2.ZERO
+		if skill_id == "taoist.soul_fire_talisman"
+		else visual_muzzle_offset_px
+	)
 
 
 func _physics_process(delta: float) -> void:
