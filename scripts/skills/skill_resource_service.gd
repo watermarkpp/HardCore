@@ -103,9 +103,6 @@ static func _quote_single(
 		if not amounts.is_empty()
 		else 0
 	)
-	if material_free:
-		item = null
-		item_amount = 0
 	if (
 		str(definition.get("mechanics", {}).get("runtime_family", "")) == "persistent_main_pet"
 		and bool(cast_context.get("has_main_pet", false))
@@ -113,8 +110,6 @@ static func _quote_single(
 		item_amount = 0
 	var materials: Dictionary = resource_context.get("materials", {})
 	var selected_item := str(resource_context.get("selected_material", item if item != null else ""))
-	if material_free:
-		selected_item = ""
 	if item != null and str(item) == "selected_poison_powder" and selected_item not in ["grey_powder", "yellow_powder"]:
 		return {"valid": false, "reason": "selected_poison_powder", "mp_cost": mp_cost}
 	if (
