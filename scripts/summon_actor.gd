@@ -21,6 +21,8 @@ const SPAWN_FOOTPRINT_CONTRACT_ID := (
 const ATTACK_FOOTPRINT_CONTRACT_ID := (
 	"skills.summon.attack_release_footprint_snapshot.v1"
 )
+const STEALTH_STATE_CONTRACT_ID := "skills.summon_actor.stealth_state.v1"
+const BUFF_STATE_CONTRACT_ID := "skills.summon_actor.buff_state.v1"
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 )
@@ -127,6 +129,17 @@ var _pending_attack_direction := Vector2.DOWN
 var _fire_visual_elapsed := 0.0
 var _fire_visual_remaining := 0.0
 var _health_bar_y := -35.0
+
+## Independent support-buff state: stealth, physical defence (AC) and magic
+## defence (MAC) each keep their own timer and refresh independently.
+var stealth_remaining_seconds := 0.0
+var stealth_buff_id := ""
+var ac_buff_bonus := 0
+var ac_buff_remaining_seconds := 0.0
+var ac_buff_id := ""
+var mac_buff_bonus := 0
+var mac_buff_remaining_seconds := 0.0
+var mac_buff_id := ""
 
 
 func setup(
@@ -318,6 +331,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_support_buff_timers(delta)
 	_attack_visual_remaining = maxf(0.0, _attack_visual_remaining - delta)
 	_hit_visual_remaining = maxf(0.0, _hit_visual_remaining - delta)
 	_update_fire_visual(delta)
@@ -767,6 +781,14 @@ static func _distance_gu_between_screen_positions_px(
 
 
 func take_damage(amount: int) -> void:
+	_apply_resolved_damage(maxi(1, amount - physical_defence_bonus()))
+
+
+func take_magic_damage(amount: int) -> void:
+	_apply_resolved_damage(maxi(1, amount - magic_defence_bonus()))
+
+
+func _apply_resolved_damage(amount: int) -> void:
 	current_hp = maxi(0, current_hp - maxi(1, amount))
 	if current_hp == 0:
 		_set_state(SummonState.DEAD)
@@ -782,6 +804,107 @@ func take_damage(amount: int) -> void:
 		_visual_state = "hit"
 		_visual_elapsed = 0.0
 	queue_redraw()
+
+
+func apply_stealth(seconds: float, buff_id := "buff.taoist.mass_invisibility") -> void:
+	## Refresh semantics: keep the longer remaining duration, mirroring the
+	## player stealth contract (player.apply_stealth uses max).
+	if seconds <= 0.0:
+		return
+	stealth_remaining_seconds = maxf(stealth_remaining_seconds, seconds)
+	if not buff_id.is_empty():
+		stealth_buff_id = buff_id
+
+
+func is_stealthed() -> bool:
+	return stealth_remaining_seconds > 0.0
+
+
+func stealth_remaining() -> float:
+	return stealth_remaining_seconds
+
+
+func apply_ac_buff(bonus: int, seconds: float, buff_id := "") -> void:
+	if seconds <= 0.0:
+		return
+	## Reliable refresh: a weaker or shorter refresh never downgrades an
+	## active buff. A fresh cast after expiry starts from the new value.
+	var safe_bonus := maxi(0, bonus)
+	if ac_buff_remaining_seconds <= 0.0:
+		ac_buff_bonus = safe_bonus
+	else:
+		ac_buff_bonus = maxi(ac_buff_bonus, safe_bonus)
+	ac_buff_remaining_seconds = maxf(ac_buff_remaining_seconds, seconds)
+	if not buff_id.is_empty():
+		ac_buff_id = buff_id
+
+
+func apply_mac_buff(bonus: int, seconds: float, buff_id := "") -> void:
+	if seconds <= 0.0:
+		return
+	var safe_bonus := maxi(0, bonus)
+	if mac_buff_remaining_seconds <= 0.0:
+		mac_buff_bonus = safe_bonus
+	else:
+		mac_buff_bonus = maxi(mac_buff_bonus, safe_bonus)
+	mac_buff_remaining_seconds = maxf(mac_buff_remaining_seconds, seconds)
+	if not buff_id.is_empty():
+		mac_buff_id = buff_id
+
+
+func physical_defence_bonus() -> int:
+	return ac_buff_bonus if ac_buff_remaining_seconds > 0.0 else 0
+
+
+func magic_defence_bonus() -> int:
+	return mac_buff_bonus if mac_buff_remaining_seconds > 0.0 else 0
+
+
+func clear_ac_buff() -> void:
+	ac_buff_bonus = 0
+	ac_buff_remaining_seconds = 0.0
+	ac_buff_id = ""
+
+
+func clear_mac_buff() -> void:
+	mac_buff_bonus = 0
+	mac_buff_remaining_seconds = 0.0
+	mac_buff_id = ""
+
+
+func buff_state_snapshot() -> Dictionary:
+	return {
+		"contract_id": BUFF_STATE_CONTRACT_ID,
+		"stealth_contract_id": STEALTH_STATE_CONTRACT_ID,
+		"stealth_remaining_seconds": stealth_remaining_seconds,
+		"stealth_buff_id": stealth_buff_id,
+		"is_stealthed": is_stealthed(),
+		"physical_defence": {
+			"bonus": physical_defence_bonus(),
+			"remaining_seconds": ac_buff_remaining_seconds,
+			"buff_id": ac_buff_id,
+		},
+		"magic_defence": {
+			"bonus": magic_defence_bonus(),
+			"remaining_seconds": mac_buff_remaining_seconds,
+			"buff_id": mac_buff_id,
+		},
+	}
+
+
+func _update_support_buff_timers(delta: float) -> void:
+	if stealth_remaining_seconds > 0.0:
+		stealth_remaining_seconds = maxf(0.0, stealth_remaining_seconds - delta)
+		if stealth_remaining_seconds <= 0.0:
+			stealth_buff_id = ""
+	if ac_buff_remaining_seconds > 0.0:
+		ac_buff_remaining_seconds = maxf(0.0, ac_buff_remaining_seconds - delta)
+		if ac_buff_remaining_seconds <= 0.0:
+			clear_ac_buff()
+	if mac_buff_remaining_seconds > 0.0:
+		mac_buff_remaining_seconds = maxf(0.0, mac_buff_remaining_seconds - delta)
+		if mac_buff_remaining_seconds <= 0.0:
+			clear_mac_buff()
 
 
 func state_name() -> String:

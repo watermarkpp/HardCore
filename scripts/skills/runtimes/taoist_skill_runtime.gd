@@ -8,6 +8,32 @@ const SkillRankResolverScript := preload(
 const TaoistCombatMathScript := preload(
 	"res://scripts/taoist_combat_math.gd"
 )
+const SkillDataLoaderScript := preload(
+	"res://scripts/skills/skill_data_loader.gd"
+)
+const TaoistSupportPolicyScript := preload(
+	"res://scripts/skills/taoist_support_policy.gd"
+)
+const TaoistFriendlyTargetingScript := preload(
+	"res://scripts/skills/taoist_friendly_targeting.gd"
+)
+
+const SUPPORT_TARGETING_CONTRACT_ID := (
+	TaoistSupportPolicyScript.CONTRACT_ID
+)
+const FRIENDLY_AREA_GEOMETRY_CONTRACT_ID := (
+	TaoistFriendlyTargetingScript.CONTRACT_ID
+)
+const DUAL_DEFENSE_CAST_CONTRACT_ID := "skills.taoist.dual_defense_cast.v1"
+const HEAL_SELECTION_RANGE_GU := (
+	TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
+)
+const DUAL_DEFENSE_SKILL_IDS: Array[String] = [
+	"taoist.magic_defense",
+	"taoist.defense",
+]
+const MASS_INVISIBILITY_GRID_SIZE := 3
+const DEFENCE_CHEBYSHEV_RADIUS := 3
 
 
 static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted) -> Dictionary:
@@ -48,7 +74,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 		"taoist.mass_invisibility":
 			_resolve_mass_invisibility(plan, rank, context, rng)
 		"taoist.magic_defense", "taoist.defense":
-			_resolve_defence_buff(plan, rank, context, rng, mechanics)
+			_resolve_defence_buff(plan, definition, request, rng)
 		"taoist.revelation":
 			_resolve_revelation(plan, rank, context, rng)
 		"taoist.entrapment":
@@ -78,17 +104,51 @@ static func _resolve_single_heal(
 	if bool(context.get("hostile", false)):
 		_reject(plan, "friendly_heal_target_required")
 		return
+	var rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
+	var skill_id := str(definition.get("skill_id", ""))
+	var candidates := _support_candidates(context)
+	var selection: Dictionary = {}
+	var selected: Dictionary = {}
+	if not candidates.is_empty():
+		selection = _heal_selection(context, candidates)
+		if not bool(selection.get("valid", false)):
+			_reject(
+				plan,
+				str(selection.get("reason", "friendly_heal_target_required"))
+			)
+			return
+		selected = selection.get("selected", {})
 	var raw_heal := _raw_heal(definition, request, rng)
-	var missing_hp := maxi(0, int(context.get("actual_hp_missing", 0)))
+	var missing_hp := 0
+	var target_instance_id := 0
+	var target_is_self := false
+	if not selected.is_empty():
+		missing_hp = int(selected.get("max_hp", 1)) - int(
+			selected.get("current_hp", 0)
+		)
+		target_instance_id = int(selected.get("instance_id", 0))
+		target_is_self = bool(selected.get("is_self", false))
+	else:
+		missing_hp = maxi(0, int(context.get("actual_hp_missing", 0)))
 	var actual_restored := mini(raw_heal, missing_hp)
 	plan.effects = [{
 		"type": "dedicated_heal",
+		"skill_id": skill_id,
+		"rank": rank,
+		"target_instance_id": target_instance_id,
+		"target_is_self": target_is_self,
 		"raw_heal": raw_heal,
 		"actual_hp_restored": actual_restored,
 		"cap_at_max_hp": true,
 		"negative_damage": false,
+		"selection_contract_id": SUPPORT_TARGETING_CONTRACT_ID,
+		"selection_range_gu": HEAL_SELECTION_RANGE_GU,
 	}]
 	plan.effect_success = actual_restored > 0
+	if not selected.is_empty():
+		plan["support_targeting"] = selection
 
 
 static func _raw_heal(definition: Dictionary, request: Dictionary, rng: RefCounted) -> int:
@@ -242,6 +302,57 @@ static func _resolve_mass_invisibility(
 	context: Dictionary,
 	rng: RefCounted
 ) -> void:
+	var candidates := _support_candidates(context)
+	if not candidates.is_empty():
+		var center_ground_gu: Variant = context.get(
+			"caster_ground_position_gu",
+			Vector2.ZERO
+		)
+		if not center_ground_gu is Vector2:
+			_reject(plan, "friendly_target_context_required")
+			return
+		var center_tile := TaoistFriendlyTargetingScript.grid_tile(
+			center_ground_gu
+		)
+		var cells := TaoistFriendlyTargetingScript.exact_square_cells(
+			center_tile,
+			MASS_INVISIBILITY_GRID_SIZE
+		)
+		var affected := TaoistFriendlyTargetingScript.candidates_in_cells(
+			candidates,
+			center_ground_gu,
+			cells
+		)
+		var effect := _stealth_effect(
+			rank,
+			context,
+			rng,
+			"buff.taoist.mass_invisibility"
+		)
+		effect["type"] = "area_monster_aggro_stealth"
+		effect["affected_count"] = affected.size()
+		effect["target_instance_ids"] = _instance_ids_from_candidates(affected)
+		effect["width_grid_steps"] = MASS_INVISIBILITY_GRID_SIZE
+		effect["height_grid_steps"] = MASS_INVISIBILITY_GRID_SIZE
+		effect["center_ground_gu"] = center_ground_gu
+		effect["center_tile"] = center_tile
+		effect["area_contract_id"] = FRIENDLY_AREA_GEOMETRY_CONTRACT_ID
+		effect["support_contract_id"] = SUPPORT_TARGETING_CONTRACT_ID
+		plan.effects = [effect]
+		plan["support_area_geometry"] = _area_geometry(
+			"square",
+			center_tile,
+			center_ground_gu,
+			cells,
+			affected,
+			{
+				"width_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
+				"height_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
+			}
+		)
+		plan.effect_success = not affected.is_empty()
+		plan.resource_commit = not affected.is_empty()
+		return
 	var affected_count := maxi(0, int(context.get("affected_friendly_count", 0)))
 	var target_instance_ids := _instance_ids(
 		context.get("affected_friendly_target_instance_ids", [])
@@ -259,23 +370,98 @@ static func _resolve_mass_invisibility(
 
 static func _resolve_defence_buff(
 	plan: Dictionary,
-	rank: int,
-	context: Dictionary,
-	rng: RefCounted,
-	mechanics: Dictionary
+	definition: Dictionary,
+	request: Dictionary,
+	rng: RefCounted
 ) -> void:
-	var targets: Array = context.get("friendly_targets", [])
-	var effects: Array[Dictionary] = []
-	var sc_roll := int(context.get("primary_stat_roll", 0))
-	var duration_seconds := maxi(
-		1,
-		int(floor(float(Formula.get_power13(rng, rank, 60) + 10 * sc_roll) / 10.0))
+	var context: Dictionary = request.get("target_context", {})
+	var rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
 	)
+	var mechanics: Dictionary = definition.get("mechanics", {})
+	var skill_id := str(definition.get("skill_id", ""))
+	var candidates := _support_candidates(context)
+	if not candidates.is_empty():
+		var center_ground_gu: Variant = context.get(
+			"caster_ground_position_gu",
+			Vector2.ZERO
+		)
+		if not center_ground_gu is Vector2:
+			_reject(plan, "friendly_target_context_required")
+			return
+		var center_tile := TaoistFriendlyTargetingScript.grid_tile(
+			center_ground_gu
+		)
+		var cells := TaoistFriendlyTargetingScript.chebyshev_area_cells(
+			center_tile,
+			DEFENCE_CHEBYSHEV_RADIUS
+		)
+		var affected := TaoistFriendlyTargetingScript.candidates_in_cells(
+			candidates,
+			center_ground_gu,
+			cells
+		)
+		var dual_context: Variant = context.get("dual_defense_context", {})
+		var is_dual := (
+			dual_context is Dictionary
+			and str((dual_context as Dictionary).get(
+				"partner_skill_id",
+				""
+			)) in DUAL_DEFENSE_SKILL_IDS
+			and str((dual_context as Dictionary).get(
+				"partner_skill_id",
+				""
+			)) != skill_id
+		)
+		plan["support_area_geometry"] = _area_geometry(
+			"chebyshev_area",
+			center_tile,
+			center_ground_gu,
+			cells,
+			affected,
+			{"radius_grid_steps": DEFENCE_CHEBYSHEV_RADIUS}
+		)
+		if is_dual:
+			_resolve_dual_defence_effects(
+				plan,
+				skill_id,
+				rank,
+				dual_context as Dictionary,
+				affected,
+				context,
+				rng
+			)
+		else:
+			var duration_seconds := _defence_duration(rank, context, rng)
+			var effects: Array[Dictionary] = []
+			for target: Dictionary in affected:
+				var value := _defence_value(int(target.get("level", 1)))
+				effects.append({
+					"type": "friendly_defence_buff",
+					"skill_id": skill_id,
+					"rank": rank,
+					"buff_id": str(mechanics.get("buff_id", "")),
+					"stat": str(mechanics.get("stat", "")),
+					"flat_bonus": value,
+					"value": value,
+					"duration_seconds": duration_seconds,
+					"stacking_policy": str(mechanics.get("stacking_policy", "")),
+					"target_instance_id": int(target.get("instance_id", 0)),
+					"target_is_self": bool(target.get("is_self", false)),
+					"level": int(target.get("level", 1)),
+				})
+			plan.effects = effects
+		plan.effect_success = not affected.is_empty()
+		plan.resource_commit = not affected.is_empty()
+		return
+	var targets: Array = context.get("friendly_targets", [])
+	var legacy_effects: Array[Dictionary] = []
+	var duration_seconds := _defence_duration(rank, context, rng)
 	for target_value: Variant in targets:
 		if not target_value is Dictionary:
 			continue
 		var target: Dictionary = target_value
-		effects.append({
+		legacy_effects.append({
 			"type": "friendly_defence_buff",
 			"buff_id": str(mechanics.get("buff_id", "")),
 			"stat": str(mechanics.get("stat", "")),
@@ -284,9 +470,116 @@ static func _resolve_defence_buff(
 			"stacking_policy": str(mechanics.get("stacking_policy", "")),
 			"target_instance_id": int(target.get("target_instance_id", 0)),
 		})
-	plan.effects = effects
-	plan.effect_success = not effects.is_empty()
-	plan.resource_commit = not effects.is_empty()
+	plan.effects = legacy_effects
+	plan.effect_success = not legacy_effects.is_empty()
+	plan.resource_commit = not legacy_effects.is_empty()
+
+
+static func _resolve_dual_defence_effects(
+	plan: Dictionary,
+	clicked_skill_id: String,
+	clicked_rank: int,
+	dual_context: Dictionary,
+	affected: Array[Dictionary],
+	context: Dictionary,
+	rng: RefCounted
+) -> void:
+	var partner_skill_id := str(dual_context.get("partner_skill_id", ""))
+	var partner_rank := SkillRankResolverScript.safe_effective_rank(
+		int(dual_context.get("partner_rank", clicked_rank))
+	)
+	var mac_skill_id := "taoist.magic_defense"
+	var ac_skill_id := "taoist.defense"
+	var mac_rank := clicked_rank if clicked_skill_id == mac_skill_id else partner_rank
+	var ac_rank := clicked_rank if clicked_skill_id == ac_skill_id else partner_rank
+	## Each effect grows and prices with its own skill's effective rank:
+	## MAC duration uses magic_defense's rank, AC duration uses defense's rank.
+	## The cast/animation/resource transaction stays shared.
+	var mac_duration := _defence_duration(mac_rank, context, rng)
+	var ac_duration := _defence_duration(ac_rank, context, rng)
+	plan.effects = [
+		_dual_defence_effect(
+			"MAC",
+			mac_skill_id,
+			mac_rank,
+			"buff.taoist.soul_shield_mac",
+			mac_duration,
+			affected,
+			ac_skill_id
+		),
+		_dual_defence_effect(
+			"AC",
+			ac_skill_id,
+			ac_rank,
+			"buff.taoist.blessed_armour_ac",
+			ac_duration,
+			affected,
+			mac_skill_id
+		),
+	]
+	plan["combined_skill_ids"] = DUAL_DEFENSE_SKILL_IDS.duplicate()
+	plan["combined_cast_contract_id"] = DUAL_DEFENSE_CAST_CONTRACT_ID
+
+
+static func _dual_defence_effect(
+	stat: String,
+	skill_id: String,
+	skill_rank: int,
+	buff_id: String,
+	duration_seconds: int,
+	affected: Array[Dictionary],
+	coexisting_skill_id: String
+) -> Dictionary:
+	var targets: Array[Dictionary] = []
+	var target_instance_ids: Array[int] = []
+	var first_value := 0
+	for target: Dictionary in affected:
+		var value := _defence_value(int(target.get("level", 1)))
+		if targets.is_empty():
+			first_value = value
+		targets.append({
+			"target_instance_id": int(target.get("instance_id", 0)),
+			"target_is_self": bool(target.get("is_self", false)),
+			"level": int(target.get("level", 1)),
+			"value": value,
+			"flat_bonus": value,
+			"duration_seconds": duration_seconds,
+		})
+		target_instance_ids.append(int(target.get("instance_id", 0)))
+	return {
+		"type": "friendly_defence_buff",
+		"stat": stat,
+		"skill_id": skill_id,
+		"rank": skill_rank,
+		"buff_id": buff_id,
+		"duration_seconds": duration_seconds,
+		"value": first_value,
+		"flat_bonus": first_value,
+		"stacking_policy": "refresh_same_buff; coexists_with_%s" % [
+			coexisting_skill_id
+		],
+		"targets": targets,
+		"target_instance_ids": target_instance_ids,
+		"affected_count": targets.size(),
+		"combined_defense": true,
+		"combined_cast_contract_id": DUAL_DEFENSE_CAST_CONTRACT_ID,
+	}
+
+
+static func _defence_value(target_level: int) -> int:
+	return maxi(1, int(floor(float(maxi(1, target_level)) / 7.0)))
+
+
+static func _defence_duration(
+	rank: int,
+	context: Dictionary,
+	rng: RefCounted
+) -> int:
+	var sc_roll := int(context.get("primary_stat_roll", 0))
+	return maxi(
+		1,
+		int(floor(float(Formula.get_power13(rng, rank, 60) + 10 * sc_roll) / 10.0))
+	)
 
 
 static func _resolve_revelation(
@@ -371,9 +664,93 @@ static func _resolve_mass_heal(
 	rng: RefCounted
 ) -> void:
 	var context: Dictionary = request.get("target_context", {})
+	var rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
+	var skill_id := str(definition.get("skill_id", ""))
+	var candidates := _support_candidates(context)
 	var raw_heal := _raw_heal(definition, request, rng)
+	if not candidates.is_empty():
+		var selection := _heal_selection(context, candidates)
+		if not bool(selection.get("valid", false)):
+			_reject(
+				plan,
+				str(selection.get("reason", "friendly_heal_target_required"))
+			)
+			return
+		var selected: Dictionary = selection.get("selected", {})
+		var center_ground_gu: Vector2 = selected.get(
+			"ground_position_gu",
+			Vector2.ZERO
+		)
+		var center_tile := TaoistFriendlyTargetingScript.grid_tile(
+			center_ground_gu
+		)
+		var cells := TaoistFriendlyTargetingScript.exact_square_cells(
+			center_tile,
+			MASS_INVISIBILITY_GRID_SIZE
+		)
+		var affected := TaoistFriendlyTargetingScript.candidates_in_cells(
+			candidates,
+			center_ground_gu,
+			cells
+		)
+		var actual_by_target: Array[int] = []
+		var target_results: Array[Dictionary] = []
+		var target_instance_ids: Array[int] = []
+		var total_restored := 0
+		for target: Dictionary in affected:
+			var missing := int(target.get("max_hp", 1)) - int(
+				target.get("current_hp", 0)
+			)
+			var actual := mini(raw_heal, maxi(0, missing))
+			actual_by_target.append(actual)
+			var target_id := int(target.get("instance_id", 0))
+			target_instance_ids.append(target_id)
+			target_results.append({
+				"target_instance_id": target_id,
+				"target_is_self": bool(target.get("is_self", false)),
+				"actual_hp_restored": actual,
+			})
+			total_restored += actual
+		plan.effects = [{
+			"type": "dedicated_area_heal",
+			"skill_id": skill_id,
+			"rank": rank,
+			"raw_heal_per_target": raw_heal,
+			"actual_hp_restored_by_target": actual_by_target,
+			"target_instance_ids": target_instance_ids,
+			"target_results": target_results,
+			"total_actual_hp_restored": total_restored,
+			"affected_count": affected.size(),
+			"width_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
+			"height_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
+			"center_ground_gu": center_ground_gu,
+			"center_tile": center_tile,
+			"selected_target_instance_id": int(
+				selected.get("instance_id", 0)
+			),
+			"selected_target_is_self": bool(selected.get("is_self", false)),
+			"selection_contract_id": SUPPORT_TARGETING_CONTRACT_ID,
+			"negative_damage": false,
+		}]
+		plan["support_targeting"] = selection
+		plan["support_area_geometry"] = _area_geometry(
+			"square",
+			center_tile,
+			center_ground_gu,
+			cells,
+			affected,
+			{
+				"width_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
+				"height_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
+			}
+		)
+		plan.effect_success = total_restored > 0
+		plan.resource_commit = total_restored > 0
+		return
 	var target_missing_hp: Array = context.get("friendly_missing_hp", [])
-	var target_instance_ids := _instance_ids(
+	var legacy_target_instance_ids := _instance_ids(
 		context.get("friendly_target_instance_ids", [])
 	)
 	var actual_by_target: Array[int] = []
@@ -385,8 +762,8 @@ static func _resolve_mass_heal(
 		actual_by_target.append(actual)
 		target_results.append({
 			"target_instance_id": (
-				int(target_instance_ids[target_index])
-				if target_index < target_instance_ids.size()
+				int(legacy_target_instance_ids[target_index])
+				if target_index < legacy_target_instance_ids.size()
 				else 0
 			),
 			"actual_hp_restored": actual,
@@ -396,7 +773,7 @@ static func _resolve_mass_heal(
 		"type": "dedicated_area_heal",
 		"raw_heal_per_target": raw_heal,
 		"actual_hp_restored_by_target": actual_by_target,
-		"target_instance_ids": target_instance_ids,
+		"target_instance_ids": legacy_target_instance_ids,
 		"target_results": target_results,
 		"total_actual_hp_restored": total_restored,
 		"width_grid_steps": 3,
@@ -404,6 +781,71 @@ static func _resolve_mass_heal(
 		"negative_damage": false,
 	}]
 	plan.effect_success = total_restored > 0
+
+
+static func _support_candidates(context: Dictionary) -> Array[Dictionary]:
+	return TaoistSupportPolicyScript.normalize_candidates(
+		context.get("friendly_candidates", [])
+	)
+
+
+static func _heal_selection(
+	context: Dictionary,
+	candidates: Array[Dictionary]
+) -> Dictionary:
+	var center: Variant = context.get(
+		"caster_ground_position_gu",
+		Vector2.ZERO
+	)
+	if not center is Vector2:
+		return {
+			"valid": false,
+			"contract_id": SUPPORT_TARGETING_CONTRACT_ID,
+			"reason": TaoistSupportPolicyScript.REASON_NO_FRIENDLY_CANDIDATES,
+			"center_ground_gu": Vector2.ZERO,
+			"range_gu": HEAL_SELECTION_RANGE_GU,
+			"candidate_count": candidates.size(),
+		}
+	return TaoistSupportPolicyScript.select_heal_target(
+		candidates,
+		center,
+		HEAL_SELECTION_RANGE_GU
+	)
+
+
+static func _area_geometry(
+	shape: String,
+	center_tile: Vector2i,
+	center_ground_gu: Vector2,
+	cells: Array,
+	affected: Array[Dictionary],
+	shape_fields: Dictionary
+) -> Dictionary:
+	var result := {
+		"contract_id": FRIENDLY_AREA_GEOMETRY_CONTRACT_ID,
+		"support_targeting_contract_id": SUPPORT_TARGETING_CONTRACT_ID,
+		"shape": shape,
+		"center_tile": center_tile,
+		"center_ground_gu": center_ground_gu,
+		"cell_count": cells.size(),
+		"affected_count": affected.size(),
+		"affected_instance_ids": _instance_ids_from_candidates(affected),
+	}
+	for key: Variant in shape_fields:
+		result[key] = shape_fields[key]
+	return result
+
+
+static func _instance_ids_from_candidates(candidates: Array) -> Array[int]:
+	var result: Array[int] = []
+	for raw_candidate: Variant in candidates:
+		if not raw_candidate is Dictionary:
+			continue
+		var candidate: Dictionary = raw_candidate
+		var instance_id := int(candidate.get("instance_id", 0))
+		if instance_id > 0:
+			result.append(instance_id)
+	return result
 
 
 static func _instance_ids(raw_ids: Variant) -> Array[int]:
