@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from collections import Counter
 from pathlib import Path
 
@@ -22,6 +23,11 @@ SCHEMA = json.loads(
         ROOT / "assets/data/rules/equipment_attribute_master_schema.json"
     ).read_text(encoding="utf-8")
 )
+FEMALE_ARMOR_EVIDENCE = json.loads(
+    (
+        ROOT / "assets/data/equipment_female_armor_attribute_evidence.json"
+    ).read_text(encoding="utf-8")
+)
 
 CONTRACT = "equipment.attribute.master.v2"
 DISTRIBUTION = "project.hardcore.equipment_attribute_master.v2"
@@ -33,6 +39,26 @@ LEGACY_SHA256 = (
 )
 WEAPON_IDS = set(range(80, 116)) | {223}
 ARMOR_IDS = {116, 118, 120, 122, 124, 126, 128, 130, 132, 140, 142, 144}
+FEMALE_ARMOR_PAIRS = {
+    117: 116,
+    119: 118,
+    121: 120,
+    123: 122,
+    125: 124,
+    127: 126,
+    129: 128,
+    131: 130,
+    133: 132,
+    141: 140,
+    143: 142,
+    145: 144,
+}
+TASK_CORRECTION_SHA256 = (
+    "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9"
+)
+PRESERVED_RECORDS_SHA256 = (
+    "FB299521AF752683C9B9A45A6FDCC4D3478E87BCC2A6A960EB21E79F53FF4204"
+)
 LEGACY_IDS = WEAPON_IDS | ARMOR_IDS
 ACCESSORY_CATEGORIES = {"头盔", "项链", "手镯", "戒指"}
 ACCESSORY_IDS = {
@@ -62,21 +88,23 @@ def main() -> None:
     assert MASTER["scope"] == {
         "weaponRecords": 37,
         "maleArmorRecords": 12,
+        "femaleArmorRecords": 12,
         "helmetRecords": 12,
         "necklaceRecords": 32,
         "braceletRecords": 31,
         "ringRecords": 39,
         "workbookOverrideRecords": 114,
-        "totalRecords": 163,
+        "totalRecords": 175,
     }
     assert MASTER["units"]["magicEvasionPercentPerPoint"] == 10
     assert SCHEMA["$id"] == "equipment.attribute.master.schema.v2"
     assert SCHEMA["properties"]["contractId"]["const"] == CONTRACT
-    assert SCHEMA["properties"]["records"]["minItems"] == 163
+    assert SCHEMA["properties"]["records"]["minItems"] == 175
+    assert SCHEMA["properties"]["records"]["maxItems"] == 175
 
     records = {row["itemId"]: row for row in MASTER["records"]}
-    assert len(records) == 163
-    assert set(records) == LEGACY_IDS | ACCESSORY_IDS
+    assert len(records) == 175
+    assert set(records) == LEGACY_IDS | set(FEMALE_ARMOR_PAIRS) | ACCESSORY_IDS
     assert len(ACCESSORY_IDS) == 114
     synced = item_by_id()
 
@@ -128,6 +156,73 @@ def main() -> None:
         assert record["source"]["previousContractId"] == (
             "equipment.attribute.master.v1"
         )
+
+    evidence_records = FEMALE_ARMOR_EVIDENCE["records"]
+    assert set(map(int, evidence_records)) == set(FEMALE_ARMOR_PAIRS)
+    assert (
+        FEMALE_ARMOR_EVIDENCE["authorization"]["evidenceSha256"]
+        == TASK_CORRECTION_SHA256
+    )
+    source_policy = FEMALE_ARMOR_EVIDENCE["preCorrectionInputs"][
+        "sourcePriorityPolicy"
+    ]
+    assert source_policy["eligibleAuxiliarySources"] == []
+    assert "equipment_gender_restrictions" in source_policy[
+        "crystalServerDataExcludedFields"
+    ]
+    for female_id, male_id in FEMALE_ARMOR_PAIRS.items():
+        female = records[female_id]
+        male = records[male_id]
+        source = female["source"]
+        assert female["genderRestriction"] == "female"
+        assert source["sourceKind"] == "explicit_user_task_correction"
+        assert source["evidenceSha256"] == TASK_CORRECTION_SHA256
+        assert source["fallbackEvidence"] == []
+        assert source["pairedPrimaryItemId"] == male_id
+        assert source["primaryMissingEvidence"]["result"] == "missing"
+        assert source["auxiliarySearchEvidence"] == {
+            "policyPath": "assets/data/source_priority_policy.json",
+            "policySha256": (
+                "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D"
+            ),
+            "eligibleAuxiliarySources": [],
+            "result": "no_eligible_auxiliary",
+            "crystalServerDataExcluded": True,
+        }
+        for field in (
+            "category",
+            "jobAffinity",
+            "jobLock",
+            "requirementType",
+            "requirementValue",
+            "legacyNeed",
+            "legacyNeedLevel",
+            "weightRequirementType",
+            "weightRequirementValue",
+            "weight",
+            "durability",
+            "rollPolicy",
+            "stats",
+            "warnings",
+        ):
+            assert female[field] == male[field], (female_id, male_id, field)
+        item = synced[female_id]
+        assert item["genderRestriction"] == "female"
+        assert item["attributeSource"] == source
+
+    preserved_records = [
+        record
+        for record in MASTER["records"]
+        if record["itemId"] not in FEMALE_ARMOR_PAIRS
+    ]
+    preserved_blob = json.dumps(
+        preserved_records,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    assert hashlib.sha256(preserved_blob).hexdigest().upper() == (
+        PRESERVED_RECORDS_SHA256
+    )
 
     for item_id in ACCESSORY_IDS:
         record = records[item_id]
@@ -255,7 +350,7 @@ def main() -> None:
     assert records[111]["historicalStatus"] == "official_existence_unverified"
     print(
         "EQUIPMENT_ATTRIBUTE_MASTER_STATIC_PASS: "
-        "163 unique records, 114 explicit workbook overrides, units verified"
+        "175 unique records, 12 female armor corrections, 163 records preserved"
     )
 
 
