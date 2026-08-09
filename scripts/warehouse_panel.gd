@@ -275,7 +275,7 @@ func refresh() -> void:
 	previous_page_button.disabled = warehouse_page <= 0
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
 	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = selected_stash_index < 0
+	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory.size() >= BAG_CAPACITY
 	_refresh_transfer_detail()
 
 
@@ -355,6 +355,8 @@ func _change_warehouse_page(delta: int) -> void:
 func _refresh_transfer_detail() -> void:
 	if selected_bag_index >= 0:
 		transfer_detail_label.text = str(PlayerState.inventory[selected_bag_index].get("name", "未知物品"))
+	elif selected_stash_index >= 0 and PlayerState.inventory.size() >= BAG_CAPACITY:
+		transfer_detail_label.text = "背包已满，无法取出"
 	elif selected_stash_index >= 0:
 		transfer_detail_label.text = str(_warehouse_record(selected_stash_index).get("name", "未知物品"))
 	elif _first_free_slot_on_current_page() < 0:
@@ -386,6 +388,10 @@ func _deposit() -> void:
 func _withdraw() -> void:
 	if not _warehouse_slot_has_item(selected_stash_index):
 		return
+	if PlayerState.inventory.size() >= BAG_CAPACITY:
+		withdraw_button.disabled = true
+		transfer_detail_label.text = "背包已满，无法取出"
+		return
 	PlayerState.inventory.append(PlayerState.warehouse_inventory[selected_stash_index])
 	PlayerState.warehouse_inventory[selected_stash_index] = {}
 	_trim_empty_warehouse_tail()
@@ -393,6 +399,11 @@ func _withdraw() -> void:
 	PlayerState.inventory_changed.emit()
 	PlayerState.save_game()
 	refresh()
+
+
+func apply_sort_result(result: Dictionary) -> void:
+	refresh()
+	transfer_detail_label.text = str(result.get("message", "仓库整理请求已处理"))
 
 
 func _warehouse_record(slot_index: int) -> Dictionary:

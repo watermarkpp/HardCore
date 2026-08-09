@@ -13,9 +13,16 @@ func _run() -> void:
 	var contract: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTRACT_PATH))
 	assert(contract is Dictionary, "死亡复活契约无法解析")
 	assert(contract.get("contractId", "") == "ui.death.revival.v1", "死亡复活契约 ID 错误")
+	var host := Control.new()
+	host.size = Vector2(1280, 720)
+	add_child(host)
 	var panel: Control = DeathRevivalPanelScript.new()
-	add_child(panel)
+	host.add_child(panel)
 	await get_tree().process_frame
+	assert(panel.modal.position + panel.modal.size * 0.5 == host.size * 0.5, "死亡复活框没有在 1280×720 居中")
+	host.size = Vector2(1600, 720)
+	await get_tree().process_frame
+	assert(panel.modal.position + panel.modal.size * 0.5 == host.size * 0.5, "死亡复活框没有随 expand 宽屏重新居中")
 	assert(panel.process_mode == Node.PROCESS_MODE_WHEN_PAUSED, "死亡界面必须能在暂停状态工作")
 	assert(panel.modal.theme_type_variation == "GothicModalFrame", "死亡界面没有复用公共哥特外框")
 	assert(panel.town_button.get_meta("stable_id", "") == "death.revival.town", "城镇复活按钮稳定 ID 错误")

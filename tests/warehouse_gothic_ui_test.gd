@@ -71,9 +71,22 @@ func _run() -> void:
 	assert(panel._warehouse_occupied_count() == stash_count, "取出后个人仓库数量错误")
 	assert(panel._warehouse_record(100).is_empty(), "取出后当前页物品格没有清空")
 
+	PlayerState.inventory.clear()
+	for index in range(WarehousePanel.BAG_CAPACITY):
+		PlayerState.inventory.append({"name": "太阳水", "count": 1, "capacity_test_index": index})
+	panel._select_item("stash", 0)
+	var warehouse_before_full_withdraw := PlayerState.warehouse_inventory.duplicate(true)
+	assert(panel.withdraw_button.disabled, "背包满 100 格时取出按钮仍可用")
+	assert(panel.transfer_detail_label.text == "背包已满，无法取出", "满背包没有显示明确取出失败原因")
+	panel._withdraw()
+	assert(PlayerState.inventory.size() == WarehousePanel.BAG_CAPACITY, "满背包取出突破了 100 格上限")
+	assert(PlayerState.warehouse_inventory == warehouse_before_full_withdraw, "满背包取出删除或改写了仓库物品")
+
 	var sort_requests := [0]
 	panel.warehouse_sort_requested.connect(func() -> void: sort_requests[0] += 1)
 	panel.get_node("TransferSection/SortStashButton").pressed.emit()
 	assert(sort_requests[0] == 1, "整理按钮没有只向玩法层发出请求")
+	panel.apply_sort_result({"success": true, "message": "仓库已整理"})
+	assert(panel.transfer_detail_label.text == "仓库已整理", "玩法层整理结果没有回填仓库面板")
 	print("WAREHOUSE_GOTHIC_UI_PASS：左仓库、右背包、8列100格与5页页码均正常")
 	get_tree().quit(0)

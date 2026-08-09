@@ -20,6 +20,9 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	assert(panel._kind_label("skill_book") == "技能书", "技能书类型标签错误")
+	assert(panel._kind_label("scroll") == "卷轴", "卷轴被错误显示为技能书")
+	assert(panel._kind_label("quest_item") == "任务物品", "任务物品类型标签错误")
 	assert(panel.size == Vector2(1220, 660), "人物物品栏没有使用横屏手机安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "人物与背包没有使用公共哥特外框")
 	assert(panel.get_node("AttributePanel").theme_type_variation == "GothicInsetFrame", "人物属性栏没有复用公共哥特内框")
