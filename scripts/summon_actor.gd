@@ -1012,7 +1012,12 @@ func _poll_visual_activation() -> void:
 	var profile := SummonVisualRegistryScript.poll_profile(_visual_request_id)
 	if profile.is_empty():
 		if not SummonVisualRegistryScript.request_active(_visual_request_id):
-			_visual_request_id = SummonVisualRegistryScript.REQUEST_FAILED
+			## The request finished without a profile for this poller: it may
+			## have been completed by another actor (cache now ready) or it
+			## failed. Ask the registry once so a cache hit activates and a
+			## terminal failure is adopted instead of re-requesting forever.
+			_visual_request_id = SummonVisualRegistryScript.REQUEST_UNKNOWN
+			request_visual_resources()
 		return
 	_visual_request_id = SummonVisualRegistryScript.REQUEST_UNKNOWN
 	_activate_profile(profile)

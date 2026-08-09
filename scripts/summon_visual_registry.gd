@@ -71,12 +71,15 @@ static func request_profile(summon_id: String) -> int:
 static func poll_profile(request_id: int) -> Dictionary:
 	if request_id <= REQUEST_UNKNOWN:
 		return {}
-	_reap_completed_requests()
+	## Resolve the owner before reaping: a completed request is erased from
+	## _request_owners, but its assembled profile is then available in the
+	## cache and must be returned to this poller.
 	var summon_id := str(_request_owners.get(request_id, ""))
-	if summon_id.is_empty():
-		return {}
-	if _profile_cache.has(summon_id):
+	_reap_completed_requests()
+	if not summon_id.is_empty() and _profile_cache.has(summon_id):
 		return (_profile_cache[summon_id] as Dictionary).duplicate()
+	if _request_owners.has(request_id):
+		return {}
 	return {}
 
 
