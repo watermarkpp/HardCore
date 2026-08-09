@@ -100,7 +100,9 @@ func _test_spell_range_is_not_lock_range(
 		"geometry": {"maximum_range_gu": 4.0},
 	}
 	assert(game._is_magic_target_in_range(far_target))
-	assert(not game._spell_definition_allows_target(short_spell, far_target))
+	## Unified range rule: hostile cast eligibility is lock-only; the skill's
+	## own geometry range no longer double-rejects a locked target.
+	assert(game._spell_definition_allows_target(short_spell, far_target))
 	assert(game._spell_definition_allows_target(short_spell, near_target))
 	assert(
 		game._ensure_skill_cast_target() == far_target,
@@ -113,8 +115,8 @@ func _test_spell_range_is_not_lock_range(
 		game.player.facing,
 		false
 	)
-	assert(not target_context.has_target)
-	assert(not target_context.target_within_skill_range)
+	assert(target_context.has_target)
+	assert(target_context.target_within_skill_range)
 	assert(game.magic_locked_target == far_target)
 	var ground_spell := {
 		"target": {"relation": "hostile_area", "mode": "ground_point"},
@@ -127,11 +129,11 @@ func _test_spell_range_is_not_lock_range(
 		false
 	)
 	assert(ground_context.has_target)
-	assert(not ground_context.target_within_skill_range)
+	assert(ground_context.target_within_skill_range)
 	assert(
 		ground_context.target_tile
-		!= game._canonical_screen_px_to_grid_cell(far_target.global_position),
-		"a ground spell inherited an out-of-spell-range persistent lock point"
+		== game._canonical_screen_px_to_grid_cell(far_target.global_position),
+		"a locked ground spell must use the persistent lock footpoint"
 	)
 	assert(game.magic_locked_target == far_target)
 

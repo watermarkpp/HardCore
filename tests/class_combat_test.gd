@@ -77,12 +77,14 @@ func _run() -> void:
 	for frame in range(12):
 		await get_tree().physics_frame
 	assert(enemy.poison_time > 0.0 and enemy.poison_damage > 0, "施毒术状态未生效")
+	assert(enemy.canonical_red_poison_active(), "红毒状态未显示")
 	game.player.take_damage(20)
 	var hp_before_heal: int = game.player.current_hp
 	game._on_player_skill("治愈术", game.player.global_position, Vector2.RIGHT, 12)
 	assert(game.player.current_hp > hp_before_heal, "治愈术未恢复生命")
 	enemy.global_position = game.player.global_position + Vector2(120, 0)
-	enemy.apply_control(10.0)
+	enemy.control_time = 0.0
+	game._set_magic_locked_target(enemy, true)
 	game._on_player_skill("困魔咒", game.player.global_position, Vector2.RIGHT, 1)
 	assert(enemy.control_time > 0.0, "困魔咒未定身")
 	game._on_player_skill("隐身术", game.player.global_position, Vector2.RIGHT, 1)

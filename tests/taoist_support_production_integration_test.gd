@@ -60,7 +60,8 @@ func _run() -> void:
 	print(
 		"TAOIST_SUPPORT_PRODUCTION_INTEGRATION_PASS: preflight rejection, "
 		+ "release live footpoint/one-time reselect, 3x3/7x7 area, dual "
-		+ "defence shared cooldown/MP, player AC/MAC separation"
+		+ "defence shared cooldown/MP, full-HP ongoing heal, stealth break, "
+		+ "player AC/MAC separation"
 	)
 	get_tree().quit(0)
 
@@ -85,16 +86,19 @@ func _verify_input_rejection_and_selection() -> void:
 
 	player.current_hp = player.max_hp
 	summon.current_hp = summon.max_hp
-	var action_before := player._attack_timer
 	var mp_before := player.current_mp
-	var facing_before_full := player.facing
-	var rejected: StringName = game._try_release_skill(_display("taoist.healing"))
-	assert(rejected == &"rejected")
-	assert(player._attack_timer == action_before)
-	assert(player.skill_cooldown_remaining_ms("taoist.healing") == 0)
+	## Full-HP friendlies are valid heal targets (user override 2026-08-09):
+	## input is accepted, self is preferred, MP still commits only at release.
+	var full_result: StringName = game._try_release_skill(
+		_display("taoist.healing")
+	)
+	assert(full_result == &"accepted")
+	assert(game._selected_friendly_instance_id == player.get_instance_id())
+	assert(player._attack_timer > 0.0)
+	assert(player.skill_cooldown_remaining_ms("taoist.healing") > 0)
 	assert(player.current_mp == mp_before)
-	assert(player.facing == facing_before_full)
-	assert(game._selected_friendly_instance_id == 0)
+	player._finish_combat_action(player._pending_combat_action_id)
+	_reset_cast_state()
 
 	## Mana-insufficient rejection must also clear the selected identity.
 	summon.current_hp = 30
@@ -145,7 +149,8 @@ func _verify_release_footpoint_and_reselect() -> void:
 	assert(game._selected_friendly_instance_id == summon_b.get_instance_id())
 	_reset_cast_state()
 
-	## No viable friendly at release: no canonical plan, no MP commit.
+	## All friendlies full at release: the cast still commits once, reselects
+	## self, and attaches the ongoing recovery (user override 2026-08-09).
 	player.current_hp = player.max_hp
 	summon_a.current_hp = 10
 	summon_b.current_hp = 10
@@ -155,10 +160,16 @@ func _verify_release_footpoint_and_reselect() -> void:
 	summon_a.current_hp = summon_a.max_hp
 	summon_b.current_hp = summon_b.max_hp
 	var mp_before := player.current_mp
+	var ongoing_before: int = (game.get("_ongoing_heals") as Array).size()
 	await get_tree().create_timer(1.0).timeout
+	assert(player.current_mp < mp_before, "all-full release must commit MP once")
 	assert(
-		player.current_mp == mp_before,
-		"release without a friendly target must not commit MP"
+		game._selected_friendly_instance_id == player.get_instance_id(),
+		"all-full release must reselect self"
+	)
+	assert(
+		game._ongoing_heals.size() > ongoing_before,
+		"all-full release must attach the ongoing recovery"
 	)
 	summon_a.free()
 	summon_b.free()
@@ -182,8 +193,60 @@ func _verify_area_effects_and_defence() -> void:
 	assert(own_summon.is_stealthed())
 	assert(not other_summon.is_stealthed(), "non-owned summon must not be affected")
 	assert(not far_summon.is_stealthed(), "out-of-range summon must not be affected")
-	player.stealth_time = 0.0
+	## Stealth renders as alpha transparency (no light-blue ground circle).
+	game._process(0.016)
+	assert(
+		is_equal_approx(player.modulate.a, 0.4),
+		"stealthed player must render with reduced alpha"
+	)
+	assert(
+		is_equal_approx(own_summon.modulate.a, 0.4),
+		"stealthed summon must render with reduced alpha"
+	)
+	## Any skill submission breaks stealth uniformly; after the break enemies
+	## can reselect the player (is_stealthed false). Summon-side break/visual
+	## hooks are a recorded integration need (summon_actor.gd is exclusive).
+	_reset_cast_state()
+	assert(player.request_skill(_display("taoist.healing")))
+	assert(not player.is_stealthed(), "skill submission must break stealth")
+	game._process(0.016)
+	assert(
+		is_equal_approx(player.modulate.a, 1.0),
+		"broken stealth must restore full alpha"
+	)
+	assert(own_summon.is_stealthed())
+	## Physical attack submission also breaks stealth uniformly.
+	_reset_cast_state()
+	assert(
+		game._try_release_skill(
+			_display("taoist.mass_invisibility")
+		) == &"accepted"
+	)
+	await get_tree().create_timer(1.0).timeout
+	assert(player.is_stealthed())
+	## Equipment-derived stealth is a second state source. Combat submission
+	## must suppress visibility without deleting that effect or other effects.
+	var had_equipment_stealth := PlayerState.computed_special_effects.has("stealth")
+	var previous_equipment_stealth: Variant = PlayerState.computed_special_effects.get("stealth")
+	PlayerState.computed_special_effects["stealth"] = {"slot": "左戒指", "item": "隐身戒指"}
+	player.stealth_time = 5.0
+	assert(player.is_stealthed())
+	## The test freezes the player physics process, so the accepted cast's
+	## action-lock timers never decay; clear them like every other
+	## release-wait block before the next combat action can start.
+	_reset_cast_state()
+	assert(player.request_attack(false))
+	assert(not player.is_stealthed(), "attack submission must break stealth")
+	assert(PlayerState.has_special_effect("stealth"), "stealth equipment effect must remain registered")
+	game._process(0.016)
+	assert(is_equal_approx(player.modulate.a, 1.0))
+	if had_equipment_stealth:
+		PlayerState.computed_special_effects["stealth"] = previous_equipment_stealth
+	else:
+		PlayerState.computed_special_effects.erase("stealth")
 	own_summon.stealth_remaining_seconds = 0.0
+	game._process(0.016)
+	assert(is_equal_approx(own_summon.modulate.a, 1.0))
 	_reset_cast_state()
 
 	## Single defence: only AC applies, player and own summon, 7x7 self center.

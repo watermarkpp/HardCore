@@ -4,6 +4,9 @@ extends RefCounted
 const Formula := preload("res://scripts/skills/formulas/mir2_skill_formula.gd")
 const Rng := preload("res://scripts/skills/skill_rng.gd")
 const Support := preload("res://tests/skills/skill_semantic_contract_support.gd")
+const VisibilityPolicy := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 
 const ASSERTIONS_BY_SKILL := {
 	"taoist.healing": [
@@ -182,8 +185,16 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3, {"primary_stat_roll": 5}, {"selected_material": "amulet"}).effects[0].duration_seconds == 45
 		"invisibility_breaks_on_move":
 			return bool(_support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].break_on_tile_movement)
+		## Manifest ID kept for package-test compatibility; the user override
+		## (2026-08-09) flips the old SOT semantics: any skill or attack
+		## submission now breaks stealth uniformly.
 		"invisibility_spell_cast_does_not_break":
-			return not bool(_support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].break_on_ranged_spell_cast)
+			var invis: Dictionary = _support.execute(
+				skill_id, 3, {}, {"selected_material": "amulet"}
+			).effects[0]
+			return bool(invis.break_on_melee_attack) and bool(
+				invis.break_on_ranged_spell_cast
+			)
 		"mass_invisibility_exact_3x3":
 			return _support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).geometry_cells.size() == 9
 		"mass_invisibility_affects_friendlies":
@@ -230,10 +241,31 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3, {"primary_stat_roll": 5}).effects[0].duration_ms == 40000
 		"revelation_no_damage":
 			var reveal: Dictionary = _support.execute(skill_id, 3).effects[0]
-			return reveal.damage == 0 and not reveal.target_stat_modification
+			return (
+				reveal.damage == 0
+				and not reveal.target_stat_modification
+				and not VisibilityPolicy.is_skill_visible("taoist.revelation")
+				and not VisibilityPolicy.is_skill_castable("taoist.revelation")
+				and not _support.definition("taoist.revelation").is_empty()
+			)
 		"entrapment_monsters_only":
 			var player_only := _support.execute(skill_id, 3, {"targets": [{"is_player": true}]}, {"selected_material": "amulet"})
-			return player_only.effects[0].trapped_count == 0
+			var locked := _support.execute(skill_id, 3, {
+				"target_instance_id": 777,
+				"target_is_monster": true,
+				"target_is_boss": false,
+				"target_control_immune": false,
+				"target_within_level_gate": true,
+				"targets": [{
+					"hostile_monster": true,
+					"target_instance_id": 888,
+				}],
+			}, {"selected_material": "amulet"})
+			return (
+				player_only.effects[0].trapped_count == 0
+				and locked.effects[0].trapped_count == 1
+				and locked.effects[0].target_instance_ids == [777]
+			)
 		"entrapment_boss_immune":
 			var boss := _support.execute(skill_id, 3, {"targets": [{"hostile_monster": true, "is_boss": true}]}, {"selected_material": "amulet"})
 			return boss.effects[0].trapped_count == 0

@@ -25,6 +25,7 @@ const FRIENDLY_AREA_GEOMETRY_CONTRACT_ID := (
 	TaoistFriendlyTargetingScript.CONTRACT_ID
 )
 const DUAL_DEFENSE_CAST_CONTRACT_ID := "skills.taoist.dual_defense_cast.v1"
+const ONGOING_HEAL_CONTRACT_ID := "skills.taoist.ongoing_heal.v1"
 const HEAL_SELECTION_RANGE_GU := (
 	TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
 )
@@ -34,6 +35,8 @@ const DUAL_DEFENSE_SKILL_IDS: Array[String] = [
 ]
 const MASS_INVISIBILITY_GRID_SIZE := 3
 const DEFENCE_CHEBYSHEV_RADIUS := 3
+const ONGOING_HEAL_TICK_COUNT := 3
+const ONGOING_HEAL_TICK_INTERVAL_SECONDS := 0.8
 
 
 static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted) -> Dictionary:
@@ -133,7 +136,7 @@ static func _resolve_single_heal(
 	else:
 		missing_hp = maxi(0, int(context.get("actual_hp_missing", 0)))
 	var actual_restored := mini(raw_heal, missing_hp)
-	plan.effects = [{
+	var effect := {
 		"type": "dedicated_heal",
 		"skill_id": skill_id,
 		"rank": rank,
@@ -145,8 +148,19 @@ static func _resolve_single_heal(
 		"negative_damage": false,
 		"selection_contract_id": SUPPORT_TARGETING_CONTRACT_ID,
 		"selection_range_gu": HEAL_SELECTION_RANGE_GU,
-	}]
-	plan.effect_success = actual_restored > 0
+	}
+	if missing_hp <= 0:
+		## User override: a full-HP friendly target is still a valid cast
+		## target and receives an attached ongoing recovery (3 x 0.8s ticks).
+		effect["ongoing_heal"] = _ongoing_heal_descriptor(
+			skill_id,
+			target_instance_id,
+			raw_heal
+		)
+	plan.effects = [effect]
+	## Full-HP casts succeed and commit resources (ongoing recovery attached);
+	## proficiency still keys off actual_hp_restored_gt_zero at the caller.
+	plan.effect_success = true
 	if not selected.is_empty():
 		plan["support_targeting"] = selection
 
@@ -290,8 +304,10 @@ static func _stealth_effect(
 		"untargetable": false,
 		"invulnerable": false,
 		"break_on_tile_movement": true,
-		"break_on_melee_attack": false,
-		"break_on_ranged_spell_cast": false,
+		## User override (2026-08-09): any attack or skill submission breaks
+		## stealth uniformly; the SOT's per-source break flags are superseded.
+		"break_on_melee_attack": true,
+		"break_on_ranged_spell_cast": true,
 		"break_on_damage": false,
 	}
 
@@ -624,20 +640,48 @@ static func _resolve_entrapment(
 	var candidates: Array = context.get("targets", [])
 	var trapped_count := 0
 	var trapped_target_instance_ids: Array[int] = []
-	for target_value: Variant in candidates:
-		if not target_value is Dictionary:
-			continue
-		var target: Dictionary = target_value
-		if (
-			bool(target.get("hostile_monster", false))
-			and not bool(target.get("is_boss", false))
-			and not bool(target.get("control_immune", false))
-			and bool(target.get("within_level_gate", true))
-		):
-			trapped_count += 1
-			var target_instance_id := int(target.get("target_instance_id", 0))
-			if target_instance_id > 0:
-				trapped_target_instance_ids.append(target_instance_id)
+	## Production path: entrapment uses the current valid locked monster like
+	## every other hostile skill. The release context carries the locked enemy
+	## identity; eligibility follows the SOT contract exactly (hostile monster,
+	## not boss, not control immune, within level gate).
+	var locked_target_id := int(context.get("target_instance_id", 0))
+	if locked_target_id > 0:
+		var locked_eligible := (
+			bool(context.get("target_is_monster", false))
+			and not bool(context.get("target_is_boss", false))
+			and not bool(
+				context.get(
+					"target_control_immune",
+					bool(context.get("control_immune", false))
+				)
+			)
+			and bool(
+				context.get(
+					"target_within_level_gate",
+					bool(context.get("within_level_gate", true))
+				)
+			)
+		)
+		if locked_eligible:
+			trapped_count = 1
+			trapped_target_instance_ids.append(locked_target_id)
+	if trapped_count == 0:
+		## Legacy/pure-test path: filter an explicit candidate array when no
+		## locked identity was supplied by the caller.
+		for target_value: Variant in candidates:
+			if not target_value is Dictionary:
+				continue
+			var target: Dictionary = target_value
+			if (
+				bool(target.get("hostile_monster", false))
+				and not bool(target.get("is_boss", false))
+				and not bool(target.get("control_immune", false))
+				and bool(target.get("within_level_gate", true))
+			):
+				trapped_count += 1
+				var target_instance_id := int(target.get("target_instance_id", 0))
+				if target_instance_id > 0:
+					trapped_target_instance_ids.append(target_instance_id)
 	var duration_seconds := maxi(
 		1,
 		Formula.get_power13(rng, rank, 40) + 3 * int(context.get("primary_stat_roll", 0))
@@ -746,8 +790,14 @@ static func _resolve_mass_heal(
 				"height_grid_steps": MASS_INVISIBILITY_GRID_SIZE,
 			}
 		)
-		plan.effect_success = total_restored > 0
-		plan.resource_commit = total_restored > 0
+		if total_restored == 0 and not target_instance_ids.is_empty():
+			plan.effects[0]["ongoing_heal_targets"] = _ongoing_heal_targets(
+				skill_id,
+				affected,
+				raw_heal
+			)
+		plan.effect_success = not affected.is_empty()
+		plan.resource_commit = not affected.is_empty()
 		return
 	var target_missing_hp: Array = context.get("friendly_missing_hp", [])
 	var legacy_target_instance_ids := _instance_ids(
@@ -780,7 +830,51 @@ static func _resolve_mass_heal(
 		"height_grid_steps": 3,
 		"negative_damage": false,
 	}]
-	plan.effect_success = total_restored > 0
+	if total_restored == 0 and not legacy_target_instance_ids.is_empty():
+		plan.effects[0]["ongoing_heal_targets"] = []
+		for target_instance_id: int in legacy_target_instance_ids:
+			plan.effects[0]["ongoing_heal_targets"].append(
+				_ongoing_heal_descriptor(
+					skill_id,
+					target_instance_id,
+					raw_heal
+				)
+			)
+	plan.effect_success = not legacy_target_instance_ids.is_empty()
+	plan.resource_commit = not legacy_target_instance_ids.is_empty()
+
+
+static func _ongoing_heal_descriptor(
+	skill_id: String,
+	target_instance_id: int,
+	raw_heal: int
+) -> Dictionary:
+	return {
+		"contract_id": ONGOING_HEAL_CONTRACT_ID,
+		"source_skill_id": skill_id,
+		"target_instance_id": target_instance_id,
+		"heal_per_tick": maxi(
+			1,
+			int(ceil(float(raw_heal) / float(ONGOING_HEAL_TICK_COUNT)))
+		),
+		"tick_count": ONGOING_HEAL_TICK_COUNT,
+		"tick_interval_seconds": ONGOING_HEAL_TICK_INTERVAL_SECONDS,
+	}
+
+
+static func _ongoing_heal_targets(
+	skill_id: String,
+	affected: Array[Dictionary],
+	raw_heal: int
+) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for target: Dictionary in affected:
+		result.append(_ongoing_heal_descriptor(
+			skill_id,
+			int(target.get("instance_id", 0)),
+			raw_heal
+		))
+	return result
 
 
 static func _support_candidates(context: Dictionary) -> Array[Dictionary]:

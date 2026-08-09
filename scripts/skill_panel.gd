@@ -5,6 +5,9 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 
 signal closed
 signal quick_slot_assignment_requested(request: Dictionary)
@@ -414,7 +417,22 @@ func _build_long_press_timer() -> void:
 
 func open_for(display_name: String) -> void:
 	_trainer_name = display_name
-	skill_entries = GameData.get_profession_skills(PlayerState.profession)
+	var all_entries: Array = GameData.get_profession_skills(
+		PlayerState.profession
+	)
+	## Hidden skills (e.g. taoist.revelation) stay in data/saves but are
+	## filtered from the visible skill system.
+	skill_entries = []
+	for entry: Variant in all_entries:
+		if not entry is Dictionary:
+			continue
+		var entry_name := str((entry as Dictionary).get("skillName", ""))
+		var entry_id := ProfessionRules.skill_id(entry_name)
+		if entry_id.is_empty() or not SkillVisibilityPolicyScript.is_skill_visible(
+			entry_id
+		):
+			continue
+		skill_entries.append(entry)
 	selected_skill_index = 0 if not skill_entries.is_empty() else -1
 	refresh()
 	show()

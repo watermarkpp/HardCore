@@ -17,7 +17,7 @@ func _run() -> void:
 	_verify_mass_invisibility_self_centered_3x3()
 	_verify_defence_self_centered_7x7()
 	print(
-		"TAOIST_SUPPORT_RUNTIME_PASS: auto-selection, full-HP rejection, "
+		"TAOIST_SUPPORT_RUNTIME_PASS: auto-selection, full-HP ongoing heal, "
 		+ "3x3 mass heal/invisibility, 7x7 defence, friendlies=self+summons"
 	)
 	get_tree().quit(0)
@@ -43,9 +43,20 @@ func _verify_single_heal_selection_and_rejection() -> void:
 		Policy.make_candidate(101, false, 80, 80, Vector2(1, 0), 5),
 	]
 	var full_plan := _plan("taoist.healing", full_context)
-	assert(not full_plan.accepted)
-	assert(full_plan.reason == Policy.REASON_ALL_FRIENDLY_TARGETS_FULL_HP)
-	assert(not full_plan.resource_commit and not full_plan.effect_success)
+	assert(full_plan.accepted)
+	assert(full_plan.effect_success)
+	assert(full_plan.resource_commit)
+	assert(full_plan.effects[0].actual_hp_restored == 0)
+	var ongoing: Dictionary = full_plan.effects[0].get("ongoing_heal", {})
+	assert(not ongoing.is_empty())
+	assert(ongoing.contract_id == "skills.taoist.ongoing_heal.v1")
+	assert(ongoing.target_instance_id == 55)
+	assert(ongoing.tick_count == 3)
+	assert(ongoing.heal_per_tick >= 1)
+	assert(
+		full_plan.support_targeting.selected.instance_id == 55,
+		"all-full pool must select self"
+	)
 
 
 func _verify_mass_heal_3x3_around_selected() -> void:

@@ -8,6 +8,9 @@ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.g
 const SkillResourceServiceScript := preload(
 	"res://scripts/skills/skill_resource_service.gd"
 )
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
@@ -75,6 +78,10 @@ var shield_initial_duration := 0.0
 var shield_capacity := 0.0
 var shield_capacity_max := 0.0
 var stealth_time := 0.0
+## Runtime stealth break latch. Equipment-derived stealth remains registered in
+## PlayerState, but an attack/skill submission suppresses its visibility until
+## a new runtime stealth application explicitly refreshes the state.
+var _stealth_break_override := false
 var defense_buff := 0
 var defense_buff_time := 0.0
 var mac_buff := 0
@@ -297,6 +304,9 @@ func can_start_attack() -> bool:
 
 
 func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
+	## Any attack submission breaks stealth uniformly (user override
+	## 2026-08-09).
+	break_stealth()
 	if not can_start_attack():
 		return false
 	var context := _build_warrior_attack_context(has_combat_target)
@@ -349,6 +359,8 @@ func can_request_skill(skill_name: String) -> bool:
 	if _attack_timer > 0.0:
 		return false
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
+		return false
 	if skill_cooldown_remaining_ms(stable_skill_id) > 0:
 		return false
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
@@ -383,6 +395,10 @@ func can_request_skill(skill_name: String) -> bool:
 
 
 func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+	## Any skill submission breaks stealth uniformly (user override
+	## 2026-08-09); the break happens at submission so a broken state can
+	## never linger into the next combat action.
+	break_stealth()
 	if not can_request_skill(skill_name):
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
@@ -1103,7 +1119,16 @@ func magic_shield_requires_refresh(
 
 
 func apply_stealth(seconds: float) -> void:
+	_stealth_break_override = false
 	stealth_time = maxf(stealth_time, seconds)
+	queue_redraw()
+
+
+func break_stealth() -> void:
+	## Do not remove or damage equipment effects: this only suppresses the
+	## actor's runtime stealth view after an explicit combat submission.
+	_stealth_break_override = true
+	stealth_time = 0.0
 	queue_redraw()
 
 
@@ -1156,7 +1181,10 @@ func apply_poison(tick_damage: int, seconds: float) -> void:
 
 
 func is_stealthed() -> bool:
-	return stealth_time > 0.0 or PlayerState.has_special_effect("stealth")
+	return stealth_time > 0.0 or (
+		PlayerState.has_special_effect("stealth")
+		and not _stealth_break_override
+	)
 
 
 func _draw() -> void:
@@ -1172,8 +1200,6 @@ func _draw() -> void:
 		var profession_color: Color = {"战士": Color(0.24, 0.34, 0.48), "法师": Color(0.20, 0.28, 0.56), "道士": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession, Color(0.24, 0.34, 0.48))
 		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
-	if stealth_time > 0.0:
-		draw_circle(Vector2(0, -4), 34.0, Color(0.55, 0.9, 0.7, 0.16), false, 3.0)
 	if control_time > 0.0:
 		draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)
 	if poison_time > 0.0:

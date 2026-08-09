@@ -1354,6 +1354,17 @@ func apply_charm(seconds: float) -> void:
 	queue_redraw()
 
 
+func canonical_red_poison_active() -> bool:
+	if not has_meta("canonical_red_poison"):
+		return false
+	var poison_data: Variant = get_meta("canonical_red_poison")
+	if not poison_data is Dictionary:
+		return false
+	return Time.get_ticks_msec() < int(
+		(poison_data as Dictionary).get("expires_at_ms", 0)
+	)
+
+
 func _update_status_effects(delta: float) -> void:
 	var had_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	var previous_poison_second := int(ceil(poison_time))
@@ -1369,6 +1380,9 @@ func _update_status_effects(delta: float) -> void:
 		take_damage(poison_damage)
 	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	if had_visible_status != has_visible_status:
+		queue_redraw()
+	if has_meta("canonical_red_poison") and not canonical_red_poison_active():
+		remove_meta("canonical_red_poison")
 		queue_redraw()
 
 
@@ -1545,6 +1559,23 @@ func _draw() -> void:
 				center + Vector2(0, -3), center + Vector2(3, 0),
 				center + Vector2(0, 3), center + Vector2(-3, 0),
 			]), Color(0.36, 0.92, 0.28, 0.90))
+	if canonical_red_poison_active():
+		## Red poison (AC/MAC reduction) is shown as a second three-diamond
+		## badge directly under the green one so both states are clearly
+		## visible under the HP bar.
+		var red_anchor := Vector2(
+			-8.0,
+			poison_indicator_anchor_y() + 8.0
+		)
+		for index in range(3):
+			var center := red_anchor + Vector2(
+				float(index) * 8.0,
+				0.0 if index == 1 else 2.0
+			)
+			draw_colored_polygon(PackedVector2Array([
+				center + Vector2(0, -3), center + Vector2(3, 0),
+				center + Vector2(0, 3), center + Vector2(-3, 0),
+			]), Color(0.92, 0.16, 0.12, 0.95))
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:

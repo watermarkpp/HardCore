@@ -3,6 +3,9 @@ extends Node
 const Loader := preload("res://scripts/skills/skill_data_loader.gd")
 const Request := preload("res://scripts/skills/skill_cast_request.gd")
 const Router := preload("res://scripts/skills/skill_runtime_router.gd")
+const VisibilityPolicy := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 
 
 func _ready() -> void:
@@ -19,7 +22,19 @@ func _ready() -> void:
 	var full_hp_healing := _execute("taoist.healing", {
 		"has_target": true, "actual_hp_missing": 0, "primary_stat_roll": 8,
 	})
-	assert(not full_hp_healing.effect_success)
+	assert(full_hp_healing.accepted)
+	assert(full_hp_healing.effect_success)
+	assert(full_hp_healing.resource_commit)
+	assert(full_hp_healing.effects[0].actual_hp_restored == 0)
+	var full_ongoing: Dictionary = full_hp_healing.effects[0].get(
+		"ongoing_heal",
+		{}
+	)
+	assert(
+		not full_ongoing.is_empty()
+		and full_ongoing.contract_id == "skills.taoist.ongoing_heal.v1"
+	)
+	assert(int(full_ongoing.get("tick_count", 0)) == 3)
 	assert(full_hp_healing.proficiency_event.is_empty())
 
 	var spiritual := _execute("taoist.spiritual_warfare", {
@@ -99,7 +114,8 @@ func _ready() -> void:
 	})
 	assert(invisibility.effects[0].duration_seconds == 45)
 	assert(invisibility.effects[0].break_on_tile_movement)
-	assert(not invisibility.effects[0].break_on_ranged_spell_cast)
+	assert(invisibility.effects[0].break_on_melee_attack)
+	assert(invisibility.effects[0].break_on_ranged_spell_cast)
 	assert(not invisibility.effects[0].pvp_invisibility)
 	assert(invisibility.proficiency_event.is_empty())
 
@@ -160,18 +176,11 @@ func _ready() -> void:
 
 	var entrapment := _execute("taoist.entrapment", {
 		"has_target": true,
-		"targets": [
-			{
-				"hostile_monster": true,
-				"within_level_gate": true,
-				"target_instance_id": 301,
-			},
-			{
-				"hostile_monster": true,
-				"is_boss": true,
-				"target_instance_id": 302,
-			},
-		],
+		"target_instance_id": 301,
+		"target_is_monster": true,
+		"target_is_boss": false,
+		"target_control_immune": false,
+		"target_within_level_gate": true,
 		"primary_stat_roll": 3,
 	})
 	assert(entrapment.effects[0].trapped_count == 1)
@@ -183,11 +192,36 @@ func _ready() -> void:
 	assert(entrapment.geometry_cells.size() == 8)
 	var boss_only_entrapment := _execute("taoist.entrapment", {
 		"has_target": true,
-		"targets": [{"hostile_monster": true, "is_boss": true}],
+		"target_instance_id": 302,
+		"target_is_monster": true,
+		"target_is_boss": true,
+		"target_control_immune": true,
+		"target_within_level_gate": true,
 	})
 	assert(not boss_only_entrapment.effect_success)
 	assert(not boss_only_entrapment.resource_commit)
 	assert(boss_only_entrapment.proficiency_event.is_empty())
+
+	var immune_entrapment := _execute("taoist.entrapment", {
+		"has_target": true,
+		"target_instance_id": 303,
+		"target_is_monster": true,
+		"target_is_boss": false,
+		"target_control_immune": true,
+		"target_within_level_gate": true,
+	})
+	assert(not immune_entrapment.effect_success)
+	assert(not immune_entrapment.resource_commit)
+	var gated_entrapment := _execute("taoist.entrapment", {
+		"has_target": true,
+		"target_instance_id": 304,
+		"target_is_monster": true,
+		"target_is_boss": false,
+		"target_control_immune": false,
+		"target_within_level_gate": false,
+	})
+	assert(not gated_entrapment.effect_success)
+	assert(not gated_entrapment.resource_commit)
 
 	var mass_healing := _execute("taoist.mass_healing", {
 		"has_target": true,
@@ -212,6 +246,15 @@ func _ready() -> void:
 	assert(divine_beast.effects[0].max_pet_level == 7)
 	assert(divine_beast.resource_quote.material_amount == 0)
 	assert(divine_beast.proficiency_event.is_empty())
+
+	## Revelation stays fully present in data/code (stable ID preserved) while
+	## the visibility policy hides it from the visible/usable skill system.
+	var revelation_definition := Loader.skill("taoist.revelation")
+	assert(not revelation_definition.is_empty())
+	assert(not VisibilityPolicy.is_skill_visible("taoist.revelation"))
+	assert(not VisibilityPolicy.is_skill_castable("taoist.revelation"))
+	assert(VisibilityPolicy.is_skill_visible("taoist.poison"))
+	assert(VisibilityPolicy.is_skill_castable("taoist.poison"))
 
 	for result: Dictionary in [
 		healing, spiritual, dual_poison, talisman, skeleton,

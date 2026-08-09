@@ -2,6 +2,9 @@ class_name SkillLoadoutRules
 extends RefCounted
 
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 
 const ASSIGNMENT_CONTRACT_ID := "gameplay.skill.quick_slot_assignment.v1"
 const BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
@@ -97,6 +100,8 @@ static func assign_button_slot(
 		return _button_failure("unknown_skill", assignments, request)
 	if not _learned_skills_contains(learned_skills, skill_name, skill_id):
 		return _button_failure("skill_not_learned", assignments, request)
+	if not SkillVisibilityPolicyScript.is_skill_castable(skill_id):
+		return _button_failure("skill_hidden", assignments, request)
 	var destination := "attack_slot" if slot_group == SLOT_GROUP_ATTACK else "skill_slot"
 	if not SkillInputPolicyScript.can_bind(skill_id, destination):
 		return _button_failure("skill_not_bindable", assignments, request)
@@ -204,6 +209,8 @@ static func assign_quick_slot(
 		return _failure("unknown_skill", current_slots, request)
 	if not _learned_skills_contains(learned_skills, skill_name, skill_id):
 		return _failure("skill_not_learned", current_slots, request)
+	if not SkillVisibilityPolicyScript.is_skill_castable(skill_id):
+		return _failure("skill_hidden", current_slots, request)
 	if not SkillInputPolicyScript.can_bind(skill_id, "skill_slot"):
 		return _failure("skill_not_bindable", current_slots, request)
 	var next_slots := current_slots.duplicate()
