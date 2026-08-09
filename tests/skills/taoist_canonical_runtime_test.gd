@@ -102,12 +102,14 @@ func _ready() -> void:
 	assert(not skeleton.effects[0].skill_rank_is_pet_level)
 	assert(skeleton.resource_quote.material_id == "amulet")
 	assert(skeleton.resource_quote.material_amount > 0)
+	assert(skeleton.resource_commit_required == skeleton.resource_commit)
 	assert(skeleton.proficiency_event.is_empty())
 	var recalled_skeleton := _execute("taoist.summon_skeleton", {
 		"has_main_pet": true,
 	}, "", 0)
 	assert(recalled_skeleton.accepted and recalled_skeleton.effects[0].type == "recall_existing_main_pet")
 	assert(not recalled_skeleton.resource_commit)
+	assert(not recalled_skeleton.resource_commit_required)
 	assert(recalled_skeleton.resource_quote.material_amount == 0)
 	assert(recalled_skeleton.proficiency_event.is_empty())
 
@@ -248,6 +250,7 @@ func _ready() -> void:
 	assert(divine_beast.effects[0].max_pet_level == 7)
 	assert(divine_beast.resource_quote.material_id == "amulet")
 	assert(divine_beast.resource_quote.material_amount > 0)
+	assert(divine_beast.resource_commit_required == divine_beast.resource_commit)
 	assert(divine_beast.proficiency_event.is_empty())
 
 	## Revelation stays fully present in data/code (stable ID preserved) while
@@ -266,6 +269,10 @@ func _ready() -> void:
 	]:
 		assert(result.accepted)
 		assert(result.has("effects") and result.has("proficiency_event"))
+		assert(
+			bool(result.resource_commit_required)
+			== bool(result.resource_commit)
+		)
 	print("TAOIST_CANONICAL_RUNTIME_PASS: thirteen skills, materialized poison/pets, buffs, healing and boundary control")
 	get_tree().quit()
 

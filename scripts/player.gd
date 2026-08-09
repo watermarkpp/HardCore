@@ -300,10 +300,12 @@ func set_combat_facing(direction: Vector2) -> void:
 
 
 func can_start_attack() -> bool:
-	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
+	return not _dead and _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
 
 
 func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
+	if _dead:
+		return false
 	## Any attack submission breaks stealth uniformly (user override
 	## 2026-08-09).
 	break_stealth()
@@ -519,6 +521,8 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 
 
 func take_damage(amount: int, causes_struck: bool = true) -> void:
+	if _dead:
+		return
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
 	_apply_resolved_damage(maxi(1, amount - absorbed), causes_struck)
 
@@ -607,6 +611,11 @@ func _resolve_direct_spell_magic_defense(
 
 
 func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
+	# Death is a single lifecycle transition.  Damage arriving while the death
+	# animation/respawn timer is active must not repeat durability, gold loss,
+	# signals or schedule another respawn coroutine.
+	if _dead:
+		return
 	var incoming_damage := maxi(1, amount)
 	var final_damage := incoming_damage
 	if (
@@ -670,6 +679,12 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 		_dead = true
 		velocity = Vector2.ZERO
 		touch_vector = Vector2.ZERO
+		_pending_combat_action_active = false
+		_pending_combat_action_committed = false
+		_pending_combat_action_kind = ""
+		_pending_attack_context.clear()
+		_pending_skill_context.clear()
+		_queued_struck_reaction = false
 		visual.play_death()
 		PlayerState.lose_gold_percent(0.05)
 		await get_tree().create_timer(0.8).timeout
@@ -829,7 +844,11 @@ func _begin_combat_action(action_kind: String) -> int:
 
 
 func _commit_combat_action(action_id: int) -> bool:
-	if not _pending_combat_action_active or action_id != _pending_combat_action_id:
+	if (
+		_dead
+		or not _pending_combat_action_active
+		or action_id != _pending_combat_action_id
+	):
 		return false
 	_pending_combat_action_committed = true
 	return true
@@ -1219,7 +1238,14 @@ func _apply_profile_stats() -> void:
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
 	defense_min = int(stats.get("defense_min", 0))
 	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))
-	current_hp = clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
+	# Gold loss and equipment durability can emit profile_changed during the
+	# death transition.  Recalculation must not resurrect HP behind the death
+	# state machine; only the respawn completion owns that transition.
+	current_hp = (
+		0
+		if _dead
+		else clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
+	)
 	current_mp = clampi(current_mp, 0, max_mp)
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)

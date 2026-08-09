@@ -30,6 +30,19 @@ func _run() -> void:
 	player.defense_max = 0
 	player.take_damage(999999)
 	assert(player._dead and player.global_position == Vector2(900, 700), "死亡动作期间人物被传送到未知世界原点")
+	var gold_after_first_death := PlayerState.gold
+	assert(not player.can_start_attack(), "死亡期间普通攻击预检必须关闭")
+	assert(not player.request_attack(), "死亡期间普通攻击请求必须拒绝")
+	player.take_damage(999999)
+	assert(
+		player._dead and player.current_hp == 0,
+		"重复伤害不得改变死亡状态 dead=%s hp=%s"
+		% [str(player._dead), str(player.current_hp)]
+	)
+	assert(
+		PlayerState.gold == gold_after_first_death,
+		"重复死亡伤害不得再次扣除金币"
+	)
 	await get_tree().create_timer(0.9).timeout
 	assert(game.current_map_id == GameData.service_home_runtime_map_id(false), "人物死亡后没有回到服务端HomeMap")
 	assert(player.global_position.is_equal_approx(game._bich_home_screen_position_px()), "人物死亡后复活坐标不是比奇城镇出生点")

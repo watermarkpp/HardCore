@@ -25,6 +25,7 @@ func _run() -> void:
 	_verify_refresh_never_downgrades(summon)
 	_verify_buff_state_snapshot(summon)
 	_verify_owner_level_contract(owner)
+	_verify_death_is_idempotent(summon)
 	owner.free()
 	print(
 		"SUMMON_SUPPORT_BUFF_STATE_PASS: stealth refresh/expiry, AC physical "
@@ -190,3 +191,21 @@ func _verify_owner_level_contract(owner: PlayerCharacter) -> void:
 	)
 	assert(fallback_owner.owner_level == 19)
 	fallback_owner.free()
+
+
+func _verify_death_is_idempotent(summon: SummonActor) -> void:
+	assert(summon.is_in_group("combat_targets"))
+	assert(summon.collision_layer != 0 and summon.collision_mask != 0)
+	summon.current_hp = 1
+	summon.take_damage(999)
+	assert(summon.state == SummonActor.SummonState.DEAD)
+	assert(not summon.is_in_group("combat_targets"))
+	assert(summon.collision_layer == 0 and summon.collision_mask == 0)
+	var death_duration := summon._death_visual_remaining
+	assert(death_duration > 0.0)
+	summon.take_magic_damage(999)
+	assert(summon.current_hp == 0)
+	assert(
+		is_equal_approx(summon._death_visual_remaining, death_duration),
+		"repeat damage must not restart summon death lifetime"
+	)

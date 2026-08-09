@@ -94,6 +94,9 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			)
 		_:
 			return _reject(plan, "unknown_taoist_skill")
+	# Canonical consumers use the explicit field; keep the legacy field in
+	# lockstep until every integration sink has migrated.
+	plan.resource_commit_required = bool(plan.get("resource_commit", true))
 	return plan
 
 
@@ -960,6 +963,7 @@ static func _base_plan(definition: Dictionary) -> Dictionary:
 		"effects": [],
 		"proficiency_event": "",
 		"resource_commit": true,
+		"resource_commit_required": true,
 	}
 
 
@@ -968,4 +972,5 @@ static func _reject(plan: Dictionary, reason: String) -> Dictionary:
 	plan.effect_success = false
 	plan.reason = reason
 	plan.resource_commit = false
+	plan.resource_commit_required = false
 	return plan

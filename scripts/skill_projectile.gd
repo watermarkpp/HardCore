@@ -67,6 +67,8 @@ var _sprite: Sprite2D
 var visual_rejection_reason := ""
 var _projectile_role_valid := false
 var _physics_segment_index := 0
+var _canonical_release_snapshot_bound := false
+var _release_snapshot_build_count := 0
 
 var _broadphase_physics_step_count := 0
 var _broadphase_snapshot_build_count := 0
@@ -95,7 +97,8 @@ func setup_ground_unit_projectile(
 	status_strength := 0,
 	status_duration := 0.0,
 	source_skill_id := "",
-	source_release_id := ""
+	source_release_id := "",
+	canonical_release_snapshot: Dictionary = {}
 ) -> void:
 	## The sole production setup boundary. All gameplay motion arrives in GU;
 	## screen PX is retained only for presentation origin and muzzle offset.
@@ -136,7 +139,13 @@ func setup_ground_unit_projectile(
 			get_instance_id(),
 		]
 	)
-	_build_release_footprint_snapshot()
+	if canonical_release_snapshot.is_empty():
+		_build_release_footprint_snapshot()
+	else:
+		# The canonical planner owns the only release-level snapshot.  Keep the
+		# exact frozen object; only physical segment snapshots are derived later.
+		_canonical_release_snapshot_bound = true
+		skill_footprint_snapshot = canonical_release_snapshot
 
 
 func configure_runtime_map_projection(
@@ -162,6 +171,11 @@ func configure_runtime_map_projection(
 		)
 		skill_footprint_snapshot = {}
 		return
+	if _canonical_release_snapshot_bound:
+		if not _canonical_release_snapshot_valid():
+			projection_rejection_reason = &"invalid_canonical_release_snapshot"
+			skill_footprint_snapshot = {}
+		return
 	_build_release_footprint_snapshot()
 
 
@@ -185,13 +199,25 @@ func _snapshot_coordinate_context(origin_ground_gu: Vector2) -> Dictionary:
 
 
 func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
+	var expected_context := _snapshot_coordinate_context(
+		_runtime_screen_to_ground_position(global_position)
+	)
+	if runtime_map_id >= 0:
+		expected_context["expected_runtime_map_id"] = runtime_map_id
 	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
 		snapshot,
-		_snapshot_coordinate_context(
-			_runtime_screen_to_ground_position(global_position)
-		),
+		expected_context,
 		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
 	).get("valid", false))
+
+
+func _canonical_release_snapshot_valid() -> bool:
+	return (
+		not skill_footprint_snapshot.is_empty()
+		and str(skill_footprint_snapshot.get("skill_id", "")) == skill_id
+		and str(skill_footprint_snapshot.get("release_id", "")) == release_id
+		and _snapshot_strict_ok(skill_footprint_snapshot)
+	)
 
 
 func configure_runtime_resolution(
@@ -214,6 +240,7 @@ func configure_maximum_travel_distance_gu(value_gu: float) -> void:
 
 
 func _build_release_footprint_snapshot() -> void:
+	_release_snapshot_build_count += 1
 	if max_travel_distance_gu <= 0.0:
 		skill_footprint_snapshot = {}
 		return
@@ -505,6 +532,8 @@ func projectile_broadphase_diagnostics() -> Dictionary:
 	)
 	return {
 		"runtime_map_id": runtime_map_id,
+		"canonical_release_snapshot_bound": _canonical_release_snapshot_bound,
+		"release_snapshot_build_count": _release_snapshot_build_count,
 		"spatial_index_available": index_available,
 		"spatial_index_rejection_reason": (
 			"" if index_available else "broadphase_unavailable"
