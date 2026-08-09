@@ -72,6 +72,9 @@ func _run() -> void:
 	assert(PlayerState.item_count("太阳水") == 1, "mismatch 不应消耗物品")
 
 	# 技能书走单一物品规则：消费一本并学习
+	PlayerState.level = 50
+	PlayerState.profession = "战士"
+	PlayerState.recalculate_stats()
 	PlayerState.add_item("基本剑术", 1)
 	assert(bool(PlayerState.assign_quick_item_slot(1, "基本剑术").get("ok", false)), "技能书绑定失败")
 	var book_use := PlayerState.use_quick_item_slot(1, "基本剑术")
