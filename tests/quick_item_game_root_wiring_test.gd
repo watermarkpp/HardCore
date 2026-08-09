@@ -33,11 +33,11 @@ func _run() -> void:
 	# 裸实例没有 player，需显式打开输入门才能验证使用动作。
 	game._player_input_enabled = true
 	assert(
-		fake_hud.get_signal_connection_count("item_quick_slot_assignment_requested") == 1,
+		fake_hud.item_quick_slot_assignment_requested.get_connections().size() == 1,
 		"assignment signal 未连接"
 	)
 	assert(
-		fake_hud.get_signal_connection_count("item_quick_slot_use_requested") == 1,
+		fake_hud.item_quick_slot_use_requested.get_connections().size() == 1,
 		"use signal 未连接"
 	)
 	assert(fake_hud.received_assignments == ["", "", "", ""], "HUD 未收到初始快捷物品快照")
@@ -48,8 +48,8 @@ func _run() -> void:
 	# 重复接线幂等
 	game._wire_item_quick_slots_hud()
 	assert(
-		fake_hud.get_signal_connection_count("item_quick_slot_assignment_requested") == 1
-		and fake_hud.get_signal_connection_count("item_quick_slot_use_requested") == 1,
+		fake_hud.item_quick_slot_assignment_requested.get_connections().size() == 1
+		and fake_hud.item_quick_slot_use_requested.get_connections().size() == 1,
 		"重复接线产生重复连接"
 	)
 
@@ -114,8 +114,8 @@ func _run() -> void:
 	game.hud = real_hud
 	game._wire_item_quick_slots_hud()
 	assert(
-		real_hud.get_signal_connection_count("item_quick_slot_assignment_requested") == 1
-		and real_hud.get_signal_connection_count("item_quick_slot_use_requested") == 1,
+		real_hud.item_quick_slot_assignment_requested.get_connections().size() == 1
+		and real_hud.item_quick_slot_use_requested.get_connections().size() == 1,
 		"合并态真实 HUD 接口未连接"
 	)
 	var merged_hud := FakeHud.new()
