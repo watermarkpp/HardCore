@@ -104,7 +104,7 @@ func _run() -> void:
 	divine_beast.setup(player, ProfessionRules.skill_display_name("taoist.summon_divine_beast"), 30, 3, "taoist.summon_divine_beast", 35)
 	assert(divine_beast.skill_id == "taoist.summon_divine_beast" and divine_beast.attack_type == "fire")
 	assert(divine_beast.lifetime_seconds == 864000.0 and divine_beast.recall_existing_on_create_failure)
-	assert(divine_beast.max_hp == 448 and skeleton.max_hp == 392)
+	assert(divine_beast.max_hp == 840 and skeleton.max_hp == 392)
 	assert(divine_beast.attack_range_gu > skeleton.attack_range_gu)
 	assert(skeleton.maximum_pet_level == 7 and divine_beast.maximum_pet_level == 7)
 	divine_beast.free()

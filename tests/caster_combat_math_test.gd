@@ -36,7 +36,7 @@ func _ready() -> void:
 	assert(skeleton.summon_level == 3 and skeleton.summon_exp_level == 3 and skeleton.summon_count == 1)
 	assert(skeleton.amulet_cost == 0 and divine_beast.amulet_cost == 0)
 	assert(skeleton.max_hp == 392 and skeleton.attack_min == 12 and skeleton.attack_max == 28)
-	assert(divine_beast.max_hp == 448 and divine_beast.attack_min == 7 and divine_beast.attack_max == 30)
+	assert(divine_beast.max_hp == 840 and divine_beast.attack_min == 20 and divine_beast.attack_max == 35)
 	assert(skeleton.max_pet_level == 7 and divine_beast.max_pet_level == 7)
 	assert(
 		divine_beast.max_hp > skeleton.max_hp

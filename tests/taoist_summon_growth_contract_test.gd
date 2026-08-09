@@ -16,8 +16,8 @@ func _ready() -> void:
 	)
 	var expected_skeleton_hp := [140, 196, 280, 392, 532, 700, 896, 1120]
 	var expected_skeleton_dc_max := [23, 24, 26, 28, 31, 35, 39, 44]
-	var expected_divine_hp := [160, 224, 320, 448, 608, 800, 1024, 1280]
-	var expected_divine_dc_max := [25, 26, 28, 30, 33, 37, 41, 46]
+	var expected_divine_hp := [300, 420, 600, 840, 1140, 1500, 1920, 2400]
+	var expected_divine_dc_max := [30, 31, 33, 35, 38, 42, 46, 51]
 	for pet_level: int in range(8):
 		var skeleton_stats := TaoistCombatMath.summon_stats("skeleton", pet_level)
 		var divine_stats := TaoistCombatMath.summon_stats("divine_beast", pet_level)
@@ -27,7 +27,7 @@ func _ready() -> void:
 		assert(skeleton_stats.mac_min == 3 and skeleton_stats.mac_max == 6)
 		assert(skeleton_stats.accuracy == 20 and skeleton_stats.agility == 20)
 		assert(divine_stats.max_hp == expected_divine_hp[pet_level])
-		assert(divine_stats.dc_min == 7 and divine_stats.dc_max == expected_divine_dc_max[pet_level])
+		assert(divine_stats.dc_min == 20 and divine_stats.dc_max == expected_divine_dc_max[pet_level])
 		assert(divine_stats.ac_min == 8 and divine_stats.ac_max == 8)
 		assert(divine_stats.mac_min == 5 and divine_stats.mac_max == 5)
 		assert(divine_stats.accuracy == 17 and divine_stats.agility == 25)

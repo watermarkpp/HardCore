@@ -94,9 +94,9 @@
       "monster_id": 146,
       "monster_level": 32,
       "base_stats": {
-        "hp": 160,
-        "dc_min": 7,
-        "dc_max": 25,
+        "hp": 300,
+        "dc_min": 20,
+        "dc_max": 30,
         "ac_min": 8,
         "ac_max": 8,
         "mac_min": 5,
@@ -114,14 +114,14 @@
       },
       "attack_type": "fire",
       "levels_0_to_7": [
-        {"level": 0, "hp": 160, "dc_min": 7, "dc_max": 25},
-        {"level": 1, "hp": 224, "dc_min": 7, "dc_max": 26},
-        {"level": 2, "hp": 320, "dc_min": 7, "dc_max": 28},
-        {"level": 3, "hp": 448, "dc_min": 7, "dc_max": 30},
-        {"level": 4, "hp": 608, "dc_min": 7, "dc_max": 33},
-        {"level": 5, "hp": 800, "dc_min": 7, "dc_max": 37},
-        {"level": 6, "hp": 1024, "dc_min": 7, "dc_max": 41},
-        {"level": 7, "hp": 1280, "dc_min": 7, "dc_max": 46}
+        {"level": 0, "hp": 300, "dc_min": 20, "dc_max": 30},
+        {"level": 1, "hp": 420, "dc_min": 20, "dc_max": 31},
+        {"level": 2, "hp": 600, "dc_min": 20, "dc_max": 33},
+        {"level": 3, "hp": 840, "dc_min": 20, "dc_max": 35},
+        {"level": 4, "hp": 1140, "dc_min": 20, "dc_max": 38},
+        {"level": 5, "hp": 1500, "dc_min": 20, "dc_max": 42},
+        {"level": 6, "hp": 1920, "dc_min": 20, "dc_max": 46},
+        {"level": 7, "hp": 2400, "dc_min": 20, "dc_max": 51}
       ],
       "visual": {
         "contract_id": "summon.visual.divine_beast.directional.v1",
