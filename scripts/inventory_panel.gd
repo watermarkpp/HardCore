@@ -5,6 +5,7 @@ const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PreviewScript = preload("res://scripts/equipment_character_preview.gd")
 const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
 const UIItemTextureCacheScript = preload("res://scripts/ui_item_texture_cache.gd")
+const TouchScrollSupportScript = preload("res://scripts/touch_scroll_support.gd")
 
 signal closed
 
@@ -14,6 +15,8 @@ const BAG_VISIBLE_CAPACITY := 40
 const BAG_CAPACITY := 100
 const BAG_CELL_SIZE := Vector2(56, 64)
 const LONG_PRESS_SECONDS := 0.48
+const CONTEXT_MENU_POLICY_ID := "ui.inventory.context_menu_policy.v1"
+const CONTEXT_MENU_ENABLED := false
 
 var item_grid: GridContainer
 var detail_label: RichTextLabel
@@ -41,6 +44,14 @@ var _press_origin := Vector2.ZERO
 var _long_press_opened := false
 var _refresh_pending := false
 var _refresh_execution_count := 0
+# Production policy: the long-press context menu is intentionally suppressed.
+# The PopupMenu builder/action helpers remain for special items enabled later
+# through _context_menu_policy (enabled + optional enabled_kinds whitelist).
+var _context_menu_policy: Dictionary = {
+	"enabled": CONTEXT_MENU_ENABLED,
+	"enabled_kinds": [],
+}
+var _press_cancelled := false
 
 
 func _ready() -> void:
@@ -247,7 +258,7 @@ func _build_context_menu() -> void:
 	_press_timer = Timer.new()
 	_press_timer.one_shot = true
 	_press_timer.wait_time = LONG_PRESS_SECONDS
-	_press_timer.timeout.connect(_open_long_press_menu)
+	_press_timer.timeout.connect(_on_long_press_timer_timeout)
 	add_child(_press_timer)
 
 
@@ -370,7 +381,7 @@ func _refresh_bag_grid() -> void:
 	if selected_inventory_index >= 0:
 		_show_inventory_detail(selected_inventory_index)
 	elif selected_equipment_slot.is_empty():
-		detail_label.text = "[color=#d9c09a]点击物品查看属性。按住物品打开穿戴、使用或卸下菜单。[/color]"
+		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
 
 
 func _create_bag_cell(index: int, stack: Dictionary) -> Control:
@@ -431,6 +442,8 @@ func _create_empty_bag_cell(index: int) -> Control:
 
 
 func _select_inventory_item(index: int) -> void:
+	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if index < 0 or index >= PlayerState.inventory.size():
 		return
 	selected_inventory_index = index
@@ -441,6 +454,8 @@ func _select_inventory_item(index: int) -> void:
 
 
 func _select_equipment_slot(slot: String) -> void:
+	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	selected_equipment_slot = slot
 	selected_inventory_index = -1
 	var equipped: Variant = PlayerState.equipment.get(slot, {})
@@ -467,7 +482,21 @@ func _show_inventory_detail(index: int) -> void:
 
 
 func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
+	if _is_double_activation_event(event):
+		_cancel_long_press()
+		_activate_inventory_index(index)
+		return
 	_handle_press_event(event, {"source": "inventory", "index": index}, button)
+
+
+func _is_double_activation_event(event: InputEvent) -> bool:
+	if event is InputEventMouseButton:
+		var mouse := event as InputEventMouseButton
+		return mouse.pressed and mouse.button_index == MOUSE_BUTTON_LEFT and mouse.double_click
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		return touch.pressed and touch.double_tap
+	return false
 
 
 func _equipment_input(event: InputEvent, slot: String, button: Button) -> void:
@@ -498,6 +527,7 @@ func _begin_long_press(context: Dictionary, button: Button, local_position: Vect
 	_press_button = button
 	_press_origin = local_position
 	_long_press_opened = false
+	_press_cancelled = false
 	_press_timer.start()
 
 
@@ -513,6 +543,32 @@ func _cancel_long_press() -> void:
 		_press_timer.stop()
 	_press_context = {}
 	_press_button = null
+	_press_cancelled = true
+
+
+func _on_long_press_timer_timeout() -> void:
+	if not _context_menu_allowed() or TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
+	_open_long_press_menu()
+
+
+func _context_menu_allowed() -> bool:
+	if not bool(_context_menu_policy.get("enabled", false)):
+		return false
+	var allowed_kinds: Array = _context_menu_policy.get("enabled_kinds", [])
+	if allowed_kinds is Array and not allowed_kinds.is_empty():
+		var item_name := ""
+		if str(_press_context.get("source", "")) == "inventory":
+			var index := int(_press_context.get("index", -1))
+			if index >= 0 and index < PlayerState.inventory.size():
+				item_name = str(PlayerState.inventory[index].get("name", ""))
+		elif str(_press_context.get("source", "")) == "equipment":
+			var slot := str(_press_context.get("slot", ""))
+			var equipped: Variant = PlayerState.equipment.get(slot, {})
+			if equipped is Dictionary:
+				item_name = str(equipped.get("name", ""))
+		return str(GameData.get_item_kind(item_name)) in allowed_kinds
+	return true
 
 
 func _open_long_press_menu() -> void:
@@ -581,8 +637,19 @@ func _on_context_action(id: int) -> void:
 func _activate_selected_item(preferred_slot := "") -> void:
 	if selected_inventory_index < 0 or selected_inventory_index >= PlayerState.inventory.size():
 		return
-	var item := GameData.get_item_record(str(PlayerState.inventory[selected_inventory_index].get("name", "")))
-	var result := PlayerState.equip_inventory_index(selected_inventory_index, preferred_slot) if str(item.get("kind", "")) == "equipment" else PlayerState.use_inventory_index(selected_inventory_index)
+	_activate_inventory_index(selected_inventory_index, preferred_slot)
+
+
+func _activate_inventory_index(index: int, preferred_slot := "") -> void:
+	# preferred_slot stays empty for direct double-click activation: PlayerState
+	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
+	if index < 0 or index >= PlayerState.inventory.size():
+		return
+	_cancel_long_press()
+	selected_inventory_index = index
+	selected_equipment_slot = ""
+	var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
+	var result := PlayerState.equip_inventory_index(index, preferred_slot) if str(item.get("kind", "")) == "equipment" else PlayerState.use_inventory_index(index)
 	selected_inventory_index = -1
 	refresh()
 	detail_label.text = "[color=#e8c277]%s[/color]" % result
