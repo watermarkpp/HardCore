@@ -9,7 +9,7 @@
 ## DeepSeek 委派与降级
 
 - 非琐碎且边界清晰的工作默认先交 `deepseek_worker`；主控负责限定范围、冻结对象、现有 dirty、验收标准和最终落地。worker 固定使用 `deepseek-v4-flash`、Responses、`max`；图片、MCP、computer-use、background 等不受支持的输入留给主控或对应工具。
-- 原生链合同为 `gpt-5.6-sol multi_agent_version=v1` → `deepseek-v4-flash multi_agent_version=v2`。Codex 更新模型缓存后先运行 `C:\Users\Administrator\.codex\agents\sync-deepseek-subagent-catalog.ps1`；不得把主控恢复为 v2 后继续跨供应商委派。
+- 原生链合同为 `gpt-5.6-sol multi_agent_version=v1` → `deepseek-v4-flash multi_agent_version=v2`。Codex 更新模型缓存后先运行 `C:\Users\Administrator\.codex\agents\sync-deepseek-subagent-catalog.ps1`；修改该合同、catalog 或 worker 配置后必须完全重启 Codex Desktop 并新建 worker，禁止复用变更前子线程；不得把主控恢复为 v2 后继续跨供应商委派。
 - `DEEPSEEK_NATIVE_TASK_MISSING` 或 `DEEPSEEK_DISPATCH_NOT_READY` 只表示原生调度不可用；立即改用 `C:\Users\Administrator\.codex\agents\invoke-deepseek-direct.ps1 -Model deepseek-v4-pro -ThinkingMode enabled -ReasoningEffort max -MaxOutputTokens 384000 -TimeoutMinutes 30`，不得空转重试或误判为 API、网络、余额故障。
 - 直连固定 `HttpClientHandler.UseProxy=false`，API Key 仅来自进程级或用户级 `DEEPSEEK_API_KEY`，不得进入仓库、提示词、聊天、命令行、补丁或日志。长请求每 ≤60 秒更新状态，并记录 model、`finish_reason`、token、`max_output_tokens`、`thinking_mode` 和 `transport=direct_no_proxy`。
 - 原生 worker 可在明确独占范围内读写并测试；直连只返回文本，由主控用 `apply_patch` 落地。两条路径的输出都不是最终验收，主控必须审查 diff、保护 dirty 和冻结对象，并在真实集成态验证。
