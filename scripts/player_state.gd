@@ -892,11 +892,28 @@ func canonical_skill_resource_context(stable_skill_id: String, current_mana: int
 			if int(materials.get("grey_powder", 0)) > 0
 			else "yellow_powder"
 		)
-	return {
+	var result := {
 		"mana": maxi(0, int(current_mana)),
 		"materials": materials,
 		"selected_material": selected_material,
 	}
+	## Dual defence: when both taoist.defense and taoist.magic_defense are
+	## learned (base rank 0 counts as learned in HardCore v2), any
+	## preflight/release quote must price the combination in one transaction
+	## with each skill's currently-effective rank (0 or equipment-extended).
+	## Equipment can never enable an unlearned partner.
+	if stable_skill_id in ["taoist.defense", "taoist.magic_defense"]:
+		var partner_skill_id := (
+			"taoist.magic_defense"
+			if stable_skill_id == "taoist.defense"
+			else "taoist.defense"
+		)
+		if is_skill_learned(partner_skill_id):
+			result["dual_defense_context"] = {
+				"partner_skill_id": partner_skill_id,
+				"partner_rank": effective_skill_level(partner_skill_id),
+			}
+	return result
 
 
 func canonical_material_item_name(material_id: String) -> String:

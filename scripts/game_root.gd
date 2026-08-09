@@ -37,6 +37,12 @@ const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
 const CombatReleaseGeometryScript := preload("res://scripts/skills/combat_release_geometry.gd")
+const TaoistSupportPolicyScript := preload(
+	"res://scripts/skills/taoist_support_policy.gd"
+)
+const TaoistFriendlyTargetingScript := preload(
+	"res://scripts/skills/taoist_friendly_targeting.gd"
+)
 const WarriorMeleeGeometryScript := preload("res://scripts/skills/warrior_melee_geometry.gd")
 const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_melee_diagnostic.gd")
 const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
@@ -74,6 +80,17 @@ const ATTACK_LOCK_RANGE_GU := 10.0
 const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclusive.v1"
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 const FIRE_WALL_SKILL_ID := "wizard.fire_wall"
+const TAOIST_HEAL_SKILL_IDS := {
+	"taoist.healing": true,
+	"taoist.mass_healing": true,
+}
+const TAOIST_SUPPORT_SKILL_IDS := {
+	"taoist.healing": true,
+	"taoist.mass_healing": true,
+	"taoist.mass_invisibility": true,
+	"taoist.magic_defense": true,
+	"taoist.defense": true,
+}
 const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
 const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
 const SKILL_INPUT_TICKET_CONTRACT_ID := (
@@ -205,6 +222,7 @@ var _canonical_cast_serial := 0
 var _skill_footprint_release_serial := 0
 var _canonical_fire_charge_expires_ms := 0
 var _skill_cast_target: EnemyActor
+var _selected_friendly_instance_id := 0
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
@@ -3367,19 +3385,47 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 			return &"busy"
 		_skill_cast_target = null
 		return &"accepted"
+	if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
+		## Friendly healing is selected by the pure support policy BEFORE any
+		## action/cooldown/MP commit. All-full or no injured friendly in 9 GU
+		## rejects the input without touching action state.
+		var heal_selection := _select_taoist_heal_target(
+			_canonical_screen_px_to_ground_gu(player.global_position)
+		)
+		if not bool(heal_selection.get("valid", false)):
+			if show_failure:
+				hud.show_message(
+					"附近没有可治疗的友方"
+					if str(heal_selection.get("reason", "")) == (
+						TaoistSupportPolicyScript.REASON_ALL_FRIENDLY_TARGETS_FULL_HP
+					)
+					else "附近没有受伤的友方"
+				)
+			_skill_cast_target = null
+			_selected_friendly_instance_id = 0
+			return &"rejected"
+		_selected_friendly_instance_id = int(
+			heal_selection.get("selected", {}).get("instance_id", 0)
+		)
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
+	var resource_context := _canonical_resource_context(stable_skill_id)
 	var resource_quote := SkillResourceServiceScript.quote(
 		definition,
 		learned_level,
-		_canonical_resource_context(stable_skill_id)
+		resource_context,
+		resource_context
 	)
 	var mana_cost := maxi(0, int(resource_quote.get("mp_cost", 0)))
 	if player.current_mp < mana_cost:
+		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
+			_selected_friendly_instance_id = 0
 		if show_failure:
 			hud.show_message("魔法不足")
 		return &"rejected"
 	if not player.can_request_skill(skill_name):
+		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
+			_selected_friendly_instance_id = 0
 		if show_failure:
 			hud.show_message("技能动作或冷却尚未结束")
 		return &"busy"
@@ -3403,12 +3449,18 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 			if show_failure:
 				hud.show_message("目标超出该法术的有效范围")
 			return &"rejected"
-	var locked_skill_target_id := (
-		_skill_cast_target.get_instance_id()
-		if is_instance_valid(_skill_cast_target)
-		else 0
-	)
+	var locked_skill_target_id := 0
+	if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
+		locked_skill_target_id = _selected_friendly_instance_id
+		_skill_cast_target = null
+	else:
+		locked_skill_target_id = (
+			_skill_cast_target.get_instance_id()
+			if is_instance_valid(_skill_cast_target)
+			else 0
+		)
 	if not player.request_skill(skill_name, locked_skill_target_id):
+		_selected_friendly_instance_id = 0
 		if show_failure:
 			hud.show_message("技能动作或冷却尚未结束")
 		return &"busy"
@@ -4008,6 +4060,19 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			hud.show_message("锁定目标已失效，技能未释放", 1.5)
 			return
 		_skill_cast_target = release_target
+	var friendly_identity_release: Dictionary = release_geometry.get(
+		"friendly_identity_release",
+		{}
+	)
+	if not friendly_identity_release.is_empty():
+		## The identity and live footpoint recorded at the release frame are
+		## authoritative for Taoist friendly-target skills.
+		_selected_friendly_instance_id = int(
+			friendly_identity_release.get(
+				"selected_friendly_instance_id",
+				0
+			)
+		)
 	var release_id := str(release_geometry.get("release_id", ""))
 	if release_id.is_empty():
 		release_id = _next_skill_footprint_release_id(stable_skill_id)
@@ -4046,13 +4111,85 @@ func _execute_canonical_skill(
 		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
 	var rank := PlayerState.effective_skill_level(skill_name)
+	var release_context := (extra_target_context as Dictionary).duplicate(true)
+	var support_center_ground_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	if TAOIST_SUPPORT_SKILL_IDS.has(stable_skill_id):
+		release_context["friendly_candidates"] = _canonical_friendly_candidates()
+		release_context["caster_ground_position_gu"] = support_center_ground_gu
+		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
+			var friendly_resolution := _resolve_release_friendly_target(
+				_selected_friendly_instance_id,
+				release_context.get("friendly_candidates", []),
+				support_center_ground_gu
+			)
+			if not bool(friendly_resolution.get("valid", false)):
+				_selected_friendly_instance_id = 0
+				_skill_cast_target = null
+				return {
+					"accepted": false,
+					"effect_success": false,
+					"skill_id": stable_skill_id,
+					"reason": str(
+						friendly_resolution.get(
+							"reason",
+							"no_injured_friendly_target_in_range"
+						)
+					),
+					"execution_result": {},
+				}
+			var selected_friendly: Dictionary = friendly_resolution.get(
+				"selected",
+				{}
+			)
+			_selected_friendly_instance_id = int(
+				selected_friendly.get("instance_id", 0)
+			)
+			release_context["selected_friendly_instance_id"] = (
+				_selected_friendly_instance_id
+			)
+			var selected_ground_gu: Vector2 = selected_friendly.get(
+				"ground_position_gu",
+				support_center_ground_gu
+			)
+			release_context["actual_hp_missing"] = (
+				int(selected_friendly.get("max_hp", 1))
+				- int(selected_friendly.get("current_hp", 0))
+			)
+			if stable_skill_id == "taoist.mass_healing":
+				var mass_heal_center_tile := (
+					TaoistFriendlyTargetingScript.grid_tile(
+						selected_ground_gu
+					)
+				)
+				release_context["target_tile"] = mass_heal_center_tile
+				release_context["origin_tile"] = mass_heal_center_tile
+		else:
+			## mass invisibility / defence stay fixed to the caster's
+			## release-frame position; never an enemy/ground/facing point.
+			var self_center_tile := TaoistFriendlyTargetingScript.grid_tile(
+				support_center_ground_gu
+			)
+			release_context["target_tile"] = self_center_tile
+			## The professional geometry service treats target_tile ZERO as
+			## "unset" and falls back to the origin tile; pin both to the same
+			## floor tile so canonical cells stay centred on the caster.
+			release_context["origin_tile"] = self_center_tile
+		var support_resource_context := _canonical_resource_context(
+			stable_skill_id
+		)
+		if support_resource_context.has("dual_defense_context"):
+			release_context["dual_defense_context"] = (
+				support_resource_context.get("dual_defense_context", {})
+			)
 	var target_context := _canonical_target_context(
 		definition,
 		origin,
 		direction,
 		not authoritative_cast_target,
 		str(extra_target_context.get("release_id", "")),
-		extra_target_context
+		release_context
 	)
 	var cast_target := _skill_cast_target
 	var request_facing := _canonical_facing_for_skill(stable_skill_id, direction)
@@ -4069,7 +4206,11 @@ func _execute_canonical_skill(
 		stable_skill_id,
 		rank,
 		PlayerState.level,
-		_canonical_screen_px_to_grid_cell(origin),
+		(
+			release_context.get("origin_tile", Vector2i(-99, -99))
+			if release_context.has("origin_tile")
+			else _canonical_screen_px_to_grid_cell(origin)
+		),
 		request_facing,
 		target_context,
 		resource_context,
@@ -4582,9 +4723,13 @@ func _canonical_target_context(
 	var exact_geometry_cells: Array[Vector2i] = []
 	var exact_release_snapshot: Dictionary = {}
 	if GROUND_EXACT_SKILL_IDS.has(stable_skill_id):
+		var geometry_origin_tile: Vector2i = context.get(
+			"origin_tile",
+			_canonical_screen_px_to_grid_cell(origin)
+		)
 		var declared_geometry_cells := SkillGeometryServiceScript.cells(
 			definition,
-			_canonical_screen_px_to_grid_cell(origin),
+			geometry_origin_tile,
 			Vector2i(signi(roundi(direction_ground_gu.x)), signi(roundi(direction_ground_gu.y))),
 			context.get("target_tile", Vector2i.ZERO)
 		)
@@ -4607,6 +4752,15 @@ func _canonical_target_context(
 		context["skill_footprint_snapshot"] = exact_release_snapshot
 	elif TARGET_FOOTPRINT_SKILL_IDS.has(stable_skill_id):
 		var target_actor: Node2D = target if is_instance_valid(target) else player
+		if (
+			stable_skill_id == "taoist.healing"
+			and int(context.get("selected_friendly_instance_id", 0)) > 0
+		):
+			var selected_friendly_actor := _canonical_friendly_actor(
+				int(context.get("selected_friendly_instance_id", 0))
+			)
+			if selected_friendly_actor != null:
+				target_actor = selected_friendly_actor
 		if is_instance_valid(target_actor):
 			context["skill_footprint_snapshot"] = (
 				SkillFootprintSnapshotScript.create_target_footprint(
@@ -4875,7 +5029,16 @@ func _apply_canonical_effects_from_plan(
 					skill_release_snapshot
 				)
 			"dedicated_heal":
-				player.restore_health(
+				var heal_target_id := int(
+					effect.get("target_instance_id", 0)
+				)
+				var heal_actor := (
+					_canonical_friendly_actor(heal_target_id)
+					if heal_target_id > 0
+					else player
+				)
+				_apply_canonical_friendly_heal(
+					heal_actor,
 					int(effect.get("actual_hp_restored", 0))
 				)
 			"dedicated_area_heal":
@@ -4995,29 +5158,68 @@ func _apply_canonical_effects_from_plan(
 					var stealth_actor := _canonical_friendly_actor(
 						target_instance_id
 					)
-					if stealth_actor == player:
-						player.apply_stealth(
-							float(effect.get("duration_seconds", 1))
-						)
-			"friendly_defence_buff":
-				var buff_target_id := int(
-					effect.get("target_instance_id", 0)
-				)
-				if buff_target_id <= 0:
-					var friendly_targets: Array = target_context.get(
-						"friendly_targets", []
-					)
-					if friendly_effect_index < friendly_targets.size():
-						buff_target_id = int(
-							(friendly_targets[friendly_effect_index] as Dictionary).get(
-								"instance_id", 0
+					_apply_friendly_stealth_to_actor(
+						stealth_actor,
+						float(effect.get("duration_seconds", 1)),
+						str(
+							effect.get(
+								"buff_id",
+								"buff.taoist.mass_invisibility"
 							)
 						)
-				friendly_effect_index += 1
-				if _canonical_friendly_actor(buff_target_id) == player:
-					player.apply_defense_buff(
-						float(effect.get("duration_seconds", 1)),
-						int(effect.get("flat_bonus", 1))
+					)
+			"friendly_defence_buff":
+				var defence_stat := str(effect.get("stat", "AC"))
+				var defence_duration := float(
+					effect.get("duration_seconds", 1)
+				)
+				var defence_buff_id := str(effect.get("buff_id", ""))
+				var aggregate_targets: Array = effect.get("targets", [])
+				if not aggregate_targets.is_empty():
+					for raw_entry: Variant in aggregate_targets:
+						if not raw_entry is Dictionary:
+							continue
+						var entry: Dictionary = raw_entry
+						_apply_friendly_defence_buff_to_actor(
+							_canonical_friendly_actor(
+								int(entry.get("target_instance_id", 0))
+							),
+							defence_stat,
+							int(
+								entry.get(
+									"value",
+									entry.get("flat_bonus", 1)
+								)
+							),
+							defence_duration,
+							defence_buff_id
+						)
+				else:
+					var buff_target_id := int(
+						effect.get("target_instance_id", 0)
+					)
+					if buff_target_id <= 0:
+						var friendly_targets: Array = target_context.get(
+							"friendly_targets", []
+						)
+						if friendly_effect_index < friendly_targets.size():
+							buff_target_id = int(
+								(friendly_targets[friendly_effect_index] as Dictionary).get(
+									"instance_id", 0
+								)
+							)
+					friendly_effect_index += 1
+					_apply_friendly_defence_buff_to_actor(
+						_canonical_friendly_actor(buff_target_id),
+						defence_stat,
+						int(
+							effect.get(
+								"value",
+								effect.get("flat_bonus", 1)
+							)
+						),
+						defence_duration,
+						defence_buff_id
 					)
 			"poison_resolution":
 				if (
@@ -6097,6 +6299,166 @@ func _apply_canonical_friendly_heal(actor: Node2D, amount: int) -> void:
 		player.restore_health(amount)
 	elif actor is SummonActor:
 		actor.current_hp = mini(actor.max_hp, actor.current_hp + amount)
+
+
+func _canonical_friendly_candidates() -> Array:
+	## Candidate pool contract: the caster plus alive, owned, non-queued
+	## SummonActors. Positions use the formal map projection.
+	var result: Array = []
+	if not is_instance_valid(player):
+		return result
+	result.append(TaoistSupportPolicyScript.make_candidate(
+		player.get_instance_id(),
+		true,
+		player.current_hp,
+		player.max_hp,
+		_canonical_screen_px_to_ground_gu(player.global_position),
+		PlayerState.level,
+		"self"
+	))
+	for node: Node in get_tree().get_nodes_in_group("summons"):
+		if not node is SummonActor:
+			continue
+		var summon := node as SummonActor
+		if (
+			summon.is_queued_for_deletion()
+			or summon.owner_player != player
+			or summon.current_hp <= 0
+		):
+			continue
+		result.append(TaoistSupportPolicyScript.make_candidate(
+			summon.get_instance_id(),
+			false,
+			summon.current_hp,
+			summon.max_hp,
+			_canonical_screen_px_to_ground_gu(summon.global_position),
+			maxi(1, _summon_owner_level(summon)),
+			"summon"
+		))
+	return result
+
+
+func _summon_owner_level(summon: SummonActor) -> int:
+	## The defence-growth contract keys off the owner level at summon time
+	## (legacy production path reads SummonActor.owner_level). The frozen actor
+	## does not declare the property, so the spawner records it as metadata.
+	## Fall back to the owner's current level when it was not recorded.
+	var owner_level_value := 0
+	if summon.has_meta("owner_level"):
+		var owner_level_raw: Variant = summon.get_meta("owner_level", 0)
+		if owner_level_raw is int:
+			owner_level_value = int(owner_level_raw)
+	if owner_level_value <= 0 and is_instance_valid(summon.owner_player):
+		owner_level_value = PlayerState.level
+	return maxi(1, owner_level_value)
+
+
+func _select_taoist_heal_target(center_ground_gu: Vector2) -> Dictionary:
+	return TaoistSupportPolicyScript.select_heal_target(
+		_canonical_friendly_candidates(),
+		center_ground_gu,
+		TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
+	)
+
+
+func _resolve_release_friendly_target(
+	requested_instance_id: int,
+	candidates: Array,
+	center_ground_gu: Vector2
+) -> Dictionary:
+	## Release-time validation of the identity recorded at input. On failure it
+	## reselects exactly once via the same pure policy; a missing result means
+	## no canonical plan and no MP commit.
+	if requested_instance_id > 0:
+		for raw_candidate: Variant in candidates:
+			if not raw_candidate is Dictionary:
+				continue
+			var candidate: Dictionary = raw_candidate
+			if int(candidate.get("instance_id", 0)) != requested_instance_id:
+				continue
+			var missing := (
+				int(candidate.get("max_hp", 1))
+				- int(candidate.get("current_hp", 0))
+			)
+			if missing <= 0:
+				break
+			if not TaoistFriendlyTargetingScript.within_range_gu(
+				candidate,
+				center_ground_gu,
+				TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
+			):
+				break
+			return {
+				"valid": true,
+				"selected": candidate,
+				"reselected": false,
+				"reason": "",
+			}
+	var selection := TaoistSupportPolicyScript.select_heal_target(
+		candidates,
+		center_ground_gu,
+		TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
+	)
+	if bool(selection.get("valid", false)):
+		return {
+			"valid": true,
+			"selected": selection.get("selected", {}),
+			"reselected": requested_instance_id > 0,
+			"reason": "",
+		}
+	return {
+		"valid": false,
+		"selected": {},
+		"reselected": false,
+		"reason": str(
+			selection.get("reason", "no_injured_friendly_target_in_range")
+		),
+	}
+
+
+func _apply_friendly_defence_buff_to_actor(
+	actor: Node2D,
+	stat: String,
+	value: int,
+	duration_seconds: float,
+	buff_id: String
+) -> void:
+	if not is_instance_valid(actor) or value <= 0:
+		return
+	if stat == "MAC":
+		if actor == player:
+			player.apply_mac_buff(duration_seconds, value)
+		elif actor is SummonActor:
+			(actor as SummonActor).apply_mac_buff(
+				value,
+				duration_seconds,
+				buff_id
+			)
+	else:
+		if actor == player:
+			player.apply_ac_buff(duration_seconds, value)
+		elif actor is SummonActor:
+			(actor as SummonActor).apply_ac_buff(
+				value,
+				duration_seconds,
+				buff_id
+			)
+
+
+func _apply_friendly_stealth_to_actor(
+	actor: Node2D,
+	duration_seconds: float,
+	buff_id: String
+) -> void:
+	if not is_instance_valid(actor):
+		return
+	if actor == player:
+		player.apply_stealth(duration_seconds)
+	elif actor is SummonActor:
+		(actor as SummonActor).apply_stealth(
+			duration_seconds,
+			buff_id
+		)
 
 
 func _apply_canonical_main_pet(

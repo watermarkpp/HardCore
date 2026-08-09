@@ -77,6 +77,8 @@ var shield_capacity_max := 0.0
 var stealth_time := 0.0
 var defense_buff := 0
 var defense_buff_time := 0.0
+var mac_buff := 0
+var mac_buff_time := 0.0
 var control_time := 0.0
 var poison_time := 0.0
 var poison_damage := 0
@@ -197,6 +199,7 @@ func _physics_process(delta: float) -> void:
 	shield_time = maxf(0.0, shield_time - delta)
 	stealth_time = maxf(0.0, stealth_time - delta)
 	defense_buff_time = maxf(0.0, defense_buff_time - delta)
+	mac_buff_time = maxf(0.0, mac_buff_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
 	var previous_poison_second := int(ceil(poison_time))
@@ -211,6 +214,8 @@ func _physics_process(delta: float) -> void:
 		shield_initial_duration = 0.0
 	if defense_buff_time == 0.0:
 		defense_buff = 0
+	if mac_buff_time == 0.0:
+		mac_buff = 0
 	var keyboard := _keyboard_movement_vector()
 	var direction := touch_vector if touch_vector.length() > keyboard.length() else keyboard
 	var movement_locked := (
@@ -354,9 +359,24 @@ func can_request_skill(skill_name: String) -> bool:
 		stable_skill_id,
 		current_mp
 	)
+	var dual_defense_context: Dictionary = resource_context.get(
+		"dual_defense_context",
+		{}
+	)
+	if not dual_defense_context.is_empty():
+		var partner_skill_id := str(dual_defense_context.get(
+			"partner_skill_id",
+			""
+		))
+		if (
+			not partner_skill_id.is_empty()
+			and skill_cooldown_remaining_ms(partner_skill_id) > 0
+		):
+			return false
 	var quote := SkillResourceServiceScript.quote(
 		canonical_definition,
 		learned_level,
+		resource_context,
 		resource_context
 	)
 	return current_mp >= maxi(0, int(quote.get("mp_cost", 0)))
@@ -393,6 +413,27 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		"cooldown_ms",
 		total_action_lock_ms
 	))
+	var resource_context := PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		current_mp
+	)
+	var dual_defense_context: Dictionary = resource_context.get(
+		"dual_defense_context",
+		{}
+	)
+	var partner_skill_id := str(dual_defense_context.get(
+		"partner_skill_id",
+		""
+	))
+	if not partner_skill_id.is_empty():
+		var partner_definition := SkillDataLoaderScript.skill(partner_skill_id)
+		cooldown_ms = maxi(
+			cooldown_ms,
+			int(partner_definition.get("timing", {}).get(
+				"cooldown_ms",
+				cooldown_ms
+			))
+		)
 	var release_ms := int(canonical_timing.get(
 		"effect_resolve_ms_from_cast_start",
 		body_cast_ms
@@ -408,6 +449,10 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	_attack_timer = action_lock_seconds
 	if cooldown_seconds > 0.0:
 		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
+		if not partner_skill_id.is_empty():
+			## Shared dual-defence cooldown: both skill ids enter the same
+			## cooldown from one action so neither button can bypass the gate.
+			_skill_cooldown_remaining[partner_skill_id] = cooldown_seconds
 	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
 	_attack_action_timer = action_duration
 	var primary_visual_duration := (
@@ -471,6 +516,31 @@ func take_direct_spell_damage(
 ) -> Dictionary:
 	var stable_skill_id := ProfessionRules.skill_id(skill_id)
 	var target_stats: Dictionary = PlayerState.computed_stats
+	## MAC buff joins the magic-defence roll range without touching
+	## PlayerState.computed_stats. AC is deliberately excluded here.
+	var adapted_stats := target_stats.duplicate(true)
+	var active_mac_buff := (
+		mac_buff
+		if mac_buff_time > 0.0
+		else 0
+	)
+	## Freeze the base MAC range first, then add the buff exactly once to each
+	## bound. Never compare an already-buffed min against the base max.
+	var base_magic_defense_min := maxi(
+		0,
+		int(target_stats.get("magic_defense_min", 0))
+	)
+	var base_magic_defense_max := maxi(
+		base_magic_defense_min,
+		int(target_stats.get("magic_defense_max", base_magic_defense_min))
+	)
+	if active_mac_buff > 0:
+		adapted_stats["magic_defense_min"] = (
+			base_magic_defense_min + active_mac_buff
+		)
+		adapted_stats["magic_defense_max"] = (
+			base_magic_defense_max + active_mac_buff
+		)
 	var checked_anti_magic_roll := anti_magic_roll
 	if checked_anti_magic_roll < 0:
 		checked_anti_magic_roll = _rng.randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
@@ -482,15 +552,19 @@ func take_direct_spell_damage(
 	var resolution := CombatResolutionRules.resolve_direct_spell_damage(
 		stable_skill_id,
 		raw_damage,
-		target_stats,
+		adapted_stats,
 		checked_anti_magic_roll,
 		magic_defense_adapter
 	)
 	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
-	resolution["magic_defense_min"] = maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	resolution["mac_buff_applied"] = active_mac_buff
+	resolution["magic_defense_min"] = maxi(
+		0,
+		int(adapted_stats.get("magic_defense_min", 0))
+	)
 	resolution["magic_defense_max"] = maxi(
 		int(resolution.magic_defense_min),
-		int(target_stats.get("magic_defense_max", resolution.magic_defense_min))
+		int(adapted_stats.get("magic_defense_max", resolution.magic_defense_min))
 	)
 	resolution["magic_defense_roll"] = int(magic_defense_state.get("roll", -1))
 	resolution["physical_defense_bypassed"] = true
@@ -648,6 +722,35 @@ func _emit_skill_after_windup(
 			get_instance_id(),
 			action_id,
 		]
+		var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+		if (
+			CombatReleaseGeometryScript.tracks_selected_friendly_identity(
+				stable_skill_id
+			)
+		):
+			## Friendly-target skills remember the selected identity and sample
+			## its live footpoint at release. This is a tracking contract only:
+			## it never enters the hostile live-axis/auto-turn path.
+			var friendly_target_position := Vector2.ZERO
+			var friendly_target_valid := false
+			if locked_target_instance_id > 0:
+				var friendly_node := instance_from_id(locked_target_instance_id)
+				if (
+					friendly_node is Node2D
+					and is_instance_valid(friendly_node)
+					and friendly_node.is_inside_tree()
+				):
+					friendly_target_position = friendly_node.global_position
+					friendly_target_valid = true
+			release_geometry["friendly_identity_release"] = (
+				CombatReleaseGeometryScript.friendly_identity_release_tracking(
+					stable_skill_id,
+					locked_target_instance_id,
+					global_position,
+					friendly_target_position,
+					friendly_target_valid
+				)
+			)
 		_pending_skill_context = {"release_geometry": release_geometry}
 		var release_signal_payload := combat_release_signal_payload(
 			release_geometry
@@ -1005,9 +1108,40 @@ func apply_stealth(seconds: float) -> void:
 
 
 func apply_defense_buff(seconds: float, amount: int) -> void:
+	## Physical AC compatibility alias; AC and MAC stay separate.
+	apply_ac_buff(seconds, amount)
+
+
+func apply_ac_buff(seconds: float, amount: int) -> void:
+	## Reliable refresh: a weaker or shorter refresh never downgrades an
+	## active physical AC buff.
+	if seconds <= 0.0:
+		return
+	var safe_amount := maxi(0, amount)
+	if defense_buff_time <= 0.0:
+		defense_buff = safe_amount
+	else:
+		defense_buff = maxi(defense_buff, safe_amount)
 	defense_buff_time = maxf(defense_buff_time, seconds)
-	defense_buff = maxi(defense_buff, amount)
 	queue_redraw()
+
+
+func apply_mac_buff(seconds: float, amount: int) -> void:
+	if seconds <= 0.0:
+		return
+	mac_buff_time = maxf(mac_buff_time, seconds)
+	mac_buff = maxi(mac_buff, maxi(0, amount))
+	queue_redraw()
+
+
+func defence_buff_snapshot() -> Dictionary:
+	return {
+		"contract_id": "gameplay.player.defence_buff_state.v1",
+		"ac_bonus": defense_buff if defense_buff_time > 0.0 else 0,
+		"ac_remaining_seconds": defense_buff_time,
+		"mac_bonus": mac_buff if mac_buff_time > 0.0 else 0,
+		"mac_remaining_seconds": mac_buff_time,
+	}
 
 
 func apply_control(seconds: float) -> void:
