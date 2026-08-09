@@ -49,7 +49,8 @@ $info = @{
 
 $dest = Join-Path $ROOT "assets/generated"
 New-Item -ItemType Directory -Path $dest -Force | Out-Null
-$info | Out-File (Join-Path $dest "build_info.json") -Encoding UTF8NoBOM
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText((Join-Path $dest "build_info.json"), $info + [Environment]::NewLine, $utf8NoBom)
 Write-Host "BUILD_INFO: $head ($buildType)"
 Write-Host "Dirty: $dirty"
 Pop-Location
