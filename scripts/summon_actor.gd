@@ -26,6 +26,11 @@ const BUFF_STATE_CONTRACT_ID := "skills.summon_actor.buff_state.v1"
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 )
+const STEALTH_BODY_MODULATE_ALPHA := 0.22
+const BUFF_HINT_FONT_SIZE := 10
+const BUFF_HINT_LINE_SPACING := 12.0
+const BUFF_HINT_OFFSET_Y := 6.0
+const _VISUAL_REQUEST_MAX_ATTEMPTS := 8
 
 enum SummonState {
 	FOLLOW_OWNER,
@@ -132,6 +137,8 @@ var _pending_attack_direction := Vector2.DOWN
 var _fire_visual_elapsed := 0.0
 var _fire_visual_remaining := 0.0
 var _health_bar_y := -35.0
+var _visual_request_id := SummonVisualRegistryScript.REQUEST_UNKNOWN
+var _visual_request_attempts := 0
 
 ## Independent support-buff state: stealth, physical defence (AC) and magic
 ## defence (MAC) each keep their own timer and refresh independently.
@@ -339,8 +346,17 @@ func _ready() -> void:
 	queue_redraw()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_EXIT_TREE:
+		## Reap finished worker results so a summon removed before its visual
+		## request completed never leaves an unjoined thread.
+		SummonVisualRegistryScript.reap_completed_requests()
+
+
 func _process(delta: float) -> void:
 	_update_support_buff_timers(delta)
+	_update_stealth_visual()
+	queue_redraw()
 	_attack_visual_remaining = maxf(0.0, _attack_visual_remaining - delta)
 	_hit_visual_remaining = maxf(0.0, _hit_visual_remaining - delta)
 	_update_fire_visual(delta)
@@ -353,7 +369,7 @@ func _process(delta: float) -> void:
 		_visual_activation_retry = maxf(0.0, _visual_activation_retry - delta)
 		if _visual_activation_retry <= 0.0:
 			_visual_activation_retry = 0.25
-			activate_visual_resources()
+			_poll_visual_activation()
 		return
 	var next_visual_state := "idle"
 	if state == SummonState.DEAD:
@@ -916,6 +932,39 @@ func _update_support_buff_timers(delta: float) -> void:
 			clear_mac_buff()
 
 
+func _update_stealth_visual() -> void:
+	## Only the summoned body/fire layers fade. The health bar and buff hints
+	## are drawn separately in _draw() and must stay readable.
+	var body_modulate := Color(
+		1.0,
+		1.0,
+		1.0,
+		STEALTH_BODY_MODULATE_ALPHA if is_stealthed() else 1.0
+	)
+	if _sprite != null and _sprite.self_modulate != body_modulate:
+		_sprite.self_modulate = body_modulate
+	if _fire_sprite != null and _fire_sprite.self_modulate != body_modulate:
+		_fire_sprite.self_modulate = body_modulate
+
+
+func _buff_hint_lines() -> Array[String]:
+	## Directly consumes buff_state_snapshot() so hints always agree with the
+	## canonical AC/MAC boost and expiry state.
+	var snapshot := buff_state_snapshot()
+	var lines: Array[String] = []
+	var physical: Dictionary = snapshot.get("physical_defence", {})
+	var ac_bonus := int(physical.get("bonus", 0))
+	var ac_remaining := float(physical.get("remaining_seconds", 0.0))
+	if ac_bonus > 0 and ac_remaining > 0.0:
+		lines.append("AC+%d %ds" % [ac_bonus, ceili(ac_remaining)])
+	var magic: Dictionary = snapshot.get("magic_defence", {})
+	var mac_bonus := int(magic.get("bonus", 0))
+	var mac_remaining := float(magic.get("remaining_seconds", 0.0))
+	if mac_bonus > 0 and mac_remaining > 0.0:
+		lines.append("MAC+%d %ds" % [mac_bonus, ceili(mac_remaining)])
+	return lines
+
+
 func state_name() -> String:
 	return SummonState.keys()[state]
 
@@ -931,11 +980,59 @@ func _install_visual() -> void:
 	_sprite.region_enabled = true
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(_sprite)
-	activate_visual_resources()
+	request_visual_resources()
 
 
+func request_visual_resources() -> void:
+	if not _animation_resources.is_empty():
+		return
+	if _visual_request_id == SummonVisualRegistryScript.REQUEST_FAILED:
+		return
+	_visual_request_id = SummonVisualRegistryScript.request_profile(summon_id)
+	if _visual_request_id == SummonVisualRegistryScript.REQUEST_READY:
+		_visual_request_attempts = 0
+		activate_visual_resources()
+	elif _visual_request_id > SummonVisualRegistryScript.REQUEST_UNKNOWN:
+		_visual_request_attempts = 0
+
+
+func _poll_visual_activation() -> void:
+	if _visual_request_id == SummonVisualRegistryScript.REQUEST_READY:
+		activate_visual_resources()
+		return
+	if _visual_request_id == SummonVisualRegistryScript.REQUEST_FAILED:
+		return
+	if _visual_request_id == SummonVisualRegistryScript.REQUEST_UNKNOWN:
+		_visual_request_attempts += 1
+		if _visual_request_attempts >= _VISUAL_REQUEST_MAX_ATTEMPTS:
+			_visual_request_id = SummonVisualRegistryScript.REQUEST_FAILED
+			return
+		request_visual_resources()
+		return
+	var profile := SummonVisualRegistryScript.poll_profile(_visual_request_id)
+	if profile.is_empty():
+		if not SummonVisualRegistryScript.request_active(_visual_request_id):
+			## The request finished without a profile for this poller: it may
+			## have been completed by another actor (cache now ready) or it
+			## failed. Ask the registry once so a cache hit activates and a
+			## terminal failure is adopted instead of re-requesting forever.
+			_visual_request_id = SummonVisualRegistryScript.REQUEST_UNKNOWN
+			request_visual_resources()
+		return
+	_visual_request_id = SummonVisualRegistryScript.REQUEST_UNKNOWN
+	_activate_profile(profile)
+
+
+## Synchronous activation is retained for deterministic test callers. The
+## production _ready/_process path uses request_visual_resources() and
+## _poll_visual_activation(), so raw atlas decoding never blocks the main
+## thread and ImageTexture creation always happens on it.
 func activate_visual_resources() -> bool:
 	var profile := SummonVisualRegistryScript.profile(summon_id)
+	return _activate_profile(profile)
+
+
+func _activate_profile(profile: Dictionary) -> bool:
 	if profile.is_empty():
 		return false
 	_animation_resources = profile
@@ -1063,3 +1160,35 @@ func _draw() -> void:
 		),
 		Color(0.22, 0.72, 0.25)
 	)
+	var buff_hints := _buff_hint_lines()
+	if not buff_hints.is_empty():
+		var font := ThemeDB.fallback_font
+		var hint_y := _health_bar_y + BUFF_HINT_OFFSET_Y
+		for line: String in buff_hints:
+			var line_width := font.get_string_size(
+				line,
+				HORIZONTAL_ALIGNMENT_LEFT,
+				-1.0,
+				BUFF_HINT_FONT_SIZE
+			).x
+			var hint_origin := Vector2(-line_width * 0.5, hint_y)
+			draw_string_outline(
+				font,
+				hint_origin,
+				line,
+				HORIZONTAL_ALIGNMENT_LEFT,
+				line_width,
+				BUFF_HINT_FONT_SIZE,
+				3,
+				Color(0.0, 0.0, 0.0, 0.85)
+			)
+			draw_string(
+				font,
+				hint_origin,
+				line,
+				HORIZONTAL_ALIGNMENT_LEFT,
+				line_width,
+				BUFF_HINT_FONT_SIZE,
+				Color(0.95, 0.95, 0.72)
+			)
+			hint_y += BUFF_HINT_LINE_SPACING
