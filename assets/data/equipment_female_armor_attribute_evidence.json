@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.attribute.female_armor_correction.evidence.v1",
+  "authority": "explicit_user_task_correction",
+  "authorization": {
+    "originalPath": "user_authorized_task/2026-08-10-equipment-foundation-audit",
+    "canonicalStatement": "2026-08-10 HardCore equipment correction: itemIds 117,119,121,123,125,127,129,131,133,141,143,145 are female armor; equipment_attribute_master is missing them; genderRestriction must be female; Crystal server_data is excluded; preserve all existing user-authored attributes.",
+    "evidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9"
+  },
+  "preCorrectionInputs": {
+    "primaryMaster": {
+      "path": "assets/data/equipment_attribute_master.json",
+      "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC",
+      "recordCount": 163,
+      "recordsCanonicalSha256": "FB299521AF752683C9B9A45A6FDCC4D3478E87BCC2A6A960EB21E79F53FF4204",
+      "preservationRule": "post-correction records excluding the 12 target IDs must have this exact canonical SHA256"
+    },
+    "sourcePriorityPolicy": {
+      "path": "assets/data/source_priority_policy.json",
+      "sha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D",
+      "lane": "equipment_attributes",
+      "primaryDistribution": "project.hardcore.equipment_attribute_master.v2",
+      "eligibleAuxiliarySources": [],
+      "crystalServerDataExcludedFields": [
+        "equipment_attributes",
+        "equipment_requirements",
+        "equipment_job_affinity",
+        "equipment_gender_restrictions",
+        "equipment_hand_weight",
+        "equipment_wear_weight"
+      ]
+    },
+    "runtimeCompatibilityCatalog": {
+      "path": "assets/data/vanilla_176/items.json",
+      "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1",
+      "authority": "identity_and_compatibility_only_not_equipment_attribute_source"
+    }
+  },
+  "fieldEvidenceProfile": {
+    "itemId": ["user_authorized_task"],
+    "name": ["runtime_identity", "exact_item_supporting_reference"],
+    "category": ["user_authorized_task", "exact_item_supporting_reference"],
+    "genderRestriction": ["user_authorized_task"],
+    "jobAffinity": ["paired_primary", "runtime_identity"],
+    "jobLock": ["paired_primary"],
+    "requirementType": ["paired_primary", "exact_item_supporting_reference"],
+    "requirementValue": ["paired_primary", "exact_item_supporting_reference"],
+    "legacyNeed": ["paired_primary", "requirement_compatibility_mapping"],
+    "legacyNeedLevel": ["paired_primary", "exact_item_supporting_reference"],
+    "weightRequirementType": ["paired_primary"],
+    "weightRequirementValue": ["paired_primary", "exact_item_supporting_reference"],
+    "weight": ["paired_primary", "exact_item_supporting_reference"],
+    "durability": ["paired_primary", "exact_item_supporting_reference"],
+    "rollPolicy": ["paired_primary"],
+    "stats": ["paired_primary", "exact_item_supporting_reference"],
+    "warnings": ["paired_primary"]
+  },
+  "records": {
+    "117": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=117", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 116, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=116", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=117", "name": "布衣(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=117", "contentSha256": "B2F2F52050B48E7D3494AA277BA16F345AA9A1E78BE50D6E6453BC6B5ED3FCC5", "observed": {"name": "布衣(女)", "category": "盔甲", "weight": 5, "durability": 5, "ac": [0, 2], "mac": [0, 1], "requirement": ["level", 1]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 116, "supportingReferenceContentSha256": "B2F2F52050B48E7D3494AA277BA16F345AA9A1E78BE50D6E6453BC6B5ED3FCC5"},
+      "fallbackEvidence": []
+    },
+    "119": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=119", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 118, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=118", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=119", "name": "轻型盔甲(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=119", "contentSha256": "D4410B409055B2522FC7D7C5A26AB9304FE8AFA55FB9A600AC02581043D7DA02", "observed": {"name": "轻型盔甲(女)", "category": "盔甲", "weight": 8, "durability": 8, "ac": [3, 3], "mac": [1, 2], "requirement": ["level", 11]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 118, "supportingReferenceContentSha256": "D4410B409055B2522FC7D7C5A26AB9304FE8AFA55FB9A600AC02581043D7DA02"},
+      "fallbackEvidence": []
+    },
+    "121": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=121", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 120, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=120", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=121", "name": "中型盔甲(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=121", "contentSha256": "4A58FECD02464BC971B44D4ADEA5CFA82D8CDF13C48402124DE3BF98479E07E7", "observed": {"name": "中型盔甲(女)", "category": "盔甲", "weight": 12, "durability": 12, "ac": [3, 5], "mac": [1, 2], "requirement": ["level", 16]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 120, "supportingReferenceContentSha256": "4A58FECD02464BC971B44D4ADEA5CFA82D8CDF13C48402124DE3BF98479E07E7"},
+      "fallbackEvidence": []
+    },
+    "123": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=123", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 122, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=122", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=123", "name": "重盔甲(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=123", "contentSha256": "51AE458D7274E83EBC1BBBD6ED7802CC225FFBC95D37921E7ED1EB19990A7341", "observed": {"name": "重盔甲(女)", "category": "盔甲", "weight": 23, "durability": 25, "ac": [4, 7], "mac": [2, 3], "requirement": ["level", 22]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 122, "supportingReferenceContentSha256": "51AE458D7274E83EBC1BBBD6ED7802CC225FFBC95D37921E7ED1EB19990A7341"},
+      "fallbackEvidence": []
+    },
+    "125": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=125", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 124, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=124", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=125", "name": "魔法长袍(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=125", "contentSha256": "13EBA11F4A524BA74A3FA9CFCA058E232E7EA3FA8BE80F680011C88E76604C69", "observed": {"name": "魔法长袍(女)", "category": "盔甲", "weight": 12, "durability": 20, "mc": [0, 2], "ac": [3, 5], "mac": [3, 4], "requirement": ["level", 22]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 124, "supportingReferenceContentSha256": "13EBA11F4A524BA74A3FA9CFCA058E232E7EA3FA8BE80F680011C88E76604C69"},
+      "fallbackEvidence": []
+    },
+    "127": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=127", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 126, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=126", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=127", "name": "灵魂战衣(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=127", "contentSha256": "01B0D2EA548A7907899A5E716B53E6874521AFEB25909B586CCEDCFEC5D359EC", "observed": {"name": "灵魂战衣(女)", "category": "盔甲", "weight": 15, "durability": 20, "sc": [0, 2], "ac": [3, 6], "mac": [3, 3], "requirement": ["level", 22]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 126, "supportingReferenceContentSha256": "01B0D2EA548A7907899A5E716B53E6874521AFEB25909B586CCEDCFEC5D359EC"},
+      "fallbackEvidence": []
+    },
+    "129": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=129", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 128, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=128", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=129", "name": "战神盔甲(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=129", "contentSha256": "33BB54B97C8BD472D7DA5CB6971ECCCD55E0F21B95D0170624FBA4C70E552DD9", "observed": {"name": "战神盔甲(女)", "category": "盔甲", "weight": 45, "durability": 30, "ac": [5, 9], "mac": [3, 5], "requirement": ["max_dc", 46]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 128, "supportingReferenceContentSha256": "33BB54B97C8BD472D7DA5CB6971ECCCD55E0F21B95D0170624FBA4C70E552DD9"},
+      "fallbackEvidence": []
+    },
+    "131": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=131", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 130, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=130", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=131", "name": "恶魔长袍(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=131", "contentSha256": "13C09D492BCED1CBA3E2261184BF30CBA5F876B0EFF06AE771F194B0FB0EC4AC", "observed": {"name": "恶魔长袍(女)", "category": "盔甲", "weight": 19, "durability": 25, "mc": [1, 4], "ac": [4, 7], "mac": [3, 4], "requirement": ["max_mc", 28]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 130, "supportingReferenceContentSha256": "13C09D492BCED1CBA3E2261184BF30CBA5F876B0EFF06AE771F194B0FB0EC4AC"},
+      "fallbackEvidence": []
+    },
+    "133": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=133", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 132, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=132", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=133", "name": "幽灵战衣(女)"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=133", "contentSha256": "963C94027E8B1E41F2112372BF53B629E6D690BAFE54BFEDFE24FB93850332C2", "observed": {"name": "幽灵战衣(女)", "category": "盔甲", "weight": 26, "durability": 28, "sc": [1, 4], "ac": [4, 7], "mac": [3, 4], "requirement": ["max_sc", 27]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 132, "supportingReferenceContentSha256": "963C94027E8B1E41F2112372BF53B629E6D690BAFE54BFEDFE24FB93850332C2"},
+      "fallbackEvidence": []
+    },
+    "141": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=141", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 140, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=140", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=141", "name": "圣战宝甲"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=141", "contentSha256": "685627F1E872ED25BAB5C6F99DF1C381B76638D79AAC96846C485E825447903C", "observed": {"name": "圣战宝甲", "category": "盔甲", "weight": 62, "durability": 35, "dc": [1, 2], "ac": [5, 12], "mac": [4, 7], "requirement": ["level", 40]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 140, "supportingReferenceContentSha256": "685627F1E872ED25BAB5C6F99DF1C381B76638D79AAC96846C485E825447903C"},
+      "fallbackEvidence": []
+    },
+    "143": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=143", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 142, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=142", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=143", "name": "霓裳羽衣"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=143", "contentSha256": "EB925422275A6EB9C5599DCAC7529FFBDDDB71E8D30A2FBB4F40FE5F28A3396D", "observed": {"name": "霓裳羽衣", "category": "盔甲", "weight": 21, "durability": 26, "mc": [2, 5], "ac": [4, 9], "mac": [4, 6], "requirement": ["level", 40]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 142, "supportingReferenceContentSha256": "EB925422275A6EB9C5599DCAC7529FFBDDDB71E8D30A2FBB4F40FE5F28A3396D"},
+      "fallbackEvidence": []
+    },
+    "145": {
+      "primaryMissingEvidence": {"path": "assets/data/equipment_attribute_master.json", "sha256": "62AD49F8A53834E17D7C3B4523136BC7C73DA52086C9DD8C3AB8487D8A22EFAC", "query": "itemId=145", "result": "missing"},
+      "auxiliarySearchEvidence": {"policyPath": "assets/data/source_priority_policy.json", "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D", "eligibleAuxiliarySources": [], "result": "no_eligible_auxiliary", "crystalServerDataExcluded": true},
+      "pairedPrimary": {"itemId": 144, "path": "assets/data/equipment_attribute_master.json", "recordKey": "legacy-v1:itemId=144", "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98"},
+      "runtimeIdentity": {"path": "assets/data/vanilla_176/items.json", "sha256": "1FD9C2E613ABD5CCA5812F42FDA35E259F9359DFFB6F44F64C206643B4DF70D1", "recordKey": "itemId=145", "name": "天师长袍"},
+      "supportingReference": {"url": "https://www.21cq.com/mir/View.aspx?id=145", "contentSha256": "FD1A01303B2DF64B34A6A2CFFFFF4C1F015951A240822E165E336CD98B328442", "observed": {"name": "天师长袍", "category": "盔甲", "weight": 37, "durability": 30, "sc": [2, 5], "ac": [4, 9], "mac": [4, 6], "requirement": ["level", 40]}},
+      "fieldEvidence": {"profile": "female_armor_pair_v1", "authorizationEvidenceSha256": "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9", "pairedPrimaryItemId": 144, "supportingReferenceContentSha256": "FD1A01303B2DF64B34A6A2CFFFFF4C1F015951A240822E165E336CD98B328442"},
+      "fallbackEvidence": []
+    }
+  }
+}

@@ -2,6 +2,15 @@ extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const MASTER_PATH := "res://assets/data/equipment_attribute_master.json"
+const FEMALE_ARMOR_EVIDENCE_PATH := "res://assets/data/equipment_female_armor_attribute_evidence.json"
+const TASK_CORRECTION_SHA256 := "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9"
+const ARMOR_PAIRS := [
+	[116, 117], [118, 119], [120, 121], [122, 123],
+	[124, 125], [126, 127], [128, 129], [130, 131],
+	[132, 133], [140, 141], [142, 143], [144, 145],
+]
+
+var _equipment_changed_count := 0
 
 
 func _ready() -> void:
@@ -25,9 +34,10 @@ func _run() -> void:
 	assert(master.get("sourceTier", "") == "primary" and master.get("fallbackEvidence", []) == [])
 	assert(master.get("sourceKind", "") == "explicit_user_primary_override")
 	assert(master.get("blankOverridePolicy", "") == "preserve_existing_value")
-	assert(master.get("records", []).size() == 163)
+	assert(master.get("records", []).size() == 175)
 	assert(int(master.get("scope", {}).get("weaponRecords", 0)) == 37)
 	assert(int(master.get("scope", {}).get("maleArmorRecords", 0)) == 12)
+	assert(int(master.get("scope", {}).get("femaleArmorRecords", 0)) == 12)
 	assert(int(master.get("scope", {}).get("workbookOverrideRecords", 0)) == 114)
 	assert(int(master.get("scope", {}).get("helmetRecords", 0)) == 12)
 	assert(int(master.get("scope", {}).get("necklaceRecords", 0)) == 32)
@@ -109,6 +119,26 @@ func _run() -> void:
 		assert(armor.get("genderRestriction", "") == "male")
 		assert(armor.get("weightRequirementType", "") == "wear")
 		assert(EquipmentRulesScript.required_gender(armor) == "男")
+	for pair: Array in ARMOR_PAIRS:
+		var male: Dictionary = by_id.get(int(pair[0]), {})
+		var female: Dictionary = by_id.get(int(pair[1]), {})
+		assert(female.get("genderRestriction", "") == "female")
+		assert(EquipmentRulesScript.required_gender(female) == "女")
+		assert(female.get("source", {}).get("sourceKind", "") == "explicit_user_task_correction")
+		assert(female.get("source", {}).get("evidenceSha256", "") == TASK_CORRECTION_SHA256)
+		assert(female.get("source", {}).get("fallbackEvidence", []) == [])
+		assert(int(female.get("source", {}).get("pairedPrimaryItemId", -1)) == int(pair[0]))
+		assert(female.get("source", {}).get("auxiliarySearchEvidence", {}).get("result", "") == "no_eligible_auxiliary")
+		assert(bool(female.get("source", {}).get("auxiliarySearchEvidence", {}).get("crystalServerDataExcluded", false)))
+		for field: String in [
+			"category", "jobAffinity", "jobLock", "requirementType",
+			"requirementValue", "legacyNeed", "legacyNeedLevel",
+			"weightRequirementType", "weightRequirementValue", "weight",
+			"durability", "rollPolicy", "stats", "warnings",
+		]:
+			assert(female.get(field) == male.get(field), "%d/%d字段%s未保持成对primary值" % [int(pair[0]), int(pair[1]), field])
+	_run_armor_gender_gate_table(by_id)
+	_assert_production_gender_gate_precedes_visual_resolution()
 	for weapon_id: int in range(80, 116):
 		var weapon: Dictionary = by_id.get(weapon_id, {})
 		assert(weapon.get("weightRequirementType", "") == "hand")
@@ -154,5 +184,77 @@ func _run() -> void:
 	assert(by_id[225].get("setId", "") == "prayer_set")
 	assert(by_id[225].get("specialEffectId", "") == "prayer_pet_rebellion")
 	assert(by_id[196].get("review", {}).get("status", "") == "低置信待确认")
-	print("EQUIPMENT_ATTRIBUTE_MASTER_PASS：163条唯一主表、114条工作簿覆盖、单位换算和审核状态正常")
+	var evidence := _load_json(FEMALE_ARMOR_EVIDENCE_PATH)
+	assert(evidence.get("authorization", {}).get("evidenceSha256", "") == TASK_CORRECTION_SHA256)
+	assert(evidence.get("preCorrectionInputs", {}).get("sourcePriorityPolicy", {}).get("eligibleAuxiliarySources", ["unexpected"]) == [])
+	assert(evidence.get("records", {}).size() == 12)
+	print("EQUIPMENT_ATTRIBUTE_MASTER_PASS：175条唯一主表、12对盔甲性别门禁、114条工作簿覆盖正常")
 	get_tree().quit(0)
+
+
+func _run_armor_gender_gate_table(by_id: Dictionary) -> void:
+	var visual_resolution_count := 0
+	if not PlayerState.equipment_changed.is_connected(_on_equipment_changed):
+		PlayerState.equipment_changed.connect(_on_equipment_changed)
+	PlayerState.test_mode = true
+	for pair: Array in ARMOR_PAIRS:
+		for case: Array in [[int(pair[0]), "男", "女"], [int(pair[1]), "女", "男"]]:
+			var item: Dictionary = by_id.get(int(case[0]), {})
+			assert(EquipmentRulesScript.requirement_error(item, 99, {
+				"attack_max": 999,
+				"magic_max": 999,
+				"tao_max": 999,
+			}).is_empty(), "%d在满足条件后仍不可穿" % int(case[0]))
+			assert(int(item.get("weight", 0)) <= EquipmentRulesScript.max_wear_weight("战士", 99))
+			_prepare_actor_for_armor(str(case[1]))
+			PlayerState.add_item(str(item.get("name", "")))
+			var correct_index := _inventory_index(str(item.get("name", "")))
+			var correct_signal_count := _equipment_changed_count
+			assert(PlayerState.equip_inventory_index(correct_index).begins_with("已装备"), "%d应允许正确性别穿戴" % int(case[0]))
+			assert(_equipment_changed_count == correct_signal_count + 1, "%d正确穿戴后必须触发外观刷新信号" % int(case[0]))
+			visual_resolution_count += 1
+			_prepare_actor_for_armor(str(case[2]))
+			PlayerState.add_item(str(item.get("name", "")))
+			var wrong_index := _inventory_index(str(item.get("name", "")))
+			var wrong_signal_count := _equipment_changed_count
+			assert(PlayerState.equip_inventory_index(wrong_index) == "该装备仅限%s性角色" % str(case[1]), "%d必须拒绝错误性别" % int(case[0]))
+			assert(_equipment_changed_count == wrong_signal_count, "%d错误性别必须在外观刷新信号前拒绝" % int(case[0]))
+	assert(visual_resolution_count == 24, "24件男女甲都必须在正确性别门禁后进入外观解析")
+
+
+func _prepare_actor_for_armor(actor_gender: String) -> void:
+	PlayerState.reset_progress()
+	PlayerState.level = 99
+	PlayerState.profession = "战士"
+	PlayerState.gender = actor_gender
+	PlayerState.recalculate_stats()
+	PlayerState.computed_stats["attack_max"] = 999
+	PlayerState.computed_stats["magic_max"] = 999
+	PlayerState.computed_stats["tao_max"] = 999
+
+
+func _inventory_index(item_name: String) -> int:
+	for index: int in range(PlayerState.inventory.size()):
+		if str(PlayerState.inventory[index].get("name", "")) == item_name:
+			return index
+	return -1
+
+
+func _on_equipment_changed() -> void:
+	_equipment_changed_count += 1
+
+
+func _assert_production_gender_gate_precedes_visual_resolution() -> void:
+	var player_state_file := FileAccess.open("res://scripts/player_state.gd", FileAccess.READ)
+	assert(player_state_file != null)
+	var player_state_source := player_state_file.get_as_text()
+	var equip_start := player_state_source.find("func equip_inventory_index")
+	var gender_guard := player_state_source.find("var required_gender := EquipmentRulesScript.required_gender(item)", equip_start)
+	var mismatch_return := player_state_source.find("return \"该装备仅限%s性角色\"", gender_guard)
+	var equipment_changed_emit := player_state_source.find("equipment_changed.emit()", mismatch_return)
+	assert(equip_start >= 0 and gender_guard > equip_start)
+	assert(mismatch_return > gender_guard and equipment_changed_emit > mismatch_return)
+	var player_visual_file := FileAccess.open("res://scripts/player_visual.gd", FileAccess.READ)
+	assert(player_visual_file != null)
+	var player_visual_source := player_visual_file.get_as_text()
+	assert(player_visual_source.find("PlayerState.equipment_changed.connect(_refresh_equipment_visuals)") >= 0)

@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Build the equipment attribute master from explicit user primary evidence.
 
-The first 49 weapon/armor records retain their original explicit-user evidence.
-The 114 accessory/headwear records are imported from the user-authorized review
-workbook. XLSX is parsed with the standard ZIP/XML format so the audit has no
-third-party dependency and reads every worksheet cell before accepting data.
+The first 49 weapon/male-armor records retain their original explicit-user
+evidence. Twelve female armor counterparts are restored by the explicit
+2026-08-10 correction contract after the exact IDs were proven absent from the
+primary master. The 114 accessory/headwear records are imported from the
+user-authorized review workbook. Crystal server_data is never consulted for
+equipment attributes.
+XLSX is parsed with the standard ZIP/XML format so the audit has no third-party
+dependency and reads every worksheet cell before accepting data.
 """
 
 from __future__ import annotations
@@ -24,6 +28,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 ITEMS_PATH = ROOT / "assets/data/vanilla_176/items.json"
 MASTER_PATH = ROOT / "assets/data/equipment_attribute_master.json"
+FEMALE_ARMOR_EVIDENCE_PATH = (
+    ROOT / "assets/data/equipment_female_armor_attribute_evidence.json"
+)
 
 CONTRACT_ID = "equipment.attribute.master.v2"
 DISTRIBUTION = "project.hardcore.equipment_attribute_master.v2"
@@ -38,12 +45,32 @@ WORKBOOK_EVIDENCE_SHA256 = (
 WORKBOOK_BASENAME = "HardCore_装备系统核对清单_审核修正版_2026-07-25.xlsx"
 WORKBOOK_SOURCE_PATH = f"user_authorized_attachment/{WORKBOOK_BASENAME}"
 WORKBOOK_SHEET = "修正后装备主表"
+FEMALE_ARMOR_CORRECTION_SOURCE_PATH = (
+    "user_authorized_task/2026-08-10-equipment-foundation-audit"
+)
+FEMALE_ARMOR_CORRECTION_EVIDENCE_SHA256 = (
+    "59FCA9C1F220041E3C6D144FC58AFA6CDE9FC02A785EE7FF8381E9136E5E0DA9"
+)
 ROLL_POLICY = "legacy_clamp_negative_span"
 MAGIC_EVASION_PERCENT_PER_POINT = 10
 
 WEAPON_IDS = set(range(80, 116)) | {223}
 ARMOR_IDS = {116, 118, 120, 122, 124, 126, 128, 130, 132, 140, 142, 144}
 LEGACY_TARGET_IDS = WEAPON_IDS | ARMOR_IDS
+FEMALE_ARMOR_PAIRS = {
+    117: 116,
+    119: 118,
+    121: 120,
+    123: 122,
+    125: 124,
+    127: 126,
+    129: 128,
+    131: 130,
+    133: 132,
+    141: 140,
+    143: 142,
+    145: 144,
+}
 ACCESSORY_CATEGORIES = {"头盔", "项链", "手镯", "戒指"}
 NEED_BY_TYPE = {"level": 0, "max_dc": 1, "max_mc": 2, "max_sc": 3}
 PROFESSION_TO_AFFINITY = {
@@ -384,6 +411,101 @@ def migrate_legacy_record(record: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def corrected_female_armor_record(
+    female_item_id: int,
+    male_master: dict[str, Any],
+    runtime_identity: dict[str, Any],
+    evidence_record: dict[str, Any],
+) -> dict[str, Any]:
+    """Restore one user-authorized female counterpart without guessing values.
+
+    Numeric attributes and requirements are copied only from the paired primary
+    record and are independently corroborated by the exact supporting page.
+    Runtime items.json supplies identity compatibility only. The evidence
+    contract records the pre-correction primary miss and that no auxiliary is
+    eligible in the lane.
+    """
+    result = deepcopy(male_master)
+    result["itemId"] = female_item_id
+    result["name"] = str(runtime_identity["name"])
+    result["genderRestriction"] = "female"
+    result["source"] = source_record(
+        evidence_sha256=FEMALE_ARMOR_CORRECTION_EVIDENCE_SHA256,
+        original_path=FEMALE_ARMOR_CORRECTION_SOURCE_PATH,
+        source_kind="explicit_user_task_correction",
+        record_key=f"authorized-female-armor:itemId={female_item_id}",
+    )
+    result["source"].update(
+        {
+            "evidenceContract": (
+                "res://assets/data/equipment_female_armor_attribute_evidence.json"
+                f"#/records/{female_item_id}"
+            ),
+            "pairedPrimaryItemId": int(male_master["itemId"]),
+            "pairedPrimaryEvidenceSha256": str(
+                male_master["source"]["evidenceSha256"]
+            ),
+            "supportingReferenceUrl": str(evidence_record["supportingReference"]["url"]),
+            "supportingReferenceContentSha256": str(
+                evidence_record["supportingReference"]["contentSha256"]
+            ),
+            "primaryMissingEvidence": deepcopy(
+                evidence_record["primaryMissingEvidence"]
+            ),
+            "auxiliarySearchEvidence": deepcopy(
+                evidence_record["auxiliarySearchEvidence"]
+            ),
+            "fieldEvidence": deepcopy(evidence_record["fieldEvidence"]),
+        }
+    )
+    result["supportingReferences"] = [
+        {
+            "url": str(evidence_record["supportingReference"]["url"]),
+            "role": "supporting_reference",
+            "contentSha256": str(
+                evidence_record["supportingReference"]["contentSha256"]
+            ),
+        },
+        {
+            "url": str(runtime_identity.get("secondarySourceUrl", "")),
+            "role": "supporting_reference",
+        },
+    ]
+    return result
+
+
+def build_female_armor_records(
+    previous_master: dict[str, Any],
+    catalog_by_id: dict[int, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    evidence = json.loads(FEMALE_ARMOR_EVIDENCE_PATH.read_text(encoding="utf-8"))
+    evidence_by_id = {
+        int(item_id): record for item_id, record in evidence["records"].items()
+    }
+    master_by_id = {
+        int(record["itemId"]): record for record in previous_master["records"]
+    }
+    if set(evidence_by_id) != set(FEMALE_ARMOR_PAIRS):
+        raise RuntimeError("female armor evidence must cover the exact 12 target IDs")
+    restored: list[dict[str, Any]] = []
+    for female_item_id, male_item_id in FEMALE_ARMOR_PAIRS.items():
+        male_master = master_by_id.get(male_item_id)
+        runtime_identity = catalog_by_id.get(female_item_id)
+        if male_master is None or runtime_identity is None:
+            raise RuntimeError(
+                f"female armor pair {male_item_id}/{female_item_id} is incomplete"
+            )
+        restored.append(
+            corrected_female_armor_record(
+                female_item_id,
+                male_master,
+                runtime_identity,
+                evidence_by_id[female_item_id],
+            )
+        )
+    return restored
+
+
 def preserved_value(
     workbook_record: dict[str, Any],
     workbook_column: str,
@@ -692,6 +814,7 @@ def build(
         raise RuntimeError("expected the existing 49 weapon/armor master records")
 
     catalog_by_id = {int(record["itemId"]): record for record in catalog["records"]}
+    female_armor_records = build_female_armor_records(previous_master, catalog_by_id)
     import_counters = {
         "blankCellsIgnored": 0,
         "existingValuesPreservedFromBlank": 0,
@@ -707,10 +830,10 @@ def build(
             reviewed_master_record(workbook_record, catalog_record, import_counters)
         )
 
-    master_records = legacy_records + reviewed_records
+    master_records = legacy_records + female_armor_records + reviewed_records
     ids = [int(record["itemId"]) for record in master_records]
-    if len(ids) != 163 or len(set(ids)) != 163:
-        raise RuntimeError("master output must contain 163 unique itemIds")
+    if len(ids) != 175 or len(set(ids)) != 175:
+        raise RuntimeError("master output must contain 175 unique itemIds")
     master_by_id = {int(record["itemId"]): record for record in master_records}
     for catalog_record in catalog["records"]:
         master_record = master_by_id.get(int(catalog_record["itemId"]))
@@ -730,6 +853,7 @@ def build(
         {
             "masterRecordCount": len(master_records),
             "legacyWeaponArmorCount": len(legacy_records),
+            "femaleArmorCorrectionCount": len(female_armor_records),
             "explicitWorkbookOverrideCount": len(reviewed_records),
             "reviewStatusCounts": dict(review_status_counts),
             "accessoryWarningCounts": dict(accessory_warning_counts),
@@ -797,6 +921,20 @@ def build(
                 "previousDistribution": LEGACY_DISTRIBUTION,
             },
             {
+                "sourceKind": "explicit_user_task_correction",
+                "evidenceSha256": FEMALE_ARMOR_CORRECTION_EVIDENCE_SHA256,
+                "originalPath": FEMALE_ARMOR_CORRECTION_SOURCE_PATH,
+                "recordCount": 12,
+                "evidenceContract": (
+                    "res://assets/data/equipment_female_armor_attribute_evidence.json"
+                ),
+                "rule": (
+                    "female gender is directly authorized; all other attribute "
+                    "fields copy the paired primary record and are corroborated "
+                    "by the exact item supporting page"
+                ),
+            },
+            {
                 "sourceKind": "explicit_user_primary_override",
                 "evidenceSha256": WORKBOOK_EVIDENCE_SHA256,
                 "originalPath": WORKBOOK_SOURCE_PATH,
@@ -821,12 +959,13 @@ def build(
         "scope": {
             "weaponRecords": 37,
             "maleArmorRecords": 12,
+            "femaleArmorRecords": 12,
             "helmetRecords": 12,
             "necklaceRecords": 32,
             "braceletRecords": 31,
             "ringRecords": 39,
             "workbookOverrideRecords": 114,
-            "totalRecords": 163,
+            "totalRecords": 175,
         },
         "supportingReferencePolicy": {
             "workbook": "explicit_user_primary_override",
@@ -854,13 +993,83 @@ def build(
     return audit
 
 
+def apply_female_armor_correction_only() -> dict[str, Any]:
+    """Apply the bounded 12-record correction without rebuilding the workbook."""
+    master = json.loads(MASTER_PATH.read_text(encoding="utf-8"))
+    catalog = json.loads(ITEMS_PATH.read_text(encoding="utf-8"))
+    existing_ids = {int(record["itemId"]) for record in master["records"]}
+    target_ids = set(FEMALE_ARMOR_PAIRS)
+    existing_targets = existing_ids & target_ids
+    if existing_targets and existing_targets != target_ids:
+        raise RuntimeError("female armor correction is partially applied")
+    catalog_by_id = {int(record["itemId"]): record for record in catalog["records"]}
+    female_records = build_female_armor_records(master, catalog_by_id)
+    legacy_records = [
+        record
+        for record in master["records"]
+        if int(record["itemId"]) in LEGACY_TARGET_IDS
+    ]
+    other_records = [
+        record
+        for record in master["records"]
+        if int(record["itemId"]) not in LEGACY_TARGET_IDS
+        and int(record["itemId"]) not in target_ids
+    ]
+    master["records"] = legacy_records + female_records + other_records
+    if len(master["records"]) != 175:
+        raise RuntimeError("bounded correction must produce exactly 175 records")
+    correction_source = {
+        "sourceKind": "explicit_user_task_correction",
+        "evidenceSha256": FEMALE_ARMOR_CORRECTION_EVIDENCE_SHA256,
+        "originalPath": FEMALE_ARMOR_CORRECTION_SOURCE_PATH,
+        "recordCount": 12,
+        "evidenceContract": (
+            "res://assets/data/equipment_female_armor_attribute_evidence.json"
+        ),
+        "rule": (
+            "female gender is directly authorized; all other attribute fields "
+            "copy the paired primary record and are corroborated by the exact "
+            "item supporting page"
+        ),
+    }
+    master["sources"] = [
+        source
+        for source in master["sources"]
+        if source.get("sourceKind") != "explicit_user_task_correction"
+    ]
+    master["sources"].insert(1, correction_source)
+    master["scope"]["femaleArmorRecords"] = 12
+    master["scope"]["totalRecords"] = 175
+    for female_record in female_records:
+        sync_runtime_record(
+            catalog_by_id[int(female_record["itemId"])], female_record
+        )
+    MASTER_PATH.write_text(
+        json.dumps(master, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    ITEMS_PATH.write_text(
+        json.dumps(catalog, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "femaleArmorCorrectionCount": len(female_records),
+        "masterRecordCount": len(master["records"]),
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--workbook",
         type=Path,
-        required=True,
+        required=False,
         help="User-authorized reviewed XLSX source",
+    )
+    parser.add_argument(
+        "--female-armor-correction-only",
+        action="store_true",
+        help="Apply only the bounded 12-record female armor correction",
     )
     parser.add_argument(
         "--check-only",
@@ -877,6 +1086,16 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    if args.female_armor_correction_only:
+        audit = apply_female_armor_correction_only()
+        print(
+            "EQUIPMENT_FEMALE_ARMOR_CORRECTION_PASS: "
+            f"{audit['femaleArmorCorrectionCount']} restored records, "
+            f"{audit['masterRecordCount']} total records"
+        )
+        return
+    if args.workbook is None:
+        raise RuntimeError("--workbook is required unless correction-only is selected")
     audit = build(
         args.workbook.resolve(),
         write_outputs=not args.check_only,
