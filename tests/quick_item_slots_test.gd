@@ -80,6 +80,33 @@ func _run() -> void:
 	assert(PlayerState.item_count("基本剑术") == 0, "技能书未消耗")
 	assert(PlayerState.is_skill_learned("基本剑术"), "技能书未学习")
 
+	# 技能书失败路径：等级不足 / 已满级 均不消耗且 ok=false
+	PlayerState.reset_progress(false)
+	PlayerState.level = 1
+	PlayerState.profession = "战士"
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("基本剑术", 1)
+	assert(bool(PlayerState.assign_quick_item_slot(0, "基本剑术").get("ok", false)), "等级不足样本绑定失败")
+	var level_gated := PlayerState.use_quick_item_slot(0, "基本剑术")
+	assert(not bool(level_gated.get("ok", false)), "等级不足不应使用成功")
+	assert(PlayerState.item_count("基本剑术") == 1, "等级不足时错误消耗技能书")
+	assert(not PlayerState.is_skill_learned("基本剑术"), "等级不足时不应学习技能")
+
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("基本剑术", 4)
+	for used_count in range(4):
+		var rank_use := PlayerState.use_quick_item_slot(0, "基本剑术")
+		assert(
+			bool(rank_use.get("ok", false)),
+			"第%d本升级使用失败：%s" % [used_count + 1, str(rank_use.get("message", ""))]
+		)
+	assert(PlayerState.item_count("基本剑术") == 1, "满级前技能书数量错误")
+	var max_use := PlayerState.use_quick_item_slot(0, "基本剑术")
+	assert(not bool(max_use.get("ok", false)), "满级后仍应使用失败")
+	assert(str(max_use.get("message", "")).contains("最高等级"), "满级拒绝提示不正确")
+	assert(PlayerState.item_count("基本剑术") == 1, "满级拒绝时错误消耗技能书")
+
 	# v9 持久化 + 旧档缺失/畸形输入迁移
 	PlayerState.active_profile_id = "quick_item_slots_test"
 	PlayerState.character_name = "快捷物品测试"
@@ -103,17 +130,30 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	assert(PlayerState.quick_item_slots == ["太阳水", "", "回城卷", ""], "v9 重载丢失快捷物品绑定")
 
-	saved["quick_item_slots"] = ["太阳水", 123, null, "多余"]
+	saved["quick_item_slots"] = ["太阳水", 123, null, "未知物品"]
+	saved["inventory"] = []
 	saved["save_version"] = 8
 	saved.erase("equip_cycle_cursor")
 	assert(PlayerState._write_json_atomic(save_path, saved), "无法写入旧档样本")
 	PlayerState.test_mode = false
 	PlayerState.load_save()
 	PlayerState.test_mode = true
-	assert(PlayerState.quick_item_slots == ["太阳水", "123", "", ""], "非四格输入未规范化为 4 字符串")
+	assert(PlayerState.quick_item_slots == ["太阳水", "", "", ""], "数字/null/未知字符串未归一为空")
+	assert(PlayerState.item_count("太阳水") == 0, "畸形样本背包应清空")
 	assert(
 		PlayerState.equip_cycle_cursor == {"戒指": "左戒指", "手镯": "左手镯"},
 		"旧档缺失轮换 cursor 未安全默认"
+	)
+	saved["quick_item_slots"] = ["回城卷", "太阳水", "未知物品", 42]
+	saved["inventory"] = []
+	saved["save_version"] = 8
+	assert(PlayerState._write_json_atomic(save_path, saved), "无法写入零库存样本")
+	PlayerState.test_mode = false
+	PlayerState.load_save()
+	PlayerState.test_mode = true
+	assert(
+		PlayerState.quick_item_slots == ["回城卷", "太阳水", "", ""],
+		"合法候选零库存未保留或未知/数字未清空"
 	)
 	var rewritten: Dictionary = PlayerState._read_json(save_path)
 	assert(int(rewritten.get("save_version", 0)) == PlayerState.SAVE_VERSION, "旧档未重写为 v9")

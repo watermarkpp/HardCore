@@ -469,7 +469,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	equipment[slot] = inventory_record.duplicate(true)
 	recalculate_stats()
 	if not explicit_slot:
-		_advance_equip_cycle_cursor(category)
+		_advance_equip_cycle_cursor(category, slot)
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
@@ -1041,14 +1041,14 @@ func _normalized_equip_cycle_cursor(saved_value: Variant) -> Dictionary:
 	return result
 
 
-func _advance_equip_cycle_cursor(category: String) -> void:
+func _advance_equip_cycle_cursor(category: String, equipped_slot: String) -> void:
 	var slots := _slots_for_category(category)
 	if slots.size() < 2:
 		return
-	var current_index := slots.find(str(equip_cycle_cursor.get(category, slots[0])))
-	if current_index < 0:
-		current_index = 0
-	equip_cycle_cursor[category] = slots[(current_index + 1) % slots.size()]
+	var equipped_index := slots.find(equipped_slot)
+	if equipped_index < 0:
+		return
+	equip_cycle_cursor[category] = slots[(equipped_index + 1) % slots.size()]
 
 
 func _empty_equipment() -> Dictionary:
@@ -1535,10 +1535,11 @@ func use_quick_item_slot(index: int, expected_item_name := "") -> Dictionary:
 			"reason": "no_inventory",
 			"message": "背包中没有%s" % bound_name,
 		}
+	var before_count := item_count(bound_name)
 	var use_result := use_inventory_index(inventory_index)
+	var ok := item_count(bound_name) < before_count
 	var item := GameData.get_item_record(bound_name)
 	var kind := str(item.get("kind", ""))
-	var ok := _quick_item_use_result_success(use_result)
 	return {
 		"ok": ok,
 		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
@@ -1554,7 +1555,9 @@ func _normalized_quick_item_slots(value: Variant) -> Array[String]:
 	var result: Array[String] = []
 	var source: Array = value if value is Array else []
 	for index in range(QUICK_ITEM_SLOT_COUNT):
-		result.append(str(source[index]) if index < source.size() else "")
+		var slot_value: Variant = source[index] if index < source.size() else null
+		var item_name := str(slot_value) if slot_value is String else ""
+		result.append(item_name if is_quick_item_candidate(item_name) else "")
 	return result
 
 
@@ -1563,14 +1566,6 @@ func _inventory_index_by_item_name(item_name: String) -> int:
 		if str(inventory[index].get("name", "")) == item_name:
 			return index
 	return -1
-
-
-func _quick_item_use_result_success(use_result: String) -> bool:
-	return (
-		use_result.begins_with("使用：")
-		or use_result.begins_with("已学会：")
-		or use_result.begins_with("技能提升：")
-	)
 
 
 func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
