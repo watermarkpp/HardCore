@@ -65,6 +65,7 @@ $ProjectileExpected = @(
 
 $SafeLogoutSuite = 'safe_logout_critical'
 $SafeLogoutExpected = @(
+    'tests/safe_logout_atomic_recovery_test.tscn',
     'tests/safe_logout_home_resolution_failure_test.tscn',
     'tests/safe_logout_character_select_guard_test.tscn',
     'tests/safe_logout_exit_guard_test.tscn',

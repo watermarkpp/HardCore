@@ -149,6 +149,7 @@ $Suites = @{
         'tests/vertical_slice_loop_test.tscn'
     )
     equipment = @(
+		'tests/hud_authority_integration_test.tscn',
 		'tests/complete_item_system_test.tscn',
 		'tests/inventory_equipment_ui_test.tscn',
 		'tests/multi_character_save_test.tscn',
@@ -192,6 +193,7 @@ $Suites.caster_visual_critical = @(
 )
 
 $Suites.taoist_critical = @(
+	'tests/canonical_summon_integration_test.tscn',
     'tests/skills/taoist_summon_projectile_async_visual_test.tscn',
     'tests/skills/taoist_summon_projectile_origin_anchor_test.tscn',
     'tests/skills/taoist_summon_projectile_stealth_buff_visual_test.tscn',
@@ -258,6 +260,7 @@ $Suites.projectile_spatial_critical = @(
 )
 
 $Suites.safe_logout_critical = @(
+	'tests/safe_logout_atomic_recovery_test.tscn',
     'tests/safe_logout_home_resolution_failure_test.tscn',
     'tests/safe_logout_character_select_guard_test.tscn',
     'tests/safe_logout_exit_guard_test.tscn',
