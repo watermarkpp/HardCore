@@ -1,6 +1,10 @@
 class_name SkillCastRequest
 extends RefCounted
 
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+
 const CONTRACT_ID := "skills.cast_request.v1"
 
 
@@ -17,7 +21,9 @@ static func create(
 	return {
 		"contract_id": CONTRACT_ID,
 		"skill_id": skill_id,
-		"rank": clampi(rank, 0, 3),
+		## Effective rank = base rank + equipment bonus. No gameplay cap; only
+		## the policy's technical anti-abuse sanity cap applies.
+		"rank": SkillRankResolverScript.safe_effective_rank(rank),
 		"caster_level": maxi(1, caster_level),
 		"origin_tile": origin_tile,
 		"facing": facing,
@@ -36,6 +42,10 @@ static func validate(request: Variant) -> Dictionary:
 		return {"valid": false, "reason": "request_contract"}
 	if str(request.get("skill_id", "")).is_empty():
 		return {"valid": false, "reason": "skill_id"}
-	if int(request.get("rank", -1)) < 0 or int(request.get("rank", -1)) > 3:
+	var request_rank := int(request.get("rank", -1))
+	if (
+		request_rank < 0
+		or request_rank > SkillRankResolverScript.technical_effective_rank_cap()
+	):
 		return {"valid": false, "reason": "rank"}
 	return {"valid": true, "reason": ""}

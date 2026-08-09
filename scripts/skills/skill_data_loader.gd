@@ -4,12 +4,18 @@ extends RefCounted
 const CombatUnitLegacyAdapter := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+const SkillRankExtensionPolicyScript := preload(
+	"res://scripts/skills/skill_rank_extension_policy.gd"
+)
 
 const SOURCE_OF_TRUTH_PATH := "res://assets/data/vanilla_176/skills_source_of_truth_v1.json"
 const PACKAGE_ROOT := "res://assets/data/vanilla_176/skill_source_package_v1_0_1"
 const PACKAGE_MANIFEST_PATH := PACKAGE_ROOT + "/manifest.json"
 const PACKAGE_TEST_MANIFEST_PATH := PACKAGE_ROOT + "/mir2_176_skill_test_manifest_v1.json"
-const SOURCE_OF_TRUTH_SHA256 := "883359e2cf191a196f749653067f2030130fc11fd59a033a89ee557cab7607e2"
+const SOURCE_OF_TRUTH_SHA256 := "6c4a4b447787eb6ad9f9f44c6c24cf6ca23c952673797226c66541008b25c516"
 const PACKAGE_ZIP_SHA256 := "2dac78d285dff8d5f1ba36a8b83e0e8f11c70b76ace15a34ee7fbfb802862a22"
 const RULESET_ID := "cn_mir2_176_vanilla_project_canonical_v1"
 const CLASS_COUNTS := {"warrior": 6, "wizard": 14, "taoist": 13}
@@ -107,16 +113,44 @@ static func display_name(skill_name_or_id: String) -> String:
 
 static func rank_record(skill_name_or_id: String, rank: int) -> Dictionary:
 	var definition := skill(skill_name_or_id)
-	var safe_rank := clampi(rank, 0, 3)
+	var safe_rank := SkillRankResolverScript.safe_effective_rank(rank)
 	var ranks: Array = definition.get("ranks", [])
-	if safe_rank >= ranks.size():
+	if ranks.is_empty():
 		return {}
-	var result: Dictionary = ranks[safe_rank].duplicate(true)
+	var result: Dictionary = {}
+	if safe_rank < ranks.size():
+		result = (ranks[safe_rank] as Dictionary).duplicate(true)
+	else:
+		result = (ranks[ranks.size() - 1] as Dictionary).duplicate(true)
+		result["rank"] = safe_rank
 	result["skill_id"] = str(definition.get("skill_id", ""))
 	result["display_name"] = str(definition.get("display_name", ""))
 	result["class"] = str(definition.get("class", ""))
 	var mp_costs: Array = definition.get("mp_cost_by_rank", [])
-	result["mp_cost"] = int(mp_costs[safe_rank]) if safe_rank < mp_costs.size() else 0
+	if safe_rank < ranks.size():
+		result["mp_cost"] = (
+			int(mp_costs[safe_rank]) if safe_rank < mp_costs.size() else 0
+		)
+		return result
+	## Effective ranks above the frozen 0..3 base follow the explicit
+	## skills.rank_extension.v1 policy (linear last-delta for MP, constant
+	## player-level requirement for base learning). Never a generic clamp.
+	result["mp_cost"] = (
+		maxi(
+			0,
+			SkillRankResolverScript.linear_int(mp_costs, safe_rank)
+		)
+		if not mp_costs.is_empty()
+		else 0
+	)
+	result["player_level_required"] = int(
+		ranks[ranks.size() - 1].get("player_level_required", 1)
+	)
+	result.erase("proficiency_required_to_reach_rank")
+	result["rank_extension"] = {
+		"contract_id": SkillRankExtensionPolicyScript.CONTRACT_ID,
+		"semantics": ["linear_last_delta", "constant_player_level_requirement"],
+	}
 	return result
 
 

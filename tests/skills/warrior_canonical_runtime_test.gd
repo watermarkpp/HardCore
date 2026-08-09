@@ -24,7 +24,7 @@ func _ready() -> void:
 	)
 	var passive := _execute("warrior.basic_swordsmanship", 3, {"valid_melee_swing": true})
 	assert(passive.accepted and passive.effects[0].value == 9)
-	assert(passive.proficiency_event == "valid_basic_melee_attack_resolved")
+	assert(passive.proficiency_event.is_empty())
 	var slaying := _execute("warrior.slaying_swordsmanship", 3, {
 		"has_target": true,
 		"valid_melee_swing": true,
@@ -33,7 +33,7 @@ func _ready() -> void:
 	assert(slaying.effects[0].flat_damage_bonus == 8)
 	assert(slaying.effects[0].flat_accuracy_bonus == 3)
 	assert(slaying.effects[0].proc_denominator == 4 and slaying.effects[0].proc_roll == 0)
-	assert(slaying.proficiency_event == "successful_slaying_proc_on_valid_melee_swing")
+	assert(slaying.proficiency_event.is_empty())
 	var slaying_definition := Loader.skill("warrior.slaying_swordsmanship")
 	assert(slaying_definition.ranks.map(func(rank: Dictionary) -> int:
 		return int(rank.player_level_required)
@@ -69,7 +69,7 @@ func _ready() -> void:
 				_body_damage(body_mode, 100) + layered_proc.flat_damage_bonus_after_body_formula
 				== _expected_proc_damage(body_mode, rank)
 			)
-			assert(layered_proc.proficiency_events.size() == 2)
+			assert(layered_proc.proficiency_events.is_empty())
 			var no_proc := Router.resolve_warrior_melee_modifiers({
 				"body_mode": body_mode,
 				"basic_sword_learned": true,
@@ -83,7 +83,7 @@ func _ready() -> void:
 			assert(no_proc.slaying_proc_roll == denominators[rank] - 1)
 			assert(no_proc.flat_damage_bonus_after_body_formula == 0)
 			assert(no_proc.flat_accuracy_bonus == 9 + rank, "未触发攻杀仍必须保留常驻准确")
-			assert(no_proc.proficiency_events.size() == 1)
+			assert(no_proc.proficiency_events.is_empty())
 	_verify_multi_target_shared_action_layer("thrust")
 	_verify_multi_target_shared_action_layer("half_moon")
 	var empty_swing := Router.resolve_warrior_melee_modifiers({
@@ -140,10 +140,10 @@ func _ready() -> void:
 	assert(fire.effects[0].damage_multiplier == 2.6)
 	assert(not fire.effects[0].auto_cast and fire.proficiency_event.is_empty())
 	var consumed_fire := _execute("warrior.fire_sword", 3, {"charge_consumed": true}, 100)
-	assert(consumed_fire.proficiency_event == "charged_fire_sword_is_consumed_by_valid_melee_attack")
+	assert(consumed_fire.proficiency_event.is_empty())
 	assert(consumed_fire.timing.body_cast_ms == 600)
 	assert(consumed_fire.timing.cooldown_ms == 8000)
-	print("WARRIOR_CANONICAL_RUNTIME_PASS: six skills, deterministic atomic wild rush, active fire charge and proficiency events")
+	print("WARRIOR_CANONICAL_RUNTIME_PASS: six skills, deterministic atomic wild rush, active fire charge, proficiency disabled")
 	get_tree().quit()
 
 

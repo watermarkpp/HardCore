@@ -2,24 +2,27 @@ class_name WizardSkillRuntime
 extends RefCounted
 
 const Formula := preload("res://scripts/skills/formulas/mir2_skill_formula.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 
 
 static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted) -> Dictionary:
 	var skill_id := str(definition.get("skill_id", ""))
-	var rank := clampi(int(request.get("rank", 0)), 0, 3)
+	var rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
 	var caster_level := int(request.get("caster_level", 1))
 	var context: Dictionary = request.get("target_context", {})
 	var mechanics: Dictionary = definition.get("mechanics", {})
-	var trigger := str(definition.get("proficiency_trigger", {}).get("event", ""))
 	var plan := _base_plan(definition)
 	match skill_id:
 		"wizard.fireball", "wizard.great_fireball":
 			plan.effects = [_damage_effect(definition, request, rng, "projectile_damage")]
-			plan.proficiency_event = trigger
 		"wizard.repulsion_ring":
-			_resolve_repulsion(plan, rank, caster_level, context, rng, trigger)
+			_resolve_repulsion(plan, rank, caster_level, context, rng)
 		"wizard.temptation_light":
-			_resolve_temptation(plan, rank, caster_level, context, rng, trigger)
+			_resolve_temptation(plan, rank, caster_level, context, rng)
 		"wizard.hellfire":
 			var hellfire := _damage_effect(definition, request, rng, "line_damage")
 			hellfire["effect_length_gu"] = float(definition.get("geometry", {}).get("effect_length_gu", 5.0))
@@ -42,7 +45,6 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			hellfire["channeled"] = false
 			hellfire["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [hellfire]
-			plan.proficiency_event = trigger
 		"wizard.lightning":
 			var lightning := _damage_effect(definition, request, rng, "targeted_sky_strike")
 			var race_multiplier := 1.5 if bool(context.get("target_is_undead", false)) else 1.0
@@ -50,15 +52,13 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			lightning["raw_power_after_race"] = roundi(float(lightning.raw_power) * race_multiplier)
 			lightning["horizontal_projectile"] = false
 			plan.effects = [lightning]
-			plan.proficiency_event = trigger
 		"wizard.teleport":
-			_resolve_teleport(plan, rank, context, rng, trigger)
+			_resolve_teleport(plan, rank, context, rng)
 		"wizard.exploding_flame", "wizard.ice_storm":
 			var area := _damage_effect(definition, request, rng, "area_damage")
 			area["width_grid_steps"] = int(definition.get("geometry", {}).get("width_grid_steps", 3.0))
 			area["height_grid_steps"] = int(definition.get("geometry", {}).get("height_grid_steps", 3.0))
 			plan.effects = [area]
-			plan.proficiency_event = trigger
 		"wizard.fire_wall":
 			var primary_stat_roll := int(context.get("primary_stat_roll", 0))
 			var field := _damage_effect(definition, request, rng, "persistent_ground_damage")
@@ -72,7 +72,6 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			)
 			field["stacking_policy"] = str(mechanics.get("stacking_policy", ""))
 			plan.effects = [field]
-			plan.proficiency_event = trigger
 		"wizard.laser":
 			var laser := _damage_effect(definition, request, rng, "piercing_line_damage")
 			laser["effect_length_gu"] = float(definition.get("geometry", {}).get("effect_length_gu", 8.0))
@@ -83,28 +82,31 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			)
 			laser["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [laser]
-			plan.proficiency_event = trigger
 		"wizard.hell_lightning":
 			var ring := _damage_effect(definition, request, rng, "caster_centered_area_damage")
 			ring["radius_grid_steps"] = int(definition.get("geometry", {}).get("radius_grid_steps", 2.0))
 			ring["exclude_center"] = true
 			ring["maximum_targets"] = int(mechanics.get("maximum_targets", 24))
 			plan.effects = [ring]
-			plan.proficiency_event = trigger
 		"wizard.magic_shield":
 			var mc_roll := int(context.get("primary_stat_roll", 0))
 			plan.effects = [{
 				"type": "refreshable_damage_reduction_buff",
 				"buff_id": "buff.wizard.magic_shield",
 				"duration_seconds": maxi(1, Formula.get_power(rng, rank, mc_roll + 15)),
-				"damage_reduction": float(mechanics.get("damage_reduction_by_rank", [0.15, 0.3, 0.45, 0.6])[rank]),
+				"damage_reduction": SkillRankResolverScript.damage_reduction(
+					mechanics.get(
+						"damage_reduction_by_rank",
+						[0.15, 0.3, 0.45, 0.6]
+					),
+					rank
+				),
 				"affected_damage_types": mechanics.get("affected_damage_types", []).duplicate(),
 				"stack_count_max": 1,
 				"stacking_policy": "refresh_same_buff_no_stacking",
 			}]
-			plan.proficiency_event = trigger
 		"wizard.holy_word":
-			_resolve_holy_word(plan, rank, caster_level, context, rng, trigger)
+			_resolve_holy_word(plan, rank, caster_level, context, rng)
 		_:
 			return _reject(plan, "unknown_wizard_skill")
 	return plan
@@ -138,8 +140,7 @@ static func _resolve_repulsion(
 	rank: int,
 	caster_level: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	var resolutions: Array[Dictionary] = []
 	var displaced_count := 0
@@ -154,10 +155,8 @@ static func _resolve_repulsion(
 			and not bool(target.get("is_boss", false))
 			and not bool(target.get("immovable", false))
 		)
-		var probability := clampf(
-			(6.0 + 3.0 * float(rank) + float(caster_level - target_level)) / 20.0,
-			0.0,
-			1.0
+		var probability := SkillRankResolverScript.capped_probability(
+			(6.0 + 3.0 * float(rank) + float(caster_level - target_level)) / 20.0
 		)
 		var roll_success: bool = (
 			eligible
@@ -185,8 +184,6 @@ static func _resolve_repulsion(
 	plan.effects = resolutions
 	plan.effect_success = displaced_count > 0
 	plan.resource_commit = true
-	if displaced_count > 0:
-		plan.proficiency_event = trigger
 
 
 static func _resolve_temptation(
@@ -194,8 +191,7 @@ static func _resolve_temptation(
 	rank: int,
 	caster_level: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	if (
 		not bool(context.get("target_is_monster", false))
@@ -208,7 +204,10 @@ static func _resolve_temptation(
 	var outcome := forced_outcome
 	var duration_seconds := 0
 	if outcome.is_empty():
-		if int(rng.call("pascal_random_exclusive", 4 - rank)) != 0:
+		if int(rng.call(
+			"pascal_random_exclusive",
+			maxi(0, 4 - rank)
+		)) != 0:
 			outcome = "no_effect"
 		elif int(rng.call("pascal_random_exclusive", 2)) != 0:
 			outcome = "rooted"
@@ -266,37 +265,46 @@ static func _resolve_temptation(
 		"duration_seconds": duration_seconds,
 		"pet_group": "wizard_tamed_pet",
 		"pet_make_level": rank,
-		"pet_cap": rank + 2,
+		"pet_cap": SkillRankResolverScript.linear_int([2, 3, 4, 5], rank),
 		"server_authoritative": true,
 	}
 	if outcome == "tamed":
 		effect["loyalty_duration_ms"] = (
-			int(rng.call("pascal_random_exclusive", caster_level * 2)) + rank * 20 + 20
+			int(rng.call("pascal_random_exclusive", caster_level * 2))
+			+ SkillRankResolverScript.linear_int([20, 40, 60, 80], rank)
 		) * 60 * 1000
-		effect["walk_speed_cap_ms"] = 1500 - rank * 200
-		effect["attack_interval_cap_ms"] = 2000 - rank * 200
+		## Tamed-pet timing caps are timing semantics: they stay at the
+		## base-max values and never change with effective rank.
+		effect["walk_speed_cap_ms"] = SkillRankResolverScript.timing_int(
+			[1500, 1300, 1100, 900],
+			rank
+		)
+		effect["attack_interval_cap_ms"] = SkillRankResolverScript.timing_int(
+			[2000, 1800, 1600, 1400],
+			rank
+		)
 	plan.effects = [effect]
 	plan.effect_success = state_changed
-	if state_changed:
-		plan.proficiency_event = trigger
 
 
 static func _resolve_teleport(
 	plan: Dictionary,
 	rank: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	if not bool(context.get("map_allows_random_teleport", true)):
 		_reject(plan, "map_disallows_random_teleport")
 		return
-	var probability := float(2 * rank + 4) / 11.0
+	var probability := SkillRankResolverScript.capped_probability(
+		float(2 * rank + 4) / 11.0
+	)
 	var roll_success: bool = (
 		not bool(context.get("force_failure", false))
 		and (
 			bool(context.get("force_success", false))
-			or int(rng.call("pascal_random_exclusive", 11)) < 2 * rank + 4
+			or int(rng.call("pascal_random_exclusive", 11))
+				< SkillRankResolverScript.capped_roll_bound(2 * rank + 4, 11)
 		)
 	)
 	var destination_valid := bool(context.get("destination_valid", true))
@@ -311,7 +319,6 @@ static func _resolve_teleport(
 		"remain_in_place_on_failure": true,
 	}]
 	plan.effect_success = moved
-	plan.proficiency_event = trigger
 
 
 static func _resolve_holy_word(
@@ -319,8 +326,7 @@ static func _resolve_holy_word(
 	rank: int,
 	caster_level: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	if (
 		not bool(context.get("target_is_monster", false))
@@ -335,10 +341,8 @@ static func _resolve_holy_word(
 		bool(context.get("force_success", false))
 		or int(rng.call("pascal_random_exclusive", 2)) + caster_level - 1 > target_level
 	)
-	var probability := clampf(
-		(7.0 * float(rank) + 15.0 + float(caster_level - target_level)) / 100.0,
-		0.0,
-		1.0
+	var probability := SkillRankResolverScript.capped_probability(
+		(7.0 * float(rank) + 15.0 + float(caster_level - target_level)) / 100.0
 	)
 	var killed: bool = (
 		precheck
@@ -356,8 +360,6 @@ static func _resolve_holy_word(
 		"normal_damage": 0,
 	}]
 	plan.effect_success = killed
-	if killed:
-		plan.proficiency_event = trigger
 
 
 static func _base_plan(definition: Dictionary) -> Dictionary:

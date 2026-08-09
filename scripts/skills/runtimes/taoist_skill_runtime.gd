@@ -2,49 +2,67 @@ class_name TaoistSkillRuntime
 extends RefCounted
 
 const Formula := preload("res://scripts/skills/formulas/mir2_skill_formula.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+const TaoistCombatMathScript := preload(
+	"res://scripts/taoist_combat_math.gd"
+)
 
 
 static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted) -> Dictionary:
 	var skill_id := str(definition.get("skill_id", ""))
-	var rank := clampi(int(request.get("rank", 0)), 0, 3)
+	var rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
 	var context: Dictionary = request.get("target_context", {})
 	var mechanics: Dictionary = definition.get("mechanics", {})
-	var trigger := str(definition.get("proficiency_trigger", {}).get("event", ""))
 	var plan := _base_plan(definition)
 	match skill_id:
 		"taoist.healing":
-			_resolve_single_heal(plan, definition, request, rng, trigger)
+			_resolve_single_heal(plan, definition, request, rng)
 		"taoist.spiritual_warfare":
 			plan.effects = [{
 				"type": "passive_stat_modifier",
 				"stat": "accuracy",
-				"value": int(mechanics.get("flat_bonus_by_rank", [0, 0, 0, 0])[rank]),
+				"value": SkillRankResolverScript.linear_int(
+					mechanics.get("flat_bonus_by_rank", [0, 0, 0, 0]),
+					rank
+				),
 				"affects": mechanics.get("affects", []).duplicate(),
 			}]
-			if bool(context.get("valid_melee_swing", false)):
-				plan.proficiency_event = trigger
 		"taoist.poison":
-			_resolve_poison(plan, rank, request, rng, trigger)
+			_resolve_poison(plan, rank, request, rng)
 		"taoist.soul_fire_talisman":
 			plan.effects = [_spirit_damage_effect(definition, request, rng)]
-			plan.proficiency_event = trigger
 		"taoist.summon_skeleton":
-			_resolve_main_pet(plan, rank, context, trigger, "skeleton", 1 + 2 * rank)
+			_resolve_main_pet(
+				plan,
+				rank,
+				context,
+				"skeleton",
+				TaoistCombatMathScript.maximum_summon_pet_level(rank)
+			)
 		"taoist.invisibility":
 			plan.effects = [_stealth_effect(rank, context, rng, "buff.taoist.invisibility")]
-			plan.proficiency_event = trigger
 		"taoist.mass_invisibility":
-			_resolve_mass_invisibility(plan, rank, context, rng, trigger)
+			_resolve_mass_invisibility(plan, rank, context, rng)
 		"taoist.magic_defense", "taoist.defense":
-			_resolve_defence_buff(plan, rank, context, rng, mechanics, trigger)
+			_resolve_defence_buff(plan, rank, context, rng, mechanics)
 		"taoist.revelation":
-			_resolve_revelation(plan, rank, context, rng, trigger)
+			_resolve_revelation(plan, rank, context, rng)
 		"taoist.entrapment":
-			_resolve_entrapment(plan, rank, context, rng, trigger)
+			_resolve_entrapment(plan, rank, context, rng)
 		"taoist.mass_healing":
-			_resolve_mass_heal(plan, definition, request, rng, trigger)
+			_resolve_mass_heal(plan, definition, request, rng)
 		"taoist.summon_divine_beast":
-			_resolve_main_pet(plan, rank, context, trigger, "divine_beast", 1 + 2 * rank)
+			_resolve_main_pet(
+				plan,
+				rank,
+				context,
+				"divine_beast",
+				TaoistCombatMathScript.maximum_summon_pet_level(rank)
+			)
 		_:
 			return _reject(plan, "unknown_taoist_skill")
 	return plan
@@ -54,8 +72,7 @@ static func _resolve_single_heal(
 	plan: Dictionary,
 	definition: Dictionary,
 	request: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	var context: Dictionary = request.get("target_context", {})
 	if bool(context.get("hostile", false)):
@@ -72,8 +89,6 @@ static func _resolve_single_heal(
 		"negative_damage": false,
 	}]
 	plan.effect_success = actual_restored > 0
-	if actual_restored > 0:
-		plan.proficiency_event = trigger
 
 
 static func _raw_heal(definition: Dictionary, request: Dictionary, rng: RefCounted) -> int:
@@ -91,8 +106,7 @@ static func _resolve_poison(
 	plan: Dictionary,
 	rank: int,
 	request: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	var context: Dictionary = request.get("target_context", {})
 	var sc_roll := int(context.get("primary_stat_roll", 0))
@@ -106,7 +120,10 @@ static func _resolve_poison(
 			)) <= 6
 		)
 	)
-	var duration_seconds: int = int([8, 12, 16, 20][rank]) + int(floor(float(sc_roll) / 5.0))
+	var duration_seconds: int = SkillRankResolverScript.linear_int(
+		[8, 12, 16, 20],
+		rank
+	) + int(floor(float(sc_roll) / 5.0))
 	var resist_bound := maxi(1, int(context.get("target_poison_resist", 0)) + 7)
 	var apply_probability := float(mini(7, resist_bound)) / float(resist_bound)
 	var green_power := Formula.get_power13(rng, rank, 40) + 2 * sc_roll
@@ -136,8 +153,6 @@ static func _resolve_poison(
 	plan.effects = [green_effect, red_effect]
 	plan.effect_success = not resisted
 	plan.resource_commit = true
-	if not resisted:
-		plan.proficiency_event = trigger
 
 
 static func _spirit_damage_effect(
@@ -165,7 +180,6 @@ static func _resolve_main_pet(
 	plan: Dictionary,
 	rank: int,
 	context: Dictionary,
-	trigger: String,
 	template_id: String,
 	max_pet_level: int
 ) -> void:
@@ -194,12 +208,11 @@ static func _resolve_main_pet(
 		"pet_group": "taoist_main_pet",
 		"group_limit": 1,
 		"template_id": template_id,
-		"initial_pet_level": rank,
+		"initial_pet_level": SkillRankResolverScript.summon_pet_level(rank),
 		"max_pet_level": max_pet_level,
 		"skill_rank_is_pet_level": false,
 		"delete_existing": false,
 	}]
-	plan.proficiency_event = trigger
 
 
 static func _stealth_effect(
@@ -227,8 +240,7 @@ static func _resolve_mass_invisibility(
 	plan: Dictionary,
 	rank: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	var affected_count := maxi(0, int(context.get("affected_friendly_count", 0)))
 	var target_instance_ids := _instance_ids(
@@ -243,8 +255,6 @@ static func _resolve_mass_invisibility(
 	plan.effects = [effect]
 	plan.effect_success = affected_count > 0
 	plan.resource_commit = affected_count > 0
-	if affected_count > 0:
-		plan.proficiency_event = trigger
 
 
 static func _resolve_defence_buff(
@@ -252,8 +262,7 @@ static func _resolve_defence_buff(
 	rank: int,
 	context: Dictionary,
 	rng: RefCounted,
-	mechanics: Dictionary,
-	trigger: String
+	mechanics: Dictionary
 ) -> void:
 	var targets: Array = context.get("friendly_targets", [])
 	var effects: Array[Dictionary] = []
@@ -278,21 +287,20 @@ static func _resolve_defence_buff(
 	plan.effects = effects
 	plan.effect_success = not effects.is_empty()
 	plan.resource_commit = not effects.is_empty()
-	if not effects.is_empty():
-		plan.proficiency_event = trigger
 
 
 static func _resolve_revelation(
 	plan: Dictionary,
 	rank: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	if not bool(context.get("target_is_living", true)):
 		_reject(plan, "living_revelation_target_required")
 		return
-	var probability := clampf(float(rank + 4) / 6.0, 0.0, 1.0)
+	var probability := SkillRankResolverScript.capped_probability(
+		float(rank + 4) / 6.0
+	)
 	var revealed: bool = (
 		bool(context.get("force_success", false))
 		or int(rng.call("pascal_random_exclusive", 6)) <= rank + 3
@@ -312,16 +320,13 @@ static func _resolve_revelation(
 		"target_stat_modification": false,
 	}]
 	plan.effect_success = revealed
-	if revealed:
-		plan.proficiency_event = trigger
 
 
 static func _resolve_entrapment(
 	plan: Dictionary,
 	rank: int,
 	context: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	var candidates: Array = context.get("targets", [])
 	var trapped_count := 0
@@ -357,16 +362,13 @@ static func _resolve_entrapment(
 	}]
 	plan.effect_success = trapped_count > 0
 	plan.resource_commit = trapped_count > 0
-	if trapped_count > 0:
-		plan.proficiency_event = trigger
 
 
 static func _resolve_mass_heal(
 	plan: Dictionary,
 	definition: Dictionary,
 	request: Dictionary,
-	rng: RefCounted,
-	trigger: String
+	rng: RefCounted
 ) -> void:
 	var context: Dictionary = request.get("target_context", {})
 	var raw_heal := _raw_heal(definition, request, rng)
@@ -402,8 +404,6 @@ static func _resolve_mass_heal(
 		"negative_damage": false,
 	}]
 	plan.effect_success = total_restored > 0
-	if total_restored > 0:
-		plan.proficiency_event = trigger
 
 
 static func _instance_ids(raw_ids: Variant) -> Array[int]:

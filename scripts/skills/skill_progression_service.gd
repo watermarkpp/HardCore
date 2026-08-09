@@ -2,8 +2,17 @@ class_name SkillProgressionService
 extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 
-const STATE_CONTRACT_ID := "skills.progression.cn_mir2_176.v1"
+## HardCore skill-growth contract v2: base ranks are learned/upgraded with
+## skill books (0..3 terminal), and effective cast rank = base_rank +
+## equipment bonus. Proficiency is fully removed: it is never produced,
+## upgraded, persisted or converted. v1 snapshots still load (rank kept as
+## base_rank, current_proficiency discarded).
+const STATE_CONTRACT_ID := "skills.progression.hardcore.v2"
+const LEGACY_STATE_CONTRACT_ID := "skills.progression.cn_mir2_176.v1"
 
 var _progress: Dictionary = {}
 
@@ -12,13 +21,70 @@ func learn(skill_name_or_id: String, player_level: int) -> Dictionary:
 	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
 	var rank_zero := SkillDataLoaderScript.rank_record(skill_id, 0)
 	if rank_zero.is_empty():
-		return {"accepted": false, "reason": "unknown_skill", "skill_id": skill_id}
-	if _progress.has(skill_id):
-		return {"accepted": false, "reason": "already_learned", "skill_id": skill_id}
-	if player_level < int(rank_zero.get("player_level_required", 1)):
-		return {"accepted": false, "reason": "player_level", "skill_id": skill_id}
-	_progress[skill_id] = {"rank": 0, "current_proficiency": 0}
-	return {"accepted": true, "reason": "", "skill_id": skill_id, "rank": 0}
+		return _learn_result(false, "unknown_skill", skill_id, 0, 0, "")
+	var current_rank := int(_progress.get(skill_id, {}).get("base_rank", -1))
+	if current_rank < 0:
+		var required_level := int(rank_zero.get("player_level_required", 1))
+		if player_level < required_level:
+			return _learn_result(
+				false,
+				"player_level",
+				skill_id,
+				0,
+				required_level,
+				"level_requirement"
+			)
+		_set_base_rank(skill_id, 0)
+		return _learn_result(true, "", skill_id, 0, required_level, "learned")
+	if current_rank >= 3:
+		return _learn_result(
+			false,
+			"max_rank",
+			skill_id,
+			3,
+			int(rank_zero.get("player_level_required", 1)),
+			"max"
+		)
+	var next_rank := current_rank + 1
+	var next_rank_data := SkillDataLoaderScript.rank_record(skill_id, next_rank)
+	if next_rank_data.is_empty():
+		return _learn_result(
+			false,
+			"rank_data_missing",
+			skill_id,
+			current_rank,
+			0,
+			""
+		)
+	var required_level := int(next_rank_data.get("player_level_required", 1))
+	if player_level < required_level:
+		return _learn_result(
+			false,
+			"player_level",
+			skill_id,
+			current_rank,
+			required_level,
+			"level_requirement"
+		)
+	_set_base_rank(skill_id, next_rank)
+	return _learn_result(
+		true,
+		"",
+		skill_id,
+		next_rank,
+		required_level,
+		"upgraded"
+	)
+
+
+func effective_rank(skill_name_or_id: String, equipment_bonus := 0) -> int:
+	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	if not _progress.has(skill_id):
+		## Equipment can never enable an unlearned skill.
+		return 0
+	var base_rank := int(_progress[skill_id].get("base_rank", 0))
+	var bonus := maxi(0, int(equipment_bonus))
+	return SkillRankResolverScript.safe_effective_rank(base_rank + bonus)
 
 
 func is_learned(skill_name_or_id: String) -> bool:
@@ -30,54 +96,38 @@ func state(skill_name_or_id: String) -> Dictionary:
 	return _progress.get(skill_id, {}).duplicate(true)
 
 
+## Compatibility no-op for pre-v2 callers: proficiency is disabled and can
+## never grow, upgrade or persist. Returns a clear rejection so callers never
+## consume resources for a proficiency gain.
 func apply_proficiency_event(
 	skill_name_or_id: String,
-	event_id: String,
-	player_level: int,
-	rng: RefCounted
+	_event_id: String,
+	_player_level: int,
+	_rng: RefCounted
 ) -> Dictionary:
 	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
 	if not _progress.has(skill_id):
-		return _event_result(false, "skill_not_learned", skill_id, 0, false)
-	var definition := SkillDataLoaderScript.skill(skill_id)
-	var trigger: Dictionary = definition.get("proficiency_trigger", {})
-	if event_id.is_empty() or event_id != str(trigger.get("event", "")):
-		return _event_result(false, "ineligible_event", skill_id, 0, false)
-	if not rng.has_method("training_gain"):
-		return _event_result(false, "rng_required", skill_id, 0, false)
-	var entry: Dictionary = _progress[skill_id]
-	var rank := clampi(int(entry.get("rank", 0)), 0, 3)
-	if rank >= 3:
-		return _event_result(true, "terminal_rank", skill_id, 0, false)
-	var gain := int(rng.call("training_gain"))
-	if gain < 1 or gain > 3:
-		return _event_result(false, "invalid_rng_gain", skill_id, 0, false)
-	entry["current_proficiency"] = maxi(0, int(entry.get("current_proficiency", 0))) + gain
-	var next_rank_data := SkillDataLoaderScript.rank_record(skill_id, rank + 1)
-	var required_level := int(next_rank_data.get("player_level_required", 1))
-	var required_proficiency := int(next_rank_data.get("proficiency_required_to_reach_rank", 0))
-	var ranked_up := player_level >= required_level and int(entry.current_proficiency) >= required_proficiency
-	if ranked_up:
-		entry["rank"] = rank + 1
-		entry["current_proficiency"] = 0
-	_progress[skill_id] = entry
-	var result := _event_result(true, "", skill_id, gain, ranked_up)
-	result["rank"] = int(entry.rank)
-	result["current_proficiency"] = int(entry.current_proficiency)
-	result["required_player_level"] = required_level
-	result["required_proficiency"] = required_proficiency
-	return result
+		return _no_op_result(skill_id, "skill_not_learned")
+	return _no_op_result(skill_id, "proficiency_disabled")
 
 
 func load_snapshot(value: Variant) -> Dictionary:
 	_progress.clear()
 	var source: Dictionary = {}
 	var migrated_legacy := false
-	if value is Dictionary and str(value.get("contract_id", "")) == STATE_CONTRACT_ID:
-		source = value.get("skills", {})
-	elif value is Dictionary:
-		source = value
-		migrated_legacy = true
+	if value is Dictionary:
+		var contract_id := str(value.get("contract_id", ""))
+		if contract_id == STATE_CONTRACT_ID:
+			source = value.get("skills", {})
+		elif contract_id == LEGACY_STATE_CONTRACT_ID:
+			source = value.get("skills", {})
+			## v1 snapshots are already canonical (stable skill IDs): keep
+			## base_rank and discard proficiency, but do NOT flag legacy sync
+			## that would repopulate the Chinese-name dictionary.
+			migrated_legacy = false
+		else:
+			source = value
+			migrated_legacy = true
 	var rejected: Array[String] = []
 	for raw_key: Variant in source:
 		var skill_id := SkillDataLoaderScript.stable_skill_id(str(raw_key))
@@ -85,17 +135,16 @@ func load_snapshot(value: Variant) -> Dictionary:
 			rejected.append(str(raw_key))
 			continue
 		var raw_entry: Variant = source[raw_key]
-		var rank := 0
-		var proficiency := 0
+		var base_rank := 0
 		if raw_entry is Dictionary:
-			rank = clampi(int(raw_entry.get("rank", 0)), 0, 3)
-			proficiency = maxi(0, int(raw_entry.get("current_proficiency", 0)))
+			base_rank = clampi(
+				int(raw_entry.get("base_rank", raw_entry.get("rank", 0))),
+				0,
+				3
+			)
 		else:
-			rank = clampi(int(raw_entry), 0, 3)
-		_progress[skill_id] = {
-			"rank": rank,
-			"current_proficiency": 0 if migrated_legacy else proficiency,
-		}
+			base_rank = clampi(int(raw_entry), 0, 3)
+		_set_base_rank(skill_id, base_rank)
 	return {
 		"loaded_count": _progress.size(),
 		"rejected": rejected,
@@ -110,11 +159,43 @@ func snapshot() -> Dictionary:
 	}
 
 
-func _event_result(accepted: bool, reason: String, skill_id: String, gain: int, ranked_up: bool) -> Dictionary:
+func _set_base_rank(skill_id: String, base_rank: int) -> void:
+	_progress[skill_id] = {
+		"base_rank": base_rank,
+		## Legacy compatibility alias kept for unmodified pre-v2 readers
+		## (e.g. PlayerState effective_skill_level); never carries proficiency.
+		"rank": base_rank,
+	}
+
+
+func _learn_result(
+	accepted: bool,
+	reason: String,
+	skill_id: String,
+	base_rank: int,
+	required_level: int,
+	outcome: String
+) -> Dictionary:
 	return {
 		"accepted": accepted,
 		"reason": reason,
+		"outcome": outcome,
 		"skill_id": skill_id,
-		"gain": gain,
-		"ranked_up": ranked_up,
+		"base_rank": base_rank,
+		"rank": base_rank,
+		"required_level": required_level,
+	}
+
+
+func _no_op_result(skill_id: String, reason: String) -> Dictionary:
+	var base_rank := int(_progress.get(skill_id, {}).get("base_rank", 0))
+	return {
+		"accepted": false,
+		"reason": reason,
+		"outcome": "proficiency_disabled",
+		"skill_id": skill_id,
+		"gain": 0,
+		"ranked_up": false,
+		"base_rank": base_rank,
+		"rank": base_rank,
 	}

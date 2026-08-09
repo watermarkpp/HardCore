@@ -102,7 +102,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"healing_training_only_if_hp_restored":
 			var restored := _support.execute(skill_id, 3, {"actual_hp_missing": 10})
 			var full := _support.execute(skill_id, 3, {"actual_hp_missing": 0})
-			return not restored.proficiency_event.is_empty() and full.proficiency_event.is_empty()
+			return restored.proficiency_event.is_empty() and full.proficiency_event.is_empty()
 		"spiritual_warfare_accuracy_exact":
 			return _support.rank_effect_values(skill_id, "value") == [0, 3, 5, 8]
 		"spiritual_warfare_never_casts":
@@ -261,7 +261,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"mass_healing_training_only_if_actual_heal":
 			var healed := _support.execute(skill_id, 3, {"friendly_missing_hp": [10]})
 			var full := _support.execute(skill_id, 3, {"friendly_missing_hp": [0]})
-			return not healed.proficiency_event.is_empty() and full.proficiency_event.is_empty()
+			return healed.proficiency_event.is_empty() and full.proficiency_event.is_empty()
 		"mass_healing_not_negative_damage":
 			return not bool(_support.execute(skill_id, 3).effects[0].negative_damage)
 		"summon_divine_beast_consumes_five_amulets_only_on_new_spawn":
