@@ -44,6 +44,7 @@ func _run() -> void:
 	_test_target_centered_release_rejects_lost_lock(game, origin_tile, near_target)
 	_test_footprint_geometry_contact(game, origin_tile)
 	_test_spell_click_hold_and_cancel(game, near_target)
+	_test_busy_hold_retry_preserves_movement_facing(game, near_target)
 	_test_attack_button_bound_spell_uses_same_lifecycle(game, near_target)
 	_test_magic_shield_toggle_and_auto_refresh(game)
 	_test_projectile_exact_gu_range(game)
@@ -330,6 +331,76 @@ func _test_spell_click_hold_and_cancel(game: Node, near_target: EnemyActor) -> v
 		4,
 		&"touch",
 		&"test_cancel"
+	)
+	assert(game._active_skill_inputs.is_empty())
+
+
+func _test_busy_hold_retry_preserves_movement_facing(
+	game: Node,
+	near_target: EnemyActor
+) -> void:
+	_reset_cast_gate(game)
+	game._set_magic_locked_target(near_target, true)
+	game._on_skill_input_started(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 106, 5, &"touch"
+	)
+	var held_key: String = game._skill_input_key(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 106, 5
+	)
+	var held_entry: Dictionary = game._active_skill_inputs[held_key]
+	held_entry["started_at_ms"] = (
+		Time.get_ticks_msec() - game.SKILL_HOLD_REPEAT_THRESHOLD_MS
+	)
+	game._active_skill_inputs[held_key] = held_entry
+
+	var sequence_before: int = game.player._combat_action_sequence
+	var movement_direction := Vector2.LEFT
+	var movement_velocity := Vector2(-96.0, 0.0)
+	game.player.facing = movement_direction
+	game.player.movement_facing = movement_direction
+	game.player.actual_motion_facing = movement_direction
+	game.player.movement_input_active = true
+	game.player.velocity = movement_velocity
+	game.player._movement_visual_lock_timer = 0.0
+	game.player._attack_timer = 0.9
+	game.player._attack_action_timer = 0.0
+	game.player._skill_cooldown_remaining["wizard.fireball"] = 0.9
+	game._skill_input_retry_remaining = 0.0
+	game._process_skill_input_actions(0.05)
+
+	assert(game.player._combat_action_sequence == sequence_before)
+	assert(game.player.facing == movement_direction)
+	assert(game.player.movement_facing == movement_direction)
+	assert(game.player.actual_motion_facing == movement_direction)
+	assert(game.player.movement_input_active)
+	assert(game.player.velocity == movement_velocity)
+
+	game.player._attack_timer = 0.0
+	game._skill_input_retry_remaining = 0.0
+	game._process_skill_input_actions(0.05)
+	assert(
+		game.player._combat_action_sequence == sequence_before,
+		"held cast ignored the skill-specific cooldown gate"
+	)
+	assert(game.player.facing == movement_direction)
+	assert(game.player.movement_facing == movement_direction)
+	assert(game.player.actual_motion_facing == movement_direction)
+	assert(game.player.movement_input_active)
+	assert(game.player.velocity == movement_velocity)
+
+	game.player._skill_cooldown_remaining.clear()
+	game._skill_input_retry_remaining = 0.0
+	game._process_skill_input_actions(0.05)
+	assert(
+		game.player._combat_action_sequence == sequence_before + 1,
+		"held cast did not commit after both release gates reopened"
+	)
+	assert(
+		game.player.facing != movement_direction,
+		"committed held cast did not preserve normal target auto-facing"
+	)
+	game._on_skill_input_ended(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 106, 5, &"touch"
 	)
 	assert(game._active_skill_inputs.is_empty())
 

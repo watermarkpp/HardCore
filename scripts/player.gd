@@ -27,6 +27,13 @@ const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
 	"skills.wizard.magic_shield.absorption_capacity.v1"
 )
 const MAGIC_SHIELD_AUTO_REFRESH_RATIO := 0.20
+const WARRIOR_STATE_SKILL_NAMES := [
+	"基本剑术",
+	"攻杀剑术",
+	"刺杀剑术",
+	"半月弯刀",
+	"烈火剑法",
+]
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -322,19 +329,15 @@ func request_attack_toward(
 	return request_attack(has_combat_target, locked_target_instance_id)
 
 
-func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+# Pure preflight for callers that must not select targets or change facing
+# unless the request can commit immediately.
+func can_request_skill(skill_name: String) -> bool:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
-	var learned_level := PlayerState.effective_skill_level(skill_name)
-	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
-		return _request_warrior_state_skill(skill_name, learned_level)
-	return _request_active_skill(skill_name, locked_target_instance_id)
-
-
-func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
-	var learned_level := PlayerState.effective_skill_level(skill_name)
+	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
+		return true
 	if _attack_timer > 0.0:
 		return false
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
@@ -343,10 +346,29 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if canonical_definition.is_empty():
 		return false
+	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var mp_costs: Array = canonical_definition.get("mp_cost_by_rank", [])
-	var mana_cost := int(mp_costs[clampi(learned_level, 0, 3)]) if not mp_costs.is_empty() else 0
-	if current_mp < mana_cost:
+	var mana_cost := (
+		int(mp_costs[clampi(learned_level, 0, 3)])
+		if not mp_costs.is_empty()
+		else 0
+	)
+	return current_mp >= mana_cost
+
+
+func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+	if not can_request_skill(skill_name):
 		return false
+	var learned_level := PlayerState.effective_skill_level(skill_name)
+	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
+		return _request_warrior_state_skill(skill_name, learned_level)
+	return _request_active_skill(skill_name, locked_target_instance_id)
+
+
+func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+	var learned_level := PlayerState.effective_skill_level(skill_name)
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
 	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target_for_skill(

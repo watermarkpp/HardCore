@@ -3380,6 +3380,10 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		if show_failure:
 			hud.show_message("魔法不足")
 		return &"rejected"
+	if not player.can_request_skill(skill_name):
+		if show_failure:
+			hud.show_message("技能动作或冷却尚未结束")
+		return &"busy"
 	_skill_cast_target = null
 	if stable_skill_id == WILD_RUSH_SKILL_ID:
 		_skill_cast_target = _select_wild_rush_target()
