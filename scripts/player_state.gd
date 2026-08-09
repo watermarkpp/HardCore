@@ -21,7 +21,7 @@ signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 7
+const SAVE_VERSION := 8
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
@@ -32,6 +32,11 @@ const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
+const CANONICAL_MATERIAL_ITEMS := {
+	"grey_powder": "灰色药粉",
+	"yellow_powder": "黄色药粉",
+	"amulet": "护身符",
+}
 const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
 const WORLD_POSITION_CONTRACT_ID := (
 	"save.world_position.screen_px_with_ground_gu.v1"
@@ -474,25 +479,28 @@ func learn_skill(skill_name: String) -> String:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if stable_skill_id.is_empty():
 		return "技能数据不存在"
-	if learned_skills.has(skill_name) or _skill_progression.is_learned(stable_skill_id):
-		return "已经学会%s" % skill_name
 	var skill := GameData.get_skill(skill_name, 0)
 	if skill.is_empty():
 		return "技能数据不存在"
 	var skill_profession := str(skill.get("profession", ""))
 	if not skill_profession.is_empty() and skill_profession != profession:
 		return "%s只能由%s学习" % [skill_name, skill_profession]
-	var required_level := int(skill.get("requiredCharacterLevel", 1))
-	if level < required_level:
-		return "需要人物等级%d" % required_level
 	if not has_item(skill_name):
 		return "背包中缺少《%s》技能书" % skill_name
 	var learn_result: Dictionary = _skill_progression.learn(stable_skill_id, level)
 	if not bool(learn_result.get("accepted", false)):
-		return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
+		match str(learn_result.get("outcome", "")):
+			"max":
+				return "%s已达到最高等级" % skill_name
+			"level_requirement":
+				return "需要人物等级%d" % int(learn_result.get("required_level", 1))
+			_:
+				return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
 	remove_item(skill_name)
-	learned_skills[skill_name] = 0
-	if SkillLoadoutRulesScript.assignment_candidate(stable_skill_id).get(
+	var base_rank := int(learn_result.get("base_rank", 0))
+	learned_skills[skill_name] = base_rank
+	var outcome := str(learn_result.get("outcome", ""))
+	if outcome == "learned" and SkillLoadoutRulesScript.assignment_candidate(stable_skill_id).get(
 		"bindable_to_skill_slot",
 		false
 	):
@@ -506,7 +514,11 @@ func learn_skill(skill_name: String) -> String:
 	skill_progression_changed.emit(_skill_progression.snapshot())
 	profile_changed.emit()
 	_commit_save()
-	return "已学会：%s" % skill_name
+	match outcome:
+		"upgraded":
+			return "技能提升：%s（当前%d级）" % [skill_name, base_rank]
+		_:
+			return "已学会：%s" % skill_name
 
 
 func is_skill_learned(skill_name: String) -> bool:
@@ -711,7 +723,9 @@ func recalculate_stats() -> void:
 		"attack_speed_percent": 0.0,
 		"cast_speed_percent": 0.0,
 		"skill_level_bonuses": {},
+		"skill_level_affix": {},
 	}
+	var skill_level_affix_records: Array = []
 	for slot: String in equipment.keys():
 		var equipped_value: Variant = equipment[slot]
 		var item_name := str(equipped_value.get("name", "")) if equipped_value is Dictionary else str(equipped_value)
@@ -722,6 +736,23 @@ func recalculate_stats() -> void:
 		var item := GameData.get_item(item_name)
 		if item.is_empty():
 			continue
+		## Affix input is an immutable snapshot of the catalog record with the
+		## equipped instance's own modifiers merged in. When the instance
+		## carries a `modifiers` container it is authoritative (full override of
+		## the catalog set), so one item can never contribute the same affixes
+		## twice. Without instance modifiers the catalog set is used unchanged.
+		var affix_input := item.duplicate(true)
+		var instance_modifiers: Variant = (
+			equipped_value.get("modifiers")
+			if equipped_value is Dictionary
+			else null
+		)
+		if instance_modifiers != null:
+			if instance_modifiers is Dictionary or instance_modifiers is Array:
+				affix_input["modifiers"] = instance_modifiers.duplicate(true)
+			else:
+				affix_input["modifiers"] = instance_modifiers
+		skill_level_affix_records.append(affix_input)
 		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
 		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
 		_add_nullable_stat(result, "magic_min", item.get("magicMin", null))
@@ -751,18 +782,11 @@ func recalculate_stats() -> void:
 				CombatResolutionRules.anti_magic_points_from_display_percent(int(item.magicEvasionPercent))
 			)
 		_add_nullable_stat(result, "attack_speed_tier", item.get("attackSpeedTier", null))
-		var modifiers: Variant = item.get("modifiers", {})
+		var modifiers: Variant = affix_input.get("modifiers", null)
 		if modifiers is Array:
 			result = ModifierEffectRuntime.apply_modifiers(result, modifiers, {
 				"profession": profession, "level": level, "slot": slot,
 			})
-			for modifier: Variant in modifiers:
-				if not modifier is Dictionary or str(modifier.get("stat", "")) != "skill_level":
-					continue
-				var skill_name := str(modifier.get("skill", modifier.get("target", "all")))
-				var skill_levels: Dictionary = result.get("skill_level_bonuses", {})
-				skill_levels[skill_name] = int(skill_levels.get(skill_name, 0)) + int(modifier.get("value", 0))
-				result["skill_level_bonuses"] = skill_levels
 		if modifiers is Dictionary:
 			result["critical_chance"] = float(result.get("critical_chance", 0.0)) + float(modifiers.get("criticalChance", 0.0))
 			result["critical_damage_multiplier"] = float(result.get("critical_damage_multiplier", 1.5)) + float(modifiers.get("criticalDamageBonus", 0.0))
@@ -771,10 +795,6 @@ func recalculate_stats() -> void:
 			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + int(modifiers.get("attackSpeedTier", 0))
 			result["attack_speed_percent"] = float(result.get("attack_speed_percent", 0.0)) + float(modifiers.get("attackSpeedPercent", 0.0))
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
-			var skill_levels: Variant = modifiers.get("skillLevels", {})
-			if skill_levels is Dictionary:
-				for skill_name: String in skill_levels.keys():
-					result["skill_level_bonuses"][skill_name] = int(result["skill_level_bonuses"].get(skill_name, 0)) + int(skill_levels[skill_name])
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
@@ -784,6 +804,9 @@ func recalculate_stats() -> void:
 			var set_id := str(set_piece.get("set", ""))
 			set_powers[set_id] = int(set_powers.get(set_id, 0)) + int(set_piece.get("power", 0))
 			set_pieces[set_id][str(set_piece.get("piece", ""))] = true
+	result["skill_level_affix"] = EquipmentRulesScript.aggregate_skill_level_affix_records(
+		skill_level_affix_records
+	)
 	if computed_special_effects.has("double_weight"):
 		result["max_wear_weight"] = int(result.get("max_wear_weight", 0)) * 2
 		result["max_hand_weight"] = int(result.get("max_hand_weight", 0)) * 2
@@ -815,14 +838,28 @@ func has_special_effect(effect_id: String) -> bool:
 func effective_skill_level(skill_name: String) -> int:
 	_ensure_skill_progression_matches_legacy()
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	var progression_state: Dictionary = _skill_progression.state(stable_skill_id)
-	var learned := (
-		int(progression_state.get("rank", 0))
-		if not progression_state.is_empty()
-		else int(learned_skills.get(skill_name, 0))
+	if not _skill_progression.is_learned(stable_skill_id):
+		## Equipment can never enable an unlearned skill.
+		return 0
+	return _skill_progression.effective_rank(
+		stable_skill_id,
+		_equipment_skill_level_bonus(stable_skill_id)
 	)
-	var bonuses: Dictionary = computed_stats.get("skill_level_bonuses", {})
-	return maxi(0, learned + int(bonuses.get("all", 0)) + int(bonuses.get(skill_name, 0)))
+
+
+func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
+	var affix: Dictionary = computed_stats.get("skill_level_affix", {})
+	var contributions: Dictionary = affix.get("contributions", {})
+	var bonus := 0
+	bonus += maxi(0, int(contributions.get("all", 0)))
+	var profession_scope := "profession:%s" % ProfessionRules.profession_id(profession)
+	bonus += maxi(0, int(contributions.get(profession_scope, 0)))
+	var skill_scope := "skill:%s" % stable_skill_id
+	bonus += maxi(0, int(contributions.get(skill_scope, 0)))
+	for raw_name: Variant in affix.get("legacy", {}):
+		if SkillDataLoaderScript.stable_skill_id(str(raw_name)) == stable_skill_id:
+			bonus += maxi(0, int(affix["legacy"][raw_name]))
+	return bonus
 
 
 func skill_progression_snapshot() -> Dictionary:
@@ -831,20 +868,39 @@ func skill_progression_snapshot() -> Dictionary:
 
 
 func apply_skill_proficiency_event(skill_name_or_id: String, event_id: String, seed_value: int) -> Dictionary:
-	_ensure_skill_progression_matches_legacy()
-	var result: Dictionary = _skill_progression.apply_proficiency_event(
-		skill_name_or_id,
+	## HardCore v2: proficiency is disabled. This compatibility entry point is a
+	## pure no-op: it never mutates progression, emits growth signals or writes
+	## the save.
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	return _skill_progression.apply_proficiency_event(
+		stable_skill_id,
 		event_id,
 		level,
 		SkillRngScript.new(seed_value)
 	)
-	if bool(result.get("accepted", false)) and int(result.get("gain", 0)) > 0:
-		_sync_legacy_learned_skills_from_progression()
-		skills_changed.emit()
-		skill_progression_changed.emit(_skill_progression.snapshot())
-		profile_changed.emit()
-		_commit_save()
-	return result
+
+
+func canonical_skill_resource_context(stable_skill_id: String, current_mana: int) -> Dictionary:
+	var materials := {}
+	for material_id: String in CANONICAL_MATERIAL_ITEMS:
+		materials[material_id] = item_count(str(CANONICAL_MATERIAL_ITEMS[material_id]))
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var selected_material := str(definition.get("resource", {}).get("item", ""))
+	if stable_skill_id == "taoist.poison":
+		selected_material = (
+			"grey_powder"
+			if int(materials.get("grey_powder", 0)) > 0
+			else "yellow_powder"
+		)
+	return {
+		"mana": maxi(0, int(current_mana)),
+		"materials": materials,
+		"selected_material": selected_material,
+	}
+
+
+func canonical_material_item_name(material_id: String) -> String:
+	return str(CANONICAL_MATERIAL_ITEMS.get(material_id, ""))
 
 
 func _ensure_skill_progression_matches_legacy() -> void:

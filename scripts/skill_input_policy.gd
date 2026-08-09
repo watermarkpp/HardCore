@@ -2,6 +2,9 @@ class_name SkillInputPolicy
 extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 
 const INPUT_METADATA_CONTRACT_ID := "gameplay.skill.input_metadata.v1"
 const WARRIOR_ATTACK_POLICY_ID := "gameplay.warrior.attack_priority.v1"
@@ -382,7 +385,9 @@ static func _with_slaying_layer(
 		return selection
 	var layer := {
 		"skill_id": "warrior.slaying_swordsmanship",
-		"rank": clampi(int(context.get("slaying_rank", 0)), 0, 3),
+		"rank": SkillRankResolverScript.safe_effective_rank(
+			int(context.get("slaying_rank", 0))
+		),
 		"rolls_per_melee_action": 1,
 		"roll_eligibility": "canonical_hit_frame_valid_melee_swing",
 		"target_available_at_input": has_target,
@@ -418,4 +423,4 @@ static func _mana_cost(skill_id: String, rank: int) -> int:
 	var costs: Array = definition.get("mp_cost_by_rank", [])
 	if costs.is_empty():
 		return 0
-	return maxi(0, int(costs[clampi(rank, 0, mini(3, costs.size() - 1))]))
+	return maxi(0, SkillRankResolverScript.linear_int(costs, rank))

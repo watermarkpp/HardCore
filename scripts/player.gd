@@ -5,6 +5,9 @@ const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
 )
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillResourceServiceScript := preload(
+	"res://scripts/skills/skill_resource_service.gd"
+)
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
@@ -347,13 +350,16 @@ func can_request_skill(skill_name: String) -> bool:
 	if canonical_definition.is_empty():
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
-	var mp_costs: Array = canonical_definition.get("mp_cost_by_rank", [])
-	var mana_cost := (
-		int(mp_costs[clampi(learned_level, 0, 3)])
-		if not mp_costs.is_empty()
-		else 0
+	var resource_context := PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		current_mp
 	)
-	return current_mp >= mana_cost
+	var quote := SkillResourceServiceScript.quote(
+		canonical_definition,
+		learned_level,
+		resource_context
+	)
+	return current_mp >= maxi(0, int(quote.get("mp_cost", 0)))
 
 
 func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:

@@ -61,14 +61,13 @@ const PersistentGroundEffectManagerScript := preload(
 const SpellTargetLockPolicyScript := preload(
 	"res://scripts/skills/spell_target_lock_policy.gd"
 )
+const SkillResourceServiceScript := preload(
+	"res://scripts/skills/skill_resource_service.gd"
+)
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
-const CANONICAL_MATERIAL_ITEMS := {
-	"grey_powder": "灰色药粉",
-	"yellow_powder": "黄色药粉",
-	"amulet": "护身符",
-}
+const CANONICAL_MATERIAL_ITEMS := PlayerState.CANONICAL_MATERIAL_ITEMS
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
 const ATTACK_LOCK_CONTRACT := "combat.attack_lock.euclidean_gu.v2"
 const ATTACK_LOCK_RANGE_GU := 10.0
@@ -3370,12 +3369,12 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		return &"accepted"
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
-	var mana_costs: Array = definition.get("mp_cost_by_rank", [])
-	var mana_cost := (
-		int(mana_costs[clampi(learned_level, 0, mana_costs.size() - 1)])
-		if not mana_costs.is_empty()
-		else 0
+	var resource_quote := SkillResourceServiceScript.quote(
+		definition,
+		learned_level,
+		_canonical_resource_context(stable_skill_id)
 	)
+	var mana_cost := maxi(0, int(resource_quote.get("mp_cost", 0)))
 	if player.current_mp < mana_cost:
 		if show_failure:
 			hud.show_message("魔法不足")
@@ -3903,19 +3902,9 @@ func _melee_diagnostic_result_code(
 
 
 func _commit_warrior_melee_modifier_events(modifiers: Dictionary) -> void:
-	for raw_event: Variant in modifiers.get("proficiency_events", []):
-		if not raw_event is Dictionary:
-			continue
-		var event: Dictionary = raw_event
-		var skill_id := str(event.get("skill_id", ""))
-		var event_id := str(event.get("event", ""))
-		if skill_id.is_empty() or event_id.is_empty():
-			continue
-		PlayerState.apply_skill_proficiency_event(
-			skill_id,
-			event_id,
-			_next_canonical_seed()
-		)
+	## HardCore v2: proficiency is disabled. Canonical melee modifier events are
+	## intentionally discarded; they never grow, upgrade or persist skills.
+	pass
 
 
 func _on_special_action_pressed(effect_id: String) -> void:
@@ -4152,13 +4141,6 @@ func _execute_canonical_skill(
 			direction,
 			target_context,
 			cast_target
-		)
-	var proficiency_event := _plan_proficiency_event(plan)
-	if not proficiency_event.is_empty():
-		PlayerState.apply_skill_proficiency_event(
-			stable_skill_id,
-			proficiency_event,
-			_next_canonical_seed()
 		)
 	var execution_result := SkillExecutionPlanScript.build_result(
 		plan,
@@ -4774,18 +4756,10 @@ func _canonical_target_context(
 
 
 func _canonical_resource_context(stable_skill_id: String) -> Dictionary:
-	var materials := {}
-	for material_id: String in CANONICAL_MATERIAL_ITEMS:
-		materials[material_id] = PlayerState.item_count(str(CANONICAL_MATERIAL_ITEMS[material_id]))
-	var definition := SkillDataLoaderScript.skill(stable_skill_id)
-	var selected_material := str(definition.get("resource", {}).get("item", ""))
-	if stable_skill_id == "taoist.poison":
-		selected_material = "grey_powder" if int(materials.grey_powder) > 0 else "yellow_powder"
-	return {
-		"mana": player.current_mp,
-		"materials": materials,
-		"selected_material": selected_material,
-	}
+	return PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		player.current_mp
+	)
 
 
 func _commit_canonical_resources(result: Dictionary) -> bool:
@@ -4798,7 +4772,7 @@ func _commit_canonical_resources(result: Dictionary) -> bool:
 	var mana_cost := maxi(0, int(quote.get("mp_cost", 0)))
 	var material_id := str(quote.get("material_id", ""))
 	var material_amount := maxi(0, int(quote.get("material_amount", 0)))
-	var item_name := str(CANONICAL_MATERIAL_ITEMS.get(material_id, ""))
+	var item_name := PlayerState.canonical_material_item_name(material_id)
 	if player.current_mp < mana_cost:
 		return false
 	if material_amount > 0 and (item_name.is_empty() or PlayerState.item_count(item_name) < material_amount):
