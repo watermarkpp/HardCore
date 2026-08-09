@@ -284,6 +284,39 @@ static func build_canonical_plan(
 		"created_by": CANONICAL_PLANNER_ID,
 		"legacy_planner": LEGACY_PLANNER_ID,
 	}
+	## Combined-cast metadata (e.g. Taoist dual defence) is forwarded from the
+	## legacy planner untouched. It is optional: single-skill plans keep the
+	## exact previous field set and hash semantics.
+	var combined_skill_ids := _duplicate_array(
+		legacy_result.get("combined_skill_ids", [])
+	)
+	if not combined_skill_ids.is_empty():
+		plan["combined_skill_ids"] = combined_skill_ids
+	var combined_cast_contract_id := str(
+		legacy_result.get("combined_cast_contract_id", "")
+	)
+	if not combined_cast_contract_id.is_empty():
+		plan["combined_cast_contract_id"] = combined_cast_contract_id
+	## Taoist support metadata (selection result and friendly-area geometry)
+	## is forwarded only when the legacy planner produced it. Single-skill
+	## plans keep the exact previous field set and hash semantics.
+	var support_targeting: Variant = legacy_result.get("support_targeting", {})
+	if (
+		support_targeting is Dictionary
+		and not (support_targeting as Dictionary).is_empty()
+	):
+		plan["support_targeting"] = (support_targeting as Dictionary).duplicate(true)
+	var support_area_geometry: Variant = legacy_result.get(
+		"support_area_geometry",
+		{}
+	)
+	if (
+		support_area_geometry is Dictionary
+		and not (support_area_geometry as Dictionary).is_empty()
+	):
+		plan["support_area_geometry"] = (
+			support_area_geometry as Dictionary
+		).duplicate(true)
 	plan["plan_hash"] = plan_hash(plan)
 	return plan
 
@@ -597,6 +630,26 @@ static func plan_hash(plan: Dictionary) -> String:
 		"summon_descriptors": plan.get("summon_descriptors", []),
 		"rejection": plan.get("rejection", {}),
 	}
+	## Combined-cast metadata participates in the hash only when present, so
+	## existing single-skill plan hashes are unchanged.
+	var combined_skill_ids: Variant = plan.get("combined_skill_ids", [])
+	if combined_skill_ids is Array and not (combined_skill_ids as Array).is_empty():
+		protected["combined_skill_ids"] = combined_skill_ids
+	var combined_cast_contract_id := str(plan.get("combined_cast_contract_id", ""))
+	if not combined_cast_contract_id.is_empty():
+		protected["combined_cast_contract_id"] = combined_cast_contract_id
+	var support_targeting: Variant = plan.get("support_targeting", {})
+	if (
+		support_targeting is Dictionary
+		and not (support_targeting as Dictionary).is_empty()
+	):
+		protected["support_targeting"] = support_targeting
+	var support_area_geometry: Variant = plan.get("support_area_geometry", {})
+	if (
+		support_area_geometry is Dictionary
+		and not (support_area_geometry as Dictionary).is_empty()
+	):
+		protected["support_area_geometry"] = support_area_geometry
 	return "%d" % hash(_canonicalize(protected))
 
 

@@ -20,6 +20,12 @@ const WILD_RUSH_RELEASE_TARGET_POLICY_ID := (
 const TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID := (
 	"gameplay.wizard.target_centered_spatial.release_live_footpoint.v1"
 )
+const FRIENDLY_IDENTITY_RELEASE_CONTRACT_ID := (
+	"gameplay.professions.friendly_identity_release.live_footpoint_gu.v1"
+)
+const FRIENDLY_IDENTITY_RELEASE_POLICY_ID := (
+	"skills.taoist.support_targeting.v1"
+)
 const LIVE_LOCKED_TARGET_AXIS_CONTRACT_ID := (
 	"gameplay.professions.combat_release.live_locked_target_axis_gu.v1"
 )
@@ -31,6 +37,10 @@ const TARGET_CENTERED_SPATIAL_SKILL_IDS := {
 const CONTINUOUS_AIM_LINE_SKILL_IDS := {
 	"wizard.hellfire": true,
 	"wizard.laser": true,
+}
+const FRIENDLY_IDENTITY_RELEASE_SKILL_IDS := {
+	"taoist.healing": true,
+	"taoist.mass_healing": true,
 }
 const POLICY_LOCKED_SINGLE_TARGET := "locked_single_target"
 const POLICY_INPUT_DIRECTION := "input_direction"
@@ -70,6 +80,57 @@ static func target_centered_spatial_policy_id(stable_skill_id: String) -> String
 	if TARGET_CENTERED_SPATIAL_SKILL_IDS.has(stable_skill_id):
 		return TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
 	return ""
+
+
+static func tracks_selected_friendly_identity(stable_skill_id: String) -> bool:
+	## Taoist friendly-target skills remember the selected friendly identity at
+	## action start and sample its live footpoint only at release. This is a
+	## tracking contract, not a lock-on/auto-turn: GameRoot performs the
+	## release-time validation and at most one reselect.
+	return FRIENDLY_IDENTITY_RELEASE_SKILL_IDS.has(stable_skill_id)
+
+
+static func friendly_identity_release_tracking(
+	stable_skill_id: String,
+	selected_friendly_instance_id: int,
+	actor_position_at_release: Vector2,
+	selected_friendly_position_at_release: Vector2,
+	selected_friendly_valid_at_release: bool
+) -> Dictionary:
+	var origin_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			actor_position_at_release
+		)
+	)
+	var selected_friendly_ground_gu_at_release := Vector2.ZERO
+	if selected_friendly_valid_at_release:
+		## Convert the live screen delta once and add it to the converted
+		## origin, mirroring resolve()'s cancellation-safe conversion.
+		selected_friendly_ground_gu_at_release = (
+			origin_ground_gu
+			+ GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				selected_friendly_position_at_release
+				- actor_position_at_release
+			)
+		)
+	return {
+		"contract_id": FRIENDLY_IDENTITY_RELEASE_CONTRACT_ID,
+		"policy_id": FRIENDLY_IDENTITY_RELEASE_POLICY_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"skill_id": stable_skill_id,
+		"selected_friendly_instance_id": int(selected_friendly_instance_id),
+		"selected_friendly_valid_at_release": (
+			selected_friendly_valid_at_release
+			and selected_friendly_instance_id > 0
+		),
+		"selected_friendly_footpoint_ground_gu_at_release": (
+			selected_friendly_ground_gu_at_release
+		),
+		"origin_ground_gu_at_release": origin_ground_gu,
+		"lock_on": false,
+		"auto_turn": false,
+		"allow_release_time_reselect": true,
+	}
 
 
 static func resolve(
