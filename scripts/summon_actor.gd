@@ -43,6 +43,9 @@ const VISUAL_PATHS := {
 }
 
 var owner_player: PlayerCharacter
+## Owner character level frozen at summon creation. Fully independent of the
+## pet's own growth level (summon_exp_level).
+var owner_level := 1
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
@@ -161,7 +164,13 @@ func setup(
 	var inferred_owner_level := owner_level_value
 	if inferred_owner_level < 1 and PlayerState != null:
 		inferred_owner_level = PlayerState.level
-	var profile := TaoistCombatMath.summon_profile(inferred_skill_id, maxi(0, inferred_level), maxi(1, inferred_owner_level), maxi(1, power))
+	owner_level = maxi(1, inferred_owner_level)
+	var profile := TaoistCombatMath.summon_profile(
+		inferred_skill_id,
+		maxi(0, inferred_level),
+		owner_level,
+		maxi(1, power)
+	)
 	skill_id = inferred_skill_id
 	skill_level = int(profile.get("skill_level", 0))
 	summon_level = int(profile.get("summon_level", skill_level))

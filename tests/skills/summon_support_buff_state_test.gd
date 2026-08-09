@@ -24,6 +24,7 @@ func _run() -> void:
 	_verify_ac_and_mac_are_separate(summon)
 	_verify_refresh_never_downgrades(summon)
 	_verify_buff_state_snapshot(summon)
+	_verify_owner_level_contract(owner)
 	owner.free()
 	print(
 		"SUMMON_SUPPORT_BUFF_STATE_PASS: stealth refresh/expiry, AC physical "
@@ -141,3 +142,51 @@ func _verify_refresh_never_downgrades(summon: SummonActor) -> void:
 			10.0
 		)
 	)
+
+
+func _verify_owner_level_contract(owner: PlayerCharacter) -> void:
+	## Default value before setup.
+	var fresh := SummonActor.new()
+	assert(fresh.owner_level == 1)
+	fresh.free()
+
+	## Explicit owner level 21 is frozen independently of the pet level.
+	var fixed_owner := SummonActor.new()
+	fixed_owner.setup(
+		owner,
+		"变异骷髅",
+		1,
+		0,
+		"taoist.summon_skeleton",
+		21,
+		7
+	)
+	add_child(fixed_owner)
+	assert(fixed_owner.owner_level == 21)
+	assert(fixed_owner.summon_exp_level != fixed_owner.owner_level)
+	assert(fixed_owner.summon_exp_level == 0)
+	fixed_owner.pet_growth_exp = TaoistCombatMath.summon_growth_threshold(
+		"skeleton",
+		0
+	)
+	assert(fixed_owner.gain_growth_from_kill(1))
+	assert(fixed_owner.summon_exp_level == 1)
+	assert(
+		fixed_owner.owner_level == 21,
+		"pet growth must never change the frozen owner level"
+	)
+	fixed_owner.free()
+
+	## No owner level argument: fall back to the PlayerState owner level.
+	PlayerState.test_mode = true
+	PlayerState.level = 19
+	var fallback_owner := SummonActor.new()
+	fallback_owner.setup(
+		owner,
+		"变异骷髅",
+		1,
+		0,
+		"taoist.summon_skeleton"
+	)
+	assert(fallback_owner.owner_level == 19)
+	fallback_owner.free()
