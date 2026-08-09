@@ -117,6 +117,8 @@ const SAFE_RING_TELEPORT_DISTANCES_GU := [
 const RANDOM_TELEPORT_MIN_DISTANCE_GU := 3.0
 const RANDOM_TELEPORT_MAX_DISTANCE_GU := 16.25
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
+const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
+const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
 const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hellfire",
 	"wizard.hell_lightning",
@@ -350,6 +352,10 @@ func _ready() -> void:
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
+	hud.shop_sell_quotes_requested.connect(_on_shop_sell_quotes_requested)
+	hud.shop_sell_requested.connect(_on_shop_sell_requested)
+	hud.quest_abandon_requested.connect(_on_quest_abandon_requested)
+	hud.warehouse_sort_requested.connect(_on_warehouse_sort_requested)
 	add_child(hud)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	_wire_item_quick_slots_hud()
@@ -599,6 +605,26 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 	var bus_index := AudioServer.get_bus_index(bus_name)
 	if bus_index >= 0:
 		AudioServer.set_bus_mute(bus_index, not bool(request.get("enabled", true)))
+
+
+func _on_shop_sell_quotes_requested(items: Array) -> void:
+	if is_instance_valid(hud):
+		hud.set_shop_sell_quotes(PlayerState.shop_sell_quotes(items))
+
+
+func _on_shop_sell_requested(request: Dictionary) -> void:
+	if is_instance_valid(hud):
+		hud.apply_shop_sell_result(PlayerState.sell_inventory_item(request))
+
+
+func _on_quest_abandon_requested(quest_id: String) -> void:
+	if is_instance_valid(hud):
+		hud.apply_quest_abandon_result(PlayerState.abandon_quest(quest_id))
+
+
+func _on_warehouse_sort_requested() -> void:
+	if is_instance_valid(hud):
+		hud.apply_warehouse_sort_result(PlayerState.sort_warehouse())
 
 
 func _prepare_safe_logout() -> Dictionary:
@@ -4367,10 +4393,15 @@ func _execute_canonical_skill(
 		int(resource_quote.get("mp_cost", 0)) > 0
 		or int(resource_quote.get("material_amount", 0)) > 0
 	)
-	var resource_committed := true
-	if needs_resource:
+	var resource_commit_required := bool(
+		plan.get("resource_commit_required", true)
+	)
+	var resource_committed := false
+	if resource_commit_required and needs_resource:
 		resource_committed = _commit_canonical_resources(plan)
-	if not resource_committed:
+	elif resource_commit_required:
+		resource_committed = true
+	if resource_commit_required and not resource_committed:
 		result["accepted"] = false
 		result["effect_success"] = false
 		result["reason"] = "resource_commit_failed"
@@ -4441,7 +4472,10 @@ func _canonical_execution_context(
 		"origin_screen_px": origin,
 		"direction_screen_px": direction,
 		"target_position_screen_px": target_position,
-		"summon_spawn_position_screen_px": _summon_spawn_screen_position_px(),
+		"summon_spawn_position_screen_px": target_context.get(
+			"summon_spawn_position_screen_px",
+			player.global_position
+		),
 		"target": target,
 		"fallback_target_actor": player,
 		"player_actor": player,
@@ -4531,7 +4565,9 @@ func _legacy_result_from_plan(plan: Dictionary) -> Dictionary:
 			"effect_success": true,
 			"skill_id": skill_id,
 			"reason": "",
-			"resource_commit": true,
+			"resource_commit": bool(
+				plan.get("resource_commit_required", true)
+			),
 			"proficiency_event": _plan_proficiency_event(plan),
 			"effects": plan.get("gameplay_actions", []).duplicate(true),
 		}
@@ -4787,7 +4823,7 @@ func _canonical_target_context(
 		"affected_friendly_target_instance_ids": [player.get_instance_id()],
 		"map_allows_random_teleport": true,
 		"destination_valid": true,
-		"spawn_tile_valid": true,
+		"spawn_tile_valid": false,
 		"has_main_pet": _canonical_main_pet() != null,
 		"current_pet_count": get_tree().get_nodes_in_group("summons").size(),
 		"caster_max_hp": player.max_hp,
@@ -4831,6 +4867,22 @@ func _canonical_target_context(
 	# positions.
 	context.merge(context_overrides, true)
 	var stable_skill_id := str(definition.get("skill_id", ""))
+	if stable_skill_id in [
+		"taoist.summon_skeleton",
+		"taoist.summon_divine_beast",
+	]:
+		var summon_spawn_plan := _canonical_summon_spawn_plan(stable_skill_id)
+		context["spawn_tile_valid"] = bool(
+			summon_spawn_plan.get("valid", false)
+		)
+		context["summon_spawn_position_screen_px"] = summon_spawn_plan.get(
+			"position_screen_px",
+			player.global_position
+		)
+		context["summon_spawn_position_ground_gu"] = summon_spawn_plan.get(
+			"position_ground_gu",
+			_canonical_screen_px_to_ground_gu(player.global_position)
+		)
 	var resolved_release_id := str(release_id)
 	if resolved_release_id.is_empty():
 		resolved_release_id = _next_skill_footprint_release_id(stable_skill_id)
@@ -5418,7 +5470,7 @@ func _apply_canonical_effects_from_plan(
 					)
 				):
 					hud.show_message(
-						"%s锛氱敓鍛?d/%d" % [
+						"%s：生命 %d/%d" % [
 							target.display_name,
 							target.current_hp,
 							target.max_hp,
@@ -5538,13 +5590,8 @@ func _apply_canonical_main_pet_from_descriptor(
 	descriptor: Dictionary,
 	plan: Dictionary
 ) -> void:
-	var effect := {
-		"type": "main_pet_spawn",
-		"template_id": str(descriptor.get("template_id", "")),
-		"spawned": bool(descriptor.get("spawned", true)),
-	}
 	_apply_canonical_main_pet(
-		effect,
+		descriptor,
 		str(plan.get("skill_id", "")),
 		str(plan.get("release_id", ""))
 	)
@@ -6718,27 +6765,89 @@ func _apply_friendly_stealth_to_actor(
 
 
 func _apply_canonical_main_pet(
-	effect: Dictionary,
+	descriptor: Dictionary,
 	stable_skill_id: String,
 	release_id: String
 ) -> void:
+	var operation := str(descriptor.get("operation", ""))
+	if operation not in [
+		"recall_existing_main_pet",
+		"main_pet_spawn",
+		"summon",
+	]:
+		return
+	var spawn_snapshot: Dictionary = descriptor.get(
+		"spawn_footprint_snapshot", {}
+	)
+	var descriptor_snapshot_id := str(
+		descriptor.get("spawn_snapshot_id", "")
+	)
+	var descriptor_map_id := int(
+		descriptor.get(
+			"spawn_runtime_map_id",
+			descriptor.get("runtime_map_id", -1)
+		)
+	)
+	if (
+		not _snapshot_strict_ok(spawn_snapshot)
+		or descriptor_snapshot_id.is_empty()
+		or descriptor_snapshot_id != str(spawn_snapshot.get("snapshot_id", ""))
+		or descriptor_map_id != current_map_id
+	):
+		return
+	var spawn_ground_gu: Vector2 = spawn_snapshot.get(
+		"target_center_ground_gu", Vector2.INF
+	)
+	if not spawn_ground_gu.is_finite():
+		return
+	var spawn_screen_px := _canonical_ground_gu_to_screen_px(spawn_ground_gu)
+	var summon_radius_gu := float(
+		spawn_snapshot.get(
+			"target_combat_radius_gu",
+			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+				21.0
+				if str(descriptor.get("template_id", "")) == "divine_beast"
+				else 15.0
+			)
+		)
+	)
 	var existing := _canonical_main_pet()
-	if str(effect.get("type", "")) == "recall_existing_main_pet" and existing != null:
-		existing.global_position = _summon_spawn_screen_position_px()
+	if operation == "recall_existing_main_pet":
+		if existing == null or not _canonical_summon_position_is_valid(
+			spawn_ground_gu,
+			summon_radius_gu,
+			existing
+		):
+			return
+		existing.global_position = spawn_screen_px
 		existing.configure_spawn_release_footprint(release_id)
+		existing.set_meta(
+			"canonical_spawn_footprint_snapshot",
+			spawn_snapshot.duplicate(true)
+		)
 		return
-	if existing != null or not bool(effect.get("spawned", false)):
+	if existing != null or not bool(descriptor.get("spawned", false)):
 		return
-	var summon_name := "神兽" if str(effect.get("template_id", "")) == "divine_beast" else "骷髅"
+	if not _canonical_summon_position_is_valid(
+		spawn_ground_gu,
+		summon_radius_gu,
+		null
+	):
+		return
+	var summon_name := (
+		"神兽"
+		if str(descriptor.get("template_id", "")) == "divine_beast"
+		else "骷髅"
+	)
 	var summon := SummonActor.new()
 	summon.setup(
 		player,
 		summon_name,
 		maxi(1, _canonical_primary_stat_roll("taoist")),
-		int(effect.get("initial_pet_level", 0)),
+		int(descriptor.get("initial_pet_level", 0)),
 		stable_skill_id,
 		PlayerState.level,
-		int(effect.get("max_pet_level", -1))
+		int(descriptor.get("max_pet_level", -1))
 	)
 	summon.set_meta("taoist_main_pet", true)
 	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
@@ -6747,12 +6856,18 @@ func _apply_canonical_main_pet(
 		Callable(self, "_canonical_ground_gu_to_screen_px"),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
-	summon.global_position = _summon_spawn_screen_position_px()
+	summon.global_position = spawn_screen_px
 	summon.configure_spawn_release_footprint(release_id)
+	summon.set_meta(
+		"canonical_spawn_footprint_snapshot",
+		spawn_snapshot.duplicate(true)
+	)
 	add_child(summon)
 
 
-func _summon_spawn_screen_position_px() -> Vector2:
+func _canonical_summon_spawn_plan(stable_skill_id: String) -> Dictionary:
+	if not is_instance_valid(player):
+		return {"valid": false, "reason": "player_unavailable"}
 	var player_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
 	)
@@ -6775,9 +6890,120 @@ func _summon_spawn_screen_position_px() -> Vector2:
 			42.0
 		)
 	)
-	return _canonical_ground_gu_to_screen_px(
+	var desired_ground_gu := (
 		player_ground_gu + side_direction_ground_gu * summon_offset_gu
 	)
+	var center_tile := Vector2i(
+		roundi(desired_ground_gu.x),
+		roundi(desired_ground_gu.y)
+	)
+	var candidates: Array[Vector2i] = []
+	for offset_y: int in range(-2, 3):
+		for offset_x: int in range(-2, 3):
+			var candidate_tile := center_tile + Vector2i(offset_x, offset_y)
+			if Vector2(candidate_tile).distance_to(desired_ground_gu) <= (
+				CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU
+				+ GroundUnitSpaceScript.EPSILON_GU
+			):
+				candidates.append(candidate_tile)
+	candidates.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
+		var a_distance := Vector2(a).distance_squared_to(desired_ground_gu)
+		var b_distance := Vector2(b).distance_squared_to(desired_ground_gu)
+		if not is_equal_approx(a_distance, b_distance):
+			return a_distance < b_distance
+		if a.y != b.y:
+			return a.y < b.y
+		return a.x < b.x
+	)
+	var summon_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			21.0
+			if stable_skill_id == "taoist.summon_divine_beast"
+			else 15.0
+		)
+	)
+	for candidate_tile: Vector2i in candidates:
+		var candidate_ground_gu := Vector2(candidate_tile)
+		if not _canonical_summon_position_is_valid(
+			candidate_ground_gu,
+			summon_radius_gu,
+			null
+		):
+			continue
+		return {
+			"valid": true,
+			"reason": "",
+			"position_ground_gu": candidate_ground_gu,
+			"position_screen_px": _canonical_ground_gu_to_screen_px(
+				candidate_ground_gu
+			),
+			"desired_ground_gu": desired_ground_gu,
+			"search_radius_gu": CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU,
+		}
+	return {
+		"valid": false,
+		"reason": "no_valid_adjacent_tile",
+		"position_ground_gu": desired_ground_gu,
+		"position_screen_px": player.global_position,
+		"desired_ground_gu": desired_ground_gu,
+		"search_radius_gu": CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU,
+	}
+
+
+func _canonical_summon_position_is_valid(
+	candidate_ground_gu: Vector2,
+	summon_radius_gu: float,
+	ignored_summon: SummonActor
+) -> bool:
+	if not candidate_ground_gu.is_finite():
+		return false
+	var candidate_screen_px := _canonical_ground_gu_to_screen_px(
+		candidate_ground_gu
+	)
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+		background,
+		candidate_screen_px,
+		WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(
+			summon_radius_gu
+		)
+	):
+		return false
+	var actors: Array = []
+	if is_instance_valid(player):
+		actors.append(player)
+	actors.append_array(get_tree().get_nodes_in_group("enemies"))
+	actors.append_array(get_tree().get_nodes_in_group("summons"))
+	var seen: Dictionary = {}
+	for raw_actor: Variant in actors:
+		if (
+			not raw_actor is Node2D
+			or not is_instance_valid(raw_actor)
+			or raw_actor == ignored_summon
+			or (raw_actor as Node2D).is_queued_for_deletion()
+		):
+			continue
+		var actor := raw_actor as Node2D
+		var actor_id := actor.get_instance_id()
+		if seen.has(actor_id):
+			continue
+		seen[actor_id] = true
+		if GroundUnitSpaceScript.distance_gu(
+			_canonical_screen_px_to_ground_gu(actor.global_position),
+			candidate_ground_gu
+		) < (
+			summon_radius_gu
+			+ _actor_combat_radius_gu(actor)
+			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+		):
+			return false
+	return true
+
+
+func _summon_spawn_screen_position_px() -> Vector2:
+	var spawn_plan := _canonical_summon_spawn_plan(
+		"taoist.summon_skeleton"
+	)
+	return spawn_plan.get("position_screen_px", player.global_position)
 
 
 func _spawn_canonical_teleport_arrival(
