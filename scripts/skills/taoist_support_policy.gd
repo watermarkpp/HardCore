@@ -16,10 +16,13 @@ const CONTRACT_ID := "skills.taoist.support_targeting.v1"
 const DEFAULT_HEAL_RANGE_GU := 9.0
 
 const REASON_NO_FRIENDLY_CANDIDATES := "no_friendly_candidates"
+## Kept for compatibility with older callers/tests; full-HP friendlies are no
+## longer a rejection reason (user override 2026-08-09).
 const REASON_ALL_FRIENDLY_TARGETS_FULL_HP := "all_friendly_targets_full_hp"
 const REASON_NO_INJURED_FRIENDLY_TARGET_IN_RANGE := (
 	"no_injured_friendly_target_in_range"
 )
+const REASON_NO_FRIENDLY_TARGET_IN_RANGE := "no_friendly_target_in_range"
 
 
 static func make_candidate(
@@ -108,22 +111,22 @@ static func select_heal_target(
 			"range_gu": range_gu,
 			"candidate_count": 0,
 		}
-	var injured := injured_candidates(normalized, center_ground_gu, range_gu)
-	if injured.is_empty():
-		var any_injured := false
-		for candidate: Dictionary in normalized:
-			if int(candidate.get("max_hp", 1)) > int(candidate.get("current_hp", 0)):
-				any_injured = true
-				break
-		var reason := (
-			REASON_ALL_FRIENDLY_TARGETS_FULL_HP
-			if not any_injured
-			else REASON_NO_INJURED_FRIENDLY_TARGET_IN_RANGE
-		)
+	## Full-HP friendlies stay eligible: the user override allows a heal cast
+	## on full HP and requires an attached ongoing recovery. When every
+	## in-range candidate is full, the tie-break prefers self.
+	var in_range: Array[Dictionary] = []
+	var injured_in_range := 0
+	for candidate: Dictionary in normalized:
+		if not Targeting.within_range_gu(candidate, center_ground_gu, range_gu):
+			continue
+		in_range.append(candidate)
+		if int(candidate.get("max_hp", 1)) > int(candidate.get("current_hp", 0)):
+			injured_in_range += 1
+	if in_range.is_empty():
 		return {
 			"valid": false,
 			"contract_id": CONTRACT_ID,
-			"reason": reason,
+			"reason": REASON_NO_FRIENDLY_TARGET_IN_RANGE,
 			"center_ground_gu": center_ground_gu,
 			"range_gu": range_gu,
 			"candidate_count": normalized.size(),
@@ -131,7 +134,7 @@ static func select_heal_target(
 	var best: Dictionary = {}
 	var best_missing := 0
 	var best_max_hp := 1
-	for candidate: Dictionary in injured:
+	for candidate: Dictionary in in_range:
 		var missing := int(candidate.get("max_hp", 1)) - int(
 			candidate.get("current_hp", 0)
 		)
@@ -160,8 +163,9 @@ static func select_heal_target(
 		"center_ground_gu": center_ground_gu,
 		"range_gu": range_gu,
 		"selected": best,
-		"injured_count": injured.size(),
+		"injured_count": injured_in_range,
 		"candidate_count": normalized.size(),
+		"all_full_hp": injured_in_range == 0,
 	}
 
 

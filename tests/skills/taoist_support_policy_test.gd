@@ -13,11 +13,12 @@ func _run() -> void:
 	_verify_range_gate()
 	_verify_lowest_hp_percent_selection()
 	_verify_tie_break_order()
-	_verify_full_hp_rejection()
+	_verify_full_hp_allowed()
 	_verify_area_geometry_contracts()
 	print(
 		"TAOIST_SUPPORT_POLICY_PASS: candidates, 9 GU, exact HP%, "
-		+ "self/distance/id tie-breaks, full-HP rejection, 3x3/7x7 geometry"
+		+ "self/distance/id tie-breaks, full-HP allowed (self preferred), "
+		+ "3x3/7x7 geometry"
 	)
 	get_tree().quit(0)
 
@@ -119,22 +120,38 @@ func _verify_tie_break_order() -> void:
 	assert(id_first.valid and id_first.selected.instance_id == 101)
 
 
-func _verify_full_hp_rejection() -> void:
+func _verify_full_hp_allowed() -> void:
 	var center := Vector2(0, 0)
 	var all_full := Policy.select_heal_target([
 		Policy.make_candidate(1, true, 100, 100, center, 40),
 		Policy.make_candidate(101, false, 80, 80, center, 5),
 	], center, 9.0)
-	assert(not all_full.valid)
-	assert(all_full.reason == Policy.REASON_ALL_FRIENDLY_TARGETS_FULL_HP)
+	assert(all_full.valid)
+	assert(all_full.reason.is_empty())
+	assert(all_full.all_full_hp)
+	assert(
+		all_full.selected.instance_id == 1,
+		"all-full pool must prefer self"
+	)
+	assert(all_full.contract_id == Policy.CONTRACT_ID)
 	var empty := Policy.select_heal_target([], center, 9.0)
 	assert(not empty.valid and empty.reason == Policy.REASON_NO_FRIENDLY_CANDIDATES)
 	var out_of_range := Policy.select_heal_target([
 		Policy.make_candidate(1, true, 100, 100, center, 40),
 		Policy.make_candidate(101, false, 50, 100, Vector2(10, 0), 5),
 	], center, 9.0)
-	assert(not out_of_range.valid)
-	assert(out_of_range.reason == Policy.REASON_NO_INJURED_FRIENDLY_TARGET_IN_RANGE)
+	## The in-range pool (self, full HP) remains valid; the out-of-range
+	## injured summon does not block the user-approved full-HP cast.
+	assert(out_of_range.valid)
+	assert(out_of_range.all_full_hp)
+	assert(out_of_range.selected.instance_id == 1)
+	var only_out_of_range := Policy.select_heal_target([
+		Policy.make_candidate(101, false, 50, 100, Vector2(10, 0), 5),
+	], center, 9.0)
+	assert(not only_out_of_range.valid)
+	assert(
+		only_out_of_range.reason == Policy.REASON_NO_FRIENDLY_TARGET_IN_RANGE
+	)
 
 
 func _verify_area_geometry_contracts() -> void:

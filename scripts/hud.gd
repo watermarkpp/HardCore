@@ -122,6 +122,7 @@ var loading_transition_overlay
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
+var taoist_buff_hint_label: Label
 var hud_item_buttons: Array[Button] = []
 var item_quick_slots: Array[String] = ["", "", "", ""]
 var item_quick_slot_icons: Array[TextureRect] = []
@@ -356,6 +357,24 @@ func _build_bottom_chassis(root: Control) -> void:
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
 	chassis_root.add_child(health_orb)
+
+	taoist_buff_hint_label = Label.new()
+	taoist_buff_hint_label.name = "TaoistBuffHint"
+	taoist_buff_hint_label.position = (
+		health_orb.position
+		+ Vector2(10, HUD_RESOURCE_ORB_SIZE.y - 30)
+	)
+	taoist_buff_hint_label.size = Vector2(96, 28)
+	taoist_buff_hint_label.add_theme_font_size_override("font_size", 11)
+	taoist_buff_hint_label.add_theme_color_override(
+		"font_color",
+		Color(0.95, 0.88, 0.55)
+	)
+	taoist_buff_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	taoist_buff_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	taoist_buff_hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	taoist_buff_hint_label.visible = false
+	chassis_root.add_child(taoist_buff_hint_label)
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
@@ -1168,6 +1187,13 @@ func update_resources(current_hp: int, max_hp: int, current_mp: int, max_mp: int
 		health_orb.call("set_values", current_hp, max_hp)
 	if mana_orb != null:
 		mana_orb.call("set_values", current_mp, max_mp)
+
+
+func update_taoist_buff_hints(entries: Array) -> void:
+	if taoist_buff_hint_label == null:
+		return
+	taoist_buff_hint_label.visible = not entries.is_empty()
+	taoist_buff_hint_label.text = "｜".join(entries)
 
 
 func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true) -> void:

@@ -109,5 +109,32 @@ func _ready() -> void:
 				or profile.learned_skills.has(str(skill_name))
 			)
 
-	print("SKILL_BUTTON_ASSIGNMENTS_V3_PASS：攻击主键1槽、六环6槽、旧存档迁移及被动排除正常")
+	## Hidden skills (e.g. taoist.revelation) cannot be newly assigned, but
+	## bindings saved in older profiles stay loadable untouched.
+	var learned_with_revelation := {"心灵启示": 3}
+	var hidden_assignment := LoadoutRules.assign_button_slot(
+		migrated_v2,
+		learned_with_revelation,
+		{
+			"contract_id": "ui.skill.button_assignment.v3",
+			"slot_group": "attack_ring",
+			"slot_index": 0,
+			"slot_id": "hud.attack_ring_skill.1",
+			"skill_name": "心灵启示",
+		}
+	)
+	assert(
+		not hidden_assignment.ok and hidden_assignment.reason == "skill_hidden"
+	)
+	var legacy_hidden := LoadoutRules.normalize_assignments({
+		"contract_id": LoadoutRules.LEGACY_BUTTON_ASSIGNMENTS_CONTRACT_ID,
+		"center": [],
+		"attack_ring": ["心灵启示"],
+	})
+	assert(
+		legacy_hidden.attack_ring[0] == "心灵启示",
+		"old hidden-skill bindings must be preserved for save compatibility"
+	)
+
+	print("SKILL_BUTTON_ASSIGNMENTS_V3_PASS：攻击主键1槽、六环6槽、旧存档迁移、被动与隐藏技能排除正常")
 	get_tree().quit(0)

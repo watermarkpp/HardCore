@@ -70,6 +70,9 @@ const SpellTargetLockPolicyScript := preload(
 const SkillResourceServiceScript := preload(
 	"res://scripts/skills/skill_resource_service.gd"
 )
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -223,6 +226,9 @@ var _skill_footprint_release_serial := 0
 var _canonical_fire_charge_expires_ms := 0
 var _skill_cast_target: EnemyActor
 var _selected_friendly_instance_id := 0
+var _ongoing_heals: Array[Dictionary] = []
+var _stealth_alpha_restore: Dictionary = {}
+var _last_taoist_buff_hint_text := ""
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
@@ -409,6 +415,9 @@ func _process(delta: float) -> void:
 	_update_target_hud()
 	_process_skill_input_actions(delta)
 	_process_magic_shield_auto_refresh(delta)
+	_tick_ongoing_heals(delta)
+	_update_stealth_alpha()
+	_update_taoist_buff_hints()
 	_warrior_hud_timer -= delta
 	_movement_target_refresh_remaining = maxf(0.0, _movement_target_refresh_remaining - delta)
 	if _warrior_hud_timer <= 0.0:
@@ -3371,6 +3380,10 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if definition.is_empty():
 		return &"rejected"
+	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
+		if show_failure:
+			hud.show_message("该技能已隐藏，无法使用")
+		return &"rejected"
 	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
 	if (
 		PlayerState.profession == "战士"
@@ -3388,20 +3401,14 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		return &"accepted"
 	if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
 		## Friendly healing is selected by the pure support policy BEFORE any
-		## action/cooldown/MP commit. All-full or no injured friendly in 9 GU
-		## rejects the input without touching action state.
+		## action/cooldown/MP commit. Full-HP friendlies remain valid targets
+		## (user override 2026-08-09); only an empty/in-range-less pool rejects.
 		var heal_selection := _select_taoist_heal_target(
 			_canonical_screen_px_to_ground_gu(player.global_position)
 		)
 		if not bool(heal_selection.get("valid", false)):
 			if show_failure:
-				hud.show_message(
-					"附近没有可治疗的友方"
-					if str(heal_selection.get("reason", "")) == (
-						TaoistSupportPolicyScript.REASON_ALL_FRIENDLY_TARGETS_FULL_HP
-					)
-					else "附近没有受伤的友方"
-				)
+				hud.show_message("附近没有可治疗的友方")
 			_skill_cast_target = null
 			_selected_friendly_instance_id = 0
 			return &"rejected"
@@ -3478,6 +3485,10 @@ func _definition_requires_hostile_target(definition: Dictionary) -> bool:
 	if not relation.contains("hostile"):
 		return false
 	var mode := str(target.get("mode", ""))
+	## Entrapment is a ground-point hostile-monster area skill but must use the
+	## current valid locked monster like every other hostile spell.
+	if mode == "ground_point_hostile_monster_area":
+		return true
 	return (
 		mode != "facing_line"
 		and not mode.contains("surrounding")
@@ -3490,17 +3501,11 @@ func _spell_definition_allows_target(
 	definition: Dictionary,
 	target: EnemyActor
 ) -> bool:
-	if not _is_magic_target_in_range(target):
-		return false
-	var geometry: Dictionary = definition.get("geometry", {})
-	var maximum_range_gu := float(
-		geometry.get("maximum_range_gu", 0.0)
-	)
-	return SpellTargetLockPolicyScript.spell_range_allows_target(
-		_spell_lock_ground_gu(player.global_position),
-		_spell_lock_ground_gu(target.global_position),
-		maximum_range_gu
-	)
+	## Hostile cast eligibility is decided ONLY by the existing auto/manual
+	## enemy lock eligibility (alive, within the 12-GU lock domain). The
+	## skill's own maximum_range_gu no longer double-rejects a locked target
+	## (e.g. taoist.soul_fire_talisman 9-tile geometry vs the 12-GU lock).
+	return _is_magic_target_in_range(target)
 
 
 func _wire_item_quick_slots_hud() -> void:
@@ -4668,8 +4673,10 @@ func _canonical_target_context(
 	var target_within_skill_range := (
 		target != null and _spell_definition_allows_target(definition, target)
 	)
+	var hostile_target_required := _definition_requires_hostile_target(definition)
 	var independent_geometry_target := (
 		str(definition.get("skill_id", "")) != FIRE_WALL_SKILL_ID
+		and not hostile_target_required
 		and (
 			target_mode == "facing_line"
 			or target_mode.contains("surrounding")
@@ -4677,7 +4684,6 @@ func _canonical_target_context(
 			or target_mode.begins_with("self")
 		)
 	)
-	var hostile_target_required := _definition_requires_hostile_target(definition)
 	var usable_target := (
 		target != null
 		and (not target_relation.contains("hostile") or target_within_skill_range)
@@ -4764,6 +4770,7 @@ func _canonical_target_context(
 			monster_data.get("undead", monster_data.get("isUndead", false))
 		))
 		context.merge({
+			"target_instance_id": target.get_instance_id(),
 			"target_level": int(monster_data.get("level", target.level)),
 			"target_is_boss": target.is_boss,
 			"target_immovable": target.is_boss,
@@ -4775,6 +4782,8 @@ func _canonical_target_context(
 			"target_poison_resist": target.anti_poison,
 			"target_is_living": target.current_hp > 0,
 			"actual_hp_missing": target.max_hp - target.current_hp,
+			"target_control_immune": target.is_boss,
+			"target_within_level_gate": target.level <= PlayerState.level,
 		}, true)
 	# Caller-provided authoritative values (for example a server-selected
 	# teleport destination) must be applied before the immutable release
@@ -5108,6 +5117,26 @@ func _apply_canonical_effects_from_plan(
 					heal_actor,
 					int(effect.get("actual_hp_restored", 0))
 				)
+				var ongoing_heal: Variant = effect.get("ongoing_heal", {})
+				if ongoing_heal is Dictionary and not (
+					ongoing_heal as Dictionary
+				).is_empty():
+					_register_ongoing_heal(
+						int(
+							(ongoing_heal as Dictionary).get(
+								"target_instance_id",
+								heal_target_id
+							)
+						),
+						int((ongoing_heal as Dictionary).get("heal_per_tick", 1)),
+						int((ongoing_heal as Dictionary).get("tick_count", 3)),
+						float(
+							(ongoing_heal as Dictionary).get(
+								"tick_interval_seconds",
+								0.8
+							)
+						)
+					)
 			"dedicated_area_heal":
 				var target_results: Array = effect.get("target_results", [])
 				if not target_results.is_empty():
@@ -5141,6 +5170,25 @@ func _apply_canonical_effects_from_plan(
 							),
 							int(restored_by_target[heal_index])
 						)
+				var ongoing_heal_targets: Array = effect.get(
+					"ongoing_heal_targets",
+					[]
+				)
+				for raw_ongoing: Variant in ongoing_heal_targets:
+					if not raw_ongoing is Dictionary:
+						continue
+					var ongoing_entry: Dictionary = raw_ongoing
+					_register_ongoing_heal(
+						int(ongoing_entry.get("target_instance_id", 0)),
+						int(ongoing_entry.get("heal_per_tick", 1)),
+						int(ongoing_entry.get("tick_count", 3)),
+						float(
+							ongoing_entry.get(
+								"tick_interval_seconds",
+								0.8
+							)
+						)
+					)
 			"adjacent_push":
 				var repulsion_target := _canonical_effect_enemy(effect)
 				if (
@@ -5345,13 +5393,11 @@ func _apply_canonical_effects_from_plan(
 					)
 					for trapped_target_id: int in trapped_target_ids:
 						var node := instance_from_id(trapped_target_id)
-						if (
-							node is EnemyActor
-							and _skill_snapshot_intersects_enemy(
-								skill_release_snapshot,
-								node
-							)
-						):
+						## The plan's trapped identities are the authoritative
+						## locked monster(s); the 3x3 geometry is the boundary
+						## ring around the trapped monster, so the monster
+						## itself is not required to intersect the ring cells.
+						if node is EnemyActor:
 							node.apply_control(
 								float(effect.get("duration_seconds", 1))
 							)
@@ -6327,6 +6373,7 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 			"flat_reduction": reduction,
 			"expires_at_ms": Time.get_ticks_msec() + roundi(duration * 1000.0),
 		})
+		target.queue_redraw()
 
 
 func _apply_canonical_temptation(target: EnemyActor, effect: Dictionary) -> void:
@@ -6366,6 +6413,118 @@ func _apply_canonical_friendly_heal(actor: Node2D, amount: int) -> void:
 		player.restore_health(amount)
 	elif actor is SummonActor:
 		actor.current_hp = mini(actor.max_hp, actor.current_hp + amount)
+
+
+func _register_ongoing_heal(
+	target_instance_id: int,
+	heal_per_tick: int,
+	tick_count: int,
+	tick_interval_seconds: float
+) -> void:
+	if target_instance_id <= 0 or heal_per_tick <= 0 or tick_count <= 0:
+		return
+	_ongoing_heals.append({
+		"target_instance_id": target_instance_id,
+		"heal_per_tick": heal_per_tick,
+		"remaining_ticks": tick_count,
+		"tick_interval_seconds": maxf(0.1, tick_interval_seconds),
+		"elapsed": 0.0,
+	})
+
+
+func _tick_ongoing_heals(delta: float) -> void:
+	if _ongoing_heals.is_empty():
+		return
+	var keep: Array[Dictionary] = []
+	for entry: Dictionary in _ongoing_heals:
+		entry["elapsed"] = float(entry.get("elapsed", 0.0)) + delta
+		var interval := float(entry.get("tick_interval_seconds", 0.8))
+		while float(entry.get("elapsed", 0.0)) >= interval:
+			entry["elapsed"] = float(entry.get("elapsed", 0.0)) - interval
+			var remaining := int(entry.get("remaining_ticks", 0)) - 1
+			entry["remaining_ticks"] = remaining
+			var actor := _canonical_friendly_actor(
+				int(entry.get("target_instance_id", 0))
+			)
+			if not is_instance_valid(actor):
+				entry["remaining_ticks"] = 0
+				break
+			_apply_canonical_friendly_heal(
+				actor,
+				int(entry.get("heal_per_tick", 1))
+			)
+			if remaining <= 0:
+				break
+		if (
+			int(entry.get("remaining_ticks", 0)) > 0
+			and is_instance_valid(_canonical_friendly_actor(
+				int(entry.get("target_instance_id", 0))
+			))
+		):
+			keep.append(entry)
+	_ongoing_heals = keep
+
+
+func _ongoing_heal_remaining_ticks(target_instance_id: int) -> int:
+	var total := 0
+	for entry: Dictionary in _ongoing_heals:
+		if int(entry.get("target_instance_id", 0)) == target_instance_id:
+			total += int(entry.get("remaining_ticks", 0))
+	return total
+
+
+func _set_actor_stealth_alpha(actor: Node2D, stealthed: bool) -> void:
+	if not is_instance_valid(actor):
+		return
+	var actor_id := actor.get_instance_id()
+	if stealthed:
+		if not _stealth_alpha_restore.has(actor_id):
+			_stealth_alpha_restore[actor_id] = actor.modulate.a
+		actor.modulate.a = minf(actor.modulate.a, 0.4)
+	else:
+		if _stealth_alpha_restore.has(actor_id):
+			actor.modulate.a = float(_stealth_alpha_restore[actor_id])
+			_stealth_alpha_restore.erase(actor_id)
+
+
+func _update_stealth_alpha() -> void:
+	if not is_instance_valid(player):
+		return
+	_set_actor_stealth_alpha(player, player.is_stealthed())
+	for node: Node in get_tree().get_nodes_in_group("summons"):
+		if (
+			node is SummonActor
+			and (node as SummonActor).owner_player == player
+		):
+			_set_actor_stealth_alpha(
+				node as SummonActor,
+				(node as SummonActor).is_stealthed()
+			)
+
+
+func _update_taoist_buff_hints() -> void:
+	if hud == null or not is_instance_valid(player):
+		return
+	var entries: Array[String] = []
+	var defence_snapshot := player.defence_buff_snapshot()
+	var ac_bonus := int(defence_snapshot.get("ac_bonus", 0))
+	var ac_remaining := float(defence_snapshot.get("ac_remaining_seconds", 0.0))
+	if ac_bonus > 0:
+		entries.append("AC+%d %ds" % [ac_bonus, int(ceil(ac_remaining))])
+	var mac_bonus := int(defence_snapshot.get("mac_bonus", 0))
+	var mac_remaining := float(defence_snapshot.get("mac_remaining_seconds", 0.0))
+	if mac_bonus > 0:
+		entries.append("MAC+%d %ds" % [mac_bonus, int(ceil(mac_remaining))])
+	if player.is_stealthed():
+		entries.append("隐身 %ds" % int(ceil(maxf(0.0, player.stealth_time))))
+	var heal_ticks := _ongoing_heal_remaining_ticks(player.get_instance_id())
+	if heal_ticks > 0:
+		entries.append("恢复 %ds" % int(ceil(float(heal_ticks) * 0.8)))
+	var hint_text := "｜".join(entries)
+	if hint_text == _last_taoist_buff_hint_text:
+		return
+	_last_taoist_buff_hint_text = hint_text
+	hud.update_taoist_buff_hints(entries)
 
 
 func _canonical_friendly_candidates() -> Array:
@@ -6420,32 +6579,38 @@ func _resolve_release_friendly_target(
 ) -> Dictionary:
 	## Release-time validation of the identity recorded at input. On failure it
 	## reselects exactly once via the same pure policy; a missing result means
-	## no canonical plan and no MP commit.
+	## no canonical plan and no MP commit. The recorded target stays
+	## authoritative only while it is still the policy's current best; once it
+	## became full while another friendly is injured (or left range / died),
+	## the release reselects exactly once. Full-HP pools still resolve validly
+	## with self preferred (user override 2026-08-09).
 	if requested_instance_id > 0:
-		for raw_candidate: Variant in candidates:
-			if not raw_candidate is Dictionary:
-				continue
-			var candidate: Dictionary = raw_candidate
-			if int(candidate.get("instance_id", 0)) != requested_instance_id:
-				continue
-			var missing := (
-				int(candidate.get("max_hp", 1))
-				- int(candidate.get("current_hp", 0))
-			)
-			if missing <= 0:
-				break
-			if not TaoistFriendlyTargetingScript.within_range_gu(
-				candidate,
-				center_ground_gu,
-				TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
-			):
-				break
-			return {
-				"valid": true,
-				"selected": candidate,
-				"reselected": false,
-				"reason": "",
-			}
+		var current_best := TaoistSupportPolicyScript.select_heal_target(
+			candidates,
+			center_ground_gu,
+			TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
+		)
+		if (
+			bool(current_best.get("valid", false))
+			and int(
+				current_best.get("selected", {}).get("instance_id", 0)
+			) == requested_instance_id
+		):
+			var recorded: Dictionary = {}
+			for raw_candidate: Variant in candidates:
+				if not raw_candidate is Dictionary:
+					continue
+				var candidate: Dictionary = raw_candidate
+				if int(candidate.get("instance_id", 0)) == requested_instance_id:
+					recorded = candidate
+					break
+			if not recorded.is_empty():
+				return {
+					"valid": true,
+					"selected": recorded,
+					"reselected": false,
+					"reason": "",
+				}
 	var selection := TaoistSupportPolicyScript.select_heal_target(
 		candidates,
 		center_ground_gu,
