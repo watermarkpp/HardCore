@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-08-10：全项目基石审计关闭与 Android 测试包
+
+- 审计与运行时代码固定于 `58db719671c15a126fde67733745e1a84ccee3a9`。UI/数据、地图发布、职业战斗、核心世界/存档均由 Sol high/xhigh 在独立所有权范围完成审计、专项测试和逐项集成；Monster Streaming 保持既有 `HOLD`，未修改冻结实现。
+- 核心关闭项包括：安全退出写失败 fail-closed、临时文件验证与 `.bak` 恢复；canonical `resource_commit_required`、召唤 operation/等级/snapshot、radius 2 最近合法落点；玩家/召唤物死亡幂等；投射物 canonical release snapshot；地图发布 candidate binding、registry 事务与显示名保留；HUD 出售/任务/仓库权威链；12 个女性盔甲主表与运行时性别门禁；Android 固定提交/build-info/dirty/编译脚本核验。
+- 全量 `critical` 最终 `250/250 PASS`、`failed=0`、`engine_log_errors=0`。来源优先级验证通过；4,889 个唯一资源引用中 blocker `4/4`、required `4,654/4,654`；183 个 Python 文件 AST、19 个 PowerShell 文件解析与正式套件注册均通过。
+- 隔离构建成品：`outputs/hardcore/HardCore-20260810-foundation-audit-debug.apk`；桌面同字节副本：`C:/Users/Administrator/Desktop/HardCore-20260810-foundation-audit-debug.apk`；大小 `245,014,120` 字节；SHA-256 `E673181750303DD189F7ABFF32679B882EE46DDD0321159BDC3809F1EE978AA1`。
+- 包信息：`versionCode=64`、`versionName=1.18.1-spatial-projection`、应用名 `HardCore`、包名 `com.personal.mafaoffline`、`arm64-v8a`、minSdk 24、targetSdk 36。APK v2/v3 签名、12 个编译脚本、586 帧技能导入、运行时资源探针与 build-info commit 均通过；等待用户实机验收。
+
 ## 2026-08-08：FREEZE-G0.3 关闭与状态同步
 
 - `FREEZE-G0.3 = CLOSED`；`confirmed_production_blockers = 0`；`new_must_fix = 0`。

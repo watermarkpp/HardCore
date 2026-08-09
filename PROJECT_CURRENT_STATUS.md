@@ -1,17 +1,26 @@
 # HardCore Current Status
 
-Updated against production HEAD: `13821799fced2fee0d50c27d89bba3149464077f`
+Updated against audited runtime HEAD: `58db719671c15a126fde67733745e1a84ccee3a9`
 Branch: `codex/integration`
-Updated: 2026-08-08
+Updated: 2026-08-10
 Purpose: where the project stands right now.
 
 ## Current HEAD
 
-`13821799fced2fee0d50c27d89bba3149464077f`
+`58db719671c15a126fde67733745e1a84ccee3a9`（APK runtime commit；后续仅文档快照提交）
 
 ## Current Stage
 
-**CORE STABILITY FREEZE**（`FREEZE-G0.3 = CLOSED`）
+**FOUNDATION AUDIT CLOSED / DEVICE ACCEPTANCE READY**
+
+## 2026-08-10 Foundation Audit Closure
+
+- 全项目按 UI/数据、地图发布、职业战斗、核心世界/存档四个互斥范围完成 Sol high/xhigh 审计、修复和集成；Monster Streaming 继续遵守既有 `HOLD`，未修改冻结生产实现。
+- 关闭的主要缺陷：安全退出误报成功与坏档无备份恢复；canonical 资源提交/召唤 descriptor 丢失；玩家和召唤物死亡重复结算；投射物重复建立释放快照；地图候选跨文档发布、registry 非 fail-closed、显示名覆盖；HUD 出售/任务放弃/仓库排序无权威消费者；仓库上限与弹窗布局；12 个女性盔甲主表缺失；Android build-info/dirty/编译脚本验证不完整。
+- 正式关键回归：`critical = PASS 250/250`，`failed=0`，`engine_log_errors=0`；来源优先级、资源完整性、测试注册、Python AST、PowerShell 解析全部通过。
+- 固定 APK runtime commit：`58db719671c15a126fde67733745e1a84ccee3a9`。
+- 桌面 APK：`C:/Users/Administrator/Desktop/HardCore-20260810-foundation-audit-debug.apk`；`245,014,120` 字节；SHA-256 `E673181750303DD189F7ABFF32679B882EE46DDD0321159BDC3809F1EE978AA1`。
+- Android 验证：`versionCode=64`、`versionName=1.18.1-spatial-projection`、`HardCore`、`com.personal.mafaoffline`、`arm64-v8a`、minSdk 24、targetSdk 36；APK v2/v3 签名、12 个编译脚本、运行时资源探针和 build-info commit 全部通过。
 
 ## Active Wizard Line Presentation Alignment
 
@@ -94,9 +103,9 @@ Purpose: where the project stands right now.
 
 ## Next Verification
 
-- `NEXT_VERIFICATION = WIZARD_SKILL_DEVICE_ACCEPTANCE`
-- `STATUS = READY_FOR_NEW_APK_DEVICE_ACCEPTANCE`
-- Verify both the Wizard Line presentation alignment and restored Hellfire damage with the newly exported Debug APK.
+- `NEXT_VERIFICATION = FOUNDATION_APK_DEVICE_ACCEPTANCE`
+- `STATUS = DESKTOP_APK_READY_FOR_MANUAL_ACCEPTANCE`
+- 使用 2026-08-10 桌面 APK 复验战斗、存档、地图发布、装备性别门禁、商店出售、任务放弃、仓库排序，以及既有 Wizard Line / Hellfire 实机表现。
 
 ## Pending Freeze Quality Gates
 
