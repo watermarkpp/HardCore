@@ -7,10 +7,10 @@ class FakeHud extends GameHUD:
 	var received_assignments: Array = []
 	var messages: Array[String] = []
 
-	override func set_item_quick_slots(assignments: Array) -> void:
+	func set_item_quick_slots(assignments: Array) -> void:
 		received_assignments = assignments.duplicate()
 
-	override func show_message(message: String, seconds := 2.0) -> void:
+	func show_message(message: String, seconds := 2.0) -> void:
 		messages.append(message)
 
 
