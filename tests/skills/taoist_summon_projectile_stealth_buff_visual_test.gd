@@ -10,10 +10,10 @@ func _ready() -> void:
 func _run() -> void:
 	var owner := PlayerCharacter.new()
 	owner.current_hp = 100
-	## Warm both profiles so this fixture focuses on stealth/buff visuals rather
-	## than async loading (covered by taoist_summon_projectile_async_visual_test).
-	SummonVisualRegistryScript.profile("skeleton")
-	SummonVisualRegistryScript.profile("divine_beast")
+	## Use the formal synchronous profile activation entrypoint; this populates
+	## the same registry cache consumed by SummonActor.setup().
+	assert(not SummonVisualRegistryScript.profile("skeleton").is_empty())
+	assert(not SummonVisualRegistryScript.profile("divine_beast").is_empty())
 
 	var summon := _spawn(owner, "taoist.summon_skeleton")
 	summon.apply_stealth(5.0, "buff.taoist.mass_invisibility")
