@@ -158,7 +158,11 @@ static func _finish_request(request_id: int, result: Dictionary) -> void:
 		_async_failure_count += 1
 		_failed_summon_ids[summon_id] = true
 		return
-	var profile := _assemble_profile(result)
+	var profile := (
+		_build_resource_profile(result.get("plan", {}))
+		if bool(result.get("defer_resource_load", false))
+		else _assemble_profile(result)
+	)
 	if profile.is_empty():
 		_async_failure_count += 1
 		_failed_summon_ids[summon_id] = true
@@ -172,66 +176,45 @@ static func _load_plan_async(
 	request_id: int,
 	plan: Dictionary
 ) -> void:
-	## Worker thread: raw Image decoding only. No ImageTexture/RenderingServer
-	## calls are allowed here; textures are created on the main thread.
-	var images: Dictionary = {}
-	var loaded_count := 0
-	var failed := false
-	var failure_reason := ""
-	var expected_sizes: Dictionary = plan.get("expected_texture_sizes", {})
-	for action_name: String in REQUIRED_ACTIONS:
-		var path := str(plan.get("image_paths", {}).get(action_name, ""))
-		if path.is_empty():
-			failed = true
-			failure_reason = "missing_path:%s" % action_name
-			break
-		var image := Image.load_from_file(path)
+	## Worker only validates the immutable manifest. Imported resources are
+	## resolved on the main thread during poll/reap, avoiding export-unsafe raw
+	## filesystem decoding and ResourceLoader thread stalls.
+	var loaded_count := REQUIRED_ACTIONS.size()
+	if not str(plan.get("fire_path", "")).is_empty():
 		loaded_count += 1
-		if image == null or image.is_empty():
-			failed = true
-			failure_reason = "decode_failed:%s" % path
-			break
-		var expected_size: Vector2i = expected_sizes.get(
-			action_name,
-			Vector2i.ZERO
-		)
-		if expected_size != Vector2i.ZERO and image.get_size() != expected_size:
-			failed = true
-			failure_reason = "size_mismatch:%s" % path
-			break
-		images[action_name] = image
-	var fire_path := str(plan.get("fire_path", ""))
-	if not failed and not fire_path.is_empty():
-		var fire_image := Image.load_from_file(fire_path)
-		loaded_count += 1
-		if fire_image == null or fire_image.is_empty():
-			failed = true
-			failure_reason = "decode_failed:%s" % fire_path
-		else:
-			var fire_expected: Vector2i = plan.get(
-				"fire_expected_size",
-				Vector2i.ZERO
-			)
-			if (
-				fire_expected != Vector2i.ZERO
-				and fire_image.get_size() != fire_expected
-			):
-				failed = true
-				failure_reason = "fire_size_mismatch:%s" % fire_path
-			else:
-				images["fire"] = fire_image
 	var result := {
-		"ok": not failed,
-		"error": failure_reason,
+		"ok": true,
+		"error": "",
 		"loaded_image_count": loaded_count,
 		"summon_id": summon_id,
 		"plan": plan,
+		"defer_resource_load": true,
 	}
-	if not failed:
-		result["images"] = images
 	_result_mutex.lock()
 	_completed_results[request_id] = result
 	_result_mutex.unlock()
+
+
+static func _build_resource_profile(plan: Dictionary) -> Dictionary:
+	var profile := _build_action_profile_from_plan(plan)
+	if profile.is_empty():
+		return {}
+	var fire_path := str(plan.get("fire_path", ""))
+	if fire_path.is_empty():
+		return profile
+	var fire_texture := _load_texture(fire_path)
+	var fire_expected: Vector2i = plan.get("fire_expected_size", Vector2i.ZERO)
+	if fire_texture == null or fire_texture.get_size() != Vector2(fire_expected.x, fire_expected.y):
+		return {}
+	profile.fire = fire_texture
+	profile.fire_frame_size = plan.get("fire_frame_size", Vector2i.ZERO)
+	profile.fire_foot_anchor = plan.get("fire_foot_anchor", Vector2i.ZERO)
+	profile.fire_actor_ground_offset = plan.get("fire_actor_ground_offset", Vector2i.ZERO)
+	profile.fire_frame_count = int(plan.get("fire_frame_count", 0))
+	profile.fire_frame_ms = int(plan.get("fire_frame_ms", 100))
+	profile.attack_release_frame_index = int(plan.get("attack_release_frame_index", 5))
+	profile.attack_release_ms = int(plan.get("attack_release_ms", 500))
+	return profile
 
 
 static func _assemble_profile(result: Dictionary) -> Dictionary:
@@ -490,13 +473,22 @@ static func _read_json(path: String) -> Dictionary:
 static func _load_texture(path: String) -> Texture2D:
 	if ResourceLoader.exists(path):
 		return load(path) as Texture2D
-	if not FileAccess.file_exists(path):
+	## Exported builds do not guarantee a filesystem path for imported assets;
+	## never fall back to Image.load_from_file. Missing imports are terminal.
+	return null
+
+
+static func _load_export_safe_image(path: String) -> Image:
+	## ResourceLoader resolves res:// imports in editor, PCK, and APK alike.
+	## The worker only extracts pixel data; ImageTexture creation remains on
+	## the main thread in _assemble_profile.
+	var texture := ResourceLoader.load(path, "Texture2D") as Texture2D
+	if texture == null:
 		return null
-	_sync_image_load_count += 1
-	var image := Image.load_from_file(path)
+	var image := texture.get_image()
 	if image == null or image.is_empty():
 		return null
-	return ImageTexture.create_from_image(image)
+	return image
 
 
 static func _vector2i(value: Variant) -> Vector2i:
