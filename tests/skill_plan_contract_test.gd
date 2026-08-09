@@ -9,6 +9,9 @@ const Fixtures := preload(
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
+const PlanContract := preload(
+	"res://scripts/skills/skill_execution_plan_contract.gd"
+)
 
 var _checked := 0
 
@@ -26,8 +29,10 @@ func _run() -> void:
 	_check_spatial_poison("taoist.poison", "poison_resolution")
 	_check_non_spatial_amulet("taoist.defense", "pure_defense_buff")
 	_check_spatial_amulet("taoist.summon_skeleton", "main_pet_spawn")
+	_check_summon_recall_contract()
+	_check_resource_commit_compat_default()
 	_check_spatial("warrior.thrusting", "")
-	assert(_checked == 9, "all contract cases must run")
+	assert(_checked == 11, "all contract cases must run")
 	_cleanup()
 	await get_tree().process_frame
 	print("SKILL_PLAN_CONTRACT_PASS cases=%d" % _checked)
@@ -144,6 +149,92 @@ func _check_spatial_amulet(skill_id: String, expected_action: String) -> void:
 			action_types.has(expected_action),
 			"%s must contain gameplay action %s" % [skill_id, expected_action]
 		)
+	assert(bool(plan.get("resource_commit_required", false)))
+	var descriptors: Array = plan.get("summon_descriptors", [])
+	assert(descriptors.size() == 1)
+	var descriptor: Dictionary = descriptors[0]
+	var summon_action: Dictionary = {}
+	for raw_action: Variant in plan.get("gameplay_actions", []):
+		if raw_action is Dictionary and str(raw_action.get("type", "")) == "main_pet_spawn":
+			summon_action = raw_action
+			break
+	assert(descriptor.operation == "main_pet_spawn")
+	assert(not summon_action.is_empty())
+	assert(
+		int(descriptor.initial_pet_level)
+		== int(summon_action.initial_pet_level)
+	)
+	assert(int(descriptor.max_pet_level) == int(summon_action.max_pet_level))
+	assert(
+		bool(descriptor.skill_rank_is_pet_level)
+		== bool(summon_action.skill_rank_is_pet_level)
+	)
+	assert(str(descriptor.spawn_snapshot_id) == str(snapshot.snapshot_id))
+	assert(int(descriptor.spawn_runtime_map_id) == int(snapshot.runtime_map_id))
+	assert(descriptor.spawn_footprint_snapshot == snapshot)
+
+
+func _check_summon_recall_contract() -> void:
+	_checked += 1
+	var target_context := Fixtures.default_target_context(true)
+	target_context["has_main_pet"] = true
+	var request := Fixtures.make_request(
+		"taoist.summon_skeleton",
+		1,
+		35,
+		Vector2i.ZERO,
+		Vector2i.DOWN,
+		target_context,
+		Fixtures.default_resource_context(500)
+	)
+	var snapshot := Fixtures.circle_snapshot(
+		self,
+		"taoist.summon_skeleton",
+		"q3a:contract:taoist.summon_skeleton:recall",
+		1,
+		Vector2.ZERO,
+		2.0
+	)
+	var plan: Dictionary = Router.build_canonical_plan(
+		request,
+		Fixtures.canonical_context(
+			1,
+			"q3a:contract:taoist.summon_skeleton:recall",
+			7,
+			0,
+			snapshot
+		)
+	)
+	_assert_contract_fields(plan)
+	assert(bool(plan.rejection.accepted))
+	assert(not bool(plan.resource_commit_required))
+	var descriptors: Array = plan.summon_descriptors
+	assert(descriptors.size() == 1)
+	assert(descriptors[0].operation == "recall_existing_main_pet")
+	assert(not bool(descriptors[0].spawned))
+	assert(str(descriptors[0].skill_id) == "taoist.summon_skeleton")
+	assert(str(descriptors[0].release_id) == str(snapshot.release_id))
+	assert(str(descriptors[0].template_id) == "skeleton")
+	assert(str(descriptors[0].spawn_snapshot_id) == str(snapshot.snapshot_id))
+	assert(descriptors[0].spawn_footprint_snapshot == snapshot)
+
+
+func _check_resource_commit_compat_default() -> void:
+	_checked += 1
+	var plan := PlanContract.build_canonical_plan(
+		{
+			"accepted": true,
+			"effects": [],
+			"resource_quote": {"mp_cost": 1},
+		},
+		{"skill_id": "taoist.defense", "rank": 1},
+		{"release_id": "q3a:resource_commit:compat", "runtime_map_id": -1}
+	)
+	assert(bool(plan.rejection.accepted))
+	assert(
+		bool(plan.resource_commit_required),
+		"accepted legacy planners without a flag must retain commit-by-default"
+	)
 
 
 func _check_spatial_poison(skill_id: String, expected_action: String) -> void:
@@ -227,6 +318,7 @@ func _assert_contract_fields(plan: Dictionary) -> void:
 	assert(plan.has("input_mode") and plan.has("requested_direction"), "input/direction")
 	assert(plan.has("resolved_direction") and plan.has("lock_on_context"), "direction/lock")
 	assert(plan.has("resource_cost") and plan.has("cooldown_contract"), "cost/cooldown")
+	assert(plan.has("resource_commit_required"), "resource_commit_required")
 	assert(plan.has("canonical_snapshot"), "canonical_snapshot")
 	assert(plan.has("gameplay_actions") and plan.has("presentation_actions"), "actions")
 	assert(plan.has("projectile_descriptors"), "projectile_descriptors")

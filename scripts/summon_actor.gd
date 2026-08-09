@@ -814,10 +814,16 @@ func take_magic_damage(amount: int) -> void:
 
 
 func _apply_resolved_damage(amount: int) -> void:
+	if state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return
 	current_hp = maxi(0, current_hp - maxi(1, amount))
 	if current_hp == 0:
 		_set_state(SummonState.DEAD)
+		remove_from_group("combat_targets")
+		collision_layer = 0
+		collision_mask = 0
 		velocity = Vector2.ZERO
+		_current_target = null
 		_clear_pending_attack()
 		_hit_visual_remaining = 0.0
 		_attack_visual_remaining = 0.0

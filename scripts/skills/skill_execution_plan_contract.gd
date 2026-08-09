@@ -228,6 +228,18 @@ static func build_canonical_plan(
 		):
 			if raw_cell is Vector2i:
 				effective_cells.append(raw_cell)
+	# Runtime planners may explicitly suppress resource consumption for an
+	# accepted no-op/recall.  Older planners expose `resource_commit`; accepted
+	# plans without either field retain the historical commit-by-default rule.
+	var resource_commit_required := (
+		accepted
+		and bool(
+			legacy_result.get(
+				"resource_commit_required",
+				legacy_result.get("resource_commit", true)
+			)
+		)
+	)
 	var plan := {
 		"contract": CONTRACT_ID,
 		"plan_version": PLAN_VERSION,
@@ -254,6 +266,7 @@ static func build_canonical_plan(
 			if legacy_result.get("resource_quote", {}) is Dictionary
 			else {}
 		),
+		"resource_commit_required": resource_commit_required,
 		"cooldown_contract": definition.get("timing", {}).duplicate(true),
 		"canonical_snapshot": snapshot,
 		"snapshot_id": str(snapshot.get("snapshot_id", "")),
@@ -276,7 +289,11 @@ static func build_canonical_plan(
 		),
 		"projectile_descriptors": _descriptors_of_kind(effects, "projectile"),
 		"ground_effect_descriptors": _descriptors_of_kind(effects, "ground"),
-		"summon_descriptors": _descriptors_of_kind(effects, "summon"),
+		"summon_descriptors": _descriptors_of_kind(
+			effects,
+			"summon",
+			snapshot
+		),
 		"rejection": {
 			"accepted": accepted,
 			"reason": reason if not accepted else REASON_ACCEPTED,
@@ -617,6 +634,10 @@ static func plan_hash(plan: Dictionary) -> String:
 		"resolved_direction": plan.get("resolved_direction", Vector2i.ZERO),
 		"effective_rank": plan.get("effective_rank", 0),
 		"resource_cost": plan.get("resource_cost", {}),
+		"resource_commit_required": plan.get(
+			"resource_commit_required",
+			bool(plan.get("rejection", {}).get("accepted", false))
+		),
 		"cooldown_contract": plan.get("cooldown_contract", {}),
 		"canonical_snapshot": plan.get("canonical_snapshot", {}),
 		"geometry_cells": plan.get("geometry_cells", []),
@@ -681,6 +702,9 @@ static func skill_execution_plan_diagnostics(plan: Dictionary) -> Dictionary:
 		"runtime_map_id": int(plan.get("runtime_map_id", -1)),
 		"snapshot_id": str(plan.get("snapshot_id", "")),
 		"resource_cost": plan.get("resource_cost", {}),
+		"resource_commit_required": bool(
+			plan.get("resource_commit_required", false)
+		),
 		"cooldown": plan.get("cooldown_contract", {}),
 		"gameplay_action_count": (plan.get("gameplay_actions", []) as Array).size(),
 		"presentation_action_count": (
@@ -894,7 +918,11 @@ static func _primary_effect(effects: Array) -> Dictionary:
 	return {}
 
 
-static func _descriptors_of_kind(effects: Array, kind: String) -> Array:
+static func _descriptors_of_kind(
+	effects: Array,
+	kind: String,
+	canonical_snapshot: Dictionary = {}
+) -> Array:
 	var result: Array = []
 	for raw_effect: Variant in effects:
 		if not raw_effect is Dictionary:
@@ -936,13 +964,48 @@ static func _descriptors_of_kind(effects: Array, kind: String) -> Array:
 						"operation": "ground_dot",
 					})
 			"summon":
-				if effect_type in ["main_pet_spawn", "summon"]:
+				if effect_type in [
+					"main_pet_spawn",
+					"recall_existing_main_pet",
+					"summon",
+				]:
 					result.append({
 						"kind": "summon",
-						"skill_id": str(effect.get("skill_id", "")),
-						"release_id": str(effect.get("release_id", "")),
-						"template_id": str(effect.get("template_id", "")),
-						"spawned": bool(effect.get("spawned", true)),
+						"skill_id": str(effect.get(
+							"skill_id",
+							canonical_snapshot.get("skill_id", "")
+						)),
+						"release_id": str(effect.get(
+							"release_id",
+							canonical_snapshot.get("release_id", "")
+						)),
+						"operation": effect_type,
+						"template_id": str(
+							effect.get(
+								"template_id",
+								effect.get("template_requested", "")
+							)
+						),
+						"spawned": bool(effect.get(
+							"spawned",
+							effect_type != "recall_existing_main_pet"
+						)),
+						"initial_pet_level": int(
+							effect.get("initial_pet_level", 0)
+						),
+						"max_pet_level": int(
+							effect.get("max_pet_level", -1)
+						),
+						"skill_rank_is_pet_level": bool(
+							effect.get("skill_rank_is_pet_level", false)
+						),
+						"spawn_snapshot_id": str(
+							canonical_snapshot.get("snapshot_id", "")
+						),
+						"spawn_runtime_map_id": int(
+							canonical_snapshot.get("runtime_map_id", -1)
+						),
+						"spawn_footprint_snapshot": canonical_snapshot,
 					})
 	return result
 

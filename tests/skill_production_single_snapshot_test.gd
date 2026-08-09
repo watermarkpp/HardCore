@@ -53,7 +53,34 @@ func _run() -> void:
 	assert(
 		str(projectile.skill_footprint_snapshot.get("snapshot_id", ""))
 			== snapshot_id,
-		"projectile must consume the canonical snapshot id"
+		(
+			"projectile must consume canonical snapshot expected=%s actual=%s "
+			+ "rejection=%s snapshot_skill=%s projectile_skill=%s "
+			+ "snapshot_release=%s projectile_release=%s snapshot_map=%s "
+			+ "projectile_map=%s"
+		)
+		% [
+			snapshot_id,
+			str(projectile.skill_footprint_snapshot.get("snapshot_id", "")),
+			str(projectile.projection_rejection_reason),
+			str(plan.get("canonical_snapshot", {}).get("skill_id", "")),
+			projectile.skill_id,
+			str(plan.get("canonical_snapshot", {}).get("release_id", "")),
+			projectile.release_id,
+			str(plan.get("canonical_snapshot", {}).get("runtime_map_id", "")),
+			str(projectile.runtime_map_id),
+		]
+	)
+	assert(
+		projectile.skill_footprint_snapshot
+		== plan.get("canonical_snapshot", {}),
+		"projectile must retain the exact canonical release snapshot"
+	)
+	var projectile_diag := projectile.projectile_broadphase_diagnostics()
+	assert(bool(projectile_diag.canonical_release_snapshot_bound))
+	assert(
+		int(projectile_diag.release_snapshot_build_count) == 0,
+		"canonical projectile setup/projection must not rebuild release snapshot"
 	)
 	for frame in range(3):
 		await get_tree().physics_frame

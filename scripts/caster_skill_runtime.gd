@@ -150,7 +150,12 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 		0,
 		0.0,
 		str(plan.get("skill_id", "")),
-		str(plan.get("release_id", ""))
+		str(plan.get("release_id", "")),
+		(
+			plan.get("skill_footprint_snapshot", {})
+			if plan.get("skill_footprint_snapshot", {}) is Dictionary
+			else {}
+		)
 	)
 	var coordinate_context: Variant = plan.get(
 		"snapshot_coordinate_context", {}
@@ -309,6 +314,13 @@ static func create_cast_nodes_from_canonical_plan(
 			coordinate_context["screen_to_ground_position_px"] = (
 				screen_to_ground_from_context
 			)
+		var ground_to_screen_from_context: Callable = runtime_context.get(
+			"ground_gu_to_screen_position_px", Callable()
+		)
+		if ground_to_screen_from_context.is_valid():
+			coordinate_context["ground_position_gu_to_screen_position_px"] = (
+				ground_to_screen_from_context
+			)
 	for raw_descriptor: Variant in plan.get("projectile_descriptors", []):
 		if not raw_descriptor is Dictionary:
 			continue
@@ -374,6 +386,10 @@ static func create_cast_nodes_from_canonical_plan(
 			# adapter hands the frozen descriptor over without creating a node.
 			summon_sink.call(descriptor, plan)
 			continue
+		if str(descriptor.get("operation", "")) == "recall_existing_main_pet":
+			# Recall requires the lifecycle owner; a node-only fallback must never
+			# reinterpret it as a fresh summon.
+			continue
 		var summon := create_summon_actor(
 			{
 				"operation": "summon",
@@ -381,8 +397,16 @@ static func create_cast_nodes_from_canonical_plan(
 				"skill_id": skill_id,
 				"release_id": release_id,
 				"display_name": str(descriptor.get("template_id", "")),
-				"skill_level": 0,
+				"skill_level": int(
+					descriptor.get("initial_pet_level", 0)
+				),
+				"max_pet_level": int(
+					descriptor.get("max_pet_level", -1)
+				),
 				"template_id": str(descriptor.get("template_id", "")),
+				"spawn_footprint_snapshot": descriptor.get(
+					"spawn_footprint_snapshot", {}
+				),
 			},
 			owner,
 			spiritual_power,
@@ -577,7 +601,8 @@ static func create_summon_actor(
 		maxi(1, spiritual_power),
 		int(plan.get("skill_level", 0)),
 		str(plan.get("skill_id", "")),
-		maxi(1, owner_level)
+		maxi(1, owner_level),
+		int(plan.get("max_pet_level", -1))
 	)
 	var coordinate_context: Variant = plan.get(
 		"snapshot_coordinate_context", {}
