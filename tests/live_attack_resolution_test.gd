@@ -1,6 +1,7 @@
 extends Node
 
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
 
 func _ready() -> void:
@@ -23,14 +24,25 @@ func _run() -> void:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
 
 	var origin_at_input: Vector2 = game.player.global_position
-	var intended := _make_enemy(game, "原锁定目标", origin_at_input + Vector2(64, 0))
-	var decoy := _make_enemy(game, "禁止偷换目标", origin_at_input + Vector2(64, 0))
+	var target_axis_gu := Vector2(1.0, 0.35).normalized()
+	var intended := _make_enemy(
+		game,
+		"原锁定目标",
+		origin_at_input + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			target_axis_gu
+		)
+	)
+	var decoy := _make_enemy(
+		game,
+		"禁止偷换目标",
+		origin_at_input + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			target_axis_gu.rotated(PI / 2.0)
+		)
+	)
 	game.locked_target = intended
 
-	# The target crosses from E to S during the 170ms windup. The body animation
-	# remains E, so melee geometry must remain E as well; silently rotating only
-	# the damage sector to S is the moving-attack desynchronization regression.
-	intended.global_position = game.player.global_position + Vector2(0, 32)
+	# Body animation remains eight-way, while the release geometry uses the
+	# exact live axis to the still-valid locked target.
 	game.player._pending_attack_context = {
 		"mode": "normal",
 		"skill_name": "attack",
@@ -47,15 +59,17 @@ func _run() -> void:
 	var intended_hp := intended.current_hp
 	var decoy_hp := decoy.current_hp
 	game._on_player_attack(origin_at_input, Vector2.RIGHT, 20)
-	assert(intended.current_hp == intended_hp, "伤害扇区在命中帧背离E向动画而暗转到S")
-	assert(decoy.current_hp == decoy_hp - 20, "E向动画没有命中E向刀锋范围内目标")
+	assert(intended.current_hp < intended_hp, "合法锁定目标未被连续轴命中")
+	assert(decoy.current_hp == decoy_hp, "连续轴攻击错误扫描了未锁定诱饵")
 
-	# Locking controls release facing and priority, not exclusive damage rights.
-	# If the original target moves out of reach, the nearest monster actually
-	# covered by the live melee geometry receives the single-target attack.
+	# An out-of-range lock fails closed. It must not fall back to a nearer target.
 	intended.current_hp = intended.max_hp
-	intended.global_position = game.player.global_position + Vector2(128, 0)
-	decoy.global_position = game.player.global_position + Vector2(64, 0)
+	intended.global_position = game.player.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		target_axis_gu * 4.0
+	)
+	decoy.global_position = game.player.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		target_axis_gu
+	)
 	game.player._pending_attack_context = {
 		"mode": "normal",
 		"skill_name": "attack",
@@ -73,7 +87,7 @@ func _run() -> void:
 	decoy_hp = decoy.current_hp
 	game._on_player_attack(origin_at_input, Vector2.RIGHT, 20)
 	assert(intended.current_hp == intended_hp, "真正超距的原锁定目标被错误命中")
-	assert(decoy.current_hp == decoy_hp - 20, "超距锁定阻断了近处刀锋范围内目标")
+	assert(decoy.current_hp == decoy_hp, "超距锁定错误回退到近处目标")
 
 	# The same resolver is shared by all professions' accepted active skills.
 	# It must update both caster origin and target direction at release time.

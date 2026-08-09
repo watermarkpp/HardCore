@@ -7286,6 +7286,19 @@ func _create_melee_release_footprint_snapshot(
 	if release_geometry.has("locked_target_valid_at_release"):
 		release_geometry["origin_ground_gu"] = origin_ground_gu
 		release_geometry["snapshot_validation_context"] = _canonical_snapshot_validation_context(origin_ground_gu)
+		# CombatReleaseGeometry freezes the target delta in GU, while mapped
+		# gameplay resolves the actor origin in absolute runtime-map GU. Rebase
+		# the locked footpoint onto that formal origin before range/shape checks;
+		# mixing the legacy delta-space origin with the absolute origin makes every
+		# real mapped target appear tens of GU out of range.
+		var locked_delta: Variant = release_geometry.get(
+			"live_locked_target_delta_ground_gu",
+			null
+		)
+		if locked_delta is Vector2:
+			release_geometry["locked_target_ground_gu_at_release"] = (
+				origin_ground_gu + (locked_delta as Vector2)
+			)
 		var plan := WarriorMeleeGeometryScript.target_aligned_melee_release_plan_ground_gu(
 			release_geometry,
 		mode,

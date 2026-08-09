@@ -57,11 +57,11 @@ func _run() -> void:
 	var enemy: EnemyActor = enemies[0]
 	enemy.global_position = game.player.global_position + Vector2(30, 0)
 	enemy.apply_control(2.0)
-	game._set_locked_target(enemy, false)
+	game._set_locked_target(enemy, true)
 	game.player.facing = Vector2.RIGHT
 	game.player.attack_min = enemy.current_hp
 	game.player.attack_max = enemy.current_hp
-	assert(game.player.request_attack(), "Basic attack rejected: attack=%.3f action=%.3f struck=%.3f control=%.3f dead=%s" % [game.player._attack_timer, game.player._attack_action_timer, game.player._struck_lock_remaining, game.player.control_time, game.player._dead])
+	assert(game.player.request_attack(true, enemy.get_instance_id()), "Basic attack rejected: attack=%.3f action=%.3f struck=%.3f control=%.3f dead=%s" % [game.player._attack_timer, game.player._attack_action_timer, game.player._struck_lock_remaining, game.player.control_time, game.player._dead])
 	await get_tree().create_timer(0.95).timeout
 	assert(not is_instance_valid(enemy), "攻击、死亡链路未完成")
 
