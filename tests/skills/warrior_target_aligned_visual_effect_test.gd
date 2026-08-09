@@ -15,6 +15,7 @@ func _ready() -> void:
 		== "skills.warrior.melee.target_aligned_visual.v1"
 	)
 	_verify_fail_closed_without_valid_snapshot()
+	await _verify_release_visual_fades_and_frees()
 	for mode: String in [
 		Geometry.SKILL_NORMAL,
 		Geometry.SKILL_FIRE,
@@ -172,6 +173,34 @@ func _verify_half_moon_single_node_per_release() -> void:
 	assert(int(hit_info.get("target_count", 0)) == 99)
 	assert(bool(hit_info.get("hit_any", false)))
 	effect.free()
+
+
+func _verify_release_visual_fades_and_frees() -> void:
+	var axis_ground_gu := Vector2.from_angle(deg_to_rad(17.0))
+	var target_ground_gu := ORIGIN_GROUND_GU + axis_ground_gu * 1.2
+	var coordinate_context := _absolute_context(ORIGIN_GROUND_GU)
+	var plan := Geometry.target_aligned_melee_release_plan_ground_gu(
+		_release_geometry(target_ground_gu),
+		Geometry.SKILL_NORMAL,
+		coordinate_context
+	)
+	var effect := Visual.create_visual(
+		plan.get("skill_footprint_snapshot") as Dictionary,
+		Geometry.SKILL_NORMAL,
+		{},
+		coordinate_context,
+		_ground_gu_to_screen_px(ORIGIN_GROUND_GU)
+	)
+	assert(effect != null)
+	var host := Node2D.new()
+	add_child(host)
+	host.add_child(effect)
+	assert(effect.is_inside_tree())
+	await get_tree().create_timer(
+		Visual.RELEASE_VISUAL_LIFETIME_SEC + 0.10
+	).timeout
+	assert(not is_instance_valid(effect))
+	host.queue_free()
 
 
 func _snapshot_for_mode(mode: String) -> Dictionary:

@@ -528,10 +528,13 @@ static func target_aligned_continuous_axis_gu(
 		if raw_axis_ground_gu is Vector2
 		else Vector2.ZERO
 	)
+	var invalid_lock_reason := (
+		"invalid_target" if not locked_target_valid else "missing_lock"
+	)
 	if not locked_target_valid or locked_target_instance_id <= 0:
 		return {
 			"valid": false,
-			"reason": "invalid_target",
+			"reason": invalid_lock_reason,
 			"axis_ground_gu": Vector2.ZERO,
 			"origin_ground_gu": release_geometry.get(
 				"origin_ground_gu", Vector2.ZERO
@@ -634,7 +637,7 @@ static func target_aligned_melee_release_plan_ground_gu(
 		"release_id", "unbound_target_aligned_release"
 	))
 	var skill_id := _target_aligned_skill_id(resolved_mode)
-	var snapshot := _target_aligned_release_snapshot_ground_gu(
+	var snapshot := target_aligned_release_snapshot_ground_gu(
 		skill_id,
 		release_id,
 		origin_ground_gu as Vector2,

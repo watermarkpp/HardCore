@@ -28,10 +28,12 @@ func _ready() -> void:
 	_verify_ineligible_cases_fail_closed()
 	_verify_diagnostics()
 	print(
-		"WARRIOR_TARGET_ALIGNED_RELEASE_GEOMETRY_PASS: %d arbitrary-angle "
-		+ "samples keep the continuous locked-target release axis while the "
-		+ "visual direction index stays 8-way quantized; one shared snapshot "
-		+ "gates normal/fire/thrust/half-moon candidate inclusion" % SAMPLE_COUNT
+		(
+			"WARRIOR_TARGET_ALIGNED_RELEASE_GEOMETRY_PASS: %d arbitrary-angle "
+			+ "samples keep the continuous locked-target release axis while the "
+			+ "visual direction index stays 8-way quantized; one shared snapshot "
+			+ "gates normal/fire/thrust/half-moon candidate inclusion"
+		) % SAMPLE_COUNT
 	)
 	get_tree().quit(0)
 

@@ -31,6 +31,10 @@ const LAYER_ROLES: Array[String] = [
 const LAYER_SCALES: Array[float] = [1.0, 0.62, 0.24]
 const LAYER_ALPHAS: Array[float] = [0.10, 0.18, 0.34]
 const POLYGON_VERTEX_TOLERANCE_PX := 0.01
+## One release is a short hit-confirmation flash, not persistent zone content.
+## The node fades on the first frame after entering the scene and is queued
+## for deletion when the fade completes.
+const RELEASE_VISUAL_LIFETIME_SEC := 0.30
 
 var mode := WarriorMeleeGeometryScript.SKILL_NORMAL
 var hit_info: Dictionary = {}
@@ -39,6 +43,12 @@ var _snapshot: Dictionary = {}
 var _snapshot_shape_type := ""
 var _projected_polygons_screen_offset_px: Array[PackedVector2Array] = []
 var _layers: Array[Polygon2D] = []
+var _lifetime_tween: Tween
+
+
+func _ready() -> void:
+	if rejection_reason.is_empty() and not _layers.is_empty():
+		_start_release_lifecycle()
 
 
 static func create_visual(
@@ -178,6 +188,20 @@ func layer_polygons_screen_offset_px() -> Array[PackedVector2Array]:
 
 func snapshot_id() -> String:
 	return str(_snapshot.get("snapshot_id", ""))
+
+
+func _start_release_lifecycle() -> void:
+	if _lifetime_tween != null and _lifetime_tween.is_valid():
+		_lifetime_tween.kill()
+	_lifetime_tween = create_tween()
+	_lifetime_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_lifetime_tween.tween_property(
+		self,
+		"modulate:a",
+		0.0,
+		RELEASE_VISUAL_LIFETIME_SEC
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_lifetime_tween.tween_callback(queue_free)
 
 
 func _install_layers() -> void:
