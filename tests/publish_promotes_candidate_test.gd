@@ -32,7 +32,10 @@ func _run() -> void:
 	var formal_path := BuildService.default_runtime_path(MAP_KEY)
 	Bridge.test_override_release_registry_path(REG_PATH)
 	var published_a := BuildService.publish_runtime_release(
-		str(candidate_a.candidate_path), MAP_ID, REG_PATH
+		str(candidate_a.candidate_path),
+		MAP_ID,
+		candidate_a.document_binding,
+		REG_PATH
 	)
 	assert(bool(published_a.get("success", false)), str(published_a))
 	assert(int(published_a.get("approval_revision", 0)) == 1)
@@ -48,7 +51,10 @@ func _run() -> void:
 	assert(str(Bridge.load_map(MAP_ID).get("build_sha256", "")) == hash_a)
 	# Publish B: release must become B everywhere.
 	var published_b := BuildService.publish_runtime_release(
-		str(candidate_b.candidate_path), MAP_ID, REG_PATH
+		str(candidate_b.candidate_path),
+		MAP_ID,
+		candidate_b.document_binding,
+		REG_PATH
 	)
 	assert(bool(published_b.get("success", false)), str(published_b))
 	assert(int(published_b.get("approval_revision", 0)) == 2)

@@ -35,7 +35,10 @@ func _run() -> void:
 	var formal_path := BuildService.default_runtime_path(MAP_KEY)
 	Bridge.test_override_release_registry_path(REG_PATH)
 	var published_a := BuildService.publish_runtime_release(
-		str(candidate_a.candidate_path), MAP_ID, REG_PATH
+		str(candidate_a.candidate_path),
+		MAP_ID,
+		candidate_a.document_binding,
+		REG_PATH
 	)
 	assert(bool(published_a.get("success", false)), str(published_a))
 	assert(Bridge.is_formal_playable(MAP_ID))
@@ -46,7 +49,10 @@ func _run() -> void:
 	var candidate_b_path := str(candidate_b.candidate_path)
 	# 1. Invalid candidate -> no change at all.
 	var invalid_result := BuildService.publish_runtime_release(
-		INVALID_CANDIDATE, MAP_ID, REG_PATH
+		INVALID_CANDIDATE,
+		MAP_ID,
+		candidate_b.document_binding,
+		REG_PATH
 	)
 	assert(
 		str(invalid_result.get("reason", "")) == "runtime_invalid",
@@ -55,7 +61,11 @@ func _run() -> void:
 	_assert_release_a(formal_path, file_hash_a, hash_a)
 	# 2. map_key mismatch via override -> rejected before any write.
 	var mismatch := BuildService.publish_runtime_release(
-		candidate_b_path, MAP_ID, REG_PATH, "wrong_key_override"
+		candidate_b_path,
+		MAP_ID,
+		candidate_b.document_binding,
+		REG_PATH,
+		"wrong_key_override"
 	)
 	assert(
 		str(mismatch.get("reason", "")) == "runtime_map_key_mismatch",
@@ -65,7 +75,10 @@ func _run() -> void:
 	# 3. Registry commit failure -> formal A rolled back, registry A remains.
 	BuildService.test_fail_registry_commit = true
 	var reg_fail := BuildService.publish_runtime_release(
-		candidate_b_path, MAP_ID, REG_PATH
+		candidate_b_path,
+		MAP_ID,
+		candidate_b.document_binding,
+		REG_PATH
 	)
 	assert(
 		str(reg_fail.get("reason", "")) == "registry_write_failed",
@@ -76,7 +89,10 @@ func _run() -> void:
 	# 4. Runtime promote failure -> formal A remains, registry A remains.
 	BuildService.test_fail_runtime_promote = true
 	var promote_fail := BuildService.publish_runtime_release(
-		candidate_b_path, MAP_ID, REG_PATH
+		candidate_b_path,
+		MAP_ID,
+		candidate_b.document_binding,
+		REG_PATH
 	)
 	assert(
 		str(promote_fail.get("reason", "")) == "runtime_promote_failed",
@@ -87,7 +103,10 @@ func _run() -> void:
 	# 5. Post-publish verification failure -> full rollback to A + Registry A.
 	BuildService.test_fail_post_publish_verify = true
 	var post_fail := BuildService.publish_runtime_release(
-		candidate_b_path, MAP_ID, REG_PATH
+		candidate_b_path,
+		MAP_ID,
+		candidate_b.document_binding,
+		REG_PATH
 	)
 	assert(
 		str(post_fail.get("reason", "")) == "post_publish_verify_failed",
