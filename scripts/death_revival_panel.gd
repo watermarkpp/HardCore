@@ -53,15 +53,22 @@ func _build_background() -> void:
 func _build_modal() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
-	surface.position = PANEL_RECT.position + Vector2(18, 24)
-	surface.size = PANEL_RECT.size - Vector2(36, 48)
+	surface.set_anchors_preset(Control.PRESET_CENTER)
+	var surface_size := PANEL_RECT.size - Vector2(36, 48)
+	surface.offset_left = -surface_size.x * 0.5
+	surface.offset_top = -surface_size.y * 0.5
+	surface.offset_right = surface_size.x * 0.5
+	surface.offset_bottom = surface_size.y * 0.5
 	surface.theme_type_variation = "GothicModalSurface"
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(surface)
 	modal = Panel.new()
 	modal.name = "DeathRevivalModal"
-	modal.position = PANEL_RECT.position
-	modal.size = PANEL_RECT.size
+	modal.set_anchors_preset(Control.PRESET_CENTER)
+	modal.offset_left = -PANEL_RECT.size.x * 0.5
+	modal.offset_top = -PANEL_RECT.size.y * 0.5
+	modal.offset_right = PANEL_RECT.size.x * 0.5
+	modal.offset_bottom = PANEL_RECT.size.y * 0.5
 	modal.theme_type_variation = "GothicModalFrame"
 	add_child(modal)
 

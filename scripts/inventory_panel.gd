@@ -777,9 +777,10 @@ func _equipment_tooltip(slot: String, record: Dictionary) -> String:
 func _kind_label(kind: String) -> String:
 	match kind:
 		"consumable": return "消耗品"
-		"scroll": return "技能书"
+		"skill_book": return "技能书"
+		"scroll": return "卷轴"
 		"material": return "材料"
-		"quest": return "任务物品"
+		"quest", "quest_item": return "任务物品"
 		_: return "物品"
 
 

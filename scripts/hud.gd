@@ -92,6 +92,10 @@ signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
 signal revival_requested(request: Dictionary)
+signal shop_sell_quotes_requested(items: Array)
+signal shop_sell_requested(request: Dictionary)
+signal quest_abandon_requested(quest_id: String)
+signal warehouse_sort_requested
 signal loading_transition_covered(request: Dictionary)
 signal loading_transition_finished(request: Dictionary)
 signal target_switch_pressed
@@ -974,6 +978,12 @@ func _ensure_shop_panel() -> void:
 		return
 	shop_panel = ShopPanel.new()
 	shop_panel.hide()
+	shop_panel.sell_quotes_requested.connect(
+		func(items: Array) -> void: shop_sell_quotes_requested.emit(items)
+	)
+	shop_panel.sell_requested.connect(
+		func(request: Dictionary) -> void: shop_sell_requested.emit(request)
+	)
 	add_child(shop_panel)
 
 
@@ -996,6 +1006,9 @@ func _ensure_quest_panel() -> void:
 		return
 	quest_panel = QuestPanel.new()
 	quest_panel.hide()
+	quest_panel.abandon_requested.connect(
+		func(quest_id: String) -> void: quest_abandon_requested.emit(quest_id)
+	)
 	add_child(quest_panel)
 
 
@@ -1025,6 +1038,9 @@ func _ensure_warehouse_panel() -> void:
 		return
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
+	warehouse_panel.warehouse_sort_requested.connect(
+		func() -> void: warehouse_sort_requested.emit()
+	)
 	add_child(warehouse_panel)
 
 
@@ -1343,6 +1359,16 @@ func open_shop(display_name: String, stock: Array) -> void:
 	shop_panel.open_for(display_name, stock)
 
 
+func set_shop_sell_quotes(quotes: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.set_sell_quotes(quotes)
+
+
+func apply_shop_sell_result(result: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.apply_sell_result(result)
+
+
 func open_skill_trainer(display_name: String) -> void:
 	_close_modal_panels()
 	_ensure_skill_panel()
@@ -1394,10 +1420,20 @@ func open_quest(display_name: String) -> void:
 	quest_panel.open_for(display_name)
 
 
+func apply_quest_abandon_result(result: Dictionary) -> void:
+	_ensure_quest_panel()
+	quest_panel.apply_abandon_result(result)
+
+
 func open_warehouse() -> void:
 	_close_modal_panels()
 	_ensure_warehouse_panel()
 	warehouse_panel.open_panel()
+
+
+func apply_warehouse_sort_result(result: Dictionary) -> void:
+	_ensure_warehouse_panel()
+	warehouse_panel.apply_sort_result(result)
 
 
 func show_message(message: String, seconds := 2.0) -> void:
