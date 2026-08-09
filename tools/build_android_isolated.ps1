@@ -4,7 +4,7 @@ param(
     [string]$GodotConsole = "",
     [string]$AndroidRoot = "",
     [string]$BaselineApkPath = "",
-    [int]$ExpectedVersionCode = 38,
+    [int]$ExpectedVersionCode = 0,
     [string]$ExpectedVersionName = "",
     [switch]$PreflightOnly,
     [switch]$KeepStage
@@ -56,19 +56,33 @@ $ExportPresetText = (@(& git -C $ProjectRoot show "${ResolvedCommit}:export_pres
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ExportPresetText)) {
     throw "Build commit has no readable export_presets.cfg: $ResolvedCommit"
 }
-if ($ExportPresetText -notmatch "(?m)^version/code=$ExpectedVersionCode`r?$") {
-    throw "Build commit export preset does not contain version/code=$ExpectedVersionCode."
+$VersionCodeMatch = [regex]::Match($ExportPresetText, '(?m)^version/code=(\d+)\r?$')
+if (-not $VersionCodeMatch.Success) {
+    throw "Build commit export preset has no readable version/code."
 }
-if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName) -and
-    $ExportPresetText -notmatch ("(?m)^version/name=`"{0}`"`r?$" -f [regex]::Escape($ExpectedVersionName))) {
-    throw "Build commit export preset does not contain version/name=`"$ExpectedVersionName`"."
+$PresetVersionCode = [int]$VersionCodeMatch.Groups[1].Value
+if ($ExpectedVersionCode -le 0) {
+    $ExpectedVersionCode = $PresetVersionCode
+}
+elseif ($PresetVersionCode -ne $ExpectedVersionCode) {
+    throw "Build commit export preset contains version/code=$PresetVersionCode, expected $ExpectedVersionCode."
+}
+$VersionNameMatch = [regex]::Match($ExportPresetText, '(?m)^version/name="([^"]+)"\r?$')
+if (-not $VersionNameMatch.Success) {
+    throw "Build commit export preset has no readable version/name."
+}
+$PresetVersionName = $VersionNameMatch.Groups[1].Value
+if ([string]::IsNullOrWhiteSpace($ExpectedVersionName)) {
+    $ExpectedVersionName = $PresetVersionName
+}
+elseif ($PresetVersionName -ne $ExpectedVersionName) {
+    throw "Build commit export preset contains version/name=`"$PresetVersionName`", expected `"$ExpectedVersionName`"."
 }
 $ProjectConfigText = (@(& git -C $ProjectRoot show "${ResolvedCommit}:project.godot")) -join "`n"
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ProjectConfigText)) {
     throw "Build commit has no readable project.godot: $ResolvedCommit"
 }
-if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName) -and
-    $ProjectConfigText -notmatch ("(?m)^config/version=`"{0}`"`r?$" -f [regex]::Escape($ExpectedVersionName))) {
+if ($ProjectConfigText -notmatch ("(?m)^config/version=`"{0}`"`r?$" -f [regex]::Escape($ExpectedVersionName))) {
     throw "Build commit project.godot does not contain config/version=`"$ExpectedVersionName`"."
 }
 $ShortCommit = $ResolvedCommit.Substring(0, 12)
@@ -134,19 +148,26 @@ try {
         $env:ANDROID_HOME = Join-Path $AndroidRoot "sdk"
         $env:ANDROID_SDK_ROOT = Join-Path $AndroidRoot "sdk"
 
-        & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
-
         # P1-014: generate build_info.json before Godot import so it is included in the APK
         $BuildInfoScript = Join-Path $StageProjectPath "tools/generate_build_info.ps1"
-        if (Test-Path -LiteralPath $BuildInfoScript) {
-            & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -SkipDirtyCheck
-            Write-Output "build_info.json generated in staged project"
+        if (-not (Test-Path -LiteralPath $BuildInfoScript -PathType Leaf)) {
+            throw "Staged project has no build-info generator: $BuildInfoScript"
         }
-        if ($LASTEXITCODE -ne 0) {
+        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -SkipDirtyCheck
+        $BuildInfoExitCode = $LASTEXITCODE
+        if ($BuildInfoExitCode -ne 0) {
+            throw "Build-info generation failed with exit code $BuildInfoExitCode."
+        }
+        Write-Output "build_info.json generated in staged project"
+
+        & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
+        $ImportExitCode = $LASTEXITCODE
+        if ($ImportExitCode -ne 0) {
             throw "Godot isolated import failed. Log: $ImportLog"
         }
         & $GodotConsole --headless --path $StageProjectPath --log-file $ExportLog --export-debug "Android" $StageApk
-        if ($LASTEXITCODE -ne 0) {
+        $ExportExitCode = $LASTEXITCODE
+        if ($ExportExitCode -ne 0) {
             throw "Godot isolated Android export failed. Log: $ExportLog"
         }
     }
@@ -167,7 +188,8 @@ try {
         -AndroidRoot $AndroidRoot `
         -BaselineApkPath $BaselineApkPath `
         -ExpectedVersionCode $ExpectedVersionCode `
-        -ExpectedVersionName $ExpectedVersionName
+        -ExpectedVersionName $ExpectedVersionName `
+        -ExpectedCommit $ResolvedCommit
     if ($LASTEXITCODE -ne 0) {
         throw "Isolated Android APK verification failed."
     }

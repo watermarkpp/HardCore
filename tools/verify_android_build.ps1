@@ -2,8 +2,9 @@ param(
     [string]$ApkPath = "",
     [string]$AndroidRoot = "",
     [string]$BaselineApkPath = "",
-    [int]$ExpectedVersionCode = 38,
-    [string]$ExpectedVersionName = ""
+    [int]$ExpectedVersionCode = 0,
+    [string]$ExpectedVersionName = "",
+    [string]$ExpectedCommit = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -45,12 +46,14 @@ $Badging = (& $Aapt dump badging $ApkPath) -join "`n"
 $Manifest = (& $Aapt dump xmltree $ApkPath AndroidManifest.xml) -join "`n"
 $ExpectedBadging = @(
     "name='com.personal.mafaoffline'",
-    "versionCode='$ExpectedVersionCode'",
     "sdkVersion:'24'",
     "targetSdkVersion:'36'",
     "application-label:'HardCore'",
     "native-code: 'arm64-v8a'"
 )
+if ($ExpectedVersionCode -gt 0) {
+    $ExpectedBadging += "versionCode='$ExpectedVersionCode'"
+}
 if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName)) {
     $ExpectedBadging += "versionName='$ExpectedVersionName'"
 }
@@ -62,7 +65,10 @@ if ($Manifest -notlike "*android:resizeableActivity*0x1*") { throw "APK does not
 
 & (Join-Path $PSScriptRoot "verify_apk_runtime_resources.ps1") `
     -ApkPath $ApkPath `
-    -BaselineApkPath $BaselineApkPath
+    -BaselineApkPath $BaselineApkPath `
+    -ExpectedVersionCode $ExpectedVersionCode `
+    -ExpectedVersionName $ExpectedVersionName `
+    -ExpectedCommit $ExpectedCommit
 if ($LASTEXITCODE -ne 0) {
     throw "APK runtime resource probe failed."
 }

@@ -5,6 +5,12 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$BaselineApkPath,
 
+    [int]$ExpectedVersionCode = 0,
+
+    [string]$ExpectedVersionName = "",
+
+    [string]$ExpectedCommit = "",
+
     [switch]$RequireRuntimeChangesFromBaseline
 )
 
@@ -80,10 +86,10 @@ function Assert-ChangedFromBaseline {
         [string]$EntryName
     )
 
+    $CurrentHash = Get-ArchiveEntrySha256 -Archive $CurrentArchive -EntryName $EntryName -ArchiveLabel "current APK"
     if (-not $RequireRuntimeChangesFromBaseline) {
         return
     }
-    $CurrentHash = Get-ArchiveEntrySha256 -Archive $CurrentArchive -EntryName $EntryName -ArchiveLabel "current APK"
     $BaselineEntry = $BaselineArchive.GetEntry($EntryName)
     if ($null -eq $BaselineEntry -or $BaselineEntry.Length -le 0) {
         return
@@ -151,6 +157,21 @@ try {
     )
     foreach ($EntryName in $CompiledScripts) {
         Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $EntryName
+    }
+
+    $BuildInfoEntry = "assets/assets/generated/build_info.json"
+    $BuildInfo = Read-ArchiveText -Archive $CurrentArchive -EntryName $BuildInfoEntry -ArchiveLabel "current APK" | ConvertFrom-Json
+    if ($BuildInfo.git_dirty -ne $false) {
+        throw "APK build-info must record git_dirty=false."
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedCommit) -and $BuildInfo.git_head -ne $ExpectedCommit) {
+        throw "APK build-info commit '$($BuildInfo.git_head)' does not match expected commit '$ExpectedCommit'."
+    }
+    if ($ExpectedVersionCode -gt 0 -and [int]$BuildInfo.version_code -ne $ExpectedVersionCode) {
+        throw "APK build-info version code '$($BuildInfo.version_code)' does not match '$ExpectedVersionCode'."
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName) -and $BuildInfo.version_name -ne $ExpectedVersionName) {
+        throw "APK build-info version name '$($BuildInfo.version_name)' does not match '$ExpectedVersionName'."
     }
 
     $WorldHelmetPolicyEntry = "assets/assets/data/equipment_world_helmet_runtime_policy.json"
@@ -250,6 +271,8 @@ try {
     Write-Output "BASELINE_APK=$ResolvedBaselineApkPath"
     Write-Output "BASELINE_SHA256=$BaselineHash"
     Write-Output "COMPILED_SCRIPTS_VERIFIED=$($CompiledScripts.Count)"
+    Write-Output "BUILD_INFO_COMMIT=$($BuildInfo.git_head)"
+    Write-Output "BUILD_INFO_VERSION=$($BuildInfo.version_name)"
     Write-Output "RUNTIME_CHANGE_COMPARISON=$($RequireRuntimeChangesFromBaseline.IsPresent)"
     if ($RequireRuntimeChangesFromBaseline) {
         Write-Output "COMPILED_SCRIPTS_CHANGED=$($CompiledScripts.Count)"

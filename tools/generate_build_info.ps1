@@ -19,13 +19,23 @@ if ($StageRoot) {
 Push-Location $ROOT -ErrorAction Stop
 
 $head = (git rev-parse HEAD).Trim()
-$branch = (git rev-parse --abbrev-ref HEAD).Trim()
-$dirty = $false
-try { 
-    $null = git diff-index --quiet HEAD --
-} catch { 
-    $dirty = $true 
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($head)) {
+    throw "Unable to resolve Git HEAD for build-info."
 }
+$branch = (git rev-parse --abbrev-ref HEAD).Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($branch)) {
+    throw "Unable to resolve Git branch for build-info."
+}
+& git diff-index --quiet HEAD --
+$TrackedDirtyExitCode = $LASTEXITCODE
+if ($TrackedDirtyExitCode -notin @(0, 1)) {
+    throw "Unable to inspect tracked Git state for build-info (exit $TrackedDirtyExitCode)."
+}
+$UntrackedPaths = @(& git ls-files --others --exclude-standard)
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to inspect untracked Git state for build-info."
+}
+$dirty = ($TrackedDirtyExitCode -eq 1 -or $UntrackedPaths.Count -gt 0)
 
 if ($dirty -and -not $AllowDirty -and -not $SkipDirtyCheck) {
     Write-Error "Working tree is dirty. Use -AllowDirty for dev builds."
@@ -34,7 +44,7 @@ if ($dirty -and -not $AllowDirty -and -not $SkipDirtyCheck) {
 
 $versionName = (git show HEAD:project.godot | Select-String 'config/version' | ForEach { $_ -replace '.*=\s*"([^"]+)".*','$1' }).Trim()
 $versionCode = (git show HEAD:export_presets.cfg | Select-String 'version/code=' | ForEach { $_ -replace '.*version/code=(\d+).*','$1' }).Trim()
-$buildType = if ($AllowDirty) { "dirty_dev" } elseif ($branch -match "validation/") { "validation" } else { "development" }
+$buildType = if ($dirty) { "dirty_dev" } elseif ($branch -match "validation/") { "validation" } else { "development" }
 
 $info = @{
     git_head = $head
