@@ -6,13 +6,13 @@
 - 按索引定向读取目标子系统；导航足够时禁止无证据全仓扫描、批量读取无关目录或重复已通过测试。`docs/CODEX_CONTEXT_SNAPSHOT.md` 仅作基线、工作树状态和既有验收的补充；将被修改、合并、构建或删除的对象仍须用当前 Git、文件和专项测试核实。重要集成里程碑后由 `codex/integration` 更新快照。
 - Godot 测试优先走 `tools/run_godot_tests.ps1`；禁止 GUI Godot，禁止直接启动未指定项目内日志/用户数据目录的 Godot。正式入口固定 console/headless、`outputs/test_logs` 和本工作树 `.godot/runtime_appdata`，避免 `%APPDATA%` 写入失败及 `c0000005` 崩溃。
 
-## DeepSeek 最高级直连与降级
+## DeepSeek 委派与降级
 
-- 本节适用于全部 HardCore 对话、主任务、子代理和专业工作树。实质 DeepSeek 分析、编码建议和审查固定使用：`C:\Users\Administrator\.codex\agents\invoke-deepseek-direct.ps1 -Model deepseek-v4-pro -ThinkingMode enabled -ReasoningEffort max -MaxOutputTokens 384000 -TimeoutMinutes 30`。效果优先；不得为省额度改用 Flash、关闭 thinking、降低 reasoning/输出上限或裁剪已证明必要的上下文。
-- 直连必须 `HttpClientHandler.UseProxy=false`，不得读取、继承、注入或转发任何系统/环境代理。API Key 仅可来自进程级或用户级 `DEEPSEEK_API_KEY`，严禁进入仓库、提示词、聊天、命令行、补丁或日志。
-- 内置 `deepseek_worker` 精确返回 `DEEPSEEK_DISPATCH_NOT_READY` 时，只代表宿主调度不可用，必须立即切换上述直连；不得误判为 API、上下文、余额或网络故障，不得反复空转或转交用户。其他失败先按直连响应、HTTP 状态、`finish_reason`、token 和超时证据分类，禁止无证据改走代理。
-- 直连只返回文本。主控先限定目标、允许文件、冻结对象、现有 dirty、验收标准和必要 code/diff；返回后由主控审查纠错、以 `apply_patch` 落地并在真实集成态专项测试。DeepSeek 的 PASS/补丁不是最终验收；主控是唯一写入控制者、风险裁决者和最终验收者。
-- 长请求用可续执行单元，每 ≤60 秒读取状态并向用户简短更新；仅在真实 30 分钟超时或明确错误后判失败。记录 `model`、`finish_reason`、输入/输出/推理 token、`max_output_tokens`、`thinking_mode`、`transport=direct_no_proxy`。当前基线为 1M 上下文、384K 输出；遇到 `finish_reason=length` 且空 `content`，先查是否仍误限 32768，禁止伪报完成。
+- 非琐碎且边界清晰的工作默认先交 `deepseek_worker`；主控负责限定范围、冻结对象、现有 dirty、验收标准和最终落地。worker 固定使用 `deepseek-v4-flash`、Responses、`max`；图片、MCP、computer-use、background 等不受支持的输入留给主控或对应工具。
+- 原生链合同为 `gpt-5.6-sol multi_agent_version=v1` → `deepseek-v4-flash multi_agent_version=v2`。Codex 更新模型缓存后先运行 `C:\Users\Administrator\.codex\agents\sync-deepseek-subagent-catalog.ps1`；不得把主控恢复为 v2 后继续跨供应商委派。
+- `DEEPSEEK_NATIVE_TASK_MISSING` 或 `DEEPSEEK_DISPATCH_NOT_READY` 只表示原生调度不可用；立即改用 `C:\Users\Administrator\.codex\agents\invoke-deepseek-direct.ps1 -Model deepseek-v4-pro -ThinkingMode enabled -ReasoningEffort max -MaxOutputTokens 384000 -TimeoutMinutes 30`，不得空转重试或误判为 API、网络、余额故障。
+- 直连固定 `HttpClientHandler.UseProxy=false`，API Key 仅来自进程级或用户级 `DEEPSEEK_API_KEY`，不得进入仓库、提示词、聊天、命令行、补丁或日志。长请求每 ≤60 秒更新状态，并记录 model、`finish_reason`、token、`max_output_tokens`、`thinking_mode` 和 `transport=direct_no_proxy`。
+- 原生 worker 可在明确独占范围内读写并测试；直连只返回文本，由主控用 `apply_patch` 落地。两条路径的输出都不是最终验收，主控必须审查 diff、保护 dirty 和冻结对象，并在真实集成态验证。
 
 ## 用户验收冻结
 
