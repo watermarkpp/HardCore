@@ -115,5 +115,109 @@ func _run() -> void:
 	panel._on_context_action(1)
 	assert(PlayerState.equipment["武器"].is_empty(), "界面卸下武器失败")
 
-	print("INVENTORY_EQUIPMENT_UI_PASS：图标网格、八槽穿戴、属性刷新、人物外观和卸下闭环正常")
+	# --- Direct activation contract: single click selects, double click uses ---
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("太阳水", 2)
+	PlayerState.add_item("匕首")
+	PlayerState.add_item("布衣(女)")
+	panel.refresh()
+	await get_tree().process_frame
+
+	var sun_index := _inventory_index_of("太阳水")
+	var dagger_index := _inventory_index_of("匕首")
+	assert(sun_index >= 0 and dagger_index >= 0, "双击测试物品缺失")
+	panel._select_inventory_item(sun_index)
+	assert(PlayerState.item_count("太阳水") == 2, "单击不应使用物品")
+	assert(panel.selected_inventory_index == sun_index, "单击应只选择并显示详情")
+	assert("太阳水" in panel.detail_label.text, "单击未显示物品详情")
+	panel._select_inventory_item(dagger_index)
+	assert(PlayerState.equipment.get("武器", {}).is_empty(), "单击装备不应直接装备")
+	await get_tree().process_frame
+
+	var sun_button := panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	assert(sun_button.gui_input.is_connected(Callable(panel, "_inventory_input").bind(sun_index)), "物品按钮未连接背包输入处理器")
+	var double_click := InputEventMouseButton.new()
+	double_click.button_index = MOUSE_BUTTON_LEFT
+	double_click.pressed = true
+	double_click.double_click = true
+	double_click.position = sun_button.size * 0.5
+	panel._inventory_input(double_click, sun_index, sun_button)
+	await get_tree().process_frame
+	assert(PlayerState.item_count("太阳水") == 1, "双击消耗品应使用一次")
+	assert("使用：太阳水" in panel.detail_label.text, "双击使用结果未显示")
+
+	sun_index = _inventory_index_of("太阳水")
+	dagger_index = _inventory_index_of("匕首")
+	var dagger_button := panel.item_grid.get_child(dagger_index).get_node("ItemButton") as Button
+	# preferred_slot intentionally stays empty: PlayerState is the authoritative
+	# equipment-slot resolver, so the UI does not hardcode a side slot here.
+	var equip_click := InputEventMouseButton.new()
+	equip_click.button_index = MOUSE_BUTTON_LEFT
+	equip_click.pressed = true
+	equip_click.double_click = true
+	equip_click.position = dagger_button.size * 0.5
+	panel._inventory_input(equip_click, dagger_index, dagger_button)
+	await get_tree().process_frame
+	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首", "双击装备应直接穿戴")
+	assert(not PlayerState.has_item("匕首"), "双击装备后物品应移出背包")
+
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("太阳水", 2)
+	panel.refresh()
+	await get_tree().process_frame
+	sun_index = _inventory_index_of("太阳水")
+	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	var touch_tap := InputEventScreenTouch.new()
+	touch_tap.index = 5
+	touch_tap.pressed = true
+	touch_tap.double_tap = true
+	touch_tap.position = sun_button.size * 0.5
+	panel._inventory_input(touch_tap, sun_index, sun_button)
+	await get_tree().process_frame
+	assert(PlayerState.item_count("太阳水") == 1, "触摸双击应使用一次")
+
+	# --- Production long-press suppressed, menu builder retained ---
+	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	panel.context_menu.clear()
+	panel.context_menu.hide()
+	panel._context_actions.clear()
+	panel._press_context = {"source": "inventory", "index": sun_index}
+	panel._press_button = sun_button
+	panel.call("_on_long_press_timer_timeout")
+	assert(not panel.context_menu.visible, "生产长按不应弹出上下文菜单")
+	assert(panel.context_menu.item_count == 0, "生产长按不应构建菜单")
+	panel._add_inventory_context_actions(sun_index)
+	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("action", "") == "use", "长按菜单动作构建逻辑应保留")
+
+	# --- Drag beyond threshold cancels long-press and activation ---
+	var press_down := InputEventScreenTouch.new()
+	press_down.index = 6
+	press_down.pressed = true
+	press_down.position = sun_button.size * 0.5
+	panel._inventory_input(press_down, sun_index, sun_button)
+	var drag_event := InputEventScreenDrag.new()
+	drag_event.index = 6
+	drag_event.position = press_down.position + Vector2(0, 16)
+	panel._inventory_input(drag_event, sun_index, sun_button)
+	assert(panel._press_timer.is_stopped(), "拖动越过阈值应取消长按")
+	var press_up := InputEventScreenTouch.new()
+	press_up.index = 6
+	press_up.pressed = false
+	press_up.position = drag_event.position
+	panel._inventory_input(press_up, sun_index, sun_button)
+	await get_tree().process_frame
+	assert(PlayerState.item_count("太阳水") == 1, "拖动释放不应使用或装备物品")
+	assert(not panel.context_menu.visible, "拖动后不应弹出菜单")
+	print("INVENTORY_EQUIPMENT_UI_PASS：双击激活、单击选择、长按策略与拖动取消均通过")
 	get_tree().quit(0)
+
+
+func _inventory_index_of(item_name: String) -> int:
+	for index in range(PlayerState.inventory.size()):
+		if str(PlayerState.inventory[index].get("name", "")) == item_name:
+			return index
+	return -1

@@ -4,6 +4,7 @@ extends Panel
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 
 signal closed
 signal quick_slot_assignment_requested(request: Dictionary)
@@ -494,6 +495,8 @@ func _rebuild_skill_cards() -> void:
 func _on_skill_selected(index: int) -> void:
 	if index < 0 or index >= skill_entries.size():
 		return
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	selected_skill_index = index
 	skill_list.select(index)
 	for button_index in range(skill_buttons.size()):
@@ -800,7 +803,7 @@ func _cancel_skill_long_press() -> void:
 
 
 func _on_skill_long_press() -> void:
-	if _pressed_skill_index < 0:
+	if _pressed_skill_index < 0 or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
 	_long_press_opened = true
 	_open_assignment_popup_for(_pressed_skill_index)

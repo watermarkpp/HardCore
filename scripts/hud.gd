@@ -9,6 +9,7 @@ const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog
 const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
 const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
@@ -21,6 +22,11 @@ const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtim
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
+const ITEM_QUICK_SLOT_COUNT := 4
+const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
+const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
+const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v1"
+const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
 const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
 const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
 const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
@@ -80,6 +86,8 @@ signal skill_input_cancelled(
 )
 signal skill_quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
+signal item_quick_slot_assignment_requested(slot_index: int, item_name: String)
+signal item_quick_slot_use_requested(slot_index: int, item_name: String)
 signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
@@ -115,6 +123,18 @@ var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
 var hud_item_buttons: Array[Button] = []
+var item_quick_slots: Array[String] = ["", "", "", ""]
+var item_quick_slot_icons: Array[TextureRect] = []
+var item_quick_slot_count_labels: Array[Label] = []
+var item_quick_slot_menu: PopupMenu
+var _item_quick_slot_menu_slot := -1
+var _item_quick_slot_menu_candidates: Dictionary = {}
+var _item_slot_press_index := -1
+var _item_slot_press_origin := Vector2.ZERO
+var _item_slot_press_touch_index := -1
+var _item_slot_long_press_opened := false
+var _item_slot_press_cancelled := false
+var _item_slot_long_press_timer: Timer
 var quick_slot_labels: Array[Label] = []
 var quick_slot_icons: Array[TextureRect] = []
 var attack_ring_skill_icons: Array[TextureRect] = []
@@ -157,18 +177,21 @@ func _build_approved_hud() -> void:
 	_build_right_utility_stack(root)
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
+	_build_item_quick_slot_menu()
 	# P1-C: panels are now lazy-loaded on first open
-	TouchScrollSupportScript.attach_tree(root)
+	TouchScrollSupportScript.attach_tree(self)
 	_build_loading_transition()
 
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.quests_changed.connect(update_quest_tracker)
 	PlayerState.profile_changed.connect(update_special_actions)
 	PlayerState.skills_changed.connect(update_quick_slots)
+	PlayerState.inventory_changed.connect(update_item_quick_slots)
 	update_profile()
 	update_quest_tracker()
 	update_special_actions()
 	update_quick_slots()
+	update_item_quick_slots()
 	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
 
 
@@ -382,8 +405,228 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_button.set_meta("stable_id", "hud.item_slot.%d" % (index + 1))
 		item_button.set_meta("metal_masked", true)
 		item_button.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
+		# ItemSlot buttons never use the Button.pressed signal; activation is
+		# emitted only from the gui_input release handler after long-press and
+		# drag guards, so Button internal pressed can never double-fire use.
+		item_button.gui_input.connect(_item_slot_input.bind(index))
 		chassis_root.add_child(item_button)
 		hud_item_buttons.append(item_button)
+		var quick_icon := TextureRect.new()
+		quick_icon.name = "ItemQuickSlotIcon"
+		quick_icon.position = Vector2(8, 8)
+		quick_icon.size = Vector2(56, 56)
+		quick_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		quick_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		quick_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		quick_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quick_icon.visible = false
+		item_button.add_child(quick_icon)
+		item_quick_slot_icons.append(quick_icon)
+		var quick_count := Label.new()
+		quick_count.name = "ItemQuickSlotCount"
+		quick_count.position = Vector2(item_button.size.x - 34, item_button.size.y - 22)
+		quick_count.size = Vector2(30, 18)
+		quick_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		quick_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quick_count.add_theme_font_size_override("font_size", 13)
+		quick_count.add_theme_color_override("font_color", Color("f2c783"))
+		quick_count.add_theme_color_override("font_shadow_color", Color.BLACK)
+		quick_count.add_theme_constant_override("shadow_offset_x", 1)
+		quick_count.add_theme_constant_override("shadow_offset_y", 1)
+		quick_count.visible = false
+		item_button.add_child(quick_count)
+		item_quick_slot_count_labels.append(quick_count)
+
+
+func _build_item_quick_slot_menu() -> void:
+	item_quick_slot_menu = PopupMenu.new()
+	item_quick_slot_menu.name = "ItemQuickSlotMenu"
+	item_quick_slot_menu.add_theme_font_size_override("font_size", 18)
+	item_quick_slot_menu.id_pressed.connect(_on_item_quick_slot_menu_pressed)
+	add_child(item_quick_slot_menu)
+	_item_slot_long_press_timer = Timer.new()
+	_item_slot_long_press_timer.name = "ItemQuickSlotLongPressTimer"
+	_item_slot_long_press_timer.one_shot = true
+	_item_slot_long_press_timer.wait_time = ITEM_QUICK_SLOT_LONG_PRESS_SECONDS
+	_item_slot_long_press_timer.timeout.connect(_open_item_quick_slot_menu)
+	add_child(_item_slot_long_press_timer)
+
+
+func set_item_quick_slots(assignments: Array) -> void:
+	item_quick_slots.clear()
+	for index in range(ITEM_QUICK_SLOT_COUNT):
+		var value: Variant = assignments[index] if index < assignments.size() else ""
+		item_quick_slots.append(_item_slot_assignment_name(value))
+	update_item_quick_slots()
+
+
+func _item_slot_assignment_name(value: Variant) -> String:
+	if value is Dictionary:
+		return str(
+			value.get(
+				"item_name",
+				value.get("name", value.get("display_name", value.get("displayName", "")))
+			)
+		)
+	return str(value)
+
+
+func update_item_quick_slots() -> void:
+	for index in range(ITEM_QUICK_SLOT_COUNT):
+		var item_name := item_quick_slots[index] if index < item_quick_slots.size() else ""
+		var count := PlayerState.item_count(item_name) if not item_name.is_empty() else 0
+		var button: Button = hud_item_buttons[index] if index < hud_item_buttons.size() else null
+		var icon: TextureRect = item_quick_slot_icons[index] if index < item_quick_slot_icons.size() else null
+		var count_label: Label = item_quick_slot_count_labels[index] if index < item_quick_slot_count_labels.size() else null
+		if button == null:
+			continue
+		button.set_meta("item_quick_slot_name", item_name)
+		button.set_meta("item_quick_slot_count", count)
+		button.set_meta("item_quick_slot_available", count > 0)
+		if item_name.is_empty():
+			if icon != null:
+				icon.texture = null
+				icon.visible = false
+			if count_label != null:
+				count_label.text = ""
+				count_label.visible = false
+			button.tooltip_text = "快捷物品 %d：长按从背包选择" % (index + 1)
+			continue
+		var record := GameData.get_item_record(item_name)
+		var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+		if icon != null:
+			icon.texture = texture
+			icon.visible = texture != null
+			icon.modulate = Color(1, 1, 1, 0.45) if count <= 0 else Color.WHITE
+		if count_label != null:
+			count_label.text = str(count)
+			count_label.visible = true
+		button.tooltip_text = "%s × %d" % [item_name, count] if count > 0 else "%s（暂无库存，补货后恢复）" % item_name
+
+
+func _item_slot_input(event: InputEvent, slot_index: int) -> void:
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		if touch.pressed:
+			_begin_item_slot_press(slot_index, touch.position, touch.index)
+		elif touch.index == _item_slot_press_touch_index:
+			_finish_item_slot_press(slot_index, touch.position, touch.index)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_begin_item_slot_press(slot_index, event.position, -1)
+		elif _item_slot_press_touch_index == -1:
+			_finish_item_slot_press(slot_index, event.position, -1)
+	elif event is InputEventScreenDrag and event.index == _item_slot_press_touch_index:
+		if event.position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
+			_cancel_item_slot_press()
+	elif event is InputEventMouseMotion and _item_slot_press_touch_index == -1 and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		if event.position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
+			_cancel_item_slot_press()
+
+
+func _begin_item_slot_press(slot_index: int, origin: Vector2, touch_index: int) -> void:
+	_item_slot_press_index = slot_index
+	_item_slot_press_origin = origin
+	_item_slot_press_touch_index = touch_index
+	_item_slot_long_press_opened = false
+	_item_slot_press_cancelled = false
+	_item_slot_long_press_timer.start()
+
+
+func _cancel_item_slot_press() -> void:
+	_item_slot_long_press_timer.stop()
+	_item_slot_press_cancelled = true
+	_item_slot_press_touch_index = -1
+
+
+func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_index := -1) -> void:
+	_item_slot_long_press_timer.stop()
+	if _item_slot_press_index != slot_index:
+		return
+	if _item_slot_press_touch_index != touch_index:
+		return
+	var long_press_opened := _item_slot_long_press_opened
+	var cancelled := _item_slot_press_cancelled
+	var moved_away := release_position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE
+	_item_slot_press_index = -1
+	_item_slot_press_touch_index = -1
+	if long_press_opened or cancelled or moved_away:
+		return
+	var item_name := _item_slot_bound_name(slot_index)
+	if item_name.is_empty():
+		show_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
+		return
+	item_quick_slot_use_requested.emit(slot_index, item_name)
+
+
+func _item_slot_bound_name(slot_index: int) -> String:
+	if slot_index >= 0 and slot_index < item_quick_slots.size():
+		return item_quick_slots[slot_index]
+	return ""
+
+
+func _open_item_quick_slot_menu() -> void:
+	var slot_index := _item_slot_press_index
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT:
+		return
+	_item_slot_long_press_opened = true
+	_item_quick_slot_menu_slot = slot_index
+	item_quick_slot_menu.clear()
+	_item_quick_slot_menu_candidates.clear()
+	var candidates := _item_quick_slot_candidates()
+	for index in range(candidates.size()):
+		var candidate: Dictionary = candidates[index]
+		var id := index + 1
+		item_quick_slot_menu.add_item("%s  ×%d" % [candidate.get("item_name", ""), int(candidate.get("count", 0))], id)
+		_item_quick_slot_menu_candidates[id] = str(candidate.get("item_name", ""))
+	if item_quick_slot_menu.item_count == 0:
+		item_quick_slot_menu.add_item("背包中没有可快捷使用的物品", 0)
+		item_quick_slot_menu.set_item_disabled(0, true)
+	var button: Button = hud_item_buttons[slot_index] if slot_index < hud_item_buttons.size() else null
+	if button != null:
+		item_quick_slot_menu.position = Vector2i(button.get_screen_position() + button.size * 0.5)
+	item_quick_slot_menu.popup()
+
+
+func _item_quick_slot_candidates() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for stack: Variant in PlayerState.inventory:
+		if not stack is Dictionary:
+			continue
+		var item_name := str(stack.get("name", ""))
+		if item_name.is_empty() or seen.has(item_name):
+			continue
+		var record := GameData.get_item_record(item_name)
+		if not _is_quick_slot_candidate(record):
+			continue
+		seen[item_name] = true
+		result.append({"item_name": item_name, "count": PlayerState.item_count(item_name)})
+	return result
+
+
+func _is_quick_slot_candidate(record: Dictionary) -> bool:
+	if record.is_empty():
+		return false
+	var kind := str(record.get("kind", ""))
+	if kind not in ["skill_book", "consumable", "scroll"]:
+		return false
+	return bool(record.get("usable", true))
+
+
+func _on_item_quick_slot_menu_pressed(id: int) -> void:
+	var item_name := str(_item_quick_slot_menu_candidates.get(id, ""))
+	if item_name.is_empty():
+		return
+	_assign_item_quick_slot(_item_quick_slot_menu_slot, item_name)
+
+
+func _assign_item_quick_slot(slot_index: int, item_name: String) -> void:
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT or item_name.is_empty():
+		return
+	item_quick_slots[slot_index] = item_name
+	update_item_quick_slots()
+	item_quick_slot_assignment_requested.emit(slot_index, item_name)
 
 
 func _build_combat_controls(root: Control) -> void:
@@ -1317,6 +1560,8 @@ func _on_skill_button(index: int) -> void:
 
 
 func _close_modal_panels() -> void:
+	if item_quick_slot_menu != null:
+		item_quick_slot_menu.hide()
 	if inventory_panel != null:
 		inventory_panel.hide()
 	if shop_panel != null:

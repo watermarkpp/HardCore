@@ -38,6 +38,7 @@ func _run() -> void:
 	hud.finish_loading_transition()
 	await get_tree().create_timer(0.45).timeout
 	assert(finished_requests.size() == 1 and finished_requests[0].transition_id == "hud:test:001", "HUD 没有转发Loading结束信号")
+	hud._ensure_death_revival_panel()
 	var death_panel: Control = hud.get("death_revival_panel") as Control
 	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 
@@ -252,6 +253,150 @@ func _run() -> void:
 	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")
+	# --- Item quick slots: mirror, signals, candidates and interactions ---
+	assert(hud.has_signal("item_quick_slot_assignment_requested"), "HUD 缺少快捷物品 assignment 信号")
+	assert(hud.has_signal("item_quick_slot_use_requested"), "HUD 缺少快捷物品 use 信号")
+	assert(hud.has_method("set_item_quick_slots"), "HUD 缺少快捷物品镜像注入口")
+	assert(hud.item_quick_slots.size() == 4 and hud.item_quick_slots == ["", "", "", ""], "快捷物品镜像应初始化为四项空字符串")
+	assert(hud.item_quick_slot_icons.size() == 4 and hud.item_quick_slot_count_labels.size() == 4, "四槽图标与数量层应存在")
+	for slot_index in range(4):
+		var item_slot_button := hud.hud_item_buttons[slot_index] as Button
+		assert(item_slot_button.size == Vector2(72, 72), "快捷物品槽几何被改动")
+		assert(item_slot_button.get_node_or_null("ItemQuickSlotIcon") != null, "快捷物品槽缺少图标层")
+		assert(item_slot_button.get_node_or_null("ItemQuickSlotCount") != null, "快捷物品槽缺少数量层")
+		assert(item_slot_button.get_meta("stable_id") == "hud.item_slot.%d" % (slot_index + 1), "快捷物品槽 stable id 被改动")
+
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("太阳水", 2)
+	PlayerState.add_item("强效太阳水", 1)
+	PlayerState.add_item("修复油", 1)
+	PlayerState.add_item("基本剑术", 1)
+	PlayerState.add_item("匕首", 1)
+	PlayerState.add_item("布衣(女)", 1)
+	await get_tree().process_frame
+	var candidates: Array = hud.call("_item_quick_slot_candidates")
+	assert(candidates.size() == 4, "快捷候选应过滤装备并稳定去重，实际 %d" % candidates.size())
+	var candidate_names: Array[String] = []
+	for candidate: Variant in candidates:
+		candidate_names.append(str(candidate.get("item_name", "")))
+	assert("太阳水" in candidate_names and "强效太阳水" in candidate_names and "修复油" in candidate_names and "基本剑术" in candidate_names, "可用候选缺失")
+	assert(not ("匕首" in candidate_names) and not ("布衣(女)" in candidate_names), "装备不应进入快捷候选")
+	assert(int(candidates[0].get("count", 0)) == 2, "同名物品数量应汇总")
+	assert(not hud.call("_is_quick_slot_candidate", {"kind": "quest", "usable": true}), "任务材料不应作为快捷候选")
+	assert(not hud.call("_is_quick_slot_candidate", {"kind": "material", "usable": true}), "材料不应作为快捷候选")
+	assert(not hud.call("_is_quick_slot_candidate", {"kind": "consumable", "usable": false}), "usable=false 不应作为快捷候选")
+	assert(hud.call("_is_quick_slot_candidate", {"kind": "scroll", "usable": true}), "scroll 应作为快捷候选")
+
+	var assignment_signals: Array = []
+	var use_signals: Array = []
+	hud.item_quick_slot_assignment_requested.connect(func(slot_index: int, item_name: String) -> void: assignment_signals.append([slot_index, item_name]))
+	hud.item_quick_slot_use_requested.connect(func(slot_index: int, item_name: String) -> void: use_signals.append([slot_index, item_name]))
+
+	hud._assign_item_quick_slot(0, "太阳水")
+	assert(hud.item_quick_slots[0] == "太阳水", "选择后本地镜像未更新")
+	assert(assignment_signals == [[0, "太阳水"]], "assignment 信号参数应为 slot_index/item_name")
+
+	var slot_center := hud.hud_item_buttons[0].size * 0.5
+	hud._begin_item_slot_press(0, slot_center, -1)
+	hud._finish_item_slot_press(0, slot_center)
+	assert(use_signals == [[0, "太阳水"]], "单击已绑定槽应发出 use 请求")
+	assert(hud.item_quick_slots[0] == "太阳水", "use 不应清除绑定")
+
+	hud._begin_item_slot_press(1, slot_center, -1)
+	hud._finish_item_slot_press(1, slot_center)
+	assert(use_signals.size() == 1, "空槽单击不应发出 use")
+	assert("快捷物品 2 为空" in hud.loot_label.text, "空槽单击应给出既有风格提示")
+
+	var before_menu_use_count := use_signals.size()
+	hud._begin_item_slot_press(2, slot_center, 7)
+	await get_tree().create_timer(0.55).timeout
+	assert(hud.item_quick_slot_menu.visible, "长按应弹出快捷物品选择菜单")
+	assert(hud.item_quick_slot_menu.item_count == 4, "菜单应列出全部可用候选")
+	var menu_text := ""
+	for item_index in range(hud.item_quick_slot_menu.item_count):
+		menu_text += hud.item_quick_slot_menu.get_item_text(item_index) + "\n"
+	assert("太阳水" in menu_text and "×2" in menu_text, "菜单应显示物品名与汇总数量")
+	hud._finish_item_slot_press(2, slot_center, 7)
+	assert(use_signals.size() == before_menu_use_count, "长按后释放不应触发 use")
+	var repair_id := -1
+	for id_value: Variant in hud._item_quick_slot_menu_candidates.keys():
+		if str(hud._item_quick_slot_menu_candidates[id_value]) == "修复油":
+			repair_id = int(id_value)
+	assert(repair_id > 0, "菜单候选缺少修复油")
+	hud._on_item_quick_slot_menu_pressed(repair_id)
+	assert(hud.item_quick_slots[2] == "修复油", "菜单选择后本地镜像未更新")
+	assert(assignment_signals.size() == 2 and assignment_signals[1] == [2, "修复油"], "菜单选择应发出 assignment 信号")
+
+	hud._begin_item_slot_press(3, slot_center, 8)
+	await get_tree().create_timer(0.55).timeout
+	assert(hud.item_quick_slot_menu.visible, "触摸长按应弹出快捷物品选择菜单")
+	hud._finish_item_slot_press(3, slot_center, 8)
+	assert(use_signals.size() == before_menu_use_count, "触摸长按释放不应触发 use")
+
+	hud.set_item_quick_slots(["太阳水", "修复油", {"item_name": "强效太阳水"}, "基本剑术"])
+	assert(hud.item_quick_slots.size() == 4, "set_item_quick_slots 应规范化为四项")
+	assert(hud.item_quick_slots == ["太阳水", "修复油", "强效太阳水", "基本剑术"], "set_item_quick_slots 镜像顺序错误")
+	assert(int(hud.hud_item_buttons[0].get_meta("item_quick_slot_count", 0)) == 2, "图标数量层未刷新")
+
+	PlayerState.remove_item("太阳水", 2)
+	await get_tree().process_frame
+	assert(hud.item_quick_slots[0] == "太阳水", "库存耗尽不应清除绑定")
+	assert(int(hud.hud_item_buttons[0].get_meta("item_quick_slot_count", -1)) == 0, "耗尽后数量应显示 0")
+	assert(not bool(hud.hud_item_buttons[0].get_meta("item_quick_slot_available", true)), "耗尽后应标记不可用")
+	assert((hud.item_quick_slot_icons[0] as TextureRect).visible, "耗尽后仍应保留绑定图标显示")
+	assert((hud.item_quick_slot_count_labels[0] as Label).text == "0", "耗尽后数量层应显示 0")
+	var depleted_use_count := use_signals.size()
+	hud._begin_item_slot_press(0, slot_center, -1)
+	hud._finish_item_slot_press(0, slot_center)
+	assert(use_signals.size() == depleted_use_count + 1, "已绑定耗尽槽单击仍应发出 use 请求")
+
+	# --- Touch identity: only the active finger may cancel or release a slot ---
+	var identity_use_before := use_signals.size()
+	var other_finger_drag := InputEventScreenDrag.new()
+	other_finger_drag.index = 8
+	other_finger_drag.position = slot_center + Vector2(0, 60)
+	hud.call("_item_slot_input", other_finger_drag, 2)
+	assert(not bool(hud.get("_item_slot_press_cancelled")), "其他手指拖动不应取消当前槽")
+	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "空闲时 touch index 应为 -1")
+	var other_finger_up := InputEventScreenTouch.new()
+	other_finger_up.index = 8
+	other_finger_up.pressed = false
+	other_finger_up.position = slot_center
+	hud.call("_item_slot_input", other_finger_up, 2)
+	assert(use_signals.size() == identity_use_before, "空闲时其他手指释放不应触发 use")
+
+	hud._begin_item_slot_press(2, slot_center, 7)
+	var same_finger_drag := InputEventScreenDrag.new()
+	same_finger_drag.index = 7
+	same_finger_drag.position = slot_center + Vector2(0, 60)
+	hud.call("_item_slot_input", same_finger_drag, 2)
+	assert(bool(hud.get("_item_slot_press_cancelled")), "活动手指拖动应取消当前槽")
+	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "取消后应清除 touch index")
+	var cancelled_up := InputEventScreenTouch.new()
+	cancelled_up.index = 7
+	cancelled_up.pressed = false
+	cancelled_up.position = slot_center
+	hud.call("_item_slot_input", cancelled_up, 2)
+	assert(use_signals.size() == identity_use_before, "已取消按压的释放不应触发 use")
+
+	hud._begin_item_slot_press(2, slot_center, 7)
+	var other_up := InputEventScreenTouch.new()
+	other_up.index = 8
+	other_up.pressed = false
+	other_up.position = slot_center
+	hud.call("_item_slot_input", other_up, 2)
+	assert(int(hud.get("_item_slot_press_touch_index")) == 7, "其他手指释放不应结束当前按压")
+	assert(use_signals.size() == identity_use_before, "其他手指释放不应触发 use")
+	var active_up := InputEventScreenTouch.new()
+	active_up.index = 7
+	active_up.pressed = false
+	active_up.position = slot_center
+	hud.call("_item_slot_input", active_up, 2)
+	assert(use_signals.size() == identity_use_before + 1, "活动手指释放应正常触发 use")
+	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "释放后应清除 touch index")
+
 	await _assert_2664x1200_landscape_layout(root, chassis, health_orb, mana_orb)
 	print("HUD_GOTHIC_RUNTIME_PASS：统一V2透明框体、动态血蓝球、4物品槽、攻击主键、6环绕技能与触控尺寸均通过")
 	get_tree().quit(0)

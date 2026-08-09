@@ -3,6 +3,7 @@ extends Node
 
 const STABLE_ID := "ui.touch_content_scroll.v1"
 const DRAG_THRESHOLD := 8.0
+const DRAG_ACTIVE_META := "touch_scroll_drag_active"
 
 var _registered_controls: Array[WeakRef] = []
 var _active_control: Control
@@ -33,13 +34,43 @@ static func attach_tree(root: Node) -> Node:
 	return support
 
 
+static func is_drag_active(tree: SceneTree) -> bool:
+	if tree == null or tree.root == null:
+		return false
+	return bool(tree.root.get_meta(DRAG_ACTIVE_META, false))
+
+
+func active_drag_index() -> int:
+	return _active_touch_index if _dragging else -1
+
+
 func register_tree(root: Node) -> void:
-	if root is ScrollContainer:
-		register_control(root)
-	elif root is RichTextLabel and (root as RichTextLabel).scroll_active:
-		register_control(root)
-	for child: Node in root.get_children():
-		register_tree(child)
+	if root == null:
+		return
+	_register_node_and_children(root)
+
+
+func _register_node_and_children(node: Node) -> void:
+	if node is ScrollContainer:
+		register_control(node)
+	elif node is RichTextLabel and (node as RichTextLabel).scroll_active:
+		register_control(node)
+	_ensure_dynamic_watch(node)
+	for child: Node in node.get_children():
+		_register_node_and_children(child)
+
+
+func _ensure_dynamic_watch(node: Node) -> void:
+	# One watch per node keeps later lazy-loaded subtrees (panels, rebuilt
+	# cards, late scroll areas) registered without duplicate connections.
+	if bool(node.get_meta("touch_scroll_tree_watched", false)):
+		return
+	node.set_meta("touch_scroll_tree_watched", true)
+	node.child_entered_tree.connect(_on_child_entered_tree)
+
+
+func _on_child_entered_tree(child: Node) -> void:
+	_register_node_and_children(child)
 
 
 func register_control(control: Control) -> void:
@@ -70,6 +101,7 @@ func _begin_drag_candidate(position: Vector2, touch_index: int) -> void:
 	_active_touch_index = touch_index if _active_control != null else -1
 	_press_position = position
 	_dragging = false
+	_set_drag_active(false)
 
 
 func _continue_drag(position: Vector2, relative: Vector2) -> void:
@@ -77,7 +109,9 @@ func _continue_drag(position: Vector2, relative: Vector2) -> void:
 		return
 	if not _dragging and position.distance_to(_press_position) < DRAG_THRESHOLD:
 		return
-	_dragging = true
+	if not _dragging:
+		_dragging = true
+		_set_drag_active(true)
 	var scroll_bar := _vertical_scroll_bar(_active_control)
 	if scroll_bar == null or scroll_bar.max_value <= scroll_bar.page:
 		return
@@ -93,6 +127,12 @@ func _end_drag() -> void:
 	_active_control = null
 	_active_touch_index = -1
 	_dragging = false
+	_set_drag_active(false)
+
+
+func _set_drag_active(active: bool) -> void:
+	if get_tree() != null and get_tree().root != null:
+		get_tree().root.set_meta(DRAG_ACTIVE_META, active)
 
 
 func _control_at(position: Vector2) -> Control:
