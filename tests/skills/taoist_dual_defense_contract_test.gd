@@ -33,7 +33,7 @@ func _run() -> void:
 
 func _verify_dual_quote_single_transaction() -> void:
 	var defense := Loader.skill("taoist.defense")
-	var resources := {"mana": 999, "materials": {}}
+	var resources := {"mana": 999, "materials": {"amulet": 999}}
 	var dual_context := {
 		"dual_defense_context": {
 			"partner_skill_id": "taoist.magic_defense",
@@ -58,7 +58,7 @@ func _verify_dual_quote_single_transaction() -> void:
 	var insufficient := ResourceService.quote(
 		defense,
 		5,
-		{"mana": 27, "materials": {}},
+		{"mana": 27, "materials": {"amulet": 999}},
 		dual_context
 	)
 	assert(not insufficient.valid and insufficient.reason == "insufficient_mana")
@@ -67,7 +67,7 @@ func _verify_dual_quote_single_transaction() -> void:
 
 func _verify_dual_quote_invalid_partner() -> void:
 	var defense := Loader.skill("taoist.defense")
-	var resources := {"mana": 999, "materials": {}}
+	var resources := {"mana": 999, "materials": {"amulet": 999}}
 	var bogus := ResourceService.quote(
 		defense,
 		5,
@@ -198,7 +198,7 @@ func _verify_canonical_support_metadata_survival() -> void:
 		Vector2i.ZERO,
 		Vector2i.DOWN,
 		heal_context,
-		{"mana": 999, "materials": {}},
+		{"mana": 999, "materials": {"amulet": 999}},
 		23
 	)
 	var fallback_target := Node2D.new()
@@ -289,6 +289,6 @@ func _request(skill_id: String, context: Dictionary, rank: int) -> Dictionary:
 		Vector2i.ZERO,
 		Vector2i.DOWN,
 		context,
-		{"mana": 999, "materials": {}},
+		{"mana": 999, "materials": {"amulet": 999}},
 		31
 	)
