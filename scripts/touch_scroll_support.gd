@@ -91,7 +91,13 @@ func _input(event: InputEvent) -> void:
 		if event.pressed:
 			_begin_drag_candidate(event.position, event.index)
 		elif event.index == _active_touch_index:
+			var was_dragging := _dragging
 			_end_drag()
+			# A release that finishes a real content drag must not reach the
+			# Button under the finger, otherwise it fires pressed after scroll.
+			# Plain tap releases (no threshold crossing) stay unconsumed.
+			if was_dragging:
+				get_viewport().set_input_as_handled()
 	elif event is InputEventScreenDrag and event.index == _active_touch_index:
 		_continue_drag(event.position, event.relative)
 

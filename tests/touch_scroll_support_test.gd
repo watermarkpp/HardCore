@@ -116,8 +116,28 @@ func _run() -> void:
 	assert(skill_bar.max_value > skill_bar.page, "技能列表没有真实溢出，无法验证拖动")
 	var skill_cards := drag_skill_scroll.get_node("SkillCards")
 	var skill_card := skill_cards.get_child(0) as Button
-	var card_presses := 0
-	skill_card.pressed.connect(func() -> void: card_presses += 1)
+	var card_presses: Array[int] = [0]
+	skill_card.pressed.connect(func() -> void: card_presses[0] += 1)
+
+	# 先验证非拖动 tap：release 不被共享服务消费，普通点击仍触发 pressed。
+	drag_skill_scroll.scroll_vertical = 0
+	await get_tree().process_frame
+	var tap_center := skill_card.get_global_rect().get_center()
+	var tap_down := InputEventScreenTouch.new()
+	tap_down.index = 10
+	tap_down.pressed = true
+	tap_down.position = tap_center
+	get_viewport().push_input(tap_down)
+	assert(skill_card.button_pressed, "普通点击按下未到达技能卡按钮")
+	var tap_up := InputEventScreenTouch.new()
+	tap_up.index = 10
+	tap_up.pressed = false
+	tap_up.position = tap_center
+	get_viewport().push_input(tap_up)
+	assert(card_presses[0] == 1, "普通点击的 release 被共享服务错误消费")
+
+	# 再验证真实拖动：滚动推进、拖动后 pressed 不再增加、共享状态复位。
+	card_presses[0] = 0
 	var card_global_center := skill_card.get_global_rect().get_center()
 	var touch_down := InputEventScreenTouch.new()
 	touch_down.index = 9
@@ -141,7 +161,7 @@ func _run() -> void:
 	touch_up.position = drag_position
 	get_viewport().push_input(touch_up)
 	support.call("_input", touch_up)
-	assert(card_presses == 0, "技能列表拖动越过阈值后仍触发了卡片点击")
+	assert(card_presses[0] == 0, "技能列表拖动越过阈值后仍触发了卡片点击")
 	assert(not TouchScrollSupportScript.is_drag_active(get_tree()), "技能列表拖动结束后共享状态未复位")
 
 	var character_select: Node = load("res://scenes/character_select.tscn").instantiate()
