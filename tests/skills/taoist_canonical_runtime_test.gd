@@ -48,7 +48,7 @@ func _ready() -> void:
 		"line_of_sight": true,
 		"force_success": true,
 		"primary_stat_roll": 10,
-	}, "")
+	}, "grey_powder")
 	assert(dual_poison.effects.size() == 2)
 	assert(dual_poison.effects[0].poison_type == "green_poison")
 	assert(dual_poison.effects[1].poison_type == "red_poison")
@@ -58,8 +58,8 @@ func _ready() -> void:
 	assert(dual_poison.effects[0].resisted == dual_poison.effects[1].resisted)
 	assert(dual_poison.effects[0].apply_probability == dual_poison.effects[1].apply_probability)
 	assert(dual_poison.effects[0].duration_seconds == dual_poison.effects[1].duration_seconds)
-	assert(dual_poison.resource_quote.material_id == "")
-	assert(dual_poison.resource_quote.material_amount == 0)
+	assert(dual_poison.resource_quote.material_id == "grey_powder")
+	assert(dual_poison.resource_quote.material_amount > 0)
 	var poison_definition := Loader.skill("taoist.poison")
 	assert(
 		dual_poison.resource_quote.mp_cost
@@ -89,7 +89,8 @@ func _ready() -> void:
 	})
 	assert(talisman.effects[0].type == "talisman_projectile_damage")
 	assert(talisman.effects[0].damage_type == "spirit_magic")
-	assert(talisman.resource_quote.material_amount == 0)
+	assert(talisman.resource_quote.material_id == "amulet")
+	assert(talisman.resource_quote.material_amount > 0)
 	assert(talisman.proficiency_event.is_empty())
 
 	var skeleton := _execute("taoist.summon_skeleton", {
@@ -99,7 +100,8 @@ func _ready() -> void:
 	assert(skeleton.effects[0].initial_pet_level == 3)
 	assert(skeleton.effects[0].max_pet_level == 7)
 	assert(not skeleton.effects[0].skill_rank_is_pet_level)
-	assert(skeleton.resource_quote.material_amount == 0)
+	assert(skeleton.resource_quote.material_id == "amulet")
+	assert(skeleton.resource_quote.material_amount > 0)
 	assert(skeleton.proficiency_event.is_empty())
 	var recalled_skeleton := _execute("taoist.summon_skeleton", {
 		"has_main_pet": true,
@@ -244,7 +246,8 @@ func _ready() -> void:
 	assert(divine_beast.effects[0].template_id == "divine_beast")
 	assert(divine_beast.effects[0].initial_pet_level == 3)
 	assert(divine_beast.effects[0].max_pet_level == 7)
-	assert(divine_beast.resource_quote.material_amount == 0)
+	assert(divine_beast.resource_quote.material_id == "amulet")
+	assert(divine_beast.resource_quote.material_amount > 0)
 	assert(divine_beast.proficiency_event.is_empty())
 
 	## Revelation stays fully present in data/code (stable ID preserved) while
@@ -263,7 +266,7 @@ func _ready() -> void:
 	]:
 		assert(result.accepted)
 		assert(result.has("effects") and result.has("proficiency_event"))
-	print("TAOIST_CANONICAL_RUNTIME_PASS: thirteen skills, material-free dual poison, pets, buffs, healing and boundary control")
+	print("TAOIST_CANONICAL_RUNTIME_PASS: thirteen skills, materialized poison/pets, buffs, healing and boundary control")
 	get_tree().quit()
 
 
