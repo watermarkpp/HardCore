@@ -60,7 +60,7 @@ static func create_visual(
 ):
 	## One call per release. Returns null (fail closed) when the snapshot is
 	## missing or invalid so integration never presents a guessed attack range.
-	var effect := WarriorMeleeVisualEffect.new()
+	var effect = new()
 	effect.setup(
 		snapshot,
 		mode_value,
