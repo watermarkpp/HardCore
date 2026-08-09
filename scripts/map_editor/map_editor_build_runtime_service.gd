@@ -28,6 +28,7 @@ const DEFAULT_RELEASE_REGISTRY_PATH := (
 ## FREEZE-P0.3R: Build Candidates are NEVER written to the formal runtime
 ## directory. outputs/ is gitignored and candidates are keyed by build hash.
 const CANDIDATE_ROOT := "res://outputs/map_runtime_candidates/"
+const CANDIDATE_BINDING_CONTRACT_ID := "mse.map.runtime.candidate_binding.v1"
 
 ## FREEZE-P0.3R test/dev seams only - all false in production.
 static var test_fail_runtime_promote := false
@@ -58,6 +59,7 @@ static func approve_for_runtime(document: Dictionary) -> Dictionary:
 static func publish_runtime_release(
 	candidate_runtime_path: String,
 	runtime_map_id: int,
+	expected_document_binding: Dictionary,
 	registry_path := DEFAULT_RELEASE_REGISTRY_PATH,
 	map_key_override := ""
 ) -> Dictionary:
@@ -74,23 +76,59 @@ static func publish_runtime_release(
 	var map_key := str(runtime.get("source", {}).get("map_id", ""))
 	if map_key.is_empty():
 		return {"success": false, "reason": "runtime_map_key_missing"}
+	var binding_check := _validate_candidate_binding(
+		runtime,
+		runtime_map_id,
+		expected_document_binding
+	)
+	if not binding_check.ok:
+		return {
+			"success": false,
+			"reason": binding_check.reason,
+			"errors": binding_check.get("errors", []),
+		}
 	if not map_key_override.is_empty() and map_key_override != map_key:
 		return {"success": false, "reason": "runtime_map_key_mismatch"}
 	var approved_hash := str(runtime.get("build_sha256", ""))
 	if approved_hash.is_empty():
 		return {"success": false, "reason": "runtime_build_hash_missing"}
-	var old_registry := _read_registry(registry_path)
+	var registry_read := _read_registry(registry_path)
+	if not registry_read.ok:
+		return {
+			"success": false,
+			"reason": registry_read.reason,
+			"errors": registry_read.get("errors", []),
+		}
+	var old_registry: Dictionary = registry_read.registry
+	var old_registry_bytes: PackedByteArray = registry_read.raw_bytes
 	var registry: Dictionary = old_registry.duplicate(true)
 	var maps: Array = registry.get("maps", [])
+	var authored_display_name := str(
+		runtime.get("source", {}).get("display_name", "")
+	).strip_edges()
 	var previous_revision := 0
 	var updated := false
 	var formal_path := default_runtime_path(map_key)
 	for i in range(maps.size()):
 		if int(maps[i].get("runtime_map_id", -1)) == runtime_map_id:
 			previous_revision = int(maps[i].get("approval_revision", 0))
+			var existing_display_name := str(
+				maps[i].get("display_name", "")
+			)
+			var release_display_name := (
+				existing_display_name
+				if not existing_display_name.strip_edges().is_empty()
+				else authored_display_name
+			)
+			if release_display_name.is_empty():
+				return {
+					"success": false,
+					"reason": "candidate_display_name_missing",
+				}
 			maps[i] = _release_entry(
 				runtime_map_id,
 				map_key,
+				release_display_name,
 				approved_hash,
 				formal_path,
 				previous_revision
@@ -98,9 +136,19 @@ static func publish_runtime_release(
 			updated = true
 			break
 	if not updated:
+		if authored_display_name.is_empty():
+			return {
+				"success": false,
+				"reason": "candidate_display_name_missing",
+			}
 		maps.append(
 			_release_entry(
-				runtime_map_id, map_key, approved_hash, formal_path, 0
+				runtime_map_id,
+				map_key,
+				authored_display_name,
+				approved_hash,
+				formal_path,
+				0
 			)
 		)
 	registry["maps"] = maps
@@ -138,8 +186,15 @@ static func publish_runtime_release(
 	)
 	if not post_ok:
 		_restore_runtime(formal_path, backup_path)
-		_write_registry_atomic(registry_path, old_registry)
+		var registry_restored := _restore_registry_bytes(
+			registry_path, old_registry_bytes
+		)
 		RuntimeBridge.invalidate_release_registry()
+		if not registry_restored:
+			return {
+				"success": false,
+				"reason": "post_publish_rollback_failed",
+			}
 		return {"success": false, "reason": "post_publish_verify_failed"}
 	if (
 		not backup_path.is_empty()
@@ -160,6 +215,7 @@ static func publish_runtime_release(
 static func _release_entry(
 	runtime_map_id: int,
 	map_key: String,
+	display_name: String,
 	approved_hash: String,
 	runtime_path: String,
 	previous_revision: int
@@ -167,7 +223,7 @@ static func _release_entry(
 	return {
 		"runtime_map_id": runtime_map_id,
 		"map_key": map_key,
-		"display_name": map_key,
+		"display_name": display_name,
 		"runtime_path": runtime_path,
 		"release_state": "implemented_playable",
 		"approved_build_sha256": approved_hash,
@@ -268,22 +324,78 @@ static func _absolute_path(path: String) -> String:
 
 
 static func _read_registry(registry_path: String) -> Dictionary:
-	if FileAccess.file_exists(registry_path):
-		var file := FileAccess.open(registry_path, FileAccess.READ)
-		var parsed: Variant = (
-			JSON.parse_string(file.get_as_text())
-			if file != null
-			else null
-		)
-		if file != null:
-			file.close()
-		if parsed is Dictionary:
-			return parsed
+	if not FileAccess.file_exists(registry_path):
+		return {"ok": false, "reason": "release_registry_missing"}
+	var file := FileAccess.open(registry_path, FileAccess.READ)
+	if file == null:
+		return {"ok": false, "reason": "release_registry_open_failed"}
+	var raw_bytes := file.get_buffer(file.get_length())
+	file.close()
+	var parser := JSON.new()
+	var parse_error := parser.parse(raw_bytes.get_string_from_utf8())
+	if parse_error != OK:
+		return {"ok": false, "reason": "release_registry_json_invalid"}
+	var parsed: Variant = parser.data
+	if not parsed is Dictionary:
+		return {"ok": false, "reason": "release_registry_json_invalid"}
+	var registry: Dictionary = parsed
+	if not registry.get("maps", null) is Array:
+		return {
+			"ok": false,
+			"reason": "release_registry_invalid",
+			"errors": ["registry_maps_must_be_array"],
+		}
+	var schema_errors := RuntimeBridge.validate_release_registry(registry)
+	if not schema_errors.is_empty():
+		return {
+			"ok": false,
+			"reason": "release_registry_invalid",
+			"errors": schema_errors,
+		}
 	return {
-		"schema_version": 1,
-		"registry_contract_id": "mse.map.runtime.release.v1",
-		"maps": [],
+		"ok": true,
+		"registry": registry,
+		"raw_bytes": raw_bytes,
 	}
+
+
+static func _restore_registry_bytes(
+	registry_path: String,
+	raw_bytes: PackedByteArray
+) -> bool:
+	var absolute_dst := _absolute_path(registry_path)
+	var absolute_tmp := absolute_dst + ".restore_tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_buffer(raw_bytes)
+	file.flush()
+	file.close()
+	var verify := FileAccess.open(absolute_tmp, FileAccess.READ)
+	if verify == null:
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	var verified_bytes := verify.get_buffer(verify.get_length())
+	verify.close()
+	if verified_bytes != raw_bytes:
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	var backup := absolute_dst + ".restore_bak"
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	if FileAccess.file_exists(absolute_dst):
+		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return false
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	return true
 
 
 static func _write_registry_atomic(
@@ -370,6 +482,115 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 	return {"ok": errors.is_empty(), "errors": errors, "warnings": warnings, "walkability": walkability}
 
 
+static func document_binding(document: Dictionary) -> Dictionary:
+	var ground: Dictionary = document.get("ground", {})
+	var fingerprint_parts := {
+		"document_sha256": _sha256(MapEditorJsonCodec.encode(document)),
+		"ground_manifest_sha256": _file_sha256(
+			str(ground.get("workspace_manifest", ""))
+		),
+		"ground_state_sha256": _file_sha256(
+			str(ground.get("workspace_state", ""))
+		),
+	}
+	return {
+		"contract_id": CANDIDATE_BINDING_CONTRACT_ID,
+		"map_key": str(document.get("map_id", "")),
+		"runtime_map_id": int(document.get("runtime_map_id", -1)),
+		"document_revision": int(
+			document.get("editor_meta", {}).get("revision", 1)
+		),
+		"document_sha256": fingerprint_parts.document_sha256,
+		"ground_manifest_sha256": fingerprint_parts.ground_manifest_sha256,
+		"ground_state_sha256": fingerprint_parts.ground_state_sha256,
+		"authoring_sha256": _sha256(
+			MapEditorJsonCodec.encode(fingerprint_parts)
+		),
+	}
+
+
+static func candidate_matches_document(
+	candidate: Dictionary,
+	document: Dictionary
+) -> bool:
+	if candidate.is_empty() or document.is_empty():
+		return false
+	return (
+		_normalize_candidate_binding(
+			candidate.get("document_binding", {})
+		)
+		== document_binding(document)
+	)
+
+
+static func _normalize_candidate_binding(binding: Dictionary) -> Dictionary:
+	return {
+		"contract_id": str(binding.get("contract_id", "")),
+		"map_key": str(binding.get("map_key", "")),
+		"runtime_map_id": int(binding.get("runtime_map_id", -1)),
+		"document_revision": int(binding.get("document_revision", -1)),
+		"document_sha256": str(binding.get("document_sha256", "")),
+		"ground_manifest_sha256": str(
+			binding.get("ground_manifest_sha256", "")
+		),
+		"ground_state_sha256": str(
+			binding.get("ground_state_sha256", "")
+		),
+		"authoring_sha256": str(binding.get("authoring_sha256", "")),
+	}
+
+
+static func _validate_candidate_binding(
+	runtime: Dictionary,
+	runtime_map_id: int,
+	expected_document_binding: Dictionary
+) -> Dictionary:
+	var source: Dictionary = runtime.get("source", {})
+	var binding := _normalize_candidate_binding(
+		source.get("candidate_binding", {})
+	)
+	if (
+		str(binding.get("contract_id", ""))
+		!= CANDIDATE_BINDING_CONTRACT_ID
+	):
+		return {"ok": false, "reason": "candidate_binding_missing"}
+	var map_key := str(source.get("map_id", ""))
+	var fingerprint_fields: Array[String] = [
+		"document_sha256",
+		"ground_manifest_sha256",
+		"ground_state_sha256",
+		"authoring_sha256",
+	]
+	if (
+		str(binding.get("map_key", "")) != map_key
+		or int(binding.get("runtime_map_id", -1)) <= 0
+		or int(binding.get("runtime_map_id", -1))
+			!= int(source.get("runtime_map_id", -2))
+		or int(binding.get("document_revision", -1))
+			!= int(source.get("revision", -2))
+	):
+		return {"ok": false, "reason": "candidate_binding_invalid"}
+	for field: String in fingerprint_fields:
+		if str(binding.get(field, "")).length() != 64:
+			return {"ok": false, "reason": "candidate_binding_invalid"}
+	if int(binding.get("runtime_map_id", -1)) != runtime_map_id:
+		return {
+			"ok": false,
+			"reason": "candidate_runtime_map_id_mismatch",
+		}
+	if expected_document_binding.is_empty():
+		return {
+			"ok": false,
+			"reason": "candidate_document_binding_required",
+		}
+	if binding != _normalize_candidate_binding(expected_document_binding):
+		return {
+			"ok": false,
+			"reason": "candidate_document_mismatch",
+		}
+	return {"ok": true, "binding": binding}
+
+
 ## FREEZE-P0.3R: Build Candidate. NEVER mutates the formal runtime artifact or
 ## the Release Registry; candidates land in outputs/map_runtime_candidates/
 ## keyed by build hash and never enter gameplay by themselves.
@@ -379,7 +600,8 @@ static func build_candidate(document: Dictionary) -> Dictionary:
 	var validation := validate_for_runtime(document)
 	if not validation.ok:
 		return validation
-	var runtime := _compile_runtime_with_hash(document, validation)
+	var binding := document_binding(document)
+	var runtime := _compile_runtime_with_hash(document, validation, binding)
 	var map_key := str(document.get("map_id", "unknown"))
 	var build_hash := str(runtime.get("build_sha256", ""))
 	var candidate_path := CANDIDATE_ROOT + map_key + "/" + build_hash + ".runtime.json"
@@ -391,6 +613,7 @@ static func build_candidate(document: Dictionary) -> Dictionary:
 		"candidate_path": candidate_path,
 		"map_key": map_key,
 		"build_sha256": build_hash,
+		"document_binding": binding,
 		"validation": validation,
 		"runtime": runtime,
 		"warnings": validation.warnings,
@@ -408,7 +631,9 @@ static func build(document: Dictionary, output_path := "") -> Dictionary:
 	var validation := validate_for_runtime(document)
 	if not validation.ok:
 		return validation
-	var runtime := _compile_runtime_with_hash(document, validation)
+	var runtime := _compile_runtime_with_hash(
+		document, validation, document_binding(document)
+	)
 	var write := _write_atomic(output_path, runtime)
 	if not write.ok:
 		return write
@@ -417,9 +642,10 @@ static func build(document: Dictionary, output_path := "") -> Dictionary:
 
 static func _compile_runtime_with_hash(
 	document: Dictionary,
-	validation: Dictionary
+	validation: Dictionary,
+	binding: Dictionary
 ) -> Dictionary:
-	var runtime := _compile(document, validation.walkability)
+	var runtime := _compile(document, validation.walkability, binding)
 	var normalized: Variant = JSON.parse_string(MapEditorJsonCodec.encode(runtime))
 	if normalized is Dictionary:
 		runtime = normalized
@@ -437,7 +663,11 @@ static func default_runtime_path(map_id: String) -> String:
 	return root + map_id + ".runtime.json"
 
 
-static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionary:
+static func _compile(
+	document: Dictionary,
+	walkability: Dictionary,
+	binding: Dictionary
+) -> Dictionary:
 	var initialized := MapEditorGroundService.initialize(document)
 	var state: Dictionary = initialized.state
 	var semantic_layers := {}
@@ -462,7 +692,15 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 		"runtime_schema_version": RUNTIME_SCHEMA_VERSION,
 		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
 		"projection_contract_id": GroundUnitSpaceScript.PROJECTION_CONTRACT_ID,
-		"source": {"map_id": document.map_id, "editor_schema_version": document.schema_version, "revision": document.editor_meta.get("revision", 1), "content_layer": document.content_layer},
+		"source": {
+			"map_id": document.map_id,
+			"runtime_map_id": int(document.runtime_map_id),
+			"display_name": str(document.display_name).strip_edges(),
+			"editor_schema_version": document.schema_version,
+			"revision": document.editor_meta.get("revision", 1),
+			"content_layer": document.content_layer,
+			"candidate_binding": binding.duplicate(true),
+		},
 		"design": document.design.duplicate(true),
 		"ground": {"ground_mode": document.ground.ground_mode, "default_fill_asset_id": document.ground.blank_fill_asset_id, "tile_overrides": MapEditorGroundService.tile_overrides(state)},
 		"instances": instances,
@@ -509,4 +747,17 @@ static func _sha256(text: String) -> String:
 	var hashing := HashingContext.new()
 	hashing.start(HashingContext.HASH_SHA256)
 	hashing.update(text.to_utf8_buffer())
+	return hashing.finish().hex_encode()
+
+
+static func _file_sha256(path: String) -> String:
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return ""
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var hashing := HashingContext.new()
+	hashing.start(HashingContext.HASH_SHA256)
+	hashing.update(file.get_buffer(file.get_length()))
+	file.close()
 	return hashing.finish().hex_encode()

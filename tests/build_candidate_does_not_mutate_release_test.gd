@@ -32,7 +32,10 @@ func _run() -> void:
 	var formal_path := BuildService.default_runtime_path(MAP_KEY)
 	Bridge.test_override_release_registry_path(REG_PATH)
 	var published := BuildService.publish_runtime_release(
-		str(candidate_a.candidate_path), MAP_ID, REG_PATH
+		str(candidate_a.candidate_path),
+		MAP_ID,
+		candidate_a.document_binding,
+		REG_PATH
 	)
 	assert(bool(published.get("success", false)), str(published))
 	assert(bool(published.get("formal_playable", false)))

@@ -10,6 +10,9 @@ const Publish := preload(
 const RuntimeService := preload(
 	"res://scripts/map_editor/map_editor_runtime_map_service.gd"
 )
+const Fixtures := preload(
+	"res://tests/helpers/map_runtime_transaction_test_fixtures.gd"
+)
 
 const TEST_REGISTRY := "res://tests/fixtures/runtime_release/test_release_registry.json"
 const MISSING_REGISTRY := "res://tests/fixtures/runtime_release/missing_registry.json"
@@ -123,9 +126,17 @@ func _run() -> void:
 	# Point the bridge at the work registry before publish so the publish
 	# postcondition verification reads the registry it is about to commit.
 	Bridge.test_override_release_registry_path(WORK_REGISTRY)
+	var publish_document := Fixtures.make_document(
+		"future_test_map", 990123, "Future Test Map"
+	)
+	var approval := Publish.approve_for_runtime(publish_document)
+	assert(approval.ok, str(approval.get("errors", [])))
+	var candidate := Publish.build_candidate(publish_document)
+	assert(candidate.ok, str(candidate.get("errors", [])))
 	var published: Dictionary = Publish.publish_runtime_release(
-		"res://tests/fixtures/runtime_release/future_test_map_v2.runtime.json",
+		str(candidate.candidate_path),
 		990123,
+		candidate.document_binding,
 		WORK_REGISTRY
 	)
 	assert(

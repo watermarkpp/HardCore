@@ -33,6 +33,7 @@ var size_label: Label
 var path_label: Label
 var status_label: Label
 var _last_build_candidate: Dictionary = {}
+var _candidate_validation_elapsed := 0.0
 var preview: MapEditorCanvasPreview
 var asset_tree: Tree
 var brush_label: Label
@@ -97,6 +98,17 @@ func _ready() -> void:
 		_open_document_path(recent_path)
 	else:
 		_create_map("sandbox_64", "quest_room", 990001, "64格沙盒")
+
+
+func _process(delta: float) -> void:
+	if _last_build_candidate.is_empty():
+		_candidate_validation_elapsed = 0.0
+		return
+	_candidate_validation_elapsed += delta
+	if _candidate_validation_elapsed < 0.1:
+		return
+	_candidate_validation_elapsed = 0.0
+	_invalidate_last_build_candidate_if_stale()
 
 
 func _startup_document_path() -> String:
@@ -760,6 +772,8 @@ func _ensure_ground_coordinate_contract(initialized: Dictionary) -> Dictionary:
 
 
 func _reset_document_session_state() -> void:
+	_last_build_candidate = {}
+	_candidate_validation_elapsed = 0.0
 	command_stack.clear()
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
@@ -771,6 +785,17 @@ func _reset_document_session_state() -> void:
 	if preview != null:
 		preview.reset_for_document_open()
 	_reset_semantic_draft_fields()
+
+
+func _invalidate_last_build_candidate_if_stale() -> bool:
+	if _last_build_candidate.is_empty():
+		return false
+	if MapEditorBuildRuntimeService.candidate_matches_document(
+		_last_build_candidate, current_document
+	):
+		return false
+	_last_build_candidate = {}
+	return true
 
 
 func _reset_semantic_draft_fields() -> void:
@@ -1474,6 +1499,7 @@ func _on_build_candidate_pressed() -> void:
 		status_label.text = "Runtime 候选构建失败：%s" % candidate.get("errors", [])
 		return
 	_last_build_candidate = candidate
+	_candidate_validation_elapsed = 0.0
 	status_label.text = (
 		"候选已构建：%s\nbuild hash：%s\n校验通过：%s"
 		% [
@@ -1487,6 +1513,11 @@ func _on_build_candidate_pressed() -> void:
 ## FREEZE-P0.3R step 2: Publish Runtime Release. Only enabled by a current
 ## valid candidate and always calls the formal publish_runtime_release().
 func _on_publish_runtime_pressed() -> void:
+	if _invalidate_last_build_candidate_if_stale():
+		status_label.text = (
+			"候选已失效：当前地图或内容已变更，请重新构建 Runtime 候选"
+		)
+		return
 	var candidate: Dictionary = _last_build_candidate
 	if candidate.is_empty():
 		status_label.text = "无有效候选：请先构建 Runtime 候选"
@@ -1496,8 +1527,16 @@ func _on_publish_runtime_pressed() -> void:
 		status_label.text = "候选文件不存在：%s" % candidate_path
 		return
 	var runtime_map_id := int(current_document.get("runtime_map_id", -1))
+	var map_key := str(current_document.get("map_id", ""))
+	var current_binding := MapEditorBuildRuntimeService.document_binding(
+		current_document
+	)
 	var result := MapEditorBuildRuntimeService.publish_runtime_release(
-		candidate_path, runtime_map_id
+		candidate_path,
+		runtime_map_id,
+		current_binding,
+		MapEditorBuildRuntimeService.DEFAULT_RELEASE_REGISTRY_PATH,
+		map_key
 	)
 	if not result.get("success", false):
 		status_label.text = "发布失败：%s %s" % [
@@ -1505,6 +1544,7 @@ func _on_publish_runtime_pressed() -> void:
 			str(result.get("errors", [])),
 		]
 		return
+	_last_build_candidate = {}
 	status_label.text = (
 		"已发布：map_id=%d key=%s\nhash=%s revision=%d formal_playable=%s"
 		% [
