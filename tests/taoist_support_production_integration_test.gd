@@ -22,6 +22,7 @@ func _run() -> void:
 		ProfessionRules.profession_display_name("taoist")
 	)
 	PlayerState.level = 40
+	PlayerState.inventory = [{"name": "护身符", "count": 999}]
 	PlayerState.learned_skills = {
 		_display("taoist.healing"): 3,
 		_display("taoist.mass_healing"): 3,
