@@ -57,7 +57,7 @@ static func create_visual(
 	hit_info_value: Dictionary,
 	coordinate_context: Dictionary,
 	anchor_screen_px := Vector2.ZERO
-) -> WarriorMeleeVisualEffect:
+):
 	## One call per release. Returns null (fail closed) when the snapshot is
 	## missing or invalid so integration never presents a guessed attack range.
 	var effect := WarriorMeleeVisualEffect.new()

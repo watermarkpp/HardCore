@@ -75,7 +75,7 @@ func _verify_three_layers_same_snapshot_source(mode: String) -> void:
 	)
 	assert(bool(plan.get("target_axis_eligible", false)))
 	var snapshot := plan.get("skill_footprint_snapshot") as Dictionary
-	var effect := Visual.create_visual(
+	var effect: Variant = Visual.create_visual(
 		snapshot,
 		mode,
 		{"hit_any": true},
@@ -85,7 +85,7 @@ func _verify_three_layers_same_snapshot_source(mode: String) -> void:
 	assert(effect != null)
 	assert(effect.visual_ready())
 	assert(effect.get_child_count() == Visual.LAYER_COUNT)
-	var children := effect.get_children()
+	var children: Array = effect.get_children()
 	var outer := children[0] as Polygon2D
 	assert(outer != null)
 	assert(
@@ -102,7 +102,7 @@ func _verify_three_layers_same_snapshot_source(mode: String) -> void:
 				expected_polygon[point_index]
 			) <= Visual.POLYGON_VERTEX_TOLERANCE_PX
 		)
-	var descriptor := effect.presentation_descriptor()
+	var descriptor: Dictionary = effect.presentation_descriptor()
 	assert(bool(descriptor.get("same_snapshot_source", false)))
 	assert(str(descriptor.get("snapshot_id", "")) == str(
 		snapshot.get("snapshot_id", "")
@@ -159,7 +159,7 @@ func _verify_half_moon_single_node_per_release() -> void:
 		coordinate_context
 	)
 	var snapshot := plan.get("skill_footprint_snapshot") as Dictionary
-	var effect := Visual.create_visual(
+	var effect: Variant = Visual.create_visual(
 		snapshot,
 		Geometry.SKILL_HALF_MOON,
 		{"hit_any": true, "target_count": 99},
@@ -168,7 +168,7 @@ func _verify_half_moon_single_node_per_release() -> void:
 	)
 	assert(effect != null)
 	assert(effect.get_child_count() == Visual.LAYER_COUNT)
-	var descriptor := effect.presentation_descriptor()
+	var descriptor: Dictionary = effect.presentation_descriptor()
 	var hit_info: Dictionary = descriptor.get("hit_info", {})
 	assert(int(hit_info.get("target_count", 0)) == 99)
 	assert(bool(hit_info.get("hit_any", false)))
@@ -184,7 +184,7 @@ func _verify_release_visual_fades_and_frees() -> void:
 		Geometry.SKILL_NORMAL,
 		coordinate_context
 	)
-	var effect := Visual.create_visual(
+	var effect: Variant = Visual.create_visual(
 		plan.get("skill_footprint_snapshot") as Dictionary,
 		Geometry.SKILL_NORMAL,
 		{},
