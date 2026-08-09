@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical')]
     [string]$Suite = 'critical',
     [ValidateRange(1, 60)]
     [int]$TimeoutSeconds = 8,
@@ -104,6 +104,9 @@ $Suites = @{
 		'tests/combat_release_geometry_test.tscn',
 		'tests/live_attack_resolution_test.tscn',
 		'tests/melee_lock_fallback_test.tscn',
+		'tests/skills/warrior_target_aligned_release_geometry_test.tscn',
+		'tests/skills/warrior_target_aligned_visual_effect_test.tscn',
+		'tests/game_root_warrior_target_aligned_integration_test.tscn',
         'tests/warrior_visual_test.tscn',
         'tests/class_combat_test.tscn',
         'tests/mobile_targeting_test.tscn',
@@ -186,6 +189,23 @@ $Suites.caster_visual_critical = @(
     "tests/input_release_cleanup_test.tscn",
     "tests/initial_world_input_lock_test.tscn",
     "tests/map_transition_input_lock_test.tscn"
+)
+
+$Suites.taoist_critical = @(
+    'tests/skills/taoist_summon_projectile_async_visual_test.tscn',
+    'tests/skills/taoist_summon_projectile_origin_anchor_test.tscn',
+    'tests/skills/taoist_summon_projectile_stealth_buff_visual_test.tscn',
+    'tests/skills/taoist_support_policy_test.tscn',
+    'tests/skills/taoist_support_runtime_test.tscn',
+    'tests/skills/taoist_canonical_runtime_test.tscn',
+    'tests/skills/taoist_dual_defense_contract_test.tscn',
+    'tests/skills/spell_target_lock_and_footprint_test.tscn',
+    'tests/skills/skill_semantic_contracts_test.tscn',
+    'tests/taoist_support_production_integration_test.tscn',
+    'tests/canonical_skill_production_entry_test.tscn',
+    'tests/skill_button_assignments_v2_test.tscn',
+    'tests/class_combat_test.tscn',
+    'tests/game_root_spell_lock_input_integration_test.tscn'
 )
 
 $Suites.snapshot_coordinate_critical = @(
@@ -393,6 +413,7 @@ $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
     $Suites.caster_visual_critical +
+    $Suites.taoist_critical +
     $Suites.snapshot_coordinate_critical +
     $Suites.snapshot_production_critical +
     $Suites.projectile_spatial_critical +

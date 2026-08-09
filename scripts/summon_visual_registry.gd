@@ -11,8 +11,7 @@ const REQUEST_UNKNOWN := 0
 const REQUEST_FAILED := -2
 
 static var _profile_cache: Dictionary = {}
-## Synchronous Image.load_from_file counter. The production SummonActor
-## _ready/add_child visual path must never increase this counter.
+## Synchronous raw-file decode counter. Production must never increase it.
 static var _sync_image_load_count := 0
 static var _async_request_count := 0
 static var _async_ready_count := 0
@@ -476,19 +475,6 @@ static func _load_texture(path: String) -> Texture2D:
 	## Exported builds do not guarantee a filesystem path for imported assets;
 	## never fall back to Image.load_from_file. Missing imports are terminal.
 	return null
-
-
-static func _load_export_safe_image(path: String) -> Image:
-	## ResourceLoader resolves res:// imports in editor, PCK, and APK alike.
-	## The worker only extracts pixel data; ImageTexture creation remains on
-	## the main thread in _assemble_profile.
-	var texture := ResourceLoader.load(path, "Texture2D") as Texture2D
-	if texture == null:
-		return null
-	var image := texture.get_image()
-	if image == null or image.is_empty():
-		return null
-	return image
 
 
 static func _vector2i(value: Variant) -> Vector2i:

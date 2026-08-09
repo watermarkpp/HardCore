@@ -45,6 +45,7 @@ const TaoistFriendlyTargetingScript := preload(
 )
 const WarriorMeleeGeometryScript := preload("res://scripts/skills/warrior_melee_geometry.gd")
 const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_melee_diagnostic.gd")
+const WarriorMeleeVisualEffectScript := preload("res://scripts/warrior_melee_visual_effect.gd")
 const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
 const CombatDiagnosticLogScript := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
 const SkillFootprintDiagnosticLogScript := preload(
@@ -3814,6 +3815,13 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				accuracy_bonus
 			)
 			canonical_resolution = "hit" if hit_any else "miss"
+	_spawn_target_aligned_melee_visual(
+		melee_release_snapshot,
+		effect_mode,
+		hit_any,
+		origin,
+		release_geometry
+	)
 	if SkillInputPolicyScript.fire_direct_release_consumes_cooldown(
 		body_selection,
 		hit_effect,
@@ -3845,6 +3853,35 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		canonical_resolution,
 		hit_any
 	)
+
+
+func _spawn_target_aligned_melee_visual(
+	snapshot: Dictionary,
+	mode: String,
+	hit_any: bool,
+	anchor_screen_px: Vector2,
+	release_geometry: Dictionary = {}
+) -> void:
+	var plan: Dictionary = release_geometry.get("target_aligned_plan", {})
+	if plan.is_empty() or not bool(plan.get("target_axis_eligible", false)):
+		return
+	var visual: Node2D = WarriorMeleeVisualEffectScript.create_visual(
+		snapshot,
+		mode,
+		{"hit": hit_any, "release_id": str(plan.get("release_id", ""))},
+		release_geometry.get(
+			"snapshot_validation_context",
+			_canonical_snapshot_validation_context(plan.get("origin_ground_gu", Vector2.ZERO))
+		),
+		anchor_screen_px
+	)
+	if visual == null:
+		return
+	var parent: Node = self
+	if is_inside_tree() and get_tree().current_scene != null:
+		parent = get_tree().current_scene
+	parent.add_child(visual)
+	visual.add_to_group("zone_content")
 
 
 func _record_melee_release_diagnostic(
@@ -4516,7 +4553,8 @@ func _execute_canonical_melee(
 	direct_toggle_release := false,
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	target_aligned_plan: Dictionary = {}
 ) -> Dictionary:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
@@ -4551,7 +4589,8 @@ func _execute_canonical_melee(
 			primary_targets,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
 		)
 		eligible_target_count += thrust_secondaries.size()
 	elif mode == "half_moon":
@@ -7237,6 +7276,25 @@ func _create_melee_release_footprint_snapshot(
 	if release_id.is_empty():
 		release_id = _next_skill_footprint_release_id(skill_id)
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
+	var declared_origin: Variant = release_geometry.get("origin_ground_gu", Vector2.INF)
+	if (not is_finite(origin_ground_gu.x) or not is_finite(origin_ground_gu.y)) and declared_origin is Vector2:
+		origin_ground_gu = declared_origin as Vector2
+	# Production release geometry carries lock-at-release fields. Route those
+	# releases through the continuous target-aligned planner; an invalid lock
+	# deliberately returns no snapshot so callers fail closed instead of
+	# quantizing back to the legacy eight-direction footprint.
+	if release_geometry.has("locked_target_valid_at_release"):
+		release_geometry["origin_ground_gu"] = origin_ground_gu
+		release_geometry["snapshot_validation_context"] = _canonical_snapshot_validation_context(origin_ground_gu)
+		var plan := WarriorMeleeGeometryScript.target_aligned_melee_release_plan_ground_gu(
+			release_geometry,
+		mode,
+		_canonical_snapshot_validation_context(origin_ground_gu)
+		)
+		release_geometry["target_aligned_plan"] = plan
+		if not bool(plan.get("target_axis_eligible", false)):
+			return {}
+		return plan.get("skill_footprint_snapshot", {}) as Dictionary
 	return WarriorMeleeGeometryScript.attack_release_footprint_snapshot_ground_gu(
 		skill_id,
 		release_id,
@@ -7254,7 +7312,8 @@ func _physical_primary_target(
 	mode := "normal",
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	target_aligned_plan: Dictionary = {}
 ) -> EnemyActor:
 	var targets := _physical_primary_targets(
 		origin,
@@ -7273,7 +7332,8 @@ func _physical_primary_targets(
 	mode := "normal",
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	target_aligned_plan: Dictionary = {}
 ) -> Array[EnemyActor]:
 	# The attack lock owns facing and priority only. Actual damage rights are
 	# rebuilt from live footpoints and the selected melee geometry at release.
@@ -7292,7 +7352,8 @@ func _physical_primary_targets(
 			direction_index,
 			mode,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
 		):
 			continue
 		result.append(enemy)
@@ -7333,11 +7394,24 @@ func _is_primary_melee_candidate(
 	direction_index: int,
 	mode: String,
 	thrust_damage_axis_plan: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	target_aligned_plan: Dictionary = {}
 ) -> bool:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.current_hp <= 0:
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+	var target_plan: Dictionary = target_aligned_plan
+	if not target_plan.is_empty():
+		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
+		if not bool(target_plan.get("target_axis_eligible", false)):
+			return false
+		if not WarriorMeleeGeometryScript.target_aligned_release_plan_intersects_target_footprint_ground_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx):
+			return false
+		if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+			return WarriorMeleeGeometryScript.target_aligned_thrust_slot_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 1
+		if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
+			return WarriorMeleeGeometryScript.target_aligned_half_moon_relative_sector_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 0
+		return true
 	if (
 		_snapshot_strict_ok(melee_release_snapshot)
 		and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
@@ -7452,10 +7526,23 @@ func _thrust_secondary_targets(
 	excluded_targets: Array[EnemyActor],
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	target_aligned_plan: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
+	var target_plan: Dictionary = target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
+	if not target_plan.is_empty():
+		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
+				continue
+			var enemy := node as EnemyActor
+			var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+			if WarriorMeleeGeometryScript.target_aligned_thrust_slot_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 2:
+				result.append(enemy)
+		_sort_melee_targets(result, origin_ground_gu, release_geometry)
+		return result
 	var direction_index := _melee_direction_index(direction, release_geometry)
 	if thrust_damage_axis_plan.is_empty():
 		thrust_damage_axis_plan = (
@@ -7502,6 +7589,18 @@ func _half_moon_secondary_targets(
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
+	var target_plan: Dictionary = release_geometry.get("target_aligned_plan", {})
+	if not target_plan.is_empty():
+		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
+				continue
+			var enemy := node as EnemyActor
+			var sector := WarriorMeleeGeometryScript.target_aligned_half_moon_relative_sector_for_plan_gu(target_plan, _canonical_screen_px_to_ground_gu(enemy.global_position), enemy.combat_radius_gu, ctx)
+			if sector > 0:
+				result.append(enemy)
+		_sort_melee_targets(result, origin_ground_gu, release_geometry)
+		return result
 	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
