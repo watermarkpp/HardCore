@@ -4,16 +4,13 @@ const GameHUD := preload("res://scripts/hud.gd")
 
 
 class FakeHud extends GameHUD:
-	signal item_quick_slot_assignment_requested(slot_index: int, item_name: String)
-	signal item_quick_slot_use_requested(slot_index: int, item_name: String)
-
 	var received_assignments: Array = []
 	var messages: Array[String] = []
 
-	func set_item_quick_slots(assignments: Array) -> void:
+	override func set_item_quick_slots(assignments: Array) -> void:
 		received_assignments = assignments.duplicate()
 
-	func show_message(message: String, seconds := 2.0) -> void:
+	override func show_message(message: String, seconds := 2.0) -> void:
 		messages.append(message)
 
 
@@ -106,13 +103,27 @@ func _run() -> void:
 	assert(fake_hud.messages.size() == messages_gated, "输入门关闭时不应提示")
 	game._player_input_enabled = true
 
-	# 基线 HUD（尚无新接口）不崩溃
-	var plain_hud := GameHUD.new()
-	game.hud = plain_hud
+	# 合并态真实 HUD：接口存在，_wire 后连接建立并收到快照
+	var real_hud := GameHUD.new()
+	assert(
+		real_hud.has_signal("item_quick_slot_assignment_requested")
+		and real_hud.has_signal("item_quick_slot_use_requested")
+		and real_hud.has_method("set_item_quick_slots"),
+		"合并态 GameHUD 缺少快捷物品接口"
+	)
+	game.hud = real_hud
 	game._wire_item_quick_slots_hud()
-	assert(not plain_hud.is_connected(
-		"item_quick_slot_assignment_requested",
-		Callable(game, "_on_item_quick_slot_assignment_requested")
-	), "基线 HUD 不应产生新信号连接")
+	assert(
+		real_hud.get_signal_connection_count("item_quick_slot_assignment_requested") == 1
+		and real_hud.get_signal_connection_count("item_quick_slot_use_requested") == 1,
+		"合并态真实 HUD 接口未连接"
+	)
+	var merged_hud := FakeHud.new()
+	game.hud = merged_hud
+	game._wire_item_quick_slots_hud()
+	assert(
+		merged_hud.received_assignments == PlayerState.quick_item_slots_snapshot(),
+		"合并态 HUD 未收到快捷物品快照"
+	)
 	print("QUICK_ITEM_GAME_ROOT_WIRING_PASS")
 	get_tree().quit(0)
