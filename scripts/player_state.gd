@@ -50,6 +50,13 @@ const ATTACK_SKILL_SLOT_COUNT := 1
 const ATTACK_RING_SKILL_SLOT_COUNT := 6
 const QUICK_ITEM_SLOTS_CONTRACT_ID := "gameplay.item.quick_slots.v1"
 const QUICK_ITEM_SLOT_COUNT := 4
+const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
+const SHOP_SELL_CONTRACT_ID := "gameplay.shop.sell_authority.v1"
+const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
+const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
+const WAREHOUSE_CAPACITY := 500
+const SHOP_SELL_PRICE_DIVISOR := 2
+const SHOP_SELL_HIGH_VALUE_PRICE := 10000
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -92,6 +99,19 @@ var _autosave_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
 var profile_directory := PROFILE_DIRECTORY
 var test_roster_reset_marker_path := TEST_ROSTER_RESET_MARKER_PATH
+var last_save_result: Dictionary = {
+	"contract_id": SAVE_RESULT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var last_load_result: Dictionary = {
+	"contract_id": SAVE_RESULT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var _consumed_shop_sell_quote_ids: Dictionary = {}
+# Test-only failure injection. Production ignores it unless test_mode is true.
+var _test_force_atomic_write_failure := false
 
 
 func _notification(what: int) -> void:
@@ -138,6 +158,7 @@ func reset_progress(emit_updates := true) -> void:
 	attack_ring_slots = ["", "", "", "", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
 	quest_states = {}
+	_consumed_shop_sell_quote_ids.clear()
 	saved_map_id = 4
 	saved_position = Vector2.ZERO
 	saved_ground_position_gu = Vector2.ZERO
@@ -284,6 +305,209 @@ func remove_item(item_name: String, amount := 1) -> bool:
 	inventory_changed.emit()
 	_commit_save()
 	return true
+
+
+func shop_sell_quotes(items: Array) -> Dictionary:
+	var quotes: Dictionary = {}
+	for raw_item: Variant in items:
+		if not raw_item is Dictionary:
+			continue
+		var request: Dictionary = raw_item
+		var quote := _shop_sell_quote(request)
+		var quote_key := str(request.get("quote_key", ""))
+		if quote_key.is_empty():
+			quote_key = str(quote.get("quote_key", ""))
+		if not quote_key.is_empty():
+			quotes[quote_key] = quote
+	return quotes
+
+
+func sell_inventory_item(request: Dictionary) -> Dictionary:
+	var quote := _shop_sell_quote(request)
+	var quote_id := str(request.get("quote_id", ""))
+	if (
+		not bool(quote.get("sellable", false))
+		or quote_id.is_empty()
+		or quote_id != str(quote.get("quote_id", ""))
+	):
+		return _shop_sell_result(false, "出售报价已失效，请重新选择物品。")
+	if _consumed_shop_sell_quote_ids.has(quote_id):
+		return _shop_sell_result(false, "该出售报价已经处理，不能重复提交。")
+	var inventory_index := int(request.get("inventory_index", -1))
+	var amount := int(request.get("amount", 0))
+	if (
+		inventory_index < 0
+		or inventory_index >= inventory.size()
+		or amount <= 0
+		or amount > int(quote.get("max_quantity", 0))
+	):
+		return _shop_sell_result(false, "出售数量或背包位置无效。")
+	var record: Variant = inventory[inventory_index]
+	if not record is Dictionary:
+		return _shop_sell_result(false, "物品状态已变化，出售已取消。")
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var current_count := maxi(1, int((record as Dictionary).get("count", 1)))
+	if amount >= current_count:
+		inventory.remove_at(inventory_index)
+	else:
+		(record as Dictionary)["count"] = current_count - amount
+	gold = maxi(0, gold + int(quote.get("unit_price", 0)) * amount)
+	inventory_changed.emit()
+	profile_changed.emit()
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		inventory_changed.emit()
+		profile_changed.emit()
+		return _shop_sell_result(false, "出售存档失败，物品和金币均未改变。")
+	_consumed_shop_sell_quote_ids[quote_id] = true
+	return _shop_sell_result(
+		true,
+		"已出售%s ×%d，获得%d金币。" % [
+			str(quote.get("item_name", "物品")),
+			amount,
+			int(quote.get("unit_price", 0)) * amount,
+		]
+	)
+
+
+func _shop_sell_quote(request: Dictionary) -> Dictionary:
+	var inventory_index := int(request.get("inventory_index", -1))
+	var requested_key := str(request.get("quote_key", ""))
+	var rejection := {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"quote_key": requested_key,
+		"quote_id": "",
+		"sellable": false,
+		"unit_price": 0,
+		"max_quantity": 0,
+		"reason": "物品状态已变化。",
+		"requires_confirmation": false,
+		"risk_flags": [],
+		"warning": "",
+	}
+	if inventory_index < 0 or inventory_index >= inventory.size():
+		return rejection
+	var raw_record: Variant = inventory[inventory_index]
+	if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+		return rejection
+	var record: Dictionary = raw_record
+	var item_name := str(record.get("name", ""))
+	var instance_id := str(record.get("instance_id", ""))
+	var expected_key := (
+		"instance:%s" % instance_id
+		if not instance_id.is_empty()
+		else "inventory:%d" % inventory_index
+	)
+	if (
+		requested_key != expected_key
+		or str(request.get("item_name", item_name)) != item_name
+		or str(request.get("instance_id", instance_id)) != instance_id
+	):
+		return rejection
+	var catalog := GameData.get_item_record(item_name)
+	var kind := str(catalog.get("kind", "unknown"))
+	var base_price := maxi(0, int(catalog.get("price", 0)))
+	var count := maxi(1, int(record.get("count", 1)))
+	if kind in ["currency", "quest_item"]:
+		rejection["reason"] = "该物品不能出售。"
+		return rejection
+	if base_price <= 0:
+		rejection["reason"] = "当前物品没有有效玩法价格。"
+		return rejection
+	var unit_price := maxi(
+		1,
+		floori(float(base_price) / float(SHOP_SELL_PRICE_DIVISOR))
+	)
+	var risk_flags := _shop_sell_risk_flags(record, catalog, base_price)
+	var quote_seed := JSON.stringify([
+		active_profile_id,
+		expected_key,
+		inventory_index,
+		instance_id,
+		item_name,
+		count,
+		unit_price,
+		record,
+	])
+	var quote_id := "%s:%s" % [
+		SHOP_SELL_CONTRACT_ID,
+		quote_seed.sha256_text().substr(0, 24),
+	]
+	return {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"quote_key": expected_key,
+		"quote_id": quote_id,
+		"item_name": item_name,
+		"sellable": true,
+		# Deterministic gameplay derivation from the existing runtime item price;
+		# this is not a second price-data authority.
+		"unit_price": unit_price,
+		"max_quantity": count,
+		"reason": "",
+		"requires_confirmation": not risk_flags.is_empty(),
+		"risk_flags": risk_flags,
+		"warning": (
+			"该物品具有高价值或特殊实例属性，出售后无法恢复。"
+			if not risk_flags.is_empty()
+			else ""
+		),
+	}
+
+
+func _shop_sell_risk_flags(
+	record: Dictionary,
+	catalog: Dictionary,
+	base_price: int
+) -> Array[String]:
+	var flags: Array[String] = []
+	if base_price >= SHOP_SELL_HIGH_VALUE_PRICE:
+		flags.append("high_value")
+	if (
+		int(record.get("enhancement_level", record.get("upgrade_level", 0))) > 0
+		or int(record.get("refine_level", 0)) > 0
+	):
+		flags.append("enhanced")
+	if int(record.get("weapon_luck", 0)) != 0 or int(record.get("weapon_curse", 0)) != 0:
+		flags.append("lucky")
+	if (
+		bool(record.get("special", false))
+		or not str(catalog.get("specialRule", "")).is_empty()
+	):
+		flags.append("special")
+	return flags
+
+
+func _shop_sell_result(success: bool, message: String) -> Dictionary:
+	return {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"success": success,
+		"message": message,
+		"quotes": shop_sell_quotes(_current_shop_sell_quote_items()),
+	}
+
+
+func _current_shop_sell_quote_items() -> Array:
+	var items: Array = []
+	for inventory_index in range(inventory.size()):
+		var raw_record: Variant = inventory[inventory_index]
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		var instance_id := str(record.get("instance_id", ""))
+		items.append({
+			"quote_key": (
+				"instance:%s" % instance_id
+				if not instance_id.is_empty()
+				else "inventory:%d" % inventory_index
+			),
+			"inventory_index": inventory_index,
+			"instance_id": instance_id,
+			"item_name": str(record.get("name", "")),
+			"count": int(record.get("count", 1)),
+		})
+	return items
 
 
 func use_inventory_index(index: int) -> String:
@@ -563,6 +787,66 @@ func accept_quest(quest_id: String) -> String:
 	quests_changed.emit()
 	_commit_save()
 	return "已接受任务：%s" % quest.get("name", quest_id)
+
+
+func abandon_quest(quest_id: String) -> Dictionary:
+	var result := {
+		"contract_id": QUEST_ABANDON_CONTRACT_ID,
+		"quest_id": quest_id,
+		"success": false,
+		"message": "当前任务不能放弃。",
+	}
+	if not quest_states.has(quest_id):
+		return result
+	var state: Variant = quest_states.get(quest_id, {})
+	if not state is Dictionary or str((state as Dictionary).get("status", "")) not in ["active", "ready"]:
+		return result
+	var states_before := quest_states.duplicate(true)
+	quest_states.erase(quest_id)
+	quests_changed.emit()
+	if not _commit_save():
+		quest_states = states_before
+		quests_changed.emit()
+		result["message"] = "任务存档失败，放弃操作已取消。"
+		return result
+	result["success"] = true
+	result["message"] = "已放弃任务，当前进度已清除。"
+	return result
+
+
+func sort_warehouse() -> Dictionary:
+	var result := {
+		"contract_id": WAREHOUSE_SORT_CONTRACT_ID,
+		"success": false,
+		"message": "仓库整理失败。",
+	}
+	if warehouse_inventory.size() > WAREHOUSE_CAPACITY:
+		result["message"] = "仓库数据超过容量，已拒绝整理以避免丢失物品。"
+		return result
+	var records: Array[Dictionary] = []
+	for raw_record: Variant in warehouse_inventory:
+		if raw_record is Dictionary and not (raw_record as Dictionary).is_empty():
+			records.append((raw_record as Dictionary).duplicate(true))
+	records.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_name := str(a.get("name", ""))
+		var b_name := str(b.get("name", ""))
+		if a_name == b_name:
+			return str(a.get("instance_id", "")) < str(b.get("instance_id", ""))
+		return a_name < b_name
+	)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	warehouse_inventory = []
+	for record: Dictionary in records:
+		warehouse_inventory.append(record)
+	inventory_changed.emit()
+	if not _commit_save():
+		warehouse_inventory = warehouse_before
+		inventory_changed.emit()
+		result["message"] = "仓库存档失败，原有顺序已恢复。"
+		return result
+	result["success"] = true
+	result["message"] = "仓库已整理，共%d件物品。" % records.size()
+	return result
 
 
 func record_kill(monster_name: String) -> void:
@@ -1124,41 +1408,167 @@ func _profile_path(profile_id: String) -> String:
 	return "%s/%s.json" % [profile_directory, profile_id]
 
 
-func _read_json(path: String) -> Dictionary:
+func _read_json_document(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
-		return {}
+		return {"exists": false, "valid": false, "data": {}}
 	var file := FileAccess.open(path, FileAccess.READ)
-	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-	return parsed if parsed is Dictionary else {}
+	if file == null:
+		return {"exists": true, "valid": false, "data": {}}
+	var serialized := file.get_as_text()
+	file.close()
+	var parser := JSON.new()
+	var parse_error := parser.parse(serialized)
+	var parsed: Variant = parser.data if parse_error == OK else null
+	return {
+		"exists": true,
+		"valid": parsed is Dictionary,
+		"data": parsed if parsed is Dictionary else {},
+	}
+
+
+func _restore_json_backup(path: String) -> Dictionary:
+	var backup := path + ".bak"
+	var backup_document := _read_json_document(backup)
+	if not bool(backup_document.get("valid", false)):
+		return {
+			"success": false,
+			"reason": "backup_missing_or_invalid",
+			"data": {},
+		}
+	var temporary := path + ".tmp"
+	var corrupt := path + ".corrupt.tmp"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return {"success": false, "reason": "backup_restore_temp_open_failed", "data": {}}
+	file.store_string(JSON.stringify(backup_document.get("data", {}), "\t"))
+	file.flush()
+	file.close()
+	if not bool(_read_json_document(temporary).get("valid", false)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return {"success": false, "reason": "backup_restore_temp_invalid", "data": {}}
+	var absolute_path := ProjectSettings.globalize_path(path)
+	var absolute_temp := ProjectSettings.globalize_path(temporary)
+	var absolute_corrupt := ProjectSettings.globalize_path(corrupt)
+	if FileAccess.file_exists(corrupt):
+		if DirAccess.remove_absolute(absolute_corrupt) != OK:
+			DirAccess.remove_absolute(absolute_temp)
+			return {"success": false, "reason": "backup_restore_cleanup_failed", "data": {}}
+	var moved_corrupt := false
+	if FileAccess.file_exists(path):
+		if DirAccess.rename_absolute(absolute_path, absolute_corrupt) != OK:
+			DirAccess.remove_absolute(absolute_temp)
+			return {"success": false, "reason": "backup_restore_main_move_failed", "data": {}}
+		moved_corrupt = true
+	if DirAccess.rename_absolute(absolute_temp, absolute_path) != OK:
+		if moved_corrupt:
+			DirAccess.rename_absolute(absolute_corrupt, absolute_path)
+		return {"success": false, "reason": "backup_restore_promote_failed", "data": {}}
+	if moved_corrupt and FileAccess.file_exists(corrupt):
+		DirAccess.remove_absolute(absolute_corrupt)
+	return {
+		"success": true,
+		"reason": "recovered_from_backup",
+		"data": backup_document.get("data", {}).duplicate(true),
+	}
+
+
+func _read_json_with_status(path: String) -> Dictionary:
+	var primary := _read_json_document(path)
+	if bool(primary.get("valid", false)):
+		return {
+			"success": true,
+			"reason": "primary",
+			"data": primary.get("data", {}).duplicate(true),
+		}
+	var recovered := _restore_json_backup(path)
+	if bool(recovered.get("success", false)):
+		return recovered
+	return {
+		"success": false,
+		"reason": (
+			"primary_missing"
+			if not bool(primary.get("exists", false))
+			else "primary_invalid"
+		),
+		"data": {},
+	}
+
+
+func _read_json(path: String) -> Dictionary:
+	return _read_json_with_status(path).get("data", {})
 
 
 func _write_json_atomic(path: String, data: Dictionary) -> bool:
+	if test_mode and _test_force_atomic_write_failure:
+		return false
 	var temporary := path + ".tmp"
 	var backup := path + ".bak"
+	var corrupt := path + ".corrupt.tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return false
 	file.store_string(JSON.stringify(data, "\t"))
 	file.flush()
 	file.close()
+	# Never move the current profile until the complete temporary document has
+	# been reparsed successfully. This keeps a failed/partial write fail-closed.
+	if not bool(_read_json_document(temporary).get("valid", false)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return false
 	var absolute_path := ProjectSettings.globalize_path(path)
 	var absolute_temp := ProjectSettings.globalize_path(temporary)
 	var absolute_backup := ProjectSettings.globalize_path(backup)
-	if FileAccess.file_exists(path):
-		if FileAccess.file_exists(backup):
-			DirAccess.remove_absolute(absolute_backup)
-		DirAccess.rename_absolute(absolute_path, absolute_backup)
-	var result := DirAccess.rename_absolute(absolute_temp, absolute_path)
-	if result != OK and FileAccess.file_exists(backup):
-		DirAccess.rename_absolute(absolute_backup, absolute_path)
-	return result == OK
+	var absolute_corrupt := ProjectSettings.globalize_path(corrupt)
+	var current_document := _read_json_document(path)
+	var moved_valid_main := false
+	var moved_corrupt_main := false
+	if bool(current_document.get("exists", false)):
+		if bool(current_document.get("valid", false)):
+			if (
+				FileAccess.file_exists(backup)
+				and DirAccess.remove_absolute(absolute_backup) != OK
+			):
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			if DirAccess.rename_absolute(absolute_path, absolute_backup) != OK:
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			moved_valid_main = true
+		else:
+			# A corrupt main must never replace a valid .bak.
+			if (
+				FileAccess.file_exists(corrupt)
+				and DirAccess.remove_absolute(absolute_corrupt) != OK
+			):
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			if DirAccess.rename_absolute(absolute_path, absolute_corrupt) != OK:
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			moved_corrupt_main = true
+	var promote_result := DirAccess.rename_absolute(absolute_temp, absolute_path)
+	if promote_result != OK:
+		if moved_valid_main:
+			DirAccess.rename_absolute(absolute_backup, absolute_path)
+		elif moved_corrupt_main:
+			DirAccess.rename_absolute(absolute_corrupt, absolute_path)
+		return false
+	if moved_corrupt_main and FileAccess.file_exists(corrupt):
+		DirAccess.remove_absolute(absolute_corrupt)
+	return bool(_read_json_document(path).get("valid", false))
 
 
-func save_game() -> void:
+func save_game() -> bool:
 	if active_profile_id.is_empty():
-		return
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "active_profile_missing",
+		}
+		return false
 	_ensure_skill_progression_matches_legacy()
-	if not _write_json_atomic(_profile_path(active_profile_id), {
+	var profile_path := _profile_path(active_profile_id)
+	if not _write_json_atomic(profile_path, {
 		"save_version": SAVE_VERSION,
 		"profile_id": active_profile_id,
 		"character_name": character_name,
@@ -1193,25 +1603,39 @@ func save_game() -> void:
 			else []
 		),
 	}):
-		push_warning("无法安全写入角色存档：%s" % active_profile_id)
-	_update_profile_index()
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "atomic_profile_write_failed",
+			"path": profile_path,
+		}
+		return false
+	var index_updated := _update_profile_index()
+	last_save_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"path": profile_path,
+		"profile_index_updated": index_updated,
+	}
+	if not index_updated:
+		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
+	return true
 
 
 func load_save() -> void:
 	var load_path := _profile_path(active_profile_id) if not active_profile_id.is_empty() else SAVE_PATH
-	if not FileAccess.file_exists(load_path):
+	var load_result := _read_json_with_status(load_path)
+	last_load_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": bool(load_result.get("success", false)),
+		"reason": str(load_result.get("reason", "")),
+		"path": load_path,
+	}
+	if not bool(load_result.get("success", false)):
 		reset_progress(false)
 		return
-	var file := FileAccess.open(load_path, FileAccess.READ)
-	var serialized := file.get_as_text() if file != null else ""
-	if file != null:
-		# Windows keeps the source file locked while FileAccess is alive. Close it
-		# before a version migration atomically renames the same profile to .bak.
-		file.close()
-	var parsed: Variant = JSON.parse_string(serialized)
-	if not parsed is Dictionary:
-		reset_progress(false)
-		return
+	var parsed: Dictionary = load_result.get("data", {})
 	level = maxi(1, int(parsed.get("level", 1)))
 	profession = str(parsed.get("profession", "战士"))
 	if not ProfessionRules.is_valid_profession(profession):
@@ -1639,6 +2063,10 @@ func save_safe_logout(
 ) -> bool:
 	if active_profile_id.is_empty():
 		return false
+	var previous_map_id := saved_map_id
+	var previous_position := saved_position
+	var previous_ground_position_gu := saved_ground_position_gu
+	var previous_ground_position_gu_valid := saved_ground_position_gu_valid
 	saved_map_id = home_map_id
 	saved_position = home_screen_position_px
 	if home_ground_position_gu is Vector2:
@@ -1647,8 +2075,16 @@ func save_safe_logout(
 	else:
 		saved_ground_position_gu = Vector2.ZERO
 		saved_ground_position_gu_valid = false
-	save_game()
-	return FileAccess.file_exists(_profile_path(active_profile_id))
+	if save_game():
+		return true
+	# The safe-location record is one transaction in memory and on disk. A
+	# failed write must not leave a fake successful Home location in memory.
+	saved_map_id = previous_map_id
+	saved_position = previous_position
+	saved_ground_position_gu = previous_ground_position_gu
+	saved_ground_position_gu_valid = previous_ground_position_gu_valid
+	last_save_result["memory_rolled_back"] = true
+	return false
 
 
 func list_characters() -> Array[Dictionary]:
@@ -1963,15 +2399,22 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 
 
 func select_character(profile_id: String) -> bool:
-	if not FileAccess.file_exists(_profile_path(profile_id)):
+	var profile_path := _profile_path(profile_id)
+	if (
+		not FileAccess.file_exists(profile_path)
+		and not FileAccess.file_exists(profile_path + ".bak")
+	):
 		return false
 	active_profile_id = profile_id
 	load_save()
+	if not bool(last_load_result.get("success", false)):
+		active_profile_id = ""
+		return false
 	_autosave_elapsed = 0.0
 	return true
 
 
-func _update_profile_index() -> void:
+func _update_profile_index() -> bool:
 	var profiles := list_characters()
 	var found := false
 	for entry: Dictionary in profiles:
@@ -1980,7 +2423,7 @@ func _update_profile_index() -> void:
 			found = true
 	if not found:
 		profiles.append({"id": active_profile_id, "name": character_name, "profession": profession, "gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())})
-	_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	return _write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
 
 
 func _migrate_single_save_to_profile() -> void:
@@ -2003,6 +2446,7 @@ func _migrate_single_save_to_profile() -> void:
 	character_name = ""
 
 
-func _commit_save() -> void:
+func _commit_save() -> bool:
 	if not test_mode:
-		save_game()
+		return save_game()
+	return true
