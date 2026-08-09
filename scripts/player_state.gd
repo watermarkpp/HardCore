@@ -15,13 +15,14 @@ signal equipment_changed
 signal skills_changed
 signal skill_progression_changed(snapshot: Dictionary)
 signal quick_slots_changed(change: Dictionary)
+signal quick_item_slots_changed(change: Dictionary)
 signal warrior_runtime_state_changed(snapshot: Dictionary)
 signal consumable_requested(item_name: String)
 signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 8
+const SAVE_VERSION := 9
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
@@ -47,6 +48,8 @@ const SKILL_SLOT_GROUP_ATTACK_RING := "attack_ring"
 const CENTER_SKILL_SLOT_COUNT := 4
 const ATTACK_SKILL_SLOT_COUNT := 1
 const ATTACK_RING_SKILL_SLOT_COUNT := 6
+const QUICK_ITEM_SLOTS_CONTRACT_ID := "gameplay.item.quick_slots.v1"
+const QUICK_ITEM_SLOT_COUNT := 4
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -70,6 +73,8 @@ var equipment: Dictionary = {
 var learned_skills: Dictionary = {}
 var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
 var quick_slots: Array[String] = ["", "", "", ""]
+var quick_item_slots: Array[String] = ["", "", "", ""]
+var equip_cycle_cursor: Dictionary = {"戒指": "左戒指", "手镯": "左手镯"}
 var attack_skill_slots: Array[String] = [""]
 var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
@@ -127,6 +132,8 @@ func reset_progress(emit_updates := true) -> void:
 	learned_skills = {}
 	_skill_progression.load_snapshot({})
 	quick_slots = ["", "", "", ""]
+	quick_item_slots = ["", "", "", ""]
+	equip_cycle_cursor = _default_equip_cycle_cursor()
 	attack_skill_slots = [""]
 	attack_ring_slots = ["", "", "", "", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
@@ -142,6 +149,11 @@ func reset_progress(emit_updates := true) -> void:
 		equipment_changed.emit()
 		skills_changed.emit()
 		skill_progression_changed.emit(_skill_progression.snapshot())
+		quick_item_slots_changed.emit({
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"reset": true,
+			"slots": quick_item_slots.duplicate(),
+		})
 		quests_changed.emit()
 		profile_changed.emit()
 
@@ -421,6 +433,10 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	if item.is_empty():
 		return "%s不是可穿戴装备" % item_name
 	var category := str(item.get("category", ""))
+	var explicit_slot := (
+		not preferred_slot.is_empty()
+		and preferred_slot in _slots_for_category(category)
+	)
 	var slot := _choose_equipment_slot(category, preferred_slot)
 	if slot.is_empty():
 		return "当前版本尚未开放该装备槽"
@@ -452,6 +468,8 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		inventory.remove_at(index)
 	equipment[slot] = inventory_record.duplicate(true)
 	recalculate_stats()
+	if not explicit_slot:
+		_advance_equip_cycle_cursor(category)
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
@@ -1003,7 +1021,34 @@ func _choose_equipment_slot(category: String, preferred_slot := "") -> String:
 		var value: Variant = equipment.get(slot, {})
 		if value is Dictionary and value.is_empty():
 			return slot
-	return slots[0] if not slots.is_empty() else ""
+	if slots.is_empty():
+		return ""
+	var cursor_slot := str(equip_cycle_cursor.get(category, slots[0]))
+	return cursor_slot if cursor_slot in slots else slots[0]
+
+
+func _default_equip_cycle_cursor() -> Dictionary:
+	return {"戒指": "左戒指", "手镯": "左手镯"}
+
+
+func _normalized_equip_cycle_cursor(saved_value: Variant) -> Dictionary:
+	var result := _default_equip_cycle_cursor()
+	if saved_value is Dictionary:
+		for category: String in result.keys():
+			var saved_slot := str(saved_value.get(category, ""))
+			if saved_slot in _slots_for_category(category):
+				result[category] = saved_slot
+	return result
+
+
+func _advance_equip_cycle_cursor(category: String) -> void:
+	var slots := _slots_for_category(category)
+	if slots.size() < 2:
+		return
+	var current_index := slots.find(str(equip_cycle_cursor.get(category, slots[0])))
+	if current_index < 0:
+		current_index = 0
+	equip_cycle_cursor[category] = slots[(current_index + 1) % slots.size()]
 
 
 func _empty_equipment() -> Dictionary:
@@ -1131,6 +1176,8 @@ func save_game() -> void:
 		"learned_skills": learned_skills,
 		"skill_progression": _skill_progression.snapshot(),
 		"quick_slots": quick_slots,
+		"quick_item_slots": quick_item_slots,
+		"equip_cycle_cursor": equip_cycle_cursor,
 		"skill_button_assignments": skill_button_assignments_snapshot(),
 		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
@@ -1192,6 +1239,8 @@ func load_save() -> void:
 		_sync_legacy_learned_skills_from_progression()
 	var saved_slots: Array = parsed.get("quick_slots", ["", "", "", ""])
 	_restore_skill_button_assignments(parsed.get("skill_button_assignments", {}), saved_slots)
+	quick_item_slots = _normalized_quick_item_slots(parsed.get("quick_item_slots", null))
+	equip_cycle_cursor = _normalized_equip_cycle_cursor(parsed.get("equip_cycle_cursor", {}))
 	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
@@ -1369,6 +1418,159 @@ func _sync_legacy_quick_slots_from_ring() -> void:
 	quick_slots = ["", "", "", ""]
 	for index in range(mini(quick_slots.size(), attack_ring_slots.size())):
 		quick_slots[index] = attack_ring_slots[index]
+
+
+func is_quick_item_candidate(item_name: String) -> bool:
+	if item_name.is_empty():
+		return false
+	var item := GameData.get_item_record(item_name)
+	if item.is_empty():
+		return false
+	if str(item.get("kind", "")) not in ["skill_book", "consumable", "scroll"]:
+		return false
+	return item.get("usable", true) != false
+
+
+func quick_item_slots_snapshot() -> Array:
+	return quick_item_slots.duplicate()
+
+
+func quick_item_slot_name(slot_index: int) -> String:
+	if slot_index < 0 or slot_index >= quick_item_slots.size():
+		return ""
+	return quick_item_slots[slot_index]
+
+
+func assign_quick_item_slot(index: int, item_name: String) -> Dictionary:
+	if index < 0 or index >= QUICK_ITEM_SLOT_COUNT:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "slot_index_out_of_range",
+			"message": "快捷物品槽位无效",
+		}
+	if not item_name.is_empty() and not is_quick_item_candidate(item_name):
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "not_quick_item_candidate",
+			"message": "%s不能绑定到快捷物品槽" % item_name,
+		}
+	if not item_name.is_empty() and not has_item(item_name):
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "no_inventory",
+			"message": "背包中没有%s" % item_name,
+		}
+	var previous := quick_item_slots[index]
+	quick_item_slots[index] = item_name
+	var change := {
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": item_name,
+		"previous_item_name": previous,
+		"slots": quick_item_slots.duplicate(),
+	}
+	quick_item_slots_changed.emit(change.duplicate(true))
+	profile_changed.emit()
+	_commit_save()
+	var message := "快捷物品槽%d已清空" % (index + 1) if item_name.is_empty() else (
+		"已将%s绑定到快捷物品槽%d" % [item_name, index + 1]
+	)
+	return {
+		"ok": true,
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": item_name,
+		"change": change,
+		"message": message,
+	}
+
+
+func use_quick_item_slot(index: int, expected_item_name := "") -> Dictionary:
+	if index < 0 or index >= QUICK_ITEM_SLOT_COUNT:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": "",
+			"reason": "slot_index_out_of_range",
+			"message": "快捷物品槽位无效",
+		}
+	var bound_name := quick_item_slots[index]
+	if bound_name.is_empty():
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": "",
+			"reason": "slot_empty",
+			"message": "快捷物品槽%d为空" % (index + 1),
+		}
+	if not expected_item_name.is_empty() and expected_item_name != bound_name:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": bound_name,
+			"expected_item_name": expected_item_name,
+			"reason": "expected_name_mismatch",
+			"message": "快捷物品槽已变更，请重试",
+		}
+	# Always re-scan by the bound name; never cache or reuse an old inventory index.
+	var inventory_index := _inventory_index_by_item_name(bound_name)
+	if inventory_index < 0:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": bound_name,
+			"reason": "no_inventory",
+			"message": "背包中没有%s" % bound_name,
+		}
+	var use_result := use_inventory_index(inventory_index)
+	var item := GameData.get_item_record(bound_name)
+	var kind := str(item.get("kind", ""))
+	var ok := _quick_item_use_result_success(use_result)
+	return {
+		"ok": ok,
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": bound_name,
+		"kind": kind,
+		"message": use_result,
+		"reason": "use_failed" if not ok else "used",
+	}
+
+
+func _normalized_quick_item_slots(value: Variant) -> Array[String]:
+	var result: Array[String] = []
+	var source: Array = value if value is Array else []
+	for index in range(QUICK_ITEM_SLOT_COUNT):
+		result.append(str(source[index]) if index < source.size() else "")
+	return result
+
+
+func _inventory_index_by_item_name(item_name: String) -> int:
+	for index in range(inventory.size()):
+		if str(inventory[index].get("name", "")) == item_name:
+			return index
+	return -1
+
+
+func _quick_item_use_result_success(use_result: String) -> bool:
+	return (
+		use_result.begins_with("使用：")
+		or use_result.begins_with("已学会：")
+		or use_result.begins_with("技能提升：")
+	)
 
 
 func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
@@ -1638,6 +1840,8 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		"equipment": equipment_data,
 		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
 		"quick_slots": legacy_slots,
+		"quick_item_slots": ["", "", "", ""],
+		"equip_cycle_cursor": _default_equip_cycle_cursor(),
 		"skill_button_assignments": assignments.duplicate(true),
 		"warrior_runtime_state": warrior_state,
 		"test_runtime_defaults": runtime_defaults.duplicate(true),
@@ -1671,7 +1875,7 @@ func ensure_developer_test_character()->void:
 		if skill is Dictionary:all_skills[str(skill.get("skillName",""))]=3
 	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
 	var now:=int(Time.get_unix_time_from_system())
-	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
+	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
 	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id),payload):return
 	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
@@ -1713,7 +1917,9 @@ func ensure_zuma_test_character() -> void:
 		"later_content_enabled": false, "game_mode_id": "classic_176", "experience": 0,
 		"gold": 100000, "inventory": [{"name": "太阳水", "count": 10}], "warehouse_inventory": [],
 		"equipment": equipment_data, "learned_skills": all_skills,
-		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"], "quest_states": {},
+		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
+		"quick_item_slots": ["", "", "", ""],
+		"equip_cycle_cursor": _default_equip_cycle_cursor(), "quest_states": {},
 		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": 4, "position": [0.0, 0.0],
 	}

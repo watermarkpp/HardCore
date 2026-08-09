@@ -345,6 +345,7 @@ func _ready() -> void:
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	add_child(hud)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
+	_wire_item_quick_slots_hud()
 	player.resources_changed.connect(
 		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:
 			_sync_player_runtime_snapshot_to_hud()
@@ -3500,6 +3501,72 @@ func _spell_definition_allows_target(
 		_spell_lock_ground_gu(target.global_position),
 		maximum_range_gu
 	)
+
+
+func _wire_item_quick_slots_hud() -> void:
+	if not is_instance_valid(hud):
+		return
+	if (
+		hud.has_signal("item_quick_slot_assignment_requested")
+		and not hud.is_connected(
+			"item_quick_slot_assignment_requested",
+			Callable(self, "_on_item_quick_slot_assignment_requested")
+		)
+	):
+		hud.connect(
+			"item_quick_slot_assignment_requested",
+			Callable(self, "_on_item_quick_slot_assignment_requested")
+		)
+	if (
+		hud.has_signal("item_quick_slot_use_requested")
+		and not hud.is_connected(
+			"item_quick_slot_use_requested",
+			Callable(self, "_on_item_quick_slot_use_requested")
+		)
+	):
+		hud.connect(
+			"item_quick_slot_use_requested",
+			Callable(self, "_on_item_quick_slot_use_requested")
+		)
+	_sync_item_quick_slots_to_hud()
+	if not PlayerState.quick_item_slots_changed.is_connected(
+		_sync_item_quick_slots_to_hud
+	):
+		PlayerState.quick_item_slots_changed.connect(_sync_item_quick_slots_to_hud)
+
+
+func _sync_item_quick_slots_to_hud(_change: Dictionary = {}) -> void:
+	if not is_instance_valid(hud) or not hud.has_method("set_item_quick_slots"):
+		return
+	hud.call("set_item_quick_slots", PlayerState.quick_item_slots_snapshot())
+
+
+func _on_item_quick_slot_assignment_requested(
+	slot_index: int,
+	item_name: String
+) -> void:
+	var result := PlayerState.assign_quick_item_slot(slot_index, item_name)
+	if not bool(result.get("ok", false)):
+		hud.show_message(str(result.get("message", "快捷物品绑定失败")))
+		return
+	_sync_item_quick_slots_to_hud()
+	hud.show_message(str(result.get("message", "快捷物品已绑定")))
+
+
+func _on_item_quick_slot_use_requested(
+	slot_index: int,
+	item_name: String
+) -> void:
+	if not gameplay_input_is_enabled():
+		return
+	var result := PlayerState.use_quick_item_slot(slot_index, item_name)
+	if not bool(result.get("ok", false)):
+		hud.show_message(str(result.get("message", "快捷物品使用失败")))
+		return
+	# consumable/scroll effects are already surfaced by their existing signal
+	# chain; only skill_book needs an immediate visible confirmation.
+	if str(result.get("kind", "")) == "skill_book":
+		hud.show_message(str(result.get("message", "技能学习成功")))
 
 
 func _on_skill_button_assignment_requested(request: Dictionary) -> void:
