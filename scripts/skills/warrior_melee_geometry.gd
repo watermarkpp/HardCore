@@ -24,6 +24,18 @@ const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 const THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID := (
 	"gameplay.warrior.thrust.damage_axis.snapped_visual_8dir_snapshot.v1"
 )
+## User-authorized formal design (2026-08-09): when the locked target is valid,
+## inside the attack skill's legal melee range and not blocked by terrain, the
+## release axis is the continuous Ground GU direction from the player release
+## footpoint to the locked target release footpoint. The old snapped 8-dir
+## damage-axis contract above is retained only for unmigrated callers/tests and
+## must never be presented as this behavior.
+const TARGET_ALIGNED_CONTINUOUS_RELEASE_CONTRACT_ID := (
+	"gameplay.warrior.melee.target_aligned_continuous_release.v1"
+)
+const TARGET_ALIGNED_RELEASE_FOOTPRINT_CONTRACT_ID := (
+	"gameplay.warrior.target_aligned_release_footprint.shared_snapshot.v1"
+)
 const RELEASE_FOOTPRINT_CONTRACT_ID := (
 	"gameplay.warrior.release_footprint.shared_snapshot.v1"
 )
@@ -58,6 +70,18 @@ const MAXIMUM_TARGETS := {
 
 const THRUST_PRIMARY_REACH_GU := 1.5
 const THRUST_WIDTH_GU := 1.0
+## Short straight-line footprint shared by normal/fire target-aligned releases.
+## Width covers the locked target combat radius (<= 0.5 GU) so the locked
+## target remains formally covered while the band stays a narrow line.
+const TARGET_ALIGNED_NORMAL_WIDTH_GU := 1.0
+const TARGET_ALIGNED_LINE_WIDTH_GU := 1.0
+## Half-moon keeps the existing four-sector fan exactly: sector centers are
+## [-45, 0, +45, +90] degrees relative to the continuous axis, each +/-22.5
+## degrees, so the fan spans [-67.5, +112.5] degrees. The arc snapshot is
+## centered at axis + PI/8 (same offset as the legacy quantized fan). The fan
+## is deliberately not symmetrized to preserve the existing balance semantics.
+const TARGET_ALIGNED_HALF_MOON_ARC_CENTER_OFFSET_RADIANS := PI / 8.0
+const TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS := PI / 2.0
 const HALF_MOON_RELATIVE_DIRECTION_OFFSETS: Array[int] = [7, 0, 1, 2]
 const WILD_RUSH_TARGET_REACH_GU := 1.5
 const WILD_RUSH_PUSH_DISTANCE_GU := 3.0
@@ -477,6 +501,487 @@ static func thrust_damage_axis_plan_ground_gu(
 		"release_id": release_id,
 		"skill_footprint_snapshot": skill_footprint_snapshot,
 	}
+
+
+## ---------------------------------------------------------------------------
+## Target-aligned continuous release contract (v1)
+## ---------------------------------------------------------------------------
+## INTEGRATION_HOOK: game_root._on_player_attack / _execute_canonical_melee
+## must route through target_aligned_melee_release_plan_ground_gu() whenever a
+## locked target is valid at release. The old snapped thrust plan is retained
+## for unmigrated callers only.
+
+static func target_aligned_continuous_axis_gu(
+	release_geometry: Dictionary
+) -> Dictionary:
+	var locked_target_valid := bool(release_geometry.get(
+		"locked_target_valid_at_release", false
+	))
+	var locked_target_instance_id := int(release_geometry.get(
+		"locked_target_instance_id", 0
+	))
+	var raw_axis_ground_gu: Variant = release_geometry.get(
+		"live_locked_target_direction_ground_gu", Vector2.ZERO
+	)
+	var axis_ground_gu := (
+		(raw_axis_ground_gu as Vector2)
+		if raw_axis_ground_gu is Vector2
+		else Vector2.ZERO
+	)
+	var invalid_lock_reason := (
+		"invalid_target" if not locked_target_valid else "missing_lock"
+	)
+	if not locked_target_valid or locked_target_instance_id <= 0:
+		return {
+			"valid": false,
+			"reason": invalid_lock_reason,
+			"axis_ground_gu": Vector2.ZERO,
+			"origin_ground_gu": release_geometry.get(
+				"origin_ground_gu", Vector2.ZERO
+			),
+			"locked_target_ground_gu_at_release": release_geometry.get(
+				"locked_target_ground_gu_at_release", Vector2.ZERO
+			),
+			"locked_target_instance_id": locked_target_instance_id,
+		}
+	if axis_ground_gu.length_squared() <= EPSILON * EPSILON:
+		return {
+			"valid": false,
+			"reason": "zero_axis",
+			"axis_ground_gu": Vector2.ZERO,
+			"origin_ground_gu": release_geometry.get(
+				"origin_ground_gu", Vector2.ZERO
+			),
+			"locked_target_ground_gu_at_release": release_geometry.get(
+				"locked_target_ground_gu_at_release", Vector2.ZERO
+			),
+			"locked_target_instance_id": locked_target_instance_id,
+		}
+	return {
+		"valid": true,
+		"reason": "",
+		"axis_ground_gu": axis_ground_gu.normalized(),
+		"origin_ground_gu": release_geometry.get(
+			"origin_ground_gu", Vector2.ZERO
+		),
+		"locked_target_ground_gu_at_release": release_geometry.get(
+			"locked_target_ground_gu_at_release", Vector2.ZERO
+		),
+		"locked_target_instance_id": locked_target_instance_id,
+	}
+
+
+static func target_aligned_melee_release_plan_ground_gu(
+	release_geometry: Dictionary,
+	mode: String,
+	coordinate_context: Dictionary,
+	range_bonus_gu := 0.0,
+	terrain_blocked := false
+) -> Dictionary:
+	## Builds the single canonical target-aligned release snapshot. Eligibility
+	## requires: locked target valid at release, non-zero live continuous axis,
+	## locked target inside the skill's legal reach and no terrain block.
+	## Ineligible releases return a plan with target_axis_eligible=false and a
+	## null snapshot so every consumer fails closed; upper-layer whiff/fail
+	## strategy stays untouched and no legacy snapped plan is substituted.
+	var resolved_mode := mode if mode in BASE_REACH_GU else SKILL_NORMAL
+	var origin_ground_gu: Variant = release_geometry.get(
+		"origin_ground_gu", Vector2.INF
+	)
+	if (
+		not origin_ground_gu is Vector2
+		or not _vector2_is_finite(origin_ground_gu as Vector2)
+	):
+		return _target_aligned_ineligible_plan(
+			release_geometry, resolved_mode, "missing_origin"
+		)
+	if not bool(release_geometry.get("locked_target_valid_at_release", false)):
+		return _target_aligned_ineligible_plan(
+			release_geometry, resolved_mode, "invalid_target"
+		)
+	var locked_target_ground_gu := (
+		release_geometry.get(
+			"locked_target_ground_gu_at_release", Vector2.ZERO
+		) as Vector2
+	)
+	if (
+		origin_ground_gu as Vector2
+	).distance_squared_to(locked_target_ground_gu) <= EPSILON * EPSILON:
+		return _target_aligned_ineligible_plan(
+			release_geometry, resolved_mode, "same_footpoint"
+		)
+	var axis_result := target_aligned_continuous_axis_gu(release_geometry)
+	if not bool(axis_result.get("valid", false)):
+		return _target_aligned_ineligible_plan(
+			release_geometry,
+			resolved_mode,
+			str(axis_result.get("reason", "invalid_target"))
+		)
+	if not is_single_target_in_reach_gu(
+		origin_ground_gu as Vector2,
+		locked_target_ground_gu,
+		resolved_mode,
+		range_bonus_gu
+	):
+		return _target_aligned_ineligible_plan(
+			release_geometry, resolved_mode, "out_of_range"
+		)
+	if terrain_blocked:
+		return _target_aligned_ineligible_plan(
+			release_geometry, resolved_mode, "terrain_blocked"
+		)
+	var continuous_axis_ground_gu := (
+		axis_result.get("axis_ground_gu", Vector2.ZERO) as Vector2
+	)
+	var release_id := str(release_geometry.get(
+		"release_id", "unbound_target_aligned_release"
+	))
+	var skill_id := _target_aligned_skill_id(resolved_mode)
+	var snapshot := target_aligned_release_snapshot_ground_gu(
+		skill_id,
+		release_id,
+		origin_ground_gu as Vector2,
+		continuous_axis_ground_gu,
+		resolved_mode,
+		range_bonus_gu,
+		coordinate_context
+	)
+	var visual_direction_index := (
+		CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
+			continuous_axis_ground_gu
+		)
+	)
+	var plan := {
+		"contract_id": TARGET_ALIGNED_CONTINUOUS_RELEASE_CONTRACT_ID,
+		"footprint_contract_id": TARGET_ALIGNED_RELEASE_FOOTPRINT_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"mode": resolved_mode,
+		"skill_id": skill_id,
+		"release_id": release_id,
+		"origin_ground_gu": origin_ground_gu as Vector2,
+		"continuous_axis_ground_gu": continuous_axis_ground_gu,
+		"locked_target_ground_gu_at_release": locked_target_ground_gu,
+		"locked_target_instance_id": int(
+			axis_result.get("locked_target_instance_id", 0)
+		),
+		"target_axis_eligible": true,
+		"ineligible_reason": "",
+		"visual_direction_index": visual_direction_index,
+		"visual_direction_contract_id": DIRECTION_SPACE_CONTRACT_ID,
+		"range_bonus_gu": range_bonus_gu,
+		"terrain_blocked": false,
+		"skill_footprint_snapshot": snapshot,
+	}
+	plan.make_read_only()
+	return plan
+
+
+static func target_aligned_release_snapshot_ground_gu(
+	skill_id: String,
+	release_id: String,
+	origin_ground_gu: Vector2,
+	continuous_axis_ground_gu: Vector2,
+	mode: String,
+	range_bonus_gu := 0.0,
+	coordinate_context := {}
+) -> Dictionary:
+	match mode:
+		SKILL_THRUST:
+			return SkillFootprintSnapshotScript.create_directed_rectangle(
+				skill_id,
+				release_id,
+				origin_ground_gu,
+				continuous_axis_ground_gu,
+				reach_gu(SKILL_THRUST, range_bonus_gu),
+				TARGET_ALIGNED_LINE_WIDTH_GU,
+				0.0,
+				0.0,
+				0.0,
+				"",
+				coordinate_context
+			)
+		SKILL_HALF_MOON:
+			return SkillFootprintSnapshotScript.create_sector_arc(
+				skill_id,
+				release_id,
+				origin_ground_gu,
+				continuous_axis_ground_gu.rotated(
+					TARGET_ALIGNED_HALF_MOON_ARC_CENTER_OFFSET_RADIANS
+				),
+				reach_gu(SKILL_HALF_MOON, range_bonus_gu),
+				TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS,
+				96,
+				coordinate_context
+			)
+		SKILL_NORMAL, SKILL_FIRE:
+			return SkillFootprintSnapshotScript.create_directed_rectangle(
+				skill_id,
+				release_id,
+				origin_ground_gu,
+				continuous_axis_ground_gu,
+				reach_gu(mode, range_bonus_gu),
+				TARGET_ALIGNED_NORMAL_WIDTH_GU,
+				0.0,
+				0.0,
+				0.0,
+				"",
+				coordinate_context
+			)
+	return {}
+
+
+static func target_aligned_release_plan_intersects_target_footprint_ground_gu(
+	plan: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	coordinate_context: Dictionary
+) -> bool:
+	## Candidate gate that consumes the plan's exact release snapshot. A plan
+	## without target_axis_eligible or without a strict-valid snapshot always
+	## fails closed; no second attack range is ever computed here.
+	if not bool(plan.get("target_axis_eligible", false)):
+		return false
+	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot")
+	if not raw_snapshot is Dictionary:
+		return false
+	var snapshot := raw_snapshot as Dictionary
+	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		coordinate_context,
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false)):
+		return false
+	return release_snapshot_intersects_target_footprint_ground_gu(
+		snapshot,
+		target_center_ground_gu,
+		target_combat_radius_gu
+	)
+
+
+static func target_aligned_thrust_slot_for_plan_gu(
+	plan: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	coordinate_context: Dictionary,
+	range_bonus_gu := 0.0
+) -> int:
+	## Same-snapshot slot classification for the continuous thrust release.
+	## Primary segment (slot 1) is 0..1.5 GU, secondary (slot 2) is
+	## 1.5..reach GU; width remains 1 GU.
+	if not bool(plan.get("target_axis_eligible", false)):
+		return 0
+	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot")
+	if not raw_snapshot is Dictionary:
+		return 0
+	var snapshot := raw_snapshot as Dictionary
+	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		coordinate_context,
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false)):
+		return 0
+	var target_polygon := target_footprint_polygon_ground_gu(
+		target_center_ground_gu,
+		target_combat_radius_gu
+	)
+	if not SkillFootprintSnapshotScript.intersects_target_polygon_ground_gu(
+		snapshot,
+		target_polygon
+	):
+		return 0
+	return thrust_footprint_slot_for_direction_ground_gu(
+		snapshot.get("origin_ground_gu", Vector2.ZERO) as Vector2,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		snapshot.get("direction_ground_gu", Vector2.ZERO) as Vector2,
+		range_bonus_gu
+	)
+
+
+static func target_aligned_half_moon_relative_sector_for_plan_gu(
+	plan: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	coordinate_context: Dictionary,
+	range_bonus_gu := 0.0
+) -> int:
+	## Same-snapshot sector classification for the continuous half-moon fan.
+	## Return codes preserve the legacy mapping: 0 = primary sector centered
+	## on the continuous axis (+/-22.5 deg), 7 = axis -45 deg, 1 = axis +45
+	## deg, 2 = axis +90 deg. A body straddling the primary boundary wins
+	## primary deterministically; callers must not add it to a side list.
+	if not bool(plan.get("target_axis_eligible", false)):
+		return -1
+	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot")
+	if not raw_snapshot is Dictionary:
+		return -1
+	var snapshot := raw_snapshot as Dictionary
+	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		coordinate_context,
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false)):
+		return -1
+	var target_polygon := target_footprint_polygon_ground_gu(
+		target_center_ground_gu,
+		target_combat_radius_gu
+	)
+	if not SkillFootprintSnapshotScript.intersects_target_polygon_ground_gu(
+		snapshot,
+		target_polygon
+	):
+		return -1
+	var origin_ground_gu := (
+		plan.get("origin_ground_gu", Vector2.ZERO) as Vector2
+	)
+	var continuous_axis_ground_gu := (
+		plan.get("continuous_axis_ground_gu", Vector2.ZERO) as Vector2
+	)
+	var effective_reach_gu := reach_gu(SKILL_HALF_MOON, range_bonus_gu)
+	if footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		continuous_axis_ground_gu,
+		effective_reach_gu
+	):
+		return 0
+	if footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		continuous_axis_ground_gu.rotated(-PI / 4.0),
+		effective_reach_gu
+	):
+		return 7
+	if footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		continuous_axis_ground_gu.rotated(PI / 4.0),
+		effective_reach_gu
+	):
+		return 1
+	if footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		continuous_axis_ground_gu.rotated(PI / 2.0),
+		effective_reach_gu
+	):
+		return 2
+	return -1
+
+
+static func footprint_intersects_continuous_direction_sector_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	direction_ground_gu: Vector2,
+	effective_reach_gu: float
+) -> bool:
+	return convex_polygons_intersect_inclusive(
+		_direction_sector_polygon_for_direction_ground_gu(
+			origin_ground_gu,
+			direction_ground_gu,
+			effective_reach_gu
+		),
+		target_footprint_polygon_ground_gu(
+			target_center_ground_gu,
+			target_combat_radius_gu
+		)
+	)
+
+
+static func _target_aligned_skill_id(mode: String) -> String:
+	match mode:
+		SKILL_THRUST:
+			return "warrior.thrusting"
+		SKILL_HALF_MOON:
+			return "warrior.half_moon"
+		SKILL_FIRE:
+			return "warrior.fire_sword"
+		_:
+			return "warrior.normal_attack"
+
+
+static func _target_aligned_ineligible_plan(
+	release_geometry: Dictionary,
+	mode: String,
+	reason: String
+) -> Dictionary:
+	var visual_direction_index := int(release_geometry.get(
+		"direction_index", -1
+	))
+	if visual_direction_index < 0 or visual_direction_index >= 8:
+		var axis_ground_gu: Vector2 = release_geometry.get(
+			"live_locked_target_direction_ground_gu", Vector2.ZERO
+		)
+		visual_direction_index = (
+			CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
+				axis_ground_gu
+			)
+			if axis_ground_gu.length_squared() > EPSILON * EPSILON
+			else 0
+		)
+	return {
+		"contract_id": TARGET_ALIGNED_CONTINUOUS_RELEASE_CONTRACT_ID,
+		"footprint_contract_id": TARGET_ALIGNED_RELEASE_FOOTPRINT_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"mode": mode,
+		"skill_id": _target_aligned_skill_id(mode),
+		"release_id": str(release_geometry.get(
+			"release_id", "unbound_target_aligned_release"
+		)),
+		"origin_ground_gu": release_geometry.get(
+			"origin_ground_gu", Vector2.ZERO
+		),
+		"continuous_axis_ground_gu": release_geometry.get(
+			"live_locked_target_direction_ground_gu", Vector2.ZERO
+		),
+		"locked_target_ground_gu_at_release": release_geometry.get(
+			"locked_target_ground_gu_at_release", Vector2.ZERO
+		),
+		"locked_target_instance_id": int(release_geometry.get(
+			"locked_target_instance_id", 0
+		)),
+		"target_axis_eligible": false,
+		"ineligible_reason": reason,
+		"visual_direction_index": visual_direction_index,
+		"visual_direction_contract_id": DIRECTION_SPACE_CONTRACT_ID,
+		"range_bonus_gu": 0.0,
+		"terrain_blocked": reason == "terrain_blocked",
+		"skill_footprint_snapshot": null,
+	}
+
+
+static func _direction_sector_polygon_for_direction_ground_gu(
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+	effective_reach_gu: float
+) -> PackedVector2Array:
+	## Continuous-direction analogue of direction_sector_polygon(): a 45-degree
+	## sector centered on an arbitrary ground direction. Deterministic convex
+	## SAT with 24 arc samples, endpoints include the +/-22.5-degree edges.
+	var safe_reach_gu := maxf(0.0, effective_reach_gu)
+	var center_angle_radians := direction_ground_gu.angle()
+	var polygon := PackedVector2Array([origin_ground_gu])
+	const ARC_SEGMENTS := 24
+	for index: int in range(ARC_SEGMENTS + 1):
+		var weight := float(index) / float(ARC_SEGMENTS)
+		var angle_radians := lerpf(
+			center_angle_radians - PI / 8.0,
+			center_angle_radians + PI / 8.0,
+			weight
+		)
+		polygon.append(
+			origin_ground_gu + Vector2.from_angle(angle_radians) * safe_reach_gu
+		)
+	return polygon
+
+
+static func _vector2_is_finite(value: Vector2) -> bool:
+	return is_finite(value.x) and is_finite(value.y)
 
 
 static func thrust_footprint_slot_for_axis_plan_gu(
