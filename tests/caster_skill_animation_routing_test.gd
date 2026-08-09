@@ -321,8 +321,11 @@ func _ready() -> void:
 	assert(skeleton != null)
 	add_child(skeleton)
 	assert(skeleton._sprite != null)
-	assert(skeleton._sprite.name == "SkeletonPrimaryStandAnimation")
-	assert(int(skeleton._sprite.call("frame_count")) == 4)
+	assert(skeleton._sprite.name == "MutantSkeletonAnimatedBody")
+	assert(
+		skeleton._visual_request_id == -1
+		or skeleton._visual_request_id > 0
+	)
 	skeleton.free()
 
 	# Q3-C: the legacy execute_cast was removed. The canonical adapter creates

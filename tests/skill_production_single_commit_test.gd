@@ -58,7 +58,7 @@ func _run() -> void:
 
 	PlayerState.select_profession("道士")
 	PlayerState.learned_skills = {"施毒术": 3}
-	PlayerState.inventory = []
+	PlayerState.inventory = [{"name": "灰色药粉", "count": 5}]
 	PlayerState.recalculate_stats()
 	_caster.current_mp = 500
 	_game._set_magic_locked_target(_target, true)
@@ -79,12 +79,19 @@ func _run() -> void:
 		poison_mp_before - _caster.current_mp == poison_cost,
 		"dual poison MP must be committed exactly once"
 	)
-	assert(PlayerState.inventory.is_empty(), "dual poison must not consume cast materials")
+	var poison_plan: Dictionary = poison_result.get("canonical_plan", {})
+	var poison_material_amount := int(
+		poison_plan.get("resource_cost", {}).get("material_amount", 0)
+	)
+	assert(poison_material_amount > 0, "dual poison must quote powder consumption")
+	assert(
+		PlayerState.item_count("灰色药粉") == 5 - poison_material_amount,
+		"dual poison powder must be committed exactly once"
+	)
 	assert(
 		Plan.sentinel_diagnostics().resource_commit_count == 1,
 		"poison resource_commit_count must be exactly 1"
 	)
-	var poison_plan: Dictionary = poison_result.get("canonical_plan", {})
 	var poison_actions: Array = poison_plan.get("gameplay_actions", [])
 	assert(poison_actions.size() == 2, "dual poison must produce exactly two gameplay actions")
 	assert(str(poison_actions[0].get("poison_type", "")) == "green_poison")
@@ -93,8 +100,8 @@ func _run() -> void:
 	assert(_target.has_meta("canonical_red_poison"), "red poison must reach the production target")
 	await get_tree().process_frame
 	print(
-		"SKILL_PRODUCTION_SINGLE_COMMIT_PASS fire_wall_mp=%d poison_mp=%d material=0"
-		% [fire_wall_cost, poison_cost]
+		"SKILL_PRODUCTION_SINGLE_COMMIT_PASS fire_wall_mp=%d poison_mp=%d material=%d"
+		% [fire_wall_cost, poison_cost, poison_material_amount]
 	)
 	get_tree().quit(0)
 
