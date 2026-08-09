@@ -19,6 +19,9 @@ const GroundUnitSpaceScript := preload(
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 const WorldSpatialRulesScript := preload(
 	"res://scripts/world_spatial_rules.gd"
 )
@@ -236,6 +239,9 @@ static func build_canonical_plan(
 		"target_runtime_id": int(context.get("target_runtime_id", 0)),
 		"runtime_map_id": int(context.get("runtime_map_id", -1)),
 		"input_mode": str(context.get("input_mode", "canonical")),
+		"effective_rank": SkillRankResolverScript.safe_effective_rank(
+			int(request.get("rank", 0))
+		),
 		"requested_direction": request.get("facing", Vector2i.DOWN),
 		"resolved_direction": _resolved_direction(request, legacy_result),
 		"lock_on_context": (
@@ -576,6 +582,7 @@ static func plan_hash(plan: Dictionary) -> String:
 		"runtime_map_id": plan.get("runtime_map_id", -1),
 		"requested_direction": plan.get("requested_direction", Vector2i.ZERO),
 		"resolved_direction": plan.get("resolved_direction", Vector2i.ZERO),
+		"effective_rank": plan.get("effective_rank", 0),
 		"resource_cost": plan.get("resource_cost", {}),
 		"cooldown_contract": plan.get("cooldown_contract", {}),
 		"canonical_snapshot": plan.get("canonical_snapshot", {}),

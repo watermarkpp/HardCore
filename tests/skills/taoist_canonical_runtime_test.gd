@@ -15,7 +15,7 @@ func _ready() -> void:
 	assert(healing.effects[0].type == "dedicated_heal")
 	assert(healing.effects[0].actual_hp_restored == 10)
 	assert(not healing.effects[0].negative_damage)
-	assert(healing.proficiency_event == "actual_hp_restored_gt_zero")
+	assert(healing.proficiency_event.is_empty())
 	var full_hp_healing := _execute("taoist.healing", {
 		"has_target": true, "actual_hp_missing": 0, "primary_stat_roll": 8,
 	})
@@ -26,7 +26,7 @@ func _ready() -> void:
 		"valid_melee_swing": true,
 	})
 	assert(spiritual.effects[0].value == 8)
-	assert(spiritual.proficiency_event == "valid_taoist_melee_attack_resolved")
+	assert(spiritual.proficiency_event.is_empty())
 
 	var dual_poison := _execute("taoist.poison", {
 		"has_target": true,
@@ -50,7 +50,7 @@ func _ready() -> void:
 		dual_poison.resource_quote.mp_cost
 		== int(poison_definition.get("mp_cost_by_rank", [])[3]) * 2
 	)
-	assert(dual_poison.proficiency_event == "poison_status_successfully_applied_or_refreshed")
+	assert(dual_poison.proficiency_event.is_empty())
 	var resisted_poison := _execute("taoist.poison", {
 		"has_target": true,
 		"line_of_sight": true,
@@ -75,7 +75,7 @@ func _ready() -> void:
 	assert(talisman.effects[0].type == "talisman_projectile_damage")
 	assert(talisman.effects[0].damage_type == "spirit_magic")
 	assert(talisman.resource_quote.material_amount == 0)
-	assert(talisman.proficiency_event == "valid_talisman_projectile_created")
+	assert(talisman.proficiency_event.is_empty())
 
 	var skeleton := _execute("taoist.summon_skeleton", {
 		"spawn_tile_valid": true,
@@ -85,7 +85,7 @@ func _ready() -> void:
 	assert(skeleton.effects[0].max_pet_level == 7)
 	assert(not skeleton.effects[0].skill_rank_is_pet_level)
 	assert(skeleton.resource_quote.material_amount == 0)
-	assert(skeleton.proficiency_event == "new_skeleton_successfully_spawned")
+	assert(skeleton.proficiency_event.is_empty())
 	var recalled_skeleton := _execute("taoist.summon_skeleton", {
 		"has_main_pet": true,
 	}, "", 0)
@@ -101,7 +101,7 @@ func _ready() -> void:
 	assert(invisibility.effects[0].break_on_tile_movement)
 	assert(not invisibility.effects[0].break_on_ranged_spell_cast)
 	assert(not invisibility.effects[0].pvp_invisibility)
-	assert(invisibility.proficiency_event == "invisibility_buff_successfully_applied")
+	assert(invisibility.proficiency_event.is_empty())
 
 	var mass_invisibility := _execute("taoist.mass_invisibility", {
 		"has_target": true,
@@ -114,7 +114,7 @@ func _ready() -> void:
 	assert(mass_invisibility.effects[0].affected_count == 2)
 	assert(mass_invisibility.effects[0].target_instance_ids == [101, 102])
 	assert(mass_invisibility.resource_commit)
-	assert(mass_invisibility.proficiency_event == "at_least_one_valid_friendly_receives_buff")
+	assert(mass_invisibility.proficiency_event.is_empty())
 	var empty_mass_invisibility := _execute("taoist.mass_invisibility", {
 		"has_target": true,
 		"affected_friendly_count": 0,
@@ -202,7 +202,7 @@ func _ready() -> void:
 	assert(mass_healing.effects[0].target_instance_ids == [401, 402, 403])
 	assert(mass_healing.effects[0].target_results[1].target_instance_id == 402)
 	assert(not mass_healing.effects[0].negative_damage)
-	assert(mass_healing.proficiency_event == "total_actual_hp_restored_gt_zero")
+	assert(mass_healing.proficiency_event.is_empty())
 
 	var divine_beast := _execute("taoist.summon_divine_beast", {
 		"spawn_tile_valid": true,
@@ -211,7 +211,7 @@ func _ready() -> void:
 	assert(divine_beast.effects[0].initial_pet_level == 3)
 	assert(divine_beast.effects[0].max_pet_level == 7)
 	assert(divine_beast.resource_quote.material_amount == 0)
-	assert(divine_beast.proficiency_event == "new_divine_beast_successfully_spawned")
+	assert(divine_beast.proficiency_event.is_empty())
 
 	for result: Dictionary in [
 		healing, spiritual, dual_poison, talisman, skeleton,

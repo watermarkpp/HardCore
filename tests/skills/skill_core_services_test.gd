@@ -88,9 +88,9 @@ func _ready() -> void:
 		"skill_id": "wizard.fireball",
 		"reason": "",
 		"resource_commit": true,
-		"proficiency_event": "valid_projectile_cast_created",
+		"proficiency_event": "",
 		"effects": [{"type": "damage"}],
 	}
-	assert(success.accepted and success.effects.size() == 1)
+	assert(success.accepted and success.effects.size() == 1 and success.proficiency_event.is_empty())
 	print("SKILL_CORE_SERVICES_PASS: request/result, target, resources and tile geometry")
 	get_tree().quit()

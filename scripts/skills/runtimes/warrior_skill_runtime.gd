@@ -4,28 +4,36 @@ extends RefCounted
 const WarriorMeleeGeometryScript := preload(
 	"res://scripts/skills/warrior_melee_geometry.gd"
 )
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 
 
 static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted) -> Dictionary:
 	var skill_id := str(definition.get("skill_id", ""))
-	var rank := clampi(int(request.get("rank", 0)), 0, 3)
+	var rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
 	var context: Dictionary = request.get("target_context", {})
 	var mechanics: Dictionary = definition.get("mechanics", {})
-	var trigger := str(definition.get("proficiency_trigger", {}).get("event", ""))
 	var plan := _base_plan(definition)
 	match skill_id:
 		"warrior.basic_swordsmanship":
 			plan.effects = [{
 				"type": "passive_stat_modifier",
 				"stat": "accuracy",
-				"value": int(mechanics.get("flat_bonus_by_rank", [0, 0, 0, 0])[rank]),
+				"value": SkillRankResolverScript.linear_int(
+					mechanics.get("flat_bonus_by_rank", [0, 0, 0, 0]),
+					rank
+				),
 				"affects": mechanics.get("affects", []).duplicate(),
 			}]
-			if bool(context.get("valid_melee_swing", false)):
-				plan.proficiency_event = trigger
 		"warrior.slaying_swordsmanship":
 			var denominators: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
-			var denominator := maxi(1, int(denominators[rank]))
+			var denominator := SkillRankResolverScript.denominator(
+				denominators,
+				rank
+			)
 			var valid_melee_action := bool(context.get("valid_melee_swing", false))
 			var force_proc := bool(context.get("force_proc", false))
 			var force_no_proc := bool(context.get("force_no_proc", false))
@@ -48,15 +56,19 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				"success_probability": 1.0 / float(denominator),
 				"proc_denominator": denominator,
 				"proc_roll": proc_roll,
-				"flat_damage_bonus": int(mechanics.get("flat_damage_bonus_by_rank", [2, 4, 6, 8])[rank]),
-				"flat_accuracy_bonus": int(mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])[rank]),
+				"flat_damage_bonus": SkillRankResolverScript.linear_int(
+					mechanics.get("flat_damage_bonus_by_rank", [2, 4, 6, 8]),
+					rank
+				),
+				"flat_accuracy_bonus": SkillRankResolverScript.linear_int(
+					mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3]),
+					rank
+				),
 				"accuracy_always_applies": true,
 				"damage_bonus_applies_after_body_formula": true,
 				"valid_melee_action": valid_melee_action,
 				"defence_type": "AC",
 			}]
-			if proc and valid_melee_action:
-				plan.proficiency_event = trigger
 		"warrior.thrusting":
 			var first: Dictionary = mechanics.get("first_cell", {})
 			var second: Dictionary = mechanics.get("second_cell", {})
@@ -76,16 +88,17 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				{
 					"type": "melee_hit",
 					"cell": 2,
-					"multiplier": float(second.get(
-						"damage_multiplier_by_rank", [0.4, 0.6, 0.8, 1.0]
-					)[rank]),
+					"multiplier": SkillRankResolverScript.linear_float(
+						second.get(
+							"damage_multiplier_by_rank", [0.4, 0.6, 0.8, 1.0]
+						),
+						rank
+					),
 					"ignore_ac": bool(second.get("ignore_ac", true)),
 					"maximum_targets": thrust_limit,
 					"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
 				},
 			]
-			if plan.effect_success:
-				plan.proficiency_event = trigger
 		"warrior.half_moon":
 			plan.effect_success = bool(context.get("eligible_target_count", 1) > 0)
 			plan.effects = [{
@@ -95,12 +108,16 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				),
 				"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
 				"primary_multiplier": float(mechanics.get("primary_damage_multiplier", 1.0)),
-				"side_multiplier": float(mechanics.get("side_damage_multiplier_by_rank", [0.15, 0.23, 0.31, 5.0 / 13.0])[rank]),
+				"side_multiplier": SkillRankResolverScript.linear_float(
+					mechanics.get(
+						"side_damage_multiplier_by_rank",
+						[0.15, 0.23, 0.31, 5.0 / 13.0]
+					),
+					rank
+				),
 				"max_resource_commits": 1,
 				"max_training_events": 1,
 			}]
-			if plan.effect_success:
-				plan.proficiency_event = trigger
 		"warrior.wild_rush":
 			var target_level := int(context.get("target_level", request.get("caster_level", 1)))
 			var caster_level := int(request.get("caster_level", 1))
@@ -140,19 +157,21 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				"damage_amount": 0,
 				"self_damage_amount": 0,
 			}]
-			if displaced:
-				plan.proficiency_event = trigger
 		"warrior.fire_sword":
 			plan.effects = [{
 				"type": "next_melee_charge",
-				"damage_multiplier": float(mechanics.get("damage_multiplier_by_rank", [1.4, 1.8, 2.2, 2.6])[rank]),
+				"damage_multiplier": SkillRankResolverScript.linear_float(
+					mechanics.get(
+						"damage_multiplier_by_rank",
+						[1.4, 1.8, 2.2, 2.6]
+					),
+					rank
+				),
 				"stack_count_max": 1,
 				"auto_cast": false,
 				"consume_on": "next_valid_melee_damage_attempt",
 				"charge_lifetime_ms": int(definition.get("timing", {}).get("charge_lifetime_ms", 10000)),
 			}]
-			if bool(context.get("charge_consumed", false)):
-				plan.proficiency_event = trigger
 		_:
 			return _failed_resolution(plan, "unknown_warrior_skill")
 	return plan

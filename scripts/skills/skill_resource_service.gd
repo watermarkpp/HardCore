@@ -1,6 +1,10 @@
 class_name SkillResourceService
 extends RefCounted
 
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+
 const MATERIAL_FREE_PROFESSION := "taoist"
 const DOUBLE_MP_SKILL_ID := "taoist.poison"
 
@@ -11,9 +15,16 @@ static func quote(
 	resource_context: Dictionary,
 	cast_context := {}
 ) -> Dictionary:
-	var safe_rank := clampi(rank, 0, 3)
+	var safe_rank := SkillRankResolverScript.safe_effective_rank(rank)
 	var mp_costs: Array = definition.get("mp_cost_by_rank", [])
-	var mp_cost := int(mp_costs[safe_rank]) if safe_rank < mp_costs.size() else 0
+	var mp_cost := (
+		maxi(
+			0,
+			SkillRankResolverScript.linear_int(mp_costs, safe_rank)
+		)
+		if not mp_costs.is_empty()
+		else 0
+	)
 	var skill_id := str(definition.get("skill_id", ""))
 	var material_free := str(definition.get("class", "")) == MATERIAL_FREE_PROFESSION
 	if material_free and skill_id == DOUBLE_MP_SKILL_ID:
@@ -27,7 +38,14 @@ static func quote(
 	var resource: Dictionary = definition.get("resource", {})
 	var item: Variant = resource.get("item")
 	var amounts: Array = resource.get("amount_by_rank", [])
-	var item_amount := int(amounts[safe_rank]) if safe_rank < amounts.size() else 0
+	var item_amount := (
+		maxi(
+			0,
+			SkillRankResolverScript.linear_int(amounts, safe_rank)
+		)
+		if not amounts.is_empty()
+		else 0
+	)
 	if material_free:
 		item = null
 		item_amount = 0

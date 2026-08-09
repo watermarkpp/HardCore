@@ -7,6 +7,9 @@ const SkillTargetServiceScript := preload("res://scripts/skills/skill_target_ser
 const SkillResourceServiceScript := preload("res://scripts/skills/skill_resource_service.gd")
 const SkillGeometryServiceScript := preload("res://scripts/skills/skill_geometry_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 const WarriorRuntimeScript := preload("res://scripts/skills/runtimes/warrior_skill_runtime.gd")
 const WizardRuntimeScript := preload("res://scripts/skills/runtimes/wizard_skill_runtime.gd")
 const TaoistRuntimeScript := preload("res://scripts/skills/runtimes/taoist_skill_runtime.gd")
@@ -108,6 +111,10 @@ static func _plan(request: Variant) -> Dictionary:
 		request.get("target_context", {}).get("target_tile", Vector2i.ZERO)
 	)
 	plan["resource_quote"] = resource_quote
+	## The release freezes the effective rank used to build every effect.
+	plan["effective_rank"] = SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
 	return plan
 
 
@@ -174,6 +181,9 @@ static func _canonical_rejection_plan(
 		"target_runtime_id": int(context.get("target_runtime_id", 0)),
 		"runtime_map_id": int(context.get("runtime_map_id", -1)),
 		"input_mode": str(context.get("input_mode", "canonical")),
+		"effective_rank": SkillRankResolverScript.safe_effective_rank(
+			int(request.get("rank", 0))
+		),
 		"requested_direction": request.get("facing", Vector2i.DOWN),
 		"resolved_direction": request.get("facing", Vector2i.DOWN),
 		"lock_on_context": {},
@@ -209,12 +219,18 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 		body_mode = "normal"
 	var basic_learned := bool(request.get("basic_sword_learned", false))
 	var slaying_learned := bool(request.get("slaying_learned", false))
-	var basic_rank := clampi(int(request.get("basic_sword_rank", 0)), 0, 3)
-	var slaying_rank := clampi(int(request.get("slaying_rank", 0)), 0, 3)
+	var basic_rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("basic_sword_rank", 0))
+	)
+	var slaying_rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("slaying_rank", 0))
+	)
 	var rng := SkillRngScript.new(int(request.get("seed", 0)))
 	var flat_dc_bonus := 0
 	var flat_damage_bonus_after_body_formula := 0
 	var flat_accuracy_bonus := 0
+	## Proficiency is disabled in HardCore v2: the compatibility array always
+	## stays empty and never grows/upgrades/persists anything.
 	var proficiency_events: Array[Dictionary] = []
 	var effects: Array[Dictionary] = []
 	var slaying_proc := false
@@ -238,20 +254,19 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 				effects.append(effect.duplicate(true))
 				if str(effect.get("type", "")) == "passive_stat_modifier":
 					flat_accuracy_bonus += int(effect.get("value", 0))
-		var basic_event := str(basic_plan.get("proficiency_event", ""))
-		if not basic_event.is_empty():
-			proficiency_events.append({
-				"skill_id": "warrior.basic_swordsmanship",
-				"event": basic_event,
-			})
-
 	if slaying_learned:
 		var slaying_definition := SkillDataLoaderScript.skill("warrior.slaying_swordsmanship")
 		var mechanics: Dictionary = slaying_definition.get("mechanics", {})
 		var accuracy_values: Array = mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])
 		var denominator_values: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
-		flat_accuracy_bonus += int(accuracy_values[slaying_rank])
-		slaying_proc_denominator = int(denominator_values[slaying_rank])
+		flat_accuracy_bonus += SkillRankResolverScript.linear_int(
+			accuracy_values,
+			slaying_rank
+		)
+		slaying_proc_denominator = SkillRankResolverScript.denominator(
+			denominator_values,
+			slaying_rank
+		)
 		if valid_melee_swing:
 			slaying_proc_roll_count = 1
 			var slaying_context := {
@@ -281,13 +296,6 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 					flat_damage_bonus_after_body_formula = int(
 						effect.get("flat_damage_bonus", 0)
 					)
-			var slaying_event := str(slaying_plan.get("proficiency_event", ""))
-			if not slaying_event.is_empty():
-				proficiency_events.append({
-					"skill_id": "warrior.slaying_swordsmanship",
-					"event": slaying_event,
-				})
-
 	return {
 		"contract_id": WARRIOR_MELEE_MODIFIER_CONTRACT_ID,
 		"source_ruleset_id": SkillDataLoaderScript.RULESET_ID,

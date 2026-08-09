@@ -4,9 +4,13 @@ extends RefCounted
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 
 const RULES_PATH := "res://assets/data/vanilla_176/profession_combat_rules.json"
 const SUMMON_BASELINE_PATH := "res://assets/data/vanilla_176/taoist_summon_baseline.json"
+## Base data max rank; effective cast rank extends via skills.rank_extension.v1.
 const MAX_SKILL_LEVEL := 3
 
 static var _rules_cache: Dictionary = {}
@@ -14,7 +18,7 @@ static var _summon_baseline_cache: Dictionary = {}
 
 
 static func clamp_skill_level(level_value: int) -> int:
-	return clampi(level_value, 0, MAX_SKILL_LEVEL)
+	return SkillRankResolverScript.safe_effective_rank(level_value)
 
 
 static func classic_get_power(power_roll: int, def_power_roll: int, level_value: int, train_level := 3) -> int:
@@ -80,11 +84,14 @@ static func revelation_duration(level_value: int, spiritual_stat_roll: int) -> i
 
 
 static func revelation_succeeds(level_value: int, random_0_to_5: int) -> bool:
-	return random_0_to_5 <= clamp_skill_level(level_value) + 3
+	return random_0_to_5 <= mini(
+		5,
+		clamp_skill_level(level_value) + 3
+	)
 
 
 static func summon_profile(skill_id: String, skill_level_value: int, owner_level: int, spiritual_power: int) -> Dictionary:
-	var level := clamp_skill_level(skill_level_value)
+	var level := SkillRankResolverScript.summon_pet_level(skill_level_value)
 	var rule := _skill_rule(skill_id)
 	var summon_id := "divine_beast" if skill_id == "taoist.summon_divine_beast" else "skeleton"
 	var divine_beast := summon_id == "divine_beast"
@@ -138,7 +145,8 @@ static func summon_profile(skill_id: String, skill_level_value: int, owner_level
 
 
 static func maximum_summon_pet_level(skill_rank: int) -> int:
-	return 1 + 2 * clamp_skill_level(skill_rank)
+	## Existing summon combat level cap stays at 7 for every effective rank.
+	return mini(7, 1 + 2 * clamp_skill_level(skill_rank))
 
 
 static func summon_template(summon_id: String) -> Dictionary:
@@ -220,7 +228,15 @@ static func profile_overrides(skill_id: String, level_value: int) -> Dictionary:
 	}
 	for key: String in rule.keys():
 		if key.ends_with("_by_level") and rule[key] is Array:
-			result[key.trim_suffix("_by_level")] = _level_value(rule[key], level)
+			var semantic := SkillRankResolverScript.SEMANTIC_LINEAR
+			if (
+				key.contains("cooldown")
+				or key.contains("lifetime")
+			):
+				semantic = SkillRankResolverScript.SEMANTIC_TIMING_CONSTANT
+			result[key.trim_suffix("_by_level")] = (
+				SkillRankResolverScript.value(rule[key], level, semantic)
+			)
 	for key: String in ["source_anchor", "service_spell_id", "attack_type", "duration_formula", "apply_delay_ms", "buff_power_formula", "area_radius_cells", "leash_range", "teleport_range", "amulet_cost"]:
 		if rule.has(key):
 			result[key] = rule[key]
@@ -260,7 +276,8 @@ static func _summon_timing_value(
 	var values: Variant = timing.get(timing_key, [])
 	if not values is Array or values.is_empty():
 		return fallback_ms
-	return int(values[mini(clamp_skill_level(skill_rank), values.size() - 1)])
+	## Pet timing is timing semantics: constant at the base-max rank values.
+	return SkillRankResolverScript.timing_int(values, skill_rank)
 
 
 static func _level_value(values: Array, level: int) -> Variant:
