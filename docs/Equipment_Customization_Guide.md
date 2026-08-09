@@ -26,6 +26,28 @@
 
 以上代表暴击率15%、暴击倍率在基础1.5倍上增加0.5、攻击速度+20%、施法速度+15%、全部技能+1且烈火剑法再+1。速度词条会同时缩短对应冷却、动作和命中前摇；没有词条时仍保持850ms攻击间隔和510ms动作。
 
+## 技能等级词条（equipment.skill_level_affix.v1）
+
+正式稳定合同 ID：`equipment.skill_level_affix.v1`，由 `scripts/equipment_rules.gd` 提供纯函数解析：
+
+- `skill_level_affix_contributions(record)`：给定装备 item/运行时记录，返回 `{contractId, contributions, legacy, diagnostics, accepted, rejected}`。
+- `aggregate_skill_level_affix_records(records)`：聚合多件装备的纯函数（不含耐久/穿戴裁决，由 integration 接线时处理）。
+
+正式词条写入 `modifiers` 数组，scope 必须使用稳定键：
+
+```json
+"modifiers": [
+  {"stat": "skill_level", "scope": "all", "value": 1},
+  {"stat": "skill_level", "scope": "profession:taoist", "value": 2},
+  {"stat": "skill_level", "scope": "skill:taoist.healing", "value": 3}
+]
+```
+
+- `all`：全部已学习技能；`profession:` 只允许 `warrior/wizard/taoist`；`skill:` 后必须是稳定技能 ID（如 `taoist.healing`）。
+- 正式输出只使用稳定 scope 键，不使用中文展示名。装备层不复制技能目录；legacy 中文名（数组 `skill`/`target` 与字典 `skillLevels` 键）会进入 `legacy` 兼容字典，由 integration 通过唯一 SkillDataLoader 转换为稳定 ID。
+- value 必须是正整数（整数或整数语义的有限浮点，如 2.0）；0、负数、非整数、非有限值、字符串均被拒绝并给出诊断。装备词条只提升、永不降低等级；不设玩法上限，累加只做 int64 技术溢出钳制。
+- 装备 API 只产生贡献，不授予未学习技能；学习判定仍属于 PlayerState/技能层。当前 PlayerState 仍只读取 legacy `skillLevels`/数组 `skill` 路径，canonical scope 的玩家状态接线由 integration 后续完成。
+
 ## 新增装备
 
 在 `newEquipment` 数组增加完整对象。最少需要 `name`、`category`、`profession`、`maxDurability`。名称必须唯一，类别必须是武器、盔甲、头盔、项链、手镯或戒指。
