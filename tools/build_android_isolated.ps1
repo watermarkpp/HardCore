@@ -63,6 +63,14 @@ if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName) -and
     $ExportPresetText -notmatch ("(?m)^version/name=`"{0}`"`r?$" -f [regex]::Escape($ExpectedVersionName))) {
     throw "Build commit export preset does not contain version/name=`"$ExpectedVersionName`"."
 }
+$ProjectConfigText = (@(& git -C $ProjectRoot show "${ResolvedCommit}:project.godot")) -join "`n"
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ProjectConfigText)) {
+    throw "Build commit has no readable project.godot: $ResolvedCommit"
+}
+if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName) -and
+    $ProjectConfigText -notmatch ("(?m)^config/version=`"{0}`"`r?$" -f [regex]::Escape($ExpectedVersionName))) {
+    throw "Build commit project.godot does not contain config/version=`"$ExpectedVersionName`"."
+}
 $ShortCommit = $ResolvedCommit.Substring(0, 12)
 $StageParent = Join-Path (Split-Path $ProjectRoot -Parent) "HardCore-android-staging"
 $StageName = "{0}-{1}-{2}" -f $ShortCommit, (Get-Date -Format "yyyyMMdd-HHmmss"), ([guid]::NewGuid().ToString("N").Substring(0, 8))
