@@ -166,5 +166,25 @@ func _run() -> void:
 		DirAccess.remove_absolute("%s.bak" % absolute_cycle_path)
 	PlayerState.active_profile_id = ""
 
+	# 回归：双槽满后手动卸下右槽，cursor 按本次实际装备的槽推进到另一侧
+	PlayerState.unequip_slot("右戒指")
+	assert(PlayerState.equipment["右戒指"].is_empty(), "回归前置右戒指未卸下")
+	assert(PlayerState.equip_cycle_cursor["戒指"] == "左戒指", "回归前置戒指 cursor 应为左戒指")
+	var refilled_right_id := str(PlayerState.inventory[-1].get("instance_id", ""))
+	assert(
+		PlayerState.equip_inventory_index(_find_inventory_instance(refilled_right_id)).begins_with("已装备"),
+		"空右槽自动装备失败"
+	)
+	assert(str(PlayerState.equipment["右戒指"].get("instance_id", "")) == refilled_right_id, "空槽自动装备未进右戒指")
+	assert(PlayerState.equip_cycle_cursor["戒指"] == "左戒指", "实际装备右槽后 cursor 未推进到左戒指")
+	var next_auto_id := str(PlayerState.inventory[0].get("instance_id", ""))
+	assert(not next_auto_id.is_empty(), "回归缺少可自动装备的戒指实例")
+	assert(
+		PlayerState.equip_inventory_index(_find_inventory_instance(next_auto_id)).begins_with("已装备"),
+		"满双槽后自动装备失败"
+	)
+	assert(str(PlayerState.equipment["左戒指"].get("instance_id", "")) == next_auto_id, "再下一件未替换左戒指（连续右）")
+	assert(PlayerState.equip_cycle_cursor["戒指"] == "右戒指", "左槽替换后 cursor 未推进")
+
 	print("EQUIPMENT_SLOT_MIGRATION_PASS：双手镯、双戒指、确定性替换、属性修理、指定卸下、v02迁移和自动轮换cursor正常")
 	get_tree().quit(0)
