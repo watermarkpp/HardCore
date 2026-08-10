@@ -10,6 +10,7 @@ extends Node2D
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const WarriorMeleeGeometryScript := preload(
 	"res://scripts/skills/warrior_melee_geometry.gd"
 )
@@ -35,6 +36,25 @@ const POLYGON_VERTEX_TOLERANCE_PX := 0.01
 ## The node fades on the first frame after entering the scene and is queued
 ## for deletion when the fade completes.
 const RELEASE_VISUAL_LIFETIME_SEC := 0.30
+const THRUST_CLIENT_EFFECT_ALIGNMENT_CONTRACT_ID := (
+	"skills.warrior.thrust.client_effect_snapshot_alignment.v1"
+)
+const THRUST_CLIENT_EFFECT_SOURCE_ORIGIN_PX := Vector2(119.0, 144.0)
+# Union bounds of all six non-transparent long_hit frames, expressed in the
+# projected ground basis of each source row. Row order is the classic client
+# order N, NE, E, SE, S, SW, W, NW. These primary-client measurements let the
+# presentation layer fit the complete animation inside the canonical band
+# without changing the snapshot or gameplay range.
+const THRUST_CLIENT_EFFECT_SOURCE_BOUNDS_BY_ROW: Array[Vector4] = [
+	Vector4(-0.486135912, 5.701048423, -0.928077650, 2.010834909),
+	Vector4(-0.156250000, 4.828125000, -2.640625000, 0.812500000),
+	Vector4(-1.104854346, 3.336660124, -4.065863992, 1.060660172),
+	Vector4(-3.359375000, 3.343750000, -3.796875000, 0.250000000),
+	Vector4(-4.596194078, 3.447145558, -1.944543648, 1.016465998),
+	Vector4(-3.921875000, 2.687500000, -2.046875000, 3.828125000),
+	Vector4(-2.143417430, 2.298097039, -1.767766953, 5.568465902),
+	Vector4(-1.265625000, 4.281250000, -0.843750000, 4.703125000),
+]
 
 var mode := WarriorMeleeGeometryScript.SKILL_NORMAL
 var hit_info: Dictionary = {}
@@ -92,6 +112,128 @@ static func fail_closed_reason(
 	).is_empty():
 		return "missing_projected_polygon"
 	return ""
+
+
+static func thrust_client_effect_alignment_descriptor(
+	snapshot: Dictionary,
+	source_direction_row: int,
+	coordinate_context: Dictionary
+) -> Dictionary:
+	## Fits the complete six-frame primary-client thrust effect into the exact
+	## projected outer polygon from the immutable gameplay snapshot. The result
+	## is anchor-relative screen presentation data; it never mutates or rebuilds
+	## the canonical geometry.
+	if fail_closed_reason(snapshot, coordinate_context) != "":
+		return {}
+	if (
+		str(snapshot.get("shape_type", ""))
+		!= SkillFootprintSnapshotScript.SHAPE_DIRECTED_RECTANGLE
+		or not is_equal_approx(
+			float(snapshot.get("effect_length_gu", 0.0)),
+			WarriorMeleeGeometryScript.reach_gu(
+				WarriorMeleeGeometryScript.SKILL_THRUST
+			)
+		)
+		or not is_equal_approx(
+			float(snapshot.get("effect_width_gu", 0.0)),
+			WarriorMeleeGeometryScript.TARGET_ALIGNED_LINE_WIDTH_GU
+		)
+	):
+		return {}
+	var projected := (
+		SkillFootprintSnapshotScript.projected_polygon_screen_offset_px(snapshot)
+	)
+	if projected.size() != 4:
+		return {}
+	var resolved_row := posmod(source_direction_row, 8)
+	var source_direction_index := posmod(resolved_row + 4, 8)
+	var source_forward_ground_gu := (
+		WarriorMeleeGeometryScript.canonical_ground_direction_gu(
+			source_direction_index
+		)
+	)
+	var source_side_ground_gu := Vector2(
+		-source_forward_ground_gu.y,
+		source_forward_ground_gu.x
+	)
+	var source_forward_screen_px := (
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			source_forward_ground_gu
+		)
+	)
+	var source_side_screen_px := (
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			source_side_ground_gu
+		)
+	)
+	var source_determinant := (
+		source_forward_screen_px.x * source_side_screen_px.y
+		- source_side_screen_px.x * source_forward_screen_px.y
+	)
+	if absf(source_determinant) <= 0.000001:
+		return {}
+	var source_inverse_x := Vector2(
+		source_side_screen_px.y,
+		-source_forward_screen_px.y
+	) / source_determinant
+	var source_inverse_y := Vector2(
+		-source_side_screen_px.x,
+		source_forward_screen_px.x
+	) / source_determinant
+	var start_center_px := (projected[0] + projected[3]) * 0.5
+	var end_center_px := (projected[1] + projected[2]) * 0.5
+	var target_forward_px := end_center_px - start_center_px
+	var target_side_px := projected[0] - projected[3]
+	var bounds := THRUST_CLIENT_EFFECT_SOURCE_BOUNDS_BY_ROW[resolved_row]
+	var source_forward_span := bounds.y - bounds.x
+	var source_side_span := bounds.w - bounds.z
+	if source_forward_span <= 0.000001 or source_side_span <= 0.000001:
+		return {}
+	var target_forward_per_source_gu := (
+		target_forward_px / source_forward_span
+	)
+	var target_side_per_source_gu := target_side_px / source_side_span
+	var basis_x_screen_px := (
+		target_forward_per_source_gu * source_inverse_x.x
+		+ target_side_per_source_gu * source_inverse_x.y
+	)
+	var basis_y_screen_px := (
+		target_forward_per_source_gu * source_inverse_y.x
+		+ target_side_per_source_gu * source_inverse_y.y
+	)
+	var source_pixel_basis := Transform2D(
+		basis_x_screen_px,
+		basis_y_screen_px,
+		Vector2.ZERO
+	)
+	var fitted_zero_px := (
+		start_center_px
+		- target_forward_px * (bounds.x / source_forward_span)
+		- target_side_px * (bounds.z / source_side_span + 0.5)
+	)
+	var origin_screen_offset_px := (
+		fitted_zero_px
+		- source_pixel_basis.basis_xform(
+			THRUST_CLIENT_EFFECT_SOURCE_ORIGIN_PX
+		)
+	)
+	var descriptor := {
+		"contract_id": THRUST_CLIENT_EFFECT_ALIGNMENT_CONTRACT_ID,
+		"snapshot_id": str(snapshot.get("snapshot_id", "")),
+		"source_direction_row": resolved_row,
+		"source_direction_index": source_direction_index,
+		"source_origin_px": THRUST_CLIENT_EFFECT_SOURCE_ORIGIN_PX,
+		"source_bounds_ground_basis": bounds,
+		"basis_x_screen_px": basis_x_screen_px,
+		"basis_y_screen_px": basis_y_screen_px,
+		"origin_screen_offset_px": origin_screen_offset_px,
+		"target_start_center_screen_offset_px": start_center_px,
+		"target_end_center_screen_offset_px": end_center_px,
+		"target_side_screen_px": target_side_px,
+		"same_snapshot_source": true,
+	}
+	descriptor.make_read_only()
+	return descriptor
 
 
 func setup(

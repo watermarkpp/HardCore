@@ -46,6 +46,38 @@ func _run() -> void:
 	var effect_line := visual.get_node("SkillEffect") as Line2D
 	var audio := visual.get_node("WeaponAudio") as AudioStreamPlayer2D
 	game.player.facing = Vector2.RIGHT
+	visual.play_action("刺杀剑术", 0.51)
+	visual._process(0.19)
+	assert(
+		not effect_sprite.visible,
+		"刺杀在正式释放快照尚未应用时不应显示超出伤害范围的客户端叠层"
+	)
+	var thrust_alignment := {
+		"contract_id": "skills.warrior.thrust.client_effect_snapshot_alignment.v1",
+		"source_direction_row": visual.current_client_direction_row(),
+		"basis_x_screen_px": Vector2(0.50, 0.10),
+		"basis_y_screen_px": Vector2(-0.05, 0.60),
+		"origin_screen_offset_px": Vector2(12.0, -7.0),
+	}
+	assert(visual.apply_thrust_client_effect_alignment(
+		thrust_alignment,
+		game.player.global_position
+	))
+	assert(effect_sprite.visible)
+	var expected_thrust_origin := visual.to_local(
+		game.player.global_position + Vector2(12.0, -7.0)
+	)
+	assert(effect_sprite.transform.origin.distance_to(expected_thrust_origin) <= 0.001)
+	assert(effect_sprite.transform.x.distance_to(Vector2(0.50, 0.10)) <= 0.001)
+	assert(effect_sprite.transform.y.distance_to(Vector2(-0.05, 0.60)) <= 0.001)
+	visual.play_action("半月弯刀", 0.51)
+	visual._process(0.05)
+	assert(
+		effect_sprite.transform.x == Vector2.RIGHT
+		and effect_sprite.transform.y == Vector2.DOWN,
+		"刺杀的二维对齐变换泄漏到了其他战士技能"
+	)
+	game.player.facing = Vector2.RIGHT
 	visual.play_action("攻杀剑术", 0.51)
 	visual._process(0.19)
 	assert(effect_sprite.visible and not effect_line.visible, "攻杀没有使用客户端Magic.wil效果")

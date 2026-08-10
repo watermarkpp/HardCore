@@ -1,12 +1,14 @@
 extends Node
 
 const Geometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const Visual := preload("res://scripts/warrior_melee_visual_effect.gd")
 
 const TARGET_RADIUS_GU := 0.25
 const MAP_ID := 4
 const ORIGIN_GROUND_GU := Vector2(19.92, 46.40)
+const ISO_ORIGIN_SCREEN_PX := Vector2(743.0, 381.0)
 
 
 func _ready() -> void:
@@ -24,12 +26,250 @@ func _ready() -> void:
 	]:
 		_verify_three_layers_same_snapshot_source(mode)
 	_verify_half_moon_single_node_per_release()
+	_verify_thrust_eight_direction_iso_lengths_and_client_alignment()
+	_verify_thrust_continuous_angle_client_alignment()
 	print(
 		"WARRIOR_TARGET_ALIGNED_VISUAL_EFFECT_PASS: three translucent layers "
 		+ "consume the exact release snapshot, descriptor is machine-checkable "
 		+ "and invalid snapshots fail closed"
 	)
 	get_tree().quit(0)
+
+
+func _verify_thrust_eight_direction_iso_lengths_and_client_alignment() -> void:
+	var texture := load(
+		"res://assets/art/characters/warrior/effects/long_hit.png"
+	) as Texture2D
+	assert(texture != null)
+	var source_image := texture.get_image()
+	assert(source_image != null and not source_image.is_empty())
+	var expected_lengths_px := [
+		56.568542,
+		89.442719,
+		113.137085,
+		89.442719,
+		56.568542,
+		89.442719,
+		113.137085,
+		89.442719,
+	]
+	var coordinate_context := _iso_absolute_context()
+	for direction_index: int in range(8):
+		var axis_ground_gu := Geometry.canonical_ground_direction_gu(
+			direction_index
+		)
+		var target_ground_gu := ORIGIN_GROUND_GU + axis_ground_gu * 2.0
+		var plan := Geometry.target_aligned_melee_release_plan_ground_gu(
+			_release_geometry(target_ground_gu),
+			Geometry.SKILL_THRUST,
+			coordinate_context
+		)
+		assert(bool(plan.get("target_axis_eligible", false)))
+		var snapshot := plan.get("skill_footprint_snapshot") as Dictionary
+		assert(is_equal_approx(float(snapshot.get("effect_length_gu", 0.0)), 2.5))
+		assert(is_equal_approx(float(snapshot.get("effect_width_gu", 0.0)), 1.0))
+		assert(absf(
+			float(snapshot.get("axis_screen_length_px", 0.0))
+			- expected_lengths_px[direction_index]
+		) <= 0.001)
+		var anchor_screen_px := _iso_ground_gu_to_screen_px(ORIGIN_GROUND_GU)
+		var effect: Variant = Visual.create_visual(
+			snapshot,
+			Geometry.SKILL_THRUST,
+			{},
+			coordinate_context,
+			anchor_screen_px
+		)
+		assert(effect != null)
+		assert(effect.scale == Vector2.ONE and is_zero_approx(effect.rotation))
+		assert(effect.global_position == anchor_screen_px)
+		var layer_polygons: Array[PackedVector2Array] = (
+			effect.layer_polygons_screen_offset_px()
+		)
+		assert(layer_polygons.size() == Visual.LAYER_COUNT)
+		var outer_start := (
+			layer_polygons[0][0] + layer_polygons[0][3]
+		) * 0.5
+		var outer_end := (
+			layer_polygons[0][1] + layer_polygons[0][2]
+		) * 0.5
+		assert(outer_start.distance_to(Vector2(snapshot.get(
+			"axis_start_screen_offset_px", Vector2.ZERO
+		))) <= Visual.POLYGON_VERTEX_TOLERANCE_PX)
+		assert(outer_end.distance_to(Vector2(snapshot.get(
+			"axis_screen_offset_px", Vector2.ZERO
+		))) <= Visual.POLYGON_VERTEX_TOLERANCE_PX)
+		assert(absf(
+			outer_start.distance_to(outer_end)
+			- expected_lengths_px[direction_index]
+		) <= 0.001)
+		for layer_polygon: PackedVector2Array in layer_polygons:
+			assert(((layer_polygon[0] + layer_polygon[3]) * 0.5).distance_to(
+				outer_start
+			) <= Visual.POLYGON_VERTEX_TOLERANCE_PX)
+			assert(((layer_polygon[1] + layer_polygon[2]) * 0.5).distance_to(
+				outer_end
+			) <= Visual.POLYGON_VERTEX_TOLERANCE_PX)
+		var source_row := posmod(direction_index + 4, 8)
+		var alignment := Visual.thrust_client_effect_alignment_descriptor(
+			snapshot,
+			source_row,
+			coordinate_context
+		)
+		assert(not alignment.is_empty())
+		assert(bool(alignment.get("same_snapshot_source", false)))
+		assert(str(alignment.get("snapshot_id", "")) == str(
+			snapshot.get("snapshot_id", "")
+		))
+		_verify_all_thrust_pixels_fit_outer_band(
+			source_image,
+			source_row,
+			alignment
+		)
+		assert(Geometry.target_aligned_thrust_slot_for_plan_gu(
+			plan,
+			ORIGIN_GROUND_GU + axis_ground_gu * 1.5,
+			0.0,
+			coordinate_context
+		) == 1)
+		assert(Geometry.target_aligned_thrust_slot_for_plan_gu(
+			plan,
+			ORIGIN_GROUND_GU + axis_ground_gu * 1.501,
+			0.0,
+			coordinate_context
+		) == 2)
+		assert(Geometry.target_aligned_thrust_slot_for_plan_gu(
+			plan,
+			ORIGIN_GROUND_GU + axis_ground_gu * 1.60,
+			0.25,
+			coordinate_context
+		) == 1, "a monster footprint crossing 1.5 GU must remain primary-first")
+		assert(Geometry.target_aligned_thrust_slot_for_plan_gu(
+			plan,
+			ORIGIN_GROUND_GU + axis_ground_gu * 1.751,
+			0.25,
+			coordinate_context
+		) == 2, "a monster footprint fully beyond 1.5 GU must enter slot 2")
+		effect.free()
+
+
+func _verify_all_thrust_pixels_fit_outer_band(
+	source_image: Image,
+	source_row: int,
+	alignment: Dictionary
+) -> void:
+	var basis := Transform2D(
+		Vector2(alignment.get("basis_x_screen_px", Vector2.RIGHT)),
+		Vector2(alignment.get("basis_y_screen_px", Vector2.DOWN)),
+		Vector2(alignment.get("origin_screen_offset_px", Vector2.ZERO))
+	)
+	var target_start := Vector2(alignment.get(
+		"target_start_center_screen_offset_px", Vector2.ZERO
+	))
+	var target_end := Vector2(alignment.get(
+		"target_end_center_screen_offset_px", Vector2.ZERO
+	))
+	var target_forward := target_end - target_start
+	var target_side := Vector2(alignment.get(
+		"target_side_screen_px", Vector2.ZERO
+	))
+	var determinant := (
+		target_forward.x * target_side.y
+		- target_side.x * target_forward.y
+	)
+	assert(absf(determinant) > 0.000001)
+	var minimum_u := INF
+	var maximum_u := -INF
+	var minimum_v := INF
+	var maximum_v := -INF
+	for frame_index: int in range(6):
+		var cell_origin := Vector2i(frame_index * 288, source_row * 224)
+		var cell_image := source_image.get_region(Rect2i(cell_origin, Vector2i(288, 224)))
+		var used_rect := cell_image.get_used_rect()
+		for pixel_y: int in range(used_rect.position.y, used_rect.end.y):
+			for pixel_x: int in range(used_rect.position.x, used_rect.end.x):
+				if cell_image.get_pixel(pixel_x, pixel_y).a <= 0.0:
+					continue
+				var transformed := basis * Vector2(pixel_x, pixel_y)
+				var relative := transformed - target_start
+				var u := (
+					target_side.y * relative.x
+					- target_side.x * relative.y
+				) / determinant
+				var v := (
+					-target_forward.y * relative.x
+					+ target_forward.x * relative.y
+				) / determinant
+				minimum_u = minf(minimum_u, u)
+				maximum_u = maxf(maximum_u, u)
+				minimum_v = minf(minimum_v, v)
+				maximum_v = maxf(maximum_v, v)
+	assert(minimum_u >= -0.0005 and maximum_u <= 1.0005)
+	assert(minimum_v >= -0.5005 and maximum_v <= 0.5005)
+	assert(absf(minimum_u) <= 0.0005 and absf(maximum_u - 1.0) <= 0.0005)
+	assert(absf(minimum_v + 0.5) <= 0.0005 and absf(maximum_v - 0.5) <= 0.0005)
+
+
+func _verify_thrust_continuous_angle_client_alignment() -> void:
+	var coordinate_context := _iso_absolute_context()
+	for sample_index: int in range(144):
+		var axis_ground_gu := Vector2.from_angle(
+			TAU * float(sample_index) / 144.0
+		)
+		var plan := Geometry.target_aligned_melee_release_plan_ground_gu(
+			_release_geometry(ORIGIN_GROUND_GU + axis_ground_gu * 2.0),
+			Geometry.SKILL_THRUST,
+			coordinate_context
+		)
+		var snapshot := plan.get("skill_footprint_snapshot") as Dictionary
+		var visual_direction_index := int(plan.get("visual_direction_index", -1))
+		var source_row := posmod(visual_direction_index + 4, 8)
+		var alignment := Visual.thrust_client_effect_alignment_descriptor(
+			snapshot,
+			source_row,
+			coordinate_context
+		)
+		assert(not alignment.is_empty())
+		var transform := Transform2D(
+			Vector2(alignment.get("basis_x_screen_px", Vector2.RIGHT)),
+			Vector2(alignment.get("basis_y_screen_px", Vector2.DOWN)),
+			Vector2(alignment.get("origin_screen_offset_px", Vector2.ZERO))
+		)
+		var bounds: Vector4 = alignment.get(
+			"source_bounds_ground_basis", Vector4.ZERO
+		)
+		var source_direction := Geometry.canonical_ground_direction_gu(
+			visual_direction_index
+		)
+		var source_side := Vector2(-source_direction.y, source_direction.x)
+		var source_origin := Vector2(alignment.get(
+			"source_origin_px", Vector2.ZERO
+		))
+		var source_corners := [
+			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				source_direction * bounds.x + source_side * bounds.z
+			),
+			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				source_direction * bounds.x + source_side * bounds.w
+			),
+			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				source_direction * bounds.y + source_side * bounds.w
+			),
+			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				source_direction * bounds.y + source_side * bounds.z
+			),
+		]
+		var target_quad := Snapshot.projected_polygon_screen_offset_px(snapshot)
+		var expected_target_order := [
+			target_quad[3],
+			target_quad[0],
+			target_quad[1],
+			target_quad[2],
+		]
+		for corner_index: int in range(4):
+			assert((transform * source_corners[corner_index]).distance_to(
+				expected_target_order[corner_index]
+			) <= 0.01)
 
 
 func _verify_fail_closed_without_valid_snapshot() -> void:
@@ -242,6 +482,24 @@ func _absolute_context(origin_ground_gu: Vector2) -> Dictionary:
 		origin_ground_gu,
 		origin_ground_gu,
 		Callable(self, "_ground_gu_to_screen_px")
+	)
+
+
+func _iso_absolute_context() -> Dictionary:
+	return Snapshot.make_absolute_runtime_context(
+		MAP_ID,
+		ORIGIN_GROUND_GU,
+		ORIGIN_GROUND_GU,
+		Callable(self, "_iso_ground_gu_to_screen_px")
+	)
+
+
+func _iso_ground_gu_to_screen_px(ground_gu: Vector2) -> Vector2:
+	return (
+		ISO_ORIGIN_SCREEN_PX
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			ground_gu - ORIGIN_GROUND_GU
+		)
 	)
 
 

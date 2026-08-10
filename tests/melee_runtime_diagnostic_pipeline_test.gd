@@ -184,6 +184,17 @@ func _run() -> void:
 	)
 	var footprint_snapshot_id := str(snapshot_payload.get("snapshot_id", ""))
 	assert(not footprint_snapshot_id.is_empty())
+	var thrust_client_effect := game.player.visual.get_node(
+		"ClientSkillEffect"
+	) as Sprite2D
+	assert(
+		thrust_client_effect.visible,
+		"valid thrust release did not reveal the snapshot-aligned client effect"
+	)
+	var thrust_alignment: Dictionary = game.player.visual.get(
+		"_thrust_client_effect_alignment"
+	)
+	assert(str(thrust_alignment.get("snapshot_id", "")) == footprint_snapshot_id)
 	assert(
 		_has_target_aligned_visual(footprint_snapshot_id),
 		"footprint edge hit committed damage but did not present the same-snapshot thrust band"
