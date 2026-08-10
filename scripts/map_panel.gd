@@ -82,13 +82,6 @@ func _build_modal_surface() -> void:
 	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
-	var surface_style := StyleBoxFlat.new()
-	surface_style.bg_color = Color("28231f")
-	surface_style.corner_radius_top_left = 10
-	surface_style.corner_radius_top_right = 10
-	surface_style.corner_radius_bottom_left = 10
-	surface_style.corner_radius_bottom_right = 10
-	surface.add_theme_stylebox_override("panel", surface_style)
 	add_child(surface)
 
 
@@ -534,13 +527,6 @@ func _framed_section(node_name: String, rect: Rect2) -> Panel:
 	surface.size = adjusted_rect.size - Vector2(16, 16)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
-	var section_style := StyleBoxFlat.new()
-	section_style.bg_color = Color("28231f")
-	section_style.corner_radius_top_left = 10
-	section_style.corner_radius_top_right = 10
-	section_style.corner_radius_bottom_left = 10
-	section_style.corner_radius_bottom_right = 10
-	surface.add_theme_stylebox_override("panel", section_style)
 	add_child(surface)
 	var frame := Panel.new()
 	frame.name = node_name
