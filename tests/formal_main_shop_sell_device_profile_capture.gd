@@ -60,6 +60,7 @@ func _ready() -> void:
 	var geometry := {
 		"profile": "HardCore.android.device_ui.v1",
 		"source": "res://scenes/main.tscn",
+		"head": OS.get_environment("DEVICE_PROFILE_HEAD"),
 		"mode": "sell",
 		"physical_size": [int(PROFILE_PHYSICAL.x), int(PROFILE_PHYSICAL.y)],
 		"logical_viewport": [logical.x, logical.y],
