@@ -33,7 +33,7 @@ func _run() -> void:
 
 func _verify_dual_quote_single_transaction() -> void:
 	var defense := Loader.skill("taoist.defense")
-	var resources := {"mana": 999, "materials": {"amulet": 999}}
+	var resources := {"mana": 999, "materials": {}}
 	var dual_context := {
 		"dual_defense_context": {
 			"partner_skill_id": "taoist.magic_defense",
@@ -46,6 +46,9 @@ func _verify_dual_quote_single_transaction() -> void:
 	assert(quote.valid)
 	assert(quote.mp_cost == 28)
 	assert(quote.dual_defense)
+	assert(quote.material_free)
+	assert(quote.material_id == "" and quote.material_amount == 0)
+	assert(quote.material_policy_contract_id == "skills.taoist.material_free.v1")
 	assert(quote.combined_cast_contract_id == DUAL_DEFENSE_CONTRACT_ID)
 	assert(quote.combined_skill_ids == ["taoist.magic_defense", "taoist.defense"])
 	assert(quote.mp_components.size() == 2)
@@ -55,10 +58,11 @@ func _verify_dual_quote_single_transaction() -> void:
 	assert(quote.mp_components[1].rank == 5 and quote.mp_components[1].mp_cost == 12)
 	var committed := ResourceService.committed_context(resources, quote)
 	assert(committed.mana == 999 - 28)
+	assert(committed.materials.is_empty())
 	var insufficient := ResourceService.quote(
 		defense,
 		5,
-		{"mana": 27, "materials": {"amulet": 999}},
+		{"mana": 27, "materials": {}},
 		dual_context
 	)
 	assert(not insufficient.valid and insufficient.reason == "insufficient_mana")
@@ -67,7 +71,7 @@ func _verify_dual_quote_single_transaction() -> void:
 
 func _verify_dual_quote_invalid_partner() -> void:
 	var defense := Loader.skill("taoist.defense")
-	var resources := {"mana": 999, "materials": {"amulet": 999}}
+	var resources := {"mana": 999, "materials": {}}
 	var bogus := ResourceService.quote(
 		defense,
 		5,
@@ -198,7 +202,7 @@ func _verify_canonical_support_metadata_survival() -> void:
 		Vector2i.ZERO,
 		Vector2i.DOWN,
 		heal_context,
-		{"mana": 999, "materials": {"amulet": 999}},
+		{"mana": 999, "materials": {}},
 		23
 	)
 	var fallback_target := Node2D.new()
@@ -289,6 +293,6 @@ func _request(skill_id: String, context: Dictionary, rank: int) -> Dictionary:
 		Vector2i.ZERO,
 		Vector2i.DOWN,
 		context,
-		{"mana": 999, "materials": {"amulet": 999}},
+		{"mana": 999, "materials": {}},
 		31
 	)

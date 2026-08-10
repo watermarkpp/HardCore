@@ -58,7 +58,7 @@ func _run() -> void:
 
 	PlayerState.select_profession("道士")
 	PlayerState.learned_skills = {"施毒术": 3}
-	PlayerState.inventory = [{"name": "灰色药粉", "count": 5}]
+	PlayerState.inventory = []
 	PlayerState.recalculate_stats()
 	_caster.current_mp = 500
 	_game._set_magic_locked_target(_target, true)
@@ -83,11 +83,8 @@ func _run() -> void:
 	var poison_material_amount := int(
 		poison_plan.get("resource_cost", {}).get("material_amount", 0)
 	)
-	assert(poison_material_amount > 0, "dual poison must quote powder consumption")
-	assert(
-		PlayerState.item_count("灰色药粉") == 5 - poison_material_amount,
-		"dual poison powder must be committed exactly once"
-	)
+	assert(poison_material_amount == 0, "dual poison must not quote cast materials")
+	assert(PlayerState.inventory.is_empty(), "dual poison must not consume cast materials")
 	assert(
 		Plan.sentinel_diagnostics().resource_commit_count == 1,
 		"poison resource_commit_count must be exactly 1"
@@ -97,7 +94,27 @@ func _run() -> void:
 	assert(str(poison_actions[0].get("poison_type", "")) == "green_poison")
 	assert(str(poison_actions[1].get("poison_type", "")) == "red_poison")
 	assert(_target.poison_time > 0.0, "green poison must reach the production target")
+	assert(is_equal_approx(_target.poison_tick_interval_seconds, 2.0), "green poison production tick interval must be 2 seconds")
 	assert(_target.has_meta("canonical_red_poison"), "red poison must reach the production target")
+	var strong_red: Dictionary = _target.get_meta("canonical_red_poison", {}).duplicate(true)
+	assert(strong_red.contract_id == "buff.taoist.red_poison.v1")
+	assert(strong_red.has("flat_ac_reduction") and strong_red.has("flat_mac_reduction"))
+	assert(strong_red.has("extra_durability_loss_per_hit"))
+	_game._apply_canonical_poison(_target, {
+		"poison_type": "red_poison",
+		"duration_seconds": 0.1,
+		"flat_ac_reduction": 0,
+		"flat_mac_reduction": 0,
+		"extra_durability_loss_per_hit": 0,
+		"stacking_policy": "same_type_refresh_duration",
+	})
+	var merged_red: Dictionary = _target.get_meta("canonical_red_poison", {})
+	assert(merged_red.contract_id == "buff.taoist.red_poison.v1")
+	assert(merged_red.flat_ac_reduction == strong_red.flat_ac_reduction)
+	assert(merged_red.flat_mac_reduction == strong_red.flat_mac_reduction)
+	assert(merged_red.flat_reduction == strong_red.flat_reduction)
+	assert(merged_red.extra_durability_loss_per_hit == strong_red.extra_durability_loss_per_hit)
+	assert(merged_red.expires_at_ms >= strong_red.expires_at_ms)
 	await get_tree().process_frame
 	print(
 		"SKILL_PRODUCTION_SINGLE_COMMIT_PASS fire_wall_mp=%d poison_mp=%d material=%d"

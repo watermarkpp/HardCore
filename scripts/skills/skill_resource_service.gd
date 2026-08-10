@@ -9,6 +9,7 @@ const SkillDataLoaderScript := preload(
 )
 
 const MATERIAL_FREE_PROFESSION := "taoist"
+const TAOIST_MATERIAL_FREE_CONTRACT_ID := "skills.taoist.material_free.v1"
 const DOUBLE_MP_SKILL_ID := "taoist.poison"
 const DUAL_DEFENSE_CAST_CONTRACT_ID := "skills.taoist.dual_defense_cast.v1"
 const DEFENSE_SKILL_IDS := {
@@ -103,6 +104,9 @@ static func _quote_single(
 		if not amounts.is_empty()
 		else 0
 	)
+	if material_free:
+		item = null
+		item_amount = 0
 	if (
 		str(definition.get("mechanics", {}).get("runtime_family", "")) == "persistent_main_pet"
 		and bool(cast_context.get("has_main_pet", false))
@@ -110,13 +114,33 @@ static func _quote_single(
 		item_amount = 0
 	var materials: Dictionary = resource_context.get("materials", {})
 	var selected_item := str(resource_context.get("selected_material", item if item != null else ""))
+	if material_free:
+		selected_item = ""
 	if item != null and str(item) == "selected_poison_powder" and selected_item not in ["grey_powder", "yellow_powder"]:
-		return {"valid": false, "reason": "selected_poison_powder", "mp_cost": mp_cost}
+		return {
+			"valid": false,
+			"reason": "selected_poison_powder",
+			"mp_cost": mp_cost,
+			"material_free": material_free,
+			"material_policy_contract_id": (
+				TAOIST_MATERIAL_FREE_CONTRACT_ID if material_free else ""
+			),
+		}
 	if (
 		not skip_mana_check
 		and int(resource_context.get("mana", 0)) < mp_cost
 	):
-		return {"valid": false, "reason": "insufficient_mana", "mp_cost": mp_cost}
+		return {
+			"valid": false,
+			"reason": "insufficient_mana",
+			"mp_cost": mp_cost,
+			"material_id": "" if material_free else selected_item,
+			"material_amount": 0 if material_free else item_amount,
+			"material_free": material_free,
+			"material_policy_contract_id": (
+				TAOIST_MATERIAL_FREE_CONTRACT_ID if material_free else ""
+			),
+		}
 	if item != null and item_amount > 0 and int(materials.get(selected_item, 0)) < item_amount:
 		return {
 			"valid": false,
@@ -124,6 +148,8 @@ static func _quote_single(
 			"material_id": selected_item,
 			"material_amount": item_amount,
 			"mp_cost": mp_cost,
+			"material_free": false,
+			"material_policy_contract_id": "",
 		}
 	return {
 		"valid": true,
@@ -132,6 +158,10 @@ static func _quote_single(
 		"material_id": selected_item,
 		"material_amount": item_amount,
 		"consume_timing": str(resource.get("consume_timing", resource.get("mp_consume_timing", ""))),
+		"material_free": material_free,
+		"material_policy_contract_id": (
+			TAOIST_MATERIAL_FREE_CONTRACT_ID if material_free else ""
+		),
 	}
 
 
@@ -209,6 +239,8 @@ static func _quote_dual_defense(
 		"combined_cast_contract_id": DUAL_DEFENSE_CAST_CONTRACT_ID,
 		"combined_skill_ids": DUAL_DEFENSE_COMBINED_SKILL_IDS.duplicate(),
 		"mp_components": components,
+		"material_free": true,
+		"material_policy_contract_id": TAOIST_MATERIAL_FREE_CONTRACT_ID,
 	}
 
 
@@ -224,4 +256,6 @@ static func _invalid_dual_quote(reason: String) -> Dictionary:
 		"combined_cast_contract_id": DUAL_DEFENSE_CAST_CONTRACT_ID,
 		"combined_skill_ids": [],
 		"mp_components": [],
+		"material_free": true,
+		"material_policy_contract_id": TAOIST_MATERIAL_FREE_CONTRACT_ID,
 	}

@@ -152,8 +152,7 @@ func _plan(skill_id: String, context: Dictionary) -> Dictionary:
 		context,
 		{
 			"mana": 999,
-			"materials": {"amulet": 999, "grey_powder": 999, "yellow_powder": 999},
-			"selected_material": "amulet",
+			"materials": {},
 		},
 		23
 	)

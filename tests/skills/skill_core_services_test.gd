@@ -32,6 +32,11 @@ func _ready() -> void:
 	assert(poison_quote.valid)
 	assert(poison_quote.mp_cost == int(poison.get("mp_cost_by_rank", [])[0]) * 2)
 	assert(poison_quote.material_amount == 0 and poison_quote.material_id == "")
+	assert(poison_quote.material_free)
+	assert(
+		poison_quote.material_policy_contract_id
+		== ResourceService.TAOIST_MATERIAL_FREE_CONTRACT_ID
+	)
 	for skill_id: String in Loader.skill_ids():
 		var definition := Loader.skill(skill_id)
 		if str(definition.get("class", "")) != "taoist":
@@ -39,6 +44,11 @@ func _ready() -> void:
 		var quote := ResourceService.quote(definition, 3, {"mana": 999, "materials": {}})
 		assert(quote.valid, "%s should not require cast materials" % skill_id)
 		assert(quote.material_amount == 0 and quote.material_id == "")
+		assert(quote.material_free)
+		assert(
+			quote.material_policy_contract_id
+			== ResourceService.TAOIST_MATERIAL_FREE_CONTRACT_ID
+		)
 	var synthetic_wizard_material := {
 		"class": "wizard",
 		"skill_id": "wizard.material_policy_probe",

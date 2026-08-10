@@ -19,8 +19,11 @@ const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joyst
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
 const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
+const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
+const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
+const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
@@ -131,6 +134,10 @@ var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
 var taoist_buff_hint_label: Label
+var taoist_ac_buff_icon: TextureRect
+var taoist_ac_buff_seconds: Label
+var taoist_mac_buff_icon: TextureRect
+var taoist_mac_buff_seconds: Label
 var hud_item_buttons: Array[Button] = []
 var item_quick_slots: Array[String] = ["", "", "", ""]
 var item_quick_slot_icons: Array[TextureRect] = []
@@ -369,6 +376,23 @@ func _build_bottom_chassis(root: Control) -> void:
 	health_orb.liquid_color = Color("a51422")
 	chassis_root.add_child(health_orb)
 
+	taoist_ac_buff_icon = _build_taoist_defence_buff_icon(
+		chassis_root,
+		"TaoistACBuffIcon",
+		"hud.taoist_buff.ac",
+		TaoistDefenseBuffTexture,
+		health_orb.position + Vector2(26, -28)
+	)
+	taoist_ac_buff_seconds = taoist_ac_buff_icon.get_node("Seconds") as Label
+	taoist_mac_buff_icon = _build_taoist_defence_buff_icon(
+		chassis_root,
+		"TaoistMACBuffIcon",
+		"hud.taoist_buff.mac",
+		TaoistMagicDefenseBuffTexture,
+		health_orb.position + Vector2(58, -28)
+	)
+	taoist_mac_buff_seconds = taoist_mac_buff_icon.get_node("Seconds") as Label
+
 	taoist_buff_hint_label = Label.new()
 	taoist_buff_hint_label.name = "TaoistBuffHint"
 	taoist_buff_hint_label.position = (
@@ -464,6 +488,41 @@ func _build_bottom_chassis(root: Control) -> void:
 		quick_count.visible = false
 		item_button.add_child(quick_count)
 		item_quick_slot_count_labels.append(quick_count)
+
+
+func _build_taoist_defence_buff_icon(
+	parent: Control,
+	node_name: String,
+	stable_id: String,
+	texture: Texture2D,
+	icon_position: Vector2
+) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.name = node_name
+	icon.position = icon_position
+	icon.size = TAOIST_BUFF_ICON_SIZE
+	icon.texture = texture
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.visible = false
+	icon.set_meta("stable_id", stable_id)
+	parent.add_child(icon)
+	var seconds := Label.new()
+	seconds.name = "Seconds"
+	seconds.position = Vector2(8, 13)
+	seconds.size = Vector2(22, 14)
+	seconds.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	seconds.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	seconds.add_theme_font_size_override("font_size", 10)
+	seconds.add_theme_color_override("font_color", Color.WHITE)
+	seconds.add_theme_color_override("font_shadow_color", Color.BLACK)
+	seconds.add_theme_constant_override("shadow_offset_x", 1)
+	seconds.add_theme_constant_override("shadow_offset_y", 1)
+	seconds.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.add_child(seconds)
+	return icon
 
 
 func _build_item_quick_slot_menu() -> void:
@@ -1346,11 +1405,40 @@ func update_resources(current_hp: int, max_hp: int, current_mp: int, max_mp: int
 		mana_orb.call("set_values", current_mp, max_mp)
 
 
-func update_taoist_buff_hints(entries: Array) -> void:
+func update_taoist_buff_hints(entries: Array, defence_snapshot := {}) -> void:
 	if taoist_buff_hint_label == null:
 		return
 	taoist_buff_hint_label.visible = not entries.is_empty()
 	taoist_buff_hint_label.text = "｜".join(entries)
+	var snapshot: Dictionary = (
+		defence_snapshot as Dictionary
+		if defence_snapshot is Dictionary
+		else {}
+	)
+	_update_taoist_defence_buff_icon(
+		taoist_ac_buff_icon,
+		taoist_ac_buff_seconds,
+		int(snapshot.get("ac_bonus", 0)),
+		float(snapshot.get("ac_remaining_seconds", 0.0))
+	)
+	_update_taoist_defence_buff_icon(
+		taoist_mac_buff_icon,
+		taoist_mac_buff_seconds,
+		int(snapshot.get("mac_bonus", 0)),
+		float(snapshot.get("mac_remaining_seconds", 0.0))
+	)
+
+
+func _update_taoist_defence_buff_icon(
+	icon: TextureRect,
+	seconds_label: Label,
+	bonus: int,
+	remaining_seconds: float
+) -> void:
+	if icon == null or seconds_label == null:
+		return
+	icon.visible = bonus > 0 and remaining_seconds > 0.0
+	seconds_label.text = str(maxi(0, int(ceil(remaining_seconds))))
 
 
 func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true) -> void:

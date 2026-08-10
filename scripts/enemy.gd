@@ -95,6 +95,8 @@ var missing_projection_rejection_count := 0
 var projection_rejection_reason := &""
 var poison_time := 0.0
 var poison_damage := 0
+var poison_tick_interval_seconds := 1.0
+var poison_tick_elapsed_seconds := 0.0
 var control_time := 0.0:
 	set(value):
 		if value > 0.0 and control_time <= 0.0:
@@ -1330,9 +1332,14 @@ func _finish_death_after_animation() -> void:
 		queue_free()
 
 
-func apply_poison(tick_damage: int, seconds: float) -> void:
+func apply_poison(
+	tick_damage: int,
+	seconds: float,
+	interval_seconds := 1.0
+) -> void:
 	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
 	poison_time = maxf(poison_time, seconds)
+	poison_tick_interval_seconds = maxf(0.01, float(interval_seconds))
 	queue_redraw()
 
 
@@ -1367,7 +1374,9 @@ func canonical_red_poison_active() -> bool:
 
 func _update_status_effects(delta: float) -> void:
 	var had_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
-	var previous_poison_second := int(ceil(poison_time))
+	var poison_active_delta := minf(maxf(0.0, delta), poison_time)
+	if poison_active_delta > 0.0:
+		poison_tick_elapsed_seconds += poison_active_delta
 	poison_time = maxf(0.0, poison_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	charm_time = maxf(0.0, charm_time - delta)
@@ -1376,8 +1385,16 @@ func _update_status_effects(delta: float) -> void:
 		if _boss_rage_time <= 0.0:
 			move_speed_gu_per_sec = _boss_base_move_speed_gu_per_sec
 			_attack_interval = _boss_base_attack_interval
-	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
+	while poison_tick_elapsed_seconds + 0.000001 >= poison_tick_interval_seconds:
+		poison_tick_elapsed_seconds = maxf(
+			0.0,
+			poison_tick_elapsed_seconds - poison_tick_interval_seconds
+		)
 		take_damage(poison_damage)
+	if poison_time <= 0.0:
+		poison_damage = 0
+		poison_tick_interval_seconds = 1.0
+		poison_tick_elapsed_seconds = 0.0
 	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	if had_visible_status != has_visible_status:
 		queue_redraw()
@@ -1565,7 +1582,7 @@ func _draw() -> void:
 		## visible under the HP bar.
 		var red_anchor := Vector2(
 			-8.0,
-			poison_indicator_anchor_y() + 8.0
+			red_poison_indicator_anchor_y()
 		)
 		for index in range(3):
 			var center := red_anchor + Vector2(
@@ -1688,7 +1705,19 @@ func _refresh_overhead_health() -> void:
 
 
 func poison_indicator_anchor_y() -> float:
-	return health_bar_anchor_y() - 8.0
+	return health_bar_anchor_y() + MonsterOverheadScript.HEALTH_BAR_HEIGHT + 5.0
+
+
+func red_poison_indicator_anchor_y() -> float:
+	return poison_indicator_anchor_y() + 10.0
+
+
+func poison_indicator_rect() -> Rect2:
+	return Rect2(-11.0, poison_indicator_anchor_y() - 3.0, 22.0, 8.0)
+
+
+func red_poison_indicator_rect() -> Rect2:
+	return Rect2(-11.0, red_poison_indicator_anchor_y() - 3.0, 22.0, 8.0)
 
 
 func ground_indicator_center() -> Vector2:

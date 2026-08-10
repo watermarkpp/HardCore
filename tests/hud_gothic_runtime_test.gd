@@ -49,6 +49,42 @@ func _run() -> void:
 	var mana_orb := chassis.get_node("ManaOrb") as Control
 	assert(health_orb != null and mana_orb != null)
 	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
+	var ac_buff_icon := chassis.get_node("TaoistACBuffIcon") as TextureRect
+	var mac_buff_icon := chassis.get_node("TaoistMACBuffIcon") as TextureRect
+	assert(ac_buff_icon != null and mac_buff_icon != null)
+	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
+	assert(ac_buff_icon.size == Vector2(26, 26) and mac_buff_icon.size == Vector2(26, 26))
+	assert(ac_buff_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
+	assert(mac_buff_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
+	assert(ac_buff_icon.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
+	assert(mac_buff_icon.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
+	assert(ac_buff_icon.get_meta("stable_id") == "hud.taoist_buff.ac")
+	assert(mac_buff_icon.get_meta("stable_id") == "hud.taoist_buff.mac")
+	assert(ac_buff_icon.texture.resource_path.ends_with("/defense.png"))
+	assert(mac_buff_icon.texture.resource_path.ends_with("/magic_defense.png"))
+	assert(not ac_buff_icon.get_rect().intersects(mac_buff_icon.get_rect()))
+	hud.update_taoist_buff_hints([], {
+		"ac_bonus": 5,
+		"ac_remaining_seconds": 7.2,
+		"mac_bonus": 4,
+		"mac_remaining_seconds": 3.1,
+	})
+	assert(ac_buff_icon.visible and mac_buff_icon.visible)
+	assert((ac_buff_icon.get_node("Seconds") as Label).text == "8")
+	assert((mac_buff_icon.get_node("Seconds") as Label).text == "4")
+	assert(not hud.taoist_buff_hint_label.visible, "AC/MAC must not remain in the text hint")
+	hud.update_taoist_buff_hints([], {
+		"ac_bonus": 5,
+		"ac_remaining_seconds": 0.0,
+		"mac_bonus": 4,
+		"mac_remaining_seconds": 2.0,
+	})
+	assert(not ac_buff_icon.visible and mac_buff_icon.visible)
+	hud.update_taoist_buff_hints([], {})
+	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
+	hud.update_taoist_buff_hints(["隐身 2s"])
+	assert(hud.taoist_buff_hint_label.visible)
+	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
 	assert(health_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2" and mana_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2")
 	assert(is_equal_approx(float(health_orb.get_meta("liquid_radius_ratio")), 0.49), "血球没有扩大到金属内孔")
 	assert(is_equal_approx(float(mana_orb.get_meta("liquid_radius_ratio")), 0.49), "蓝球没有扩大到金属内孔")

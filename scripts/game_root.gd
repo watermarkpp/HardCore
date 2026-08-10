@@ -6511,14 +6511,48 @@ func _apply_canonical_player_teleport(destination: Vector2) -> bool:
 func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 	var duration := float(effect.get("duration_seconds", 1))
 	if str(effect.get("poison_type", "")) == "green_poison":
-		target.apply_poison(int(effect.get("damage_per_tick", 1)), duration)
+		target.apply_poison(
+			int(effect.get("damage_per_tick", 1)),
+			duration,
+			float(effect.get("tick_interval_ms", 1000)) / 1000.0
+		)
 	else:
-		var reduction := maxi(int(effect.get("flat_ac_reduction", 0)), int(effect.get("flat_mac_reduction", 0)))
-		target.set_meta("canonical_red_poison", {
-			"contract_id": "buff.taoist.red_poison.v1",
-			"flat_reduction": reduction,
-			"expires_at_ms": Time.get_ticks_msec() + roundi(duration * 1000.0),
-		})
+		var previous: Variant = target.get_meta("canonical_red_poison", {})
+		var merged: Dictionary = (
+			(previous as Dictionary).duplicate(true)
+			if previous is Dictionary
+			else {}
+		)
+		for key: Variant in effect:
+			if not merged.has(key):
+				merged[key] = effect[key]
+		var flat_ac := maxi(
+			int(merged.get("flat_ac_reduction", 0)),
+			int(effect.get("flat_ac_reduction", 0))
+		)
+		var flat_mac := maxi(
+			int(merged.get("flat_mac_reduction", 0)),
+			int(effect.get("flat_mac_reduction", 0))
+		)
+		var extra_durability := maxi(
+			int(merged.get("extra_durability_loss_per_hit", 0)),
+			int(effect.get("extra_durability_loss_per_hit", 0))
+		)
+		merged["contract_id"] = "buff.taoist.red_poison.v1"
+		merged["poison_type"] = "red_poison"
+		merged["flat_ac_reduction"] = flat_ac
+		merged["flat_mac_reduction"] = flat_mac
+		merged["flat_reduction"] = maxi(flat_ac, flat_mac)
+		merged["extra_durability_loss_per_hit"] = extra_durability
+		merged["duration_seconds"] = maxf(
+			float(merged.get("duration_seconds", 0.0)),
+			duration
+		)
+		merged["expires_at_ms"] = maxi(
+			int(merged.get("expires_at_ms", 0)),
+			Time.get_ticks_msec() + roundi(duration * 1000.0)
+		)
+		target.set_meta("canonical_red_poison", merged)
 		target.queue_redraw()
 
 
@@ -6653,24 +6687,22 @@ func _update_taoist_buff_hints() -> void:
 		return
 	var entries: Array[String] = []
 	var defence_snapshot := player.defence_buff_snapshot()
-	var ac_bonus := int(defence_snapshot.get("ac_bonus", 0))
-	var ac_remaining := float(defence_snapshot.get("ac_remaining_seconds", 0.0))
-	if ac_bonus > 0:
-		entries.append("AC+%d %ds" % [ac_bonus, int(ceil(ac_remaining))])
-	var mac_bonus := int(defence_snapshot.get("mac_bonus", 0))
-	var mac_remaining := float(defence_snapshot.get("mac_remaining_seconds", 0.0))
-	if mac_bonus > 0:
-		entries.append("MAC+%d %ds" % [mac_bonus, int(ceil(mac_remaining))])
 	if player.is_stealthed():
 		entries.append("隐身 %ds" % int(ceil(maxf(0.0, player.stealth_time))))
 	var heal_ticks := _ongoing_heal_remaining_ticks(player.get_instance_id())
 	if heal_ticks > 0:
 		entries.append("恢复 %ds" % int(ceil(float(heal_ticks) * 0.8)))
-	var hint_text := "｜".join(entries)
+	var hint_text := "%s|%d|%d|%d|%d" % [
+		"｜".join(entries),
+		int(defence_snapshot.get("ac_bonus", 0)),
+		int(ceil(float(defence_snapshot.get("ac_remaining_seconds", 0.0)))),
+		int(defence_snapshot.get("mac_bonus", 0)),
+		int(ceil(float(defence_snapshot.get("mac_remaining_seconds", 0.0)))),
+	]
 	if hint_text == _last_taoist_buff_hint_text:
 		return
 	_last_taoist_buff_hint_text = hint_text
-	hud.update_taoist_buff_hints(entries)
+	hud.update_taoist_buff_hints(entries, defence_snapshot)
 
 
 func _canonical_friendly_candidates() -> Array:

@@ -156,7 +156,7 @@ func _run() -> void:
 
 	PlayerState.profession = "道士"
 	PlayerState.learned_skills = {"召唤神兽": 3}
-	PlayerState.inventory = [{"name": "护身符", "count": 5}]
+	PlayerState.inventory = []
 	PlayerState.recalculate_stats()
 	caster.current_mp = 100
 	var summon_result: Dictionary = game._execute_canonical_skill(
@@ -166,7 +166,19 @@ func _run() -> void:
 		0
 	)
 	assert(bool(summon_result.get("accepted", false)), "召唤神兽canonical真实入口被拒绝")
-	assert(PlayerState.item_count("护身符") == 0, "道士材料适配器未按rank3消耗5张护身符")
+	var summon_resource_cost: Dictionary = summon_result.get(
+		"canonical_plan", {}
+	).get("resource_cost", {})
+	assert(PlayerState.inventory.is_empty(), "召唤神兽不得消耗施法材料")
+	assert(
+		int(summon_resource_cost.get("material_amount", -1)) == 0
+		and str(summon_resource_cost.get("material_id", "invalid")).is_empty(),
+		"召唤神兽canonical计划必须保持道士零材料合同"
+	)
+	assert(
+		str(summon_resource_cost.get("material_policy_contract_id", ""))
+		== "skills.taoist.material_free.v1"
+	)
 	var main_pet: SummonActor = game._canonical_main_pet()
 	assert(main_pet != null and main_pet.skill_id == "taoist.summon_divine_beast", "道士唯一主宠未携带稳定source_skill_id")
 	assert(main_pet._sprite != null, "召唤神兽canonical主宠未加载正式动画")

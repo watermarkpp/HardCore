@@ -90,7 +90,6 @@ const MATRIX := [
 		"learned": {"神圣战甲术": 3},
 		"melee": false,
 		"target": false,
-		"amulet": true,
 		"expect_mp": 8,
 		"spatial": false,
 	},
@@ -101,7 +100,6 @@ const MATRIX := [
 		"learned": {"施毒术": 3},
 		"melee": false,
 		"target": true,
-		"poison": true,
 		"expect_mp": 10,
 		"spatial": true,
 	},
@@ -112,7 +110,6 @@ const MATRIX := [
 		"learned": {"召唤骷髅": 3},
 		"melee": false,
 		"target": false,
-		"amulet": true,
 		"expect_mp": 24,
 		"spatial": true,
 		"summon": true,
@@ -165,15 +162,9 @@ func _matrix_case(row: Dictionary) -> void:
 	var learned: Dictionary = row.get("learned", {})
 	var needs_target := bool(row.get("target", false))
 	var melee := bool(row.get("melee", false))
-	var amulet := bool(row.get("amulet", false))
-	var poison := bool(row.get("poison", false))
 	PlayerState.select_profession(profession)
 	PlayerState.learned_skills = learned.duplicate()
 	PlayerState.inventory = []
-	if amulet:
-		PlayerState.inventory.append({"name": "护身符", "count": 5})
-	if poison:
-		PlayerState.inventory.append({"name": "灰色药粉", "count": 5})
 	PlayerState.recalculate_stats()
 	_caster.current_mp = 500
 	_target.current_hp = _target.max_hp
@@ -281,13 +272,7 @@ func _compare_shadow(
 	plan: Dictionary
 ) -> void:
 	var skill_id := str(row.get("skill", ""))
-	var amulet := bool(row.get("amulet", false))
-	var poison := bool(row.get("poison", false))
 	var resource_context := Fixtures.default_resource_context(500)
-	if poison:
-		resource_context = Fixtures.poison_resource_context(500)
-	elif amulet:
-		resource_context = Fixtures.amulet_resource_context(500)
 	var request := Fixtures.make_request(
 		skill_id,
 		3,
