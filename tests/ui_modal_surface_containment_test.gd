@@ -25,12 +25,13 @@ func _run() -> void:
 		assert(surface != null and Rect2(Vector2.ZERO, panel.size).encloses(surface.get_rect()), "%s modal surface escapes outer frame" % panel.name)
 		for child in panel.get_children():
 			if child.name.ends_with("Panel") and child is Control:
+				var section := child as Control
 				var section_surface := panel.get_node_or_null("%sSurface" % child.name) as Control
 				if section_surface != null:
-					var inset := section_surface.position - child.position
+					var inset: Vector2 = section_surface.position - section.position
 					assert(inset.x >= 8.0 and inset.y >= 8.0)
-					assert(child.size.x - section_surface.size.x - inset.x >= 8.0)
-					assert(child.size.y - section_surface.size.y - inset.y >= 8.0)
+					assert(section.size.x - section_surface.size.x - inset.x >= 8.0)
+					assert(section.size.y - section_surface.size.y - inset.y >= 8.0)
 		panel.queue_free()
 		await get_tree().process_frame
 	var death := DeathPanelScript.new() as Control
