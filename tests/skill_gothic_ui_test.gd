@@ -90,6 +90,10 @@ func _run() -> void:
 			panel.attack_ring_assignment_buttons[index].get_meta("stable_slot_id", "")
 			== "hud.attack_ring_skill.%d" % (index + 1)
 		)
+		var ring_content := panel.attack_ring_assignment_buttons[index].get_node("Content") as Control
+		assert((ring_content.get_node("SlotLabel") as Label).text == "技 %d" % (index + 1))
+		if (ring_content.get_node("SkillName") as Label).text == "空":
+			assert(not (ring_content.get_node("InteractionMode") as Label).visible)
 	assert(panel._skill_interaction_mode("刺杀剑术") == "toggle")
 	assert(panel._skill_interaction_mode("半月弯刀") == "toggle")
 	assert(panel._skill_interaction_mode("烈火剑法") == "toggle")

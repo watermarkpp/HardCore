@@ -256,7 +256,7 @@ func _run() -> void:
 	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 58.0), "摇杆触控区和缩小后的可视半径不匹配")
 	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有向安全区内部移动")
 	assert(hud.warrior_state_label.get_meta("layout_anchor", "") == "chassis_source_center_peak.v1", "战士状态行没有使用底盘中央尖顶锚点")
-	assert(hud.warrior_state_label.get_meta("stable_id", "") == "hud.warrior_state_label.centered.v2")
+	assert(hud.warrior_state_label.get_meta("stable_id", "") == "hud.warrior_state_label.centered.v3")
 	assert((root.get_node("InventoryButton") as Control).position.y > (root.get_node("MapButton") as Control).position.y)
 	assert((root.get_node("SkillBookButton") as Control).position.y > (root.get_node("MenuButton") as Control).position.y)
 	assert((root.get_node("SwitchTargetButton") as Control).position.x > (root.get_node("InteractButton") as Control).position.x)
