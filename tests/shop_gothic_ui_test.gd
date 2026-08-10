@@ -101,7 +101,15 @@ func _run() -> void:
 	assert(row_global.encloses(decrease.get_global_rect()) and row_global.encloses(increase.get_global_rect()))
 	assert(decrease.position.x >= 8.0 and row_global.size.x - (increase.position.x + increase.size.x) >= 8.0)
 	assert(Rect2(Vector2.ZERO, bg.size).encloses(Rect2(panel.sell_quantity_label.position - bg.position, panel.sell_quantity_label.size)))
-	assert(decrease.text == "-" and increase.text == "+")
+	assert(decrease.text.is_empty() and increase.text.is_empty())
+	var minus_bar := decrease.get_node("HorizontalBar") as ColorRect
+	var plus_bar := increase.get_node("HorizontalBar") as ColorRect
+	var plus_vertical := increase.get_node("VerticalBar") as ColorRect
+	assert(minus_bar != null and plus_bar != null and plus_vertical != null)
+	assert(minus_bar.size == plus_bar.size and minus_bar.color == plus_bar.color)
+	assert(absf(minus_bar.get_global_rect().get_center().x - decrease.get_global_rect().get_center().x) <= 0.5)
+	assert(absf(plus_bar.get_global_rect().get_center().x - increase.get_global_rect().get_center().x) <= 0.5)
+	assert(absf(plus_vertical.get_global_rect().get_center().x - increase.get_global_rect().get_center().x) <= 0.5)
 	assert(decrease.get_theme_font_size("font_size") == increase.get_theme_font_size("font_size"))
 	assert(dec.get_meta("atlas_region", Rect2()).size == Vector2(58, 46) and inc.get_meta("atlas_region", Rect2()).size == Vector2(58, 46))
 	assert(absf(decrease.get_global_rect().get_center().y - increase.get_global_rect().get_center().y) <= 1.0)

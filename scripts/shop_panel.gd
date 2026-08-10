@@ -187,13 +187,16 @@ func _build_detail_section() -> void:
 	panel.add_child(sell_quantity_row)
 	var minus_button := Button.new()
 	minus_button.name = "DecreaseQuantity"
-	minus_button.text = "-"
+	minus_button.text = ""
+	minus_button.tooltip_text = "减少出售数量"
+	minus_button.set_meta("quantity_delta", -1)
 	minus_button.add_theme_font_size_override("font_size", 18)
 	minus_button.position = Vector2(8, 0)
 	minus_button.size = Vector2(58, 46)
 	minus_button.theme_type_variation = "GothicTransparentButton"
 	minus_button.clip_contents = true
 	_add_quantity_decoration(minus_button, false)
+	_add_quantity_symbol(minus_button, false)
 	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
 	sell_quantity_row.add_child(minus_button)
 	var quantity_background := Panel.new()
@@ -215,12 +218,15 @@ func _build_detail_section() -> void:
 	var plus_button := Button.new()
 	plus_button.name = "IncreaseQuantity"
 	plus_button.text = "+"
+	plus_button.tooltip_text = "增加出售数量"
+	plus_button.set_meta("quantity_delta", 1)
 	plus_button.add_theme_font_size_override("font_size", 18)
 	plus_button.position = Vector2(260, 0)
 	plus_button.size = Vector2(58, 46)
 	plus_button.theme_type_variation = "GothicTransparentButton"
 	plus_button.clip_contents = true
 	_add_quantity_decoration(plus_button, true)
+	_add_quantity_symbol(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
 	sell_quantity_row.add_child(plus_button)
 	sell_one_button = Button.new()
@@ -263,6 +269,24 @@ func _add_quantity_decoration(button: Button, flip_h: bool) -> void:
 	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	decoration.show_behind_parent = true
 	button.add_child(decoration)
+
+func _add_quantity_symbol(button: Button, plus: bool) -> void:
+	var color := Color("f2c783")
+	var horizontal := ColorRect.new()
+	horizontal.name = "HorizontalBar"
+	horizontal.position = Vector2(22, 21.5)
+	horizontal.size = Vector2(14, 3)
+	horizontal.color = color
+	horizontal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(horizontal)
+	if plus:
+		var vertical := ColorRect.new()
+		vertical.name = "VerticalBar"
+		vertical.position = Vector2(27.5, 16)
+		vertical.size = Vector2(3, 14)
+		vertical.color = color
+		vertical.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(vertical)
 
 
 func _build_compatibility_list() -> void:
