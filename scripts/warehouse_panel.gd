@@ -8,8 +8,8 @@ signal closed
 signal warehouse_sort_requested
 
 const PANEL_SIZE := Vector2(1164, 660)
-const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
-const SECTION_VERTICAL_SHIFT := 24.0
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 52)
+const SECTION_VERTICAL_SHIFT := 48.0
 const BAG_CAPACITY := 100
 const WAREHOUSE_PAGE_CAPACITY := 100
 const WAREHOUSE_PAGE_COUNT := 5
@@ -104,7 +104,7 @@ func _build_header() -> void:
 
 
 func _build_storage_sections() -> void:
-	var stash_panel := _section_panel("StashSection", Rect2(20, 72, 492, 566))
+	var stash_panel := _section_panel("StashSection", Rect2(20, 72, 492, 542))
 	stash_panel.add_child(_section_title("个人仓库", 492))
 	stash_grid = _build_item_grid(stash_panel, "StashScroll", "StashGrid")
 	stash_panel.add_child(_paging_hint("StashPagingHint", "每页 100 格　·　下拉查看本页后 60 格"))
@@ -112,7 +112,7 @@ func _build_storage_sections() -> void:
 	stash_summary_label = _summary_label("StashSummary")
 	stash_panel.add_child(stash_summary_label)
 
-	var transfer_panel := _section_panel("TransferSection", Rect2(520, 72, 124, 566))
+	var transfer_panel := _section_panel("TransferSection", Rect2(520, 72, 124, 542))
 	transfer_panel.add_child(_section_title("转移", 124))
 	transfer_detail_label = Label.new()
 	transfer_detail_label.name = "TransferDetail"
@@ -139,7 +139,7 @@ func _build_storage_sections() -> void:
 	sort_button.pressed.connect(func() -> void: warehouse_sort_requested.emit())
 	transfer_panel.add_child(sort_button)
 
-	var bag_panel := _section_panel("BagSection", Rect2(652, 72, 492, 566))
+	var bag_panel := _section_panel("BagSection", Rect2(652, 72, 492, 542))
 	bag_panel.add_child(_section_title("人物背包", 492))
 	bag_grid = _build_item_grid(bag_panel, "BagScroll", "BagGrid")
 	bag_panel.add_child(_paging_hint("BagPagingHint", "首屏 40 格　·　下拉查看 41–100 格"))
