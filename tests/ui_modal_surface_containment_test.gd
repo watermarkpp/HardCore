@@ -23,6 +23,7 @@ func _run() -> void:
 		await get_tree().process_frame
 		var surface := panel.get_node("ModalSurface") as Control
 		assert(surface != null and Rect2(Vector2.ZERO, panel.size).encloses(surface.get_rect()), "%s modal surface escapes outer frame" % panel.name)
+		assert(surface.get_theme_stylebox("panel").bg_color != Color.BLACK)
 		var outer_gap := surface.position.y + surface.size.y
 		for child in panel.get_children():
 			if child is Control and child.name.ends_with("Panel"):
@@ -32,6 +33,7 @@ func _run() -> void:
 				var section := child as Control
 				var section_surface := panel.get_node_or_null("%sSurface" % child.name) as Control
 				if section_surface != null:
+					assert(section_surface.get_theme_stylebox("panel").bg_color != Color.BLACK)
 					var inset: Vector2 = section_surface.position - section.position
 					assert(inset.x >= 8.0 and inset.y >= 8.0)
 					assert(section.size.x - section_surface.size.x - inset.x >= 8.0)
