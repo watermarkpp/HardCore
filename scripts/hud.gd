@@ -897,7 +897,34 @@ func _popup_item_quick_slot_picker(button: Button, content_size: Vector2) -> voi
 	item_quick_slot_menu.popup(Rect2i(Vector2i(popup_position.round()), Vector2i(popup_size.round())))
 	item_quick_slot_menu.position = Vector2i(popup_position.round())
 	item_quick_slot_menu.size = Vector2i(popup_size.round())
+	# PopupPanel may reconcile its minimum size after popup() once the themed
+	# panel margins are applied. Re-anchor from the final control rect so the
+	# visible frame remains centered on the held slot and the scroll margins stay
+	# symmetric even when that reconciliation changes width or height.
+	_recenter_item_quick_slot_picker.call_deferred(button)
 	_scroll_item_quick_slot_menu_to_bottom.call_deferred()
+
+
+func _recenter_item_quick_slot_picker(button: Button) -> void:
+	if item_quick_slot_menu == null or not item_quick_slot_menu.visible or button == null:
+		return
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root == null:
+		return
+	var safe_rect := Rect2(safe_root.get_screen_position(), safe_root.size)
+	var slot_rect := Rect2(button.get_screen_position(), button.size)
+	var final_size := Vector2(item_quick_slot_menu.size)
+	if final_size.x <= 0.0 or final_size.y <= 0.0:
+		return
+	var final_position := Vector2(
+		slot_rect.get_center().x - final_size.x * 0.5,
+		slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - final_size.y,
+	)
+	final_position.x = clampf(final_position.x, safe_rect.position.x, safe_rect.end.x - final_size.x)
+	final_position.y = maxf(final_position.y, safe_rect.position.y)
+	item_quick_slot_menu.position = Vector2i(final_position.round())
+	_item_quick_slot_menu_scroll.position = Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING
+	_item_quick_slot_menu_scroll.size = final_size - Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING * 2.0
 
 
 func _scroll_item_quick_slot_menu_to_bottom() -> void:
