@@ -17,6 +17,7 @@ func _run() -> void:
 	root.size = Vector2(1920, 1080)
 	viewport.add_child(root)
 	add_child(viewport)
+	var section_content_violations: Array[String] = []
 	for script in [InventoryPanelScript, MapPanelScript, SkillPanelScript, WarehousePanelScript]:
 		var panel := script.new() as Control
 		root.add_child(panel)
@@ -31,6 +32,12 @@ func _run() -> void:
 		for child in panel.get_children():
 			if child.name.ends_with("Panel") and child is Control:
 				var section := child as Control
+				var section_bounds := Rect2(Vector2.ZERO, section.size)
+				for section_child in section.get_children():
+					if section_child is Control:
+						var content_rect := (section_child as Control).get_rect()
+						if not section_bounds.encloses(content_rect) or section.size.y - content_rect.end.y < 8.0:
+							section_content_violations.append("%s/%s=%s within %s" % [section.name, section_child.name, (section_child as Control).get_rect(), section_bounds])
 				var section_surface := panel.get_node_or_null("%sSurface" % child.name) as Control
 				if section_surface != null:
 					assert(section_surface.get_theme_stylebox("panel").bg_color == Color("28231f"))
@@ -40,6 +47,7 @@ func _run() -> void:
 					assert(section.size.y - section_surface.size.y - inset.y >= 8.0)
 		panel.queue_free()
 		await get_tree().process_frame
+	assert(section_content_violations.is_empty(), "section content escapes: %s" % [section_content_violations])
 	var death := DeathPanelScript.new() as Control
 	root.add_child(death)
 	await get_tree().process_frame

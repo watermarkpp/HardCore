@@ -147,7 +147,7 @@ func _build_skill_list_section() -> void:
 	scroll.add_child(skill_list_container)
 	skill_count_label = Label.new()
 	skill_count_label.name = "SkillCount"
-	skill_count_label.position = Vector2(18, 500)
+	skill_count_label.position = Vector2(18, 490)
 	skill_count_label.size = Vector2(274, 26)
 	skill_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -276,7 +276,7 @@ func _build_assignment_section() -> void:
 		var clear_button := Button.new()
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
 		clear_button.text = "清空 %d" % (slot_index + 1)
-		clear_button.position = button.position + Vector2(0, 82)
+		clear_button.position = button.position + Vector2(0, 79)
 		clear_button.size = Vector2(126, 40)
 		clear_button.theme_type_variation = "GothicComponentButton"
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
@@ -294,7 +294,7 @@ func _build_assignment_section() -> void:
 	## clamping to 320px -> right edge 10px past the parent).
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.theme_type_variation = "GothicMutedLabel"
-	hint.position = Vector2(18, 473)
+	hint.position = Vector2(18, 467)
 	hint.size = Vector2(390, 44)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
