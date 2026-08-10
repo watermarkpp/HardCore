@@ -39,12 +39,14 @@ const RELEASE_VISUAL_LIFETIME_SEC := 0.30
 const THRUST_CLIENT_EFFECT_ALIGNMENT_CONTRACT_ID := (
 	"skills.warrior.thrust.client_effect_snapshot_alignment.v1"
 )
+const THRUST_CLIENT_EFFECT_CROSS_AXIS_SCALE_POLICY := "native_source"
 const THRUST_CLIENT_EFFECT_SOURCE_ORIGIN_PX := Vector2(119.0, 144.0)
 # Union bounds of all six non-transparent long_hit frames, expressed in the
 # projected ground basis of each source row. Row order is the classic client
 # order N, NE, E, SE, S, SW, W, NW. These primary-client measurements let the
-# presentation layer fit the complete animation inside the canonical band
-# without changing the snapshot or gameplay range.
+# presentation layer fit the animation's forward extent to the canonical
+# release while preserving the primary client's native cross-axis thickness.
+# This never changes the snapshot or gameplay range.
 const THRUST_CLIENT_EFFECT_SOURCE_BOUNDS_BY_ROW: Array[Vector4] = [
 	Vector4(-0.486135912, 5.701048423, -0.928077650, 2.010834909),
 	Vector4(-0.156250000, 4.828125000, -2.640625000, 0.812500000),
@@ -119,10 +121,10 @@ static func thrust_client_effect_alignment_descriptor(
 	source_direction_row: int,
 	coordinate_context: Dictionary
 ) -> Dictionary:
-	## Fits the complete six-frame primary-client thrust effect into the exact
-	## projected outer polygon from the immutable gameplay snapshot. The result
-	## is anchor-relative screen presentation data; it never mutates or rebuilds
-	## the canonical geometry.
+	## Fits only the forward extent of the complete six-frame primary-client
+	## thrust effect to the immutable gameplay snapshot. The source cross-axis
+	## projection remains native and is merely centered on the release axis, so
+	## the artwork is not vertically crushed into the one-GU gameplay band.
 	if fail_closed_reason(snapshot, coordinate_context) != "":
 		return {}
 	if (
@@ -192,24 +194,28 @@ static func thrust_client_effect_alignment_descriptor(
 	var target_forward_per_source_gu := (
 		target_forward_px / source_forward_span
 	)
-	var target_side_per_source_gu := target_side_px / source_side_span
+	# Forward length follows the release snapshot. Cross-axis pixels retain the
+	# source projection exactly; changing this back to target_side/span would
+	# crush some direction rows into an almost invisible strip.
+	var native_source_side_per_source_gu := source_side_screen_px
 	var basis_x_screen_px := (
 		target_forward_per_source_gu * source_inverse_x.x
-		+ target_side_per_source_gu * source_inverse_x.y
+		+ native_source_side_per_source_gu * source_inverse_x.y
 	)
 	var basis_y_screen_px := (
 		target_forward_per_source_gu * source_inverse_y.x
-		+ target_side_per_source_gu * source_inverse_y.y
+		+ native_source_side_per_source_gu * source_inverse_y.y
 	)
 	var source_pixel_basis := Transform2D(
 		basis_x_screen_px,
 		basis_y_screen_px,
 		Vector2.ZERO
 	)
+	var source_side_center := (bounds.z + bounds.w) * 0.5
 	var fitted_zero_px := (
 		start_center_px
 		- target_forward_px * (bounds.x / source_forward_span)
-		- target_side_px * (bounds.z / source_side_span + 0.5)
+		- native_source_side_per_source_gu * source_side_center
 	)
 	var origin_screen_offset_px := (
 		fitted_zero_px
@@ -224,6 +230,10 @@ static func thrust_client_effect_alignment_descriptor(
 		"source_direction_index": source_direction_index,
 		"source_origin_px": THRUST_CLIENT_EFFECT_SOURCE_ORIGIN_PX,
 		"source_bounds_ground_basis": bounds,
+		"cross_axis_scale_policy": (
+			THRUST_CLIENT_EFFECT_CROSS_AXIS_SCALE_POLICY
+		),
+		"native_source_side_screen_px": source_side_screen_px,
 		"basis_x_screen_px": basis_x_screen_px,
 		"basis_y_screen_px": basis_y_screen_px,
 		"origin_screen_offset_px": origin_screen_offset_px,

@@ -37,12 +37,6 @@ func _ready() -> void:
 
 
 func _verify_thrust_eight_direction_iso_lengths_and_client_alignment() -> void:
-	var texture := load(
-		"res://assets/art/characters/warrior/effects/long_hit.png"
-	) as Texture2D
-	assert(texture != null)
-	var source_image := texture.get_image()
-	assert(source_image != null and not source_image.is_empty())
 	var expected_lengths_px := [
 		56.568542,
 		89.442719,
@@ -111,18 +105,24 @@ func _verify_thrust_eight_direction_iso_lengths_and_client_alignment() -> void:
 				outer_end
 			) <= Visual.POLYGON_VERTEX_TOLERANCE_PX)
 		var source_row := posmod(direction_index + 4, 8)
+		var frozen_snapshot := snapshot.duplicate(true)
+		var frozen_outer := Snapshot.projected_polygon_screen_offset_px(snapshot)
 		var alignment := Visual.thrust_client_effect_alignment_descriptor(
 			snapshot,
 			source_row,
 			coordinate_context
 		)
 		assert(not alignment.is_empty())
+		assert(snapshot == frozen_snapshot)
+		assert(
+			Snapshot.projected_polygon_screen_offset_px(snapshot)
+			== frozen_outer
+		)
 		assert(bool(alignment.get("same_snapshot_source", false)))
 		assert(str(alignment.get("snapshot_id", "")) == str(
 			snapshot.get("snapshot_id", "")
 		))
-		_verify_all_thrust_pixels_fit_outer_band(
-			source_image,
+		_verify_thrust_forward_fit_and_native_cross_axis(
 			source_row,
 			alignment
 		)
@@ -153,11 +153,14 @@ func _verify_thrust_eight_direction_iso_lengths_and_client_alignment() -> void:
 		effect.free()
 
 
-func _verify_all_thrust_pixels_fit_outer_band(
-	source_image: Image,
+func _verify_thrust_forward_fit_and_native_cross_axis(
 	source_row: int,
 	alignment: Dictionary
 ) -> void:
+	assert(
+		str(alignment.get("cross_axis_scale_policy", ""))
+		== Visual.THRUST_CLIENT_EFFECT_CROSS_AXIS_SCALE_POLICY
+	)
 	var basis := Transform2D(
 		Vector2(alignment.get("basis_x_screen_px", Vector2.RIGHT)),
 		Vector2(alignment.get("basis_y_screen_px", Vector2.DOWN)),
@@ -169,45 +172,57 @@ func _verify_all_thrust_pixels_fit_outer_band(
 	var target_end := Vector2(alignment.get(
 		"target_end_center_screen_offset_px", Vector2.ZERO
 	))
-	var target_forward := target_end - target_start
-	var target_side := Vector2(alignment.get(
-		"target_side_screen_px", Vector2.ZERO
-	))
-	var determinant := (
-		target_forward.x * target_side.y
-		- target_side.x * target_forward.y
+	var bounds: Vector4 = alignment.get(
+		"source_bounds_ground_basis", Vector4.ZERO
 	)
-	assert(absf(determinant) > 0.000001)
-	var minimum_u := INF
-	var maximum_u := -INF
-	var minimum_v := INF
-	var maximum_v := -INF
-	for frame_index: int in range(6):
-		var cell_origin := Vector2i(frame_index * 288, source_row * 224)
-		var cell_image := source_image.get_region(Rect2i(cell_origin, Vector2i(288, 224)))
-		var used_rect := cell_image.get_used_rect()
-		for pixel_y: int in range(used_rect.position.y, used_rect.end.y):
-			for pixel_x: int in range(used_rect.position.x, used_rect.end.x):
-				if cell_image.get_pixel(pixel_x, pixel_y).a <= 0.0:
-					continue
-				var transformed := basis * Vector2(pixel_x, pixel_y)
-				var relative := transformed - target_start
-				var u := (
-					target_side.y * relative.x
-					- target_side.x * relative.y
-				) / determinant
-				var v := (
-					-target_forward.y * relative.x
-					+ target_forward.x * relative.y
-				) / determinant
-				minimum_u = minf(minimum_u, u)
-				maximum_u = maxf(maximum_u, u)
-				minimum_v = minf(minimum_v, v)
-				maximum_v = maxf(maximum_v, v)
-	assert(minimum_u >= -0.0005 and maximum_u <= 1.0005)
-	assert(minimum_v >= -0.5005 and maximum_v <= 0.5005)
-	assert(absf(minimum_u) <= 0.0005 and absf(maximum_u - 1.0) <= 0.0005)
-	assert(absf(minimum_v + 0.5) <= 0.0005 and absf(maximum_v - 0.5) <= 0.0005)
+	var source_direction_index := posmod(source_row + 4, 8)
+	var source_direction := Geometry.canonical_ground_direction_gu(
+		source_direction_index
+	)
+	var source_side := Vector2(-source_direction.y, source_direction.x)
+	var source_side_screen := (
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(source_side)
+	)
+	assert(source_side_screen.length() > 0.001)
+	assert(Vector2(alignment.get(
+		"native_source_side_screen_px", Vector2.ZERO
+	)).distance_to(source_side_screen) <= 0.000001)
+	var source_origin := Vector2(alignment.get(
+		"source_origin_px", Vector2.ZERO
+	))
+	var source_side_center := (bounds.z + bounds.w) * 0.5
+	var source_start_center := (
+		source_origin
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			source_direction * bounds.x + source_side * source_side_center
+		)
+	)
+	var source_end_center := (
+		source_origin
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			source_direction * bounds.y + source_side * source_side_center
+		)
+	)
+	assert((basis * source_start_center).distance_to(target_start) <= 0.01)
+	assert((basis * source_end_center).distance_to(target_end) <= 0.01)
+	var source_cross_min := (
+		source_origin
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			source_direction * bounds.x + source_side * bounds.z
+		)
+	)
+	var source_cross_max := (
+		source_origin
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			source_direction * bounds.x + source_side * bounds.w
+		)
+	)
+	var native_cross_span := source_cross_max - source_cross_min
+	var transformed_cross_span := (
+		basis * source_cross_max - basis * source_cross_min
+	)
+	assert(native_cross_span.length() > 0.001)
+	assert(transformed_cross_span.distance_to(native_cross_span) <= 0.01)
 
 
 func _verify_thrust_continuous_angle_client_alignment() -> void:
@@ -230,46 +245,10 @@ func _verify_thrust_continuous_angle_client_alignment() -> void:
 			coordinate_context
 		)
 		assert(not alignment.is_empty())
-		var transform := Transform2D(
-			Vector2(alignment.get("basis_x_screen_px", Vector2.RIGHT)),
-			Vector2(alignment.get("basis_y_screen_px", Vector2.DOWN)),
-			Vector2(alignment.get("origin_screen_offset_px", Vector2.ZERO))
+		_verify_thrust_forward_fit_and_native_cross_axis(
+			source_row,
+			alignment
 		)
-		var bounds: Vector4 = alignment.get(
-			"source_bounds_ground_basis", Vector4.ZERO
-		)
-		var source_direction := Geometry.canonical_ground_direction_gu(
-			visual_direction_index
-		)
-		var source_side := Vector2(-source_direction.y, source_direction.x)
-		var source_origin := Vector2(alignment.get(
-			"source_origin_px", Vector2.ZERO
-		))
-		var source_corners := [
-			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				source_direction * bounds.x + source_side * bounds.z
-			),
-			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				source_direction * bounds.x + source_side * bounds.w
-			),
-			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				source_direction * bounds.y + source_side * bounds.w
-			),
-			source_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				source_direction * bounds.y + source_side * bounds.z
-			),
-		]
-		var target_quad := Snapshot.projected_polygon_screen_offset_px(snapshot)
-		var expected_target_order := [
-			target_quad[3],
-			target_quad[0],
-			target_quad[1],
-			target_quad[2],
-		]
-		for corner_index: int in range(4):
-			assert((transform * source_corners[corner_index]).distance_to(
-				expected_target_order[corner_index]
-			) <= 0.01)
 
 
 func _verify_fail_closed_without_valid_snapshot() -> void:
