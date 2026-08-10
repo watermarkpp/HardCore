@@ -41,6 +41,16 @@ func _run() -> void:
 		summon._animation_resources.is_empty(),
 		"cold-cache visuals must not be installed synchronously"
 	)
+	summon.apply_stealth(60.0, "buff.taoist.mass_invisibility")
+	summon._update_stealth_visual()
+	assert(is_equal_approx(summon.modulate.a, 1.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 0.60))
+	var cold_shadow := summon.ground_shadow_layout_snapshot()
+	assert(
+		cold_shadow.contract_id
+			== "skills.summon.ground_shadow.authored_body_frames.v2"
+	)
+	assert(not bool(cold_shadow.procedural_fallback_drawn))
 
 	## Idle-first activation: the body becomes visible and fully opaque after
 	## only one atlas is finalized, while remaining atlases continue serially.
@@ -52,7 +62,12 @@ func _run() -> void:
 	assert(summon._visual_preview_active)
 	assert(not summon._visual_profile_complete)
 	assert(summon._sprite.texture != null)
-	assert(is_equal_approx(summon._sprite.self_modulate.a, 1.0))
+	assert(is_equal_approx(summon.modulate.a, 1.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 0.60))
+	var preview_shadow := summon.ground_shadow_layout_snapshot()
+	assert(preview_shadow.ground_shadow_mode == "authored_body_frames")
+	assert(bool(preview_shadow.authored_body_texture_active))
+	assert(not bool(preview_shadow.procedural_fallback_drawn))
 	assert(
 		SummonVisualRegistryScript.request_active(summon._visual_request_id),
 		"remaining atlases must continue loading after the preview appears"
@@ -68,6 +83,8 @@ func _run() -> void:
 	assert(summon._visual_profile_complete)
 	assert(not summon._visual_preview_active)
 	assert(summon._sprite.texture != null)
+	assert(is_equal_approx(summon.modulate.a, 1.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 0.60))
 	assert(
 		diagnostics.async_ready_count == 1,
 		"threaded profile must be assembled and cached exactly once"
@@ -98,6 +115,8 @@ func _run() -> void:
 		not second._animation_resources.is_empty(),
 		"warm-cache summon must install visuals synchronously"
 	)
+	assert(is_equal_approx(second.modulate.a, 1.0))
+	assert(is_equal_approx(second._sprite.self_modulate.a, 1.0))
 	diagnostics = SummonVisualRegistryScript.async_diagnostics()
 	assert(diagnostics.async_request_count == 1, "cache must be reused")
 	assert(diagnostics.sync_image_load_count == 0, "cache hit must not decode")
@@ -108,10 +127,19 @@ func _run() -> void:
 	## path, while its idle body preview appears after the first resource.
 	var divine_beast := _spawn_summon("divine_beast")
 	assert(divine_beast._animation_resources.is_empty())
+	divine_beast.apply_stealth(60.0, "buff.taoist.mass_invisibility")
+	divine_beast._update_stealth_visual()
+	assert(is_equal_approx(divine_beast.modulate.a, 1.0))
+	assert(is_equal_approx(divine_beast._sprite.self_modulate.a, 0.60))
 	await _wait_for_visual_preview(divine_beast)
 	assert(divine_beast._sprite.texture != null)
-	assert(is_equal_approx(divine_beast._sprite.self_modulate.a, 1.0))
+	assert(is_equal_approx(divine_beast.modulate.a, 1.0))
+	assert(is_equal_approx(divine_beast._sprite.self_modulate.a, 0.60))
 	assert(not divine_beast._visual_profile_complete)
+	var beast_preview_shadow := divine_beast.ground_shadow_layout_snapshot()
+	assert(beast_preview_shadow.ground_shadow_mode == "authored_body_frames")
+	assert(bool(beast_preview_shadow.authored_body_texture_active))
+	assert(not bool(beast_preview_shadow.procedural_fallback_drawn))
 	await _wait_for_visual_ready(divine_beast)
 	diagnostics = SummonVisualRegistryScript.async_diagnostics()
 	assert(diagnostics.async_request_count == 2)
@@ -120,7 +148,13 @@ func _run() -> void:
 	assert(diagnostics.max_resources_finalized_in_one_poll == 1)
 	assert(diagnostics.main_thread_blocking_load_count == 0)
 	assert(divine_beast._animation_resources.has("fire"))
+	assert(is_equal_approx(divine_beast.modulate.a, 1.0))
+	assert(is_equal_approx(divine_beast._sprite.self_modulate.a, 0.60))
+	assert(is_equal_approx(divine_beast._fire_sprite.self_modulate.a, 0.60))
 	_verify_divine_beast_foot_anchors(divine_beast)
+	var beast_full_shadow := divine_beast.ground_shadow_layout_snapshot()
+	assert(bool(beast_full_shadow.authored_body_texture_active))
+	assert(not bool(beast_full_shadow.procedural_fallback_drawn))
 
 	## Failure path: a finished-but-failed request becomes terminal; further
 	## requests return REQUEST_FAILED without issuing new ResourceLoader jobs, so the
@@ -241,6 +275,7 @@ func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
 		Vector2i.ZERO
 	)
 	assert(authored_foot_anchor != Vector2i.ZERO)
+	assert(profile.get("ground_shadow_mode", "") == "authored_body_frames")
 	assert(
 		summon._sprite.position
 			+ Vector2(authored_foot_anchor + authored_ground_offset)
@@ -250,19 +285,24 @@ func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
 	var shadow_layout := summon.ground_shadow_layout_snapshot()
 	assert(
 		shadow_layout.contract_id
-			== "skills.summon.ground_shadow.actor_origin.v1"
+			== "skills.summon.ground_shadow.authored_body_frames.v2"
 	)
 	assert(shadow_layout.actor_ground_origin_local_px == Vector2.ZERO)
+	assert(shadow_layout.ground_shadow_mode == "authored_body_frames")
+	assert(bool(shadow_layout.authored_body_texture_active))
 	assert(
-		shadow_layout.outer_center_local_px
-			== shadow_layout.actor_ground_origin_local_px,
-		"outer summon shadow must share the authored gameplay foot point"
+		not bool(shadow_layout.procedural_fallback_drawn),
+		"authored WIL body frames must never receive a second ellipse shadow"
 	)
+	var saved_profile := summon._animation_resources
+	summon._animation_resources = {
+		"ground_shadow_mode": "procedural_fallback",
+	}
 	assert(
-		shadow_layout.inner_center_local_px
-			== shadow_layout.actor_ground_origin_local_px,
-		"inner summon shadow must not retain a south offset"
+		bool(summon.ground_shadow_layout_snapshot().procedural_fallback_drawn),
+		"only an explicit procedural fallback profile may draw an ellipse"
 	)
+	summon._animation_resources = saved_profile
 	_verify_level_label(summon)
 
 	summon.reset_performance_diagnostics_for_tests()

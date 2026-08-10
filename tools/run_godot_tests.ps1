@@ -201,6 +201,7 @@ $Suites.taoist_critical = @(
     'tests/skills/taoist_support_policy_test.tscn',
     'tests/skills/taoist_support_runtime_test.tscn',
     'tests/skills/taoist_canonical_runtime_test.tscn',
+    'tests/skills/taoist_entrapment_boundary_production_test.tscn',
     'tests/skills/taoist_dual_defense_contract_test.tscn',
     'tests/skills/spell_target_lock_and_footprint_test.tscn',
     'tests/skills/skill_semantic_contracts_test.tscn',

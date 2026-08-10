@@ -182,6 +182,7 @@ def build() -> None:
         "frameSize": [cell_width, cell_height],
         "footAnchor": [foot_anchor[0], foot_anchor[1]],
         "actorGroundOffset": list(ACTOR_GROUND_OFFSET),
+        "groundShadowMode": "authored_body_frames",
         "stableBodyTop": 39,
         "attackReleaseFrameIndex": 5,
         "attackReleaseMs": 500,

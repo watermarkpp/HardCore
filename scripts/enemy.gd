@@ -12,6 +12,9 @@ const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const EntrapmentBoundaryControllerScript := preload(
+	"res://scripts/entrapment_boundary_controller.gd"
+)
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
@@ -158,6 +161,8 @@ var _threat_table := {}
 var _threat_decay_per_second := 4.0
 var _leash_multiplier := 1.5
 var _control_anchor_ground_gu := Vector2.INF
+var _entrapment_controller: EntrapmentBoundaryControllerScript
+var _entrapment_last_end_reason := ""
 var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _area_attack_footprint_snapshot: Dictionary = {}
@@ -368,6 +373,7 @@ func _physics_process(delta: float) -> void:
 	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
+	_update_entrapment_state(delta)
 	_update_pending_attack(delta)
 	if _can_use_background_ai():
 		_background_ai_timer -= delta
@@ -749,6 +755,26 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		global_position,
 	)
 	_physics_move_count += 1
+	if entrapment_active():
+		var before_ground_gu := _screen_position_px_to_ground_position_gu(
+			position_before_move
+		)
+		var candidate_ground_gu := _screen_position_px_to_ground_position_gu(
+			global_position
+		)
+		if (
+			before_ground_gu == Vector2.INF
+			or candidate_ground_gu == Vector2.INF
+			or _entrapment_controller.movement_candidate_blocked(
+				before_ground_gu,
+				candidate_ground_gu,
+				combat_radius_gu
+			)
+		):
+			set_combat_position(position_before_move, &"entrapment_boundary_revert")
+			actual_ground_motion_gu = Vector2.ZERO
+			velocity = Vector2.ZERO
+			return
 	var entered_safe_zone := not _point_inside_safe_zone(position_before_move) and _point_inside_safe_zone(global_position)
 	if entered_safe_zone:
 		set_combat_position(position_before_move, &"safe_zone_revert")
@@ -947,6 +973,7 @@ func configure_spatial_index(
 
 
 func _exit_tree() -> void:
+	clear_entrapment("exit_tree")
 	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
 		combat_spatial_index.unregister(spatial_actor_runtime_id)
 	combat_spatial_index = null
@@ -1308,6 +1335,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 
 
 func _begin_death() -> void:
+	clear_entrapment("death")
 	_dying = true
 	velocity = Vector2.ZERO
 	_pending_attack_time = -1.0
@@ -1356,6 +1384,150 @@ func apply_control(seconds: float) -> void:
 		velocity = Vector2.ZERO
 	control_time = maxf(control_time, seconds)
 	queue_redraw()
+
+
+func apply_entrapment(
+	effect: Dictionary,
+	boundary_snapshot: Dictionary,
+	caster_actor: Node2D
+) -> Dictionary:
+	var immunity := control_immunity_snapshot()
+	if bool(immunity.get("immune", false)):
+		_entrapment_last_end_reason = "target_control_immune"
+		return {
+			"valid": false,
+			"reason": "target_control_immune",
+			"control_immunity_snapshot": immunity,
+		}
+	var raw_target_ids: Variant = effect.get("target_instance_ids", [])
+	if (
+		not raw_target_ids is Array
+		or not (raw_target_ids as Array).has(get_instance_id())
+	):
+		_entrapment_last_end_reason = "target_instance_not_declared"
+		return {"valid": false, "reason": "target_instance_not_declared"}
+	var next_controller := EntrapmentBoundaryControllerScript.new()
+	var result := next_controller.configure(
+		effect,
+		boundary_snapshot,
+		runtime_map_id,
+		caster_actor,
+		runtime_ground_gu_to_screen_position_px
+	)
+	if not bool(result.get("valid", false)):
+		_entrapment_last_end_reason = str(
+			result.get("reason", "entrapment_controller_rejected")
+		)
+		return result
+	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if (
+		current_ground_gu == Vector2.INF
+		or next_controller.movement_candidate_blocked(
+			current_ground_gu,
+			current_ground_gu,
+			combat_radius_gu
+		)
+	):
+		next_controller.reset("target_not_inside_open_center")
+		_entrapment_last_end_reason = "target_not_inside_open_center"
+		return {"valid": false, "reason": "target_not_inside_open_center"}
+	clear_entrapment("replaced")
+	_entrapment_controller = next_controller
+	_entrapment_last_end_reason = ""
+	return result
+
+
+func clear_entrapment(reason := "cleared") -> void:
+	if _entrapment_controller != null:
+		_entrapment_controller.reset(reason)
+	_entrapment_controller = null
+	_entrapment_last_end_reason = reason
+
+
+func entrapment_active() -> bool:
+	return (
+		_entrapment_controller != null
+		and _entrapment_controller.is_active()
+	)
+
+
+func entrapment_state_snapshot() -> Dictionary:
+	if _entrapment_controller != null:
+		return _entrapment_controller.state_snapshot()
+	return {
+		"contract_id": EntrapmentBoundaryControllerScript.CONTRACT_ID,
+		"active": false,
+		"runtime_map_id": -1,
+		"caster_instance_id": 0,
+		"remaining_seconds": 0.0,
+		"boundary_cell_count": 0,
+		"last_end_reason": _entrapment_last_end_reason,
+	}
+
+
+func accepts_external_attack_from(source_actor: Node) -> bool:
+	return not (
+		entrapment_active()
+		and is_instance_valid(source_actor)
+		and source_actor is SummonActor
+	)
+
+
+func control_immunity_snapshot() -> Dictionary:
+	var reasons: Array[String] = []
+	if is_boss:
+		reasons.append("boss")
+	if _explicit_control_immunity(monster_data):
+		reasons.append("monster_data_explicit")
+	if _explicit_control_immunity(behavior_profile):
+		reasons.append("behavior_profile_explicit")
+	for metadata_key: StringName in [
+		&"control_immune", &"controlImmune", &"immune_to_control", &"immuneToControl"
+	]:
+		if has_meta(metadata_key) and bool(get_meta(metadata_key)):
+			reasons.append("metadata_explicit")
+			break
+	return {
+		"contract_id": "monster.control_immunity.explicit_snapshot.v1",
+		"immune": not reasons.is_empty(),
+		"reasons": reasons,
+		"boss": is_boss,
+		"monster_id": monster_id,
+		"instance_id": get_instance_id(),
+	}
+
+
+static func _explicit_control_immunity(source: Dictionary) -> bool:
+	for key: String in [
+		"control_immune", "controlImmune", "immune_to_control", "immuneToControl"
+	]:
+		if source.has(key) and bool(source.get(key, false)):
+			return true
+	for value: Variant in source.values():
+		if value is Dictionary and _explicit_control_immunity(value):
+			return true
+	return false
+
+
+func _update_entrapment_state(delta: float) -> void:
+	if not entrapment_active():
+		return
+	var caster := _entrapment_controller.caster_actor()
+	var caster_center_ground_gu := Vector2.INF
+	var caster_radius_gu := 0.0
+	if is_instance_valid(caster):
+		caster_center_ground_gu = _screen_position_px_to_ground_position_gu(
+			caster.global_position
+		)
+		caster_radius_gu = _target_combat_radius_gu(caster)
+	var end_reason := _entrapment_controller.advance(
+		delta,
+		runtime_map_id,
+		caster_center_ground_gu,
+		caster_radius_gu
+	)
+	if not end_reason.is_empty():
+		clear_entrapment(end_reason)
 
 
 func apply_charm(seconds: float) -> void:

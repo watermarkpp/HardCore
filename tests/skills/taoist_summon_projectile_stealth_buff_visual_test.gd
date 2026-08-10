@@ -22,12 +22,12 @@ func _run() -> void:
 	summon._process(0.0)
 	assert(summon.is_stealthed())
 	assert(
-		summon._sprite.self_modulate.a < 0.5,
-		"stealth must make the summon body clearly transparent"
+		is_equal_approx(summon.modulate.a, 1.0),
+		"summon stealth must not fade the parent node"
 	)
 	assert(
-		summon._sprite.self_modulate.a > 0.1,
-		"stealth body must stay readable, not disappear"
+		is_equal_approx(summon._sprite.self_modulate.a, 0.60),
+		"stealth must use the formal readable body alpha"
 	)
 	var hints := summon._buff_hint_lines()
 	assert(hints.has("AC+7 12s"), "AC hint must stay readable while stealthed")
@@ -36,7 +36,8 @@ func _run() -> void:
 	## Stealth expiry restores full body opacity.
 	summon._process(5.1)
 	assert(not summon.is_stealthed())
-	assert(summon._sprite.self_modulate.a == 1.0)
+	assert(is_equal_approx(summon.modulate.a, 1.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 1.0))
 
 	## Buff hints consume the snapshot and refresh/expire with it.
 	summon._process(2.9)
@@ -50,14 +51,17 @@ func _run() -> void:
 	var beast := _spawn(owner, "taoist.summon_divine_beast")
 	beast.apply_stealth(3.0, "buff.taoist.mass_invisibility")
 	beast._process(0.0)
-	assert(beast._sprite.self_modulate.a < 0.5)
+	assert(is_equal_approx(beast.modulate.a, 1.0))
+	assert(is_equal_approx(beast._sprite.self_modulate.a, 0.60))
 	assert(
-		beast._fire_sprite != null and beast._fire_sprite.self_modulate.a < 0.5,
+		beast._fire_sprite != null
+		and is_equal_approx(beast._fire_sprite.self_modulate.a, 0.60),
 		"divine beast fire layer must fade with stealth"
 	)
 	beast._process(3.1)
-	assert(beast._sprite.self_modulate.a == 1.0)
-	assert(beast._fire_sprite.self_modulate.a == 1.0)
+	assert(is_equal_approx(beast.modulate.a, 1.0))
+	assert(is_equal_approx(beast._sprite.self_modulate.a, 1.0))
+	assert(is_equal_approx(beast._fire_sprite.self_modulate.a, 1.0))
 
 	owner.free()
 	print(

@@ -38,15 +38,23 @@ const TARGET_ACQUISITION_CONTRACT_ID := (
 	"skills.summon.target_acquisition.shared_spatial_index.v1"
 )
 const GROUND_SHADOW_CONTRACT_ID := (
-	"skills.summon.ground_shadow.actor_origin.v1"
+	"skills.summon.ground_shadow.authored_body_frames.v2"
+)
+const REST_FORMATION_CONTRACT_ID := (
+	"skills.summon.owner_formation_slots.v1"
+)
+const COLLISION_INTERACTION_CONTRACT_ID := (
+	"skills.summon.collision.player_pet_passthrough.v1"
 )
 const TARGET_ACQUIRE_INTERVAL_SECONDS := 0.25
+const FORMATION_WAKE_DISTANCE_GU := 0.35
+const FORMATION_SETTLE_DISTANCE_GU := 0.15
 const GROUND_SHADOW_CENTER_LOCAL_PX := Vector2.ZERO
 const GROUND_SHADOW_VERTICAL_SCALE := 0.36
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 )
-const STEALTH_BODY_MODULATE_ALPHA := 0.22
+const STEALTH_BODY_MODULATE_ALPHA := 0.60
 const BUFF_HINT_FONT_SIZE := 10
 const BUFF_HINT_LINE_SPACING := 12.0
 const BUFF_HINT_OFFSET_Y := 6.0
@@ -80,6 +88,7 @@ var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+var _rest_formation_moving := false
 ## FREEZE-P0.1: fail-closed projection diagnostics.
 var missing_projection_rejection_count := 0
 var projection_rejection_reason := &""
@@ -467,21 +476,8 @@ func _physics_process(delta: float) -> void:
 	)
 	if owner_distance_gu >= teleport_range_gu:
 		_set_state(SummonState.RETURN_TO_OWNER)
-		var owner_facing_ground_gu := (
-			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				owner_player.facing
-			).normalized()
-		)
-		var recall_offset_ground_gu := Vector2(
-			-owner_facing_ground_gu.y,
-			owner_facing_ground_gu.x
-		) * RECALL_OFFSET_GU
-		global_position = (
-			owner_player.global_position
-			+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-				recall_offset_ground_gu
-			)
-		)
+		global_position = _owner_formation_anchor_screen_px()
+		_rest_formation_moving = false
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
 		return
@@ -489,6 +485,7 @@ func _physics_process(delta: float) -> void:
 		not is_instance_valid(_current_target)
 		or _current_target.is_queued_for_deletion()
 		or _current_target.current_hp <= 0
+		or not _enemy_accepts_external_attack(_current_target)
 	):
 		_current_target = null
 		if _target_acquire_remaining <= 0.0:
@@ -517,11 +514,21 @@ func _physics_process(delta: float) -> void:
 			_set_state(SummonState.CHASE_TARGET)
 			velocity = _screen_velocity_toward_delta_px(offset_screen_px)
 	else:
-		var owner_offset_screen_px := owner_player.global_position - global_position
-		if owner_distance_gu > follow_distance_gu:
+		var rest_target_screen_px := _owner_formation_anchor_screen_px()
+		var rest_offset_screen_px := rest_target_screen_px - global_position
+		var rest_distance_gu := distance_gu_to_screen_position_px(
+			rest_target_screen_px
+		)
+		if _rest_formation_moving:
+			if rest_distance_gu <= FORMATION_SETTLE_DISTANCE_GU:
+				_rest_formation_moving = false
+		elif rest_distance_gu >= FORMATION_WAKE_DISTANCE_GU:
+			_rest_formation_moving = true
+		if _rest_formation_moving:
 			_set_state(SummonState.RETURN_TO_OWNER)
-			velocity = _screen_velocity_toward_delta_px(
-				owner_offset_screen_px
+			velocity = _screen_velocity_toward_arrival_delta_px(
+				rest_offset_screen_px,
+				delta
 			)
 		else:
 			_set_state(SummonState.FOLLOW_OWNER)
@@ -577,6 +584,7 @@ func _release_pending_attack() -> void:
 		is_instance_valid(target)
 		and not target.is_queued_for_deletion()
 		and target.current_hp > 0
+		and _enemy_accepts_external_attack(target)
 		and attack_release_snapshot_intersects_target(snapshot, target)
 		and _attack_hit_succeeds(target)
 	):
@@ -668,6 +676,7 @@ func _nearest_enemy() -> EnemyActor:
 			or enemy.is_queued_for_deletion()
 			or enemy.current_hp <= 0
 			or enemy.runtime_map_id != runtime_map_id
+			or not _enemy_accepts_external_attack(enemy)
 		):
 			continue
 		var target_ground_gu := enemy.spatial_index_position()
@@ -710,9 +719,74 @@ func _nearest_enemy() -> EnemyActor:
 	return nearest
 
 
+func _enemy_accepts_external_attack(enemy: EnemyActor) -> bool:
+	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+		return false
+	return enemy.accepts_external_attack_from(self)
+
+
 func _reject_target_acquisition(reason: String) -> void:
 	_target_acquire_fail_closed_count += 1
 	_target_acquire_last_rejection_reason = reason
+
+
+func _owner_formation_anchor_screen_px() -> Vector2:
+	var owner_forward_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			owner_player.movement_facing
+		)
+	)
+	if (
+		owner_forward_ground_gu.length_squared()
+		<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+	):
+		owner_forward_ground_gu = Vector2(1.0, 1.0)
+	owner_forward_ground_gu = owner_forward_ground_gu.normalized()
+	var lateral_ground_gu := Vector2(
+		-owner_forward_ground_gu.y,
+		owner_forward_ground_gu.x
+	)
+	var typed_side := -1.0 if summon_id == "skeleton" else 1.0
+	var slot_offset_ground_gu := (
+		lateral_ground_gu
+		* typed_side
+		* RECALL_OFFSET_GU
+	)
+	return (
+		owner_player.global_position
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			slot_offset_ground_gu
+		)
+	)
+
+
+func rest_formation_contract_snapshot() -> Dictionary:
+	return {
+		"contract_id": REST_FORMATION_CONTRACT_ID,
+		"collision_contract_id": COLLISION_INTERACTION_CONTRACT_ID,
+		"typed_slot_id": summon_id,
+		"direction_source": "owner_movement_facing",
+		"slot_offset_gu": RECALL_OFFSET_GU,
+		"expected_dual_separation_gu": RECALL_OFFSET_GU * 2.0,
+		"wake_distance_gu": FORMATION_WAKE_DISTANCE_GU,
+		"settle_distance_gu": FORMATION_SETTLE_DISTANCE_GU,
+		"desired_screen_position_px": _owner_formation_anchor_screen_px(),
+		"player_pass_through": (
+			collision_layer == WorldSpatialRulesScript.PLAYER_LAYER
+			and (
+				collision_mask & WorldSpatialRulesScript.PLAYER_LAYER
+			) == 0
+		),
+		"pet_hard_collision_enabled": (
+			collision_mask & WorldSpatialRulesScript.PLAYER_LAYER
+		) != 0,
+		"world_collision_preserved": (
+			collision_mask & WorldSpatialRulesScript.WORLD_LAYER
+		) != 0,
+		"enemy_collision_preserved": (
+			collision_mask & WorldSpatialRulesScript.ENEMY_LAYER
+		) != 0,
+	}
 
 
 func spatial_contract_snapshot() -> Dictionary:
@@ -943,6 +1017,17 @@ func take_magic_damage(amount: int) -> void:
 	_apply_resolved_damage(maxi(1, amount - magic_defence_bonus()))
 
 
+func restore_health(amount: int) -> int:
+	if amount <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return 0
+	var hp_before := current_hp
+	current_hp = mini(max_hp, current_hp + amount)
+	var actual_restored := current_hp - hp_before
+	if actual_restored > 0:
+		_request_visual_redraw()
+	return actual_restored
+
+
 func _apply_resolved_damage(amount: int) -> void:
 	if state in [SummonState.DEAD, SummonState.EXPIRED]:
 		return
@@ -1079,6 +1164,19 @@ func _buff_draw_signature() -> Vector2i:
 	)
 
 
+func _screen_velocity_toward_arrival_delta_px(
+	delta_screen_px: Vector2,
+	delta: float
+) -> Vector2:
+	var desired_velocity := _screen_velocity_toward_delta_px(delta_screen_px)
+	if delta <= 0.0:
+		return desired_velocity
+	var maximum_step_px := desired_velocity.length() * delta
+	if maximum_step_px > delta_screen_px.length():
+		return delta_screen_px / delta
+	return desired_velocity
+
+
 func _refresh_buff_redraw_if_needed() -> void:
 	var signature := _buff_draw_signature()
 	if signature == _last_buff_draw_signature:
@@ -1211,9 +1309,9 @@ func _activate_profile(profile: Dictionary, is_streaming_preview := false) -> bo
 		"actor_ground_offset",
 		Vector2i.ZERO
 	)
-	## The manifest's authored ground point is foot_anchor +
-	## actor_ground_offset. Alpha-bounds verification shows that this composite
-	## point, not the raw atlas anchor alone, is the body contact point.
+	## foot_anchor is the atlas packing origin. actor_ground_offset migrates the
+	## classic WIL DrawChr origin to this actor's gameplay origin; neither value
+	## is a guessed per-frame visible foot or shadow center.
 	_sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_health_bar_y = _sprite.position.y + float(profile.get("stable_body_top", 0)) - 7.0
 	_sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
@@ -1474,34 +1572,51 @@ func _apply_fire_frame() -> void:
 
 
 func ground_shadow_layout_snapshot() -> Dictionary:
+	var shadow_mode := str(
+		_animation_resources.get("ground_shadow_mode", "")
+	)
 	return {
 		"contract_id": GROUND_SHADOW_CONTRACT_ID,
+		"ground_shadow_mode": shadow_mode,
 		"actor_ground_origin_local_px": GROUND_SHADOW_CENTER_LOCAL_PX,
-		"outer_center_local_px": GROUND_SHADOW_CENTER_LOCAL_PX,
-		"inner_center_local_px": GROUND_SHADOW_CENTER_LOCAL_PX,
+		"authored_body_texture_active": (
+			shadow_mode
+				== SummonVisualRegistryScript.GROUND_SHADOW_MODE_AUTHORED_BODY_FRAMES
+			and _sprite != null
+			and _sprite.texture != null
+		),
+		"procedural_fallback_drawn": _should_draw_procedural_ground_shadow(),
 		"vertical_scale": GROUND_SHADOW_VERTICAL_SCALE,
 	}
+
+
+func _should_draw_procedural_ground_shadow() -> bool:
+	return (
+		str(_animation_resources.get("ground_shadow_mode", ""))
+			== SummonVisualRegistryScript.GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK
+	)
 
 
 func _draw() -> void:
 	var color := Color(0.88, 0.72, 0.35) if summon_name == "神兽" else Color(0.72, 0.74, 0.70)
 	var radius := 21.0 if summon_name == "神兽" else 15.0
-	draw_set_transform(
-		GROUND_SHADOW_CENTER_LOCAL_PX,
-		0.0,
-		Vector2(1.0, GROUND_SHADOW_VERTICAL_SCALE)
-	)
-	draw_circle(
-		Vector2.ZERO,
-		radius,
-		Color(0, 0, 0, 0.28)
-	)
-	draw_circle(
-		Vector2.ZERO,
-		radius * 0.56,
-		Color(0, 0, 0, 0.56)
-	)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	if _should_draw_procedural_ground_shadow():
+		draw_set_transform(
+			GROUND_SHADOW_CENTER_LOCAL_PX,
+			0.0,
+			Vector2(1.0, GROUND_SHADOW_VERTICAL_SCALE)
+		)
+		draw_circle(
+			Vector2.ZERO,
+			radius,
+			Color(0, 0, 0, 0.28)
+		)
+		draw_circle(
+			Vector2.ZERO,
+			radius * 0.56,
+			Color(0, 0, 0, 0.56)
+		)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	if _sprite == null and summon_id != "divine_beast":
 		draw_circle(Vector2(0, -4), radius, color)
 		draw_circle(Vector2(-6, -7), 2.5, Color(0.15, 0.75, 0.35))

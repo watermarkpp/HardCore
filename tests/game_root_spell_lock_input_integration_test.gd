@@ -523,12 +523,40 @@ func _test_taoist_entrapment_retains_locked_monster(
 			game._try_release_skill("困魔咒", false) == &"accepted",
 			"%s entrapment input was rejected before the body action" % monster_name
 		)
-		await get_tree().create_timer(0.65).timeout
+		assert(not target.entrapment_active())
+		await get_tree().create_timer(0.50).timeout
 		assert(
-			target.control_time > 0.0,
-			"%s lost its locked identity during the 600 ms entrapment windup"
+			not target.entrapment_active(),
+			"%s entrapment resolved before the canonical 600 ms release"
 			% monster_name
 		)
+		assert(
+			game.player.current_mp == mana_before,
+			"%s entrapment committed MP before release" % monster_name
+		)
+		await get_tree().create_timer(0.20).timeout
+		var entrapment_state := target.entrapment_state_snapshot()
+		assert(
+			bool(entrapment_state.get("active", false)),
+			"%s lost its locked identity during the 600 ms entrapment windup: state=%s mp=%d/%d target_ground=%s target_cell=%s"
+			% [monster_name, JSON.stringify(entrapment_state), game.player.current_mp, mana_before, str(game._canonical_screen_px_to_ground_gu(target.global_position)), str(game._canonical_screen_px_to_grid_cell(target.global_position))]
+		)
+		assert(
+			str(entrapment_state.get("contract_id", ""))
+			== "skills.taoist.entrapment.boundary_controller.v1"
+		)
+		assert(int(entrapment_state.get("boundary_cell_count", 0)) == 8)
+		assert(int(entrapment_state.get("runtime_map_id", -1)) == game.current_map_id)
+		assert(
+			int(entrapment_state.get("caster_instance_id", 0))
+			== game.player.get_instance_id()
+		)
+		assert(
+			entrapment_state.get("center_cell", Vector2i.ZERO)
+			== game._canonical_screen_px_to_grid_cell(target.global_position)
+		)
+		assert(not str(entrapment_state.get("snapshot_id", "")).is_empty())
+		assert(target.control_time == 0.0, "entrapment must not apply generic control")
 		assert(
 			game.player.current_mp < mana_before,
 			"successful entrapment did not commit MP for %s" % monster_name
@@ -536,6 +564,30 @@ func _test_taoist_entrapment_retains_locked_monster(
 		game._set_magic_locked_target(null, false)
 		target.queue_free()
 		await get_tree().process_frame
+
+	## Explicit non-boss immunity must reach the runtime plan before resource
+	## commit. The body action may start, but release produces no trap and spends
+	## neither MP nor material.
+	_reset_cast_gate(game)
+	var immune_target := _make_enemy(
+		game,
+		origin_tile + Vector2(2, 0),
+		"explicit-control-immune"
+	)
+	immune_target.control_time = 0.0
+	immune_target.set_meta(&"control_immune", true)
+	game._set_magic_locked_target(immune_target, true)
+	var immune_mana_before: int = game.player.current_mp
+	var immune_inventory_before: Array = PlayerState.inventory.duplicate(true)
+	assert(game._try_release_skill("困魔咒", false) == &"accepted")
+	await get_tree().create_timer(0.70).timeout
+	assert(not immune_target.entrapment_active())
+	assert(immune_target.control_time == 0.0)
+	assert(game.player.current_mp == immune_mana_before)
+	assert(PlayerState.inventory == immune_inventory_before)
+	game._set_magic_locked_target(null, false)
+	immune_target.queue_free()
+	await get_tree().process_frame
 
 
 func _reset_cast_gate(game: Node) -> void:
@@ -558,6 +610,11 @@ func _make_enemy(game: Node, tile: Vector2, display_name: String) -> EnemyActor:
 		"magic_defense_max": 0,
 	}, game.player, false)
 	enemy.control_time = 60.0
+	enemy.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu")
+	)
 	game.add_child(enemy)
 	enemy.global_position = game._canonical_ground_gu_to_screen_px(tile)
 	enemy.set_physics_process(false)

@@ -26,6 +26,9 @@ const FRIENDLY_AREA_GEOMETRY_CONTRACT_ID := (
 )
 const DUAL_DEFENSE_CAST_CONTRACT_ID := "skills.taoist.dual_defense_cast.v1"
 const ONGOING_HEAL_CONTRACT_ID := "skills.taoist.ongoing_heal.v1"
+const ENTRAPMENT_CONTROLLER_CONTRACT_ID := (
+	"skills.taoist.entrapment.boundary_controller.v1"
+)
 const HEAL_SELECTION_RANGE_GU := (
 	TaoistSupportPolicyScript.DEFAULT_HEAL_RANGE_GU
 )
@@ -654,10 +657,10 @@ static func _resolve_entrapment(
 	var candidates: Array = context.get("targets", [])
 	var trapped_count := 0
 	var trapped_target_instance_ids: Array[int] = []
-	## Production path: entrapment uses the current valid locked monster like
-	## every other hostile skill. The release context carries the locked enemy
-	## identity; eligibility follows the SOT contract exactly (hostile monster,
-	## not boss, not control immune, within level gate).
+	var trapped_ids := {}
+	## Production path: the current valid locked monster is the sole occupant of
+	## the open center. context.targets belongs to the eight-cell boundary query
+	## and therefore cannot be promoted to trapped occupants.
 	var locked_target_id := int(context.get("target_instance_id", 0))
 	if locked_target_id > 0:
 		var locked_eligible := (
@@ -679,36 +682,73 @@ static func _resolve_entrapment(
 		if locked_eligible:
 			trapped_count = 1
 			trapped_target_instance_ids.append(locked_target_id)
-	if trapped_count == 0:
-		## Legacy/pure-test path: filter an explicit candidate array when no
-		## locked identity was supplied by the caller.
+			trapped_ids[locked_target_id] = true
+	## Production context.targets is selected by intersection with the eight
+	## boundary cells. Those actors are attackers outside the open center, not
+	## trap occupants. Only the locked actor defines the center occupant until a
+	## future producer supplies a separately proven open-center footprint list.
+	## Preserve the old pure-runtime candidate path only when there is no
+	## production identity/context at all.
+	if (
+		locked_target_id <= 0
+		and str(context.get("input_mode", "")) != "production_canonical"
+	):
 		for target_value: Variant in candidates:
 			if not target_value is Dictionary:
 				continue
 			var target: Dictionary = target_value
-			if (
+			if not (
 				bool(target.get("hostile_monster", false))
 				and not bool(target.get("is_boss", false))
 				and not bool(target.get("control_immune", false))
 				and bool(target.get("within_level_gate", true))
 			):
-				trapped_count += 1
-				var target_instance_id := int(target.get("target_instance_id", 0))
-				if target_instance_id > 0:
-					trapped_target_instance_ids.append(target_instance_id)
+				continue
+			var target_instance_id := int(
+				target.get("target_instance_id", target.get("instance_id", 0))
+			)
+			if target_instance_id > 0:
+				if trapped_ids.has(target_instance_id):
+					continue
+				trapped_ids[target_instance_id] = true
+				trapped_target_instance_ids.append(target_instance_id)
+			trapped_count += 1
 	var duration_seconds := maxi(
 		1,
 		Formula.get_power13(rng, rank, 40) + 3 * int(context.get("primary_stat_roll", 0))
 	)
+	var boundary_snapshot: Dictionary = context.get(
+		"skill_footprint_snapshot", {}
+	)
+	var geometry_cells: Array = context.get("geometry_cells", [])
+	if (
+		str(context.get("input_mode", "")) == "production_canonical"
+		and (
+			boundary_snapshot.is_empty()
+			or geometry_cells.size() != 8
+		)
+	):
+		_reject(plan, "entrapment_strict_boundary_required")
+		return
 	plan.effects = [{
 		"type": "monster_boundary_control",
+		"controller_contract_id": ENTRAPMENT_CONTROLLER_CONTRACT_ID,
 		"trapped_count": trapped_count,
 		"target_instance_ids": trapped_target_instance_ids,
 		"duration_seconds": duration_seconds,
+		"caster_instance_id": int(context.get("caster_runtime_id", 0)),
+		"runtime_map_id": int(context.get("runtime_map_id", -1)),
+		"boundary_snapshot": boundary_snapshot.duplicate(true),
+		"boundary_cell_count": geometry_cells.size(),
+		"boundary_ring_candidate_count": candidates.size(),
+		"boundary_ring_candidates_are_not_trap_targets": true,
+		"required_snapshot_validation_policy": "strict_v2",
 		"footprint": "canonical_3x3_boundary",
 		"prevents_boundary_exit": true,
 		"break_on_any_player_entry": true,
-		"external_attack_behavior": "trapped_state_evasion_policy",
+		"break_on_damage": false,
+		"break_on_map_transition": true,
+		"external_attack_behavior": "summon_actor_rejected_other_sources_allowed",
 		"generic_root": false,
 	}]
 	plan.effect_success = trapped_count > 0

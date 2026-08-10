@@ -77,6 +77,7 @@
         "frame_size": [176, 160],
         "foot_anchor": [43, 87],
         "actor_ground_offset": [32, 28],
+        "ground_shadow_mode": "authored_body_frames",
         "stable_body_top": 36,
         "actions": {
           "idle": {"path": "res://assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_idle.png", "frames_per_direction": 4, "frame_ms": 200},

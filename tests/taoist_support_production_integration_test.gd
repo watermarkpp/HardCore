@@ -52,6 +52,7 @@ func _run() -> void:
 			)
 
 	_verify_input_rejection_and_selection()
+	await _verify_heal_release_timing_and_summon_redraw()
 	await _verify_release_footpoint_and_reselect()
 	await _verify_area_effects_and_defence()
 	await _verify_dual_defence_production()
@@ -60,7 +61,8 @@ func _run() -> void:
 	_verify_player_defence_separation()
 	print(
 		"TAOIST_SUPPORT_PRODUCTION_INTEGRATION_PASS: preflight rejection, "
-		+ "release live footpoint/one-time reselect, 3x3/7x7 area, dual "
+		+ "600/800 ms heal release and summon redraw, release live footpoint/"
+		+ "one-time reselect, 3x3/7x7 area, dual "
 		+ "defence shared cooldown/MP, full-HP ongoing heal, stealth break, "
 		+ "player AC/MAC separation"
 	)
@@ -112,6 +114,101 @@ func _verify_input_rejection_and_selection() -> void:
 	assert(game._selected_friendly_instance_id == 0)
 	player.current_mp = 999
 	summon.free()
+
+
+func _verify_heal_release_timing_and_summon_redraw() -> void:
+	## Single healing resolves at the explicit 800 ms override, not at the
+	## 600 ms body release used by the other Taoist support skills.
+	_reset_cast_state()
+	player.current_hp = player.max_hp
+	var single_target := _make_summon(Vector2(2, 0), player)
+	single_target.max_hp = 100
+	single_target.current_hp = 20
+	single_target.reset_performance_diagnostics_for_tests()
+	var single_mp_before: int = player.current_mp
+	assert(game._try_release_skill(_display("taoist.healing")) == &"accepted")
+	await get_tree().create_timer(0.70).timeout
+	assert(single_target.current_hp == 20, "single heal resolved before 800 ms")
+	assert(player.current_mp == single_mp_before, "single heal spent MP before release")
+	await get_tree().create_timer(0.20).timeout
+	assert(single_target.current_hp > 20, "single heal did not resolve after 800 ms")
+	assert(player.current_mp < single_mp_before, "single heal did not spend MP at release")
+	single_target.free()
+
+	## Mass healing keeps the ordinary 600 ms release. Its selected summon must
+	## remain unchanged before that frame, then update immediately.
+	_reset_cast_state()
+	player.current_hp = player.max_hp
+	var mass_target := _make_summon(Vector2(2, 0), player)
+	mass_target.max_hp = 100
+	mass_target.current_hp = 25
+	mass_target.reset_performance_diagnostics_for_tests()
+	var mass_mp_before: int = player.current_mp
+	assert(game._try_release_skill(_display("taoist.mass_healing")) == &"accepted")
+	await get_tree().create_timer(0.50).timeout
+	assert(mass_target.current_hp == 25, "mass heal resolved before 600 ms")
+	assert(player.current_mp == mass_mp_before, "mass heal spent MP before release")
+	await get_tree().create_timer(0.20).timeout
+	assert(mass_target.current_hp > 25, "mass heal did not resolve after 600 ms")
+	assert(player.current_mp < mass_mp_before, "mass heal did not spend MP at release")
+	await _wait_for_summon_visual_request_to_settle(mass_target)
+
+	## The GameRoot helper returns the actual capped restoration and the ongoing
+	## scheduler reaches the exact same redraw-aware summon API.
+	mass_target.current_hp = 95
+	mass_target.reset_performance_diagnostics_for_tests()
+	assert(game._apply_canonical_friendly_heal(mass_target, 10) == 5)
+	assert(mass_target.current_hp == 100)
+	assert(
+		int(mass_target.performance_diagnostics().custom_draw_request_count) == 1
+	)
+	mass_target.reset_performance_diagnostics_for_tests()
+	assert(game._apply_canonical_friendly_heal(mass_target, 10) == 0)
+	assert(
+		int(mass_target.performance_diagnostics().custom_draw_request_count) == 0
+	)
+	game._ongoing_heals.clear()
+	mass_target.current_hp = 50
+	mass_target.reset_performance_diagnostics_for_tests()
+	game._register_ongoing_heal(mass_target.get_instance_id(), 7, 1, 0.8)
+	game._tick_ongoing_heals(0.79)
+	assert(mass_target.current_hp == 50)
+	assert(
+		int(mass_target.performance_diagnostics().custom_draw_request_count) == 0
+	)
+	game._tick_ongoing_heals(0.02)
+	assert(mass_target.current_hp == 57)
+	assert(
+		int(mass_target.performance_diagnostics().custom_draw_request_count) == 1
+	)
+
+	## Dead summons are never revived by either direct or scheduled healing.
+	mass_target.take_damage(mass_target.current_hp)
+	assert(mass_target.state == SummonActor.SummonState.DEAD)
+	mass_target.reset_performance_diagnostics_for_tests()
+	assert(game._apply_canonical_friendly_heal(mass_target, 50) == 0)
+	assert(mass_target.current_hp == 0)
+	assert(
+		int(mass_target.performance_diagnostics().custom_draw_request_count) == 0
+	)
+	game._ongoing_heals.clear()
+	game._register_ongoing_heal(mass_target.get_instance_id(), 9, 1, 0.8)
+	game._tick_ongoing_heals(0.81)
+	assert(mass_target.current_hp == 0)
+	assert(game._ongoing_heals.is_empty())
+	assert(
+		int(mass_target.performance_diagnostics().custom_draw_request_count) == 0
+	)
+	mass_target.free()
+	_reset_cast_state()
+
+
+func _wait_for_summon_visual_request_to_settle(summon: SummonActor) -> void:
+	for _frame_index: int in range(300):
+		if not bool(summon.performance_diagnostics().visual_request_active):
+			return
+		await get_tree().process_frame
+	assert(false, "summon visual request did not settle before redraw assertions")
 
 
 func _verify_release_footpoint_and_reselect() -> void:
@@ -180,29 +277,62 @@ func _verify_area_effects_and_defence() -> void:
 	_reset_cast_state()
 	var own_summon := _make_summon(Vector2(1, 0), player, 21, 7)
 	own_summon.current_hp = own_summon.max_hp
+	var own_beast := _make_summon(
+		Vector2(-1, 0),
+		player,
+		21,
+		7,
+		"taoist.summon_divine_beast"
+	)
+	own_beast.current_hp = own_beast.max_hp
 	var other_owner := PlayerCharacter.new()
 	var other_summon := _make_summon(Vector2(0, 1), other_owner)
 	other_summon.current_hp = other_summon.max_hp
 	var far_summon := _make_summon(Vector2(10, 0), player)
 	far_summon.current_hp = far_summon.max_hp
 	player.current_hp = player.max_hp
+	await _wait_for_summon_visual_request_to_settle(own_summon)
+	await _wait_for_summon_visual_request_to_settle(own_beast)
 
 	## Mass invisibility: self-centered exact 3x3, only own friendly actors.
 	assert(game._try_release_skill(_display("taoist.mass_invisibility")) == &"accepted")
 	await get_tree().create_timer(1.0).timeout
 	assert(player.is_stealthed())
 	assert(own_summon.is_stealthed())
+	assert(own_beast.is_stealthed())
 	assert(not other_summon.is_stealthed(), "non-owned summon must not be affected")
 	assert(not far_summon.is_stealthed(), "out-of-range summon must not be affected")
 	## Stealth renders as alpha transparency (no light-blue ground circle).
+	## Simulate a stale cache/parent alpha left by builds that faded the whole
+	## summon; the current integration must heal it on the next presentation tick.
+	own_summon.modulate.a = 0.4
+	game._stealth_alpha_restore[own_summon.get_instance_id()] = 0.4
 	game._process(0.016)
 	assert(
-		is_equal_approx(player.modulate.a, 0.4),
-		"stealthed player must render with reduced alpha"
+		is_equal_approx(player.modulate.a, 0.60),
+		"stealthed player must render at the canonical 0.60 alpha"
 	)
 	assert(
-		is_equal_approx(own_summon.modulate.a, 0.4),
-		"stealthed summon must render with reduced alpha"
+		is_equal_approx(own_summon.modulate.a, 1.0),
+		"summon parent must remain opaque so its hint layer stays readable"
+	)
+	assert(
+		not game._stealth_alpha_restore.has(own_summon.get_instance_id()),
+		"summon parent must discard stale whole-actor alpha restore state"
+	)
+	assert(
+		is_equal_approx(own_summon._sprite.self_modulate.a, 0.60),
+		"summon body must own the 0.60 stealth fade"
+	)
+	assert(is_equal_approx(own_beast.modulate.a, 1.0))
+	assert(
+		own_beast._sprite != null
+		and is_equal_approx(own_beast._sprite.self_modulate.a, 0.60)
+	)
+	assert(
+		own_beast._fire_sprite != null
+		and is_equal_approx(own_beast._fire_sprite.self_modulate.a, 0.60),
+		"divine-beast fire must fade without dimming the parent hint layer"
 	)
 	## Any skill submission breaks stealth uniformly; after the break enemies
 	## can reselect the player (is_stealthed false). Summon-side break/visual
@@ -214,6 +344,10 @@ func _verify_area_effects_and_defence() -> void:
 	assert(
 		is_equal_approx(player.modulate.a, 1.0),
 		"broken stealth must restore full alpha"
+	)
+	assert(
+		not game._stealth_alpha_restore.has(player.get_instance_id()),
+		"breaking stealth must clear the player alpha restore cache"
 	)
 	assert(own_summon.is_stealthed())
 	## Physical attack submission also breaks stealth uniformly.
@@ -246,8 +380,17 @@ func _verify_area_effects_and_defence() -> void:
 	else:
 		PlayerState.computed_special_effects.erase("stealth")
 	own_summon.stealth_remaining_seconds = 0.0
+	own_beast.stealth_remaining_seconds = 0.0
+	own_summon._update_stealth_visual()
+	own_beast._update_stealth_visual()
 	game._process(0.016)
 	assert(is_equal_approx(own_summon.modulate.a, 1.0))
+	assert(is_equal_approx(own_summon._sprite.self_modulate.a, 1.0))
+	assert(is_equal_approx(own_beast.modulate.a, 1.0))
+	assert(is_equal_approx(own_beast._sprite.self_modulate.a, 1.0))
+	assert(is_equal_approx(own_beast._fire_sprite.self_modulate.a, 1.0))
+	assert(not game._stealth_alpha_restore.has(own_summon.get_instance_id()))
+	assert(not game._stealth_alpha_restore.has(own_beast.get_instance_id()))
 	_reset_cast_state()
 
 	## Single defence: only AC applies, player and own summon, 7x7 self center.
@@ -278,6 +421,7 @@ func _verify_area_effects_and_defence() -> void:
 	other_owner.free()
 	other_summon.free()
 	far_summon.free()
+	own_beast.free()
 	own_summon.free()
 
 
@@ -644,15 +788,16 @@ func _make_summon(
 	ground_offset_gu: Vector2,
 	owner: PlayerCharacter,
 	owner_level_value := 19,
-	maximum_pet_level := 1
+	maximum_pet_level := 1,
+	stable_skill_id := "taoist.summon_skeleton"
 ) -> SummonActor:
 	var summon := SummonActor.new()
 	summon.setup(
 		owner,
-		ProfessionRules.skill_display_name("taoist.summon_skeleton"),
+		ProfessionRules.skill_display_name(stable_skill_id),
 		1,
 		0,
-		"taoist.summon_skeleton",
+		stable_skill_id,
 		owner_level_value,
 		maximum_pet_level
 	)

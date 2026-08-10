@@ -37,10 +37,14 @@ func _run() -> void:
 
 func _verify_stealth_refresh_and_expiry(summon: SummonActor) -> void:
 	summon.apply_stealth(5.0, "buff.taoist.mass_invisibility")
+	summon._update_stealth_visual()
 	assert(summon.is_stealthed())
 	assert(is_equal_approx(summon.stealth_remaining(), 5.0))
+	assert(is_equal_approx(summon.modulate.a, 1.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 0.60))
 	summon._process(2.0)
 	assert(is_equal_approx(summon.stealth_remaining(), 3.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 0.60))
 	summon.apply_stealth(4.0, "buff.taoist.mass_invisibility")
 	assert(is_equal_approx(summon.stealth_remaining(), 4.0))
 	summon.apply_stealth(2.0, "buff.taoist.mass_invisibility")
@@ -48,6 +52,8 @@ func _verify_stealth_refresh_and_expiry(summon: SummonActor) -> void:
 	summon._process(4.1)
 	assert(not summon.is_stealthed())
 	assert(summon.stealth_buff_id.is_empty())
+	assert(is_equal_approx(summon.modulate.a, 1.0))
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 1.0))
 	summon.apply_stealth(0.0)
 	assert(not summon.is_stealthed())
 
@@ -126,6 +132,8 @@ func _verify_persistence_round_trip(
 		19,
 		7
 	)
+	add_child(restored)
+	restored.set_process(false)
 	assert(restored.restore_persistence_snapshot(snapshot))
 	assert(restored.current_hp == 77 and restored.max_hp == 196)
 	assert(restored.summon_exp_level == 1)
@@ -134,6 +142,8 @@ func _verify_persistence_round_trip(
 	assert(is_equal_approx(restored.remaining_lifetime, 1234.5))
 	assert(is_equal_approx(restored.stealth_remaining_seconds, 6.0))
 	assert(restored.stealth_buff_id == "buff.taoist.mass_invisibility")
+	assert(is_equal_approx(restored.modulate.a, 1.0))
+	assert(is_equal_approx(restored._sprite.self_modulate.a, 0.60))
 	assert(restored.ac_buff_bonus == 9)
 	assert(is_equal_approx(restored.ac_buff_remaining_seconds, 12.0))
 	assert(restored.mac_buff_bonus == 7)

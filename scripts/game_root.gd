@@ -95,6 +95,7 @@ const TAOIST_SUPPORT_SKILL_IDS := {
 	"taoist.magic_defense": true,
 	"taoist.defense": true,
 }
+const PLAYER_STEALTH_ALPHA := 0.60
 const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
 const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
 const SKILL_INPUT_TICKET_CONTRACT_ID := (
@@ -4848,6 +4849,9 @@ func _canonical_target_context(
 			roundi(fallback_target_ground_gu.y)
 		)
 	var context := {
+		"input_mode": "production_canonical",
+		"runtime_map_id": current_map_id,
+		"caster_runtime_id": player.get_instance_id(),
 		"has_target": usable_target or independent_geometry_target or friendly_cast,
 		"line_of_sight": usable_target or independent_geometry_target or friendly_cast,
 		"friendly": friendly_cast,
@@ -4890,6 +4894,7 @@ func _canonical_target_context(
 		context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
 	if target != null:
 		var monster_data: Dictionary = target.monster_data
+		var target_control_immunity := target.control_immunity_snapshot()
 		var service_behavior: Dictionary = target.behavior_profile.get(
 			"serviceBehavior", {}
 		)
@@ -4910,7 +4915,9 @@ func _canonical_target_context(
 			"target_poison_resist": target.anti_poison,
 			"target_is_living": target.current_hp > 0,
 			"actual_hp_missing": target.max_hp - target.current_hp,
-			"target_control_immune": target.is_boss,
+			"target_control_immune": bool(
+				target_control_immunity.get("immune", false)
+			),
 			"target_within_level_gate": target.level <= PlayerState.level,
 		}, true)
 	# Caller-provided authoritative values (for example a server-selected
@@ -5546,13 +5553,15 @@ func _apply_canonical_effects_from_plan(
 					)
 					for trapped_target_id: int in trapped_target_ids:
 						var node := instance_from_id(trapped_target_id)
-						## The plan's trapped identities are the authoritative
-						## locked monster(s); the 3x3 geometry is the boundary
-						## ring around the trapped monster, so the monster
-						## itself is not required to intersect the ring cells.
+						## The plan's trapped identity and immutable strict-V2
+						## release snapshot are authoritative. EnemyActor owns the
+						## boundary lifecycle; this integration sink must not
+						## degrade entrapment into generic immobilization.
 						if node is EnemyActor:
-							node.apply_control(
-								float(effect.get("duration_seconds", 1))
+							(node as EnemyActor).apply_entrapment(
+								effect,
+								skill_release_snapshot,
+								player
 							)
 			"next_melee_charge":
 				_set_canonical_fire_charge_expires_at(
@@ -6721,13 +6730,16 @@ func _canonical_friendly_actor(instance_id: int) -> Node2D:
 	return null
 
 
-func _apply_canonical_friendly_heal(actor: Node2D, amount: int) -> void:
+func _apply_canonical_friendly_heal(actor: Node2D, amount: int) -> int:
 	if not is_instance_valid(actor) or amount <= 0:
-		return
+		return 0
 	if actor == player:
+		var hp_before := player.current_hp
 		player.restore_health(amount)
+		return maxi(0, player.current_hp - hp_before)
 	elif actor is SummonActor:
-		actor.current_hp = mini(actor.max_hp, actor.current_hp + amount)
+		return (actor as SummonActor).restore_health(amount)
+	return 0
 
 
 func _register_ongoing_heal(
@@ -6792,10 +6804,17 @@ func _set_actor_stealth_alpha(actor: Node2D, stealthed: bool) -> void:
 	if not is_instance_valid(actor):
 		return
 	var actor_id := actor.get_instance_id()
+	if actor is SummonActor:
+		## SummonActor owns body/fire fading through self_modulate. Keeping the
+		## parent opaque leaves its health bar and buff hints fully readable.
+		actor.modulate.a = 1.0
+		## Discard values cached by builds that faded the whole summon parent.
+		_stealth_alpha_restore.erase(actor_id)
+		return
 	if stealthed:
 		if not _stealth_alpha_restore.has(actor_id):
 			_stealth_alpha_restore[actor_id] = actor.modulate.a
-		actor.modulate.a = minf(actor.modulate.a, 0.4)
+		actor.modulate.a = PLAYER_STEALTH_ALPHA
 	else:
 		if _stealth_alpha_restore.has(actor_id):
 			actor.modulate.a = float(_stealth_alpha_restore[actor_id])

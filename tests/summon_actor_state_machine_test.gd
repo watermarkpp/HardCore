@@ -4,6 +4,18 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const WorldSpatialRulesScript := preload(
+	"res://scripts/world_spatial_rules.gd"
+)
+
+
+class ExternalAttackPolicyEnemy:
+	extends EnemyActor
+
+	var allow_external_attack := true
+
+	func accepts_external_attack_from(_attacker: Node) -> bool:
+		return allow_external_attack
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -45,6 +57,57 @@ func _run() -> void:
 	assert(skeleton.lifetime_seconds == 864000.0 and skeleton.owner_death_rule == "expire")
 	assert(skeleton.reject_when_owner_has_slave and not skeleton.recall_existing_on_create_failure)
 	assert(skeleton.state == SummonActor.SummonState.FOLLOW_OWNER)
+	skeleton.current_hp = skeleton.max_hp - 7
+	skeleton.reset_performance_diagnostics_for_tests()
+	assert(skeleton.restore_health(5) == 5)
+	assert(skeleton.current_hp == skeleton.max_hp - 2)
+	assert(
+		int(skeleton.performance_diagnostics().custom_draw_request_count) == 1,
+		"effective summon healing must redraw the HP bar in the same frame"
+	)
+	assert(skeleton.restore_health(99) == 2)
+	assert(skeleton.current_hp == skeleton.max_hp)
+	assert(skeleton.restore_health(1) == 0)
+	assert(
+		int(skeleton.performance_diagnostics().custom_draw_request_count) == 2,
+		"full-HP healing must not enqueue a redundant redraw"
+	)
+	var dead_heal_fixture := SummonActor.new()
+	dead_heal_fixture.setup(
+		player,
+		"dead-heal-fixture",
+		1,
+		0,
+		"taoist.summon_skeleton",
+		35
+	)
+	dead_heal_fixture.take_damage(dead_heal_fixture.current_hp)
+	dead_heal_fixture.reset_performance_diagnostics_for_tests()
+	assert(dead_heal_fixture.state == SummonActor.SummonState.DEAD)
+	assert(dead_heal_fixture.restore_health(50) == 0)
+	assert(
+		int(dead_heal_fixture.performance_diagnostics().custom_draw_request_count)
+			== 0
+	)
+	dead_heal_fixture.free()
+	var expired_heal_fixture := SummonActor.new()
+	expired_heal_fixture.setup(
+		player,
+		"expired-heal-fixture",
+		1,
+		0,
+		"taoist.summon_skeleton",
+		35
+	)
+	expired_heal_fixture._set_state(SummonActor.SummonState.EXPIRED)
+	expired_heal_fixture.current_hp -= 1
+	expired_heal_fixture.reset_performance_diagnostics_for_tests()
+	assert(expired_heal_fixture.restore_health(50) == 0)
+	assert(
+		int(expired_heal_fixture.performance_diagnostics().custom_draw_request_count)
+			== 0
+	)
+	expired_heal_fixture.free()
 	var spatial := skeleton.spatial_contract_snapshot()
 	assert(spatial.contract_id == SummonActor.SPATIAL_CONTRACT_ID)
 	assert(spatial.unit_contract_id == GroundUnit.CONTRACT_ID)
@@ -99,6 +162,179 @@ func _run() -> void:
 			== "screen_to_ground_projection_unavailable"
 	)
 	missing_projection.free()
+	var original_movement_facing := player.movement_facing
+	var original_attack_facing := player.facing
+	player.movement_facing = Vector2.RIGHT
+	player.facing = Vector2.UP
+	skeleton.global_position = player.global_position
+	skeleton._current_target = null
+	skeleton._target_acquire_remaining = 1.0
+	var single_skeleton_formation := skeleton.rest_formation_contract_snapshot()
+	assert(
+		single_skeleton_formation.contract_id
+			== "skills.summon.owner_formation_slots.v1"
+	)
+	assert(single_skeleton_formation.typed_slot_id == "skeleton")
+	assert(
+		single_skeleton_formation.direction_source
+			== "owner_movement_facing"
+	)
+	for single_formation_frame: int in range(120):
+		skeleton._physics_process(1.0 / 60.0)
+	assert(
+		skeleton.distance_gu_to_screen_position_px(
+			single_skeleton_formation.desired_screen_position_px
+		) <= float(single_skeleton_formation.settle_distance_gu)
+	)
+	var formation_beast := SummonActor.new()
+	formation_beast.setup(
+		player,
+		ProfessionRules.skill_display_name("taoist.summon_divine_beast"),
+		30,
+		3,
+		"taoist.summon_divine_beast",
+		35
+	)
+	formation_beast.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen"),
+		GroundUnit.screen_delta_px_to_ground_delta_gu
+	)
+	formation_beast.configure_spatial_index(combat_index)
+	formation_beast.global_position = player.global_position
+	game.add_child(formation_beast)
+	formation_beast.set_physics_process(false)
+	var skeleton_formation := skeleton.rest_formation_contract_snapshot()
+	var beast_formation := formation_beast.rest_formation_contract_snapshot()
+	assert(
+		skeleton_formation.collision_contract_id
+			== "skills.summon.collision.player_pet_passthrough.v1"
+	)
+	assert(skeleton_formation.typed_slot_id == "skeleton")
+	assert(beast_formation.typed_slot_id == "divine_beast")
+	assert(
+		skeleton_formation.desired_screen_position_px
+			!= beast_formation.desired_screen_position_px
+	)
+	for formation_frame: int in range(120):
+		skeleton._physics_process(1.0 / 60.0)
+		formation_beast._physics_process(1.0 / 60.0)
+	var rested_separation_gu := skeleton.distance_gu_to_screen_position_px(
+		formation_beast.global_position
+	)
+	assert(
+		rested_separation_gu
+			>= (
+				skeleton.combat_radius_gu
+				+ formation_beast.combat_radius_gu
+				+ 0.2
+			),
+		"dual pets must settle at distinct non-overlapping typed slots"
+	)
+	assert(
+		skeleton.distance_gu_to_screen_position_px(
+			skeleton_formation.desired_screen_position_px
+		) <= float(skeleton_formation.settle_distance_gu)
+	)
+	assert(
+		formation_beast.distance_gu_to_screen_position_px(
+			beast_formation.desired_screen_position_px
+		) <= float(beast_formation.settle_distance_gu)
+	)
+	assert(
+		float(skeleton_formation.expected_dual_separation_gu)
+			> skeleton.combat_radius_gu
+				+ formation_beast.combat_radius_gu
+				+ 0.2
+	)
+	assert(
+		bool(skeleton_formation.player_pass_through)
+		and not bool(skeleton_formation.pet_hard_collision_enabled)
+	)
+	assert(
+		bool(skeleton_formation.world_collision_preserved)
+		and bool(skeleton_formation.enemy_collision_preserved)
+	)
+	assert(
+		player.collision_layer == WorldSpatialRulesScript.PLAYER_LAYER
+		and (
+			player.collision_mask & WorldSpatialRulesScript.PLAYER_LAYER
+		) == 0,
+		"player movement mask must continue to pass through pet bodies"
+	)
+	var skeleton_before_attack_facing := (
+		skeleton.rest_formation_contract_snapshot()
+	)
+	var beast_before_attack_facing := (
+		formation_beast.rest_formation_contract_snapshot()
+	)
+	var skeleton_anchor_before_attack_facing: Vector2 = (
+		skeleton_before_attack_facing.desired_screen_position_px
+	)
+	var beast_anchor_before_attack_facing: Vector2 = (
+		beast_before_attack_facing.desired_screen_position_px
+	)
+	player.facing = Vector2.LEFT
+	var skeleton_after_attack_facing := (
+		skeleton.rest_formation_contract_snapshot()
+	)
+	var beast_after_attack_facing := (
+		formation_beast.rest_formation_contract_snapshot()
+	)
+	assert(
+		(skeleton_after_attack_facing.desired_screen_position_px as Vector2
+		).is_equal_approx(
+			skeleton_anchor_before_attack_facing
+		)
+	)
+	assert(
+		(beast_after_attack_facing.desired_screen_position_px as Vector2
+		).is_equal_approx(
+			beast_anchor_before_attack_facing
+		)
+	)
+	var far_recall_position := (
+		player.global_position
+		+ GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2(
+			skeleton.teleport_range_gu + 1.0,
+			0.0
+		))
+	)
+	skeleton.global_position = far_recall_position
+	formation_beast.global_position = far_recall_position
+	skeleton._target_acquire_remaining = 1.0
+	formation_beast._target_acquire_remaining = 1.0
+	skeleton._physics_process(1.0 / 60.0)
+	formation_beast._physics_process(1.0 / 60.0)
+	assert(skeleton.global_position.is_equal_approx(
+		skeleton_anchor_before_attack_facing
+	))
+	assert(formation_beast.global_position.is_equal_approx(
+		beast_anchor_before_attack_facing
+	))
+	assert(skeleton.global_position != formation_beast.global_position)
+	var skeleton_ground_for_formation_combat := (
+		GroundUnit.screen_delta_px_to_ground_delta_gu(skeleton.global_position)
+	)
+	var formation_combat_enemy := _make_indexed_enemy(
+		game,
+		player,
+		combat_index,
+		1,
+		900,
+		900,
+		skeleton_ground_for_formation_combat + Vector2(3.0, 0.0)
+	)
+	skeleton._current_target = formation_combat_enemy
+	skeleton._physics_process(1.0 / 60.0)
+	assert(skeleton.state == SummonActor.SummonState.CHASE_TARGET)
+	assert(skeleton.velocity.length_squared() > 0.0)
+	combat_index.unregister(900)
+	formation_combat_enemy.free()
+	skeleton._current_target = null
+	formation_beast.free()
+	player.movement_facing = original_movement_facing
+	player.facing = original_attack_facing
 	for sample_index: int in range(32):
 		var ground_direction := Vector2.from_angle(
 			TAU * float(sample_index) / 32.0
@@ -237,6 +473,44 @@ func _run() -> void:
 	assert(skeleton._nearest_enemy() == actor_id_enemy)
 	combat_index.unregister(100)
 	assert(skeleton._nearest_enemy() == stable_order_enemy)
+	var rejecting_enemy := _make_policy_enemy(
+		game,
+		player,
+		combat_index,
+		1,
+		600,
+		1,
+		skeleton_ground_gu + Vector2(0.25, 0.0),
+		false
+	)
+	assert(
+		skeleton._nearest_enemy() == stable_order_enemy,
+		"summon acquisition must skip enemies rejecting external pet attacks"
+	)
+	combat_index.unregister(600)
+	rejecting_enemy.free()
+	var release_policy_enemy := _make_policy_enemy(
+		game,
+		player,
+		combat_index,
+		1,
+		601,
+		1,
+		skeleton_ground_gu + Vector2(0.5, 0.0),
+		true
+	)
+	var policy_hp_before := release_policy_enemy.current_hp
+	skeleton._clear_pending_attack()
+	skeleton._begin_attack(release_policy_enemy)
+	release_policy_enemy.allow_external_attack = false
+	skeleton._release_pending_attack()
+	assert(
+		release_policy_enemy.current_hp == policy_hp_before,
+		"delayed summon release must recheck external-attack eligibility"
+	)
+	assert(skeleton._pending_attack_target == null)
+	combat_index.unregister(601)
+	release_policy_enemy.free()
 	skeleton._current_target = enemy
 	skeleton._physics_process(0.016)
 	assert(skeleton.state == SummonActor.SummonState.CHASE_TARGET)
@@ -247,10 +521,14 @@ func _run() -> void:
 	var enemy_hp := enemy.current_hp
 	skeleton._attack_timer = 0.0
 	skeleton.apply_stealth(10.0, "buff.taoist.mass_invisibility")
+	skeleton._update_stealth_visual()
+	assert(is_equal_approx(skeleton.modulate.a, 1.0))
+	assert(is_equal_approx(skeleton._sprite.self_modulate.a, 0.60))
 	skeleton._physics_process(0.016)
 	assert(skeleton.state == SummonActor.SummonState.ATTACK_TARGET and enemy.current_hp == enemy_hp)
 	assert(not skeleton.is_stealthed(), "entering attack must break summon stealth immediately")
 	assert(skeleton.stealth_buff_id.is_empty())
+	assert(is_equal_approx(skeleton._sprite.self_modulate.a, 1.0))
 	assert(skeleton._pending_attack_target == enemy, "召唤物攻击未等待客户端命中帧")
 	assert(skeleton.last_attack_footprint_snapshot.shape_type == "directed_rectangle")
 	assert(is_equal_approx(
@@ -304,6 +582,49 @@ func _make_indexed_enemy(
 	var enemy := EnemyActor.new()
 	enemy.setup({
 		"name": "summon-index-target-%d" % actor_runtime_id,
+		"hp": 9999,
+		"attackMin": 1,
+		"attackMax": 1,
+		"level": 1,
+	}, player, false)
+	enemy.control_time = 60.0
+	enemy.global_position = GroundUnit.ground_delta_gu_to_screen_delta_px(
+		ground_position_gu
+	)
+	enemy.configure_runtime_map_projection(
+		map_id,
+		Callable(self, "_test_ground_to_screen"),
+		GroundUnit.screen_delta_px_to_ground_delta_gu
+	)
+	enemy.configure_spatial_index(index, actor_runtime_id)
+	parent.add_child(enemy)
+	enemy.set_physics_process(false)
+	index.register(
+		actor_runtime_id,
+		map_id,
+		ground_position_gu,
+		enemy.combat_radius_gu,
+		stable_combat_order,
+		enemy,
+		Callable(enemy, "spatial_index_position")
+	)
+	return enemy
+
+
+func _make_policy_enemy(
+	parent: Node,
+	player: PlayerCharacter,
+	index: RuntimeCombatSpatialIndexScript,
+	map_id: int,
+	actor_runtime_id: int,
+	stable_combat_order: int,
+	ground_position_gu: Vector2,
+	allow_external_attack: bool
+) -> ExternalAttackPolicyEnemy:
+	var enemy := ExternalAttackPolicyEnemy.new()
+	enemy.allow_external_attack = allow_external_attack
+	enemy.setup({
+		"name": "summon-policy-target-%d" % actor_runtime_id,
 		"hp": 9999,
 		"attackMin": 1,
 		"attackMax": 1,

@@ -82,11 +82,25 @@ func _run() -> void:
 	var hp_before_heal: int = game.player.current_hp
 	game._on_player_skill("治愈术", game.player.global_position, Vector2.RIGHT, 12)
 	assert(game.player.current_hp > hp_before_heal, "治愈术未恢复生命")
-	enemy.global_position = game.player.global_position + Vector2(120, 0)
+	var entrapment_center_cell: Vector2i = (
+		game._canonical_screen_px_to_grid_cell(game.player.global_position)
+		+ Vector2i(2, 0)
+	)
+	enemy.global_position = game._canonical_grid_cell_to_screen_px(
+		entrapment_center_cell
+	)
 	enemy.control_time = 0.0
 	game._set_magic_locked_target(enemy, true)
 	game._on_player_skill("困魔咒", game.player.global_position, Vector2.RIGHT, 1)
-	assert(enemy.control_time > 0.0, "困魔咒未定身")
+	var entrapment_state := enemy.entrapment_state_snapshot()
+	assert(bool(entrapment_state.get("active", false)), "困魔咒未建立边界状态")
+	assert(
+		str(entrapment_state.get("contract_id", ""))
+		== "skills.taoist.entrapment.boundary_controller.v1"
+	)
+	assert(int(entrapment_state.get("boundary_cell_count", 0)) == 8)
+	assert(entrapment_state.get("center_cell", Vector2i.ZERO) == entrapment_center_cell)
+	assert(enemy.control_time == 0.0, "困魔咒不得退化为通用定身")
 	game._on_player_skill("隐身术", game.player.global_position, Vector2.RIGHT, 1)
 	assert(game.player.is_stealthed(), "隐身术未生效")
 	game._on_player_skill("召唤骷髅", game.player.global_position, Vector2.RIGHT, 12)

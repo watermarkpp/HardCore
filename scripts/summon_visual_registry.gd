@@ -4,6 +4,8 @@ extends RefCounted
 const SUMMON_BASELINE_PATH := "res://assets/data/vanilla_176/taoist_summon_baseline.json"
 const DIVINE_BEAST_MANIFEST_PATH := "res://assets/data/vanilla_176/divine_beast_animation.json"
 const DIVINE_BEAST_CONTRACT_ID := "summon.visual.divine_beast.directional.v1"
+const GROUND_SHADOW_MODE_AUTHORED_BODY_FRAMES := "authored_body_frames"
+const GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK := "procedural_fallback"
 const SERIAL_STREAMING_CONTRACT_ID := (
 	"summon.visual.streaming.serial_idle_preview.v1"
 )
@@ -272,6 +274,7 @@ static func _build_idle_preview_profile(
 		"frame_size": plan.get("frame_size", Vector2i.ZERO),
 		"foot_anchor": plan.get("foot_anchor", Vector2i.ZERO),
 		"actor_ground_offset": plan.get("actor_ground_offset", Vector2i.ZERO),
+		"ground_shadow_mode": str(plan.get("ground_shadow_mode", "")),
 		"stable_body_top": int(plan.get("stable_body_top", 0)),
 		"frame_counts": {},
 		"frame_ms": {},
@@ -361,6 +364,7 @@ static func _assemble_profile(result: Dictionary) -> Dictionary:
 		"frame_size": plan.get("frame_size", Vector2i.ZERO),
 		"foot_anchor": plan.get("foot_anchor", Vector2i.ZERO),
 		"actor_ground_offset": plan.get("actor_ground_offset", Vector2i.ZERO),
+		"ground_shadow_mode": str(plan.get("ground_shadow_mode", "")),
 		"stable_body_top": int(plan.get("stable_body_top", 0)),
 		"frame_counts": (plan.get("frame_counts", {}) as Dictionary).duplicate(),
 		"frame_ms": (plan.get("frame_ms", {}) as Dictionary).duplicate(),
@@ -450,6 +454,7 @@ static func _build_skeleton_plan() -> Dictionary:
 		visual.get("frame_size", []),
 		visual.get("foot_anchor", []),
 		visual.get("actor_ground_offset", []),
+		visual.get("ground_shadow_mode", ""),
 		int(visual.get("stable_body_top", 0)),
 		visual.get("actions", {}),
 		"frames_per_direction",
@@ -468,6 +473,7 @@ static func _build_divine_beast_plan() -> Dictionary:
 		parsed.get("frameSize", []),
 		parsed.get("footAnchor", []),
 		parsed.get("actorGroundOffset", []),
+		parsed.get("groundShadowMode", ""),
 		int(parsed.get("stableBodyTop", 39)),
 		parsed.get("actions", {}),
 		"framesPerDirection",
@@ -511,6 +517,7 @@ static func _build_action_metadata(
 	frame_size_data: Variant,
 	foot_anchor_data: Variant,
 	ground_offset_data: Variant,
+	ground_shadow_mode_data: Variant,
 	stable_body_top: int,
 	actions_value: Variant,
 	frame_count_key: String,
@@ -522,7 +529,14 @@ static func _build_action_metadata(
 	var frame_size := _vector2i(frame_size_data)
 	var foot_anchor := _vector2i(foot_anchor_data)
 	var ground_offset := _vector2i(ground_offset_data)
-	if frame_size == Vector2i.ZERO:
+	var ground_shadow_mode := str(ground_shadow_mode_data)
+	if (
+		frame_size == Vector2i.ZERO
+		or ground_shadow_mode not in [
+			GROUND_SHADOW_MODE_AUTHORED_BODY_FRAMES,
+			GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK,
+		]
+	):
 		return {}
 	var actions: Dictionary = actions_value
 	var image_paths: Dictionary = {}
@@ -549,6 +563,7 @@ static func _build_action_metadata(
 		"frame_size": frame_size,
 		"foot_anchor": foot_anchor,
 		"actor_ground_offset": ground_offset,
+		"ground_shadow_mode": ground_shadow_mode,
 		"stable_body_top": stable_body_top,
 		"image_paths": image_paths,
 		"expected_texture_sizes": expected_sizes,
@@ -583,6 +598,7 @@ static func _build_action_profile_from_textures(
 		"frame_size": frame_size,
 		"foot_anchor": foot_anchor,
 		"actor_ground_offset": ground_offset,
+		"ground_shadow_mode": str(plan.get("ground_shadow_mode", "")),
 		"stable_body_top": int(plan.get("stable_body_top", 0)),
 		"frame_counts": (plan.get("frame_counts", {}) as Dictionary).duplicate(),
 		"frame_ms": (plan.get("frame_ms", {}) as Dictionary).duplicate(),
