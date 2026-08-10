@@ -17,18 +17,20 @@ static var _async_request_count := 0
 static var _async_ready_count := 0
 static var _async_failure_count := 0
 static var _last_loaded_image_count := 0
+static var _threaded_resource_request_count := 0
+static var _threaded_resource_ready_count := 0
+static var _main_thread_blocking_load_count := 0
+static var _max_resources_finalized_in_one_poll := 0
 
 static var _request_serial := 0
 static var _pending_requests: Dictionary = {}
 static var _request_owners: Dictionary = {}
-static var _completed_results: Dictionary = {}
 static var _failed_summon_ids: Dictionary = {}
-static var _result_mutex := Mutex.new()
 
 
 ## Synchronous API kept for deterministic callers/tests. Production summon
-## actors must use request_profile()/poll_profile() so raw atlas decoding runs
-## on a worker thread and ImageTexture creation stays on the main thread.
+## actors must use request_profile()/poll_profile() so imported Texture2D
+## resources are loaded by ResourceLoader's worker pool.
 static func profile(summon_id: String) -> Dictionary:
 	if _profile_cache.has(summon_id):
 		return (_profile_cache[summon_id] as Dictionary).duplicate()
@@ -39,11 +41,10 @@ static func profile(summon_id: String) -> Dictionary:
 	return result.duplicate()
 
 
-## Starts a threaded raw-image load for a summon profile and returns a request
+## Starts threaded imported-Texture2D loads for a summon profile and returns a request
 ## id. Returns REQUEST_READY when the profile is already cached and
 ## REQUEST_UNKNOWN when the plan is invalid (caller keeps the 0.25s retry).
 static func request_profile(summon_id: String) -> int:
-	_reap_completed_requests()
 	if _profile_cache.has(summon_id):
 		return REQUEST_READY
 	if _failed_summon_ids.has(summon_id):
@@ -55,17 +56,40 @@ static func request_profile(summon_id: String) -> int:
 		return REQUEST_UNKNOWN
 	_request_serial += 1
 	var request_id := _request_serial
-	_pending_requests[summon_id] = {"request_id": request_id}
+	var resource_entries := _resource_entries_from_plan(plan)
+	if resource_entries.is_empty():
+		return REQUEST_UNKNOWN
+	_pending_requests[summon_id] = {
+		"request_id": request_id,
+		"plan": plan,
+		"resources": resource_entries,
+		"textures": {},
+		"finalized_count": 0,
+	}
 	_request_owners[request_id] = summon_id
 	_async_request_count += 1
-	var thread := Thread.new()
-	_pending_requests[summon_id]["thread"] = thread
-	thread.start(_load_plan_async.bind(summon_id, request_id, plan))
+	for resource_entry: Dictionary in resource_entries:
+		var path := str(resource_entry.get("path", ""))
+		var error := ResourceLoader.load_threaded_request(
+			path,
+			"Texture2D",
+			true,
+			ResourceLoader.CACHE_MODE_REUSE
+		)
+		if error != OK:
+			_finish_request(request_id, {
+				"ok": false,
+				"error": "threaded_request_failed:%s:%d" % [path, error],
+				"loaded_image_count": 0,
+			})
+			return REQUEST_FAILED
+		_threaded_resource_request_count += 1
 	return request_id
 
 
-## Non-blocking readiness poll. Returns the assembled profile once ready
-## (ImageTexture creation happens on this main thread), {} while loading, and
+## Non-blocking readiness poll. It finalizes at most one already-loaded
+## Texture2D per call, returns the assembled profile once all are ready,
+## {} while loading, and
 ## {} for a finished-but-failed request (removed from the active request map).
 static func poll_profile(request_id: int) -> Dictionary:
 	if request_id <= REQUEST_UNKNOWN:
@@ -74,7 +98,7 @@ static func poll_profile(request_id: int) -> Dictionary:
 	## _request_owners, but its assembled profile is then available in the
 	## cache and must be returned to this poller.
 	var summon_id := str(_request_owners.get(request_id, ""))
-	_reap_completed_requests()
+	_poll_request_once(summon_id)
 	if not summon_id.is_empty() and _profile_cache.has(summon_id):
 		return (_profile_cache[summon_id] as Dictionary).duplicate()
 	if _request_owners.has(request_id):
@@ -86,32 +110,27 @@ static func request_active(request_id: int) -> bool:
 	return request_id > REQUEST_UNKNOWN and _request_owners.has(request_id)
 
 
-## Joins and assembles every completed worker request. Safe to call from any
-## poll or from SummonActor._exit_tree so finished threads are never leaked.
+## Advances each pending imported-resource request once. ResourceLoader owns
+## its worker lifetime, so actor teardown never joins a custom thread.
 static func reap_completed_requests() -> void:
-	_reap_completed_requests()
+	for summon_id: String in _pending_requests.keys():
+		_poll_request_once(summon_id)
 
 
 static func clear_cache_for_tests() -> void:
-	## Join every still-running worker before dropping request state so tests
-	## never leak unjoined Thread objects or cross-test completed results.
-	for summon_id: String in _pending_requests:
-		var entry: Dictionary = _pending_requests[summon_id]
-		var thread: Thread = entry.get("thread", null)
-		if thread != null:
-			thread.wait_to_finish()
 	_pending_requests.clear()
 	_request_owners.clear()
 	_failed_summon_ids.clear()
-	_result_mutex.lock()
-	_completed_results.clear()
-	_result_mutex.unlock()
 	_profile_cache = {}
 	_sync_image_load_count = 0
 	_async_request_count = 0
 	_async_ready_count = 0
 	_async_failure_count = 0
 	_last_loaded_image_count = 0
+	_threaded_resource_request_count = 0
+	_threaded_resource_ready_count = 0
+	_main_thread_blocking_load_count = 0
+	_max_resources_finalized_in_one_poll = 0
 
 
 static func async_diagnostics() -> Dictionary:
@@ -123,21 +142,68 @@ static func async_diagnostics() -> Dictionary:
 		"last_loaded_image_count": _last_loaded_image_count,
 		"pending_request_count": _pending_requests.size(),
 		"failed_profile_count": _failed_summon_ids.size(),
+		"threaded_resource_request_count": _threaded_resource_request_count,
+		"threaded_resource_ready_count": _threaded_resource_ready_count,
+		"ready_count": _threaded_resource_ready_count,
+		"main_thread_blocking_load_count": _main_thread_blocking_load_count,
+		"max_resources_finalized_in_one_poll": _max_resources_finalized_in_one_poll,
 	}
 
 
-static func _reap_completed_requests() -> void:
-	_result_mutex.lock()
-	var completed: Array[Dictionary] = []
-	for request_id in _completed_results:
-		completed.append({
-			"request_id": int(request_id),
-			"result": _completed_results[request_id],
-		})
-	_completed_results.clear()
-	_result_mutex.unlock()
-	for entry: Dictionary in completed:
-		_finish_request(int(entry.get("request_id", 0)), entry.get("result", {}))
+static func _poll_request_once(summon_id: String) -> void:
+	if not _pending_requests.has(summon_id):
+		return
+	var entry: Dictionary = _pending_requests[summon_id]
+	var resources: Array = entry.get("resources", [])
+	var textures: Dictionary = entry.get("textures", {})
+	var finalized_this_poll := 0
+	for resource_value: Variant in resources:
+		var resource_entry: Dictionary = resource_value
+		var resource_key := str(resource_entry.get("key", ""))
+		if textures.has(resource_key):
+			continue
+		var path := str(resource_entry.get("path", ""))
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_finish_request(int(entry.get("request_id", 0)), {
+				"ok": false,
+				"error": "threaded_resource_failed:%s:%d" % [path, status],
+				"loaded_image_count": int(entry.get("finalized_count", 0)),
+			})
+			return
+		if status != ResourceLoader.THREAD_LOAD_LOADED:
+			continue
+		var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+		if texture == null:
+			_finish_request(int(entry.get("request_id", 0)), {
+				"ok": false,
+				"error": "threaded_resource_not_texture:%s" % path,
+				"loaded_image_count": int(entry.get("finalized_count", 0)),
+			})
+			return
+		textures[resource_key] = texture
+		entry["textures"] = textures
+		entry["finalized_count"] = int(entry.get("finalized_count", 0)) + 1
+		_pending_requests[summon_id] = entry
+		_threaded_resource_ready_count += 1
+		finalized_this_poll = 1
+		break
+	_max_resources_finalized_in_one_poll = maxi(
+		_max_resources_finalized_in_one_poll,
+		finalized_this_poll
+	)
+	if int(entry.get("finalized_count", 0)) < resources.size():
+		return
+	var profile := _build_profile_from_threaded_textures(
+		entry.get("plan", {}),
+		textures
+	)
+	_finish_request(int(entry.get("request_id", 0)), {
+		"ok": not profile.is_empty(),
+		"error": "" if not profile.is_empty() else "invalid_threaded_profile",
+		"loaded_image_count": int(entry.get("finalized_count", 0)),
+		"profile": profile,
+	})
 
 
 static func _finish_request(request_id: int, result: Dictionary) -> void:
@@ -147,21 +213,13 @@ static func _finish_request(request_id: int, result: Dictionary) -> void:
 		## finish or a reaped request) must never double-count or rejoin.
 		return
 	_request_owners.erase(request_id)
-	var entry: Dictionary = _pending_requests.get(summon_id, {})
 	_pending_requests.erase(summon_id)
-	var thread: Thread = entry.get("thread", null)
-	if thread != null:
-		thread.wait_to_finish()
 	_last_loaded_image_count = int(result.get("loaded_image_count", 0))
 	if not bool(result.get("ok", false)):
 		_async_failure_count += 1
 		_failed_summon_ids[summon_id] = true
 		return
-	var profile := (
-		_build_resource_profile(result.get("plan", {}))
-		if bool(result.get("defer_resource_load", false))
-		else _assemble_profile(result)
-	)
+	var profile: Dictionary = result.get("profile", {})
 	if profile.is_empty():
 		_async_failure_count += 1
 		_failed_summon_ids[summon_id] = true
@@ -169,39 +227,17 @@ static func _finish_request(request_id: int, result: Dictionary) -> void:
 	_async_ready_count += 1
 	_profile_cache[summon_id] = profile
 
-
-static func _load_plan_async(
-	summon_id: String,
-	request_id: int,
-	plan: Dictionary
-) -> void:
-	## Worker only validates the immutable manifest. Imported resources are
-	## resolved on the main thread during poll/reap, avoiding export-unsafe raw
-	## filesystem decoding and ResourceLoader thread stalls.
-	var loaded_count := REQUIRED_ACTIONS.size()
-	if not str(plan.get("fire_path", "")).is_empty():
-		loaded_count += 1
-	var result := {
-		"ok": true,
-		"error": "",
-		"loaded_image_count": loaded_count,
-		"summon_id": summon_id,
-		"plan": plan,
-		"defer_resource_load": true,
-	}
-	_result_mutex.lock()
-	_completed_results[request_id] = result
-	_result_mutex.unlock()
-
-
-static func _build_resource_profile(plan: Dictionary) -> Dictionary:
-	var profile := _build_action_profile_from_plan(plan)
+static func _build_profile_from_threaded_textures(
+	plan: Dictionary,
+	textures: Dictionary
+) -> Dictionary:
+	var profile := _build_action_profile_from_textures(plan, textures)
 	if profile.is_empty():
 		return {}
 	var fire_path := str(plan.get("fire_path", ""))
 	if fire_path.is_empty():
 		return profile
-	var fire_texture := _load_texture(fire_path)
+	var fire_texture := textures.get("fire", null) as Texture2D
 	var fire_expected: Vector2i = plan.get("fire_expected_size", Vector2i.ZERO)
 	if fire_texture == null or fire_texture.get_size() != Vector2(fire_expected.x, fire_expected.y):
 		return {}
@@ -214,6 +250,22 @@ static func _build_resource_profile(plan: Dictionary) -> Dictionary:
 	profile.attack_release_frame_index = int(plan.get("attack_release_frame_index", 5))
 	profile.attack_release_ms = int(plan.get("attack_release_ms", 500))
 	return profile
+
+
+static func _resource_entries_from_plan(plan: Dictionary) -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	var image_paths: Dictionary = plan.get("image_paths", {})
+	for action_name: String in REQUIRED_ACTIONS:
+		var path := str(image_paths.get(action_name, ""))
+		if path.is_empty() or not ResourceLoader.exists(path):
+			return []
+		entries.append({"key": action_name, "path": path})
+	var fire_path := str(plan.get("fire_path", ""))
+	if not fire_path.is_empty():
+		if not ResourceLoader.exists(fire_path):
+			return []
+		entries.append({"key": "fire", "path": fire_path})
+	return entries
 
 
 static func _assemble_profile(result: Dictionary) -> Dictionary:
@@ -424,6 +476,20 @@ static func _build_action_metadata(
 
 
 static func _build_action_profile_from_plan(plan: Dictionary) -> Dictionary:
+	var textures: Dictionary = {}
+	var image_paths: Dictionary = plan.get("image_paths", {})
+	for action_name: String in REQUIRED_ACTIONS:
+		var path := str(image_paths.get(action_name, ""))
+		if path.is_empty():
+			return {}
+		textures[action_name] = _load_texture(path)
+	return _build_action_profile_from_textures(plan, textures)
+
+
+static func _build_action_profile_from_textures(
+	plan: Dictionary,
+	textures: Dictionary
+) -> Dictionary:
 	if plan.is_empty():
 		return {}
 	var frame_size: Vector2i = plan.get("frame_size", Vector2i.ZERO)
@@ -439,13 +505,9 @@ static func _build_action_profile_from_plan(plan: Dictionary) -> Dictionary:
 		"frame_counts": (plan.get("frame_counts", {}) as Dictionary).duplicate(),
 		"frame_ms": (plan.get("frame_ms", {}) as Dictionary).duplicate(),
 	}
-	var image_paths: Dictionary = plan.get("image_paths", {})
 	var expected_sizes: Dictionary = plan.get("expected_texture_sizes", {})
 	for action_name: String in REQUIRED_ACTIONS:
-		var path := str(image_paths.get(action_name, ""))
-		if path.is_empty():
-			return {}
-		var texture := _load_texture(path)
+		var texture := textures.get(action_name, null) as Texture2D
 		var frame_count := int(
 			plan.get("frame_counts", {}).get(action_name, 0)
 		)
@@ -471,6 +533,7 @@ static func _read_json(path: String) -> Dictionary:
 
 static func _load_texture(path: String) -> Texture2D:
 	if ResourceLoader.exists(path):
+		_main_thread_blocking_load_count += 1
 		return load(path) as Texture2D
 	## Exported builds do not guarantee a filesystem path for imported assets;
 	## never fall back to Image.load_from_file. Missing imports are terminal.

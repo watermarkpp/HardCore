@@ -25,6 +25,14 @@ func _run() -> void:
 		"summon visual request must start on the threaded path"
 	)
 	assert(
+		diagnostics.threaded_resource_request_count == 5,
+		"skeleton must request its five imported atlases through ResourceLoader"
+	)
+	assert(
+		diagnostics.main_thread_blocking_load_count == 0,
+		"cold production request must not call blocking load(path)"
+	)
+	assert(
 		summon._animation_resources.is_empty(),
 		"cold-cache visuals must not be installed synchronously"
 	)
@@ -52,8 +60,20 @@ func _run() -> void:
 		"threaded profile must be assembled and cached exactly once"
 	)
 	assert(
-		diagnostics.last_loaded_image_count >= 5,
-		"worker must decode all five action atlases"
+		diagnostics.last_loaded_image_count == 5,
+		"all five threaded skeleton resources must be finalized"
+	)
+	assert(
+		diagnostics.ready_count == 5,
+		"all formal ResourceLoader requests must reach ready"
+	)
+	assert(
+		diagnostics.max_resources_finalized_in_one_poll == 1,
+		"one poll must finalize at most one texture"
+	)
+	assert(
+		diagnostics.main_thread_blocking_load_count == 0,
+		"threaded completion must not hide a blocking main-thread load"
 	)
 
 	## Warm cache: a second summon installs immediately with no new request and
@@ -66,6 +86,21 @@ func _run() -> void:
 	diagnostics = SummonVisualRegistryScript.async_diagnostics()
 	assert(diagnostics.async_request_count == 1, "cache must be reused")
 	assert(diagnostics.sync_image_load_count == 0, "cache hit must not decode")
+	assert(diagnostics.threaded_resource_request_count == 5, "cache hit must not re-request atlases")
+	assert(diagnostics.main_thread_blocking_load_count == 0, "cache hit must remain non-blocking")
+
+	## Divine beast exercises the sixth fire atlas on the same bounded finalize
+	## path. The profile becomes visible only after all six resources are ready.
+	var divine_beast := _spawn_summon("divine_beast")
+	assert(divine_beast._animation_resources.is_empty())
+	await _wait_for_visual_ready(divine_beast)
+	diagnostics = SummonVisualRegistryScript.async_diagnostics()
+	assert(diagnostics.async_request_count == 2)
+	assert(diagnostics.threaded_resource_request_count == 11)
+	assert(diagnostics.ready_count == 11)
+	assert(diagnostics.max_resources_finalized_in_one_poll == 1)
+	assert(diagnostics.main_thread_blocking_load_count == 0)
+	assert(divine_beast._animation_resources.has("fire"))
 
 	## Failure path: a finished-but-failed request becomes terminal; further
 	## requests return REQUEST_FAILED without spawning new Threads, so the
@@ -137,9 +172,9 @@ func _run() -> void:
 
 	_owner.free()
 	print(
-		"TAOIST_SUMMON_PROJECTILE_ASYNC_VISUAL_PASS: _ready/add_child never "
-		+ "calls raw Image.load_from_file; threaded request plus 0.25s poll "
-		+ "installs once; cache reuse and terminal failure state confirmed"
+		"TAOIST_SUMMON_PROJECTILE_ASYNC_VISUAL_PASS: imported Texture2D resources "
+		+ "use ResourceLoader threaded requests; each poll finalizes at most one; "
+		+ "warm cache and terminal failure state confirmed"
 	)
 	get_tree().quit(0)
 

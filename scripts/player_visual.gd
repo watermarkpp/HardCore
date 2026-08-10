@@ -52,8 +52,6 @@ var _action_duration := 0.0
 var _last_state := ""
 var _action_name := "attack"
 var _action_audio_played := false
-var _thrust_client_effect_alignment: Dictionary = {}
-var _thrust_client_effect_anchor_screen_px := Vector2.ZERO
 var _passive_proc_effect_name := ""
 var _passive_proc_effect_remaining := 0.0
 var _passive_proc_effect_duration := 0.0
@@ -288,8 +286,6 @@ func play_action(animation_name: String, duration: float) -> void:
 	if _action_name == "death" and _action_remaining > 0.0 and animation_name != "death":
 		return
 	_action_name = animation_name
-	_thrust_client_effect_alignment.clear()
-	_thrust_client_effect_anchor_screen_px = Vector2.ZERO
 	if animation_name in ["hit", "death"]:
 		_action_remaining = duration
 		_action_duration = duration
@@ -298,27 +294,6 @@ func play_action(animation_name: String, duration: float) -> void:
 		_action_duration = maxf(_action_duration, duration)
 	_elapsed = 0.0
 	_action_audio_played = false
-
-
-func current_client_direction_row() -> int:
-	return current_direction
-
-
-func apply_thrust_client_effect_alignment(
-	descriptor: Dictionary,
-	anchor_screen_px: Vector2
-) -> bool:
-	if (
-		_action_name != "刺杀剑术"
-		or str(descriptor.get("contract_id", ""))
-		!= "skills.warrior.thrust.client_effect_snapshot_alignment.v1"
-		or int(descriptor.get("source_direction_row", -1)) != current_direction
-	):
-		return false
-	_thrust_client_effect_alignment = descriptor
-	_thrust_client_effect_anchor_screen_px = anchor_screen_px
-	_update_skill_effect()
-	return true
 
 
 func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
@@ -845,10 +820,6 @@ func _update_skill_effect() -> void:
 	var active := current_state == "action" and WARRIOR_SKILL_COLORS.has(_action_name)
 	var uses_client_effect := active and CLIENT_EFFECTS.has(_action_name)
 	skill_effect_sprite.visible = uses_client_effect
-	skill_effect_sprite.transform = Transform2D(
-		0.0,
-		Vector2.ZERO
-	)
 	# The former three-point Line2D fallback was the V-shaped prototype effect.
 	# It must not be presented as a finished attack/skill animation.
 	skill_effect.visible = false
@@ -871,45 +842,6 @@ func _update_skill_effect() -> void:
 		else:
 			skill_effect_sprite.texture = PresentationAssets.effect_texture(str(effect.get("asset", "")))
 			skill_effect_sprite.region_rect = Rect2(Vector2(current_frame * cell.x, current_direction * cell.y), Vector2(cell))
-		if _action_name == "刺杀剑术":
-			if _thrust_client_effect_alignment.is_empty():
-				# The target-aligned band does not exist until the formal 170 ms
-				# release snapshot. Hiding the early client overlay prevents an
-				# oversized pre-release arc from claiming gameplay range it lacks.
-				skill_effect_sprite.visible = false
-				return
-			var global_origin_px := (
-				_thrust_client_effect_anchor_screen_px
-				+ Vector2(_thrust_client_effect_alignment.get(
-					"origin_screen_offset_px", Vector2.ZERO
-				))
-			)
-			var global_basis_x_px := Vector2(
-				_thrust_client_effect_alignment.get(
-					"basis_x_screen_px", Vector2.RIGHT
-				)
-			)
-			var global_basis_y_px := Vector2(
-				_thrust_client_effect_alignment.get(
-					"basis_y_screen_px", Vector2.DOWN
-				)
-			)
-			var local_origin_px := to_local(global_origin_px)
-			var local_basis_x_px := (
-				to_local(global_origin_px + global_basis_x_px)
-				- local_origin_px
-			)
-			var local_basis_y_px := (
-				to_local(global_origin_px + global_basis_y_px)
-				- local_origin_px
-			)
-			skill_effect_sprite.transform = Transform2D(
-				local_basis_x_px,
-				local_basis_y_px,
-				local_origin_px
-			)
-			skill_effect_sprite.modulate = Color.WHITE
-			return
 		# Hum/Weapon pixels were packed around the classic (64,80) actor
 		# anchor. Runtime uses (96,108) for ground placement, so Magic.wil must
 		# follow the same migration to preserve its source-relative position.

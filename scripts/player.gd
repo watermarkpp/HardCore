@@ -29,6 +29,9 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
+const SOUL_FIRE_TALISMAN_LAUNCH_TIMING_CONTRACT_ID := (
+	"skills.taoist.soul_fire_talisman.body_release_frame_launch.v1"
+)
 const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
 	"skills.wizard.magic_shield.absorption_capacity.v1"
 )
@@ -456,6 +459,20 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		"effect_resolve_ms_from_cast_start",
 		body_cast_ms
 	))
+	## An explicit projectile-launch field is independent from effect resolve.
+	## Soul Fire Talisman has a narrower project override: its travelling paper
+	## leaves on the body release frame while its audited 1200 ms effect timing
+	## stays source semantics. Other projectile skills retain their existing
+	## effect-resolve schedule unless they explicitly declare launch timing.
+	var canonical_geometry: Dictionary = canonical_definition.get("geometry", {})
+	if str(canonical_geometry.get("shape", "")) == "projectile":
+		if canonical_timing.has("projectile_launch_ms_from_cast_start"):
+			release_ms = int(canonical_timing.get(
+				"projectile_launch_ms_from_cast_start",
+				release_ms
+			))
+		elif stable_skill_id == "taoist.soul_fire_talisman":
+			release_ms = body_cast_ms
 	var action_lock_seconds := maxf(
 		0.0,
 		float(total_action_lock_ms) / 1000.0

@@ -195,6 +195,7 @@ $Suites.caster_visual_critical = @(
 $Suites.taoist_critical = @(
 	'tests/canonical_summon_integration_test.tscn',
     'tests/skills/taoist_summon_projectile_async_visual_test.tscn',
+	'tests/skills/taoist_soul_fire_launch_timing_test.tscn',
     'tests/skills/taoist_summon_projectile_origin_anchor_test.tscn',
     'tests/skills/taoist_summon_projectile_stealth_buff_visual_test.tscn',
     'tests/skills/taoist_support_policy_test.tscn',

@@ -3922,31 +3922,6 @@ func _spawn_target_aligned_melee_visual(
 	)
 	if visual == null:
 		return
-	if (
-		mode == WarriorMeleeGeometryScript.SKILL_THRUST
-		and player != null
-		and player.visual != null
-		and player.visual.has_method("current_client_direction_row")
-		and player.visual.has_method("apply_thrust_client_effect_alignment")
-	):
-		var thrust_alignment := (
-			WarriorMeleeVisualEffectScript.thrust_client_effect_alignment_descriptor(
-				snapshot,
-				int(player.visual.call("current_client_direction_row")),
-				release_geometry.get(
-					"snapshot_validation_context",
-					_canonical_snapshot_validation_context(
-						plan.get("origin_ground_gu", Vector2.ZERO)
-					)
-				)
-			)
-		)
-		if not thrust_alignment.is_empty():
-			player.visual.call(
-				"apply_thrust_client_effect_alignment",
-				thrust_alignment,
-				anchor_screen_px
-			)
 	var parent: Node = self
 	if is_inside_tree() and get_tree().current_scene != null:
 		parent = get_tree().current_scene
