@@ -188,7 +188,7 @@ func _build_detail_section() -> void:
 	minus_button.text = "−"
 	minus_button.position = Vector2.ZERO
 	minus_button.size = Vector2(58, 46)
-	minus_button.theme_type_variation = "GothicComponentButton"
+	minus_button.theme_type_variation = "GothicTransparentButton"
 	_add_quantity_decoration(minus_button, false)
 	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
 	sell_quantity_row.add_child(minus_button)
@@ -212,7 +212,7 @@ func _build_detail_section() -> void:
 	plus_button.text = "+"
 	plus_button.position = Vector2(268, 0)
 	plus_button.size = Vector2(58, 46)
-	plus_button.theme_type_variation = "GothicComponentButton"
+	plus_button.theme_type_variation = "GothicTransparentButton"
 	_add_quantity_decoration(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
 	sell_quantity_row.add_child(plus_button)
@@ -250,6 +250,7 @@ func _add_quantity_decoration(button: Button, flip_h: bool) -> void:
 	decoration.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	decoration.flip_h = flip_h
 	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	decoration.show_behind_parent = true
 	button.add_child(decoration)
 
 

@@ -69,6 +69,24 @@ func _run() -> void:
 			"warning": "测试高风险物品",
 		}
 	panel.set_sell_quotes(quotes)
+	var dec := panel.sell_quantity_row.get_node("DecreaseQuantity/QuantityDecoration") as TextureRect
+	var inc := panel.sell_quantity_row.get_node("IncreaseQuantity/QuantityDecoration") as TextureRect
+	assert(dec != null and inc != null and not dec.flip_h and inc.flip_h, "数量装饰未真实镜像")
+	assert(panel.sell_quantity_row.get_node("DecreaseQuantity").theme_type_variation == "GothicTransparentButton", "数量按钮仍使用不透明背景")
+	var bg := panel.sell_quantity_row.get_node("QuantityCenterBackground") as Panel
+	assert(Rect2(Vector2.ZERO, panel.sell_quantity_row.size).encloses(Rect2(bg.position, bg.size)), "中心背景越出数量行")
+	assert(Rect2(Vector2.ZERO, panel.sell_quantity_row.size).encloses(Rect2(panel.sell_quantity_label.position, panel.sell_quantity_label.size)), "数量标签越出数量行")
+	assert(bg.position.x >= 66.0 and bg.position.x + bg.size.x <= 268.0, "中心背景与两侧按钮缺少安全间隙")
+	panel._select_sell_item(0)
+	panel._select_sell_item(1)
+	assert(panel._selected_sell_indices.size() == 2, "多选未生效")
+	panel._change_sell_quantity(1)
+	assert(int(panel._sell_quantities.get(panel._selected_sell_index, 0)) == 2, "独立数量未生效")
+	panel._select_sell_item(1)
+	assert(panel._selected_sell_indices.size() == 1, "再次点击未取消选择")
+	panel._select_sell_item(1)
+	panel.set_sell_quotes(quotes)
+	assert(panel._selected_sell_indices.size() == 2, "报价刷新改变了选择集合")
 	panel._select_sell_item(0)
 	assert(not panel.sell_one_button.disabled and "单件报价" in panel.detail_label.text, "有效玩法报价没有启用出售操作")
 	panel._change_sell_quantity(1)
