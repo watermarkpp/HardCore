@@ -7,6 +7,11 @@ const PROFILE_SAFE_RIGHT_PX := 129.0
 func _ready() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	var ratio_text := OS.get_environment("HARDCORE_DEVICE_PROFILE_EXP_RATIO")
+	var exp_ratio := clampf(float(ratio_text) if not ratio_text.is_empty() else 0.0, 0.0, 1.0)
+	var exp_required := maxi(1, PlayerState.experience_to_next_level())
+	var actual_experience := clampi(int(floor(float(exp_required) * exp_ratio)), 0, exp_required - 1)
+	PlayerState.experience = actual_experience
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
@@ -32,11 +37,18 @@ func _ready() -> void:
 	var output_dir := ProjectSettings.globalize_path("res://outputs/android_device")
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	var image := viewport.get_texture().get_image()
-	var output_path := output_dir.path_join("local_main_device_profile.png")
+	var capture_name := OS.get_environment("HARDCORE_DEVICE_PROFILE_CAPTURE_NAME")
+	if capture_name.is_empty():
+		capture_name = "local_main_device_profile"
+	var output_path := output_dir.path_join("%s.png" % capture_name)
 	assert(image.save_png(output_path) == OK, "unable to save formal main scene capture")
 	var geometry := {
 		"profile": "HardCore.android.device_ui.v1",
 		"source": "res://scenes/main.tscn",
+		"head": OS.get_environment("DEVICE_PROFILE_HEAD"),
+		"experience_ratio": exp_ratio,
+		"experience_required": exp_required,
+		"experience": actual_experience,
 		"physical_size": [int(PROFILE_PHYSICAL.x), int(PROFILE_PHYSICAL.y)],
 		"logical_viewport": [logical.x, logical.y],
 		"safe_pixels": {"left": PROFILE_SAFE_LEFT_PX, "right": PROFILE_SAFE_RIGHT_PX, "top": 0.0, "bottom": 0.0},
@@ -44,7 +56,7 @@ func _ready() -> void:
 		"safe_root_rect": [safe_root.position.x, safe_root.position.y, safe_root.size.x, safe_root.size.y],
 		"capture": output_path,
 	}
-	var geometry_path := output_dir.path_join("local_main_device_profile.json")
+	var geometry_path := output_dir.path_join("%s.json" % capture_name)
 	FileAccess.open(geometry_path, FileAccess.WRITE).store_string(JSON.stringify(geometry, "  "))
 	print("FORMAL_MAIN_DEVICE_PROFILE_PASS capture=%s geometry=%s logical=%s" % [output_path, geometry_path, logical])
 	get_tree().quit(0)
