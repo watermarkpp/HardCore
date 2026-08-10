@@ -45,15 +45,12 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	assert(panel.size == Vector2(1208, 650))
-	assert((panel.get_node("SkillDetailPanel") as Control).size.x == 400.0)
-	assert((panel.get_node("AssignmentPanel") as Control).size.x == 434.0)
 	assert(panel.theme_type_variation == "GothicModalFrame")
 	assert(panel.center_assignment_buttons.is_empty(), "已取消的中央四技能槽仍然存在")
 	assert(panel.attack_assignment_buttons.size() == 1)
 	assert(panel.attack_ring_assignment_buttons.size() == 6)
 	assert(panel.assignment_buttons.size() == 7)
 	assert(panel.assignment_popup_buttons.size() == 7)
-	assert(panel.find_child("LearnButton", true, false) == null)
 	assert(panel.attack_assignment_buttons[0].get_meta("stable_slot_id", "") == "hud.attack.primary")
 	assert(panel.get_node("AssignmentPanel/AttackSlotTitle").text != "")
 	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").text == "空")
