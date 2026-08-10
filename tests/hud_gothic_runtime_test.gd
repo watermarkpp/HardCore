@@ -48,6 +48,19 @@ func _run() -> void:
 	var health_orb := chassis.get_node("HealthOrb") as Control
 	var mana_orb := chassis.get_node("ManaOrb") as Control
 	assert(health_orb != null and mana_orb != null)
+	var experience_bar := chassis.get_node("ExperienceBar") as Control
+	assert(experience_bar != null and experience_bar.get_meta("stable_id") == "ui.hud.experience_bar.10_segments.v1")
+	assert(experience_bar.get_meta("segment_count") == 10)
+	var required_exp := maxi(1, int(PlayerState.experience_to_next_level()))
+	for sample in [0.0, 0.05, 0.10, 0.55, 1.0]:
+		PlayerState.experience = int(round(required_exp * sample))
+		hud.update_experience_bar()
+		for index in range(10):
+			var segment := experience_bar.get_node("Segment%02d" % (index + 1)) as ColorRect
+			var fill := segment.get_node("Fill") as ColorRect
+			var expected_ratio := clampf(sample * 10.0 - index, 0.0, 1.0)
+			assert(is_equal_approx(float(segment.get_meta("fill_ratio")), expected_ratio))
+			assert(is_equal_approx(fill.size.x, segment.size.x * expected_ratio))
 	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
 	var buff_strip := root.get_node("TaoistDefenseBuffStrip") as Control
 	assert(buff_strip != null)

@@ -62,6 +62,22 @@ func _run() -> void:
 		hint.size.x >= hint.get_combined_minimum_size().x,
 		"hint width must fit text minimum"
 	)
+	assert(panel.find_child("AssignButton", true, false) == null, "center detail assignment button must be removed")
+	var assignment_panel := panel.find_child("AssignmentPanel", true, false) as Control
+	assert(assignment_panel != null and assignment_panel.size.x == 374.0)
+	var attack_slot := assignment_panel.find_child("AttackSkillSlot", true, false) as Button
+	var clear_attack := assignment_panel.find_child("ClearAttackSkillSlot", true, false) as Button
+	assert(attack_slot != null and clear_attack != null)
+	assert(not attack_slot.get_rect().intersection(clear_attack.get_rect()).has_area())
+	panel.call("_set_assignment_button_content", attack_slot, "攻击主键", "烈火剑法")
+	var attack_icon := attack_slot.get_node("Content/SkillIcon") as TextureRect
+	assert(attack_icon != null and attack_icon.get_meta("alignment_contract", "") == "primary_attack_inset_centered.v2")
+	assert(attack_icon.position.x >= 16.0 and attack_icon.position.x < 30.0)
+	for index in range(6):
+		var ring := assignment_panel.find_child("AttackRingSkillSlot_%d" % (index + 1), true, false) as Control
+		assert(ring != null and assignment_panel.get_rect().encloses(ring.get_rect()))
+	var title := panel.find_child("SkillName", true, false) as Label
+	assert(title != null)
 	viewport.queue_free()
 	await get_tree().process_frame
 	print("SKILL_PANEL_ASSIGNMENT_HINT_LAYOUT_CONTRACT_PASS")

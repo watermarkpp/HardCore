@@ -536,6 +536,14 @@ func _build_experience_bar(chassis_root: Control) -> void:
 		segment.color = Color("241a16")
 		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		var fill := ColorRect.new()
+		fill.name = "Fill"
+		fill.position = Vector2.ZERO
+		fill.size = Vector2.ZERO
+		fill.color = Color("b77a31")
+		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		fill.set_meta("stable_id", "%s.fill.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		segment.add_child(fill)
 		experience_bar.add_child(segment)
 		experience_segments.append(segment)
 
@@ -548,7 +556,9 @@ func update_experience_bar() -> void:
 	for index in range(experience_segments.size()):
 		var segment_progress := clampf(progress * HUD_EXPERIENCE_SEGMENT_COUNT - index, 0.0, 1.0)
 		var segment := experience_segments[index]
-		segment.color = Color("b77a31") if segment_progress > 0.0 else Color("241a16")
+		segment.color = Color("241a16")
+		var fill := segment.get_node("Fill") as ColorRect
+		fill.size = Vector2(segment.size.x * segment_progress, segment.size.y)
 		segment.set_meta("fill_ratio", segment_progress)
 
 

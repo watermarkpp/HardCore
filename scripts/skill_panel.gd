@@ -231,7 +231,7 @@ func _build_assignment_section() -> void:
 	var attack_slot := Button.new()
 	attack_slot.name = "AttackSkillSlot"
 	attack_slot.position = Vector2(18, 80)
-	attack_slot.size = Vector2(190, 82)
+	attack_slot.size = Vector2(230, 82)
 	attack_slot.text = ""
 	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
 	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
@@ -244,7 +244,7 @@ func _build_assignment_section() -> void:
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
 	clear_attack.text = "恢复\n普通攻击"
-	clear_attack.position = Vector2(212, 80)
+	clear_attack.position = Vector2(252, 80)
 	clear_attack.size = Vector2(104, 82)
 	clear_attack.theme_type_variation = "GothicComponentButton"
 	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
@@ -263,8 +263,8 @@ func _build_assignment_section() -> void:
 	for slot_index in range(ATTACK_RING_SLOT_COUNT):
 		var button := Button.new()
 		button.name = "AttackRingSkillSlot_%d" % (slot_index + 1)
-		button.position = Vector2(18 + (slot_index % 3) * 100, 208 + floori(float(slot_index) / 3.0) * 112)
-		button.size = Vector2(94, 60)
+		button.position = Vector2(18 + (slot_index % 3) * 118, 208 + floori(float(slot_index) / 3.0) * 112)
+		button.size = Vector2(108, 60)
 		button.text = ""
 		button.theme_type_variation = "GothicComponentButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
@@ -278,7 +278,7 @@ func _build_assignment_section() -> void:
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
 		clear_button.text = "清空 %d" % (slot_index + 1)
 		clear_button.position = button.position + Vector2(0, 64)
-		clear_button.size = Vector2(94, 40)
+		clear_button.size = Vector2(108, 40)
 		clear_button.theme_type_variation = "GothicComponentButton"
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
@@ -295,8 +295,8 @@ func _build_assignment_section() -> void:
 	## clamping to 320px -> right edge 10px past the parent).
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.theme_type_variation = "GothicMutedLabel"
-	hint.position = Vector2(24, 442)
-	hint.size = Vector2(286, 72)
+	hint.position = Vector2(18, 442)
+	hint.size = Vector2(338, 72)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(hint)
@@ -482,12 +482,13 @@ func _rebuild_skill_cards() -> void:
 		var has_book := PlayerState.has_item(skill_name)
 		var level := int(PlayerState.learned_skills.get(skill_name, 0))
 		var interaction_label := _skill_presentation_label(skill_name)
-		var status := "Lv.%d（已学会）" % level if learned else ("可学习" if has_book else "缺少技能书")
+		var status := "已学会" if learned else ("未学会" if has_book else "未学会")
+		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
 		var button := Button.new()
 		button.name = "SkillCard_%d" % index
 		button.custom_minimum_size = Vector2(266, 64)
 		button.toggle_mode = true
-		button.text = "%s\n%s" % [skill_name, status]
+		button.text = "%s（%s）\n%s" % [skill_name, status, detail_status]
 		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.add_theme_font_size_override("font_size", 15)
 		button.set_pressed_no_signal(index == selected_skill_index)
@@ -634,8 +635,8 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var icon := TextureRect.new()
 	icon.name = "SkillIcon"
 	var compact := button.size.x < 120.0
-	var normal_attack := skill_name.is_empty() or skill_name == "普通攻击"
-	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else (Vector2(14, 21) if normal_attack else Vector2(8, 22))
+	var primary_attack := button.name == "AttackSkillSlot" or str(button.get_meta("stable_slot_id", "")) == "hud.attack.primary"
+	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else (Vector2(16, 21) if primary_attack else Vector2(8, 22))
 	icon.size = Vector2(40, 40)
 	icon.texture = _skill_texture(skill_name)
 	icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
@@ -644,13 +645,13 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.set_meta("alignment_contract", "centered_with_restore_normal_attack.v1" if normal_attack else "default_assignment_icon.v1")
+	icon.set_meta("alignment_contract", "primary_attack_inset_centered.v2" if primary_attack else "default_assignment_icon.v1")
 	content.add_child(icon)
 	var slot_label := Label.new()
 	slot_label.name = "SlotLabel"
 	slot_label.text = slot_label_text
-	slot_label.position = Vector2(4, 52) if compact else Vector2(52, 6)
-	slot_label.size = Vector2(button.size.x - 8, 18) if compact else Vector2(button.size.x - 58, 20)
+	slot_label.position = Vector2(4, 52) if compact else (Vector2(58, 6) if primary_attack else Vector2(52, 6))
+	slot_label.size = Vector2(button.size.x - 8, 18) if compact else (Vector2(button.size.x - 64, 20) if primary_attack else Vector2(button.size.x - 58, 20))
 	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	slot_label.theme_type_variation = "GothicMutedLabel"
@@ -659,8 +660,8 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var name_label := Label.new()
 	name_label.name = "SkillName"
 	name_label.text = skill_name if not skill_name.is_empty() else "空"
-	name_label.position = Vector2(4, 70) if compact else Vector2(52, 28)
-	name_label.size = Vector2(button.size.x - 8, 24) if compact else Vector2(button.size.x - 58, 26)
+	name_label.position = Vector2(4, 70) if compact else (Vector2(58, 28) if primary_attack else Vector2(52, 28))
+	name_label.size = Vector2(button.size.x - 8, 24) if compact else (Vector2(button.size.x - 64, 26) if primary_attack else Vector2(button.size.x - 58, 26))
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.clip_text = true
