@@ -109,6 +109,10 @@ func _run() -> void:
 	var goods_surface := panel.get_node("GoodsPanelSurface") as Control
 	var detail_surface := panel.get_node("DetailPanelSurface") as Control
 	assert(outer_surface.get_global_rect().end.y <= panel.get_global_rect().end.y - 32.0)
+	assert(outer_surface.position.x >= 42.0 and outer_surface.position.y >= 42.0)
+	assert(panel.size.x - (outer_surface.position.x + outer_surface.size.x) >= 42.0 and panel.size.y - (outer_surface.position.y + outer_surface.size.y) >= 42.0)
+	assert(goods_frame.position.x >= 42.0 and panel.size.x - (detail_frame.position.x + detail_frame.size.x) >= 42.0)
+	assert(outer_surface.get_global_rect().encloses(goods_frame.get_global_rect()) and outer_surface.get_global_rect().encloses(detail_frame.get_global_rect()))
 	assert(goods_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0 and detail_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0)
 	assert(goods_surface.position.x - goods_frame.position.x >= 10.0 and goods_frame.size.x - (goods_surface.position.x - goods_frame.position.x) - goods_surface.size.x >= 0.0)
 	assert(detail_surface.position.x - detail_frame.position.x >= 10.0 and detail_frame.size.x - (detail_surface.position.x - detail_frame.position.x) - detail_surface.size.x >= 0.0)

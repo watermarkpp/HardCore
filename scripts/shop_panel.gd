@@ -69,12 +69,12 @@ func _ready() -> void:
 func _build_modal_surface() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
-	surface.position = Vector2(24, 28)
-	surface.size = Vector2(1032, 556)
+	surface.position = Vector2(42, 42)
+	surface.size = Vector2(996, 536)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	var surface_style := StyleBoxFlat.new()
-	surface_style.bg_color = Color("241d1a")
+	surface_style.bg_color = Color("171513")
 	surface.add_theme_stylebox_override("panel", surface_style)
 	add_child(surface)
 
@@ -109,7 +109,7 @@ func _build_header() -> void:
 
 
 func _build_goods_section() -> void:
-	var panel := _framed_section("GoodsPanel", Rect2(26, 72, 650, 480))
+	var panel := _framed_section("GoodsPanel", Rect2(42, 76, 620, 476))
 	buy_tab_button = Button.new()
 	buy_tab_button.name = "BuyTab"
 	buy_tab_button.text = "购买"
@@ -138,7 +138,7 @@ func _build_goods_section() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "GoodsScroll"
 	scroll.position = Vector2(18, 58)
-	scroll.size = Vector2(614, 400)
+	scroll.size = Vector2(584, 398)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
@@ -152,7 +152,7 @@ func _build_goods_section() -> void:
 
 
 func _build_detail_section() -> void:
-	var panel := _framed_section("DetailPanel", Rect2(688, 72, 366, 480))
+	var panel := _framed_section("DetailPanel", Rect2(674, 76, 364, 476))
 	panel.add_child(_section_title("商品详情", 366))
 	detail_label = RichTextLabel.new()
 	detail_label.name = "DetailLabel"
