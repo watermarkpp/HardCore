@@ -135,7 +135,7 @@ func _build_goods_section() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "GoodsScroll"
 	scroll.position = Vector2(18, 58)
-	scroll.size = Vector2(614, 442)
+	scroll.size = Vector2(614, 420)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
@@ -154,7 +154,7 @@ func _build_detail_section() -> void:
 	detail_label = RichTextLabel.new()
 	detail_label.name = "DetailLabel"
 	detail_label.position = Vector2(26, 62)
-	detail_label.size = Vector2(314, 280)
+	detail_label.size = Vector2(314, 250)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -163,7 +163,7 @@ func _build_detail_section() -> void:
 	buy_button = Button.new()
 	buy_button.name = "BuyButton"
 	buy_button.text = "购买"
-	buy_button.position = Vector2(20, 356)
+	buy_button.position = Vector2(20, 334)
 	buy_button.size = Vector2(326, 58)
 	buy_button.theme_type_variation = "GothicComponentSelectedButton"
 	buy_button.add_theme_font_size_override("font_size", 18)
@@ -172,7 +172,7 @@ func _build_detail_section() -> void:
 	repair_button = Button.new()
 	repair_button.name = "RepairButton"
 	repair_button.text = "维修全部装备"
-	repair_button.position = Vector2(20, 426)
+	repair_button.position = Vector2(20, 404)
 	repair_button.size = Vector2(326, 58)
 	repair_button.theme_type_variation = "GothicComponentButton"
 	repair_button.add_theme_font_size_override("font_size", 16)
@@ -180,7 +180,7 @@ func _build_detail_section() -> void:
 	panel.add_child(repair_button)
 	sell_quantity_row = Control.new()
 	sell_quantity_row.name = "SellQuantityRow"
-	sell_quantity_row.position = Vector2(20, 344)
+	sell_quantity_row.position = Vector2(20, 322)
 	sell_quantity_row.size = Vector2(326, 46)
 	sell_quantity_row.visible = false
 	sell_quantity_row.clip_contents = true
@@ -197,16 +197,16 @@ func _build_detail_section() -> void:
 	sell_quantity_row.add_child(minus_button)
 	var quantity_background := Panel.new()
 	quantity_background.name = "QuantityCenterBackground"
-	quantity_background.position = Vector2(74, 4)
-	quantity_background.size = Vector2(178, 38)
+	quantity_background.position = Vector2(76, 6)
+	quantity_background.size = Vector2(174, 34)
 	quantity_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quantity_background.clip_contents = true
 	quantity_background.theme_type_variation = "GothicModalSurface"
 	sell_quantity_row.add_child(quantity_background)
 	sell_quantity_label = Label.new()
 	sell_quantity_label.name = "Quantity"
-	sell_quantity_label.position = Vector2(78, 6)
-	sell_quantity_label.size = Vector2(170, 34)
+	sell_quantity_label.position = Vector2(77, 7)
+	sell_quantity_label.size = Vector2(172, 32)
 	sell_quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sell_quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	sell_quantity_label.add_theme_font_size_override("font_size", 16)
@@ -224,7 +224,7 @@ func _build_detail_section() -> void:
 	sell_one_button = Button.new()
 	sell_one_button.name = "SellOneButton"
 	sell_one_button.text = "出售单件"
-	sell_one_button.position = Vector2(20, 398)
+	sell_one_button.position = Vector2(20, 376)
 	sell_one_button.size = Vector2(326, 48)
 	sell_one_button.theme_type_variation = "GothicComponentSelectedButton"
 	sell_one_button.visible = false
@@ -233,7 +233,7 @@ func _build_detail_section() -> void:
 	sell_quantity_button = Button.new()
 	sell_quantity_button.name = "SellQuantityButton"
 	sell_quantity_button.text = "出售选定数量"
-	sell_quantity_button.position = Vector2(20, 454)
+	sell_quantity_button.position = Vector2(20, 432)
 	sell_quantity_button.size = Vector2(326, 48)
 	sell_quantity_button.theme_type_variation = "GothicComponentButton"
 	sell_quantity_button.visible = false
