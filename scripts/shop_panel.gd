@@ -187,7 +187,8 @@ func _build_detail_section() -> void:
 	panel.add_child(sell_quantity_row)
 	var minus_button := Button.new()
 	minus_button.name = "DecreaseQuantity"
-	minus_button.text = "−"
+	minus_button.text = "-"
+	minus_button.add_theme_font_size_override("font_size", 18)
 	minus_button.position = Vector2(8, 0)
 	minus_button.size = Vector2(58, 46)
 	minus_button.theme_type_variation = "GothicTransparentButton"
@@ -214,6 +215,7 @@ func _build_detail_section() -> void:
 	var plus_button := Button.new()
 	plus_button.name = "IncreaseQuantity"
 	plus_button.text = "+"
+	plus_button.add_theme_font_size_override("font_size", 18)
 	plus_button.position = Vector2(260, 0)
 	plus_button.size = Vector2(58, 46)
 	plus_button.theme_type_variation = "GothicTransparentButton"
