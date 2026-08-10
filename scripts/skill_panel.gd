@@ -574,7 +574,7 @@ func _refresh_assignment_slots() -> void:
 			]
 	for slot_index in range(attack_ring_assignment_buttons.size()):
 		var skill_name := _assignment_skill_name("attack_ring", slot_index)
-		_set_assignment_button_content(attack_ring_assignment_buttons[slot_index], "技 %d" % (slot_index + 1), skill_name)
+		_set_assignment_button_content(attack_ring_assignment_buttons[slot_index], "环 %d" % (slot_index + 1), skill_name)
 		var popup_index := ATTACK_SLOT_COUNT + slot_index
 		if popup_index < assignment_popup_buttons.size():
 			assignment_popup_buttons[popup_index].text = "攻击环 %d\n%s [%s]" % [
@@ -643,7 +643,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var slot_label := Label.new()
 	slot_label.name = "SlotLabel"
 	slot_label.text = slot_label_text
-	slot_label.position = Vector2(4, 52) if compact else (Vector2(58, 8) if primary_attack else Vector2(52, 10))
+	slot_label.position = Vector2(4, 52) if compact else (Vector2(58, 6) if primary_attack else Vector2(52, 6))
 	slot_label.size = Vector2(button.size.x - 8, 18) if compact else (Vector2(button.size.x - 64, 20) if primary_attack else Vector2(button.size.x - 58, 20))
 	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -653,7 +653,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var name_label := Label.new()
 	name_label.name = "SkillName"
 	name_label.text = skill_name if not skill_name.is_empty() else "空"
-	name_label.position = Vector2(4, 70) if compact else (Vector2(58, 26) if primary_attack else Vector2(52, 31))
+	name_label.position = Vector2(4, 70) if compact else (Vector2(58, 28) if primary_attack else Vector2(52, 28))
 	name_label.size = Vector2(button.size.x - 8, 24) if compact else (Vector2(button.size.x - 64, 26) if primary_attack else Vector2(button.size.x - 58, 26))
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -664,7 +664,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var mode_label := Label.new()
 	mode_label.name = "InteractionMode"
 	mode_label.text = _skill_presentation_label(skill_name)
-	mode_label.position = Vector2(4, 94) if compact else (Vector2(58, 52) if primary_attack else Vector2(52, 52))
+	mode_label.position = Vector2(4, 94) if compact else (Vector2(58, 56) if primary_attack else Vector2(52, 56))
 	mode_label.size = Vector2(button.size.x - 8, 18) if compact else (Vector2(button.size.x - 64, 20) if primary_attack else Vector2(button.size.x - 58, 20))
 	mode_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -677,10 +677,6 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 			name_label.text = "空"
 			name_label.add_theme_font_size_override("font_size", 24)
 			mode_label.visible = false
-	elif skill_name.is_empty() and not compact:
-		name_label.text = "空"
-		name_label.add_theme_font_size_override("font_size", 20)
-		mode_label.visible = false
 	button.set_meta("skill_name", skill_name)
 	button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
 
