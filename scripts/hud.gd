@@ -599,6 +599,24 @@ func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
 	)
 
 
+func _anchor_warrior_state_label(root: Control) -> void:
+	if warrior_state_label == null or hud_item_buttons.is_empty():
+		return
+	var item_bar_global_rect := hud_item_buttons[0].get_global_rect()
+	for index in range(1, hud_item_buttons.size()):
+		item_bar_global_rect = item_bar_global_rect.merge(hud_item_buttons[index].get_global_rect())
+	var root_global_rect := root.get_global_rect()
+	var root_inverse := root.get_global_transform().affine_inverse()
+	var item_bar_local := Rect2(root_inverse * item_bar_global_rect.position, item_bar_global_rect.size)
+	var label_width := minf(500.0, item_bar_local.size.x)
+	warrior_state_label.position.x = item_bar_local.get_center().x - label_width * 0.5
+	warrior_state_label.size.x = label_width
+	warrior_state_label.position.y = item_bar_local.position.y - warrior_state_label.size.y - 8.0
+	warrior_state_label.size.y = 28.0
+	warrior_state_label.set_meta("layout_anchor", "bottom_quick_bar_center_peak.v1")
+	warrior_state_label.set_meta("layout_gap", 8.0)
+
+
 func _build_taoist_defence_buff_icon(
 	parent: Control,
 	node_name: String,
@@ -1024,7 +1042,7 @@ func _build_combat_controls(root: Control) -> void:
 
 	warrior_state_label = Label.new()
 	warrior_state_label.name = "WarriorStateLabel"
-	warrior_state_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	warrior_state_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	warrior_state_label.offset_left = 350
 	warrior_state_label.offset_top = -250
 	warrior_state_label.offset_right = -350
@@ -1033,6 +1051,7 @@ func _build_combat_controls(root: Control) -> void:
 	warrior_state_label.add_theme_font_size_override("font_size", 15)
 	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
 	root.add_child(warrior_state_label)
+	_anchor_warrior_state_label(root)
 
 	_add_bottom_right_fill(root, "InteractFill", Rect2(-241, -403, 52, 52), "GothicArtCircleFill")
 	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-111, -403, 52, 52), "GothicArtCircleFill")
