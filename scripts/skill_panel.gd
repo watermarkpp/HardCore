@@ -567,7 +567,7 @@ func _show_skill_detail(index: int) -> void:
 		row.get("confidence", "待核验"),
 	]
 	learn_button.disabled = learned
-	learn_button.text = "已学习" if learned else "使用技能书学习"
+	learn_button.text = "已学习" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
 	# Assignment is intentionally available only in the right-hand panel.
 	learn_button.visible = not learned and PlayerState.has_item(skill_name)
 
