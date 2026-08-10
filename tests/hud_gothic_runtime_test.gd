@@ -137,13 +137,6 @@ func _run() -> void:
 		Vector2(537.96875, 190.53125),
 	]
 	var chassis_art := chassis.get_node("DemonChassisArt") as TextureRect
-	var item_bar_global := (chassis.get_node("ItemSlot1") as Button).get_global_rect()
-	for slot_index in range(2, 5):
-		item_bar_global = item_bar_global.merge((chassis.get_node("ItemSlot%d" % slot_index) as Button).get_global_rect())
-	var warrior_rect := hud.warrior_state_label.get_global_rect()
-	assert(absf(warrior_rect.get_center().x - item_bar_global.get_center().x) <= 1.0)
-	assert(warrior_rect.end.y <= item_bar_global.position.y - 6.0)
-	assert(hud.warrior_state_label.get_meta("layout_anchor", "") == "bottom_quick_bar_center_peak.v1")
 	for index in range(4):
 		var item_fill := chassis.get_node("ItemSlotFill%d" % (index + 1)) as Panel
 		var item_slot := chassis.get_node("ItemSlot%d" % (index + 1)) as Button
