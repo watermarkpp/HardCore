@@ -4,6 +4,7 @@ extends Panel
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const QUANTITY_BUTTON_TEXTURE := preload("res://assets/ui/gothic_theme/v1/sample/button_normal.png")
 
 signal closed
 signal sell_quotes_requested(items: Array)
@@ -33,7 +34,11 @@ var _trade_mode := "buy"
 var _sell_quotes: Dictionary = {}
 var _selected_sell_index := -1
 var _sell_quantity := 1
+var _selected_sell_indices: Dictionary = {}
+var _sell_quantities: Dictionary = {}
 var _pending_sell_request: Dictionary = {}
+var _batch_sell_queue: Array = []
+var _batch_sell_active := false
 var _inventory_refresh_pending := false
 var _inventory_refresh_execution_count := 0
 
@@ -184,13 +189,21 @@ func _build_detail_section() -> void:
 	minus_button.text = "−"
 	minus_button.position = Vector2.ZERO
 	minus_button.size = Vector2(58, 46)
-	minus_button.theme_type_variation = "GothicComponentButton"
+	minus_button.theme_type_variation = "GothicTransparentButton"
+	_add_quantity_decoration(minus_button, false)
 	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
 	sell_quantity_row.add_child(minus_button)
+	var quantity_background := Panel.new()
+	quantity_background.name = "QuantityCenterBackground"
+	quantity_background.position = Vector2(72, 4)
+	quantity_background.size = Vector2(182, 38)
+	quantity_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quantity_background.theme_type_variation = "GothicModalSurface"
+	sell_quantity_row.add_child(quantity_background)
 	sell_quantity_label = Label.new()
 	sell_quantity_label.name = "Quantity"
-	sell_quantity_label.position = Vector2(66, 0)
-	sell_quantity_label.size = Vector2(194, 46)
+	sell_quantity_label.position = Vector2(76, 4)
+	sell_quantity_label.size = Vector2(174, 38)
 	sell_quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sell_quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	sell_quantity_label.add_theme_font_size_override("font_size", 16)
@@ -200,7 +213,8 @@ func _build_detail_section() -> void:
 	plus_button.text = "+"
 	plus_button.position = Vector2(268, 0)
 	plus_button.size = Vector2(58, 46)
-	plus_button.theme_type_variation = "GothicComponentButton"
+	plus_button.theme_type_variation = "GothicTransparentButton"
+	_add_quantity_decoration(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
 	sell_quantity_row.add_child(plus_button)
 	sell_one_button = Button.new()
@@ -226,6 +240,19 @@ func _build_detail_section() -> void:
 	sell_confirmation.confirmed.connect(_on_sell_confirmation_confirmed)
 	sell_confirmation.cancelled.connect(_cancel_pending_sell)
 	add_child(sell_confirmation)
+
+func _add_quantity_decoration(button: Button, flip_h: bool) -> void:
+	var decoration := TextureRect.new()
+	decoration.name = "QuantityDecoration"
+	decoration.texture = QUANTITY_BUTTON_TEXTURE
+	decoration.position = Vector2(3, 3)
+	decoration.size = Vector2(52, 40)
+	decoration.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	decoration.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	decoration.flip_h = flip_h
+	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	decoration.show_behind_parent = true
+	button.add_child(decoration)
 
 
 func _build_compatibility_list() -> void:
@@ -271,6 +298,8 @@ func open_for(display_name: String, new_stock: Array) -> void:
 	_sell_quotes.clear()
 	_selected_sell_index = -1
 	_sell_quantity = 1
+	_selected_sell_indices.clear()
+	_sell_quantities.clear()
 	shop_title.text = display_name
 	item_list.clear()
 	for entry: Variant in stock:
@@ -394,6 +423,8 @@ func _set_trade_mode(mode: String) -> void:
 	else:
 		_selected_sell_index = -1
 		_sell_quantity = 1
+		_selected_sell_indices.clear()
+		_sell_quantities.clear()
 		_rebuild_sell_cards()
 		_set_sell_actions_enabled(false)
 		_update_sell_quantity_label()
@@ -410,18 +441,40 @@ func set_sell_quotes(quotes: Dictionary) -> void:
 	_sell_quotes = quotes.duplicate(true)
 	if _trade_mode == "sell":
 		_rebuild_sell_cards()
-		if _selected_sell_index >= 0 and _selected_sell_index < PlayerState.inventory.size():
-			_select_sell_item(_selected_sell_index)
+		for card: Button in goods_buttons:
+			var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
+			card.set_pressed_no_signal(selected)
+			card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
+		_update_sell_quantity_label()
 
 
 func apply_sell_result(result: Dictionary) -> void:
 	var message := str(result.get("message", "出售请求已处理。"))
 	detail_label.text = "[color=#e8c277]%s[/color]" % message
+	if _batch_sell_active:
+		if result.get("quotes", null) is Dictionary:
+			_sell_quotes = result.get("quotes", {}).duplicate(true)
+		_refresh_gold()
+		if not bool(result.get("success", false)):
+			_batch_sell_queue.clear()
+			_batch_sell_active = false
+			_selected_sell_indices.clear()
+			_sell_quantities.clear()
+			_apply_inventory_change()
+			return
+		if not _batch_sell_queue.is_empty():
+			_emit_next_batch_request()
+			return
+		_batch_sell_active = false
 	if result.get("quotes", null) is Dictionary:
 		_sell_quotes = result.get("quotes", {}).duplicate(true)
 	_refresh_gold()
 	if bool(result.get("success", false)) and _trade_mode == "sell":
+		_inventory_refresh_pending = false
 		_selected_sell_index = -1
+		_selected_sell_indices.clear()
+		_sell_quantities.clear()
+		_batch_sell_queue.clear()
 		_rebuild_sell_cards()
 		_set_sell_actions_enabled(false)
 		_request_sell_quotes()
@@ -446,17 +499,35 @@ func _request_sell_quotes() -> void:
 func _select_sell_item(inventory_index: int) -> void:
 	if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
 		return
-	_selected_sell_index = inventory_index
+	var record: Dictionary = PlayerState.inventory[inventory_index]
+	var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
+	if not bool(quote.get("sellable", false)):
+		_show_sell_detail(inventory_index, quote)
+		_set_sell_actions_enabled(not _selected_sell_indices.is_empty())
+		return
+	if _selected_sell_indices.has(inventory_index):
+		_selected_sell_indices.erase(inventory_index)
+		_sell_quantities.erase(inventory_index)
+	else:
+		_selected_sell_indices[inventory_index] = true
+		_sell_quantities[inventory_index] = 1
+	_selected_sell_index = inventory_index if _selected_sell_indices.has(inventory_index) else (_selected_sell_indices.keys()[-1] if not _selected_sell_indices.is_empty() else -1)
 	for card: Button in goods_buttons:
-		var selected := int(card.get_meta("inventory_index", -1)) == inventory_index
+		var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
 		card.set_pressed_no_signal(selected)
 		card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
-	var record: Dictionary = PlayerState.inventory[inventory_index]
-	var quote_key := sell_quote_key(inventory_index, record)
-	var quote: Dictionary = _sell_quotes.get(quote_key, {})
+	if _selected_sell_index < 0:
+		_sell_quantity = 1
+		_update_sell_quantity_label()
+		_set_sell_actions_enabled(false)
+		return
+	var quote_key := sell_quote_key(_selected_sell_index, PlayerState.inventory[_selected_sell_index])
+	quote = _sell_quotes.get(quote_key, {})
+	record = PlayerState.inventory[_selected_sell_index]
 	var count := maxi(1, int(record.get("count", 1)))
 	var max_quantity := clampi(int(quote.get("max_quantity", count)), 1, count)
-	_sell_quantity = clampi(_sell_quantity, 1, max_quantity)
+	_sell_quantity = clampi(int(_sell_quantities.get(_selected_sell_index, 1)), 1, max_quantity)
+	_sell_quantities[_selected_sell_index] = _sell_quantity
 	_update_sell_quantity_label()
 	var sellable := bool(quote.get("sellable", false))
 	_set_sell_actions_enabled(sellable)
@@ -471,6 +542,10 @@ func _select_sell_item(inventory_index: int) -> void:
 		"\n[color=#b8a58a]%s[/color]" % reason if not reason.is_empty() else "",
 	]
 
+func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
+	var record: Dictionary = PlayerState.inventory[inventory_index]
+	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n数量：%d\n\n[color=#d4a15e]%s[/color]" % [record.get("name", "物品"), int(record.get("count", 1)), str(quote.get("reason", "等待商店报价"))]
+
 
 func _change_sell_quantity(delta: int) -> void:
 	if _selected_sell_index < 0 or _selected_sell_index >= PlayerState.inventory.size():
@@ -478,7 +553,8 @@ func _change_sell_quantity(delta: int) -> void:
 	var record: Dictionary = PlayerState.inventory[_selected_sell_index]
 	var quote: Dictionary = _sell_quotes.get(sell_quote_key(_selected_sell_index, record), {})
 	var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
-	_sell_quantity = clampi(_sell_quantity + delta, 1, maximum)
+	_sell_quantity = clampi(int(_sell_quantities.get(_selected_sell_index, _sell_quantity)) + delta, 1, maximum)
+	_sell_quantities[_selected_sell_index] = _sell_quantity
 	_update_sell_quantity_label()
 
 
@@ -491,45 +567,47 @@ func _update_sell_quantity_label() -> void:
 
 
 func _request_selected_quantity() -> void:
-	_request_sell(_sell_quantity)
+	_request_sell(0)
 
+
+func _request_sell_batch(amount: int) -> void:
+	if _selected_sell_indices.is_empty() and _selected_sell_index >= 0:
+		_selected_sell_indices[_selected_sell_index] = true
+		_sell_quantities[_selected_sell_index] = _sell_quantity
+	if _selected_sell_indices.is_empty():
+		return
+	var requests: Array = []
+	for index_variant in _selected_sell_indices.keys():
+		var inventory_index := int(index_variant)
+		if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
+			continue
+		var record: Dictionary = PlayerState.inventory[inventory_index]
+		var quote_key := sell_quote_key(inventory_index, record)
+		var quote: Dictionary = _sell_quotes.get(quote_key, {})
+		if not bool(quote.get("sellable", false)):
+			continue
+		var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
+		var requested_amount := 1 if amount == 1 else int(_sell_quantities.get(inventory_index, 1))
+		requests.append({"quote_key": quote_key, "quote_id": str(quote.get("quote_id", "")), "inventory_index": inventory_index, "instance_id": str(record.get("instance_id", "")), "item_name": str(record.get("name", "")), "amount": clampi(requested_amount, 1, maximum), "requires_confirmation": bool(quote.get("requires_confirmation", false))})
+	if requests.is_empty():
+		return
+	requests.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("inventory_index", -1)) > int(b.get("inventory_index", -1)))
+	if requests.any(func(r: Dictionary) -> bool: return bool(r.get("requires_confirmation", false))):
+		_pending_sell_request = {"batch": requests}
+		sell_confirmation.open_confirmation({"action_id": "shop.sell.risky_item", "title": "确认批量出售", "message": "批量出售 %d 件物品，其中包含高风险物品。" % requests.size(), "confirm_label": "确认出售", "cancel_label": "取消", "tone": "danger", "context": {"quote_id": requests[0].get("quote_id", "")}})
+		return
+	_batch_sell_queue = requests
+	_batch_sell_active = true
+	_emit_next_batch_request()
+
+func _emit_next_batch_request() -> void:
+	if _batch_sell_queue.is_empty():
+		_batch_sell_active = false
+		return
+	_emit_sell_request(_batch_sell_queue.pop_front())
 
 func _request_sell(amount: int) -> void:
-	if _selected_sell_index < 0 or _selected_sell_index >= PlayerState.inventory.size():
-		detail_label.text = "请先选择要出售的背包物品。"
-		return
-	var record: Dictionary = PlayerState.inventory[_selected_sell_index]
-	var quote_key := sell_quote_key(_selected_sell_index, record)
-	var quote: Dictionary = _sell_quotes.get(quote_key, {})
-	if not bool(quote.get("sellable", false)):
-		detail_label.text = "[color=#ef9f63]%s[/color]" % quote.get("reason", "当前物品没有有效出售报价。")
-		return
-	var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
-	var request := {
-		"quote_key": quote_key,
-		"quote_id": str(quote.get("quote_id", "")),
-		"inventory_index": _selected_sell_index,
-		"instance_id": str(record.get("instance_id", "")),
-		"item_name": str(record.get("name", "")),
-		"amount": clampi(amount, 1, maximum),
-	}
-	if bool(quote.get("requires_confirmation", false)):
-		_pending_sell_request = request
-		var warning := str(quote.get("warning", "该物品具有高价值或特殊属性，出售后无法恢复。"))
-		sell_confirmation.open_confirmation({
-			"action_id": "shop.sell.risky_item",
-			"title": "确认出售",
-			"message": "%s\n出售：%s ×%d" % [warning, request.item_name, request.amount],
-			"confirm_label": "确认出售",
-			"cancel_label": "取消",
-			"tone": "danger",
-			"context": {
-				"quote_id": request.quote_id,
-				"instance_id": request.instance_id,
-			},
-		})
-		return
-	_emit_sell_request(request)
+	_request_sell_batch(amount)
 
 
 func _on_sell_confirmation_confirmed(_confirmation: Dictionary) -> void:
@@ -538,10 +616,18 @@ func _on_sell_confirmation_confirmed(_confirmation: Dictionary) -> void:
 
 func _cancel_pending_sell(_confirmation: Dictionary) -> void:
 	_pending_sell_request.clear()
+	_batch_sell_queue.clear()
+	_batch_sell_active = false
 
 
 func _confirm_pending_sell() -> void:
 	if _pending_sell_request.is_empty():
+		return
+	if _pending_sell_request.has("batch"):
+		_batch_sell_queue = _pending_sell_request.get("batch", []).duplicate(true)
+		_pending_sell_request.clear()
+		_batch_sell_active = true
+		_emit_next_batch_request()
 		return
 	var request := _pending_sell_request.duplicate(true)
 	_pending_sell_request.clear()
@@ -549,8 +635,8 @@ func _confirm_pending_sell() -> void:
 
 
 func _emit_sell_request(request: Dictionary) -> void:
-	sell_requested.emit(request.duplicate(true))
 	detail_label.text = "[color=#d8bd8c]出售请求已提交，等待玩法层返回交易结果。[/color]"
+	sell_requested.emit(request.duplicate(true))
 
 
 func _set_sell_actions_enabled(enabled: bool) -> void:
@@ -574,6 +660,9 @@ func _sell_risk_text(quote: Dictionary) -> String:
 func _on_inventory_changed() -> void:
 	if _trade_mode != "sell":
 		return
+	if _batch_sell_active:
+		_inventory_refresh_pending = true
+		return
 	if not visible:
 		_inventory_refresh_pending = true
 		return
@@ -586,6 +675,9 @@ func _on_visibility_changed() -> void:
 
 
 func _apply_inventory_change() -> void:
+	if _batch_sell_active:
+		_inventory_refresh_pending = true
+		return
 	_inventory_refresh_pending = false
 	_inventory_refresh_execution_count += 1
 	_selected_sell_index = -1
