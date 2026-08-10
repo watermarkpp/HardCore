@@ -217,7 +217,7 @@ func _build_detail_section() -> void:
 	sell_quantity_row.add_child(sell_quantity_label)
 	var plus_button := Button.new()
 	plus_button.name = "IncreaseQuantity"
-	plus_button.text = "+"
+	plus_button.text = ""
 	plus_button.tooltip_text = "增加出售数量"
 	plus_button.set_meta("quantity_delta", 1)
 	plus_button.add_theme_font_size_override("font_size", 18)
