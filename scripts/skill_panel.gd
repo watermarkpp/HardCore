@@ -671,8 +671,8 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var mode_label := Label.new()
 	mode_label.name = "InteractionMode"
 	mode_label.text = _skill_presentation_label(skill_name)
-	mode_label.position = Vector2(4, 94) if compact else Vector2(52, 56)
-	mode_label.size = Vector2(button.size.x - 8, 18) if compact else Vector2(button.size.x - 58, 20)
+	mode_label.position = Vector2(4, 94) if compact else (Vector2(58, 56) if primary_attack else Vector2(52, 56))
+	mode_label.size = Vector2(button.size.x - 8, 18) if compact else (Vector2(button.size.x - 64, 20) if primary_attack else Vector2(button.size.x - 58, 20))
 	mode_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	mode_label.add_theme_font_size_override("font_size", 12)
