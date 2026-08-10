@@ -51,6 +51,10 @@ func _run() -> void:
 	var experience_bar := chassis.get_node("ExperienceBar") as Control
 	assert(experience_bar != null and experience_bar.get_meta("stable_id") == "ui.hud.experience_bar.10_segments.v1")
 	assert(experience_bar.get_meta("segment_count") == 10)
+	assert(is_equal_approx(experience_bar.size.x, 180.0))
+	assert(is_equal_approx(experience_bar.get_global_rect().get_center().x, chassis.get_global_rect().get_center().x))
+	assert(experience_bar.get_global_rect().end.y <= chassis.get_global_rect().end.y - 4.0)
+	assert(not experience_bar.get_global_rect().intersects((chassis.get_node("ItemSlot1") as Control).get_global_rect()))
 	var required_exp := maxi(1, int(PlayerState.experience_to_next_level()))
 	for sample in [0.0, 0.05, 0.10, 0.55, 1.0]:
 		PlayerState.experience = int(round(required_exp * sample))
