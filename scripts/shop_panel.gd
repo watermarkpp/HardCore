@@ -183,6 +183,7 @@ func _build_detail_section() -> void:
 	sell_quantity_row.position = Vector2(20, 344)
 	sell_quantity_row.size = Vector2(326, 46)
 	sell_quantity_row.visible = false
+	sell_quantity_row.clip_contents = true
 	panel.add_child(sell_quantity_row)
 	var minus_button := Button.new()
 	minus_button.name = "DecreaseQuantity"
@@ -190,6 +191,7 @@ func _build_detail_section() -> void:
 	minus_button.position = Vector2.ZERO
 	minus_button.size = Vector2(58, 46)
 	minus_button.theme_type_variation = "GothicTransparentButton"
+	minus_button.clip_contents = true
 	_add_quantity_decoration(minus_button, false)
 	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
 	sell_quantity_row.add_child(minus_button)
@@ -198,6 +200,7 @@ func _build_detail_section() -> void:
 	quantity_background.position = Vector2(72, 4)
 	quantity_background.size = Vector2(182, 38)
 	quantity_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quantity_background.clip_contents = true
 	quantity_background.theme_type_variation = "GothicModalSurface"
 	sell_quantity_row.add_child(quantity_background)
 	sell_quantity_label = Label.new()
@@ -214,6 +217,7 @@ func _build_detail_section() -> void:
 	plus_button.position = Vector2(268, 0)
 	plus_button.size = Vector2(58, 46)
 	plus_button.theme_type_variation = "GothicTransparentButton"
+	plus_button.clip_contents = true
 	_add_quantity_decoration(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
 	sell_quantity_row.add_child(plus_button)

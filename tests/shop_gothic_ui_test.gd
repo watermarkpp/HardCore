@@ -95,6 +95,10 @@ func _run() -> void:
 	assert(bg.position.x - (decrease.position.x + decrease.size.x) >= 8.0, "中心背景与左按钮缺少安全间隙")
 	assert(increase.position.x - (bg.position.x + bg.size.x) >= 8.0, "中心背景与右按钮缺少安全间隙")
 
+	var row_global := panel.sell_quantity_row.get_global_rect()
+	assert(row_global.encloses(bg.get_global_rect()) and row_global.encloses(panel.sell_quantity_label.get_global_rect()))
+	assert(decrease.size == Vector2(58, 46) and increase.size == Vector2(58, 46))
+	assert(row_global.encloses(decrease.get_global_rect()) and row_global.encloses(increase.get_global_rect()))
 	panel._select_sell_item(safe_indices[0])
 	panel._change_sell_quantity(1)
 	assert(int(panel._sell_quantities.get(safe_indices[0], 0)) == 2, "第一个物品的独立数量未生效")
