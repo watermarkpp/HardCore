@@ -12,12 +12,21 @@ const LOG_PATH := "user://combat_diagnostics/melee.jsonl"
 const MAX_LOG_BYTES := 8 * 1024 * 1024
 const MAX_RECENT_EVENTS := 256
 
-static func _is_enabled() -> bool:
-	return OS.is_debug_build() and RuntimeDiagnostics.file_output_enabled() and RuntimeDiagnostics.combat_enabled()
+static func capture_enabled() -> bool:
+	## Building a full melee diagnostic walks nearby enemies and recursively
+	## normalizes a large nested payload. Keep that work behind the combat gate;
+	## file output remains an independent, stricter opt-in below.
+	return OS.is_debug_build() and RuntimeDiagnostics.combat_enabled()
+
+
+static func _file_output_enabled() -> bool:
+	return capture_enabled() and RuntimeDiagnostics.file_output_enabled()
 static var _recent_events: Array[Dictionary] = []
 
 
 static func record(raw_event: Dictionary) -> Dictionary:
+	if not capture_enabled():
+		return {}
 	var event: Dictionary = _json_safe(raw_event)
 	event["schema"] = SCHEMA_ID
 	event["contract_id"] = CONTRACT_ID
@@ -26,7 +35,7 @@ static func record(raw_event: Dictionary) -> Dictionary:
 	_recent_events.append(event.duplicate(true))
 	if _recent_events.size() > MAX_RECENT_EVENTS:
 		_recent_events.pop_front()
-	if not _is_enabled():
+	if not _file_output_enabled():
 		return event
 	var encoded := JSON.stringify(event)
 	print(LOG_PREFIX + encoded)

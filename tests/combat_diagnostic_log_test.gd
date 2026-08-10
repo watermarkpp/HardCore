@@ -5,9 +5,22 @@ const DiagnosticGate := preload("res://scripts/runtime_diagnostics.gd")
 
 
 func _ready() -> void:
-	var previous_enabled: bool = DiagnosticGate.is_enabled()
+	var previous_enabled: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_ENABLED, false
+	))
+	var previous_combat: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_COMBAT, false
+	))
+	var previous_file_output: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_FILE_OUTPUT, false
+	))
 	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, false)
 	DiagnosticLog.clear_recent_events()
+	assert(DiagnosticLog.record({"event": "disabled"}).is_empty())
+	assert(DiagnosticLog.recent_events().is_empty())
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, true)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_COMBAT, true)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_FILE_OUTPUT, false)
 	var event := DiagnosticLog.record({
 		"event": "test_attack_release",
 		"origin_screen_px": Vector2(32.5, -16.25),
@@ -31,5 +44,9 @@ func _ready() -> void:
 	assert(DiagnosticLog.recent_events().size() == 1)
 	DiagnosticLog.clear_recent_events()
 	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, previous_enabled)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_COMBAT, previous_combat)
+	ProjectSettings.set_setting(
+		DiagnosticGate.SETTING_FILE_OUTPUT, previous_file_output
+	)
 	print("COMBAT_DIAGNOSTIC_LOG_PASS：运行时近战诊断事件可JSON序列化且不改变战斗状态")
 	get_tree().quit(0)

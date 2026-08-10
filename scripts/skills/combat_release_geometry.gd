@@ -140,7 +140,8 @@ static func resolve(
 	locked_target_position_at_release := Vector2.ZERO,
 	locked_target_valid_at_release := false,
 	track_locked_target := true,
-	release_facing_policy := FACING_POLICY_LIVE_LOCKED_TARGET
+	release_facing_policy := FACING_POLICY_LIVE_LOCKED_TARGET,
+	locked_target_combat_radius_gu_at_release := 0.0
 ) -> Dictionary:
 	var input_direction_ground_gu := _normalized_input_ground_direction(input_direction)
 	var release_direction_ground_gu := input_direction_ground_gu
@@ -255,6 +256,11 @@ static func resolve(
 		"live_locked_target_direction_index": live_locked_target_direction_index,
 		"locked_target_instance_id": locked_target_instance_id if had_locked_target else 0,
 		"locked_target_valid_at_release": valid_original_target,
+		"locked_target_combat_radius_gu_at_release": (
+			maxf(0.0, locked_target_combat_radius_gu_at_release)
+			if valid_original_target
+			else 0.0
+		),
 		"allow_target_retarget": not had_locked_target,
 		"allow_directional_scan": not had_locked_target,
 	}

@@ -2068,7 +2068,8 @@ func _request_mobile_attack() -> bool:
 		target.global_position if is_instance_valid(target) else Vector2.ZERO,
 		is_instance_valid(target),
 		true,
-		CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
+		CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION,
+		target.combat_radius_gu if is_instance_valid(target) else 0.0
 	)
 	attack_direction = Vector2(
 		input_release_geometry.get("direction_screen_px", attack_direction)
@@ -2078,28 +2079,33 @@ func _request_mobile_attack() -> bool:
 		melee_mode,
 		input_release_geometry
 	)
-	var diagnostic := _build_melee_input_diagnostic(
-		target,
-		melee_mode,
-		attack_direction,
-		input_release_geometry,
-		input_has_hittable_target,
-		facing_before,
-		touch_before,
-		movement_was_active
-	)
+	var diagnostics_enabled := CombatDiagnosticLogScript.capture_enabled()
+	var diagnostic: Dictionary = {}
+	if diagnostics_enabled:
+		diagnostic = _build_melee_input_diagnostic(
+			target,
+			melee_mode,
+			attack_direction,
+			input_release_geometry,
+			input_has_hittable_target,
+			facing_before,
+			touch_before,
+			movement_was_active
+		)
+	else:
+		_pending_melee_diagnostic.clear()
 	var accepted := player.request_attack_toward(
 		attack_direction,
 		input_has_hittable_target,
 		target_instance_id
 	)
-	if accepted:
+	if accepted and diagnostics_enabled:
 		diagnostic["event"] = "attack_input_accepted"
 		diagnostic["facing_after_input"] = player.facing
 		diagnostic["facing_after_input_index"] = ArtSpec.direction_index(player.facing)
 		_pending_melee_diagnostic = diagnostic.duplicate(true)
 		CombatDiagnosticLogScript.record(diagnostic)
-	else:
+	elif not accepted and diagnostics_enabled:
 		diagnostic["event"] = "attack_input_rejected"
 		diagnostic["reject_code"] = "PLAYER_REQUEST_REJECTED"
 		CombatDiagnosticLogScript.record(diagnostic)
@@ -3699,24 +3705,28 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		thrust_damage_axis_plan,
 		melee_release_snapshot
 	)
+	var thrust_secondary_targets: Array[EnemyActor] = []
+	var half_moon_secondary_targets: Array[EnemyActor] = []
 	var eligible_target_count := primary_targets.size()
 	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		eligible_target_count += _thrust_secondary_targets(
+		thrust_secondary_targets = _thrust_secondary_targets(
 			origin,
 			direction,
 			primary_targets,
 			release_geometry,
 			thrust_damage_axis_plan,
 			melee_release_snapshot
-		).size()
+		)
+		eligible_target_count += thrust_secondary_targets.size()
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-		eligible_target_count += _half_moon_secondary_targets(
+		half_moon_secondary_targets = _half_moon_secondary_targets(
 			origin,
 			direction,
 			primary_targets,
 			release_geometry,
 			melee_release_snapshot
-		).size()
+		)
+		eligible_target_count += half_moon_secondary_targets.size()
 	var has_eligible_target := eligible_target_count > 0
 	var consumes_armed_fire := false
 	if not primary_targets.is_empty() and Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
@@ -3777,24 +3787,28 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			thrust_damage_axis_plan,
 			melee_release_snapshot
 		)
+		thrust_secondary_targets.clear()
+		half_moon_secondary_targets.clear()
 		eligible_target_count = primary_targets.size()
 		if effect_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-			eligible_target_count += _thrust_secondary_targets(
+			thrust_secondary_targets = _thrust_secondary_targets(
 				origin,
 				direction,
 				primary_targets,
 				release_geometry,
 				thrust_damage_axis_plan,
 				melee_release_snapshot
-			).size()
+			)
+			eligible_target_count += thrust_secondary_targets.size()
 		elif effect_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-			eligible_target_count += _half_moon_secondary_targets(
+			half_moon_secondary_targets = _half_moon_secondary_targets(
 				origin,
 				direction,
 				primary_targets,
 				release_geometry,
 				melee_release_snapshot
-			).size()
+			)
+			eligible_target_count += half_moon_secondary_targets.size()
 		has_eligible_target = eligible_target_count > 0
 	if consumes_armed_fire and effect_mode == "fire":
 		_set_canonical_fire_charge_expires_at(0)
@@ -3828,7 +3842,12 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			bool(body_selection.get("direct_toggle_release", false)),
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			primary_targets,
+			thrust_secondary_targets,
+			half_moon_secondary_targets,
+			true
 		)
 		hit_any = bool(melee_resolution.get("hit_any", false))
 		canonical_resolution = str(melee_resolution.get("resolution", "rejected"))
@@ -3924,6 +3943,8 @@ func _record_melee_release_diagnostic(
 	canonical_resolution: String,
 	hit_any: bool
 ) -> void:
+	if not CombatDiagnosticLogScript.capture_enabled():
+		return
 	# Direct unit-test calls deliberately have no input trace. Avoid turning the
 	# existing test suite into noisy production telemetry while retaining a
 	# complete record for every real mobile/keyboard attack action.
@@ -4590,7 +4611,11 @@ func _execute_canonical_melee(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	resolved_primary_targets: Array[EnemyActor] = [],
+	resolved_thrust_secondaries: Array[EnemyActor] = [],
+	resolved_half_moon_secondaries: Array[EnemyActor] = [],
+	targets_resolved_at_release := false
 ) -> Dictionary:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
@@ -4607,42 +4632,50 @@ func _execute_canonical_melee(
 				release_geometry.get("snapshot_validation_context", {})
 			)
 		)
-	var primary_targets := _physical_primary_targets(
-		origin,
-		direction,
-		mode,
-		release_geometry,
-		thrust_damage_axis_plan,
-		melee_release_snapshot
-	)
-	var thrust_secondaries: Array[EnemyActor] = []
-	var half_moon_secondaries: Array[EnemyActor] = []
-	var eligible_target_count := primary_targets.size()
-	if mode == "thrust":
-		thrust_secondaries = _thrust_secondary_targets(
+	var primary_targets: Array[EnemyActor] = resolved_primary_targets
+	var thrust_secondaries: Array[EnemyActor] = resolved_thrust_secondaries
+	var half_moon_secondaries: Array[EnemyActor] = resolved_half_moon_secondaries
+	if not targets_resolved_at_release:
+		primary_targets = _physical_primary_targets(
 			origin,
 			direction,
-			primary_targets,
+			mode,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot,
-			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
-		)
-		eligible_target_count += thrust_secondaries.size()
-	elif mode == "half_moon":
-		half_moon_secondaries = _half_moon_secondary_targets(
-			origin,
-			direction,
-			primary_targets,
-			release_geometry,
 			melee_release_snapshot
 		)
-		eligible_target_count += half_moon_secondaries.size()
+		if mode == "thrust":
+			thrust_secondaries = _thrust_secondary_targets(
+				origin,
+				direction,
+				primary_targets,
+				release_geometry,
+				thrust_damage_axis_plan,
+				melee_release_snapshot,
+				target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
+			)
+		elif mode == "half_moon":
+			half_moon_secondaries = _half_moon_secondary_targets(
+				origin,
+				direction,
+				primary_targets,
+				release_geometry,
+				melee_release_snapshot
+			)
+	var eligible_target_count := (
+		primary_targets.size()
+		+ thrust_secondaries.size()
+		+ half_moon_secondaries.size()
+	)
 	var extra := {
 		"has_target": eligible_target_count > 0,
 		"line_of_sight": eligible_target_count > 0,
 		"valid_melee_swing": eligible_target_count > 0,
 		"eligible_target_count": eligible_target_count,
+		# The release-frame melee resolver already produced the authoritative
+		# hostile target lists. Canonical planning must not run the generic spell
+		# target scan (or its terrain probes) a second time.
+		"hostile_targets_pre_resolved": targets_resolved_at_release,
 		"charge_consumed": mode == "fire" and not primary_targets.is_empty(),
 		"direct_toggle_release": (
 			mode == "fire"
@@ -4738,6 +4771,7 @@ func _canonical_target_context(
 	context_overrides: Dictionary = {}
 ) -> Dictionary:
 	var target_contract: Dictionary = definition.get("target", {})
+	var stable_skill_id := str(definition.get("skill_id", ""))
 	var target_mode := str(target_contract.get("mode", ""))
 	var target_relation := str(target_contract.get("relation", ""))
 	var friendly_cast := target_relation.contains("friendly") or target_mode in ["self", "self_or_friendly_single"]
@@ -4832,9 +4866,10 @@ func _canonical_target_context(
 	context["snapshot_coordinate_context"] = (
 		_canonical_snapshot_absolute_context(snapshot_origin_ground_gu)
 	)
-	var destination := _find_valid_random_teleport_position(origin)
-	context["destination_valid"] = destination != origin
-	context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
+	if stable_skill_id == "wizard.teleport":
+		var destination := _find_valid_random_teleport_position(origin)
+		context["destination_valid"] = destination != origin
+		context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
 	if target != null:
 		var monster_data: Dictionary = target.monster_data
 		var service_behavior: Dictionary = target.behavior_profile.get(
@@ -4866,7 +4901,6 @@ func _canonical_target_context(
 	# effect destination and footprint snapshot describe different ground
 	# positions.
 	context.merge(context_overrides, true)
-	var stable_skill_id := str(definition.get("skill_id", ""))
 	if stable_skill_id in [
 		"taoist.summon_skeleton",
 		"taoist.summon_divine_beast",
@@ -4985,54 +5019,55 @@ func _canonical_target_context(
 					adjacent_ring_cells.append(
 						caster_tile + Vector2i(ring_x, ring_y)
 					)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if (
-			not node is EnemyActor
-			or node.is_queued_for_deletion()
-			or (
-				_snapshot_strict_ok(exact_release_snapshot)
-				and not _skill_snapshot_intersects_enemy(
-					exact_release_snapshot, node as EnemyActor
+	if not bool(context.get("hostile_targets_pre_resolved", false)):
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if (
+				not node is EnemyActor
+				or node.is_queued_for_deletion()
+				or (
+					_snapshot_strict_ok(exact_release_snapshot)
+					and not _skill_snapshot_intersects_enemy(
+						exact_release_snapshot, node as EnemyActor
+					)
 				)
-			)
-			or (
-				not _snapshot_strict_ok(exact_release_snapshot)
-				and not GroundUnitSpaceScript.is_within_range_gu(
-					origin_ground_gu,
+				or (
+					not _snapshot_strict_ok(exact_release_snapshot)
+					and not GroundUnitSpaceScript.is_within_range_gu(
+						origin_ground_gu,
+						_canonical_screen_px_to_ground_gu(node.global_position),
+						search_range_gu
+					)
+				)
+			):
+				continue
+			if (
+				not adjacent_ring_cells.is_empty()
+				and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+					adjacent_ring_cells,
 					_canonical_screen_px_to_ground_gu(node.global_position),
-					search_range_gu
-				)
-			)
-		):
-			continue
-		if (
-			not adjacent_ring_cells.is_empty()
-			and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
-				adjacent_ring_cells,
-				_canonical_screen_px_to_ground_gu(node.global_position),
-				node.combat_radius_gu
-			).get("intersects", false))
-		):
-			continue
-		nearby.append({
-			"instance_id": node.get_instance_id(),
-			"target_instance_id": node.get_instance_id(),
-			"level": node.level,
-			"is_boss": node.is_boss,
-			"immovable": node.is_boss,
-			"path_blocked": background.is_environment_point_blocked(
-				_canonical_ground_gu_to_screen_px(
-					_canonical_screen_px_to_ground_gu(node.global_position)
-					+ (
+					node.combat_radius_gu
+				).get("intersects", false))
+			):
+				continue
+			nearby.append({
+				"instance_id": node.get_instance_id(),
+				"target_instance_id": node.get_instance_id(),
+				"level": node.level,
+				"is_boss": node.is_boss,
+				"immovable": node.is_boss,
+				"path_blocked": background.is_environment_point_blocked(
+					_canonical_ground_gu_to_screen_px(
 						_canonical_screen_px_to_ground_gu(node.global_position)
-						- origin_ground_gu
-					).normalized()
-				)
-			),
-			"hostile_monster": true,
-			"control_immune": node.is_boss,
-			"within_level_gate": node.level <= PlayerState.level,
-		})
+						+ (
+							_canonical_screen_px_to_ground_gu(node.global_position)
+							- origin_ground_gu
+						).normalized()
+					)
+				),
+				"hostile_monster": true,
+				"control_immune": node.is_boss,
+				"within_level_gate": node.level <= PlayerState.level,
+			})
 	context["targets"] = nearby
 	if friendly_cast and _snapshot_strict_ok(exact_release_snapshot):
 		var friendly_targets: Array[Dictionary] = []

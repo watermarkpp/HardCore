@@ -23,6 +23,7 @@ func _ready() -> void:
 	)
 	_verify_arbitrary_angle_continuous_axis_and_quantization()
 	_verify_locked_target_inclusion_and_out_of_range_exclusion()
+	_verify_full_target_footprint_gates_release()
 	_verify_thrust_dimensions_and_slots_unchanged()
 	_verify_half_moon_sector_semantics_unchanged()
 	_verify_ineligible_cases_fail_closed()
@@ -172,6 +173,65 @@ func _verify_locked_target_inclusion_and_out_of_range_exclusion() -> void:
 			))
 			checked_samples += 1
 	assert(checked_samples == SAMPLE_COUNT * 4)
+
+
+func _verify_full_target_footprint_gates_release() -> void:
+	var axis_ground_gu := Vector2.from_angle(deg_to_rad(23.0))
+	var combat_radius_gu := 0.65
+	for mode: String in [
+		Geometry.SKILL_NORMAL,
+		Geometry.SKILL_FIRE,
+		Geometry.SKILL_HALF_MOON,
+		Geometry.SKILL_THRUST,
+	]:
+		var reach_gu := Geometry.reach_gu(mode)
+		var touching_center := (
+			ORIGIN_GROUND_GU
+			+ axis_ground_gu * (reach_gu + combat_radius_gu * 0.5)
+		)
+		assert(not Geometry.is_single_target_in_reach_gu(
+			ORIGIN_GROUND_GU,
+			touching_center,
+			mode
+		))
+		var touching_plan := Geometry.target_aligned_melee_release_plan_ground_gu(
+			_release_geometry(
+				ORIGIN_GROUND_GU,
+				touching_center,
+				4500 + mode.hash(),
+				{"locked_target_combat_radius_gu_at_release": combat_radius_gu}
+			),
+			mode,
+			_absolute_context(ORIGIN_GROUND_GU)
+		)
+		assert(
+			bool(touching_plan.get("target_axis_eligible", false)),
+			"the target body intersects the release snapshot even though its centre is beyond reach"
+		)
+		assert(touching_plan.get("skill_footprint_snapshot") is Dictionary)
+		assert(Geometry.target_aligned_release_plan_intersects_target_footprint_ground_gu(
+			touching_plan,
+			touching_center,
+			combat_radius_gu,
+			_absolute_context(ORIGIN_GROUND_GU)
+		))
+		var separated_center := (
+			ORIGIN_GROUND_GU
+			+ axis_ground_gu * (reach_gu + combat_radius_gu + 0.02)
+		)
+		var separated_plan := Geometry.target_aligned_melee_release_plan_ground_gu(
+			_release_geometry(
+				ORIGIN_GROUND_GU,
+				separated_center,
+				4600 + mode.hash(),
+				{"locked_target_combat_radius_gu_at_release": combat_radius_gu}
+			),
+			mode,
+			_absolute_context(ORIGIN_GROUND_GU)
+		)
+		assert(not bool(separated_plan.get("target_axis_eligible", false)))
+		assert(str(separated_plan.get("ineligible_reason", "")) == "out_of_range")
+		assert(separated_plan.get("skill_footprint_snapshot") == null)
 
 
 func _verify_thrust_dimensions_and_slots_unchanged() -> void:

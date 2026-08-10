@@ -818,11 +818,17 @@ func _resolve_combat_release_geometry(
 ) -> Dictionary:
 	var target_position := Vector2.ZERO
 	var target_valid := false
+	var target_combat_radius_gu := 0.0
 	if track_locked_target and locked_target_instance_id > 0:
 		var candidate := instance_from_id(locked_target_instance_id)
 		if candidate is Node2D and is_instance_valid(candidate) and candidate.is_inside_tree():
 			target_position = candidate.global_position
 			target_valid = true
+			if candidate is EnemyActor:
+				target_combat_radius_gu = maxf(
+					0.0,
+					(candidate as EnemyActor).combat_radius_gu
+				)
 	return CombatReleaseGeometryScript.resolve(
 		global_position,
 		input_direction,
@@ -830,7 +836,8 @@ func _resolve_combat_release_geometry(
 		target_position,
 		target_valid,
 		track_locked_target,
-		release_facing_policy
+		release_facing_policy,
+		target_combat_radius_gu
 	)
 
 

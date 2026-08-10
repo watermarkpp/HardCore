@@ -617,15 +617,6 @@ static func target_aligned_melee_release_plan_ground_gu(
 			resolved_mode,
 			str(axis_result.get("reason", "invalid_target"))
 		)
-	if not is_single_target_in_reach_gu(
-		origin_ground_gu as Vector2,
-		locked_target_ground_gu,
-		resolved_mode,
-		range_bonus_gu
-	):
-		return _target_aligned_ineligible_plan(
-			release_geometry, resolved_mode, "out_of_range"
-		)
 	if terrain_blocked:
 		return _target_aligned_ineligible_plan(
 			release_geometry, resolved_mode, "terrain_blocked"
@@ -646,6 +637,23 @@ static func target_aligned_melee_release_plan_ground_gu(
 		range_bonus_gu,
 		coordinate_context
 	)
+	var locked_target_combat_radius_gu := maxf(
+		0.0,
+		float(release_geometry.get(
+			"locked_target_combat_radius_gu_at_release", 0.0
+		))
+	)
+	# Eligibility consumes the exact same snapshot and the target's complete
+	# combat footprint as damage and presentation. A centre-only distance gate
+	# would reject large monsters whose body still intersects the release band.
+	if not release_snapshot_intersects_target_footprint_ground_gu(
+		snapshot,
+		locked_target_ground_gu,
+		locked_target_combat_radius_gu
+	):
+		return _target_aligned_ineligible_plan(
+			release_geometry, resolved_mode, "out_of_range"
+		)
 	var visual_direction_index := (
 		CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
 			continuous_axis_ground_gu
@@ -663,6 +671,9 @@ static func target_aligned_melee_release_plan_ground_gu(
 		"locked_target_ground_gu_at_release": locked_target_ground_gu,
 		"locked_target_instance_id": int(
 			axis_result.get("locked_target_instance_id", 0)
+		),
+		"locked_target_combat_radius_gu_at_release": (
+			locked_target_combat_radius_gu
 		),
 		"target_axis_eligible": true,
 		"ineligible_reason": "",
@@ -945,6 +956,12 @@ static func _target_aligned_ineligible_plan(
 		"locked_target_instance_id": int(release_geometry.get(
 			"locked_target_instance_id", 0
 		)),
+		"locked_target_combat_radius_gu_at_release": maxf(
+			0.0,
+			float(release_geometry.get(
+				"locked_target_combat_radius_gu_at_release", 0.0
+			))
+		),
 		"target_axis_eligible": false,
 		"ineligible_reason": reason,
 		"visual_direction_index": visual_direction_index,
