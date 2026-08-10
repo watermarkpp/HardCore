@@ -32,7 +32,8 @@ const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const HUD_EXPERIENCE_SEGMENT_COUNT := 10
 const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
-const HUD_EXPERIENCE_BAR_SIZE := Vector2(180, 16)
+const HUD_EXPERIENCE_BAR_SIZE := Vector2(180, 10)
+const HUD_EXPERIENCE_BOTTOM_GAP := 7.0
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
 const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
@@ -520,8 +521,10 @@ func _build_experience_bar(chassis_root: Control) -> void:
 	experience_bar = Control.new()
 	experience_bar.name = "ExperienceBar"
 	experience_bar.size = HUD_EXPERIENCE_BAR_SIZE
-	var source_center := _chassis_source_to_local(Vector2(504, 280))
-	experience_bar.position = source_center - experience_bar.size * 0.5
+	experience_bar.position = Vector2(
+		(HUD_CHASSIS_SIZE.x - experience_bar.size.x) * 0.5,
+		HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_bar.size.y,
+	)
 	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
 	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
