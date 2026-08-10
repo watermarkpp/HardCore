@@ -29,7 +29,6 @@ var skill_name_label: Label
 var skill_icon: TextureRect
 var detail_label: RichTextLabel
 var description_label: RichTextLabel
-var learn_button: Button
 var center_assignment_buttons: Array[Button] = []
 var attack_assignment_buttons: Array[Button] = []
 var attack_ring_assignment_buttons: Array[Button] = []
@@ -157,8 +156,8 @@ func _build_skill_list_section() -> void:
 
 
 func _build_skill_detail_section() -> void:
-	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 460, 548))
-	panel.add_child(_section_title("技能详情", 460))
+	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 400, 548))
+	panel.add_child(_section_title("技能详情", 400))
 	var icon_frame := Button.new()
 	icon_frame.name = "SkillIconFrame"
 	icon_frame.position = Vector2(24, 58)
@@ -180,7 +179,7 @@ func _build_skill_detail_section() -> void:
 	skill_name_label.name = "SkillName"
 	skill_name_label.text = "请选择技能"
 	skill_name_label.position = Vector2(152, 58)
-	skill_name_label.size = Vector2(284, 38)
+	skill_name_label.size = Vector2(224, 38)
 	skill_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	skill_name_label.add_theme_font_size_override("font_size", 22)
@@ -189,7 +188,7 @@ func _build_skill_detail_section() -> void:
 	detail_label = RichTextLabel.new()
 	detail_label.name = "SkillStats"
 	detail_label.position = Vector2(152, 104)
-	detail_label.size = Vector2(284, 190)
+	detail_label.size = Vector2(224, 190)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -200,7 +199,7 @@ func _build_skill_detail_section() -> void:
 	description_title.name = "DescriptionTitle"
 	description_title.text = "技能说明与来源"
 	description_title.position = Vector2(24, 304)
-	description_title.size = Vector2(412, 28)
+	description_title.size = Vector2(352, 28)
 	description_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	description_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	description_title.theme_type_variation = "GothicSectionTitle"
@@ -208,30 +207,22 @@ func _build_skill_detail_section() -> void:
 	description_label = RichTextLabel.new()
 	description_label.name = "SkillDescription"
 	description_label.position = Vector2(24, 338)
-	description_label.size = Vector2(412, 116)
+	description_label.size = Vector2(352, 116)
 	description_label.bbcode_enabled = true
 	description_label.fit_content = false
 	description_label.scroll_active = true
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.theme_type_variation = "GothicDetailText"
 	panel.add_child(description_label)
-	learn_button = Button.new()
-	learn_button.name = "LearnButton"
-	learn_button.text = "使用技能书学习"
-	learn_button.position = Vector2(24, 466)
-	learn_button.size = Vector2(412, 64)
-	learn_button.theme_type_variation = "GothicComponentButton"
-	learn_button.pressed.connect(_learn_selected)
-	panel.add_child(learn_button)
 
 func _build_assignment_section() -> void:
-	var panel := _section_panel("AssignmentPanel", Rect2(814, 76, 374, 548))
-	panel.add_child(_section_title("技能按钮配置", 374))
+	var panel := _section_panel("AssignmentPanel", Rect2(754, 76, 434, 548))
+	panel.add_child(_section_title("技能按钮配置", 434))
 	var attack_title := Label.new()
 	attack_title.name = "AttackSlotTitle"
 	attack_title.text = "攻击主键"
 	attack_title.position = Vector2(22, 50)
-	attack_title.size = Vector2(330, 26)
+	attack_title.size = Vector2(390, 26)
 	attack_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	attack_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	attack_title.theme_type_variation = "GothicMutedLabel"
@@ -239,7 +230,7 @@ func _build_assignment_section() -> void:
 	var attack_slot := Button.new()
 	attack_slot.name = "AttackSkillSlot"
 	attack_slot.position = Vector2(18, 80)
-	attack_slot.size = Vector2(230, 82)
+	attack_slot.size = Vector2(280, 82)
 	attack_slot.text = ""
 	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
 	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
@@ -251,12 +242,10 @@ func _build_assignment_section() -> void:
 	assignment_buttons.append(attack_slot)
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
-	clear_attack.text = "空"
 	clear_attack.add_theme_font_size_override("font_size", 24)
-	clear_attack.text = "恢复\n普通攻击"
 	clear_attack.text = "空"
-	clear_attack.position = Vector2(252, 80)
-	clear_attack.size = Vector2(104, 82)
+	clear_attack.position = Vector2(306, 80)
+	clear_attack.size = Vector2(110, 82)
 	clear_attack.theme_type_variation = "GothicComponentButton"
 	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
 	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
@@ -274,8 +263,8 @@ func _build_assignment_section() -> void:
 	for slot_index in range(ATTACK_RING_SLOT_COUNT):
 		var button := Button.new()
 		button.name = "AttackRingSkillSlot_%d" % (slot_index + 1)
-		button.position = Vector2(18 + (slot_index % 3) * 118, 208 + floori(float(slot_index) / 3.0) * 112)
-		button.size = Vector2(108, 60)
+		button.position = Vector2(18 + (slot_index % 3) * 140, 208 + floori(float(slot_index) / 3.0) * 152)
+		button.size = Vector2(126, 88)
 		button.text = ""
 		button.theme_type_variation = "GothicComponentButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
@@ -288,8 +277,8 @@ func _build_assignment_section() -> void:
 		var clear_button := Button.new()
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
 		clear_button.text = "清空 %d" % (slot_index + 1)
-		clear_button.position = button.position + Vector2(0, 64)
-		clear_button.size = Vector2(108, 40)
+		clear_button.position = button.position + Vector2(0, 92)
+		clear_button.size = Vector2(126, 32)
 		clear_button.theme_type_variation = "GothicComponentButton"
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
@@ -306,7 +295,7 @@ func _build_assignment_section() -> void:
 	## clamping to 320px -> right edge 10px past the parent).
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.theme_type_variation = "GothicMutedLabel"
-	hint.position = Vector2(18, 442)
+	hint.position = Vector2(18, 500)
 	hint.size = Vector2(338, 72)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -566,10 +555,6 @@ func _show_skill_detail(index: int) -> void:
 		row.get("source", row.get("contentLayer", "vanilla_core")),
 		row.get("confidence", "待核验"),
 	]
-	learn_button.disabled = learned
-	learn_button.text = "已学习" if learned else "使用技能书学习"
-	# Assignment is intentionally available only in the right-hand panel.
-	learn_button.visible = not learned and PlayerState.has_item(skill_name)
 
 
 func _clear_skill_detail() -> void:
@@ -577,8 +562,6 @@ func _clear_skill_detail() -> void:
 	skill_icon.texture = null
 	detail_label.text = "[color=#a99479]从左侧选择技能查看完整资料。[/color]"
 	description_label.text = ""
-	learn_button.disabled = true
-	learn_button.visible = false
 
 
 func _refresh_assignment_slots() -> void:
