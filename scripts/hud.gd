@@ -28,6 +28,9 @@ const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
 const TAOIST_BUFF_STRIP_ITEM_BAR_GAP := 6.0
 const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
+const HUD_EXPERIENCE_SEGMENT_COUNT := 10
+const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
+const HUD_EXPERIENCE_BAR_SIZE := Vector2(360, 16)
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
 const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
@@ -146,6 +149,8 @@ var hud_item_buttons: Array[Button] = []
 var item_quick_slots: Array[String] = ["", "", "", ""]
 var item_quick_slot_icons: Array[TextureRect] = []
 var item_quick_slot_count_labels: Array[Label] = []
+var experience_bar: Control
+var experience_segments: Array[ColorRect] = []
 var item_quick_slot_menu: PopupPanel
 var item_quick_slot_candidate_buttons: Array[Button] = []
 var _item_quick_slot_menu_slot := -1
@@ -206,11 +211,13 @@ func _build_approved_hud() -> void:
 	_build_loading_transition()
 
 	PlayerState.profile_changed.connect(update_profile)
+	PlayerState.profile_changed.connect(update_experience_bar)
 	PlayerState.quests_changed.connect(update_quest_tracker)
 	PlayerState.profile_changed.connect(update_special_actions)
 	PlayerState.skills_changed.connect(update_quick_slots)
 	PlayerState.inventory_changed.connect(update_item_quick_slots)
 	update_profile()
+	update_experience_bar()
 	update_quest_tracker()
 	update_special_actions()
 	update_quick_slots()
@@ -503,7 +510,46 @@ func _build_bottom_chassis(root: Control) -> void:
 		quick_count.visible = false
 		item_button.add_child(quick_count)
 		item_quick_slot_count_labels.append(quick_count)
+	_build_experience_bar(chassis_root)
 	_anchor_taoist_buff_strip_above_item_quick_slots(root)
+
+
+func _build_experience_bar(chassis_root: Control) -> void:
+	experience_bar = Control.new()
+	experience_bar.name = "ExperienceBar"
+	experience_bar.size = HUD_EXPERIENCE_BAR_SIZE
+	var source_center := _chassis_source_to_local(Vector2(504, 260))
+	experience_bar.position = source_center - experience_bar.size * 0.5
+	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
+	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
+	experience_bar.set_meta("data_source", "PlayerState.experience / experience_to_next_level()")
+	chassis_root.add_child(experience_bar)
+	experience_segments.clear()
+	var gap := 3.0
+	var segment_width := (HUD_EXPERIENCE_BAR_SIZE.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
+	for index in range(HUD_EXPERIENCE_SEGMENT_COUNT):
+		var segment := ColorRect.new()
+		segment.name = "Segment%02d" % (index + 1)
+		segment.position = Vector2(index * (segment_width + gap), 0)
+		segment.size = Vector2(segment_width, HUD_EXPERIENCE_BAR_SIZE.y)
+		segment.color = Color("241a16")
+		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		experience_bar.add_child(segment)
+		experience_segments.append(segment)
+
+
+func update_experience_bar() -> void:
+	if experience_segments.is_empty():
+		return
+	var required := maxi(1, int(PlayerState.experience_to_next_level()))
+	var progress := clampf(float(PlayerState.experience) / float(required), 0.0, 1.0)
+	for index in range(experience_segments.size()):
+		var segment_progress := clampf(progress * HUD_EXPERIENCE_SEGMENT_COUNT - index, 0.0, 1.0)
+		var segment := experience_segments[index]
+		segment.color = Color("b77a31") if segment_progress > 0.0 else Color("241a16")
+		segment.set_meta("fill_ratio", segment_progress)
 
 
 func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
