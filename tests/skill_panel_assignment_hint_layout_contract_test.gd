@@ -11,6 +11,7 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	PlayerState.learned_skills["基本剑术"] = 0
 	var viewport := SubViewport.new()
 	viewport.size = RESOLUTION
 	var root := Control.new()
@@ -77,6 +78,9 @@ func _run() -> void:
 	assert(attack_icon != null and attack_icon.get_meta("alignment_contract", "") == "primary_attack_inset_centered.v2")
 	assert(attack_icon.position.x >= 16.0 and attack_icon.position.x < 30.0)
 	var assignment_bounds := Rect2(Vector2.ZERO, assignment_panel.size)
+	assert(assignment_bounds.encloses(attack_slot.get_rect()))
+	assert(assignment_bounds.encloses(clear_attack.get_rect()))
+	assert(assignment_bounds.encloses(hint.get_rect()))
 	for index in range(6):
 		var ring := assignment_panel.find_child("AttackRingSkillSlot_%d" % (index + 1), true, false) as Control
 		assert(ring != null and assignment_bounds.encloses(ring.get_rect()))
@@ -85,13 +89,11 @@ func _run() -> void:
 		if index % 3 < 2:
 			var next_ring := assignment_panel.find_child("AttackRingSkillSlot_%d" % (index + 2), true, false) as Control
 			assert(not ring.get_rect().intersects(next_ring.get_rect()))
-	var hint_bounds := (hint.get_parent() as Control).get_rect()
-	assert(hint_bounds.encloses(hint.get_rect()))
 	var mode_label := attack_slot.get_node("Content/InteractionMode") as Label
 	var slot_label := attack_slot.get_node("Content/SlotLabel") as Label
 	var name_label := attack_slot.get_node("Content/SkillName") as Label
 	assert(mode_label.position.x == slot_label.position.x and mode_label.position.x == name_label.position.x)
-	var title := panel.find_child("SkillName", true, false) as Label
+	var title := panel.get_node("SkillDetailPanel/SkillName") as Label
 	assert(title != null)
 	var learned_index := -1
 	var entries: Array = panel.get("skill_entries")
