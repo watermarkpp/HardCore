@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/player_health_bar_level_label_test.gd" type="Script" id="1"]
+
+[node name="PlayerHealthBarLevelLabelTest" type="Node"]
+script = ExtResource("1")
