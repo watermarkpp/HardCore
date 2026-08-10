@@ -25,8 +25,13 @@ func _run() -> void:
 		"summon visual request must start on the threaded path"
 	)
 	assert(
-		diagnostics.threaded_resource_request_count == 5,
-		"skeleton must request its five imported atlases through ResourceLoader"
+		diagnostics.threaded_resource_request_count == 1,
+		"cold skeleton must start only the idle atlas request"
+	)
+	assert(diagnostics.max_resources_in_flight_per_profile == 1)
+	assert(
+		diagnostics.streaming_contract_id
+			== "summon.visual.streaming.serial_idle_preview.v1"
 	)
 	assert(
 		diagnostics.main_thread_blocking_load_count == 0,
@@ -37,14 +42,20 @@ func _run() -> void:
 		"cold-cache visuals must not be installed synchronously"
 	)
 
-	## Existing 0.25s retry cadence: first _process schedules the poll window
-	## and a second call inside the window must not re-issue the request.
-	summon._process(0.0)
-	assert(is_equal_approx(summon._visual_activation_retry, 0.25))
-	summon._process(0.01)
+	## Idle-first activation: the body becomes visible and fully opaque after
+	## only one atlas is finalized, while remaining atlases continue serially.
+	await _wait_for_visual_preview(summon)
 	assert(
 		SummonVisualRegistryScript.async_diagnostics().async_request_count == 1,
-		"pending visual request must not be re-issued inside the 0.25s window"
+		"preview activation must not re-issue the profile request"
+	)
+	assert(summon._visual_preview_active)
+	assert(not summon._visual_profile_complete)
+	assert(summon._sprite.texture != null)
+	assert(is_equal_approx(summon._sprite.self_modulate.a, 1.0))
+	assert(
+		SummonVisualRegistryScript.request_active(summon._visual_request_id),
+		"remaining atlases must continue loading after the preview appears"
 	)
 
 	await _wait_for_visual_ready(summon)
@@ -54,6 +65,8 @@ func _run() -> void:
 		"production summon path must never fall back to sync Image.load_from_file"
 	)
 	assert(not summon._animation_resources.is_empty())
+	assert(summon._visual_profile_complete)
+	assert(not summon._visual_preview_active)
 	assert(summon._sprite.texture != null)
 	assert(
 		diagnostics.async_ready_count == 1,
@@ -71,6 +84,7 @@ func _run() -> void:
 		diagnostics.max_resources_finalized_in_one_poll == 1,
 		"one poll must finalize at most one texture"
 	)
+	assert(diagnostics.max_resources_in_flight_per_profile == 1)
 	assert(
 		diagnostics.main_thread_blocking_load_count == 0,
 		"threaded completion must not hide a blocking main-thread load"
@@ -91,9 +105,13 @@ func _run() -> void:
 	assert(diagnostics.main_thread_blocking_load_count == 0, "cache hit must remain non-blocking")
 
 	## Divine beast exercises the sixth fire atlas on the same bounded finalize
-	## path. The profile becomes visible only after all six resources are ready.
+	## path, while its idle body preview appears after the first resource.
 	var divine_beast := _spawn_summon("divine_beast")
 	assert(divine_beast._animation_resources.is_empty())
+	await _wait_for_visual_preview(divine_beast)
+	assert(divine_beast._sprite.texture != null)
+	assert(is_equal_approx(divine_beast._sprite.self_modulate.a, 1.0))
+	assert(not divine_beast._visual_profile_complete)
 	await _wait_for_visual_ready(divine_beast)
 	diagnostics = SummonVisualRegistryScript.async_diagnostics()
 	assert(diagnostics.async_request_count == 2)
@@ -146,7 +164,7 @@ func _run() -> void:
 	)
 
 	## Actor-level terminal state: a summon spawned after the failure keeps
-	## REQUEST_FAILED and its 0.25s retry polls never start another request.
+	## REQUEST_FAILED and frame polls never start another request.
 	var failed_summon := SummonActor.new()
 	failed_summon.setup(
 		_owner,
@@ -198,31 +216,38 @@ func _spawn_summon(summon_id: String) -> SummonActor:
 
 
 func _wait_for_visual_ready(summon: SummonActor) -> void:
-	for frame_index: int in range(240):
-		if not summon._animation_resources.is_empty():
+	for frame_index: int in range(600):
+		if summon._visual_profile_complete:
 			return
-		summon._process(0.26)
+		summon._process(1.0 / 60.0)
 		await get_tree().process_frame
 	assert(false, "summon visual never became ready")
+
+
+func _wait_for_visual_preview(summon: SummonActor) -> void:
+	for frame_index: int in range(600):
+		if summon._visual_preview_active:
+			return
+		summon._process(1.0 / 60.0)
+		await get_tree().process_frame
+	assert(false, "summon idle preview never became ready")
 
 
 func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
 	var profile: Dictionary = summon._animation_resources
 	var authored_foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
-	var legacy_ground_offset: Vector2i = profile.get(
+	var authored_ground_offset: Vector2i = profile.get(
 		"actor_ground_offset",
 		Vector2i.ZERO
 	)
 	assert(authored_foot_anchor != Vector2i.ZERO)
 	assert(
-		summon._sprite.position + Vector2(authored_foot_anchor) == Vector2.ZERO,
-		"authored summon foot anchor must land exactly on actor gameplay origin"
-	)
-	assert(
 		summon._sprite.position
-			!= -Vector2(authored_foot_anchor + legacy_ground_offset),
-		"canonical summon footpoint must not receive legacy actor offset twice"
+			+ Vector2(authored_foot_anchor + authored_ground_offset)
+			== Vector2.ZERO,
+		"authored composite ground point must land on actor gameplay origin"
 	)
+	_verify_level_label(summon)
 
 	summon.reset_performance_diagnostics_for_tests()
 	for frame_index: int in range(120):
@@ -235,7 +260,7 @@ func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
 	)
 	assert(
 		performance.visual_foot_anchor_contract_id
-			== "skills.summon.visual_foot_anchor_at_actor_origin.v1"
+			== "skills.summon.visual_authored_ground_point_at_actor_origin.v2"
 	)
 	assert(
 		int(performance.target_scan_count) <= 9,
@@ -255,7 +280,51 @@ func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
 func _verify_divine_beast_foot_anchors(summon: SummonActor) -> void:
 	var profile: Dictionary = summon._animation_resources
 	var body_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
+	var body_ground_offset: Vector2i = profile.get(
+		"actor_ground_offset", Vector2i.ZERO
+	)
 	var fire_anchor: Vector2i = profile.get("fire_foot_anchor", Vector2i.ZERO)
+	var fire_ground_offset: Vector2i = profile.get(
+		"fire_actor_ground_offset", Vector2i.ZERO
+	)
 	assert(body_anchor != Vector2i.ZERO and fire_anchor != Vector2i.ZERO)
-	assert(summon._sprite.position + Vector2(body_anchor) == Vector2.ZERO)
-	assert(summon._fire_sprite.position + Vector2(fire_anchor) == Vector2.ZERO)
+	assert(
+		summon._sprite.position
+			+ Vector2(body_anchor + body_ground_offset) == Vector2.ZERO
+	)
+	assert(
+		summon._fire_sprite.position
+			+ Vector2(fire_anchor + fire_ground_offset) == Vector2.ZERO
+	)
+
+
+func _verify_level_label(summon: SummonActor) -> void:
+	summon.summon_exp_level = 0
+	var internal_zero := summon.level_label_layout_snapshot()
+	assert(
+		internal_zero.contract_id
+			== "skills.summon.level_label.current_pet_level.v1"
+	)
+	assert(internal_zero.text == "Lv.1")
+	assert(int(internal_zero.internal_pet_level) == 0)
+	assert(int(internal_zero.display_level) == 1)
+	var one_bounds: Rect2 = internal_zero.bounds
+	assert(is_equal_approx(one_bounds.get_center().x, 0.0))
+	assert(one_bounds.end.y < float(internal_zero.health_bar_y))
+
+	var expected_levels := {
+		1: 1,
+		3: 3,
+		6: 6,
+		7: 7,
+	}
+	for internal_level: int in expected_levels:
+		summon.summon_exp_level = internal_level
+		var layout := summon.level_label_layout_snapshot()
+		var display_level := int(expected_levels[internal_level])
+		assert(layout.text == "Lv.%d" % display_level)
+		assert(int(layout.internal_pet_level) == internal_level)
+		assert(int(layout.display_level) == display_level)
+		var bounds: Rect2 = layout.bounds
+		assert(is_equal_approx(bounds.get_center().x, 0.0))
+		assert(bounds.end.y < float(layout.health_bar_y))

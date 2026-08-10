@@ -49,10 +49,69 @@ func _run() -> void:
 	var second_id: String = PlayerState.active_profile_id
 	assert(first_id != second_id, "多角色档案ID重复")
 	assert(not bool(PlayerState.warrior_runtime_state_for_restore().toggles["warrior.fire_sword.auto_enabled"]), "新角色错误继承烈火旧自动开关")
+	assert(
+		PlayerState.taoist_main_pet_runtime_state_for_restore().is_empty(),
+		"新角色错误继承旧召唤物"
+	)
+	var second_path := TEST_DIRECTORY + "/" + second_id + ".json"
+	var missing_field_payload: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(second_path)
+	)
+	assert(missing_field_payload is Dictionary)
+	assert(int(missing_field_payload.get("save_version", 0)) == 9)
+	assert(
+		not (missing_field_payload as Dictionary).has(
+			"taoist_main_pet_runtime_state"
+		),
+		"empty optional summon field should not be serialized"
+	)
+	PlayerState.load_save()
+	assert(
+		PlayerState.taoist_main_pet_runtime_state_for_restore().is_empty(),
+		"v9 save without optional summon field did not load compatibly"
+	)
+	# Character creation is still warrior-only; switch the test profile to the
+	# already-supported Taoist runtime before attaching its summon snapshot.
+	PlayerState.profession = "道士"
+	var summon_snapshot := {
+		"contract_id": "skills.summon.persistence.runtime_state.v1",
+		"alive": true,
+		"runtime_state": "FOLLOW_OWNER",
+		"summon_id": "divine_beast",
+		"skill_id": "taoist.summon_divine_beast",
+		"skill_rank": 3,
+		"owner_level": 40,
+		"current_hp": 731,
+		"max_hp": 840,
+		"summon_exp_level": 3,
+		"maximum_pet_level": 7,
+		"pet_growth_exp": 88,
+		"remaining_lifetime": 4567.5,
+		"stealth": {
+			"remaining_seconds": 7.5,
+			"buff_id": "buff.taoist.mass_invisibility",
+		},
+		"physical_defence": {
+			"bonus": 4,
+			"remaining_seconds": 8.5,
+			"buff_id": "buff.taoist.defense",
+		},
+		"magic_defence": {
+			"bonus": 5,
+			"remaining_seconds": 9.5,
+			"buff_id": "buff.taoist.magic_defense",
+		},
+	}
+	assert(PlayerState.apply_taoist_main_pet_runtime_state(summon_snapshot))
+	assert(PlayerState.save_game(), "道士召唤物状态未写入角色存档")
 	var profiles: Array[Dictionary] = PlayerState.list_characters()
 	assert(profiles.size() == 2, "角色索引未保存两个档案")
 	assert(PlayerState.select_character(first_id), "无法选择第一个角色")
 	assert(PlayerState.character_name == "长风" and PlayerState.level == 12 and PlayerState.gold == 3456, "角色独立数据恢复失败")
+	assert(
+		PlayerState.taoist_main_pet_runtime_state_for_restore().is_empty(),
+		"战士角色错误继承道士召唤物"
+	)
 	assert(PlayerState.attack_ring_slots[2] == "野蛮冲撞", "野蛮冲撞六环槽未从存档恢复")
 	assert(PlayerState.quick_slots[2] == "野蛮冲撞", "野蛮冲撞快捷槽置换未从存档恢复")
 	var restored_runtime := PlayerState.warrior_runtime_state_for_restore()
@@ -87,6 +146,11 @@ func _run() -> void:
 		"退出后的地面GU坐标未恢复"
 	)
 	assert(FileAccess.file_exists(TEST_DIRECTORY + "/" + first_id + ".json.bak"), "原子存档备份未生成")
+	assert(PlayerState.select_character(second_id), "无法重载道士角色")
+	_assert_summon_snapshot_equal(
+		PlayerState.taoist_main_pet_runtime_state_for_restore(),
+		summon_snapshot
+	)
 	var launcher: Node = load("res://scenes/character_select.tscn").instantiate()
 	add_child(launcher)
 	await get_tree().process_frame
@@ -97,8 +161,30 @@ func _run() -> void:
 	PlayerState.test_mode = old_test_mode
 	PlayerState.active_profile_id = ""
 	_cleanup()
-	print("MULTI_CHARACTER_SAVE_PASS：角色选择、双档隔离、原子写入与备份正常")
+	print("MULTI_CHARACTER_SAVE_PASS：角色选择、双档隔离、召唤状态、原子写入与备份正常")
 	get_tree().quit(0)
+
+
+func _assert_summon_snapshot_equal(actual: Dictionary, expected: Dictionary) -> void:
+	for key: String in [
+		"contract_id", "alive", "runtime_state", "summon_id", "skill_id",
+		"skill_rank", "owner_level", "current_hp", "max_hp",
+		"summon_exp_level", "maximum_pet_level", "pet_growth_exp",
+		"remaining_lifetime",
+	]:
+		assert(
+			actual.get(key) == expected.get(key),
+			"召唤物持久化字段未恢复：%s" % key
+		)
+	for buff_key: String in ["stealth", "physical_defence", "magic_defence"]:
+		var actual_buff: Dictionary = actual.get(buff_key, {})
+		var expected_buff: Dictionary = expected.get(buff_key, {})
+		for field: String in ["bonus", "remaining_seconds", "buff_id"]:
+			if expected_buff.has(field):
+				assert(
+					actual_buff.get(field) == expected_buff.get(field),
+					"召唤物buff字段未恢复：%s.%s" % [buff_key, field]
+				)
 
 
 func _cleanup() -> void:

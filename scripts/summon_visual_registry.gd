@@ -4,6 +4,9 @@ extends RefCounted
 const SUMMON_BASELINE_PATH := "res://assets/data/vanilla_176/taoist_summon_baseline.json"
 const DIVINE_BEAST_MANIFEST_PATH := "res://assets/data/vanilla_176/divine_beast_animation.json"
 const DIVINE_BEAST_CONTRACT_ID := "summon.visual.divine_beast.directional.v1"
+const SERIAL_STREAMING_CONTRACT_ID := (
+	"summon.visual.streaming.serial_idle_preview.v1"
+)
 const REQUIRED_ACTIONS: Array[String] = ["idle", "walk", "attack", "hit", "death"]
 
 const REQUEST_READY := -1
@@ -21,6 +24,7 @@ static var _threaded_resource_request_count := 0
 static var _threaded_resource_ready_count := 0
 static var _main_thread_blocking_load_count := 0
 static var _max_resources_finalized_in_one_poll := 0
+static var _max_resources_in_flight_per_profile := 0
 
 static var _request_serial := 0
 static var _pending_requests: Dictionary = {}
@@ -41,9 +45,9 @@ static func profile(summon_id: String) -> Dictionary:
 	return result.duplicate()
 
 
-## Starts threaded imported-Texture2D loads for a summon profile and returns a request
-## id. Returns REQUEST_READY when the profile is already cached and
-## REQUEST_UNKNOWN when the plan is invalid (caller keeps the 0.25s retry).
+## Starts an idle-first serial imported-Texture2D stream for a summon profile
+## and returns a request id. Returns REQUEST_READY when the profile is already
+## cached and REQUEST_UNKNOWN when the plan is invalid.
 static func request_profile(summon_id: String) -> int:
 	if _profile_cache.has(summon_id):
 		return REQUEST_READY
@@ -65,25 +69,14 @@ static func request_profile(summon_id: String) -> int:
 		"resources": resource_entries,
 		"textures": {},
 		"finalized_count": 0,
+		"active_resource_index": -1,
+		"next_request_index": 0,
+		"preview_profile": {},
 	}
 	_request_owners[request_id] = summon_id
 	_async_request_count += 1
-	for resource_entry: Dictionary in resource_entries:
-		var path := str(resource_entry.get("path", ""))
-		var error := ResourceLoader.load_threaded_request(
-			path,
-			"Texture2D",
-			true,
-			ResourceLoader.CACHE_MODE_REUSE
-		)
-		if error != OK:
-			_finish_request(request_id, {
-				"ok": false,
-				"error": "threaded_request_failed:%s:%d" % [path, error],
-				"loaded_image_count": 0,
-			})
-			return REQUEST_FAILED
-		_threaded_resource_request_count += 1
+	if not _request_next_resource(summon_id):
+		return REQUEST_FAILED
 	return request_id
 
 
@@ -110,11 +103,25 @@ static func request_active(request_id: int) -> bool:
 	return request_id > REQUEST_UNKNOWN and _request_owners.has(request_id)
 
 
+static func preview_profile(request_id: int) -> Dictionary:
+	var summon_id := str(_request_owners.get(request_id, ""))
+	if summon_id.is_empty() or not _pending_requests.has(summon_id):
+		return {}
+	var preview: Dictionary = _pending_requests[summon_id].get(
+		"preview_profile",
+		{}
+	)
+	return preview.duplicate() if not preview.is_empty() else {}
+
+
 ## Advances each pending imported-resource request once. ResourceLoader owns
 ## its worker lifetime, so actor teardown never joins a custom thread.
 static func reap_completed_requests() -> void:
 	for summon_id: String in _pending_requests.keys():
+		var ready_before := _threaded_resource_ready_count
 		_poll_request_once(summon_id)
+		if _threaded_resource_ready_count > ready_before:
+			return
 
 
 static func clear_cache_for_tests() -> void:
@@ -131,6 +138,7 @@ static func clear_cache_for_tests() -> void:
 	_threaded_resource_ready_count = 0
 	_main_thread_blocking_load_count = 0
 	_max_resources_finalized_in_one_poll = 0
+	_max_resources_in_flight_per_profile = 0
 
 
 static func async_diagnostics() -> Dictionary:
@@ -147,7 +155,43 @@ static func async_diagnostics() -> Dictionary:
 		"ready_count": _threaded_resource_ready_count,
 		"main_thread_blocking_load_count": _main_thread_blocking_load_count,
 		"max_resources_finalized_in_one_poll": _max_resources_finalized_in_one_poll,
+		"max_resources_in_flight_per_profile": _max_resources_in_flight_per_profile,
+		"streaming_contract_id": SERIAL_STREAMING_CONTRACT_ID,
 	}
+
+
+static func _request_next_resource(summon_id: String) -> bool:
+	if not _pending_requests.has(summon_id):
+		return false
+	var entry: Dictionary = _pending_requests[summon_id]
+	var resources: Array = entry.get("resources", [])
+	var next_index := int(entry.get("next_request_index", 0))
+	if next_index >= resources.size():
+		return true
+	var resource_entry: Dictionary = resources[next_index]
+	var path := str(resource_entry.get("path", ""))
+	var error := ResourceLoader.load_threaded_request(
+		path,
+		"Texture2D",
+		false,
+		ResourceLoader.CACHE_MODE_REUSE
+	)
+	if error != OK:
+		_finish_request(int(entry.get("request_id", 0)), {
+			"ok": false,
+			"error": "threaded_request_failed:%s:%d" % [path, error],
+			"loaded_image_count": int(entry.get("finalized_count", 0)),
+		})
+		return false
+	entry["active_resource_index"] = next_index
+	entry["next_request_index"] = next_index + 1
+	_pending_requests[summon_id] = entry
+	_threaded_resource_request_count += 1
+	_max_resources_in_flight_per_profile = maxi(
+		_max_resources_in_flight_per_profile,
+		1
+	)
+	return true
 
 
 static func _poll_request_once(summon_id: String) -> void:
@@ -156,43 +200,49 @@ static func _poll_request_once(summon_id: String) -> void:
 	var entry: Dictionary = _pending_requests[summon_id]
 	var resources: Array = entry.get("resources", [])
 	var textures: Dictionary = entry.get("textures", {})
+	var active_index := int(entry.get("active_resource_index", -1))
+	if active_index < 0 or active_index >= resources.size():
+		return
 	var finalized_this_poll := 0
-	for resource_value: Variant in resources:
-		var resource_entry: Dictionary = resource_value
-		var resource_key := str(resource_entry.get("key", ""))
-		if textures.has(resource_key):
-			continue
-		var path := str(resource_entry.get("path", ""))
-		var status := ResourceLoader.load_threaded_get_status(path)
-		if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			_finish_request(int(entry.get("request_id", 0)), {
-				"ok": false,
-				"error": "threaded_resource_failed:%s:%d" % [path, status],
-				"loaded_image_count": int(entry.get("finalized_count", 0)),
-			})
-			return
-		if status != ResourceLoader.THREAD_LOAD_LOADED:
-			continue
-		var texture := ResourceLoader.load_threaded_get(path) as Texture2D
-		if texture == null:
-			_finish_request(int(entry.get("request_id", 0)), {
-				"ok": false,
-				"error": "threaded_resource_not_texture:%s" % path,
-				"loaded_image_count": int(entry.get("finalized_count", 0)),
-			})
-			return
-		textures[resource_key] = texture
-		entry["textures"] = textures
-		entry["finalized_count"] = int(entry.get("finalized_count", 0)) + 1
-		_pending_requests[summon_id] = entry
-		_threaded_resource_ready_count += 1
-		finalized_this_poll = 1
-		break
+	var resource_entry: Dictionary = resources[active_index]
+	var resource_key := str(resource_entry.get("key", ""))
+	var path := str(resource_entry.get("path", ""))
+	var status := ResourceLoader.load_threaded_get_status(path)
+	if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		_finish_request(int(entry.get("request_id", 0)), {
+			"ok": false,
+			"error": "threaded_resource_failed:%s:%d" % [path, status],
+			"loaded_image_count": int(entry.get("finalized_count", 0)),
+		})
+		return
+	if status != ResourceLoader.THREAD_LOAD_LOADED:
+		return
+	var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+	if texture == null:
+		_finish_request(int(entry.get("request_id", 0)), {
+			"ok": false,
+			"error": "threaded_resource_not_texture:%s" % path,
+			"loaded_image_count": int(entry.get("finalized_count", 0)),
+		})
+		return
+	textures[resource_key] = texture
+	entry["textures"] = textures
+	entry["finalized_count"] = int(entry.get("finalized_count", 0)) + 1
+	entry["active_resource_index"] = -1
+	if resource_key == "idle":
+		entry["preview_profile"] = _build_idle_preview_profile(
+			entry.get("plan", {}),
+			texture
+		)
+	_pending_requests[summon_id] = entry
+	_threaded_resource_ready_count += 1
+	finalized_this_poll = 1
 	_max_resources_finalized_in_one_poll = maxi(
 		_max_resources_finalized_in_one_poll,
 		finalized_this_poll
 	)
 	if int(entry.get("finalized_count", 0)) < resources.size():
+		_request_next_resource(summon_id)
 		return
 	var profile := _build_profile_from_threaded_textures(
 		entry.get("plan", {}),
@@ -204,6 +254,38 @@ static func _poll_request_once(summon_id: String) -> void:
 		"loaded_image_count": int(entry.get("finalized_count", 0)),
 		"profile": profile,
 	})
+
+
+static func _build_idle_preview_profile(
+	plan: Dictionary,
+	idle_texture: Texture2D
+) -> Dictionary:
+	if plan.is_empty() or idle_texture == null:
+		return {}
+	var idle_frame_count := int(
+		plan.get("frame_counts", {}).get("idle", 1)
+	)
+	var idle_frame_ms := int(plan.get("frame_ms", {}).get("idle", 200))
+	var preview := {
+		"contract_id": str(plan.get("contract_id", "")),
+		"direction_mode": str(plan.get("direction_mode", "")),
+		"frame_size": plan.get("frame_size", Vector2i.ZERO),
+		"foot_anchor": plan.get("foot_anchor", Vector2i.ZERO),
+		"actor_ground_offset": plan.get("actor_ground_offset", Vector2i.ZERO),
+		"stable_body_top": int(plan.get("stable_body_top", 0)),
+		"frame_counts": {},
+		"frame_ms": {},
+		"streaming_preview": true,
+	}
+	for action_name: String in REQUIRED_ACTIONS:
+		preview[action_name] = idle_texture
+		preview.frame_counts[action_name] = idle_frame_count
+		preview.frame_ms[action_name] = idle_frame_ms
+	preview.attack_release_frame_index = int(
+		plan.get("attack_release_frame_index", 5)
+	)
+	preview.attack_release_ms = int(plan.get("attack_release_ms", 500))
+	return preview
 
 
 static func _finish_request(request_id: int, result: Dictionary) -> void:

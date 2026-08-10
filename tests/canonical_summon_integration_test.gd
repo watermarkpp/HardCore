@@ -18,7 +18,13 @@ func _run() -> void:
 	var skill_name := ProfessionRules.skill_display_name(
 		"taoist.summon_skeleton"
 	)
-	PlayerState.learned_skills = {skill_name: 3}
+	var divine_skill_name := ProfessionRules.skill_display_name(
+		"taoist.summon_divine_beast"
+	)
+	PlayerState.learned_skills = {
+		skill_name: 3,
+		divine_skill_name: 3,
+	}
 	PlayerState.recalculate_stats()
 	_game = load("res://scenes/main.tscn").instantiate()
 	add_child(_game)
@@ -117,8 +123,81 @@ func _run() -> void:
 		"recall spent an amulet"
 	)
 
+	# The one-main-pet contract is type-agnostic. Casting Divine Beast while a
+	# skeleton lives must recall the skeleton without replacing or refreshing
+	# any part of its real runtime state.
+	pet.current_hp = pet.max_hp - 17
+	pet.pet_growth_exp = 123
+	pet.remaining_lifetime = 4321.5
+	pet.apply_stealth(11.0, "buff.test.stealth")
+	pet.apply_ac_buff(3, 12.0, "buff.test.ac")
+	pet.apply_mac_buff(4, 13.0, "buff.test.mac")
+	var cross_skill_state_before := pet.persistence_snapshot()
+	var cross_skill_mp_before := _player.current_mp
+	var cross_skill_amulet_before := PlayerState.item_count("护身符")
+	var cross_skill_result: Dictionary = _game._execute_canonical_skill(
+		divine_skill_name,
+		_player.global_position,
+		_player.facing,
+		0,
+		{"release_id": "test:summon:cross_skill_recall"}
+	)
+	var cross_skill_plan: Dictionary = cross_skill_result.get(
+		"canonical_plan", {}
+	)
+	assert(bool(cross_skill_result.get("accepted", false)))
+	assert(not bool(cross_skill_plan.get("resource_commit_required", true)))
+	assert(_game._canonical_main_pet().get_instance_id() == pet_id)
+	assert(pet.summon_id == "skeleton")
+	assert(
+		pet.persistence_snapshot() == cross_skill_state_before,
+		"cross-skill recall changed type/HP/level/growth/buffs/lifetime"
+	)
+	assert(_player.current_mp == cross_skill_mp_before)
+	assert(PlayerState.item_count("护身符") == cross_skill_amulet_before)
+
+	# A different summon type becomes eligible only after the live pet dies.
+	pet.take_damage(pet.current_hp + 9999)
+	assert(_game._canonical_main_pet() == null)
+	var divine_result: Dictionary = _game._execute_canonical_skill(
+		divine_skill_name,
+		_player.global_position,
+		_player.facing,
+		0,
+		{"release_id": "test:summon:after_death"}
+	)
+	assert(bool(divine_result.get("accepted", false)))
+	var divine_pet: SummonActor = _game._canonical_main_pet()
+	assert(divine_pet != null and divine_pet.get_instance_id() != pet_id)
+	assert(
+		divine_pet.summon_id == "divine_beast"
+		and divine_pet.skill_id == "taoist.summon_divine_beast"
+	)
+
+	# Save/restore rehydrates the exact live state without a skill cast, resource
+	# commit or duplicate main pet.
+	divine_pet.current_hp = divine_pet.max_hp - 23
+	divine_pet.pet_growth_exp = 77
+	divine_pet.remaining_lifetime = 3210.25
+	divine_pet.apply_stealth(9.0, "buff.test.restore.stealth")
+	var persisted_state := divine_pet.persistence_snapshot()
+	assert(PlayerState.apply_taoist_main_pet_runtime_state(persisted_state))
+	var restore_mp_before := _player.current_mp
+	var restore_amulet_before := PlayerState.item_count("护身符")
+	divine_pet.queue_free()
+	await get_tree().process_frame
+	assert(_game._restore_persisted_taoist_main_pet_if_needed())
+	var restored_pet: SummonActor = _game._canonical_main_pet()
+	assert(restored_pet != null and restored_pet.summon_id == "divine_beast")
+	assert(restored_pet.persistence_snapshot() == persisted_state)
+	var restored_pet_id := restored_pet.get_instance_id()
+	assert(not _game._restore_persisted_taoist_main_pet_if_needed())
+	assert(_game._canonical_main_pet().get_instance_id() == restored_pet_id)
+	assert(_player.current_mp == restore_mp_before)
+	assert(PlayerState.item_count("护身符") == restore_amulet_before)
+
 	# Fill every candidate in the exact radius-2 search after removing the pet.
-	pet.queue_free()
+	restored_pet.queue_free()
 	await get_tree().process_frame
 	var open_plan: Dictionary = _game._canonical_summon_spawn_plan(
 		"taoist.summon_skeleton"
@@ -159,7 +238,8 @@ func _run() -> void:
 
 	print(
 		"CANONICAL_SUMMON_INTEGRATION_PASS: radius-2 placement, descriptor "
-		+ "levels/snapshot, recall identity, and blocked no-op resources"
+		+ "levels/snapshot, cross-skill recall identity/state, death-gated type, "
+		+ "persistence restore, and blocked no-op resources"
 	)
 	get_tree().quit(0)
 

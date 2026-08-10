@@ -52,12 +52,22 @@ func _run() -> void:
 	var buff_strip := root.get_node("TaoistDefenseBuffStrip") as Control
 	assert(buff_strip != null)
 	assert(buff_strip.get_meta("stable_id") == GameHUD.TAOIST_BUFF_STRIP_STABLE_ID)
-	assert(buff_strip.get_meta("layout_policy") == "safe_root_above_bottom_chassis.v1")
+	assert(buff_strip.get_meta("layout_policy") == "safe_root_above_item_quick_slots.v2")
 	assert(buff_strip.size == GameHUD.TAOIST_BUFF_STRIP_SIZE)
+	var item_bar_global_rect := (chassis.get_node("ItemSlot1") as Control).get_global_rect()
+	for index in range(2, 5):
+		item_bar_global_rect = item_bar_global_rect.merge(
+			(chassis.get_node("ItemSlot%d" % index) as Control).get_global_rect()
+		)
 	assert(is_equal_approx(
-		buff_strip.position.y + buff_strip.size.y,
-		chassis.position.y - GameHUD.TAOIST_BUFF_STRIP_CHASSIS_GAP
+		buff_strip.get_global_rect().end.y,
+		item_bar_global_rect.position.y - GameHUD.TAOIST_BUFF_STRIP_ITEM_BAR_GAP
 	))
+	assert(is_equal_approx(
+		buff_strip.get_global_rect().get_center().x,
+		item_bar_global_rect.get_center().x
+	))
+	assert(buff_strip.get_index() > chassis.get_index())
 	var ac_buff_icon := buff_strip.get_node("TaoistACBuffIcon") as TextureRect
 	var mac_buff_icon := buff_strip.get_node("TaoistMACBuffIcon") as TextureRect
 	assert(ac_buff_icon != null and mac_buff_icon != null)
@@ -72,7 +82,7 @@ func _run() -> void:
 	assert(ac_buff_icon.texture.resource_path.ends_with("/defense.png"))
 	assert(mac_buff_icon.texture.resource_path.ends_with("/magic_defense.png"))
 	assert(not ac_buff_icon.get_rect().intersects(mac_buff_icon.get_rect()))
-	assert(not buff_strip.get_global_rect().intersects(chassis.get_global_rect()))
+	assert(not buff_strip.get_global_rect().intersects(item_bar_global_rect))
 	hud.update_taoist_buff_hints([], {
 		"ac_bonus": 5,
 		"ac_remaining_seconds": 7.2,

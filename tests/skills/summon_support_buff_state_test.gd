@@ -24,6 +24,7 @@ func _run() -> void:
 	_verify_ac_and_mac_are_separate(summon)
 	_verify_refresh_never_downgrades(summon)
 	_verify_buff_state_snapshot(summon)
+	_verify_persistence_round_trip(owner, summon)
 	_verify_owner_level_contract(owner)
 	_verify_death_is_idempotent(summon)
 	owner.free()
@@ -91,6 +92,56 @@ func _verify_buff_state_snapshot(summon: SummonActor) -> void:
 	assert(snapshot.physical_defence.bonus == 0)
 	assert(snapshot.magic_defence.bonus == 4)
 	assert(snapshot.magic_defence.buff_id == "buff.taoist.soul_shield_mac")
+
+
+func _verify_persistence_round_trip(
+	owner: PlayerCharacter,
+	summon: SummonActor
+) -> void:
+	summon.current_hp = 77
+	summon.max_hp = 196
+	summon.summon_exp_level = 1
+	summon.maximum_pet_level = 7
+	summon.pet_growth_exp = 83
+	summon.remaining_lifetime = 1234.5
+	summon.apply_stealth(6.0, "buff.taoist.mass_invisibility")
+	summon.clear_ac_buff()
+	summon.clear_mac_buff()
+	summon.apply_ac_buff(9, 12.0, "buff.taoist.blessed_armour_ac")
+	summon.apply_mac_buff(7, 14.0, "buff.taoist.soul_shield_mac")
+	var snapshot := summon.persistence_snapshot()
+	assert(snapshot.contract_id == "skills.summon.persistence.runtime_state.v1")
+	assert(snapshot.alive)
+	assert(snapshot.summon_id == "skeleton")
+	assert(snapshot.skill_rank == 0)
+	assert(snapshot.owner_level == 19)
+
+	var restored := SummonActor.new()
+	restored.setup(
+		owner,
+		"鍙樺紓楠烽珔",
+		1,
+		0,
+		"taoist.summon_skeleton",
+		19,
+		7
+	)
+	assert(restored.restore_persistence_snapshot(snapshot))
+	assert(restored.current_hp == 77 and restored.max_hp == 196)
+	assert(restored.summon_exp_level == 1)
+	assert(restored.maximum_pet_level == 7)
+	assert(restored.pet_growth_exp == 83)
+	assert(is_equal_approx(restored.remaining_lifetime, 1234.5))
+	assert(is_equal_approx(restored.stealth_remaining_seconds, 6.0))
+	assert(restored.stealth_buff_id == "buff.taoist.mass_invisibility")
+	assert(restored.ac_buff_bonus == 9)
+	assert(is_equal_approx(restored.ac_buff_remaining_seconds, 12.0))
+	assert(restored.mac_buff_bonus == 7)
+	assert(is_equal_approx(restored.mac_buff_remaining_seconds, 14.0))
+	var dead_snapshot := snapshot.duplicate(true)
+	dead_snapshot.alive = false
+	assert(not restored.restore_persistence_snapshot(dead_snapshot))
+	restored.free()
 
 
 func _verify_refresh_never_downgrades(summon: SummonActor) -> void:

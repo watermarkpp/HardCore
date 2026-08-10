@@ -45,6 +45,13 @@ func _run() -> void:
 	assert(spatial.contract_id == SummonActor.SPATIAL_CONTRACT_ID)
 	assert(spatial.unit_contract_id == GroundUnit.CONTRACT_ID)
 	assert(spatial.move_speed_gu_per_sec > 0.0)
+	assert(
+		spatial.attack_footprint_contract_id
+			== "skills.summon.attack_release_directed_gu.v2"
+	)
+	assert(is_equal_approx(float(spatial.attack_effect_length_gu), 1.5))
+	assert(is_equal_approx(float(spatial.attack_effect_width_gu), 1.0))
+	assert(is_equal_approx(float(spatial.attack_interval_seconds), 1.2))
 	for sample_index: int in range(32):
 		var ground_direction := Vector2.from_angle(
 			TAU * float(sample_index) / 32.0
@@ -81,9 +88,19 @@ func _run() -> void:
 	)
 	var enemy_hp := enemy.current_hp
 	skeleton._attack_timer = 0.0
+	skeleton.apply_stealth(10.0, "buff.taoist.mass_invisibility")
 	skeleton._physics_process(0.016)
 	assert(skeleton.state == SummonActor.SummonState.ATTACK_TARGET and enemy.current_hp == enemy_hp)
+	assert(not skeleton.is_stealthed(), "entering attack must break summon stealth immediately")
+	assert(skeleton.stealth_buff_id.is_empty())
 	assert(skeleton._pending_attack_target == enemy, "召唤物攻击未等待客户端命中帧")
+	assert(skeleton.last_attack_footprint_snapshot.shape_type == "directed_rectangle")
+	assert(is_equal_approx(
+		float(skeleton.last_attack_footprint_snapshot.effect_length_gu), 1.5
+	))
+	assert(is_equal_approx(
+		float(skeleton.last_attack_footprint_snapshot.effect_width_gu), 1.0
+	))
 	skeleton._physics_process(0.50)
 	assert(enemy.current_hp < enemy_hp, "召唤物客户端命中帧没有结算伤害")
 	assert(skeleton.last_attack_type == "physical")
@@ -106,6 +123,11 @@ func _run() -> void:
 	assert(divine_beast.lifetime_seconds == 864000.0 and divine_beast.recall_existing_on_create_failure)
 	assert(divine_beast.max_hp == 840 and skeleton.max_hp == 392)
 	assert(divine_beast.attack_range_gu > skeleton.attack_range_gu)
+	assert(is_equal_approx(divine_beast.attack_range_gu, 3.0))
+	assert(is_equal_approx(divine_beast.attack_interval, 1.2))
+	var beast_spatial := divine_beast.spatial_contract_snapshot()
+	assert(is_equal_approx(float(beast_spatial.attack_effect_length_gu), 3.0))
+	assert(is_equal_approx(float(beast_spatial.attack_effect_width_gu), 1.0))
 	assert(skeleton.maximum_pet_level == 7 and divine_beast.maximum_pet_level == 7)
 	divine_beast.free()
 	print("SUMMON_ACTOR_STATE_MACHINE_PASS: levels, attacks, ten-day life, owner follow, recall")

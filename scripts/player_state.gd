@@ -30,6 +30,9 @@ const PROFILE_DIRECTORY := "user://characters"
 const TEST_ROSTER_RESET_MARKER_PATH := "user://test_roster_v2_reset.json"
 const AUTOSAVE_INTERVAL := 30.0
 const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
+const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
+	"skills.summon.persistence.runtime_state.v1"
+)
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
@@ -85,6 +88,7 @@ var equip_cycle_cursor: Dictionary = {"戒指": "左戒指", "手镯": "左手�
 var attack_skill_slots: Array[String] = [""]
 var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
+var taoist_main_pet_runtime_state: Dictionary = {}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
@@ -110,6 +114,7 @@ var last_load_result: Dictionary = {
 	"reason": "not_attempted",
 }
 var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _taoist_main_pet_persistence_provider := Callable()
 # Test-only failure injection. Production ignores it unless test_mode is true.
 var _test_force_atomic_write_failure := false
 
@@ -157,6 +162,7 @@ func reset_progress(emit_updates := true) -> void:
 	attack_skill_slots = [""]
 	attack_ring_slots = ["", "", "", "", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
+	taoist_main_pet_runtime_state = {}
 	quest_states = {}
 	_consumed_shop_sell_quote_ids.clear()
 	saved_map_id = 4
@@ -1566,9 +1572,10 @@ func save_game() -> bool:
 			"reason": "active_profile_missing",
 		}
 		return false
+	_refresh_taoist_main_pet_runtime_state_for_save()
 	_ensure_skill_progression_matches_legacy()
 	var profile_path := _profile_path(active_profile_id)
-	if not _write_json_atomic(profile_path, {
+	var payload := {
 		"save_version": SAVE_VERSION,
 		"profile_id": active_profile_id,
 		"character_name": character_name,
@@ -1602,7 +1609,12 @@ func save_game() -> bool:
 			if saved_ground_position_gu_valid
 			else []
 		),
-	}):
+	}
+	if not taoist_main_pet_runtime_state.is_empty():
+		payload["taoist_main_pet_runtime_state"] = (
+			taoist_main_pet_runtime_state.duplicate(true)
+		)
+	if not _write_json_atomic(profile_path, payload):
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
 			"success": false,
@@ -1666,6 +1678,9 @@ func load_save() -> void:
 	quick_item_slots = _normalized_quick_item_slots(parsed.get("quick_item_slots", null))
 	equip_cycle_cursor = _normalized_equip_cycle_cursor(parsed.get("equip_cycle_cursor", {}))
 	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
+	taoist_main_pet_runtime_state = _normalized_taoist_main_pet_runtime_state(
+		parsed.get("taoist_main_pet_runtime_state", {})
+	)
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
 	var position_data: Variant = parsed.get(
@@ -2006,6 +2021,101 @@ func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool
 
 func warrior_runtime_state_for_restore() -> Dictionary:
 	return warrior_runtime_state.duplicate(true)
+
+
+func configure_taoist_main_pet_persistence_provider(provider: Callable) -> void:
+	_taoist_main_pet_persistence_provider = provider
+
+
+func clear_taoist_main_pet_persistence_provider() -> void:
+	_taoist_main_pet_persistence_provider = Callable()
+
+
+func apply_taoist_main_pet_runtime_state(snapshot: Dictionary) -> bool:
+	if snapshot.is_empty():
+		taoist_main_pet_runtime_state = {}
+		return true
+	var normalized := _normalized_taoist_main_pet_runtime_state(snapshot)
+	if normalized.is_empty():
+		return false
+	taoist_main_pet_runtime_state = normalized
+	return true
+
+
+func taoist_main_pet_runtime_state_for_restore() -> Dictionary:
+	return taoist_main_pet_runtime_state.duplicate(true)
+
+
+func _refresh_taoist_main_pet_runtime_state_for_save() -> void:
+	if not _taoist_main_pet_persistence_provider.is_valid():
+		return
+	var captured: Variant = _taoist_main_pet_persistence_provider.call()
+	if not captured is Dictionary:
+		return
+	if (captured as Dictionary).is_empty():
+		taoist_main_pet_runtime_state = {}
+		return
+	var normalized := _normalized_taoist_main_pet_runtime_state(captured)
+	# A live provider is authoritative. Invalid/corrupt live state fails closed
+	# instead of preserving a stale summon from an earlier save.
+	taoist_main_pet_runtime_state = normalized
+
+
+func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
+	if not snapshot is Dictionary:
+		return {}
+	var source := snapshot as Dictionary
+	if (
+		str(source.get("contract_id", ""))
+		!= TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID
+		or not bool(source.get("alive", false))
+	):
+		return {}
+	var summon_id := str(source.get("summon_id", ""))
+	var skill_id := str(source.get("skill_id", ""))
+	if (
+		(summon_id == "skeleton" and skill_id != "taoist.summon_skeleton")
+		or (
+			summon_id == "divine_beast"
+			and skill_id != "taoist.summon_divine_beast"
+		)
+		or summon_id not in ["skeleton", "divine_beast"]
+	):
+		return {}
+	var runtime_state := str(source.get("runtime_state", ""))
+	if runtime_state not in [
+		"FOLLOW_OWNER",
+		"ACQUIRE_TARGET",
+		"CHASE_TARGET",
+		"ATTACK_TARGET",
+		"RETURN_TO_OWNER",
+	]:
+		return {}
+	var skill_rank := int(source.get("skill_rank", -1))
+	var owner_level := int(source.get("owner_level", 0))
+	var current_hp := int(source.get("current_hp", 0))
+	var max_hp := int(source.get("max_hp", 0))
+	var remaining_lifetime := float(source.get("remaining_lifetime", 0.0))
+	var summon_exp_level := int(source.get("summon_exp_level", -1))
+	var maximum_pet_level := int(source.get("maximum_pet_level", -1))
+	var pet_growth_exp := int(source.get("pet_growth_exp", -1))
+	if (
+		skill_rank < 0
+		or skill_rank > 7
+		or owner_level <= 0
+		or current_hp <= 0
+		or max_hp <= 0
+		or current_hp > max_hp
+		or not is_finite(remaining_lifetime)
+		or remaining_lifetime <= 0.0
+		or summon_exp_level < 0
+		or summon_exp_level > 7
+		or maximum_pet_level < summon_exp_level
+		or maximum_pet_level > 7
+		or pet_growth_exp < 0
+	):
+		return {}
+	return source.duplicate(true)
 
 
 func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:

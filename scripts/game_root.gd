@@ -328,6 +328,9 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	add_child(player)
+	PlayerState.configure_taoist_main_pet_persistence_provider(
+		Callable(self, "_capture_taoist_main_pet_runtime_state")
+	)
 	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
 
 	_world_camera = Camera2D.new()
@@ -369,6 +372,10 @@ func _ready() -> void:
 	# 初次进场通过独立 bootstrap 合约：显示遮罩 → 预加载 → 加载地图 → 开放输入。
 	_build_system_menu()
 	_begin_initial_world_bootstrap()
+
+
+func _exit_tree() -> void:
+	PlayerState.clear_taoist_main_pet_persistence_provider()
 
 
 func _notification(what: int) -> void:
@@ -629,6 +636,9 @@ func _on_warehouse_sort_requested() -> void:
 
 func _prepare_safe_logout() -> Dictionary:
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
+	PlayerState.apply_taoist_main_pet_runtime_state(
+		_capture_taoist_main_pet_runtime_state()
+	)
 	var home_map_id := GameData.service_home_runtime_map_id(false)
 	var resolved := _resolve_bich_home()
 	if not bool(resolved.get("valid", false)):
@@ -1536,6 +1546,11 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	_zone_generation += 1
 	_active_safe_zones.clear()
 	_cancel_all_combat_targets()
+	# Preserve the live summon before zone_content is queued for deletion. The
+	# destination map restores the same gameplay state beside the owner.
+	PlayerState.apply_taoist_main_pet_runtime_state(
+		_capture_taoist_main_pet_runtime_state()
+	)
 	for node: Node in get_tree().get_nodes_in_group("zone_content"):
 		if is_instance_valid(node):
 			node.queue_free()
@@ -1574,6 +1589,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		_spawn_database_zone_content(current_map_data)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
+	_restore_persisted_taoist_main_pet_if_needed()
 	_on_player_stats_changed(player.current_hp, player.max_hp)
 	hud.show_message("进入%s" % zone_name, 1.5)
 
@@ -6543,9 +6559,119 @@ func _apply_canonical_temptation(target: EnemyActor, effect: Dictionary) -> void
 
 func _canonical_main_pet() -> SummonActor:
 	for node: Node in get_tree().get_nodes_in_group("summons"):
-		if node is SummonActor and node.owner_player == player and bool(node.get_meta("taoist_main_pet", false)):
+		if (
+			node is SummonActor
+			and is_instance_valid(node)
+			and not node.is_queued_for_deletion()
+			and node.owner_player == player
+			and bool(node.get_meta("taoist_main_pet", false))
+			and node.current_hp > 0
+			and node.state not in [
+				SummonActor.SummonState.EXPIRED,
+				SummonActor.SummonState.DEAD,
+			]
+		):
 			return node
 	return null
+
+
+func _capture_taoist_main_pet_runtime_state() -> Dictionary:
+	var summon := _canonical_main_pet()
+	if summon != null and summon.has_method("persistence_snapshot"):
+		var snapshot: Variant = summon.persistence_snapshot()
+		if snapshot is Dictionary:
+			return (snapshot as Dictionary).duplicate(true)
+	# During initial bootstrap/map replacement there is intentionally a short
+	# interval with no live node. Preserve the already captured state rather than
+	# letting autosave mistake that queue_free window for a pet death.
+	if _world_bootstrap_in_progress or _map_transition_in_progress:
+		return PlayerState.taoist_main_pet_runtime_state_for_restore()
+	return {}
+
+
+func _on_canonical_main_pet_state_changed(
+	_previous_state: int,
+	current_state: int,
+	summon: SummonActor
+) -> void:
+	if (
+		current_state in [
+			SummonActor.SummonState.EXPIRED,
+			SummonActor.SummonState.DEAD,
+		]
+		and is_instance_valid(summon)
+		and summon.owner_player == player
+		and bool(summon.get_meta("taoist_main_pet", false))
+	):
+		PlayerState.apply_taoist_main_pet_runtime_state({})
+
+
+func _wire_canonical_main_pet_persistence(summon: SummonActor) -> void:
+	summon.summon_state_changed.connect(
+		Callable(self, "_on_canonical_main_pet_state_changed").bind(summon)
+	)
+
+
+func _restore_persisted_taoist_main_pet_if_needed() -> bool:
+	if (
+		ProfessionRules.profession_id(PlayerState.profession) != "taoist"
+		or _canonical_main_pet() != null
+	):
+		return false
+	var snapshot := PlayerState.taoist_main_pet_runtime_state_for_restore()
+	if snapshot.is_empty() or not bool(snapshot.get("alive", false)):
+		return false
+	var stable_skill_id := str(snapshot.get("skill_id", ""))
+	var summon_id := str(snapshot.get("summon_id", ""))
+	if (
+		(stable_skill_id == "taoist.summon_skeleton" and summon_id != "skeleton")
+		or (
+			stable_skill_id == "taoist.summon_divine_beast"
+			and summon_id != "divine_beast"
+		)
+		or stable_skill_id not in [
+			"taoist.summon_skeleton",
+			"taoist.summon_divine_beast",
+		]
+	):
+		PlayerState.apply_taoist_main_pet_runtime_state({})
+		return false
+	var spawn_plan := _canonical_summon_spawn_plan(stable_skill_id)
+	if not bool(spawn_plan.get("valid", false)):
+		return false
+	var summon := SummonActor.new()
+	summon.setup(
+		player,
+		"神兽" if summon_id == "divine_beast" else "骷髅",
+		maxi(1, _canonical_primary_stat_roll("taoist")),
+		maxi(0, int(snapshot.get("skill_rank", 0))),
+		stable_skill_id,
+		maxi(1, int(snapshot.get("owner_level", PlayerState.level))),
+		int(snapshot.get("maximum_pet_level", -1))
+	)
+	if not summon.restore_persistence_snapshot(snapshot):
+		summon.free()
+		PlayerState.apply_taoist_main_pet_runtime_state({})
+		return false
+	summon.set_meta("taoist_main_pet", true)
+	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
+	summon.configure_runtime_map_projection(
+		current_map_id,
+		Callable(self, "_canonical_ground_gu_to_screen_px"),
+		Callable(self, "_canonical_screen_px_to_ground_gu")
+	)
+	summon.global_position = spawn_plan.get(
+		"position_screen_px", player.global_position
+	) as Vector2
+	summon.configure_spawn_release_footprint(
+		"restore:%s:%d" % [stable_skill_id, Time.get_ticks_msec()]
+	)
+	_wire_canonical_main_pet_persistence(summon)
+	add_child(summon)
+	PlayerState.apply_taoist_main_pet_runtime_state(
+		summon.persistence_snapshot()
+	)
+	return true
 
 
 func _canonical_friendly_actor(instance_id: int) -> Node2D:
@@ -6929,7 +7055,11 @@ func _apply_canonical_main_pet(
 		"canonical_spawn_footprint_snapshot",
 		spawn_snapshot.duplicate(true)
 	)
+	_wire_canonical_main_pet_persistence(summon)
 	add_child(summon)
+	PlayerState.apply_taoist_main_pet_runtime_state(
+		summon.persistence_snapshot()
+	)
 
 
 func _canonical_summon_spawn_plan(stable_skill_id: String) -> Dictionary:

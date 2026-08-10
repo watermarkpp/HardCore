@@ -19,16 +19,18 @@ const SPAWN_FOOTPRINT_CONTRACT_ID := (
 	"skills.summon.spawn_destination_footprint_snapshot.v1"
 )
 const ATTACK_FOOTPRINT_CONTRACT_ID := (
-	"skills.summon.attack_release_footprint_snapshot.v1"
+	"skills.summon.attack_release_directed_gu.v2"
 )
+const PERSISTENCE_CONTRACT_ID := "skills.summon.persistence.runtime_state.v1"
 const STEALTH_STATE_CONTRACT_ID := "skills.summon_actor.stealth_state.v1"
 const BUFF_STATE_CONTRACT_ID := "skills.summon_actor.buff_state.v1"
 const SUSTAINED_FRAME_COST_CONTRACT_ID := (
 	"skills.summon.sustained_frame_cost.bounded.v1"
 )
 const VISUAL_FOOT_ANCHOR_CONTRACT_ID := (
-	"skills.summon.visual_foot_anchor_at_actor_origin.v1"
+	"skills.summon.visual_authored_ground_point_at_actor_origin.v2"
 )
+const LEVEL_LABEL_CONTRACT_ID := "skills.summon.level_label.current_pet_level.v1"
 const TARGET_ACQUIRE_INTERVAL_SECONDS := 0.25
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
@@ -37,6 +39,11 @@ const STEALTH_BODY_MODULATE_ALPHA := 0.22
 const BUFF_HINT_FONT_SIZE := 10
 const BUFF_HINT_LINE_SPACING := 12.0
 const BUFF_HINT_OFFSET_Y := 6.0
+const LEVEL_LABEL_FONT_SIZE := 10
+const LEVEL_LABEL_GAP_PX := 2.0
+const SKELETON_ATTACK_LENGTH_GU := 1.5
+const DIVINE_BEAST_ATTACK_LENGTH_GU := 3.0
+const SUMMON_ATTACK_WIDTH_GU := 1.0
 const _VISUAL_REQUEST_MAX_ATTEMPTS := 8
 
 enum SummonState {
@@ -128,6 +135,8 @@ var _sprite: Sprite2D
 var _fire_sprite: Sprite2D
 var _current_target: EnemyActor
 var _animation_resources: Dictionary = {}
+var _visual_profile_complete := false
+var _visual_preview_active := false
 var _visual_state := "idle"
 var _visual_direction := 0
 var _visual_frame := 0
@@ -136,7 +145,6 @@ var _visual_facing := Vector2.DOWN
 var _attack_visual_remaining := 0.0
 var _hit_visual_remaining := 0.0
 var _death_visual_remaining := 0.0
-var _visual_activation_retry := 0.0
 var _pending_attack_target: EnemyActor
 var _pending_attack_snapshot: Dictionary = {}
 var _pending_attack_release_remaining := 0.0
@@ -226,12 +234,10 @@ func setup(
 			155.0 if summon_id == "divine_beast" else 135.0
 		)
 	))
-	attack_range_gu = float(profile.get(
-		"attack_range_gu",
-		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			72.0 if summon_id == "divine_beast" else 48.0
-		)
-	))
+	## User-authored combat geometry supersedes the legacy screen-pixel range:
+	## skeleton uses the warrior-normal 1.5 GU reach and divine beast uses a
+	## 3 GU by 1 GU directed footprint.
+	attack_range_gu = _attack_effect_length_gu()
 	aggro_radius_gu = float(profile.get(
 		"aggro_radius_gu",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
@@ -361,8 +367,8 @@ func _ready() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_EXIT_TREE:
-		## Reap finished worker results so a summon removed before its visual
-		## request completed never leaves an unjoined thread.
+		## Advance one ready ResourceLoader result so an actor teardown can still
+		## contribute to the shared warm cache; ResourceLoader owns worker life.
 		SummonVisualRegistryScript.reap_completed_requests()
 
 
@@ -378,11 +384,12 @@ func _process(delta: float) -> void:
 		if _death_visual_remaining <= 0.0:
 			queue_free()
 			return
+	if not _visual_profile_complete:
+		## The registry can finalize at most one imported texture per poll. Polling
+		## each frame makes the idle-first preview visible as soon as its formal
+		## Texture2D import completes without adding a blocking load.
+		_poll_visual_activation()
 	if _animation_resources.is_empty():
-		_visual_activation_retry = maxf(0.0, _visual_activation_retry - delta)
-		if _visual_activation_retry <= 0.0:
-			_visual_activation_retry = 0.25
-			_poll_visual_activation()
 		return
 	var next_visual_state := "idle"
 	if state == SummonState.DEAD:
@@ -482,10 +489,7 @@ func _physics_process(delta: float) -> void:
 		enemy = null
 	if enemy != null:
 		var offset_screen_px := enemy.global_position - global_position
-		if target_footprint_surface_distance_gu(
-			enemy.global_position,
-			_target_combat_radius_gu(enemy)
-		) <= attack_range_gu + GroundUnitSpaceScript.EPSILON_GU:
+		if _target_within_attack_geometry(enemy):
 			_set_state(SummonState.ATTACK_TARGET)
 			velocity = Vector2.ZERO
 			if _attack_timer <= 0.0 and _pending_attack_target == null:
@@ -514,6 +518,12 @@ func _physics_process(delta: float) -> void:
 
 
 func _begin_attack(enemy: EnemyActor) -> void:
+	## Entering an attack breaks group invisibility immediately, rather than
+	## waiting for the delayed damage-release frame.
+	if is_stealthed():
+		stealth_remaining_seconds = 0.0
+		stealth_buff_id = ""
+		_update_stealth_visual()
 	_attack_timer = attack_interval
 	last_attack_type = attack_type
 	_pending_attack_target = enemy
@@ -634,6 +644,10 @@ func spatial_contract_snapshot() -> Dictionary:
 		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
 		"move_speed_gu_per_sec": move_speed_gu_per_sec,
 		"attack_range_gu": attack_range_gu,
+		"attack_footprint_contract_id": ATTACK_FOOTPRINT_CONTRACT_ID,
+		"attack_effect_length_gu": _attack_effect_length_gu(),
+		"attack_effect_width_gu": SUMMON_ATTACK_WIDTH_GU,
+		"attack_interval_seconds": attack_interval,
 		"aggro_radius_gu": aggro_radius_gu,
 		"combat_radius_gu": combat_radius_gu,
 		"leash_range_gu": leash_range_gu,
@@ -712,32 +726,50 @@ func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
 		_attack_release_sequence,
 	]
 	_attack_release_sequence += 1
-	var reach_from_center_gu := combat_radius_gu + attack_range_gu
-	if summon_id == "divine_beast":
-		last_attack_relation = "directed_core"
-		return SkillFootprintSnapshotScript.create_directed_rectangle(
-			skill_id,
-			release_id,
-			origin_ground_gu,
-			GroundUnitSpaceScript.normalized_ground_direction(
-				origin_ground_gu, target_ground_gu
-			),
-			reach_from_center_gu,
-			combat_radius_gu * 2.0,
-			0.0,
-			0.0,
-			0.0,
-			"",
-			_snapshot_coordinate_context(origin_ground_gu)
-		)
-	last_attack_relation = "release_contact"
-	return SkillFootprintSnapshotScript.create_circle(
+	last_attack_relation = "directed_ground_gu"
+	return SkillFootprintSnapshotScript.create_directed_rectangle(
 		skill_id,
 		release_id,
 		origin_ground_gu,
-		reach_from_center_gu,
-		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		GroundUnitSpaceScript.normalized_ground_direction(
+			origin_ground_gu, target_ground_gu
+		),
+		_attack_effect_length_gu(),
+		SUMMON_ATTACK_WIDTH_GU,
+		0.0,
+		0.0,
+		0.0,
+		"",
 		_snapshot_coordinate_context(origin_ground_gu)
+	)
+
+
+func _attack_effect_length_gu() -> float:
+	return (
+		DIVINE_BEAST_ATTACK_LENGTH_GU
+		if summon_id == "divine_beast"
+		else SKELETON_ATTACK_LENGTH_GU
+	)
+
+
+func _target_within_attack_geometry(target: Node2D) -> bool:
+	if not is_instance_valid(target):
+		return false
+	var origin_ground_gu := _runtime_screen_to_ground_position(global_position)
+	var target_ground_gu := _runtime_screen_to_ground_position(
+		target.global_position
+	)
+	if not origin_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return false
+	## The target is the aiming axis, so the exact directed-rectangle contact
+	## condition reduces to length plus the target's canonical GU footprint.
+	## Release still uses the frozen polygon snapshot, preserving width when a
+	## target moves sideways during the attack animation.
+	return (
+		origin_ground_gu.distance_to(target_ground_gu)
+		<= _attack_effect_length_gu()
+			+ _target_combat_radius_gu(target)
+			+ GroundUnitSpaceScript.EPSILON_GU
 	)
 
 
@@ -1038,7 +1070,7 @@ func _install_visual() -> void:
 
 
 func request_visual_resources() -> void:
-	if not _animation_resources.is_empty():
+	if _visual_profile_complete:
 		return
 	if _visual_request_id == SummonVisualRegistryScript.REQUEST_FAILED:
 		return
@@ -1051,6 +1083,8 @@ func request_visual_resources() -> void:
 
 
 func _poll_visual_activation() -> void:
+	if _visual_profile_complete:
+		return
 	if _visual_request_id == SummonVisualRegistryScript.REQUEST_READY:
 		activate_visual_resources()
 		return
@@ -1065,6 +1099,11 @@ func _poll_visual_activation() -> void:
 		return
 	var profile := SummonVisualRegistryScript.poll_profile(_visual_request_id)
 	if profile.is_empty():
+		var preview := SummonVisualRegistryScript.preview_profile(
+			_visual_request_id
+		)
+		if not preview.is_empty() and not _visual_preview_active:
+			_activate_profile(preview, true)
 		if not SummonVisualRegistryScript.request_active(_visual_request_id):
 			## The request finished without a profile for this poller: it may
 			## have been completed by another actor (cache now ready) or it
@@ -1074,7 +1113,7 @@ func _poll_visual_activation() -> void:
 			request_visual_resources()
 		return
 	_visual_request_id = SummonVisualRegistryScript.REQUEST_UNKNOWN
-	_activate_profile(profile)
+	_activate_profile(profile, false)
 
 
 ## Synchronous activation is retained for deterministic test callers. The
@@ -1083,19 +1122,25 @@ func _poll_visual_activation() -> void:
 ## bounded ResourceLoader threaded path.
 func activate_visual_resources() -> bool:
 	var profile := SummonVisualRegistryScript.profile(summon_id)
-	return _activate_profile(profile)
+	return _activate_profile(profile, false)
 
 
-func _activate_profile(profile: Dictionary) -> bool:
+func _activate_profile(profile: Dictionary, is_streaming_preview := false) -> bool:
 	if profile.is_empty():
 		return false
 	_animation_resources = profile
+	_visual_preview_active = is_streaming_preview
+	_visual_profile_complete = not is_streaming_preview
 	var frame_size: Vector2i = profile.get("frame_size", Vector2i.ZERO)
 	var foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
-	## SummonActor.global_position is already the canonical gameplay footpoint.
-	## The authored atlas foot anchor therefore maps directly to local origin;
-	## applying the legacy actor-ground migration a second time made pets float.
-	_sprite.position = -Vector2(foot_anchor)
+	var actor_ground_offset: Vector2i = profile.get(
+		"actor_ground_offset",
+		Vector2i.ZERO
+	)
+	## The manifest's authored ground point is foot_anchor +
+	## actor_ground_offset. Alpha-bounds verification shows that this composite
+	## point, not the raw atlas anchor alone, is the body contact point.
+	_sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_health_bar_y = _sprite.position.y + float(profile.get("stable_body_top", 0)) - 7.0
 	_sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	if summon_id == "divine_beast" and profile.has("fire"):
@@ -1111,8 +1156,14 @@ func _activate_profile(profile: Dictionary) -> bool:
 		var fire_foot_anchor: Vector2i = profile.get(
 			"fire_foot_anchor", Vector2i.ZERO
 		)
-		_fire_sprite.position = -Vector2(fire_foot_anchor)
+		var fire_ground_offset: Vector2i = profile.get(
+			"fire_actor_ground_offset", Vector2i.ZERO
+		)
+		_fire_sprite.position = -Vector2(
+			fire_foot_anchor + fire_ground_offset
+		)
 	refresh_visual_after_activation()
+	_update_stealth_visual()
 	_request_visual_redraw()
 	return true
 
@@ -1156,6 +1207,121 @@ func performance_diagnostics() -> Dictionary:
 			_visual_request_id
 		),
 		"visual_foot_anchor_contract_id": VISUAL_FOOT_ANCHOR_CONTRACT_ID,
+		"visual_profile_complete": _visual_profile_complete,
+		"visual_preview_active": _visual_preview_active,
+	}
+
+
+func persistence_snapshot() -> Dictionary:
+	return {
+		"contract_id": PERSISTENCE_CONTRACT_ID,
+		"alive": (
+			current_hp > 0
+			and state not in [SummonState.EXPIRED, SummonState.DEAD]
+		),
+		"runtime_state": state_name(),
+		"summon_id": summon_id,
+		"skill_id": skill_id,
+		"skill_rank": skill_level,
+		"owner_level": owner_level,
+		"current_hp": current_hp,
+		"max_hp": max_hp,
+		"summon_exp_level": summon_exp_level,
+		"maximum_pet_level": maximum_pet_level,
+		"pet_growth_exp": pet_growth_exp,
+		"remaining_lifetime": remaining_lifetime,
+		"stealth": {
+			"remaining_seconds": stealth_remaining_seconds,
+			"buff_id": stealth_buff_id,
+		},
+		"physical_defence": {
+			"bonus": ac_buff_bonus,
+			"remaining_seconds": ac_buff_remaining_seconds,
+			"buff_id": ac_buff_id,
+		},
+		"magic_defence": {
+			"bonus": mac_buff_bonus,
+			"remaining_seconds": mac_buff_remaining_seconds,
+			"buff_id": mac_buff_id,
+		},
+	}
+
+
+func restore_persistence_snapshot(snapshot: Dictionary) -> bool:
+	if str(snapshot.get("contract_id", "")) != PERSISTENCE_CONTRACT_ID:
+		return false
+	if not bool(snapshot.get("alive", true)):
+		return false
+	var restored_summon_id := str(snapshot.get("summon_id", ""))
+	if restored_summon_id not in ["skeleton", "divine_beast"]:
+		return false
+	summon_id = restored_summon_id
+	skill_id = str(snapshot.get("skill_id", skill_id))
+	skill_level = maxi(0, int(snapshot.get("skill_rank", skill_level)))
+	owner_level = maxi(1, int(snapshot.get("owner_level", owner_level)))
+	max_hp = maxi(1, int(snapshot.get("max_hp", max_hp)))
+	current_hp = clampi(int(snapshot.get("current_hp", current_hp)), 0, max_hp)
+	summon_exp_level = clampi(
+		int(snapshot.get("summon_exp_level", summon_exp_level)), 0, 7
+	)
+	maximum_pet_level = clampi(
+		int(snapshot.get("maximum_pet_level", maximum_pet_level)),
+		summon_exp_level,
+		7
+	)
+	pet_growth_exp = maxi(0, int(snapshot.get("pet_growth_exp", pet_growth_exp)))
+	remaining_lifetime = maxf(
+		0.0, float(snapshot.get("remaining_lifetime", remaining_lifetime))
+	)
+	var stealth: Dictionary = snapshot.get("stealth", {})
+	stealth_remaining_seconds = maxf(
+		0.0, float(stealth.get("remaining_seconds", 0.0))
+	)
+	stealth_buff_id = str(stealth.get("buff_id", ""))
+	var physical: Dictionary = snapshot.get("physical_defence", {})
+	ac_buff_bonus = maxi(0, int(physical.get("bonus", 0)))
+	ac_buff_remaining_seconds = maxf(
+		0.0, float(physical.get("remaining_seconds", 0.0))
+	)
+	ac_buff_id = str(physical.get("buff_id", ""))
+	var magic: Dictionary = snapshot.get("magic_defence", {})
+	mac_buff_bonus = maxi(0, int(magic.get("bonus", 0)))
+	mac_buff_remaining_seconds = maxf(
+		0.0, float(magic.get("remaining_seconds", 0.0))
+	)
+	mac_buff_id = str(magic.get("buff_id", ""))
+	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
+	attack_range_gu = _attack_effect_length_gu()
+	_last_buff_draw_signature = _buff_draw_signature()
+	_update_stealth_visual()
+	_request_visual_redraw()
+	return true
+
+
+func level_label_layout_snapshot() -> Dictionary:
+	var font := ThemeDB.fallback_font
+	var display_level := clampi(summon_exp_level, 1, 7)
+	var label_text := "Lv.%d" % display_level
+	var label_width := font.get_string_size(
+		label_text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1.0,
+		LEVEL_LABEL_FONT_SIZE
+	).x
+	var descent := font.get_descent(LEVEL_LABEL_FONT_SIZE)
+	var ascent := font.get_ascent(LEVEL_LABEL_FONT_SIZE)
+	var baseline_y := _health_bar_y - LEVEL_LABEL_GAP_PX - descent
+	return {
+		"contract_id": LEVEL_LABEL_CONTRACT_ID,
+		"internal_pet_level": summon_exp_level,
+		"display_level": display_level,
+		"text": label_text,
+		"origin": Vector2(-label_width * 0.5, baseline_y),
+		"bounds": Rect2(
+			Vector2(-label_width * 0.5, baseline_y - ascent),
+			Vector2(label_width, ascent + descent)
+		),
+		"health_bar_y": _health_bar_y,
 	}
 
 
@@ -1238,6 +1404,31 @@ func _draw() -> void:
 			4
 		),
 		Color(0.22, 0.72, 0.25)
+	)
+	var level_layout := level_label_layout_snapshot()
+	var level_font := ThemeDB.fallback_font
+	var level_origin: Vector2 = level_layout.get("origin", Vector2.ZERO)
+	var level_text := str(level_layout.get("text", ""))
+	var level_bounds: Rect2 = level_layout.get("bounds", Rect2())
+	var level_width := level_bounds.size.x
+	draw_string_outline(
+		level_font,
+		level_origin,
+		level_text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		level_width,
+		LEVEL_LABEL_FONT_SIZE,
+		3,
+		Color(0.0, 0.0, 0.0, 0.9)
+	)
+	draw_string(
+		level_font,
+		level_origin,
+		level_text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		level_width,
+		LEVEL_LABEL_FONT_SIZE,
+		Color(1.0, 0.9, 0.35)
 	)
 	var buff_hints := _buff_hint_lines()
 	if not buff_hints.is_empty():

@@ -25,7 +25,7 @@ const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
 const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
-const TAOIST_BUFF_STRIP_CHASSIS_GAP := 6.0
+const TAOIST_BUFF_STRIP_ITEM_BAR_GAP := 6.0
 const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const ITEM_QUICK_SLOT_COUNT := 4
@@ -386,26 +386,9 @@ func _build_bottom_chassis(root: Control) -> void:
 	taoist_buff_icon_strip.anchor_top = 1.0
 	taoist_buff_icon_strip.anchor_right = 0.5
 	taoist_buff_icon_strip.anchor_bottom = 1.0
-	var health_orb_center_from_safe_center := (
-		-HUD_CHASSIS_SIZE.x * 0.5
-		+ health_orb.position.x
-		+ health_orb.size.x * 0.5
-	)
-	taoist_buff_icon_strip.offset_left = (
-		health_orb_center_from_safe_center - TAOIST_BUFF_STRIP_SIZE.x * 0.5
-	)
-	taoist_buff_icon_strip.offset_right = (
-		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
-	)
-	taoist_buff_icon_strip.offset_bottom = -(
-		HUD_CHASSIS_SIZE.y + TAOIST_BUFF_STRIP_CHASSIS_GAP
-	)
-	taoist_buff_icon_strip.offset_top = (
-		taoist_buff_icon_strip.offset_bottom - TAOIST_BUFF_STRIP_SIZE.y
-	)
 	taoist_buff_icon_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	taoist_buff_icon_strip.set_meta("stable_id", TAOIST_BUFF_STRIP_STABLE_ID)
-	taoist_buff_icon_strip.set_meta("layout_policy", "safe_root_above_bottom_chassis.v1")
+	taoist_buff_icon_strip.set_meta("layout_policy", "safe_root_above_item_quick_slots.v2")
 	root.add_child(taoist_buff_icon_strip)
 
 	taoist_ac_buff_icon = _build_taoist_defence_buff_icon(
@@ -520,6 +503,44 @@ func _build_bottom_chassis(root: Control) -> void:
 		quick_count.visible = false
 		item_button.add_child(quick_count)
 		item_quick_slot_count_labels.append(quick_count)
+	_anchor_taoist_buff_strip_above_item_quick_slots(root)
+
+
+func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
+	if taoist_buff_icon_strip == null or hud_item_buttons.is_empty():
+		return
+	# ItemSlot controls are the actual interactive/front-frame rectangles seen
+	# on device. Resolve their global union once, then express the status strip
+	# as bottom/center offsets inside MobileSafeRoot. Both the item chassis and
+	# this strip therefore retain the same relationship on safe-area or aspect
+	# changes without using the much taller transparent chassis bounds.
+	var item_bar_global_rect := hud_item_buttons[0].get_global_rect()
+	for index in range(1, hud_item_buttons.size()):
+		item_bar_global_rect = item_bar_global_rect.merge(
+			hud_item_buttons[index].get_global_rect()
+		)
+	var safe_root_global_rect := root.get_global_rect()
+	var center_offset_x := (
+		item_bar_global_rect.get_center().x
+		- safe_root_global_rect.get_center().x
+	)
+	var item_bar_top_offset_from_safe_bottom := (
+		item_bar_global_rect.position.y
+		- safe_root_global_rect.end.y
+	)
+	taoist_buff_icon_strip.offset_left = (
+		center_offset_x - TAOIST_BUFF_STRIP_SIZE.x * 0.5
+	)
+	taoist_buff_icon_strip.offset_right = (
+		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
+	)
+	taoist_buff_icon_strip.offset_bottom = (
+		item_bar_top_offset_from_safe_bottom
+		- TAOIST_BUFF_STRIP_ITEM_BAR_GAP
+	)
+	taoist_buff_icon_strip.offset_top = (
+		taoist_buff_icon_strip.offset_bottom - TAOIST_BUFF_STRIP_SIZE.y
+	)
 
 
 func _build_taoist_defence_buff_icon(
