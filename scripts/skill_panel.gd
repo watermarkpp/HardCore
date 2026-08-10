@@ -221,7 +221,7 @@ func _build_assignment_section() -> void:
 	var attack_title := Label.new()
 	attack_title.name = "AttackSlotTitle"
 	attack_title.text = "攻击主键"
-	attack_title.position = Vector2(22, 50)
+	attack_title.position = Vector2(22, 42)
 	attack_title.size = Vector2(390, 26)
 	attack_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	attack_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -229,8 +229,8 @@ func _build_assignment_section() -> void:
 	panel.add_child(attack_title)
 	var attack_slot := Button.new()
 	attack_slot.name = "AttackSkillSlot"
-	attack_slot.position = Vector2(18, 80)
-	attack_slot.size = Vector2(280, 82)
+	attack_slot.position = Vector2(18, 72)
+	attack_slot.size = Vector2(280, 76)
 	attack_slot.text = ""
 	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
 	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
@@ -242,10 +242,9 @@ func _build_assignment_section() -> void:
 	assignment_buttons.append(attack_slot)
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
-	clear_attack.add_theme_font_size_override("font_size", 24)
 	clear_attack.text = "恢复\n普通攻击"
-	clear_attack.position = Vector2(306, 80)
-	clear_attack.size = Vector2(110, 82)
+	clear_attack.position = Vector2(306, 72)
+	clear_attack.size = Vector2(110, 76)
 	clear_attack.theme_type_variation = "GothicComponentButton"
 	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
 	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
@@ -254,7 +253,7 @@ func _build_assignment_section() -> void:
 	var ring_title := Label.new()
 	ring_title.name = "AttackRingSlotsTitle"
 	ring_title.text = "攻击环技能槽 1–6"
-	ring_title.position = Vector2(22, 176)
+	ring_title.position = Vector2(22, 152)
 	ring_title.size = Vector2(330, 26)
 	ring_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ring_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -263,8 +262,8 @@ func _build_assignment_section() -> void:
 	for slot_index in range(ATTACK_RING_SLOT_COUNT):
 		var button := Button.new()
 		button.name = "AttackRingSkillSlot_%d" % (slot_index + 1)
-		button.position = Vector2(18 + (slot_index % 3) * 140, 204 + floori(float(slot_index) / 3.0) * 126)
-		button.size = Vector2(126, 84)
+		button.position = Vector2(18 + (slot_index % 3) * 140, 182 + floori(float(slot_index) / 3.0) * 146)
+		button.size = Vector2(126, 78)
 		button.text = ""
 		button.theme_type_variation = "GothicComponentButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
@@ -277,8 +276,8 @@ func _build_assignment_section() -> void:
 		var clear_button := Button.new()
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
 		clear_button.text = "清空 %d" % (slot_index + 1)
-		clear_button.position = button.position + Vector2(0, 88)
-		clear_button.size = Vector2(126, 30)
+		clear_button.position = button.position + Vector2(0, 82)
+		clear_button.size = Vector2(126, 40)
 		clear_button.theme_type_variation = "GothicComponentButton"
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
@@ -295,8 +294,8 @@ func _build_assignment_section() -> void:
 	## clamping to 320px -> right edge 10px past the parent).
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.theme_type_variation = "GothicMutedLabel"
-	hint.position = Vector2(18, 458)
-	hint.size = Vector2(390, 50)
+	hint.position = Vector2(18, 473)
+	hint.size = Vector2(390, 44)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(hint)
@@ -680,19 +679,6 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 			mode_label.visible = false
 	button.set_meta("skill_name", skill_name)
 	button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
-
-
-func _learn_selected() -> void:
-	var index := selected_skill_index
-	var selected := skill_list.get_selected_items()
-	if not selected.is_empty():
-		index = selected[0]
-	if index < 0 or index >= skill_entries.size():
-		description_label.text = "[color=#b58b68]请先选择技能。[/color]"
-		return
-	var skill_name := str(skill_entries[index].get("skillName", ""))
-	description_label.text = "[color=#d7c3a3]%s[/color]" % PlayerState.learn_skill(skill_name)
-	refresh.call_deferred()
 
 
 func _open_assignment_popup_for_selected() -> void:

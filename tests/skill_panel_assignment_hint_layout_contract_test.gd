@@ -68,7 +68,7 @@ func _run() -> void:
 	)
 	assert(panel.find_child("AssignButton", true, false) == null, "center detail assignment button must be removed")
 	var assignment_panel := panel.find_child("AssignmentPanel", true, false) as Control
-	assert(assignment_panel != null and assignment_panel.size.x == 374.0)
+	assert(assignment_panel != null and assignment_panel.size == Vector2(434.0, 524.0))
 	var attack_slot := assignment_panel.find_child("AttackSkillSlot", true, false) as Button
 	var clear_attack := assignment_panel.find_child("ClearAttackSkillSlot", true, false) as Button
 	assert(attack_slot != null and clear_attack != null)
@@ -76,7 +76,7 @@ func _run() -> void:
 	panel.call("_set_assignment_button_content", attack_slot, "攻击主键", "烈火剑法")
 	var attack_icon := attack_slot.get_node("Content/SkillIcon") as TextureRect
 	assert(attack_icon != null and attack_icon.get_meta("alignment_contract", "") == "primary_attack_inset_centered.v2")
-	assert(attack_icon.position.x >= 16.0 and attack_icon.position.x < 30.0)
+	assert(attack_icon.position.x >= 24.0 and attack_icon.position.x < 32.0)
 	var assignment_bounds := Rect2(Vector2.ZERO, assignment_panel.size)
 	assert(assignment_bounds.encloses(attack_slot.get_rect()))
 	assert(assignment_bounds.encloses(clear_attack.get_rect()))
@@ -105,8 +105,7 @@ func _run() -> void:
 	assert(learned_index >= 0, "fixture must contain an actually learned skill")
 	panel.call("_show_skill_detail", learned_index)
 	assert(title.text.contains("（已学会）"))
-	var learn_button := panel.find_child("LearnButton", true, false) as Button
-	assert(learn_button != null and not learn_button.visible)
+	assert(panel.find_child("LearnButton", true, false) == null)
 	assert(panel.find_child("AssignButton", true, false) == null)
 	viewport.queue_free()
 	await get_tree().process_frame
