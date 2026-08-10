@@ -4,6 +4,7 @@ extends Panel
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const QUANTITY_BUTTON_TEXTURE := preload("res://assets/ui/gothic_theme/v1/sample/button_normal.png")
 
 signal closed
 signal sell_quotes_requested(items: Array)
@@ -243,7 +244,7 @@ func _build_detail_section() -> void:
 func _add_quantity_decoration(button: Button, flip_h: bool) -> void:
 	var decoration := TextureRect.new()
 	decoration.name = "QuantityDecoration"
-	decoration.texture = load("res://assets/ui/gothic_theme/v1/components/button_normal.png")
+	decoration.texture = QUANTITY_BUTTON_TEXTURE
 	decoration.position = Vector2(3, 3)
 	decoration.size = Vector2(52, 40)
 	decoration.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -469,6 +470,7 @@ func apply_sell_result(result: Dictionary) -> void:
 		_sell_quotes = result.get("quotes", {}).duplicate(true)
 	_refresh_gold()
 	if bool(result.get("success", false)) and _trade_mode == "sell":
+		_inventory_refresh_pending = false
 		_selected_sell_index = -1
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
@@ -500,7 +502,6 @@ func _select_sell_item(inventory_index: int) -> void:
 	var record: Dictionary = PlayerState.inventory[inventory_index]
 	var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
 	if not bool(quote.get("sellable", false)):
-		_selected_sell_index = inventory_index
 		_show_sell_detail(inventory_index, quote)
 		_set_sell_actions_enabled(not _selected_sell_indices.is_empty())
 		return
@@ -516,6 +517,8 @@ func _select_sell_item(inventory_index: int) -> void:
 		card.set_pressed_no_signal(selected)
 		card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
 	if _selected_sell_index < 0:
+		_sell_quantity = 1
+		_update_sell_quantity_label()
 		_set_sell_actions_enabled(false)
 		return
 	var quote_key := sell_quote_key(_selected_sell_index, PlayerState.inventory[_selected_sell_index])
