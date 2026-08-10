@@ -106,7 +106,7 @@ func _build_header() -> void:
 
 
 func _build_goods_section() -> void:
-	var panel := _framed_section("GoodsPanel", Rect2(26, 72, 650, 522))
+	var panel := _framed_section("GoodsPanel", Rect2(26, 72, 650, 500))
 	buy_tab_button = Button.new()
 	buy_tab_button.name = "BuyTab"
 	buy_tab_button.text = "购买"
@@ -149,7 +149,7 @@ func _build_goods_section() -> void:
 
 
 func _build_detail_section() -> void:
-	var panel := _framed_section("DetailPanel", Rect2(688, 72, 366, 522))
+	var panel := _framed_section("DetailPanel", Rect2(688, 72, 366, 500))
 	panel.add_child(_section_title("商品详情", 366))
 	detail_label = RichTextLabel.new()
 	detail_label.name = "DetailLabel"
@@ -248,12 +248,16 @@ func _build_detail_section() -> void:
 func _add_quantity_decoration(button: Button, flip_h: bool) -> void:
 	var decoration := TextureRect.new()
 	decoration.name = "QuantityDecoration"
-	decoration.texture = QUANTITY_BUTTON_TEXTURE
+	var atlas := AtlasTexture.new()
+	atlas.atlas = QUANTITY_BUTTON_TEXTURE
+	atlas.region = Rect2(0, 0, 58, 46)
+	decoration.texture = atlas
 	decoration.position = Vector2(3, 3)
 	decoration.size = Vector2(52, 40)
 	decoration.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	decoration.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	decoration.flip_h = flip_h
+	decoration.set_meta("atlas_region", atlas.region)
 	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	decoration.show_behind_parent = true
 	button.add_child(decoration)

@@ -101,6 +101,13 @@ func _run() -> void:
 	assert(row_global.encloses(decrease.get_global_rect()) and row_global.encloses(increase.get_global_rect()))
 	assert(decrease.position.x >= 8.0 and row_global.size.x - (increase.position.x + increase.size.x) >= 8.0)
 	assert(Rect2(Vector2.ZERO, bg.size).encloses(Rect2(panel.sell_quantity_label.position - bg.position, panel.sell_quantity_label.size)))
+	assert(decrease.text == "−" and increase.text == "+")
+	assert(dec.get_meta("atlas_region", Rect2()).size == Vector2(58, 46) and inc.get_meta("atlas_region", Rect2()).size == Vector2(58, 46))
+	assert(absf(decrease.get_global_rect().get_center().y - increase.get_global_rect().get_center().y) <= 1.0)
+	var modal_surface := panel.get_node("ModalSurface") as Control
+	var goods_frame := panel.get_node("GoodsPanel") as Control
+	var detail_frame := panel.get_node("DetailPanel") as Control
+	assert(goods_frame.get_global_rect().end.y <= modal_surface.get_global_rect().end.y - 20.0 and detail_frame.get_global_rect().end.y <= modal_surface.get_global_rect().end.y - 20.0)
 	panel._select_sell_item(safe_indices[0])
 	panel._change_sell_quantity(1)
 	assert(int(panel._sell_quantities.get(safe_indices[0], 0)) == 2, "第一个物品的独立数量未生效")
