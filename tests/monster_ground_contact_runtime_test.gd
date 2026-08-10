@@ -90,14 +90,20 @@ func _run() -> void:
 		assert(final_shadow.radii.is_equal_approx(fixed_radii))
 		var saved_resources := visual.active_resources
 		var saved_authored_flag := visual._has_authored_client_art
+		var saved_visible := visual.visible
+		var saved_texture := visual.sprite.texture
 		visual.active_resources = {}
 		visual._has_authored_client_art = false
+		visual.visible = false
+		visual.sprite.texture = null
 		var fallback_shadow := visual.ground_shadow_layout_snapshot()
 		assert(fallback_shadow.mode == "procedural_fallback")
 		assert(fallback_shadow.owner == "enemy")
 		assert(not bool(fallback_shadow.draw_contact_core))
 		visual.active_resources = saved_resources
 		visual._has_authored_client_art = saved_authored_flag
+		visual.visible = saved_visible
+		visual.sprite.texture = saved_texture
 		var expected_projection_offset := _vector2(entry.ringCenterOffset)
 		var expected_radii := (
 			WorldSpatialRules.actor_footprint_radii_px(enemy.collision_radius_px)
