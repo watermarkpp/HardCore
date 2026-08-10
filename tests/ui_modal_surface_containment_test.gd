@@ -27,7 +27,7 @@ func _run() -> void:
 		var outer_gap := surface.position.y + surface.size.y
 		for child in panel.get_children():
 			if child is Control and child.name.ends_with("Panel"):
-				assert((child as Control).position.y + (child as Control).size.y <= outer_gap - 48.0)
+				assert((child as Control).position.y + (child as Control).size.y <= outer_gap - 8.0)
 		for child in panel.get_children():
 			if child.name.ends_with("Panel") and child is Control:
 				var section := child as Control

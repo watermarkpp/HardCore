@@ -9,8 +9,8 @@ signal teleport_requested(request: Dictionary)
 signal closed
 
 const PANEL_SIZE := Vector2(1160, 650)
-const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 52)
-const SECTION_VERTICAL_SHIFT := 48.0
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
+const SECTION_VERTICAL_SHIFT := 24.0
 const MAP_CARD_SIZE := Vector2(226, 58)
 const WORLD_NODE_SIZE := Vector2(430, 50)
 const WORLD_TREE_BLUEPRINT := [
@@ -123,7 +123,7 @@ func _build_header() -> void:
 
 
 func _build_map_list_section() -> void:
-	var panel := _framed_section("MapListPanel", Rect2(20, 76, 270, 524))
+	var panel := _framed_section("MapListPanel", Rect2(20, 76, 270, 548))
 	panel.add_child(_section_title("区域地图", 270))
 	search_box = LineEdit.new()
 	search_box.name = "SearchBox"
@@ -165,7 +165,7 @@ func _build_map_list_section() -> void:
 
 
 func _build_world_tree_section() -> void:
-	var panel := _framed_section("MapPreviewPanel", Rect2(302, 76, 520, 524))
+	var panel := _framed_section("MapPreviewPanel", Rect2(302, 76, 520, 548))
 	panel.add_child(_section_title("HardCore 世界地图树", 520))
 	var hint := Label.new()
 	hint.name = "WorldTreeHint"
@@ -192,7 +192,7 @@ func _build_world_tree_section() -> void:
 
 
 func _build_map_detail_section() -> void:
-	var panel := _framed_section("MapDetailPanel", Rect2(834, 76, 306, 524))
+	var panel := _framed_section("MapDetailPanel", Rect2(834, 76, 306, 548))
 	panel.add_child(_section_title("区域信息", 306))
 	map_name_label = Label.new()
 	map_name_label.name = "MapName"

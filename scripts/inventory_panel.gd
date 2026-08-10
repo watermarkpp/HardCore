@@ -10,8 +10,8 @@ const TouchScrollSupportScript = preload("res://scripts/touch_scroll_support.gd"
 signal closed
 
 const PANEL_SIZE := Vector2(1220, 660)
-const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 52)
-const SECTION_VERTICAL_SHIFT := 48.0
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
+const SECTION_VERTICAL_SHIFT := 24.0
 const BAG_COLUMNS := 8
 const BAG_VISIBLE_CAPACITY := 40
 const BAG_CAPACITY := 100
@@ -126,7 +126,7 @@ func _build_header() -> void:
 
 
 func _build_attribute_panel() -> void:
-	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 542))
+	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
 	add_child(panel)
 	var title := _section_title("人物属性", 250)
 	panel.add_child(title)
@@ -164,7 +164,7 @@ func _build_attribute_panel() -> void:
 
 
 func _build_equipment_panel() -> void:
-	var panel := _section_panel("EquipmentPanel", Vector2(294, 72), Vector2(390, 542))
+	var panel := _section_panel("EquipmentPanel", Vector2(294, 72), Vector2(390, 566))
 	add_child(panel)
 	panel.add_child(_section_title("人物装备", 390))
 	character_preview = PreviewScript.new()
@@ -223,7 +223,7 @@ func _build_equipment_panel() -> void:
 
 
 func _build_bag_panel() -> void:
-	var panel := _section_panel("BagPanel", Vector2(696, 72), Vector2(492, 542))
+	var panel := _section_panel("BagPanel", Vector2(696, 72), Vector2(492, 566))
 	add_child(panel)
 	panel.add_child(_section_title("综合背包", 492))
 	bag_summary_label = Label.new()
