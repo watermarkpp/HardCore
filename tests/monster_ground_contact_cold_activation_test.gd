@@ -49,6 +49,10 @@ func _run() -> void:
 			not enemy.should_draw_synthetic_ground_shadow(),
 			"monsterId=%d authored cold profile exposed a procedural circular shadow" % monster_id,
 		)
+		var pending_shadow := enemy.visual.ground_shadow_layout_snapshot()
+		assert(pending_shadow.mode == "hidden_pending_art")
+		assert(pending_shadow.owner == "none")
+		assert(not bool(pending_shadow.draw_contact_core))
 
 		var prefetch = _coordinator.begin_map_prefetch([monster_id])
 		var deadline_msec := Time.get_ticks_msec() + ASYNC_DEADLINE_MSEC
@@ -75,6 +79,10 @@ func _run() -> void:
 			not enemy.should_draw_synthetic_ground_shadow(),
 			"monsterId=%d final WIL profile retained a procedural circular shadow" % monster_id,
 		)
+		var final_shadow := enemy.visual.ground_shadow_layout_snapshot()
+		assert(final_shadow.mode == "authored_cast_with_contact_core")
+		assert(final_shadow.owner == "monster_visual")
+		assert(bool(final_shadow.draw_contact_core))
 		var final_contact := enemy.ground_indicator_center()
 		var final_radii := enemy.ground_indicator_radii()
 		assert(

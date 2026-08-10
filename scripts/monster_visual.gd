@@ -39,6 +39,14 @@ const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v5"
 const MANUAL_ALIGNMENT_REPLAY_CONTRACT := (
 	"monster.ground_alignment.manual_replay.v1"
 )
+const GROUND_SHADOW_MODE_AUTHORED_CAST_WITH_CONTACT_CORE := (
+	"authored_cast_with_contact_core"
+)
+const GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK := "procedural_fallback"
+const GROUND_SHADOW_MODE_HIDDEN_PENDING_ART := "hidden_pending_art"
+const CONTACT_CORE_RADIUS_SCALE := 0.42
+const CONTACT_CORE_ALPHA_GROUNDED := 0.24
+const CONTACT_CORE_ALPHA_AIRBORNE := 0.18
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -168,17 +176,15 @@ func _client_resource_paths(client_mapping: Dictionary) -> Dictionary:
 
 
 func _draw() -> void:
-	# Keep the saved foot point and its target ring in one CanvasItem transform
-	# chain so Android cannot round the actor and visual positions separately.
-	if (
-		not is_instance_valid(actor)
-		or actor._dying
-		or not actor.is_targeted
-		or not uses_final_art()
-	):
+	# Final WIL art owns the cast shadow. Keep its contact core and the optional
+	# target ring in this same CanvasItem and derive both from one reviewed foot.
+	if not is_instance_valid(actor) or not uses_final_art() or actor._burrowed:
 		return
 	var center := target_ring_local_position()
 	var radii := ground_indicator_radii(Vector2.ZERO)
+	_draw_contact_core(center, radii)
+	if actor._dying or not actor.is_targeted:
+		return
 	var points := PackedVector2Array()
 	for index in range(49):
 		var angle := TAU * float(index) / 48.0
@@ -187,6 +193,51 @@ func _draw() -> void:
 			+ Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
 		)
 	draw_polyline(points, Color(1.0, 0.78, 0.18, 0.78), 2.0, true)
+
+
+func _draw_contact_core(center: Vector2, radii: Vector2) -> void:
+	var scale := CONTACT_CORE_RADIUS_SCALE
+	var points := PackedVector2Array()
+	for index in range(25):
+		var angle := TAU * float(index) / 24.0
+		points.append(
+			center
+			+ Vector2(cos(angle) * radii.x * scale, sin(angle) * radii.y * scale)
+		)
+	var alpha := (
+		CONTACT_CORE_ALPHA_AIRBORNE
+		if ground_projection_strategy() in ["flying", "hover"]
+		else CONTACT_CORE_ALPHA_GROUNDED
+	)
+	draw_colored_polygon(points, Color(0.05, 0.04, 0.03, alpha))
+
+
+func ground_shadow_layout_snapshot() -> Dictionary:
+	var final_art := uses_final_art()
+	var pending_art := _has_authored_client_art and active_resources.is_empty()
+	var mode := GROUND_SHADOW_MODE_HIDDEN_PENDING_ART
+	var owner := "none"
+	var draw_contact_core := false
+	if final_art:
+		mode = GROUND_SHADOW_MODE_AUTHORED_CAST_WITH_CONTACT_CORE
+		owner = "monster_visual"
+		draw_contact_core = not actor._burrowed
+	elif not _has_authored_client_art:
+		mode = GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK
+		owner = "enemy"
+	return {
+		"contract_id": "monster.ground_shadow.contact_core.v1",
+		"mode": mode,
+		"owner": owner,
+		"contact_center_local": actor.ground_indicator_center(),
+		"actor_local_center": actor.ground_indicator_center(),
+		"ring_center_local": actor.ground_indicator_center(),
+		"visual_center_local": target_ring_local_position(),
+		"radii": ground_indicator_radii(Vector2.ZERO),
+		"draw_contact_core": draw_contact_core,
+		"pending_authored_art": pending_art,
+		"ring_visible": final_art and not actor._dying and actor.is_targeted,
+	}
 
 
 func _process(delta: float) -> void:
