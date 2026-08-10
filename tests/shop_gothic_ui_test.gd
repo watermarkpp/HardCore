@@ -102,6 +102,17 @@ func _run() -> void:
 	assert(decrease.position.x >= 8.0 and row_global.size.x - (increase.position.x + increase.size.x) >= 8.0)
 	assert(Rect2(Vector2.ZERO, bg.size).encloses(Rect2(panel.sell_quantity_label.position - bg.position, panel.sell_quantity_label.size)))
 	assert(decrease.text.is_empty() and increase.text.is_empty())
+	var modal_surface := panel.get_node("ModalSurface") as Control
+	var goods_frame := panel.get_node("GoodsPanel") as Control
+	var detail_frame := panel.get_node("DetailPanel") as Control
+	var outer_surface := panel.get_node("ModalSurface") as Control
+	var goods_surface := panel.get_node("GoodsPanelSurface") as Control
+	var detail_surface := panel.get_node("DetailPanelSurface") as Control
+	assert(outer_surface.get_global_rect().end.y <= panel.get_global_rect().end.y - 32.0)
+	assert(goods_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0 and detail_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0)
+	assert(goods_surface.position.x - goods_frame.position.x >= 10.0 and goods_frame.size.x - (goods_surface.position.x - goods_frame.position.x) - goods_surface.size.x >= 0.0)
+	assert(detail_surface.position.x - detail_frame.position.x >= 10.0 and detail_frame.size.x - (detail_surface.position.x - detail_frame.position.x) - detail_surface.size.x >= 0.0)
+	assert(absf(goods_frame.get_global_rect().end.y - detail_frame.get_global_rect().end.y) <= 1.0)
 	var minus_bar := decrease.get_node("HorizontalBar") as ColorRect
 	var plus_bar := increase.get_node("HorizontalBar") as ColorRect
 	var plus_vertical := increase.get_node("VerticalBar") as ColorRect
@@ -113,9 +124,6 @@ func _run() -> void:
 	assert(decrease.get_theme_font_size("font_size") == increase.get_theme_font_size("font_size"))
 	assert(dec.get_meta("atlas_region", Rect2()).size == Vector2(58, 46) and inc.get_meta("atlas_region", Rect2()).size == Vector2(58, 46))
 	assert(absf(decrease.get_global_rect().get_center().y - increase.get_global_rect().get_center().y) <= 1.0)
-	var modal_surface := panel.get_node("ModalSurface") as Control
-	var goods_frame := panel.get_node("GoodsPanel") as Control
-	var detail_frame := panel.get_node("DetailPanel") as Control
 	assert(goods_frame.get_global_rect().end.y <= modal_surface.get_global_rect().end.y - 20.0 and detail_frame.get_global_rect().end.y <= modal_surface.get_global_rect().end.y - 20.0)
 	panel._select_sell_item(safe_indices[0])
 	panel._change_sell_quantity(1)
