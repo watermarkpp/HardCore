@@ -9,6 +9,7 @@ signal teleport_requested(request: Dictionary)
 signal closed
 
 const PANEL_SIZE := Vector2(1160, 650)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
 const MAP_CARD_SIZE := Vector2(226, 58)
 const WORLD_NODE_SIZE := Vector2(430, 50)
 const WORLD_TREE_BLUEPRINT := [
@@ -76,8 +77,8 @@ func _ready() -> void:
 func _build_modal_surface() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(1124, 604)
+	surface.position = Vector2(MODAL_SURFACE_INSET.x, MODAL_SURFACE_INSET.y)
+	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	add_child(surface)
@@ -520,8 +521,8 @@ func _source_id_label(value: Variant) -> String:
 func _framed_section(node_name: String, rect: Rect2) -> Panel:
 	var surface := Panel.new()
 	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
+	surface.position = rect.position + Vector2(8, 8)
+	surface.size = rect.size - Vector2(16, 16)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	add_child(surface)

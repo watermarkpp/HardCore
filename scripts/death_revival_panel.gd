@@ -8,6 +8,7 @@ signal revival_requested(request: Dictionary)
 
 const CONTRACT_ID := "ui.death.revival.v1"
 const PANEL_RECT := Rect2(350, 80, 580, 560)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
 const TOWN_SLOT := "town"
 const SPECIAL_SLOT := "special"
 
@@ -54,7 +55,7 @@ func _build_modal() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
 	surface.set_anchors_preset(Control.PRESET_CENTER)
-	var surface_size := PANEL_RECT.size - Vector2(36, 48)
+	var surface_size := PANEL_RECT.size - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
 	surface.offset_left = -surface_size.x * 0.5
 	surface.offset_top = -surface_size.y * 0.5
 	surface.offset_right = surface_size.x * 0.5

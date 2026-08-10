@@ -14,6 +14,7 @@ signal quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
 
 const PANEL_SIZE := Vector2(1208, 650)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
 const LONG_PRESS_SECONDS := 0.48
 const ATTACK_SLOT_COUNT := 1
 const ATTACK_RING_SLOT_COUNT := 6
@@ -28,7 +29,6 @@ var skill_icon: TextureRect
 var detail_label: RichTextLabel
 var description_label: RichTextLabel
 var learn_button: Button
-var assign_button: Button
 var center_assignment_buttons: Array[Button] = []
 var attack_assignment_buttons: Array[Button] = []
 var attack_ring_assignment_buttons: Array[Button] = []
@@ -77,8 +77,8 @@ func _ready() -> void:
 func _build_modal_surface() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(1172, 604)
+	surface.position = Vector2(MODAL_SURFACE_INSET.x, MODAL_SURFACE_INSET.y)
+	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	add_child(surface)
@@ -149,8 +149,8 @@ func _build_skill_list_section() -> void:
 
 
 func _build_skill_detail_section() -> void:
-	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 500, 548))
-	panel.add_child(_section_title("技能详情", 500))
+	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 460, 548))
+	panel.add_child(_section_title("技能详情", 460))
 	var icon_frame := Button.new()
 	icon_frame.name = "SkillIconFrame"
 	icon_frame.position = Vector2(24, 58)
@@ -172,7 +172,7 @@ func _build_skill_detail_section() -> void:
 	skill_name_label.name = "SkillName"
 	skill_name_label.text = "请选择技能"
 	skill_name_label.position = Vector2(152, 58)
-	skill_name_label.size = Vector2(324, 38)
+	skill_name_label.size = Vector2(284, 38)
 	skill_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	skill_name_label.add_theme_font_size_override("font_size", 22)
@@ -181,7 +181,7 @@ func _build_skill_detail_section() -> void:
 	detail_label = RichTextLabel.new()
 	detail_label.name = "SkillStats"
 	detail_label.position = Vector2(152, 104)
-	detail_label.size = Vector2(324, 190)
+	detail_label.size = Vector2(284, 190)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -192,7 +192,7 @@ func _build_skill_detail_section() -> void:
 	description_title.name = "DescriptionTitle"
 	description_title.text = "技能说明与来源"
 	description_title.position = Vector2(24, 304)
-	description_title.size = Vector2(452, 28)
+	description_title.size = Vector2(412, 28)
 	description_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	description_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	description_title.theme_type_variation = "GothicSectionTitle"
@@ -200,7 +200,7 @@ func _build_skill_detail_section() -> void:
 	description_label = RichTextLabel.new()
 	description_label.name = "SkillDescription"
 	description_label.position = Vector2(24, 338)
-	description_label.size = Vector2(452, 116)
+	description_label.size = Vector2(412, 116)
 	description_label.bbcode_enabled = true
 	description_label.fit_content = false
 	description_label.scroll_active = true
@@ -211,28 +211,19 @@ func _build_skill_detail_section() -> void:
 	learn_button.name = "LearnButton"
 	learn_button.text = "使用技能书学习"
 	learn_button.position = Vector2(24, 466)
-	learn_button.size = Vector2(210, 64)
+	learn_button.size = Vector2(412, 64)
 	learn_button.theme_type_variation = "GothicComponentButton"
 	learn_button.pressed.connect(_learn_selected)
 	panel.add_child(learn_button)
-	assign_button = Button.new()
-	assign_button.name = "AssignButton"
-	assign_button.text = "配置技能按钮"
-	assign_button.position = Vector2(246, 466)
-	assign_button.size = Vector2(230, 64)
-	assign_button.theme_type_variation = "GothicComponentSelectedButton"
-	assign_button.pressed.connect(_open_assignment_popup_for_selected)
-	panel.add_child(assign_button)
-
 
 func _build_assignment_section() -> void:
-	var panel := _section_panel("AssignmentPanel", Rect2(854, 76, 334, 548))
-	panel.add_child(_section_title("技能按钮配置", 334))
+	var panel := _section_panel("AssignmentPanel", Rect2(814, 76, 374, 548))
+	panel.add_child(_section_title("技能按钮配置", 374))
 	var attack_title := Label.new()
 	attack_title.name = "AttackSlotTitle"
 	attack_title.text = "攻击主键"
 	attack_title.position = Vector2(22, 50)
-	attack_title.size = Vector2(290, 26)
+	attack_title.size = Vector2(330, 26)
 	attack_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	attack_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	attack_title.theme_type_variation = "GothicMutedLabel"
@@ -467,8 +458,8 @@ func refresh() -> void:
 		var skill_name := str(entry.get("skillName", "技能"))
 		var learned := PlayerState.is_skill_learned(skill_name)
 		var has_book := PlayerState.has_item(skill_name)
-		var marker := "已学" if learned else ("有书" if has_book else "缺书")
-		skill_list.add_item("%s　Lv%d　[%s]" % [skill_name, int(entry.get("requiredCharacterLevel", 1)), marker])
+		var marker := "已学会" if learned else ("可学习" if has_book else "缺少技能书")
+		skill_list.add_item("%s（%s）　Lv%d" % [skill_name, marker, int(entry.get("requiredCharacterLevel", 1))])
 	_rebuild_skill_cards()
 	_refresh_assignment_slots()
 	trainer_context_label.text = "%s　·　%s" % [_trainer_name, PlayerState.profession]
@@ -491,7 +482,7 @@ func _rebuild_skill_cards() -> void:
 		var has_book := PlayerState.has_item(skill_name)
 		var level := int(PlayerState.learned_skills.get(skill_name, 0))
 		var interaction_label := _skill_presentation_label(skill_name)
-		var status := "Lv.%d　已学会　[%s]" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
+		var status := "Lv.%d（已学会）" % level if learned else ("可学习" if has_book else "缺少技能书")
 		var button := Button.new()
 		button.name = "SkillCard_%d" % index
 		button.custom_minimum_size = Vector2(266, 64)
@@ -538,11 +529,10 @@ func _show_skill_detail(index: int) -> void:
 	var target_mode := str(combat.get("target_mode", "unknown"))
 	var cooldown := float(combat.get("cooldown", 0.0))
 	var maximum_range_gu := float(combat.get("maximum_range_gu", 0.0))
-	var interaction_mode := _skill_interaction_mode(skill_name)
 	var training_points: Variant = row.get("trainingPoints", null)
 	var mastery_text := "—" if training_points == null else "下级需求 %s" % training_points
 	var state_text := "已学会" if learned else ("可学习" if PlayerState.has_item(skill_name) else "缺少技能书")
-	skill_name_label.text = skill_name
+	skill_name_label.text = "%s（%s）" % [skill_name, state_text]
 	skill_icon.texture = _skill_texture(skill_name)
 	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 	skill_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
@@ -565,11 +555,9 @@ func _show_skill_detail(index: int) -> void:
 		row.get("confidence", "待核验"),
 	]
 	learn_button.disabled = learned
-	learn_button.text = "已学会" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
-	var assignment_eligible := interaction_mode != "passive"
-	assign_button.disabled = not learned or not assignment_eligible
-	assign_button.text = "被动技能仅展示" if not assignment_eligible else "配置技能按钮"
-	assign_button.set_meta("assignment_eligible", assignment_eligible)
+	learn_button.text = "已学习" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
+	# Assignment is intentionally available only in the right-hand panel.
+	learn_button.visible = not learned
 
 
 func _clear_skill_detail() -> void:
@@ -578,8 +566,7 @@ func _clear_skill_detail() -> void:
 	detail_label.text = "[color=#a99479]从左侧选择技能查看完整资料。[/color]"
 	description_label.text = ""
 	learn_button.disabled = true
-	assign_button.disabled = true
-	assign_button.text = "配置技能按钮"
+	learn_button.visible = true
 
 
 func _refresh_assignment_slots() -> void:
@@ -647,7 +634,8 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	var icon := TextureRect.new()
 	icon.name = "SkillIcon"
 	var compact := button.size.x < 120.0
-	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else Vector2(8, 22)
+	var normal_attack := skill_name.is_empty() or skill_name == "普通攻击"
+	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else (Vector2(14, 21) if normal_attack else Vector2(8, 22))
 	icon.size = Vector2(40, 40)
 	icon.texture = _skill_texture(skill_name)
 	icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
@@ -656,6 +644,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.set_meta("alignment_contract", "centered_with_restore_normal_attack.v1" if normal_attack else "default_assignment_icon.v1")
 	content.add_child(icon)
 	var slot_label := Label.new()
 	slot_label.name = "SlotLabel"
@@ -904,8 +893,8 @@ func _target_mode_label(target_mode: String) -> String:
 func _section_panel(node_name: String, rect: Rect2) -> Panel:
 	var surface := Panel.new()
 	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
+	surface.position = rect.position + Vector2(8, 8)
+	surface.size = rect.size - Vector2(16, 16)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	add_child(surface)

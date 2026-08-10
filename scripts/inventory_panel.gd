@@ -10,6 +10,7 @@ const TouchScrollSupportScript = preload("res://scripts/touch_scroll_support.gd"
 signal closed
 
 const PANEL_SIZE := Vector2(1220, 660)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
 const BAG_COLUMNS := 8
 const BAG_VISIBLE_CAPACITY := 40
 const BAG_CAPACITY := 100
@@ -80,8 +81,8 @@ func _ready() -> void:
 func _build_modal_surface() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(1184, 616)
+	surface.position = Vector2(MODAL_SURFACE_INSET.x, MODAL_SURFACE_INSET.y)
+	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	add_child(surface)
