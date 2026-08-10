@@ -12,6 +12,13 @@ const MATERIAL_FREE_PROFESSION := "taoist"
 const TAOIST_MATERIAL_FREE_CONTRACT_ID := "skills.taoist.material_free.v1"
 const DOUBLE_MP_SKILL_ID := "taoist.poison"
 const DUAL_DEFENSE_CAST_CONTRACT_ID := "skills.taoist.dual_defense_cast.v1"
+const MAIN_PET_RECALL_RESOURCE_CONTRACT_ID := (
+	"skills.taoist.main_pet.recall_resource.v1"
+)
+const MAIN_PET_SKILL_TO_SUMMON_ID := {
+	"taoist.summon_skeleton": "skeleton",
+	"taoist.summon_divine_beast": "divine_beast",
+}
 const DEFENSE_SKILL_IDS := {
 	"taoist.defense": true,
 	"taoist.magic_defense": true,
@@ -85,8 +92,17 @@ static func _quote_single(
 	)
 	var skill_id := str(definition.get("skill_id", ""))
 	var material_free := str(definition.get("class", "")) == MATERIAL_FREE_PROFESSION
+	var main_pet_recall := _requested_main_pet_is_active(
+		definition,
+		resource_context,
+		cast_context
+	)
 	if material_free and skill_id == DOUBLE_MP_SKILL_ID:
 		mp_cost *= 2
+	if main_pet_recall:
+		# Recall is an identity-preserving reposition operation, not a new cast.
+		# It must survive both router quote and Player preflight at zero resources.
+		mp_cost = 0
 	if (
 		str(definition.get("mechanics", {}).get("runtime_family", "")) == "next_melee_charge"
 		and bool(cast_context.get("charge_consumed", false))
@@ -105,6 +121,9 @@ static func _quote_single(
 		else 0
 	)
 	if material_free:
+		item = null
+		item_amount = 0
+	if main_pet_recall:
 		item = null
 		item_amount = 0
 	if (
@@ -151,7 +170,7 @@ static func _quote_single(
 			"material_free": false,
 			"material_policy_contract_id": "",
 		}
-	return {
+	var result := {
 		"valid": true,
 		"reason": "",
 		"mp_cost": mp_cost,
@@ -163,6 +182,44 @@ static func _quote_single(
 			TAOIST_MATERIAL_FREE_CONTRACT_ID if material_free else ""
 		),
 	}
+	if main_pet_recall:
+		result["main_pet_recall"] = true
+		result["main_pet_recall_resource_contract_id"] = (
+			MAIN_PET_RECALL_RESOURCE_CONTRACT_ID
+		)
+	return result
+
+
+static func _requested_main_pet_is_active(
+	definition: Dictionary,
+	resource_context: Dictionary,
+	cast_context: Dictionary
+) -> bool:
+	if (
+		str(definition.get("mechanics", {}).get("runtime_family", ""))
+		!= "persistent_main_pet"
+	):
+		return false
+	var skill_id := str(definition.get("skill_id", ""))
+	var expected_summon_id := str(MAIN_PET_SKILL_TO_SUMMON_ID.get(skill_id, ""))
+	if expected_summon_id.is_empty():
+		return false
+	var requested_summon_id := str(
+		resource_context.get(
+			"requested_main_pet_summon_id",
+			cast_context.get(
+				"requested_main_pet_summon_id",
+				expected_summon_id
+			)
+		)
+	)
+	if requested_summon_id != expected_summon_id:
+		return false
+	var active_ids: Variant = resource_context.get(
+		"active_main_pet_summon_ids",
+		cast_context.get("active_main_pet_summon_ids", [])
+	)
+	return active_ids is Array and (active_ids as Array).has(requested_summon_id)
 
 
 static func _quote_dual_defense(

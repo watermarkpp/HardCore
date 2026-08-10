@@ -260,7 +260,17 @@ static func _resolve_main_pet(
 	template_id: String,
 	max_pet_level: int
 ) -> void:
-	if bool(context.get("has_main_pet", false)):
+	var has_requested_main_pet := false
+	if context.has("active_main_pet_summon_ids"):
+		var active_ids: Variant = context.get("active_main_pet_summon_ids", [])
+		has_requested_main_pet = (
+			active_ids is Array and (active_ids as Array).has(template_id)
+		)
+	else:
+		# Compatibility for older isolated planner fixtures. Production always
+		# supplies the typed active-id list.
+		has_requested_main_pet = bool(context.get("has_main_pet", false))
+	if has_requested_main_pet:
 		plan.effects = [{
 			"type": "recall_existing_main_pet",
 			"pet_group": "taoist_main_pet",
@@ -284,6 +294,7 @@ static func _resolve_main_pet(
 		"spawned": true,
 		"pet_group": "taoist_main_pet",
 		"group_limit": 1,
+		"group_limit_scope": "summon_id",
 		"template_id": template_id,
 		"initial_pet_level": SkillRankResolverScript.summon_pet_level(rank),
 		"max_pet_level": max_pet_level,

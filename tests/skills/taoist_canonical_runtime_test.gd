@@ -99,6 +99,7 @@ func _ready() -> void:
 	assert(talisman.proficiency_event.is_empty())
 
 	var skeleton := _execute("taoist.summon_skeleton", {
+		"active_main_pet_summon_ids": [],
 		"spawn_tile_valid": true,
 	})
 	assert(skeleton.effects[0].spawned)
@@ -110,13 +111,25 @@ func _ready() -> void:
 	assert(skeleton.resource_commit_required == skeleton.resource_commit)
 	assert(skeleton.proficiency_event.is_empty())
 	var recalled_skeleton := _execute("taoist.summon_skeleton", {
-		"has_main_pet": true,
-	}, "", 0)
+		"active_main_pet_summon_ids": ["skeleton"],
+	}, "", 0, 0)
 	assert(recalled_skeleton.accepted and recalled_skeleton.effects[0].type == "recall_existing_main_pet")
 	assert(not recalled_skeleton.resource_commit)
 	assert(not recalled_skeleton.resource_commit_required)
+	assert(recalled_skeleton.resource_quote.mp_cost == 0)
 	assert(recalled_skeleton.resource_quote.material_amount == 0)
+	assert(recalled_skeleton.resource_quote.main_pet_recall)
+	assert(
+		recalled_skeleton.resource_quote.main_pet_recall_resource_contract_id
+		== "skills.taoist.main_pet.recall_resource.v1"
+	)
 	assert(recalled_skeleton.proficiency_event.is_empty())
+	var insufficient_cross_type := _execute("taoist.summon_divine_beast", {
+		"active_main_pet_summon_ids": ["skeleton"],
+		"spawn_tile_valid": true,
+	}, "", 0, 0)
+	assert(not insufficient_cross_type.accepted)
+	assert(insufficient_cross_type.reason == "insufficient_mana")
 
 	var invisibility := _execute("taoist.invisibility", {
 		"primary_stat_roll": 5,
@@ -248,8 +261,10 @@ func _ready() -> void:
 	assert(mass_healing.proficiency_event.is_empty())
 
 	var divine_beast := _execute("taoist.summon_divine_beast", {
+		"active_main_pet_summon_ids": ["skeleton"],
 		"spawn_tile_valid": true,
 	})
+	assert(divine_beast.effects[0].type == "main_pet_spawn")
 	assert(divine_beast.effects[0].template_id == "divine_beast")
 	assert(divine_beast.effects[0].initial_pet_level == 3)
 	assert(divine_beast.effects[0].max_pet_level == 7)
@@ -257,6 +272,14 @@ func _ready() -> void:
 	assert(divine_beast.resource_quote.material_amount == 0)
 	assert(divine_beast.resource_commit_required == divine_beast.resource_commit)
 	assert(divine_beast.proficiency_event.is_empty())
+	var recalled_divine_beast := _execute("taoist.summon_divine_beast", {
+		"active_main_pet_summon_ids": ["skeleton", "divine_beast"],
+	}, "", 0)
+	assert(
+		recalled_divine_beast.accepted
+		and recalled_divine_beast.effects[0].type == "recall_existing_main_pet"
+	)
+	assert(not recalled_divine_beast.resource_commit_required)
 
 	## Revelation stays fully present in data/code (stable ID preserved) while
 	## the visibility policy hides it from the visible/usable skill system.
@@ -286,7 +309,8 @@ func _execute(
 	skill_id: String,
 	target_context: Dictionary,
 	_selected_material := "amulet",
-	_material_count := 99
+	_material_count := 99,
+	_mana := 999
 ) -> Dictionary:
 	if not target_context.has("friendly"):
 		target_context["friendly"] = false
@@ -300,7 +324,7 @@ func _execute(
 		Vector2i.RIGHT,
 		target_context,
 		{
-			"mana": 999,
+			"mana": _mana,
 			"materials": {},
 		},
 		23

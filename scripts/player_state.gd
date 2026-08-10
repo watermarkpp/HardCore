@@ -33,6 +33,9 @@ const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
 const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
 	"skills.summon.persistence.runtime_state.v1"
 )
+const TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID := (
+	"skills.summon.persistence.runtime_states.v1"
+)
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
@@ -88,7 +91,10 @@ var equip_cycle_cursor: Dictionary = {"戒指": "左戒指", "手镯": "左手�
 var attack_skill_slots: Array[String] = [""]
 var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
-var taoist_main_pet_runtime_state: Dictionary = {}
+var taoist_main_pet_runtime_states: Dictionary = {
+	"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+	"slots": {},
+}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
@@ -114,7 +120,7 @@ var last_load_result: Dictionary = {
 	"reason": "not_attempted",
 }
 var _consumed_shop_sell_quote_ids: Dictionary = {}
-var _taoist_main_pet_persistence_provider := Callable()
+var _taoist_main_pets_persistence_provider := Callable()
 # Test-only failure injection. Production ignores it unless test_mode is true.
 var _test_force_atomic_write_failure := false
 
@@ -162,7 +168,7 @@ func reset_progress(emit_updates := true) -> void:
 	attack_skill_slots = [""]
 	attack_ring_slots = ["", "", "", "", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
-	taoist_main_pet_runtime_state = {}
+	taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 	quest_states = {}
 	_consumed_shop_sell_quote_ids.clear()
 	saved_map_id = 4
@@ -1205,6 +1211,17 @@ func canonical_skill_resource_context(stable_skill_id: String, current_mana: int
 		"materials": materials,
 		"selected_material": selected_material,
 	}
+	var requested_main_pet_summon_id := ""
+	match stable_skill_id:
+		"taoist.summon_skeleton":
+			requested_main_pet_summon_id = "skeleton"
+		"taoist.summon_divine_beast":
+			requested_main_pet_summon_id = "divine_beast"
+	if not requested_main_pet_summon_id.is_empty():
+		result["requested_main_pet_summon_id"] = requested_main_pet_summon_id
+		result["active_main_pet_summon_ids"] = (
+			_taoist_main_pet_runtime_state_slots().keys()
+		)
 	## Dual defence: when both taoist.defense and taoist.magic_defense are
 	## learned (base rank 0 counts as learned in HardCore v2), any
 	## preflight/release quote must price the combination in one transaction
@@ -1572,7 +1589,7 @@ func save_game() -> bool:
 			"reason": "active_profile_missing",
 		}
 		return false
-	_refresh_taoist_main_pet_runtime_state_for_save()
+	_refresh_taoist_main_pet_runtime_states_for_save()
 	_ensure_skill_progression_matches_legacy()
 	var profile_path := _profile_path(active_profile_id)
 	var payload := {
@@ -1610,9 +1627,9 @@ func save_game() -> bool:
 			else []
 		),
 	}
-	if not taoist_main_pet_runtime_state.is_empty():
-		payload["taoist_main_pet_runtime_state"] = (
-			taoist_main_pet_runtime_state.duplicate(true)
+	if not _taoist_main_pet_runtime_state_slots().is_empty():
+		payload["taoist_main_pet_runtime_states"] = (
+			taoist_main_pet_runtime_states.duplicate(true)
 		)
 	if not _write_json_atomic(profile_path, payload):
 		last_save_result = {
@@ -1678,9 +1695,30 @@ func load_save() -> void:
 	quick_item_slots = _normalized_quick_item_slots(parsed.get("quick_item_slots", null))
 	equip_cycle_cursor = _normalized_equip_cycle_cursor(parsed.get("equip_cycle_cursor", {}))
 	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
-	taoist_main_pet_runtime_state = _normalized_taoist_main_pet_runtime_state(
-		parsed.get("taoist_main_pet_runtime_state", {})
-	)
+	if parsed.has("taoist_main_pet_runtime_states"):
+		var loaded_main_pet_states := _normalized_taoist_main_pet_runtime_states(
+			parsed.get("taoist_main_pet_runtime_states", {})
+		)
+		taoist_main_pet_runtime_states = (
+			loaded_main_pet_states
+			if not loaded_main_pet_states.is_empty()
+			else _empty_taoist_main_pet_runtime_states()
+		)
+	else:
+		# Compatibility for the short-lived singular save emitted by the faulty
+		# device build. Migrate its typed snapshot into the matching plural slot;
+		# every subsequent save writes only the plural field.
+		var legacy_main_pet := _normalized_taoist_main_pet_runtime_state(
+			parsed.get("taoist_main_pet_runtime_state", {})
+		)
+		taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
+		if not legacy_main_pet.is_empty():
+			var migrated_slots := (
+				taoist_main_pet_runtime_states["slots"] as Dictionary
+			)
+			migrated_slots[str(legacy_main_pet.get("summon_id", ""))] = (
+				legacy_main_pet
+			)
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
 	var position_data: Variant = parsed.get(
@@ -2023,42 +2061,101 @@ func warrior_runtime_state_for_restore() -> Dictionary:
 	return warrior_runtime_state.duplicate(true)
 
 
-func configure_taoist_main_pet_persistence_provider(provider: Callable) -> void:
-	_taoist_main_pet_persistence_provider = provider
+func configure_taoist_main_pets_persistence_provider(provider: Callable) -> void:
+	_taoist_main_pets_persistence_provider = provider
 
 
-func clear_taoist_main_pet_persistence_provider() -> void:
-	_taoist_main_pet_persistence_provider = Callable()
+func clear_taoist_main_pets_persistence_provider() -> void:
+	_taoist_main_pets_persistence_provider = Callable()
 
 
-func apply_taoist_main_pet_runtime_state(snapshot: Dictionary) -> bool:
-	if snapshot.is_empty():
-		taoist_main_pet_runtime_state = {}
-		return true
-	var normalized := _normalized_taoist_main_pet_runtime_state(snapshot)
-	if normalized.is_empty():
+func apply_taoist_main_pet_runtime_states(states: Dictionary) -> bool:
+	var normalized := _normalized_taoist_main_pet_runtime_states(states)
+	if (
+		normalized.is_empty()
+		or str(normalized.get("contract_id", ""))
+		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
+	):
 		return false
-	taoist_main_pet_runtime_state = normalized
+	taoist_main_pet_runtime_states = normalized
 	return true
 
 
-func taoist_main_pet_runtime_state_for_restore() -> Dictionary:
-	return taoist_main_pet_runtime_state.duplicate(true)
-
-
-func _refresh_taoist_main_pet_runtime_state_for_save() -> void:
-	if not _taoist_main_pet_persistence_provider.is_valid():
+func clear_taoist_main_pet_runtime_state(summon_id: String) -> void:
+	if summon_id not in ["skeleton", "divine_beast"]:
 		return
-	var captured: Variant = _taoist_main_pet_persistence_provider.call()
+	var slots := _taoist_main_pet_runtime_state_slots()
+	slots.erase(summon_id)
+	taoist_main_pet_runtime_states = {
+		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+		"slots": slots,
+	}
+
+
+func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
+	return taoist_main_pet_runtime_states.duplicate(true)
+
+
+func taoist_main_pet_runtime_state_for_restore(summon_id: String) -> Dictionary:
+	var slots := _taoist_main_pet_runtime_state_slots()
+	var snapshot: Variant = slots.get(summon_id, {})
+	return (snapshot as Dictionary).duplicate(true) if snapshot is Dictionary else {}
+
+
+func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
+	if not _taoist_main_pets_persistence_provider.is_valid():
+		return
+	var captured: Variant = _taoist_main_pets_persistence_provider.call()
 	if not captured is Dictionary:
 		return
-	if (captured as Dictionary).is_empty():
-		taoist_main_pet_runtime_state = {}
-		return
-	var normalized := _normalized_taoist_main_pet_runtime_state(captured)
-	# A live provider is authoritative. Invalid/corrupt live state fails closed
-	# instead of preserving a stale summon from an earlier save.
-	taoist_main_pet_runtime_state = normalized
+	# The live provider is authoritative. Invalid/corrupt captured state fails
+	# closed to an empty two-slot document rather than retaining stale pets.
+	var normalized := _normalized_taoist_main_pet_runtime_states(
+		captured
+	)
+	taoist_main_pet_runtime_states = (
+		normalized
+		if not normalized.is_empty()
+		else _empty_taoist_main_pet_runtime_states()
+	)
+
+
+func _empty_taoist_main_pet_runtime_states() -> Dictionary:
+	return {
+		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+		"slots": {},
+	}
+
+
+func _taoist_main_pet_runtime_state_slots() -> Dictionary:
+	var slots: Variant = taoist_main_pet_runtime_states.get("slots", {})
+	return (slots as Dictionary).duplicate(true) if slots is Dictionary else {}
+
+
+func _normalized_taoist_main_pet_runtime_states(states: Variant) -> Dictionary:
+	if not states is Dictionary:
+		return {}
+	var source := states as Dictionary
+	if (
+		str(source.get("contract_id", ""))
+		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
+	):
+		return {}
+	var raw_slots: Variant = source.get("slots", {})
+	if not raw_slots is Dictionary:
+		return {}
+	var result := _empty_taoist_main_pet_runtime_states()
+	var slots := result["slots"] as Dictionary
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var normalized := _normalized_taoist_main_pet_runtime_state(
+			(raw_slots as Dictionary).get(summon_id, {})
+		)
+		if (
+			not normalized.is_empty()
+			and str(normalized.get("summon_id", "")) == summon_id
+		):
+			slots[summon_id] = normalized
+	return result
 
 
 func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
