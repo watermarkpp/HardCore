@@ -45,7 +45,7 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	assert(panel.size == Vector2(1208, 650))
-	assert((panel.get_node("SkillDetailPanel") as Control).size.x == 400.0)
+	assert((panel.get_node("SkillDetailPanel") as Control).size == Vector2(400, 524))
 	assert((panel.get_node("AssignmentPanel") as Control).size.x == 434.0)
 	assert(panel.theme_type_variation == "GothicModalFrame")
 	assert(panel.center_assignment_buttons.is_empty(), "已取消的中央四技能槽仍然存在")
@@ -57,6 +57,10 @@ func _run() -> void:
 	assert(panel.attack_assignment_buttons[0].get_meta("stable_slot_id", "") == "hud.attack.primary")
 	assert(panel.get_node("AssignmentPanel/AttackSlotTitle").text != "")
 	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").text == "空")
+	var assignment_bounds := Rect2(Vector2.ZERO, (panel.get_node("AssignmentPanel") as Control).size)
+	for child in (panel.get_node("AssignmentPanel") as Control).get_children():
+		if child is Control and child.name not in ["AssignmentPanelSurface"]:
+			assert(assignment_bounds.encloses((child as Control).get_rect()), "%s escapes assignment panel" % child.name)
 	assert(panel.get_node("AssignmentPanel/SkillListPanelSurface").get_theme_stylebox("panel").bg_color != Color.BLACK)
 	for index in range(6):
 		assert(

@@ -14,8 +14,8 @@ signal quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
 
 const PANEL_SIZE := Vector2(1208, 650)
-const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
-const SECTION_VERTICAL_SHIFT := 24.0
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 52)
+const SECTION_VERTICAL_SHIFT := 48.0
 const LONG_PRESS_SECONDS := 0.48
 const ATTACK_SLOT_COUNT := 1
 const ATTACK_RING_SLOT_COUNT := 6
@@ -122,7 +122,7 @@ func _build_header() -> void:
 
 
 func _build_skill_list_section() -> void:
-	var panel := _section_panel("SkillListPanel", Rect2(20, 76, 310, 548))
+	var panel := _section_panel("SkillListPanel", Rect2(20, 76, 310, 524))
 	panel.add_child(_section_title("人物技能", 310))
 	trainer_context_label = Label.new()
 	trainer_context_label.name = "TrainerContext"
@@ -156,7 +156,7 @@ func _build_skill_list_section() -> void:
 
 
 func _build_skill_detail_section() -> void:
-	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 400, 548))
+	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 400, 524))
 	panel.add_child(_section_title("技能详情", 400))
 	var icon_frame := Button.new()
 	icon_frame.name = "SkillIconFrame"
@@ -216,7 +216,7 @@ func _build_skill_detail_section() -> void:
 	panel.add_child(description_label)
 
 func _build_assignment_section() -> void:
-	var panel := _section_panel("AssignmentPanel", Rect2(754, 76, 434, 548))
+	var panel := _section_panel("AssignmentPanel", Rect2(754, 76, 434, 524))
 	panel.add_child(_section_title("技能按钮配置", 434))
 	var attack_title := Label.new()
 	attack_title.name = "AttackSlotTitle"
@@ -243,7 +243,7 @@ func _build_assignment_section() -> void:
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
 	clear_attack.add_theme_font_size_override("font_size", 24)
-	clear_attack.text = "空"
+	clear_attack.text = "恢复\n普通攻击"
 	clear_attack.position = Vector2(306, 80)
 	clear_attack.size = Vector2(110, 82)
 	clear_attack.theme_type_variation = "GothicComponentButton"
@@ -263,8 +263,8 @@ func _build_assignment_section() -> void:
 	for slot_index in range(ATTACK_RING_SLOT_COUNT):
 		var button := Button.new()
 		button.name = "AttackRingSkillSlot_%d" % (slot_index + 1)
-		button.position = Vector2(18 + (slot_index % 3) * 140, 208 + floori(float(slot_index) / 3.0) * 152)
-		button.size = Vector2(126, 88)
+		button.position = Vector2(18 + (slot_index % 3) * 140, 204 + floori(float(slot_index) / 3.0) * 126)
+		button.size = Vector2(126, 84)
 		button.text = ""
 		button.theme_type_variation = "GothicComponentButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
@@ -277,8 +277,8 @@ func _build_assignment_section() -> void:
 		var clear_button := Button.new()
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
 		clear_button.text = "清空 %d" % (slot_index + 1)
-		clear_button.position = button.position + Vector2(0, 92)
-		clear_button.size = Vector2(126, 32)
+		clear_button.position = button.position + Vector2(0, 88)
+		clear_button.size = Vector2(126, 30)
 		clear_button.theme_type_variation = "GothicComponentButton"
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
@@ -295,8 +295,8 @@ func _build_assignment_section() -> void:
 	## clamping to 320px -> right edge 10px past the parent).
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.theme_type_variation = "GothicMutedLabel"
-	hint.position = Vector2(18, 500)
-	hint.size = Vector2(338, 72)
+	hint.position = Vector2(18, 458)
+	hint.size = Vector2(390, 50)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(hint)
@@ -630,7 +630,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	icon.name = "SkillIcon"
 	var compact := button.size.x < 120.0
 	var primary_attack := button.name == "AttackSkillSlot" or str(button.get_meta("stable_slot_id", "")) == "hud.attack.primary"
-	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else (Vector2(16, 21) if primary_attack else Vector2(8, 22))
+	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else (Vector2(24, 21) if primary_attack else Vector2(8, 22))
 	icon.size = Vector2(40, 40)
 	icon.texture = _skill_texture(skill_name)
 	icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
@@ -672,6 +672,12 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	mode_label.add_theme_font_size_override("font_size", 12)
 	mode_label.add_theme_color_override("font_color", Color("7fb789") if _skill_interaction_mode(skill_name) == "toggle" else Color("c8a871"))
 	content.add_child(mode_label)
+	if primary_attack:
+		slot_label.text = ""
+		if skill_name.is_empty():
+			name_label.text = "空"
+			name_label.add_theme_font_size_override("font_size", 24)
+			mode_label.visible = false
 	button.set_meta("skill_name", skill_name)
 	button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
 
