@@ -607,7 +607,7 @@ func _anchor_warrior_state_label(root: Control) -> void:
 		return
 	var root_inverse := root.get_global_transform().affine_inverse()
 	var chassis_global := chassis_root.get_global_rect()
-	var peak_global_y: float = chassis_root.to_global(_chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
+	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
 	var label_width := minf(500.0, chassis_global.size.x)
 	warrior_state_label.position.x = (root_inverse * chassis_global.get_center()).x
 	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
