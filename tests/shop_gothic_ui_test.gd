@@ -99,6 +99,8 @@ func _run() -> void:
 	assert(row_global.encloses(bg.get_global_rect()) and row_global.encloses(panel.sell_quantity_label.get_global_rect()))
 	assert(decrease.size == Vector2(58, 46) and increase.size == Vector2(58, 46))
 	assert(row_global.encloses(decrease.get_global_rect()) and row_global.encloses(increase.get_global_rect()))
+	assert(decrease.position.x >= 8.0 and row_global.size.x - (increase.position.x + increase.size.x) >= 8.0)
+	assert(Rect2(Vector2.ZERO, bg.size).encloses(Rect2(panel.sell_quantity_label.position - bg.position, panel.sell_quantity_label.size)))
 	panel._select_sell_item(safe_indices[0])
 	panel._change_sell_quantity(1)
 	assert(int(panel._sell_quantities.get(safe_indices[0], 0)) == 2, "第一个物品的独立数量未生效")

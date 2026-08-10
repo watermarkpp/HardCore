@@ -188,7 +188,7 @@ func _build_detail_section() -> void:
 	var minus_button := Button.new()
 	minus_button.name = "DecreaseQuantity"
 	minus_button.text = "−"
-	minus_button.position = Vector2.ZERO
+	minus_button.position = Vector2(8, 0)
 	minus_button.size = Vector2(58, 46)
 	minus_button.theme_type_variation = "GothicTransparentButton"
 	minus_button.clip_contents = true
@@ -197,16 +197,16 @@ func _build_detail_section() -> void:
 	sell_quantity_row.add_child(minus_button)
 	var quantity_background := Panel.new()
 	quantity_background.name = "QuantityCenterBackground"
-	quantity_background.position = Vector2(72, 4)
-	quantity_background.size = Vector2(182, 38)
+	quantity_background.position = Vector2(74, 4)
+	quantity_background.size = Vector2(178, 38)
 	quantity_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quantity_background.clip_contents = true
 	quantity_background.theme_type_variation = "GothicModalSurface"
 	sell_quantity_row.add_child(quantity_background)
 	sell_quantity_label = Label.new()
 	sell_quantity_label.name = "Quantity"
-	sell_quantity_label.position = Vector2(76, 4)
-	sell_quantity_label.size = Vector2(174, 38)
+	sell_quantity_label.position = Vector2(78, 6)
+	sell_quantity_label.size = Vector2(170, 34)
 	sell_quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sell_quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	sell_quantity_label.add_theme_font_size_override("font_size", 16)
@@ -214,7 +214,7 @@ func _build_detail_section() -> void:
 	var plus_button := Button.new()
 	plus_button.name = "IncreaseQuantity"
 	plus_button.text = "+"
-	plus_button.position = Vector2(268, 0)
+	plus_button.position = Vector2(260, 0)
 	plus_button.size = Vector2(58, 46)
 	plus_button.theme_type_variation = "GothicTransparentButton"
 	plus_button.clip_contents = true
