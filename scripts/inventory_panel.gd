@@ -492,6 +492,8 @@ func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 func _is_double_activation_event(event: InputEvent) -> bool:
 	if event is InputEventMouseButton:
 		var mouse := event as InputEventMouseButton
+		if mouse.device == InputEvent.DEVICE_ID_EMULATION:
+			return false
 		return mouse.pressed and mouse.button_index == MOUSE_BUTTON_LEFT and mouse.double_click
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch
@@ -504,6 +506,8 @@ func _equipment_input(event: InputEvent, slot: String, button: Button) -> void:
 
 
 func _handle_press_event(event: InputEvent, context: Dictionary, button: Button) -> void:
+	if event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			_begin_long_press(context, button, event.position)

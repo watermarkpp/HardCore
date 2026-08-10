@@ -25,6 +25,10 @@ const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
 const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
+const ITEM_QUICK_SLOT_PICKER_GAP := 8.0
+const ITEM_QUICK_SLOT_PICKER_CARD_SIZE := Vector2(56, 64)
+const ITEM_QUICK_SLOT_PICKER_PADDING := 8.0
+const ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT := 320.0
 const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v1"
 const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
 const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
@@ -131,9 +135,12 @@ var hud_item_buttons: Array[Button] = []
 var item_quick_slots: Array[String] = ["", "", "", ""]
 var item_quick_slot_icons: Array[TextureRect] = []
 var item_quick_slot_count_labels: Array[Label] = []
-var item_quick_slot_menu: PopupMenu
+var item_quick_slot_menu: PopupPanel
+var item_quick_slot_candidate_buttons: Array[Button] = []
 var _item_quick_slot_menu_slot := -1
 var _item_quick_slot_menu_candidates: Dictionary = {}
+var _item_quick_slot_menu_scroll: ScrollContainer
+var _item_quick_slot_menu_list: Control
 var _item_slot_press_index := -1
 var _item_slot_press_origin := Vector2.ZERO
 var _item_slot_press_touch_index := -1
@@ -436,8 +443,6 @@ func _build_bottom_chassis(root: Control) -> void:
 		hud_item_buttons.append(item_button)
 		var quick_icon := TextureRect.new()
 		quick_icon.name = "ItemQuickSlotIcon"
-		quick_icon.position = Vector2(8, 8)
-		quick_icon.size = Vector2(56, 56)
 		quick_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		quick_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		quick_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -447,8 +452,8 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_quick_slot_icons.append(quick_icon)
 		var quick_count := Label.new()
 		quick_count.name = "ItemQuickSlotCount"
-		quick_count.position = Vector2(item_button.size.x - 34, item_button.size.y - 22)
-		quick_count.size = Vector2(30, 18)
+		quick_count.position = Vector2(item_button.size.x - 34, item_button.size.y - 20)
+		quick_count.size = Vector2(30, 16)
 		quick_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		quick_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_count.add_theme_font_size_override("font_size", 13)
@@ -462,11 +467,17 @@ func _build_bottom_chassis(root: Control) -> void:
 
 
 func _build_item_quick_slot_menu() -> void:
-	item_quick_slot_menu = PopupMenu.new()
+	item_quick_slot_menu = PopupPanel.new()
 	item_quick_slot_menu.name = "ItemQuickSlotMenu"
-	item_quick_slot_menu.add_theme_font_size_override("font_size", 18)
-	item_quick_slot_menu.id_pressed.connect(_on_item_quick_slot_menu_pressed)
 	add_child(item_quick_slot_menu)
+	_item_quick_slot_menu_scroll = ScrollContainer.new()
+	_item_quick_slot_menu_scroll.name = "ItemQuickSlotScroll"
+	_item_quick_slot_menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_item_quick_slot_menu_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	item_quick_slot_menu.add_child(_item_quick_slot_menu_scroll)
+	_item_quick_slot_menu_list = Control.new()
+	_item_quick_slot_menu_list.name = "ItemQuickSlotCandidates"
+	_item_quick_slot_menu_scroll.add_child(_item_quick_slot_menu_list)
 	_item_slot_long_press_timer = Timer.new()
 	_item_slot_long_press_timer.name = "ItemQuickSlotLongPressTimer"
 	_item_slot_long_press_timer.one_shot = true
@@ -507,9 +518,11 @@ func update_item_quick_slots() -> void:
 		button.set_meta("item_quick_slot_count", count)
 		button.set_meta("item_quick_slot_available", count > 0)
 		if item_name.is_empty():
+			button.text = str(index + 1)
 			if icon != null:
 				icon.texture = null
 				icon.visible = false
+				icon.modulate = Color.WHITE
 			if count_label != null:
 				count_label.text = ""
 				count_label.visible = false
@@ -517,10 +530,12 @@ func update_item_quick_slots() -> void:
 			continue
 		var record := GameData.get_item_record(item_name)
 		var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+		button.text = ""
 		if icon != null:
 			icon.texture = texture
 			icon.visible = texture != null
 			icon.modulate = Color(1, 1, 1, 0.45) if count <= 0 else Color.WHITE
+			_layout_native_item_icon(icon, texture, button.size)
 		if count_label != null:
 			count_label.text = str(count)
 			count_label.visible = true
@@ -528,6 +543,8 @@ func update_item_quick_slots() -> void:
 
 
 func _item_slot_input(event: InputEvent, slot_index: int) -> void:
+	if event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch
 		if touch.pressed:
@@ -594,21 +611,23 @@ func _open_item_quick_slot_menu() -> void:
 		return
 	_item_slot_long_press_opened = true
 	_item_quick_slot_menu_slot = slot_index
-	item_quick_slot_menu.clear()
+	_clear_item_quick_slot_picker()
 	_item_quick_slot_menu_candidates.clear()
 	var candidates := _item_quick_slot_candidates()
 	for index in range(candidates.size()):
 		var candidate: Dictionary = candidates[index]
 		var id := index + 1
-		item_quick_slot_menu.add_item("%s  ×%d" % [candidate.get("item_name", ""), int(candidate.get("count", 0))], id)
 		_item_quick_slot_menu_candidates[id] = str(candidate.get("item_name", ""))
-	if item_quick_slot_menu.item_count == 0:
-		item_quick_slot_menu.add_item("背包中没有可快捷使用的物品", 0)
-		item_quick_slot_menu.set_item_disabled(0, true)
+		_add_item_quick_slot_candidate(candidate, id, candidates.size() - 1 - index)
+	var content_size := _item_quick_slot_picker_content_size(candidates.size())
+	if candidates.is_empty():
+		_add_item_quick_slot_empty_state()
+		content_size = Vector2(180, 56)
+	_item_quick_slot_menu_list.custom_minimum_size = content_size
+	_item_quick_slot_menu_list.size = content_size
 	var button: Button = hud_item_buttons[slot_index] if slot_index < hud_item_buttons.size() else null
 	if button != null:
-		item_quick_slot_menu.position = Vector2i(button.get_screen_position() + button.size * 0.5)
-	item_quick_slot_menu.popup()
+		_popup_item_quick_slot_picker(button, content_size)
 
 
 func _item_quick_slot_candidates() -> Array[Dictionary]:
@@ -641,7 +660,129 @@ func _on_item_quick_slot_menu_pressed(id: int) -> void:
 	var item_name := str(_item_quick_slot_menu_candidates.get(id, ""))
 	if item_name.is_empty():
 		return
+	item_quick_slot_menu.hide()
 	_assign_item_quick_slot(_item_quick_slot_menu_slot, item_name)
+
+
+func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2) -> void:
+	if texture == null:
+		icon.position = bounds * 0.5
+		icon.size = Vector2.ZERO
+		return
+	icon.size = texture.get_size()
+	icon.position = (bounds - icon.size) * 0.5
+
+
+func _clear_item_quick_slot_picker() -> void:
+	item_quick_slot_candidate_buttons.clear()
+	for child: Node in _item_quick_slot_menu_list.get_children():
+		_item_quick_slot_menu_list.remove_child(child)
+		child.queue_free()
+
+
+func _item_quick_slot_picker_content_size(candidate_count: int) -> Vector2:
+	if candidate_count <= 0:
+		return Vector2.ZERO
+	return Vector2(
+		ITEM_QUICK_SLOT_PICKER_CARD_SIZE.x,
+		ITEM_QUICK_SLOT_PICKER_CARD_SIZE.y * candidate_count
+			+ ITEM_QUICK_SLOT_PICKER_GAP * maxi(0, candidate_count - 1),
+	)
+
+
+func _add_item_quick_slot_candidate(candidate: Dictionary, id: int, visual_row: int) -> void:
+	var item_name := str(candidate.get("item_name", ""))
+	var count := int(candidate.get("count", 0))
+	var card := Button.new()
+	card.name = "ItemQuickSlotCandidate%d" % id
+	card.position = Vector2(0, visual_row * (ITEM_QUICK_SLOT_PICKER_CARD_SIZE.y + ITEM_QUICK_SLOT_PICKER_GAP))
+	card.size = ITEM_QUICK_SLOT_PICKER_CARD_SIZE
+	card.custom_minimum_size = ITEM_QUICK_SLOT_PICKER_CARD_SIZE
+	card.text = ""
+	card.tooltip_text = "%s × %d" % [item_name, count]
+	card.accessibility_name = "%s，数量 %d" % [item_name, count]
+	card.set_meta("accessibility_text", card.tooltip_text)
+	card.set_meta("candidate_id", id)
+	card.set_meta("item_name", item_name)
+	card.set_meta("count", count)
+	card.pressed.connect(_on_item_quick_slot_menu_pressed.bind(id))
+	_item_quick_slot_menu_list.add_child(card)
+	item_quick_slot_candidate_buttons.append(card)
+	var record := GameData.get_item_record(item_name)
+	var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+	var icon := TextureRect.new()
+	icon.name = "InventoryIcon"
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = texture
+	icon.visible = texture != null
+	_layout_native_item_icon(icon, texture, card.size)
+	card.add_child(icon)
+	var count_label := Label.new()
+	count_label.name = "Count"
+	count_label.position = Vector2(card.size.x - 28, card.size.y - 20)
+	count_label.size = Vector2(24, 16)
+	count_label.text = str(count)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.add_theme_font_size_override("font_size", 13)
+	count_label.add_theme_color_override("font_color", Color("f2c783"))
+	count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	count_label.add_theme_constant_override("shadow_offset_x", 1)
+	count_label.add_theme_constant_override("shadow_offset_y", 1)
+	card.add_child(count_label)
+
+
+func _add_item_quick_slot_empty_state() -> void:
+	var label := Label.new()
+	label.name = "EmptyState"
+	label.size = Vector2(180, 56)
+	label.text = "暂无可快捷物品"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_item_quick_slot_menu_list.add_child(label)
+
+
+func _popup_item_quick_slot_picker(button: Button, content_size: Vector2) -> void:
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root == null:
+		return
+	var safe_rect := Rect2(safe_root.get_screen_position(), safe_root.size)
+	var slot_rect := Rect2(button.get_screen_position(), button.size)
+	var available_height := maxf(0.0, slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - safe_rect.position.y)
+	var popup_size := Vector2(
+		content_size.x + ITEM_QUICK_SLOT_PICKER_PADDING * 2.0,
+		minf(content_size.y + ITEM_QUICK_SLOT_PICKER_PADDING * 2.0, minf(ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT, available_height)),
+	)
+	if popup_size.y <= 0.0:
+		return
+	var popup_position := Vector2(
+		slot_rect.get_center().x - popup_size.x * 0.5,
+		slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - popup_size.y,
+	)
+	popup_position.x = clampf(popup_position.x, safe_rect.position.x, safe_rect.end.x - popup_size.x)
+	popup_position.y = maxf(popup_position.y, safe_rect.position.y)
+	_item_quick_slot_menu_scroll.position = Vector2(ITEM_QUICK_SLOT_PICKER_PADDING, ITEM_QUICK_SLOT_PICKER_PADDING)
+	_item_quick_slot_menu_scroll.size = popup_size - Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING * 2.0
+	# PopupPanel derives its initial window size from child minimum sizes and may
+	# collapse a manually positioned ScrollContainer to the panel border. Apply
+	# the computed safe-area window size after popup so it remains authoritative.
+	item_quick_slot_menu.popup(Rect2i(Vector2i(popup_position.round()), Vector2i(popup_size.round())))
+	item_quick_slot_menu.position = Vector2i(popup_position.round())
+	item_quick_slot_menu.size = Vector2i(popup_size.round())
+	_scroll_item_quick_slot_menu_to_bottom.call_deferred()
+
+
+func _scroll_item_quick_slot_menu_to_bottom() -> void:
+	if _item_quick_slot_menu_scroll == null:
+		return
+	_item_quick_slot_menu_scroll.scroll_vertical = int(maxf(
+		0.0,
+		_item_quick_slot_menu_list.size.y - _item_quick_slot_menu_scroll.size.y,
+	))
 
 
 func _assign_item_quick_slot(slot_index: int, item_name: String) -> void:

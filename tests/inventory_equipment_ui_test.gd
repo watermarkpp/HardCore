@@ -174,6 +174,18 @@ func _run() -> void:
 	await get_tree().process_frame
 	sun_index = _inventory_index_of("太阳水")
 	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	# Godot 4.7 dispatches this emulated mouse double-click before the native
+	# ScreenTouch double_tap for one mobile gesture. Only the native event owns
+	# activation, so the pair must still consume exactly one item.
+	var emulated_double_click := InputEventMouseButton.new()
+	emulated_double_click.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_double_click.button_index = MOUSE_BUTTON_LEFT
+	emulated_double_click.pressed = true
+	emulated_double_click.double_click = true
+	emulated_double_click.position = sun_button.size * 0.5
+	panel._inventory_input(emulated_double_click, sun_index, sun_button)
+	assert(PlayerState.item_count("太阳水") == 2, "触摸模拟鼠标双击不应进入背包激活入口")
+	assert(panel._press_timer.is_stopped(), "触摸模拟鼠标按下不应启动鼠标长按")
 	var touch_tap := InputEventScreenTouch.new()
 	touch_tap.index = 5
 	touch_tap.pressed = true
@@ -181,7 +193,7 @@ func _run() -> void:
 	touch_tap.position = sun_button.size * 0.5
 	panel._inventory_input(touch_tap, sun_index, sun_button)
 	await get_tree().process_frame
-	assert(PlayerState.item_count("太阳水") == 1, "触摸双击应使用一次")
+	assert(PlayerState.item_count("太阳水") == 1, "模拟鼠标加原生触摸双击应只使用一次")
 
 	# --- Production long-press suppressed, menu builder retained ---
 	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button

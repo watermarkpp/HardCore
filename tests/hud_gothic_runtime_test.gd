@@ -297,6 +297,18 @@ func _run() -> void:
 	hud._assign_item_quick_slot(0, "太阳水")
 	assert(hud.item_quick_slots[0] == "太阳水", "选择后本地镜像未更新")
 	assert(assignment_signals == [[0, "太阳水"]], "assignment 信号参数应为 slot_index/item_name")
+	var bound_button := hud.hud_item_buttons[0] as Button
+	var bound_icon := hud.item_quick_slot_icons[0] as TextureRect
+	var bound_count := hud.item_quick_slot_count_labels[0] as Label
+	assert(bound_button.text.is_empty(), "绑定快捷物品后槽号文字应清空")
+	assert(bound_icon.texture != null and bound_icon.size == bound_icon.texture.get_size(), "主槽图标应保持 inventoryIcon 原生尺寸")
+	assert(bound_icon.size == Vector2(20, 27), "太阳水主槽图标应保持 20x27 原生像素")
+	assert(bound_icon.position + bound_icon.size * 0.5 == bound_button.size * 0.5, "主槽图标未在 72x72 框内居中")
+	assert(not Rect2(bound_icon.position, bound_icon.size).intersects(Rect2(bound_count.position, bound_count.size)), "主槽数量角标与太阳水图标相交")
+	hud.set_item_quick_slots(["", "", "", ""])
+	assert(bound_button.text == "1", "清空绑定后应恢复空槽号")
+	hud.set_item_quick_slots(["太阳水", "", "", ""])
+	assert(bound_button.text.is_empty(), "恢复绑定后槽号文字应再次清空")
 
 	var slot_center := hud.hud_item_buttons[0].size * 0.5
 	hud._begin_item_slot_press(0, slot_center, -1)
@@ -312,12 +324,36 @@ func _run() -> void:
 	var before_menu_use_count := use_signals.size()
 	hud._begin_item_slot_press(2, slot_center, 7)
 	await get_tree().create_timer(0.55).timeout
+	await get_tree().process_frame
 	assert(hud.item_quick_slot_menu.visible, "长按应弹出快捷物品选择菜单")
-	assert(hud.item_quick_slot_menu.item_count == 4, "菜单应列出全部可用候选")
-	var menu_text := ""
-	for item_index in range(hud.item_quick_slot_menu.item_count):
-		menu_text += hud.item_quick_slot_menu.get_item_text(item_index) + "\n"
-	assert("太阳水" in menu_text and "×2" in menu_text, "菜单应显示物品名与汇总数量")
+	assert(hud.item_quick_slot_candidate_buttons.size() == 4, "可视选择器应列出全部四个候选")
+	var candidate_screen_ys: Array[float] = []
+	for candidate_index in range(hud.item_quick_slot_candidate_buttons.size()):
+		var candidate_button := hud.item_quick_slot_candidate_buttons[candidate_index] as Button
+		var candidate_icon := candidate_button.get_node("InventoryIcon") as TextureRect
+		var candidate_count := candidate_button.get_node("Count") as Label
+		assert(candidate_button.size == Vector2(56, 64), "候选卡应为 56x64")
+		assert(candidate_icon.visible and candidate_icon.texture != null, "候选卡缺少 inventoryIcon")
+		assert(candidate_icon.size == candidate_icon.texture.get_size(), "候选卡图标未保持原生尺寸")
+		assert(int(candidate_count.text) >= 1, "候选卡数量应包含 1")
+		assert(str(candidate_button.get_meta("item_name")) in candidate_button.tooltip_text and "×" in candidate_button.tooltip_text, "候选 tooltip 应带物品名和数量")
+		assert(str(candidate_button.get_meta("item_name")) in candidate_button.accessibility_name and "数量" in candidate_button.accessibility_name, "候选可访问文本应带物品名和数量")
+		candidate_screen_ys.append(candidate_button.get_screen_position().y)
+	assert(candidate_screen_ys[0] == candidate_screen_ys.max(), "原候选数组第 1 项应最靠近槽位")
+	var sorted_candidate_ys := candidate_screen_ys.duplicate()
+	sorted_candidate_ys.sort()
+	for candidate_index in range(1, sorted_candidate_ys.size()):
+		assert(is_equal_approx(sorted_candidate_ys[candidate_index] - sorted_candidate_ys[candidate_index - 1], 72.0), "候选卡间隔应一致为 8px")
+	var held_button := hud.hud_item_buttons[2] as Button
+	var popup_rect := Rect2(Vector2(hud.item_quick_slot_menu.position), Vector2(hud.item_quick_slot_menu.size))
+	var held_rect := Rect2(held_button.get_screen_position(), held_button.size)
+	var safe_rect := Rect2(root.get_screen_position(), root.size)
+	assert(
+		absf(popup_rect.end.y - (held_rect.position.y - 8.0)) <= 1.0,
+		"选择器底边应在按住槽顶上方 8px：popup=%s held=%s" % [popup_rect, held_rect],
+	)
+	assert(absf(popup_rect.get_center().x - held_rect.get_center().x) <= 1.0, "选择器应与按住槽水平居中")
+	assert(safe_rect.encloses(popup_rect), "选择器必须完整位于 MobileSafeRoot 安全区")
 	hud._finish_item_slot_press(2, slot_center, 7)
 	assert(use_signals.size() == before_menu_use_count, "长按后释放不应触发 use")
 	var repair_id := -1
@@ -325,7 +361,8 @@ func _run() -> void:
 		if str(hud._item_quick_slot_menu_candidates[id_value]) == "修复油":
 			repair_id = int(id_value)
 	assert(repair_id > 0, "菜单候选缺少修复油")
-	hud._on_item_quick_slot_menu_pressed(repair_id)
+	var repair_button := hud.item_quick_slot_candidate_buttons[repair_id - 1] as Button
+	repair_button.pressed.emit()
 	assert(hud.item_quick_slots[2] == "修复油", "菜单选择后本地镜像未更新")
 	assert(assignment_signals.size() == 2 and assignment_signals[1] == [2, "修复油"], "菜单选择应发出 assignment 信号")
 
@@ -334,6 +371,34 @@ func _run() -> void:
 	assert(hud.item_quick_slot_menu.visible, "触摸长按应弹出快捷物品选择菜单")
 	hud._finish_item_slot_press(3, slot_center, 8)
 	assert(use_signals.size() == before_menu_use_count, "触摸长按释放不应触发 use")
+	hud.item_quick_slot_menu.hide()
+
+	# A native touch release is followed by emulated mouse press/release when
+	# emulate_mouse_from_touch is enabled. The pair must emit one use request.
+	var emulation_use_before := use_signals.size()
+	var quick_touch_down := InputEventScreenTouch.new()
+	quick_touch_down.index = 11
+	quick_touch_down.pressed = true
+	quick_touch_down.position = slot_center
+	hud.call("_item_slot_input", quick_touch_down, 2)
+	var quick_touch_up := InputEventScreenTouch.new()
+	quick_touch_up.index = 11
+	quick_touch_up.pressed = false
+	quick_touch_up.position = slot_center
+	hud.call("_item_slot_input", quick_touch_up, 2)
+	var emulated_mouse_down := InputEventMouseButton.new()
+	emulated_mouse_down.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_mouse_down.button_index = MOUSE_BUTTON_LEFT
+	emulated_mouse_down.pressed = true
+	emulated_mouse_down.position = slot_center
+	hud.call("_item_slot_input", emulated_mouse_down, 2)
+	var emulated_mouse_up := InputEventMouseButton.new()
+	emulated_mouse_up.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_mouse_up.button_index = MOUSE_BUTTON_LEFT
+	emulated_mouse_up.pressed = false
+	emulated_mouse_up.position = slot_center
+	hud.call("_item_slot_input", emulated_mouse_up, 2)
+	assert(use_signals.size() == emulation_use_before + 1, "原生触摸加模拟鼠标只能发出一次快捷物品 use")
 
 	hud.set_item_quick_slots(["太阳水", "修复油", {"item_name": "强效太阳水"}, "基本剑术"])
 	assert(hud.item_quick_slots.size() == 4, "set_item_quick_slots 应规范化为四项")
