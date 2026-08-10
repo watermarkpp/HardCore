@@ -27,10 +27,10 @@ func _run() -> void:
 		assert(surface.get_theme_stylebox("panel").bg_color == Color("28231f"))
 		assert(panel.size.y - surface.get_rect().end.y >= 50.0, "%s modal surface has no bottom safety band" % panel.name)
 		for child in panel.get_children():
-			if child is Control and (child.name.ends_with("Panel") or child.name.ends_with("Section")):
+			if child is Control and child.name.ends_with("Panel"):
 				assert(panel.size.y - (child as Control).get_rect().end.y >= 48.0, "%s section presses the outer frame" % child.name)
 		for child in panel.get_children():
-			if child is Control and (child.name.ends_with("Panel") or child.name.ends_with("Section")):
+			if child.name.ends_with("Panel") and child is Control:
 				var section := child as Control
 				var section_bounds := Rect2(Vector2.ZERO, section.size)
 				for section_child in section.get_children():

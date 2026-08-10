@@ -210,7 +210,7 @@ func _build_page_controls(parent: Panel) -> void:
 func _summary_label(node_name: String) -> Label:
 	var label := Label.new()
 	label.name = node_name
-	label.position = Vector2(18, 496)
+	label.position = Vector2(18, 506)
 	label.size = Vector2(456, 34)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
