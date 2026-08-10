@@ -22,6 +22,8 @@ const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtim
 const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
 const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
+const HUD_CHASSIS_CENTER_PEAK_SOURCE := Vector2(505, 71)
+const HUD_CHASSIS_STATE_LABEL_GAP := 8.0
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
 const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
@@ -600,21 +602,21 @@ func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
 
 
 func _anchor_warrior_state_label(root: Control) -> void:
-	if warrior_state_label == null or hud_item_buttons.is_empty():
+	var chassis_root := root.get_node_or_null("IntegratedHUDChassis") as Control
+	if warrior_state_label == null or chassis_root == null:
 		return
-	var item_bar_global_rect := hud_item_buttons[0].get_global_rect()
-	for index in range(1, hud_item_buttons.size()):
-		item_bar_global_rect = item_bar_global_rect.merge(hud_item_buttons[index].get_global_rect())
-	var root_global_rect := root.get_global_rect()
 	var root_inverse := root.get_global_transform().affine_inverse()
-	var item_bar_local := Rect2(root_inverse * item_bar_global_rect.position, item_bar_global_rect.size)
-	var label_width := minf(500.0, item_bar_local.size.x)
-	warrior_state_label.position.x = item_bar_local.get_center().x - label_width * 0.5
+	var chassis_global := chassis_root.get_global_rect()
+	var peak_global_y := chassis_root.to_global(_chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
+	var label_width := minf(500.0, chassis_global.size.x)
+	warrior_state_label.position.x = root_inverse * chassis_global.get_center()
+	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
 	warrior_state_label.size.x = label_width
-	warrior_state_label.position.y = item_bar_local.position.y - warrior_state_label.size.y - 8.0
 	warrior_state_label.size.y = 28.0
-	warrior_state_label.set_meta("layout_anchor", "bottom_quick_bar_center_peak.v1")
-	warrior_state_label.set_meta("layout_gap", 8.0)
+	var peak_local := root_inverse * Vector2(chassis_global.position.x, peak_global_y)
+	warrior_state_label.position.y = peak_local.y - warrior_state_label.size.y - HUD_CHASSIS_STATE_LABEL_GAP
+	warrior_state_label.set_meta("layout_anchor", "chassis_source_center_peak.v1")
+	warrior_state_label.set_meta("layout_gap", HUD_CHASSIS_STATE_LABEL_GAP)
 
 
 func _build_taoist_defence_buff_icon(
