@@ -410,6 +410,21 @@ func _run() -> void:
 	)
 	assert(absf(popup_rect.get_center().x - held_rect.get_center().x) <= 1.0, "选择器应与按住槽水平居中")
 	assert(safe_rect.encloses(popup_rect), "选择器必须完整位于 MobileSafeRoot 安全区")
+	var picker_style := hud.item_quick_slot_menu.get_theme_stylebox("panel") as StyleBoxFlat
+	assert(picker_style != null, "快捷选择器必须使用显式面板样式")
+	assert(
+		picker_style.border_width_left == 1 and picker_style.border_width_top == 1
+		and picker_style.border_width_right == 1 and picker_style.border_width_bottom == 1,
+		"快捷选择器必须在四边使用精确 1px 边框",
+	)
+	assert(picker_style.border_color == Color("8f6a38"), "快捷选择器边框应为克制暗金色")
+	assert(picker_style.shadow_offset == Vector2.ZERO, "快捷选择器阴影必须以面板几何中心为基准")
+	var scroll_rect := Rect2(hud._item_quick_slot_menu_scroll.get_screen_position(), hud._item_quick_slot_menu_scroll.size)
+	var left_margin := scroll_rect.position.x - popup_rect.position.x
+	var right_margin := popup_rect.end.x - scroll_rect.end.x
+	assert(absf(left_margin - right_margin) <= 1.0, "快捷选择器内容左右内边距必须对称")
+	var first_card := hud.item_quick_slot_candidate_buttons[0] as Button
+	assert(absf(first_card.get_screen_position().x - scroll_rect.position.x) <= 1.0, "候选卡必须水平居中于选择器内容区")
 	hud._finish_item_slot_press(2, slot_center, 7)
 	assert(use_signals.size() == before_menu_use_count, "长按后释放不应触发 use")
 	var repair_id := -1

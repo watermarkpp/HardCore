@@ -581,6 +581,18 @@ func _build_taoist_defence_buff_icon(
 func _build_item_quick_slot_menu() -> void:
 	item_quick_slot_menu = PopupPanel.new()
 	item_quick_slot_menu.name = "ItemQuickSlotMenu"
+	var picker_style := StyleBoxFlat.new()
+	picker_style.bg_color = Color("241b16")
+	picker_style.border_color = Color("8f6a38")
+	picker_style.border_width_left = 1
+	picker_style.border_width_top = 1
+	picker_style.border_width_right = 1
+	picker_style.border_width_bottom = 1
+	# Keep the pale cast shadow geometrically centered on the dark panel.
+	picker_style.shadow_color = Color(0.78, 0.72, 0.62, 0.34)
+	picker_style.shadow_size = 4
+	picker_style.shadow_offset = Vector2.ZERO
+	item_quick_slot_menu.add_theme_stylebox_override("panel", picker_style)
 	add_child(item_quick_slot_menu)
 	_item_quick_slot_menu_scroll = ScrollContainer.new()
 	_item_quick_slot_menu_scroll.name = "ItemQuickSlotScroll"
