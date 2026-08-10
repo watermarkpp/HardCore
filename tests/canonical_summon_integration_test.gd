@@ -70,6 +70,10 @@ func _run() -> void:
 	assert(str(spawn_descriptor.get("operation", "")) == "main_pet_spawn")
 	var skeleton: SummonActor = _game._canonical_main_pet("skeleton")
 	assert(skeleton != null, "skeleton descriptor did not create a skeleton")
+	assert(
+		skeleton._combat_spatial_index == _game._combat_spatial_index,
+		"new skeleton did not receive the shared combat spatial index"
+	)
 	var skeleton_id := skeleton.get_instance_id()
 	assert(
 		skeleton.summon_exp_level
@@ -162,6 +166,11 @@ func _run() -> void:
 	)
 	var divine: SummonActor = _game._canonical_main_pet("divine_beast")
 	assert(divine != null and divine.get_instance_id() != skeleton_id)
+	assert(
+		divine._combat_spatial_index == _game._combat_spatial_index,
+		"new divine beast did not receive the shared combat spatial index"
+	)
+	assert(divine._combat_spatial_index == skeleton._combat_spatial_index)
 	assert(_live_main_pet_count() == 2, "two summon types did not coexist")
 	assert(skeleton.persistence_snapshot() == skeleton_state_before_divine)
 
@@ -230,6 +239,8 @@ func _run() -> void:
 	var restored_skeleton: SummonActor = _game._canonical_main_pet("skeleton")
 	var restored_divine: SummonActor = _game._canonical_main_pet("divine_beast")
 	assert(restored_skeleton != null and restored_divine != null)
+	assert(restored_skeleton._combat_spatial_index == _game._combat_spatial_index)
+	assert(restored_divine._combat_spatial_index == _game._combat_spatial_index)
 	assert(restored_skeleton.get_instance_id() != old_skeleton_id)
 	assert(restored_divine.get_instance_id() != old_divine_id)
 	assert(restored_skeleton.persistence_snapshot() == persisted_slots["skeleton"])

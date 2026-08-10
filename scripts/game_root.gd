@@ -6691,6 +6691,7 @@ func _restore_persisted_taoist_main_pet_if_needed() -> bool:
 			Callable(self, "_canonical_ground_gu_to_screen_px"),
 			Callable(self, "_canonical_screen_px_to_ground_gu")
 		)
+		summon.configure_spatial_index(_combat_spatial_index)
 		summon.global_position = spawn_plan.get(
 			"position_screen_px", player.global_position
 		) as Vector2
@@ -7092,6 +7093,7 @@ func _apply_canonical_main_pet(
 		Callable(self, "_canonical_ground_gu_to_screen_px"),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
+	summon.configure_spatial_index(_combat_spatial_index)
 	summon.global_position = spawn_screen_px
 	summon.configure_spawn_release_footprint(release_id)
 	summon.set_meta(

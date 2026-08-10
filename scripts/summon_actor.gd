@@ -13,6 +13,9 @@ const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
+const RuntimeCombatSpatialIndexScript := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
 
 const SPATIAL_CONTRACT_ID := "skills.summon_actor.spatial_ground_gu.v1"
 const SPAWN_FOOTPRINT_CONTRACT_ID := (
@@ -31,7 +34,15 @@ const VISUAL_FOOT_ANCHOR_CONTRACT_ID := (
 	"skills.summon.visual_authored_ground_point_at_actor_origin.v2"
 )
 const LEVEL_LABEL_CONTRACT_ID := "skills.summon.level_label.current_pet_level.v1"
+const TARGET_ACQUISITION_CONTRACT_ID := (
+	"skills.summon.target_acquisition.shared_spatial_index.v1"
+)
+const GROUND_SHADOW_CONTRACT_ID := (
+	"skills.summon.ground_shadow.actor_origin.v1"
+)
 const TARGET_ACQUIRE_INTERVAL_SECONDS := 0.25
+const GROUND_SHADOW_CENTER_LOCAL_PX := Vector2.ZERO
+const GROUND_SHADOW_VERTICAL_SCALE := 0.36
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 )
@@ -68,6 +79,7 @@ var owner_level := 1
 var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
+var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 ## FREEZE-P0.1: fail-closed projection diagnostics.
 var missing_projection_rejection_count := 0
 var projection_rejection_reason := &""
@@ -156,6 +168,9 @@ var _visual_request_id := SummonVisualRegistryScript.REQUEST_UNKNOWN
 var _visual_request_attempts := 0
 var _target_acquire_remaining := 0.0
 var _target_scan_count := 0
+var _target_candidate_count := 0
+var _target_acquire_fail_closed_count := 0
+var _target_acquire_last_rejection_reason := ""
 var _custom_draw_request_count := 0
 var _sprite_frame_apply_count := 0
 var _last_buff_draw_signature := Vector2i(-1, -1)
@@ -319,6 +334,10 @@ func configure_runtime_map_projection(
 		if screen_position_px_to_ground_gu is Callable
 		else Callable()
 	)
+
+
+func configure_spatial_index(index: RuntimeCombatSpatialIndexScript) -> void:
+	_combat_spatial_index = index
 
 
 func projection_ready() -> bool:
@@ -612,30 +631,88 @@ func _set_state(next_state: int) -> void:
 
 func _nearest_enemy() -> EnemyActor:
 	_target_scan_count += 1
+	if runtime_map_id < 0:
+		_reject_target_acquisition("runtime_map_unavailable")
+		return null
+	if not runtime_screen_to_ground_position_px.is_valid():
+		_reject_target_acquisition("screen_to_ground_projection_unavailable")
+		return null
+	if (
+		_combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+	):
+		_reject_target_acquisition("spatial_index_unavailable")
+		return null
+	var origin_ground_gu := _runtime_screen_to_ground_position(global_position)
+	if not origin_ground_gu.is_finite():
+		_reject_target_acquisition("origin_ground_position_invalid")
+		return null
+	_target_acquire_last_rejection_reason = ""
 	var nearest: EnemyActor
 	var nearest_distance_gu := INF
-	var nearest_instance_id := 0
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
+	var nearest_stable_combat_order := 0
+	var nearest_actor_runtime_id := 0
+	var candidates := _combat_spatial_index.query_aabb_candidates(
+		runtime_map_id,
+		Rect2(origin_ground_gu, Vector2.ZERO),
+		aggro_radius_gu + combat_radius_gu + GroundUnitSpaceScript.EPSILON_GU
+	)
+	_target_candidate_count += candidates.size()
+	for candidate: Dictionary in candidates:
+		var node: Node = candidate.get("node", null)
+		if not node is EnemyActor:
 			continue
-		var distance_gu := target_footprint_surface_distance_gu(
-			node.global_position,
-			_target_combat_radius_gu(node)
+		var enemy := node as EnemyActor
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+			or enemy.runtime_map_id != runtime_map_id
+		):
+			continue
+		var target_ground_gu := enemy.spatial_index_position()
+		if not target_ground_gu.is_finite():
+			continue
+		var target_bounds_gu := maxf(
+			0.0, float(candidate.get("bounds_gu", 0.0))
+		)
+		var distance_gu := maxf(
+			0.0,
+			origin_ground_gu.distance_to(target_ground_gu)
+				- combat_radius_gu
+				- target_bounds_gu
 		)
 		if distance_gu > aggro_radius_gu + GroundUnitSpaceScript.EPSILON_GU:
 			continue
-		var instance_id := int(node.get_instance_id())
+		var stable_combat_order := int(
+			candidate.get("stable_combat_order", 0)
+		)
+		var actor_runtime_id := int(candidate.get("actor_runtime_id", 0))
 		if (
 			distance_gu < nearest_distance_gu - GroundUnitSpaceScript.EPSILON_GU
 			or (
-				is_equal_approx(distance_gu, nearest_distance_gu)
-				and (nearest == null or instance_id < nearest_instance_id)
+				absf(distance_gu - nearest_distance_gu)
+					<= GroundUnitSpaceScript.EPSILON_GU
+				and (
+					nearest == null
+					or stable_combat_order < nearest_stable_combat_order
+					or (
+						stable_combat_order == nearest_stable_combat_order
+						and actor_runtime_id < nearest_actor_runtime_id
+					)
+				)
 			)
 		):
-			nearest = node
+			nearest = enemy
 			nearest_distance_gu = distance_gu
-			nearest_instance_id = instance_id
+			nearest_stable_combat_order = stable_combat_order
+			nearest_actor_runtime_id = actor_runtime_id
 	return nearest
+
+
+func _reject_target_acquisition(reason: String) -> void:
+	_target_acquire_fail_closed_count += 1
+	_target_acquire_last_rejection_reason = reason
 
 
 func spatial_contract_snapshot() -> Dictionary:
@@ -832,11 +909,8 @@ func target_footprint_surface_distance_gu(
 
 
 static func _target_combat_radius_gu(target: Node) -> float:
-	if not is_instance_valid(target):
-		return 0.0
-	for property: Dictionary in target.get_property_list():
-		if str(property.get("name", "")) == "combat_radius_gu":
-			return maxf(0.0, float(target.get("combat_radius_gu")))
+	if is_instance_valid(target) and target is EnemyActor:
+		return maxf(0.0, (target as EnemyActor).combat_radius_gu)
 	return 0.0
 
 
@@ -1201,6 +1275,18 @@ func performance_diagnostics() -> Dictionary:
 		"contract_id": SUSTAINED_FRAME_COST_CONTRACT_ID,
 		"target_acquire_interval_seconds": TARGET_ACQUIRE_INTERVAL_SECONDS,
 		"target_scan_count": _target_scan_count,
+		"target_acquisition_contract_id": TARGET_ACQUISITION_CONTRACT_ID,
+		"target_candidate_count": _target_candidate_count,
+		"target_acquire_fail_closed_count": (
+			_target_acquire_fail_closed_count
+		),
+		"target_acquire_last_rejection_reason": (
+			_target_acquire_last_rejection_reason
+		),
+		"spatial_index_available": (
+			_combat_spatial_index != null
+			and is_instance_valid(_combat_spatial_index)
+		),
 		"custom_draw_request_count": _custom_draw_request_count,
 		"sprite_frame_apply_count": _sprite_frame_apply_count,
 		"visual_request_active": SummonVisualRegistryScript.request_active(
@@ -1327,6 +1413,9 @@ func level_label_layout_snapshot() -> Dictionary:
 
 func reset_performance_diagnostics_for_tests() -> void:
 	_target_scan_count = 0
+	_target_candidate_count = 0
+	_target_acquire_fail_closed_count = 0
+	_target_acquire_last_rejection_reason = ""
 	_custom_draw_request_count = 0
 	_sprite_frame_apply_count = 0
 
@@ -1384,12 +1473,34 @@ func _apply_fire_frame() -> void:
 	)
 
 
+func ground_shadow_layout_snapshot() -> Dictionary:
+	return {
+		"contract_id": GROUND_SHADOW_CONTRACT_ID,
+		"actor_ground_origin_local_px": GROUND_SHADOW_CENTER_LOCAL_PX,
+		"outer_center_local_px": GROUND_SHADOW_CENTER_LOCAL_PX,
+		"inner_center_local_px": GROUND_SHADOW_CENTER_LOCAL_PX,
+		"vertical_scale": GROUND_SHADOW_VERTICAL_SCALE,
+	}
+
+
 func _draw() -> void:
 	var color := Color(0.88, 0.72, 0.35) if summon_name == "神兽" else Color(0.72, 0.74, 0.70)
 	var radius := 21.0 if summon_name == "神兽" else 15.0
-	draw_set_transform(Vector2(0, 5), 0.0, Vector2(1.0, 0.36))
-	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.28))
-	draw_circle(Vector2(0, -1), radius * 0.56, Color(0, 0, 0, 0.56))
+	draw_set_transform(
+		GROUND_SHADOW_CENTER_LOCAL_PX,
+		0.0,
+		Vector2(1.0, GROUND_SHADOW_VERTICAL_SCALE)
+	)
+	draw_circle(
+		Vector2.ZERO,
+		radius,
+		Color(0, 0, 0, 0.28)
+	)
+	draw_circle(
+		Vector2.ZERO,
+		radius * 0.56,
+		Color(0, 0, 0, 0.56)
+	)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	if _sprite == null and summon_id != "divine_beast":
 		draw_circle(Vector2(0, -4), radius, color)

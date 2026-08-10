@@ -247,6 +247,22 @@ func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
 			== Vector2.ZERO,
 		"authored composite ground point must land on actor gameplay origin"
 	)
+	var shadow_layout := summon.ground_shadow_layout_snapshot()
+	assert(
+		shadow_layout.contract_id
+			== "skills.summon.ground_shadow.actor_origin.v1"
+	)
+	assert(shadow_layout.actor_ground_origin_local_px == Vector2.ZERO)
+	assert(
+		shadow_layout.outer_center_local_px
+			== shadow_layout.actor_ground_origin_local_px,
+		"outer summon shadow must share the authored gameplay foot point"
+	)
+	assert(
+		shadow_layout.inner_center_local_px
+			== shadow_layout.actor_ground_origin_local_px,
+		"inner summon shadow must not retain a south offset"
+	)
 	_verify_level_label(summon)
 
 	summon.reset_performance_diagnostics_for_tests()
