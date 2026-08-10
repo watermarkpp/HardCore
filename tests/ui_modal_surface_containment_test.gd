@@ -23,17 +23,17 @@ func _run() -> void:
 		await get_tree().process_frame
 		var surface := panel.get_node("ModalSurface") as Control
 		assert(surface != null and Rect2(Vector2.ZERO, panel.size).encloses(surface.get_rect()), "%s modal surface escapes outer frame" % panel.name)
-		assert(surface.get_theme_stylebox("panel").bg_color != Color.BLACK)
-		var outer_gap := surface.position.y + surface.size.y
+		assert(surface.get_theme_stylebox("panel").bg_color == Color("28231f"))
+		assert(panel.size.y - surface.get_rect().end.y >= 50.0, "%s modal surface has no bottom safety band" % panel.name)
 		for child in panel.get_children():
 			if child is Control and child.name.ends_with("Panel"):
-				assert((child as Control).position.y + (child as Control).size.y <= outer_gap - 48.0)
+				assert(panel.size.y - (child as Control).get_rect().end.y >= 48.0, "%s section presses the outer frame" % child.name)
 		for child in panel.get_children():
 			if child.name.ends_with("Panel") and child is Control:
 				var section := child as Control
 				var section_surface := panel.get_node_or_null("%sSurface" % child.name) as Control
 				if section_surface != null:
-					assert(section_surface.get_theme_stylebox("panel").bg_color != Color.BLACK)
+					assert(section_surface.get_theme_stylebox("panel").bg_color == Color("28231f"))
 					var inset: Vector2 = section_surface.position - section.position
 					assert(inset.x >= 8.0 and inset.y >= 8.0)
 					assert(section.size.x - section_surface.size.x - inset.x >= 8.0)

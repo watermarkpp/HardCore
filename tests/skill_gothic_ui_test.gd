@@ -56,12 +56,35 @@ func _run() -> void:
 	assert(panel.find_child("LearnButton", true, false) == null)
 	assert(panel.attack_assignment_buttons[0].get_meta("stable_slot_id", "") == "hud.attack.primary")
 	assert(panel.get_node("AssignmentPanel/AttackSlotTitle").text != "")
-	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").text == "空")
-	var assignment_bounds := Rect2(Vector2.ZERO, (panel.get_node("AssignmentPanel") as Control).size)
-	for child in (panel.get_node("AssignmentPanel") as Control).get_children():
-		if child is Control and child.name not in ["AssignmentPanelSurface"]:
+	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").text == "恢复\n普通攻击")
+	var assignment_panel := panel.get_node("AssignmentPanel") as Control
+	var assignment_bounds := Rect2(Vector2.ZERO, assignment_panel.size)
+	for child in assignment_panel.get_children():
+		if child is Control:
 			assert(assignment_bounds.encloses((child as Control).get_rect()), "%s escapes assignment panel" % child.name)
-	assert(panel.get_node("AssignmentPanel/SkillListPanelSurface").get_theme_stylebox("panel").bg_color != Color.BLACK)
+	assert(panel.get_node("AssignmentPanelSurface").get_theme_stylebox("panel").bg_color == Color("28231f"))
+	var primary := panel.attack_assignment_buttons[0] as Button
+	var primary_content := primary.get_node("Content") as Control
+	assert((primary_content.get_node("SlotLabel") as Label).text.is_empty())
+	assert((primary_content.get_node("SkillName") as Label).text == "空")
+	assert(not (primary_content.get_node("InteractionMode") as Label).visible)
+	assert((primary_content.get_node("SkillIcon") as TextureRect).position.x >= 24.0)
+	panel._set_assignment_button_content(primary, "攻击主键", "刺杀剑术")
+	primary_content = primary.get_node("Content") as Control
+	assert((primary_content.get_node("SlotLabel") as Label).text.is_empty())
+	assert((primary_content.get_node("SkillIcon") as TextureRect).position.x >= 24.0)
+	assert((primary_content.get_node("SkillName") as Label).text == "刺杀剑术")
+	assert((primary_content.get_node("InteractionMode") as Label).visible)
+	panel._set_assignment_button_content(primary, "攻击主键", "")
+	var ring_controls: Array[Control] = []
+	for index in range(6):
+		ring_controls.append(panel.attack_ring_assignment_buttons[index])
+		ring_controls.append(panel.get_node("AssignmentPanel/ClearAttackRingSkillSlot_%d" % (index + 1)) as Control)
+	ring_controls.append(panel.get_node("AssignmentPanel/AssignmentHint") as Control)
+	for first_index in range(ring_controls.size()):
+		assert(assignment_bounds.encloses(ring_controls[first_index].get_rect()))
+		for second_index in range(first_index + 1, ring_controls.size()):
+			assert(not ring_controls[first_index].get_rect().intersects(ring_controls[second_index].get_rect()), "%s overlaps %s" % [ring_controls[first_index].name, ring_controls[second_index].name])
 	for index in range(6):
 		assert(
 			panel.attack_ring_assignment_buttons[index].get_meta("stable_slot_id", "")
