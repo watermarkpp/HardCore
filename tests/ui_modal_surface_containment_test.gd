@@ -22,20 +22,24 @@ func _run() -> void:
 		root.add_child(panel)
 		await get_tree().process_frame
 		var surface := panel.get_node("ModalSurface") as Control
-		assert(surface != null and panel.get_rect().encloses(surface.get_rect()), "%s modal surface escapes outer frame" % panel.name)
+		assert(surface != null and Rect2(Vector2.ZERO, panel.size).encloses(surface.get_rect()), "%s modal surface escapes outer frame" % panel.name)
 		for child in panel.get_children():
 			if child.name.ends_with("Panel") and child is Control:
 				var section_surface := panel.get_node_or_null("%sSurface" % child.name) as Control
 				if section_surface != null:
-					assert(child.get_rect().position.distance_to(section_surface.get_rect().position) >= 8.0)
-			panel.queue_free()
+					var inset := section_surface.position - child.position
+					assert(inset.x >= 8.0 and inset.y >= 8.0)
+					assert(child.size.x - section_surface.size.x - inset.x >= 8.0)
+					assert(child.size.y - section_surface.size.y - inset.y >= 8.0)
+		panel.queue_free()
+		await get_tree().process_frame
 	var death := DeathPanelScript.new() as Control
 	root.add_child(death)
 	await get_tree().process_frame
 	var death_surface := death.get_node("ModalSurface") as Control
 	var death_modal := death.get_node("DeathRevivalModal") as Control
 	assert(death_surface != null and death_modal != null)
-	assert(death_modal.get_rect().encloses(death_surface.get_rect()))
+	assert(Rect2(death_modal.position, death_modal.size).encloses(death_surface.get_rect()))
 	viewport.queue_free()
 	await get_tree().process_frame
 	print("UI_MODAL_SURFACE_CONTAINMENT_PASS")
