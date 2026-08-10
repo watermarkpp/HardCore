@@ -9,6 +9,7 @@ signal warehouse_sort_requested
 
 const PANEL_SIZE := Vector2(1164, 660)
 const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
+const SECTION_BOTTOM_SAFE_GAP := 18.0
 const BAG_CAPACITY := 100
 const WAREHOUSE_PAGE_CAPACITY := 100
 const WAREHOUSE_PAGE_COUNT := 5
@@ -479,17 +480,18 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 
 
 func _section_panel(node_name: String, rect: Rect2) -> Panel:
+	var adjusted_rect := Rect2(rect.position + Vector2(0, -24), rect.size)
 	var surface := Panel.new()
 	surface.name = "%sSurface" % node_name
-	surface.position = rect.position + Vector2(8, 8)
-	surface.size = rect.size - Vector2(16, 16)
+	surface.position = adjusted_rect.position + Vector2(8, 8)
+	surface.size = adjusted_rect.size - Vector2(16, 16)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
 	add_child(surface)
 	var panel := Panel.new()
 	panel.name = node_name
-	panel.position = rect.position
-	panel.size = rect.size
+	panel.position = adjusted_rect.position
+	panel.size = adjusted_rect.size
 	panel.theme_type_variation = "GothicInsetFrame"
 	add_child(panel)
 	return panel
