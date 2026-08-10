@@ -10,7 +10,7 @@ signal closed
 
 const PANEL_SIZE := Vector2(1160, 650)
 const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
-const SECTION_BOTTOM_SAFE_GAP := 18.0
+const SECTION_VERTICAL_SHIFT := 24.0
 const MAP_CARD_SIZE := Vector2(226, 58)
 const WORLD_NODE_SIZE := Vector2(430, 50)
 const WORLD_TREE_BLUEPRINT := [
@@ -520,7 +520,7 @@ func _source_id_label(value: Variant) -> String:
 
 
 func _framed_section(node_name: String, rect: Rect2) -> Panel:
-	var adjusted_rect := Rect2(rect.position + Vector2(0, -24), rect.size)
+	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
 	var surface := Panel.new()
 	surface.name = "%sSurface" % node_name
 	surface.position = adjusted_rect.position + Vector2(8, 8)

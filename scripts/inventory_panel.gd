@@ -11,7 +11,7 @@ signal closed
 
 const PANEL_SIZE := Vector2(1220, 660)
 const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
-const SECTION_BOTTOM_SAFE_GAP := 18.0
+const SECTION_VERTICAL_SHIFT := 24.0
 const BAG_COLUMNS := 8
 const BAG_VISIBLE_CAPACITY := 40
 const BAG_CAPACITY := 100
@@ -826,7 +826,7 @@ func _value(value: Variant) -> String:
 func _section_panel(node_name: String, at: Vector2, panel_size: Vector2) -> Panel:
 	var panel := Panel.new()
 	panel.name = node_name
-	panel.position = at + Vector2(0, -24)
+	panel.position = at + Vector2(0, -SECTION_VERTICAL_SHIFT)
 	panel.size = panel_size
 	panel.theme_type_variation = "GothicInsetFrame"
 	var surface := Panel.new()
