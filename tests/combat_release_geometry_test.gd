@@ -252,6 +252,14 @@ func _verify_target_centered_spatial_cast_policies() -> void:
 			ReleaseGeometry.target_centered_spatial_policy_id(stable_skill_id)
 			== ReleaseGeometry.TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
 		)
+	assert(ReleaseGeometry.tracks_locked_target_for_skill(
+		"taoist.entrapment",
+		"ground_point_hostile_monster_area"
+	))
+	assert(
+		ReleaseGeometry.target_centered_spatial_policy_id("taoist.entrapment")
+		== ReleaseGeometry.TAOIST_ENTRAPMENT_RELEASE_TARGET_POLICY_ID
+	)
 
 	# A valid target identity survives the windup, while its position is sampled
 	# live at release. The old input direction must not become a ground fallback.

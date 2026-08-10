@@ -49,8 +49,17 @@ func _run() -> void:
 	var mana_orb := chassis.get_node("ManaOrb") as Control
 	assert(health_orb != null and mana_orb != null)
 	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
-	var ac_buff_icon := chassis.get_node("TaoistACBuffIcon") as TextureRect
-	var mac_buff_icon := chassis.get_node("TaoistMACBuffIcon") as TextureRect
+	var buff_strip := root.get_node("TaoistDefenseBuffStrip") as Control
+	assert(buff_strip != null)
+	assert(buff_strip.get_meta("stable_id") == GameHUD.TAOIST_BUFF_STRIP_STABLE_ID)
+	assert(buff_strip.get_meta("layout_policy") == "safe_root_above_bottom_chassis.v1")
+	assert(buff_strip.size == GameHUD.TAOIST_BUFF_STRIP_SIZE)
+	assert(is_equal_approx(
+		buff_strip.position.y + buff_strip.size.y,
+		chassis.position.y - GameHUD.TAOIST_BUFF_STRIP_CHASSIS_GAP
+	))
+	var ac_buff_icon := buff_strip.get_node("TaoistACBuffIcon") as TextureRect
+	var mac_buff_icon := buff_strip.get_node("TaoistMACBuffIcon") as TextureRect
 	assert(ac_buff_icon != null and mac_buff_icon != null)
 	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
 	assert(ac_buff_icon.size == Vector2(26, 26) and mac_buff_icon.size == Vector2(26, 26))
@@ -63,6 +72,7 @@ func _run() -> void:
 	assert(ac_buff_icon.texture.resource_path.ends_with("/defense.png"))
 	assert(mac_buff_icon.texture.resource_path.ends_with("/magic_defense.png"))
 	assert(not ac_buff_icon.get_rect().intersects(mac_buff_icon.get_rect()))
+	assert(not buff_strip.get_global_rect().intersects(chassis.get_global_rect()))
 	hud.update_taoist_buff_hints([], {
 		"ac_bonus": 5,
 		"ac_remaining_seconds": 7.2,

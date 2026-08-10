@@ -23,6 +23,13 @@ const ATTACK_FOOTPRINT_CONTRACT_ID := (
 )
 const STEALTH_STATE_CONTRACT_ID := "skills.summon_actor.stealth_state.v1"
 const BUFF_STATE_CONTRACT_ID := "skills.summon_actor.buff_state.v1"
+const SUSTAINED_FRAME_COST_CONTRACT_ID := (
+	"skills.summon.sustained_frame_cost.bounded.v1"
+)
+const VISUAL_FOOT_ANCHOR_CONTRACT_ID := (
+	"skills.summon.visual_foot_anchor_at_actor_origin.v1"
+)
+const TARGET_ACQUIRE_INTERVAL_SECONDS := 0.25
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 )
@@ -139,6 +146,11 @@ var _fire_visual_remaining := 0.0
 var _health_bar_y := -35.0
 var _visual_request_id := SummonVisualRegistryScript.REQUEST_UNKNOWN
 var _visual_request_attempts := 0
+var _target_acquire_remaining := 0.0
+var _target_scan_count := 0
+var _custom_draw_request_count := 0
+var _sprite_frame_apply_count := 0
+var _last_buff_draw_signature := Vector2i(-1, -1)
 
 ## Independent support-buff state: stealth, physical defence (AC) and magic
 ## defence (MAC) each keep their own timer and refresh independently.
@@ -343,7 +355,8 @@ func _ready() -> void:
 	collision.shape = shape
 	add_child(collision)
 	_install_visual()
-	queue_redraw()
+	_last_buff_draw_signature = _buff_draw_signature()
+	_request_visual_redraw()
 
 
 func _notification(what: int) -> void:
@@ -356,7 +369,7 @@ func _notification(what: int) -> void:
 func _process(delta: float) -> void:
 	_update_support_buff_timers(delta)
 	_update_stealth_visual()
-	queue_redraw()
+	_refresh_buff_redraw_if_needed()
 	_attack_visual_remaining = maxf(0.0, _attack_visual_remaining - delta)
 	_hit_visual_remaining = maxf(0.0, _hit_visual_remaining - delta)
 	_update_fire_visual(delta)
@@ -411,6 +424,10 @@ func _physics_process(delta: float) -> void:
 		actual_ground_motion_gu = Vector2.ZERO
 		return
 	_attack_timer = maxf(0.0, _attack_timer - delta)
+	_target_acquire_remaining = maxf(
+		0.0,
+		_target_acquire_remaining - delta
+	)
 	_update_pending_attack(delta)
 	remaining_lifetime = maxf(0.0, remaining_lifetime - delta)
 	if remaining_lifetime <= 0.0:
@@ -441,12 +458,18 @@ func _physics_process(delta: float) -> void:
 		)
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
-		queue_redraw()
 		return
-	if not is_instance_valid(_current_target) or _current_target.is_queued_for_deletion():
-		if state not in [SummonState.FOLLOW_OWNER, SummonState.RETURN_TO_OWNER]:
-			_set_state(SummonState.ACQUIRE_TARGET)
-		_current_target = _nearest_enemy()
+	if (
+		not is_instance_valid(_current_target)
+		or _current_target.is_queued_for_deletion()
+		or _current_target.current_hp <= 0
+	):
+		_current_target = null
+		if _target_acquire_remaining <= 0.0:
+			if state not in [SummonState.FOLLOW_OWNER, SummonState.RETURN_TO_OWNER]:
+				_set_state(SummonState.ACQUIRE_TARGET)
+			_current_target = _nearest_enemy()
+			_target_acquire_remaining = TARGET_ACQUIRE_INTERVAL_SECONDS
 	var enemy := _current_target
 	if (
 		enemy != null
@@ -455,6 +478,7 @@ func _physics_process(delta: float) -> void:
 		) > leash_range_gu
 	):
 		_current_target = null
+		_target_acquire_remaining = 0.0
 		enemy = null
 	if enemy != null:
 		var offset_screen_px := enemy.global_position - global_position
@@ -487,7 +511,6 @@ func _physics_process(delta: float) -> void:
 			global_position
 		)
 	)
-	queue_redraw()
 
 
 func _begin_attack(enemy: EnemyActor) -> void:
@@ -578,6 +601,7 @@ func _set_state(next_state: int) -> void:
 
 
 func _nearest_enemy() -> EnemyActor:
+	_target_scan_count += 1
 	var nearest: EnemyActor
 	var nearest_distance_gu := INF
 	var nearest_instance_id := 0
@@ -630,7 +654,7 @@ func gain_growth_from_kill(killed_monster_level: int) -> bool:
 	pet_growth_exp -= threshold
 	summon_exp_level = mini(maximum_pet_level, summon_exp_level + 1)
 	_apply_growth_stats_preserving_current_hp()
-	queue_redraw()
+	_request_visual_redraw()
 	return true
 
 
@@ -834,7 +858,7 @@ func _apply_resolved_damage(amount: int) -> void:
 		_hit_visual_remaining = _visual_action_duration("hit")
 		_visual_state = "hit"
 		_visual_elapsed = 0.0
-	queue_redraw()
+	_request_visual_redraw()
 
 
 func apply_stealth(seconds: float, buff_id := "buff.taoist.mass_invisibility") -> void:
@@ -938,6 +962,30 @@ func _update_support_buff_timers(delta: float) -> void:
 			clear_mac_buff()
 
 
+func _buff_draw_signature() -> Vector2i:
+	return Vector2i(
+		ceili(ac_buff_remaining_seconds)
+			if ac_buff_bonus > 0 and ac_buff_remaining_seconds > 0.0
+			else 0,
+		ceili(mac_buff_remaining_seconds)
+			if mac_buff_bonus > 0 and mac_buff_remaining_seconds > 0.0
+			else 0
+	)
+
+
+func _refresh_buff_redraw_if_needed() -> void:
+	var signature := _buff_draw_signature()
+	if signature == _last_buff_draw_signature:
+		return
+	_last_buff_draw_signature = signature
+	_request_visual_redraw()
+
+
+func _request_visual_redraw() -> void:
+	_custom_draw_request_count += 1
+	queue_redraw()
+
+
 func _update_stealth_visual() -> void:
 	## Only the summoned body/fire layers fade. The health bar and buff hints
 	## are drawn separately in _draw() and must stay readable.
@@ -1031,8 +1079,8 @@ func _poll_visual_activation() -> void:
 
 ## Synchronous activation is retained for deterministic test callers. The
 ## production _ready/_process path uses request_visual_resources() and
-## _poll_visual_activation(), so raw atlas decoding never blocks the main
-## thread and ImageTexture creation always happens on it.
+## _poll_visual_activation(), so imported textures use the registry's
+## bounded ResourceLoader threaded path.
 func activate_visual_resources() -> bool:
 	var profile := SummonVisualRegistryScript.profile(summon_id)
 	return _activate_profile(profile)
@@ -1044,8 +1092,10 @@ func _activate_profile(profile: Dictionary) -> bool:
 	_animation_resources = profile
 	var frame_size: Vector2i = profile.get("frame_size", Vector2i.ZERO)
 	var foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
-	var actor_ground_offset: Vector2i = profile.get("actor_ground_offset", Vector2i.ZERO)
-	_sprite.position = -Vector2(foot_anchor + actor_ground_offset)
+	## SummonActor.global_position is already the canonical gameplay footpoint.
+	## The authored atlas foot anchor therefore maps directly to local origin;
+	## applying the legacy actor-ground migration a second time made pets float.
+	_sprite.position = -Vector2(foot_anchor)
 	_health_bar_y = _sprite.position.y + float(profile.get("stable_body_top", 0)) - 7.0
 	_sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	if summon_id == "divine_beast" and profile.has("fire"):
@@ -1061,11 +1111,9 @@ func _activate_profile(profile: Dictionary) -> bool:
 		var fire_foot_anchor: Vector2i = profile.get(
 			"fire_foot_anchor", Vector2i.ZERO
 		)
-		var fire_ground_offset: Vector2i = profile.get(
-			"fire_actor_ground_offset", Vector2i.ZERO
-		)
-		_fire_sprite.position = -Vector2(fire_foot_anchor + fire_ground_offset)
+		_fire_sprite.position = -Vector2(fire_foot_anchor)
 	refresh_visual_after_activation()
+	_request_visual_redraw()
 	return true
 
 
@@ -1083,13 +1131,38 @@ func _apply_visual_frame() -> void:
 	if _animation_resources.is_empty() or _sprite == null:
 		return
 	var frame_size: Vector2i = _animation_resources.get("frame_size", Vector2i.ZERO)
-	_sprite.texture = _animation_resources.get(_visual_state, null)
-	_sprite.region_rect = Rect2(
+	var next_texture: Texture2D = _animation_resources.get(_visual_state, null)
+	var next_region := Rect2(
 		_visual_frame * frame_size.x,
 		_visual_direction * frame_size.y,
 		frame_size.x,
 		frame_size.y
 	)
+	if _sprite.texture == next_texture and _sprite.region_rect == next_region:
+		return
+	_sprite.texture = next_texture
+	_sprite.region_rect = next_region
+	_sprite_frame_apply_count += 1
+
+
+func performance_diagnostics() -> Dictionary:
+	return {
+		"contract_id": SUSTAINED_FRAME_COST_CONTRACT_ID,
+		"target_acquire_interval_seconds": TARGET_ACQUIRE_INTERVAL_SECONDS,
+		"target_scan_count": _target_scan_count,
+		"custom_draw_request_count": _custom_draw_request_count,
+		"sprite_frame_apply_count": _sprite_frame_apply_count,
+		"visual_request_active": SummonVisualRegistryScript.request_active(
+			_visual_request_id
+		),
+		"visual_foot_anchor_contract_id": VISUAL_FOOT_ANCHOR_CONTRACT_ID,
+	}
+
+
+func reset_performance_diagnostics_for_tests() -> void:
+	_target_scan_count = 0
+	_custom_draw_request_count = 0
+	_sprite_frame_apply_count = 0
 
 
 func _visual_action_duration(action_name: String) -> float:

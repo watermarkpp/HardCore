@@ -13,7 +13,7 @@ func _ready()->void:
 		"contract_id": "buff.taoist.red_poison.v1",
 		"expires_at_ms": Time.get_ticks_msec() + 5000,
 	})
-	assert(EnemyActor.POISON_INDICATOR_STYLE == "overhead_three_diamonds", "poison feedback regressed to a ground ring")
+	assert(EnemyActor.POISON_INDICATOR_STYLE == "overhead_green_red_dot_row", "poison feedback must be one green/red dot row")
 	var health_bar_rect := Rect2(
 		-enemy.overhead.bar_width * 0.5,
 		enemy.health_bar_anchor_y(),
@@ -22,9 +22,13 @@ func _ready()->void:
 	)
 	assert(enemy.poison_indicator_anchor_y() > health_bar_rect.end.y, "green poison must sit below the HP bar")
 	assert(enemy.red_poison_indicator_anchor_y() > health_bar_rect.end.y, "red poison must sit below the HP bar")
+	assert(is_equal_approx(enemy.poison_indicator_anchor_y(), enemy.red_poison_indicator_anchor_y()), "green/red poison dots must share one horizontal row")
+	assert(enemy.poison_indicator_center().x < enemy.red_poison_indicator_center().x)
+	assert(enemy.poison_indicator_rect().size == Vector2.ONE * EnemyActor.POISON_INDICATOR_DOT_RADIUS * 2.0)
+	assert(enemy.red_poison_indicator_rect().size == Vector2.ONE * EnemyActor.POISON_INDICATOR_DOT_RADIUS * 2.0)
 	assert(not enemy.poison_indicator_rect().intersects(health_bar_rect))
 	assert(not enemy.red_poison_indicator_rect().intersects(health_bar_rect))
-	assert(not enemy.poison_indicator_rect().intersects(enemy.red_poison_indicator_rect()))
+	assert(not enemy.poison_indicator_rect().intersects(enemy.red_poison_indicator_rect()), "the two single poison dots must stay distinct")
 	assert(enemy.poison_indicator_anchor_y() < enemy.ground_indicator_center().y - 24.0, "poison feedback regressed to a ground/portal ring")
 	var timing_enemy := EnemyActor.new()
 	timing_enemy.max_hp = 100

@@ -24,6 +24,16 @@ const GROUND_UNIT_SETUP_CONTRACT_ID := (
 const RELEASE_FOOTPRINT_CONTRACT_ID := (
 	"skills.projectile.release_swept_path.shared_snapshot.v1"
 )
+const SOUL_FIRE_TALISMAN_PRESENTATION_LAUNCH_ANCHOR_CONTRACT_ID := (
+	"skills.taoist.soul_fire_talisman.presentation_launch_anchor.v2"
+)
+## The player visual's current runtime hand markers sit around y=-38 with a
+## 13px horizontal reach.  Soul Fire uses the same actor-foot coordinate
+## system, with a small vertical allowance for forward/back directions so the
+## paper starts in front of the torso instead of beside the head.
+const SOUL_FIRE_TALISMAN_HAND_CENTER_PX := Vector2(0.0, -34.0)
+const SOUL_FIRE_TALISMAN_HAND_HORIZONTAL_REACH_PX := 12.0
+const SOUL_FIRE_TALISMAN_HAND_VERTICAL_REACH_PX := 6.0
 
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/fireball.png",
@@ -290,13 +300,13 @@ func _install_visual() -> void:
 	var desired_extent := maxf(1.0, float(render.get("fit_extent", 34.0)))
 	var presentation_overrides := {}
 	if skill_id == "taoist.soul_fire_talisman":
-		## The talisman source frames carry a hand-relative draw offset
-		## (source_draw_offset) rather than a top-left world anchor. Anchoring
-		## at the actor foot/hand and dropping the 24px direction muzzle lets
-		## the paper fly from the character's body along the target direction
-		## while gameplay release origin stays canonical.
+		## Magic.wil's source_draw_offset is the original effect draw coordinate,
+		## not a character hand socket. Treating it as hand-relative placed every
+		## direction around (+24,-46) before fit scaling: beside the head and too
+		## far from the body. Preserve the primary-client pixels but centre their
+		## sequence on an explicit actor-foot-relative presentation hand anchor.
 		presentation_overrides["anchor_policy"] = (
-			"source_draw_offset_from_actor_foot"
+			"center_sequence_bounds_on_geometry_origin"
 		)
 	var candidate := AnimationPlayerScript.new()
 	if not candidate.configure(
@@ -317,9 +327,33 @@ func _install_visual() -> void:
 	_sprite = candidate
 	add_child(_sprite)
 	_sprite.position = (
-		Vector2.ZERO
+		soul_fire_talisman_presentation_launch_anchor_px(
+			direction_screen_px
+		)
 		if skill_id == "taoist.soul_fire_talisman"
 		else visual_muzzle_offset_px
+	)
+
+
+static func soul_fire_talisman_presentation_launch_anchor_px(
+	cast_direction_screen_px: Vector2
+) -> Vector2:
+	## Presentation only. Projectile global_position, release snapshot origin,
+	## range, travel direction, speed and collision remain untouched.
+	var forward := (
+		cast_direction_screen_px.normalized()
+		if cast_direction_screen_px.length_squared() > 0.000001
+		else Vector2.DOWN
+	)
+	return Vector2(
+		roundf(
+			SOUL_FIRE_TALISMAN_HAND_CENTER_PX.x
+			+ forward.x * SOUL_FIRE_TALISMAN_HAND_HORIZONTAL_REACH_PX
+		),
+		roundf(
+			SOUL_FIRE_TALISMAN_HAND_CENTER_PX.y
+			+ forward.y * SOUL_FIRE_TALISMAN_HAND_VERTICAL_REACH_PX
+		)
 	)
 
 

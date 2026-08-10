@@ -20,6 +20,9 @@ const WILD_RUSH_RELEASE_TARGET_POLICY_ID := (
 const TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID := (
 	"gameplay.wizard.target_centered_spatial.release_live_footpoint.v1"
 )
+const TAOIST_ENTRAPMENT_RELEASE_TARGET_POLICY_ID := (
+	"gameplay.taoist.entrapment.release_locked_monster_footpoint.v1"
+)
 const FRIENDLY_IDENTITY_RELEASE_CONTRACT_ID := (
 	"gameplay.professions.friendly_identity_release.live_footpoint_gu.v1"
 )
@@ -70,6 +73,7 @@ static func tracks_locked_target_for_skill(
 	# silently degrading to the caster's facing point.
 	return (
 		stable_skill_id == "warrior.wild_rush"
+		or stable_skill_id == "taoist.entrapment"
 		or TARGET_CENTERED_SPATIAL_SKILL_IDS.has(stable_skill_id)
 		or CONTINUOUS_AIM_LINE_SKILL_IDS.has(stable_skill_id)
 		or tracks_locked_target(target_mode)
@@ -77,6 +81,8 @@ static func tracks_locked_target_for_skill(
 
 
 static func target_centered_spatial_policy_id(stable_skill_id: String) -> String:
+	if stable_skill_id == "taoist.entrapment":
+		return TAOIST_ENTRAPMENT_RELEASE_TARGET_POLICY_ID
 	if TARGET_CENTERED_SPATIAL_SKILL_IDS.has(stable_skill_id):
 		return TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
 	return ""

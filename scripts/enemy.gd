@@ -27,7 +27,9 @@ const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
 const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
-const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
+const POISON_INDICATOR_STYLE := "overhead_green_red_dot_row"
+const POISON_INDICATOR_DOT_RADIUS := 3.0
+const POISON_INDICATOR_DOT_CENTER_OFFSET_X := 5.0
 const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
 const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
@@ -1567,32 +1569,22 @@ func _draw() -> void:
 	if is_boss and _boss_phase_two:
 		draw_circle(Vector2(0, -5), radius_px + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
 	if poison_time > 0.0:
-		# Poison is an overhead three-diamond badge. It stays readable without
-		# creating a green ground ring that can be mistaken for a portal marker.
-		var poison_anchor := Vector2(-8.0, poison_indicator_anchor_y())
-		for index in range(3):
-			var center := poison_anchor + Vector2(float(index) * 8.0, 0.0 if index == 1 else 2.0)
-			draw_colored_polygon(PackedVector2Array([
-				center + Vector2(0, -3), center + Vector2(3, 0),
-				center + Vector2(0, 3), center + Vector2(-3, 0),
-			]), Color(0.36, 0.92, 0.28, 0.90))
-	if canonical_red_poison_active():
-		## Red poison (AC/MAC reduction) is shown as a second three-diamond
-		## badge directly under the green one so both states are clearly
-		## visible under the HP bar.
-		var red_anchor := Vector2(
-			-8.0,
-			red_poison_indicator_anchor_y()
+		# One compact green dot denotes the damage-over-time poison. Keeping it
+		# below the HP bar avoids both the former three-diamond cluster and any
+		# ground-ring/portal ambiguity.
+		draw_circle(
+			poison_indicator_center(),
+			POISON_INDICATOR_DOT_RADIUS,
+			Color(0.36, 0.92, 0.28, 0.90)
 		)
-		for index in range(3):
-			var center := red_anchor + Vector2(
-				float(index) * 8.0,
-				0.0 if index == 1 else 2.0
-			)
-			draw_colored_polygon(PackedVector2Array([
-				center + Vector2(0, -3), center + Vector2(3, 0),
-				center + Vector2(0, 3), center + Vector2(-3, 0),
-			]), Color(0.92, 0.16, 0.12, 0.95))
+	if canonical_red_poison_active():
+		# Red poison shares the same row and uses one dot of its own. The fixed
+		# center gap keeps both states distinct without forming a badge stack.
+		draw_circle(
+			red_poison_indicator_center(),
+			POISON_INDICATOR_DOT_RADIUS,
+			Color(0.92, 0.16, 0.12, 0.95)
+		)
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:
@@ -1709,15 +1701,31 @@ func poison_indicator_anchor_y() -> float:
 
 
 func red_poison_indicator_anchor_y() -> float:
-	return poison_indicator_anchor_y() + 10.0
+	return poison_indicator_anchor_y()
+
+
+func poison_indicator_center() -> Vector2:
+	return Vector2(-POISON_INDICATOR_DOT_CENTER_OFFSET_X, poison_indicator_anchor_y())
+
+
+func red_poison_indicator_center() -> Vector2:
+	return Vector2(POISON_INDICATOR_DOT_CENTER_OFFSET_X, red_poison_indicator_anchor_y())
 
 
 func poison_indicator_rect() -> Rect2:
-	return Rect2(-11.0, poison_indicator_anchor_y() - 3.0, 22.0, 8.0)
+	var center := poison_indicator_center()
+	return Rect2(
+		center - Vector2.ONE * POISON_INDICATOR_DOT_RADIUS,
+		Vector2.ONE * POISON_INDICATOR_DOT_RADIUS * 2.0
+	)
 
 
 func red_poison_indicator_rect() -> Rect2:
-	return Rect2(-11.0, red_poison_indicator_anchor_y() - 3.0, 22.0, 8.0)
+	var center := red_poison_indicator_center()
+	return Rect2(
+		center - Vector2.ONE * POISON_INDICATOR_DOT_RADIUS,
+		Vector2.ONE * POISON_INDICATOR_DOT_RADIUS * 2.0
+	)
 
 
 func ground_indicator_center() -> Vector2:

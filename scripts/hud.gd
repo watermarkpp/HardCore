@@ -24,6 +24,9 @@ const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoi
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
+const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
+const TAOIST_BUFF_STRIP_CHASSIS_GAP := 6.0
+const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
@@ -134,6 +137,7 @@ var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
 var taoist_buff_hint_label: Label
+var taoist_buff_icon_strip: Control
 var taoist_ac_buff_icon: TextureRect
 var taoist_ac_buff_seconds: Label
 var taoist_mac_buff_icon: TextureRect
@@ -376,20 +380,48 @@ func _build_bottom_chassis(root: Control) -> void:
 	health_orb.liquid_color = Color("a51422")
 	chassis_root.add_child(health_orb)
 
+	taoist_buff_icon_strip = Control.new()
+	taoist_buff_icon_strip.name = "TaoistDefenseBuffStrip"
+	taoist_buff_icon_strip.anchor_left = 0.5
+	taoist_buff_icon_strip.anchor_top = 1.0
+	taoist_buff_icon_strip.anchor_right = 0.5
+	taoist_buff_icon_strip.anchor_bottom = 1.0
+	var health_orb_center_from_safe_center := (
+		-HUD_CHASSIS_SIZE.x * 0.5
+		+ health_orb.position.x
+		+ health_orb.size.x * 0.5
+	)
+	taoist_buff_icon_strip.offset_left = (
+		health_orb_center_from_safe_center - TAOIST_BUFF_STRIP_SIZE.x * 0.5
+	)
+	taoist_buff_icon_strip.offset_right = (
+		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
+	)
+	taoist_buff_icon_strip.offset_bottom = -(
+		HUD_CHASSIS_SIZE.y + TAOIST_BUFF_STRIP_CHASSIS_GAP
+	)
+	taoist_buff_icon_strip.offset_top = (
+		taoist_buff_icon_strip.offset_bottom - TAOIST_BUFF_STRIP_SIZE.y
+	)
+	taoist_buff_icon_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	taoist_buff_icon_strip.set_meta("stable_id", TAOIST_BUFF_STRIP_STABLE_ID)
+	taoist_buff_icon_strip.set_meta("layout_policy", "safe_root_above_bottom_chassis.v1")
+	root.add_child(taoist_buff_icon_strip)
+
 	taoist_ac_buff_icon = _build_taoist_defence_buff_icon(
-		chassis_root,
+		taoist_buff_icon_strip,
 		"TaoistACBuffIcon",
 		"hud.taoist_buff.ac",
 		TaoistDefenseBuffTexture,
-		health_orb.position + Vector2(26, -28)
+		Vector2.ZERO
 	)
 	taoist_ac_buff_seconds = taoist_ac_buff_icon.get_node("Seconds") as Label
 	taoist_mac_buff_icon = _build_taoist_defence_buff_icon(
-		chassis_root,
+		taoist_buff_icon_strip,
 		"TaoistMACBuffIcon",
 		"hud.taoist_buff.mac",
 		TaoistMagicDefenseBuffTexture,
-		health_orb.position + Vector2(58, -28)
+		Vector2(TAOIST_BUFF_ICON_SIZE.x + 6.0, 0.0)
 	)
 	taoist_mac_buff_seconds = taoist_mac_buff_icon.get_node("Seconds") as Label
 

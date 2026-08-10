@@ -75,6 +75,7 @@ func _run() -> void:
 		diagnostics.main_thread_blocking_load_count == 0,
 		"threaded completion must not hide a blocking main-thread load"
 	)
+	_verify_sustained_frame_cost_and_foot_anchor(summon)
 
 	## Warm cache: a second summon installs immediately with no new request and
 	## no raw decode.
@@ -101,9 +102,10 @@ func _run() -> void:
 	assert(diagnostics.max_resources_finalized_in_one_poll == 1)
 	assert(diagnostics.main_thread_blocking_load_count == 0)
 	assert(divine_beast._animation_resources.has("fire"))
+	_verify_divine_beast_foot_anchors(divine_beast)
 
 	## Failure path: a finished-but-failed request becomes terminal; further
-	## requests return REQUEST_FAILED without spawning new Threads, so the
+	## requests return REQUEST_FAILED without issuing new ResourceLoader jobs, so the
 	## request counter stays flat while the summon lives.
 	SummonVisualRegistryScript.clear_cache_for_tests()
 	var failed_request := SummonVisualRegistryScript.request_profile("skeleton")
@@ -202,3 +204,58 @@ func _wait_for_visual_ready(summon: SummonActor) -> void:
 		summon._process(0.26)
 		await get_tree().process_frame
 	assert(false, "summon visual never became ready")
+
+
+func _verify_sustained_frame_cost_and_foot_anchor(summon: SummonActor) -> void:
+	var profile: Dictionary = summon._animation_resources
+	var authored_foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
+	var legacy_ground_offset: Vector2i = profile.get(
+		"actor_ground_offset",
+		Vector2i.ZERO
+	)
+	assert(authored_foot_anchor != Vector2i.ZERO)
+	assert(
+		summon._sprite.position + Vector2(authored_foot_anchor) == Vector2.ZERO,
+		"authored summon foot anchor must land exactly on actor gameplay origin"
+	)
+	assert(
+		summon._sprite.position
+			!= -Vector2(authored_foot_anchor + legacy_ground_offset),
+		"canonical summon footpoint must not receive legacy actor offset twice"
+	)
+
+	summon.reset_performance_diagnostics_for_tests()
+	for frame_index: int in range(120):
+		summon._process(1.0 / 60.0)
+		summon._physics_process(1.0 / 60.0)
+	var performance := summon.performance_diagnostics()
+	assert(
+		performance.contract_id
+			== "skills.summon.sustained_frame_cost.bounded.v1"
+	)
+	assert(
+		performance.visual_foot_anchor_contract_id
+			== "skills.summon.visual_foot_anchor_at_actor_origin.v1"
+	)
+	assert(
+		int(performance.target_scan_count) <= 9,
+		"two idle seconds must not scan the complete enemy group every physics frame"
+	)
+	assert(
+		int(performance.custom_draw_request_count) == 0,
+		"unchanged idle summon must not rebuild custom draw commands every frame"
+	)
+	assert(
+		int(performance.sprite_frame_apply_count) <= 12,
+		"idle atlas region must update at authored frame cadence, not every frame"
+	)
+	assert(not bool(performance.visual_request_active))
+
+
+func _verify_divine_beast_foot_anchors(summon: SummonActor) -> void:
+	var profile: Dictionary = summon._animation_resources
+	var body_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
+	var fire_anchor: Vector2i = profile.get("fire_foot_anchor", Vector2i.ZERO)
+	assert(body_anchor != Vector2i.ZERO and fire_anchor != Vector2i.ZERO)
+	assert(summon._sprite.position + Vector2(body_anchor) == Vector2.ZERO)
+	assert(summon._fire_sprite.position + Vector2(fire_anchor) == Vector2.ZERO)

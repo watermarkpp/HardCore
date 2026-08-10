@@ -48,6 +48,7 @@ func _run() -> void:
 	_test_attack_button_bound_spell_uses_same_lifecycle(game, near_target)
 	_test_magic_shield_toggle_and_auto_refresh(game)
 	_test_projectile_exact_gu_range(game)
+	await _test_taoist_entrapment_retains_locked_monster(game, origin_tile)
 
 	game.queue_free()
 	await get_tree().process_frame
@@ -496,6 +497,45 @@ func _test_projectile_exact_gu_range(game: Node) -> void:
 	assert(projectile != null)
 	assert(is_equal_approx(projectile.max_travel_distance_gu, expected_range))
 	projectile.queue_free()
+
+
+func _test_taoist_entrapment_retains_locked_monster(
+	game: Node,
+	origin_tile: Vector2
+) -> void:
+	PlayerState.profession = "道士"
+	PlayerState.level = 50
+	PlayerState.learned_skills = {"困魔咒": 3}
+	PlayerState.recalculate_stats()
+	game.player.max_mp = 999
+	game.player.current_mp = 999
+	for monster_name: String in ["钉耙猫", "森林雪人", "毒蜘蛛"]:
+		_reset_cast_gate(game)
+		var target := _make_enemy(
+			game,
+			origin_tile + Vector2(2, 0),
+			monster_name
+		)
+		target.control_time = 0.0
+		game._set_magic_locked_target(target, true)
+		var mana_before: int = game.player.current_mp
+		assert(
+			game._try_release_skill("困魔咒", false) == &"accepted",
+			"%s entrapment input was rejected before the body action" % monster_name
+		)
+		await get_tree().create_timer(0.65).timeout
+		assert(
+			target.control_time > 0.0,
+			"%s lost its locked identity during the 600 ms entrapment windup"
+			% monster_name
+		)
+		assert(
+			game.player.current_mp < mana_before,
+			"successful entrapment did not commit MP for %s" % monster_name
+		)
+		game._set_magic_locked_target(null, false)
+		target.queue_free()
+		await get_tree().process_frame
 
 
 func _reset_cast_gate(game: Node) -> void:
