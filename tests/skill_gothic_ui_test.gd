@@ -52,6 +52,9 @@ func _run() -> void:
 	assert(panel.assignment_buttons.size() == 7)
 	assert(panel.assignment_popup_buttons.size() == 7)
 	assert(panel.attack_assignment_buttons[0].get_meta("stable_slot_id", "") == "hud.attack.primary")
+	assert(panel.get_node("AssignmentPanel/AttackSlotTitle").text != "")
+	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").text == "空")
+	assert(panel.get_node("AssignmentPanel/SkillListPanelSurface").get_theme_stylebox("panel").bg_color != Color.BLACK)
 	for index in range(6):
 		assert(
 			panel.attack_ring_assignment_buttons[index].get_meta("stable_slot_id", "")
@@ -66,14 +69,14 @@ func _run() -> void:
 	assert(basic_index >= 0, "基本剑术没有保留在技能列表")
 	panel._on_skill_selected(basic_index)
 	assert(panel.skill_buttons[basic_index].get_meta("assignment_eligible", true) == false)
-	assert(panel.assign_button.disabled and panel.assign_button.text == "被动技能仅展示")
+	assert(panel.find_child("AssignButton", true, false) == null)
 	panel._open_assignment_popup_for(basic_index)
 	assert(not panel.assignment_popup.visible, "被动技能错误进入技能绑定弹窗")
 
 	var thrusting_index := _skill_index(panel, "刺杀剑术")
 	assert(thrusting_index >= 0)
 	panel._on_skill_selected(thrusting_index)
-	assert(not panel.assign_button.disabled)
+	assert(panel.find_child("AssignmentPanel", true, false) != null)
 	panel._open_assignment_popup_for(thrusting_index)
 	assert(panel.assignment_popup.visible)
 	assert(panel.assignment_popup.get_meta("skill_id", "") == "warrior.thrusting")

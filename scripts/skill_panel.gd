@@ -82,6 +82,13 @@ func _build_modal_surface() -> void:
 	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
+	var surface_style := StyleBoxFlat.new()
+	surface_style.bg_color = Color("28231f")
+	surface_style.corner_radius_top_left = 12
+	surface_style.corner_radius_top_right = 12
+	surface_style.corner_radius_bottom_left = 12
+	surface_style.corner_radius_bottom_right = 12
+	surface.add_theme_stylebox_override("panel", surface_style)
 	add_child(surface)
 
 
@@ -244,7 +251,10 @@ func _build_assignment_section() -> void:
 	assignment_buttons.append(attack_slot)
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
+	clear_attack.text = "空"
+	clear_attack.add_theme_font_size_override("font_size", 24)
 	clear_attack.text = "恢复\n普通攻击"
+	clear_attack.text = "空"
 	clear_attack.position = Vector2(252, 80)
 	clear_attack.size = Vector2(104, 82)
 	clear_attack.theme_type_variation = "GothicComponentButton"
@@ -256,7 +266,7 @@ func _build_assignment_section() -> void:
 	ring_title.name = "AttackRingSlotsTitle"
 	ring_title.text = "攻击环技能槽 1–6"
 	ring_title.position = Vector2(22, 176)
-	ring_title.size = Vector2(290, 26)
+	ring_title.size = Vector2(330, 26)
 	ring_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ring_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ring_title.theme_type_variation = "GothicMutedLabel"
@@ -559,7 +569,7 @@ func _show_skill_detail(index: int) -> void:
 	learn_button.disabled = learned
 	learn_button.text = "已学习" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
 	# Assignment is intentionally available only in the right-hand panel.
-	learn_button.visible = not learned
+	learn_button.visible = not learned and PlayerState.has_item(skill_name)
 
 
 func _clear_skill_detail() -> void:
@@ -568,7 +578,7 @@ func _clear_skill_detail() -> void:
 	detail_label.text = "[color=#a99479]从左侧选择技能查看完整资料。[/color]"
 	description_label.text = ""
 	learn_button.disabled = true
-	learn_button.visible = true
+	learn_button.visible = false
 
 
 func _refresh_assignment_slots() -> void:
@@ -900,6 +910,13 @@ func _section_panel(node_name: String, rect: Rect2) -> Panel:
 	surface.size = adjusted_rect.size - Vector2(16, 16)
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
+	var section_style := StyleBoxFlat.new()
+	section_style.bg_color = Color("28231f")
+	section_style.corner_radius_top_left = 10
+	section_style.corner_radius_top_right = 10
+	section_style.corner_radius_bottom_left = 10
+	section_style.corner_radius_bottom_right = 10
+	surface.add_theme_stylebox_override("panel", section_style)
 	add_child(surface)
 	var panel := Panel.new()
 	panel.name = node_name

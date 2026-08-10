@@ -612,13 +612,13 @@ func _anchor_warrior_state_label(root: Control) -> void:
 	var chassis_global := chassis_root.get_global_rect()
 	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
 	var label_width := minf(500.0, chassis_global.size.x)
-	warrior_state_label.position.x = (root_inverse * chassis_global.get_center()).x
-	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
+	warrior_state_label.position.x = roundf((root_inverse * chassis_global.get_center()).x - label_width * 0.5)
 	warrior_state_label.size.x = label_width
 	warrior_state_label.size.y = 28.0
 	var peak_local := root_inverse * Vector2(chassis_global.position.x, peak_global_y)
 	warrior_state_label.position.y = peak_local.y - warrior_state_label.size.y - HUD_CHASSIS_STATE_LABEL_GAP
 	warrior_state_label.set_meta("layout_anchor", "chassis_source_center_peak.v1")
+	warrior_state_label.set_meta("stable_id", "hud.warrior_state_label.centered.v2")
 	warrior_state_label.set_meta("layout_gap", HUD_CHASSIS_STATE_LABEL_GAP)
 
 
