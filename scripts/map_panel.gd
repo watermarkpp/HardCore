@@ -156,7 +156,7 @@ func _build_map_list_section() -> void:
 	scroll.add_child(map_list_container)
 	count_label = Label.new()
 	count_label.name = "CountLabel"
-	count_label.position = Vector2(18, 488)
+	count_label.position = Vector2(18, 500)
 	count_label.size = Vector2(234, 24)
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

@@ -200,7 +200,7 @@ func _build_equipment_panel() -> void:
 	# avoids another paper-doll re-layout when those stable equipment slots land.
 	var future_row := Control.new()
 	future_row.name = "FutureEquipmentRow"
-	future_row.position = Vector2(12, 432)
+	future_row.position = Vector2(12, 444)
 	future_row.size = Vector2(366, 102)
 	future_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	future_row.set_meta("reserved_slots", ["勋章", "腰带", "鞋子"])
