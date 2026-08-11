@@ -238,6 +238,7 @@ var _pending_melee_diagnostic: Dictionary = {}
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
 var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
+var _death_experience_penalty_applied := false
 var _world_bootstrap_coordinator := WorldBootstrapCoordinator.new()
 var _gameplay_input_locks: Dictionary = {}
 
@@ -2979,6 +2980,12 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 func _on_player_death_requested() -> void:
 	if not gameplay_input_is_enabled(): return
+	# player.gd emits this only after the automatic-revival branch has failed,
+	# making it the formal-death boundary.  Guard retries during travel and
+	# revival failure so one lifecycle can never deduct twice.
+	if not _death_experience_penalty_applied:
+		PlayerState.apply_death_experience_penalty()
+		_death_experience_penalty_applied = true
 	_cancel_all_combat_targets()
 	_magic_shield_auto_enabled = false
 	if is_instance_valid(hud):
@@ -3007,6 +3014,7 @@ func _finish_death_revival() -> void:
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
 	PlayerState.save_game()
+	_death_experience_penalty_applied = false
 	if hud != null:
 		hud.show_message("你已在最近的城镇复活", 2.0)
 

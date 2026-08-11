@@ -57,6 +57,7 @@ const ATTACK_RING_SKILL_SLOT_COUNT := 6
 const QUICK_ITEM_SLOTS_CONTRACT_ID := "gameplay.item.quick_slots.v1"
 const QUICK_ITEM_SLOT_COUNT := 4
 const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
+const DEATH_EXPERIENCE_PENALTY_CONTRACT_ID := "player_state.death_experience_penalty.v1"
 const SHOP_SELL_CONTRACT_ID := "gameplay.shop.sell_authority.v1"
 const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
 const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
@@ -649,6 +650,22 @@ func add_experience(amount: int) -> void:
 		recalculate_stats()
 	profile_changed.emit()
 	_commit_save()
+
+
+## Applies the formal-death experience penalty exactly as a level-local
+## experience mutation.  Experience is the current level's progress (see
+## add_experience), so no level or threshold is changed here.  floor() gives
+## deterministic integer behaviour for 0/1/9/10/101 and the clamp prevents
+## negative values.  The caller must invoke this once per formal death.
+func apply_death_experience_penalty() -> int:
+	var current_experience := maxi(0, int(experience))
+	var lost := mini(current_experience, int(floor(float(current_experience) * 0.10)))
+	if lost <= 0:
+		return 0
+	experience = current_experience - lost
+	profile_changed.emit()
+	_commit_save()
+	return lost
 
 
 func experience_to_next_level() -> int:
