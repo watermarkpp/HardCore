@@ -1,8 +1,10 @@
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const EquipmentCharacterPreviewScript := preload("res://scripts/equipment_character_preview.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal character_creation_requested(request: Dictionary)
 signal character_launch_requested(request: Dictionary)
@@ -14,6 +16,7 @@ const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
 const FIXED_CHARACTER_GENDER := "男"
 const ROSTER_DRAG_THRESHOLD := 12.0
 const ROSTER_PRESS_SUPPRESSION_MSEC := 220
+const AI_TEAMMATE_AVAILABLE := false
 const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
 const PROFESSION_PRESENTATION := {
 	"战士": {
@@ -78,6 +81,7 @@ func _ready() -> void:
 	_build_creation_panel()
 	_refresh_profiles()
 	TouchScrollSupportScript.attach_tree(self)
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
 
 
 func _input(event: InputEvent) -> void:
@@ -259,6 +263,7 @@ func _build_roster_panel() -> void:
 	ai_teammate_toggle.position = Vector2(26, 448)
 	ai_teammate_toggle.size = Vector2(274, 48)
 	ai_teammate_toggle.theme_type_variation = "GothicContentToggle"
+	ai_teammate_toggle.disabled = not AI_TEAMMATE_AVAILABLE
 	ai_teammate_toggle.set_meta("stable_id", "character.ai_teammate.enabled")
 	ai_teammate_toggle.toggled.connect(_set_ai_teammate_enabled)
 	panel.add_child(ai_teammate_toggle)
@@ -398,6 +403,8 @@ func _build_creation_panel() -> void:
 
 
 func _refresh_profiles() -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	for child in list_box.get_children():
 		child.free()
 	profile_cards.clear()
@@ -467,6 +474,8 @@ func _add_profile_card(profile: Dictionary) -> void:
 
 
 func _refresh_selection_state() -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	for profile_id: String in profile_cards:
 		var entry: Dictionary = profile_cards[profile_id]
 		var main_button: Button = entry.main_button
@@ -476,22 +485,12 @@ func _refresh_selection_state() -> void:
 			if profile_id == selected_main_profile_id
 			else "GothicComponentButton"
 		)
-		var is_ai := profile_id == selected_ai_profile_id
-		ai_button.disabled = not ai_teammate_enabled or profile_id == selected_main_profile_id
-		ai_button.theme_type_variation = "GothicComponentSelectedButton" if is_ai else "GothicComponentButton"
-		ai_button.text = "AI队友\n已选择" if is_ai else "设为\nAI队友"
-	ai_teammate_toggle.set_pressed_no_signal(ai_teammate_enabled)
-	var ai_profile := _profile_by_id(selected_ai_profile_id)
-	if not ai_teammate_enabled:
-		teammate_status_label.text = "AI 队友：关闭"
-	elif ai_profile.is_empty():
-		teammate_status_label.text = "AI 队友：未选择\n请从其他角色中选择"
-	else:
-		teammate_status_label.text = "AI 队友：%s · Lv.%d %s" % [
-			ai_profile.get("name", "未命名"),
-			int(ai_profile.get("level", 1)),
-			ai_profile.get("profession", "战士"),
-		]
+		ai_button.disabled = true
+		ai_button.theme_type_variation = "GothicComponentButton"
+		ai_button.text = "AI队友\n暂未开放"
+	ai_teammate_toggle.disabled = true
+	ai_teammate_toggle.set_pressed_no_signal(false)
+	teammate_status_label.text = "AI队友功能暂未开放"
 	enter_button.disabled = selected_main_profile_id.is_empty()
 	enter_button.text = "选择主角色" if enter_button.disabled else "进入 HardCore"
 	_refresh_character_preview()
@@ -569,17 +568,14 @@ func _select_main_profile(profile_id: String) -> void:
 
 
 func _select_ai_profile(profile_id: String) -> void:
-	if not _profile_exists(profile_id) or profile_id == selected_main_profile_id:
-		return
-	ai_teammate_enabled = true
-	selected_ai_profile_id = "" if selected_ai_profile_id == profile_id else profile_id
-	message_label.text = ""
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	_refresh_selection_state()
 
 
 func _set_ai_teammate_enabled(enabled: bool) -> void:
-	ai_teammate_enabled = enabled
-	message_label.text = ""
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	_refresh_selection_state()
 
 
@@ -628,6 +624,8 @@ func build_creation_request() -> Dictionary:
 		"profession_id": ProfessionRules.profession_id(selected_creation_profession),
 		"profession_name": selected_creation_profession,
 		"gender": FIXED_CHARACTER_GENDER,
+		"ai_teammate_enabled": false,
+		"ai_teammate_profile_id": "",
 	}
 
 
@@ -648,15 +646,12 @@ func _enter_selected_character() -> void:
 
 
 func build_launch_request() -> Dictionary:
-	var teammate_id := selected_ai_profile_id if ai_teammate_enabled else ""
-	if teammate_id == selected_main_profile_id or not _profile_exists(teammate_id):
-		teammate_id = ""
 	return {
 		"contract_id": LAUNCH_CONTRACT_ID,
 		"main_profile_id": selected_main_profile_id,
-		"ai_teammate_enabled": ai_teammate_enabled and not teammate_id.is_empty(),
-		"ai_teammate_profile_id": teammate_id,
-		"ai_control_mode": "companion_ai" if not teammate_id.is_empty() else "disabled",
+		"ai_teammate_enabled": false,
+		"ai_teammate_profile_id": "",
+		"ai_control_mode": "disabled",
 	}
 
 
@@ -675,21 +670,8 @@ func _safe_node_name(value: String) -> String:
 	return value.replace(".", "_").replace("-", "_").replace(" ", "_")
 
 
-func _section_panel(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	content_root.add_child(surface)
-	var panel := Panel.new()
-	panel.name = node_name
-	panel.position = rect.position
-	panel.size = rect.size
-	panel.theme_type_variation = "GothicInsetFrame"
-	content_root.add_child(panel)
-	return panel
+func _section_panel(node_name: String, rect: Rect2) -> Control:
+	return GothicFrameFactoryScript.add_filled_section(content_root, node_name, rect)
 
 
 func _section_title(text_value: String, width: float) -> Label:

@@ -2,7 +2,9 @@ class_name QuestPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal closed
 signal abandon_requested(quest_id: String)
@@ -42,24 +44,19 @@ func _ready() -> void:
 	_build_header()
 	_build_quest_list()
 	_build_quest_detail()
+	GothicFrameFactoryScript.seal_modal_rings(self)
 	PlayerState.quests_changed.connect(refresh)
 	refresh()
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(984, 590)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(282, 4)
+	title_frame.position = Vector2(282, 10)
 	title_frame.size = Vector2(456, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -171,6 +168,7 @@ func _build_quest_detail() -> void:
 	rewards_panel.position = Vector2(28, 356)
 	rewards_panel.size = Vector2(576, 72)
 	rewards_panel.theme_type_variation = "GothicInfoPanel"
+	rewards_panel.set_meta("calibration_layer", "quest_rewards_panel")
 	panel.add_child(rewards_panel)
 	var rewards_title := Label.new()
 	rewards_title.name = "RewardsTitle"
@@ -246,10 +244,12 @@ func refresh() -> void:
 	current_quest_id = _selected_quest_id
 	_rebuild_quest_cards(active_quest_id)
 	_refresh_selected_quest(active_quest_id)
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
 
 
 func _rebuild_quest_cards(active_quest_id: String) -> void:
 	for child: Node in quest_list.get_children():
+		quest_list.remove_child(child)
 		child.queue_free()
 	quest_buttons.clear()
 	var quests := GameData.get_bich_quests()
@@ -455,21 +455,8 @@ func apply_abandon_result(result: Dictionary) -> void:
 		abandon_button.disabled = false
 
 
-func _framed_section(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var frame := Panel.new()
-	frame.name = node_name
-	frame.position = rect.position
-	frame.size = rect.size
-	frame.theme_type_variation = "GothicInsetFrame"
-	add_child(frame)
-	return frame
+func _framed_section(node_name: String, rect: Rect2) -> Control:
+	return GothicFrameFactoryScript.add_filled_section(self, node_name, rect)
 
 
 func _section_title(text_value: String, section_width: float) -> Label:

@@ -63,7 +63,7 @@ const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
 const WAREHOUSE_CAPACITY := 500
 const SHOP_SELL_PRICE_DIVISOR := 2
 const SHOP_SELL_HIGH_VALUE_PRICE := 10000
-const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
+const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
 	10: 6000, 11: 8000, 12: 10000, 13: 15000, 14: 30000, 15: 40000, 16: 50000,
@@ -81,7 +81,7 @@ var inventory: Array = []
 var warehouse_inventory: Array = []
 var equipment: Dictionary = {
 	"武器": {}, "衣服": {}, "头盔": {}, "项链": {},
-	"左手镯": {}, "右手镯": {}, "左戒指": {}, "右戒指": {},
+	"左手镯": {}, "右手镯": {}, "左戒指": {}, "右戒指": {}, "圣物": {}, "徽章": {},
 }
 var learned_skills: Dictionary = {}
 var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
@@ -319,6 +319,66 @@ func remove_item(item_name: String, amount := 1) -> bool:
 	return true
 
 
+func destroy_inventory_indices(indices: Array) -> Dictionary:
+	var targets: Array[int] = []
+	for raw_index: Variant in indices:
+		var index := int(raw_index)
+		if index < 0 or index >= inventory.size() or index in targets:
+			return {"success": false, "destroyed": 0, "reason": "invalid_inventory_index"}
+		targets.append(index)
+	if targets.is_empty():
+		return {"success": true, "destroyed": 0, "reason": "empty_selection"}
+	targets.sort()
+	for offset in range(targets.size() - 1, -1, -1):
+		inventory.remove_at(targets[offset])
+	inventory_changed.emit()
+	profile_changed.emit()
+	_commit_save()
+	return {"success": true, "destroyed": targets.size(), "reason": ""}
+
+
+func sort_inventory_deterministic() -> Dictionary:
+	var decorated: Array = []
+	for index in range(inventory.size()):
+		var record: Variant = inventory[index]
+		if record is Dictionary:
+			var item := GameData.get_item_record(str(record.get("name", "")))
+			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
+		else:
+			decorated.append({"record": record, "index": index, "key": "!opaque|%08d" % index})
+	decorated.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["key"]) < str(b["key"]))
+	var sorted_inventory: Array = []
+	for entry: Dictionary in decorated:
+		var record: Variant = entry["record"]
+		if record is Dictionary and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary and _inventory_records_mergeable(sorted_inventory.back(), record) and sorted_inventory.back().get("name", "") == record.get("name", ""):
+			sorted_inventory.back()["count"] = int(sorted_inventory.back().get("count", 1)) + int(record.get("count", 1))
+		else:
+			sorted_inventory.append(record)
+	var changed := sorted_inventory != inventory
+	if changed:
+		inventory = sorted_inventory
+		inventory_changed.emit()
+		profile_changed.emit()
+		_commit_save()
+	return {"success": true, "changed": changed, "count": inventory.size()}
+
+
+func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
+	for key: Variant in a.keys():
+		if str(key) not in ["name", "count"]:
+			return false
+	for key: Variant in b.keys():
+		if str(key) not in ["name", "count"]:
+			return false
+	var item := GameData.get_item_record(str(a.get("name", "")))
+	if str(a.get("name", "")) != str(b.get("name", "")) or not bool(item.get("stackable", false)) or str(item.get("kind", "")) == "equipment":
+		return false
+	for key: String in ["instance_id", "durability", "max_durability", "modifiers", "random_stats", "bind", "bound"]:
+		if a.has(key) or b.has(key):
+			return false
+	return true
+
+
 func shop_sell_quotes(items: Array) -> Dictionary:
 	var quotes: Dictionary = {}
 	for raw_item: Variant in items:
@@ -360,6 +420,8 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 	var inventory_before := inventory.duplicate(true)
 	var gold_before := gold
 	var current_count := maxi(1, int((record as Dictionary).get("count", 1)))
+	if amount > current_count:
+		return _shop_sell_result(false, "出售数量超过当前背包库存。")
 	if amount >= current_count:
 		inventory.remove_at(inventory_index)
 	else:
@@ -1317,6 +1379,8 @@ func _slots_for_category(category: String) -> Array[String]:
 		"项链": return ["项链"]
 		"手镯": return ["左手镯", "右手镯"]
 		"戒指": return ["左戒指", "右戒指"]
+		"圣物": return ["圣物"]
+		"徽章": return ["徽章"]
 		_: return []
 
 

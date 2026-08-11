@@ -133,7 +133,6 @@ var inventory_panel: InventoryPanel
 var shop_panel: ShopPanel
 var skill_panel: SkillPanel
 var quest_panel: QuestPanel
-var profession_panel: ProfessionPanel
 var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
 var death_revival_panel
@@ -1384,14 +1383,6 @@ func _ensure_quest_panel() -> void:
 	add_child(quest_panel)
 
 
-func _ensure_profession_panel() -> void:
-	if is_instance_valid(profession_panel):
-		return
-	profession_panel = ProfessionPanel.new()
-	profession_panel.hide()
-	add_child(profession_panel)
-
-
 func _ensure_map_panel() -> void:
 	if is_instance_valid(map_panel):
 		return
@@ -1719,16 +1710,6 @@ func _toggle_inventory() -> void:
 		inventory_panel.show()
 
 
-func _toggle_profession() -> void:
-	_ensure_profession_panel()
-	if profession_panel.visible:
-		profession_panel.hide()
-	else:
-		_close_modal_panels()
-		profession_panel.refresh()
-		profession_panel.show()
-
-
 func _toggle_map_panel() -> void:
 	_ensure_map_panel()
 	if map_panel.visible:
@@ -2033,8 +2014,6 @@ func _close_modal_panels() -> void:
 		skill_panel.hide()
 	if quest_panel != null:
 		quest_panel.hide()
-	if profession_panel != null:
-		profession_panel.hide()
 	if map_panel != null:
 		map_panel.hide()
 	if warehouse_panel != null:

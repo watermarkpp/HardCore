@@ -4,8 +4,10 @@ extends Panel
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PreviewScript = preload("res://scripts/equipment_character_preview.gd")
 const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript = preload("res://scripts/gothic_frame_factory.gd")
 const UIItemTextureCacheScript = preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript = preload("res://scripts/touch_scroll_support.gd")
+const UIRuntimeLayoutOverridesScript = preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal closed
 
@@ -28,10 +30,14 @@ var character_preview: Control
 var equipment_buttons: Dictionary = {}
 var equipment_slot_labels: Dictionary = {}
 var selected_inventory_index := -1
+var selected_inventory_indices: Dictionary = {}
 var selected_equipment_slot := ""
+var _suppress_next_pressed_index := -1
+var auto_sort_button: Button
+var discard_button: Button
 
 # Compatibility mirrors retained for save/UI regression tests. The user-facing
-# interface uses the eight direct slots and the long-press menu.
+# interface uses the ten direct slots and the long-press menu.
 var equipment_label: Label
 var equipment_slot_picker: OptionButton
 var action_button: Button
@@ -72,6 +78,7 @@ func _ready() -> void:
 	_build_equipment_panel()
 	_build_bag_panel()
 	_build_context_menu()
+	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_panel_data_changed)
 	PlayerState.equipment_changed.connect(_on_panel_data_changed)
@@ -80,19 +87,13 @@ func _ready() -> void:
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(MODAL_SURFACE_INSET.x, MODAL_SURFACE_INSET.y)
-	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(380, 4)
+	title_frame.position = Vector2(380, 10)
 	title_frame.size = Vector2(460, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -120,7 +121,6 @@ func _build_header() -> void:
 
 func _build_attribute_panel() -> void:
 	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
-	add_child(panel)
 	var title := _section_title("人物属性", 250)
 	panel.add_child(title)
 	equipment_stats_label = RichTextLabel.new()
@@ -158,7 +158,6 @@ func _build_attribute_panel() -> void:
 
 func _build_equipment_panel() -> void:
 	var panel := _section_panel("EquipmentPanel", Vector2(294, 72), Vector2(390, 566))
-	add_child(panel)
 	panel.add_child(_section_title("人物装备", 390))
 	character_preview = PreviewScript.new()
 	character_preview.name = "CharacterPreview"
@@ -186,14 +185,14 @@ func _build_equipment_panel() -> void:
 		"武器": Vector2(10, 144), "衣服": Vector2(296, 144),
 		"左手镯": Vector2(10, 244), "右手镯": Vector2(296, 244),
 		"左戒指": Vector2(10, 344), "右戒指": Vector2(296, 344),
+		"圣物": Vector2(10, 44), "徽章": Vector2(10, 444),
 	}
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		_create_equipment_slot(panel, slot, positions.get(slot, Vector2.ZERO))
-	# Reserved for a future medal / belt / boots row. Keeping this anchor empty
-	# avoids another paper-doll re-layout when those stable equipment slots land.
+	# Keep the legacy reserved anchor for calibration compatibility.
 	var future_row := Control.new()
 	future_row.name = "FutureEquipmentRow"
-	future_row.position = Vector2(12, 444)
+	future_row.position = Vector2(12, 550)
 	future_row.size = Vector2(366, 102)
 	future_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	future_row.set_meta("reserved_slots", ["勋章", "腰带", "鞋子"])
@@ -217,7 +216,6 @@ func _build_equipment_panel() -> void:
 
 func _build_bag_panel() -> void:
 	var panel := _section_panel("BagPanel", Vector2(696, 72), Vector2(492, 566))
-	add_child(panel)
 	panel.add_child(_section_title("综合背包", 492))
 	bag_summary_label = Label.new()
 	bag_summary_label.name = "BagSummary"
@@ -249,6 +247,28 @@ func _build_bag_panel() -> void:
 	paging_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	paging_hint.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(paging_hint)
+	var actions := Control.new()
+	actions.name = "InventoryActions"
+	actions.position = Vector2(16, 452)
+	actions.size = Vector2(460, 48)
+	actions.add_theme_constant_override("separation", 10)
+	panel.add_child(actions)
+	auto_sort_button = Button.new()
+	auto_sort_button.name = "AutoSortButton"
+	auto_sort_button.text = "自动整理"
+	auto_sort_button.position = Vector2(0, 0)
+	auto_sort_button.size = Vector2(215, 48)
+	auto_sort_button.pressed.connect(_on_auto_sort_pressed)
+	auto_sort_button.theme_type_variation = "GothicComponentButton"
+	actions.add_child(auto_sort_button)
+	discard_button = Button.new()
+	discard_button.name = "DiscardButton"
+	discard_button.text = "丢弃"
+	discard_button.position = Vector2(225, 0)
+	discard_button.size = Vector2(215, 48)
+	discard_button.pressed.connect(_on_discard_pressed)
+	discard_button.theme_type_variation = "GothicComponentButton"
+	actions.add_child(discard_button)
 
 
 func _build_context_menu() -> void:
@@ -324,6 +344,7 @@ func refresh() -> void:
 	_refresh_bag_grid()
 	if character_preview != null:
 		character_preview.refresh()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
 
 
 func _refresh_equipment_slots() -> void:
@@ -370,9 +391,16 @@ func _character_stats_text(stats: Dictionary) -> String:
 
 func _refresh_bag_grid() -> void:
 	for child: Node in item_grid.get_children():
-		child.queue_free()
+		# Rebuild synchronously so stable cell names never collide with queued old nodes.
+		child.free()
 	if selected_inventory_index >= PlayerState.inventory.size():
 		selected_inventory_index = -1
+	var stale_selection_indices: Array = []
+	for selected_index: Variant in selected_inventory_indices.keys():
+		if int(selected_index) >= PlayerState.inventory.size():
+			stale_selection_indices.append(selected_index)
+	for selected_index: Variant in stale_selection_indices:
+		selected_inventory_indices.erase(selected_index)
 	for inventory_index in range(PlayerState.inventory.size()):
 		var stack: Variant = PlayerState.inventory[inventory_index]
 		if stack is Dictionary:
@@ -388,14 +416,14 @@ func _refresh_bag_grid() -> void:
 
 func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 	var cell := Control.new()
-	cell.name = "InventoryCell_%d" % index
+	cell.name = "InventoryCell_%03d" % index
 	cell.custom_minimum_size = BAG_CELL_SIZE
 	var button := Button.new()
 	button.name = "ItemButton"
 	button.position = Vector2.ZERO
 	button.size = BAG_CELL_SIZE
 	button.tooltip_text = str(stack.get("name", "未知物品"))
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if index == selected_inventory_index else "GothicComponentSlotButton"
+	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected_inventory_indices.has(index) else "GothicComponentSlotButton"
 	button.pressed.connect(_select_inventory_item.bind(index))
 	button.gui_input.connect(_inventory_input.bind(index, button))
 	cell.add_child(button)
@@ -430,7 +458,7 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 
 func _create_empty_bag_cell(index: int) -> Control:
 	var cell := Control.new()
-	cell.name = "EmptyCell_%d" % index
+	cell.name = "InventoryCell_%03d" % index
 	cell.custom_minimum_size = BAG_CELL_SIZE
 	var background := Button.new()
 	background.name = "EmptySlotBackground"
@@ -448,7 +476,14 @@ func _select_inventory_item(index: int) -> void:
 		return
 	if index < 0 or index >= PlayerState.inventory.size():
 		return
-	selected_inventory_index = index
+	if _suppress_next_pressed_index == index:
+		_suppress_next_pressed_index = -1
+		return
+	if selected_inventory_indices.has(index):
+		selected_inventory_indices.erase(index)
+	else:
+		selected_inventory_indices[index] = true
+	selected_inventory_index = index if selected_inventory_indices.has(index) else (-1 if selected_inventory_indices.is_empty() else int(selected_inventory_indices.keys().back()))
 	selected_equipment_slot = ""
 	_show_inventory_detail(index)
 	_refresh_equipment_slots()
@@ -460,6 +495,7 @@ func _select_equipment_slot(slot: String) -> void:
 		return
 	selected_equipment_slot = slot
 	selected_inventory_index = -1
+	selected_inventory_indices.clear()
 	var equipped: Variant = PlayerState.equipment.get(slot, {})
 	if equipped is Dictionary and not equipped.is_empty():
 		detail_label.text = _equipment_detail(slot, equipped)
@@ -486,7 +522,10 @@ func _show_inventory_detail(index: int) -> void:
 func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 	if _is_double_activation_event(event):
 		_cancel_long_press()
+		_suppress_next_pressed_index = index
+		selected_inventory_indices.clear()
 		_activate_inventory_index(index)
+		_clear_pressed_suppression.call_deferred(index)
 		return
 	_handle_press_event(event, {"source": "inventory", "index": index}, button)
 
@@ -634,6 +673,7 @@ func _on_context_action(id: int) -> void:
 		_:
 			return
 	selected_inventory_index = -1
+	selected_inventory_indices.clear()
 	selected_equipment_slot = ""
 	refresh()
 	detail_label.text = "[color=#e8c277]%s[/color]" % result
@@ -653,12 +693,35 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 		return
 	_cancel_long_press()
 	selected_inventory_index = index
+	selected_inventory_indices.clear()
 	selected_equipment_slot = ""
 	var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
 	var result := PlayerState.equip_inventory_index(index, preferred_slot) if str(item.get("kind", "")) == "equipment" else PlayerState.use_inventory_index(index)
 	selected_inventory_index = -1
 	refresh()
 	detail_label.text = "[color=#e8c277]%s[/color]" % result
+
+
+func _clear_pressed_suppression(index: int) -> void:
+	if _suppress_next_pressed_index == index:
+		_suppress_next_pressed_index = -1
+
+
+func _on_auto_sort_pressed() -> void:
+	var result: Dictionary = PlayerState.sort_inventory_deterministic()
+	selected_inventory_indices.clear()
+	selected_inventory_index = -1
+	refresh()
+	detail_label.text = "[color=#e8c277]自动整理%s[/color]" % ("完成" if bool(result.get("success", false)) else "失败")
+
+
+func _on_discard_pressed() -> void:
+	var indices: Array = selected_inventory_indices.keys()
+	var result: Dictionary = PlayerState.destroy_inventory_indices(indices)
+	selected_inventory_indices.clear()
+	selected_inventory_index = -1
+	refresh()
+	detail_label.text = "[color=#e8c277]丢弃 %d 个物品格[/color]" % int(result.get("destroyed", 0))
 
 
 func _unequip_selected() -> void:
@@ -753,6 +816,8 @@ func _slots_for_category(category: String) -> Array[String]:
 		"项链": return ["项链"]
 		"手镯": return ["左手镯", "右手镯"]
 		"戒指": return ["左戒指", "右戒指"]
+		"圣物": return ["圣物"]
+		"徽章": return ["徽章"]
 	return []
 
 
@@ -823,20 +888,9 @@ func _value(value: Variant) -> String:
 	return "—" if value == null else str(value)
 
 
-func _section_panel(node_name: String, at: Vector2, panel_size: Vector2) -> Panel:
-	var panel := Panel.new()
-	panel.name = node_name
-	panel.position = at + Vector2(0, -SECTION_VERTICAL_SHIFT)
-	panel.size = panel_size
-	panel.theme_type_variation = "GothicInsetFrame"
-	var surface := Panel.new()
-	surface.name = "SectionSurface"
-	surface.position = Vector2(12, 14)
-	surface.size = panel_size - Vector2(24, 28)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	panel.add_child(surface)
-	return panel
+func _section_panel(node_name: String, at: Vector2, panel_size: Vector2) -> Control:
+	var rect := Rect2(at + Vector2(0, -SECTION_VERTICAL_SHIFT), panel_size)
+	return GothicFrameFactoryScript.add_filled_section(self, node_name, rect)
 
 
 func _section_title(text_value: String, section_width: float) -> Label:
