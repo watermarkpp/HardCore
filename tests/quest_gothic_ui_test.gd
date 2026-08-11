@@ -27,10 +27,22 @@ func _run() -> void:
 	assert(panel.theme_type_variation == "GothicModalFrame", "任务面板没有复用公共哥特外框")
 	assert(panel.get_node("QuestListPanel").theme_type_variation == "GothicInsetFrame", "任务列表没有复用公共内框")
 	assert(panel.get_node("QuestDetailPanel").theme_type_variation == "GothicInsetFrame", "任务详情没有复用公共内框")
-	assert(panel.get_node("QuestDetailPanel/RewardsPanel").theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
+	var rewards_panel := panel.get_node("QuestDetailPanel/RewardsPanel") as Panel
+	assert(rewards_panel.theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
+	assert(rewards_panel.get_meta("calibration_layer", "") == "quest_rewards_panel", "任务奖励外框没有暴露为可校准层")
 	var rewards_title := panel.get_node("QuestDetailPanel/RewardsPanel/RewardsTitle") as Label
 	assert(rewards_title.text == "任务奖励：" and rewards_title.position.y < panel.reward_label.position.y, "任务奖励标题没有上移、补冒号或与奖励内容对齐")
 	assert(panel.quest_buttons.size() == GameData.bich_quest_count(), "任务列表没有完整显示六段比奇任务")
+	var stable_quest_paths: Array[String] = []
+	for quest_button: Button in panel.quest_buttons:
+		var quest_id := str(quest_button.get_meta("quest_id", ""))
+		assert(quest_button.name == "QuestCard_%s" % quest_id, "任务卡没有使用稳定节点名: %s" % quest_button.name)
+		stable_quest_paths.append(str(panel.get_path_to(quest_button)))
+	panel.refresh()
+	var rebuilt_quest_paths: Array[String] = []
+	for quest_button: Button in panel.quest_buttons:
+		rebuilt_quest_paths.append(str(panel.get_path_to(quest_button)))
+	assert(rebuilt_quest_paths == stable_quest_paths, "任务卡刷新后节点路径发生漂移")
 	var first_number := panel.quest_buttons[0].get_node("QuestNumber") as Label
 	assert(first_number.vertical_alignment == VERTICAL_ALIGNMENT_CENTER and first_number.size.y == QuestPanel.QUEST_CARD_SIZE.y, "任务编号没有在卡片内垂直居中")
 	assert(panel.current_quest_id == "bich_field_hunt", "任务面板没有默认选中当前任务")

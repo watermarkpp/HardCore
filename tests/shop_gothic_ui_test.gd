@@ -1,6 +1,7 @@
 extends Node
 
 const SELL_CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/shop_sell_contract.json"
+const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 
 const STOCK := [
 	{"name": "匕首", "price": 120, "description": "测试武器"},
@@ -51,9 +52,12 @@ func _run() -> void:
 	panel._buy_selected()
 	assert(PlayerState.gold == gold_before - 120 and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
 	panel._set_trade_mode("sell")
+	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
+	assert(panel.sell_quantity_button.name == "SellQuantityButton" and panel.sell_quantity_button.text == "出售", "出售按钮文案或唯一稳定节点错误")
+	assert(panel.sell_quantity_button.get_meta("calibration_text_revision", 0) == 1, "出售按钮文案版本元数据缺失")
 	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory.size(), "出售页没有向玩法层请求背包报价")
 	assert(panel.goods_buttons.size() == PlayerState.inventory.size(), "出售页没有排除已穿戴装备或遗漏背包物品")
-	assert(panel.sell_one_button.disabled and panel.sell_quantity_button.disabled, "没有报价时出售按钮没有禁用")
+	assert(panel.sell_quantity_button.disabled, "没有报价时出售按钮没有禁用")
 	var quotes := {}
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Dictionary = PlayerState.inventory[inventory_index]
@@ -83,8 +87,8 @@ func _run() -> void:
 	assert(dec != null and inc != null and not dec.flip_h and inc.flip_h, "数量装饰未真实镜像")
 	assert(dec.show_behind_parent and inc.show_behind_parent, "数量装饰没有放在按钮文字后方")
 	assert(
-		panel.sell_quantity_row.get_node("DecreaseQuantity").theme_type_variation == "GothicTransparentButton"
-		and panel.sell_quantity_row.get_node("IncreaseQuantity").theme_type_variation == "GothicTransparentButton",
+		panel.sell_quantity_row.get_node("DecreaseQuantity").theme_type_variation == "GothicPanelTransparentButton"
+		and panel.sell_quantity_row.get_node("IncreaseQuantity").theme_type_variation == "GothicPanelTransparentButton",
 		"数量按钮仍使用未镜像的不透明背景"
 	)
 	var bg := panel.sell_quantity_row.get_node("QuantityCenterBackground") as Panel
@@ -92,30 +96,43 @@ func _run() -> void:
 	assert(Rect2(Vector2.ZERO, panel.sell_quantity_row.size).encloses(Rect2(panel.sell_quantity_label.position, panel.sell_quantity_label.size)), "数量标签越出数量行")
 	var decrease := panel.sell_quantity_row.get_node("DecreaseQuantity") as Button
 	var increase := panel.sell_quantity_row.get_node("IncreaseQuantity") as Button
-	assert(bg.position.x - (decrease.position.x + decrease.size.x) >= 8.0, "中心背景与左按钮缺少安全间隙")
-	assert(increase.position.x - (bg.position.x + bg.size.x) >= 8.0, "中心背景与右按钮缺少安全间隙")
+	var layout_contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(UI_LAYOUT_CONTRACT))
+	var sell_nodes: Dictionary = layout_contract["profiles"]["shop_sell"]["nodes"]
+	for saved_path: String in ["DetailPanel/SellQuantityRow/DecreaseQuantity", "DetailPanel/SellQuantityRow/IncreaseQuantity"]:
+		var saved_rect: Array = sell_nodes[saved_path]["logicalRect"]
+		var actual := panel.get_node(saved_path) as Control
+		assert(actual.position.is_equal_approx(Vector2(float(saved_rect[0]), float(saved_rect[1]))) and actual.size.is_equal_approx(Vector2(float(saved_rect[2]), float(saved_rect[3]))), "出售数量按钮必须与正式校准合同一致")
+	assert(bg.position.x - (decrease.position.x + decrease.size.x) >= 0.0, "中心背景与左按钮不应重叠")
+	assert(increase.position.x - (bg.position.x + bg.size.x) >= 0.0, "中心背景与右按钮不应重叠")
 
 	var row_global := panel.sell_quantity_row.get_global_rect()
 	assert(row_global.encloses(bg.get_global_rect()) and row_global.encloses(panel.sell_quantity_label.get_global_rect()))
-	assert(decrease.size == Vector2(58, 46) and increase.size == Vector2(58, 46))
+	assert(decrease.size.is_equal_approx(Vector2(58, 46)) and increase.size.is_equal_approx(Vector2(58, 46)))
 	assert(row_global.encloses(decrease.get_global_rect()) and row_global.encloses(increase.get_global_rect()))
-	assert(decrease.position.x >= 8.0 and row_global.size.x - (increase.position.x + increase.size.x) >= 8.0)
+	assert(decrease.position.x >= 0.0 and row_global.size.x - (increase.position.x + increase.size.x) >= 0.0)
 	assert(Rect2(Vector2.ZERO, bg.size).encloses(Rect2(panel.sell_quantity_label.position - bg.position, panel.sell_quantity_label.size)))
 	assert(decrease.text.is_empty() and increase.text.is_empty())
 	var modal_surface := panel.get_node("ModalSurface") as Control
 	var goods_frame := panel.get_node("GoodsPanel") as Control
 	var detail_frame := panel.get_node("DetailPanel") as Control
 	var outer_surface := panel.get_node("ModalSurface") as Control
-	var goods_surface := panel.get_node("GoodsPanelSurface") as Control
-	var detail_surface := panel.get_node("DetailPanelSurface") as Control
+	var goods_decoration := panel.get_node("GoodsPanel/GoodsPanelDecoration") as Control
+	var goods_surface := panel.get_node("GoodsPanel/GoodsPanelDecoration/GoodsPanelFill") as Control
+	var goods_visual_frame := panel.get_node("GoodsPanel/GoodsPanelDecoration/GoodsPanelFrame") as Control
+	var detail_decoration := panel.get_node("DetailPanel/DetailPanelDecoration") as Control
+	var detail_surface := panel.get_node("DetailPanel/DetailPanelDecoration/DetailPanelFill") as Control
+	var detail_visual_frame := panel.get_node("DetailPanel/DetailPanelDecoration/DetailPanelFrame") as Control
 	assert(outer_surface.get_global_rect().end.y <= panel.get_global_rect().end.y - 32.0)
-	assert(outer_surface.position.x >= 42.0 and outer_surface.position.y >= 42.0)
-	assert(panel.size.x - (outer_surface.position.x + outer_surface.size.x) >= 42.0 and panel.size.y - (outer_surface.position.y + outer_surface.size.y) >= 42.0)
+	assert(outer_surface.position.x >= 40.0 and outer_surface.position.y >= 40.0)
+	assert(panel.size.x - (outer_surface.position.x + outer_surface.size.x) >= 40.0 and panel.size.y - (outer_surface.position.y + outer_surface.size.y) >= 40.0)
 	assert(goods_frame.position.x >= 42.0 and panel.size.x - (detail_frame.position.x + detail_frame.size.x) >= 42.0)
 	assert(outer_surface.get_global_rect().encloses(goods_frame.get_global_rect()) and outer_surface.get_global_rect().encloses(detail_frame.get_global_rect()))
 	assert(goods_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0 and detail_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0)
-	assert(goods_surface.position.x - goods_frame.position.x >= 10.0 and goods_frame.size.x - (goods_surface.position.x - goods_frame.position.x) - goods_surface.size.x >= 0.0)
-	assert(detail_surface.position.x - detail_frame.position.x >= 10.0 and detail_frame.size.x - (detail_surface.position.x - detail_frame.position.x) - detail_surface.size.x >= 0.0)
+	assert(goods_decoration.get_global_rect().size.x > 0.0 and goods_decoration.get_global_rect().size.y > 0.0 and detail_decoration.get_global_rect().size.x > 0.0 and detail_decoration.get_global_rect().size.y > 0.0)
+	assert(goods_surface.get_global_rect().size.x > 0.0 and goods_visual_frame.get_global_rect().size.x > 0.0)
+	assert(detail_surface.get_global_rect().size.x > 0.0 and detail_visual_frame.get_global_rect().size.x > 0.0)
+	assert(goods_surface.get_meta("calibration_internal_visual", false) and detail_surface.get_meta("calibration_internal_visual", false))
+	assert(goods_visual_frame.theme_type_variation == "GothicInsetFrame" and detail_visual_frame.theme_type_variation == "GothicInsetFrame")
 	assert(absf(goods_frame.get_global_rect().end.y - detail_frame.get_global_rect().end.y) <= 1.0)
 	var minus_bar := decrease.get_node("HorizontalBar") as ColorRect
 	var plus_bar := increase.get_node("HorizontalBar") as ColorRect
@@ -128,10 +145,15 @@ func _run() -> void:
 	assert(decrease.get_theme_font_size("font_size") == increase.get_theme_font_size("font_size"))
 	assert(dec.get_meta("atlas_region", Rect2()).size == Vector2(58, 46) and inc.get_meta("atlas_region", Rect2()).size == Vector2(58, 46))
 	assert(absf(decrease.get_global_rect().get_center().y - increase.get_global_rect().get_center().y) <= 1.0)
-	assert(goods_frame.get_global_rect().end.y <= modal_surface.get_global_rect().end.y - 20.0 and detail_frame.get_global_rect().end.y <= modal_surface.get_global_rect().end.y - 20.0)
+	assert(modal_surface.get_global_rect().encloses(goods_frame.get_global_rect()) and modal_surface.get_global_rect().encloses(detail_frame.get_global_rect()))
 	panel._select_sell_item(safe_indices[0])
+	assert(decrease.disabled and not increase.disabled, "堆叠物品初始数量边界错误")
 	panel._change_sell_quantity(1)
 	assert(int(panel._sell_quantities.get(safe_indices[0], 0)) == 2, "第一个物品的独立数量未生效")
+	panel._change_sell_quantity(99)
+	assert(increase.disabled, "达到最大数量时增加按钮未禁用")
+	panel._change_sell_quantity(-99)
+	assert(decrease.disabled, "回到1时减少按钮未禁用")
 	panel._select_sell_item(safe_indices[1])
 	assert(panel._selected_sell_indices.size() == 2, "单击两个卡片没有形成多选")
 	assert(int(panel._sell_quantities.get(safe_indices[1], 0)) == 1, "第二个物品没有保持独立默认数量")
@@ -153,9 +175,12 @@ func _run() -> void:
 	blocked_quotes[blocked_key] = blocked_quote
 	panel.set_sell_quotes(blocked_quotes)
 	panel._select_sell_item(risky_index)
+	assert(decrease.disabled and increase.disabled, "不可售/count1物品数量按钮未禁用")
 	assert(panel._selected_sell_indices.size() == 2, "点击不可售物品破坏了已有多选")
-	assert(not panel.sell_one_button.disabled and not panel.sell_quantity_button.disabled, "查看不可售物品错误禁用了已有批量出售")
+	assert(not panel.sell_quantity_button.disabled, "查看不可售物品错误禁用了已有批量出售")
 	panel.set_sell_quotes(quotes)
+	panel._sell_quantities[safe_indices[0]] = 2
+	panel._sell_quantities[safe_indices[1]] = 1
 
 	sell_requests.clear()
 	panel._request_selected_quantity()
@@ -172,14 +197,14 @@ func _run() -> void:
 	assert(int(amounts_by_index.get(safe_indices[1], 0)) == 1, "批量出售错误复用了其他物品数量")
 	panel.apply_sell_result({"success": true, "message": "批量全部完成", "quotes": quotes})
 	assert(not panel._batch_sell_active and panel._batch_sell_queue.is_empty(), "批量完成后队列没有清空")
-	assert(panel._selected_sell_indices.is_empty() and panel.sell_one_button.disabled, "批量完成后选择状态没有清空")
+	assert(panel._selected_sell_indices.is_empty() and panel.sell_quantity_button.disabled, "批量完成后选择状态没有清空")
 	assert("批量全部完成" in panel.detail_label.text, "最终成功消息被提交提示覆盖")
 
 	panel.set_sell_quotes(quotes)
 	panel._select_sell_item(safe_indices[0])
 	panel._select_sell_item(safe_indices[1])
 	sell_requests.clear()
-	panel._request_sell(1)
+	panel._request_sell()
 	assert(sell_requests.size() == 1, "失败路径没有提交首笔请求")
 	panel.apply_sell_result({"success": false, "message": "测试失败停止", "quotes": quotes})
 	assert(sell_requests.size() == 1, "批量失败后仍提交了后续请求")
@@ -190,14 +215,14 @@ func _run() -> void:
 	panel._select_sell_item(safe_indices[0])
 	panel._select_sell_item(risky_index)
 	sell_requests.clear()
-	panel._request_sell(1)
+	panel._request_sell()
 	assert(not panel._pending_sell_request.is_empty() and sell_requests.is_empty(), "高风险批量没有在提交前进入二次确认")
 	assert(panel.sell_confirmation.visible, "高风险出售没有打开公共确认组件")
 	assert(panel.sell_confirmation.get_meta("stable_id", "") == "ui.confirmation.dialog", "商店没有复用公共确认组件")
 	assert(panel.sell_confirmation.current_request.action_id == "shop.sell.risky_item", "商店确认操作 ID 错误")
 	panel.sell_confirmation.cancel_button.pressed.emit()
 	assert(panel._pending_sell_request.is_empty() and panel._batch_sell_queue.is_empty() and sell_requests.is_empty(), "取消高风险批量后仍保留待处理交易")
-	panel._request_sell(1)
+	panel._request_sell()
 	panel.sell_confirmation.confirm_button.pressed.emit()
 	assert(sell_requests.size() == 1 and "quote_id" in sell_requests[0], "确认后没有提交第一笔玩法层报价")
 	panel.apply_sell_result({"success": true, "message": "风险批量第一笔成功", "quotes": quotes})

@@ -109,7 +109,6 @@ legend176_game/
 | `player_health_bar.gd` | 项目支持文件 | `scripts/player_health_bar.gd` |
 | `player_state.gd` | 角色等级、背包、装备、技能、任务、奖励、多角色档案与原子自动存档 | `scripts/player_state.gd` |
 | `player_visual.gd` | 战士五动作、Weapon/Hum动态穿戴、技能特效与音效 | `scripts/player_visual.gd` |
-| `profession_panel.gd` | 职业选择与切换界面 | `scripts/profession_panel.gd` |
 | `profession_rules.gd` | 三职业基础成长和技能战斗配置 | `scripts/profession_rules.gd` |
 | `quest_panel.gd` | 比奇老兵动态任务面板、目标、奖励和来源显示 | `scripts/quest_panel.gd` |
 | `region_content.gd` | 地图门点、怪物/Boss刷新、NPC与候选掉落运行定义 | `scripts/region_content.gd` |

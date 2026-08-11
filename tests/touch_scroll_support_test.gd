@@ -78,7 +78,6 @@ func _run() -> void:
 	hud._ensure_shop_panel()
 	hud._ensure_skill_panel()
 	hud._ensure_quest_panel()
-	hud._ensure_profession_panel()
 	hud._ensure_map_panel()
 	hud._ensure_warehouse_panel()
 	(hud.get("skill_panel") as SkillPanel).open_for("技能导师")
@@ -87,7 +86,6 @@ func _run() -> void:
 		"InventoryScroll",
 		"MapListScroll",
 		"WorldTreeScroll",
-		"UnlockScroll",
 		"QuestListScroll",
 		"GoodsScroll",
 		"SkillListScroll",

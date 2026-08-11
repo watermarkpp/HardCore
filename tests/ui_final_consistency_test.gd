@@ -7,7 +7,6 @@ const PANEL_CASES := [
 	{"name": "quest", "script": preload("res://scripts/quest_panel.gd")},
 	{"name": "map", "script": preload("res://scripts/map_panel.gd")},
 	{"name": "skill", "script": preload("res://scripts/skill_panel.gd")},
-	{"name": "profession", "script": preload("res://scripts/profession_panel.gd")},
 ]
 const VIEWPORT_CASES := [
 	{"name": "reference", "size": Vector2i(1280, 720), "insets": Vector4(24, 16, 24, 16)},
@@ -29,7 +28,7 @@ func _run() -> void:
 			await _audit_panel(viewport_case, panel_case)
 		await _audit_system_menu(viewport_case)
 		await _audit_character_hall(viewport_case)
-	print("UI_FINAL_CONSISTENCY_PASS：7个主面板、暂停菜单与人物大厅通过1280×720、宽屏手机和Android挖孔安全区验收")
+	print("UI_FINAL_CONSISTENCY_PASS：6个主面板、暂停菜单与人物大厅通过1280×720、宽屏手机和Android挖孔安全区验收")
 	get_tree().quit(0)
 
 
