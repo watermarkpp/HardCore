@@ -22,7 +22,11 @@ func _run() -> void:
 	assert(menu.modal.theme_type_variation == "GothicModalFrame", "暂停菜单没有使用公共哥特外框")
 	assert(menu.modal.get_node("ModalSurface").get_script() == GothicFrameFillScript, "暂停菜单一级框没有使用代码背景")
 	assert(menu.modal.has_node("ModalFrameSafetyOverlay"), "暂停菜单缺少双圈安全覆盖层")
-	assert(menu.modal.anchor_left == 0.5 and menu.modal.anchor_top == 0.5, "暂停菜单没有使用宽屏居中锚点")
+	var layout_contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/manual_layout_overrides.json"))
+	var modal_saved: Array = layout_contract["profiles"]["system_menu"]["nodes"]["SystemMenuModal"]["logicalRect"] if layout_contract["profiles"]["system_menu"]["nodes"].has("SystemMenuModal") else []
+	assert(modal_saved.size() == 4, "系统菜单正式布局合同缺少 Modal")
+	var modal_center: Vector2 = menu.modal.get_global_rect().get_center()
+	assert(absf(modal_center.x - menu.size.x * 0.5) <= 1.0 and absf(modal_center.y - menu.size.y * 0.5) <= 1.0, "暂停菜单数学上未相对完整屏幕居中")
 	assert(menu.current_page == "main" and menu.main_page.visible and not menu.settings_page.visible, "暂停菜单默认页面错误")
 	assert(menu.continue_button.size.y >= 56, "继续游戏按钮触控区不足")
 	assert(menu.character_select_button.size.y >= 56, "返回人物选择按钮触控区不足")

@@ -21,6 +21,8 @@ func _ready() -> void:
 	root.name = "SystemMenuRoot"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(root)
+	var root_size_before := root.size
+	var root_anchors_before := Vector4(root.anchor_left, root.anchor_top, root.anchor_right, root.anchor_bottom)
 	var modal := Control.new()
 	modal.name = "SystemMenuModal"
 	modal.size = Vector2(500, 608)
@@ -33,6 +35,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
+	assert(root.size.is_equal_approx(root_size_before) and Vector4(root.anchor_left, root.anchor_top, root.anchor_right, root.anchor_bottom) == root_anchors_before, "profile application must not rewrite root full-rect geometry")
 	assert(title.text == "动态标题", "runtime loader must never freeze calibrated text")
 	var before := modal.get_global_rect()
 	Loader.apply_profile(root, "system_menu")
@@ -40,6 +43,13 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(modal.get_global_rect().is_equal_approx(before), "repeated application must be idempotent")
+	var transient := Control.new()
+	add_child(transient)
+	Loader.apply_profile(transient, "system_menu")
+	transient.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
 	var inventory := InventoryPanel.new()
 	var map_panel := MapPanel.new()
 	var shop := ShopPanel.new()

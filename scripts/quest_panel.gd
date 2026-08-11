@@ -247,6 +247,11 @@ func refresh() -> void:
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
 
 
+func _on_runtime_layout_profile_applied(profile_id: String) -> void:
+	if profile_id == "quest" and abandon_button != null:
+		_set_abandon_available(abandon_button.visible)
+
+
 func _rebuild_quest_cards(active_quest_id: String) -> void:
 	for child: Node in quest_list.get_children():
 		quest_list.remove_child(child)

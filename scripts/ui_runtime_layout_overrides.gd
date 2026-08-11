@@ -12,6 +12,9 @@ static var _target_tokens: Dictionary = {}
 static func apply_profile(target: Control, profile_id: String) -> void:
 	if target == null or not is_instance_valid(target) or not target.is_inside_tree():
 		return
+	var tree: SceneTree = target.get_tree()
+	if tree == null:
+		return
 	_load_contract()
 	var profile: Dictionary = _contract.get("profiles", {}).get(profile_id, {})
 	var entries: Dictionary = profile.get("nodes", {})
@@ -51,10 +54,14 @@ static func apply_profile(target: Control, profile_id: String) -> void:
 			var control := raw_control as Control
 			if not is_instance_valid(control):
 				continue
-			_apply_geometry(control, item["entry"] as Dictionary, profile, target)
+			if not _can_write(target, control):
+				return
+			_apply_geometry(control, item["entry"] as Dictionary, profile, target, str(item["path"]))
 			if int(_target_tokens.get(target_id, 0)) != token:
 				return
-		await target.get_tree().process_frame
+		await tree.process_frame
+		if not _can_write(target, target):
+			return
 		if int(_target_tokens.get(target_id, 0)) != token:
 			return
 		# Font and visibility are deliberately applied without saved text content.
@@ -62,16 +69,22 @@ static func apply_profile(target: Control, profile_id: String) -> void:
 		if int(_target_tokens.get(target_id, 0)) != token:
 			return
 		var raw_control: Variant = item["control"]
-		if not is_instance_valid(raw_control):
+		if not _can_write(target, raw_control):
 			continue
 		var control := raw_control as Control
 		if not is_instance_valid(control):
 			continue
 		var entry := item["entry"] as Dictionary
+		if not _can_write(target, control):
+			return
 		if entry.has("fontSize") and _supports_text(control):
 			_set_font_size(control, entry, profile, target)
+		if not _can_write(target, control):
+			return
 		control.visible = bool(entry.get("visible", true)) and not bool(entry.get("deleted", false))
-	await target.get_tree().process_frame
+	await tree.process_frame
+	if not _can_write(target, target):
+		return
 	if int(_target_tokens.get(target_id, 0)) != token:
 		return
 	# Reassert geometry after font/minimum-size changes.
@@ -82,8 +95,10 @@ static func apply_profile(target: Control, profile_id: String) -> void:
 		if not is_instance_valid(raw_control):
 			continue
 		var control := raw_control as Control
-		if is_instance_valid(control):
-			_apply_geometry(control, item["entry"] as Dictionary, profile, target)
+		if _can_write(target, control):
+			_apply_geometry(control, item["entry"] as Dictionary, profile, target, str(item["path"]))
+	if int(_target_tokens.get(target_id, 0)) == token and _can_write(target, target) and target.has_method("_on_runtime_layout_profile_applied"):
+		target.call("_on_runtime_layout_profile_applied", profile_id)
 
 
 static func _load_contract() -> void:
@@ -165,7 +180,9 @@ static func _legacy_quest_map(target: Control, entries: Dictionary) -> Dictionar
 	return result
 
 
-static func _apply_geometry(control: Control, entry: Dictionary, profile: Dictionary, root: Control) -> void:
+static func _apply_geometry(control: Control, entry: Dictionary, profile: Dictionary, root: Control, saved_path: String) -> void:
+	if saved_path == "." or control == root or not _can_write(root, control):
+		return
 	var rect: Array = entry.get("logicalRect", [])
 	if rect.size() != 4:
 		return
@@ -177,6 +194,8 @@ static func _apply_geometry(control: Control, entry: Dictionary, profile: Dictio
 	var sy := root_size.y / float(design[1]) if design.size() == 2 and float(design[1]) > 0 else 1.0
 	# logicalRect is local to the saved parent (the editor writes localRect
 	# under this name), so applying it directly preserves parent/child geometry.
+	if not control is Container:
+		control.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	if control is Button:
 		_prepare_button_for_size(control as Button, Vector2(float(rect[2]) * sx, float(rect[3]) * sy))
 	control.position = Vector2(float(rect[0]) * sx, float(rect[1]) * sy)
@@ -205,6 +224,10 @@ static func _prepare_button_for_size(button: Button, desired_size: Vector2) -> v
 			adjusted.content_margin_bottom = 0.0
 		button.add_theme_stylebox_override(state, adjusted)
 	button.update_minimum_size()
+
+
+static func _can_write(target: Variant, control: Variant) -> bool:
+	return target != null and is_instance_valid(target) and target.is_inside_tree() and control != null and is_instance_valid(control) and control is Control and (control as Control).is_inside_tree()
 
 
 static func _set_font_size(control: Control, entry: Dictionary, profile: Dictionary, target: Control) -> void:

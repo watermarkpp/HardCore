@@ -39,6 +39,9 @@ func _run() -> void:
 		assert(quest_button.name == "QuestCard_%s" % quest_id, "任务卡没有使用稳定节点名: %s" % quest_button.name)
 		stable_quest_paths.append(str(panel.get_path_to(quest_button)))
 	panel.refresh()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
 	var rebuilt_quest_paths: Array[String] = []
 	for quest_button: Button in panel.quest_buttons:
 		rebuilt_quest_paths.append(str(panel.get_path_to(quest_button)))
