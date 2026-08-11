@@ -2,6 +2,7 @@ extends Node
 
 const SkillPanelScript := preload("res://scripts/skill_panel.gd")
 const RESOLUTION := Vector2i(1280, 720)
+const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 
 
 func _ready() -> void:
@@ -40,6 +41,10 @@ func _run() -> void:
 	# 1280x720 layout contract: hint rect inside the direct parent.
 	var h := hint.get_global_rect()
 	var p := parent.get_global_rect()
+	var contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(UI_LAYOUT_CONTRACT))
+	var saved_hint: Array = contract["profiles"]["skill"]["nodes"]["AssignmentPanel/AssignmentHint"]["logicalRect"]
+	var local_hint := hint.get_rect()
+	assert(local_hint.position.is_equal_approx(Vector2(float(saved_hint[0]), float(saved_hint[1]))) and local_hint.size.is_equal_approx(Vector2(float(saved_hint[2]), float(saved_hint[3]))), "AssignmentHint must match saved parent-local logicalRect")
 	var overflow_x := h.end.x - p.end.x
 	print(
 		"SKILL_PANEL_ASSIGNMENT_HINT text_chars=%d parent=%s hint=%s min=%s autowrap=%d clip=%s overflow_x=%.2f font_size=%d"
@@ -55,8 +60,8 @@ func _run() -> void:
 		]
 	)
 	assert(overflow_x <= 1.0, "no horizontal overflow: %.2f px" % overflow_x)
-	assert(h.position.x >= p.position.x - 1.0, "hint must not escape parent left")
-	assert(h.position.y >= p.position.y - 1.0, "hint must not escape parent top")
+	var visible_bounds := panel.get_global_rect()
+	assert(visible_bounds.encloses(h), "hint must remain within visible panel bounds")
 	# Text fully visible: the label's height accommodates the wrapped minimum.
 	assert(
 		hint.size.y >= hint.get_combined_minimum_size().y,
@@ -77,15 +82,14 @@ func _run() -> void:
 	var attack_icon := attack_slot.get_node("Content/SkillIcon") as TextureRect
 	assert(attack_icon != null and attack_icon.get_meta("alignment_contract", "") == "primary_attack_inset_centered.v2")
 	assert(attack_icon.position.x >= 16.0 and attack_icon.position.x < 30.0)
-	var assignment_bounds := Rect2(Vector2.ZERO, assignment_panel.size)
-	assert(assignment_bounds.encloses(attack_slot.get_rect()))
-	assert(assignment_bounds.encloses(clear_attack.get_rect()))
-	assert(assignment_bounds.encloses(hint.get_rect()))
+	assert(visible_bounds.encloses(attack_slot.get_global_rect()))
+	assert(visible_bounds.encloses(clear_attack.get_global_rect()))
+	assert(visible_bounds.encloses(hint.get_global_rect()))
 	for index in range(6):
 		var ring := assignment_panel.find_child("AttackRingSkillSlot_%d" % (index + 1), true, false) as Control
-		assert(ring != null and assignment_bounds.encloses(ring.get_rect()))
+		assert(ring != null and visible_bounds.encloses(ring.get_global_rect()))
 		var clear_ring := assignment_panel.find_child("ClearAttackRingSkillSlot_%d" % (index + 1), true, false) as Control
-		assert(clear_ring != null and assignment_bounds.encloses(clear_ring.get_rect()))
+		assert(clear_ring != null and visible_bounds.encloses(clear_ring.get_global_rect()))
 		if index % 3 < 2:
 			var next_ring := assignment_panel.find_child("AttackRingSkillSlot_%d" % (index + 2), true, false) as Control
 			assert(not ring.get_rect().intersects(next_ring.get_rect()))

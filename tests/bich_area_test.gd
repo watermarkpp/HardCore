@@ -6,7 +6,11 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	PlayerState.test_mode = true
+	# The initial world bootstrap must exercise the production frame-paced
+	# threaded prefetch path.  The test-mode shortcut uses a tight polling loop
+	# that can starve Godot's main thread while texture resources finalize,
+	# producing transient dummy-renderer RID errors in the full suite.
+	PlayerState.test_mode = false
 	PlayerState.reset_progress()
 	for map_id in [4, 217, 218, 221]:
 		assert(RegionContent.has_map(map_id), "比奇区域包缺少地图%d" % map_id)
@@ -16,8 +20,16 @@ func _run() -> void:
 	assert("森林雪人" in bich_spawn_names and "食人花" in bich_spawn_names, "正式比奇刷怪表缺少森林雪人或食人花")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var bootstrap_deadline := Time.get_ticks_msec() + 15000
+	while (
+		(game._world_bootstrap_in_progress or game._map_transition_in_progress)
+		and Time.get_ticks_msec() < bootstrap_deadline
+	):
+		await get_tree().process_frame
+	assert(not game._world_bootstrap_in_progress, "初始世界加载未完成")
+	assert(not game._map_transition_in_progress, "初始地图切换未完成")
+	# Keep the remainder of the fixture's deterministic gameplay shortcuts.
+	PlayerState.test_mode = true
 
 	game.travel_to_map(217)
 	await get_tree().process_frame
