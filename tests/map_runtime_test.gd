@@ -14,6 +14,7 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await _await_map_transition(game, 5)
 
 	game.hud._toggle_map_panel()
 	assert(game.hud.map_panel.visible, "地图目录未打开")
@@ -29,11 +30,27 @@ func _run() -> void:
 	game.hud.map_panel.hide()
 
 	game.travel_to_map(217)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _await_map_transition(game)
 	assert(game.current_map_id == 217 and game.current_zone == "兽人古墓一层", "地图ID切换失败")
-	assert(get_tree().get_nodes_in_group("enemies").size() == 5, "首批手工地图怪物未生成")
+	# Test mode completes the transition synchronously; flush queued frees before
+	# inspecting the destination actor set. Production performs this frame wait
+	# inside _run_map_transition before declaring READY.
+	await get_tree().process_frame
+	var runtime_content := MapEditorRuntimeBridge.game_content_for_map(217)
+	var expected_monster_ids: Array[int] = []
+	for raw_spawn: Variant in runtime_content.get("spawns", []):
+		if raw_spawn is Dictionary:
+			expected_monster_ids.append(int((raw_spawn as Dictionary).get("monster_id", -1)))
+	var actual_monster_ids: Array[int] = []
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if node is EnemyActor and not node.is_boss:
+			actual_monster_ids.append(int(node.monster_data.get("monsterId", -1)))
+	expected_monster_ids.sort()
+	actual_monster_ids.sort()
+	assert(not expected_monster_ids.is_empty(), "正式运行时地图未声明怪物")
+	assert(actual_monster_ids == expected_monster_ids, "正式运行时地图怪物未按runtime语义生成")
 	assert(get_tree().get_nodes_in_group("interactable").size() >= 1, "通用地图临时门点未生成")
+
 	var generic_map_id := -1
 	for map_data: Variant in GameData.maps:
 		if map_data is Dictionary and bool(map_data.get("availabilityDefault", true)) and not RegionContent.has_map(int(map_data.get("mapId", -1))):
@@ -41,8 +58,7 @@ func _run() -> void:
 			break
 	if generic_map_id > 0:
 		game.travel_to_map(generic_map_id)
-		await get_tree().process_frame
-		await get_tree().process_frame
+		await _await_map_transition(game, 8)
 		assert(get_tree().get_nodes_in_group("enemies").size() >= 8, "通用地图怪物未生成")
 	else:
 		for map_data: Variant in GameData.maps:
@@ -56,13 +72,19 @@ func _run() -> void:
 	assert(not wooma_map.is_empty(), "数据库缺少沃玛寺庙核心地图")
 	assert(GameData.get_bosses_for_map(wooma_map).size() >= 1, "沃玛教主地点关联失败")
 	game.travel_to_map(int(wooma_map.get("mapId", -1)))
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _await_map_transition(game)
 	var boss_count := 0
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if node is EnemyActor and node.is_boss:
 			boss_count += 1
 	assert(boss_count >= 1, "关联Boss未在目标地图生成")
 
-	print("MAP_RUNTIME_PASS：129/142地图目录、唯一ID切换、固定区域怪物、Boss关联与门点正常")
+	print("MAP_RUNTIME_PASS：129/142地图目录、唯一ID切换、正式runtime怪物、Boss关联与门点正常")
 	get_tree().quit(0)
+
+
+func _await_map_transition(game: Node, minimum_enemies: int = 0) -> void:
+	var deadline := Time.get_ticks_msec() + 5000
+	while (bool(game.get("_world_bootstrap_in_progress")) or bool(game.get("_map_transition_in_progress")) or get_tree().get_nodes_in_group("enemies").size() < minimum_enemies) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	assert(not bool(game.get("_world_bootstrap_in_progress")) and not bool(game.get("_map_transition_in_progress")))
