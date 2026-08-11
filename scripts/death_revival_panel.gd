@@ -2,6 +2,7 @@ class_name DeathRevivalPanel
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GAME_ICON := preload("res://assets/branding/game_icon.png")
 
 signal revival_requested(request: Dictionary)
@@ -52,17 +53,6 @@ func _build_background() -> void:
 
 
 func _build_modal() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.set_anchors_preset(Control.PRESET_CENTER)
-	var surface_size := PANEL_RECT.size - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
-	surface.offset_left = -surface_size.x * 0.5
-	surface.offset_top = -surface_size.y * 0.5
-	surface.offset_right = surface_size.x * 0.5
-	surface.offset_bottom = surface_size.y * 0.5
-	surface.theme_type_variation = "GothicModalSurface"
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(surface)
 	modal = Panel.new()
 	modal.name = "DeathRevivalModal"
 	modal.set_anchors_preset(Control.PRESET_CENTER)
@@ -72,6 +62,7 @@ func _build_modal() -> void:
 	modal.offset_bottom = PANEL_RECT.size.y * 0.5
 	modal.theme_type_variation = "GothicModalFrame"
 	add_child(modal)
+	GothicFrameFactoryScript.add_modal_fill(modal, PANEL_RECT.size)
 
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
@@ -159,6 +150,7 @@ func _build_modal() -> void:
 	footer.theme_type_variation = "GothicMutedLabel"
 	footer.add_theme_font_size_override("font_size", 11)
 	modal.add_child(footer)
+	GothicFrameFactoryScript.seal_modal_rings(modal)
 
 
 func _revival_button(node_name: String, text_value: String, y: float, stable_id: String) -> Button:

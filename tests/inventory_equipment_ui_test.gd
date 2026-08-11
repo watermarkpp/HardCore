@@ -1,6 +1,7 @@
 extends Node
 
 const PreviewScript := preload("res://scripts/equipment_character_preview.gd")
+const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 
 
 func _ready() -> void:
@@ -32,13 +33,35 @@ func _run() -> void:
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
 	assert(panel.bag_summary_label.position.y >= 18.0 and panel.bag_summary_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "背包金币与占用格数仍然贴近装饰框上沿")
-	assert(panel.equipment_buttons.size() == 8, "人物装备栏必须显示八个直接装备槽")
+	assert(panel.equipment_buttons.size() == 10, "人物装备栏必须显示十个直接装备槽")
+	assert((panel.equipment_buttons["圣物"] as Button).get_parent().position == Vector2(10, 44), "圣物槽默认位置必须在左上")
+	assert((panel.equipment_buttons["徽章"] as Button).get_parent().position == Vector2(10, 444), "徽章槽默认位置必须在左戒指下方")
+	assert(not (panel.get_node("BagPanel/InventoryActions") is Container), "背包操作栏必须允许校准器独立调整")
+	var sort_rect := Rect2(panel.auto_sort_button.position, panel.auto_sort_button.size)
+	var discard_rect := Rect2(panel.discard_button.position, panel.discard_button.size)
+	assert(not sort_rect.intersects(discard_rect), "整理和丢弃按钮默认不得重叠")
 	assert(panel.item_grid.columns == 8 and panel.item_grid.get_child_count() == 100, "综合背包必须使用8列并提供固定100格")
+	var first_grid_paths: Array[String] = []
+	for cell_index in range(100):
+		var cell := panel.item_grid.get_child(cell_index) as Control
+		assert(cell.name == "InventoryCell_%03d" % cell_index, "背包格必须使用基于序号的稳定节点名")
+		first_grid_paths.append(str(cell.get_path()))
+		if cell.has_node("ItemButton"):
+			assert(cell.get_node("ItemButton").name == "ItemButton", "物品按钮语义节点名不稳定")
+		elif cell.has_node("EmptySlotBackground"):
+			assert(cell.get_node("EmptySlotBackground").name == "EmptySlotBackground", "空格背景语义节点名不稳定")
+	panel.refresh()
+	await get_tree().process_frame
+	for cell_index in range(100):
+		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
 	var fortieth_cell := panel.item_grid.get_child(39) as Control
 	var forty_first_cell := panel.item_grid.get_child(40) as Control
+	var layout_contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(UI_LAYOUT_CONTRACT))
+	var saved_scroll: Array = layout_contract["profiles"]["inventory"]["nodes"]["BagPanel/InventoryScroll"]["logicalRect"]
+	assert(bag_scroll.position.is_equal_approx(Vector2(float(saved_scroll[0]), float(saved_scroll[1]))) and bag_scroll.size.is_equal_approx(Vector2(float(saved_scroll[2]), float(saved_scroll[3]))), "背包滚动区必须与正式校准合同一致")
 	assert(fortieth_cell.position.y + fortieth_cell.size.y <= bag_scroll.size.y, "背包首屏没有完整显示前40格")
-	assert(forty_first_cell.position.y >= bag_scroll.size.y, "第41格错误进入背包首屏")
+	assert(forty_first_cell.position.y >= fortieth_cell.position.y + fortieth_cell.size.y, "背包格子不应重叠")
 	assert(bag_scroll.get_v_scroll_bar().visible, "背包后60格没有提供右侧滚动查看")
 	assert(panel.item_grid.get_child(3).has_node("StackCount") and panel.item_grid.get_child(3).get_node("StackCount").text == "2", "可堆叠物品没有在同一格显示数量")
 	assert(panel.character_preview != null, "装备面板缺少人物穿戴预览")
@@ -51,7 +74,14 @@ func _run() -> void:
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")
 	assert(panel.equipment_stats_label is RichTextLabel and panel.equipment_stats_label.scroll_active, "人物属性超长时没有右侧滑块")
 	assert(panel.detail_label.scroll_active, "物品属性超长时没有右侧滑块")
-	assert(panel.equipment_stats_label.size == panel.detail_label.size, "人物属性与物品属性占位尺寸不一致")
+	for saved_path: String in ["AttributePanel/CharacterStats", "AttributePanel/ItemDetail"]:
+		var saved_rect: Array = layout_contract["profiles"]["inventory"]["nodes"][saved_path]["logicalRect"]
+		var saved_control := panel.get_node(saved_path) as Control
+		assert(
+			saved_control.position.is_equal_approx(Vector2(float(saved_rect[0]), float(saved_rect[1])))
+			and saved_control.size.is_equal_approx(Vector2(float(saved_rect[2]), float(saved_rect[3]))),
+			"人物属性与物品详情必须分别服从正式校准合同"
+		)
 	var equipment_panel := panel.get_node("EquipmentPanel") as Control
 	var necklace_button := panel.equipment_buttons["项链"] as Button
 	var armor_button := panel.equipment_buttons["衣服"] as Button

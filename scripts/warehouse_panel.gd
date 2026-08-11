@@ -2,6 +2,8 @@ class_name WarehousePanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 
 signal closed
@@ -51,25 +53,20 @@ func _ready() -> void:
 	_build_header()
 	_build_storage_sections()
 	_build_compatibility_lists()
+	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	refresh()
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(MODAL_SURFACE_INSET.x, MODAL_SURFACE_INSET.y)
-	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(352, 4)
+	title_frame.position = Vector2(352, 10)
 	title_frame.size = Vector2(460, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -140,7 +137,7 @@ func _build_storage_sections() -> void:
 	bag_panel.add_child(bag_summary_label)
 
 
-func _build_item_grid(parent: Panel, scroll_name: String, grid_name: String) -> GridContainer:
+func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -> GridContainer:
 	var scroll := ScrollContainer.new()
 	scroll.name = scroll_name
 	scroll.position = Vector2(10, 50)
@@ -171,7 +168,7 @@ func _paging_hint(node_name: String, text_value: String) -> Label:
 	return label
 
 
-func _build_page_controls(parent: Panel) -> void:
+func _build_page_controls(parent: Control) -> void:
 	previous_page_button = Button.new()
 	previous_page_button.name = "PreviousPageButton"
 	previous_page_button.text = "‹"
@@ -279,6 +276,7 @@ func refresh() -> void:
 	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
 	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory.size() >= BAG_CAPACITY
 	_refresh_transfer_detail()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "warehouse")
 
 
 func _fill_grid(
@@ -479,22 +477,9 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	button.add_child(icon_rect)
 
 
-func _section_panel(node_name: String, rect: Rect2) -> Panel:
+func _section_panel(node_name: String, rect: Rect2) -> Control:
 	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = adjusted_rect.position + Vector2(8, 8)
-	surface.size = adjusted_rect.size - Vector2(16, 16)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var panel := Panel.new()
-	panel.name = node_name
-	panel.position = adjusted_rect.position
-	panel.size = adjusted_rect.size
-	panel.theme_type_variation = "GothicInsetFrame"
-	add_child(panel)
-	return panel
+	return GothicFrameFactoryScript.add_filled_section(self, node_name, adjusted_rect)
 
 
 func _section_title(text_value: String, width: float) -> Label:

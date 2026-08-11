@@ -2,6 +2,8 @@ class_name SystemMenuPanel
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal continue_requested
 signal return_to_character_select_requested
@@ -39,6 +41,7 @@ func _ready() -> void:
 	_build_background()
 	_build_modal()
 	show_main_page()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
 
 
 func _build_background() -> void:
@@ -57,14 +60,6 @@ func _build_background() -> void:
 
 
 func _build_modal() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.set_anchors_preset(Control.PRESET_CENTER)
-	surface.position = -PANEL_RECT.size * 0.5 + Vector2(18, 24)
-	surface.size = PANEL_RECT.size - Vector2(36, 48)
-	surface.theme_type_variation = "GothicModalSurface"
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(surface)
 	modal = Panel.new()
 	modal.name = "SystemMenuModal"
 	modal.set_anchors_preset(Control.PRESET_CENTER)
@@ -72,8 +67,10 @@ func _build_modal() -> void:
 	modal.size = PANEL_RECT.size
 	modal.theme_type_variation = "GothicModalFrame"
 	add_child(modal)
+	GothicFrameFactoryScript.add_modal_fill(modal, PANEL_RECT.size)
 	_build_main_page()
 	_build_settings_page()
+	GothicFrameFactoryScript.seal_modal_rings(modal)
 
 
 func _build_main_page() -> void:
@@ -236,6 +233,7 @@ func show_main_page() -> void:
 		main_page.show()
 	if settings_page != null:
 		settings_page.hide()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
 
 
 func show_settings_page() -> void:

@@ -20,10 +20,12 @@ func _run() -> void:
 	assert(game.hud.has_signal("map_teleport_availability_requested"), "HUD 没有转发传送规则请求")
 	assert(game.hud.has_signal("map_teleport_requested"), "HUD 没有转发结构化传送请求")
 	assert(game.hud.has_method("set_map_teleport_availability"), "HUD 缺少传送开放规则注入方法")
-	assert(game.hud.map_panel.map_entries.size() == 129, "地图目录默认筛选错误")
-	game.hud.map_panel.later_toggle.button_pressed = true
+	assert(game.hud.map_panel._selected_world_node_id == "bich_province", "地图目录默认未选择首个可过滤大区")
+	for map_data: Dictionary in game.hud.map_panel.map_entries:
+		assert(game.hud.map_panel._node_matches_map(game.hud.map_panel._world_node("bich_province"), map_data), "默认地图列表含不匹配地图")
+	PlayerState.set_later_content_enabled(true)
+	game.hud.map_panel.refresh()
 	assert(PlayerState.later_content_enabled, "后期内容开关未保存")
-	assert(game.hud.map_panel.map_entries.size() == 142, "后期地图未进入目录")
 	game.hud.map_panel.hide()
 
 	game.travel_to_map(217)

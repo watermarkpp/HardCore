@@ -1,17 +1,19 @@
 class_name GothicUITheme
 extends RefCounted
 
+const GothicModalLayoutScript := preload("res://scripts/gothic_modal_layout.gd")
+
 const COMPONENT_ROOT := "res://assets/ui/gothic_theme/v1/sample"
 const COMPONENT_MODAL_FRAME := preload(COMPONENT_ROOT + "/modal_frame.png")
 const COMPONENT_TITLE_BAR := preload(COMPONENT_ROOT + "/title_bar.png")
-const COMPONENT_INSET_FRAME := preload(COMPONENT_ROOT + "/inset_frame.png")
-const COMPONENT_TAB_FRAME := preload(COMPONENT_ROOT + "/tab_frame.png")
-const COMPONENT_BUTTON_NORMAL := preload(COMPONENT_ROOT + "/button_normal.png")
-const COMPONENT_BUTTON_PRESSED := preload(COMPONENT_ROOT + "/button_pressed.png")
-const COMPONENT_BUTTON_DISABLED := preload(COMPONENT_ROOT + "/button_disabled.png")
-const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot.png")
-const COMPONENT_SHOP_CARD := preload(COMPONENT_ROOT + "/shop_card.png")
-const COMPONENT_CLOSE_RING := preload(COMPONENT_ROOT + "/close_ring.png")
+const COMPONENT_INSET_FRAME := preload(COMPONENT_ROOT + "/inset_frame_single_v2.png")
+const COMPONENT_TAB_FRAME := preload(COMPONENT_ROOT + "/tab_frame_single_v2.png")
+const COMPONENT_BUTTON_NORMAL := preload(COMPONENT_ROOT + "/button_normal_single_v2.png")
+const COMPONENT_BUTTON_PRESSED := preload(COMPONENT_ROOT + "/button_pressed_single_v2.png")
+const COMPONENT_BUTTON_DISABLED := preload(COMPONENT_ROOT + "/button_disabled_single_v2.png")
+const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
+const COMPONENT_SHOP_CARD := preload(COMPONENT_ROOT + "/shop_card_single_v2.png")
+const COMPONENT_CLOSE_RING := preload(COMPONENT_ROOT + "/close_ring_single_v2.png")
 
 const IRON := Color("181513")
 const IRON_HOVER := Color("2b2119")
@@ -22,6 +24,7 @@ const PARCHMENT := Color("ead8b7")
 const MUTED := Color("a99479")
 const BLOOD := Color("6e1519")
 const MANA := Color("173d79")
+const MODAL_CONTENT_SAFE_INSET := GothicModalLayoutScript.FRAME_SAFE_INSET
 
 
 static func build() -> Theme:
@@ -58,14 +61,14 @@ static func build() -> Theme:
 	result.set_type_variation("GothicContentToggle", "CheckButton")
 	result.set_stylebox("normal", "GothicContentToggle", _flat(Color(0.018, 0.015, 0.014, 0.86), Color(0.38, 0.28, 0.19, 0.8), 1, 8))
 	result.set_stylebox("hover", "GothicContentToggle", _flat(Color(0.09, 0.055, 0.028, 0.92), BRONZE, 1, 8))
-	result.set_stylebox("pressed", "GothicContentToggle", _flat(Color(0.14, 0.065, 0.025, 0.96), BRONZE_BRIGHT, 2, 8))
+	result.set_stylebox("pressed", "GothicContentToggle", _flat(Color(0.14, 0.065, 0.025, 0.96), BRONZE_BRIGHT, 1, 8))
 	result.set_stylebox("focus", "GothicContentToggle", _flat(Color(0.09, 0.055, 0.028, 0.92), BRONZE_BRIGHT, 1, 8))
 	result.set_color("font_color", "GothicContentToggle", PARCHMENT)
 	result.set_color("font_hover_color", "GothicContentToggle", Color.WHITE)
 	result.set_color("font_pressed_color", "GothicContentToggle", Color("ffe2ad"))
 	result.set_font_size("font_size", "GothicContentToggle", 14)
 	result.set_type_variation("GothicInfoPanel", "Panel")
-	result.set_stylebox("panel", "GothicInfoPanel", _flat(Color(0.025, 0.02, 0.018, 0.88), Color(0.42, 0.31, 0.20, 0.92), 2, 16))
+	result.set_stylebox("panel", "GothicInfoPanel", _flat(Color(0.025, 0.02, 0.018, 0.88), Color(0.42, 0.31, 0.20, 0.92), 1, 16))
 	result.set_type_variation("GothicTargetPanel", "Panel")
 	result.set_stylebox("panel", "GothicTargetPanel", _flat(Color(0.035, 0.018, 0.015, 0.91), Color(0.58, 0.34, 0.20, 0.96), 2, 18))
 	result.set_type_variation("GothicSkillDisc", "Panel")
@@ -88,14 +91,21 @@ static func build() -> Theme:
 	result.set_stylebox("panel", "GothicModalSurface", _flat(Color(0.018, 0.014, 0.012, 0.94), Color.TRANSPARENT, 0, 24))
 	result.set_type_variation("GothicModalScrim", "Panel")
 	result.set_stylebox("panel", "GothicModalScrim", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0))
+	var modal_frame_style := _texture(COMPONENT_MODAL_FRAME, Vector4(112, 96, 112, 96), 0)
+	modal_frame_style.content_margin_left = MODAL_CONTENT_SAFE_INSET.x
+	modal_frame_style.content_margin_top = MODAL_CONTENT_SAFE_INSET.y
+	modal_frame_style.content_margin_right = MODAL_CONTENT_SAFE_INSET.z
+	modal_frame_style.content_margin_bottom = MODAL_CONTENT_SAFE_INSET.w
 	result.set_type_variation("GothicModalFrame", "Panel")
-	result.set_stylebox("panel", "GothicModalFrame", _texture(COMPONENT_MODAL_FRAME, Vector4(112, 96, 112, 96), 42))
+	result.set_stylebox("panel", "GothicModalFrame", modal_frame_style)
+	result.set_type_variation("GothicModalFrameOverlay", "Panel")
+	result.set_stylebox("panel", "GothicModalFrameOverlay", modal_frame_style)
 	result.set_type_variation("GothicTitleBar", "Panel")
-	result.set_stylebox("panel", "GothicTitleBar", _texture(COMPONENT_TITLE_BAR, Vector4(118, 58, 118, 58), 34))
+	result.set_stylebox("panel", "GothicTitleBar", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0))
 	result.set_type_variation("GothicInsetFrame", "Panel")
-	result.set_stylebox("panel", "GothicInsetFrame", _texture(COMPONENT_INSET_FRAME, Vector4(48, 48, 48, 48), 28))
+	result.set_stylebox("panel", "GothicInsetFrame", _texture(COMPONENT_INSET_FRAME, Vector4(18, 18, 18, 18), 14))
 	result.set_type_variation("GothicTabFrame", "Panel")
-	result.set_stylebox("panel", "GothicTabFrame", _texture(COMPONENT_TAB_FRAME, Vector4(76, 48, 76, 48), 26))
+	result.set_stylebox("panel", "GothicTabFrame", _texture(COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14))
 	result.set_type_variation("GothicEquipmentSlotCaption", "Panel")
 	result.set_stylebox("panel", "GothicEquipmentSlotCaption", _flat(Color(0.035, 0.024, 0.018, 0.98), Color(0.52, 0.37, 0.21, 0.96), 1, 3))
 	result.set_type_variation("GothicLootGroundPanel", "Panel")
@@ -114,9 +124,11 @@ static func build() -> Theme:
 	_apply_button_variation(result, "GothicItemButton", _flat(Color(0.018, 0.015, 0.014, 0.86), Color(0.55, 0.39, 0.22, 0.22), 1, 5), _flat(Color(0.16, 0.09, 0.045, 0.88), BRONZE_BRIGHT, 2, 5), _flat(Color(0.25, 0.11, 0.04, 0.92), Color("e6b56f"), 2, 5))
 	_apply_button_variation(result, "GothicHUDItemHitButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.18, 0.09, 0.045, 0.18), Color.TRANSPARENT, 0, 7), _flat(Color(0.30, 0.11, 0.04, 0.24), Color.TRANSPARENT, 0, 7))
 	_apply_button_variation(result, "GothicTransparentButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.45, 0.22, 0.06, 0.12), Color(0.85, 0.66, 0.38, 0.55), 1, 9), _flat(Color(0.55, 0.12, 0.04, 0.20), BRONZE_BRIGHT, 2, 9))
-	_apply_texture_button_variation(result, "GothicComponentButton", COMPONENT_BUTTON_NORMAL, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(48, 34, 48, 34), 18)
-	_apply_texture_button_variation(result, "GothicComponentSelectedButton", COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(48, 34, 48, 34), 18)
-	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(82, 44, 82, 44), 18)
+	_apply_button_variation(result, "GothicPanelTransparentButton", _flat(Color.TRANSPARENT, Color(0.46, 0.33, 0.21, 0.86), 1, 9), _flat(Color(0.16, 0.08, 0.04, 0.72), BRONZE_BRIGHT, 1, 9), _flat(Color(0.26, 0.08, 0.035, 0.82), BRONZE_BRIGHT, 1, 9))
+	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
+	_apply_texture_button_variation(result, "GothicComponentButton", COMPONENT_BUTTON_NORMAL, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(18, 18, 18, 18), 14)
+	_apply_texture_button_variation(result, "GothicComponentSelectedButton", COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(18, 18, 18, 18), 14)
+	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
 	_apply_equipment_slot_button_variation(result, "GothicEquipmentSlotButton", false)
@@ -125,8 +137,22 @@ static func build() -> Theme:
 	_apply_texture_button_variation(result, "GothicComponentShopCard", COMPONENT_SHOP_CARD, COMPONENT_SHOP_CARD, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 12)
 	_apply_selected_shop_card_variation(result)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
-	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 8)
+	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, Vector4.ZERO, 8)
 	return result
+
+
+static func modal_content_safe_rect(panel_size: Vector2) -> Rect2:
+	return GothicModalLayoutScript.safe_rect(panel_size)
+
+
+static func add_modal_frame_overlay(parent: Control) -> Panel:
+	var overlay := Panel.new()
+	overlay.name = "ModalFrameOverlay"
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.theme_type_variation = "GothicModalFrameOverlay"
+	parent.add_child(overlay)
+	return overlay
 
 
 static func _apply_button_variation(theme: Theme, variation: StringName, normal: StyleBox, hover: StyleBox, pressed: StyleBox) -> void:
@@ -159,9 +185,9 @@ static func _apply_texture_button_variation(theme: Theme, variation: StringName,
 
 static func _apply_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
 	theme.set_type_variation(variation, "Button")
-	var normal := _slot_box(Color("21150d"), Color("bd8644"), 2) if selected else _slot_box(Color("0c0a09"), Color("594532"), 2)
-	var hover := _slot_box(Color("18110c"), Color("9a7044"), 2)
-	var pressed := _slot_box(Color("26160c"), Color("d3a15e"), 2)
+	var normal := _slot_box(Color("21150d"), Color("bd8644"), 1) if selected else _slot_box(Color("0c0a09"), Color("594532"), 1)
+	var hover := _slot_box(Color("18110c"), Color("9a7044"), 1)
+	var pressed := _slot_box(Color("26160c"), Color("d3a15e"), 1)
 	theme.set_stylebox("normal", variation, normal)
 	theme.set_stylebox("hover", variation, hover)
 	theme.set_stylebox("pressed", variation, pressed)
@@ -176,9 +202,9 @@ static func _apply_slot_button_variation(theme: Theme, variation: StringName, se
 
 static func _apply_equipment_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
 	theme.set_type_variation(variation, "Button")
-	var normal := _equipment_slot_box(Color("21150d"), Color("c18a49"), 2) if selected else _equipment_slot_box(Color("0b0a09"), Color("72583b"), 2)
-	var hover := _equipment_slot_box(Color("15100c"), Color("a77a46"), 2)
-	var pressed := _equipment_slot_box(Color("25150b"), Color("d8a25b"), 2)
+	var normal := _equipment_slot_box(Color("21150d"), Color("c18a49"), 1) if selected else _equipment_slot_box(Color("0b0a09"), Color("72583b"), 1)
+	var hover := _equipment_slot_box(Color("15100c"), Color("a77a46"), 1)
+	var pressed := _equipment_slot_box(Color("25150b"), Color("d8a25b"), 1)
 	theme.set_stylebox("normal", variation, normal)
 	theme.set_stylebox("hover", variation, hover)
 	theme.set_stylebox("pressed", variation, pressed)

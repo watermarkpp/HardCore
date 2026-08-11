@@ -17,7 +17,7 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	PlayerState.level = 50
 	PlayerState.recalculate_stats()
-	assert(PlayerState.EQUIPMENT_SLOTS == ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"], "1.76八装备槽顺序错误")
+	assert(PlayerState.EQUIPMENT_SLOTS == ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"], "装备十槽顺序错误")
 
 	PlayerState.add_item("古铜戒指", 3)
 	var first_id := str(PlayerState.inventory[0].get("instance_id", ""))
@@ -56,7 +56,7 @@ func _run() -> void:
 	var legacy_bracelet := {"name": "铁手镯", "durability": 2, "max_durability": 4, "instance_id": "legacy_bracelet"}
 	var legacy_ring := {"name": "古铜戒指", "durability": 3, "max_durability": 5, "instance_id": "legacy_ring"}
 	var migrated := PlayerState.migrate_equipment_slots({"武器": "木剑", "手镯": legacy_bracelet, "戒指": legacy_ring})
-	assert(migrated.size() == 8 and not migrated.has("手镯") and not migrated.has("戒指"), "旧存档没有迁移为八槽结构")
+	assert(migrated.size() == 10 and not migrated.has("手镯") and not migrated.has("戒指"), "旧存档没有迁移为十槽结构")
 	assert(str(migrated["左手镯"].get("instance_id", "")) == "legacy_bracelet" and migrated["右手镯"].is_empty(), "旧手镯实例迁移错误")
 	assert(str(migrated["左戒指"].get("instance_id", "")) == "legacy_ring" and migrated["右戒指"].is_empty(), "旧戒指实例迁移错误")
 	assert(str(migrated["武器"].get("name", "")) == "木剑", "旧字符串装备兼容迁移失败")
@@ -64,7 +64,7 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	assert(panel.equipment_slot_picker.item_count == 8, "装备面板没有提供八槽选择")
+	assert(panel.equipment_slot_picker.item_count == 10, "装备面板没有提供十槽选择")
 	assert("左手镯" in panel.equipment_label.text and "右戒指" in panel.equipment_label.text, "装备面板没有显示左右槽")
 
 	# ---- 左右重复装备槽自动轮换 cursor ----

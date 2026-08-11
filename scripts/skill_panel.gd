@@ -5,6 +5,8 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
 )
@@ -76,19 +78,28 @@ func _ready() -> void:
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
+	var surface := GothicFrameFillScript.new()
 	surface.name = "ModalSurface"
-	surface.position = Vector2(MODAL_SURFACE_INSET.x, MODAL_SURFACE_INSET.y)
-	surface.size = PANEL_SIZE - Vector2(MODAL_SURFACE_INSET.x + MODAL_SURFACE_INSET.z, MODAL_SURFACE_INSET.y + MODAL_SURFACE_INSET.w)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
+	# The large frame has two visible rings. Its source image's regular inner
+	# opening starts at x=46/y=60 and ends 46/65 px before the opposite edges.
+	# This code fill is placed strictly inside that opening and drawn behind the
+	# frame, so neither ring nor the central ornaments can be covered.
+	# The measured inner opening follows a 41 px radius from (83, 60) to
+	# (42, 101). Extend the fill one pixel beneath the inner ring so its
+	# antialiased edge covers the join without ever drawing above the frame.
+	surface.position = Vector2(41, 59)
+	surface.size = PANEL_SIZE - Vector2(82, 123)
+	surface.shape_mode = GothicFrameFillScript.ShapeMode.ROUNDED_INNER
+	surface.corner_radius = 42.0
+	surface.show_behind_parent = true
+	surface.set_meta("calibration_internal_visual", true)
 	add_child(surface)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(374, 4)
+	title_frame.position = Vector2(374, 10)
 	title_frame.size = Vector2(460, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -470,6 +481,7 @@ func refresh() -> void:
 		_show_skill_detail(selected_skill_index)
 	else:
 		_clear_skill_detail()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
 
 
 func _rebuild_skill_cards() -> void:
@@ -892,22 +904,33 @@ func _target_mode_label(target_mode: String) -> String:
 	}.get(target_mode, target_mode)
 
 
-func _section_panel(node_name: String, rect: Rect2) -> Panel:
+func _section_panel(node_name: String, rect: Rect2) -> Control:
 	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = adjusted_rect.position + Vector2(8, 8)
-	surface.size = adjusted_rect.size - Vector2(16, 16)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var panel := Panel.new()
-	panel.name = node_name
-	panel.position = adjusted_rect.position
-	panel.size = adjusted_rect.size
-	panel.theme_type_variation = "GothicInsetFrame"
-	add_child(panel)
-	return panel
+	var section := Control.new()
+	section.name = node_name
+	section.position = adjusted_rect.position
+	section.size = adjusted_rect.size
+	section.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(section)
+	var decoration := Control.new()
+	decoration.name = "%sDecoration" % node_name
+	decoration.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	decoration.set_meta("calibration_layer", "filled_single_ring_decoration")
+	section.add_child(decoration)
+	var fill := GothicFrameFillScript.new()
+	fill.name = "%sFill" % node_name
+	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	fill.set_meta("calibration_internal_visual", true)
+	decoration.add_child(fill)
+	var frame := Panel.new()
+	frame.name = "%sFrame" % node_name
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.theme_type_variation = "GothicInsetFrame"
+	frame.set_meta("calibration_internal_visual", true)
+	decoration.add_child(frame)
+	return section
 
 
 func _section_title(text_value: String, width: float) -> Label:

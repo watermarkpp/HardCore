@@ -2,6 +2,7 @@ extends Node
 
 const CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/confirmation_dialog_contract_v1.json"
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
 
 
 func _ready() -> void:
@@ -22,6 +23,7 @@ func _run() -> void:
 	assert(dialog.modal_frame.theme_type_variation == "GothicInsetFrame", "紧凑确认组件没有使用比例匹配的公共内嵌框")
 	assert(dialog.modal_frame.clip_contents, "确认框没有启用子内容裁切")
 	assert(Rect2(Vector2.ZERO, dialog.modal_frame.size).encloses(Rect2(dialog.inner_fill.position, dialog.inner_fill.size)), "内部底板超出装饰框")
+	assert(dialog.inner_fill.get_script() == GothicFrameFillScript and dialog.inner_fill.show_behind_parent, "确认框没有使用贴合单圈框的代码背景")
 	assert(dialog.cancel_button.size.y >= 56 and dialog.confirm_button.size.y >= 56, "确认按钮触控高度不足")
 	assert(dialog.cancel_button.theme_type_variation == "GothicComponentButton", "取消按钮未复用公共 Theme")
 	assert(dialog.confirm_button.theme_type_variation == "GothicComponentSelectedButton", "确认按钮未复用公共 Theme")

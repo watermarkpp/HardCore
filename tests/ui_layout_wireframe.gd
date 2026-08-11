@@ -3,11 +3,11 @@ extends Control
 const DESIGN_SIZE := Vector2(1280, 720)
 const SAFE_RECT := Rect2(24, 16, 1232, 688)
 const TOUCH_MIN := 56.0
-const MODES := ["hud", "inventory", "shop", "warehouse", "quest", "map", "skill", "profession"]
+const MODES := ["hud", "inventory", "shop", "warehouse", "quest", "map", "skill"]
 const TOP_CAPTION_NODES := [
 	"AttributeSection", "CharacterSection", "BagSection", "CategorySection", "GoodsSection", "DetailSection",
 	"TransferSection", "StashSection", "QuestList", "QuestDetail", "MapList", "MapCanvas", "MapDetail",
-	"SkillList", "SkillDetail", "Assignment", "ProfessionIdentity", "GrowthPath", "Unlocks",
+	"SkillList", "SkillDetail", "Assignment",
 ]
 
 const COLOR_BG := Color("10141a")
@@ -56,8 +56,6 @@ func _build_canvas() -> void:
 				_build_map()
 			"skill":
 				_build_skill()
-			"profession":
-				_build_profession()
 	_build_safe_guide()
 	_build_legend()
 
@@ -219,22 +217,6 @@ func _build_skill() -> void:
 	_add_panel(panel, "Assignment", Rect2(854, 78, 334, 548), "技能按钮配置", COLOR_SECTION)
 	for index in range(3):
 		_add_touch(panel, "SkillSlot%d" % index, Rect2(876, 144 + index * 136, 290, 112), "技能按钮 %d" % (index + 1), COLOR_RED if index == 0 else COLOR_GOLD)
-
-
-func _build_profession() -> void:
-	var panel := _modal_shell("ProfessionPanel", "职业成长", "职业定位、成长路线与解锁内容", Rect2(90, 48, 1100, 636))
-	_add_panel(panel, "ProfessionTabs", Rect2(20, 78, 1060, 88), "", COLOR_SECTION)
-	for index in range(3):
-		_add_touch(panel, "Profession%d" % index, Rect2(38 + index * 346, 94, 326, 56), ["战士", "法师", "道士"][index], COLOR_RED if index == 0 else COLOR_BLUE)
-	_add_panel(panel, "ProfessionIdentity", Rect2(20, 178, 316, 434), "职业定位", COLOR_SECTION)
-	_add_panel(panel, "ProfessionPortrait", Rect2(44, 228, 268, 180), "职业人物预览", Color("414b58"))
-	_add_panel(panel, "RoleText", Rect2(44, 424, 268, 160), "近战 / 爆发 / 生存\n主属性与推荐装备", Color("414b58"))
-	_add_panel(panel, "GrowthPath", Rect2(348, 178, 440, 434), "成长路线", COLOR_SECTION)
-	for index in range(4):
-		_add_touch(panel, "GrowthNode%d" % index, Rect2(372, 226 + index * 86, 392, 68), "阶段 %d　属性与技能解锁" % (index + 1), COLOR_GOLD)
-	_add_panel(panel, "Unlocks", Rect2(800, 178, 280, 434), "解锁内容", COLOR_SECTION)
-	_add_panel(panel, "UnlockList", Rect2(824, 228, 232, 238), "技能\n装备类型\n职业机制\n成长奖励", Color("414b58"))
-	_add_touch(panel, "ConfirmProfession", Rect2(824, 504, 232, 64), "确认职业", COLOR_GREEN)
 
 
 func _add_shop_item(parent: Control, index: int, at: Vector2) -> void:

@@ -2,6 +2,7 @@ extends Node
 
 const CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/system_menu_audio_contract_v1.json"
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
 
 
 func _ready() -> void:
@@ -19,6 +20,8 @@ func _run() -> void:
 
 	assert(menu.process_mode == Node.PROCESS_MODE_WHEN_PAUSED, "暂停菜单不能在游戏暂停时工作")
 	assert(menu.modal.theme_type_variation == "GothicModalFrame", "暂停菜单没有使用公共哥特外框")
+	assert(menu.modal.get_node("ModalSurface").get_script() == GothicFrameFillScript, "暂停菜单一级框没有使用代码背景")
+	assert(menu.modal.has_node("ModalFrameSafetyOverlay"), "暂停菜单缺少双圈安全覆盖层")
 	assert(menu.modal.anchor_left == 0.5 and menu.modal.anchor_top == 0.5, "暂停菜单没有使用宽屏居中锚点")
 	assert(menu.current_page == "main" and menu.main_page.visible and not menu.settings_page.visible, "暂停菜单默认页面错误")
 	assert(menu.continue_button.size.y >= 56, "继续游戏按钮触控区不足")

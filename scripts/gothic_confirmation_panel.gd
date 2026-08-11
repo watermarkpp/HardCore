@@ -7,9 +7,10 @@ signal cancelled(request: Dictionary)
 const CONTRACT_ID := "ui.confirmation.dialog.v1"
 const STABLE_ID := "ui.confirmation.dialog"
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 
 var modal_frame: Panel
-var inner_fill: Panel
+var inner_fill: Control
 var title_label: Label
 var message_label: Label
 var cancel_button: Button
@@ -46,13 +47,7 @@ func _build_interface() -> void:
 	modal_frame.clip_contents = true
 	add_child(modal_frame)
 
-	inner_fill = Panel.new()
-	inner_fill.name = "InnerFill"
-	inner_fill.position = Vector2(20, 20)
-	inner_fill.size = Vector2(520, 264)
-	inner_fill.theme_type_variation = "GothicModalSurface"
-	inner_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	modal_frame.add_child(inner_fill)
+	inner_fill = GothicFrameFactoryScript.add_inset_fill(modal_frame)
 
 	var title_bar := Panel.new()
 	title_bar.name = "TitleBar"

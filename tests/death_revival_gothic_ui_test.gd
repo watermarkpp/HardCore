@@ -2,6 +2,7 @@ extends Node
 
 const CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/death_revival_contract_v1.json"
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
 const GAME_ICON_PATH := "res://assets/branding/game_icon.png"
 
 
@@ -25,6 +26,8 @@ func _run() -> void:
 	assert(panel.modal.position + panel.modal.size * 0.5 == host.size * 0.5, "死亡复活框没有随 expand 宽屏重新居中")
 	assert(panel.process_mode == Node.PROCESS_MODE_WHEN_PAUSED, "死亡界面必须能在暂停状态工作")
 	assert(panel.modal.theme_type_variation == "GothicModalFrame", "死亡界面没有复用公共哥特外框")
+	assert(panel.modal.get_node("ModalSurface").get_script() == GothicFrameFillScript, "死亡界面一级框没有使用代码背景")
+	assert(panel.modal.has_node("ModalFrameSafetyOverlay"), "死亡界面缺少双圈安全覆盖层")
 	assert(panel.town_button.get_meta("stable_id", "") == "death.revival.town", "城镇复活按钮稳定 ID 错误")
 	assert(panel.special_button.get_meta("stable_id", "") == "death.revival.special", "特殊复活按钮稳定 ID 错误")
 	assert(panel.town_button.size.y >= 56 and panel.special_button.size.y >= 56, "复活按钮触控范围不足")

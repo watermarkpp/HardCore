@@ -2,8 +2,10 @@ class_name ShopPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const QUANTITY_BUTTON_TEXTURE := preload("res://assets/ui/gothic_theme/v1/sample/button_normal.png")
 
 signal closed
@@ -28,6 +30,8 @@ var sell_quantity_row: Control
 var sell_quantity_label: Label
 var sell_one_button: Button
 var sell_quantity_button: Button
+var decrease_quantity_button: Button
+var increase_quantity_button: Button
 var sell_confirmation: Control
 var stock: Array = []
 var _trade_mode := "buy"
@@ -44,6 +48,7 @@ var _inventory_refresh_execution_count := 0
 
 
 func _ready() -> void:
+	set_meta("calibration_retired_paths", ["DetailPanel/SellOneButton"])
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -58,31 +63,24 @@ func _ready() -> void:
 	_build_goods_section()
 	_build_detail_section()
 	_build_compatibility_list()
+	GothicFrameFactoryScript.seal_modal_rings(self)
 	PlayerState.profile_changed.connect(_refresh_gold)
 	PlayerState.equipment_changed.connect(_refresh_repair_preview)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	visibility_changed.connect(_on_visibility_changed)
 	_refresh_gold()
 	_refresh_repair_preview()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "shop_buy")
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(42, 42)
-	surface.size = Vector2(996, 536)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	var surface_style := StyleBoxFlat.new()
-	surface_style.bg_color = Color("171513")
-	surface.add_theme_stylebox_override("panel", surface_style)
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(290, 4)
+	title_frame.position = Vector2(290, 10)
 	title_frame.size = Vector2(500, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -189,6 +187,7 @@ func _build_detail_section() -> void:
 	sell_quantity_row.clip_contents = true
 	panel.add_child(sell_quantity_row)
 	var minus_button := Button.new()
+	decrease_quantity_button = minus_button
 	minus_button.name = "DecreaseQuantity"
 	minus_button.text = ""
 	minus_button.tooltip_text = "减少出售数量"
@@ -196,7 +195,7 @@ func _build_detail_section() -> void:
 	minus_button.add_theme_font_size_override("font_size", 18)
 	minus_button.position = Vector2(8, 0)
 	minus_button.size = Vector2(58, 46)
-	minus_button.theme_type_variation = "GothicTransparentButton"
+	minus_button.theme_type_variation = "GothicPanelTransparentButton"
 	minus_button.clip_contents = true
 	_add_quantity_decoration(minus_button, false)
 	_add_quantity_symbol(minus_button, false)
@@ -219,6 +218,7 @@ func _build_detail_section() -> void:
 	sell_quantity_label.add_theme_font_size_override("font_size", 16)
 	sell_quantity_row.add_child(sell_quantity_label)
 	var plus_button := Button.new()
+	increase_quantity_button = plus_button
 	plus_button.name = "IncreaseQuantity"
 	plus_button.text = ""
 	plus_button.tooltip_text = "增加出售数量"
@@ -226,29 +226,21 @@ func _build_detail_section() -> void:
 	plus_button.add_theme_font_size_override("font_size", 18)
 	plus_button.position = Vector2(260, 0)
 	plus_button.size = Vector2(58, 46)
-	plus_button.theme_type_variation = "GothicTransparentButton"
+	plus_button.theme_type_variation = "GothicPanelTransparentButton"
 	plus_button.clip_contents = true
 	_add_quantity_decoration(plus_button, true)
 	_add_quantity_symbol(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
 	sell_quantity_row.add_child(plus_button)
-	sell_one_button = Button.new()
-	sell_one_button.name = "SellOneButton"
-	sell_one_button.text = "出售单件"
-	sell_one_button.position = Vector2(20, 356)
-	sell_one_button.size = Vector2(326, 48)
-	sell_one_button.theme_type_variation = "GothicComponentSelectedButton"
-	sell_one_button.visible = false
-	sell_one_button.pressed.connect(_request_sell.bind(1))
-	panel.add_child(sell_one_button)
 	sell_quantity_button = Button.new()
 	sell_quantity_button.name = "SellQuantityButton"
-	sell_quantity_button.text = "出售选定数量"
-	sell_quantity_button.position = Vector2(20, 412)
+	sell_quantity_button.text = "出售"
+	sell_quantity_button.position = Vector2(20, 356)
 	sell_quantity_button.size = Vector2(326, 48)
 	sell_quantity_button.theme_type_variation = "GothicComponentButton"
 	sell_quantity_button.visible = false
 	sell_quantity_button.pressed.connect(_request_selected_quantity)
+	sell_quantity_button.set_meta("calibration_text_revision", 1)
 	panel.add_child(sell_quantity_button)
 	sell_confirmation = GothicConfirmationPanelScript.new()
 	sell_confirmation.name = "SellConfirmation"
@@ -302,21 +294,8 @@ func _build_compatibility_list() -> void:
 	add_child(item_list)
 
 
-func _framed_section(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position + Vector2(10, 10)
-	surface.size = rect.size - Vector2(20, 20)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var frame := Panel.new()
-	frame.name = node_name
-	frame.position = rect.position
-	frame.size = rect.size
-	frame.theme_type_variation = "GothicInsetFrame"
-	add_child(frame)
-	return frame
+func _framed_section(node_name: String, rect: Rect2) -> Control:
+	return GothicFrameFactoryScript.add_filled_section(self, node_name, rect)
 
 
 func _section_title(text_value: String, section_width: float) -> Label:
@@ -452,7 +431,6 @@ func _set_trade_mode(mode: String) -> void:
 	buy_button.visible = buying
 	repair_button.visible = buying
 	sell_quantity_row.visible = not buying
-	sell_one_button.visible = not buying
 	sell_quantity_button.visible = not buying
 	if buying:
 		_rebuild_goods_cards()
@@ -467,6 +445,7 @@ func _set_trade_mode(mode: String) -> void:
 		_update_sell_quantity_label()
 		detail_label.text = "[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]\n\n[color=#a99479]出售价格由玩法层报价，UI不会自行计算。[/color]"
 		_request_sell_quotes()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "shop_sell" if not buying else "shop_buy")
 
 
 func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
@@ -482,7 +461,21 @@ func set_sell_quotes(quotes: Dictionary) -> void:
 			var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
 			card.set_pressed_no_signal(selected)
 			card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
+		_reclamp_sell_quantities()
 		_update_sell_quantity_label()
+
+
+func _reclamp_sell_quantities() -> void:
+	for index_variant in _selected_sell_indices.keys().duplicate():
+		var inventory_index := int(index_variant)
+		if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
+			_selected_sell_indices.erase(inventory_index)
+			_sell_quantities.erase(inventory_index)
+			continue
+		var record: Dictionary = PlayerState.inventory[inventory_index]
+		var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
+		var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
+		_sell_quantities[inventory_index] = clampi(int(_sell_quantities.get(inventory_index, 1)), 1, maximum)
 
 
 func apply_sell_result(result: Dictionary) -> void:
@@ -599,15 +592,24 @@ func _update_sell_quantity_label() -> void:
 	if sell_quantity_label == null:
 		return
 	sell_quantity_label.text = "出售数量：%d" % _sell_quantity
-	if sell_quantity_button != null:
-		sell_quantity_button.text = "出售选定数量（%d）" % _sell_quantity
+	var selected_record: Dictionary = PlayerState.inventory[_selected_sell_index] if _selected_sell_index >= 0 and _selected_sell_index < PlayerState.inventory.size() else {}
+	var maximum := 1
+	var sellable := false
+	if not selected_record.is_empty():
+		var selected_quote: Dictionary = _sell_quotes.get(sell_quote_key(_selected_sell_index, selected_record), {})
+		maximum = clampi(int(selected_quote.get("max_quantity", int(selected_record.get("count", 1)))), 1, maxi(1, int(selected_record.get("count", 1))))
+		sellable = bool(selected_quote.get("sellable", false))
+	if decrease_quantity_button != null:
+		decrease_quantity_button.disabled = not sellable or _selected_sell_index < 0 or _sell_quantity <= 1 or maximum <= 1
+	if increase_quantity_button != null:
+		increase_quantity_button.disabled = not sellable or _selected_sell_index < 0 or _sell_quantity >= maximum or maximum <= 1
 
 
 func _request_selected_quantity() -> void:
-	_request_sell(0)
+	_request_sell()
 
 
-func _request_sell_batch(amount: int) -> void:
+func _request_sell_batch() -> void:
 	if _selected_sell_indices.is_empty() and _selected_sell_index >= 0:
 		_selected_sell_indices[_selected_sell_index] = true
 		_sell_quantities[_selected_sell_index] = _sell_quantity
@@ -624,14 +626,14 @@ func _request_sell_batch(amount: int) -> void:
 		if not bool(quote.get("sellable", false)):
 			continue
 		var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
-		var requested_amount := 1 if amount == 1 else int(_sell_quantities.get(inventory_index, 1))
+		var requested_amount := int(_sell_quantities.get(inventory_index, 1))
 		requests.append({"quote_key": quote_key, "quote_id": str(quote.get("quote_id", "")), "inventory_index": inventory_index, "instance_id": str(record.get("instance_id", "")), "item_name": str(record.get("name", "")), "amount": clampi(requested_amount, 1, maximum), "requires_confirmation": bool(quote.get("requires_confirmation", false))})
 	if requests.is_empty():
 		return
 	requests.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("inventory_index", -1)) > int(b.get("inventory_index", -1)))
 	if requests.any(func(r: Dictionary) -> bool: return bool(r.get("requires_confirmation", false))):
 		_pending_sell_request = {"batch": requests}
-		sell_confirmation.open_confirmation({"action_id": "shop.sell.risky_item", "title": "确认批量出售", "message": "批量出售 %d 件物品，其中包含高风险物品。" % requests.size(), "confirm_label": "确认出售", "cancel_label": "取消", "tone": "danger", "context": {"quote_id": requests[0].get("quote_id", "")}})
+		sell_confirmation.open_confirmation({"action_id": "shop.sell.risky_item", "title": "确认批量出售", "message": "批量出售 %d 件物品，其中包含稀有物品。" % requests.size(), "confirm_label": "确认出售", "cancel_label": "取消", "tone": "danger", "context": {"quote_id": requests[0].get("quote_id", "")}})
 		return
 	_batch_sell_queue = requests
 	_batch_sell_active = true
@@ -643,8 +645,8 @@ func _emit_next_batch_request() -> void:
 		return
 	_emit_sell_request(_batch_sell_queue.pop_front())
 
-func _request_sell(amount: int) -> void:
-	_request_sell_batch(amount)
+func _request_sell() -> void:
+	_request_sell_batch()
 
 
 func _on_sell_confirmation_confirmed(_confirmation: Dictionary) -> void:
@@ -677,7 +679,6 @@ func _emit_sell_request(request: Dictionary) -> void:
 
 
 func _set_sell_actions_enabled(enabled: bool) -> void:
-	sell_one_button.disabled = not enabled
 	sell_quantity_button.disabled = not enabled
 
 
@@ -717,6 +718,7 @@ func _apply_inventory_change() -> void:
 		return
 	_inventory_refresh_pending = false
 	_inventory_refresh_execution_count += 1
+	_reclamp_sell_quantities()
 	_selected_sell_index = -1
 	_rebuild_sell_cards()
 	_set_sell_actions_enabled(false)
