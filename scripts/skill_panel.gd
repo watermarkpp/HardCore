@@ -11,6 +11,7 @@ const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout
 const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
 )
+const SKILL_RULES_PATH := "res://assets/data/vanilla_176/profession_combat_rules.json"
 
 signal closed
 signal quick_slot_assignment_requested(request: Dictionary)
@@ -53,9 +54,11 @@ var skill_button_assignments: Dictionary = {}
 var skill_button_modes: Dictionary = {}
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _formal_skill_rules: Dictionary = {}
 
 
 func _ready() -> void:
+	_load_formal_skill_rules()
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -163,6 +166,15 @@ func _build_skill_list_section() -> void:
 
 func _build_skill_detail_section() -> void:
 	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 460, 548))
+	# Independent v3 secondary frame: the factory's transparent nine-slice is
+	# paired with its measured V3_INNER code fill and kept behind all content.
+	var detail_frame := GothicFrameFactoryScript.add_filled_section(
+		panel,
+		"SkillDetailV3Frame",
+		Rect2(8, 42, 444, 498),
+	)
+	detail_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.move_child(detail_frame, 0)
 	panel.add_child(_section_title("技能详情", 460))
 	var icon_frame := Button.new()
 	icon_frame.name = "SkillIconFrame"
@@ -203,7 +215,7 @@ func _build_skill_detail_section() -> void:
 	panel.add_child(detail_label)
 	var description_title := Label.new()
 	description_title.name = "DescriptionTitle"
-	description_title.text = "技能说明与来源"
+	description_title.text = "技能说明"
 	description_title.position = Vector2(24, 304)
 	description_title.size = Vector2(412, 28)
 	description_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -591,16 +603,109 @@ func _show_skill_detail(index: int) -> void:
 		maximum_range_gu,
 		state_text,
 	]
-	description_label.text = "[color=#d7c3a3]%s[/color]\n\n[color=#8f7d6a]技能ID：%s\n来源：%s　可信度：%s[/color]" % [
-		row.get("description", "暂无说明"),
-		ProfessionRules.skill_id(skill_name),
-		row.get("source", row.get("contentLayer", "vanilla_core")),
-		row.get("confidence", "待核验"),
-	]
+	description_label.text = "[color=#d7c3a3]%s[/color]" % _player_mechanics_description(row, combat)
 	learn_button.disabled = learned
 	learn_button.text = "已学习" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
 	# Assignment is intentionally available only in the right-hand panel.
 	learn_button.visible = not learned
+
+
+func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
+	var parts: Array[String] = []
+	var base := str(row.get("description", "暂无说明")).strip_edges()
+	if not base.is_empty():
+		parts.append(base)
+	var effect := str(row.get("effect", "")).strip_edges()
+	if not effect.is_empty() and effect != "-":
+		parts.append("效果：%s" % effect)
+	# Only explicit player-facing fields are rendered; internal formula strings are ignored.
+	var probability: Variant = combat.get("probability", combat.get("chance", null))
+	if probability is float or probability is int:
+		var probability_value := float(probability)
+		parts.append("触发概率：%.1f%%" % (probability_value * 100.0 if probability_value <= 1.0 else probability_value))
+	var cooldown := float(combat.get("cooldown", row.get("delay", 0.0)))
+	if cooldown > 0.0:
+		parts.append("冷却：%.2f秒" % cooldown)
+	var mana := int(row.get("manaCost", combat.get("mana_cost", 0)))
+	if mana > 0:
+		parts.append("消耗：%d MP" % mana)
+	var target := str(combat.get("target_mode", "")).strip_edges()
+	if not target.is_empty() and target != "unknown":
+		parts.append("目标：%s" % _target_mode_label(target))
+	var range_gu := float(combat.get("maximum_range_gu", 0.0))
+	if range_gu > 0.0:
+		parts.append("作用范围：%.1f GU" % range_gu)
+	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
+	var formal: Dictionary = _formal_skill_rules.get(stable_id, {})
+	if not formal.is_empty():
+		var group := str(formal.get("formula_group", ""))
+		if group == "classic_magic_damage":
+			var mp_base := int(formal.get("magic_power_base", 0))
+			var p_base := int(formal.get("power_base", 0))
+			parts.append("伤害公式：魔法攻击随机值＋按（技能威力随机值÷（训练等级＋1）×（技能等级＋1））正式取整所得数值＋基础威力%d；魔法威力基础值%d" % [p_base, mp_base])
+		elif group == "classic_healing":
+			parts.append("治疗公式：技能威力（按等级折算） + 精神力随机值×2")
+		elif group == "classic_summon":
+			var life_values: Array = formal.get("lifetime_seconds_by_level", [])
+			var life_idx := clampi(int(combat.get("skill_level", 0)), 0, life_values.size() - 1) if not life_values.is_empty() else -1
+			if life_idx >= 0:
+				parts.append("召唤：召唤物等级与技能等级相同；数量%d，存在时间%.0f秒" % [int(formal.get("default_count", 1)), float(life_values[life_idx])])
+		for key in ["power_base", "power_bonus", "magic_power_base", "magic_power_bonus", "area_radius_cells", "tick_interval_ms", "apply_delay_ms", "amulet_cost", "max_slave_count", "leash_range", "teleport_range"]:
+			if formal.has(key):
+				var labels := {"power_base":"基础威力", "power_bonus":"威力加成", "magic_power_base":"基础魔法威力", "magic_power_bonus":"魔法威力加成", "area_radius_cells":"作用格数", "tick_interval_ms":"每次间隔毫秒", "apply_delay_ms":"生效延迟毫秒", "amulet_cost":"符咒消耗", "max_slave_count":"最大召唤数", "leash_range":"跟随距离", "teleport_range":"传送距离"}
+				parts.append("%s：%s" % [labels[key], str(formal[key])])
+		if formal.has("multiplier_by_level"):
+			var levels: Array = formal.get("multiplier_by_level")
+			var idx := clampi(int(combat.get("skill_level", 0)), 0, levels.size() - 1)
+			parts.append("当前等级倍率：%.2f倍" % float(levels[idx]))
+		for formula_key in ["duration_formula", "success_formula", "shield_power_formula", "damage_remaining_ratio_formula", "buff_power_formula", "green_power_formula", "red_power_formula", "push_cells_formula", "anti_poison_formula"]:
+			if formal.has(formula_key):
+				parts.append(_translate_formal_formula(formula_key, str(formal[formula_key])))
+		if stable_id == "wizard.temptation_light":
+			parts.append("成功概率：目标等级不高于施法者等级+2且满足生命值条件时判定成功")
+	if stable_id.begins_with("warrior."):
+		var level := int(combat.get("skill_level", 0))
+		match stable_id:
+			"warrior.fire_sword": parts.append("烈火伤害：基础物理伤害×%.1f倍（当前等级%d）" % [WarriorCombatMath.fire_sword_multiplier(level), level])
+			"warrior.slaying_swordsmanship": parts.append("攻杀：基础物理伤害+%d点；触发概率约%.1f百分比（每%d次攻击一次）" % [WarriorCombatMath.slaying_flat_damage_bonus(level), 100.0 / float(WarriorCombatMath.slaying_proc_cycle(level)), WarriorCombatMath.slaying_proc_cycle(level)])
+			"warrior.thrusting": parts.append("刺杀：第二目标伤害＝基础伤害×(技能等级+2)/(训练等级+2)，并按%d百分比折算" % [WarriorCombatMath.SWORD_LONG_POWER_RATE])
+			"warrior.half_moon": parts.append("半月：扇形副目标伤害＝基础伤害×(技能等级+2)/(训练等级+10)")
+			"warrior.basic_swordsmanship": parts.append("基本剑术：每级增加%d点命中，直接用于命中判定" % WarriorCombatMath.basic_sword_accuracy_bonus(level))
+			"warrior.wild_rush": parts.append("野蛮冲撞：仅玩家等级高于目标时成功，成功率100百分比；最多推进%d格" % [WarriorCombatMath.wild_rush_max_cells(level)])
+	return "\n".join(parts)
+
+
+func _load_formal_skill_rules() -> void:
+	var file := FileAccess.open(SKILL_RULES_PATH, FileAccess.READ)
+	if file == null:
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		for profession in ["wizard", "taoist"]:
+			var skills: Dictionary = parsed.get(profession, {}).get("skills", {})
+			_formal_skill_rules.merge(skills, true)
+
+
+func _translate_formal_formula(kind: String, formula: String) -> String:
+	var labels := {"duration_formula":"持续时间公式", "success_formula":"成功判定", "shield_power_formula":"护盾强度公式", "damage_remaining_ratio_formula":"承伤剩余比例", "buff_power_formula":"增益强度公式", "green_power_formula":"绿色毒伤公式", "red_power_formula":"红色毒伤公式", "push_cells_formula":"击退格数公式", "anti_poison_formula":"抗毒判定"}
+	var readable := formula
+	readable = readable.replace("get_power13(60) + sc_roll*10", "按技能等级折算的防御力 + 精神力随机值×10")
+	readable = readable.replace("get_power13(40) + sc_roll*3", "按技能等级折算的持续时间 + 精神力随机值×3")
+	readable = readable.replace("get_power13(30) + sc_roll*3", "按技能等级折算的持续时间 + 精神力随机值×3")
+	readable = readable.replace("get_power(10)", "按技能等级折算的基础持续值")
+	readable = readable.replace("get_power(mc_roll + 15)", "按技能等级折算的护盾强度（魔法随机值+15）")
+	readable = readable.replace("shield_power seconds", "护盾强度对应的秒数")
+	readable = readable.replace("(skill_level+2)*0.08", "技能等级+2再乘8%；实际承受伤害比例，减伤比例为其余部分")
+	readable = readable.replace("get_power13(40) + sc_roll*2", "按技能等级折算的毒伤 + 精神力随机值×2")
+	readable = readable.replace("get_power13(30) + sc_roll*2", "按技能等级折算的毒伤 + 精神力随机值×2")
+	readable = readable.replace("delphi_round(skill_level/3 * power/20)", "按技能等级与威力折算的持续时间")
+	readable = readable.replace("random(target_anti_poison+7) <= 6", "随机值（目标抗毒+7）≤6；满足时抗毒判定通过")
+	readable = readable.replace("random(100) < skill_level*7 + 15 + caster_level-target_level", "随机百分比 < 技能等级×7 + 15 + 施法者等级－目标等级；右侧为成功概率上限")
+	readable = readable.replace("random(6) <= skill_level + 3", "1至6的随机值≤技能等级+3；成功概率=(技能等级+3)/6")
+	readable = readable.replace("random(11) < skill_level * 2 + 4", "1至11的随机值<技能等级×2+4；成功概率=(技能等级×2+4)/11")
+	readable = readable.replace("random_range(0,caster_level)", "0至施法者等级的随机分钟")
+	readable = readable.replace("random(2)", "0至1的随机格数")
+	return "%s：%s" % [labels.get(kind, "效果公式"), readable]
 
 
 func _clear_skill_detail() -> void:
