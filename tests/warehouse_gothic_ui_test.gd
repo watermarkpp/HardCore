@@ -34,6 +34,8 @@ func _run() -> void:
 		assert(frame.get_node("%sGridV3FrameDecoration/%sGridV3FrameFrame" % [side_name, side_name]) != null, "%s 二级框缺少边框层" % side_name)
 	assert(panel.bag_grid.get_child_count() == 100, "人物背包没有保留 100 格")
 	assert(panel.stash_grid.get_child_count() == 100, "仓库当前页没有显示 100 格")
+	assert(panel.get_node("BagSection/BagPagingHint").text == "首屏 30 格　·　下拉查看 31–100 格", "人物背包分页说明没有同步 6 列首屏")
+	assert(panel.get_node("StashSection/StashPagingHint").text == "每页 100 格　·　下拉查看本页后 70 格", "仓库分页说明没有同步 6 列首屏")
 	assert(panel.get_node("BagSection/BagScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "人物背包滚动区没有避开二级框内圈")
 	assert(panel.get_node("StashSection/StashScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "仓库滚动区没有避开二级框内圈")
 	var initial_bag_positions: Array[Vector2] = []

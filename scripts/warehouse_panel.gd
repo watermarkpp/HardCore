@@ -18,7 +18,7 @@ const WAREHOUSE_PAGE_CAPACITY := 100
 const WAREHOUSE_PAGE_COUNT := 5
 const WAREHOUSE_DISPLAY_CAPACITY := WAREHOUSE_PAGE_CAPACITY * WAREHOUSE_PAGE_COUNT
 const GRID_COLUMNS := 6
-const GRID_VISIBLE_SLOTS := 40
+const GRID_VISIBLE_SLOTS := 30
 const ITEM_CELL_SIZE := Vector2(56, 64)
 const GRID_HORIZONTAL_SEPARATION := 1.0
 const GRID_VERTICAL_SEPARATION := 4.0
@@ -113,7 +113,7 @@ func _build_storage_sections() -> void:
 	stash_frame.set_meta("calibration_layer", "warehouse_stash_grid_decoration")
 	stash_panel.add_child(_section_title("个人仓库", 492))
 	stash_grid = _build_item_grid(stash_panel, "StashScroll", "StashGrid")
-	stash_panel.add_child(_paging_hint("StashPagingHint", "每页 100 格　·　下拉查看本页后 60 格"))
+	stash_panel.add_child(_paging_hint("StashPagingHint", "每页 100 格　·　下拉查看本页后 70 格"))
 	_build_page_controls(stash_panel)
 	stash_summary_label = _summary_label("StashSummary")
 	stash_panel.add_child(stash_summary_label)
@@ -151,7 +151,7 @@ func _build_storage_sections() -> void:
 	bag_frame.set_meta("calibration_layer", "warehouse_bag_grid_decoration")
 	bag_panel.add_child(_section_title("人物背包", 492))
 	bag_grid = _build_item_grid(bag_panel, "BagScroll", "BagGrid")
-	bag_panel.add_child(_paging_hint("BagPagingHint", "首屏 40 格　·　下拉查看 41–100 格"))
+	bag_panel.add_child(_paging_hint("BagPagingHint", "首屏 30 格　·　下拉查看 31–100 格"))
 	bag_summary_label = _summary_label("BagSummary")
 	bag_panel.add_child(bag_summary_label)
 
