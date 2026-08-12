@@ -180,6 +180,7 @@ func _paging_hint(node_name: String, text_value: String) -> Label:
 	var label := Label.new()
 	label.name = node_name
 	label.text = text_value
+	label.set_meta("calibration_text_revision", LAYOUT_REVISION)
 	label.position = Vector2(18, 408)
 	label.size = Vector2(456, 20)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
