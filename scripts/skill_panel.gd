@@ -6,6 +6,7 @@ const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
@@ -949,6 +950,10 @@ func _section_panel(node_name: String, rect: Rect2) -> Control:
 	var fill := GothicFrameFillScript.new()
 	fill.name = "%sFill" % node_name
 	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# v3 inset_frame has a transparent centre; use the measured inner opening
+	# rather than the legacy chamfer default so skill-page sections contain
+	# their code-drawn background within the stretched frame.
+	GothicFrameFactoryScript.configure_inset_fill(fill)
 	fill.set_meta("calibration_internal_visual", true)
 	decoration.add_child(fill)
 	var frame := Panel.new()
