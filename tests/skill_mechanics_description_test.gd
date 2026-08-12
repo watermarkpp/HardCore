@@ -1,5 +1,7 @@
 extends Node
 
+const CalibrationOverlay := preload("res://scripts/ui_layout_calibration_overlay.gd")
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -9,10 +11,29 @@ func _run() -> void:
 	var panel := SkillPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	var frame := panel.get_node("SkillDetailPanel/SkillDetailV3Frame")
-	assert(frame.get_parent().get_child(0) == frame and frame.mouse_filter == Control.MOUSE_FILTER_IGNORE)
-	var fill := frame.get_node("SkillDetailV3FrameDecoration/SkillDetailV3FrameFill")
+	var detail := panel.get_node("SkillDetailPanel") as Control
+	var decoration := detail.get_node("SkillDetailPanelDecoration") as Control
+	var fill := decoration.get_node("SkillDetailPanelFill") as GothicFrameFill
+	var frame := decoration.get_node("SkillDetailPanelFrame") as Panel
+	assert(detail != null and decoration != null and fill != null and frame != null)
+	assert(detail.find_children("SkillDetailPanelDecoration", "Control", true, false).size() == 1)
+	assert(detail.find_children("SkillDetailPanelFill", "GothicFrameFill", true, false).size() == 1)
+	assert(detail.find_children("SkillDetailPanelFrame", "Panel", true, false).size() == 1)
+	assert(panel.get_node_or_null("SkillDetailPanel/SkillDetailV3Frame") == null)
+	assert(panel.find_child("LearnButton", true, false) == null)
 	assert(fill.shape_mode == GothicFrameFill.ShapeMode.V3_INNER and fill.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+	assert(frame.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+	var overlay := CalibrationOverlay.new()
+	add_child(overlay)
+	overlay.target = panel
+	assert(overlay._is_calibratable(detail), "semantic detail panel must be selectable")
+	assert(overlay._is_calibratable(decoration), "semantic decoration root must be selectable")
+	assert(not overlay._is_calibratable(fill) and not overlay._is_calibratable(frame), "internal frame visuals must not be independently selectable")
+	overlay.selected = decoration
+	overlay.delete_selected()
+	assert(not decoration.visible and detail.visible, "delete must affect the selected semantic layer only")
+	overlay.undo_last_change()
+	assert(decoration.visible)
 	var cases := {
 		"warrior.fire_sword": ["倍"], "warrior.slaying_swordsmanship": ["基础物理伤害+", "触发概率"], "warrior.thrusting": ["刺杀", "基础伤害"],
 		"warrior.half_moon": ["半月", "基础伤害"], "warrior.wild_rush": ["成功率", "等级"], "warrior.basic_swordsmanship": ["每级准确+3", "当前准确+0"],

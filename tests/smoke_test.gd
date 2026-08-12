@@ -94,8 +94,13 @@ func _run() -> void:
 	game.hud.shop_panel._buy_selected()
 	assert(PlayerState.has_item("基本剑术"), "技能书购买失败")
 	trainer.interact(game)
-	game.hud.skill_panel.skill_list.select(0)
-	game.hud.skill_panel._learn_selected()
+	var basic_book_index := -1
+	for inventory_index in range(PlayerState.inventory.size()):
+		if str(PlayerState.inventory[inventory_index].get("name", "")) == "基本剑术":
+			basic_book_index = inventory_index
+			break
+	assert(basic_book_index >= 0, "背包中未找到已购买的技能书")
+	PlayerState.use_inventory_index(basic_book_index)
 	assert(PlayerState.is_skill_learned("基本剑术"), "技能学习失败")
 	assert(
 		PlayerState.attack_ring_slots.all(func(value: String) -> bool: return value.is_empty()),

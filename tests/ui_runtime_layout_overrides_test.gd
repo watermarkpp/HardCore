@@ -4,10 +4,11 @@ const Loader := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const InventoryPanel := preload("res://scripts/inventory_panel.gd")
 const MapPanel := preload("res://scripts/map_panel.gd")
 const ShopPanel := preload("res://scripts/shop_panel.gd")
+const SkillPanelScript := preload("res://scripts/skill_panel.gd")
 const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "5AED8EEF144A313CC347133D5A13649E91433F1EF5510399103BFE9154970F2D"
+const EXPECTED_HASH := "5CB454AD13D75B43F24FF78949E7E9E9AB945E4BA4E12096717B6C7DE8397D36"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
@@ -53,10 +54,12 @@ func _ready() -> void:
 	var inventory := InventoryPanel.new()
 	var map_panel := MapPanel.new()
 	var shop := ShopPanel.new()
+	var skill := SkillPanelScript.new()
 	var character_hall := CharacterHallScene.instantiate() as Control
 	add_child(inventory)
 	add_child(map_panel)
 	add_child(shop)
+	add_child(skill)
 	add_child(character_hall)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -64,6 +67,14 @@ func _ready() -> void:
 	_assert_saved_local_rect(inventory, "inventory", "BagPanel")
 	_assert_saved_local_rect(map_panel, "map", "MapListPanel")
 	_assert_saved_local_rect(shop, "shop_buy", "GoodsPanel")
+	Loader.apply_profile(skill, "skill")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(skill.get_node_or_null("SkillDetailPanel/SkillDetailV3Frame") == null, "retired duplicate skill frame was recreated")
+	assert(skill.get_node_or_null("SkillDetailPanel/LearnButton") == null, "retired skill learn button was recreated")
+	var skill_retired: Array = skill.get_meta("calibration_retired_paths", [])
+	assert("SkillDetailPanel/SkillDetailV3Frame" in skill_retired and "SkillDetailPanel/LearnButton" in skill_retired)
 	_assert_saved_local_rect(character_hall, "character_hall", "CenteredContent")
 	var retired_path := "BagPanel/BagPanelDecoration"
 	var retired_entry: Dictionary = data["profiles"]["inventory"]["nodes"].get(retired_path, {})

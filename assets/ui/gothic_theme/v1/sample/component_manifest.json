@@ -1,9 +1,9 @@
 {
-  "assetSetId": "ui.theme.gothic.v1.sample.v5",
+  "assetSetId": "ui.theme.gothic.v1.sample.v6",
   "status": "pending_system_screenshot_review",
   "reference": "ui.hud.gothic.v2",
   "generationMode": "built-in-imagegen-plus-code-normalization",
-  "sourcePolicy": "approved v4 medium and wide masters plus approved v5 hollow square skill-config frame",
+  "sourcePolicy": "approved v4 medium and wide masters plus approved v5 hollow square skill-config frame and v6 antique-gold thin warehouse frame",
   "scopeExclusions": [
     "main HUD skill, attack, item, target, navigation, and utility controls remain unchanged"
   ],
@@ -322,6 +322,36 @@
       "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
     },
     {
+      "id": "ui.theme.gothic.v1.button.antique_gold_thin.normal",
+      "file": "button_antique_gold_thin_normal_v6.png",
+      "size": [1935, 813],
+      "patchMargins": [0, 0, 0, 0],
+      "stretchPolicy": "contain",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-warehouse-only",
+      "ringCount": 1,
+      "material": "aged-dark-gold"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.antique_gold_thin.pressed",
+      "file": "button_antique_gold_thin_pressed_v6.png",
+      "size": [1935, 813],
+      "patchMargins": [0, 0, 0, 0],
+      "stretchPolicy": "contain",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-warehouse-only",
+      "ringCount": 1,
+      "material": "aged-dark-gold-pressed"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.antique_gold_thin.disabled",
+      "file": "button_antique_gold_thin_disabled_v6.png",
+      "size": [1935, 813],
+      "patchMargins": [0, 0, 0, 0],
+      "stretchPolicy": "contain",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-warehouse-only",
+      "ringCount": 1,
+      "material": "aged-dark-gold-disabled"
+    },
+    {
       "id": "ui.theme.gothic.v1.shop_card",
       "file": "shop_card_single_v2.png",
       "size": [
@@ -367,7 +397,7 @@
       "ringCount": 1
     }
   ],
-  "revision": "v5-approved-three-small-aspect-family-v4-medium-wide-preserved",
+  "revision": "v6-antique-gold-thin-warehouse-frame",
   "aspectSelection": {
     "compactMax": 3.3333333333333335,
     "standardMax": 4.67,

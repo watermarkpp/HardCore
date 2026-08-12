@@ -109,8 +109,8 @@ func _run() -> void:
 	assert(learned_index >= 0, "fixture must contain an actually learned skill")
 	panel.call("_show_skill_detail", learned_index)
 	assert(title.text.contains("（已学会）"))
-	var learn_button := panel.find_child("LearnButton", true, false) as Button
-	assert(learn_button != null and not learn_button.visible)
+	assert(panel.find_child("LearnButton", true, false) == null)
+	assert(panel.get_node_or_null("SkillDetailPanel/SkillDetailV3Frame") == null)
 	assert(panel.find_child("AssignButton", true, false) == null)
 	viewport.queue_free()
 	await get_tree().process_frame

@@ -19,7 +19,6 @@ func _run() -> void:
 	await get_tree().process_frame
 	panel.open_panel()
 	await get_tree().process_frame
-
 	assert(panel.size == Vector2(1164, 660), "仓库没有使用既定横屏布局尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "仓库没有使用公共哥特外框")
 	assert(panel.get_node("StashSection").position.x < panel.get_node("BagSection").position.x, "仓库必须位于左侧、人物背包位于右侧")
@@ -41,13 +40,20 @@ func _run() -> void:
 	assert(is_equal_approx(panel.bag_grid.custom_minimum_size.x, 341.0), "人物背包并非真实六列内容宽")
 	assert(is_equal_approx(panel.stash_grid.custom_minimum_size.x, 341.0), "仓库并非真实六列内容宽")
 	for grid in [panel.bag_grid, panel.stash_grid]:
+		var scroll := (grid as GridContainer).get_parent().get_parent() as ScrollContainer
 		var first := (grid as GridContainer).get_child(0) as Control
 		var sixth := (grid as GridContainer).get_child(5) as Control
 		var seventh := (grid as GridContainer).get_child(6) as Control
+		var visible_left := scroll.get_global_rect().position.x
+		var visible_right := scroll.get_v_scroll_bar().get_global_rect().position.x if scroll.get_v_scroll_bar().visible else scroll.get_global_rect().end.x
+		assert(scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "六列网格错误启用了水平滚动")
+		assert(scroll.get_h_scroll_bar().max_value <= scroll.get_h_scroll_bar().page + 0.5, "六列网格产生了隐藏的水平溢出")
 		assert(is_equal_approx(first.position.y, sixth.position.y), "六列中的第六格没有留在首行")
 		assert(seventh.position.y > sixth.position.y, "第七格没有真实换到下一行")
 		assert(is_equal_approx(seventh.position.x, first.position.x), "第七格没有从下一行首列开始")
 		assert(sixth.position.x + sixth.size.x <= WarehousePanel.GRID_CONTENT_WIDTH + 0.5, "第六格越过六列内容边界")
+		assert(first.get_global_rect().position.x >= visible_left - 0.5, "首列被左侧裁切")
+		assert(sixth.get_global_rect().end.x <= visible_right + 0.5, "第六列被滚动条或右侧裁切")
 	var initial_bag_positions: Array[Vector2] = []
 	for index in range(30):
 		initial_bag_positions.append((panel.bag_grid.get_child(index) as Control).position)

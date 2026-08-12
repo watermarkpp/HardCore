@@ -7,6 +7,8 @@ var wide: StyleBoxTexture
 var square_texture: Texture2D
 var shortwide_texture: Texture2D
 var widesmall_texture: Texture2D
+var fixed_aspect_texture: Texture2D
+var fixed_aspect_fill_inset := Vector2(10.0, 10.0)
 var small_family := false
 var square_threshold := 10.0 / 3.0
 var fill_color := Color(0.055, 0.035, 0.018, 0.96)
@@ -22,6 +24,7 @@ func configure(c: Texture2D, s: Texture2D, w: Texture2D, margins := Vector4(36, 
 	square_texture = null
 	shortwide_texture = null
 	widesmall_texture = null
+	fixed_aspect_texture = null
 	small_family = false
 	force_widesmall = false
 	force_square = false
@@ -34,6 +37,22 @@ func configure_widesmall(w: Texture2D, fill := Color(0.055, 0.035, 0.018, 0.96))
 	widesmall_texture = w
 	fill_color = fill
 	force_widesmall = true
+	force_square = false
+	small_family = false
+	return self
+
+## Configures a single, hollow frame that keeps its authored aspect ratio.
+## The code fill is drawn first and remains inside the frame's safe band; the
+## texture is then contained in the control rect so the thin border is never
+## stretched into a silver-looking composite.
+func configure_fixed_aspect(frame: Texture2D, fill := Color(0.055, 0.035, 0.018, 0.96), inset := Vector2(10.0, 10.0)) -> AdaptiveButtonStyleBox:
+	compact = _make(frame, Vector4.ZERO)
+	standard = _make(frame, Vector4.ZERO)
+	wide = _make(frame, Vector4.ZERO)
+	fixed_aspect_texture = frame
+	fixed_aspect_fill_inset = inset
+	fill_color = fill
+	force_widesmall = false
 	force_square = false
 	small_family = false
 	return self
@@ -71,6 +90,19 @@ func selected_small_fill_rect(rect: Rect2) -> Rect2:
 	var inset := 12.0 if selected_small_kind(rect) == &"square" else 10.0
 	return rect.grow(-inset)
 
+func fixed_aspect_draw_rect(rect: Rect2) -> Rect2:
+	if fixed_aspect_texture == null or fixed_aspect_texture.get_width() <= 0 or fixed_aspect_texture.get_height() <= 0:
+		return rect
+	var texture_size := Vector2(fixed_aspect_texture.get_size())
+	var scale := minf(rect.size.x / texture_size.x, rect.size.y / texture_size.y)
+	var draw_size := texture_size * scale
+	return Rect2(rect.position + (rect.size - draw_size) * 0.5, draw_size)
+
+func fixed_aspect_fill_rect(rect: Rect2) -> Rect2:
+	var draw_rect := fixed_aspect_draw_rect(rect)
+	var inset := Vector2(minf(fixed_aspect_fill_inset.x, draw_rect.size.x * 0.25), minf(fixed_aspect_fill_inset.y, draw_rect.size.y * 0.25))
+	return Rect2(draw_rect.position + inset, (draw_rect.size - inset * 2.0).max(Vector2.ZERO))
+
 func square_fill_rect(rect: Rect2) -> Rect2:
 	var side := minf(rect.size.x, rect.size.y)
 	var origin := rect.position + (rect.size - Vector2.ONE * side) * 0.5
@@ -100,6 +132,13 @@ func choose(rect: Rect2) -> StyleBoxTexture:
 	return compact if ratio <= square_threshold else (standard if ratio <= 4.67 else wide)
 
 func _draw(canvas_item: RID, rect: Rect2) -> void:
+	if fixed_aspect_texture != null:
+		var fill_rect := fixed_aspect_fill_rect(rect)
+		if fill_rect.size.x > 0.0 and fill_rect.size.y > 0.0:
+			square_fill_style(fill_rect).draw(canvas_item, fill_rect)
+		var draw_rect := fixed_aspect_draw_rect(rect)
+		RenderingServer.canvas_item_add_texture_rect(canvas_item, draw_rect, fixed_aspect_texture.get_rid(), false, Color.WHITE)
+		return
 	if force_widesmall:
 		var thin_texture := compact.texture
 		square_fill_style(selected_small_fill_rect(rect)).draw(canvas_item, selected_small_fill_rect(rect))

@@ -33,7 +33,6 @@ var skill_name_label: Label
 var skill_icon: TextureRect
 var detail_label: RichTextLabel
 var description_label: RichTextLabel
-var learn_button: Button
 var center_assignment_buttons: Array[Button] = []
 var attack_assignment_buttons: Array[Button] = []
 var attack_ring_assignment_buttons: Array[Button] = []
@@ -58,6 +57,13 @@ var _formal_skill_rules: Dictionary = {}
 
 
 func _ready() -> void:
+	set_meta("calibration_retired_paths", [
+		"SkillDetailPanel/SkillDetailV3Frame",
+		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration",
+		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFill",
+		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFrame",
+		"SkillDetailPanel/LearnButton",
+	])
 	_load_formal_skill_rules()
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
@@ -166,15 +172,6 @@ func _build_skill_list_section() -> void:
 
 func _build_skill_detail_section() -> void:
 	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 460, 548))
-	# Independent v3 secondary frame: the factory's transparent nine-slice is
-	# paired with its measured V3_INNER code fill and kept behind all content.
-	var detail_frame := GothicFrameFactoryScript.add_filled_section(
-		panel,
-		"SkillDetailV3Frame",
-		Rect2(8, 42, 444, 498),
-	)
-	detail_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.move_child(detail_frame, 0)
 	panel.add_child(_section_title("技能详情", 460))
 	var icon_frame := Button.new()
 	icon_frame.name = "SkillIconFrame"
@@ -232,14 +229,6 @@ func _build_skill_detail_section() -> void:
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.theme_type_variation = "GothicDetailText"
 	panel.add_child(description_label)
-	learn_button = Button.new()
-	learn_button.name = "LearnButton"
-	learn_button.text = "使用技能书学习"
-	learn_button.position = Vector2(24, 466)
-	learn_button.size = Vector2(412, 64)
-	learn_button.theme_type_variation = "GothicComponentButton"
-	learn_button.pressed.connect(_learn_selected)
-	panel.add_child(learn_button)
 
 func _build_assignment_section() -> void:
 	var panel := _section_panel("AssignmentPanel", Rect2(814, 76, 374, 548))
@@ -604,10 +593,6 @@ func _show_skill_detail(index: int) -> void:
 		state_text,
 	]
 	description_label.text = "[color=#d7c3a3]%s[/color]" % _player_mechanics_description(row, combat)
-	learn_button.disabled = learned
-	learn_button.text = "已学习" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
-	# Assignment is intentionally available only in the right-hand panel.
-	learn_button.visible = not learned
 
 
 func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
@@ -713,8 +698,6 @@ func _clear_skill_detail() -> void:
 	skill_icon.texture = null
 	detail_label.text = "[color=#a99479]从左侧选择技能查看完整资料。[/color]"
 	description_label.text = ""
-	learn_button.disabled = true
-	learn_button.visible = true
 
 
 func _refresh_assignment_slots() -> void:
@@ -827,19 +810,6 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	content.add_child(mode_label)
 	button.set_meta("skill_name", skill_name)
 	button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
-
-
-func _learn_selected() -> void:
-	var index := selected_skill_index
-	var selected := skill_list.get_selected_items()
-	if not selected.is_empty():
-		index = selected[0]
-	if index < 0 or index >= skill_entries.size():
-		description_label.text = "[color=#b58b68]请先选择技能。[/color]"
-		return
-	var skill_name := str(skill_entries[index].get("skillName", ""))
-	description_label.text = "[color=#d7c3a3]%s[/color]" % PlayerState.learn_skill(skill_name)
-	refresh.call_deferred()
 
 
 func _open_assignment_popup_for_selected() -> void:

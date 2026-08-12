@@ -29,8 +29,8 @@ const GRID_MINIMUM_SIZE := Vector2(
 )
 const GRID_FRAME_RECT := Rect2(6, 40, 480, 392)
 const GRID_CONTENT_WIDTH := GRID_MINIMUM_SIZE.x
-const GRID_SCROLLBAR_WIDTH := 22.0
-const GRID_SCROLL_WIDTH := GRID_CONTENT_WIDTH + GRID_SCROLLBAR_WIDTH
+const GRID_SCROLLBAR_CLEARANCE := 2.0
+const GRID_SCROLL_WIDTH := 385.0
 const GRID_SCROLL_RECT := Rect2((492.0 - GRID_SCROLL_WIDTH) * 0.5, 66, GRID_SCROLL_WIDTH, 340)
 const THIN_BUTTON_HEIGHT := 48.0
 const LAYOUT_REVISION := 2
@@ -168,14 +168,21 @@ func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	parent.add_child(scroll)
+	var host := Control.new()
+	host.name = "%sHost" % grid_name
+	host.custom_minimum_size = Vector2(GRID_SCROLL_WIDTH, GRID_MINIMUM_SIZE.y)
+	host.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	host.clip_contents = true
+	scroll.add_child(host)
 	var grid := GridContainer.new()
 	grid.name = grid_name
+	grid.position = Vector2.ZERO
 	grid.columns = GRID_COLUMNS
 	grid.custom_minimum_size = GRID_MINIMUM_SIZE
 	grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	grid.add_theme_constant_override("h_separation", int(GRID_HORIZONTAL_SEPARATION))
 	grid.add_theme_constant_override("v_separation", int(GRID_VERTICAL_SEPARATION))
-	scroll.add_child(grid)
+	host.add_child(grid)
 	return grid
 
 
@@ -317,10 +324,15 @@ func _stabilize_grid_layout() -> void:
 		if scroll != null:
 			scroll.position = GRID_SCROLL_RECT.position
 			scroll.size = GRID_SCROLL_RECT.size
+			var host := scroll.get_child(0) as Control if scroll.get_child_count() > 0 else null
+			if host != null:
+				var scrollbar_width := scroll.get_v_scroll_bar().size.x if scroll.get_v_scroll_bar().visible else 0.0
+				host.custom_minimum_size = Vector2(GRID_CONTENT_WIDTH + scrollbar_width + GRID_SCROLLBAR_CLEARANCE, GRID_MINIMUM_SIZE.y)
 	for grid in [stash_grid, bag_grid]:
 		if grid == null:
 			continue
 		grid.columns = GRID_COLUMNS
+		grid.position = Vector2.ZERO
 		grid.custom_minimum_size = GRID_MINIMUM_SIZE
 		grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		grid.queue_sort()
