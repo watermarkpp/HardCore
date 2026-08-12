@@ -16,7 +16,7 @@ func _ready() -> void:
 		assert(theme.has_stylebox("disabled", variation), "%s 缺少disabled样式" % variation)
 	assert(FileAccess.file_exists(MANIFEST_PATH))
 	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
-	assert(manifest is Dictionary and manifest.get("revision", "").begins_with("v6-"))
+	assert(manifest is Dictionary and manifest.get("revision", "").begins_with("v5-"))
 	assert(manifest.get("components", []).size() >= 16)
 	_assert_single_ring_contract(theme, manifest)
 	_assert_main_hud_styles_preserved(theme)
@@ -74,15 +74,16 @@ func _assert_single_ring_contract(theme: Theme, manifest: Dictionary) -> void:
 	assert(button_style.choose(Rect2(0,0,260,56)) == button_style.standard)
 	assert(button_style.choose(Rect2(0,0,440,56)) == button_style.wide)
 	var warehouse_style := theme.get_stylebox("normal", "GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
-	assert(warehouse_style.fixed_aspect_texture != null)
-	assert(not warehouse_style.force_widesmall)
-	var warehouse_rect := Rect2(0, 0, 96, 48)
-	var warehouse_draw := warehouse_style.fixed_aspect_draw_rect(warehouse_rect)
-	assert(warehouse_draw.size.x <= warehouse_rect.size.x and warehouse_draw.size.y <= warehouse_rect.size.y)
-	assert(is_equal_approx(warehouse_draw.size.x / warehouse_draw.size.y, 1935.0 / 813.0))
-	var warehouse_fill := warehouse_style.fixed_aspect_fill_rect(warehouse_rect)
-	assert(warehouse_fill.position.x >= warehouse_draw.position.x and warehouse_fill.end.x <= warehouse_draw.end.x)
-	assert(warehouse_fill.position.y >= warehouse_draw.position.y and warehouse_fill.end.y <= warehouse_draw.end.y)
+	assert(warehouse_style.compact.texture.resource_path == button_style.compact.texture.resource_path)
+	assert(warehouse_style.standard.texture.resource_path == button_style.standard.texture.resource_path)
+	assert(warehouse_style.wide.texture.resource_path == button_style.wide.texture.resource_path)
+	assert(warehouse_style.choose(Rect2(0, 0, 96, 48)).texture.resource_path.ends_with("button_compact_normal_v4.png"))
+	for state in ["pressed", "disabled"]:
+		var skill_state := theme.get_stylebox(state, "GothicComponentButton") as AdaptiveButtonStyleBoxScript
+		var warehouse_state := theme.get_stylebox(state, "GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
+		assert(warehouse_state.compact.texture.resource_path == skill_state.compact.texture.resource_path)
+		assert(warehouse_state.standard.texture.resource_path == skill_state.standard.texture.resource_path)
+		assert(warehouse_state.wide.texture.resource_path == skill_state.wide.texture.resource_path)
 	var square_style := theme.get_stylebox("normal", "GothicSkillConfigCompactButton") as AdaptiveButtonStyleBoxScript
 	assert(square_style.square_texture.resource_path.ends_with("button_square_normal_v5.png"))
 	assert(square_style.small_family and not square_style.force_square)

@@ -29,7 +29,6 @@ const GRID_MINIMUM_SIZE := Vector2(
 )
 const GRID_FRAME_RECT := Rect2(6, 40, 480, 392)
 const GRID_CONTENT_WIDTH := GRID_MINIMUM_SIZE.x
-const GRID_SCROLLBAR_CLEARANCE := 2.0
 const GRID_SCROLL_WIDTH := 385.0
 const GRID_SCROLL_RECT := Rect2((492.0 - GRID_SCROLL_WIDTH) * 0.5, 66, GRID_SCROLL_WIDTH, 340)
 const THIN_BUTTON_HEIGHT := 48.0
@@ -167,13 +166,8 @@ func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -
 	scroll.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.clip_contents = true
 	parent.add_child(scroll)
-	var host := Control.new()
-	host.name = "%sHost" % grid_name
-	host.custom_minimum_size = Vector2(GRID_SCROLL_WIDTH, GRID_MINIMUM_SIZE.y)
-	host.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	host.clip_contents = true
-	scroll.add_child(host)
 	var grid := GridContainer.new()
 	grid.name = grid_name
 	grid.position = Vector2.ZERO
@@ -182,7 +176,7 @@ func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -
 	grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	grid.add_theme_constant_override("h_separation", int(GRID_HORIZONTAL_SEPARATION))
 	grid.add_theme_constant_override("v_separation", int(GRID_VERTICAL_SEPARATION))
-	host.add_child(grid)
+	scroll.add_child(grid)
 	return grid
 
 
@@ -191,6 +185,7 @@ func _paging_hint(node_name: String, text_value: String) -> Label:
 	label.name = node_name
 	label.text = text_value
 	label.set_meta("calibration_text_revision", LAYOUT_REVISION)
+	label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	label.position = Vector2(18, 408)
 	label.size = Vector2(456, 20)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -324,10 +319,6 @@ func _stabilize_grid_layout() -> void:
 		if scroll != null:
 			scroll.position = GRID_SCROLL_RECT.position
 			scroll.size = GRID_SCROLL_RECT.size
-			var host := scroll.get_child(0) as Control if scroll.get_child_count() > 0 else null
-			if host != null:
-				var scrollbar_width := scroll.get_v_scroll_bar().size.x if scroll.get_v_scroll_bar().visible else 0.0
-				host.custom_minimum_size = Vector2(GRID_CONTENT_WIDTH + scrollbar_width + GRID_SCROLLBAR_CLEARANCE, GRID_MINIMUM_SIZE.y)
 	for grid in [stash_grid, bag_grid]:
 		if grid == null:
 			continue
@@ -382,6 +373,7 @@ func _create_item_cell(
 	if not record.is_empty() and count > 1:
 		var count_label := Label.new()
 		count_label.name = "StackCount"
+		count_label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 		count_label.text = str(count)
 		count_label.position = Vector2(30, 41)
 		count_label.size = Vector2(22, 19)
@@ -547,6 +539,7 @@ func _section_panel(node_name: String, rect: Rect2) -> Control:
 func _section_title(text_value: String, width: float) -> Label:
 	var title := Label.new()
 	title.text = text_value
+	title.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	title.position = Vector2(18, 16)
 	title.size = Vector2(width - 36.0, 28)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

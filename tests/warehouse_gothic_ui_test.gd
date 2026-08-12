@@ -1,5 +1,7 @@
 extends Node
 
+const CalibrationOverlayScript := preload("res://scripts/ui_layout_calibration_overlay.gd")
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -37,10 +39,12 @@ func _run() -> void:
 	assert(panel.get_node("StashSection/StashPagingHint").text == "每页 100 格　·　下拉查看本页后 70 格", "仓库分页说明没有同步 6 列首屏")
 	assert(panel.get_node("BagSection/BagScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "人物背包滚动区没有避开二级框内圈")
 	assert(panel.get_node("StashSection/StashScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "仓库滚动区没有避开二级框内圈")
+	assert(panel.get_node("BagSection/BagScroll/BagGrid") == panel.bag_grid, "人物背包网格稳定路径被中间容器破坏")
+	assert(panel.get_node("StashSection/StashScroll/StashGrid") == panel.stash_grid, "仓库网格稳定路径被中间容器破坏")
 	assert(is_equal_approx(panel.bag_grid.custom_minimum_size.x, 341.0), "人物背包并非真实六列内容宽")
 	assert(is_equal_approx(panel.stash_grid.custom_minimum_size.x, 341.0), "仓库并非真实六列内容宽")
 	for grid in [panel.bag_grid, panel.stash_grid]:
-		var scroll := (grid as GridContainer).get_parent().get_parent() as ScrollContainer
+		var scroll := (grid as GridContainer).get_parent() as ScrollContainer
 		var first := (grid as GridContainer).get_child(0) as Control
 		var sixth := (grid as GridContainer).get_child(5) as Control
 		var seventh := (grid as GridContainer).get_child(6) as Control
@@ -123,5 +127,30 @@ func _run() -> void:
 	assert(sort_requests[0] == 1, "整理按钮没有只向玩法层发出请求")
 	panel.apply_sort_result({"success": true, "message": "仓库已整理"})
 	assert(panel.transfer_detail_label.text == "仓库已整理", "玩法层整理结果没有回填仓库面板")
+
+	# 用校准器真实加载仓库输出，防止在 Scroll 与 Grid 之间插入容器后
+	# 旧的稳定节点路径全部失配。测试数据与校准工作台保持一致。
+	panel.queue_free()
+	await get_tree().process_frame
+	PlayerState.reset_progress()
+	PlayerState.inventory = []
+	PlayerState.add_item("强效太阳水", 82)
+	PlayerState.add_item("魔法药(中量)", 94)
+	PlayerState.add_item("金创药(小量)", 25)
+	PlayerState.warehouse_inventory = [{"name": "魔法药(小量)", "count": 23}]
+	var calibrated_panel := WarehousePanel.new()
+	add_child(calibrated_panel)
+	await get_tree().process_frame
+	var overlay := CalibrationOverlayScript.new()
+	add_child(overlay)
+	await get_tree().process_frame
+	var inventory_before_calibration := PlayerState.inventory.duplicate(true)
+	var warehouse_before_calibration := PlayerState.warehouse_inventory.duplicate(true)
+	overlay.edit_panel(calibrated_panel, "warehouse")
+	await overlay.profile_loaded
+	assert("缺失 0" in overlay.status_label.text, "仓库校准存档仍有稳定路径缺失：%s" % overlay.status_label.text)
+	assert("偏差 0" in overlay.status_label.text, "仓库校准存档加载后仍有几何偏差：%s" % overlay.status_label.text)
+	assert(PlayerState.inventory == inventory_before_calibration, "校准存档加载意外修改了人物背包数据")
+	assert(PlayerState.warehouse_inventory == warehouse_before_calibration, "校准存档加载意外修改了仓库数据")
 	print("WAREHOUSE_GOTHIC_UI_PASS：左仓库、右背包、真实6列100格与5页页码均正常")
 	get_tree().quit(0)

@@ -20,9 +20,6 @@ const BUTTON_WIDE_V4 := preload(COMPONENT_V3_ROOT + "/button_wide_normal_v4.png"
 const BUTTON_SQUARE_V5 := preload(COMPONENT_V3_ROOT + "/button_square_normal_v5.png")
 const BUTTON_SHORTWIDE_V5 := preload(COMPONENT_V3_ROOT + "/button_shortwide_normal_v5.png")
 const BUTTON_WIDESMALL_V5 := preload(COMPONENT_V3_ROOT + "/button_widesmall_normal_v5.png")
-const BUTTON_ANTIQUE_GOLD_THIN_NORMAL_V6 := COMPONENT_V3_ROOT + "/button_antique_gold_thin_normal_v6.png"
-const BUTTON_ANTIQUE_GOLD_THIN_PRESSED_V6 := COMPONENT_V3_ROOT + "/button_antique_gold_thin_pressed_v6.png"
-const BUTTON_ANTIQUE_GOLD_THIN_DISABLED_V6 := COMPONENT_V3_ROOT + "/button_antique_gold_thin_disabled_v6.png"
 const COMPONENT_INSET_FRAME_V3 := preload(COMPONENT_V3_ROOT + "/inset_frame_v3.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
@@ -142,7 +139,8 @@ static func build() -> Theme:
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")
-	_apply_warehouse_thin_button(result)
+	# 仓库操作按钮与技能典籍列表共用同一套已验收的 v4 金铜按钮。
+	_apply_adaptive_button(result, "GothicWarehouseThinButton")
 	_apply_skill_config_compact_button(result)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
@@ -206,21 +204,6 @@ static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
 	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
-
-static func _apply_warehouse_thin_button(theme: Theme) -> void:
-	var variation := &"GothicWarehouseThinButton"
-	theme.set_type_variation(variation, "Button")
-	var normal := AdaptiveButtonStyleBoxScript.new().configure_fixed_aspect(_load_component_texture(BUTTON_ANTIQUE_GOLD_THIN_NORMAL_V6))
-	var pressed := AdaptiveButtonStyleBoxScript.new().configure_fixed_aspect(_load_component_texture(BUTTON_ANTIQUE_GOLD_THIN_PRESSED_V6))
-	var disabled := AdaptiveButtonStyleBoxScript.new().configure_fixed_aspect(_load_component_texture(BUTTON_ANTIQUE_GOLD_THIN_DISABLED_V6), Color(0.035, 0.03, 0.025, 0.92))
-	theme.set_stylebox("normal", variation, normal); theme.set_stylebox("hover", variation, normal); theme.set_stylebox("focus", variation, normal)
-	theme.set_stylebox("pressed", variation, pressed); theme.set_stylebox("disabled", variation, disabled)
-	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
-
-static func _load_component_texture(path: String) -> Texture2D:
-	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
-	assert(not image.is_empty(), "Missing Gothic UI component: %s" % path)
-	return ImageTexture.create_from_image(image)
 
 static func _apply_skill_config_compact_button(theme: Theme) -> void:
 	var variation := &"GothicSkillConfigCompactButton"
