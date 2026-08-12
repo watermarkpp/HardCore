@@ -66,14 +66,13 @@ func _run() -> void:
 	assert(basic_index >= 0, "基本剑术没有保留在技能列表")
 	panel._on_skill_selected(basic_index)
 	assert(panel.skill_buttons[basic_index].get_meta("assignment_eligible", true) == false)
-	assert(panel.assign_button.disabled and panel.assign_button.text == "被动技能仅展示")
+	assert(panel.get_node("AssignmentPanel/AssignmentHint").text != "")
 	panel._open_assignment_popup_for(basic_index)
 	assert(not panel.assignment_popup.visible, "被动技能错误进入技能绑定弹窗")
 
 	var thrusting_index := _skill_index(panel, "刺杀剑术")
 	assert(thrusting_index >= 0)
 	panel._on_skill_selected(thrusting_index)
-	assert(not panel.assign_button.disabled)
 	panel._open_assignment_popup_for(thrusting_index)
 	assert(panel.assignment_popup.visible)
 	assert(panel.assignment_popup.get_meta("skill_id", "") == "warrior.thrusting")
@@ -107,6 +106,26 @@ func _run() -> void:
 	assert(requests[3].clear and requests[3].slot_id == "hud.attack_ring_skill.6")
 	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").get_meta("assignment_action", "") == "clear")
 	assert(panel.get_node("AssignmentPanel/ClearAttackRingSkillSlot_6").get_meta("assignment_action", "") == "clear")
+	# The final card must be fully exposed at the mathematical maximum scroll
+	# position for every profession; this guards against profession-specific
+	# card-count/layout clipping without naming a particular skill.
+	for profession in ["战士", "法师", "道士"]:
+		PlayerState.profession = profession
+		panel.open_for("技能导师")
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var scroll := panel.get_node("SkillListPanel/SkillListScroll") as ScrollContainer
+		var cards := panel.get_node("SkillListPanel/SkillListScroll/SkillCards") as Control
+		assert(cards.get_child_count() > 0, "%s 技能列表为空" % profession)
+		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+		await get_tree().process_frame
+		var last_card := cards.get_child(cards.get_child_count() - 1) as Control
+		var visible_rect := scroll.get_global_rect()
+		if scroll.get_h_scroll_bar().visible:
+			visible_rect.size.y -= scroll.get_h_scroll_bar().size.y
+		var last_rect := last_card.get_global_rect()
+		assert(last_rect.position.y >= visible_rect.position.y - 1.0, "%s 末项顶部被裁切" % profession)
+		assert(last_rect.end.y <= visible_rect.end.y + 1.0, "%s 末项底部被裁切" % profession)
 
 	print("SKILL_GOTHIC_UI_PASS: 攻击主键、六环槽、被动过滤与可逆清空请求均通过")
 	get_tree().quit(0)

@@ -1,6 +1,7 @@
 extends Node
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicButtonStyleBoxScript := preload("res://scripts/gothic_button_style_box.gd")
 const MANIFEST_PATH := "res://assets/ui/gothic_theme/v1/sample/component_manifest.json"
 
 
@@ -47,9 +48,23 @@ func _assert_single_ring_contract(theme: Theme, manifest: Dictionary) -> void:
 			if style is StyleBoxFlat:
 				assert(style.border_width_left <= 1, "%s.%s reintroduced a thick border" % [variation, state])
 	var inset_style := theme.get_stylebox("panel", "GothicInsetFrame") as StyleBoxTexture
-	assert(inset_style.texture.resource_path.ends_with("inset_frame_single_v2.png"))
-	var button_style := theme.get_stylebox("normal", "GothicComponentButton") as StyleBoxTexture
-	assert(button_style.texture.resource_path.ends_with("button_normal_single_v2.png"))
+	assert(inset_style.texture.resource_path.ends_with("inset_frame_v3.png"))
+	assert(inset_style.texture.get_width() == 604 and inset_style.texture.get_height() == 327)
+	assert(inset_style.texture_margin_left == 64 and inset_style.texture_margin_right == 64)
+	assert(inset_style.texture_margin_top == 58 and inset_style.texture_margin_bottom == 58)
+	assert(64 * 2 >= 120 and 58 * 2 >= 80)
+	var button_style := theme.get_stylebox("normal", "GothicComponentButton") as GothicButtonStyleBoxScript
+	assert(button_style.background.texture.resource_path.ends_with("button_bg_v3.png"))
+	assert(button_style.background.texture_margin_left == 34)
+	assert(button_style.background.texture_margin_right == 34)
+	for width in [120.0, 160.0, 260.0, 440.0]:
+		for height in [48.0, 56.0]:
+			var rect := Rect2(Vector2.ZERO, Vector2(width, height))
+			var ornament_rect: Rect2 = button_style.ornament_rect(rect)
+			assert(absf(ornament_rect.get_center().x - rect.get_center().x) < 0.01)
+			assert(ornament_rect.size.x <= width and ornament_rect.size.y <= height)
+			assert(absf(ornament_rect.size.x / ornament_rect.size.y - 44.0 / 72.0) < 0.001)
+			assert(button_style.background.texture_margin_left + button_style.background.texture_margin_right < width)
 
 
 func _assert_main_hud_styles_preserved(theme: Theme) -> void:

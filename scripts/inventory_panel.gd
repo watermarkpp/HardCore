@@ -14,8 +14,10 @@ signal closed
 const PANEL_SIZE := Vector2(1220, 660)
 const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
 const SECTION_VERTICAL_SHIFT := 24.0
-const BAG_COLUMNS := 8
-const BAG_VISIBLE_CAPACITY := 40
+## Two fewer columns than the former eight-column layout; capacity remains 100.
+const BAG_COLUMNS := 6
+## Six columns x five 64px rows (with 4px separation) fit the 340px viewport.
+const BAG_VISIBLE_CAPACITY := 30
 const BAG_CAPACITY := 100
 const BAG_CELL_SIZE := Vector2(56, 64)
 const LONG_PRESS_SECONDS := 0.48
@@ -225,6 +227,11 @@ func _build_bag_panel() -> void:
 	bag_summary_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	bag_summary_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(bag_summary_label)
+	# Independent level-2 decoration for the item area.  Its code-filled
+	# chamfered frame is separate from InventoryScroll and ItemGrid so each can
+	# be calibrated without moving the other.
+	var grid_frame := GothicFrameFactoryScript.add_filled_section(panel, "InventoryGridFrame", Rect2(0, 42, 492, 360))
+	grid_frame.set_meta("calibration_layer", "inventory_grid_decoration")
 	var scroll := ScrollContainer.new()
 	scroll.name = "InventoryScroll"
 	scroll.position = Vector2(10, 50)
@@ -345,6 +352,27 @@ func refresh() -> void:
 	if character_preview != null:
 		character_preview.refresh()
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
+	_stabilize_bag_layout()
+	call_deferred("_stabilize_bag_layout")
+
+
+func _on_runtime_layout_profile_applied(profile_id: String) -> void:
+	if profile_id == "inventory":
+		_stabilize_bag_layout()
+		call_deferred("_stabilize_bag_layout")
+
+
+func _stabilize_bag_layout() -> void:
+	if item_grid == null or not is_instance_valid(item_grid) or not item_grid.is_inside_tree():
+		return
+	var rows := ceili(float(BAG_CAPACITY) / float(BAG_COLUMNS))
+	var grid_width := float(BAG_COLUMNS) * BAG_CELL_SIZE.x + float(maxi(BAG_COLUMNS - 1, 0))
+	var grid_height := float(rows) * BAG_CELL_SIZE.y + float(maxi(rows - 1, 0)) * 4.0
+	item_grid.custom_minimum_size = Vector2(grid_width, grid_height)
+	item_grid.queue_sort()
+	var scroll := get_node_or_null("BagPanel/InventoryScroll") as ScrollContainer
+	if scroll != null:
+		scroll.queue_redraw()
 
 
 func _refresh_equipment_slots() -> void:

@@ -7,6 +7,8 @@ const MODAL_INNER_POSITION := Vector2(41, 59)
 const MODAL_INNER_END_INSET := Vector2(41, 64)
 const MODAL_INNER_RADIUS := 42.0
 const INSET_FRAME_VARIATION := &"GothicInsetFrame"
+const COMPONENT_INSET_FRAME_V3 := preload("res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png")
+const INSET_FRAME_V3_PATCH := Vector4(64, 58, 64, 58)
 ## Reserved local planes for sealed modal chrome.  Close controls deliberately
 ## sit above the safety overlay without lifting their sibling content.
 const MODAL_OVERLAY_Z_INDEX := 100
@@ -117,3 +119,21 @@ static func add_inset_fill(frame: Panel, node_name := "InnerFill") -> Control:
 	fill.set_meta("calibration_internal_visual", true)
 	frame.add_child(fill)
 	return fill
+
+
+## Creates the approved v3 one-ring level-2 frame. Corners remain fixed while
+## all four edges stretch; the center is intentionally transparent so the
+## companion GothicFrameFill owns containment and fill.
+static func create_inset_frame_style_v3() -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = COMPONENT_INSET_FRAME_V3
+	style.set_texture_margin(SIDE_LEFT, INSET_FRAME_V3_PATCH.x)
+	style.set_texture_margin(SIDE_TOP, INSET_FRAME_V3_PATCH.y)
+	style.set_texture_margin(SIDE_RIGHT, INSET_FRAME_V3_PATCH.z)
+	style.set_texture_margin(SIDE_BOTTOM, INSET_FRAME_V3_PATCH.w)
+	style.draw_center = false
+	style.content_margin_left = INSET_FRAME_V3_PATCH.x
+	style.content_margin_top = INSET_FRAME_V3_PATCH.y
+	style.content_margin_right = INSET_FRAME_V3_PATCH.z
+	style.content_margin_bottom = INSET_FRAME_V3_PATCH.w
+	return style

@@ -482,6 +482,34 @@ func refresh() -> void:
 	else:
 		_clear_skill_detail()
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
+	call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _on_runtime_layout_profile_applied(profile_id: String) -> void:
+	if profile_id == "skill":
+		_ensure_skill_list_bottom_clearance()
+		call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _ensure_skill_list_bottom_clearance() -> void:
+	if not is_instance_valid(skill_list_container) or not is_instance_valid(skill_list_container.get_parent()):
+		return
+	var scroll := skill_list_container.get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	var content_bottom := 0.0
+	for child: Node in skill_list_container.get_children():
+		if child is Control:
+			var control := child as Control
+			content_bottom = maxf(content_bottom, control.position.y + control.size.y)
+	var separation := float(skill_list_container.get_theme_constant("separation"))
+	var viewport_height := maxf(0.0, scroll.size.y)
+	# Keep enough trailing space for the calibrated card's bottom edge to clear
+	# the viewport clip at max scroll.  The extra separation is layout-relative,
+	# not tied to any profession or skill name.
+	var required_height := maxf(viewport_height, content_bottom + separation * 3.0)
+	skill_list_container.custom_minimum_size.y = required_height
+	skill_list_container.queue_sort()
 
 
 func _rebuild_skill_cards() -> void:

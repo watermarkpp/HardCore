@@ -40,7 +40,21 @@ func _run() -> void:
 	var sort_rect := Rect2(panel.auto_sort_button.position, panel.auto_sort_button.size)
 	var discard_rect := Rect2(panel.discard_button.position, panel.discard_button.size)
 	assert(not sort_rect.intersects(discard_rect), "整理和丢弃按钮默认不得重叠")
-	assert(panel.item_grid.columns == 8 and panel.item_grid.get_child_count() == 100, "综合背包必须使用8列并提供固定100格")
+	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "综合背包必须使用正式列数减2的6列并提供固定100格")
+	var grid_frame := panel.get_node("BagPanel/InventoryGridFrame") as Control
+	var grid_decoration := panel.get_node("BagPanel/InventoryGridFrame/InventoryGridFrameDecoration") as Control
+	var grid_scroll := panel.get_node("BagPanel/InventoryScroll") as Control
+	assert(grid_frame != null and grid_decoration != null, "综合背包物品区缺少独立二级装饰框")
+	assert(grid_decoration.get_node_or_null("InventoryGridFrameFill") != null and grid_decoration.get_node_or_null("InventoryGridFrameFrame") != null, "综合背包二级框必须使用代码填充和内圈")
+	assert(grid_frame != grid_scroll and grid_scroll.get_parent() == panel.get_node("BagPanel"), "综合背包二级装饰框与滚动区必须独立可校准")
+	assert(grid_frame.mouse_filter == Control.MOUSE_FILTER_IGNORE and grid_decoration.mouse_filter == Control.MOUSE_FILTER_IGNORE, "综合背包二级装饰框不得拦截物品点击")
+	assert(grid_decoration.get_node("InventoryGridFrameFill").mouse_filter == Control.MOUSE_FILTER_IGNORE and grid_decoration.get_node("InventoryGridFrameFrame").mouse_filter == Control.MOUSE_FILTER_IGNORE, "综合背包装饰填充与内圈不得拦截物品点击")
+	assert(grid_frame.get_index() < grid_scroll.get_index(), "综合背包装饰框必须先于滚动内容绘制且保持可独立选择")
+	var first_grid_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
+	await get_tree().process_frame
+	assert(panel.item_grid.get_child_count() == 100 and panel.item_grid.columns == 6, "首次稳定帧必须保留100格与6列")
+	var first_stable_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
+	assert(first_stable_rect.size.y >= first_grid_rect.size.y, "首次打开时物品网格不能出现残缺高度")
 	var first_grid_paths: Array[String] = []
 	for cell_index in range(100):
 		var cell := panel.item_grid.get_child(cell_index) as Control
@@ -52,16 +66,21 @@ func _run() -> void:
 			assert(cell.get_node("EmptySlotBackground").name == "EmptySlotBackground", "空格背景语义节点名不稳定")
 	panel.refresh()
 	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "刷新后列数与容量必须保持")
+	assert(Rect2(panel.item_grid.position, panel.item_grid.size).is_equal_approx(first_stable_rect), "首次稳定帧与刷新后网格几何必须一致")
 	for cell_index in range(100):
 		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
+	await get_tree().process_frame
 	var fortieth_cell := panel.item_grid.get_child(39) as Control
 	var forty_first_cell := panel.item_grid.get_child(40) as Control
 	var layout_contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(UI_LAYOUT_CONTRACT))
 	var saved_scroll: Array = layout_contract["profiles"]["inventory"]["nodes"]["BagPanel/InventoryScroll"]["logicalRect"]
 	assert(bag_scroll.position.is_equal_approx(Vector2(float(saved_scroll[0]), float(saved_scroll[1]))) and bag_scroll.size.is_equal_approx(Vector2(float(saved_scroll[2]), float(saved_scroll[3]))), "背包滚动区必须与正式校准合同一致")
-	assert(fortieth_cell.position.y + fortieth_cell.size.y <= bag_scroll.size.y, "背包首屏没有完整显示前40格")
-	assert(forty_first_cell.position.y >= fortieth_cell.position.y + fortieth_cell.size.y, "背包格子不应重叠")
+	assert(fortieth_cell.position.y >= bag_scroll.size.y, "六列布局下第40格应位于可滚动首屏之后")
+	assert(panel.get_node("BagPanel/BagPagingHint").text.contains("1–30") and panel.get_node("BagPanel/BagPagingHint").text.contains("31–100"), "六列布局说明文字必须准确反映首屏30格")
+	assert(not Rect2(fortieth_cell.position, fortieth_cell.size).intersects(Rect2(forty_first_cell.position, forty_first_cell.size)), "背包格子不应重叠")
 	assert(bag_scroll.get_v_scroll_bar().visible, "背包后60格没有提供右侧滚动查看")
 	assert(panel.item_grid.get_child(3).has_node("StackCount") and panel.item_grid.get_child(3).get_node("StackCount").text == "2", "可堆叠物品没有在同一格显示数量")
 	assert(panel.character_preview != null, "装备面板缺少人物穿戴预览")
