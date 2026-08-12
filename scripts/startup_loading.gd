@@ -45,6 +45,12 @@ func _process(_delta: float) -> void:
 
 
 func _run_finite_loading_phase() -> void:
+	# Present the startup scene for at least one real frame before the minimum
+	# duration begins. Cold Android launches can otherwise replace this scene
+	# before the custom loading surface is ever composited.
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
 	await get_tree().create_timer(FINITE_ANIMATION_SECONDS).timeout
 	if not is_inside_tree():
 		return

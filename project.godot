@@ -19,7 +19,8 @@ config/quit_on_go_back=false
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/branding/game_icon.png"
 boot_splash/image=""
-boot_splash/bg_color=Color(0, 0, 0, 1)
+; Match the Android/Godot starting surface to the first loading frame.
+boot_splash/bg_color=Color(0.018, 0.025, 0.035, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false

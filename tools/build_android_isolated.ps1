@@ -129,6 +129,44 @@ try {
         throw "Fresh isolated stage unexpectedly contains an existing Godot cache."
     }
 
+    # Bootstrap the host-managed Gradle template into the disposable stage
+    # without network access or mutation of the integration worktree.
+    if ($ExportPresetText -match '(?m)^gradle_build/use_gradle_build=true\r?$') {
+        $AndroidSourceZip = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_source.zip"
+        if (-not (Test-Path -LiteralPath $AndroidSourceZip -PathType Leaf)) {
+            throw "Gradle Android export is enabled but offline template is missing: $AndroidSourceZip"
+        }
+        $StageAndroidPath = [System.IO.Path]::GetFullPath((Join-Path $StageProjectPath "android"))
+        $SafeStagePrefix = $StageProjectPath + [System.IO.Path]::DirectorySeparatorChar
+        if (-not $StageAndroidPath.StartsWith($SafeStagePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+            throw "Refusing unsafe Android template extraction path: $StageAndroidPath"
+        }
+        New-Item -ItemType Directory -Path $StageAndroidPath -Force | Out-Null
+        & tar -xf $AndroidSourceZip -C $StageAndroidPath
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath (Join-Path $StageAndroidPath "res\values\themes.xml") -PathType Leaf)) {
+            throw "Offline Android template extraction failed: $StageAndroidPath"
+        }
+        $StageThemesPath = Join-Path $StageAndroidPath "res\values\themes.xml"
+        $StageThemesText = Get-Content -LiteralPath $StageThemesPath -Raw
+        $Tab = [char]9
+        $SplashThemeReplacement = @(
+            '<style name="GodotAppSplashTheme" parent="Theme.SplashScreen">',
+            ($Tab + $Tab + '<item name="android:windowSplashScreenBackground">#12191f</item>'),
+            ($Tab + $Tab + '<item name="android:windowSplashScreenBrandingImage">@null</item>'),
+            ($Tab + $Tab + '<item name="windowSplashScreenAnimatedIcon">@null</item>'),
+            ($Tab + $Tab + '<item name="android:windowSplashScreenIconBackgroundColor">#12191f</item>'),
+            ($Tab + $Tab + '<item name="postSplashScreenTheme">@style/GodotAppMainTheme</item>'),
+            ($Tab + $Tab + '<item name="android:windowIsTranslucent">false</item>'),
+            ($Tab + '</style>')
+        ) -join [Environment]::NewLine
+        $StageThemesText = $StageThemesText -replace '(?s)<style name="GodotAppSplashTheme".*?</style>', $SplashThemeReplacement
+        Set-Content -LiteralPath $StageThemesPath -Value $StageThemesText -Encoding utf8NoBOM
+        if ($StageThemesText -notmatch 'windowSplashScreenAnimatedIcon.*@null' -or $StageThemesText -notmatch 'windowSplashScreenBrandingImage.*@null') {
+            throw "Offline Android template splash patch did not apply: $StageThemesPath"
+        }
+        Write-Output "ANDROID_GRADLE_TEMPLATE_BOOTSTRAP_PASS"
+    }
+
     $StageOutputDirectory = Join-Path $StageProjectPath "outputs\hardcore"
     New-Item -ItemType Directory -Path $StageOutputDirectory -Force | Out-Null
     $StageApk = Join-Path $StageOutputDirectory "HardCore-isolated-debug.apk"
