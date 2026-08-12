@@ -40,6 +40,12 @@ func _run() -> void:
 	var hint := panel.get_node("MapPreviewPanel/WorldTreeHint") as Label
 	assert(hint.position.x >= 0.0 and hint.position.y >= 0.0 and hint.size.x > 0.0 and hint.size.y >= 18.0, "世界树提示必须为有效矩形")
 	var tree_scroll := panel.get_node("MapPreviewPanel/WorldTreeScroll") as ScrollContainer
+	var tree_frame := panel.get_node("MapPreviewPanel/MapListV3Frame") as Control
+	assert(tree_frame.get_index() < tree_scroll.get_index() and tree_frame.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+	var tree_decoration := tree_frame.get_node("MapListV3FrameDecoration") as Control
+	var tree_fill := tree_decoration.get_node("MapListV3FrameFill") as GothicFrameFill
+	var tree_frame_panel := tree_decoration.get_node("MapListV3FrameFrame") as Panel
+	assert(tree_fill.shape_mode == GothicFrameFill.ShapeMode.V3_INNER and tree_fill.mouse_filter == Control.MOUSE_FILTER_IGNORE and tree_frame_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE)
 	assert(tree_scroll.position.x >= 0.0 and tree_scroll.position.y >= 0.0 and tree_scroll.size.x > 0.0 and tree_scroll.size.y > 0.0, "世界树滚动区必须为有效矩形")
 	assert(tree_scroll.get_meta("calibration_layout_revision") == 1, "世界树布局版本错误")
 	var expected_pairs: Dictionary = {}

@@ -135,6 +135,10 @@ func _build_map_list_section() -> void:
 
 func _build_world_tree_section() -> void:
 	var panel := _framed_section("MapPreviewPanel", Rect2(302, 76, 520, 548))
+	var tree_frame := GothicFrameFactoryScript.add_filled_section(panel, "MapListV3Frame", Rect2(8, 40, 504, 486))
+	tree_frame.set_meta("calibration_layer", "map_world_tree_decoration")
+	tree_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.move_child(tree_frame, 0)
 	panel.add_child(_section_title("HardCore 世界地图树", 520))
 	var hint := Label.new()
 	hint.name = "WorldTreeHint"
