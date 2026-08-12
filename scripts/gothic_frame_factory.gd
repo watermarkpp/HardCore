@@ -9,6 +9,11 @@ const MODAL_INNER_RADIUS := 42.0
 const INSET_FRAME_VARIATION := &"GothicInsetFrame"
 const COMPONENT_INSET_FRAME_V3 := preload("res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png")
 const INSET_FRAME_V3_PATCH := Vector4(64, 58, 64, 58)
+## Measured safe opening for inset_frame_v3.png.  The texture's inner alpha
+## edge is approximately x=31/573 and y=26/300 at 604x327; keeping the code
+## fill within this inset remains safe when the nine-slice is resized.
+const INSET_FRAME_V3_INNER_INSETS := Vector4(31, 26, 31, 26)
+const INSET_FRAME_V3_INNER_RADIUS := 18.0
 ## Reserved local planes for sealed modal chrome.  Close controls deliberately
 ## sit above the safety overlay without lifting their sibling content.
 const MODAL_OVERLAY_Z_INDEX := 100
@@ -96,6 +101,9 @@ static func add_filled_section(
 	var fill := GothicFrameFillScript.new()
 	fill.name = "%sFill" % node_name
 	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	fill.shape_mode = GothicFrameFillScript.ShapeMode.V3_INNER
+	fill.content_insets = INSET_FRAME_V3_INNER_INSETS
+	fill.corner_radius = INSET_FRAME_V3_INNER_RADIUS
 	fill.set_meta("calibration_internal_visual", true)
 	decoration.add_child(fill)
 
@@ -115,6 +123,9 @@ static func add_inset_fill(frame: Panel, node_name := "InnerFill") -> Control:
 	var fill := GothicFrameFillScript.new()
 	fill.name = node_name
 	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	fill.shape_mode = GothicFrameFillScript.ShapeMode.V3_INNER
+	fill.content_insets = INSET_FRAME_V3_INNER_INSETS
+	fill.corner_radius = INSET_FRAME_V3_INNER_RADIUS
 	fill.show_behind_parent = true
 	fill.set_meta("calibration_internal_visual", true)
 	frame.add_child(fill)

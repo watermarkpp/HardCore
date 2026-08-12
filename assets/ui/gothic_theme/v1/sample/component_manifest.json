@@ -1,9 +1,9 @@
 {
-  "assetSetId": "ui.theme.gothic.v1.sample.v4",
+  "assetSetId": "ui.theme.gothic.v1.sample.v5",
   "status": "pending_system_screenshot_review",
   "reference": "ui.hud.gothic.v2",
   "generationMode": "built-in-imagegen-plus-code-normalization",
-  "sourcePolicy": "approved v4 three complete masters; chroma removed soft matte despill",
+  "sourcePolicy": "approved v4 medium and wide masters plus approved v5 hollow square skill-config frame",
   "scopeExclusions": [
     "main HUD skill, attack, item, target, navigation, and utility controls remain unchanged"
   ],
@@ -253,6 +253,75 @@
       "ringCount": 1
     },
     {
+      "id": "ui.theme.gothic.v1.button.square.normal",
+      "file": "button_square_normal_v5.png",
+      "size": [320, 320],
+      "patchMargins": [0, 0, 0, 0],
+      "ringCount": 1,
+      "stretchPolicy": "contain",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.square.pressed",
+      "file": "button_square_pressed_v5.png",
+      "size": [320, 320],
+      "patchMargins": [0, 0, 0, 0],
+      "ringCount": 1,
+      "stretchPolicy": "contain",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.square.disabled",
+      "file": "button_square_disabled_v5.png",
+      "size": [320, 320],
+      "patchMargins": [0, 0, 0, 0],
+      "ringCount": 1,
+      "stretchPolicy": "contain",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.shortwide.normal",
+      "file": "button_shortwide_normal_v5.png",
+      "size": [1659, 948],
+      "stretchPolicy": "exact-control-rect",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.shortwide.pressed",
+      "file": "button_shortwide_pressed_v5.png",
+      "size": [1659, 948],
+      "stretchPolicy": "exact-control-rect",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.shortwide.disabled",
+      "file": "button_shortwide_disabled_v5.png",
+      "size": [1659, 948],
+      "stretchPolicy": "exact-control-rect",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.widesmall.normal",
+      "file": "button_widesmall_normal_v5.png",
+      "size": [2106, 747],
+      "stretchPolicy": "exact-control-rect",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.widesmall.pressed",
+      "file": "button_widesmall_pressed_v5.png",
+      "size": [2106, 747],
+      "stretchPolicy": "exact-control-rect",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.widesmall.disabled",
+      "file": "button_widesmall_disabled_v5.png",
+      "size": [2106, 747],
+      "stretchPolicy": "exact-control-rect",
+      "renderContract": "transparent-hollow-frame-code-filled-interior-skill-config-only"
+    },
+    {
       "id": "ui.theme.gothic.v1.shop_card",
       "file": "shop_card_single_v2.png",
       "size": [
@@ -298,7 +367,7 @@
       "ringCount": 1
     }
   ],
-  "revision": "v4-approved-three-complete-masters",
+  "revision": "v5-approved-three-small-aspect-family-v4-medium-wide-preserved",
   "aspectSelection": {
     "compactMax": 3.3333333333333335,
     "standardMax": 4.67,

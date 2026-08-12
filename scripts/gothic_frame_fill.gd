@@ -4,12 +4,14 @@ extends Control
 enum ShapeMode {
 	CHAMFERED,
 	ROUNDED_INNER,
+	## Inner opening of inset_frame_v3.png.  This is deliberately code drawn:
+	## the v3 texture has a transparent centre and must never be used as a fill.
+	V3_INNER,
 }
 
-## Code-drawn fill shared by framed UI layers. It follows the generated
-## single-ring frame's preserved 18 px corner region: the visible outer edge
-## begins 4 px inside the control and the diagonal reaches the straight edge
-## 12 px later. Drawing beneath the frame hides the seam without filling the
+## Code-drawn fill shared by framed UI layers. V3_INNER follows the measured
+## inner alpha edge of inset_frame_v3 (31 px horizontal, 26 px vertical at the
+## source size). Drawing beneath the frame hides the seam without filling the
 ## transparent exterior corner triangles.
 @export var fill_enabled := true:
 	set(value):
@@ -48,7 +50,7 @@ func _ready() -> void:
 func _draw() -> void:
 	if not fill_enabled:
 		return
-	if shape_mode == ShapeMode.ROUNDED_INNER:
+	if shape_mode == ShapeMode.ROUNDED_INNER or shape_mode == ShapeMode.V3_INNER:
 		var fill_rect := Rect2(
 			Vector2(content_insets.x, content_insets.y),
 			size - Vector2(content_insets.x + content_insets.z, content_insets.y + content_insets.w),
@@ -57,7 +59,13 @@ func _draw() -> void:
 			return
 		var style := StyleBoxFlat.new()
 		style.bg_color = fill_color
-		style.set_corner_radius_all(int(round(minf(corner_radius, minf(fill_rect.size.x, fill_rect.size.y) * 0.5))))
+		var radius := corner_radius
+		if shape_mode == ShapeMode.V3_INNER:
+			# The source frame's inner opening is x=31..573, y=26..300.
+			# Keep the fill inside that opening at every scale, including tiny
+			# panels where the radius must collapse with the available space.
+			radius = minf(radius, minf(fill_rect.size.x, fill_rect.size.y) * 0.5)
+		style.set_corner_radius_all(int(round(radius)))
 		style.anti_aliasing = true
 		draw_style_box(style, fill_rect)
 	else:
@@ -84,3 +92,11 @@ static func polygon_for_size(bounds: Vector2, inset: float, cut: float) -> Packe
 		Vector2(left, bottom - safe_cut),
 		Vector2(left, top + safe_cut),
 	])
+
+## Deterministic geometry contract used by the v3 frame tests and preview tools.
+static func v3_inner_rect_for_size(bounds: Vector2, insets := Vector4(31, 26, 31, 26)) -> Rect2:
+	var left := clampf(insets.x, 0.0, bounds.x * 0.5)
+	var top := clampf(insets.y, 0.0, bounds.y * 0.5)
+	var right := clampf(insets.z, 0.0, bounds.x * 0.5)
+	var bottom := clampf(insets.w, 0.0, bounds.y * 0.5)
+	return Rect2(Vector2(left, top), Vector2(maxf(0.0, bounds.x - left - right), maxf(0.0, bounds.y - top - bottom)))

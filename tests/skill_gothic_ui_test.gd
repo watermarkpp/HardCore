@@ -50,6 +50,13 @@ func _run() -> void:
 	assert(panel.attack_assignment_buttons.size() == 1)
 	assert(panel.attack_ring_assignment_buttons.size() == 6)
 	assert(panel.assignment_buttons.size() == 7)
+	assert(panel.get_node("AssignmentPanel/ClearAttackSkillSlot").theme_type_variation == "GothicSkillConfigCompactButton")
+	assert(panel.get_node("AssignmentPanel/AttackRingSkillSlot_1").theme_type_variation == "GothicSkillConfigCompactButton")
+	assert(panel.get_node("AssignmentPanel/ClearAttackRingSkillSlot_1").theme_type_variation == "GothicSkillConfigCompactButton")
+	assert(panel.get_node("AssignmentPanel/AttackSkillSlot").theme_type_variation == "GothicSkillConfigCompactButton")
+	var popup_attack := panel.find_child("PopupAttackSlot", true, false) as Button
+	assert(popup_attack != null, "PopupAttackSlot must exist")
+	assert(popup_attack.theme_type_variation == "GothicComponentSelectedButton")
 	assert(panel.assignment_popup_buttons.size() == 7)
 	assert(panel.attack_assignment_buttons[0].get_meta("stable_slot_id", "") == "hud.attack.primary")
 	for index in range(6):

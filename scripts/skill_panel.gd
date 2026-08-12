@@ -245,7 +245,7 @@ func _build_assignment_section() -> void:
 	attack_slot.position = Vector2(18, 80)
 	attack_slot.size = Vector2(230, 82)
 	attack_slot.text = ""
-	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
+	attack_slot.theme_type_variation = "GothicSkillConfigCompactButton"
 	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
 	attack_slot.set_meta("slot_group", "attack")
 	attack_slot.set_meta("slot_index", 0)
@@ -258,7 +258,7 @@ func _build_assignment_section() -> void:
 	clear_attack.text = "恢复\n普通攻击"
 	clear_attack.position = Vector2(252, 80)
 	clear_attack.size = Vector2(104, 82)
-	clear_attack.theme_type_variation = "GothicComponentButton"
+	clear_attack.theme_type_variation = "GothicSkillConfigCompactButton"
 	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
 	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
 	clear_attack.set_meta("assignment_action", "clear")
@@ -278,7 +278,7 @@ func _build_assignment_section() -> void:
 		button.position = Vector2(18 + (slot_index % 3) * 118, 208 + floori(float(slot_index) / 3.0) * 112)
 		button.size = Vector2(108, 60)
 		button.text = ""
-		button.theme_type_variation = "GothicComponentButton"
+		button.theme_type_variation = "GothicSkillConfigCompactButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
 		button.set_meta("slot_group", "attack_ring")
 		button.set_meta("slot_index", slot_index)
@@ -291,7 +291,7 @@ func _build_assignment_section() -> void:
 		clear_button.text = "清空 %d" % (slot_index + 1)
 		clear_button.position = button.position + Vector2(0, 64)
 		clear_button.size = Vector2(108, 40)
-		clear_button.theme_type_variation = "GothicComponentButton"
+		clear_button.theme_type_variation = "GothicSkillConfigCompactButton"
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
 		clear_button.set_meta("assignment_action", "clear")
