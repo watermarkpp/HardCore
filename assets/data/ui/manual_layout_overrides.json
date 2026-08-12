@@ -7024,14 +7024,14 @@
 				"CloseButton": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						1800.45056819916,
 						13.3333330154419,
 						93.3566961288452,
 						93.3333311080933
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						1080.0,
 						8.0,
@@ -7056,26 +7056,27 @@
 						93.3333311080933
 					],
 					"text": "×",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentCloseButton",
 					"visible": true
 				},
 				"MapDetailPanel": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						1350.34769421886,
+						1341.3476391935,
 						86.6666646003723,
 						510.127660989761,
 						913.33331155777
 					],
 					"logicalRect": [
-						810.005859375,
+						804.607177734375,
 						52.0,
 						306.0,
 						548.0
 					],
 					"normalized": [
-						0.69828091325431,
+						0.69362687735722,
 						0.08,
 						0.263793103448276,
 						0.843076923076923
@@ -7086,25 +7087,26 @@
 						1083.33330750465
 					],
 					"rect": [
-						1715.43905943702,
+						1706.43900441166,
 						144.999996542931,
 						510.127660989761,
 						913.33331155777
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
 				"MapDetailPanel/@Label@455": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						40.0100126266479,
 						49.0000045537947,
 						430.107635736465,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
 						24.0,
 						29.4000034332275,
@@ -7123,36 +7125,37 @@
 						913.33331155777
 					],
 					"rect": [
-						1755.44907206367,
+						1746.44901703831,
 						193.999997917811,
 						430.107635736465,
 						46.6666655540466
 					],
 					"text": "区域信息",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"MapDetailPanel/MapDetail": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						34.0100140995955,
+						50.0100101717353,
 						237.333470090227,
-						430.107635736465,
+						410.000013818146,
 						449.999989271164
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
-						20.4009017944336,
+						29.9984970092773,
 						142.400085449219,
-						258.0,
+						245.938446044922,
 						270.0
 					],
 					"normalized": [
-						0.0666696137072993,
+						0.0980343039518867,
 						0.259854170527771,
-						0.843137254901961,
+						0.803720411911509,
 						0.492700729927007
 					],
 					"parent": "MapDetailPanel",
@@ -7161,34 +7164,35 @@
 						913.33331155777
 					],
 					"rect": [
-						1749.44903538009,
+						1756.4490781776,
 						382.333466633158,
-						430.107635736465,
+						410.000013818146,
 						449.999989271164
 					],
-					"text": "[color=#a99479]先在中间选择省份、主城或洞穴群，再从左侧选择具体地图。[/color]",
+					"text": "[color=#d8c8ae]所属大地图：比奇\n地区：比奇地区\n地图组：地表/入口\n\n资料ID：4\n运行时ID：4\n版本：2003官服1.76基准版\n资料状态：基准候选\n可信度：B\n\n门点：5　怪物点：6\n关联Boss：暂无可靠关联[/color]\n\n[color=#8f7d6a]传送状态：该地图尚未开放传送[/color]",
+					"textRevision": 0,
 					"themeVariation": "GothicDetailText",
 					"visible": true
 				},
 				"MapDetailPanel/MapDetailPanelDecoration": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						-12.9999976035411,
-						25.0000009934107,
-						510.127660989761,
+						-23.9999972879198,
+						55.0000050465264,
+						550.00000488705,
 						850.000081459679
 					],
 					"logicalRect": [
-						-7.79804658889771,
-						15.0000009536743,
-						306.0,
+						-14.3963947296143,
+						33.0000038146973,
+						329.917419433594,
 						510.000061035156
 					],
 					"normalized": [
-						-0.0254838123820186,
-						0.0273722645140042,
-						1.0,
+						-0.0470470416000466,
+						0.0602189850633162,
+						1.07816150141697,
 						0.930657045684592
 					],
 					"parent": "MapDetailPanel",
@@ -7197,25 +7201,26 @@
 						913.33331155777
 					],
 					"rect": [
-						1702.43908170667,
-						169.999995946884,
-						510.127660989761,
+						1682.43895942809,
+						199.999995231628,
+						550.00000488705,
 						850.000081459679
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapDetailPanel/MapName": {
 					"deleted": false,
 					"fontSize": 34.999999165535,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						43.0100118901742,
 						114.666618156434,
 						430.107635736465,
 						59.9999985694885
 					],
-					"logicalFontSize": 21.0,
+					"logicalFontSize": 21,
 					"logicalRect": [
 						25.7995491027832,
 						68.7999725341797,
@@ -7234,36 +7239,37 @@
 						913.33331155777
 					],
 					"rect": [
-						1758.44909040545,
+						1749.44903538009,
 						259.666614699365,
 						430.107635736465,
 						59.9999985694885
 					],
-					"text": "请选择地图",
+					"text": "比奇省",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapDetailPanel/TeleportButton": {
 					"deleted": false,
 					"fontSize": 29.9999992847443,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						22.3416798892772,
+						54.5609702811194,
 						742.333203736944,
-						443.444306612015,
+						400.00005442958,
 						89.9999978542328
 					],
-					"logicalFontSize": 18.0,
+					"logicalFontSize": 18,
 					"logicalRect": [
-						13.4016532897949,
+						32.7283897399902,
 						445.399932861328,
-						266.0,
+						239.939971923828,
 						54.0
 					],
 					"normalized": [
-						0.0437962525810292,
+						0.106955522026112,
 						0.812773600111913,
-						0.869281045751634,
+						0.784117555306628,
 						0.0985401459854015
 					],
 					"parent": "MapDetailPanel",
@@ -7272,18 +7278,19 @@
 						913.33331155777
 					],
 					"rect": [
-						1737.78066937267,
+						1760.9999810522,
 						887.333149417245,
-						443.444306612015,
+						400.00005442958,
 						89.9999978542328
 					],
 					"text": "传送未开放",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSelectedButton",
 					"visible": true
 				},
 				"MapListPanel": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						80.3416656507839,
 						86.6666646003723,
@@ -7313,30 +7320,31 @@
 						450.112642049789,
 						913.33331155777
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
 				"MapListPanel/@Label@449": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						40.0100126266479,
+						66.0100062438751,
 						49.0000045537947,
-						370.092616796494,
+						370.092667671855,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						24.0,
+						39.5960922241211,
 						29.4000034332275,
-						222.0,
+						222.000030517578,
 						28.0
 					],
 					"normalized": [
-						0.0888888888888889,
+						0.146652193422671,
 						0.0536496413015101,
-						0.822222222222222,
+						0.822222335250289,
 						0.0510948905109489
 					],
 					"parent": "MapListPanel",
@@ -7345,34 +7353,35 @@
 						913.33331155777
 					],
 					"rect": [
-						485.443037136174,
+						511.443043472242,
 						193.999997917811,
-						370.092616796494,
+						370.092667671855,
 						46.6666655540466
 					],
 					"text": "区域地图",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"MapListPanel/MapListPanelDecoration": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						6.00000011690747,
-						25.0000057617822,
-						460.000014262423,
+						-19.9999950901747,
+						55.0000114043551,
+						550.00000488705,
 						849.999776283905
 					],
 					"logicalRect": [
-						3.59909915924072,
-						15.0000038146973,
-						275.930938720703,
+						-11.9969940185547,
+						33.0000076293945,
+						329.917419433594,
 						509.999877929688
 					],
 					"normalized": [
-						0.0133299968860768,
-						0.027372269734849,
-						1.02196643970631,
+						-0.0444333111798322,
+						0.0602189920244426,
+						1.22191636827257,
 						0.930656711550525
 					],
 					"parent": "MapListPanel",
@@ -7381,33 +7390,34 @@
 						913.33331155777
 					],
 					"rect": [
-						451.433010317738,
-						169.999995946884,
-						460.000014262423,
+						425.433029419351,
+						200.000007947286,
+						550.00000488705,
 						849.999776283905
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						30.007509469986,
-						153.999833567941,
-						413.436797142029,
+						50.0075045601607,
+						169.000011229515,
+						413.436924330434,
 						649.999984502792
 					],
 					"logicalRect": [
-						18.0,
-						92.39990234375,
-						248.0,
+						29.9969940185547,
+						101.400009155273,
+						248.000076293945,
 						390.0
 					],
 					"normalized": [
-						0.0666666666666667,
-						0.168612960481296,
-						0.918518518518519,
+						0.111099977846499,
+						0.185036513057068,
+						0.918518801088686,
 						0.711678832116788
 					],
 					"parent": "MapListPanel",
@@ -7416,25 +7426,26 @@
 						913.33331155777
 					],
 					"rect": [
-						475.440533979512,
-						298.999830110872,
-						413.436797142029,
+						495.440554507368,
+						314.000007772445,
+						413.436924330434,
 						649.999984502792
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_1578": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1949.99995350838,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						1170.0,
@@ -7453,26 +7464,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						2257.3331167539,
+						507.110141523473,
+						2272.33331984679,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_1578/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -7491,26 +7503,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						2268.99978314241,
+						523.78098011791,
+						2283.9999862353,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "尸王殿",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_1578/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -7529,26 +7542,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						2303.99978230795,
+						523.78098011791,
+						2318.99998540083,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 1578",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_217": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						108.333330750465,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						65.0,
@@ -7567,26 +7581,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						415.666493995988,
+						507.110141523473,
+						430.666697088876,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_217/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -7605,26 +7620,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						427.3331603845,
+						523.78098011791,
+						442.333363477388,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "兽人古墓一层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_217/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -7643,26 +7659,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						462.333159550035,
+						523.78098011791,
+						477.333362642923,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 217",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_218": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						216.666661500931,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						130.0,
@@ -7681,26 +7698,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						523.999824746454,
+						507.110141523473,
+						539.000027839342,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_218/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -7719,26 +7737,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						535.666491134965,
+						523.78098011791,
+						550.666694227853,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "兽人古墓二层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_218/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -7757,26 +7776,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						570.6664903005,
+						523.78098011791,
+						585.666693393388,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 218",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_221": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						324.999992251396,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						195.0,
@@ -7795,26 +7815,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						632.333155496919,
+						507.110141523473,
+						647.333358589807,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_221/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -7833,26 +7854,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						643.999821885431,
+						523.78098011791,
+						659.000024978319,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "兽人古墓三层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_221/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -7871,26 +7893,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						678.999821050966,
+						523.78098011791,
+						694.000024143854,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 221",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_248": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						433.333323001862,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						260.0,
@@ -7909,26 +7932,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						740.666486247384,
+						507.110141523473,
+						755.666689340273,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_248/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -7947,26 +7971,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						752.333152635896,
+						523.78098011791,
+						767.333355728784,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "洞穴一层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_248/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -7985,26 +8010,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						787.333151801431,
+						523.78098011791,
+						802.333354894319,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 248",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_249": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						541.666653752327,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						325.0,
@@ -8023,26 +8049,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						848.99981699785,
+						507.110141523473,
+						864.000020090738,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_249/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8061,26 +8088,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						860.666483386362,
+						523.78098011791,
+						875.66668647925,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "洞穴二层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_249/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8099,26 +8127,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						895.666482551896,
+						523.78098011791,
+						910.666685644785,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 249",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_4": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -8137,26 +8166,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						307.333163245523,
+						507.110141523473,
+						322.333340907097,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSelectedButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_4/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8175,26 +8205,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						318.999829634035,
+						523.78098011791,
+						334.000007295608,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇省",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_4/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8213,26 +8244,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						353.99982879957,
+						523.78098011791,
+						369.000006461143,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 4",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_401": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						649.999984502792,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						390.0,
@@ -8251,26 +8283,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						957.333147748315,
+						507.110141523473,
+						972.333350841203,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_401/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8289,26 +8322,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						968.999814136827,
+						523.78098011791,
+						984.000017229715,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "废矿入口",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_401/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8327,26 +8361,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1003.99981330236,
+						523.78098011791,
+						1019.00001639525,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 401",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_402": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						758.333315253258,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						455.0,
@@ -8365,26 +8400,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1065.66647849878,
+						507.110141523473,
+						1080.66668159167,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_402/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8403,26 +8439,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1077.33314488729,
+						523.78098011791,
+						1092.33334798018,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "矿区B一层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_402/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8441,26 +8478,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1112.33314405283,
+						523.78098011791,
+						1127.33334714572,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 402",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_403": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						866.666646003723,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						520.0,
@@ -8479,26 +8517,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1173.99980924925,
+						507.110141523473,
+						1189.00001234213,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_403/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8517,26 +8556,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1185.66647563776,
+						523.78098011791,
+						1200.66667873065,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "矿区A一层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_403/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8555,26 +8595,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1220.66647480329,
+						523.78098011791,
+						1235.66667789618,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 403",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_404": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						974.999976754189,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						585.0,
@@ -8593,26 +8634,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1282.33313999971,
+						507.110141523473,
+						1297.3333430926,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_404/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8631,26 +8673,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1293.99980638822,
+						523.78098011791,
+						1309.00000948111,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "废矿区东部",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_404/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8669,26 +8712,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1328.99980555376,
+						523.78098011791,
+						1344.00000864665,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 404",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_405": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1083.33330750465,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						650.0,
@@ -8707,26 +8751,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1390.66647075018,
+						507.110141523473,
+						1405.66667384306,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_405/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8745,26 +8790,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1402.33313713869,
+						523.78098011791,
+						1417.33334023158,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "矿区C一层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_405/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8783,26 +8829,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1437.33313630422,
+						523.78098011791,
+						1452.33333939711,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 405",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_406": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1191.66663825512,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						715.0,
@@ -8821,26 +8868,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1498.99980150064,
+						507.110141523473,
+						1514.00000459353,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_406/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8859,26 +8907,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1510.66646788915,
+						523.78098011791,
+						1525.66667098204,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "矿区一层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_406/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -8897,26 +8946,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1545.66646705469,
+						523.78098011791,
+						1560.66667014758,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 406",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_407": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1299.99996900558,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						780.0,
@@ -8935,26 +8985,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1607.33313225111,
+						507.110141523473,
+						1622.333335344,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_407/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -8973,26 +9024,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1618.99979863962,
+						523.78098011791,
+						1634.00000173251,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "桥",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_407/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -9011,26 +9063,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1653.99979780515,
+						523.78098011791,
+						1669.00000089804,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 407",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_408": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1408.33329975605,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						845.0,
@@ -9049,26 +9102,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1715.66646300157,
+						507.110141523473,
+						1730.66666609446,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_408/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -9087,26 +9141,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1727.33312939008,
+						523.78098011791,
+						1742.33333248297,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "矿区B二层",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_408/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -9125,26 +9180,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1762.33312855562,
+						523.78098011791,
+						1777.33333164851,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 408",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_409": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1516.66663050652,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						910.0,
@@ -9163,26 +9219,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1823.99979375204,
+						507.110141523473,
+						1838.99999684493,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_409/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -9201,26 +9258,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1835.66646014055,
+						523.78098011791,
+						1850.66666323344,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "桥",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_409/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -9239,26 +9297,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1870.66645930609,
+						523.78098011791,
+						1885.66666239897,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 409",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_410": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1624.99996125698,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						975.0,
@@ -9277,26 +9336,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						1932.3331245025,
+						507.110141523473,
+						1947.33332759539,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_410/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -9315,26 +9375,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1943.99979089102,
+						523.78098011791,
+						1958.9999939839,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "矿物回收站",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_410/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -9353,26 +9414,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						1978.99979005655,
+						523.78098011791,
+						1993.99999314944,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 410",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_411": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1733.33329200745,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						1040.0,
@@ -9391,26 +9453,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						2040.66645525297,
+						507.110141523473,
+						2055.66665834586,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_411/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -9429,26 +9492,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						2052.33312164148,
+						523.78098011791,
+						2067.33332473437,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "桥",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_411/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -9467,26 +9531,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						2087.33312080702,
+						523.78098011791,
+						2102.3333238999,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 411",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_412": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						1841.66662275791,
 						376.760952234268,
 						96.6666643619537
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						1105.0,
@@ -9505,26 +9570,27 @@
 						2046.66661787033
 					],
 					"rect": [
-						487.110120995618,
-						2148.99978600343,
+						507.110141523473,
+						2163.99998909632,
 						376.760952234268,
 						96.6666643619537
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_412/MapName": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						11.6666663885117,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						10.0,
 						7.0,
@@ -9543,26 +9609,27 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						2160.66645239195,
+						523.78098011791,
+						2175.66665548483,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "废矿区南部",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll/MapCards/MapCard_412/MapSubtitle": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						46.6666655540466,
 						343.419275045395,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						10.0,
 						28.0,
@@ -9581,18 +9648,19 @@
 						96.6666643619537
 					],
 					"rect": [
-						503.780959590054,
-						2195.66645155748,
+						523.78098011791,
+						2210.66665465037,
 						343.419275045395,
 						38.3333324193954
 					],
 					"text": "比奇地区 · ID 412",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapPreviewPanel": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						503.459325551987,
 						86.6666646003723,
@@ -9622,28 +9690,29 @@
 						866.883606910706,
 						913.33331155777
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
 				"MapPreviewPanel/@Label@452": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						40.0100126266479,
+						60.0100077168227,
 						49.0000140905377,
 						786.86358165741,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						24.0,
+						35.9969940185547,
 						29.4000091552734,
 						472.0,
 						28.0
 					],
 					"normalized": [
-						0.0461538461538462,
+						0.0692249884972206,
 						0.0536496517431997,
 						0.907692307692308,
 						0.0510948905109489
@@ -9654,35 +9723,36 @@
 						913.33331155777
 					],
 					"rect": [
-						908.560703396797,
+						928.560723924653,
 						194.000010633468,
 						786.86358165741,
 						46.6666655540466
 					],
 					"text": "HardCore 世界地图树",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
-				"MapPreviewPanel/MapPreviewPanelDecoration": {
-					"deleted": true,
-					"layoutRevision": 0.0,
+				"MapPreviewPanel/MapListV3Frame": {
+					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						0.0,
-						0.0,
-						866.883606910706,
-						913.33331155777
+						28.3366671931803,
+						66.6666650772095,
+						703.346689277801,
+						809.999980688095
 					],
 					"logicalRect": [
-						0.0,
-						0.0,
-						520.0,
-						548.0
+						16.997745513916,
+						40.0,
+						421.902404785156,
+						486.0
 					],
 					"normalized": [
-						0.0,
-						0.0,
-						1.0,
-						1.0
+						0.0326879721421462,
+						0.072992700729927,
+						0.811350778432993,
+						0.886861313868613
 					],
 					"parent": "MapPreviewPanel",
 					"parentSize": [
@@ -9690,36 +9760,73 @@
 						913.33331155777
 					],
 					"rect": [
-						868.550690770149,
-						144.999996542931,
-						866.883606910706,
-						913.33331155777
+						896.887351603909,
+						211.66666162014,
+						703.346689277801,
+						809.999980688095
 					],
+					"textRevision": 0,
+					"themeVariation": "GothicInsetFrame",
+					"visible": true
+				},
+				"MapPreviewPanel/MapListV3Frame/MapListV3FrameDecoration": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						39.9999933600595,
+						-11.6666576464973,
+						800.000007108436,
+						849.999979734421
+					],
+					"logicalRect": [
+						23.993989944458,
+						-6.99999475479126,
+						479.8798828125,
+						510.0
+					],
+					"normalized": [
+						0.0568709485234538,
+						-0.0144032813884594,
+						1.13741916938555,
+						1.04938271604938
+					],
+					"parent": "MapPreviewPanel/MapListV3Frame",
+					"parentSize": [
+						703.346689277801,
+						809.999980688095
+					],
+					"rect": [
+						936.887392659621,
+						200.000007947286,
+						800.000007108436,
+						849.999979734421
+					],
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": false
+					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeHint": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
-					"layoutRevision": 0.0,
+					"layoutRevision": 2,
 					"localRect": [
-						40.0100126266479,
-						98.9999874671303,
-						786.86358165741,
-						46.6666655540466
+						138.449335475218,
+						118.999986990293,
+						650.000005775604,
+						38.3333324193954
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
-						24.0,
-						59.3999938964844,
-						472.0,
-						28.0
+						83.0488128662109,
+						71.3999938964844,
+						389.902404785156,
+						23.0
 					],
 					"normalized": [
-						0.0461538461538462,
-						0.108394149446139,
-						0.907692307692308,
-						0.0510948905109489
+						0.159709255511944,
+						0.130291959665117,
+						0.749812316894531,
+						0.041970802919708
 					],
 					"parent": "MapPreviewPanel",
 					"parentSize": [
@@ -9727,34 +9834,35 @@
 						913.33331155777
 					],
 					"rect": [
-						908.560703396797,
-						243.999984010061,
-						786.86358165741,
-						46.6666655540466
+						1007.00005168305,
+						263.999983533224,
+						650.000005775604,
+						38.3333324193954
 					],
 					"text": "选择大地图节点，在左侧展开其包含的全部地图",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll": {
 					"deleted": false,
-					"layoutRevision": 1.0,
+					"layoutRevision": 2,
 					"localRect": [
-						40.0100126266479,
-						155.333222818377,
-						793.531917095184,
+						147.449237874493,
+						168.999973082543,
+						646.828537464142,
 						669.999984025955
 					],
 					"logicalRect": [
-						24.0,
-						93.1999359130859,
-						476.0,
+						88.4474029541016,
+						101.39998626709,
+						388.0,
 						402.0
 					],
 					"normalized": [
-						0.0461538461538462,
-						0.170072875753806,
-						0.915384615384615,
+						0.170091159527118,
+						0.18503647129031,
+						0.746153846153846,
 						0.733576642335766
 					],
 					"parent": "MapPreviewPanel",
@@ -9763,1233 +9871,330 @@
 						913.33331155777
 					],
 					"rect": [
-						908.560703396797,
-						300.333219361308,
-						793.531917095184,
+						1015.99990320696,
+						313.999982341131,
+						646.828537464142,
 						669.999984025955
 					],
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bich_mine/WorldNode_bich_mine": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bich_mine",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1828.66654168765,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "比奇矿区",
-					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bich_province/WorldNode_bich_province": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bich_province",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						308.666552495959,
-						716.846059560776,
+						1047.67449653639,
+						322.333315475782,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "比奇",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSelectedButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bone_cave/WorldNode_bone_cave": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bone_cave",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2968.66651450793,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "骨魔洞",
-					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_cangyue_island/WorldNode_cangyue_island": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_cangyue_island",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						1448.66655074756,
-						716.846059560776,
+						1047.67449653639,
+						892.333352748552,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "苍月",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_centipede_cave/WorldNode_centipede_cave": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_centipede_cave",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2208.66653262774,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "蜈蚣洞",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_corpse_cave/WorldNode_corpse_cave": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_corpse_cave",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2873.66651677291,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "尸魔洞",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_cow_temple/WorldNode_cow_temple": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_cow_temple",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						3063.66651224295,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "牛魔寺庙",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_fengmo_valley/WorldNode_fengmo_valley": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_fengmo_valley",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						1258.66655527751,
-						716.846059560776,
+						1047.67449653639,
+						797.333304150899,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "封魔谷",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_03754485c1b0/WorldNode_group_03754485c1b0": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_03754485c1b0",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1353.66655301253,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_0798d854204f/WorldNode_group_0798d854204f": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_0798d854204f",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						973.666562072438,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_151e2aae53c0/WorldNode_group_151e2aae53c0": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_151e2aae53c0",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						593.666571132344,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_1bd58918a261/WorldNode_group_1bd58918a261": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_1bd58918a261",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						403.666550230982,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_68d7163a023f/WorldNode_group_68d7163a023f": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_68d7163a023f",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2778.66651903788,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "封魔殿",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_6de4198ce97d/WorldNode_group_6de4198ce97d": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_6de4198ce97d",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1543.66654848258,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_90e59622dafc/WorldNode_group_90e59622dafc": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_90e59622dafc",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						783.666566602391,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_9edf0da4676f/WorldNode_group_9edf0da4676f": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_9edf0da4676f",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2303.66653036277,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "未知暗殿",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_9f152d9f4d3c/WorldNode_group_9f152d9f4d3c": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_9f152d9f4d3c",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2683.66652130286,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "赤月峡谷",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_abdb6407e71f/WorldNode_group_abdb6407e71f": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_abdb6407e71f",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1163.66655754249,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "地表/入口",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_b6aaa08f0620/WorldNode_group_b6aaa08f0620": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_b6aaa08f0620",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						3253.666507713,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "六件新衣",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_e9759aa701d5/WorldNode_group_e9759aa701d5": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_e9759aa701d5",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2113.66653489272,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "毒蛇矿区",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_eeb54b802a9a/WorldNode_group_eeb54b802a9a": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_group_eeb54b802a9a",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1923.66653942267,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "沃玛自然洞穴",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_mengzhong_province/WorldNode_mengzhong_province": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_mengzhong_province",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						878.666564337414,
-						716.846059560776,
+						1047.67449653639,
+						607.333308680853,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "盟重",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_natural_cave/WorldNode_natural_cave": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_natural_cave",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1733.66654395263,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "天然洞穴",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_orc_tomb/WorldNode_orc_tomb": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_orc_tomb",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						1638.6665462176,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "兽人古墓",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_region_c1a88abe7247/WorldNode_region_c1a88abe7247": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_region_c1a88abe7247",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						3158.66650997798,
-						716.846059560776,
+						1047.67449653639,
+						987.333350483575,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "其他",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_stone_tomb/WorldNode_stone_tomb": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_stone_tomb",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2398.66652809779,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "石墓",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_viper_valley/WorldNode_viper_valley": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_viper_valley",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						688.666568867367,
-						716.846059560776,
+						1047.67449653639,
+						512.333310945829,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "毒蛇",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_white_sun_red_moon/WorldNode_white_sun_red_moon": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_white_sun_red_moon",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						1068.66655980746,
-						716.846059560776,
+						1047.67449653639,
+						702.333306415876,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "白日门",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_wooma_forest/WorldNode_wooma_forest": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						20.005006313324,
 						0.0,
-						716.846059560776,
+						569.979980522308,
 						83.3333313465118
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						12.0,
 						0.0,
-						430.0,
+						341.902404785156,
 						50.0
 					],
 					"normalized": [
-						0.026431718061674,
+						0.0327868852459016,
 						0.0,
-						0.947136563876652,
+						0.934159575915728,
 						1.0
 					],
 					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_wooma_forest",
 					"parentSize": [
-						756.856072187424,
+						610.152692556381,
 						83.3333313465118
 					],
 					"rect": [
-						940.235296726227,
-						498.66657339732,
-						716.846059560776,
+						1047.67449653639,
+						417.333313210806,
+						569.979980522308,
 						83.3333313465118
 					],
 					"text": "沃玛",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_wooma_temple/WorldNode_wooma_temple": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_wooma_temple",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2018.6665371577,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "沃玛寺庙",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_xiangshi_tomb/WorldNode_xiangshi_tomb": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_xiangshi_tomb",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2493.66652583281,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "香石古墓",
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_zuma_temple/WorldNode_zuma_temple": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						716.846059560776,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						430.0,
-						50.0
-					],
-					"normalized": [
-						0.026431718061674,
-						0.0,
-						0.947136563876652,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_zuma_temple",
-					"parentSize": [
-						756.856072187424,
-						83.3333313465118
-					],
-					"rect": [
-						940.235296726227,
-						2588.66652356784,
-						716.846059560776,
-						83.3333313465118
-					],
-					"text": "祖玛寺庙",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"TitleFrame": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						583.479350805283,
 						16.6666662693024,
@@ -11019,20 +10224,21 @@
 						766.858575344086,
 						106.666664123535
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicTitleBar",
 					"visible": true
 				},
 				"TitleFrame/TitleLabel": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						50.0125157833099,
 						24.9999994039536,
 						666.833543777466,
 						56.6666653156281
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						30.0,
 						15.0,
@@ -11057,6 +10263,7 @@
 						56.6666653156281
 					],
 					"text": "世界地图",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				}

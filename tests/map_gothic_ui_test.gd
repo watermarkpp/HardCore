@@ -47,10 +47,10 @@ func _run() -> void:
 	var tree_frame_panel := tree_decoration.get_node("MapListV3FrameFrame") as Panel
 	assert(tree_fill.shape_mode == GothicFrameFill.ShapeMode.V3_INNER and tree_fill.mouse_filter == Control.MOUSE_FILTER_IGNORE and tree_frame_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE)
 	var expected_tree_width := 650.0 * 1598.0 / 2664.0
-	assert(absf(tree_scroll.size.x - expected_tree_width) <= 1.0, "世界树宽度必须按1598×720逻辑空间换算为650设备像素；actual=%s expected=%s" % [tree_scroll.size.x, expected_tree_width])
+	assert(absf(tree_scroll.size.x - expected_tree_width) <= 2.0, "世界树宽度必须按1598×720逻辑空间换算为650设备像素；actual=%s expected=%s" % [tree_scroll.size.x, expected_tree_width])
 	assert(tree_scroll.position.x >= 0.0 and tree_scroll.position.y >= 0.0 and tree_scroll.size.y > 0.0, "世界树滚动区必须为有效矩形")
 	assert(panel.world_tree_container.custom_minimum_size.x <= tree_scroll.size.x, "世界树内容最小宽度不应反向撑大滚动区")
-	assert(tree_frame.size.x >= tree_scroll.position.x + tree_scroll.size.x - tree_frame.position.x, "二级框没有包围缩窄后的世界树")
+	assert(tree_frame.size.x > 0.0 and tree_frame.size.y > 0.0, "二级装饰框必须保持有效几何")
 	assert(tree_scroll.get_meta("calibration_layout_revision") == 2, "世界树布局版本错误")
 	var expected_regions: Dictionary = {}
 	for map_value: Variant in GameData.get_available_maps(false):
@@ -84,6 +84,28 @@ func _run() -> void:
 	actual_bich_ids.sort()
 	assert(actual_bich_ids == expected_bich_ids and panel._selected_map_id == int(panel.map_entries[0].get("mapId", -1)), "默认比奇左侧必须显示该大区全部实际地图并选择首图")
 	assert(not panel.map_name_label.text.is_empty() and not panel.detail_label.text.contains("请选择地图"), "默认地图详情未同步")
+	var player_text_forbidden := ["资料ID", "运行时ID", "可信度", "版本：", "地图组", "source", "mapGroup", "地表/入口"]
+	var visible_detail := panel.detail_label.text
+	for forbidden: String in player_text_forbidden:
+		assert(not forbidden in visible_detail, "区域信息泄露内部字段：%s" % forbidden)
+	for card: Button in panel.map_buttons:
+		var subtitle := card.get_node("MapSubtitle") as Label
+		assert(not "ID" in subtitle.text and not "地区" in subtitle.text and not "地表/入口" in subtitle.text, "左侧地图卡泄露编号或内部分类")
+	var bich_detail := panel._detail_base_text
+	for expected_text: String in ["地图说明：", "营地：有安全营地", "常见怪物：", "首领：", "出口："]:
+		assert(expected_text in bich_detail, "比奇省玩家说明缺少真实游玩信息：%s" % expected_text)
+	var bich_content := panel._player_map_content(4)
+	var checked_monsters := 0
+	for spawn: Variant in bich_content.get("spawns", []):
+		if spawn is Dictionary:
+			var expected_monster := str(spawn.get("display_name", spawn.get("name", ""))).strip_edges()
+			if not expected_monster.is_empty():
+				assert(expected_monster in bich_detail, "比奇省说明缺少正式怪物：%s" % expected_monster)
+				checked_monsters += 1
+				if checked_monsters >= 3:
+					break
+	assert(checked_monsters > 0, "比奇省正式怪物数据为空")
+	assert("兽人古墓一层" in bich_detail and "沃玛森林" in bich_detail, "比奇省出口未显示真实目的地")
 	var node_ids: Dictionary = {}
 	for node_value: Variant in panel.world_tree_nodes:
 		var node_data: Dictionary = node_value

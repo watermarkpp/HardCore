@@ -4,6 +4,7 @@ extends Panel
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 
 signal map_selected(map_id: int)
 signal teleport_availability_requested(map_ids: Array)
@@ -184,6 +185,7 @@ func _build_map_detail_section() -> void:
 	panel.add_child(_section_title("区域信息", 306))
 	map_name_label = Label.new()
 	map_name_label.name = "MapName"
+	map_name_label.set_meta("calibration_runtime_text", true)
 	map_name_label.position = Vector2(24, 58)
 	map_name_label.size = Vector2(258, 36)
 	map_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -193,6 +195,7 @@ func _build_map_detail_section() -> void:
 	panel.add_child(map_name_label)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "MapDetail"
+	detail_label.set_meta("calibration_runtime_text", true)
 	detail_label.position = Vector2(24, 104)
 	detail_label.size = Vector2(258, 330)
 	detail_label.bbcode_enabled = true
@@ -260,7 +263,7 @@ func refresh() -> void:
 			continue
 		map_entries.append(map_data)
 		var later_marker := "［后期］" if str(map_data.get("versionTag", "")).begins_with("1.76后期") else ""
-		map_list.add_item("%s%s　%s" % [later_marker, map_data.get("name", "未命名"), map_data.get("mapGroup", "")])
+		map_list.add_item("%s%s" % [later_marker, map_data.get("name", "未命名")])
 	_rebuild_map_cards()
 	var node_label := str(node.get("label", "HardCore 世界"))
 	var selected_index := _index_for_map_id(_selected_map_id)
@@ -329,6 +332,7 @@ func _rebuild_map_cards() -> void:
 		button.set_meta("map_id", int(map_data.get("mapId", -1)))
 		var name_label := Label.new()
 		name_label.name = "MapName"
+		name_label.set_meta("calibration_runtime_text", true)
 		name_label.text = str(map_data.get("name", "未命名"))
 		name_label.position = Vector2(10, 7)
 		name_label.size = Vector2(206, 20)
@@ -340,7 +344,8 @@ func _rebuild_map_cards() -> void:
 		button.add_child(name_label)
 		var sub_label := Label.new()
 		sub_label.name = "MapSubtitle"
-		sub_label.text = "%s · ID %s" % [map_data.get("region", "未分类"), _source_id_label(map_data.get("sourceMapId", map_data.get("mapId", -1)))]
+		sub_label.set_meta("calibration_runtime_text", true)
+		sub_label.text = _map_card_summary(map_data)
 		sub_label.position = Vector2(10, 28)
 		sub_label.size = Vector2(206, 17)
 		sub_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -386,7 +391,7 @@ func _show_selected(index: int) -> void:
 		var selected := button_index == index
 		button.set_pressed_no_signal(selected)
 		button.theme_type_variation = "GothicComponentSelectedButton" if selected else "GothicComponentButton"
-	var content := RegionContent.get_map_content(_selected_map_id)
+	var content := _player_map_content(_selected_map_id)
 	var bosses := GameData.get_bosses_for_map(map_data)
 	var boss_names: Array[String] = []
 	for boss: Variant in bosses:
@@ -397,20 +402,88 @@ func _show_selected(index: int) -> void:
 		if boss is Dictionary and not boss_names.has(str(boss.get("name", "Boss"))):
 			boss_names.append(str(boss.get("name", "Boss")))
 	map_name_label.text = str(map_data.get("name", "未命名地图"))
-	_detail_base_text = "[color=#d8c8ae]所属大地图：%s\n地区：%s\n地图组：%s\n\n资料ID：%s\n运行时ID：%d\n版本：%s\n资料状态：%s\n可信度：%s\n\n门点：%d　怪物点：%d\n关联Boss：%s[/color]" % [
-		_world_node(_selected_world_node_id).get("label", "HardCore 世界"),
-		map_data.get("region", "未分类"),
-		map_data.get("mapGroup", "未分类"),
-		_source_id_label(map_data.get("sourceMapId", map_data.get("mapId", -1))),
-		_selected_map_id,
-		map_data.get("versionTag", "未标注"),
-		map_data.get("recordStatus", content.get("status", "未标注")),
-		map_data.get("confidence", "?"),
-		content.get("portals", []).size(),
-		content.get("spawns", []).size(),
-		"、".join(boss_names) if not boss_names.is_empty() else "暂无可靠关联",
-	]
+	_detail_base_text = _player_map_detail(map_data, content, boss_names)
 	_refresh_teleport_button()
+
+
+func _player_map_content(map_id: int) -> Dictionary:
+	var runtime_content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+	return runtime_content if not runtime_content.is_empty() else RegionContent.get_map_content(map_id)
+
+
+func _map_card_summary(map_data: Dictionary) -> String:
+	var content := _player_map_content(int(map_data.get("mapId", -1)))
+	var bosses: Array[String] = []
+	for boss: Variant in content.get("bosses", []):
+		if boss is Dictionary:
+			var boss_name := str(boss.get("name", "")).strip_edges()
+			if not boss_name.is_empty() and not bosses.has(boss_name):
+				bosses.append(boss_name)
+	for boss: Variant in GameData.get_bosses_for_map(map_data):
+		if boss is Dictionary:
+			var boss_name := str(boss.get("name", "")).strip_edges()
+			if not boss_name.is_empty() and not bosses.has(boss_name):
+				bosses.append(boss_name)
+	return "有首领" if not bosses.is_empty() else "探索区域"
+
+
+func _player_map_detail(map_data: Dictionary, content: Dictionary, boss_names: Array[String]) -> String:
+	var map_name := str(map_data.get("name", "这片区域"))
+	var map_id := int(map_data.get("mapId", -1))
+	var safe_areas: Array = content.get("safe_areas", [])
+	var npcs: Array = content.get("npcs", [])
+	var has_camp := not safe_areas.is_empty()
+	if not has_camp:
+		for npc: Variant in npcs:
+			if npc is Dictionary and str(npc.get("kind", "")) in ["shop", "trainer", "quest", "guide"]:
+				has_camp = true
+				break
+	var monster_names: Array[String] = []
+	for spawn: Variant in content.get("spawns", []):
+		if not spawn is Dictionary:
+			continue
+		var monster_name := str(spawn.get("display_name", spawn.get("name", ""))).strip_edges()
+		if not monster_name.is_empty() and not monster_names.has(monster_name):
+			monster_names.append(monster_name)
+	var portal_lines: Array[String] = []
+	for portal: Variant in content.get("portals", []):
+		if not portal is Dictionary:
+			continue
+		var target_id := int(portal.get("target_map_id", -1))
+		var target_map := GameData.get_map_by_id(target_id)
+		var target_name := str(target_map.get("name", "未知区域")).strip_edges()
+		var portal_label := str(portal.get("label", "")).strip_edges()
+		if portal_label.is_empty():
+			portal_label = "通往%s" % target_name
+		var line := "%s（目的地：%s）" % [portal_label, target_name]
+		if not portal_lines.has(line):
+			portal_lines.append(line)
+	var description := "%s位于%s，是一处可供玩家探索的区域。" % [map_name, _world_node(_selected_world_node_id).get("label", "HardCore 世界")]
+	var camp_text := "有安全营地，可在此休整。" if has_camp else "未发现可供休整的安全营地。"
+	var monster_text := "、".join(monster_names) if not monster_names.is_empty() else "暂未发现常驻怪物"
+	var boss_text := "会刷新：%s" % "、".join(boss_names) if not boss_names.is_empty() else "未发现首领刷新"
+	var entrance_sources := _incoming_route_names(map_id)
+	var entrance_text := "可从%s进入。" % "、".join(entrance_sources) if not entrance_sources.is_empty() else "入口线索暂无记录，需要继续探索。"
+	var exit_text := "；".join(portal_lines) if not portal_lines.is_empty() else "未发现通往其他区域的出口。"
+	return "[color=#d8c8ae]地图说明：%s\n\n营地：%s\n\n常见怪物：%s\n\n首领：%s\n\n入口：%s\n\n出口：%s[/color]" % [description, camp_text, monster_text, boss_text, entrance_text, exit_text]
+
+
+func _incoming_route_names(destination_map_id: int) -> Array[String]:
+	var sources: Array[String] = []
+	for source_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+		if not source_value is Dictionary:
+			continue
+		var source_map: Dictionary = source_value
+		var source_map_id := int(source_map.get("mapId", -1))
+		if source_map_id == destination_map_id:
+			continue
+		for portal: Variant in _player_map_content(source_map_id).get("portals", []):
+			if portal is Dictionary and int(portal.get("target_map_id", -1)) == destination_map_id:
+				var source_name := str(source_map.get("name", "相邻区域")).strip_edges()
+				if not source_name.is_empty() and not sources.has(source_name):
+					sources.append(source_name)
+				break
+	return sources
 
 
 func _clear_map_selection() -> void:
