@@ -10,7 +10,7 @@ func _ready() -> void:
 	var theme := GothicUIThemeScript.build()
 	for variation in ["GothicModalFrame", "GothicTitleBar", "GothicInsetFrame", "GothicTabFrame"]:
 		assert(theme.has_stylebox("panel", variation), "%s 缺少公共Panel样式" % variation)
-	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicSkillConfigCompactButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentSelectedShopCard", "GothicComponentCloseButton"]:
+	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicWarehouseThinButton", "GothicSkillConfigCompactButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentSelectedShopCard", "GothicComponentCloseButton"]:
 		assert(theme.has_stylebox("normal", variation), "%s 缺少normal样式" % variation)
 		assert(theme.has_stylebox("pressed", variation), "%s 缺少pressed样式" % variation)
 		assert(theme.has_stylebox("disabled", variation), "%s 缺少disabled样式" % variation)
@@ -73,6 +73,14 @@ func _assert_single_ring_contract(theme: Theme, manifest: Dictionary) -> void:
 	assert(button_style.choose(Rect2(0,0,160,48)) == button_style.compact)
 	assert(button_style.choose(Rect2(0,0,260,56)) == button_style.standard)
 	assert(button_style.choose(Rect2(0,0,440,56)) == button_style.wide)
+	var warehouse_style := theme.get_stylebox("normal", "GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
+	assert(warehouse_style.compact.texture.resource_path.ends_with("button_widesmall_normal_v5.png"))
+	assert(warehouse_style.standard.texture.resource_path.ends_with("button_widesmall_normal_v5.png"))
+	assert(warehouse_style.wide.texture.resource_path.ends_with("button_widesmall_normal_v5.png"))
+	assert(warehouse_style.force_widesmall and warehouse_style.widesmall_texture.resource_path.ends_with("button_widesmall_normal_v5.png"))
+	var warehouse_rect := Rect2(0, 0, 96, 48)
+	assert(warehouse_style.selected_small_draw_rect(warehouse_rect) == warehouse_rect)
+	assert(warehouse_style.selected_small_fill_rect(warehouse_rect).size == Vector2(76, 28))
 	var square_style := theme.get_stylebox("normal", "GothicSkillConfigCompactButton") as AdaptiveButtonStyleBoxScript
 	assert(square_style.square_texture.resource_path.ends_with("button_square_normal_v5.png"))
 	assert(square_style.small_family and not square_style.force_square)

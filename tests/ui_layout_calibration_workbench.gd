@@ -45,7 +45,7 @@ func _ready() -> void:
 	_freeze_calibration_world()
 	_build_calibration_overlay()
 	assert(process_mode == Node.PROCESS_MODE_ALWAYS, "calibration workbench must process while the game is paused")
-	await _show_panel(0)
+	active_panel = null
 	_print_geometry()
 
 
@@ -280,6 +280,13 @@ func _show_panel(index: int) -> void:
 	else:
 		active_panel = hud.get(str(spec["panel_property"])) as Control
 	assert(active_panel != null and active_panel.visible, "production panel did not open: %s" % str(spec["id"]))
+	# Keep freshly constructed production controls off-screen until the saved
+	# profile has retired/hidden stale layers. This prevents a one-frame flash
+	# of controls that the user already deleted in the calibration data.
+	active_panel.hide()
+	overlay.edit_panel(active_panel, str(spec["id"]))
+	await overlay.profile_loaded
+	active_panel.show()
 	if str(spec["id"]) == "skill":
 		var loaded_title := active_panel.get_node_or_null("SkillDetailPanel/DescriptionTitle") as Label
 		var loaded_description := active_panel.get_node_or_null("SkillDetailPanel/SkillDescription") as RichTextLabel
@@ -296,7 +303,6 @@ func _show_panel(index: int) -> void:
 			active_panel.get_global_rect().is_equal_approx(expected_skill_rect),
 			"skill panel does not match the accepted device profile: %s / %s" % [active_panel.get_global_rect(), expected_skill_rect],
 		)
-	overlay.edit_panel(active_panel, str(spec["id"]))
 	print("UI_CALIBRATOR_PANEL_OPEN profile=%s panel=%s" % [str(spec["id"]), active_panel.get_global_rect()])
 
 
@@ -384,6 +390,9 @@ func _open_confirmation_dialog() -> void:
 
 
 func _print_geometry() -> void:
+	if not is_instance_valid(active_panel):
+		print("UI_CALIBRATOR_GEOMETRY physical=%s safe_root=%s panel=<none>" % [DEVICE_PHYSICAL_SIZE, hud.get_node("MobileSafeRoot").get_rect()])
+		return
 	print(
 		"UI_CALIBRATOR_GEOMETRY physical=%s safe_root=%s panel=%s" % [
 			DEVICE_PHYSICAL_SIZE,

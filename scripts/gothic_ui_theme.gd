@@ -139,6 +139,7 @@ static func build() -> Theme:
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")
+	_apply_warehouse_thin_button(result)
 	_apply_skill_config_compact_button(result)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
@@ -201,6 +202,16 @@ static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 	var d := AdaptiveButtonStyleBoxScript.new().configure(preload(COMPONENT_V3_ROOT + "/button_compact_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_standard_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_wide_disabled_v4.png"))
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
+	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
+
+static func _apply_warehouse_thin_button(theme: Theme) -> void:
+	var variation := &"GothicWarehouseThinButton"
+	theme.set_type_variation(variation, "Button")
+	var normal := AdaptiveButtonStyleBoxScript.new().configure_widesmall(BUTTON_WIDESMALL_V5)
+	var pressed := AdaptiveButtonStyleBoxScript.new().configure_widesmall(preload(COMPONENT_V3_ROOT + "/button_widesmall_pressed_v5.png"))
+	var disabled := AdaptiveButtonStyleBoxScript.new().configure_widesmall(preload(COMPONENT_V3_ROOT + "/button_widesmall_disabled_v5.png"))
+	theme.set_stylebox("normal", variation, normal); theme.set_stylebox("hover", variation, normal); theme.set_stylebox("focus", variation, normal)
+	theme.set_stylebox("pressed", variation, pressed); theme.set_stylebox("disabled", variation, disabled)
 	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
 
 static func _apply_skill_config_compact_button(theme: Theme) -> void:

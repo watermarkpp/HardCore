@@ -12,6 +12,7 @@ var square_threshold := 10.0 / 3.0
 var fill_color := Color(0.055, 0.035, 0.018, 0.96)
 var square_alpha_safe_inset := 12.0
 var force_square := false
+var force_widesmall := false
 
 func configure(c: Texture2D, s: Texture2D, w: Texture2D, margins := Vector4(36, 0, 36, 0)) -> AdaptiveButtonStyleBox:
 	compact = _make(c, margins)
@@ -22,7 +23,19 @@ func configure(c: Texture2D, s: Texture2D, w: Texture2D, margins := Vector4(36, 
 	shortwide_texture = null
 	widesmall_texture = null
 	small_family = false
+	force_widesmall = false
 	force_square = false
+	return self
+
+func configure_widesmall(w: Texture2D, fill := Color(0.055, 0.035, 0.018, 0.96)) -> AdaptiveButtonStyleBox:
+	compact = _make(w, Vector4.ZERO)
+	standard = _make(w, Vector4.ZERO)
+	wide = _make(w, Vector4.ZERO)
+	widesmall_texture = w
+	fill_color = fill
+	force_widesmall = true
+	force_square = false
+	small_family = false
 	return self
 
 func configure_square(square: Texture2D, s: Texture2D, w: Texture2D, threshold := 2.0, fill := Color(0.055, 0.035, 0.018, 0.96)) -> AdaptiveButtonStyleBox:
@@ -87,6 +100,11 @@ func choose(rect: Rect2) -> StyleBoxTexture:
 	return compact if ratio <= square_threshold else (standard if ratio <= 4.67 else wide)
 
 func _draw(canvas_item: RID, rect: Rect2) -> void:
+	if force_widesmall:
+		var thin_texture := compact.texture
+		square_fill_style(selected_small_fill_rect(rect)).draw(canvas_item, selected_small_fill_rect(rect))
+		RenderingServer.canvas_item_add_texture_rect(canvas_item, rect, thin_texture.get_rid(), false, Color.WHITE)
+		return
 	if square_texture != null and (small_family or force_square):
 		var ratio := rect.size.x / maxf(rect.size.y, 1.0)
 		var texture := square_texture

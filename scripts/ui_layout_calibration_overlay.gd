@@ -1,6 +1,8 @@
 class_name UILayoutCalibrationOverlay
 extends Control
 
+signal profile_loaded(loaded_profile_id: String)
+
 const GothicModalLayoutScript := preload("res://scripts/gothic_modal_layout.gd")
 const OUTPUT_PATH := "res://outputs/ui_calibration/manual_layout_overrides.json"
 
@@ -624,6 +626,7 @@ func load_profile() -> void:
 	var entries: Dictionary = profile.get("nodes", {})
 	if entries.is_empty():
 		status_label.text = "当前界面没有已保存数据"
+		profile_loaded.emit(profile_id)
 		return
 	var resolved := _resolve_saved_controls(entries)
 	var ordered: Array[Dictionary] = resolved.get("matched", [])
@@ -645,7 +648,10 @@ func load_profile() -> void:
 		if entry.has("fontSize") and _supports_text(control):
 			var scale := _device_scale(control)
 			_set_control_font_size(control, maxi(1, roundi(float(entry["fontSize"]) / scale.y)))
-		control.visible = bool(entry.get("visible", true))
+		# The workbench owns the target root's reveal. Child visibility is restored
+		# here while the root stays hidden, so retired layers never flash for a frame.
+		if control != target:
+			control.visible = bool(entry.get("visible", true))
 	await get_tree().process_frame
 	# Text and font restoration can invalidate Button minimum sizes. Reapply the
 	# saved geometry after that invalidation so the persisted device-pixel rect
@@ -674,6 +680,7 @@ func load_profile() -> void:
 		])
 	_sync_fields()
 	queue_redraw()
+	profile_loaded.emit(profile_id)
 
 
 func _apply_saved_geometry(control: Control, entry: Dictionary, schema_version: int) -> void:

@@ -38,6 +38,16 @@ func _run() -> void:
 	assert(panel.get_node("StashSection/StashPagingHint").text == "每页 100 格　·　下拉查看本页后 70 格", "仓库分页说明没有同步 6 列首屏")
 	assert(panel.get_node("BagSection/BagScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "人物背包滚动区没有避开二级框内圈")
 	assert(panel.get_node("StashSection/StashScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "仓库滚动区没有避开二级框内圈")
+	assert(is_equal_approx(panel.bag_grid.custom_minimum_size.x, 341.0), "人物背包并非真实六列内容宽")
+	assert(is_equal_approx(panel.stash_grid.custom_minimum_size.x, 341.0), "仓库并非真实六列内容宽")
+	for grid in [panel.bag_grid, panel.stash_grid]:
+		var first := (grid as GridContainer).get_child(0) as Control
+		var sixth := (grid as GridContainer).get_child(5) as Control
+		var seventh := (grid as GridContainer).get_child(6) as Control
+		assert(is_equal_approx(first.position.y, sixth.position.y), "六列中的第六格没有留在首行")
+		assert(seventh.position.y > sixth.position.y, "第七格没有真实换到下一行")
+		assert(is_equal_approx(seventh.position.x, first.position.x), "第七格没有从下一行首列开始")
+		assert(sixth.position.x + sixth.size.x <= WarehousePanel.GRID_CONTENT_WIDTH + 0.5, "第六格越过六列内容边界")
 	var initial_bag_positions: Array[Vector2] = []
 	for index in range(30):
 		initial_bag_positions.append((panel.bag_grid.get_child(index) as Control).position)
@@ -61,6 +71,7 @@ func _run() -> void:
 	for button in [panel.previous_page_button, panel.next_page_button, panel.deposit_button, panel.withdraw_button, panel.get_node("TransferSection/SortStashButton")]:
 		assert((button as Button).size.y == WarehousePanel.THIN_BUTTON_HEIGHT, "仓库按钮未统一为细按钮：%s" % button.name)
 		assert((button as Button).alignment == HORIZONTAL_ALIGNMENT_CENTER, "仓库按钮文字未数学居中：%s" % button.name)
+		assert((button as Button).theme_type_variation == &"GothicWarehouseThinButton", "仓库按钮未使用最终最薄按钮：%s" % button.name)
 	var page_group_center := (panel.previous_page_button.position.x + panel.next_page_button.position.x + panel.next_page_button.size.x) * 0.5
 	assert(is_equal_approx(page_group_center, 246.0), "翻页按钮和页码没有作为整体居中")
 	assert(panel.previous_page_button.disabled and not panel.next_page_button.disabled, "仓库第一页翻页按钮状态错误")
@@ -106,5 +117,5 @@ func _run() -> void:
 	assert(sort_requests[0] == 1, "整理按钮没有只向玩法层发出请求")
 	panel.apply_sort_result({"success": true, "message": "仓库已整理"})
 	assert(panel.transfer_detail_label.text == "仓库已整理", "玩法层整理结果没有回填仓库面板")
-	print("WAREHOUSE_GOTHIC_UI_PASS：左仓库、右背包、8列100格与5页页码均正常")
+	print("WAREHOUSE_GOTHIC_UI_PASS：左仓库、右背包、真实6列100格与5页页码均正常")
 	get_tree().quit(0)

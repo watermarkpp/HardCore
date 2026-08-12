@@ -28,9 +28,12 @@ const GRID_MINIMUM_SIZE := Vector2(
 	ITEM_CELL_SIZE.y * GRID_ROWS + GRID_VERTICAL_SEPARATION * (GRID_ROWS - 1)
 )
 const GRID_FRAME_RECT := Rect2(6, 40, 480, 392)
-const GRID_SCROLL_RECT := Rect2(37, 66, 418, 340)
+const GRID_CONTENT_WIDTH := GRID_MINIMUM_SIZE.x
+const GRID_SCROLLBAR_WIDTH := 22.0
+const GRID_SCROLL_WIDTH := GRID_CONTENT_WIDTH + GRID_SCROLLBAR_WIDTH
+const GRID_SCROLL_RECT := Rect2((492.0 - GRID_SCROLL_WIDTH) * 0.5, 66, GRID_SCROLL_WIDTH, 340)
 const THIN_BUTTON_HEIGHT := 48.0
-const LAYOUT_REVISION := 1
+const LAYOUT_REVISION := 2
 
 var bag_list: ItemList
 var stash_list: ItemList
@@ -169,7 +172,7 @@ func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -
 	grid.name = grid_name
 	grid.columns = GRID_COLUMNS
 	grid.custom_minimum_size = GRID_MINIMUM_SIZE
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	grid.add_theme_constant_override("h_separation", int(GRID_HORIZONTAL_SEPARATION))
 	grid.add_theme_constant_override("v_separation", int(GRID_VERTICAL_SEPARATION))
 	scroll.add_child(grid)
@@ -197,7 +200,7 @@ func _build_page_controls(parent: Control) -> void:
 	previous_page_button.size = Vector2(96, THIN_BUTTON_HEIGHT)
 	previous_page_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	previous_page_button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
-	previous_page_button.theme_type_variation = "GothicComponentButton"
+	previous_page_button.theme_type_variation = "GothicWarehouseThinButton"
 	previous_page_button.add_theme_font_size_override("font_size", 24)
 	previous_page_button.pressed.connect(_change_warehouse_page.bind(-1))
 	parent.add_child(previous_page_button)
@@ -217,7 +220,7 @@ func _build_page_controls(parent: Control) -> void:
 	next_page_button.size = Vector2(96, THIN_BUTTON_HEIGHT)
 	next_page_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	next_page_button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
-	next_page_button.theme_type_variation = "GothicComponentButton"
+	next_page_button.theme_type_variation = "GothicWarehouseThinButton"
 	next_page_button.add_theme_font_size_override("font_size", 24)
 	next_page_button.pressed.connect(_change_warehouse_page.bind(1))
 	parent.add_child(next_page_button)
@@ -242,7 +245,7 @@ func _transfer_button(node_name: String, label_text: String, position_value: Vec
 	button.size = Vector2(96, THIN_BUTTON_HEIGHT)
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
-	button.theme_type_variation = "GothicComponentButton"
+	button.theme_type_variation = "GothicWarehouseThinButton"
 	button.add_theme_font_size_override("font_size", 17)
 	return button
 
@@ -309,11 +312,17 @@ func refresh() -> void:
 
 
 func _stabilize_grid_layout() -> void:
+	for scroll_path in ["StashSection/StashScroll", "BagSection/BagScroll"]:
+		var scroll := get_node_or_null(scroll_path) as ScrollContainer
+		if scroll != null:
+			scroll.position = GRID_SCROLL_RECT.position
+			scroll.size = GRID_SCROLL_RECT.size
 	for grid in [stash_grid, bag_grid]:
 		if grid == null:
 			continue
 		grid.columns = GRID_COLUMNS
 		grid.custom_minimum_size = GRID_MINIMUM_SIZE
+		grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		grid.queue_sort()
 
 
