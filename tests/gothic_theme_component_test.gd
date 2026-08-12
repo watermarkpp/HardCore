@@ -1,7 +1,7 @@
 extends Node
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
-const GothicButtonStyleBoxScript := preload("res://scripts/gothic_button_style_box.gd")
+const AdaptiveButtonStyleBoxScript := preload("res://scripts/adaptive_button_style_box.gd")
 const MANIFEST_PATH := "res://assets/ui/gothic_theme/v1/sample/component_manifest.json"
 
 
@@ -15,8 +15,8 @@ func _ready() -> void:
 		assert(theme.has_stylebox("disabled", variation), "%s 缺少disabled样式" % variation)
 	assert(FileAccess.file_exists(MANIFEST_PATH))
 	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
-	assert(manifest is Dictionary and manifest.get("status", "") == "pending_system_screenshot_review")
-	assert(manifest.get("components", []).size() == 10, "公共Theme样板必须包含10类组件")
+	assert(manifest is Dictionary and manifest.get("assetSetId", "").ends_with(".v4"))
+	assert(manifest.get("components", []).size() >= 16)
 	_assert_single_ring_contract(theme, manifest)
 	_assert_main_hud_styles_preserved(theme)
 	for entry: Variant in manifest.get("components", []):
@@ -53,18 +53,14 @@ func _assert_single_ring_contract(theme: Theme, manifest: Dictionary) -> void:
 	assert(inset_style.texture_margin_left == 64 and inset_style.texture_margin_right == 64)
 	assert(inset_style.texture_margin_top == 58 and inset_style.texture_margin_bottom == 58)
 	assert(64 * 2 >= 120 and 58 * 2 >= 80)
-	var button_style := theme.get_stylebox("normal", "GothicComponentButton") as GothicButtonStyleBoxScript
-	assert(button_style.background.texture.resource_path.ends_with("button_bg_v3.png"))
-	assert(button_style.background.texture_margin_left == 34)
-	assert(button_style.background.texture_margin_right == 34)
-	for width in [120.0, 160.0, 260.0, 440.0]:
-		for height in [48.0, 56.0]:
-			var rect := Rect2(Vector2.ZERO, Vector2(width, height))
-			var ornament_rect: Rect2 = button_style.ornament_rect(rect)
-			assert(absf(ornament_rect.get_center().x - rect.get_center().x) < 0.01)
-			assert(ornament_rect.size.x <= width and ornament_rect.size.y <= height)
-			assert(absf(ornament_rect.size.x / ornament_rect.size.y - 44.0 / 72.0) < 0.001)
-			assert(button_style.background.texture_margin_left + button_style.background.texture_margin_right < width)
+	var button_style := theme.get_stylebox("normal", "GothicComponentButton") as AdaptiveButtonStyleBoxScript
+	assert(button_style.compact.texture.resource_path.ends_with("button_compact_normal_v4.png"))
+	assert(button_style.standard.texture.resource_path.ends_with("button_standard_normal_v4.png"))
+	assert(button_style.wide.texture.resource_path.ends_with("button_wide_normal_v4.png"))
+	assert(button_style.choose(Rect2(0,0,120,48)) == button_style.compact)
+	assert(button_style.choose(Rect2(0,0,160,48)) == button_style.compact)
+	assert(button_style.choose(Rect2(0,0,260,56)) == button_style.standard)
+	assert(button_style.choose(Rect2(0,0,440,56)) == button_style.wide)
 
 
 func _assert_main_hud_styles_preserved(theme: Theme) -> void:

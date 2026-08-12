@@ -3,7 +3,7 @@ extends RefCounted
 
 const GothicModalLayoutScript := preload("res://scripts/gothic_modal_layout.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
-const GothicButtonStyleBoxScript := preload("res://scripts/gothic_button_style_box.gd")
+const AdaptiveButtonStyleBoxScript := preload("res://scripts/adaptive_button_style_box.gd")
 
 const COMPONENT_ROOT := "res://assets/ui/gothic_theme/v1/sample"
 const COMPONENT_V3_ROOT := COMPONENT_ROOT
@@ -14,10 +14,9 @@ const COMPONENT_TAB_FRAME := preload(COMPONENT_ROOT + "/tab_frame_single_v2.png"
 const COMPONENT_BUTTON_NORMAL := preload(COMPONENT_ROOT + "/button_normal_single_v2.png")
 const COMPONENT_BUTTON_PRESSED := preload(COMPONENT_ROOT + "/button_pressed_single_v2.png")
 const COMPONENT_BUTTON_DISABLED := preload(COMPONENT_ROOT + "/button_disabled_single_v2.png")
-const COMPONENT_BUTTON_V3_NORMAL := preload(COMPONENT_V3_ROOT + "/button_bg_v3.png")
-const COMPONENT_BUTTON_V3_PRESSED := preload(COMPONENT_V3_ROOT + "/button_bg_pressed_v3.png")
-const COMPONENT_BUTTON_V3_DISABLED := preload(COMPONENT_V3_ROOT + "/button_bg_disabled_v3.png")
-const COMPONENT_BUTTON_V3_ORNAMENT := preload(COMPONENT_V3_ROOT + "/button_ornament_v3.png")
+const BUTTON_COMPACT_V4 := preload(COMPONENT_V3_ROOT + "/button_compact_normal_v4.png")
+const BUTTON_STANDARD_V4 := preload(COMPONENT_V3_ROOT + "/button_standard_normal_v4.png")
+const BUTTON_WIDE_V4 := preload(COMPONENT_V3_ROOT + "/button_wide_normal_v4.png")
 const COMPONENT_INSET_FRAME_V3 := preload(COMPONENT_V3_ROOT + "/inset_frame_v3.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
@@ -135,9 +134,9 @@ static func build() -> Theme:
 	_apply_button_variation(result, "GothicTransparentButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.45, 0.22, 0.06, 0.12), Color(0.85, 0.66, 0.38, 0.55), 1, 9), _flat(Color(0.55, 0.12, 0.04, 0.20), BRONZE_BRIGHT, 2, 9))
 	_apply_button_variation(result, "GothicPanelTransparentButton", _flat(Color.TRANSPARENT, Color(0.46, 0.33, 0.21, 0.86), 1, 9), _flat(Color(0.16, 0.08, 0.04, 0.72), BRONZE_BRIGHT, 1, 9), _flat(Color(0.26, 0.08, 0.035, 0.82), BRONZE_BRIGHT, 1, 9))
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
-	_apply_v3_button_variation(result, "GothicComponentButton", COMPONENT_BUTTON_V3_NORMAL, COMPONENT_BUTTON_V3_PRESSED, COMPONENT_BUTTON_V3_DISABLED)
-	_apply_v3_button_variation(result, "GothicComponentSelectedButton", COMPONENT_BUTTON_V3_PRESSED, COMPONENT_BUTTON_V3_PRESSED, COMPONENT_BUTTON_V3_DISABLED)
-	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_BUTTON_V3_PRESSED, COMPONENT_BUTTON_V3_DISABLED, Vector4(22, 18, 22, 18), 14)
+	_apply_adaptive_button(result, "GothicComponentButton")
+	_apply_adaptive_button(result, "GothicComponentSelectedButton")
+	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
 	_apply_equipment_slot_button_variation(result, "GothicEquipmentSlotButton", false)
@@ -191,22 +190,15 @@ static func _apply_texture_button_variation(theme: Theme, variation: StringName,
 	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
 	theme.set_constant("outline_size", variation, 3)
 
-static func _apply_v3_button_variation(theme: Theme, variation: StringName, normal_texture: Texture2D, pressed_texture: Texture2D, disabled_texture: Texture2D) -> void:
+static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 	theme.set_type_variation(variation, "Button")
-	var normal := GothicButtonStyleBoxScript.new().configure(normal_texture, BUTTON_V3_PATCH, COMPONENT_BUTTON_V3_ORNAMENT)
-	var pressed := GothicButtonStyleBoxScript.new().configure(pressed_texture, BUTTON_V3_PATCH, COMPONENT_BUTTON_V3_ORNAMENT, Color(0.92, 0.82, 0.76, 1.0))
-	var disabled := GothicButtonStyleBoxScript.new().configure(disabled_texture, BUTTON_V3_PATCH, COMPONENT_BUTTON_V3_ORNAMENT, Color(0.62, 0.62, 0.62, 0.72))
-	theme.set_stylebox("normal", variation, normal)
-	theme.set_stylebox("hover", variation, normal)
-	theme.set_stylebox("pressed", variation, pressed)
-	theme.set_stylebox("focus", variation, normal)
-	theme.set_stylebox("disabled", variation, disabled)
-	theme.set_color("font_color", variation, PARCHMENT)
-	theme.set_color("font_hover_color", variation, Color.WHITE)
-	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
-	theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
-	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
-	theme.set_constant("outline_size", variation, 3)
+	var n := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
+	var p := AdaptiveButtonStyleBoxScript.new().configure(preload(COMPONENT_V3_ROOT + "/button_compact_pressed_v4.png"), preload(COMPONENT_V3_ROOT + "/button_standard_pressed_v4.png"), preload(COMPONENT_V3_ROOT + "/button_wide_pressed_v4.png"))
+	var d := AdaptiveButtonStyleBoxScript.new().configure(preload(COMPONENT_V3_ROOT + "/button_compact_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_standard_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_wide_disabled_v4.png"))
+	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
+	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
+	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
+
 
 
 static func _apply_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
