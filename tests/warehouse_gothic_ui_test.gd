@@ -40,6 +40,7 @@ func _run() -> void:
 	assert(panel.get_node("StashSection/StashPagingHint").text == "每页 100 格　·　下拉查看本页后 70 格", "仓库分页说明没有同步 6 列首屏")
 	assert(panel.get_node("BagSection/BagScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "人物背包滚动区没有避开二级框内圈")
 	assert(panel.get_node("StashSection/StashScroll").size == WarehousePanel.GRID_SCROLL_RECT.size, "仓库滚动区没有避开二级框内圈")
+	assert(is_equal_approx(WarehousePanel.GRID_SCROLL_RECT.size.x, WarehousePanel.GRID_CONTENT_WIDTH + WarehousePanel.GRID_SCROLLBAR_WIDTH), "滚动区没有按六列内容宽加滚动条精确计算")
 	assert(panel.get_node("BagSection/BagScroll/BagGrid") == panel.bag_grid, "人物背包网格稳定路径被中间容器破坏")
 	assert(panel.get_node("StashSection/StashScroll/StashGrid") == panel.stash_grid, "仓库网格稳定路径被中间容器破坏")
 	assert(is_equal_approx(panel.bag_grid.custom_minimum_size.x, 341.0), "人物背包并非真实六列内容宽")
@@ -52,6 +53,7 @@ func _run() -> void:
 		var visible_left := scroll.get_global_rect().position.x
 		var visible_right := scroll.get_v_scroll_bar().get_global_rect().position.x if scroll.get_v_scroll_bar().visible else scroll.get_global_rect().end.x
 		assert(scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "六列网格错误启用了水平滚动")
+		assert(scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "六列网格外错误保留了额外细框")
 		assert(scroll.get_h_scroll_bar().max_value <= scroll.get_h_scroll_bar().page + 0.5, "六列网格产生了隐藏的水平溢出")
 		assert(is_equal_approx(first.position.y, sixth.position.y), "六列中的第六格没有留在首行")
 		assert(seventh.position.y > sixth.position.y, "第七格没有真实换到下一行")
@@ -59,14 +61,21 @@ func _run() -> void:
 		assert(sixth.position.x + sixth.size.x <= WarehousePanel.GRID_CONTENT_WIDTH + 0.5, "第六格越过六列内容边界")
 		assert(first.get_global_rect().position.x >= visible_left - 0.5, "首列被左侧裁切")
 		assert(sixth.get_global_rect().end.x <= visible_right + 0.5, "第六列被滚动条或右侧裁切")
+		assert(is_equal_approx(first.get_global_rect().position.x, visible_left), "六列网格左侧留出了半列或非数学空隙")
+		assert(is_equal_approx(sixth.get_global_rect().end.x, visible_left + WarehousePanel.GRID_CONTENT_WIDTH), "六列网格没有严格结束在第六列边界")
 	var initial_bag_positions: Array[Vector2] = []
 	for index in range(30):
 		initial_bag_positions.append((panel.bag_grid.get_child(index) as Control).position)
 	panel.refresh()
 	await get_tree().process_frame
 	await get_tree().process_frame
+	panel._stabilize_grid_layout()
+	await get_tree().process_frame
 	for index in range(30):
 		assert((panel.bag_grid.get_child(index) as Control).position == initial_bag_positions[index], "刷新后背包格子位置漂移：%d" % index)
+	for scroll_path in ["StashSection/StashScroll", "BagSection/BagScroll"]:
+		var stabilized_scroll := panel.get_node(scroll_path) as ScrollContainer
+		assert(stabilized_scroll.position == WarehousePanel.GRID_SCROLL_RECT.position and stabilized_scroll.size == WarehousePanel.GRID_SCROLL_RECT.size, "profile apply 后六列滚动区被旧存档宽度覆盖：%s" % scroll_path)
 	assert(panel.warehouse_page_label.text == "第 1/5 页", "仓库底部页码错误")
 	assert(panel.previous_page_button.position.y == panel.warehouse_page_label.position.y, "上一页按钮与页码没有在同一水平线上")
 	assert(panel.next_page_button.position.y == panel.warehouse_page_label.position.y, "下一页按钮与页码没有在同一水平线上")

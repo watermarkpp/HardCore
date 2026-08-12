@@ -29,10 +29,14 @@ const GRID_MINIMUM_SIZE := Vector2(
 )
 const GRID_FRAME_RECT := Rect2(6, 40, 480, 392)
 const GRID_CONTENT_WIDTH := GRID_MINIMUM_SIZE.x
-const GRID_SCROLL_WIDTH := 385.0
+## The viewport is the exact six-column content width plus the visible vertical
+## scrollbar.  Keeping this mathematical contract prevents saved 477px
+## calibration rectangles from exposing a seventh/partial column.
+const GRID_SCROLLBAR_WIDTH := 16.0
+const GRID_SCROLL_WIDTH := GRID_CONTENT_WIDTH + GRID_SCROLLBAR_WIDTH
 const GRID_SCROLL_RECT := Rect2((492.0 - GRID_SCROLL_WIDTH) * 0.5, 66, GRID_SCROLL_WIDTH, 340)
 const THIN_BUTTON_HEIGHT := 48.0
-const LAYOUT_REVISION := 2
+const LAYOUT_REVISION := 3
 
 var bag_list: ItemList
 var stash_list: ItemList
@@ -167,6 +171,7 @@ func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	scroll.clip_contents = true
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	parent.add_child(scroll)
 	var grid := GridContainer.new()
 	grid.name = grid_name
@@ -319,6 +324,8 @@ func _stabilize_grid_layout() -> void:
 		if scroll != null:
 			scroll.position = GRID_SCROLL_RECT.position
 			scroll.size = GRID_SCROLL_RECT.size
+			scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+			scroll.clip_contents = true
 	for grid in [stash_grid, bag_grid]:
 		if grid == null:
 			continue
