@@ -2,7 +2,7 @@ class_name UIRuntimeLayoutOverrides
 extends RefCounted
 
 const CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
-const CONTRACT_SHA256 := "D53C1F3F5CE62C46B49F9309E8F6827911FCA26F233EB48B1598C331E55EA125"
+const CONTRACT_SHA256 := "5AED8EEF144A313CC347133D5A13649E91433F1EF5510399103BFE9154970F2D"
 const SCHEMA_VERSION := 3
 
 static var _contract: Dictionary = {}
