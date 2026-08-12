@@ -8,7 +8,7 @@ const SkillPanelScript := preload("res://scripts/skill_panel.gd")
 const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "A0286CB7F20B152DAA829A1FB36201780159C927E76AB3D5B6C93AE5DC5A322E"
+const EXPECTED_HASH := "F22B667996DAFD03020F23980ED2755C14E8E758F29F92E8504426FD92196106"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
