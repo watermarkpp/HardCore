@@ -139,9 +139,9 @@ static func build() -> Theme:
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")
-	# 仓库操作按钮与技能典籍列表共用同一套已验收的 v4 金铜按钮。
-	_apply_adaptive_button(result, "GothicWarehouseThinButton")
-	_apply_skill_config_compact_button(result)
+	# 仓库操作按钮复用技能配置区已验收的 v5 细边按钮三态族。
+	_apply_small_button(result, &"GothicWarehouseThinButton")
+	_apply_small_button(result, &"GothicSkillConfigCompactButton")
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
@@ -205,8 +205,7 @@ static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
 	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
 
-static func _apply_skill_config_compact_button(theme: Theme) -> void:
-	var variation := &"GothicSkillConfigCompactButton"
+static func _apply_small_button(theme: Theme, variation: StringName) -> void:
 	theme.set_type_variation(variation, "Button")
 	var n := AdaptiveButtonStyleBoxScript.new().configure_small(BUTTON_SQUARE_V5, BUTTON_SHORTWIDE_V5, BUTTON_WIDESMALL_V5)
 	var p := AdaptiveButtonStyleBoxScript.new().configure_small(preload(COMPONENT_V3_ROOT + "/button_square_pressed_v5.png"), preload(COMPONENT_V3_ROOT + "/button_shortwide_pressed_v5.png"), preload(COMPONENT_V3_ROOT + "/button_widesmall_pressed_v5.png"))

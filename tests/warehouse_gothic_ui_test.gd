@@ -1,6 +1,7 @@
 extends Node
 
 const CalibrationOverlayScript := preload("res://scripts/ui_layout_calibration_overlay.gd")
+const AdaptiveButtonStyleBoxScript := preload("res://scripts/adaptive_button_style_box.gd")
 
 
 func _ready() -> void:
@@ -82,6 +83,12 @@ func _run() -> void:
 		assert((button as Button).size.y == WarehousePanel.THIN_BUTTON_HEIGHT, "仓库按钮未统一为细按钮：%s" % button.name)
 		assert((button as Button).alignment == HORIZONTAL_ALIGNMENT_CENTER, "仓库按钮文字未数学居中：%s" % button.name)
 		assert((button as Button).theme_type_variation == &"GothicWarehouseThinButton", "仓库按钮未使用最终最薄按钮：%s" % button.name)
+		for state in [&"normal", &"pressed", &"disabled"]:
+			var warehouse_style := panel.theme.get_stylebox(state, &"GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
+			var skill_style := panel.theme.get_stylebox(state, &"GothicSkillConfigCompactButton") as AdaptiveButtonStyleBoxScript
+			assert(warehouse_style.square_texture.resource_path == skill_style.square_texture.resource_path, "仓库细边按钮没有复用技能配置方形素材：%s.%s" % [button.name, state])
+			assert(warehouse_style.shortwide_texture.resource_path == skill_style.shortwide_texture.resource_path, "仓库细边按钮没有复用技能配置短宽素材：%s.%s" % [button.name, state])
+			assert(warehouse_style.widesmall_texture.resource_path == skill_style.widesmall_texture.resource_path, "仓库细边按钮没有复用技能配置超薄素材：%s.%s" % [button.name, state])
 	var page_group_center := (panel.previous_page_button.position.x + panel.next_page_button.position.x + panel.next_page_button.size.x) * 0.5
 	assert(is_equal_approx(page_group_center, 246.0), "翻页按钮和页码没有作为整体居中")
 	assert(panel.previous_page_button.disabled and not panel.next_page_button.disabled, "仓库第一页翻页按钮状态错误")
