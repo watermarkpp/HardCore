@@ -69,6 +69,11 @@ func _run() -> void:
 	for cell_index in range(100):
 		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
+	assert(bag_scroll.has_theme_stylebox_override("panel"), "背包物品阵列外框必须由局部样式覆盖移除")
+	assert(bag_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "背包物品阵列外框不得继承全局ScrollContainer细边线")
+	var first_cell_button := panel.item_grid.get_child(0).get_node("ItemButton") as Button
+	var first_cell_style := first_cell_button.get_theme_stylebox("normal") as StyleBoxFlat
+	assert(first_cell_style != null and first_cell_style.border_width_left > 0, "移除阵列外框不得删除单格物品边框")
 	await get_tree().process_frame
 	var fortieth_cell := panel.item_grid.get_child(39) as Control
 	var forty_first_cell := panel.item_grid.get_child(40) as Control

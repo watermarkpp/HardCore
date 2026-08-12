@@ -241,6 +241,11 @@ func _build_bag_panel() -> void:
 	panel.add_child(bag_summary_label)
 	var scroll := ScrollContainer.new()
 	scroll.name = "InventoryScroll"
+	# The shared ScrollContainer theme draws a one-pixel panel border.  This
+	# inventory viewport sits flush around the complete six-column grid, so that
+	# border reads as an unintended outer grid frame.  Suppress it only here;
+	# individual occupied and empty slot button frames remain unchanged.
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	scroll.position = Vector2(10, 50)
 	scroll.size = Vector2(472, 340)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
