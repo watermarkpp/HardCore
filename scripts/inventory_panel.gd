@@ -19,6 +19,7 @@ const BAG_COLUMNS := 6
 ## Six columns x five 64px rows (with 4px separation) fit the 340px viewport.
 const BAG_VISIBLE_CAPACITY := 30
 const BAG_CAPACITY := 100
+const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
 const BAG_CELL_SIZE := Vector2(56, 64)
 const LONG_PRESS_SECONDS := 0.48
 const CONTEXT_MENU_POLICY_ID := "ui.inventory.context_menu_policy.v1"
@@ -86,6 +87,7 @@ func _ready() -> void:
 	PlayerState.equipment_changed.connect(_on_panel_data_changed)
 	PlayerState.profile_changed.connect(_refresh_character_stats)
 	refresh()
+	_refresh_bag_grid.call_deferred()
 
 
 func _build_modal_surface() -> void:
@@ -242,6 +244,7 @@ func _build_bag_panel() -> void:
 	item_grid = GridContainer.new()
 	item_grid.name = "ItemGrid"
 	item_grid.columns = BAG_COLUMNS
+	item_grid.custom_minimum_size = Vector2(BAG_COLUMNS * BAG_CELL_SIZE.x + (BAG_COLUMNS - 1), 5 * BAG_CELL_SIZE.y + 4 * 4)
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_grid.add_theme_constant_override("h_separation", 1)
 	item_grid.add_theme_constant_override("v_separation", 4)
@@ -295,12 +298,14 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	var holder := Control.new()
 	holder.name = "EquipmentHolder_%s" % slot
 	holder.position = position_value
-	holder.size = Vector2(84, 98)
+	holder.size = Vector2(72, 84)
 	parent.add_child(holder)
 	var button := Button.new()
 	button.name = "EquipmentSlot_%s" % slot
 	button.position = Vector2(2, 0)
-	button.size = Vector2(80, 80)
+	button.size = Vector2(68, 68)
+	button.set_meta("calibration_layout_revision", EQUIPMENT_SLOT_LAYOUT_REVISION)
+	holder.set_meta("calibration_layout_revision", EQUIPMENT_SLOT_LAYOUT_REVISION)
 	button.expand_icon = true
 	button.toggle_mode = true
 	button.tooltip_text = "%s：空" % slot
@@ -310,8 +315,8 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	holder.add_child(button)
 	var caption_plate := Panel.new()
 	caption_plate.name = "SlotCaptionPlate"
-	caption_plate.position = Vector2(8, 68)
-	caption_plate.size = Vector2(68, 24)
+	caption_plate.position = Vector2(6, 64)
+	caption_plate.size = Vector2(60, 20)
 	caption_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	caption_plate.theme_type_variation = "GothicEquipmentSlotCaption"
 	holder.add_child(caption_plate)
@@ -521,6 +526,20 @@ func _select_inventory_item(index: int) -> void:
 func _select_equipment_slot(slot: String) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
+	if selected_inventory_index >= 0 and selected_inventory_index < PlayerState.inventory.size():
+		var item := GameData.get_item_record(str(PlayerState.inventory[selected_inventory_index].get("name", "")))
+		if str(item.get("kind", "")) == "equipment":
+			var allowed: Array = _slots_for_category(str(item.get("category", "")))
+			if not allowed.has(slot):
+				detail_label.text = "[color=#d96f5f]该装备不能放入此槽位。[/color]"
+				return
+			var result := PlayerState.equip_inventory_index(selected_inventory_index, slot)
+			selected_equipment_slot = slot
+			selected_inventory_index = -1
+			selected_inventory_indices.clear()
+			refresh()
+			detail_label.text = "[color=#e8c277]%s[/color]" % result
+			return
 	selected_equipment_slot = slot
 	selected_inventory_index = -1
 	selected_inventory_indices.clear()
@@ -550,9 +569,13 @@ func _show_inventory_detail(index: int) -> void:
 func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 	if _is_double_activation_event(event):
 		_cancel_long_press()
-		_suppress_next_pressed_index = index
 		selected_inventory_indices.clear()
-		_activate_inventory_index(index)
+		var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
+		if str(item.get("kind", "")) == "equipment":
+			_select_inventory_item(index)
+			_suppress_next_pressed_index = index
+		else:
+			_activate_inventory_index(index)
 		_clear_pressed_suppression.call_deferred(index)
 		return
 	_handle_press_event(event, {"source": "inventory", "index": index}, button)

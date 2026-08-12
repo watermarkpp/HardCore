@@ -111,6 +111,7 @@ func _run() -> void:
 	assert((panel.equipment_buttons["武器"] as Button).size.x == (panel.equipment_buttons["武器"] as Button).size.y, "装备格不是严格正方形")
 	var weapon_caption := panel.equipment_buttons["武器"].get_parent().get_node("SlotCaptionPlate") as Control
 	var weapon_button := panel.equipment_buttons["武器"] as Button
+	assert(weapon_button.size == Vector2(68, 68) and weapon_button.get_parent().size == Vector2(72, 84), "equipment slot geometry mismatch")
 	assert(weapon_caption.position.y < weapon_button.position.y + weapon_button.size.y and weapon_caption.position.y + weapon_caption.size.y > weapon_button.position.y + weapon_button.size.y, "装备名称铭牌没有压住对应装备格底边")
 	var future_row := equipment_panel.get_node("FutureEquipmentRow") as Control
 	var current_slots_bottom := 0.0
@@ -173,7 +174,18 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	PlayerState.add_item("太阳水", 2)
 	PlayerState.add_item("匕首")
-	PlayerState.add_item("布衣(女)")
+	panel.refresh()
+	await get_tree().process_frame
+	var dagger_direct := _inventory_index_of("匕首")
+	panel._select_inventory_item(dagger_direct)
+	var wrong_equipment := PlayerState.equipment.duplicate(true)
+	var wrong_inventory := PlayerState.inventory.duplicate(true)
+	panel._select_equipment_slot("衣服")
+	assert(PlayerState.equipment == wrong_equipment and PlayerState.inventory == wrong_inventory and panel.selected_inventory_index == dagger_direct, "wrong equipment slot must reject without mutation")
+	panel._select_equipment_slot("武器")
+	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首" and not PlayerState.has_item("匕首"), "correct slot click must equip")
+	PlayerState.unequip_slot("武器")
+	assert(PlayerState.equipment.get("武器", {}).is_empty() and PlayerState.has_item("匕首"), "double-click fixture must restore dagger to inventory")
 	panel.refresh()
 	await get_tree().process_frame
 
@@ -212,8 +224,8 @@ func _run() -> void:
 	equip_click.position = dagger_button.size * 0.5
 	panel._inventory_input(equip_click, dagger_index, dagger_button)
 	await get_tree().process_frame
-	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首", "双击装备应直接穿戴")
-	assert(not PlayerState.has_item("匕首"), "双击装备后物品应移出背包")
+	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) != "匕首", "double-click equipment must not equip")
+	assert(PlayerState.has_item("匕首"), "double-click equipment remains in inventory")
 
 	PlayerState.reset_progress()
 	PlayerState.level = 50
