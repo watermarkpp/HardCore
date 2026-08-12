@@ -1,4 +1,4 @@
-extends Node
+﻿extends Node
 
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 

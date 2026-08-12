@@ -1344,21 +1344,22 @@
 			"nodes": {
 				"AttributePanel": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						91.3466614546887,
-						79.9999980926514,
+						117.000004839897,
 						416.771219237726,
 						943.333310842514
 					],
 					"logicalRect": [
 						54.7942810058594,
-						48.0,
+						70.2000045776367,
 						250.000152587891,
 						566.0
 					],
 					"normalized": [
 						0.04491334508677,
-						0.0727272727272727,
+						0.10636364329945,
 						0.204918157858927,
 						0.857575757575758
 					],
@@ -1369,34 +1370,36 @@
 					],
 					"rect": [
 						406.425510889541,
-						129.999996900558,
+						167.000003647804,
 						416.771219237726,
 						943.333310842514
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
-				"AttributePanel/@Label@452": {
+				"AttributePanel/@Label@449": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
-						23.3391740322113,
-						18.0000046571095,
+						22.3391742777026,
+						-4.00000363985689,
 						370.092616796494,
-						49.9999797344212
+						49.9999988079071
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						14.0,
-						10.8000030517578,
+						13.4001502990723,
+						-2.40000224113464,
 						222.0,
-						29.9999885559082
+						30.0
 					],
 					"normalized": [
-						0.0559999658203334,
-						0.0190812774766039,
+						0.0536005684810983,
+						-0.00424028664511421,
 						0.887999458008143,
-						0.0530035133496611
+						0.0530035335689046
 					],
 					"parent": "AttributePanel",
 					"parentSize": [
@@ -1404,34 +1407,36 @@
 						943.333310842514
 					],
 					"rect": [
-						429.764684921753,
-						148.000001557668,
+						428.764678807824,
+						163.00000120004,
 						370.092616796494,
-						49.9999797344212
+						49.9999988079071
 					],
 					"text": "人物属性",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
-				"AttributePanel/@Label@456": {
+				"AttributePanel/@Label@453": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
-						23.5744725810982,
-						476.00004968643,
+						26.6733417510986,
+						463.333322286606,
 						363.424281358719,
 						49.9999988079071
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						14.1411437988281,
-						285.600036621094,
+						16.0,
+						278.0,
 						218.0,
 						30.0
 					],
 					"normalized": [
-						0.0565645406710567,
-						0.504593704277551,
+						0.0639999609375238,
+						0.491166077738516,
 						0.871999467773762,
 						0.0530035335689046
 					],
@@ -1441,34 +1446,36 @@
 						943.333310842514
 					],
 					"rect": [
-						429.99998347064,
-						606.000046586989,
+						433.09885264064,
+						630.333338650067,
 						363.424281358719,
 						49.9999988079071
 					],
 					"text": "物品属性",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"AttributePanel/AttributePanelDecoration": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						-1.00000611392898,
-						33.0000042994816,
-						416.771244675407,
-						859.999979496002
+						-33.0000014379186,
+						-6.82671860677904e-06,
+						479.999983914917,
+						889.999978780746
 					],
 					"logicalRect": [
-						-0.599853515625,
-						19.8000030517578,
-						250.00016784668,
-						516.0
+						-19.7950458526611,
+						-4.09603126172442e-06,
+						287.927917480469,
+						534.0
 					],
 					"normalized": [
-						-0.00239941259801477,
-						0.0349823375472753,
-						1.00000006103512,
-						0.911660777385159
+						-0.0791801350829254,
+						-7.23680434933643e-09,
+						1.15171096697329,
+						0.943462897526502
 					],
 					"parent": "AttributePanel",
 					"parentSize": [
@@ -1476,24 +1483,26 @@
 						943.333310842514
 					],
 					"rect": [
-						405.425504775612,
-						163.00000120004,
-						416.771244675407,
-						859.999979496002
+						373.425512631333,
+						166.999990932147,
+						479.999983914917,
+						889.999978780746
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AttributePanel/CharacterStats": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						32.6733275593106,
 						83.3333059151973,
 						363.424281358719,
 						366.666785081225
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						19.5990905761719,
 						49.9999847412109,
@@ -1513,24 +1522,26 @@
 					],
 					"rect": [
 						439.098838448852,
-						213.333302815756,
+						250.333296847344,
 						363.424281358719,
 						366.666785081225
 					],
 					"text": "战士　等级 1\n生命 19　魔法 15\n攻击 2-5\n魔法 0-0　道术 0-0\n防御 0-0　魔防 0-0\n准确 5　敏捷 15　幸运 0\n魔法躲避 10%　攻击速度 +0\n暴击 0.0%\n穿戴重量 0/15",
+					"textRevision": 0,
 					"themeVariation": "GothicDetailText",
 					"visible": true
 				},
 				"AttributePanel/ItemDetail": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						26.6733417510986,
 						537.000160129861,
 						363.424281358719,
 						315.000857154508
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						16.0,
 						322.200103759766,
@@ -1550,16 +1561,18 @@
 					],
 					"rect": [
 						433.09885264064,
-						667.000157030419,
+						704.000176493322,
 						363.424281358719,
 						315.000857154508
 					],
 					"text": "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]",
+					"textRevision": 0,
 					"themeVariation": "GothicDetailText",
 					"visible": true
 				},
 				"BagPanel": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						1160.29036617279,
 						79.9999980926514,
@@ -1589,30 +1602,32 @@
 						820.205258846283,
 						943.333310842514
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
-				"BagPanel/@Label@474": {
+				"BagPanel/@Label@471": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
-						11.3392024157874,
-						18.0000046571095,
+						36.3391708408249,
+						33.0000074783959,
 						773.52691078186,
-						49.9999543031067
+						49.9999447663638
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						6.80181884765625,
-						10.8000030517578,
+						21.7980461120605,
+						19.8000049591064,
 						464.0,
-						29.9999732971191
+						29.9999675750732
 					],
 					"normalized": [
-						0.0138248350562119,
-						0.0190812774766039,
+						0.0443049717724808,
+						0.0349823409171492,
 						0.943089430894309,
-						0.0530034863906699
+						0.0530034762810481
 					],
 					"parent": "BagPanel",
 					"parentSize": [
@@ -1620,34 +1635,36 @@
 						943.333310842514
 					],
 					"rect": [
-						1486.70841802343,
-						148.000001557668,
+						1511.70836737021,
+						163.00000120004,
 						773.52691078186,
-						49.9999543031067
+						49.9999447663638
 					],
 					"text": "综合背包",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"BagPanel/BagPagingHint": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
-						30.007509469986,
-						669.999984025955,
+						34.0075084880209,
+						723.000521906204,
 						760.190239906311,
 						46.6666655540466
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
-						18.0,
-						402.0,
+						20.3993988037109,
+						433.800323486328,
 						456.0,
 						28.0
 					],
 					"normalized": [
-						0.0365853658536585,
-						0.710247349823322,
+						0.0414621926904694,
+						0.766431666936976,
 						0.926829268292683,
 						0.049469964664311
 					],
@@ -1657,59 +1674,27 @@
 						943.333310842514
 					],
 					"rect": [
-						1505.37672507763,
-						799.999980926514,
+						1509.37674953335,
+						853.000518806763,
 						760.190239906311,
 						46.6666655540466
 					],
-					"text": "首屏 1–40 格　·　拖动右侧滚条查看 41–100 格",
+					"text": "首屏 1–30 格　·　拖动右侧滚条查看 31–100 格",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
-				},
-				"BagPanel/BagPanelDecoration": {
-					"deleted": true,
-					"localRect": [
-						0.0,
-						0.0,
-						779.99998658058,
-						943.333310842514
-					],
-					"logicalRect": [
-						0.0,
-						0.0,
-						467.882873535156,
-						566.0
-					],
-					"normalized": [
-						0.0,
-						0.0,
-						0.950981450274708,
-						1.0
-					],
-					"parent": "BagPanel",
-					"parentSize": [
-						820.205258846283,
-						943.333310842514
-					],
-					"rect": [
-						1475.36921560764,
-						129.999996900558,
-						779.99998658058,
-						943.333310842514
-					],
-					"themeVariation": "",
-					"visible": false
 				},
 				"BagPanel/BagSummary": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						410.102629423141,
 						91.6665881872195,
 						363.424281358719,
 						43.3332560062427
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						246.0,
 						54.9999542236328,
@@ -1734,29 +1719,31 @@
 						43.3332560062427
 					],
 					"text": "金币 0　3/100格",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"BagPanel/InventoryActions/AutoSortButton": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						0.0,
-						0.0,
-						358.423029780388,
+						77.9574681273757,
+						6.66668796539255,
+						319.999997755838,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						0.0,
-						0.0,
-						215.0,
+						46.7627754211426,
+						4.00001287460327,
+						191.951950073242,
 						51.0
 					],
 					"normalized": [
-						0.0,
-						0.0,
-						0.467391304347826,
+						0.101658207437266,
+						0.0833336015542348,
+						0.417286847985309,
 						1.0625
 					],
 					"parent": "BagPanel/InventoryActions",
@@ -1765,35 +1752,37 @@
 						79.9999980926514
 					],
 					"rect": [
-						1502.04255735874,
-						883.333312273026,
-						358.423029780388,
+						1579.99999368902,
+						889.999978780746,
+						319.999997755838,
 						84.9999979734421
 					],
 					"text": "自动整理",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"BagPanel/InventoryActions/DiscardButton": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						375.093868374825,
-						0.0,
-						358.423029780388,
+						388.093947855901,
+						6.66668796539255,
+						320.000023193519,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						225.0,
-						0.0,
-						215.0,
+						232.798095703125,
+						4.00001287460327,
+						191.951965332031,
 						51.0
 					],
 					"normalized": [
-						0.489130434782609,
-						0.0,
-						0.467391304347826,
+						0.506082816745924,
+						0.0833336015542348,
+						0.41728688115659,
 						1.0625
 					],
 					"parent": "BagPanel/InventoryActions",
@@ -1802,33 +1791,107 @@
 						79.9999980926514
 					],
 					"rect": [
-						1877.13642573357,
-						883.333312273026,
-						358.423029780388,
+						1890.13650521464,
+						889.999978780746,
+						320.000023193519,
 						84.9999979734421
 					],
 					"text": "丢弃",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
+					"visible": true
+				},
+				"BagPanel/InventoryGridFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						70.0000046888986,
+						820.205258846283,
+						899.999978542328
+					],
+					"logicalRect": [
+						0.0,
+						42.0000038146973,
+						492.0,
+						540.0
+					],
+					"normalized": [
+						0.0,
+						0.0742049537362142,
+						1.0,
+						0.954063604240283
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1475.36921560764,
+						199.999995231628,
+						820.205258846283,
+						899.999978542328
+					],
+					"textRevision": 0,
+					"themeVariation": "GothicInsetFrame",
+					"visible": true
+				},
+				"BagPanel/InventoryGridFrame/InventoryGridFrameDecoration": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						20.9999964345385,
+						-33.0000074783959,
+						779.99998658058,
+						889.999978780746
+					],
+					"logicalRect": [
+						12.5968446731567,
+						-19.8000049591064,
+						467.882873535156,
+						534.0
+					],
+					"normalized": [
+						0.0256033428316194,
+						-0.0366666758501971,
+						0.950981450274708,
+						0.988888888888889
+					],
+					"parent": "BagPanel/InventoryGridFrame",
+					"parentSize": [
+						820.205258846283,
+						899.999978542328
+					],
+					"rect": [
+						1496.36924224943,
+						166.999990932147,
+						779.99998658058,
+						889.999978780746
+					],
+					"textRevision": 0,
+					"themeVariation": "",
 					"visible": true
 				},
 				"BagPanel/InventoryScroll": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						-8.32911075234006,
-						159.999843597416,
-						795.199000954628,
+						111.630693690471,
+						134.999907771748,
+						605.15144097805,
 						574.999986290932
 					],
 					"logicalRect": [
-						-4.9962158203125,
-						95.9999084472656,
-						477.0,
+						66.9616546630859,
+						80.9999465942383,
+						363.0,
 						345.0
 					],
 					"normalized": [
-						-0.0101549102038872,
-						0.169611145666547,
-						0.969512195121951,
+						0.136100924111963,
+						0.143109446279573,
+						0.73780487804878,
 						0.609540636042403
 					],
 					"parent": "BagPanel",
@@ -1837,24 +1900,26 @@
 						943.333310842514
 					],
 					"rect": [
-						1467.0401048553,
-						289.999840497974,
-						795.199000954628,
+						1586.9999347358,
+						264.99989195665,
+						605.15144097805,
 						574.999986290932
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@487/ItemButton": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_000/ItemButton": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -1867,23 +1932,25 @@
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@487",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_000",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						298.333173632625,
+						1598.6695217519,
+						273.333225091301,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@487/ItemButton/CenteredPixelIcon": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_000/ItemButton/CenteredPixelIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						23.3391740322113,
 						29.1666659712791,
@@ -1902,30 +1969,32 @@
 						0.5,
 						0.453125
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@487/ItemButton",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_000/ItemButton",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1502.04886590362,
-						327.499839603905,
+						1622.00869578411,
+						302.49989106258,
 						46.6783480644226,
 						48.3333321809769
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@487/StackCount": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_000/StackCount": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						36.6758449077606,
 						68.3333317041397,
 						50.0125157833099,
 						38.3333324193954
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						22.0,
 						41.0,
@@ -1938,31 +2007,33 @@
 						0.535714285714286,
 						0.359375
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@487",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_000",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1515.38553677917,
-						366.666505336765,
+						1635.34536665966,
+						341.666556795441,
 						50.0125157833099,
 						38.3333324193954
 					],
 					"text": "82",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@488/ItemButton": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_001/ItemButton": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -1975,23 +2046,25 @@
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@488",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_001",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						298.333173632625,
+						1693.69330174019,
+						273.333225091301,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@488/ItemButton/CenteredPixelIcon": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_001/ItemButton/CenteredPixelIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						30.007509469986,
 						29.1666659712791,
@@ -2010,30 +2083,32 @@
 						0.357142857142857,
 						0.453125
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@488/ItemButton",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_001/ItemButton",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1603.74098132968,
-						327.499839603905,
+						1723.70081121018,
+						302.49989106258,
 						33.3416771888733,
 						48.3333321809769
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@488/StackCount": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_001/StackCount": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						36.6758449077606,
 						68.3333317041397,
 						50.0125157833099,
 						38.3333324193954
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						22.0,
 						41.0,
@@ -2046,31 +2121,33 @@
 						0.535714285714286,
 						0.359375
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@488",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_001",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1610.40931676746,
-						366.666505336765,
+						1730.36914664795,
+						341.666556795441,
 						50.0125157833099,
 						38.3333324193954
 					],
 					"text": "94",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@489/ItemButton": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_002/ItemButton": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -2083,23 +2160,25 @@
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@489",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_002",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						298.333173632625,
+						1788.71708172848,
+						273.333225091301,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@489/ItemButton/CenteredPixelIcon": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_002/ItemButton/CenteredPixelIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						33.3416771888733,
 						29.1666659712791,
@@ -2118,30 +2197,32 @@
 						0.285714285714286,
 						0.453125
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@489/ItemButton",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_002/ItemButton",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1702.09892903686,
-						327.499839603905,
+						1822.05875891735,
+						302.49989106258,
 						26.6733417510986,
 						48.3333321809769
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@489/StackCount": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_002/StackCount": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						36.6758449077606,
 						68.3333317041397,
 						50.0125157833099,
 						38.3333324193954
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						22.0,
 						41.0,
@@ -2154,3509 +2235,3699 @@
 						0.535714285714286,
 						0.359375
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@489",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_002",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1705.43309675575,
-						366.666505336765,
+						1825.39292663624,
+						341.666556795441,
 						50.0125157833099,
 						38.3333324193954
 					],
 					"text": "25",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@490/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_003/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@490",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_003",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						298.333173632625,
+						1883.74086171677,
+						273.333225091301,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@491/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_004/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@491",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_004",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						298.333173632625,
+						1978.76464170506,
+						273.333225091301,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@492/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_005/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@492",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_005",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						411.666504263882,
+						2073.78842169335,
+						273.333225091301,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@493/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_006/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@493",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_006",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						411.666504263882,
+						1598.6695217519,
+						386.666555722557,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@494/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_007/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@494",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_007",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						411.666504263882,
+						1693.69330174019,
+						386.666555722557,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@495/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_008/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@495",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_008",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						411.666504263882,
+						1788.71708172848,
+						386.666555722557,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@496/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_009/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@496",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_009",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						411.666504263882,
+						1883.74086171677,
+						386.666555722557,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@497/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_010/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@497",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_010",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						411.666504263882,
+						1978.76464170506,
+						386.666555722557,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@498/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_011/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@498",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_011",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						411.666504263882,
+						2073.78842169335,
+						386.666555722557,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@499/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_012/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@499",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_012",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						411.666504263882,
+						1598.6695217519,
+						499.999886353813,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@500/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_013/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@500",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_013",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						524.999834895138,
+						1693.69330174019,
+						499.999886353813,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@501/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_014/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@501",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_014",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						524.999834895138,
+						1788.71708172848,
+						499.999886353813,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@502/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_015/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@502",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_015",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						524.999834895138,
+						1883.74086171677,
+						499.999886353813,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@503/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_016/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@503",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_016",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						524.999834895138,
+						1978.76464170506,
+						499.999886353813,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@504/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_017/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@504",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_017",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						524.999834895138,
+						2073.78842169335,
+						499.999886353813,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@505/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_018/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@505",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_018",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						524.999834895138,
+						1598.6695217519,
+						613.333216985069,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@506/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_019/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@506",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_019",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						524.999834895138,
+						1693.69330174019,
+						613.333216985069,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@507/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_020/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@507",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_020",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						524.999834895138,
+						1788.71708172848,
+						613.333216985069,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@508/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_021/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@508",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_021",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						638.333165526394,
+						1883.74086171677,
+						613.333216985069,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@509/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_022/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@509",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_022",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						638.333165526394,
+						1978.76464170506,
+						613.333216985069,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@510/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_023/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@510",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_023",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						638.333165526394,
+						2073.78842169335,
+						613.333216985069,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@511/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_024/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@511",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_024",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						638.333165526394,
+						1598.6695217519,
+						726.666547616325,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@512/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_025/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@512",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_025",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						638.333165526394,
+						1693.69330174019,
+						726.666547616325,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@513/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_026/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@513",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_026",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						638.333165526394,
+						1788.71708172848,
+						726.666547616325,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@514/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_027/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@514",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_027",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						638.333165526394,
+						1883.74086171677,
+						726.666547616325,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@515/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_028/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@515",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_028",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						638.333165526394,
+						1978.76464170506,
+						726.666547616325,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@516/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_029/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@516",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_029",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						751.66649615765,
+						2073.78842169335,
+						726.666547616325,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@517/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_030/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@517",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_030",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						751.66649615765,
+						1598.6695217519,
+						839.999878247581,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@518/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_031/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@518",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_031",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						751.66649615765,
+						1693.69330174019,
+						839.999878247581,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@519/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_032/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@519",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_032",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						751.66649615765,
+						1788.71708172848,
+						839.999878247581,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@520/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_033/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@520",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_033",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						751.66649615765,
+						1883.74086171677,
+						839.999878247581,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@521/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_034/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@521",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_034",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						751.66649615765,
+						1978.76464170506,
+						839.999878247581,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@522/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_035/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@522",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_035",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						751.66649615765,
+						2073.78842169335,
+						839.999878247581,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@523/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_036/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@523",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_036",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						751.66649615765,
+						1598.6695217519,
+						953.333208878837,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@524/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_037/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333279768627,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						67.9999694824219,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.06249952316284,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@524",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_037",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						864.999775926277,
+						1693.69330174019,
+						953.333208878837,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@525/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_038/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333279768627,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						67.9999694824219,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.06249952316284,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@525",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_038",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						864.999775926277,
+						1788.71708172848,
+						953.333208878837,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@526/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_039/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333279768627,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						67.9999694824219,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.06249952316284,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@526",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_039",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						864.999775926277,
+						1883.74086171677,
+						953.333208878837,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@527/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_040/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@527",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_040",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						864.999775926277,
+						1978.76464170506,
+						953.333208878837,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@528/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_041/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@528",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_041",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						864.999775926277,
+						2073.78842169335,
+						953.333208878837,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@529/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_042/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@529",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_042",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						864.999775926277,
+						1598.6695217519,
+						1066.66653951009,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@530/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_043/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@530",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_043",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						864.999775926277,
+						1693.69330174019,
+						1066.66653951009,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@531/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_044/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@531",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_044",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						864.999775926277,
+						1788.71708172848,
+						1066.66653951009,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@532/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_045/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@532",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_045",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						978.333106557533,
+						1883.74086171677,
+						1066.66653951009,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@533/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_046/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@533",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_046",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						978.333106557533,
+						1978.76464170506,
+						1066.66653951009,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@534/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_047/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@534",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_047",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						978.333106557533,
+						2073.78842169335,
+						1066.66653951009,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@535/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_048/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@535",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_048",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						978.333106557533,
+						1598.6695217519,
+						1179.99987014135,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@536/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_049/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@536",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_049",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						978.333106557533,
+						1693.69330174019,
+						1179.99987014135,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@537/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_050/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@537",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_050",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						978.333106557533,
+						1788.71708172848,
+						1179.99987014135,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@538/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_051/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@538",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_051",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						978.333106557533,
+						1883.74086171677,
+						1179.99987014135,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@539/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_052/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@539",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_052",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						978.333106557533,
+						1978.76464170506,
+						1179.99987014135,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@540/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_053/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@540",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_053",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						1091.66643718879,
+						2073.78842169335,
+						1179.99987014135,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@541/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_054/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@541",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_054",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1091.66643718879,
+						1598.6695217519,
+						1293.33320077261,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@542/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_055/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@542",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_055",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1091.66643718879,
+						1693.69330174019,
+						1293.33320077261,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@543/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_056/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@543",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_056",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1091.66643718879,
+						1788.71708172848,
+						1293.33320077261,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@544/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_057/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@544",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_057",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						1091.66643718879,
+						1883.74086171677,
+						1293.33320077261,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@545/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_058/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@545",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_058",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						1091.66643718879,
+						1978.76464170506,
+						1293.33320077261,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@546/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_059/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@546",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_059",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						1091.66643718879,
+						2073.78842169335,
+						1293.33320077261,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@547/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_060/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@547",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_060",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						1091.66643718879,
+						1598.6695217519,
+						1406.66653140386,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@548/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_061/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@548",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_061",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						1204.99976782005,
+						1693.69330174019,
+						1406.66653140386,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@549/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_062/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@549",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_062",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1204.99976782005,
+						1788.71708172848,
+						1406.66653140386,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@550/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_063/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@550",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_063",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1204.99976782005,
+						1883.74086171677,
+						1406.66653140386,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@551/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_064/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@551",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_064",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1204.99976782005,
+						1978.76464170506,
+						1406.66653140386,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@552/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_065/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@552",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_065",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						1204.99976782005,
+						2073.78842169335,
+						1406.66653140386,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@553/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_066/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@553",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_066",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						1204.99976782005,
+						1598.6695217519,
+						1519.99986203512,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@554/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_067/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@554",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_067",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						1204.99976782005,
+						1693.69330174019,
+						1519.99986203512,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@555/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_068/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@555",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_068",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						1204.99976782005,
+						1788.71708172848,
+						1519.99986203512,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@556/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_069/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@556",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_069",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						1318.3330984513,
+						1883.74086171677,
+						1519.99986203512,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@557/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_070/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@557",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_070",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1318.3330984513,
+						1978.76464170506,
+						1519.99986203512,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@558/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_071/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@558",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_071",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1318.3330984513,
+						2073.78842169335,
+						1519.99986203512,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@559/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_072/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@559",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_072",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1318.3330984513,
+						1598.6695217519,
+						1633.33319266637,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@560/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_073/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@560",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_073",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						1318.3330984513,
+						1693.69330174019,
+						1633.33319266637,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@561/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_074/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@561",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_074",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						1318.3330984513,
+						1788.71708172848,
+						1633.33319266637,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@562/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_075/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@562",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_075",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						1318.3330984513,
+						1883.74086171677,
+						1633.33319266637,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@563/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_076/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@563",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_076",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						1318.3330984513,
+						1978.76464170506,
+						1633.33319266637,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@564/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_077/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@564",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_077",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						1431.66642908256,
+						2073.78842169335,
+						1633.33319266637,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@565/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_078/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@565",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_078",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1431.66642908256,
+						1598.6695217519,
+						1746.66662502289,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@566/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_079/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@566",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_079",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1431.66642908256,
+						1693.69330174019,
+						1746.66662502289,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@567/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_080/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@567",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_080",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1431.66642908256,
+						1788.71708172848,
+						1746.66662502289,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@568/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_081/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@568",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_081",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						1431.66642908256,
+						1883.74086171677,
+						1746.66662502289,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@569/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_082/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@569",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_082",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						1431.66642908256,
+						1978.76464170506,
+						1746.66662502289,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@570/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_083/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@570",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_083",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						1431.66642908256,
+						2073.78842169335,
+						1746.66662502289,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@571/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_084/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@571",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_084",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						1431.66642908256,
+						1598.6695217519,
+						1859.99995565414,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@572/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_085/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@572",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_085",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						1544.99975971381,
+						1693.69330174019,
+						1859.99995565414,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@573/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_086/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@573",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_086",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1544.99975971381,
+						1788.71708172848,
+						1859.99995565414,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@574/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_087/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@574",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_087",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1544.99975971381,
+						1883.74086171677,
+						1859.99995565414,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@575/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_088/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@575",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_088",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1544.99975971381,
+						1978.76464170506,
+						1859.99995565414,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@576/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_089/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@576",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_089",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1858.80481182456,
-						1544.99975971381,
+						2073.78842169335,
+						1859.99995565414,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@577/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_090/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@577",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_090",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1953.82859181285,
-						1544.99975971381,
+						1598.6695217519,
+						1973.3332862854,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@578/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_091/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@578",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_091",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2048.85237180114,
-						1544.99975971381,
+						1693.69330174019,
+						1973.3332862854,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@579/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_092/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
 						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
+						0.0,
 						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
 						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@579",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_092",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						2143.87615178943,
-						1544.99975971381,
+						1788.71708172848,
+						1973.3332862854,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@580/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_093/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@580",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_093",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1478.70969187141,
-						1658.33309034507,
+						1883.74086171677,
+						1973.3332862854,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@581/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_094/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@581",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_094",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1658.33309034507,
+						1978.76464170506,
+						1973.3332862854,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@582/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_095/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						-475.118899941444,
-						113.333330631256,
+						0.0,
+						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						-285.0,
-						68.0,
+						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						-5.08928571428571,
-						1.0625,
+						0.0,
+						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@582",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_095",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1658.33309034507,
+						2073.78842169335,
+						1973.3332862854,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@583/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_096/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						285.071339964867,
+						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						171.0,
 						0.0,
+						0.0,
 						56.0,
 						64.0
 					],
 					"normalized": [
-						3.05357142857143,
+						0.0,
 						0.0,
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@583",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_096",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1658.33309034507,
+						1598.6695217519,
+						2086.66661691666,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@584/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_097/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -5669,31 +5940,33 @@
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@584",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_097",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1573.7334718597,
-						1658.33309034507,
+						1693.69330174019,
+						2086.66661691666,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@585/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_098/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -5706,31 +5979,33 @@
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@585",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_098",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1668.75725184799,
-						1658.33309034507,
+						1788.71708172848,
+						2086.66661691666,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
-				"BagPanel/InventoryScroll/ItemGrid/@Control@586/EmptySlotBackground": {
+				"BagPanel/InventoryScroll/ItemGrid/InventoryCell_099/EmptySlotBackground": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						93.3566961288452,
 						106.666664123535
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -5743,31 +6018,33 @@
 						1.0,
 						1.0
 					],
-					"parent": "BagPanel/InventoryScroll/ItemGrid/@Control@586",
+					"parent": "BagPanel/InventoryScroll/ItemGrid/InventoryCell_099",
 					"parentSize": [
 						93.3566961288452,
 						106.666664123535
 					],
 					"rect": [
-						1763.78103183628,
-						1658.33309034507,
+						1883.74086171677,
+						2086.66661691666,
 						93.3566961288452,
 						106.666664123535
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
 				"CloseButton": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
 					"localRect": [
 						1897.14143204689,
 						13.3333330154419,
 						93.3566961288452,
 						93.3333311080933
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						1138.0,
 						8.0,
@@ -5792,26 +6069,28 @@
 						93.3333311080933
 					],
 					"text": "×",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentCloseButton",
 					"visible": true
 				},
 				"EquipmentPanel": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						500.122715815727,
-						89.0000767151496,
+						548.123009284318,
+						96.0000587463364,
 						650.162705183029,
 						943.333310842514
 					],
 					"logicalRect": [
-						299.99853515625,
-						53.4000473022461,
+						328.79150390625,
+						57.6000366210938,
 						390.0,
 						566.0
 					],
 					"normalized": [
-						0.245900438652664,
-						0.0809091625791608,
+						0.269501232710041,
+						0.087272782759233,
 						0.319672131147541,
 						0.857575757575758
 					],
@@ -5821,33 +6100,35 @@
 						1099.99997377396
 					],
 					"rect": [
-						815.20156525058,
-						139.000075523057,
+						863.201858719171,
+						146.000057554244,
 						650.162705183029,
 						943.333310842514
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
-				"EquipmentPanel/@Label@459": {
+				"EquipmentPanel/@Label@456": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
-						23.3391740322113,
-						8.99992603461124,
+						14.3391762416327,
+						16.6666662693024,
 						603.484357118607,
 						49.9999988079071
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						14.0,
-						5.39995574951172,
+						8.60135269165039,
+						10.0,
 						362.0,
 						30.0
 					],
 					"normalized": [
-						0.0358974358974359,
-						0.00954055786132813,
+						0.0220547504914113,
+						0.0176678445229682,
 						0.928205128205128,
 						0.0530035335689046
 					],
@@ -5857,62 +6138,66 @@
 						943.333310842514
 					],
 					"rect": [
-						838.540739282791,
-						148.000001557668,
+						877.541079476745,
+						162.666723823546,
 						603.484357118607,
 						49.9999988079071
 					],
 					"text": "人物装备",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_右戒指/EquipmentSlot_右戒指": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_右戒指",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						1311.99255536479,
-						712.333407902715,
-						133.366708755493,
-						133.333330154419
+						1359.99284883338,
+						719.333377218245,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_右戒指/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -5922,71 +6207,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_右戒指/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						1321.99505852145,
-						825.666738533972,
+						1366.66118427116,
+						826.00004134178,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "右戒指",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_右手镯/EquipmentSlot_右手镯": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_右手镯",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						1311.99255536479,
-						545.666745209692,
-						133.366708755493,
-						133.333330154419
+						1359.99284883338,
+						552.666714525221,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_右手镯/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -5996,71 +6285,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_右手镯/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						1321.99505852145,
-						659.000075840948,
+						1366.66118427116,
+						659.333378648756,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "右手镯",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_圣物/EquipmentSlot_圣物": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_圣物",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						835.206571563904,
-						212.333407107987,
-						133.366708755493,
-						133.333330154419
+						883.206865032495,
+						219.333389139174,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_圣物/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6070,71 +6363,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_圣物/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						845.209074720566,
-						325.6667504549,
+						889.875200470269,
+						326.000053262709,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "圣物",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_头盔/EquipmentSlot_头盔": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_头盔",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						1073.59956346435,
-						212.333407107987,
-						133.366708755493,
-						133.333330154419
+						1121.59985693294,
+						219.333389139174,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_头盔/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6144,71 +6441,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_头盔/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						1083.60206662101,
-						325.6667504549,
+						1128.26819237071,
+						326.000053262709,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "头盔",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_左戒指/EquipmentSlot_左戒指": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_左戒指",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						835.206571563904,
-						712.333407902715,
-						133.366708755493,
-						133.333330154419
+						883.206865032495,
+						719.333377218245,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_左戒指/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6218,71 +6519,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_左戒指/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						845.209074720566,
-						825.666738533972,
+						889.875200470269,
+						826.00004134178,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "左戒指",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_左手镯/EquipmentSlot_左手镯": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_左手镯",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						835.206571563904,
-						545.666745209692,
-						133.366708755493,
-						133.333330154419
+						883.206865032495,
+						552.666714525221,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_左手镯/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6292,71 +6597,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_左手镯/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						845.209074720566,
-						659.000075840948,
+						889.875200470269,
+						659.333378648756,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "左手镯",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_徽章/EquipmentSlot_徽章": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_徽章",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						835.206571563904,
-						879.00001973311,
-						133.366708755493,
-						133.333330154419
+						883.206865032495,
+						886.000039911269,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_徽章/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6366,71 +6675,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_徽章/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						845.209074720566,
-						992.333350364366,
+						889.875200470269,
+						992.666704034804,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "徽章",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_武器/EquipmentSlot_武器": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_武器",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						835.206571563904,
-						379.000082516668,
-						133.366708755493,
-						133.333330154419
+						883.206865032495,
+						386.000051832198,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_武器/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6440,71 +6753,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_武器/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						845.209074720566,
-						492.333413147924,
+						889.875200470269,
+						492.666715955733,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "武器",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_衣服/EquipmentSlot_衣服": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_衣服",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						1311.99255536479,
-						379.000082516668,
-						133.366708755493,
-						133.333330154419
+						1359.99284883338,
+						386.000051832198,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_衣服/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6514,71 +6831,75 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_衣服/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						1321.99505852145,
-						492.333413147924,
+						1366.66118427116,
+						492.666715955733,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "衣服",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_项链/EquipmentSlot_项链": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 1,
 					"localRect": [
 						3.33416771888733,
 						0.0,
-						133.366708755493,
-						133.333330154419
+						113.361702442169,
+						113.333330631256
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						2.0,
 						0.0,
-						80.0,
-						80.0
+						68.0,
+						68.0
 					],
 					"normalized": [
-						0.0238095238095238,
+						0.0277777777777778,
 						0.0,
-						0.952380952380952,
-						0.816326530612245
+						0.944444444444444,
+						0.80952380952381
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_项链",
 					"parentSize": [
-						140.035044193268,
-						163.333329439163
+						120.030037879944,
+						139.99999666214
 					],
 					"rect": [
-						1311.99255536479,
-						212.333407107987,
-						133.366708755493,
-						133.333330154419
+						1359.99284883338,
+						219.333389139174,
+						113.361702442169,
+						113.333330631256
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicEquipmentSlotButton",
 					"visible": true
 				},
 				"EquipmentPanel/EquipmentHolder_项链/SlotCaptionPlate/SlotLabel": {
 					"deleted": false,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						113.361702442169,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						0.0,
 						0.0,
@@ -6588,60 +6909,28 @@
 					"normalized": [
 						0.0,
 						0.0,
-						1.0,
-						1.0
+						1.13333333333333,
+						1.2
 					],
 					"parent": "EquipmentPanel/EquipmentHolder_项链/SlotCaptionPlate",
 					"parentSize": [
-						113.361702442169,
-						39.9999990463257
+						100.02503156662,
+						33.3333325386047
 					],
 					"rect": [
-						1321.99505852145,
-						325.6667504549,
+						1366.66118427116,
+						326.000053262709,
 						113.361702442169,
 						39.9999990463257
 					],
 					"text": "项链",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
-				"EquipmentPanel/EquipmentPanelDecoration": {
-					"deleted": true,
-					"localRect": [
-						0.0,
-						39.0000143289562,
-						679.999985692026,
-						849.999572833389
-					],
-					"logicalRect": [
-						0.0,
-						23.4000091552734,
-						407.897888183594,
-						509.999755859375
-					],
-					"normalized": [
-						0.0,
-						0.0413427723591403,
-						1.04589202098357,
-						0.901059639327518
-					],
-					"parent": "EquipmentPanel",
-					"parentSize": [
-						650.162705183029,
-						943.333310842514
-					],
-					"rect": [
-						815.20156525058,
-						178.000089852013,
-						679.999985692026,
-						849.999572833389
-					],
-					"themeVariation": "",
-					"visible": false
-				},
 				"TitleFrame": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						633.491866588593,
 						16.6666662693024,
@@ -6671,19 +6960,21 @@
 						766.858575344086,
 						106.666664123535
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicTitleBar",
 					"visible": true
 				},
 				"TitleFrame/Title": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
 					"localRect": [
 						50.0125157833099,
 						24.9999994039536,
 						666.833543777466,
 						56.6666653156281
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						30.0,
 						15.0,
@@ -6708,6 +6999,7 @@
 						56.6666653156281
 					],
 					"text": "人物与背包",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				}

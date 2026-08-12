@@ -323,6 +323,7 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	var slot_label := Label.new()
 	slot_label.name = "SlotLabel"
 	slot_label.text = slot
+	slot_label.set_meta("calibration_layout_revision", EQUIPMENT_SLOT_LAYOUT_REVISION)
 	slot_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

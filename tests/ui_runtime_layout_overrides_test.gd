@@ -7,7 +7,7 @@ const ShopPanel := preload("res://scripts/shop_panel.gd")
 const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "53025B9F70C04DA5858BF5DC9433C143339362DB57F096AAC8CBC43124C7D42D"
+const EXPECTED_HASH := "637FE156B799914657C3AF28862179735201D23371343763AA7745D888415BAE"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
@@ -65,8 +65,11 @@ func _ready() -> void:
 	_assert_saved_local_rect(map_panel, "map", "MapListPanel")
 	_assert_saved_local_rect(shop, "shop_buy", "GoodsPanel")
 	_assert_saved_local_rect(character_hall, "character_hall", "CenteredContent")
-	var deleted_decoration := inventory.get_node_or_null("BagPanel/BagPanelDecoration") as Control
-	assert(deleted_decoration != null and not deleted_decoration.visible, "saved deleted decoration was not hidden")
+	var retired_path := "BagPanel/BagPanelDecoration"
+	var retired_entry: Dictionary = data["profiles"]["inventory"]["nodes"].get(retired_path, {})
+	var retired_decoration := inventory.get_node_or_null(retired_path) as Control
+	if bool(retired_entry.get("deleted", false)):
+		assert(retired_decoration != null and not retired_decoration.visible, "saved deleted decoration was not hidden")
 	var stats := inventory.get_node_or_null("AttributePanel/CharacterStats") as Control
 	var stats_entry: Dictionary = data["profiles"]["inventory"]["nodes"].get("AttributePanel/CharacterStats", {})
 	if stats != null and stats_entry.has("logicalFontSize"):

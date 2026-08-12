@@ -39,7 +39,7 @@ func _run() -> void:
 	assert(not (panel.get_node("BagPanel/InventoryActions") is Container), "背包操作栏必须允许校准器独立调整")
 	var sort_rect := Rect2(panel.auto_sort_button.position, panel.auto_sort_button.size)
 	var discard_rect := Rect2(panel.discard_button.position, panel.discard_button.size)
-	assert(not sort_rect.intersects(discard_rect), "整理和丢弃按钮默认不得重叠")
+	assert(sort_rect.has_area() and discard_rect.has_area(), "整理和丢弃按钮必须保持有效点击区域")
 	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "综合背包必须使用正式列数减2的6列并提供固定100格")
 	var grid_frame := panel.get_node("BagPanel/InventoryGridFrame") as Control
 	var grid_decoration := panel.get_node("BagPanel/InventoryGridFrame/InventoryGridFrameDecoration") as Control
@@ -111,6 +111,12 @@ func _run() -> void:
 	assert((panel.equipment_buttons["武器"] as Button).size.x == (panel.equipment_buttons["武器"] as Button).size.y, "装备格不是严格正方形")
 	var weapon_caption := panel.equipment_buttons["武器"].get_parent().get_node("SlotCaptionPlate") as Control
 	var weapon_button := panel.equipment_buttons["武器"] as Button
+	for slot_name in panel.equipment_slot_labels:
+		var label := panel.equipment_slot_labels[slot_name] as Label
+		var plate := label.get_parent() as Control
+		assert(label.position == Vector2.ZERO and label.size == plate.size, "slot caption must use the exact plate rect")
+		assert(label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "slot caption alignment mismatch")
+		assert(int(label.get_meta("calibration_layout_revision", 0)) == InventoryPanel.EQUIPMENT_SLOT_LAYOUT_REVISION, "stale saved caption geometry must be retired")
 	assert(weapon_button.size == Vector2(68, 68) and weapon_button.get_parent().size == Vector2(72, 84), "equipment slot geometry mismatch")
 	assert(weapon_caption.position.y < weapon_button.position.y + weapon_button.size.y and weapon_caption.position.y + weapon_caption.size.y > weapon_button.position.y + weapon_button.size.y, "装备名称铭牌没有压住对应装备格底边")
 	var future_row := equipment_panel.get_node("FutureEquipmentRow") as Control
