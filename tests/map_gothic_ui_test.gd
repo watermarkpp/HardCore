@@ -46,37 +46,43 @@ func _run() -> void:
 	var tree_fill := tree_decoration.get_node("MapListV3FrameFill") as GothicFrameFill
 	var tree_frame_panel := tree_decoration.get_node("MapListV3FrameFrame") as Panel
 	assert(tree_fill.shape_mode == GothicFrameFill.ShapeMode.V3_INNER and tree_fill.mouse_filter == Control.MOUSE_FILTER_IGNORE and tree_frame_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE)
-	assert(tree_scroll.position.x >= 0.0 and tree_scroll.position.y >= 0.0 and tree_scroll.size.x > 0.0 and tree_scroll.size.y > 0.0, "世界树滚动区必须为有效矩形")
-	assert(tree_scroll.get_meta("calibration_layout_revision") == 1, "世界树布局版本错误")
-	var expected_pairs: Dictionary = {}
+	var expected_tree_width := 650.0 * 1598.0 / 2664.0
+	assert(absf(tree_scroll.size.x - expected_tree_width) <= 1.0, "世界树宽度必须按1598×720逻辑空间换算为650设备像素；actual=%s expected=%s" % [tree_scroll.size.x, expected_tree_width])
+	assert(tree_scroll.position.x >= 0.0 and tree_scroll.position.y >= 0.0 and tree_scroll.size.y > 0.0, "世界树滚动区必须为有效矩形")
+	assert(panel.world_tree_container.custom_minimum_size.x <= tree_scroll.size.x, "世界树内容最小宽度不应反向撑大滚动区")
+	assert(tree_frame.size.x >= tree_scroll.position.x + tree_scroll.size.x - tree_frame.position.x, "二级框没有包围缩窄后的世界树")
+	assert(tree_scroll.get_meta("calibration_layout_revision") == 2, "世界树布局版本错误")
 	var expected_regions: Dictionary = {}
 	for map_value: Variant in GameData.get_available_maps(false):
 		if map_value is Dictionary:
 			expected_regions[str(map_value.get("region", ""))] = true
-			expected_pairs["%s|%s" % [map_value.get("region", ""), map_value.get("mapGroup", "")]] = true
-	var actual_pairs: Dictionary = {}
 	var actual_regions: Dictionary = {}
 	for node_value: Variant in panel.world_tree_nodes:
 		var node_data: Dictionary = node_value
-		var node_depth := int(node_data.get("depth", -1))
-		assert(node_depth in [0, 1], "运行时目录出现非法深度")
-		if node_depth == 0:
-			actual_regions[str(node_data.get("regions", [""])[0])] = true
-		elif node_depth == 1:
-			actual_pairs["%s|%s" % [node_data.get("regions", [""])[0], node_data.get("map_groups", [""])[0]]] = true
+		assert(int(node_data.get("depth", -1)) == 0, "中间目录只能包含大地图region节点")
+		assert(node_data.get("regions", []).size() == 1, "大地图节点必须精确对应一个region")
+		assert(node_data.get("map_groups", []).is_empty() and node_data.get("map_ids", []).is_empty() and node_data.get("name_terms", []).is_empty(), "中间目录不得包含地图组或具体地图过滤")
+		actual_regions[str(node_data.get("regions", [""])[0])] = true
 	assert(actual_regions.size() == expected_regions.size(), "目录 region 数量与正式数据不一致")
 	for expected_region: Variant in expected_regions.keys():
 		assert(actual_regions.has(expected_region), "目录缺少正式 region：%s" % expected_region)
-	assert(actual_pairs.size() == expected_pairs.size(), "目录 group 集合与正式数据不一致")
-	for expected_pair: Variant in expected_pairs.keys():
-		assert(actual_pairs.has(expected_pair), "目录缺少正式 region/group：%s" % expected_pair)
-	var bich_groups: Array[String] = []
+	var all_group_labels: Dictionary = {}
+	for map_value: Variant in GameData.get_available_maps(false):
+		if map_value is Dictionary:
+			all_group_labels[str(map_value.get("mapGroup", ""))] = true
 	for node_value: Variant in panel.world_tree_nodes:
-		var node_data: Dictionary = node_value
-		if int(node_data.get("depth", -1)) == 1 and node_data.get("regions", [""])[0] == "比奇地区":
-			bich_groups.append(str(node_data.get("label", "")))
-	assert(bich_groups.size() == 4 and bich_groups.has("地表/入口") and bich_groups.has("兽人古墓") and bich_groups.has("天然洞穴") and bich_groups.has("比奇矿区"), "比奇子组目录不完整")
-	assert(panel.map_entries.size() == 19 and panel._selected_map_id == int(panel.map_entries[0].get("mapId", -1)), "比奇区域应为19图并自动选择首图")
+		assert(not all_group_labels.has(str((node_value as Dictionary).get("label", ""))), "内部mapGroup被错误提升为大地图按钮")
+	assert(not panel.world_tree_container.find_child("*地表*", true, false), "中间目录不得出现地表/入口分支")
+	var expected_bich_ids: Array[int] = []
+	for map_value: Variant in GameData.get_available_maps(false):
+		if map_value is Dictionary and str(map_value.get("region", "")) == "比奇地区":
+			expected_bich_ids.append(int(map_value.get("mapId", -1)))
+	var actual_bich_ids: Array[int] = []
+	for map_data: Dictionary in panel.map_entries:
+		actual_bich_ids.append(int(map_data.get("mapId", -1)))
+	expected_bich_ids.sort()
+	actual_bich_ids.sort()
+	assert(actual_bich_ids == expected_bich_ids and panel._selected_map_id == int(panel.map_entries[0].get("mapId", -1)), "默认比奇左侧必须显示该大区全部实际地图并选择首图")
 	assert(not panel.map_name_label.text.is_empty() and not panel.detail_label.text.contains("请选择地图"), "默认地图详情未同步")
 	var node_ids: Dictionary = {}
 	for node_value: Variant in panel.world_tree_nodes:
@@ -95,30 +101,41 @@ func _run() -> void:
 		assert(world_button.position == reference_world_button.position, "世界地图节点装饰框左边缘不一致")
 		assert(world_button.size == reference_world_button.size, "世界地图节点装饰框尺寸不一致")
 		assert(world_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "世界地图名称没有相对装饰框水平居中")
-	assert((panel.world_node_buttons["cangyue_island"] as Button).position.x == 12.0, "苍月岛装饰框左侧出现异常突出")
+	assert((panel.world_node_buttons["cangyue_island"] as Button).position.x == panel.WORLD_TREE_SIDE_GUTTER, "苍月岛装饰框左侧出现异常突出")
 	var total_maps := GameData.get_available_maps(true).size()
 	for node_id: Variant in panel.world_node_buttons.keys():
 		panel._select_world_node(str(node_id))
 		assert(panel.map_entries.size() > 0 and panel.map_entries.size() < total_maps, "节点筛选为空或回退全量")
 		var filter_node := panel._world_node(str(node_id))
+		var region_name := str(filter_node.get("regions", [""])[0])
+		var expected_ids: Array[int] = []
+		for map_value: Variant in GameData.get_available_maps(false):
+			if map_value is Dictionary and str(map_value.get("region", "")) == region_name:
+				expected_ids.append(int(map_value.get("mapId", -1)))
+		var actual_ids: Array[int] = []
 		for map_data: Dictionary in panel.map_entries:
 			assert(panel._node_matches_map(filter_node, map_data), "节点列表含不匹配地图")
+			assert(str(map_data.get("region", "")) == region_name, "左侧地图混入其他大区")
+			actual_ids.append(int(map_data.get("mapId", -1)))
+		expected_ids.sort()
+		actual_ids.sort()
+		assert(actual_ids == expected_ids, "左侧没有精确显示当前大区的全部地图")
+		assert(panel._selected_map_id == int(panel.map_entries[0].get("mapId", -1)) and not panel.map_name_label.text.is_empty(), "切换大区后首图详情未自动同步")
 
 	var requested_batches: Array = []
 	panel.teleport_availability_requested.connect(
 		func(map_ids: Array) -> void: requested_batches.append(map_ids.duplicate())
 	)
-	panel._select_world_node("cow_temple")
+	panel._select_world_node("cangyue_island")
 	await get_tree().process_frame
-	assert(panel._selected_world_node_id == "cow_temple", "点击牛魔寺庙大地图节点后没有选中该节点")
-	assert(panel.map_entries.size() == 8 and panel.map_buttons.size() == 8 and panel._selected_map_id == int(panel.map_entries[0].get("mapId", -1)), "牛魔寺庙应为8图并自动选择首图")
-	assert(not requested_batches.is_empty() and COW_TEMPLE_FLOOR_ONE_ID in requested_batches.back(), "牛魔寺庙子地图没有请求传送开放规则")
+	assert(panel._selected_world_node_id == "cangyue_island", "点击苍月大地图节点后没有选中该节点")
+	assert(not requested_batches.is_empty() and COW_TEMPLE_FLOOR_ONE_ID in requested_batches.back(), "苍月区域没有请求其牛魔寺庙子地图传送规则")
 
 	var cow_names: Array[String] = []
 	for map_data: Dictionary in panel.map_entries:
-		assert(str(map_data.get("mapGroup", "")) == "牛魔寺庙", "牛魔寺庙列表混入了其他地图组")
-		cow_names.append(str(map_data.get("name", "")))
-	assert("牛魔寺庙一层" in cow_names and "牛魔寺庙大厅" in cow_names, "牛魔寺庙列表缺少楼层或大厅")
+		if str(map_data.get("mapGroup", "")) == "牛魔寺庙":
+			cow_names.append(str(map_data.get("name", "")))
+	assert("牛魔寺庙一层" in cow_names and "牛魔寺庙大厅" in cow_names, "苍月区域列表缺少牛魔寺庙楼层或大厅")
 	var first_paths: Array[String] = []
 	for card: Button in panel.map_buttons:
 		assert(card.name == "MapCard_%d" % int(card.get_meta("map_id", -1)), "地图卡节点名不稳定")

@@ -14,28 +14,12 @@ const PANEL_SIZE := Vector2(1160, 650)
 const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
 const SECTION_VERTICAL_SHIFT := 24.0
 const MAP_CARD_SIZE := Vector2(226, 58)
-const WORLD_NODE_SIZE := Vector2(430, 50)
-const WORLD_TREE_BLUEPRINT := [
-	{"node_id": "mafa_world", "label": "HardCore 世界", "depth": 0},
-	{"node_id": "bich_province", "label": "比奇省", "depth": 1, "regions": ["比奇地区"]},
-	{"node_id": "orc_tomb", "label": "兽人古墓／骷髅洞", "depth": 2, "map_groups": ["兽人古墓"]},
-	{"node_id": "natural_cave", "label": "天然洞穴", "depth": 2, "map_groups": ["天然洞穴"]},
-	{"node_id": "bich_mine", "label": "比奇矿区／僵尸洞", "depth": 2, "map_groups": ["比奇矿区"]},
-	{"node_id": "wooma_forest", "label": "沃玛森林", "depth": 1, "regions": ["沃玛地区"]},
-	{"node_id": "wooma_temple", "label": "沃玛寺庙", "depth": 2, "map_groups": ["沃玛寺庙"]},
-	{"node_id": "white_sun_red_moon", "label": "白日门／赤月峡谷", "depth": 2, "regions": ["白日门区"]},
-	{"node_id": "fengmo_valley", "label": "封魔谷", "depth": 2, "regions": ["封魔谷区"]},
-	{"node_id": "viper_valley", "label": "毒蛇山谷", "depth": 1, "regions": ["毒蛇地区"]},
-	{"node_id": "mengzhong_province", "label": "盟重省", "depth": 1, "regions": ["盟重地区"]},
-	{"node_id": "xiangshi_tomb", "label": "沙巴克密道／香石古墓", "depth": 2, "name_terms": ["沙巴克密道", "香石"]},
-	{"node_id": "stone_tomb", "label": "石墓／猪洞", "depth": 2, "map_groups": ["石墓"]},
-	{"node_id": "zuma_temple", "label": "祖玛寺庙", "depth": 2, "map_groups": ["祖玛寺庙"]},
-	{"node_id": "centipede_cave", "label": "蜈蚣洞／死亡山谷", "depth": 2, "map_groups": ["蜈蚣洞"]},
-	{"node_id": "cangyue_island", "label": "苍月岛", "depth": 1, "regions": ["苍月地区"]},
-	{"node_id": "corpse_cave", "label": "尸魔洞", "depth": 2, "map_groups": ["尸魔洞"]},
-	{"node_id": "bone_cave", "label": "骨魔洞", "depth": 2, "map_groups": ["骨魔洞"]},
-	{"node_id": "cow_temple", "label": "牛魔寺庙", "depth": 2, "map_groups": ["牛魔寺庙"]},
-]
+const DEVICE_TO_LOGICAL_SCALE := 1598.0 / 2664.0
+const WORLD_TREE_DEVICE_WIDTH := 650.0
+const WORLD_TREE_SCROLL_WIDTH := WORLD_TREE_DEVICE_WIDTH * DEVICE_TO_LOGICAL_SCALE
+const WORLD_TREE_SIDE_GUTTER := 12.0
+const WORLD_TREE_CONTAINER_WIDTH := WORLD_TREE_SCROLL_WIDTH - 24.0
+const WORLD_NODE_SIZE := Vector2(WORLD_TREE_CONTAINER_WIDTH - WORLD_TREE_SIDE_GUTTER * 2.0, 50)
 
 var search_box: LineEdit
 var later_toggle: CheckButton
@@ -135,7 +119,8 @@ func _build_map_list_section() -> void:
 
 func _build_world_tree_section() -> void:
 	var panel := _framed_section("MapPreviewPanel", Rect2(302, 76, 520, 548))
-	var tree_frame := GothicFrameFactoryScript.add_filled_section(panel, "MapListV3Frame", Rect2(8, 40, 504, 486))
+	var tree_frame_width := WORLD_TREE_SCROLL_WIDTH + 32.0
+	var tree_frame := GothicFrameFactoryScript.add_filled_section(panel, "MapListV3Frame", Rect2(8, 40, tree_frame_width, 486))
 	tree_frame.set_meta("calibration_layer", "map_world_tree_decoration")
 	tree_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.move_child(tree_frame, 0)
@@ -144,7 +129,8 @@ func _build_world_tree_section() -> void:
 	hint.name = "WorldTreeHint"
 	hint.text = "选择大地图节点，在左侧展开其包含的全部地图"
 	hint.position = Vector2(24, 46)
-	hint.size = Vector2(472, 18)
+	hint.size = Vector2(WORLD_TREE_SCROLL_WIDTH, 18)
+	hint.set_meta("calibration_layout_revision", 2)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hint.theme_type_variation = "GothicMutedLabel"
@@ -152,15 +138,15 @@ func _build_world_tree_section() -> void:
 	world_tree_scroll = ScrollContainer.new()
 	world_tree_scroll.name = "WorldTreeScroll"
 	world_tree_scroll.position = Vector2(24, 68)
-	world_tree_scroll.size = Vector2(472, 440)
+	world_tree_scroll.size = Vector2(WORLD_TREE_SCROLL_WIDTH, 440)
 	world_tree_scroll.set_meta("calibration_layout_dependencies", ["MapPreviewPanel/WorldTreeHint"])
-	world_tree_scroll.set_meta("calibration_layout_revision", 1)
+	world_tree_scroll.set_meta("calibration_layout_revision", 2)
 	world_tree_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	world_tree_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(world_tree_scroll)
 	world_tree_container = VBoxContainer.new()
 	world_tree_container.name = "WorldTree"
-	world_tree_container.custom_minimum_size = Vector2(454, 0)
+	world_tree_container.custom_minimum_size = Vector2(WORLD_TREE_CONTAINER_WIDTH, 0)
 	world_tree_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	world_tree_container.add_theme_constant_override("separation", 7)
 	world_tree_scroll.add_child(world_tree_container)
@@ -169,40 +155,18 @@ func _build_world_tree_section() -> void:
 func _build_runtime_catalog() -> Array:
 	var result: Array = []
 	var region_nodes: Dictionary = {}
-	var group_nodes: Dictionary = {}
 	for map_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
 		if not map_value is Dictionary:
 			continue
 		var map_data: Dictionary = map_value
 		var region := str(map_data.get("region", "")).strip_edges()
-		var group := str(map_data.get("mapGroup", "")).strip_edges()
-		if region.is_empty() or group.is_empty():
+		if region.is_empty():
 			continue
 		if not region_nodes.has(region):
 			var region_id := _stable_catalog_id(region, "region")
 			region_nodes[region] = {"node_id": region_id, "label": region.trim_suffix("地区").trim_suffix("区"), "depth": 0, "regions": [region]}
 			result.append(region_nodes[region])
-		if not group_nodes.has(region + "|" + group):
-			var group_id := _group_catalog_id(region, group)
-			group_nodes[region + "|" + group] = {"node_id": group_id, "label": group, "depth": 1, "regions": [region], "map_groups": [group]}
-			result.append(group_nodes[region + "|" + group])
 	return result
-
-
-func _group_catalog_id(region: String, group: String) -> String:
-	var legacy := {
-		"比奇地区|兽人古墓": "orc_tomb", "比奇地区|天然洞穴": "natural_cave", "比奇地区|比奇矿区": "bich_mine",
-		"沃玛地区|沃玛寺庙": "wooma_temple", "盟重地区|香石古墓": "xiangshi_tomb", "盟重地区|石墓": "stone_tomb",
-		"盟重地区|祖玛寺庙": "zuma_temple", "盟重地区|蜈蚣洞": "centipede_cave", "苍月地区|尸魔洞": "corpse_cave",
-		"苍月地区|骨魔洞": "bone_cave", "苍月地区|牛魔寺庙": "cow_temple"
-	}
-	var key := "%s|%s" % [region, group]
-	if legacy.has(key):
-		return str(legacy[key])
-	var context := HashingContext.new()
-	context.start(HashingContext.HASH_SHA256)
-	context.update(key.to_utf8_buffer())
-	return "group_%s" % context.finish().hex_encode().substr(0, 12)
 
 
 func _stable_catalog_id(value: String, suffix: String) -> String:
@@ -327,11 +291,11 @@ func _rebuild_world_tree() -> void:
 		var depth := maxi(0, int(node.get("depth", 0)))
 		var holder := Control.new()
 		holder.name = "WorldNodeHolder_%s" % node_id
-		holder.custom_minimum_size = Vector2(454, WORLD_NODE_SIZE.y)
+		holder.custom_minimum_size = Vector2(WORLD_TREE_CONTAINER_WIDTH, WORLD_NODE_SIZE.y)
 		world_tree_container.add_child(holder)
 		var button := Button.new()
 		button.name = "WorldNode_%s" % node_id
-		button.position = Vector2(12, 0)
+		button.position = Vector2(WORLD_TREE_SIDE_GUTTER, 0)
 		button.size = WORLD_NODE_SIZE
 		button.toggle_mode = true
 		button.text = str(node.get("label", "地图节点"))
