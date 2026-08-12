@@ -15,7 +15,7 @@ func _run() -> void:
 	assert(fill.shape_mode == GothicFrameFill.ShapeMode.V3_INNER and fill.mouse_filter == Control.MOUSE_FILTER_IGNORE)
 	var cases := {
 		"warrior.fire_sword": ["倍"], "warrior.slaying_swordsmanship": ["基础物理伤害+", "触发概率"], "warrior.thrusting": ["刺杀", "基础伤害"],
-		"warrior.half_moon": ["半月", "基础伤害"], "warrior.wild_rush": ["成功率", "等级"], "warrior.basic_swordsmanship": ["命中"],
+		"warrior.half_moon": ["半月", "基础伤害"], "warrior.wild_rush": ["成功率", "等级"], "warrior.basic_swordsmanship": ["每级准确+3", "当前准确+0"],
 		"wizard.magic_shield": ["承受", "减伤"], "wizard.fire_wall": ["持续", "3000"], "wizard.temptation_light": ["成功概率"],
 		"taoist.poison": ["毒伤", "抗毒"], "taoist.defense": ["防御"], "taoist.summon_skeleton": ["召唤物等级", "存在时间"]
 	}

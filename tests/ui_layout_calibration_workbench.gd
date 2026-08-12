@@ -281,6 +281,16 @@ func _show_panel(index: int) -> void:
 		active_panel = hud.get(str(spec["panel_property"])) as Control
 	assert(active_panel != null and active_panel.visible, "production panel did not open: %s" % str(spec["id"]))
 	if str(spec["id"]) == "skill":
+		var loaded_title := active_panel.get_node_or_null("SkillDetailPanel/DescriptionTitle") as Label
+		var loaded_description := active_panel.get_node_or_null("SkillDetailPanel/SkillDescription") as RichTextLabel
+		assert(loaded_title != null and loaded_title.text == "技能说明", "calibration overlay restored stale skill title")
+		assert(loaded_description != null and not ("技能ID" in loaded_description.text or "来源" in loaded_description.text or "可信度" in loaded_description.text), "calibration overlay restored stale skill provenance")
+		print("UI_CALIBRATOR_SKILL_AFTER_LOAD title=%s description_has_internal=%s" % [loaded_title.text, loaded_description.text.contains("技能ID") or loaded_description.text.contains("来源") or loaded_description.text.contains("可信度")])
+		var detail := active_panel.get_node_or_null("SkillDetailPanel") as Control
+		var v3 := active_panel.get_node_or_null("SkillDetailPanel/SkillDetailV3Frame") as Control
+		var title := active_panel.get_node_or_null("SkillDetailPanel/DescriptionTitle") as Label
+		var description := active_panel.get_node_or_null("SkillDetailPanel/SkillDescription") as RichTextLabel
+		print("UI_CALIBRATOR_SKILL_MARKER SkillDetailV3Frame=%s child0=%s title=%s description_has_internal=%s" % [v3 != null, detail != null and detail.get_child_count() > 0 and detail.get_child(0) == v3, title.text if title != null else "<missing>", description != null and ("技能ID" in description.text or "来源" in description.text or "可信度" in description.text)])
 		var expected_skill_rect := Rect2(195, 35, 1208, 650)
 		assert(
 			active_panel.get_global_rect().is_equal_approx(expected_skill_rect),

@@ -640,7 +640,7 @@ func load_profile() -> void:
 	for item: Dictionary in ordered:
 		var control := item["control"] as Control
 		var entry := item["entry"] as Dictionary
-		if entry.has("text") and _supports_text(control) and not _saved_text_revision_stale(control, entry):
+		if entry.has("text") and _supports_text(control) and _should_restore_saved_text(control, entry):
 			_set_control_text(control, str(entry["text"]))
 		if entry.has("fontSize") and _supports_text(control):
 			var scale := _device_scale(control)
@@ -950,7 +950,7 @@ func _verify_loaded_profile(ordered: Array[Dictionary]) -> Dictionary:
 		if control.visible != expected_visible:
 			mismatches += 1
 			details.append("%s visible expected=%s actual=%s" % [saved_path, expected_visible, control.visible])
-		if entry.has("text") and _supports_text(control) and not _saved_text_revision_stale(control, entry) and _control_text(control) != str(entry["text"]):
+		if entry.has("text") and _supports_text(control) and _should_restore_saved_text(control, entry) and _control_text(control) != str(entry["text"]):
 			mismatches += 1
 			details.append("%s text" % saved_path)
 		if entry.has("fontSize") and _supports_text(control):
@@ -1026,7 +1026,7 @@ func _load_selected_override() -> void:
 		selected.position = Vector2(float(rect[0]), float(rect[1]))
 		selected.size = Vector2(float(rect[2]), float(rect[3]))
 	selected.visible = bool(entry.get("visible", true))
-	if entry.has("text") and _supports_text(selected) and not _saved_text_revision_stale(selected, entry):
+	if entry.has("text") and _supports_text(selected) and _should_restore_saved_text(selected, entry):
 		_set_control_text(selected, str(entry["text"]))
 	if entry.has("fontSize") and _supports_text(selected):
 		var scale := _device_scale(selected)
@@ -1060,6 +1060,20 @@ func _device_scale(control: Control) -> Vector2:
 
 func _supports_text(control: Control) -> bool:
 	return control is Label or control is RichTextLabel or control is Button or control is LineEdit or control is TextEdit
+
+
+func _runtime_owned_text(control: Control) -> bool:
+	if bool(control.get_meta("calibration_runtime_text", false)):
+		return true
+	var path := str(target.get_path_to(control)) if target != null and is_instance_valid(target) else ""
+	if path.begins_with("SkillDetailPanel/"):
+		return control.name in [&"DescriptionTitle", &"SkillDescription", &"SkillStats", &"SkillName"]
+	if path.begins_with("SkillListPanel/SkillListScroll/SkillCards/"):
+		return true
+	return false
+
+func _should_restore_saved_text(control: Control, entry: Dictionary) -> bool:
+	return not _runtime_owned_text(control) and not _saved_text_revision_stale(control, entry)
 
 
 func _control_text(control: Control) -> String:

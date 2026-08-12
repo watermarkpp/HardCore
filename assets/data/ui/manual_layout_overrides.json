@@ -17001,20 +17001,21 @@
 			"nodes": {
 				"AssignmentPanel": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						1357.00626158714,
+						1347.00620044785,
 						86.6666646003723,
 						623.489363431931,
 						913.33331155777
 					],
 					"logicalRect": [
-						814.0,
+						808.00146484375,
 						52.0,
 						374.0,
 						548.0
 					],
 					"normalized": [
-						0.673841059602649,
+						0.668875384804429,
 						0.08,
 						0.309602649006623,
 						0.843076923076923
@@ -17025,24 +17026,26 @@
 						1083.33330750465
 					],
 					"rect": [
-						1682.08761417866,
+						1672.08755303937,
 						144.999996542931,
 						623.489363431931,
 						913.33331155777
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/@Label@443": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
 						-14.9924810727622,
 						69.0000008980433,
 						563.474344491959,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
 						-8.99323749542236,
 						41.4000015258789,
@@ -17061,25 +17064,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1667.09515377401,
+						1657.09509263472,
 						213.999984725317,
 						563.474344491959,
 						46.6666655540466
 					],
 					"text": "技能按钮配置",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"AssignmentPanel/AssignmentHint": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						-14.9924810727622,
 						736.666649103165,
 						563.474344491959,
 						119.999997138977
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						-8.99323749542236,
 						442.0,
@@ -17098,34 +17103,36 @@
 						913.33331155777
 					],
 					"rect": [
-						1667.09515377401,
+						1657.09509263472,
 						881.666645646095,
 						563.474344491959,
 						119.999997138977
 					],
 					"text": "主动技能可配置到攻击主键或六个环形技能位\n被动技能仅在技能列表中展示",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AssignmentPanelDecoration": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						-55.0876065900497,
-						52.0000032107034,
-						623.489363431931,
-						799.999980926514
+						-87.0875796560686,
+						-3.17891431222961e-06,
+						690.000046831316,
+						899.999978542328
 					],
 					"logicalRect": [
-						-33.0442924499512,
-						31.2000026702881,
-						374.0,
-						480.0
+						-52.2394714355469,
+						-1.9073486328125e-06,
+						413.896423339844,
+						540.0
 					],
 					"normalized": [
-						-0.0883537231282117,
-						0.0569343114421315,
-						1.0,
-						0.875912408759124
+						-0.139677731111088,
+						-3.48056319856296e-09,
+						1.10667492871616,
+						0.985401459854015
 					],
 					"parent": "AssignmentPanel",
 					"parentSize": [
@@ -17133,24 +17140,26 @@
 						913.33331155777
 					],
 					"rect": [
-						1626.99997579151,
-						197.000002932548,
-						623.489363431931,
-						799.999980926514
+						1584.99992250794,
+						144.999996542931,
+						690.000046831316,
+						899.999978542328
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_1": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						-26.0876137092964,
 						351.666709144909,
 						180.045056819916,
 						99.9999976158142
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						-15.6486511230469,
 						211.000030517578,
@@ -17169,25 +17178,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1655.999949594,
+						1645.99988845471,
 						496.66670568784,
 						180.045056819916,
 						99.9999976158142
 					],
 					"text": "",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_1/Content/InteractionMode": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						156.666662931442,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						94.0,
@@ -17206,17 +17217,19 @@
 						99.9999976158142
 					],
 					"rect": [
-						1662.66828503177,
+						1652.66822389248,
 						653.333368619282,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_1/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						56.6808512210846,
 						16.6666662693024,
@@ -17241,61 +17254,26 @@
 						99.9999976158142
 					],
 					"rect": [
-						1712.68080081508,
+						1702.68073967579,
 						513.333371957142,
 						66.6833543777466,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
-				},
-				"AssignmentPanel/AttackRingSkillSlot_1/Content/SkillName": {
-					"deleted": true,
-					"fontSize": 21.6666661500931,
-					"localRect": [
-						6.66833543777466,
-						116.666663885117,
-						166.708385944366,
-						39.9999990463257
-					],
-					"logicalFontSize": 13.0,
-					"logicalRect": [
-						4.0,
-						70.0,
-						100.0,
-						24.0
-					],
-					"normalized": [
-						0.037037037037037,
-						1.16666666666667,
-						0.925925925925926,
-						0.4
-					],
-					"parent": "AssignmentPanel/AttackRingSkillSlot_1/Content",
-					"parentSize": [
-						180.045056819916,
-						99.9999976158142
-					],
-					"rect": [
-						1662.66828503177,
-						613.333369572956,
-						166.708385944366,
-						39.9999990463257
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_1/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						86.6666646003723,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						52.0,
@@ -17314,25 +17292,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						1662.66828503177,
+						1652.66822389248,
 						583.333370288212,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "环 1",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_2": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						165.723031934671,
 						352.000011952718,
 						180.045056819916,
 						99.9999976158142
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						99.408935546875,
 						211.200012207031,
@@ -17351,54 +17331,19 @@
 						913.33331155777
 					],
 					"rect": [
-						1847.81064611333,
+						1837.81058497404,
 						497.000008495648,
 						180.045056819916,
 						99.9999976158142
 					],
 					"text": "",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
-				},
-				"AssignmentPanel/AttackRingSkillSlot_2/Content/InteractionMode": {
-					"deleted": true,
-					"fontSize": 19.9999995231628,
-					"localRect": [
-						6.66833543777466,
-						156.666662931442,
-						166.708385944366,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						4.0,
-						94.0,
-						100.0,
-						23.0
-					],
-					"normalized": [
-						0.037037037037037,
-						1.56666666666667,
-						0.925925925925926,
-						0.383333333333333
-					],
-					"parent": "AssignmentPanel/AttackRingSkillSlot_2/Content",
-					"parentSize": [
-						180.045056819916,
-						99.9999976158142
-					],
-					"rect": [
-						1854.4789815511,
-						653.66667142709,
-						166.708385944366,
-						38.3333324193954
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_2/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						56.6808512210846,
 						16.6666662693024,
@@ -17423,24 +17368,26 @@
 						99.9999976158142
 					],
 					"rect": [
-						1904.49149733441,
+						1894.49143619512,
 						513.666674764951,
 						66.6833543777466,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_2/Content/SkillName": {
-					"deleted": false,
+					"deleted": true,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						116.666663885117,
 						166.708385944366,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						4.0,
 						70.0,
@@ -17459,25 +17406,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						1854.4789815511,
+						1844.47892041181,
 						613.666672380765,
 						166.708385944366,
 						39.9999990463257
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": true
+					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_2/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						86.6666646003723,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						52.0,
@@ -17496,25 +17445,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						1854.4789815511,
+						1844.47892041181,
 						583.666673096021,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "环 2",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_3": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						359.438909007236,
 						351.666709144909,
 						180.045056819916,
 						99.9999976158142
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						215.609375,
 						211.000030517578,
@@ -17533,54 +17484,19 @@
 						913.33331155777
 					],
 					"rect": [
-						2041.52652318589,
+						2031.5264620466,
 						496.66670568784,
 						180.045056819916,
 						99.9999976158142
 					],
 					"text": "",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
-				},
-				"AssignmentPanel/AttackRingSkillSlot_3/Content/InteractionMode": {
-					"deleted": true,
-					"fontSize": 19.9999995231628,
-					"localRect": [
-						6.66833543777466,
-						156.666662931442,
-						166.708385944366,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						4.0,
-						94.0,
-						100.0,
-						23.0
-					],
-					"normalized": [
-						0.037037037037037,
-						1.56666666666667,
-						0.925925925925926,
-						0.383333333333333
-					],
-					"parent": "AssignmentPanel/AttackRingSkillSlot_3/Content",
-					"parentSize": [
-						180.045056819916,
-						99.9999976158142
-					],
-					"rect": [
-						2048.19485862367,
-						653.333368619282,
-						166.708385944366,
-						38.3333324193954
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_3/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						56.6808512210846,
 						16.6666662693024,
@@ -17605,24 +17521,26 @@
 						99.9999976158142
 					],
 					"rect": [
-						2098.20737440698,
+						2088.20731326769,
 						513.333371957142,
 						66.6833543777466,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_3/Content/SkillName": {
-					"deleted": false,
+					"deleted": true,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						116.666663885117,
 						166.708385944366,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						4.0,
 						70.0,
@@ -17641,25 +17559,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						2048.19485862367,
+						2038.19479748438,
 						613.333369572956,
 						166.708385944366,
 						39.9999990463257
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": true
+					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_3/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						86.6666646003723,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						52.0,
@@ -17678,25 +17598,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						2048.19485862367,
+						2038.19479748438,
 						583.333370288212,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "环 3",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_4": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						-26.0876137092964,
 						554.333533740039,
 						180.045056819916,
 						99.9999976158142
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						-15.6486511230469,
 						332.600128173828,
@@ -17715,25 +17637,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1655.999949594,
+						1645.99988845471,
 						699.333530282969,
 						180.045056819916,
 						99.9999976158142
 					],
 					"text": "",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_4/Content/InteractionMode": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						156.666662931442,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						94.0,
@@ -17752,17 +17676,19 @@
 						99.9999976158142
 					],
 					"rect": [
-						1662.66828503177,
+						1652.66822389248,
 						856.000142351782,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_4/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						56.6808512210846,
 						16.6666662693024,
@@ -17787,61 +17713,26 @@
 						99.9999976158142
 					],
 					"rect": [
-						1712.68080081508,
+						1702.68073967579,
 						716.000196552272,
 						66.6833543777466,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
-				},
-				"AssignmentPanel/AttackRingSkillSlot_4/Content/SkillName": {
-					"deleted": true,
-					"fontSize": 21.6666661500931,
-					"localRect": [
-						6.66833543777466,
-						116.666663885117,
-						166.708385944366,
-						39.9999990463257
-					],
-					"logicalFontSize": 13.0,
-					"logicalRect": [
-						4.0,
-						70.0,
-						100.0,
-						24.0
-					],
-					"normalized": [
-						0.037037037037037,
-						1.16666666666667,
-						0.925925925925926,
-						0.4
-					],
-					"parent": "AssignmentPanel/AttackRingSkillSlot_4/Content",
-					"parentSize": [
-						180.045056819916,
-						99.9999976158142
-					],
-					"rect": [
-						1662.66828503177,
-						816.000194168086,
-						166.708385944366,
-						39.9999990463257
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_4/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						89.6666568994524,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						53.7999954223633,
@@ -17860,25 +17751,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						1662.66828503177,
+						1652.66822389248,
 						789.000174466764,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "环 4",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_5": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						165.912390031743,
 						554.000027481714,
 						180.045056819916,
 						99.9999976158142
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						99.5225219726563,
 						332.400024414063,
@@ -17897,54 +17790,19 @@
 						913.33331155777
 					],
 					"rect": [
-						1847.99990245968,
+						1837.99984132039,
 						699.000024024645,
 						180.045056819916,
 						99.9999976158142
 					],
 					"text": "",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
-				},
-				"AssignmentPanel/AttackRingSkillSlot_5/Content/InteractionMode": {
-					"deleted": true,
-					"fontSize": 19.9999995231628,
-					"localRect": [
-						6.66833543777466,
-						156.666662931442,
-						166.708385944366,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						4.0,
-						94.0,
-						100.0,
-						23.0
-					],
-					"normalized": [
-						0.037037037037037,
-						1.56666666666667,
-						0.925925925925926,
-						0.383333333333333
-					],
-					"parent": "AssignmentPanel/AttackRingSkillSlot_5/Content",
-					"parentSize": [
-						180.045056819916,
-						99.9999976158142
-					],
-					"rect": [
-						1854.66823789745,
-						855.666686956087,
-						166.708385944366,
-						38.3333324193954
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_5/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						56.6808512210846,
 						16.6666662693024,
@@ -17969,24 +17827,26 @@
 						99.9999976158142
 					],
 					"rect": [
-						1904.68075368076,
+						1894.68069254147,
 						715.666690293947,
 						66.6833543777466,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_5/Content/SkillName": {
-					"deleted": false,
+					"deleted": true,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						116.666663885117,
 						166.708385944366,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						4.0,
 						70.0,
@@ -18005,25 +17865,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						1854.66823789745,
+						1844.66817675816,
 						815.666687909761,
 						166.708385944366,
 						39.9999990463257
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": true
+					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_5/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						86.6666646003723,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						52.0,
@@ -18042,25 +17904,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						1854.66823789745,
+						1844.66817675816,
 						785.666688625017,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "环 5",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_6": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						359.912380562959,
 						554.000027481714,
 						180.045031382235,
 						99.9999976158142
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						215.89338684082,
 						332.400024414063,
@@ -18079,54 +17943,19 @@
 						913.33331155777
 					],
 					"rect": [
-						2042.00007105466,
+						2032.00000991537,
 						699.000024024645,
 						180.045031382235,
 						99.9999976158142
 					],
 					"text": "",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
-				},
-				"AssignmentPanel/AttackRingSkillSlot_6/Content/InteractionMode": {
-					"deleted": true,
-					"fontSize": 19.9999995231628,
-					"localRect": [
-						6.66833543777466,
-						156.666662931442,
-						166.708385944366,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						4.0,
-						94.0,
-						100.0,
-						23.0
-					],
-					"normalized": [
-						0.0370370422698187,
-						1.56666666666667,
-						0.925926056745467,
-						0.383333333333333
-					],
-					"parent": "AssignmentPanel/AttackRingSkillSlot_6/Content",
-					"parentSize": [
-						180.045031382235,
-						99.9999976158142
-					],
-					"rect": [
-						2048.66840649243,
-						855.666686956087,
-						166.708385944366,
-						38.3333324193954
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_6/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						56.6808512210846,
 						16.6666662693024,
@@ -18151,24 +17980,26 @@
 						99.9999976158142
 					],
 					"rect": [
-						2098.68092227574,
+						2088.68086113645,
 						715.666690293947,
 						66.6833543777466,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSkillSlot_6/Content/SkillName": {
-					"deleted": false,
+					"deleted": true,
 					"fontSize": 21.6666661500931,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						116.666663885117,
 						166.708385944366,
 						39.9999990463257
 					],
-					"logicalFontSize": 13.0,
+					"logicalFontSize": 13,
 					"logicalRect": [
 						4.0,
 						70.0,
@@ -18187,25 +18018,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						2048.66840649243,
+						2038.66834535314,
 						815.666687909761,
 						166.708385944366,
 						39.9999990463257
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": true
+					"visible": false
 				},
 				"AssignmentPanel/AttackRingSkillSlot_6/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						6.66833543777466,
 						86.6666646003723,
 						166.708385944366,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						4.0,
 						52.0,
@@ -18224,25 +18057,27 @@
 						99.9999976158142
 					],
 					"rect": [
-						2048.66840649243,
+						2038.66834535314,
 						785.666688625017,
 						166.708385944366,
 						38.3333324193954
 					],
 					"text": "环 6",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackRingSlotsTitle": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						13.6758505540597,
 						304.333437975245,
 						483.454319238663,
 						43.3333323001862
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						8.20345687866211,
 						182.600067138672,
@@ -18261,25 +18096,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1695.76342021678,
+						1685.76335907749,
 						449.333434518176,
 						483.454319238663,
 						43.3333323001862
 					],
 					"text": "攻击环技能槽 1–6",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentPanel/AttackSkillSlot": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						-25.9924783723583,
 						166.3332454443,
 						383.429287672043,
 						136.667083024969
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						-15.5915842056274,
 						99.7999496459961,
@@ -18298,54 +18135,19 @@
 						913.33331155777
 					],
 					"rect": [
-						1656.09508652079,
+						1646.0950253815,
 						311.333254702888,
 						383.429287672043,
 						136.667083024969
 					],
 					"text": "",
-					"themeVariation": "GothicComponentSelectedButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
-				},
-				"AssignmentPanel/AttackSkillSlot/Content/InteractionMode": {
-					"deleted": true,
-					"fontSize": 19.9999995231628,
-					"localRect": [
-						96.6908638477325,
-						93.3333311080933,
-						276.735920667648,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						58.0,
-						56.0,
-						166.0,
-						23.0
-					],
-					"normalized": [
-						0.252173913043478,
-						0.682924732439351,
-						0.721739130434783,
-						0.280486943680448
-					],
-					"parent": "AssignmentPanel/AttackSkillSlot/Content",
-					"parentSize": [
-						383.429287672043,
-						136.667083024969
-					],
-					"rect": [
-						1752.78605211925,
-						404.666585810981,
-						276.735920667648,
-						38.3333324193954
-					],
-					"text": "空",
-					"themeVariation": "",
-					"visible": false
 				},
 				"AssignmentPanel/AttackSkillSlot/Content/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						80.6733284945703,
 						34.999999165535,
@@ -18370,24 +18172,26 @@
 						136.667083024969
 					],
 					"rect": [
-						1736.76845317188,
+						1726.76839203259,
 						346.333253868423,
 						66.6835960357157,
 						66.6666650772095
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackSkillSlot/Content/SkillName": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						156.691167089269,
 						46.6666655540466,
 						276.735920667648,
 						43.3333323001862
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						93.9911727905273,
 						28.0,
@@ -18406,25 +18210,27 @@
 						136.667083024969
 					],
 					"rect": [
-						1812.78621545354,
+						1802.78615431425,
 						357.999920256934,
 						276.735920667648,
 						43.3333323001862
 					],
 					"text": "空",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"AssignmentPanel/AttackSkillSlot/Content/SlotLabel": {
 					"deleted": false,
 					"fontSize": 19.9999995231628,
+					"layoutRevision": 0,
 					"localRect": [
 						154.691154861411,
 						9.99999976158142,
 						276.735920667648,
 						38.3333324193954
 					],
-					"logicalFontSize": 12.0,
+					"logicalFontSize": 12,
 					"logicalRect": [
 						92.7914657592773,
 						6.0,
@@ -18443,62 +18249,27 @@
 						136.667083024969
 					],
 					"rect": [
-						1810.78620322568,
+						1800.78614208639,
 						321.333254464469,
 						276.735920667648,
 						38.3333324193954
 					],
 					"text": "攻击主键",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
-				},
-				"AssignmentPanel/AttackSlotTitle": {
-					"deleted": true,
-					"fontSize": 23.3333327770233,
-					"localRect": [
-						36.6758449077606,
-						83.3333313465118,
-						550.137673616409,
-						43.3333323001862
-					],
-					"logicalFontSize": 14.0,
-					"logicalRect": [
-						22.0,
-						50.0,
-						330.0,
-						26.0
-					],
-					"normalized": [
-						0.0588235294117647,
-						0.0912408759124088,
-						0.882352941176471,
-						0.0474452554744526
-					],
-					"parent": "AssignmentPanel",
-					"parentSize": [
-						623.489363431931,
-						913.33331155777
-					],
-					"rect": [
-						1718.76345908642,
-						228.333327889442,
-						550.137673616409,
-						43.3333323001862
-					],
-					"text": "攻击主键",
-					"themeVariation": "GothicMutedLabel",
-					"visible": false
 				},
 				"AssignmentPanel/ClearAttackRingSkillSlot_1": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						-26.0876137092964,
 						469.333484903967,
 						180.045056819916,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						-15.6486511230469,
 						281.60009765625,
@@ -18517,25 +18288,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1655.999949594,
+						1645.99988845471,
 						614.333481446898,
 						180.045056819916,
 						84.9999979734421
 					],
 					"text": "清空 1",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/ClearAttackRingSkillSlot_2": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						165.912390031743,
 						468.999978645643,
 						180.045056819916,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						99.5225219726563,
 						281.399993896484,
@@ -18554,25 +18327,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1847.99990245968,
+						1837.99984132039,
 						613.999975188573,
 						180.045056819916,
 						84.9999979734421
 					],
 					"text": "清空 2",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/ClearAttackRingSkillSlot_3": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						359.912380562959,
 						468.999978645643,
 						180.045031382235,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						215.89338684082,
 						281.399993896484,
@@ -18591,25 +18366,27 @@
 						913.33331155777
 					],
 					"rect": [
-						2042.00007105466,
+						2032.00000991537,
 						613.999975188573,
 						180.045031382235,
 						84.9999979734421
 					],
 					"text": "清空 3",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/ClearAttackRingSkillSlot_4": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						-26.0876137092964,
 						676.000350093833,
 						180.045056819916,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						-15.6486511230469,
 						405.600219726563,
@@ -18628,25 +18405,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1655.999949594,
+						1645.99988845471,
 						821.000346636763,
 						180.045056819916,
 						84.9999979734421
 					],
 					"text": "清空 4",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/ClearAttackRingSkillSlot_5": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						165.912390031743,
 						675.99999405543,
 						180.045056819916,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						99.5225219726563,
 						405.600006103516,
@@ -18665,25 +18444,27 @@
 						913.33331155777
 					],
 					"rect": [
-						1847.99990245968,
+						1837.99984132039,
 						820.99999059836,
 						180.045056819916,
 						84.9999979734421
 					],
 					"text": "清空 5",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/ClearAttackRingSkillSlot_6": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						359.912380562959,
 						675.99999405543,
 						180.045031382235,
 						84.9999979734421
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						215.89338684082,
 						405.600006103516,
@@ -18702,25 +18483,27 @@
 						913.33331155777
 					],
 					"rect": [
-						2042.00007105466,
+						2032.00000991537,
 						820.99999059836,
 						180.045031382235,
 						84.9999979734421
 					],
 					"text": "清空 6",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentPanel/ClearAttackSkillSlot": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						370.104826883355,
 						166.000006214777,
 						173.376721382141,
 						136.666663408279
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						222.00732421875,
 						99.6000061035156,
@@ -18739,25 +18522,27 @@
 						913.33331155777
 					],
 					"rect": [
-						2052.19244106201,
+						2042.19237992272,
 						311.000002757708,
 						173.376721382141,
 						136.666663408279
 					],
 					"text": "恢复\n普通攻击",
-					"themeVariation": "GothicComponentButton",
+					"textRevision": 0,
+					"themeVariation": "GothicSkillConfigCompactButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/@Label@444": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
 						46.6783480644226,
 						123.333330392838,
 						940.235296726227,
 						49.9999988079071
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						28.0,
 						74.0,
@@ -18782,19 +18567,21 @@
 						49.9999988079071
 					],
 					"text": "选择攻击主键或六个攻击环技能槽",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/@Label@445": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
 						46.6783480644226,
 						296.666659593582,
 						940.235296726227,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
 						28.0,
 						178.0,
@@ -18819,19 +18606,21 @@
 						46.6666655540466
 					],
 					"text": "攻击环技能槽",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/CancelButton": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						406.768461704254,
 						583.333319425583,
 						220.055069446564,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						244.0,
 						350.0,
@@ -18856,19 +18645,21 @@
 						103.333330869675
 					],
 					"text": "取消",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackRingSlot_1": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						46.6783480644226,
 						346.666658401489,
 						293.406759262085,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						28.0,
 						208.0,
@@ -18893,19 +18684,21 @@
 						103.333330869675
 					],
 					"text": "攻击环 1\n空 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackRingSlot_2": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						360.090113639832,
 						346.666658401489,
 						293.406759262085,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						216.0,
 						208.0,
@@ -18930,19 +18723,21 @@
 						103.333330869675
 					],
 					"text": "攻击环 2\n空 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackRingSlot_3": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						673.50187921524,
 						346.666658401489,
 						293.406759262085,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						404.0,
 						208.0,
@@ -18967,19 +18762,21 @@
 						103.333330869675
 					],
 					"text": "攻击环 3\n空 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackRingSlot_4": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						46.6783480644226,
 						463.333322286606,
 						293.406759262085,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						28.0,
 						278.0,
@@ -19004,19 +18801,21 @@
 						103.333330869675
 					],
 					"text": "攻击环 4\n空 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackRingSlot_5": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						360.090113639832,
 						463.333322286606,
 						293.406759262085,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						216.0,
 						278.0,
@@ -19041,19 +18840,21 @@
 						103.333330869675
 					],
 					"text": "攻击环 5\n空 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackRingSlot_6": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						673.50187921524,
 						463.333322286606,
 						293.406759262085,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						404.0,
 						278.0,
@@ -19078,19 +18879,21 @@
 						103.333330869675
 					],
 					"text": "攻击环 6\n空 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupAttackSlot": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
 						46.6783480644226,
 						179.999995708466,
 						940.235296726227,
 						103.333330869675
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
 						28.0,
 						108.0,
@@ -19115,19 +18918,21 @@
 						103.333330869675
 					],
 					"text": "攻击主键\n普通攻击 [空]",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSelectedButton",
 					"visible": true
 				},
 				"AssignmentScrim/SkillAssignmentPopup/PopupTitle": {
 					"deleted": false,
 					"fontSize": 34.999999165535,
+					"layoutRevision": 0,
 					"localRect": [
 						46.6783480644226,
 						46.6666655540466,
 						940.235296726227,
 						69.9999983310699
 					],
-					"logicalFontSize": 21.0,
+					"logicalFontSize": 21,
 					"logicalRect": [
 						28.0,
 						28.0,
@@ -19152,19 +18957,21 @@
 						69.9999983310699
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"CloseButton": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
 					"localRect": [
 						1880.47059345245,
 						13.3333330154419,
 						93.3566961288452,
 						93.3333311080933
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						1128.0,
 						8.0,
@@ -19189,26 +18996,28 @@
 						93.3333311080933
 					],
 					"text": "×",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentCloseButton",
 					"visible": true
 				},
 				"SkillDetailPanel": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						570.142679929733,
-						86.6666646003723,
+						573.14269827152,
+						47.6667456388454,
 						766.858575344086,
 						913.33331155777
 					],
 					"logicalRect": [
-						342.0,
-						52.0,
+						343.799560546875,
+						28.6000480651855,
 						460.0,
 						548.0
 					],
 					"normalized": [
-						0.283112582781457,
-						0.08,
+						0.284602285220923,
+						0.0440000739464393,
 						0.380794701986755,
 						0.843076923076923
 					],
@@ -19218,24 +19027,26 @@
 						1083.33330750465
 					],
 					"rect": [
-						895.224032521248,
-						144.999996542931,
+						898.224050863035,
+						106.000077581404,
 						766.858575344086,
 						913.33331155777
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"SkillDetailPanel/@Label@438": {
-					"deleted": false,
+					"deleted": true,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
 						30.007509469986,
 						68.666640869777,
 						706.843556404114,
 						46.6666719118753
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
 						18.0,
 						41.1999855041504,
@@ -19254,34 +19065,36 @@
 						913.33331155777
 					],
 					"rect": [
-						925.231541991234,
-						213.666631054879,
+						928.231560333021,
+						174.666718451181,
 						706.843556404114,
 						46.6666719118753
 					],
 					"text": "技能详情",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
-					"visible": true
+					"visible": false
 				},
 				"SkillDetailPanel/DescriptionTitle": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
 						43.0100118901742,
-						506.666654586792,
+						522.666816965735,
 						686.83855009079,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
 						25.7995491027832,
-						304.0,
+						313.60009765625,
 						412.0,
 						28.0
 					],
 					"normalized": [
 						0.0560859763103983,
-						0.554744525547445,
+						0.572262951927463,
 						0.895652173913044,
 						0.0510948905109489
 					],
@@ -19291,71 +19104,36 @@
 						913.33331155777
 					],
 					"rect": [
-						938.234063489683,
-						651.666651129723,
+						941.23408183147,
+						628.666875473653,
 						686.83855009079,
 						46.6666655540466
 					],
-					"text": "技能说明与来源",
+					"text": "技能说明",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
-				},
-				"SkillDetailPanel/LearnButton": {
-					"deleted": true,
-					"fontSize": 26.6666660308838,
-					"localRect": [
-						40.0100126266479,
-						776.66664814949,
-						686.83855009079,
-						106.666664123535
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						24.0,
-						466.0,
-						412.0,
-						64.0
-					],
-					"normalized": [
-						0.0521739130434783,
-						0.85036496350365,
-						0.895652173913044,
-						0.116788321167883
-					],
-					"parent": "SkillDetailPanel",
-					"parentSize": [
-						766.858575344086,
-						913.33331155777
-					],
-					"rect": [
-						935.234045147896,
-						921.666644692421,
-						686.83855009079,
-						106.666664123535
-					],
-					"text": "缺少同名技能书",
-					"themeVariation": "GothicComponentButton",
-					"visible": false
 				},
 				"SkillDetailPanel/SkillDescription": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
-						91.775699741193,
-						567.333360497156,
+						92.7756994957017,
+						592.333614214254,
 						600.000005331327,
 						193.333328723907
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
-						55.0516395568848,
-						340.400024414063,
+						55.6514892578125,
+						355.400177001953,
 						359.909912109375,
 						116.0
 					],
 					"normalized": [
-						0.119677477297576,
-						0.621167927762888,
+						0.120981498386549,
+						0.648540468981666,
 						0.782412852411685,
 						0.211678832116788
 					],
@@ -19365,70 +19143,110 @@
 						913.33331155777
 					],
 					"rect": [
-						986.999725903021,
-						712.333357040086,
+						990.999750358736,
+						698.333672722172,
 						600.000005331327,
 						193.333328723907
 					],
-					"text": "[color=#d7c3a3]根据技能等级，提高攻击命中率，攻击命中率将会得到提高[/color]\n\n[color=#8f7d6a]技能ID：warrior.basic_swordsmanship\n来源：vanilla_176　可信度：A[/color]",
+					"text": "[color=#d7c3a3]根据技能等级，提高攻击命中率，攻击命中率将会得到提高\n目标：自身\n基本剑术：每级准确+3（当前准确+0），直接用于命中判定[/color]",
+					"textRevision": 0,
 					"themeVariation": "GothicDetailText",
 					"visible": true
 				},
-				"SkillDetailPanel/SkillDetailPanelDecoration": {
-					"deleted": true,
+				"SkillDetailPanel/SkillDetailV3Frame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3366684206367,
+						38.9999157826126,
+						719.999924997013,
+						829.999980211258
+					],
+					"logicalRect": [
+						13.9984970092773,
+						23.3999500274658,
+						431.891845703125,
+						498.0
+					],
+					"normalized": [
+						0.0304315152375594,
+						0.0427006387362515,
+						0.938895316745924,
+						0.908759124087591
+					],
+					"parent": "SkillDetailPanel",
+					"parentSize": [
+						766.858575344086,
+						913.33331155777
+					],
+					"rect": [
+						921.56068112715,
+						144.999996542931,
+						719.999924997013,
+						829.999980211258
+					],
+					"textRevision": 0,
+					"themeVariation": "GothicInsetFrame",
+					"visible": true
+				},
+				"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration": {
+					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
-						766.858575344086,
-						913.33331155777
+						719.999924997013,
+						899.999978542328
 					],
 					"logicalRect": [
 						0.0,
 						0.0,
-						460.0,
-						548.0
+						431.891845703125,
+						540.0
 					],
 					"normalized": [
 						0.0,
 						0.0,
 						1.0,
-						1.0
+						1.08433734939759
 					],
-					"parent": "SkillDetailPanel",
+					"parent": "SkillDetailPanel/SkillDetailV3Frame",
 					"parentSize": [
-						766.858575344086,
-						913.33331155777
+						719.999924997013,
+						829.999980211258
 					],
 					"rect": [
-						895.224032521248,
+						921.56068112715,
 						144.999996542931,
-						766.858575344086,
-						913.33331155777
+						719.999924997013,
+						899.999978542328
 					],
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": false
+					"visible": true
 				},
 				"SkillDetailPanel/SkillIconFrame": {
 					"deleted": false,
 					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
 					"localRect": [
-						67.0100059983838,
-						229.666539120677,
-						186.713570321457,
-						186.668137232427
+						98.0099983881546,
+						273.999907000862,
+						186.713761104064,
+						186.668111801113
 					],
-					"logicalFontSize": 16.0,
+					"logicalFontSize": 16,
 					"logicalRect": [
-						40.1959419250488,
-						137.799926757813,
-						112.000106811523,
-						112.000885009766
+						58.7912826538086,
+						164.399948120117,
+						112.000221252441,
+						112.000869750977
 					],
 					"normalized": [
-						0.0873824824457583,
-						0.251459720360972,
-						0.243478493068529,
-						0.20438117702512
+						0.127807136203932,
+						0.299999905328681,
+						0.243478741853133,
+						0.204381149180614
 					],
 					"parent": "SkillDetailPanel",
 					"parentSize": [
@@ -19436,17 +19254,19 @@
 						913.33331155777
 					],
 					"rect": [
-						962.23400672253,
-						374.666535663608,
-						186.713570321457,
-						186.668137232427
+						996.234011094668,
+						379.999990940094,
+						186.713761104064,
+						186.668111801113
 					],
 					"text": "",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSlotButton",
 					"visible": true
 				},
 				"SkillDetailPanel/SkillIconFrame/SkillIcon": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						16.6708385944366,
 						16.6666662693024,
@@ -19460,44 +19280,46 @@
 						92.0
 					],
 					"normalized": [
-						0.089285629136303,
-						0.0892850087669225,
-						0.821427788053987,
-						0.821422080655687
+						0.089285537904971,
+						0.0892850209309451,
+						0.821426948725734,
+						0.821422192564695
 					],
 					"parent": "SkillDetailPanel/SkillIconFrame",
 					"parentSize": [
-						186.713570321457,
-						186.668137232427
+						186.713761104064,
+						186.668111801113
 					],
 					"rect": [
-						978.904845316967,
-						391.33320193291,
+						1012.9048496891,
+						396.666657209396,
 						153.371715068817,
 						153.333329677582
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"SkillDetailPanel/SkillName": {
 					"deleted": false,
-					"fontSize": 36.6666657924652,
+					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
-						246.396703837934,
-						142.666546281182,
+						163.396196381829,
+						107.999913501742,
 						473.451816082001,
 						63.333331823349
 					],
-					"logicalFontSize": 22.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						147.801025390625,
-						85.5999298095703,
+						98.01318359375,
+						64.7999496459961,
 						284.0,
 						38.0
 					],
 					"normalized": [
-						0.321306576936141,
-						0.156204251477318,
+						0.213072138247283,
+						0.118248083295613,
 						0.617391304347826,
 						0.0693430656934307
 					],
@@ -19507,36 +19329,38 @@
 						913.33331155777
 					],
 					"rect": [
-						1141.62073635918,
-						287.666542824112,
+						1061.62024724486,
+						213.999984725317,
 						473.451816082001,
 						63.333331823349
 					],
 					"text": "基本剑术（缺少技能书）",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"SkillDetailPanel/SkillStats": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
-						279.39690559759,
-						235.333449792859,
-						439.999993734567,
-						269.999993562698
+						307.397076787602,
+						273.999907000862,
+						379.999983026362,
+						220.000020186106
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
-						167.59619140625,
-						141.200073242188,
-						263.933929443359,
-						162.0
+						184.39208984375,
+						164.399948120117,
+						227.942932128906,
+						132.000015258789
 					],
 					"normalized": [
-						0.364339546535326,
-						0.257664367230269,
-						0.57376941183339,
-						0.295620437956204
+						0.400852369225543,
+						0.299999905328681,
+						0.495528113323709,
+						0.240875940253265
 					],
 					"parent": "SkillDetailPanel",
 					"parentSize": [
@@ -19544,31 +19368,33 @@
 						913.33331155777
 					],
 					"rect": [
-						1174.62093811884,
-						380.33344633579,
-						439.999993734567,
-						269.999993562698
+						1205.62112765064,
+						379.999990940094,
+						379.999983026362,
+						220.000020186106
 					],
 					"text": "[color=#ddc9a9]等级：未学习　　熟练度：—\n类型：被动　　交互：被动\n目标：自身　　消耗：0 MP\n冷却：0.00 秒　　范围：0.0 GU\n状态：缺少技能书[/color]",
+					"textRevision": 0,
 					"themeVariation": "GothicDetailText",
 					"visible": true
 				},
 				"SkillListPanel": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						33.3416771888733,
+						27.3416850212411,
 						86.6666646003723,
 						516.795996427536,
 						913.33331155777
 					],
 					"logicalRect": [
-						20.0,
+						16.4009056091309,
 						52.0,
 						310.0,
 						548.0
 					],
 					"normalized": [
-						0.0165562913907285,
+						0.0135769086168302,
 						0.08,
 						0.256622516556291,
 						0.843076923076923
@@ -19579,32 +19405,34 @@
 						1083.33330750465
 					],
 					"rect": [
-						358.423029780388,
+						352.423043972176,
 						144.999996542931,
 						516.795996427536,
 						913.33331155777
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"SkillListPanel/@Label@435": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
 					"localRect": [
-						66.0075006323004,
+						91.0074754167581,
 						68.9999945402146,
 						456.780977487564,
 						46.6666719118753
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						39.5945892333984,
+						54.5908203125,
 						41.3999977111816,
 						274.0,
 						28.0000038146973
 					],
 					"normalized": [
-						0.127724481398059,
+						0.176099420362903,
 						0.0755474410787986,
 						0.883870967741936,
 						0.0510948974720753
@@ -19615,71 +19443,36 @@
 						913.33331155777
 					],
 					"rect": [
-						424.430530412688,
+						443.430519388934,
 						213.999984725317,
 						456.780977487564,
 						46.6666719118753
 					],
 					"text": "人物技能",
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
-				"SkillListPanel/SkillCount": {
-					"deleted": true,
-					"fontSize": 23.3333327770233,
-					"localRect": [
-						30.007509469986,
-						833.333313465118,
-						456.780977487564,
-						43.3333323001862
-					],
-					"logicalFontSize": 14.0,
-					"logicalRect": [
-						18.0,
-						500.0,
-						274.0,
-						26.0
-					],
-					"normalized": [
-						0.0580645161290323,
-						0.912408759124088,
-						0.883870967741936,
-						0.0474452554744526
-					],
-					"parent": "SkillListPanel",
-					"parentSize": [
-						516.795996427536,
-						913.33331155777
-					],
-					"rect": [
-						388.430539250374,
-						978.333310008049,
-						456.780977487564,
-						43.3333323001862
-					],
-					"text": "战士技能　6 项",
-					"themeVariation": "GothicMutedLabel",
-					"visible": false
-				},
 				"SkillListPanel/SkillListPanelDecoration": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						47.9999913961294,
-						52.0000222841893,
-						516.795996427536,
-						799.999980926514
+						26.9999901920257,
+						1.5894571561148e-05,
+						600.000005331327,
+						899.999978542328
 					],
 					"logicalRect": [
-						28.7927875518799,
-						31.2000141143799,
-						310.0,
-						480.0
+						16.1959400177002,
+						9.5367431640625e-06,
+						359.909912109375,
+						540.0
 					],
 					"normalized": [
-						0.0928799598447738,
-						0.0569343323255107,
-						1.0,
-						0.875912408759124
+						0.0522449677990329,
+						1.74028159928148e-08,
+						1.16099971648185,
+						0.985401459854015
 					],
 					"parent": "SkillListPanel",
 					"parentSize": [
@@ -19687,33 +19480,35 @@
 						913.33331155777
 					],
 					"rect": [
-						406.423017996807,
-						197.000015648206,
-						516.795996427536,
-						799.999980926514
+						379.423030984492,
+						145.000009258588,
+						600.000005331327,
+						899.999978542328
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
-						67.0075003868092,
+						87.0074954769839,
 						165.99999349912,
 						480.120151519775,
-						624.999985098839
+						649.999984502792
 					],
 					"logicalRect": [
-						40.1944389343262,
+						52.1914329528809,
 						99.5999984741211,
 						288.0,
-						375.0
+						390.0
 					],
 					"normalized": [
-						0.12965948043331,
+						0.168359461138325,
 						0.181751822033068,
 						0.929032258064516,
-						0.684306569343066
+						0.711678832116788
 					],
 					"parent": "SkillListPanel",
 					"parentSize": [
@@ -19721,254 +19516,268 @@
 						913.33331155777
 					],
 					"rect": [
-						425.430536526617,
+						439.43054580858,
 						311.000002757708,
 						480.120151519775,
-						624.999985098839
+						649.999984502792
 					],
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll/SkillCards/SkillCard_0": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
 						0.0,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						0.0,
 						0.0,
 						266.0,
-						68.0
+						64.0
 					],
 					"normalized": [
 						0.0,
 						0.0,
 						1.0,
-						0.153498871331828
+						0.145454545454545
 					],
 					"parent": "SkillListPanel/SkillListScroll/SkillCards",
 					"parentSize": [
 						443.444306612015,
-						738.333315730095
+						733.333315849304
 					],
 					"rect": [
-						437.100148980404,
+						451.100132824686,
 						319.333335892359,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
 					"text": "基本剑术（未学会）\n缺少技能书",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSelectedButton",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll/SkillCards/SkillCard_1": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
-						124.999997019768,
+						118.333330512047,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						0.0,
-						75.0,
+						71.0,
 						266.0,
-						68.0
+						64.0
 					],
 					"normalized": [
 						0.0,
-						0.169300225733634,
+						0.161363636363636,
 						1.0,
-						0.153498871331828
+						0.145454545454545
 					],
 					"parent": "SkillListPanel/SkillListScroll/SkillCards",
 					"parentSize": [
 						443.444306612015,
-						738.333315730095
+						733.333315849304
 					],
 					"rect": [
-						437.100148980404,
-						444.333332912127,
+						451.100132824686,
+						437.666666404406,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
 					"text": "攻杀剑术（未学会）\n缺少技能书",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll/SkillCards/SkillCard_2": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
-						249.999994039536,
+						236.666661024094,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						0.0,
-						150.0,
+						142.0,
 						266.0,
-						68.0
+						64.0
 					],
 					"normalized": [
 						0.0,
-						0.338600451467269,
+						0.322727272727273,
 						1.0,
-						0.153498871331828
+						0.145454545454545
 					],
 					"parent": "SkillListPanel/SkillListScroll/SkillCards",
 					"parentSize": [
 						443.444306612015,
-						738.333315730095
+						733.333315849304
 					],
 					"rect": [
-						437.100148980404,
-						569.333329931895,
+						451.100132824686,
+						555.999996916453,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
 					"text": "刺杀剑术（未学会）\n缺少技能书",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll/SkillCards/SkillCard_3": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
-						374.999991059303,
+						354.99999153614,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						0.0,
-						225.0,
+						213.0,
 						266.0,
-						68.0
+						64.0
 					],
 					"normalized": [
 						0.0,
-						0.507900677200903,
+						0.484090909090909,
 						1.0,
-						0.153498871331828
+						0.145454545454545
 					],
 					"parent": "SkillListPanel/SkillListScroll/SkillCards",
 					"parentSize": [
 						443.444306612015,
-						738.333315730095
+						733.333315849304
 					],
 					"rect": [
-						437.100148980404,
-						694.333326951662,
+						451.100132824686,
+						674.3333274285,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
 					"text": "半月弯刀（未学会）\n缺少技能书",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll/SkillCards/SkillCard_4": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
-						499.999988079071,
+						473.333322048187,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						0.0,
-						300.0,
+						284.0,
 						266.0,
-						68.0
+						64.0
 					],
 					"normalized": [
 						0.0,
-						0.677200902934537,
+						0.645454545454546,
 						1.0,
-						0.153498871331828
+						0.145454545454545
 					],
 					"parent": "SkillListPanel/SkillListScroll/SkillCards",
 					"parentSize": [
 						443.444306612015,
-						738.333315730095
+						733.333315849304
 					],
 					"rect": [
-						437.100148980404,
-						819.33332397143,
+						451.100132824686,
+						792.666657940546,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
 					"text": "野蛮冲撞（未学会）\n缺少技能书",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"SkillListPanel/SkillListScroll/SkillCards/SkillCard_5": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
 					"localRect": [
 						0.0,
-						624.999985098839,
+						591.666652560234,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						0.0,
-						375.0,
+						355.0,
 						266.0,
-						68.0
+						64.0
 					],
 					"normalized": [
 						0.0,
-						0.846501128668172,
+						0.806818181818182,
 						1.0,
-						0.153498871331828
+						0.145454545454545
 					],
 					"parent": "SkillListPanel/SkillListScroll/SkillCards",
 					"parentSize": [
 						443.444306612015,
-						738.333315730095
+						733.333315849304
 					],
 					"rect": [
-						437.100148980404,
-						944.333270128569,
+						451.100132824686,
+						910.999937589964,
 						443.444306612015,
-						113.333330631256
+						106.666664123535
 					],
 					"text": "烈火剑法（未学会）\n缺少技能书",
+					"textRevision": 0,
 					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"SkillListPanel/TrainerContext": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
 					"localRect": [
-						68.0075001413179,
+						94.0075064773855,
 						117.333244069419,
 						456.780977487564,
 						46.6666655540466
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
-						40.7942886352539,
+						56.3903884887695,
 						70.3999481201172,
 						274.0,
 						28.0
 					],
 					"normalized": [
-						0.131594479468561,
+						0.181904478996031,
 						0.128467058613353,
 						0.883870967741936,
 						0.0510948905109489
@@ -19979,17 +19788,19 @@
 						913.33331155777
 					],
 					"rect": [
-						426.430517202865,
+						446.430537730721,
 						262.33324061235,
 						456.780977487564,
 						46.6666655540466
 					],
-					"text": "战士",
+					"text": "技能导师　·　战士",
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"TitleFrame": {
 					"deleted": false,
+					"layoutRevision": 0,
 					"localRect": [
 						623.489363431931,
 						16.6666662693024,
@@ -20019,19 +19830,21 @@
 						766.858575344086,
 						106.666664123535
 					],
+					"textRevision": 0,
 					"themeVariation": "GothicTitleBar",
 					"visible": true
 				},
 				"TitleFrame/Title": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
 					"localRect": [
 						50.0125157833099,
 						46.0000122547146,
 						666.833543777466,
 						56.6666653156281
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						30.0,
 						27.6000080108643,
@@ -20056,6 +19869,7 @@
 						56.6666653156281
 					],
 					"text": "技能典籍",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				}

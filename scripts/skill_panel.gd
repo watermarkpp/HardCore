@@ -670,7 +670,7 @@ func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> Strin
 			"warrior.slaying_swordsmanship": parts.append("攻杀：基础物理伤害+%d点；触发概率约%.1f百分比（每%d次攻击一次）" % [WarriorCombatMath.slaying_flat_damage_bonus(level), 100.0 / float(WarriorCombatMath.slaying_proc_cycle(level)), WarriorCombatMath.slaying_proc_cycle(level)])
 			"warrior.thrusting": parts.append("刺杀：第二目标伤害＝基础伤害×(技能等级+2)/(训练等级+2)，并按%d百分比折算" % [WarriorCombatMath.SWORD_LONG_POWER_RATE])
 			"warrior.half_moon": parts.append("半月：扇形副目标伤害＝基础伤害×(技能等级+2)/(训练等级+10)")
-			"warrior.basic_swordsmanship": parts.append("基本剑术：每级增加%d点命中，直接用于命中判定" % WarriorCombatMath.basic_sword_accuracy_bonus(level))
+			"warrior.basic_swordsmanship": parts.append("基本剑术：每级准确+3（当前准确+%d），直接用于命中判定" % [WarriorCombatMath.basic_sword_accuracy_bonus(level)])
 			"warrior.wild_rush": parts.append("野蛮冲撞：仅玩家等级高于目标时成功，成功率100百分比；最多推进%d格" % [WarriorCombatMath.wild_rush_max_cells(level)])
 	return "\n".join(parts)
 
