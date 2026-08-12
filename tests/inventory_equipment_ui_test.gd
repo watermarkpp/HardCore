@@ -41,20 +41,16 @@ func _run() -> void:
 	var discard_rect := Rect2(panel.discard_button.position, panel.discard_button.size)
 	assert(sort_rect.has_area() and discard_rect.has_area(), "整理和丢弃按钮必须保持有效点击区域")
 	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "综合背包必须使用正式列数减2的6列并提供固定100格")
-	var grid_frame := panel.get_node("BagPanel/InventoryGridFrame") as Control
-	var grid_decoration := panel.get_node("BagPanel/InventoryGridFrame/InventoryGridFrameDecoration") as Control
-	var grid_scroll := panel.get_node("BagPanel/InventoryScroll") as Control
-	assert(grid_frame != null and grid_decoration != null, "综合背包物品区缺少独立二级装饰框")
-	assert(grid_decoration.get_node_or_null("InventoryGridFrameFill") != null and grid_decoration.get_node_or_null("InventoryGridFrameFrame") != null, "综合背包二级框必须使用代码填充和内圈")
-	assert(grid_frame != grid_scroll and grid_scroll.get_parent() == panel.get_node("BagPanel"), "综合背包二级装饰框与滚动区必须独立可校准")
-	assert(grid_frame.mouse_filter == Control.MOUSE_FILTER_IGNORE and grid_decoration.mouse_filter == Control.MOUSE_FILTER_IGNORE, "综合背包二级装饰框不得拦截物品点击")
-	assert(grid_decoration.get_node("InventoryGridFrameFill").mouse_filter == Control.MOUSE_FILTER_IGNORE and grid_decoration.get_node("InventoryGridFrameFrame").mouse_filter == Control.MOUSE_FILTER_IGNORE, "综合背包装饰填充与内圈不得拦截物品点击")
-	assert(grid_frame.get_index() < grid_scroll.get_index(), "综合背包装饰框必须先于滚动内容绘制且保持可独立选择")
+	assert(panel.get_node_or_null("BagPanel/InventoryGridFrame") == null, "源码额外添加的背包大二级框必须删除")
+	var retired_paths: Array = panel.get_meta("calibration_retired_paths", [])
+	assert("BagPanel/InventoryGridFrame" in retired_paths and "BagPanel/InventoryGridFrame/InventoryGridFrameDecoration" in retired_paths, "旧校准路径必须退休，不能复活重复大框")
 	var first_grid_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
+	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(panel.item_grid.get_child_count() == 100 and panel.item_grid.columns == 6, "首次稳定帧必须保留100格与6列")
 	var first_stable_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
 	assert(first_stable_rect.size.y >= first_grid_rect.size.y, "首次打开时物品网格不能出现残缺高度")
+	_assert_six_column_geometry(panel, "首次打开")
 	var first_grid_paths: Array[String] = []
 	for cell_index in range(100):
 		var cell := panel.item_grid.get_child(cell_index) as Control
@@ -69,6 +65,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "刷新后列数与容量必须保持")
 	assert(Rect2(panel.item_grid.position, panel.item_grid.size).is_equal_approx(first_stable_rect), "首次稳定帧与刷新后网格几何必须一致")
+	_assert_six_column_geometry(panel, "刷新后")
 	for cell_index in range(100):
 		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
@@ -190,6 +187,8 @@ func _run() -> void:
 	assert(PlayerState.equipment == wrong_equipment and PlayerState.inventory == wrong_inventory and panel.selected_inventory_index == dagger_direct, "wrong equipment slot must reject without mutation")
 	panel._select_equipment_slot("武器")
 	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首" and not PlayerState.has_item("匕首"), "correct slot click must equip")
+	await get_tree().process_frame
+	_assert_six_column_geometry(panel, "点击匹配装备槽后")
 	PlayerState.unequip_slot("武器")
 	assert(PlayerState.equipment.get("武器", {}).is_empty() and PlayerState.has_item("匕首"), "double-click fixture must restore dagger to inventory")
 	panel.refresh()
@@ -214,9 +213,12 @@ func _run() -> void:
 	double_click.double_click = true
 	double_click.position = sun_button.size * 0.5
 	panel._inventory_input(double_click, sun_index, sun_button)
+	panel._select_inventory_item(sun_index) # Button.pressed follows gui_input.
 	await get_tree().process_frame
 	assert(PlayerState.item_count("太阳水") == 1, "双击消耗品应使用一次")
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "双击使用后的pressed不得再次切换选择")
 	assert("使用：太阳水" in panel.detail_label.text, "双击使用结果未显示")
+	_assert_six_column_geometry(panel, "使用后")
 
 	sun_index = _inventory_index_of("太阳水")
 	dagger_index = _inventory_index_of("匕首")
@@ -232,6 +234,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) != "匕首", "double-click equipment must not equip")
 	assert(PlayerState.has_item("匕首"), "double-click equipment remains in inventory")
+	_assert_six_column_geometry(panel, "装备双击后")
 
 	PlayerState.reset_progress()
 	PlayerState.level = 50
@@ -261,6 +264,7 @@ func _run() -> void:
 	panel._inventory_input(touch_tap, sun_index, sun_button)
 	await get_tree().process_frame
 	assert(PlayerState.item_count("太阳水") == 1, "模拟鼠标加原生触摸双击应只使用一次")
+	_assert_six_column_geometry(panel, "触摸双击后")
 
 	# --- Production long-press suppressed, menu builder retained ---
 	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
@@ -291,9 +295,13 @@ func _run() -> void:
 	press_up.pressed = false
 	press_up.position = drag_event.position
 	panel._inventory_input(press_up, sun_index, sun_button)
+	var selected_before_drag_release := panel.selected_inventory_indices.duplicate()
+	panel._select_inventory_item(sun_index) # Button.pressed after dragged release.
 	await get_tree().process_frame
 	assert(PlayerState.item_count("太阳水") == 1, "拖动释放不应使用或装备物品")
+	assert(panel.selected_inventory_indices == selected_before_drag_release, "拖动释放后的pressed不得选择或取消物品")
 	assert(not panel.context_menu.visible, "拖动后不应弹出菜单")
+	_assert_six_column_geometry(panel, "拖动后")
 	print("INVENTORY_EQUIPMENT_UI_PASS：双击激活、单击选择、长按策略与拖动取消均通过")
 	get_tree().quit(0)
 
@@ -303,3 +311,17 @@ func _inventory_index_of(item_name: String) -> int:
 		if str(PlayerState.inventory[index].get("name", "")) == item_name:
 			return index
 	return -1
+
+
+func _assert_six_column_geometry(panel: InventoryPanel, phase: String) -> void:
+	var grid := panel.item_grid
+	var scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
+	assert(grid.columns == 6 and grid.get_child_count() == 100, "%s：容量或列数改变" % phase)
+	var first := grid.get_child(0) as Control
+	var sixth := grid.get_child(5) as Control
+	var seventh := grid.get_child(6) as Control
+	for index in range(6):
+		assert(is_equal_approx((grid.get_child(index) as Control).position.y, first.position.y), "%s：首行第1至6格必须同y" % phase)
+	assert(seventh.position.x == first.position.x and seventh.position.y > first.position.y, "%s：第7格必须回到首列并换行" % phase)
+	assert(sixth.position.x + sixth.size.x <= grid.size.x + 0.01, "%s：第6列被裁切" % phase)
+	assert(grid.size.x <= scroll.size.x + 0.01, "%s：网格宽度溢出滚动视口并露出伪第7列" % phase)

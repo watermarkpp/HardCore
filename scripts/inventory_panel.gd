@@ -21,6 +21,12 @@ const BAG_VISIBLE_CAPACITY := 30
 const BAG_CAPACITY := 100
 const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
 const BAG_CELL_SIZE := Vector2(56, 64)
+const BAG_HORIZONTAL_SEPARATION := 1
+const BAG_VERTICAL_SEPARATION := 4
+const RETIRED_CALIBRATION_PATHS := [
+	"BagPanel/InventoryGridFrame",
+	"BagPanel/InventoryGridFrame/InventoryGridFrameDecoration",
+]
 const LONG_PRESS_SECONDS := 0.48
 const CONTEXT_MENU_POLICY_ID := "ui.inventory.context_menu_policy.v1"
 const CONTEXT_MENU_ENABLED := false
@@ -66,6 +72,10 @@ var _press_cancelled := false
 
 
 func _ready() -> void:
+	# This source-created frame duplicated the user's calibrated BagPanel frame.
+	# Keep both its root and generated decoration retired so an older saved
+	# calibration profile cannot bind them if that profile is loaded again.
+	set_meta("calibration_retired_paths", RETIRED_CALIBRATION_PATHS.duplicate())
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -229,11 +239,6 @@ func _build_bag_panel() -> void:
 	bag_summary_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	bag_summary_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(bag_summary_label)
-	# Independent level-2 decoration for the item area.  Its code-filled
-	# chamfered frame is separate from InventoryScroll and ItemGrid so each can
-	# be calibrated without moving the other.
-	var grid_frame := GothicFrameFactoryScript.add_filled_section(panel, "InventoryGridFrame", Rect2(0, 42, 492, 360))
-	grid_frame.set_meta("calibration_layer", "inventory_grid_decoration")
 	var scroll := ScrollContainer.new()
 	scroll.name = "InventoryScroll"
 	scroll.position = Vector2(10, 50)
@@ -244,10 +249,10 @@ func _build_bag_panel() -> void:
 	item_grid = GridContainer.new()
 	item_grid.name = "ItemGrid"
 	item_grid.columns = BAG_COLUMNS
-	item_grid.custom_minimum_size = Vector2(BAG_COLUMNS * BAG_CELL_SIZE.x + (BAG_COLUMNS - 1), 5 * BAG_CELL_SIZE.y + 4 * 4)
-	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_grid.add_theme_constant_override("h_separation", 1)
-	item_grid.add_theme_constant_override("v_separation", 4)
+	item_grid.custom_minimum_size = _bag_grid_minimum_size()
+	item_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	item_grid.add_theme_constant_override("h_separation", BAG_HORIZONTAL_SEPARATION)
+	item_grid.add_theme_constant_override("v_separation", BAG_VERTICAL_SEPARATION)
 	scroll.add_child(item_grid)
 	var paging_hint := Label.new()
 	paging_hint.name = "BagPagingHint"
@@ -371,14 +376,26 @@ func _on_runtime_layout_profile_applied(profile_id: String) -> void:
 func _stabilize_bag_layout() -> void:
 	if item_grid == null or not is_instance_valid(item_grid) or not item_grid.is_inside_tree():
 		return
-	var rows := ceili(float(BAG_CAPACITY) / float(BAG_COLUMNS))
-	var grid_width := float(BAG_COLUMNS) * BAG_CELL_SIZE.x + float(maxi(BAG_COLUMNS - 1, 0))
-	var grid_height := float(rows) * BAG_CELL_SIZE.y + float(maxi(rows - 1, 0)) * 4.0
-	item_grid.custom_minimum_size = Vector2(grid_width, grid_height)
+	# GridContainer can inherit an expanded width while the asynchronous runtime
+	# calibration profile is settling.  Reassert the complete mathematical
+	# contract after every rebuild and again after the profile callback so first
+	# open and later refreshes have identical six-column geometry.
+	item_grid.columns = BAG_COLUMNS
+	item_grid.position = Vector2.ZERO
+	item_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	item_grid.custom_minimum_size = _bag_grid_minimum_size()
 	item_grid.queue_sort()
 	var scroll := get_node_or_null("BagPanel/InventoryScroll") as ScrollContainer
 	if scroll != null:
 		scroll.queue_redraw()
+
+
+func _bag_grid_minimum_size() -> Vector2:
+	var rows := ceili(float(BAG_CAPACITY) / float(BAG_COLUMNS))
+	return Vector2(
+		float(BAG_COLUMNS) * BAG_CELL_SIZE.x + float(maxi(BAG_COLUMNS - 1, 0)) * BAG_HORIZONTAL_SEPARATION,
+		float(rows) * BAG_CELL_SIZE.y + float(maxi(rows - 1, 0)) * BAG_VERTICAL_SEPARATION
+	)
 
 
 func _refresh_equipment_slots() -> void:
@@ -441,6 +458,7 @@ func _refresh_bag_grid() -> void:
 			item_grid.add_child(_create_bag_cell(inventory_index, stack))
 	for empty_index in range(PlayerState.inventory.size(), BAG_CAPACITY):
 		item_grid.add_child(_create_empty_bag_cell(empty_index))
+	_stabilize_bag_layout()
 	bag_summary_label.text = "金币 %d　%d/%d格" % [PlayerState.gold, PlayerState.inventory.size(), BAG_CAPACITY]
 	if selected_inventory_index >= 0:
 		_show_inventory_detail(selected_inventory_index)
@@ -574,8 +592,13 @@ func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 		var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
 		if str(item.get("kind", "")) == "equipment":
 			_select_inventory_item(index)
+			# Button.pressed follows gui_input for the same physical gesture.  Keep
+			# the explicit equipment selection, then suppress its duplicate toggle.
 			_suppress_next_pressed_index = index
 		else:
+			# Consumable activation rebuilds the grid synchronously; suppress the
+			# pressed callback that still belongs to the original gesture.
+			_suppress_next_pressed_index = index
 			_activate_inventory_index(index)
 		_clear_pressed_suppression.call_deferred(index)
 		return
