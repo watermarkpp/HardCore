@@ -158,9 +158,11 @@ static func build() -> Theme:
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
 	_apply_equipment_slot_button_variation(result, "GothicEquipmentSlotButton", false)
 	_apply_equipment_slot_button_variation(result, "GothicSelectedEquipmentSlotButton", true)
-	# Shop cards have a fixed icon/text split and scale as one cohesive asset.
-	_apply_texture_button_variation(result, "GothicComponentShopCard", COMPONENT_SHOP_CARD, COMPONENT_SHOP_CARD, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 12)
-	_apply_selected_shop_card_variation(result)
+	# Trading cards deliberately use the same crisp code-drawn border and
+	# selected-state contrast as inventory slots.  Their wider rect only changes
+	# content layout; it must not weaken the border or selection feedback.
+	_apply_slot_button_variation(result, &"GothicComponentShopCard", false)
+	_apply_slot_button_variation(result, &"GothicComponentSelectedShopCard", true)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
 	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, Vector4.ZERO, 8)
 	return result
@@ -320,19 +322,6 @@ static func _apply_equipment_slot_button_variation(theme: Theme, variation: Stri
 	theme.set_stylebox("pressed", variation, pressed)
 	theme.set_stylebox("focus", variation, hover)
 	theme.set_stylebox("disabled", variation, _equipment_slot_box(Color("080706"), Color("352b22"), 1))
-	theme.set_color("font_color", variation, PARCHMENT)
-	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
-	theme.set_constant("outline_size", variation, 3)
-
-
-static func _apply_selected_shop_card_variation(theme: Theme) -> void:
-	var variation := &"GothicComponentSelectedShopCard"
-	theme.set_type_variation(variation, "Button")
-	theme.set_stylebox("normal", variation, _texture(COMPONENT_SHOP_CARD, Vector4.ZERO, 12, Color("ffd7a2")))
-	theme.set_stylebox("hover", variation, _texture(COMPONENT_SHOP_CARD, Vector4.ZERO, 12, Color("ffe5bd")))
-	theme.set_stylebox("pressed", variation, _texture(COMPONENT_SHOP_CARD, Vector4.ZERO, 12, Color("ffbe72")))
-	theme.set_stylebox("focus", variation, _texture(COMPONENT_SHOP_CARD, Vector4.ZERO, 12, Color("ffe5bd")))
-	theme.set_stylebox("disabled", variation, _texture(COMPONENT_SHOP_CARD, Vector4.ZERO, 12, Color(0.52, 0.48, 0.44, 0.76)))
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
 	theme.set_constant("outline_size", variation, 3)

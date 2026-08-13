@@ -429,6 +429,15 @@ func _build_item_catalog() -> void:
 	item_catalog.clear()
 	_catalog_by_name.clear()
 	var skill_names := {}
+	var service_equipment_prices := {}
+	for service_equipment: Variant in service_item_catalog.get("serviceEquipmentReference", []):
+		if not service_equipment is Dictionary:
+			continue
+		var service_name := str(service_equipment.get("serviceName", ""))
+		var service_price := int(service_equipment.get("price", 0))
+		if service_name.is_empty() or service_price <= 0 or service_equipment_prices.has(service_name):
+			continue
+		service_equipment_prices[service_name] = service_price
 	for skill: Variant in skills:
 		if skill is Dictionary:
 			skill_names[str(skill.get("skillName", ""))] = true
@@ -438,6 +447,13 @@ func _build_item_catalog() -> void:
 		var record: Dictionary = EquipmentRulesScript.enrich_catalog_record(equipment)
 		record["kind"] = "equipment"
 		record["stackable"] = false
+		# Equipment attributes remain owned by equipment_attribute_master.  Price
+		# is a server-data/shop field, so use the existing primary service record
+		# without allowing it to overwrite any equipment attribute.
+		var equipment_name := str(record.get("name", ""))
+		if service_equipment_prices.has(equipment_name):
+			record["price"] = int(service_equipment_prices[equipment_name])
+			record["priceSource"] = "server.crystal.cjlaaa"
 		if record.has("maxDurability"):
 			record["maxDurability"] = maxi(1, int(record.get("maxDurability", 1)))
 		elif record.has("serviceDuraMax"):

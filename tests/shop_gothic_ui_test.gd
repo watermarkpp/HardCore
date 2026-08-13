@@ -47,6 +47,7 @@ func _run() -> void:
 	for card: Button in panel.goods_buttons:
 		assert(card.size == Vector2(286, 72), "双格商品卡比例错误")
 		assert(card.has_node("ItemName") and card.has_node("Price"), "双格商品卡缺少名称或价格区域")
+		assert(card.get_theme_stylebox("normal") is StyleBoxFlat, "购买商品卡没有使用背包格清晰代码边框")
 	panel._select_shop_item(0)
 	assert(panel.item_list.get_selected_items() == PackedInt32Array([0]), "商品卡选择没有同步购买逻辑")
 	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "选中商品没有公共高亮状态")
@@ -79,6 +80,8 @@ func _run() -> void:
 			"warning": "测试高风险物品",
 		}
 	panel.set_sell_quotes(quotes)
+	for card: Button in panel.goods_buttons:
+		assert(card.get_theme_stylebox("normal") is StyleBoxFlat, "出售商品卡没有使用背包格清晰代码边框")
 	var safe_indices: Array[int] = []
 	var risky_index := -1
 	for inventory_index in range(PlayerState.inventory.size()):
@@ -87,6 +90,9 @@ func _run() -> void:
 		else:
 			safe_indices.append(inventory_index)
 	assert(safe_indices.size() >= 2 and risky_index >= 0, "出售测试缺少两个普通物品和一个高风险物品")
+	panel._select_sell_item(risky_index)
+	assert(panel.goods_buttons.filter(func(card: Button) -> bool: return int(card.get_meta("inventory_index", -1)) == risky_index)[0].theme_type_variation == "GothicComponentSelectedShopCard", "装备商品卡选中后没有背包格高亮")
+	panel._select_sell_item(risky_index)
 
 	assert(panel.sell_quantity_row.get_node_or_null("DecreaseQuantity/QuantityDecoration") == null, "减号按钮不应恢复旧角饰")
 	assert(panel.sell_quantity_row.get_node_or_null("IncreaseQuantity/QuantityDecoration") == null, "加号按钮不应恢复旧角饰")

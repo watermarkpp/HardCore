@@ -101,6 +101,25 @@ func _run() -> void:
 	_hud.shop_sell_requested.emit(missing_request)
 	assert(PlayerState.inventory.is_empty() and PlayerState.gold == gold_after_sale)
 
+	# A non-stackable equipment instance with implicit count=1 must receive a
+	# server-authoritative price and sell as one whole item.
+	PlayerState.add_item("木剑")
+	assert(PlayerState.inventory.size() == 1 and str(PlayerState.inventory[0].get("instance_id", "")) != "")
+	var equipment_quote_item := _quote_request(0)
+	_hud.shop_sell_quotes_requested.emit([equipment_quote_item])
+	var equipment_key := str(equipment_quote_item.get("quote_key", ""))
+	var equipment_quote: Dictionary = _hud.shop_panel._sell_quotes.get(equipment_key, {})
+	assert(bool(equipment_quote.get("sellable", false)), "数量1的装备没有获得可出售报价")
+	assert(int(equipment_quote.get("max_quantity", 0)) == 1, "非堆叠装备的最大出售数量不是1")
+	assert(int(equipment_quote.get("unit_price", 0)) == 25, "木剑没有使用服务端价格50的半价出售规则")
+	var equipment_sell_request := equipment_quote_item.duplicate(true)
+	equipment_sell_request["quote_id"] = str(equipment_quote.get("quote_id", ""))
+	equipment_sell_request["amount"] = 1
+	var equipment_gold_before := PlayerState.gold
+	_hud.shop_sell_requested.emit(equipment_sell_request)
+	assert(PlayerState.inventory.is_empty(), "数量1的装备出售后没有从背包移除")
+	assert(PlayerState.gold == equipment_gold_before + 25, "数量1的装备出售金币错误")
+
 	# Quest abandon and warehouse sort traverse the same HUD-only-forwarding
 	# path and mutate only PlayerState's authoritative containers.
 	PlayerState.quest_states = {
@@ -130,10 +149,11 @@ func _run() -> void:
 
 func _quote_request(inventory_index: int) -> Dictionary:
 	var record: Dictionary = PlayerState.inventory[inventory_index]
+	var instance_id := str(record.get("instance_id", ""))
 	return {
-		"quote_key": "inventory:%d" % inventory_index,
+		"quote_key": "instance:%s" % instance_id if not instance_id.is_empty() else "inventory:%d" % inventory_index,
 		"inventory_index": inventory_index,
-		"instance_id": str(record.get("instance_id", "")),
+		"instance_id": instance_id,
 		"item_name": str(record.get("name", "")),
 		"count": int(record.get("count", 1)),
 	}

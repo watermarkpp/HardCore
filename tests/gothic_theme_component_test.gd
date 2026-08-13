@@ -26,6 +26,7 @@ func _ready() -> void:
 		assert(not image.is_empty() and image.get_format() in [Image.FORMAT_RGBA8, Image.FORMAT_RGBAF, Image.FORMAT_RGBAH])
 		assert(image.get_pixel(0, 0).a < 0.04, "%s 的透明角未清理干净" % entry.get("id", ""))
 	_assert_shop_card_contract(manifest)
+	_assert_shop_card_inventory_feedback(theme)
 	_assert_v3_fill_geometry()
 	print("GOTHIC_THEME_COMPONENT_TEST_PASS：10类公共组件、透明角、商品卡安全区与Theme状态样式均通过")
 	get_tree().quit(0)
@@ -135,3 +136,16 @@ func _assert_shop_card_contract(manifest: Dictionary) -> void:
 	var information_safe_rect: Array = shop_card.get("informationSafeRectNormalized", [])
 	assert(icon_safe_rect.size() == 4 and information_safe_rect.size() == 4)
 	assert(icon_safe_rect[0] + icon_safe_rect[2] < information_safe_rect[0], "Shop icon and information safe areas must not overlap")
+
+
+func _assert_shop_card_inventory_feedback(theme: Theme) -> void:
+	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		var inventory_style := theme.get_stylebox(state, "GothicComponentSlotButton") as StyleBoxFlat
+		var shop_style := theme.get_stylebox(state, "GothicComponentShopCard") as StyleBoxFlat
+		assert(shop_style != null and inventory_style != null)
+		assert(shop_style.bg_color == inventory_style.bg_color, "交易卡%s背景没有复用背包格" % state)
+		assert(shop_style.border_color == inventory_style.border_color, "交易卡%s边框没有复用背包格" % state)
+		assert(shop_style.border_width_left == inventory_style.border_width_left, "交易卡%s边宽没有复用背包格" % state)
+	var selected_inventory := theme.get_stylebox("normal", "GothicComponentSelectedSlotButton") as StyleBoxFlat
+	var selected_shop := theme.get_stylebox("normal", "GothicComponentSelectedShopCard") as StyleBoxFlat
+	assert(selected_shop.bg_color == selected_inventory.bg_color and selected_shop.border_color == selected_inventory.border_color, "交易卡选中态没有复用背包格高亮")
