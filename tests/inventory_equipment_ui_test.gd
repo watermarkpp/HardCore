@@ -79,7 +79,13 @@ func _run() -> void:
 		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
 	assert(bag_scroll.has_theme_stylebox_override("panel"), "背包物品阵列外框必须由局部样式覆盖移除")
-	assert(bag_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "背包物品阵列外框不得继承全局ScrollContainer细边线")
+	var bag_viewport_style := bag_scroll.get_theme_stylebox("panel") as StyleBoxEmpty
+	assert(bag_viewport_style != null, "背包物品阵列外框不得继承全局ScrollContainer细边线")
+	assert(
+		is_equal_approx(bag_viewport_style.content_margin_left, InventoryPanel.BAG_VIEWPORT_CONTENT_INSET.x)
+		and is_equal_approx(bag_viewport_style.content_margin_top, InventoryPanel.BAG_VIEWPORT_CONTENT_INSET.y),
+		"背包阵列整体留白必须由单一viewport内容边距承担"
+	)
 	var first_cell_button := panel.item_grid.get_child(0).get_node("ItemButton") as Button
 	var first_cell_style := first_cell_button.get_theme_stylebox("normal") as StyleBoxFlat
 	assert(first_cell_style != null and first_cell_style.border_width_left > 0, "移除阵列外框不得删除单格物品边框")
@@ -395,6 +401,7 @@ func _assert_six_column_geometry(panel: InventoryPanel, phase: String) -> void:
 	var grid := panel.item_grid
 	var scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
 	assert(grid.columns == 6 and grid.get_child_count() == 100, "%s：容量或列数改变" % phase)
+	assert(grid.position.is_equal_approx(InventoryPanel.BAG_VIEWPORT_CONTENT_INSET), "%s：六列阵列整体位置未服从viewport内容边距" % phase)
 	var first := grid.get_child(0) as Control
 	var sixth := grid.get_child(5) as Control
 	var seventh := grid.get_child(6) as Control
@@ -402,4 +409,8 @@ func _assert_six_column_geometry(panel: InventoryPanel, phase: String) -> void:
 		assert(is_equal_approx((grid.get_child(index) as Control).position.y, first.position.y), "%s：首行第1至6格必须同y" % phase)
 	assert(seventh.position.x == first.position.x and seventh.position.y > first.position.y, "%s：第7格必须回到首列并换行" % phase)
 	assert(sixth.position.x + sixth.size.x <= grid.size.x + 0.01, "%s：第6列被裁切" % phase)
-	assert(grid.size.x <= scroll.size.x + 0.01, "%s：网格宽度溢出滚动视口并露出伪第7列" % phase)
+	var vertical_bar_width := scroll.get_v_scroll_bar().size.x if scroll.get_v_scroll_bar().visible else 0.0
+	assert(
+		grid.position.x + grid.size.x + vertical_bar_width <= scroll.size.x + 0.01,
+		"%s：六列内容与原生滚动条没有完整落入滚动视口" % phase
+	)

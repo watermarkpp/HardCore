@@ -9,7 +9,7 @@ const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const ConfirmationPanel := preload("res://scripts/gothic_confirmation_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "CEC47CBEDD5F180FAB0350EE37FAA24FE5D0F1F49D71B220AB2EBBF9ED0DFB34"
+const EXPECTED_HASH := "059C7EF8A620EDB99C50E2DEF123ACBD8A7DF0E36503717EB01C7E8A3D24420E"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
@@ -17,6 +17,13 @@ func _ready() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTRACT))
 	assert(data is Dictionary and int(data.get("schemaVersion", 0)) == 3)
 	var profiles: Dictionary = data.get("profiles", {})
+	var inventory_nodes: Dictionary = profiles.get("inventory", {}).get("nodes", {})
+	assert(inventory_nodes.size() == 40, "inventory profile must contain only stable authored layers")
+	for saved_path: String in inventory_nodes.keys():
+		assert(
+			not saved_path.begins_with("BagPanel/InventoryScroll/ItemGrid/"),
+			"inventory profile must not persist runtime-owned cells: %s" % saved_path
+		)
 	for profile_id in ["character_hall", "confirmation_dialog", "death_revival", "inventory", "map", "quest", "shop_buy", "shop_sell", "skill", "system_menu", "warehouse"]:
 		assert(profiles.has(profile_id), "missing profile: %s" % profile_id)
 	var root := Control.new()

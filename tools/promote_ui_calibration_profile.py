@@ -9,6 +9,22 @@ from pathlib import Path
 import subprocess
 
 
+RUNTIME_OWNED_PREFIXES = {
+    "inventory": ("BagPanel/InventoryScroll/ItemGrid/",),
+}
+
+
+def compact_profile(profile_id: str, profile: dict) -> tuple[dict, int]:
+    """Remove transient runtime collection members from a saved UI profile."""
+    compacted = json.loads(json.dumps(profile))
+    nodes = compacted.get("nodes", {})
+    prefixes = RUNTIME_OWNED_PREFIXES.get(profile_id, ())
+    removed = [path for path in nodes if path.startswith(prefixes)] if prefixes else []
+    for path in removed:
+        nodes.pop(path, None)
+    return compacted, len(removed)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("profile", help="profile id to promote, for example: skill")
@@ -25,6 +41,11 @@ def main() -> int:
     parser.add_argument(
         "--base-revision",
         help="read the runtime contract from this Git revision before promotion",
+    )
+    parser.add_argument(
+        "--rewrite-saved",
+        action="store_true",
+        help="also rewrite the manual saved profile without runtime-owned members",
     )
     args = parser.parse_args()
 
@@ -51,13 +72,22 @@ def main() -> int:
     if saved.get("deviceProfile") != runtime.get("deviceProfile"):
         raise SystemExit("deviceProfile mismatch")
 
-    runtime_profiles[args.profile] = saved_profiles[args.profile]
+    compacted_profile, removed_count = compact_profile(
+        args.profile, saved_profiles[args.profile]
+    )
+    runtime_profiles[args.profile] = compacted_profile
     with args.runtime.open("w", encoding="utf-8", newline="\n") as output:
         json.dump(runtime, output, ensure_ascii=False, indent="\t")
         output.write("\n")
+    if args.rewrite_saved:
+        saved_profiles[args.profile] = compacted_profile
+        with args.saved.open("w", encoding="utf-8", newline="\n") as output:
+            json.dump(saved, output, ensure_ascii=False, indent="\t")
+            output.write("\n")
     print(
         f"UI_CALIBRATION_PROFILE_PROMOTED profile={args.profile} "
-        f"nodes={len(saved_profiles[args.profile].get('nodes', {}))}"
+        f"nodes={len(compacted_profile.get('nodes', {}))} "
+        f"runtime_owned_removed={removed_count}"
     )
     return 0
 

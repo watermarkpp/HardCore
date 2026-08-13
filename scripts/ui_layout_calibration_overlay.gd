@@ -248,6 +248,13 @@ func _is_calibratable(control: Control) -> bool:
 		return false
 	if bool(control.get_meta("calibration_internal_visual", false)):
 		return false
+	# Runtime collection members are data, not layout layers.  Keeping them out
+	# of the picker prevents a single item slot from being mistaken for the whole
+	# inventory array and keeps saved profiles compact and refresh-safe.
+	if target != null and target.is_ancestor_of(control):
+		var control_path := str(target.get_path_to(control))
+		if _is_deferred_dynamic_saved_path(control_path):
+			return false
 	if control.has_meta("calibration_layer"):
 		return true
 	var variation := str(control.theme_type_variation)

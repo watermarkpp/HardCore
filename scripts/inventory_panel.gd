@@ -23,6 +23,10 @@ const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
 const BAG_CELL_SIZE := Vector2(56, 64)
 const BAG_HORIZONTAL_SEPARATION := 1
 const BAG_VERTICAL_SEPARATION := 4
+## The manually accepted viewport leaves this much breathing room before the
+## first cell.  It belongs to the ScrollContainer's existing panel style, not
+## to any of the 100 transient cells.
+const BAG_VIEWPORT_CONTENT_INSET := Vector2(14, 10)
 const RETIRED_CALIBRATION_PATHS := [
 	"BagPanel/InventoryGridFrame",
 	"BagPanel/InventoryGridFrame/InventoryGridFrameDecoration",
@@ -254,7 +258,10 @@ func _build_bag_panel() -> void:
 	# inventory viewport sits flush around the complete six-column grid, so that
 	# border reads as an unintended outer grid frame.  Suppress it only here;
 	# individual occupied and empty slot button frames remain unchanged.
-	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	var viewport_style := StyleBoxEmpty.new()
+	viewport_style.content_margin_left = BAG_VIEWPORT_CONTENT_INSET.x
+	viewport_style.content_margin_top = BAG_VIEWPORT_CONTENT_INSET.y
+	scroll.add_theme_stylebox_override("panel", viewport_style)
 	scroll.position = Vector2(10, 50)
 	scroll.size = Vector2(472, 340)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -410,7 +417,6 @@ func _stabilize_bag_layout() -> void:
 	# contract after every rebuild and again after the profile callback so first
 	# open and later refreshes have identical six-column geometry.
 	item_grid.columns = BAG_COLUMNS
-	item_grid.position = Vector2.ZERO
 	item_grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	item_grid.custom_minimum_size = _bag_grid_minimum_size()
 	item_grid.queue_sort()
