@@ -78,5 +78,18 @@ func _run() -> void:
 	var withdrawn := PlayerState.withdraw_from_warehouse(0)
 	assert(withdrawn.success and PlayerState.item_count("金创药(小量)") == 1, "仓库取出未接入负重门禁")
 
+	# A failed deposit to a high slot must restore the exact pre-transaction
+	# array shape, not a snapshot taken after implicit warehouse expansion.
+	PlayerState.warehouse_inventory = []
+	var inventory_before_failed_deposit := PlayerState.inventory.duplicate(true)
+	var warehouse_before_failed_deposit := PlayerState.warehouse_inventory.duplicate(true)
+	PlayerState._test_force_atomic_write_failure = true
+	var failed_deposit := PlayerState.deposit_to_warehouse(0, 12)
+	PlayerState._test_force_atomic_write_failure = false
+	assert(not bool(failed_deposit.get("success", true)), "强制存档失败仍报告仓库存入成功")
+	assert(PlayerState.inventory == inventory_before_failed_deposit, "仓库存入失败没有恢复背包")
+	assert(PlayerState.warehouse_inventory == warehouse_before_failed_deposit, "仓库存入失败没有恢复仓库结构")
+	assert(PlayerState.warehouse_inventory.size() == 0, "仓库存入失败遗留扩容空槽")
+
 	print("INVENTORY_WEIGHT_AUTHORITY_PASS")
 	get_tree().quit(0)

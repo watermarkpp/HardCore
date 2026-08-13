@@ -773,6 +773,7 @@ func _shop_buy_result(success: bool, message: String, stock: Array, context: Dic
 
 
 func sell_inventory_item(request: Dictionary) -> Dictionary:
+	var merchant_id := str(request.get("merchant_id", ""))
 	var quote := _shop_sell_quote(request)
 	var quote_id := str(request.get("quote_id", ""))
 	if (
@@ -780,9 +781,9 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 		or quote_id.is_empty()
 		or quote_id != str(quote.get("quote_id", ""))
 	):
-		return _shop_sell_result(false, "出售报价已失效，请重新选择物品。")
+		return _shop_sell_result(false, "出售报价已失效，请重新选择物品。", merchant_id)
 	if _consumed_shop_sell_quote_ids.has(quote_id):
-		return _shop_sell_result(false, "该出售报价已经处理，不能重复提交。")
+		return _shop_sell_result(false, "该出售报价已经处理，不能重复提交。", merchant_id)
 	var inventory_index := int(request.get("inventory_index", -1))
 	var amount := int(request.get("amount", 0))
 	if (
@@ -791,15 +792,15 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 		or amount <= 0
 		or amount > int(quote.get("max_quantity", 0))
 	):
-		return _shop_sell_result(false, "出售数量或背包位置无效。")
+		return _shop_sell_result(false, "出售数量或背包位置无效。", merchant_id)
 	var record: Variant = inventory[inventory_index]
 	if not record is Dictionary:
-		return _shop_sell_result(false, "物品状态已变化，出售已取消。")
+		return _shop_sell_result(false, "物品状态已变化，出售已取消。", merchant_id)
 	var inventory_before := inventory.duplicate(true)
 	var gold_before := gold
 	var current_count := maxi(1, int((record as Dictionary).get("count", 1)))
 	if amount > current_count:
-		return _shop_sell_result(false, "出售数量超过当前背包库存。")
+		return _shop_sell_result(false, "出售数量超过当前背包库存。", merchant_id)
 	if amount >= current_count:
 		inventory.remove_at(inventory_index)
 	else:
@@ -812,7 +813,7 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 		gold = gold_before
 		inventory_changed.emit()
 		profile_changed.emit()
-		return _shop_sell_result(false, "出售存档失败，物品和金币均未改变。")
+		return _shop_sell_result(false, "出售存档失败，物品和金币均未改变。", merchant_id)
 	_consumed_shop_sell_quote_ids[quote_id] = true
 	return _shop_sell_result(
 		true,
@@ -820,7 +821,8 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 			str(quote.get("item_name", "物品")),
 			amount,
 			int(quote.get("unit_price", 0)) * amount,
-		]
+		],
+		merchant_id
 	)
 
 
@@ -845,6 +847,11 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 	if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
 		return rejection
 	var record: Dictionary = raw_record
+	var merchant_id := str(request.get("merchant_id", ""))
+	var merchant_context := GameData.merchant_context_by_id(merchant_id)
+	if merchant_id.is_empty() or merchant_context.is_empty():
+		rejection["reason"] = "商人状态已变化。"
+		return rejection
 	var item_name := str(record.get("name", ""))
 	var instance_id := str(record.get("instance_id", ""))
 	var expected_key := (
@@ -862,7 +869,7 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 	var base_price := _shop_sell_base_price(item_name, catalog)
 	var count := maxi(1, int(record.get("count", 1)))
 	var pricing_quote := PricingServiceScript.quote_sell(
-		GameData.get_item_price_record(item_name), catalog, record, 1
+		GameData.get_item_price_record(item_name), catalog, record, 1, merchant_context
 	)
 	if not bool(pricing_quote.get("valid", false)):
 		rejection["reason"] = str(pricing_quote.get("reason", "该物品不能出售。"))
@@ -879,6 +886,7 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		count,
 		unit_price,
 		pricing_quote,
+		merchant_context,
 		record,
 	])
 	var quote_id := "%s:%s" % [
@@ -890,6 +898,7 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		"quote_key": expected_key,
 		"quote_id": quote_id,
 		"item_name": item_name,
+		"merchant_id": merchant_id,
 		"sellable": true,
 		"unit_price": unit_price,
 		"policy_version": str(pricing_quote.get("policy_version", "")),
@@ -934,16 +943,16 @@ func _shop_sell_risk_flags(
 	return flags
 
 
-func _shop_sell_result(success: bool, message: String) -> Dictionary:
+func _shop_sell_result(success: bool, message: String, merchant_id := "") -> Dictionary:
 	return {
 		"contract_id": SHOP_SELL_CONTRACT_ID,
 		"success": success,
 		"message": message,
-		"quotes": shop_sell_quotes(_current_shop_sell_quote_items()),
+		"quotes": shop_sell_quotes(_current_shop_sell_quote_items(merchant_id)),
 	}
 
 
-func _current_shop_sell_quote_items() -> Array:
+func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 	var items: Array = []
 	for inventory_index in range(inventory.size()):
 		var raw_record: Variant = inventory[inventory_index]
@@ -961,6 +970,7 @@ func _current_shop_sell_quote_items() -> Array:
 			"instance_id": instance_id,
 			"item_name": str(record.get("name", "")),
 			"count": int(record.get("count", 1)),
+			"merchant_id": merchant_id,
 		})
 	return items
 
@@ -981,8 +991,8 @@ func use_inventory_index(index: int) -> String:
 			var weapon_value: Variant = equipment.get("武器", {})
 			if not weapon_value is Dictionary or weapon_value.is_empty():
 				return "需要先装备武器"
-			if effect in ["repair_oil", "war_god_oil"] and int(weapon_value.get("durability", 0)) >= int(weapon_value.get("max_durability", 1)):
-				return "武器无需修复"
+			if effect in ["repair_oil", "war_god_oil"]:
+				return _use_weapon_repair_oil_item(index, effect == "war_god_oil")
 		if remove_item(item_name):
 			scroll_requested.emit(item_name)
 			return "使用：%s" % item_name
@@ -999,6 +1009,37 @@ func use_inventory_index(index: int) -> String:
 	return "物品数量不足"
 
 
+func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
+	if index < 0 or index >= inventory.size():
+		return "物品数量不足"
+	var weapon_value: Variant = equipment.get("武器", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return "需要先装备武器"
+	_ensure_raw_durability_fields(weapon_value)
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
+	if current >= maximum:
+		return "武器无需修复"
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var record: Dictionary = inventory[index]
+	var count := maxi(1, int(record.get("count", 1)))
+	if count <= 1:
+		inventory.remove_at(index)
+	else:
+		record["count"] = count - 1
+	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats(false)
+		return "修复油存档失败，物品和装备均未改变"
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	return "武器已完全修复" if full_repair else "武器已部分修复"
+
+
 func apply_weapon_repair_oil(full_repair: bool) -> String:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
@@ -1008,6 +1049,22 @@ func apply_weapon_repair_oil(full_repair: bool) -> String:
 	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
 	if current >= maximum:
 		return "武器无需修复"
+	var equipment_before := equipment.duplicate(true)
+	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
+	if not _commit_save():
+		equipment = equipment_before
+		recalculate_stats(false)
+		return "武器修复存档失败"
+	equipment_changed.emit()
+	profile_changed.emit()
+	return "武器已完全修复" if full_repair else "武器已部分修复"
+
+
+func _apply_weapon_repair_oil_without_commit(
+	weapon_value: Dictionary, full_repair: bool
+) -> void:
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
 	if full_repair:
 		weapon_value["durability_raw"] = maximum
 	else:
@@ -1019,10 +1076,6 @@ func apply_weapon_repair_oil(full_repair: bool) -> String:
 		weapon_value["durability_raw"] = mini(maximum, current + 5000)
 	_sync_durability_compatibility_fields(weapon_value)
 	recalculate_stats(false)
-	equipment_changed.emit()
-	profile_changed.emit()
-	_commit_save()
-	return "武器已完全修复" if full_repair else "武器已部分修复"
 
 
 func _make_item_instance(item_name: String, catalog_item: Dictionary) -> Dictionary:
@@ -2192,7 +2245,7 @@ func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
 
 
 func repair_cost(context := {}) -> int:
-	return int(_repair_plan(context).get("total_price", 0))
+	return int(_repair_plan(_authoritative_merchant_context(context)).get("total_price", 0))
 
 
 func _repair_plan(context := {}) -> Dictionary:
@@ -2220,6 +2273,7 @@ func _repair_plan(context := {}) -> Dictionary:
 
 
 func repair_all_equipment(context := {}) -> String:
+	context = _authoritative_merchant_context(context)
 	if context is Dictionary and context.has("supports_repair") and not bool(context.get("supports_repair", false)):
 		return "该商人不提供维修服务"
 	var plan := _repair_plan(context)
@@ -2280,6 +2334,24 @@ func repair_all_equipment(context := {}) -> String:
 	if spent >= full_cost:
 		return "全部装备维修完成，花费%d金币" % spent
 	return "金币不足，已优先维修%d件装备，花费%d金币" % [repaired_slots, spent]
+
+
+func _authoritative_merchant_context(context: Variant) -> Dictionary:
+	if not context is Dictionary:
+		return {}
+	var merchant_id := str((context as Dictionary).get("merchant_id", ""))
+	if merchant_id.is_empty():
+		return (context as Dictionary).duplicate(true)
+	var authoritative := GameData.merchant_context_by_id(merchant_id)
+	if not authoritative.is_empty():
+		return authoritative
+	# An unknown merchant id must never fall back to PricingService's legacy
+	# context defaults, otherwise a forged request could regain repair access.
+	return {
+		"merchant_id": merchant_id,
+		"types": [],
+		"supports_repair": false,
+	}
 
 
 func _maximum_affordable_repair_raw_quote(
@@ -2591,14 +2663,14 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 	if inventory_index < 0 or inventory_index >= inventory.size() or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
 		result["message"] = "存入位置无效。"
 		return result
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
 	while warehouse_inventory.size() <= warehouse_slot:
 		warehouse_inventory.append({})
 	var target: Variant = warehouse_inventory[warehouse_slot]
 	if target is Dictionary and not target.is_empty():
 		result["message"] = "仓库位置已被占用。"
 		return result
-	var inventory_before := inventory.duplicate(true)
-	var warehouse_before := warehouse_inventory.duplicate(true)
 	warehouse_inventory[warehouse_slot] = inventory[inventory_index].duplicate(true) if inventory[inventory_index] is Dictionary else inventory[inventory_index]
 	inventory.remove_at(inventory_index)
 	if not _commit_save():

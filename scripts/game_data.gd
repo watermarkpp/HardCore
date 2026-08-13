@@ -201,6 +201,17 @@ func merchant_context(stock_key: String) -> Dictionary:
 	} if not merchant.is_empty() else {}
 
 
+func merchant_context_by_id(merchant_id: String) -> Dictionary:
+	if merchant_id.is_empty():
+		return {}
+	for stock_key: String in (merchant_catalog.get("merchants", {}) as Dictionary).keys():
+		var context := merchant_context(stock_key)
+		if str(context.get("merchant_id", "")) == merchant_id:
+			context["stock_key"] = stock_key
+			return context
+	return {}
+
+
 func _load_bich_quest_chain() -> void:
 	bich_quest_chain = {}
 	_bich_quests_by_id.clear()

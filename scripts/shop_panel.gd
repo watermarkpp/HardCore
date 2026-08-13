@@ -572,6 +572,7 @@ func apply_sell_result(result: Dictionary) -> void:
 
 func _request_sell_quotes() -> void:
 	var items: Array = []
+	var merchant_id := str(_active_merchant_context().get("merchant_id", ""))
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Variant = PlayerState.inventory[inventory_index]
 		if not record is Dictionary:
@@ -582,6 +583,7 @@ func _request_sell_quotes() -> void:
 			"instance_id": str(record.get("instance_id", "")),
 			"item_name": str(record.get("name", "")),
 			"count": int(record.get("count", 1)),
+			"merchant_id": merchant_id,
 		})
 	sell_quotes_requested.emit(items)
 
@@ -722,7 +724,7 @@ func _request_sell_batch() -> void:
 			continue
 		var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
 		var requested_amount := int(_sell_quantities.get(inventory_index, 1))
-		requests.append({"quote_key": quote_key, "quote_id": str(quote.get("quote_id", "")), "inventory_index": inventory_index, "instance_id": str(record.get("instance_id", "")), "item_name": str(record.get("name", "")), "amount": clampi(requested_amount, 1, maximum), "requires_confirmation": bool(quote.get("requires_confirmation", false))})
+		requests.append({"quote_key": quote_key, "quote_id": str(quote.get("quote_id", "")), "inventory_index": inventory_index, "instance_id": str(record.get("instance_id", "")), "item_name": str(record.get("name", "")), "amount": clampi(requested_amount, 1, maximum), "requires_confirmation": bool(quote.get("requires_confirmation", false)), "merchant_id": str(quote.get("merchant_id", ""))})
 	if requests.is_empty():
 		return
 	requests.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("inventory_index", -1)) > int(b.get("inventory_index", -1)))

@@ -12,7 +12,7 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
 	PlayerState.inventory = [
-		{"name": "金创药(小量)", "count": 3},
+		{"name": "木剑", "count": 3},
 		{"name": "魔法药(小量)", "count": 2},
 	]
 	PlayerState.gold = 7
@@ -62,7 +62,18 @@ func _run() -> void:
 		"inventory:0", {}
 	)
 	assert(bool(quote.get("sellable", false)), "authority did not quote item")
-	assert(int(quote.get("unit_price", 0)) == 22, "主库40金币药品未按商店110%后半价报价")
+	assert(int(quote.get("unit_price", 0)) == 28, "主库50金币木剑未按商店110%后半价报价")
+
+	# The quote is bound to the authoritative merchant. Replaying it through a
+	# different merchant must fail without mutating either side of the sale.
+	var cross_merchant := quote_item.duplicate(true)
+	cross_merchant["quote_id"] = str(quote.get("quote_id", ""))
+	cross_merchant["amount"] = 1
+	cross_merchant["merchant_id"] = str(GameData.merchant_context("general").get("merchant_id", ""))
+	var cross_inventory_before := PlayerState.inventory.duplicate(true)
+	var cross_gold_before := PlayerState.gold
+	_hud.shop_sell_requested.emit(cross_merchant)
+	assert(PlayerState.inventory == cross_inventory_before and PlayerState.gold == cross_gold_before)
 
 	var sell_request := quote_item.duplicate(true)
 	sell_request["quote_id"] = str(quote.get("quote_id", ""))
@@ -162,4 +173,5 @@ func _quote_request(inventory_index: int) -> Dictionary:
 		"instance_id": instance_id,
 		"item_name": str(record.get("name", "")),
 		"count": int(record.get("count", 1)),
+		"merchant_id": str(GameData.merchant_context("starter_gear").get("merchant_id", "")),
 	}

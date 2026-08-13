@@ -35,6 +35,24 @@ static func adjusted_database_price(price_record: Dictionary, policy_override :=
 	return maxi(0, value)
 
 
+static func merchant_accepts_service_type(
+	context: Dictionary, price_record: Dictionary
+) -> bool:
+	var merchant_id := str(context.get("merchant_id", ""))
+	if merchant_id.is_empty():
+		return true
+	var service_type := int(price_record.get("service_type", -1))
+	if service_type < 0:
+		return false
+	var raw_types: Variant = context.get("types", [])
+	if not raw_types is Array:
+		return false
+	for raw_type: Variant in raw_types:
+		if int(raw_type) == service_type:
+			return true
+	return false
+
+
 static func quote_buy(
 	price_record: Dictionary,
 	quantity := 1,
@@ -79,6 +97,9 @@ static func quote_sell(
 	var sell_policy: Dictionary = active.get("sell", {})
 	if quantity <= 0:
 		rejection["reason"] = "出售数量无效。"
+		return rejection
+	if not merchant_accepts_service_type(context, price_record):
+		rejection["reason"] = "该商人不回收此类物品。"
 		return rejection
 	if str(price_record.get("kind", "unknown")) in sell_policy.get("nonTradableKinds", []):
 		rejection["reason"] = "该物品不能出售。"
@@ -174,6 +195,9 @@ static func quote_repair_raw_delta(
 	var result := _quote_base("repair", price_record, 1, active)
 	if not bool(context.get("supports_repair", true)):
 		result["reason"] = "该商人不提供维修服务。"
+		return result
+	if not merchant_accepts_service_type(context, price_record):
+		result["reason"] = "该商人不能维修此类装备。"
 		return result
 	var display_maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
 	var maximum_raw := (

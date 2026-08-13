@@ -7,6 +7,7 @@ as distinct offers because the primary scripts use them for pack choices.
 from __future__ import annotations
 
 import hashlib
+import argparse
 import json
 import re
 from pathlib import Path
@@ -130,7 +131,7 @@ def discover_standard_merchants() -> list[dict]:
     return discovered
 
 
-def main() -> None:
+def build_payload() -> dict:
     by_name = item_index()
     merchants = {
         stock_key: parse_merchant(stock_key, npc_id, merchant_id, relative, by_name)
@@ -166,8 +167,22 @@ def main() -> None:
             "note": "Primary repeats 超级金疮药 20 where a different item may have been intended; no correction is inferred.",
         }],
     }
-    OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"wrote {OUTPUT} with {len(merchants)} runtime merchants and {len(payload['discoveredStandardMerchants'])} discovered scripts")
+    return payload
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--check", action="store_true", help="verify output without writing")
+    args = parser.parse_args()
+    payload = build_payload()
+    serialized = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    if args.check:
+        if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != serialized:
+            raise SystemExit("merchant catalog drift detected; run generator without --check")
+        print(f"merchant catalog check passed: {OUTPUT}")
+        return
+    OUTPUT.write_text(serialized, encoding="utf-8")
+    print(f"wrote {OUTPUT} with {len(payload['merchants'])} runtime merchants and {len(payload['discoveredStandardMerchants'])} discovered scripts")
 
 
 if __name__ == "__main__":

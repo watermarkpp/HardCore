@@ -31,6 +31,27 @@ func _run() -> void:
 	var full_instance := {"name": "木剑", "durability": 4, "max_durability": 4, "instance_id": "pricing-full"}
 	var sell := PricingServiceScript.quote_sell(wood, GameData.get_item_record("木剑"), full_instance)
 	assert(bool(sell.get("valid", false)) and int(sell.get("unit_price", 0)) == 28)
+	var starter_context := GameData.merchant_context("starter_gear")
+	var general_context := GameData.merchant_context("general")
+	var accepted_sell := PricingServiceScript.quote_sell(
+		wood, GameData.get_item_record("木剑"), full_instance, 1, starter_context
+	)
+	var rejected_sell := PricingServiceScript.quote_sell(
+		wood, GameData.get_item_record("木剑"), full_instance, 1, general_context
+	)
+	assert(bool(accepted_sell.get("valid", false)), "主库Types允许的武器没有出售报价")
+	assert(not bool(rejected_sell.get("valid", true)), "主库Types不允许的武器仍获得出售报价")
+	var rated_context := starter_context.duplicate(true)
+	rated_context["merchant_id"] = "merchant.test.rate"
+	rated_context["merchant_rate_bps"] = 13000
+	var rated_sell := PricingServiceScript.quote_sell(
+		wood, GameData.get_item_record("木剑"), full_instance, 1, rated_context
+	)
+	assert(
+		bool(rated_sell.get("valid", false))
+		and int(rated_sell.get("unit_price", 0)) == 36,
+		"Merchant Rate没有进入出售权威报价"
+	)
 	var half_instance := full_instance.duplicate(true)
 	half_instance["durability"] = 2
 	var half_sell := PricingServiceScript.quote_sell(wood, GameData.get_item_record("木剑"), half_instance)
@@ -51,6 +72,16 @@ func _run() -> void:
 		GameData.merchant_context("general")
 	)
 	assert(not bool(grocery_repair.get("valid", true)))
+	var wrong_type_repair_context := starter_context.duplicate(true)
+	wrong_type_repair_context["merchant_id"] = "merchant.test.wrong_type"
+	wrong_type_repair_context["types"] = [13]
+	var wrong_type_repair := PricingServiceScript.quote_repair(
+		wood,
+		GameData.get_item_record("木剑"),
+		{"durability": 0, "max_durability": 4},
+		wrong_type_repair_context
+	)
+	assert(not bool(wrong_type_repair.get("valid", true)), "主库Types不允许的装备仍可维修")
 	var partial_repair := PricingServiceScript.quote_repair_delta(
 		wood,
 		GameData.get_item_record("木剑"),

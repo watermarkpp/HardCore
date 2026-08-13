@@ -23,6 +23,42 @@ func _equip_all(current_raw := 10000) -> void:
 		PlayerState.equipment[slot] = _instance("木剑", current_raw, 10000)
 
 
+func _inventory_index(item_name: String) -> int:
+	for index in range(PlayerState.inventory.size()):
+		var value: Variant = PlayerState.inventory[index]
+		if value is Dictionary and str((value as Dictionary).get("name", "")) == item_name:
+			return index
+	return -1
+
+
+func _test_oil_transaction(item_name: String, expected_full_repair: bool) -> void:
+	PlayerState.reset_progress(false)
+	PlayerState.add_item("木剑")
+	assert(PlayerState.equip_inventory_index(0).begins_with("已装备"))
+	PlayerState.add_item(item_name)
+	var weapon: Dictionary = PlayerState.equipment["武器"]
+	weapon["durability_raw"] = 3998
+	weapon["max_durability_raw"] = 4000
+	PlayerState._sync_durability_compatibility_fields(weapon)
+	assert(int(weapon.durability) == 4 and int(weapon.max_durability) == 4)
+	var oil_count_before := PlayerState.item_count(item_name)
+	var inventory_before := PlayerState.inventory.duplicate(true)
+	var equipment_before := PlayerState.equipment.duplicate(true)
+	PlayerState._test_force_atomic_write_failure = true
+	var failed := PlayerState.use_inventory_index(_inventory_index(item_name))
+	PlayerState._test_force_atomic_write_failure = false
+	assert("失败" in failed, "%s存档失败没有向调用方报告" % item_name)
+	assert(PlayerState.inventory == inventory_before, "%s存档失败仍消耗物品" % item_name)
+	assert(PlayerState.equipment == equipment_before, "%s存档失败仍修改raw耐久" % item_name)
+	var success := PlayerState.use_inventory_index(_inventory_index(item_name))
+	assert(success.begins_with("武器已"), "%s在3998/4000 raw时被display字段错误阻断" % item_name)
+	assert(PlayerState.item_count(item_name) == oil_count_before - 1, "%s成功后没有且仅有一次消费" % item_name)
+	weapon = PlayerState.equipment["武器"]
+	assert(int(weapon.durability_raw) == int(weapon.max_durability_raw))
+	if expected_full_repair:
+		assert(int(weapon.max_durability_raw) == 4000, "战神油错误降低最大耐久")
+
+
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
@@ -30,6 +66,9 @@ func _run() -> void:
 	var profile_signals := [0]
 	PlayerState.equipment_changed.connect(func() -> void: equipment_signals[0] += 1)
 	PlayerState.profile_changed.connect(func() -> void: profile_signals[0] += 1)
+	_test_oil_transaction("修复油", false)
+	_test_oil_transaction("战神油", true)
+	PlayerState.reset_progress(false)
 
 	var weapon := _instance("木剑", 5000, 10000)
 	PlayerState.equipment["武器"] = weapon
