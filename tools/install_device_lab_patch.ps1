@@ -26,7 +26,12 @@ A @('push',$pck,"$remote.pck")
 A @('push',$manifestFull,"$remote.json")
 A @('shell','run-as',$PackageId,'mkdir','-p','files/device_lab/patches')
 # Preserve the previous manifest, then atomically publish the verified pair.
-& $Adb @prefix @('shell','run-as',$PackageId,'cp','files/device_lab/patches/active.json','files/device_lab/patches/previous.json') 2>$null
+$savedPreference=$ErrorActionPreference
+$ErrorActionPreference='SilentlyContinue'
+& $Adb @prefix @('shell','run-as',$PackageId,'test','-f','files/device_lab/patches/active.json') 2>$null
+$hasPrevious=($LASTEXITCODE -eq 0)
+$ErrorActionPreference=$savedPreference
+if($hasPrevious){A @('shell','run-as',$PackageId,'cp','files/device_lab/patches/active.json','files/device_lab/patches/previous.json')}
 A @('shell','run-as',$PackageId,'cp',"$remote.pck","files/device_lab/patches/$($manifest.file)")
 A @('shell','run-as',$PackageId,'cp',"$remote.json",'files/device_lab/patches/active.json.tmp')
 A @('shell','run-as',$PackageId,'mv','files/device_lab/patches/active.json.tmp','files/device_lab/patches/active.json')
