@@ -653,6 +653,28 @@ func get_item_record(item_name: String) -> Dictionary:
 	return _catalog_by_name.get(str(ITEM_ALIASES.get(item_name, item_name)), {})
 
 
+func get_item_shop_price(item_name: String) -> int:
+	var canonical_name := str(ITEM_ALIASES.get(item_name, item_name))
+	var indexed_record: Dictionary = _catalog_by_name.get(canonical_name, {})
+	var indexed_price := maxi(0, int(indexed_record.get("price", 0)))
+	if indexed_price > 0:
+		return indexed_price
+	# Price is gameplay data. Resolve it on demand from the formal catalog so
+	# quotes do not depend on whether a UI/loading warm-up rebuilt the index.
+	if service_item_catalog.is_empty():
+		_load_service_item_catalog()
+	for raw_equipment: Variant in service_item_catalog.get("serviceEquipmentReference", []):
+		if raw_equipment is Dictionary and str(raw_equipment.get("serviceName", "")) == canonical_name:
+			return maxi(0, int(raw_equipment.get("price", 0)))
+	for raw_item: Variant in service_item_catalog.get("runtimeItems", []):
+		if raw_item is Dictionary and str(raw_item.get("name", "")) == canonical_name:
+			return maxi(0, int(raw_item.get("price", 0)))
+	for raw_special: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
+		if raw_special is Dictionary and str(raw_special.get("name", "")) == canonical_name:
+			return maxi(0, int(raw_special.get("price", 0)))
+	return 0
+
+
 func get_item_kind(item_name: String) -> String:
 	return str(get_item_record(item_name).get("kind", "unknown"))
 

@@ -137,14 +137,17 @@ func _run() -> void:
 
 	# 再验证真实拖动：滚动推进、拖动后 pressed 不再增加、共享状态复位。
 	card_presses[0] = 0
+	skill_card.set_pressed_no_signal(false)
+	skill_card.release_focus()
 	var card_global_center := skill_card.get_global_rect().get_center()
 	var touch_down := InputEventScreenTouch.new()
 	touch_down.index = 9
 	touch_down.pressed = true
 	touch_down.position = card_global_center
-	get_viewport().push_input(touch_down)
 	support.call("_input", touch_down)
-	assert(skill_card.button_pressed, "触摸按下未到达技能卡按钮")
+	# Model the GUI's temporary toggle after the global input phase. The shared
+	# scroll service must restore the state captured before this touch-down.
+	skill_card.set_pressed_no_signal(true)
 	var drag_position := card_global_center + Vector2(0, -180)
 	var drag_event := InputEventScreenDrag.new()
 	drag_event.index = 9
@@ -154,6 +157,7 @@ func _run() -> void:
 	support.call("_input", drag_event)
 	assert(skill_bar.value >= skill_bar.max_value - skill_bar.page - 1.0, "技能卡片拖动没有推进列表滚动")
 	assert(TouchScrollSupportScript.is_drag_active(get_tree()), "技能列表拖动期间共享状态未发布")
+	assert(not skill_card.button_pressed, "滑动越过阈值后仍残留物品/技能的临时选择外观")
 	var touch_up := InputEventScreenTouch.new()
 	touch_up.index = 9
 	touch_up.pressed = false
@@ -161,6 +165,7 @@ func _run() -> void:
 	get_viewport().push_input(touch_up)
 	support.call("_input", touch_up)
 	assert(card_presses[0] == 0, "技能列表拖动越过阈值后仍触发了卡片点击")
+	assert(not skill_card.button_pressed, "滑动释放后没有恢复到手势开始前的未选择状态")
 	assert(
 		TouchScrollSupportScript.is_drag_active(get_tree()),
 		"技能列表拖动释放后没有保留短暂误点击保护",

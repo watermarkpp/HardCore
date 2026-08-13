@@ -303,7 +303,7 @@ static func _apply_slot_button_variation(theme: Theme, variation: StringName, se
 	theme.set_stylebox("normal", variation, normal)
 	theme.set_stylebox("hover", variation, hover)
 	theme.set_stylebox("pressed", variation, pressed)
-	theme.set_stylebox("focus", variation, hover)
+	theme.set_stylebox("focus", variation, normal)
 	theme.set_stylebox("disabled", variation, _slot_box(Color("090807"), Color("332a22"), 1))
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_hover_color", variation, Color.WHITE)
@@ -320,7 +320,9 @@ static func _apply_equipment_slot_button_variation(theme: Theme, variation: Stri
 	theme.set_stylebox("normal", variation, normal)
 	theme.set_stylebox("hover", variation, hover)
 	theme.set_stylebox("pressed", variation, pressed)
-	theme.set_stylebox("focus", variation, hover)
+	# Focus is input navigation state, not semantic selection. Reusing hover here
+	# leaves a bright border after a toggle button has been deselected.
+	theme.set_stylebox("focus", variation, normal)
 	theme.set_stylebox("disabled", variation, _equipment_slot_box(Color("080706"), Color("352b22"), 1))
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))

@@ -533,23 +533,10 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 
 
 func _shop_sell_base_price(item_name: String, catalog: Dictionary) -> int:
-	var catalog_price := maxi(0, int(catalog.get("price", 0)))
-	if catalog_price > 0:
-		return catalog_price
-	# Equipment attributes remain owned by the formal equipment master, while
-	# shop price is owned by the already-loaded service item catalog. Resolve
-	# the latter at quote time so a hot-patched gameplay session never depends
-	# on when the global item index was initially built.
-	for raw_service_item: Variant in GameData.service_item_catalog.get(
-		"serviceEquipmentReference",
-		[],
-	):
-		if not raw_service_item is Dictionary:
-			continue
-		var service_item: Dictionary = raw_service_item
-		if str(service_item.get("serviceName", "")) == item_name:
-			return maxi(0, int(service_item.get("price", 0)))
-	return 0
+	return maxi(
+		maxi(0, int(catalog.get("price", 0))),
+		GameData.get_item_shop_price(item_name),
+	)
 
 
 func _shop_sell_risk_flags(

@@ -12,6 +12,7 @@ var _active_control: Control
 var _active_touch_index := -1
 var _press_position := Vector2.ZERO
 var _dragging := false
+var _button_states_before_gesture: Array[Dictionary] = []
 
 
 static func attach_tree(root: Node) -> Node:
@@ -98,6 +99,8 @@ func _input(event: InputEvent) -> void:
 			_begin_drag_candidate(event.position, event.index)
 		elif event.index == _active_touch_index:
 			var was_dragging := _dragging
+			if was_dragging:
+				_restore_button_states_before_gesture()
 			_end_drag()
 			# A release that finishes a real content drag must not reach the
 			# Button under the finger, otherwise it fires pressed after scroll.
@@ -110,10 +113,16 @@ func _input(event: InputEvent) -> void:
 
 
 func _begin_drag_candidate(position: Vector2, touch_index: int) -> void:
+	# The same native event can be observed through both SceneTree input and a
+	# local forwarding path. Keep the state captured before GUI handling instead
+	# of replacing it with the button's temporary touch-down state.
+	if touch_index == _active_touch_index and _active_control != null:
+		return
 	_active_control = _control_at(position)
 	_active_touch_index = touch_index if _active_control != null else -1
 	_press_position = position
 	_dragging = false
+	_capture_button_state_before_gesture(position)
 	_set_drag_active(false)
 
 
@@ -125,6 +134,11 @@ func _continue_drag(position: Vector2, relative: Vector2) -> void:
 	if not _dragging:
 		_dragging = true
 		_set_drag_active(true)
+		# A BaseButton may already have toggled its visual pressed state on the
+		# initial touch-down.  Once movement proves this is a scroll gesture,
+		# restore the exact pre-gesture state so scrolling never looks like a
+		# selection, even for toggle buttons.
+		_restore_button_states_before_gesture()
 	var scroll_bar := _vertical_scroll_bar(_active_control)
 	if scroll_bar == null or scroll_bar.max_value <= scroll_bar.page:
 		return
@@ -133,6 +147,9 @@ func _continue_drag(position: Vector2, relative: Vector2) -> void:
 		scroll_bar.min_value,
 		maxf(scroll_bar.min_value, scroll_bar.max_value - scroll_bar.page)
 	)
+	# Re-assert after scroll handling as well. Some platforms deliver the same
+	# drag through GUI dispatch after the global input callback.
+	_restore_button_states_before_gesture()
 	get_viewport().set_input_as_handled()
 
 
@@ -140,7 +157,43 @@ func _end_drag() -> void:
 	_active_control = null
 	_active_touch_index = -1
 	_dragging = false
+	_button_states_before_gesture.clear()
 	_set_drag_active(false)
+
+
+func _capture_button_state_before_gesture(position: Vector2) -> void:
+	_button_states_before_gesture.clear()
+	if _active_control == null:
+		return
+	var button := _button_at(_active_control, position)
+	if button == null:
+		return
+	_button_states_before_gesture.append({
+		"button": weakref(button),
+		"pressed": button.button_pressed,
+	})
+
+
+func _button_at(node: Node, position: Vector2) -> BaseButton:
+	var children := node.get_children()
+	for index in range(children.size() - 1, -1, -1):
+		var nested := _button_at(children[index], position)
+		if nested != null:
+			return nested
+	if node is BaseButton:
+		var button := node as BaseButton
+		if button.is_visible_in_tree() and button.get_global_rect().has_point(position):
+			return button
+	return null
+
+
+func _restore_button_states_before_gesture() -> void:
+	for state: Dictionary in _button_states_before_gesture:
+		var button := (state.get("button") as WeakRef).get_ref() as BaseButton
+		if button == null:
+			continue
+		button.set_pressed_no_signal(bool(state.get("pressed", false)))
+		button.release_focus()
 
 
 func _set_drag_active(active: bool) -> void:

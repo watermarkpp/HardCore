@@ -95,6 +95,10 @@ func _run() -> void:
 	assert(panel.goods_buttons.filter(func(card: Button) -> bool: return int(card.get_meta("inventory_index", -1)) == risky_index)[0].theme_type_variation == "GothicComponentSelectedShopCard", "装备商品卡选中后没有背包格高亮")
 	assert("攻击" in panel.detail_label.text and "防御" in panel.detail_label.text and "穿戴要求" in panel.detail_label.text, "出售装备详情没有展示玩家属性")
 	panel._select_sell_item(risky_index)
+	var deselected_risky_card: Button = panel.goods_buttons.filter(func(card: Button) -> bool: return int(card.get_meta("inventory_index", -1)) == risky_index)[0]
+	assert(not deselected_risky_card.button_pressed, "取消选择后仍保留按钮按下状态")
+	assert(deselected_risky_card.theme_type_variation == "GothicComponentShopCard", "取消选择后仍保留高亮边框样式")
+	assert(not deselected_risky_card.has_focus(), "取消选择后焦点边框没有释放")
 
 	assert(panel.sell_quantity_row.get_node_or_null("DecreaseQuantity/QuantityDecoration") == null, "减号按钮不应恢复旧角饰")
 	assert(panel.sell_quantity_row.get_node_or_null("IncreaseQuantity/QuantityDecoration") == null, "加号按钮不应恢复旧角饰")

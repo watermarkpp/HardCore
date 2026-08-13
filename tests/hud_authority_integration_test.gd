@@ -113,6 +113,15 @@ func _run() -> void:
 	assert(int(equipment_quote.get("max_quantity", 0)) == 1, "非堆叠装备的最大出售数量不是1")
 	assert(int(equipment_quote.get("unit_price", 0)) == 25, "木剑没有使用服务端价格50的半价出售规则")
 	assert(PlayerState._shop_sell_base_price("木剑", {}) == 50, "报价入口不能在目录索引缺价时即时读取正式服务价格")
+	var saved_wooden_sword: Dictionary = GameData._catalog_by_name.get("木剑", {}).duplicate(true)
+	var unpriced_wooden_sword := saved_wooden_sword.duplicate(true)
+	unpriced_wooden_sword.erase("price")
+	var saved_service_catalog := GameData.service_item_catalog.duplicate(true)
+	GameData._catalog_by_name["木剑"] = unpriced_wooden_sword
+	GameData.service_item_catalog.clear()
+	assert(GameData.get_item_shop_price("木剑") == 50, "玩法报价未能按需重载正式装备价格")
+	GameData._catalog_by_name["木剑"] = saved_wooden_sword
+	GameData.service_item_catalog = saved_service_catalog
 	var equipment_sell_request := equipment_quote_item.duplicate(true)
 	equipment_sell_request["quote_id"] = str(equipment_quote.get("quote_id", ""))
 	equipment_sell_request["amount"] = 1

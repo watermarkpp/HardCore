@@ -349,6 +349,7 @@ func _rebuild_goods_cards() -> void:
 		card.custom_minimum_size = CARD_SIZE
 		card.size = CARD_SIZE
 		card.toggle_mode = true
+		card.focus_mode = Control.FOCUS_NONE
 		card.theme_type_variation = "GothicComponentShopCard"
 		card.tooltip_text = str(entry.get("name", "物品"))
 		card.pressed.connect(_select_shop_item.bind(index))
@@ -374,6 +375,7 @@ func _rebuild_sell_cards() -> void:
 		card.custom_minimum_size = CARD_SIZE
 		card.size = CARD_SIZE
 		card.toggle_mode = true
+		card.focus_mode = Control.FOCUS_NONE
 		card.theme_type_variation = "GothicComponentShopCard"
 		card.tooltip_text = str(quote.get("reason", "等待玩法层提供出售报价"))
 		card.pressed.connect(_select_sell_item.bind(inventory_index))
@@ -482,8 +484,7 @@ func set_sell_quotes(quotes: Dictionary) -> void:
 		_rebuild_sell_cards()
 		for card: Button in goods_buttons:
 			var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
-			card.set_pressed_no_signal(selected)
-			card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
+			_set_shop_card_selected(card, selected)
 		_reclamp_sell_quantities()
 		_update_sell_quantity_label()
 
@@ -569,8 +570,7 @@ func _select_sell_item(inventory_index: int) -> void:
 	_selected_sell_index = inventory_index if _selected_sell_indices.has(inventory_index) else (_selected_sell_indices.keys()[-1] if not _selected_sell_indices.is_empty() else -1)
 	for card: Button in goods_buttons:
 		var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
-		card.set_pressed_no_signal(selected)
-		card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
+		_set_shop_card_selected(card, selected)
 	if _selected_sell_index < 0:
 		_sell_quantity = 1
 		_update_sell_quantity_label()
@@ -804,8 +804,7 @@ func _on_item_selected(index: int) -> void:
 	for card_index in range(goods_buttons.size()):
 		var card := goods_buttons[card_index]
 		var selected := card_index == index
-		card.set_pressed_no_signal(selected)
-		card.theme_type_variation = "GothicComponentSelectedShopCard" if selected else "GothicComponentShopCard"
+		_set_shop_card_selected(card, selected)
 	var entry: Dictionary = stock[index]
 	var item_name := str(entry.get("name", ""))
 	var item := GameData.get_item_record(item_name)
@@ -816,6 +815,17 @@ func _on_item_selected(index: int) -> void:
 			_value(item.get("defenseMin")), _value(item.get("defenseMax")), _value(item.get("reqLevel")),
 		]
 	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n[color=#d3a763]价格：%d金币[/color]\n\n%s" % [item_name, int(entry.get("price", 0)), description]
+
+
+func _set_shop_card_selected(card: Button, selected: bool) -> void:
+	card.set_pressed_no_signal(selected)
+	card.theme_type_variation = (
+		"GothicComponentSelectedShopCard"
+		if selected
+		else "GothicComponentShopCard"
+	)
+	if not selected:
+		card.release_focus()
 
 
 func _repair_all() -> void:
