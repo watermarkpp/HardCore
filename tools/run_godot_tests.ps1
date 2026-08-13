@@ -415,7 +415,8 @@ $Suites.skill_panel_layout_critical = @(
 )
 
 $Suites.device_lab_critical = @(
-    'tests/device_lab_runtime_test.tscn'
+    'tests/device_lab_runtime_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn'
 )
 
 $Suites.critical = @(

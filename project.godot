@@ -28,6 +28,7 @@ boot_splash/minimum_display_time=0
 
 [autoload]
 
+DeviceLabPatch="*res://scripts/device_lab_patch_bootstrap.gd"
 ContentLayers="*res://scripts/layers/runtime/content_layer_registry.gd"
 WorldContent="*res://scripts/layers/runtime/world_content_service.gd"
 PresentationAssets="*res://scripts/layers/presentation/presentation_registry.gd"

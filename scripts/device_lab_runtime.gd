@@ -340,6 +340,16 @@ func _execute(command: Dictionary) -> Dictionary:
 
 
 func status_snapshot() -> Dictionary:
+	var patch_status := {
+		"loadedPatchId": "",
+		"loadedPatchSha256": "",
+		"loadError": "",
+	}
+	var patch_loader := get_node_or_null("/root/DeviceLabPatch")
+	if patch_loader != null:
+		patch_status["loadedPatchId"] = str(patch_loader.get("loaded_patch_id"))
+		patch_status["loadedPatchSha256"] = str(patch_loader.get("loaded_patch_sha256"))
+		patch_status["loadError"] = str(patch_loader.get("load_error"))
 	return {
 		"protocolVersion": PROTOCOL_VERSION,
 		"allowlist": ALLOWLIST_ID,
@@ -348,7 +358,8 @@ func status_snapshot() -> Dictionary:
 		"inbox": PENDING_PATH,
 		"outbox": OUTBOX_DIR,
 		"lastCommandNonce": _last_command_nonce,
-		"capabilities": ["ui_profile", "player_state", "checkpoints", "snapshot"],
+		"capabilities": ["ui_profile", "player_state", "checkpoints", "snapshot", "resource_patch"],
+		"resourcePatch": patch_status,
 	}
 
 
