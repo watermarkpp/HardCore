@@ -160,7 +160,8 @@ try {
             ($Tab + '</style>')
         ) -join [Environment]::NewLine
         $StageThemesText = $StageThemesText -replace '(?s)<style name="GodotAppSplashTheme".*?</style>', $SplashThemeReplacement
-        Set-Content -LiteralPath $StageThemesPath -Value $StageThemesText -Encoding utf8NoBOM
+        $Utf8WithoutBom = New-Object System.Text.UTF8Encoding($false)
+        [System.IO.File]::WriteAllText($StageThemesPath, $StageThemesText, $Utf8WithoutBom)
         if ($StageThemesText -notmatch 'windowSplashScreenAnimatedIcon.*@null' -or $StageThemesText -notmatch 'windowSplashScreenBrandingImage.*@null') {
             throw "Offline Android template splash patch did not apply: $StageThemesPath"
         }
