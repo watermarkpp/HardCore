@@ -57,6 +57,7 @@ const ATTACK_RING_SKILL_SLOT_COUNT := 6
 const QUICK_ITEM_SLOTS_CONTRACT_ID := "gameplay.item.quick_slots.v1"
 const QUICK_ITEM_SLOT_COUNT := 4
 const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
+const DEVICE_LAB_SAVE_CONTRACT_ID := "device_lab.player_save.v1"
 const DEATH_EXPERIENCE_PENALTY_CONTRACT_ID := "player_state.death_experience_penalty.v1"
 const SHOP_SELL_CONTRACT_ID := "gameplay.shop.sell_authority.v1"
 const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
@@ -1731,6 +1732,97 @@ func save_game() -> bool:
 	if not index_updated:
 		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
 	return true
+
+
+## Debug-lab export of the complete active character document.  This uses the
+## same schema and normalization path as production saves so a device snapshot
+## can be edited on the host and applied back without a parallel save format.
+func device_lab_active_save_document() -> Dictionary:
+	if not OS.is_debug_build() and not test_mode:
+		return {}
+	if active_profile_id.is_empty():
+		return {}
+	# Persist volatile runtime fields before exporting the experiment state.
+	if not save_game():
+		return {}
+	return _read_json(_profile_path(active_profile_id)).duplicate(true)
+
+
+## Atomically replaces the active experimental character and immediately
+## reloads every normalized runtime field.  A failed write/load restores the
+## complete previous document before returning.
+func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
+	var result := {
+		"ok": false,
+		"contractId": DEVICE_LAB_SAVE_CONTRACT_ID,
+		"profileId": active_profile_id,
+		"rolledBack": false,
+		"error": "",
+	}
+	if not OS.is_debug_build() and not test_mode:
+		result["error"] = "debug_only"
+		return result
+	var validation := _validate_device_lab_save_document(document)
+	if not bool(validation.get("ok", false)):
+		result["error"] = str(validation.get("error", "invalid_document"))
+		return result
+	var path := _profile_path(active_profile_id)
+	var previous := _read_json(path).duplicate(true)
+	if previous.is_empty():
+		result["error"] = "previous_save_missing"
+		return result
+	if not _write_json_atomic(path, document.duplicate(true)):
+		result["error"] = "atomic_write_failed"
+		return result
+	load_save()
+	if not bool(last_load_result.get("success", false)):
+		result["rolledBack"] = _write_json_atomic(path, previous)
+		if bool(result["rolledBack"]):
+			load_save()
+		result["error"] = "reload_failed"
+		return result
+	_emit_device_lab_state_changed()
+	result["ok"] = true
+	result["saveVersion"] = SAVE_VERSION
+	result["inventoryCount"] = inventory.size()
+	result["warehouseCount"] = warehouse_inventory.size()
+	return result
+
+
+func _validate_device_lab_save_document(document: Dictionary) -> Dictionary:
+	if document.is_empty():
+		return {"ok": false, "error": "empty_document"}
+	if active_profile_id.is_empty() or str(document.get("profile_id", "")) != active_profile_id:
+		return {"ok": false, "error": "profile_id"}
+	if int(document.get("save_version", 0)) != SAVE_VERSION:
+		return {"ok": false, "error": "save_version"}
+	if not document.get("inventory", null) is Array or (document.get("inventory") as Array).size() > 100:
+		return {"ok": false, "error": "inventory"}
+	if not document.get("warehouse_inventory", null) is Array or (document.get("warehouse_inventory") as Array).size() > WAREHOUSE_CAPACITY:
+		return {"ok": false, "error": "warehouse_inventory"}
+	if not document.get("equipment", null) is Dictionary:
+		return {"ok": false, "error": "equipment"}
+	if int(document.get("level", 0)) < 1 or int(document.get("level", 0)) > 255:
+		return {"ok": false, "error": "level"}
+	if not ProfessionRules.is_valid_profession(str(document.get("profession", ""))):
+		return {"ok": false, "error": "profession"}
+	if str(document.get("gender", "")) not in ["男", "女"]:
+		return {"ok": false, "error": "gender"}
+	for required_object: String in ["learned_skills", "quest_states"]:
+		if not document.get(required_object, null) is Dictionary:
+			return {"ok": false, "error": required_object}
+	return {"ok": true}
+
+
+func _emit_device_lab_state_changed() -> void:
+	profile_changed.emit()
+	profession_changed.emit(profession)
+	inventory_changed.emit()
+	equipment_changed.emit()
+	skills_changed.emit()
+	quests_changed.emit()
+	quick_slots_changed.emit({"source": "device_lab"})
+	quick_item_slots_changed.emit({"source": "device_lab"})
 
 
 func load_save() -> void:

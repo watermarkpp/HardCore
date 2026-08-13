@@ -3,7 +3,9 @@ extends Node
 
 ## Debug-only, file-mailbox bridge for the Android Device Lab.
 ##
-## The bridge deliberately has no socket, eval, save, or arbitrary path API.
+## The bridge deliberately has no socket, eval, or arbitrary path API.  Its
+## save replacement endpoint is schema-checked, debug-only, checkpointed, and
+## limited to the active experimental character.
 ## A host writes one small command to user://device_lab/inbox/pending.json;
 ## this node atomically claims it, validates it, performs a bounded read-only
 ## action, and publishes user://device_lab/outbox/result_<nonce>.json.
@@ -13,16 +15,19 @@ const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout
 const PROTOCOL_VERSION := 1
 const POLL_INTERVAL_SECONDS := 0.15
 const MAX_COMMAND_BYTES := 64 * 1024
-const MAX_PAYLOAD_BYTES := 512 * 1024
+## A fully populated experimental character may contain 100 bag records and
+## 500 warehouse records.  Keep this bounded, but large enough to round-trip
+## the production save schema without inventing a lossy lab format.
+const MAX_PAYLOAD_BYTES := 4 * 1024 * 1024
 const MAX_NONCE_LENGTH := 64
 const MAX_SNAPSHOT_DEPTH := 12
 const MAX_SNAPSHOT_NODES := 1024
 const MAX_SNAPSHOT_CONTROLS := 320
 const MAX_SNAPSHOT_NODE2D := 320
 const MAX_TEXT_HASH_BYTES := 16 * 1024
-const MAX_RESULT_BYTES := 256 * 1024
+const MAX_RESULT_BYTES := 4 * 1024 * 1024
 const MAX_OUTBOX_ENTRIES := 32
-const MAX_OUTBOX_TOTAL_BYTES := 2 * 1024 * 1024
+const MAX_OUTBOX_TOTAL_BYTES := 16 * 1024 * 1024
 const MAX_OUTBOX_AGE_SECONDS := 7 * 24 * 60 * 60
 const MAX_PROCESSED_NONCES := 256
 const ALLOWLIST_ID := "device_lab.v1"
@@ -31,6 +36,8 @@ const OUTBOX_DIR := "user://device_lab/outbox"
 const PENDING_PATH := INBOX_DIR + "/pending.json"
 const PROCESSING_PATH := INBOX_DIR + "/processing.json"
 const NONCE_HISTORY_PATH := "user://device_lab/nonce_history.json"
+const CHECKPOINT_DIR := "user://device_lab/checkpoints"
+const MAX_CHECKPOINTS := 20
 
 const COMMON_COMMAND_FIELDS := {
 	"schemaVersion": true,
@@ -41,6 +48,8 @@ const COMMON_COMMAND_FIELDS := {
 const ACTION_COMMAND_FIELDS := {
 	"status": {},
 	"snapshot": {},
+	"export_player_state": {},
+	"list_checkpoints": {},
 	"apply_ui_profile": {
 		"profile": true,
 		"path": true,
@@ -48,6 +57,17 @@ const ACTION_COMMAND_FIELDS := {
 		"size": true,
 		"layout": true,
 		"rootPath": true,
+	},
+	"apply_player_state": {
+		"path": true,
+		"checksum": true,
+		"size": true,
+	},
+	"rollback_player_state": {
+		"checkpoint": true,
+	},
+	"rollback_ui_profile": {
+		"checkpoint": true,
 	},
 }
 
@@ -219,7 +239,7 @@ static func validate_command(command: Dictionary) -> Dictionary:
 	if nonce.is_empty() or nonce.length() > MAX_NONCE_LENGTH or not _is_safe_token(nonce):
 		return {"ok": false, "error": "nonce"}
 	var action := str(command.get("action", ""))
-	if action not in ["status", "snapshot", "apply_ui_profile"]:
+	if action not in ["status", "snapshot", "export_player_state", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
 		return {"ok": false, "error": "unknown_action"}
 	var allowed_fields: Dictionary = COMMON_COMMAND_FIELDS.duplicate()
 	var action_fields: Dictionary = ACTION_COMMAND_FIELDS.get(action, {})
@@ -256,6 +276,12 @@ static func validate_command(command: Dictionary) -> Dictionary:
 			return {"ok": false, "error": "profile_payload_ambiguous"}
 		if not command.has("path") and not command.has("layout"):
 			return {"ok": false, "error": "profile_payload_missing"}
+	if action == "apply_player_state" and not command.has("path"):
+		return {"ok": false, "error": "player_state_payload_missing"}
+	if action in ["rollback_player_state", "rollback_ui_profile"]:
+		var checkpoint := str(command.get("checkpoint", ""))
+		if not _is_safe_token(checkpoint) or checkpoint.contains(".."):
+			return {"ok": false, "error": "checkpoint"}
 	if command.has("rootPath"):
 		var root_path := str(command.get("rootPath", ""))
 		if root_path.length() > 256 or root_path.contains("..") or root_path.contains("\\") or root_path.begins_with("/"):
@@ -297,8 +323,18 @@ func _execute(command: Dictionary) -> Dictionary:
 			return {"ok": true, "action": action, "status": status_snapshot()}
 		"snapshot":
 			return {"ok": true, "action": action, "snapshot": build_snapshot(_game_root)}
+		"export_player_state":
+			return _export_player_state()
+		"list_checkpoints":
+			return {"ok": true, "action": action, "checkpoints": _list_checkpoints()}
 		"apply_ui_profile":
 			return await _apply_ui_profile(command)
+		"apply_player_state":
+			return _apply_player_state(command)
+		"rollback_player_state":
+			return _rollback_player_state(command)
+		"rollback_ui_profile":
+			return await _rollback_ui_profile(command)
 		_:
 			return _error_result({"error": "unknown_action"})
 
@@ -312,7 +348,126 @@ func status_snapshot() -> Dictionary:
 		"inbox": PENDING_PATH,
 		"outbox": OUTBOX_DIR,
 		"lastCommandNonce": _last_command_nonce,
+		"capabilities": ["ui_profile", "player_state", "checkpoints", "snapshot"],
 	}
+
+
+func _export_player_state() -> Dictionary:
+	var document: Dictionary = PlayerState.device_lab_active_save_document()
+	if document.is_empty():
+		return _error_result({"error": "active_save_unavailable"})
+	return {
+		"ok": true,
+		"action": "export_player_state",
+		"document": document,
+		"checksum": _sha256(JSON.stringify(document).to_utf8_buffer()),
+	}
+
+
+func _apply_player_state(command: Dictionary) -> Dictionary:
+	var loaded := _load_json_payload(command)
+	if not bool(loaded.get("ok", false)):
+		return _error_result(loaded)
+	var document: Variant = loaded.get("data", {})
+	if not document is Dictionary:
+		return _error_result({"error": "player_state_json"})
+	var checkpoint := _create_player_checkpoint(str(command.get("nonce", "")))
+	if checkpoint.is_empty():
+		return _error_result({"error": "checkpoint_failed"})
+	var result: Dictionary = PlayerState.device_lab_apply_save_document(document as Dictionary)
+	result["action"] = "apply_player_state"
+	result["checkpoint"] = checkpoint
+	return result
+
+
+func _rollback_player_state(command: Dictionary) -> Dictionary:
+	var checkpoint := str(command.get("checkpoint", ""))
+	var path := CHECKPOINT_DIR + "/%s.json" % checkpoint
+	if not FileAccess.file_exists(path):
+		return _error_result({"error": "checkpoint_not_found"})
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary or str((parsed as Dictionary).get("kind", "player_state")) != "player_state":
+		return _error_result({"error": "checkpoint_json"})
+	var document: Dictionary = (parsed as Dictionary).get("document", parsed) as Dictionary
+	var before_rollback := _create_player_checkpoint("before_rollback_%s" % str(command.get("nonce", "")))
+	if before_rollback.is_empty():
+		return _error_result({"error": "checkpoint_failed"})
+	var result: Dictionary = PlayerState.device_lab_apply_save_document(document)
+	result["action"] = "rollback_player_state"
+	result["restoredCheckpoint"] = checkpoint
+	result["undoCheckpoint"] = before_rollback
+	return result
+
+
+func _load_json_payload(command: Dictionary) -> Dictionary:
+	var path := str(command.get("path", ""))
+	var bytes := FileAccess.get_file_as_bytes(path)
+	if bytes.size() > MAX_PAYLOAD_BYTES:
+		return {"ok": false, "error": "payload_size"}
+	if int(command.get("size", -1)) != bytes.size():
+		return {"ok": false, "error": "payload_size_mismatch"}
+	if _sha256(bytes) != str(command.get("checksum", "")).to_upper():
+		return {"ok": false, "error": "payload_checksum_mismatch"}
+	var parsed: Variant = JSON.parse_string(bytes.get_string_from_utf8())
+	if parsed == null:
+		return {"ok": false, "error": "payload_json"}
+	return {"ok": true, "data": parsed}
+
+
+func _create_player_checkpoint(label: String) -> String:
+	var document: Dictionary = PlayerState.device_lab_active_save_document()
+	if document.is_empty():
+		return ""
+	return _write_checkpoint(label, {"kind": "player_state", "document": document})
+
+
+func _write_checkpoint(label: String, payload: Dictionary) -> String:
+	var safe_label := label if _is_safe_token(label) else "checkpoint_%d" % Time.get_ticks_msec()
+	var name := "%d_%s" % [int(Time.get_unix_time_from_system()), safe_label.left(48)]
+	var path := CHECKPOINT_DIR + "/%s.json" % name
+	var file := FileAccess.open(path + ".tmp", FileAccess.WRITE)
+	if file == null:
+		return ""
+	file.store_string(JSON.stringify(payload, "\t"))
+	file.flush()
+	file.close()
+	var directory := DirAccess.open(CHECKPOINT_DIR)
+	if directory == null or directory.rename("%s.json.tmp" % name, "%s.json" % name) != OK:
+		DirAccess.remove_absolute(path + ".tmp")
+		return ""
+	_prune_checkpoints()
+	return name
+
+
+func _create_ui_checkpoint(profile_id: String, root_path: String, contract: Dictionary, label: String) -> String:
+	if contract.is_empty():
+		return ""
+	return _write_checkpoint(label, {
+		"kind": "ui_profile",
+		"profile": profile_id,
+		"rootPath": root_path,
+		"contract": contract,
+	})
+
+
+func _list_checkpoints() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for file_name: String in DirAccess.get_files_at(CHECKPOINT_DIR):
+		if file_name.ends_with(".json") and _is_safe_token(file_name.trim_suffix(".json")):
+			var path := CHECKPOINT_DIR + "/" + file_name
+			var kind := "unknown"
+			var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+			if parsed is Dictionary:
+				kind = str((parsed as Dictionary).get("kind", "player_state"))
+			result.append({"id": file_name.trim_suffix(".json"), "kind": kind, "bytes": _file_size(path), "modified": FileAccess.get_modified_time(path)})
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.modified) > int(b.modified))
+	return result
+
+
+func _prune_checkpoints() -> void:
+	var records := _list_checkpoints()
+	for index in range(MAX_CHECKPOINTS, records.size()):
+		DirAccess.remove_absolute(CHECKPOINT_DIR + "/%s.json" % str(records[index].id))
 
 
 func _apply_ui_profile(command: Dictionary) -> Dictionary:
@@ -327,6 +482,12 @@ func _apply_ui_profile(command: Dictionary) -> Dictionary:
 	var target := _find_profile_target(profile_id, str(command.get("rootPath", "")))
 	if target == null:
 		return _error_result({"error": "profile_target_not_found"})
+	var root_path := str(_game_root.get_path_to(target)) if _game_root != null else ""
+	var profile: Dictionary = (contract.get("profiles", {}) as Dictionary).get(profile_id, {})
+	var before_contract := UIRuntimeLayoutOverridesScript.capture_external_profile(target, profile_id, profile.get("nodes", {}))
+	var checkpoint := _create_ui_checkpoint(profile_id, root_path, before_contract, "ui_%s_%s" % [profile_id, str(command.get("nonce", ""))])
+	if checkpoint.is_empty():
+		return _error_result({"error": "checkpoint_failed"})
 	# External writes use the transactional loader.  It validates the complete
 	# plan, backs up every property, and reports rollback instead of claiming a
 	# successful apply when the scene changes mid-commit.
@@ -336,10 +497,39 @@ func _apply_ui_profile(command: Dictionary) -> Dictionary:
 		contract
 	)
 	transaction["action"] = "apply_ui_profile"
+	transaction["checkpoint"] = checkpoint
 	transaction["targetPath"] = str(_game_root.get_path_to(target)) if _game_root != null and is_instance_valid(target) else ""
 	if bool(transaction.get("ok", false)):
 		transaction["actual"] = _snapshot_control_subtree(target)
 	return transaction
+
+
+func _rollback_ui_profile(command: Dictionary) -> Dictionary:
+	var checkpoint := str(command.get("checkpoint", ""))
+	var path := CHECKPOINT_DIR + "/%s.json" % checkpoint
+	if not FileAccess.file_exists(path):
+		return _error_result({"error": "checkpoint_not_found"})
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary or str((parsed as Dictionary).get("kind", "")) != "ui_profile":
+		return _error_result({"error": "checkpoint_kind"})
+	var saved := parsed as Dictionary
+	var profile_id := str(saved.get("profile", ""))
+	var contract: Variant = saved.get("contract", {})
+	if not contract is Dictionary:
+		return _error_result({"error": "checkpoint_json"})
+	var target := _find_profile_target(profile_id, str(saved.get("rootPath", "")))
+	if target == null:
+		return _error_result({"error": "profile_target_not_found"})
+	var profile: Dictionary = ((contract as Dictionary).get("profiles", {}) as Dictionary).get(profile_id, {})
+	var undo_contract := UIRuntimeLayoutOverridesScript.capture_external_profile(target, profile_id, profile.get("nodes", {}))
+	var undo := _create_ui_checkpoint(profile_id, str(saved.get("rootPath", "")), undo_contract, "ui_undo_%s" % str(command.get("nonce", "")))
+	if undo.is_empty():
+		return _error_result({"error": "checkpoint_failed"})
+	var result: Dictionary = await UIRuntimeLayoutOverridesScript.apply_external_profile_transaction(target, profile_id, contract as Dictionary)
+	result["action"] = "rollback_ui_profile"
+	result["restoredCheckpoint"] = checkpoint
+	result["undoCheckpoint"] = undo
+	return result
 
 
 func _load_external_contract(command: Dictionary) -> Dictionary:
@@ -601,6 +791,7 @@ func _ensure_mailbox_dirs() -> void:
 	if root_dir != null:
 		root_dir.make_dir_recursive("device_lab/inbox")
 		root_dir.make_dir_recursive("device_lab/outbox")
+		root_dir.make_dir_recursive("device_lab/checkpoints")
 		_mailbox_initialized = true
 
 

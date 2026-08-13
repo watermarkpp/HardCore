@@ -2,6 +2,7 @@ extends Node
 
 const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
 const LayoutLoader := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const InventoryPanelScript := preload("res://scripts/inventory_panel.gd")
 
 
 func _ready() -> void:
@@ -10,9 +11,11 @@ func _ready() -> void:
 
 func _run() -> void:
 	_test_protocol_rejection()
+	await _test_player_state_roundtrip()
 	await _test_external_profile_guards()
 	_test_bounded_snapshot()
 	await _test_transaction_rollback()
+	await _test_ui_checkpoint_rollback()
 	await _test_mailbox_roundtrip()
 	_test_nonce_and_outbox_guards()
 	_test_debug_gate()
@@ -70,6 +73,78 @@ func _test_protocol_rejection() -> void:
 	}) as Dictionary
 	assert(mismatch.get("error", "") == "payload_checksum_mismatch", "payload hash mismatch accepted")
 	DirAccess.remove_absolute(payload_path)
+	var player_apply := {
+		"schemaVersion": 1,
+		"nonce": "player_001",
+		"action": "apply_player_state",
+		"allowlist": ["device_lab.v1", "apply_player_state"],
+		"path": "user://device_lab/inbox/player_player_001.json",
+		"size": 2,
+		"checksum": "0".repeat(64),
+	}
+	assert(DeviceLabRuntimeScript.validate_command(player_apply).get("ok", false), "valid player-state command rejected")
+	var unknown_player_field := player_apply.duplicate(true)
+	unknown_player_field["profile"] = "inventory"
+	assert(str(DeviceLabRuntimeScript.validate_command(unknown_player_field).get("error", "")).begins_with("unknown_field"), "player-state command accepted unknown field")
+
+
+func _test_player_state_roundtrip() -> void:
+	const TEST_DIRECTORY := "user://device_lab_runtime_profiles"
+	const TEST_INDEX := "user://device_lab_runtime_profile_index.json"
+	var old_directory: String = PlayerState.profile_directory
+	var old_index: String = PlayerState.profile_index_path
+	var old_test_mode: bool = PlayerState.test_mode
+	var old_active: String = PlayerState.active_profile_id
+	_cleanup_player_state_fixture(TEST_DIRECTORY, TEST_INDEX)
+	PlayerState.profile_directory = TEST_DIRECTORY
+	PlayerState.profile_index_path = TEST_INDEX
+	PlayerState.test_mode = true
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEST_DIRECTORY))
+	PlayerState.active_profile_id = "device_lab_test_profile"
+	PlayerState.character_name = "实验室存档"
+	PlayerState.reset_progress(false)
+	PlayerState.level = 7
+	PlayerState.gold = 321
+	PlayerState.recalculate_stats()
+	assert(PlayerState.save_game(), "device-lab fixture save failed")
+	var exported: Dictionary = PlayerState.device_lab_active_save_document()
+	assert(str(exported.get("profile_id", "")) == PlayerState.active_profile_id, "exported profile identity mismatch")
+	var edited := exported.duplicate(true)
+	edited["gold"] = 654321
+	edited["level"] = 8
+	var applied: Dictionary = PlayerState.device_lab_apply_save_document(edited)
+	assert(bool(applied.get("ok", false)), "valid player-state replacement failed")
+	assert(PlayerState.gold == 654321 and PlayerState.level == 8, "player-state replacement did not reload runtime")
+	var invalid := edited.duplicate(true)
+	invalid["profile_id"] = "wrong_profile"
+	var invalid_result: Dictionary = PlayerState.device_lab_apply_save_document(invalid)
+	assert(not bool(invalid_result.get("ok", true)) and PlayerState.gold == 654321, "invalid player-state replacement mutated runtime")
+	var runtime := DeviceLabRuntimeScript.new()
+	add_child(runtime)
+	runtime.call("_ensure_mailbox_dirs")
+	var checkpoint: String = str(runtime.call("_create_player_checkpoint", "roundtrip_checkpoint"))
+	assert(not checkpoint.is_empty(), "player checkpoint was not created")
+	var changed := PlayerState.device_lab_active_save_document()
+	changed["gold"] = 111
+	assert(bool(PlayerState.device_lab_apply_save_document(changed).get("ok", false)), "pre-rollback mutation failed")
+	var restored: Dictionary = runtime.call("_rollback_player_state", {"nonce": "rollback_test", "checkpoint": checkpoint})
+	assert(bool(restored.get("ok", false)) and PlayerState.gold == 654321, "checkpoint rollback did not restore player state")
+	PlayerState.profile_directory = old_directory
+	PlayerState.profile_index_path = old_index
+	PlayerState.active_profile_id = old_active
+	PlayerState.test_mode = old_test_mode
+	_cleanup_player_state_fixture(TEST_DIRECTORY, TEST_INDEX)
+
+
+func _cleanup_player_state_fixture(directory_path: String, index_path: String) -> void:
+	for suffix: String in ["", ".tmp", ".bak"]:
+		DirAccess.remove_absolute(index_path + suffix)
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(directory_path)):
+		var directory := DirAccess.open(directory_path)
+		if directory != null:
+			for file_name: String in directory.get_files():
+				DirAccess.remove_absolute(directory_path + "/" + file_name)
+		DirAccess.remove_absolute(directory_path)
 
 
 func _test_external_profile_guards() -> void:
@@ -204,6 +279,47 @@ func _compete_profile(root: Control, contract: Dictionary) -> void:
 	LayoutLoader.apply_profile(root, "inventory", contract)
 
 
+func _test_ui_checkpoint_rollback() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	var panel := InventoryPanelScript.new()
+	add_child(panel)
+	await get_tree().process_frame
+	var bag := panel.get_node("BagPanel") as Control
+	var before := Rect2(bag.position, bag.size)
+	var moved := Rect2(before.position + Vector2(9, 7), before.size - Vector2(11, 5))
+	var contract := {
+		"schemaVersion": LayoutLoader.SCHEMA_VERSION,
+		"profiles": {
+			"inventory": {
+				"logicalDesignSize": [panel.size.x, panel.size.y],
+				"nodes": {
+					"BagPanel": {"logicalRect": [moved.position.x, moved.position.y, moved.size.x, moved.size.y], "visible": true},
+				},
+			},
+		},
+	}
+	var runtime := DeviceLabRuntimeScript.new().configure(self)
+	add_child(runtime)
+	runtime.call("_ensure_mailbox_dirs")
+	var applied: Dictionary = await runtime.call("_apply_ui_profile", {
+		"nonce": "ui_checkpoint_apply",
+		"profile": "inventory",
+		"layout": contract,
+	})
+	assert(bool(applied.get("ok", false)), "checkpointed UI patch failed")
+	assert(Rect2(bag.position, bag.size).is_equal_approx(moved), "UI patch geometry did not apply")
+	var checkpoint := str(applied.get("checkpoint", ""))
+	assert(not checkpoint.is_empty(), "UI patch did not return checkpoint")
+	var restored: Dictionary = await runtime.call("_rollback_ui_profile", {
+		"nonce": "ui_checkpoint_restore",
+		"checkpoint": checkpoint,
+	})
+	assert(bool(restored.get("ok", false)), "UI checkpoint rollback failed")
+	assert(Rect2(bag.position, bag.size).is_equal_approx(before), "UI checkpoint did not restore original geometry")
+	panel.queue_free()
+
+
 func _test_nonce_and_outbox_guards() -> void:
 	var runtime := DeviceLabRuntimeScript.new()
 	add_child(runtime)
@@ -264,6 +380,8 @@ func _test_powershell_contract() -> void:
 	assert(source.contains("$result = $text | ConvertFrom-Json"), "PS pull result validation missing")
 	assert(not source.contains("ConvertFrom-Json -Depth"), "PS tool must remain compatible with Windows PowerShell 5.1")
 	assert(source.contains("Invoke-Adb -Arguments @('pull', $remoteScreenshot, $target)"), "PS screenshot must use binary-safe adb pull")
+	assert(source.contains("'export_player_state' { $result.document; break }"), "PS player-state export routing missing")
+	assert(source.contains("ConvertTo-Json -Depth 100"), "PS structured export must preserve nested save data")
 
 
 func _test_mailbox_roundtrip() -> void:

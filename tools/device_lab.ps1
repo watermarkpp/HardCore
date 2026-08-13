@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('push', 'status', 'snapshot', 'apply_ui_profile', 'pull', 'screenshot')]
+    [ValidateSet('push', 'status', 'snapshot', 'apply_ui_profile', 'export_player_state', 'apply_player_state', 'list_checkpoints', 'rollback_player_state', 'rollback_ui_profile', 'pull', 'screenshot')]
     [string]$Action = 'status',
     [ValidatePattern('^$|^[A-Za-z0-9._:-]{1,128}$')]
     [string]$Serial = '',
@@ -9,6 +9,7 @@ param(
     [string]$Profile = '',
     [string]$LayoutPath = '',
     [string]$PayloadPath = '',
+    [string]$Checkpoint = '',
     [string]$Nonce = '',
     [string]$OutputPath = '',
     [ValidateRange(1, 120)]
@@ -243,6 +244,30 @@ function New-ApplyCommand {
     return @{ command = $command; payload = $hostPayload; remoteName = $remoteName }
 }
 
+function New-PlayerStateCommand {
+    param([string]$NonceValue)
+    if ([string]::IsNullOrWhiteSpace($PayloadPath)) { throw 'apply_player_state requires -PayloadPath' }
+    $source = [IO.Path]::GetFullPath($PayloadPath)
+    if (-not (Test-Path -LiteralPath $source -PathType Leaf)) { throw "Player state payload missing: $source" }
+    $bytes = [IO.File]::ReadAllBytes($source)
+    if ($bytes.Length -gt 4194304) { throw 'Player state payload exceeds 4 MiB' }
+    $checksum = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToUpperInvariant()
+    $remoteName = "player_state_$NonceValue.json"
+    return @{
+        command = [ordered]@{
+            schemaVersion = 1
+            nonce = $NonceValue
+            action = 'apply_player_state'
+            allowlist = @('device_lab.v1', 'apply_player_state')
+            path = "user://device_lab/inbox/$remoteName"
+            checksum = $checksum
+            size = $bytes.Length
+        }
+        payload = $source
+        remoteName = $remoteName
+    }
+}
+
 if ($Action -eq 'screenshot') {
     $nonceValue = Get-SafeNonce
     $target = if ([string]::IsNullOrWhiteSpace($OutputPath)) { Join-Path (Get-Location) "device_lab_screenshot_$nonceValue.png" } else { [IO.Path]::GetFullPath($OutputPath) }
@@ -271,6 +296,21 @@ switch ($Action) {
         } finally {
             if (Test-Path -LiteralPath $spec.payload) { Remove-Item -LiteralPath $spec.payload -Force }
         }
+    }
+    'apply_player_state' {
+        $spec = New-PlayerStateCommand -NonceValue $nonceValue
+        Push-HostFile -LocalPath $spec.payload -RemoteInboxName $spec.remoteName -NonceValue $nonceValue
+        Push-Command -Command $spec.command
+    }
+    { $_ -in @('rollback_player_state', 'rollback_ui_profile') } {
+        if ($Checkpoint -notmatch '^[A-Za-z0-9_.-]{1,128}$' -or $Checkpoint.Contains('..')) { throw "$Action requires safe -Checkpoint" }
+        Push-Command -Command ([ordered]@{
+            schemaVersion = 1
+            nonce = $nonceValue
+            action = $Action
+            allowlist = @('device_lab.v1', $Action)
+            checkpoint = $Checkpoint
+        })
     }
     'push' {
         if ([string]::IsNullOrWhiteSpace($LayoutPath) -and [string]::IsNullOrWhiteSpace($PayloadPath)) { throw 'push requires -LayoutPath or -PayloadPath' }
@@ -302,7 +342,7 @@ switch ($Action) {
         exit 0
     }
     default {
-        $allowAction = if ($Action -eq 'status') { 'status' } else { 'snapshot' }
+        $allowAction = $Action
         $command = [ordered]@{
             schemaVersion = 1
             nonce = $nonceValue
@@ -315,4 +355,23 @@ switch ($Action) {
 
 if ($Action -eq 'push') { exit 0 }
 $result = Read-Result -NonceValue $nonceValue
+$documentActions = @('snapshot', 'export_player_state', 'list_checkpoints')
+if ($documentActions -contains $Action -and -not [string]::IsNullOrWhiteSpace($OutputPath)) {
+    $targetPath = [IO.Path]::GetFullPath($OutputPath)
+    $parent = Split-Path -Parent $targetPath
+    if (-not [string]::IsNullOrWhiteSpace($parent)) {
+        New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    }
+    $document = switch ($Action) {
+        'snapshot' { $result.snapshot; break }
+        'export_player_state' { $result.document; break }
+        'list_checkpoints' { $result.checkpoints; break }
+    }
+    if ($null -eq $document) { throw "Device Lab $Action result did not include an export document" }
+    $targetTemp = "$targetPath.$nonceValue.tmp"
+    $json = $document | ConvertTo-Json -Depth 100
+    [IO.File]::WriteAllText($targetTemp, $json, [Text.UTF8Encoding]::new($false))
+    Move-Item -LiteralPath $targetTemp -Destination $targetPath -Force
+    $result | Add-Member -NotePropertyName outputPath -NotePropertyValue $targetPath -Force
+}
 $result

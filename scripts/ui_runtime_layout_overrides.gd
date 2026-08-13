@@ -25,15 +25,64 @@ const EXTERNAL_PROFILE_ALLOWED_ENTRY_KEYS := {
 	"layoutRevision": true,
 	"logicalFontSize": true,
 	"logicalRect": true,
+	"modulate": true,
+	"mouseFilter": true,
+	"selfModulate": true,
 	"text": true,
 	"textRevision": true,
 	"themeVariation": true,
 	"visible": true,
+	"zIndex": true,
 }
 
 static var _contract: Dictionary = {}
 static var _loaded := false
 static var _target_tokens: Dictionary = {}
+
+
+## Captures only the static controls addressed by an incoming patch.  The
+## result is another schema-3 profile, so it can be persisted as a compact
+## Device Lab checkpoint and applied through the same validated transaction.
+static func capture_external_profile(
+	target: Control,
+	profile_id: String,
+	requested_entries: Dictionary
+) -> Dictionary:
+	if target == null or not is_instance_valid(target) or not target.is_inside_tree():
+		return {}
+	var nodes := {}
+	for raw_path: Variant in requested_entries.keys():
+		var path := str(raw_path)
+		if path == "." or _dynamic_map_path(path) or _retired(target, path):
+			continue
+		var control := target.get_node_or_null(NodePath(path)) as Control
+		if control == null or not _can_write(target, control):
+			continue
+		var entry := {
+			"logicalRect": [control.position.x, control.position.y, control.size.x, control.size.y],
+			"visible": control.visible,
+			"deleted": false,
+			"themeVariation": str(control.theme_type_variation),
+			"modulate": [control.modulate.r, control.modulate.g, control.modulate.b, control.modulate.a],
+			"selfModulate": [control.self_modulate.r, control.self_modulate.g, control.self_modulate.b, control.self_modulate.a],
+			"zIndex": control.z_index,
+			"mouseFilter": control.mouse_filter,
+		}
+		if _supports_text(control) and not bool(control.get_meta("calibration_runtime_text", false)):
+			entry["text"] = _control_text(control)
+			entry["logicalFontSize"] = control.get_theme_font_size("font_size")
+		nodes[path] = entry
+	if nodes.is_empty():
+		return {}
+	return {
+		"schemaVersion": SCHEMA_VERSION,
+		"profiles": {
+			profile_id: {
+				"logicalDesignSize": [target.size.x, target.size.y],
+				"nodes": nodes,
+			},
+		},
+	}
 
 
 ## Applies a Device Lab profile as one guarded transaction.  This is separate
@@ -108,6 +157,7 @@ static func apply_external_profile_transaction(
 		var entry: Dictionary = item.get("entry", {}) as Dictionary
 		if entry.has("fontSize") and _supports_text(control):
 			_set_font_size(control, entry, profile, target)
+		_apply_external_properties(control, entry)
 		control.visible = bool(entry.get("visible", true)) and not bool(entry.get("deleted", false))
 	if not _transaction_valid(target, plan, token):
 		_rollback_external_profile(backups)
@@ -190,6 +240,12 @@ static func _backup_external_control(control: Control) -> Dictionary:
 		"size": control.size,
 		"anchors": [control.anchor_left, control.anchor_top, control.anchor_right, control.anchor_bottom],
 		"visible": control.visible,
+		"modulate": control.modulate,
+		"self_modulate": control.self_modulate,
+		"z_index": control.z_index,
+		"mouse_filter": control.mouse_filter,
+		"theme_variation": control.theme_type_variation,
+		"text": _control_text(control),
 		"has_font_size": control.has_theme_font_size_override("font_size"),
 		"font_size": control.get_theme_font_size("font_size"),
 	}
@@ -220,6 +276,13 @@ static func _rollback_external_profile(backups: Array) -> void:
 		control.position = backup.get("position", Vector2.ZERO)
 		control.size = backup.get("size", Vector2.ZERO)
 		control.visible = bool(backup.get("visible", true))
+		control.modulate = backup.get("modulate", Color.WHITE)
+		control.self_modulate = backup.get("self_modulate", Color.WHITE)
+		control.z_index = int(backup.get("z_index", 0))
+		control.mouse_filter = int(backup.get("mouse_filter", Control.MOUSE_FILTER_STOP))
+		control.theme_type_variation = str(backup.get("theme_variation", ""))
+		if _supports_text(control):
+			_set_control_text(control, str(backup.get("text", "")))
 		if control.has_theme_font_size_override("font_size"):
 			control.remove_theme_font_size_override("font_size")
 		if bool(backup.get("has_font_size", false)):
@@ -392,7 +455,53 @@ static func validate_external_profile(profile_id: String, contract: Dictionary) 
 			return {"ok": false, "error": "layout_revision_type"}
 		if entry.has("themeVariation") and not (entry.themeVariation is String):
 			return {"ok": false, "error": "theme_variation_type"}
+		for color_key: String in ["modulate", "selfModulate"]:
+			if entry.has(color_key) and not _valid_color_array(entry.get(color_key)):
+				return {"ok": false, "error": "%s_type" % color_key}
+		if entry.has("zIndex") and not (entry.zIndex is int or entry.zIndex is float):
+			return {"ok": false, "error": "z_index_type"}
+		if entry.has("mouseFilter") and (not (entry.mouseFilter is int or entry.mouseFilter is float) or int(entry.mouseFilter) not in [0, 1, 2]):
+			return {"ok": false, "error": "mouse_filter_type"}
 	return {"ok": true, "profile": profile_id, "nodes": (nodes as Dictionary).size()}
+
+
+static func _valid_color_array(value: Variant) -> bool:
+	if not value is Array or (value as Array).size() != 4:
+		return false
+	for component: Variant in value as Array:
+		if not (component is int or component is float) or not is_finite(float(component)):
+			return false
+	return true
+
+
+static func _apply_external_properties(control: Control, entry: Dictionary) -> void:
+	if entry.has("text") and _supports_text(control) and not bool(control.get_meta("calibration_runtime_text", false)):
+		_set_control_text(control, str(entry.get("text", "")))
+	if entry.has("themeVariation"):
+		control.theme_type_variation = str(entry.get("themeVariation", ""))
+	if entry.has("modulate"):
+		control.modulate = _color_from_array(entry.get("modulate", []))
+	if entry.has("selfModulate"):
+		control.self_modulate = _color_from_array(entry.get("selfModulate", []))
+	if entry.has("zIndex"):
+		control.z_index = int(entry.get("zIndex", control.z_index))
+	if entry.has("mouseFilter"):
+		control.mouse_filter = int(entry.get("mouseFilter", control.mouse_filter))
+
+
+static func _color_from_array(value: Array) -> Color:
+	return Color(float(value[0]), float(value[1]), float(value[2]), float(value[3]))
+
+
+static func _control_text(control: Control) -> String:
+	if _supports_text(control):
+		return str(control.get("text"))
+	return ""
+
+
+static func _set_control_text(control: Control, value: String) -> void:
+	if _supports_text(control):
+		control.set("text", value)
 
 
 static func _load_contract() -> void:
