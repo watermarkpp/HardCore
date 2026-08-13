@@ -10,6 +10,7 @@ const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
 const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
@@ -185,6 +186,8 @@ var _special_action_index := 0
 var _last_target_text := ""
 var _skill_button_assignments: Dictionary = {}
 var _skill_button_modes: Dictionary = {}
+var _panel_prewarm_in_progress := false
+var _all_panels_prewarmed := false
 
 
 func _ready() -> void:
@@ -1370,6 +1373,97 @@ func _ensure_skill_panel() -> void:
 		func(request: Dictionary) -> void: skill_button_assignment_requested.emit(request)
 	)
 	add_child(skill_panel)
+
+
+func prewarm_all_panels(system_menu_panel: Control = null) -> void:
+	if _all_panels_prewarmed:
+		return
+	if _panel_prewarm_in_progress:
+		while _panel_prewarm_in_progress and is_inside_tree():
+			await get_tree().process_frame
+		return
+	_panel_prewarm_in_progress = true
+	_ensure_inventory_panel()
+	_ensure_shop_panel()
+	_ensure_skill_panel()
+	_ensure_quest_panel()
+	_ensure_map_panel()
+	_ensure_warehouse_panel()
+	_ensure_death_revival_panel()
+	# SkillPanel intentionally refreshes only when opened. Run the same public
+	# refresh once while hidden so its dynamic cards, icons and saved profile are
+	# part of the Loading-phase warm-up as well.
+	skill_panel.refresh()
+	var panels: Array[Control] = [
+		inventory_panel,
+		shop_panel,
+		skill_panel,
+		quest_panel,
+		map_panel,
+		warehouse_panel,
+		death_revival_panel,
+	]
+	if is_instance_valid(system_menu_panel):
+		panels.append(system_menu_panel)
+	for panel: Control in panels:
+		panel.hide()
+	# Each layout profile runs multiple frame-separated passes. Keep every
+	# reusable panel hidden until its initial contract has reached the final
+	# geometry pass, so first-open can only expose the finished frame.
+	var initial_profiles: Array = [
+		[inventory_panel, "inventory"],
+		[shop_panel, "shop_buy"],
+		[skill_panel, "skill"],
+		[quest_panel, "quest"],
+		[map_panel, "map"],
+		[warehouse_panel, "warehouse"],
+		[death_revival_panel, "death_revival"],
+	]
+	if is_instance_valid(system_menu_panel):
+		initial_profiles.append([system_menu_panel, "system_menu"])
+	await _wait_for_layout_profiles(initial_profiles)
+	# The shop owns two independent saved layouts. Warm the sell layout without
+	# requesting quotes or changing its business state, then restore buy.
+	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_sell")
+	await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_buy")
+	await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	# Shop and quest already own the reusable public confirmation dialog.
+	var confirmation_profiles: Array = []
+	if is_instance_valid(shop_panel.sell_confirmation):
+		confirmation_profiles.append([shop_panel.sell_confirmation, "confirmation_dialog"])
+	if is_instance_valid(quest_panel.abandon_confirmation):
+		confirmation_profiles.append([quest_panel.abandon_confirmation, "confirmation_dialog"])
+	await _wait_for_layout_profiles(confirmation_profiles)
+	# Flush deferred grid/list stabilizers once more while hidden.
+	await get_tree().process_frame
+	for panel: Control in panels:
+		panel.hide()
+	_all_panels_prewarmed = _profiles_are_ready(
+		initial_profiles
+		+ [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
+		+ confirmation_profiles
+	)
+	_panel_prewarm_in_progress = false
+
+
+func _wait_for_layout_profiles(profiles: Array) -> void:
+	for _frame in 30:
+		if _profiles_are_ready(profiles):
+			break
+		await get_tree().process_frame
+
+
+func _profiles_are_ready(profiles: Array) -> bool:
+	for raw_item: Variant in profiles:
+		var item := raw_item as Array
+		if not UIRuntimeLayoutOverridesScript.profile_is_ready(item[0] as Control, str(item[1])):
+			return false
+	return true
+
+
+func all_panels_are_prewarmed() -> bool:
+	return _all_panels_prewarmed
 
 
 func _ensure_quest_panel() -> void:

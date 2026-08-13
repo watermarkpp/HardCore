@@ -1165,6 +1165,10 @@ func _run_map_transition(
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
+		# Complete reusable UI construction while initial Loading still covers
+		# the world. Panels stay hidden and this warm-up does not invoke actions.
+		if _world_bootstrap_in_progress and not PlayerState.test_mode:
+			await hud.prewarm_all_panels(_system_menu_panel)
 		hud.finish_loading_transition()
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests

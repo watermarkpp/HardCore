@@ -321,6 +321,7 @@ static func apply_profile(
 	var entries: Dictionary = profile.get("nodes", {})
 	if entries.is_empty():
 		return
+	target.set_meta(_ready_meta_key(profile_id), false)
 	var target_id := target.get_instance_id()
 	var token := int(_target_tokens.get(target_id, 0)) + 1
 	_target_tokens[target_id] = token
@@ -398,8 +399,22 @@ static func apply_profile(
 		var control := raw_control as Control
 		if _can_write(target, control):
 			_apply_geometry(control, item["entry"] as Dictionary, profile, target, str(item["path"]))
-	if int(_target_tokens.get(target_id, 0)) == token and _can_write(target, target) and target.has_method("_on_runtime_layout_profile_applied"):
-		target.call("_on_runtime_layout_profile_applied", profile_id)
+	if int(_target_tokens.get(target_id, 0)) == token and _can_write(target, target):
+		target.set_meta(_ready_meta_key(profile_id), true)
+		if target.has_method("_on_runtime_layout_profile_applied"):
+			target.call("_on_runtime_layout_profile_applied", profile_id)
+
+
+static func profile_is_ready(target: Control, profile_id: String) -> bool:
+	return (
+		target != null
+		and is_instance_valid(target)
+		and bool(target.get_meta(_ready_meta_key(profile_id), false))
+	)
+
+
+static func _ready_meta_key(profile_id: String) -> StringName:
+	return StringName("runtime_layout_profile_ready_%s" % profile_id)
 
 
 ## Validates an external Device Lab profile without touching any scene node.

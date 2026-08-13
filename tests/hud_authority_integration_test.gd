@@ -21,6 +21,38 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_hud = _game.hud
+	assert(_hud.inventory_panel == null and _hud.skill_panel == null)
+	var state_before_prewarm := {
+		"inventory": PlayerState.inventory.duplicate(true),
+		"equipment": PlayerState.equipment.duplicate(true),
+		"warehouse": PlayerState.warehouse_inventory.duplicate(true),
+		"quests": PlayerState.quest_states.duplicate(true),
+	}
+	await _hud.prewarm_all_panels(_game._system_menu_panel)
+	assert(_hud.all_panels_are_prewarmed(), "all reusable modal profiles did not settle")
+	for panel in [
+		_hud.inventory_panel, _hud.shop_panel, _hud.skill_panel,
+		_hud.quest_panel, _hud.map_panel, _hud.warehouse_panel,
+		_hud.death_revival_panel, _game._system_menu_panel,
+	]:
+		assert(is_instance_valid(panel) and not panel.visible)
+	assert(PlayerState.inventory == state_before_prewarm.inventory)
+	assert(PlayerState.equipment == state_before_prewarm.equipment)
+	assert(PlayerState.warehouse_inventory == state_before_prewarm.warehouse)
+	assert(PlayerState.quest_states == state_before_prewarm.quests)
+	var inventory_instance_id := _hud.inventory_panel.get_instance_id()
+	var skill_instance_id := _hud.skill_panel.get_instance_id()
+	await _hud.prewarm_all_panels(_game._system_menu_panel)
+	assert(_hud.inventory_panel.get_instance_id() == inventory_instance_id)
+	assert(_hud.skill_panel.get_instance_id() == skill_instance_id)
+	_hud._toggle_inventory()
+	assert(_hud.inventory_panel.visible)
+	assert(_hud.inventory_panel.get_instance_id() == inventory_instance_id)
+	_hud._toggle_inventory()
+	_hud._toggle_skill_book()
+	assert(_hud.skill_panel.visible)
+	assert(_hud.skill_panel.get_instance_id() == skill_instance_id)
+	_hud._toggle_skill_book()
 	_hud._ensure_shop_panel()
 
 	# Quote goes HUD -> GameRoot -> PlayerState authority -> HUD. Its price is a
