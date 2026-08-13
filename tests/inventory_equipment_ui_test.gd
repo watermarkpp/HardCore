@@ -29,6 +29,13 @@ func _run() -> void:
 	assert(panel.get_node("AttributePanel").theme_type_variation == "GothicInsetFrame", "人物属性栏没有复用公共哥特内框")
 	assert(panel.get_node("EquipmentPanel").theme_type_variation == "GothicInsetFrame", "人物装备栏没有复用公共哥特内框")
 	assert(panel.get_node("BagPanel").theme_type_variation == "GothicInsetFrame", "综合背包没有复用公共哥特内框")
+	for stable_title_path: String in [
+		"AttributePanel/AttributeTitle",
+		"AttributePanel/ItemDetailTitle",
+		"EquipmentPanel/EquipmentTitle",
+		"BagPanel/BagTitle",
+	]:
+		assert(panel.get_node_or_null(stable_title_path) is Label, "inventory section title must have a stable saved path: %s" % stable_title_path)
 	assert(panel.theme.get_stylebox("normal", "GothicComponentSlotButton") is StyleBoxFlat, "人物与背包插槽没有使用简洁原生方格")
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
@@ -97,7 +104,14 @@ func _run() -> void:
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")
 	assert(panel.equipment_stats_label is RichTextLabel and panel.equipment_stats_label.scroll_active, "人物属性超长时没有右侧滑块")
 	assert(panel.detail_label.scroll_active, "物品属性超长时没有右侧滑块")
-	for saved_path: String in ["AttributePanel/CharacterStats", "AttributePanel/ItemDetail"]:
+	for saved_path: String in [
+		"AttributePanel/AttributeTitle",
+		"AttributePanel/CharacterStats",
+		"AttributePanel/ItemDetailTitle",
+		"AttributePanel/ItemDetail",
+		"EquipmentPanel/EquipmentTitle",
+		"BagPanel/BagTitle",
+	]:
 		var saved_rect: Array = layout_contract["profiles"]["inventory"]["nodes"][saved_path]["logicalRect"]
 		var saved_control := panel.get_node(saved_path) as Control
 		assert(

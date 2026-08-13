@@ -136,6 +136,7 @@ func _build_header() -> void:
 func _build_attribute_panel() -> void:
 	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
 	var title := _section_title("人物属性", 250)
+	title.name = "AttributeTitle"
 	panel.add_child(title)
 	equipment_stats_label = RichTextLabel.new()
 	equipment_stats_label.name = "CharacterStats"
@@ -154,6 +155,7 @@ func _build_attribute_panel() -> void:
 	divider.size = Vector2(218, 8)
 	panel.add_child(divider)
 	var item_title := Label.new()
+	item_title.name = "ItemDetailTitle"
 	item_title.text = "物品属性"
 	item_title.position = Vector2(16, 278)
 	item_title.size = Vector2(218, 30)
@@ -174,7 +176,9 @@ func _build_attribute_panel() -> void:
 
 func _build_equipment_panel() -> void:
 	var panel := _section_panel("EquipmentPanel", Vector2(294, 72), Vector2(390, 566))
-	panel.add_child(_section_title("人物装备", 390))
+	var title := _section_title("人物装备", 390)
+	title.name = "EquipmentTitle"
+	panel.add_child(title)
 	character_preview = PreviewScript.new()
 	character_preview.name = "CharacterPreview"
 	character_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -232,7 +236,9 @@ func _build_equipment_panel() -> void:
 
 func _build_bag_panel() -> void:
 	var panel := _section_panel("BagPanel", Vector2(696, 72), Vector2(492, 566))
-	panel.add_child(_section_title("综合背包", 492))
+	var title := _section_title("综合背包", 492)
+	title.name = "BagTitle"
+	panel.add_child(title)
 	bag_summary_label = Label.new()
 	bag_summary_label.name = "BagSummary"
 	bag_summary_label.set_meta("calibration_runtime_text", true)

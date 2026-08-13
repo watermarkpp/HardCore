@@ -9,7 +9,7 @@ const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const ConfirmationPanel := preload("res://scripts/gothic_confirmation_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "F50245E17C67C9C43E7FCDFAADE8CB739782974EEA1C59A024D047A50E042354"
+const EXPECTED_HASH := "CEC47CBEDD5F180FAB0350EE37FAA24FE5D0F1F49D71B220AB2EBBF9ED0DFB34"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
@@ -121,6 +121,13 @@ func _ready() -> void:
 	var stats_entry: Dictionary = data["profiles"]["inventory"]["nodes"].get("AttributePanel/CharacterStats", {})
 	if stats != null and stats_entry.has("logicalFontSize"):
 		assert(stats.get_theme_font_size("font_size") == int(stats_entry["logicalFontSize"]), "logical font size not restored")
+	for stable_title_path: String in [
+		"AttributePanel/AttributeTitle",
+		"AttributePanel/ItemDetailTitle",
+		"EquipmentPanel/EquipmentTitle",
+		"BagPanel/BagTitle",
+	]:
+		_assert_saved_local_rect(inventory, "inventory", stable_title_path)
 	var buy_button := shop.get_node_or_null("DetailPanel/BuyButton") as Button
 	assert(buy_button != null and buy_button.size.is_equal_approx(Vector2(270, 51)), "购买按钮没有保持新的统一操作按钮尺寸")
 	shop._set_trade_mode("buy")

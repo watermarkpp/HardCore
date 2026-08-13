@@ -17,6 +17,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$DeviceLabPrivateRoot = 'files/device_lab'
 
 function Invoke-Adb {
     param([string[]]$Arguments)
@@ -75,12 +76,12 @@ function Invoke-RunAsText {
 }
 
 function Ensure-DeviceLabDirs {
-    [void](Invoke-RunAs -Arguments @('mkdir', '-p', 'device_lab/inbox', 'device_lab/outbox'))
+    [void](Invoke-RunAs -Arguments @('mkdir', '-p', "$DeviceLabPrivateRoot/inbox", "$DeviceLabPrivateRoot/outbox"))
 }
 
 function Test-RemoteFile {
     param([string]$Path)
-    if ($Path -notmatch '^device_lab/(inbox/(pending|processing)\.json|outbox/result_[A-Za-z0-9_.-]{1,64}\.json)$') {
+    if ($Path -notmatch '^files/device_lab/(inbox/(pending|processing)\.json|outbox/result_[A-Za-z0-9_.-]{1,64}\.json)$') {
         throw "Unsafe fixed Device Lab path: $Path"
     }
     try {
@@ -92,13 +93,13 @@ function Test-RemoteFile {
 }
 
 function Test-DeviceLabInboxBusy {
-    return (Test-RemoteFile -Path 'device_lab/inbox/pending.json') -or (Test-RemoteFile -Path 'device_lab/inbox/processing.json')
+    return (Test-RemoteFile -Path "$DeviceLabPrivateRoot/inbox/pending.json") -or (Test-RemoteFile -Path "$DeviceLabPrivateRoot/inbox/processing.json")
 }
 
 function Test-RemoteInboxEntry {
     param([string]$Name)
     Assert-SafeRemoteName -Name $Name
-    $path = "device_lab/inbox/$Name"
+    $path = "$DeviceLabPrivateRoot/inbox/$Name"
     $probe = Invoke-RunAsCapture -Arguments @('test', '-e', $path)
     if ($probe.ExitCode -eq 0) { return $true }
     if ($probe.ExitCode -eq 1) { return $false }
@@ -106,7 +107,7 @@ function Test-RemoteInboxEntry {
 }
 
 function Enter-DeviceLabLock {
-    $lockPath = 'device_lab/inbox/.lock'
+    $lockPath = "$DeviceLabPrivateRoot/inbox/.lock"
     $deadline = [DateTime]::UtcNow.AddSeconds([Math]::Max(1, $TimeoutSeconds))
     while ([DateTime]::UtcNow -lt $deadline) {
         $attempt = Invoke-RunAsCapture -Arguments @('mkdir', $lockPath)
@@ -142,7 +143,7 @@ function Push-HostFile {
     $temporary = "/data/local/tmp/hardcore_device_lab_${NonceValue}_$transferToken.tmp"
     $stageName = ".stage_${NonceValue}_$transferToken.tmp"
     Assert-SafeRemoteName -Name $stageName
-    $stagePath = "device_lab/inbox/$stageName"
+    $stagePath = "$DeviceLabPrivateRoot/inbox/$stageName"
     $lockOwner = $false
     try {
         Invoke-Adb -Arguments @('push', $resolved, $temporary) | Out-Null
@@ -161,7 +162,7 @@ function Push-HostFile {
         if (Test-DeviceLabInboxBusy) {
             throw 'Device Lab mailbox became busy before atomic move'
         }
-        $move = Invoke-RunAsCapture -Arguments @('mv', $stagePath, "device_lab/inbox/$RemoteInboxName")
+        $move = Invoke-RunAsCapture -Arguments @('mv', $stagePath, "$DeviceLabPrivateRoot/inbox/$RemoteInboxName")
         if ($move.ExitCode -ne 0) {
             throw "Device Lab atomic move failed ($($move.Output -join "`n"))"
         }
@@ -169,7 +170,7 @@ function Push-HostFile {
         if ($lockOwner) {
             # Only the mkdir owner may remove the lock or its unique stage.
             try { Invoke-RunAs -Arguments @('rm', '-f', $stagePath) | Out-Null } catch { }
-            try { Invoke-RunAs -Arguments @('rmdir', 'device_lab/inbox/.lock') | Out-Null } catch { }
+            try { Invoke-RunAs -Arguments @('rmdir', "$DeviceLabPrivateRoot/inbox/.lock") | Out-Null } catch { }
         }
         try { Invoke-Adb -Arguments @('shell', 'rm', '-f', $temporary) | Out-Null } catch { }
     }
@@ -191,12 +192,12 @@ function Read-Result {
     param([string]$NonceValue)
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
     Assert-SafeRemoteName -Name $NonceValue
-    $remote = "device_lab/outbox/result_$NonceValue.json"
+    $remote = "$DeviceLabPrivateRoot/outbox/result_$NonceValue.json"
     while ([DateTime]::UtcNow -lt $deadline) {
         try {
             $text = Invoke-RunAsText -Arguments @('cat', $remote)
             if (-not [string]::IsNullOrWhiteSpace($text)) {
-                $result = $text | ConvertFrom-Json -Depth 50
+                $result = $text | ConvertFrom-Json
                 if ([int]$result.protocolVersion -ne 1 -or [string]$result.nonce -ne $NonceValue) {
                     throw 'Device Lab result identity validation failed'
                 }
@@ -247,11 +248,13 @@ if ($Action -eq 'screenshot') {
     $target = if ([string]::IsNullOrWhiteSpace($OutputPath)) { Join-Path (Get-Location) "device_lab_screenshot_$nonceValue.png" } else { [IO.Path]::GetFullPath($OutputPath) }
     $parent = Split-Path -Parent $target
     if (-not [string]::IsNullOrWhiteSpace($parent)) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
-    $args = @()
-    if (-not [string]::IsNullOrWhiteSpace($Serial)) { $args += @('-s', $Serial) }
-    $args += @('exec-out', 'screencap', '-p')
-    & $Adb @args | Set-Content -LiteralPath $target -AsByteStream
-    if ($LASTEXITCODE -ne 0) { throw "adb screenshot failed ($LASTEXITCODE)" }
+    $remoteScreenshot = "/sdcard/hardcore_device_lab_$nonceValue.png"
+    try {
+        Invoke-Adb -Arguments @('shell', 'screencap', '-p', $remoteScreenshot) | Out-Null
+        Invoke-Adb -Arguments @('pull', $remoteScreenshot, $target) | Out-Null
+    } finally {
+        try { Invoke-Adb -Arguments @('shell', 'rm', '-f', $remoteScreenshot) | Out-Null } catch { }
+    }
     [pscustomobject]@{ ok = $true; action = 'screenshot'; nonce = $nonceValue; path = $target }
     exit 0
 }
@@ -283,11 +286,11 @@ switch ($Action) {
     }
     'pull' {
         if ([string]::IsNullOrWhiteSpace($OutputPath)) { throw 'pull requires -OutputPath' }
-        $remoteName = "device_lab/outbox/result_$nonceValue.json"
+        $remoteName = "$DeviceLabPrivateRoot/outbox/result_$nonceValue.json"
         $parent = Split-Path -Parent ([IO.Path]::GetFullPath($OutputPath))
         if (-not [string]::IsNullOrWhiteSpace($parent)) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
         $text = Invoke-RunAsText -Arguments @('cat', $remoteName)
-        $result = $text | ConvertFrom-Json -Depth 50
+        $result = $text | ConvertFrom-Json
         if ([int]$result.protocolVersion -ne 1 -or [string]$result.nonce -ne $nonceValue) {
             throw 'Device Lab pull identity validation failed'
         }

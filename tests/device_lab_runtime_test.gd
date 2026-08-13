@@ -260,10 +260,19 @@ func _test_powershell_contract() -> void:
 	assert(source.contains("ValidatePattern('^[A-Za-z][A-Za-z0-9_]*"), "PS package id safety regex missing")
 	assert(source.contains("Device Lab mailbox is busy; refusing to overwrite"), "PS pending overwrite guard missing")
 	assert(source.contains("Move-Item -LiteralPath $hostTemp -Destination $targetPath -Force"), "PS pull atomic move missing")
-	assert(source.contains("ConvertFrom-Json -Depth 50"), "PS pull result validation missing")
+	assert(source.contains("$DeviceLabPrivateRoot = 'files/device_lab'"), "PS Android user:// private root mapping missing")
+	assert(source.contains("$result = $text | ConvertFrom-Json"), "PS pull result validation missing")
+	assert(not source.contains("ConvertFrom-Json -Depth"), "PS tool must remain compatible with Windows PowerShell 5.1")
+	assert(source.contains("Invoke-Adb -Arguments @('pull', $remoteScreenshot, $target)"), "PS screenshot must use binary-safe adb pull")
 
 
 func _test_mailbox_roundtrip() -> void:
+	# Each runner invocation reuses its isolated user:// directory. Remove only
+	# this test's prior mailbox identity state so a previous successful run does
+	# not correctly trigger the production replay guard on the next run.
+	DirAccess.remove_absolute(DeviceLabRuntimeScript.PENDING_PATH)
+	DirAccess.remove_absolute(DeviceLabRuntimeScript.PROCESSING_PATH)
+	DirAccess.remove_absolute(DeviceLabRuntimeScript.NONCE_HISTORY_PATH)
 	var inbox := DirAccess.open("user://device_lab/inbox")
 	var outbox := DirAccess.open("user://device_lab/outbox")
 	assert(inbox != null and outbox != null, "mailbox directories missing")
