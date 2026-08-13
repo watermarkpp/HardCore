@@ -484,7 +484,7 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		return rejection
 	var catalog := GameData.get_item_record(item_name)
 	var kind := str(catalog.get("kind", "unknown"))
-	var base_price := maxi(0, int(catalog.get("price", 0)))
+	var base_price := _shop_sell_base_price(item_name, catalog)
 	var count := maxi(1, int(record.get("count", 1)))
 	if kind in ["currency", "quest_item"]:
 		rejection["reason"] = "该物品不能出售。"
@@ -530,6 +530,26 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 			else ""
 		),
 	}
+
+
+func _shop_sell_base_price(item_name: String, catalog: Dictionary) -> int:
+	var catalog_price := maxi(0, int(catalog.get("price", 0)))
+	if catalog_price > 0:
+		return catalog_price
+	# Equipment attributes remain owned by the formal equipment master, while
+	# shop price is owned by the already-loaded service item catalog. Resolve
+	# the latter at quote time so a hot-patched gameplay session never depends
+	# on when the global item index was initially built.
+	for raw_service_item: Variant in GameData.service_item_catalog.get(
+		"serviceEquipmentReference",
+		[],
+	):
+		if not raw_service_item is Dictionary:
+			continue
+		var service_item: Dictionary = raw_service_item
+		if str(service_item.get("serviceName", "")) == item_name:
+			return maxi(0, int(service_item.get("price", 0)))
+	return 0
 
 
 func _shop_sell_risk_flags(

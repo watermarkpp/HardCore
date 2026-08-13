@@ -112,6 +112,7 @@ func _run() -> void:
 	assert(bool(equipment_quote.get("sellable", false)), "数量1的装备没有获得可出售报价")
 	assert(int(equipment_quote.get("max_quantity", 0)) == 1, "非堆叠装备的最大出售数量不是1")
 	assert(int(equipment_quote.get("unit_price", 0)) == 25, "木剑没有使用服务端价格50的半价出售规则")
+	assert(PlayerState._shop_sell_base_price("木剑", {}) == 50, "报价入口不能在目录索引缺价时即时读取正式服务价格")
 	var equipment_sell_request := equipment_quote_item.duplicate(true)
 	equipment_sell_request["quote_id"] = str(equipment_quote.get("quote_id", ""))
 	equipment_sell_request["amount"] = 1

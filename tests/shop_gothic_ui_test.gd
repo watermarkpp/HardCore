@@ -82,6 +82,7 @@ func _run() -> void:
 	panel.set_sell_quotes(quotes)
 	for card: Button in panel.goods_buttons:
 		assert(card.get_theme_stylebox("normal") is StyleBoxFlat, "出售商品卡没有使用背包格清晰代码边框")
+		assert(card.has_node("Price"), "可出售商品卡缺少单件售价")
 	var safe_indices: Array[int] = []
 	var risky_index := -1
 	for inventory_index in range(PlayerState.inventory.size()):
@@ -92,6 +93,7 @@ func _run() -> void:
 	assert(safe_indices.size() >= 2 and risky_index >= 0, "出售测试缺少两个普通物品和一个高风险物品")
 	panel._select_sell_item(risky_index)
 	assert(panel.goods_buttons.filter(func(card: Button) -> bool: return int(card.get_meta("inventory_index", -1)) == risky_index)[0].theme_type_variation == "GothicComponentSelectedShopCard", "装备商品卡选中后没有背包格高亮")
+	assert("攻击" in panel.detail_label.text and "防御" in panel.detail_label.text and "穿戴要求" in panel.detail_label.text, "出售装备详情没有展示玩家属性")
 	panel._select_sell_item(risky_index)
 
 	assert(panel.sell_quantity_row.get_node_or_null("DecreaseQuantity/QuantityDecoration") == null, "减号按钮不应恢复旧角饰")
@@ -183,6 +185,11 @@ func _run() -> void:
 	blocked_quote["reason"] = "测试不可出售"
 	blocked_quotes[blocked_key] = blocked_quote
 	panel.set_sell_quotes(blocked_quotes)
+	var blocked_card: Button = panel.goods_buttons.filter(
+		func(card: Button) -> bool:
+			return int(card.get_meta("inventory_index", -1)) == risky_index
+	)[0] as Button
+	assert(blocked_card.get_node_or_null("Price") == null, "不可出售原因不应显示在物品列表")
 	panel._select_sell_item(risky_index)
 	assert(decrease.disabled and increase.disabled, "不可售/count1物品数量按钮未禁用")
 	assert(panel._selected_sell_indices.size() == 2, "点击不可售物品破坏了已有多选")

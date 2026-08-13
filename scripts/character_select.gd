@@ -142,7 +142,10 @@ func _finish_roster_drag() -> bool:
 
 
 func _roster_press_is_suppressed() -> bool:
-	return Time.get_ticks_msec() <= _roster_suppress_press_until_msec
+	return (
+		Time.get_ticks_msec() <= _roster_suppress_press_until_msec
+		or TouchScrollSupportScript.is_drag_active(get_tree())
+	)
 
 
 func _build_content_root() -> void:

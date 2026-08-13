@@ -5,6 +5,7 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 
 signal closed
 signal abandon_requested(quest_id: String)
@@ -410,6 +411,8 @@ func _refresh_selected_quest(active_quest_id: String) -> void:
 
 
 func _select_quest(quest_id: String) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	_selected_quest_id = quest_id
 	current_quest_id = quest_id
 	refresh()

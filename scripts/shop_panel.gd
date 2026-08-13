@@ -5,6 +5,8 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal closed
@@ -366,7 +368,7 @@ func _rebuild_sell_cards() -> void:
 		var quote_key := sell_quote_key(inventory_index, sell_record)
 		var quote: Dictionary = _sell_quotes.get(quote_key, {})
 		var sellable := bool(quote.get("sellable", false))
-		var price_text := "%d 金币 / 件" % int(quote.get("unit_price", 0)) if sellable else str(quote.get("reason", "等待商店报价"))
+		var price_text := "%d 金币 / 件" % int(quote.get("unit_price", 0)) if sellable else ""
 		var card := Button.new()
 		card.name = "SellCard_%d" % inventory_index
 		card.custom_minimum_size = CARD_SIZE
@@ -383,7 +385,7 @@ func _rebuild_sell_cards() -> void:
 		var count := int(sell_record.get("count", 1))
 		if count > 1:
 			display_entry["name"] = "%s ×%d" % [sell_record.get("name", "物品"), count]
-		_build_card_contents(card, display_entry, price_text)
+		_build_card_contents(card, display_entry, price_text, sellable)
 
 
 func _clear_goods_cards() -> void:
@@ -392,7 +394,12 @@ func _clear_goods_cards() -> void:
 	goods_buttons.clear()
 
 
-func _build_card_contents(card: Button, entry: Dictionary, price_text := "") -> void:
+func _build_card_contents(
+	card: Button,
+	entry: Dictionary,
+	price_text := "",
+	show_price := true,
+) -> void:
 	var item_name := str(entry.get("name", "物品"))
 	var catalog_name := item_name.split(" ×")[0]
 	var texture := _item_texture(GameData.get_item_record(catalog_name))
@@ -410,13 +417,15 @@ func _build_card_contents(card: Button, entry: Dictionary, price_text := "") -> 
 	var name_label := Label.new()
 	name_label.name = "ItemName"
 	name_label.text = item_name
-	name_label.position = Vector2(84, 11)
+	name_label.position = Vector2(84, 11 if show_price else 22)
 	name_label.size = Vector2(184, 28)
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 15)
 	name_label.add_theme_color_override("font_color", Color("ecd4aa"))
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(name_label)
+	if not show_price:
+		return
 	var price_label := Label.new()
 	price_label.name = "Price"
 	price_label.text = price_text if not price_text.is_empty() else "%d 金币" % int(entry.get("price", 0))
@@ -429,6 +438,8 @@ func _build_card_contents(card: Button, entry: Dictionary, price_text := "") -> 
 
 
 func _select_shop_item(index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if index < 0 or index >= stock.size():
 		return
 	item_list.select(index)
@@ -539,6 +550,8 @@ func _request_sell_quotes() -> void:
 
 
 func _select_sell_item(inventory_index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
 		return
 	var record: Dictionary = PlayerState.inventory[inventory_index]
@@ -576,17 +589,51 @@ func _select_sell_item(inventory_index: int) -> void:
 	if quote.is_empty():
 		detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % [record.get("name", "物品"), count]
 		return
-	var risk_text := _sell_risk_text(quote)
-	var reason := str(quote.get("reason", ""))
-	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n数量：%d\n[color=#d3a763]单件报价：%d金币[/color]\n%s%s" % [
-		record.get("name", "物品"), count, int(quote.get("unit_price", 0)),
-		"\n[color=#ef9f63]风险：%s[/color]" % risk_text if not risk_text.is_empty() else "",
-		"\n[color=#b8a58a]%s[/color]" % reason if not reason.is_empty() else "",
-	]
+	detail_label.text = _sell_item_detail(
+		record,
+		GameData.get_item_record(str(record.get("name", ""))),
+		quote,
+	)
 
 func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
 	var record: Dictionary = PlayerState.inventory[inventory_index]
-	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n数量：%d\n\n[color=#d4a15e]%s[/color]" % [record.get("name", "物品"), int(record.get("count", 1)), str(quote.get("reason", "等待商店报价"))]
+	var item := GameData.get_item_record(str(record.get("name", "")))
+	detail_label.text = _sell_item_detail(record, item, quote)
+
+
+func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) -> String:
+	var lines: Array[String] = [
+		"[color=#f2c783][font_size=20]%s[/font_size][/color]" % str(record.get("name", "物品")),
+		"数量：%d" % maxi(1, int(record.get("count", 1))),
+	]
+	if not item.is_empty():
+		lines.append("类别：%s　重量：%d" % [str(item.get("category", "未分类")), int(item.get("weight", 0))])
+		if str(item.get("kind", "")) == "equipment":
+			var current_durability := int(record.get("durability", item.get("maxDurability", 1)))
+			var maximum_durability := int(record.get("max_durability", item.get("maxDurability", 1)))
+			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
+			lines.append(_equipment_stat_text(item))
+			lines.append("穿戴要求：%s" % EquipmentRulesScript.requirement_label(item))
+		elif not str(item.get("description", "")).is_empty():
+			lines.append(str(item.get("description", "")))
+	if bool(quote.get("sellable", false)):
+		lines.append("[color=#d3a763]单件售价：%d金币[/color]" % int(quote.get("unit_price", 0)))
+		var risk_text := _sell_risk_text(quote)
+		if not risk_text.is_empty():
+			lines.append("[color=#ef9f63]出售提示：%s[/color]" % risk_text)
+	else:
+		lines.append("[color=#b8a58a]不可出售：%s[/color]" % str(quote.get("reason", "暂时无法报价")))
+	return "\n".join(lines)
+
+
+func _equipment_stat_text(item: Dictionary) -> String:
+	return "攻击 %s-%s　魔法 %s-%s\n道术 %s-%s　防御 %s-%s\n魔防 %s-%s" % [
+		_value(item.get("attackMin")), _value(item.get("attackMax")),
+		_value(item.get("magicMin")), _value(item.get("magicMax")),
+		_value(item.get("taoMin")), _value(item.get("taoMax")),
+		_value(item.get("defenseMin")), _value(item.get("defenseMax")),
+		_value(item.get("mdefMin")), _value(item.get("mdefMax")),
+	]
 
 
 func _change_sell_quantity(delta: int) -> void:
@@ -750,6 +797,8 @@ func _refresh_repair_preview() -> void:
 
 
 func _on_item_selected(index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if index < 0 or index >= stock.size():
 		return
 	for card_index in range(goods_buttons.size()):

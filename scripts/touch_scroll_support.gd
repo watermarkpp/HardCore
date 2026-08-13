@@ -4,6 +4,8 @@ extends Node
 const STABLE_ID := "ui.touch_content_scroll.v1"
 const DRAG_THRESHOLD := 8.0
 const DRAG_ACTIVE_META := "touch_scroll_drag_active"
+const DRAG_RELEASE_GUARD_META := "touch_scroll_drag_release_guard_until_msec"
+const DRAG_RELEASE_GUARD_MSEC := 160
 
 var _registered_controls: Array[WeakRef] = []
 var _active_control: Control
@@ -37,7 +39,11 @@ static func attach_tree(root: Node) -> Node:
 static func is_drag_active(tree: SceneTree) -> bool:
 	if tree == null or tree.root == null:
 		return false
-	return bool(tree.root.get_meta(DRAG_ACTIVE_META, false))
+	if bool(tree.root.get_meta(DRAG_ACTIVE_META, false)):
+		return true
+	return Time.get_ticks_msec() <= int(
+		tree.root.get_meta(DRAG_RELEASE_GUARD_META, -1)
+	)
 
 
 func active_drag_index() -> int:
@@ -97,6 +103,7 @@ func _input(event: InputEvent) -> void:
 			# Button under the finger, otherwise it fires pressed after scroll.
 			# Plain tap releases (no threshold crossing) stay unconsumed.
 			if was_dragging:
+				_set_drag_release_guard()
 				get_viewport().set_input_as_handled()
 	elif event is InputEventScreenDrag and event.index == _active_touch_index:
 		_continue_drag(event.position, event.relative)
@@ -139,6 +146,14 @@ func _end_drag() -> void:
 func _set_drag_active(active: bool) -> void:
 	if get_tree() != null and get_tree().root != null:
 		get_tree().root.set_meta(DRAG_ACTIVE_META, active)
+
+
+func _set_drag_release_guard() -> void:
+	if get_tree() != null and get_tree().root != null:
+		get_tree().root.set_meta(
+			DRAG_RELEASE_GUARD_META,
+			Time.get_ticks_msec() + DRAG_RELEASE_GUARD_MSEC,
+		)
 
 
 func _control_at(position: Vector2) -> Control:

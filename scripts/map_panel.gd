@@ -4,6 +4,7 @@ extends Panel
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 
 signal map_selected(map_id: int)
@@ -221,7 +222,7 @@ func _build_compatibility_list() -> void:
 	map_list = ItemList.new()
 	map_list.name = "CompatibilityMapList"
 	map_list.visible = false
-	map_list.item_selected.connect(_show_selected)
+	map_list.item_selected.connect(_on_map_list_item_selected)
 	map_list.item_activated.connect(func(_index: int) -> void: _teleport_selected())
 	add_child(map_list)
 
@@ -360,6 +361,8 @@ func _rebuild_map_cards() -> void:
 
 
 func _select_world_node(node_id: String) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if _world_node(node_id).is_empty():
 		return
 	_selected_world_node_id = node_id
@@ -375,9 +378,17 @@ func _select_world_node(node_id: String) -> void:
 
 
 func _select_map(index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if index < 0 or index >= map_entries.size():
 		return
 	map_list.select(index)
+	_show_selected(index)
+
+
+func _on_map_list_item_selected(index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	_show_selected(index)
 
 

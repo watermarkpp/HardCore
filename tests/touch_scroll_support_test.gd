@@ -161,7 +161,20 @@ func _run() -> void:
 	get_viewport().push_input(touch_up)
 	support.call("_input", touch_up)
 	assert(card_presses[0] == 0, "技能列表拖动越过阈值后仍触发了卡片点击")
-	assert(not TouchScrollSupportScript.is_drag_active(get_tree()), "技能列表拖动结束后共享状态未复位")
+	assert(
+		TouchScrollSupportScript.is_drag_active(get_tree()),
+		"技能列表拖动释放后没有保留短暂误点击保护",
+	)
+	# Expiry is evaluated from the stored monotonic deadline; exercise it
+	# deterministically instead of depending on headless wall-clock scheduling.
+	get_tree().root.set_meta(
+		TouchScrollSupportScript.DRAG_RELEASE_GUARD_META,
+		Time.get_ticks_msec() - 1,
+	)
+	assert(
+		not TouchScrollSupportScript.is_drag_active(get_tree()),
+		"技能列表拖动释放保护过期后没有自动结束",
+	)
 
 	var character_select: Node = load("res://scenes/character_select.tscn").instantiate()
 	add_child(character_select)
