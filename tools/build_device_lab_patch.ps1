@@ -29,7 +29,7 @@ $outputDir=[IO.Path]::GetFullPath((Join-Path $root $OutputDirectory))
 if(-not $outputDir.StartsWith($root,[StringComparison]::OrdinalIgnoreCase)){throw 'output directory must stay inside workspace'}
 New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
 $pck=Join-Path $outputDir "$PatchId.pck"
-$args=@('--headless','--path',$root,'--user-data-dir',(Join-Path $root '.godot/runtime_appdata/device_lab_patch_builder'),'--log-file',(Join-Path $root 'outputs/test_logs/device_lab_patch_build.log'),'--export-patch','Android',$pck,'--patches',($safeBasePacks -join ','))
+$args=@('--headless','--path',$root,'--log-file',(Join-Path $root 'outputs/test_logs/device_lab_patch_build.log'),'--export-patch','Android',$pck,'--patches',($safeBasePacks -join ','))
 & $godot @args
 if($LASTEXITCODE -ne 0){throw "Device Lab patch build failed: $LASTEXITCODE"}
 $item=Get-Item -LiteralPath $pck
