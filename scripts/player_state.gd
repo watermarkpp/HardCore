@@ -23,7 +23,7 @@ signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 9
+const SAVE_VERSION := 10
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
@@ -61,6 +61,17 @@ const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
 const DEVICE_LAB_SAVE_CONTRACT_ID := "device_lab.player_save.v1"
 const DEATH_EXPERIENCE_PENALTY_CONTRACT_ID := "player_state.death_experience_penalty.v1"
 const PRICING_CONTRACT_ID := PricingServiceScript.CONTRACT_ID
+const DURABILITY_CONTRACT_ID := "equipment.durability.raw_authority.v1"
+const DURABILITY_EVENT_WEAPON_PHYSICAL_HIT := (
+	"equipment.durability.weapon_physical_hit.v1"
+)
+const DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK := (
+	"equipment.durability.incoming_physical_struck.v1"
+)
+const DURABILITY_RAW_UNITS_PER_DISPLAY := 1000
+const DURABILITY_INCOMING_EXTENSION_POLICY := (
+	"project_slots_relic_badge_use_same_one_in_eight_physical_wear.v1"
+)
 const SHOP_SELL_CONTRACT_ID := PRICING_CONTRACT_ID
 const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
 const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
@@ -112,6 +123,8 @@ var saved_ground_position_gu_valid := false
 var computed_stats: Dictionary = {}
 var computed_special_effects: Dictionary = {}
 var test_mode := false
+var durability_event_commit_count := 0
+var _durability_rng := RandomNumberGenerator.new()
 var active_profile_id := ""
 var character_name := ""
 var _autosave_elapsed := 0.0
@@ -191,6 +204,7 @@ func reset_progress(emit_updates := true) -> void:
 	_consumed_shop_sell_quote_ids.clear()
 	_consumed_shop_buy_quote_ids.clear()
 	_shop_buy_quote_serial = 0
+	durability_event_commit_count = 0
 	if _shop_pricing_session_nonce.is_empty():
 		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	saved_map_id = 4
@@ -645,7 +659,7 @@ func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
 	var item := GameData.get_item_record(str(a.get("name", "")))
 	if str(a.get("name", "")) != str(b.get("name", "")) or not bool(item.get("stackable", false)) or str(item.get("kind", "")) == "equipment":
 		return false
-	for key: String in ["instance_id", "durability", "max_durability", "modifiers", "random_stats", "bind", "bound"]:
+	for key: String in ["instance_id", "durability", "max_durability", "durability_raw", "max_durability_raw", "modifiers", "random_stats", "bind", "bound"]:
 		if a.has(key) or b.has(key):
 			return false
 	return true
@@ -989,22 +1003,22 @@ func apply_weapon_repair_oil(full_repair: bool) -> String:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
 		return "需要先装备武器"
-	var current := int(weapon_value.get("durability", 0))
-	var maximum := maxi(1, int(weapon_value.get("max_durability", 1)))
+	_ensure_raw_durability_fields(weapon_value)
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
 	if current >= maximum:
 		return "武器无需修复"
 	if full_repair:
-		weapon_value["durability"] = maximum
+		weapon_value["durability_raw"] = maximum
 	else:
-		# Crystal RepairOil repairs a bounded portion and slightly reduces the
-		# maximum durability.  Runtime durability is stored in whole display
-		# points, so the 5000/30 service-unit loss rounds to at least one point.
-		var repaired := mini(maximum, current + 5)
-		var maximum_loss := maxi(1, int(ceil(float(repaired - current) / 30.0)))
-		maximum = maxi(repaired, maximum - maximum_loss)
-		weapon_value["max_durability"] = maximum
-		weapon_value["durability"] = mini(repaired, maximum)
-	recalculate_stats()
+		# ObjBase uses raw durability units: ordinary repair oil restores at most
+		# 5000 while reducing the maximum by missing durability / 30.
+		var maximum_loss := maxi(0, int((maximum - current) / 30))
+		maximum = maxi(1, maximum - maximum_loss)
+		weapon_value["max_durability_raw"] = maximum
+		weapon_value["durability_raw"] = mini(maximum, current + 5000)
+	_sync_durability_compatibility_fields(weapon_value)
+	recalculate_stats(false)
 	equipment_changed.emit()
 	profile_changed.emit()
 	_commit_save()
@@ -1017,6 +1031,9 @@ func _make_item_instance(item_name: String, catalog_item: Dictionary) -> Diction
 		var maximum := maxi(1, int(catalog_item.get("maxDurability", 1)))
 		instance["durability"] = maximum
 		instance["max_durability"] = maximum
+		instance["durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["max_durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
 		instance["instance_id"] = "%d_%d" % [Time.get_ticks_usec(), inventory.size()]
 		if str(catalog_item.get("category", "")) == "武器":
 			instance["weapon_luck"] = 0
@@ -1488,7 +1505,7 @@ func _migrate_quest_states() -> void:
 			state["status"] = "ready"
 
 
-func recalculate_stats() -> void:
+func recalculate_stats(emit_profile_change := true) -> void:
 	var base := ProfessionRules.stats_for_level(profession, level)
 	computed_special_effects = {}
 	var set_powers := {"magic_blood": 0, "rainbow_demon": 0}
@@ -1530,7 +1547,7 @@ func recalculate_stats() -> void:
 		var item_name := str(equipped_value.get("name", "")) if equipped_value is Dictionary else str(equipped_value)
 		if item_name.is_empty():
 			continue
-		if equipped_value is Dictionary and int(equipped_value.get("durability", 1)) <= 0:
+		if equipped_value is Dictionary and not _has_positive_raw_durability(equipped_value):
 			continue
 		var item := GameData.get_item(item_name)
 		if item.is_empty():
@@ -1628,7 +1645,8 @@ func recalculate_stats() -> void:
 	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
 	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
 	computed_stats = result
-	profile_changed.emit()
+	if emit_profile_change:
+		profile_changed.emit()
 
 
 func has_special_effect(effect_id: String) -> bool:
@@ -1827,7 +1845,7 @@ func max_inventory_weight() -> int:
 
 func _active_double_weight_effect() -> bool:
 	for value: Variant in equipment.values():
-		if not value is Dictionary or value.is_empty() or int(value.get("durability", 1)) <= 0:
+		if not value is Dictionary or value.is_empty() or not _has_positive_raw_durability(value):
 			continue
 		var item := GameData.get_item_record(str(value.get("name", "")))
 		var special := EquipmentRulesScript.special_effect_for(item)
@@ -1896,10 +1914,105 @@ func _empty_equipment() -> Dictionary:
 
 func _equipment_instance_from_saved(saved_value: Variant) -> Dictionary:
 	if saved_value is Dictionary:
-		return saved_value.duplicate(true)
+		var restored: Dictionary = saved_value.duplicate(true)
+		_ensure_raw_durability_fields(restored)
+		return restored
 	if not str(saved_value).is_empty():
 		return _make_item_instance(str(saved_value), GameData.get_item_record(str(saved_value)))
 	return {}
+
+
+func _ensure_raw_durability_fields(instance: Dictionary) -> bool:
+	if instance.is_empty():
+		return false
+	var catalog := GameData.get_item_record(str(instance.get("name", "")))
+	var catalog_maximum := maxi(1, int(catalog.get("maxDurability", 1)))
+	var migrated := false
+	if not instance.has("max_durability_raw"):
+		instance["max_durability_raw"] = (
+			maxi(1, int(instance.get("max_durability", catalog_maximum)))
+			* DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+		migrated = true
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	instance["max_durability_raw"] = maximum_raw
+	if not instance.has("durability_raw"):
+		instance["durability_raw"] = (
+			clampi(
+				int(instance.get("durability", instance.get("max_durability", catalog_maximum))),
+				0,
+				maxi(1, int(instance.get("max_durability", catalog_maximum)))
+			)
+			* DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+		migrated = true
+	instance["durability_raw"] = clampi(
+		int(instance.get("durability_raw", 0)), 0, maximum_raw
+	)
+	instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
+	_sync_durability_compatibility_fields(instance)
+	return migrated
+
+
+func _adopt_legacy_durability_compatibility_override(instance: Dictionary) -> void:
+	if not instance.has("durability_raw") or not instance.has("max_durability_raw"):
+		return
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	var current_raw := clampi(int(instance.get("durability_raw", 0)), 0, maximum_raw)
+	var expected_maximum := maxi(
+		1,
+		int(ceil(float(maximum_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	var expected_current := (
+		0
+		if current_raw <= 0
+		else int(ceil(float(current_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	var display_maximum := maxi(1, int(instance.get("max_durability", expected_maximum)))
+	var display_current := clampi(
+		int(instance.get("durability", expected_current)), 0, display_maximum
+	)
+	if display_maximum != expected_maximum:
+		maximum_raw = display_maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["max_durability_raw"] = maximum_raw
+	if display_current != expected_current:
+		instance["durability_raw"] = mini(
+			maximum_raw, display_current * DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+
+
+func _sync_durability_compatibility_fields(instance: Dictionary) -> void:
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	var current_raw := clampi(int(instance.get("durability_raw", 0)), 0, maximum_raw)
+	instance["max_durability_raw"] = maximum_raw
+	instance["durability_raw"] = current_raw
+	# Existing UI and pricing contracts remain whole display points. Ceiling is
+	# intentional: a positive raw remainder is usable and must not look broken.
+	instance["max_durability"] = maxi(
+		1,
+		int(ceil(float(maximum_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	instance["durability"] = (
+		0
+		if current_raw <= 0
+		else int(ceil(float(current_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+
+
+func _has_positive_raw_durability(instance: Dictionary) -> bool:
+	_adopt_legacy_durability_compatibility_override(instance)
+	_ensure_raw_durability_fields(instance)
+	return int(instance.get("durability_raw", 0)) > 0
+
+
+func _migrate_item_collection_durability(records: Array) -> bool:
+	var migrated := false
+	for value: Variant in records:
+		if value is Dictionary and not value.is_empty():
+			var catalog := GameData.get_item_record(str(value.get("name", "")))
+			if str(catalog.get("kind", "")) == "equipment":
+				migrated = _ensure_raw_durability_fields(value) or migrated
+	return migrated
 
 
 func migrate_equipment_slots(saved_equipment: Dictionary) -> Dictionary:
@@ -1915,19 +2028,167 @@ func migrate_equipment_slots(saved_equipment: Dictionary) -> Dictionary:
 
 
 func damage_equipment_durability(slot: String, amount := 1) -> void:
+	_damage_equipment_durability_raw(
+		slot,
+		maxi(0, amount) * DURABILITY_RAW_UNITS_PER_DISPLAY,
+		true
+	)
+
+
+func _damage_equipment_durability_raw(
+	slot: String,
+	amount_raw: int,
+	commit_individually := false
+) -> bool:
 	var equipped: Variant = equipment.get(slot, {})
 	if not equipped is Dictionary or equipped.is_empty():
-		return
-	var old_value := int(equipped.get("durability", 0))
-	var new_value := maxi(0, old_value - maxi(0, amount))
+		return false
+	_ensure_raw_durability_fields(equipped)
+	var old_value := int(equipped.get("durability_raw", 0))
+	var new_value := maxi(0, old_value - maxi(0, amount_raw))
 	if new_value == old_value:
-		return
-	equipped["durability"] = new_value
-	if new_value == 0:
-		recalculate_stats()
+		return false
+	equipped["durability_raw"] = new_value
+	_sync_durability_compatibility_fields(equipped)
+	if commit_individually:
+		if new_value == 0:
+			recalculate_stats(false)
+		equipment_changed.emit()
+		profile_changed.emit()
+		_commit_save()
+	return true
+
+
+func apply_durability_event(event_id: String, context := {}) -> Dictionary:
+	var result := {
+		"contract_id": DURABILITY_CONTRACT_ID,
+		"event_id": event_id,
+		"applied": false,
+		"changed_slots": {},
+		"raw_loss": 0,
+		"signal_batches": 0,
+		"save_commits": 0,
+		"extension_policy": DURABILITY_INCOMING_EXTENSION_POLICY,
+	}
+	if not context is Dictionary:
+		result["reason"] = "invalid_context"
+		return result
+	var event_context: Dictionary = context
+	if str(event_context.get("damage_type", "physical")) != "physical":
+		result["reason"] = "non_physical"
+		return result
+	if int(event_context.get("damage", 1)) <= 0:
+		result["reason"] = "non_positive_damage"
+		return result
+	var equipment_before := equipment.duplicate(true)
+	var crossed_zero := false
+	match event_id:
+		DURABILITY_EVENT_WEAPON_PHYSICAL_HIT:
+			if not bool(event_context.get("confirmed_hit", false)):
+				result["reason"] = "unconfirmed_hit"
+				return result
+			var weapon: Variant = equipment.get("武器", {})
+			if not weapon is Dictionary or weapon.is_empty():
+				result["reason"] = "weapon_missing"
+				return result
+			_ensure_raw_durability_fields(weapon)
+			var weapon_roll := _durability_roll(event_context, "weapon_roll", 0, 4)
+			var weapon_strong := _weapon_strong(weapon, event_context)
+			var weapon_loss := maxi(0, weapon_roll + 2 - weapon_strong)
+			result["raw_loss"] = weapon_loss
+			result["weapon_roll"] = weapon_roll
+			result["weapon_strong"] = weapon_strong
+			if weapon_loss > 0:
+				var old_weapon_raw := int(weapon.get("durability_raw", 0))
+				if _damage_equipment_durability_raw("武器", weapon_loss):
+					(result["changed_slots"] as Dictionary)["武器"] = weapon_loss
+					crossed_zero = old_weapon_raw > 0 and int(weapon.get("durability_raw", 0)) == 0
+		DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK:
+			if not bool(event_context.get("causes_struck", true)):
+				result["reason"] = "not_struck_damage"
+				return result
+			var incoming_roll := _durability_roll(event_context, "armor_roll", 0, 9)
+			var incoming_loss := incoming_roll + 5
+			if bool(event_context.get("red_poison", false)):
+				incoming_loss = maxi(1, roundi(float(incoming_loss) * 1.2))
+			result["raw_loss"] = incoming_loss
+			result["armor_roll"] = incoming_roll
+			var armor: Variant = equipment.get("衣服", {})
+			if armor is Dictionary and not armor.is_empty():
+				_ensure_raw_durability_fields(armor)
+				var old_armor_raw := int(armor.get("durability_raw", 0))
+				if _damage_equipment_durability_raw("衣服", incoming_loss):
+					(result["changed_slots"] as Dictionary)["衣服"] = incoming_loss
+					crossed_zero = crossed_zero or (
+						old_armor_raw > 0 and int(armor.get("durability_raw", 0)) == 0
+					)
+			var slot_rolls: Dictionary = event_context.get("slot_rolls", {})
+			for slot: String in EQUIPMENT_SLOTS:
+				var slot_roll := (
+					clampi(int(slot_rolls.get(slot, 0)), 0, 7)
+					if slot_rolls.has(slot)
+					else _durability_roll(event_context, "", 0, 7)
+				)
+				if slot_roll != 0:
+					continue
+				var equipped: Variant = equipment.get(slot, {})
+				if not equipped is Dictionary or equipped.is_empty():
+					continue
+				_ensure_raw_durability_fields(equipped)
+				var old_slot_raw := int(equipped.get("durability_raw", 0))
+				if _damage_equipment_durability_raw(slot, incoming_loss):
+					var previous_loss := int((result["changed_slots"] as Dictionary).get(slot, 0))
+					(result["changed_slots"] as Dictionary)[slot] = previous_loss + incoming_loss
+					crossed_zero = crossed_zero or (
+						old_slot_raw > 0 and int(equipped.get("durability_raw", 0)) == 0
+					)
+		_:
+			result["reason"] = "unknown_event"
+			return result
+	if (result["changed_slots"] as Dictionary).is_empty():
+		result["reason"] = "no_durability_change"
+		return result
+	result["save_commits"] = 1
+	if crossed_zero:
+		recalculate_stats(false)
+	result["save_committed"] = _commit_save()
+	if not bool(result["save_committed"]):
+		equipment = equipment_before
+		recalculate_stats(false)
+		result["changed_slots"] = {}
+		result["raw_loss"] = 0
+		result["rolled_back"] = true
+		result["reason"] = "save_failed"
+		return result
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
+	result["signal_batches"] = 1
+	durability_event_commit_count += 1
+	result["applied"] = true
+	result["reason"] = ""
+	return result
+
+
+func _durability_roll(context: Dictionary, key: String, minimum: int, maximum: int) -> int:
+	if not key.is_empty() and context.has(key):
+		return clampi(int(context.get(key, minimum)), minimum, maximum)
+	var rng_value: Variant = context.get("rng", null)
+	if rng_value is RandomNumberGenerator:
+		return (rng_value as RandomNumberGenerator).randi_range(minimum, maximum)
+	return _durability_rng.randi_range(minimum, maximum)
+
+
+func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
+	if context.has("weapon_strong"):
+		return maxi(0, int(context.get("weapon_strong", 0)))
+	for key: String in ["weapon_strong", "WeaponStrong", "strong", "Strong"]:
+		if weapon.has(key):
+			return maxi(0, int(weapon.get(key, 0)))
+	var catalog := GameData.get_item_record(str(weapon.get("name", "")))
+	for key: String in ["weaponStrong", "WeaponStrong", "strong", "Strong"]:
+		if catalog.has(key):
+			return maxi(0, int(catalog.get(key, 0)))
+	return 0
 
 
 func repair_cost(context := {}) -> int:
@@ -1941,6 +2202,8 @@ func _repair_plan(context := {}) -> Dictionary:
 		var equipped: Variant = equipment.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
+		_adopt_legacy_durability_compatibility_override(equipped)
+		_ensure_raw_durability_fields(equipped)
 		var item_name := str(equipped.get("name", ""))
 		var quote := PricingServiceScript.quote_repair(
 			GameData.get_item_price_record(item_name),
@@ -1972,30 +2235,32 @@ func repair_all_equipment(context := {}) -> String:
 		var equipped: Variant = equipment.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
+		_ensure_raw_durability_fields(equipped)
 		var item_name := str(equipped.get("name", ""))
 		var price_record := GameData.get_item_price_record(item_name)
 		var catalog := GameData.get_item_record(item_name)
-		var current := int(equipped.get("durability", 0))
-		var maximum := maxi(1, int(equipped.get("max_durability", catalog.get("maxDurability", 1))))
-		var missing := maximum - clampi(current, 0, maximum)
-		if missing <= 0 or remaining_gold <= 0:
+		var current_raw := int(equipped.get("durability_raw", 0))
+		var maximum_raw := maxi(1, int(equipped.get("max_durability_raw", 1)))
+		var missing_raw := maximum_raw - clampi(current_raw, 0, maximum_raw)
+		if missing_raw <= 0 or remaining_gold <= 0:
 			continue
-		var chosen_quote := PricingServiceScript.quote_repair_delta(
-			price_record, catalog, equipped, missing, context
+		var chosen_quote := PricingServiceScript.quote_repair_raw_delta(
+			price_record, catalog, equipped, missing_raw, context
 		)
 		if not bool(chosen_quote.get("valid", false)):
 			continue
 		if int(chosen_quote.get("total_price", 0)) > remaining_gold:
-			chosen_quote = _maximum_affordable_repair_quote(
-				price_record, catalog, equipped, missing, remaining_gold, context
+			chosen_quote = _maximum_affordable_repair_raw_quote(
+				price_record, catalog, equipped, missing_raw, remaining_gold, context
 			)
 		if not bool(chosen_quote.get("valid", false)):
 			continue
 		var slot_cost := int(chosen_quote.get("total_price", 0))
-		var target := int(chosen_quote.get("formula_snapshot", {}).get("target_durability", current))
-		if slot_cost <= 0 or slot_cost > remaining_gold or target <= current:
+		var target_raw := int(chosen_quote.get("formula_snapshot", {}).get("target_durability_raw", current_raw))
+		if slot_cost <= 0 or slot_cost > remaining_gold or target_raw <= current_raw:
 			continue
-		equipped["durability"] = mini(maximum, target)
+		equipped["durability_raw"] = mini(maximum_raw, target_raw)
+		_sync_durability_compatibility_fields(equipped)
 		remaining_gold -= slot_cost
 		spent += slot_cost
 		repaired_slots += 1
@@ -2017,20 +2282,20 @@ func repair_all_equipment(context := {}) -> String:
 	return "金币不足，已优先维修%d件装备，花费%d金币" % [repaired_slots, spent]
 
 
-func _maximum_affordable_repair_quote(
+func _maximum_affordable_repair_raw_quote(
 	price_record: Dictionary,
 	catalog: Dictionary,
 	instance: Dictionary,
-	maximum_amount: int,
+	maximum_amount_raw: int,
 	budget: int,
 	context: Dictionary
 ) -> Dictionary:
 	var low := 1
-	var high := maxi(0, maximum_amount)
+	var high := maxi(0, maximum_amount_raw)
 	var best: Dictionary = {}
 	while low <= high:
 		var amount := int((low + high) / 2)
-		var quote := PricingServiceScript.quote_repair_delta(
+		var quote := PricingServiceScript.quote_repair_raw_delta(
 			price_record, catalog, instance, amount, context
 		)
 		if bool(quote.get("valid", false)) and int(quote.get("total_price", 0)) <= budget:
@@ -2450,6 +2715,8 @@ func load_save() -> void:
 	warehouse_inventory = parsed.get("warehouse_inventory", [])
 	var saved_equipment: Dictionary = parsed.get("equipment", {})
 	equipment = migrate_equipment_slots(saved_equipment)
+	_migrate_item_collection_durability(inventory)
+	_migrate_item_collection_durability(warehouse_inventory)
 	learned_skills = parsed.get("learned_skills", {})
 	var progression_load: Dictionary = _skill_progression.load_snapshot(
 		parsed.get("skill_progression", learned_skills)
@@ -3292,7 +3559,7 @@ func ensure_developer_test_character()->void:
 
 func _developer_item(item_name:String,instance_id:String)->Dictionary:
 	var item:=GameData.get_item_record(item_name);var maximum:=maxi(1,int(item.get("maxDurability",1)))
-	var result:={"name":item_name,"count":1,"durability":maximum,"max_durability":maximum,"instance_id":instance_id}
+	var result:={"name":item_name,"count":1,"durability":maximum,"max_durability":maximum,"durability_raw":maximum*DURABILITY_RAW_UNITS_PER_DISPLAY,"max_durability_raw":maximum*DURABILITY_RAW_UNITS_PER_DISPLAY,"durability_contract_id":DURABILITY_CONTRACT_ID,"instance_id":instance_id}
 	if str(item.get("category",""))=="武器":result.merge({"weapon_luck":0,"weapon_curse":0})
 	return result
 
@@ -3422,4 +3689,4 @@ func _migrate_single_save_to_profile() -> void:
 func _commit_save() -> bool:
 	if not test_mode:
 		return save_game()
-	return true
+	return not _test_force_atomic_write_failure

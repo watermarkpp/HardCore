@@ -115,10 +115,15 @@ static func quote_repair(
 	policy_override := {}
 ) -> Dictionary:
 	var active := _policy(policy_override)
-	var result := _quote_base("repair", price_record, 1, active)
-	if not bool(context.get("supports_repair", true)):
-		result["reason"] = "该商人不提供维修服务。"
-		return result
+	if instance.has("durability_raw") or instance.has("max_durability_raw"):
+		var maximum_raw := maxi(1, int(instance.get(
+			"max_durability_raw",
+			maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1)))) * 1000
+		)))
+		var current_raw := clampi(int(instance.get("durability_raw", maximum_raw)), 0, maximum_raw)
+		return quote_repair_raw_delta(
+			price_record, catalog, instance, maximum_raw - current_raw, context, active
+		)
 	var current := int(instance.get("durability", 0))
 	var maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
 	var missing := maximum - clampi(current, 0, maximum)
@@ -133,18 +138,63 @@ static func quote_repair_delta(
 	context := {},
 	policy_override := {}
 ) -> Dictionary:
+	var maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
+	var current := clampi(int(instance.get("durability", 0)), 0, maximum)
+	var missing := maximum - current
+	if missing <= 0:
+		var active := _policy(policy_override)
+		return _complete_quote(
+			_quote_base("repair", price_record, 1, active), 0, 1,
+			{"missing_durability": 0, "missing_durability_raw": 0}
+		)
+	var applied_amount := clampi(repair_amount, 0, missing)
+	return quote_repair_raw_delta(
+		price_record,
+		catalog,
+		instance,
+		applied_amount * 1000,
+		context,
+		policy_override,
+		current * 1000,
+		maximum * 1000
+	)
+
+
+static func quote_repair_raw_delta(
+	price_record: Dictionary,
+	catalog: Dictionary,
+	instance: Dictionary,
+	repair_amount_raw: int,
+	context := {},
+	policy_override := {},
+	current_raw_override := -1,
+	maximum_raw_override := -1
+) -> Dictionary:
 	var active := _policy(policy_override)
 	var result := _quote_base("repair", price_record, 1, active)
 	if not bool(context.get("supports_repair", true)):
 		result["reason"] = "该商人不提供维修服务。"
 		return result
-	var current := int(instance.get("durability", 0))
-	var maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
-	var missing := maximum - clampi(current, 0, maximum)
-	if missing <= 0:
-		return _complete_quote(result, 0, 1, {"missing_durability": 0})
-	var applied_amount := clampi(repair_amount, 0, missing)
-	if applied_amount <= 0:
+	var display_maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
+	var maximum_raw := (
+		maximum_raw_override
+		if maximum_raw_override > 0
+		else maxi(1, int(instance.get("max_durability_raw", display_maximum * 1000)))
+	)
+	var current_raw := (
+		current_raw_override
+		if current_raw_override >= 0
+		else int(instance.get("durability_raw", int(instance.get("durability", 0)) * 1000))
+	)
+	current_raw = clampi(current_raw, 0, maximum_raw)
+	var missing_raw := maximum_raw - current_raw
+	if missing_raw <= 0:
+		return _complete_quote(result, 0, 1, {
+			"missing_durability": 0,
+			"missing_durability_raw": 0,
+		})
+	var applied_raw := clampi(repair_amount_raw, 0, missing_raw)
+	if applied_raw <= 0:
 		result["reason"] = "修复量无效。"
 		return result
 	var buy_basis := quote_buy(price_record, 1, context, active)
@@ -154,15 +204,19 @@ static func quote_repair_delta(
 	var user_item_price := _instance_value(int(buy_basis.get("unit_price", 0)), catalog, instance)
 	var divisor := maxi(1, int((active.get("repair", {}) as Dictionary).get("priceDivisor", 3)))
 	var one_third := int(user_item_price / divisor)
-	var cost := _round_half_up_ratio(one_third * applied_amount, 1, maximum)
+	var cost := _round_half_up_ratio(one_third, applied_raw, maximum_raw)
 	cost = maxi(1, cost)
 	return _complete_quote(result, cost, 1, {
 		"instance_value": user_item_price,
 		"price_divisor": divisor,
-		"missing_durability": missing,
-		"repair_amount": applied_amount,
-		"target_durability": clampi(current, 0, maximum) + applied_amount,
-		"maximum_durability": maximum,
+		"missing_durability": int(ceil(float(missing_raw) / 1000.0)),
+		"missing_durability_raw": missing_raw,
+		"repair_amount": int(ceil(float(applied_raw) / 1000.0)),
+		"repair_amount_raw": applied_raw,
+		"target_durability": int(ceil(float(current_raw + applied_raw) / 1000.0)),
+		"target_durability_raw": current_raw + applied_raw,
+		"maximum_durability": int(ceil(float(maximum_raw) / 1000.0)),
+		"maximum_durability_raw": maximum_raw,
 		"preserve_maximum_durability": bool((active.get("repair", {}) as Dictionary).get("preserveMaximumDurability", true)),
 	})
 
@@ -204,9 +258,27 @@ static func _instance_value(base_value: int, catalog: Dictionary, instance: Dict
 	if str(catalog.get("kind", "")) != "equipment" and not instance.has("max_durability"):
 		return base_value
 	var catalog_maximum := maxi(1, int(catalog.get("maxDurability", instance.get("max_durability", 1))))
-	var instance_maximum := maxi(1, int(instance.get("max_durability", catalog_maximum)))
-	var current := clampi(int(instance.get("durability", instance_maximum)), 0, instance_maximum)
-	var value := _round_half_up_ratio(base_value, instance_maximum, catalog_maximum)
+	var uses_raw := instance.has("durability_raw") or instance.has("max_durability_raw")
+	var unit_scale := 1000 if uses_raw else 1
+	var catalog_maximum_units := catalog_maximum * unit_scale
+	var instance_maximum := maxi(
+		1,
+		int(instance.get(
+			"max_durability_raw" if uses_raw else "max_durability",
+			catalog_maximum_units
+		))
+	)
+	var current := clampi(
+		int(instance.get(
+			"durability_raw" if uses_raw else "durability",
+			instance_maximum
+		)),
+		0,
+		instance_maximum
+	)
+	var value := _round_half_up_ratio(
+		base_value, instance_maximum, catalog_maximum_units
+	)
 	var service_bonus_points := maxi(0, int(instance.get("service_bonus_points", 0)))
 	if service_bonus_points > 0:
 		value = int(value / 5) * service_bonus_points

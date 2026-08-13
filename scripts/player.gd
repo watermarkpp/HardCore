@@ -336,8 +336,6 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 		facing.normalized(),
 		locked_target_instance_id
 	)
-	if _rng.randi_range(1, 25) == 1:
-		PlayerState.damage_equipment_durability("武器")
 	return true
 
 
@@ -532,16 +530,33 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		locked_target_instance_id,
 		track_locked_target
 	)
-	if _rng.randi_range(1, 30) == 1:
-		PlayerState.damage_equipment_durability("武器")
 	return true
 
 
-func take_damage(amount: int, causes_struck: bool = true) -> void:
+func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dictionary:
+	var event_context: Dictionary = (
+		context.duplicate(true) if context is Dictionary else {}
+	)
+	event_context["confirmed_hit"] = true
+	event_context["damage_type"] = "physical"
+	event_context["damage"] = damage
+	if not event_context.has("rng"):
+		event_context["rng"] = _rng
+	return PlayerState.apply_durability_event(
+		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
+		event_context
+	)
+
+
+func take_damage(amount: int, causes_struck: bool = true, durability_context := {}) -> void:
 	if _dead:
 		return
+	if amount <= 0:
+		return
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
-	_apply_resolved_damage(maxi(1, amount - absorbed), causes_struck)
+	_apply_resolved_damage(
+		maxi(1, amount - absorbed), causes_struck, "physical", durability_context
+	)
 
 
 func take_direct_spell_damage(
@@ -607,7 +622,7 @@ func take_direct_spell_damage(
 	resolution["physical_defense_bypassed"] = true
 	var hp_before := current_hp
 	if int(resolution.final_damage) > 0:
-		_apply_resolved_damage(int(resolution.final_damage), causes_struck)
+		_apply_resolved_damage(int(resolution.final_damage), causes_struck, "magic")
 	resolution["player_pipeline_input"] = int(resolution.final_damage)
 	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
 	return resolution
@@ -627,7 +642,12 @@ func _resolve_direct_spell_magic_defense(
 	return maxi(0, incoming_damage - roll)
 
 
-func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
+func _apply_resolved_damage(
+	amount: int,
+	causes_struck: bool,
+	damage_type := "physical",
+	durability_context := {}
+) -> void:
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/respawn timer is active must not repeat durability, gold loss,
 	# signals or schedule another respawn coroutine.
@@ -668,6 +688,22 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
 	current_hp = maxi(0, current_hp - final_damage)
+	if causes_struck and damage_type == "physical" and final_damage > 0:
+		var event_context: Dictionary = (
+			durability_context.duplicate(true)
+			if durability_context is Dictionary
+			else {}
+		)
+		event_context["damage_type"] = "physical"
+		event_context["damage"] = final_damage
+		event_context["causes_struck"] = true
+		event_context["red_poison"] = _incoming_red_poison_active(event_context)
+		if not event_context.has("rng"):
+			event_context["rng"] = _rng
+		PlayerState.apply_durability_event(
+			PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
+			event_context
+		)
 	if causes_struck and ProfessionRules.should_player_stagger(final_damage, max_hp) and current_hp > 0:
 		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
 		velocity = Vector2.ZERO
@@ -679,8 +715,6 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 			_queued_struck_reaction = true
 		else:
 			_start_struck_reaction()
-	if _rng.randi_range(1, 30) == 1:
-		PlayerState.damage_equipment_durability("衣服")
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
@@ -713,6 +747,17 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 		death_requested.emit()
 		stats_changed.emit(current_hp, max_hp)
 		resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+
+
+func _incoming_red_poison_active(context: Dictionary) -> bool:
+	if context.has("red_poison"):
+		return bool(context.get("red_poison", false))
+	if not has_meta("canonical_red_poison"):
+		return false
+	var poison_data: Variant = get_meta("canonical_red_poison")
+	if not poison_data is Dictionary:
+		return false
+	return Time.get_ticks_msec() < int(poison_data.get("expires_at_ms", 0))
 
 
 func _emit_attack_after_windup(

@@ -65,6 +65,18 @@ func _run() -> void:
 		2,
 		GameData.merchant_context("starter_gear")
 	)
+	var raw_repair := PricingServiceScript.quote_repair_raw_delta(
+		wood,
+		GameData.get_item_record("木剑"),
+		{"durability": 4, "max_durability": 4, "durability_raw": 3998, "max_durability_raw": 4000},
+		2
+	)
+	assert(
+		raw_repair.valid
+		and int(raw_repair.formula_snapshot.repair_amount_raw) == 2
+		and int(raw_repair.formula_snapshot.target_durability_raw) == 4000,
+		"不足1显示点的raw耐久没有进入维修报价"
+	)
 	assert(bool(partial_repair.get("valid", false)) and int(partial_repair.get("total_price", 0)) >= 1)
 	assert(int(larger_partial_repair.get("total_price", 0)) >= int(partial_repair.get("total_price", 0)))
 	assert(int(blacksmith_repair.get("total_price", 0)) >= int(larger_partial_repair.get("total_price", 0)))

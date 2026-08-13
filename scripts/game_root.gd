@@ -8022,6 +8022,13 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 		"actual_hp_delta": maxi(0, hp_before - enemy.current_hp),
 		"result_code": "HIT_COMMITTED",
 	})
+	# Durability is committed only after the authoritative physical damage
+	# transaction succeeds. Misses, empty swings, spell routes and rejected
+	# damage never reach this point.
+	if is_instance_valid(player):
+		player.apply_confirmed_physical_hit_durability(
+			maxi(0, hp_before - enemy.current_hp)
+		)
 	var life_steal_percent := int(PlayerState.computed_stats.get("life_steal_percent", 0))
 	var recovered := int(float(maxi(1, damage)) * float(life_steal_percent) / 100.0)
 	if recovered >= 2:

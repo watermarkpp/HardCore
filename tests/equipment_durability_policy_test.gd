@@ -45,14 +45,23 @@ func _run() -> void:
 	PlayerState.gold = expected_cost - 1
 	var partial_message := PlayerState.repair_all_equipment()
 	assert(partial_message.begins_with("金币不足，已优先维修"), "金币不足时未执行武器优先的部分维修")
-	assert(int(weapon.get("durability", -1)) > 0 and int(weapon.get("durability", -1)) < maximum, "余额不足时部分维修量错误")
+	assert(
+		int(weapon.get("durability_raw", -1)) > 0
+		and int(weapon.get("durability_raw", -1)) < int(weapon.get("max_durability_raw", 0)),
+		"余额不足时部分维修raw量错误"
+	)
 	assert(PlayerState.gold >= 0 and PlayerState.gold < expected_cost - 1, "部分维修扣费错误")
 	assert(int(weapon.get("max_durability", -1)) == maximum, "部分维修错误降低最大耐久")
 
 	PlayerState.gold = PlayerState.repair_cost()
 	assert(PlayerState.repair_all_equipment().begins_with("全部装备维修完成"), "唯一维修功能执行失败")
 	assert(PlayerState.gold == 0, "维修扣费错误")
-	assert(int(weapon.get("durability", -1)) == maximum and int(weapon.get("max_durability", -1)) == maximum, "维修没有恢复原最大耐久")
+	assert(
+		int(weapon.get("durability_raw", -1)) == int(weapon.get("max_durability_raw", 0))
+		and int(weapon.get("durability", -1)) == maximum
+		and int(weapon.get("max_durability", -1)) == maximum,
+		"维修没有恢复原最大耐久"
+	)
 	assert(str(weapon.get("instance_id", "")) == instance_id, "维修改变了装备实例")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == attack_with_weapon, "维修后装备属性没有恢复")
 

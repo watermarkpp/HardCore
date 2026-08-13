@@ -72,13 +72,13 @@ func _run() -> void:
 		FileAccess.get_file_as_string(second_path)
 	)
 	assert(missing_field_payload is Dictionary)
-	assert(int(missing_field_payload.get("save_version", 0)) == 9)
+	assert(int(missing_field_payload.get("save_version", 0)) == PlayerState.SAVE_VERSION)
 	assert(not (missing_field_payload as Dictionary).has("taoist_main_pet_runtime_state"))
 	assert(not (missing_field_payload as Dictionary).has("taoist_main_pet_runtime_states"))
 	PlayerState.load_save()
 	assert(
 		PlayerState.taoist_main_pet_runtime_states_for_restore().slots.is_empty(),
-		"v9 save without summon fields did not load compatibly"
+		"current save without summon fields did not load compatibly"
 	)
 
 	# Character creation remains warrior-only. Switch this existing profile to
