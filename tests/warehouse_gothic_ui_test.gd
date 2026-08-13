@@ -25,9 +25,13 @@ func _run() -> void:
 	assert(panel.size == Vector2(1164, 660), "仓库没有使用既定横屏布局尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "仓库没有使用公共哥特外框")
 	assert(panel.get_node("StashSection").position.x < panel.get_node("BagSection").position.x, "仓库必须位于左侧、人物背包位于右侧")
-	assert(panel.get_node("StashSection").theme_type_variation == "GothicInsetFrame", "个人仓库没有使用公共内框")
-	assert(panel.get_node("TransferSection").theme_type_variation == "GothicInsetFrame", "转移栏没有使用公共内框")
-	assert(panel.get_node("BagSection").theme_type_variation == "GothicInsetFrame", "人物背包没有使用公共内框")
+	for retired_decoration_path: String in [
+		"StashSection/StashSectionDecoration",
+		"TransferSection/TransferSectionDecoration",
+		"BagSection/BagSectionDecoration",
+	]:
+		assert(panel.get_node_or_null(retired_decoration_path) == null, "%s 不应再生成自动二级框" % retired_decoration_path)
+		assert(retired_decoration_path in panel.get_meta("calibration_retired_paths", []), "%s 未加入校准退役路径" % retired_decoration_path)
 	assert(panel.bag_grid.columns == 6 and panel.stash_grid.columns == 6, "仓库与人物背包没有按要求减少为 6 列")
 	for side_name: String in ["Stash", "Bag"]:
 		var frame := panel.get_node("%sSection/%sGridV3Frame" % [side_name, side_name]) as Control

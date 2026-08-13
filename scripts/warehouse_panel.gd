@@ -58,6 +58,17 @@ var _refresh_execution_count := 0
 
 
 func _ready() -> void:
+	set_meta("calibration_retired_paths", [
+		"StashSection/StashSectionDecoration",
+		"StashSection/StashSectionDecoration/StashSectionFill",
+		"StashSection/StashSectionDecoration/StashSectionFrame",
+		"TransferSection/TransferSectionDecoration",
+		"TransferSection/TransferSectionDecoration/TransferSectionFill",
+		"TransferSection/TransferSectionDecoration/TransferSectionFrame",
+		"BagSection/BagSectionDecoration",
+		"BagSection/BagSectionDecoration/BagSectionFill",
+		"BagSection/BagSectionDecoration/BagSectionFrame",
+	])
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -539,7 +550,17 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 
 func _section_panel(node_name: String, rect: Rect2) -> Control:
 	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
-	return GothicFrameFactoryScript.add_filled_section(self, node_name, adjusted_rect)
+	# Section roots own content and calibrated geometry only.  Their former
+	# add_filled_section() decorations created three extra, unselectable frames
+	# around the left, transfer, and right columns.  Keep the stable roots while
+	# leaving their visual treatment to the explicit grid frames below.
+	var section := Control.new()
+	section.name = node_name
+	section.position = adjusted_rect.position
+	section.size = adjusted_rect.size
+	section.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(section)
+	return section
 
 
 func _section_title(node_name: String, text_value: String, width: float) -> Label:
