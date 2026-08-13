@@ -136,7 +136,9 @@ try {
         if (-not (Test-Path -LiteralPath $AndroidSourceZip -PathType Leaf)) {
             throw "Gradle Android export is enabled but offline template is missing: $AndroidSourceZip"
         }
-        $StageAndroidPath = [System.IO.Path]::GetFullPath((Join-Path $StageProjectPath "android"))
+        # Godot detects a custom Android build template only at android/build.
+        # The official android_source.zip contains the build root itself.
+        $StageAndroidPath = [System.IO.Path]::GetFullPath((Join-Path $StageProjectPath "android\build"))
         $SafeStagePrefix = $StageProjectPath + [System.IO.Path]::DirectorySeparatorChar
         if (-not $StageAndroidPath.StartsWith($SafeStagePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
             throw "Refusing unsafe Android template extraction path: $StageAndroidPath"
