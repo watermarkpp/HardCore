@@ -217,9 +217,35 @@ try {
         if ($ImportExitCode -ne 0) {
             throw "Godot isolated import failed. Log: $ImportLog"
         }
-        & $GodotConsole --headless --path $StageProjectPath --log-file $ExportLog --export-debug "Android" $StageApk
-        $ExportExitCode = $LASTEXITCODE
-        if ($ExportExitCode -ne 0) {
+        $ExportStdout = Join-Path $StageProjectPath "outputs\android_isolated_export_stdout.log"
+        $ExportStderr = Join-Path $StageProjectPath "outputs\android_isolated_export_stderr.log"
+        $ExportProcess = Start-Process $GodotConsole -ArgumentList @(
+            "--headless", "--path", $StageProjectPath, "--log-file", $ExportLog,
+            "--export-debug", "Android", $StageApk
+        ) -RedirectStandardOutput $ExportStdout -RedirectStandardError $ExportStderr -WindowStyle Hidden -PassThru
+        $ExportDeadline = (Get-Date).AddMinutes(10)
+        while (-not $ExportProcess.HasExited -and (Get-Date) -lt $ExportDeadline) {
+            Start-Sleep -Seconds 2
+            $ExportProcess.Refresh()
+            if (Test-Path -LiteralPath $StageApk -PathType Leaf) {
+                $FirstLength = (Get-Item -LiteralPath $StageApk).Length
+                Start-Sleep -Seconds 2
+                $ExportProcess.Refresh()
+                if (-not $ExportProcess.HasExited -and (Get-Item -LiteralPath $StageApk).Length -eq $FirstLength -and $FirstLength -gt 0) {
+                    $ExportLogText = if (Test-Path $ExportLog) { Get-Content -LiteralPath $ExportLog -Raw } else { "" }
+                    if ($ExportLogText -match '\[ DONE \].*export') {
+                        Stop-Process -Id $ExportProcess.Id -Force
+                        $ExportProcess.WaitForExit()
+                        break
+                    }
+                }
+            }
+        }
+        if (-not $ExportProcess.HasExited) {
+            Stop-Process -Id $ExportProcess.Id -Force
+            throw "Godot isolated Android export timed out. Log: $ExportLog"
+        }
+        if (-not (Test-Path -LiteralPath $StageApk -PathType Leaf)) {
             throw "Godot isolated Android export failed. Log: $ExportLog"
         }
     }
