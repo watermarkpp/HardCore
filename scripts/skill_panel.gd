@@ -148,7 +148,7 @@ func _build_header() -> void:
 
 func _build_skill_list_section() -> void:
 	var panel := _section_panel("SkillListPanel", Rect2(20, 76, 310, 548))
-	panel.add_child(_section_title("人物技能", 310))
+	panel.add_child(_section_title("SkillListTitle", "人物技能", 310))
 	trainer_context_label = Label.new()
 	trainer_context_label.name = "TrainerContext"
 	trainer_context_label.position = Vector2(18, 50)
@@ -233,7 +233,7 @@ func _build_skill_detail_section() -> void:
 
 func _build_assignment_section() -> void:
 	var panel := _section_panel("AssignmentPanel", Rect2(814, 76, 374, 548))
-	panel.add_child(_section_title("技能按钮配置", 374))
+	panel.add_child(_section_title("AssignmentTitle", "技能按钮配置", 374))
 	var attack_slot := Button.new()
 	attack_slot.name = "AttackSkillSlot"
 	attack_slot.position = Vector2(18, 80)
@@ -349,6 +349,7 @@ func _build_assignment_popup() -> void:
 	assignment_popup_title.add_theme_color_override("font_color", Color("f1cc88"))
 	assignment_popup.add_child(assignment_popup_title)
 	var hint := Label.new()
+	hint.name = "PopupHint"
 	hint.text = "选择攻击主键或六个攻击环技能槽"
 	hint.position = Vector2(28, 74)
 	hint.size = Vector2(564, 30)
@@ -367,6 +368,7 @@ func _build_assignment_popup() -> void:
 	assignment_popup.add_child(attack_slot)
 	assignment_popup_buttons.append(attack_slot)
 	var ring_title := Label.new()
+	ring_title.name = "PopupRingTitle"
 	ring_title.text = "攻击环技能槽"
 	ring_title.position = Vector2(28, 178)
 	ring_title.size = Vector2(564, 26)
@@ -1028,8 +1030,9 @@ func _section_panel(node_name: String, rect: Rect2) -> Control:
 	return section
 
 
-func _section_title(text_value: String, width: float) -> Label:
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
 	var title := Label.new()
+	title.name = node_name
 	title.text = text_value
 	title.position = Vector2(18, 16)
 	title.size = Vector2(width - 36.0, 28)
