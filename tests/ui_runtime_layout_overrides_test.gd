@@ -69,6 +69,22 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
+	var runtime_stats_text := "runtime stats sentinel"
+	var runtime_detail_text := "runtime detail sentinel"
+	var runtime_summary_text := "runtime summary sentinel"
+	var runtime_hint_text := "runtime hint sentinel"
+	inventory.equipment_stats_label.text = runtime_stats_text
+	inventory.detail_label.text = runtime_detail_text
+	inventory.bag_summary_label.text = runtime_summary_text
+	inventory.get_node("BagPanel/BagPagingHint").text = runtime_hint_text
+	Loader.apply_profile(inventory, "inventory")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(inventory.equipment_stats_label.text == runtime_stats_text, "inventory runtime stats text was restored from stale profile")
+	assert(inventory.detail_label.text == runtime_detail_text, "inventory runtime detail text was restored from stale profile")
+	assert(inventory.bag_summary_label.text == runtime_summary_text, "inventory runtime summary text was restored from stale profile")
+	assert(inventory.get_node("BagPanel/BagPagingHint").text == runtime_hint_text, "inventory runtime hint text was restored from stale profile")
 	_assert_saved_local_rect(inventory, "inventory", "BagPanel")
 	_assert_saved_local_rect(map_panel, "map", "MapListPanel")
 	_assert_saved_local_rect(shop, "shop_sell", "GoodsPanel")

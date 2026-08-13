@@ -51,6 +51,8 @@ func _run() -> void:
 	var first_stable_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
 	assert(first_stable_rect.size.y >= first_grid_rect.size.y, "首次打开时物品网格不能出现残缺高度")
 	_assert_six_column_geometry(panel, "首次打开")
+	_assert_dynamic_inventory_geometry(panel, "initial_open")
+	var static_rects_before_use := _inventory_static_rects(panel)
 	var first_grid_paths: Array[String] = []
 	for cell_index in range(100):
 		var cell := panel.item_grid.get_child(cell_index) as Control
@@ -227,6 +229,8 @@ func _run() -> void:
 
 	sun_index = _inventory_index_of("太阳水")
 	dagger_index = _inventory_index_of("匕首")
+	_assert_dynamic_inventory_geometry(panel, "after_use")
+	_assert_static_rects_equal(panel, static_rects_before_use, "after_use")
 	var dagger_button := panel.item_grid.get_child(dagger_index).get_node("ItemButton") as Button
 	# preferred_slot intentionally stays empty: PlayerState is the authoritative
 	# equipment-slot resolver, so the UI does not hardcode a side slot here.
@@ -308,6 +312,29 @@ func _run() -> void:
 	assert(not panel.context_menu.visible, "拖动后不应弹出菜单")
 	_assert_six_column_geometry(panel, "拖动后")
 	print("INVENTORY_EQUIPMENT_UI_PASS：双击激活、单击选择、长按策略与拖动取消均通过")
+	# Mutation fail-closed contract: equip/sort/discard must clear numeric
+	# selections before a rebuilt grid can reuse those indices.
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("匕首")
+	PlayerState.add_item("布衣(男)")
+	panel.refresh()
+	await get_tree().process_frame
+	var selected_for_sort := 0
+	panel.selected_inventory_indices = {selected_for_sort: true}
+	panel.selected_inventory_index = selected_for_sort
+	assert(panel.selected_inventory_index == selected_for_sort, "整理前未建立选择")
+	panel._on_auto_sort_pressed()
+	await get_tree().process_frame
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "整理后保留了陈旧选择")
+	panel.selected_inventory_indices = {0: true, 1: true}
+	panel.selected_inventory_index = 1
+	assert(not panel.selected_inventory_indices.is_empty(), "丢弃前未建立多选")
+	panel._on_discard_pressed()
+	await get_tree().process_frame
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "丢弃后保留了陈旧选择")
+	assert(panel.selected_inventory_index < PlayerState.inventory.size(), "丢弃后选择索引越界")
 	get_tree().quit(0)
 
 
@@ -316,6 +343,38 @@ func _inventory_index_of(item_name: String) -> int:
 		if str(PlayerState.inventory[index].get("name", "")) == item_name:
 			return index
 	return -1
+
+
+func _assert_dynamic_inventory_geometry(panel: InventoryPanel, phase: String) -> void:
+	var grid := panel.item_grid
+	assert(grid.columns == InventoryPanel.BAG_COLUMNS and grid.get_child_count() == InventoryPanel.BAG_CAPACITY, "%s: dynamic inventory capacity/columns changed" % phase)
+	for index in range(InventoryPanel.BAG_VISIBLE_CAPACITY):
+		var cell := grid.get_child(index) as Control
+		assert(cell.name == "InventoryCell_%03d" % index, "%s: dynamic cell name changed index=%d" % [phase, index])
+		var item_button := cell.get_node_or_null("ItemButton") as Button
+		var empty_button := cell.get_node_or_null("EmptySlotBackground") as Button
+		var button := item_button if item_button != null else empty_button
+		assert(button != null, "%s: dynamic cell missing semantic button index=%d" % [phase, index])
+		assert(button.position.is_zero_approx() and button.size.is_equal_approx(InventoryPanel.BAG_CELL_SIZE), "%s: dynamic button received stale profile geometry index=%d rect=%s" % [phase, index, Rect2(button.position, button.size)])
+
+
+func _inventory_static_rects(panel: InventoryPanel) -> Dictionary:
+	var result := {}
+	for path in [
+		"AttributePanel", "AttributePanel/CharacterStats", "AttributePanel/ItemDetail",
+		"EquipmentPanel", "BagPanel", "BagPanel/InventoryScroll", "BagPanel/BagPagingHint",
+		"BagPanel/InventoryActions", "BagPanel/InventoryActions/AutoSortButton",
+		"BagPanel/InventoryActions/DiscardButton",
+	]:
+		var control := panel.get_node(path) as Control
+		result[path] = Rect2(control.position, control.size)
+	return result
+
+
+func _assert_static_rects_equal(panel: InventoryPanel, expected: Dictionary, phase: String) -> void:
+	for path: String in expected.keys():
+		var control := panel.get_node(path) as Control
+		assert(Rect2(control.position, control.size).is_equal_approx(expected[path]), "%s: static rect changed at %s" % [phase, path])
 
 
 func _assert_six_column_geometry(panel: InventoryPanel, phase: String) -> void:

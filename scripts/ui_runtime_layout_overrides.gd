@@ -4,19 +4,257 @@ extends RefCounted
 const CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
 const CONTRACT_SHA256 := "F50245E17C67C9C43E7FCDFAADE8CB739782974EEA1C59A024D047A50E042354"
 const SCHEMA_VERSION := 3
+const KNOWN_PROFILE_IDS := {
+	"character_hall": true,
+	"confirmation_dialog": true,
+	"death_revival": true,
+	"inventory": true,
+	"map": true,
+	"quest": true,
+	"shop_buy": true,
+	"shop_sell": true,
+	"skill": true,
+	"system_menu": true,
+	"warehouse": true,
+}
+const EXTERNAL_PROFILE_MAX_NODES := 512
+const EXTERNAL_PROFILE_MAX_PATH_LENGTH := 256
+const EXTERNAL_PROFILE_ALLOWED_ENTRY_KEYS := {
+	"deleted": true,
+	"fontSize": true,
+	"layoutRevision": true,
+	"logicalFontSize": true,
+	"logicalRect": true,
+	"text": true,
+	"textRevision": true,
+	"themeVariation": true,
+	"visible": true,
+}
 
 static var _contract: Dictionary = {}
 static var _loaded := false
 static var _target_tokens: Dictionary = {}
 
-static func apply_profile(target: Control, profile_id: String) -> void:
+
+## Applies a Device Lab profile as one guarded transaction.  This is separate
+## from apply_profile(): the formal resource loader keeps its historical async
+## contract, while the external bridge must be able to report a failed commit
+## and restore every Control it touched.
+static func apply_external_profile_transaction(
+	target: Control,
+	profile_id: String,
+	external_contract: Dictionary
+) -> Dictionary:
+	var failure := {"ok": false, "profile": profile_id, "applied": [], "rolledBack": false, "error": ""}
+	if not _can_write(target, target):
+		failure["error"] = "target_unavailable"
+		return failure
+	var validation := validate_external_profile(profile_id, external_contract)
+	if not bool(validation.get("ok", false)):
+		failure["error"] = str(validation.get("error", "invalid_profile"))
+		return failure
+	var profile: Dictionary = (external_contract.get("profiles", {}) as Dictionary).get(profile_id, {})
+	var entries: Dictionary = profile.get("nodes", {})
+	var plan_result := _build_external_plan(target, entries)
+	if not bool(plan_result.get("ok", false)):
+		failure["error"] = str(plan_result.get("error", "plan_failed"))
+		return failure
+	var plan: Array = plan_result.get("plan", [])
+	var target_id := target.get_instance_id()
+	var token := int(_target_tokens.get(target_id, 0)) + 1
+	_target_tokens[target_id] = token
+	var backups: Array = []
+	for item: Dictionary in plan:
+		var control: Control = item.get("control") as Control
+		if not _can_write(target, control):
+			_rollback_external_profile(backups)
+			failure["error"] = "node_released_before_commit"
+			failure["rolledBack"] = true
+			return failure
+		backups.append(_backup_external_control(control))
+	if not _transaction_valid(target, plan, token):
+		_rollback_external_profile(backups)
+		failure["error"] = "transaction_invalid_before_commit"
+		failure["rolledBack"] = true
+		return failure
+	var tree: SceneTree = target.get_tree()
+	for pass_index in 2:
+		for item: Dictionary in plan:
+			if not _transaction_valid(target, plan, token):
+				_rollback_external_profile(backups)
+				failure["error"] = "transaction_invalid_during_geometry"
+				failure["rolledBack"] = true
+				return failure
+			var control: Control = item.get("control") as Control
+			_apply_geometry(control, item.get("entry", {}) as Dictionary, profile, target, str(item.get("path", "")))
+			if not _transaction_valid(target, plan, token):
+				_rollback_external_profile(backups)
+				failure["error"] = "transaction_invalid_after_geometry"
+				failure["rolledBack"] = true
+				return failure
+		await tree.process_frame
+		if not _transaction_valid(target, plan, token):
+			_rollback_external_profile(backups)
+			failure["error"] = "transaction_invalid_after_frame"
+			failure["rolledBack"] = true
+			return failure
+	for item: Dictionary in plan:
+		if not _transaction_valid(target, plan, token):
+			_rollback_external_profile(backups)
+			failure["error"] = "transaction_invalid_during_properties"
+			failure["rolledBack"] = true
+			return failure
+		var control: Control = item.get("control") as Control
+		var entry: Dictionary = item.get("entry", {}) as Dictionary
+		if entry.has("fontSize") and _supports_text(control):
+			_set_font_size(control, entry, profile, target)
+		control.visible = bool(entry.get("visible", true)) and not bool(entry.get("deleted", false))
+	if not _transaction_valid(target, plan, token):
+		_rollback_external_profile(backups)
+		failure["error"] = "transaction_invalid_after_properties"
+		failure["rolledBack"] = true
+		return failure
+	await tree.process_frame
+	if not _transaction_valid(target, plan, token):
+		_rollback_external_profile(backups)
+		failure["error"] = "transaction_invalid_after_properties_frame"
+		failure["rolledBack"] = true
+		return failure
+	for item: Dictionary in plan:
+		var control: Control = item.get("control") as Control
+		if not _transaction_valid(target, plan, token):
+			_rollback_external_profile(backups)
+			failure["error"] = "transaction_invalid_during_reassert"
+			failure["rolledBack"] = true
+			return failure
+		_apply_geometry(control, item.get("entry", {}) as Dictionary, profile, target, str(item.get("path", "")))
+	if not _transaction_valid(target, plan, token):
+		_rollback_external_profile(backups)
+		failure["error"] = "transaction_invalid_after_reassert"
+		failure["rolledBack"] = true
+		return failure
+	if target.has_method("_on_runtime_layout_profile_applied"):
+		target.call("_on_runtime_layout_profile_applied", profile_id)
+	if not _transaction_valid(target, plan, token):
+		_rollback_external_profile(backups)
+		failure["error"] = "transaction_invalid_after_callback"
+		failure["rolledBack"] = true
+		return failure
+	var applied: Array[String] = []
+	for item: Dictionary in plan:
+		applied.append(str(item.get("path", "")))
+	return {"ok": true, "profile": profile_id, "applied": applied, "rolledBack": false, "error": ""}
+
+
+static func _build_external_plan(target: Control, entries: Dictionary) -> Dictionary:
+	var inventory_map := _legacy_inventory_map(target, entries)
+	var quest_map := _legacy_quest_map(target, entries)
+	var used: Dictionary = {}
+	var plan: Array = []
+	for raw_path: Variant in entries.keys():
+		var path := str(raw_path)
+		var raw_entry: Variant = entries[raw_path]
+		if not raw_entry is Dictionary or _retired(target, path) or _dynamic_map_path(path):
+			continue
+		var control := _resolve(target, path, inventory_map, quest_map)
+		if control == null or used.has(control.get_instance_id()):
+			continue
+		var entry := raw_entry as Dictionary
+		if _stale(control, entry) or _dependency_retired(target, entries, control):
+			continue
+		used[control.get_instance_id()] = true
+		plan.append({"path": path, "control": control, "entry": entry})
+	if plan.is_empty():
+		return {"ok": false, "error": "no_applicable_nodes"}
+	plan.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return _depth(a["control"] as Node, target) < _depth(b["control"] as Node, target)
+	)
+	return {"ok": true, "plan": plan}
+
+
+static func _transaction_valid(target: Control, plan: Array, token: int) -> bool:
+	if not _can_write(target, target):
+		return false
+	if int(_target_tokens.get(target.get_instance_id(), 0)) != token:
+		return false
+	for item: Dictionary in plan:
+		if not _can_write(target, item.get("control") as Control):
+			return false
+	return true
+
+
+static func _backup_external_control(control: Control) -> Dictionary:
+	var backup := {
+		"control": control,
+		"position": control.position,
+		"size": control.size,
+		"anchors": [control.anchor_left, control.anchor_top, control.anchor_right, control.anchor_bottom],
+		"visible": control.visible,
+		"has_font_size": control.has_theme_font_size_override("font_size"),
+		"font_size": control.get_theme_font_size("font_size"),
+	}
+	if control is Button:
+		backup["clip_text"] = (control as Button).clip_text
+		var styleboxes: Dictionary = {}
+		for state: StringName in [&"normal", &"hover", &"pressed", &"focus", &"disabled"]:
+			styleboxes[state] = {
+				"has": (control as Button).has_theme_stylebox_override(state),
+				"value": (control as Button).get_theme_stylebox(state),
+			}
+		backup["styleboxes"] = styleboxes
+	return backup
+
+
+static func _rollback_external_profile(backups: Array) -> void:
+	for index in range(backups.size() - 1, -1, -1):
+		var backup: Dictionary = backups[index]
+		var control: Control = backup.get("control") as Control
+		if control == null or not is_instance_valid(control):
+			continue
+		var anchors: Array = backup.get("anchors", [])
+		if anchors.size() == 4:
+			control.anchor_left = float(anchors[0])
+			control.anchor_top = float(anchors[1])
+			control.anchor_right = float(anchors[2])
+			control.anchor_bottom = float(anchors[3])
+		control.position = backup.get("position", Vector2.ZERO)
+		control.size = backup.get("size", Vector2.ZERO)
+		control.visible = bool(backup.get("visible", true))
+		if control.has_theme_font_size_override("font_size"):
+			control.remove_theme_font_size_override("font_size")
+		if bool(backup.get("has_font_size", false)):
+			control.add_theme_font_size_override("font_size", int(backup.get("font_size", 14)))
+		if control is Button:
+			var button := control as Button
+			button.clip_text = bool(backup.get("clip_text", false))
+			var styleboxes: Dictionary = backup.get("styleboxes", {})
+			for state: StringName in [&"normal", &"hover", &"pressed", &"focus", &"disabled"]:
+				var state_backup: Dictionary = styleboxes.get(state, {})
+				if bool(state_backup.get("has", false)):
+					button.add_theme_stylebox_override(state, state_backup.get("value"))
+				else:
+					button.remove_theme_stylebox_override(state)
+
+static func apply_profile(
+	target: Control,
+	profile_id: String,
+	external_contract: Dictionary = {}
+) -> void:
 	if target == null or not is_instance_valid(target) or not target.is_inside_tree():
 		return
 	var tree: SceneTree = target.get_tree()
 	if tree == null:
 		return
-	_load_contract()
-	var profile: Dictionary = _contract.get("profiles", {}).get(profile_id, {})
+	var source_contract := external_contract
+	if source_contract.is_empty():
+		_load_contract()
+		source_contract = _contract
+	else:
+		var validation := validate_external_profile(profile_id, source_contract)
+		if not bool(validation.get("ok", false)):
+			push_warning("Device Lab rejected UI profile: %s" % str(validation.get("error", "invalid_profile")))
+			return
+	var profile: Dictionary = source_contract.get("profiles", {}).get(profile_id, {})
 	var entries: Dictionary = profile.get("nodes", {})
 	if entries.is_empty():
 		return
@@ -99,6 +337,62 @@ static func apply_profile(target: Control, profile_id: String) -> void:
 			_apply_geometry(control, item["entry"] as Dictionary, profile, target, str(item["path"]))
 	if int(_target_tokens.get(target_id, 0)) == token and _can_write(target, target) and target.has_method("_on_runtime_layout_profile_applied"):
 		target.call("_on_runtime_layout_profile_applied", profile_id)
+
+
+## Validates an external Device Lab profile without touching any scene node.
+## The formal resource contract remains loaded through _load_contract() for all
+## existing callers; this gate only accepts a copied, schema-versioned profile.
+static func validate_external_profile(profile_id: String, contract: Dictionary) -> Dictionary:
+	if not KNOWN_PROFILE_IDS.has(profile_id):
+		return {"ok": false, "error": "unknown_profile"}
+	if contract.is_empty():
+		return {"ok": false, "error": "empty_contract"}
+	if int(contract.get("schemaVersion", 0)) != SCHEMA_VERSION:
+		return {"ok": false, "error": "schema_version"}
+	var profiles: Variant = contract.get("profiles", {})
+	if not profiles is Dictionary:
+		return {"ok": false, "error": "profiles_not_object"}
+	var profile: Variant = (profiles as Dictionary).get(profile_id, {})
+	if not profile is Dictionary:
+		return {"ok": false, "error": "profile_not_object"}
+	var nodes: Variant = (profile as Dictionary).get("nodes", {})
+	if not nodes is Dictionary or (nodes as Dictionary).is_empty():
+		return {"ok": false, "error": "nodes_not_object"}
+	if (nodes as Dictionary).size() > EXTERNAL_PROFILE_MAX_NODES:
+		return {"ok": false, "error": "nodes_limit"}
+	for raw_path: Variant in (nodes as Dictionary).keys():
+		var path := str(raw_path)
+		if path.is_empty() or path.length() > EXTERNAL_PROFILE_MAX_PATH_LENGTH:
+			return {"ok": false, "error": "path_length"}
+		if path != "." and (path.begins_with("/") or path.contains("..") or path.contains("\\")):
+			return {"ok": false, "error": "path_not_allowlisted"}
+		var raw_entry: Variant = (nodes as Dictionary)[raw_path]
+		if not raw_entry is Dictionary:
+			return {"ok": false, "error": "entry_not_object"}
+		var entry := raw_entry as Dictionary
+		for raw_key: Variant in entry.keys():
+			if not EXTERNAL_PROFILE_ALLOWED_ENTRY_KEYS.has(str(raw_key)):
+				return {"ok": false, "error": "entry_key_not_allowlisted:%s" % str(raw_key)}
+		if entry.has("logicalRect"):
+			var rect: Variant = entry.get("logicalRect", [])
+			if not rect is Array or (rect as Array).size() != 4:
+				return {"ok": false, "error": "logical_rect"}
+			for value: Variant in rect as Array:
+				if not (value is int or value is float) or not is_finite(float(value)):
+					return {"ok": false, "error": "logical_rect_number"}
+		if entry.has("logicalFontSize") and (not (entry.logicalFontSize is int or entry.logicalFontSize is float) or not is_finite(float(entry.logicalFontSize))):
+			return {"ok": false, "error": "logical_font_size"}
+		if entry.has("fontSize") and (not (entry.fontSize is int or entry.fontSize is float) or not is_finite(float(entry.fontSize))):
+			return {"ok": false, "error": "font_size"}
+		if entry.has("visible") and not (entry.visible is bool):
+			return {"ok": false, "error": "visible_type"}
+		if entry.has("deleted") and not (entry.deleted is bool):
+			return {"ok": false, "error": "deleted_type"}
+		if entry.has("layoutRevision") and not (entry.layoutRevision is int or entry.layoutRevision is float):
+			return {"ok": false, "error": "layout_revision_type"}
+		if entry.has("themeVariation") and not (entry.themeVariation is String):
+			return {"ok": false, "error": "theme_variation_type"}
+	return {"ok": true, "profile": profile_id, "nodes": (nodes as Dictionary).size()}
 
 
 static func _load_contract() -> void:
@@ -274,6 +568,14 @@ static func _dependency_retired(target: Control, entries: Dictionary, control: C
 
 static func _dynamic_map_path(path: String) -> bool:
 	return (
+		# Inventory cells and their descendants are rebuilt from PlayerState on
+		# every data refresh.  They are not authored layout layers: applying a
+		# saved cell/button rect to a newly-created child can restore a stale
+		# position/size (and, after a consume removes a stack, the stale entry can
+		# belong to a different item).  The grid/viewport itself remains static and
+		# is still eligible for the formal profile above this path.
+		path.begins_with("BagPanel/InventoryScroll/ItemGrid/")
+		or
 		path.begins_with("MapListPanel/MapListScroll/MapCards/")
 		or path.begins_with("MapPreviewPanel/WorldTreeScroll/WorldTree/")
 		or path.begins_with("GoodsPanel/GoodsScroll/GoodsGrid/")

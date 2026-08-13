@@ -789,6 +789,11 @@ func _is_deferred_dynamic_saved_path(saved_path: String) -> bool:
 	# catalog state are not static layers in another state and must never fall
 	# back onto unrelated controls that happen to share their text.
 	return (
+		# Inventory cells/buttons/icons/counts are rebuilt from PlayerState on
+		# every refresh.  Their saved paths describe one transient data snapshot,
+		# not user-authored geometry, so never restore them into a later snapshot.
+		saved_path.begins_with("BagPanel/InventoryScroll/ItemGrid/")
+		or
 		saved_path.begins_with("MapListPanel/MapListScroll/MapCards/")
 		or saved_path.begins_with("MapPreviewPanel/WorldTreeScroll/WorldTree/")
 		or saved_path.begins_with("GoodsPanel/GoodsScroll/GoodsGrid/")

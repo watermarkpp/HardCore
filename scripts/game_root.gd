@@ -74,6 +74,7 @@ const SkillResourceServiceScript := preload(
 const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
 )
+const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -241,6 +242,7 @@ var _player_input_enabled := false
 var _death_experience_penalty_applied := false
 var _world_bootstrap_coordinator := WorldBootstrapCoordinator.new()
 var _gameplay_input_locks: Dictionary = {}
+var _device_lab_runtime: DeviceLabRuntimeScript
 
 # --- P1-A: Gameplay Input Gate (counted runtime locks) ---
 
@@ -363,6 +365,13 @@ func _ready() -> void:
 	hud.warehouse_sort_requested.connect(_on_warehouse_sort_requested)
 	add_child(hud)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
+	# Device Lab is intentionally a Debug-only child.  It exposes only the
+	# bounded ADB mailbox service; release builds never create the node.
+	if OS.is_debug_build():
+		_device_lab_runtime = DeviceLabRuntimeScript.new()
+		_device_lab_runtime.configure(self)
+		_device_lab_runtime.name = "DeviceLabRuntime"
+		add_child(_device_lab_runtime)
 	_wire_item_quick_slots_hud()
 	player.resources_changed.connect(
 		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:

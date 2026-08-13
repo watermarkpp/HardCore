@@ -139,6 +139,7 @@ func _build_attribute_panel() -> void:
 	panel.add_child(title)
 	equipment_stats_label = RichTextLabel.new()
 	equipment_stats_label.name = "CharacterStats"
+	equipment_stats_label.set_meta("calibration_runtime_text", true)
 	equipment_stats_label.position = Vector2(16, 44)
 	equipment_stats_label.size = Vector2(218, 220)
 	equipment_stats_label.fit_content = false
@@ -161,6 +162,7 @@ func _build_attribute_panel() -> void:
 	panel.add_child(item_title)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "ItemDetail"
+	detail_label.set_meta("calibration_runtime_text", true)
 	detail_label.position = Vector2(16, 312)
 	detail_label.size = Vector2(218, 220)
 	detail_label.bbcode_enabled = true
@@ -233,6 +235,7 @@ func _build_bag_panel() -> void:
 	panel.add_child(_section_title("综合背包", 492))
 	bag_summary_label = Label.new()
 	bag_summary_label.name = "BagSummary"
+	bag_summary_label.set_meta("calibration_runtime_text", true)
 	bag_summary_label.position = Vector2(246, 19)
 	bag_summary_label.size = Vector2(218, 26)
 	bag_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -261,6 +264,7 @@ func _build_bag_panel() -> void:
 	scroll.add_child(item_grid)
 	var paging_hint := Label.new()
 	paging_hint.name = "BagPagingHint"
+	paging_hint.set_meta("calibration_runtime_text", true)
 	paging_hint.text = "首屏 1–%d 格　·　拖动右侧滚条查看 %d–%d 格" % [BAG_VISIBLE_CAPACITY, BAG_VISIBLE_CAPACITY + 1, BAG_CAPACITY]
 	paging_hint.position = Vector2(18, 402)
 	paging_hint.size = Vector2(456, 28)
@@ -346,6 +350,13 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 
 
 func _on_panel_data_changed() -> void:
+	# PlayerState emits inventory_changed without an index remap contract.  A
+	# removal/sort can therefore make the previous numeric selection refer to a
+	# different item.  Drop it before rebuilding so details never describe the
+	# wrong stack; callers that intentionally select/equip will set the new
+	# semantic selection after their mutation completes.
+	selected_inventory_index = -1
+	selected_inventory_indices.clear()
 	if not visible:
 		_refresh_pending = true
 		return
@@ -353,8 +364,15 @@ func _on_panel_data_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
-	if visible and _refresh_pending:
+	if not visible:
+		return
+	if _refresh_pending:
 		refresh()
+	# A panel can be kept alive while HUD toggles it.  Action feedback (for
+	# example, "丢弃 1 个物品格") is intentionally transient; a later open must
+	# not expose that result as if it were the currently selected item detail.
+	if selected_inventory_index < 0 and selected_inventory_indices.is_empty() and selected_equipment_slot.is_empty():
+		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
 
 
 func refresh() -> void:
@@ -776,7 +794,14 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	selected_inventory_indices.clear()
 	selected_equipment_slot = ""
 	var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
-	var result := PlayerState.equip_inventory_index(index, preferred_slot) if str(item.get("kind", "")) == "equipment" else PlayerState.use_inventory_index(index)
+	var is_equipment := str(item.get("kind", "")) == "equipment"
+	# use_inventory_index emits inventory_changed synchronously.  Clear the
+	# selection before that signal so a consumed stack removal cannot make the
+	# signal-driven refresh show the next item under the old index.
+	if not is_equipment:
+		selected_inventory_index = -1
+		selected_inventory_indices.clear()
+	var result := PlayerState.equip_inventory_index(index, preferred_slot) if is_equipment else PlayerState.use_inventory_index(index)
 	selected_inventory_index = -1
 	refresh()
 	detail_label.text = "[color=#e8c277]%s[/color]" % result

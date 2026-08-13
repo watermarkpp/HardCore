@@ -1,0 +1,289 @@
+extends Node
+
+const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
+const LayoutLoader := preload("res://scripts/ui_runtime_layout_overrides.gd")
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	_test_protocol_rejection()
+	await _test_external_profile_guards()
+	_test_bounded_snapshot()
+	await _test_transaction_rollback()
+	await _test_mailbox_roundtrip()
+	_test_nonce_and_outbox_guards()
+	_test_debug_gate()
+	_test_powershell_contract()
+	print("DEVICE_LAB_RUNTIME_PASS protocol snapshot bounded dynamic_inventory runtime_text")
+	get_tree().quit(0)
+
+
+func _test_protocol_rejection() -> void:
+	var status := {
+		"schemaVersion": 1,
+		"nonce": "status_001",
+		"action": "status",
+		"allowlist": ["device_lab.v1", "status"],
+	}
+	assert(DeviceLabRuntimeScript.validate_command(status).get("ok", false), "valid status command rejected")
+	var traversal := status.duplicate(true)
+	traversal["path"] = "user://device_lab/inbox/../save.json"
+	traversal["size"] = 1
+	traversal["checksum"] = "0".repeat(64)
+	assert(not bool(DeviceLabRuntimeScript.validate_command(traversal).get("ok", false)), "path traversal accepted")
+	var oversized := status.duplicate(true)
+	oversized["action"] = "apply_ui_profile"
+	oversized["allowlist"] = ["device_lab.v1", "apply_ui_profile"]
+	oversized["profile"] = "inventory"
+	oversized["path"] = "user://device_lab/inbox/layout_status_001.json"
+	oversized["size"] = DeviceLabRuntimeScript.MAX_PAYLOAD_BYTES + 1
+	oversized["checksum"] = "0".repeat(64)
+	assert(DeviceLabRuntimeScript.validate_command(oversized).get("error", "") == "payload_size", "oversized payload accepted")
+	var unknown := status.duplicate(true)
+	unknown["action"] = "execute_script"
+	assert(DeviceLabRuntimeScript.validate_command(unknown).get("error", "") == "unknown_action", "unknown action accepted")
+	var unknown_field := status.duplicate(true)
+	unknown_field["unexpected"] = true
+	assert(str(DeviceLabRuntimeScript.validate_command(unknown_field).get("error", "")).begins_with("unknown_field"), "unknown command field accepted")
+	var weak_allowlist := status.duplicate(true)
+	weak_allowlist["allowlist"] = ["status"]
+	assert(DeviceLabRuntimeScript.validate_command(weak_allowlist).get("error", "") == "allowlist", "weak allowlist accepted")
+	var bad_hash := oversized.duplicate(true)
+	bad_hash["size"] = 4
+	bad_hash["checksum"] = "NOT_A_HASH"
+	assert(DeviceLabRuntimeScript.validate_command(bad_hash).get("error", "") == "payload_checksum", "bad hash format accepted")
+	var root_dir := DirAccess.open("user://")
+	assert(root_dir != null and root_dir.make_dir_recursive("device_lab/inbox") == OK, "test mailbox directory unavailable")
+	var payload_path := "user://device_lab/inbox/layout_status_001.json"
+	var payload_file := FileAccess.open(payload_path, FileAccess.WRITE)
+	payload_file.store_string("{}")
+	payload_file.close()
+	var runtime := DeviceLabRuntimeScript.new()
+	var mismatch := runtime.call("_load_external_contract", {
+		"profile": "inventory",
+		"path": payload_path,
+		"size": 2,
+		"checksum": "0".repeat(64),
+	}) as Dictionary
+	assert(mismatch.get("error", "") == "payload_checksum_mismatch", "payload hash mismatch accepted")
+	DirAccess.remove_absolute(payload_path)
+
+
+func _test_external_profile_guards() -> void:
+	var root := Control.new()
+	root.name = "InventoryRoot"
+	root.size = Vector2(100, 100)
+	add_child(root)
+	var bag := Control.new()
+	bag.name = "BagPanel"
+	bag.size = Vector2(100, 100)
+	root.add_child(bag)
+	var scroll := Control.new()
+	scroll.name = "InventoryScroll"
+	scroll.size = Vector2(100, 100)
+	bag.add_child(scroll)
+	var grid := Control.new()
+	grid.name = "ItemGrid"
+	grid.size = Vector2(100, 100)
+	scroll.add_child(grid)
+	var dynamic_cell := Control.new()
+	dynamic_cell.name = "InventoryCell_000"
+	dynamic_cell.position = Vector2(4, 4)
+	dynamic_cell.size = Vector2(20, 20)
+	grid.add_child(dynamic_cell)
+	var dynamic_button := Button.new()
+	dynamic_button.name = "ItemButton"
+	dynamic_button.position = Vector2(2, 2)
+	dynamic_button.size = Vector2(16, 16)
+	grid.get_child(0).add_child(dynamic_button)
+	var runtime_label := Label.new()
+	runtime_label.name = "RuntimeText"
+	runtime_label.text = "live inventory sentinel"
+	runtime_label.set_meta("calibration_runtime_text", true)
+	root.add_child(runtime_label)
+	var before_dynamic := Rect2(dynamic_button.position, dynamic_button.size)
+	var contract := {
+		"schemaVersion": LayoutLoader.SCHEMA_VERSION,
+		"profiles": {
+			"inventory": {
+				"logicalDesignSize": [100.0, 100.0],
+				"nodes": {
+					"BagPanel": {"logicalRect": [1.0, 1.0, 90.0, 90.0], "visible": true},
+					"BagPanel/InventoryScroll/ItemGrid/InventoryCell_000/ItemButton": {"logicalRect": [30.0, 30.0, 30.0, 30.0], "visible": true},
+					"RuntimeText": {"logicalRect": [10.0, 10.0, 70.0, 20.0], "text": "stale saved text", "visible": true},
+				},
+			},
+		},
+	}
+	assert(LayoutLoader.validate_external_profile("inventory", contract).get("ok", false), "valid external profile rejected")
+	var invalid_entry := contract.duplicate(true)
+	invalid_entry["profiles"]["inventory"]["nodes"]["RuntimeText"]["script"] = "res://evil.gd"
+	assert(not LayoutLoader.validate_external_profile("inventory", invalid_entry).get("ok", false), "unknown entry property accepted")
+	LayoutLoader.apply_profile(root, "inventory", contract)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(Rect2(dynamic_button.position, dynamic_button.size).is_equal_approx(before_dynamic), "dynamic inventory child received external geometry")
+	assert(runtime_label.text == "live inventory sentinel", "runtime text was overwritten by external profile")
+
+
+func _test_bounded_snapshot() -> void:
+	var root := Node2D.new()
+	root.name = "SnapshotRoot"
+	add_child(root)
+	var bag := Control.new()
+	bag.name = "BagPanel"
+	root.add_child(bag)
+	var scroll := Control.new()
+	scroll.name = "InventoryScroll"
+	bag.add_child(scroll)
+	var grid := Control.new()
+	grid.name = "ItemGrid"
+	scroll.add_child(grid)
+	for index in range(400):
+		var cell := Control.new()
+		cell.name = "InventoryCell_%03d" % index
+		grid.add_child(cell)
+	for index in range(400):
+		var actor := Node2D.new()
+		actor.name = "Actor_%03d" % index
+		actor.position = Vector2(index, index)
+		root.add_child(actor)
+	var snapshot := DeviceLabRuntimeScript.build_snapshot(root)
+	assert((snapshot["controls"] as Array).size() <= DeviceLabRuntimeScript.MAX_SNAPSHOT_CONTROLS, "control snapshot exceeded bound")
+	assert((snapshot["node2d"] as Array).size() <= DeviceLabRuntimeScript.MAX_SNAPSHOT_NODE2D, "Node2D snapshot exceeded bound")
+	assert(not JSON.stringify(snapshot).to_lower().contains("inventorycell"), "snapshot leaked full dynamic inventory")
+	assert(snapshot.has("window") and snapshot.has("player") and snapshot.has("scene"), "snapshot summary fields missing")
+	for control: Dictionary in snapshot["controls"] as Array:
+		assert(control.has("textHash") and control.has("runtime_text"), "control redaction fields missing")
+
+
+func _test_transaction_rollback() -> void:
+	var root := Control.new()
+	root.name = "TransactionRoot"
+	root.size = Vector2(100, 100)
+	add_child(root)
+	var bag := Control.new()
+	bag.name = "BagPanel"
+	bag.position = Vector2(7, 8)
+	bag.size = Vector2(40, 40)
+	root.add_child(bag)
+	var runtime_label := Label.new()
+	runtime_label.name = "RuntimeText"
+	runtime_label.position = Vector2(50, 5)
+	runtime_label.size = Vector2(40, 15)
+	runtime_label.text = "transaction sentinel"
+	root.add_child(runtime_label)
+	var contract := {
+		"schemaVersion": LayoutLoader.SCHEMA_VERSION,
+		"profiles": {
+			"inventory": {
+				"logicalDesignSize": [100.0, 100.0],
+				"nodes": {
+					"BagPanel": {"logicalRect": [20.0, 20.0, 60.0, 60.0], "visible": true},
+					"RuntimeText": {"logicalRect": [10.0, 10.0, 70.0, 20.0], "text": "must not write", "visible": true},
+				},
+			},
+		},
+	}
+	var before := Rect2(bag.position, bag.size)
+	# A second loader invocation changes the target token while the external
+	# transaction is awaiting a frame; the first transaction must roll back.
+	call_deferred("_compete_profile", root, contract)
+	var result: Dictionary = await LayoutLoader.apply_external_profile_transaction(root, "inventory", contract)
+	assert(not bool(result.get("ok", true)), "token change incorrectly reported success")
+	assert(bool(result.get("rolledBack", false)), "failed transaction did not report rollback")
+	assert(Rect2(bag.position, bag.size).is_equal_approx(before), "failed transaction did not restore geometry")
+	assert(runtime_label.text == "transaction sentinel", "transaction touched runtime text")
+
+
+func _compete_profile(root: Control, contract: Dictionary) -> void:
+	LayoutLoader.apply_profile(root, "inventory", contract)
+
+
+func _test_nonce_and_outbox_guards() -> void:
+	var runtime := DeviceLabRuntimeScript.new()
+	add_child(runtime)
+	var nonce := "nonce_guard_%d" % Time.get_ticks_msec()
+	var first: Variant = runtime.call("_write_result", nonce, {"ok": true, "value": "first"})
+	var second: Variant = runtime.call("_write_result", nonce, {"ok": true, "value": "second"})
+	assert(bool(first), "first result write failed")
+	assert(not bool(second), "duplicate result overwrote existing nonce")
+	var result_path := DeviceLabRuntimeScript.OUTBOX_DIR + "/result_%s.json" % nonce
+	var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(result_path))
+	assert(str(saved.get("value", "")) == "first", "duplicate nonce changed old result")
+	runtime.call("_remember_nonce", nonce)
+	var pending := {
+		"schemaVersion": DeviceLabRuntimeScript.PROTOCOL_VERSION,
+		"nonce": nonce,
+		"action": "status",
+		"allowlist": [DeviceLabRuntimeScript.ALLOWLIST_ID, "status"],
+	}
+	var pending_file := FileAccess.open(DeviceLabRuntimeScript.PENDING_PATH, FileAccess.WRITE)
+	pending_file.store_string(JSON.stringify(pending))
+	pending_file.close()
+	await runtime.call("_poll_inbox")
+	var replay_saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(result_path))
+	assert(str(replay_saved.get("value", "")) == "first", "nonce replay overwrote original result")
+	DirAccess.remove_absolute(result_path)
+	var oversized: Variant = runtime.call("_write_result", "oversized_%d" % Time.get_ticks_msec(), {"payload": "x".repeat(DeviceLabRuntimeScript.MAX_RESULT_BYTES)})
+	assert(not bool(oversized), "oversized result was emitted")
+	var files_before := DirAccess.get_files_at(DeviceLabRuntimeScript.OUTBOX_DIR)
+	for index in range(DeviceLabRuntimeScript.MAX_OUTBOX_ENTRIES + 8):
+		var path := DeviceLabRuntimeScript.OUTBOX_DIR + "/result_prune_%03d.json" % index
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		file.store_string("{}")
+		file.close()
+	runtime.call("_prune_outbox")
+	var files_after := DirAccess.get_files_at(DeviceLabRuntimeScript.OUTBOX_DIR)
+	var result_count := 0
+	for name: String in files_after:
+		if name.begins_with("result_") and name.ends_with(".json"):
+			result_count += 1
+	assert(result_count <= DeviceLabRuntimeScript.MAX_OUTBOX_ENTRIES, "outbox prune exceeded entry bound")
+
+
+func _test_debug_gate() -> void:
+	var runtime := DeviceLabRuntimeScript.new()
+	runtime.set_debug_gate_for_test(false)
+	add_child(runtime)
+	await get_tree().process_frame
+	assert(not runtime.mailbox_initialized_for_test(), "non-debug Device Lab initialized mailbox")
+
+
+func _test_powershell_contract() -> void:
+	var source := FileAccess.get_file_as_string("res://tools/device_lab.ps1")
+	assert(source.contains("ValidatePattern('^$|^[A-Za-z0-9._:-]{1,128}$')"), "PS serial safety regex missing")
+	assert(source.contains("ValidatePattern('^[A-Za-z][A-Za-z0-9_]*"), "PS package id safety regex missing")
+	assert(source.contains("Device Lab mailbox is busy; refusing to overwrite"), "PS pending overwrite guard missing")
+	assert(source.contains("Move-Item -LiteralPath $hostTemp -Destination $targetPath -Force"), "PS pull atomic move missing")
+	assert(source.contains("ConvertFrom-Json -Depth 50"), "PS pull result validation missing")
+
+
+func _test_mailbox_roundtrip() -> void:
+	var inbox := DirAccess.open("user://device_lab/inbox")
+	var outbox := DirAccess.open("user://device_lab/outbox")
+	assert(inbox != null and outbox != null, "mailbox directories missing")
+	var nonce := "test_roundtrip_%d" % Time.get_ticks_msec()
+	var pending := {
+		"schemaVersion": DeviceLabRuntimeScript.PROTOCOL_VERSION,
+		"nonce": nonce,
+		"action": "status",
+		"allowlist": [DeviceLabRuntimeScript.ALLOWLIST_ID, "status"],
+	}
+	var file := FileAccess.open(DeviceLabRuntimeScript.PENDING_PATH, FileAccess.WRITE)
+	file.store_string(JSON.stringify(pending))
+	file.close()
+	var runtime := DeviceLabRuntimeScript.new()
+	add_child(runtime)
+	await runtime.call("_poll_inbox")
+	var result_path := DeviceLabRuntimeScript.OUTBOX_DIR + "/result_%s.json" % nonce
+	assert(FileAccess.file_exists(result_path), "mailbox result missing")
+	var result: Variant = JSON.parse_string(FileAccess.get_file_as_string(result_path))
+	assert(result is Dictionary and bool((result as Dictionary).get("ok", false)), "mailbox status failed")
+	assert(str((result as Dictionary).get("nonce", "")) == nonce, "mailbox result nonce missing")
+	assert(not FileAccess.file_exists(DeviceLabRuntimeScript.PROCESSING_PATH), "processing command was not removed")
+	DirAccess.remove_absolute(result_path)

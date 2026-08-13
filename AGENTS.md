@@ -6,19 +6,15 @@
 - 按索引定向读取目标子系统；导航足够时禁止无证据全仓扫描、批量读取无关目录或重复已通过测试。`docs/CODEX_CONTEXT_SNAPSHOT.md` 仅作基线、工作树状态和既有验收的补充；将被修改、合并、构建或删除的对象仍须用当前 Git、文件和专项测试核实。重要集成里程碑后由 `codex/integration` 更新快照。
 - Godot 测试优先走 `tools/run_godot_tests.ps1`；禁止 GUI Godot，禁止直接启动未指定项目内日志/用户数据目录的 Godot。正式入口固定 console/headless、`outputs/test_logs` 和本工作树 `.godot/runtime_appdata`，避免 `%APPDATA%` 写入失败及 `c0000005` 崩溃。
 
-## DeepSeek 委派与降级
+## 子代理调度
 
-- 非琐碎且边界清晰的工作默认交 DeepSeek：常规实现、测试和构建用 `deepseek_worker`（V4 Flash），复杂架构、深层诊断和高风险审查用 `deepseek_pro_worker`（原生工具线程承载、直连 V4 Pro 推理）；主控负责范围、冻结对象、dirty、验收标准和最终落地。不支持的图片、MCP、computer-use、background 输入留给主控或对应工具。
-- 子智能体数量按可安全拆分的独立工作包动态决定，不设任务级固定数量；Flash 与 Pro 可并行。
-- 调度合同为 `gpt-5.6-sol multi_agent_version=v1` → `deepseek-v4-flash multi_agent_version=v2`，困难任务由 Pro-backed worker 直连 `deepseek-v4-pro`。Codex 更新模型缓存后运行 `C:\Users\Administrator\.codex\agents\sync-deepseek-subagent-catalog.ps1`；修改合同、catalog 或 worker 配置后必须完全重启 Codex Desktop 并新建 worker，禁止复用旧子线程或把主控恢复为 v2。
-- `DEEPSEEK_NATIVE_TASK_MISSING` 或 `DEEPSEEK_DISPATCH_NOT_READY` 只表示原生调度不可用；立即用 `C:\Users\Administrator\.codex\agents\invoke-deepseek-direct.ps1` 直连原定 Flash 或 Pro，不得空转重试或误判为 API、网络、余额故障。
-- 直连固定 `HttpClientHandler.UseProxy=false`，API Key 仅来自进程级或用户级 `DEEPSEEK_API_KEY`，不得进入仓库、提示词、聊天、命令行、补丁或日志。长请求每 ≤60 秒更新状态，并记录 model、`finish_reason`、token、`max_output_tokens`、`thinking_mode` 和 `transport=direct_no_proxy`。
-- 原生 worker 可在明确独占范围内读写并测试；直连只返回文本，由主控用 `apply_patch` 落地。两条路径的输出都不是最终验收，主控必须审查 diff、保护 dirty 和冻结对象，并在真实集成态验证。
+- 常规且边界清晰的实现、诊断、测试和构建，优先使用 GPT-5.6 Luna 子代理，推理强度固定为 `max`。
+- 跨系统架构、高风险审查、复杂集成和关键返工，使用 GPT-5.6 Sol 子代理，推理强度至少为 `high`；主控仍由 Sol `high` 或更高强度负责最终裁决。
+- 子代理数量按互不重叠的独立工作包动态决定，最多并行 3 个；写代理不得重叠文件、工作树、缓存或生成输出。所有交付均须主控审查目标 diff，并在真实集成态做最小独立验证。
 
 ## 用户验收冻结
 
-- 用户明确说“已修改好/已完成/已通过/不要再动”的项目、素材、映射、坐标、缩放、存档或数据立即只读冻结。除非用户后续点名精确对象并授权，任何任务、专业树、生成器、校准工具、旧合同、缓存或批处理均不得改写、重建、重映射或回退。
-- 每次只改本次点名对象。动工前记录相关冻结文件、数据和哈希，结束后逐项证明未变；不得因共享脚本/图集、批量生成或测试便利连带修改已验收对象。
+- 用户明确说“已修改好/已完成/已通过/不要再动”的对象立即只读冻结；仅在用户后续点名并授权时修改。动工前记录相关文件、数据和哈希，结束后证明其余冻结对象未变；不得因共享依赖、批量生成或测试便利产生连带修改。
 - 最新人工保存数据高于旧合同、旧生成结果、编辑器缓存和历史基线；加载链可能回退时应修复加载链并保留人工数据，不得旧数据覆盖后要求重做。生成器/校准工具须支持精确单目标更新；不能证明冻结对象像素和数据零差异时，禁止运行相关批量重建。
 
 ## 分支职责与所有权
@@ -52,7 +48,7 @@
 - 仅工具无法代办的外部实体动作可简短通知用户；这不是授权询问，也不得转交内部决策。宿主/OS 强制权限提示属于外部边界。专业树、子代理和自动化不得向用户发问、求批准/取舍或转交风险；冲突、失败、不确定性只向 integration 报告证据和方案，由主控裁决。
 - integration 负责拆分、分配、接口裁决、审查、逐项合并和最终验收。除 integration 独占文件、跨系统接口/编排、存档、全局服务、最小接线和最终跨域回归外，不得代替专业树实现；UI、地图、怪物、装备、职业技能任务优先交对应永久工作树执行、测试并提交。
 - 跨领域任务按责任树拆分；写代理不得同时修改重叠文件、所有权、工作树或生成输出。一次只审查/合并一个专业提交；专业测试未通过不得集成，每次合并后先冒烟再继续。需改其他分支所有权文件时不得直接修改，只在交付记录所需接口、字段/ID、原因和验收方式。
-- `dev_art_sources`、本地 Godot 工具、DepotDownloader 不入 Git，通过本地联接共享且只读；`.godot` 和 `outputs` 每树独立，不得共享缓存/输出。专业分支只提交本领域文件，提交前记录专项测试；始终保护既有 tracked/untracked/用户 dirty，并保持数据可追溯、玩法可扩展、资源可替换、系统可测试。
+- `dev_art_sources`、本地 Godot 工具、DepotDownloader 不入 Git，通过本地联接共享且只读；`.godot` 和 `outputs` 每树独立。专业分支提交仅含本领域文件，并保持数据可追溯、玩法可扩展、资源可替换、系统可测试。
 
 ## 交付格式
 
