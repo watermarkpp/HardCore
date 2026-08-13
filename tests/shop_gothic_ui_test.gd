@@ -34,6 +34,7 @@ func _run() -> void:
 	panel.sell_quotes_requested.connect(func(items: Array) -> void: quote_batches.append(items))
 	panel.sell_requested.connect(func(request: Dictionary) -> void: sell_requests.append(request))
 	panel.open_for("测试商店", STOCK)
+	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	await get_tree().process_frame
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")
@@ -53,8 +54,11 @@ func _run() -> void:
 	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "选中商品没有公共高亮状态")
 	assert("匕首" in panel.detail_label.text, "商品详情没有响应卡片选择")
 	var gold_before := PlayerState.gold
+	var buy_quote := panel._buy_quote_for_index(0)
 	panel._buy_selected()
-	assert(PlayerState.gold == gold_before - 120 and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
+	var buy_result := PlayerState.buy_shop_item({"stock_index": 0, "quote_id": buy_quote.get("quote_id", ""), "quantity": 1}, STOCK)
+	panel.apply_buy_result(buy_result)
+	assert(PlayerState.gold == gold_before - int(buy_quote.get("unit_price", 0)) and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
 	panel._set_trade_mode("sell")
 	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
 	assert("UI不会自行计算" not in panel.detail_label.text and "玩法层报价" not in panel.detail_label.text, "出售页仍显示无意义的内部报价备注")

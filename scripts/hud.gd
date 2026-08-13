@@ -109,6 +109,8 @@ signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
 signal revival_requested(request: Dictionary)
+signal shop_buy_quotes_requested(stock: Array)
+signal shop_buy_requested(request: Dictionary)
 signal shop_sell_quotes_requested(items: Array)
 signal shop_sell_requested(request: Dictionary)
 signal quest_abandon_requested(quest_id: String)
@@ -1352,6 +1354,12 @@ func _ensure_shop_panel() -> void:
 		return
 	shop_panel = ShopPanel.new()
 	shop_panel.hide()
+	shop_panel.buy_quotes_requested.connect(
+		func(stock: Array) -> void: shop_buy_quotes_requested.emit(stock)
+	)
+	shop_panel.buy_requested.connect(
+		func(request: Dictionary) -> void: shop_buy_requested.emit(request)
+	)
 	shop_panel.sell_quotes_requested.connect(
 		func(items: Array) -> void: shop_sell_quotes_requested.emit(items)
 	)
@@ -1838,6 +1846,16 @@ func open_shop(display_name: String, stock: Array) -> void:
 func set_shop_sell_quotes(quotes: Dictionary) -> void:
 	_ensure_shop_panel()
 	shop_panel.set_sell_quotes(quotes)
+
+
+func set_shop_buy_quotes(quotes: Array) -> void:
+	_ensure_shop_panel()
+	shop_panel.set_buy_quotes(quotes)
+
+
+func apply_shop_buy_result(result: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.apply_buy_result(result)
 
 
 func apply_shop_sell_result(result: Dictionary) -> void:

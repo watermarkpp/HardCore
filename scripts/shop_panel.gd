@@ -10,6 +10,8 @@ const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal closed
+signal buy_quotes_requested(stock: Array)
+signal buy_requested(request: Dictionary)
 signal sell_quotes_requested(items: Array)
 signal sell_requested(request: Dictionary)
 
@@ -37,6 +39,7 @@ var increase_quantity_button: Button
 var sell_confirmation: Control
 var stock: Array = []
 var _trade_mode := "buy"
+var _buy_quotes: Array = []
 var _sell_quotes: Dictionary = {}
 var _selected_sell_index := -1
 var _sell_quantity := 1
@@ -325,6 +328,7 @@ func _section_title(node_name: String, text_value: String, section_width: float)
 
 func open_for(display_name: String, new_stock: Array) -> void:
 	stock = new_stock
+	_buy_quotes.clear()
 	_sell_quotes.clear()
 	_selected_sell_index = -1
 	_sell_quantity = 1
@@ -333,11 +337,39 @@ func open_for(display_name: String, new_stock: Array) -> void:
 	shop_title.text = display_name
 	item_list.clear()
 	for entry: Variant in stock:
-		item_list.add_item("%s　%d金币" % [entry.get("name", "物品"), int(entry.get("price", 0))])
+		item_list.add_item(str(entry.get("name", "物品")))
 	_set_trade_mode("buy")
 	_refresh_gold()
 	_refresh_repair_preview()
 	show()
+	buy_quotes_requested.emit(stock.duplicate(true))
+
+
+func set_buy_quotes(quotes: Array) -> void:
+	_buy_quotes = quotes.duplicate(true)
+	if _trade_mode != "buy":
+		return
+	item_list.clear()
+	for index in range(stock.size()):
+		var quote := _buy_quote_for_index(index)
+		var item_name := str(stock[index].get("name", "物品"))
+		var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
+		item_list.add_item("%s ×%d　%d金币" % [item_name, pack_count, int(quote.get("total_price", 0))])
+	_rebuild_goods_cards()
+
+
+func apply_buy_result(result: Dictionary) -> void:
+	detail_label.text = "[color=#e8c277]%s[/color]" % str(result.get("message", "购买请求已处理。"))
+	if result.get("quotes", null) is Array:
+		set_buy_quotes(result.get("quotes", []))
+	_refresh_gold()
+
+
+func _buy_quote_for_index(stock_index: int) -> Dictionary:
+	for raw_quote: Variant in _buy_quotes:
+		if raw_quote is Dictionary and int(raw_quote.get("stock_index", -1)) == stock_index:
+			return raw_quote
+	return {}
 
 
 func _rebuild_goods_cards() -> void:
@@ -356,7 +388,11 @@ func _rebuild_goods_cards() -> void:
 		card.set_meta("stock_index", index)
 		goods_grid.add_child(card)
 		goods_buttons.append(card)
-		_build_card_contents(card, entry)
+		var display_entry: Dictionary = entry.duplicate(true)
+		var quote := _buy_quote_for_index(index)
+		var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
+		display_entry["name"] = "%s ×%d" % [str(entry.get("name", "物品")), pack_count]
+		_build_card_contents(card, display_entry, "%d 金币" % int(quote.get("total_price", 0)), true)
 
 
 func _rebuild_sell_cards() -> void:
@@ -454,7 +490,7 @@ func _set_trade_mode(mode: String) -> void:
 	buy_tab_button.theme_type_variation = "GothicComponentSelectedButton" if buying else "GothicComponentButton"
 	sell_tab_button.theme_type_variation = "GothicComponentButton" if buying else "GothicComponentSelectedButton"
 	buy_button.visible = buying
-	repair_button.visible = buying
+	repair_button.visible = buying and bool(_active_merchant_context().get("supports_repair", false))
 	sell_quantity_row.visible = not buying
 	sell_quantity_button.visible = not buying
 	if buying:
@@ -792,7 +828,12 @@ func _refresh_gold() -> void:
 func _refresh_repair_preview() -> void:
 	if repair_button == null:
 		return
-	var cost := PlayerState.repair_cost()
+	var context := _active_merchant_context()
+	repair_button.visible = _trade_mode == "buy" and bool(context.get("supports_repair", false))
+	repair_button.disabled = not bool(context.get("supports_repair", false))
+	if repair_button.disabled:
+		return
+	var cost := PlayerState.repair_cost(context)
 	repair_button.text = "维修全部（%d金币）" % cost if cost > 0 else "装备无需维修"
 
 
@@ -814,7 +855,16 @@ func _on_item_selected(index: int) -> void:
 			item.get("category", ""), _value(item.get("attackMin")), _value(item.get("attackMax")),
 			_value(item.get("defenseMin")), _value(item.get("defenseMax")), _value(item.get("reqLevel")),
 		]
-	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n[color=#d3a763]价格：%d金币[/color]\n\n%s" % [item_name, int(entry.get("price", 0)), description]
+	var quote := _buy_quote_for_index(index)
+	var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
+	var price_line := (
+		"[color=#d3a763]价格：%d金币 × %d，共%d金币[/color]" % [
+			int(quote.get("unit_price", 0)), pack_count, int(quote.get("total_price", 0)),
+		]
+		if bool(quote.get("valid", false))
+		else "[color=#b8a58a]%s[/color]" % str(quote.get("reason", "等待玩法价格报价"))
+	)
+	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n%s\n\n%s" % [item_name, price_line, description]
 
 
 func _set_shop_card_selected(card: Button, selected: bool) -> void:
@@ -829,7 +879,7 @@ func _set_shop_card_selected(card: Button, selected: bool) -> void:
 
 
 func _repair_all() -> void:
-	detail_label.text = PlayerState.repair_all_equipment()
+	detail_label.text = PlayerState.repair_all_equipment(_active_merchant_context())
 	_refresh_gold()
 
 
@@ -838,14 +888,27 @@ func _buy_selected() -> void:
 	if selected.is_empty():
 		detail_label.text = "请先选择商品。"
 		return
-	var entry: Dictionary = stock[selected[0]]
-	var price := int(entry.get("price", 0))
-	if not PlayerState.spend_gold(price):
-		detail_label.text = "金币不足。"
+	var stock_index := int(selected[0])
+	var quote := _buy_quote_for_index(stock_index)
+	if not bool(quote.get("valid", false)):
+		detail_label.text = str(quote.get("reason", "该商品暂时无法购买。"))
 		return
-	PlayerState.add_item(str(entry.get("name", "未知物品")))
-	detail_label.text = "[color=#e8c277]购买成功：%s[/color]" % entry.get("name", "")
-	_refresh_gold()
+	detail_label.text = "[color=#d8bd8c]购买请求已提交，等待玩法层返回交易结果。[/color]"
+	buy_requested.emit({
+		"contract_id": str(quote.get("contract_id", "")),
+		"quote_id": str(quote.get("quote_id", "")),
+		"stock_index": stock_index,
+		"stock_key": str(quote.get("stock_key", "")),
+		"item_name": str(quote.get("item_name", "")),
+		"quantity": int(quote.get("pack_count", 1)),
+		"merchant_id": str(quote.get("merchant_id", "")),
+	})
+
+
+func _active_merchant_context() -> Dictionary:
+	if stock.is_empty() or not stock[0] is Dictionary:
+		return {}
+	return (stock[0].get("merchant_context", {}) as Dictionary).duplicate(true)
 
 
 func _item_texture(record: Dictionary) -> Texture2D:

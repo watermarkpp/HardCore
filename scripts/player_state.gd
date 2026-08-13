@@ -8,6 +8,7 @@ const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
+const PricingServiceScript := preload("res://scripts/pricing_service.gd")
 
 signal profile_changed
 signal inventory_changed
@@ -59,11 +60,17 @@ const QUICK_ITEM_SLOT_COUNT := 4
 const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
 const DEVICE_LAB_SAVE_CONTRACT_ID := "device_lab.player_save.v1"
 const DEATH_EXPERIENCE_PENALTY_CONTRACT_ID := "player_state.death_experience_penalty.v1"
-const SHOP_SELL_CONTRACT_ID := "gameplay.shop.sell_authority.v1"
+const PRICING_CONTRACT_ID := PricingServiceScript.CONTRACT_ID
+const SHOP_SELL_CONTRACT_ID := PRICING_CONTRACT_ID
 const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
 const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
 const WAREHOUSE_CAPACITY := 500
-const SHOP_SELL_PRICE_DIVISOR := 2
+const INVENTORY_CAPACITY := 100
+const INVENTORY_WEIGHT_CONTRACT_ID := "gameplay.inventory.weight_authority.v1"
+const INVENTORY_WEIGHT_REJECTION := "超过负重，无法拾取。"
+const INVENTORY_SLOT_REJECTION := "背包空间不足。"
+const WAREHOUSE_TRANSFER_CONTRACT_ID := "gameplay.warehouse.transfer_authority.v1"
+const MAX_SAFE_WEIGHT := 9223372036854775807
 const SHOP_SELL_HIGH_VALUE_PRICE := 10000
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
@@ -122,6 +129,14 @@ var last_load_result: Dictionary = {
 	"reason": "not_attempted",
 }
 var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _consumed_shop_buy_quote_ids: Dictionary = {}
+var _shop_buy_quote_serial := 0
+var _shop_pricing_session_nonce := ""
+var last_receive_result: Dictionary = {
+	"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
 var _taoist_main_pets_persistence_provider := Callable()
 # Test-only failure injection. Production ignores it unless test_mode is true.
 var _test_force_atomic_write_failure := false
@@ -142,6 +157,7 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
 	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
@@ -173,6 +189,10 @@ func reset_progress(emit_updates := true) -> void:
 	taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 	quest_states = {}
 	_consumed_shop_sell_quote_ids.clear()
+	_consumed_shop_buy_quote_ids.clear()
+	_shop_buy_quote_serial = 0
+	if _shop_pricing_session_nonce.is_empty():
+		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	saved_map_id = 4
 	saved_position = Vector2.ZERO
 	saved_ground_position_gu = Vector2.ZERO
@@ -198,6 +218,49 @@ func select_profession(value: String) -> String:
 		return "无效职业：%s" % value
 	if profession == value:
 		return "当前职业已经是%s" % value
+	# Profession changes can invalidate equipped items. Preflight all returned
+	# instances against the *final* equipment effect set and bag cap before
+	# mutating the character, so a full/overweight bag cannot partially switch
+	# profession or silently delete an item.
+	var incompatible_slots: Array[String] = []
+	var incompatible_records: Array[Dictionary] = []
+	for slot: String in equipment.keys():
+		var equipped_record: Variant = equipment[slot]
+		var equipped_name := str(equipped_record.get("name", "")) if equipped_record is Dictionary else str(equipped_record)
+		if equipped_name.is_empty():
+			continue
+		var item := GameData.get_item(equipped_name)
+		var item_profession := EquipmentRulesScript.effective_profession(item)
+		if item_profession not in ["", "通用", value]:
+			incompatible_slots.append(slot)
+			incompatible_records.append(
+				equipped_record.duplicate(true)
+				if equipped_record is Dictionary
+				else _make_item_instance(equipped_name, GameData.get_item_record(equipped_name))
+			)
+	var profession_before := profession
+	var equipment_before := equipment.duplicate(true)
+	var stats_before := computed_stats.duplicate(true)
+	var effects_before := computed_special_effects.duplicate(true)
+	var planned_inventory := inventory.duplicate(true)
+	if not incompatible_records.is_empty():
+		profession = value
+		for slot: String in incompatible_slots:
+			equipment[slot] = {}
+		recalculate_stats()
+		for returned_record: Dictionary in incompatible_records:
+			var preview := _build_receive_result_for_record(returned_record, planned_inventory)
+			if not bool(preview.get("success", false)):
+				profession = profession_before
+				equipment = equipment_before
+				computed_stats = stats_before
+				computed_special_effects = effects_before
+				return str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+			planned_inventory = (preview.get("inventory", planned_inventory) as Array).duplicate(true)
+		profession = profession_before
+		equipment = equipment_before
+		computed_stats = stats_before
+		computed_special_effects = effects_before
 	profession = value
 	for skill_name: Variant in learned_skills.keys():
 		var profile := ProfessionRules.skill_profile(str(skill_name))
@@ -216,22 +279,16 @@ func select_profession(value: String) -> String:
 	_sync_legacy_quick_slots_from_ring()
 	if profession != "战士":
 		warrior_runtime_state = _default_warrior_runtime_state()
-	var returned_items: Array[String] = []
 	for slot: String in equipment.keys():
 		var equipped_record: Variant = equipment[slot]
 		var equipped_name := str(equipped_record.get("name", "")) if equipped_record is Dictionary else str(equipped_record)
 		if equipped_name.is_empty():
 			continue
 		var item := GameData.get_item(equipped_name)
-		var item_profession := str(item.get("profession", "通用"))
+		var item_profession := EquipmentRulesScript.effective_profession(item)
 		if item_profession not in ["", "通用", profession]:
-			if equipped_record is Dictionary:
-				inventory.append(equipped_record.duplicate(true))
-			else:
-				returned_items.append(equipped_name)
 			equipment[slot] = {}
-	for returned_name: String in returned_items:
-		add_item(returned_name)
+	inventory = planned_inventory
 	recalculate_stats()
 	profession_changed.emit(profession)
 	inventory_changed.emit()
@@ -249,27 +306,240 @@ func set_later_content_enabled(enabled: bool) -> void:
 	_commit_save()
 
 
-func add_item(item_name: String, amount := 1) -> void:
+## Public inventory entry point. All gameplay paths (loot, shops, quests and
+## warehouse withdrawal) must use this atomic authority instead of appending
+## records directly.
+func add_item(item_name: String, amount := 1) -> Dictionary:
+	return receive(item_name, amount)
+
+
+## A cheap, side-effect-free preflight. The detailed rejection is retained in
+## `last_receive_result` for UI/diagnostics while the boolean keeps old callers
+## source-compatible.
+func can_receive(item_name: String, amount := 1) -> bool:
+	last_receive_result = _build_receive_result(item_name, amount, inventory)
+	return bool(last_receive_result.get("success", false))
+
+
+func can_receive_record(record: Dictionary) -> bool:
+	last_receive_result = _build_receive_result_for_record(record, inventory)
+	return bool(last_receive_result.get("success", false))
+
+
+func receive(item_name: String, amount := 1, commit := true) -> Dictionary:
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_result(item_name, amount, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "物品和金币均未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	if int(result.get("gold_delta", 0)) != 0:
+		profile_changed.emit()
+	return result
+
+
+## Internal variant used by buy/quest/warehouse transactions. It shares the
+## same preflight and plan builder but defers the enclosing transaction's save.
+func _add_item_without_commit(item_name: String, amount: int) -> bool:
+	var result := receive(item_name, amount, false)
+	return bool(result.get("success", false))
+
+
+func receive_record(record: Dictionary, commit := true) -> Dictionary:
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_result_for_record(record, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "物品未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	return result
+
+
+func _build_receive_result(item_name: String, amount: int, base_inventory: Array) -> Dictionary:
 	var catalog_item := GameData.get_item_record(item_name)
+	if catalog_item.is_empty():
+		return _receive_failure("unknown_item", "物品无效。")
+	if amount <= 0:
+		return _receive_failure("invalid_amount", "数量无效。")
 	var kind := str(catalog_item.get("kind", "unknown"))
 	if kind == "currency":
-		add_gold(int(catalog_item.get("currencyAmount", 10)) * amount)
-		return
-	if kind == "equipment" or not bool(catalog_item.get("stackable", true)):
-		for count in range(maxi(1, amount)):
-			inventory.append(_make_item_instance(item_name, catalog_item))
+		return {
+			"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+			"success": true,
+			"reason": "",
+			"inventory": base_inventory.duplicate(true),
+			"inventory_changed": false,
+			"gold_delta": int(catalog_item.get("currencyAmount", 1)) * amount,
+			"weight_before": inventory_weight(base_inventory),
+			"weight_after": inventory_weight(base_inventory),
+		}
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, {})
+
+
+func _build_receive_result_for_record(record: Dictionary, base_inventory: Array) -> Dictionary:
+	var item_name := str(record.get("name", ""))
+	var amount := maxi(1, int(record.get("count", 1)))
+	var catalog_item := GameData.get_item_record(item_name)
+	if catalog_item.is_empty() or item_name.is_empty():
+		return _receive_failure("unknown_item", "物品无效。")
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, record)
+
+
+func _build_receive_result_for_template(
+	item_name: String,
+	amount: int,
+	catalog_item: Dictionary,
+	base_inventory: Array,
+	template: Dictionary
+) -> Dictionary:
+	if amount <= 0:
+		return _receive_failure("invalid_amount", "数量无效。")
+	var next_inventory: Array = base_inventory.duplicate(true)
+	var is_stackable := bool(catalog_item.get("stackable", false)) and str(catalog_item.get("kind", "")) != "equipment"
+	var max_stack := _max_stack_for_item(catalog_item) if is_stackable else 1
+	var remaining := amount
+	if is_stackable:
+		for index in range(next_inventory.size()):
+			var existing: Variant = next_inventory[index]
+			if not existing is Dictionary or str(existing.get("name", "")) != item_name or not _inventory_records_mergeable(existing, template if not template.is_empty() else {"name": item_name, "count": 1}):
+				continue
+			var available := maxi(0, max_stack - int(existing.get("count", 0)))
+			if available <= 0:
+				continue
+			var moved := mini(available, remaining)
+			existing["count"] = int(existing.get("count", 0)) + moved
+			remaining -= moved
+			if remaining <= 0:
+				break
+	while remaining > 0:
+		if next_inventory.size() >= INVENTORY_CAPACITY:
+			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
+		var moved := mini(remaining, max_stack) if is_stackable else 1
+		var new_record: Dictionary
+		if not template.is_empty() and not is_stackable:
+			new_record = template.duplicate(true)
+			new_record["count"] = 1
+		elif str(catalog_item.get("kind", "")) == "equipment":
+			new_record = _make_item_instance(item_name, catalog_item)
+		else:
+			new_record = {"name": item_name, "count": moved}
+		next_inventory.append(new_record)
+		remaining -= moved
+	var weight_before := inventory_weight(base_inventory)
+	var weight_after := inventory_weight(next_inventory)
+	var max_weight := max_inventory_weight()
+	# Compatibility rule: an old save may already exceed the new cap, but no
+	# operation may increase that burden. This also lets a swap/unequip preserve
+	# an existing overweight state when the resulting weight is not higher.
+	if weight_after > max_weight and weight_after > weight_before:
+		return _receive_failure("overweight", INVENTORY_WEIGHT_REJECTION, weight_before, weight_after, max_weight)
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"inventory": next_inventory,
+		"inventory_changed": next_inventory != base_inventory,
+		"gold_delta": 0,
+		"weight_before": weight_before,
+		"weight_after": weight_after,
+		"max_weight": max_weight,
+	}
+
+
+func _receive_failure(reason: String, message: String, before := -1, after := -1, maximum := -1) -> Dictionary:
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": false,
+		"reason": reason,
+		"message": message,
+		"inventory_changed": false,
+		"gold_delta": 0,
+		"weight_before": before if before >= 0 else inventory_weight(inventory),
+		"weight_after": after if after >= 0 else inventory_weight(inventory),
+		"max_weight": maximum if maximum >= 0 else max_inventory_weight(),
+	}
+
+
+func _apply_receive_result(result: Dictionary) -> void:
+	if result.get("inventory", null) is Array:
+		inventory = (result.get("inventory") as Array).duplicate(true)
+	gold = maxi(0, gold + int(result.get("gold_delta", 0)))
+
+
+func _max_stack_for_item(catalog_item: Dictionary) -> int:
+	return maxi(1, int(catalog_item.get("maxStack", catalog_item.get("max_stack", 1))))
+
+
+func can_receive_batch(rewards: Array) -> bool:
+	var simulation := _build_receive_batch_result(rewards, inventory)
+	last_receive_result = simulation
+	return bool(simulation.get("success", false))
+
+
+func receive_batch(rewards: Array, commit := true) -> Dictionary:
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_batch_result(rewards, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "奖励和金币均未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
 		inventory_changed.emit()
-		_commit_save()
-		return
-	for stack: Variant in inventory:
-		if stack is Dictionary and stack.get("name", "") == item_name:
-			stack["count"] = int(stack.get("count", 0)) + amount
-			inventory_changed.emit()
-			_commit_save()
-			return
-	inventory.append({"name": item_name, "count": amount})
-	inventory_changed.emit()
-	_commit_save()
+	if int(result.get("gold_delta", 0)) != 0:
+		profile_changed.emit()
+	return result
+
+
+func _build_receive_batch_result(rewards: Array, base_inventory: Array) -> Dictionary:
+	var next_inventory := base_inventory.duplicate(true)
+	var gold_delta := 0
+	for raw_reward: Variant in rewards:
+		if not raw_reward is Dictionary:
+			continue
+		var reward: Dictionary = raw_reward
+		var item_name := str(reward.get("name", ""))
+		var amount := maxi(1, int(reward.get("count", reward.get("amount", 1))))
+		var result := _build_receive_result(item_name, amount, next_inventory)
+		if not bool(result.get("success", false)):
+			return result
+		next_inventory = (result.get("inventory", next_inventory) as Array).duplicate(true)
+		gold_delta += int(result.get("gold_delta", 0))
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"inventory": next_inventory,
+		"inventory_changed": next_inventory != base_inventory,
+		"gold_delta": gold_delta,
+		"weight_before": inventory_weight(base_inventory),
+		"weight_after": inventory_weight(next_inventory),
+		"max_weight": max_inventory_weight(),
+	}
 
 
 func add_gold(amount: int) -> void:
@@ -396,6 +666,98 @@ func shop_sell_quotes(items: Array) -> Dictionary:
 	return quotes
 
 
+func shop_buy_quotes(stock: Array, context := {}) -> Array:
+	_shop_buy_quote_serial += 1
+	return _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
+
+
+func _build_shop_buy_quotes(stock: Array, context: Dictionary, quote_serial: int) -> Array:
+	var quotes: Array = []
+	for stock_index in range(stock.size()):
+		var raw_entry: Variant = stock[stock_index]
+		if not raw_entry is Dictionary:
+			continue
+		var entry: Dictionary = raw_entry
+		var item_name := str(entry.get("name", ""))
+		var entry_context: Dictionary = context.duplicate(true)
+		entry_context.merge(entry.get("merchant_context", {}), true)
+		var pack_count := maxi(1, int(entry.get("pack_count", 1)))
+		var pricing_quote := PricingServiceScript.quote_buy(
+			GameData.get_item_price_record(item_name), pack_count, entry_context
+		)
+		var quote_id := ""
+		if bool(pricing_quote.get("valid", false)):
+			quote_id = "%s:%s" % [PRICING_CONTRACT_ID, JSON.stringify([
+				_shop_pricing_session_nonce, active_profile_id, quote_serial, stock_index, item_name, pricing_quote,
+			]).sha256_text().substr(0, 24)]
+		var result: Dictionary = pricing_quote.duplicate(true)
+		result.merge({
+			"stock_index": stock_index,
+			"stock_key": str(entry.get("offer_id", "stock:%d:%s" % [stock_index, item_name])),
+			"quote_id": quote_id,
+			"description": str(entry.get("description", "")),
+			"merchant_id": str(entry.get("merchant_id", entry_context.get("merchant_id", ""))),
+			"pack_count": pack_count,
+		}, true)
+		quotes.append(result)
+	return quotes
+
+
+func buy_shop_item(request: Dictionary, stock: Array, context := {}) -> Dictionary:
+	var stock_index := int(request.get("stock_index", -1))
+	if stock_index < 0 or stock_index >= stock.size():
+		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
+	var current_quotes := _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
+	var quote: Dictionary = {}
+	for candidate: Variant in current_quotes:
+		if candidate is Dictionary and int(candidate.get("stock_index", -1)) == stock_index:
+			quote = candidate
+			break
+	var quote_id := str(request.get("quote_id", ""))
+	if not bool(quote.get("valid", false)) or quote_id.is_empty() or quote_id != str(quote.get("quote_id", "")):
+		return _shop_buy_result(false, "购买报价已失效，请重新选择商品。", stock, context)
+	if (
+		str(request.get("item_name", quote.get("item_name", ""))) != str(quote.get("item_name", ""))
+		or str(request.get("stock_key", quote.get("stock_key", ""))) != str(quote.get("stock_key", ""))
+		or str(request.get("merchant_id", quote.get("merchant_id", ""))) != str(quote.get("merchant_id", ""))
+	):
+		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
+	if _consumed_shop_buy_quote_ids.has(quote_id):
+		return _shop_buy_result(false, "该购买报价已经处理，不能重复提交。", stock, context)
+	var quantity := int(request.get("quantity", 1))
+	if quantity != int(quote.get("pack_count", 1)):
+		return _shop_buy_result(false, "购买数量无效。", stock, context)
+	var total_price := int(quote.get("total_price", 0))
+	if total_price <= 0 or gold < total_price:
+		return _shop_buy_result(false, "金币不足。", stock, context)
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	gold -= total_price
+	if not _add_item_without_commit(str(quote.get("item_name", "")), quantity):
+		gold = gold_before
+		inventory = inventory_before
+		return _shop_buy_result(false, "背包空间不足或商品无效。", stock, context)
+	inventory_changed.emit()
+	profile_changed.emit()
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		inventory_changed.emit()
+		profile_changed.emit()
+		return _shop_buy_result(false, "购买存档失败，物品和金币均未改变。", stock, context)
+	_consumed_shop_buy_quote_ids[quote_id] = true
+	return _shop_buy_result(true, "购买成功：%s" % str(quote.get("item_name", "物品")), stock, context)
+
+
+func _shop_buy_result(success: bool, message: String, stock: Array, context: Dictionary) -> Dictionary:
+	return {
+		"contract_id": PRICING_CONTRACT_ID,
+		"success": success,
+		"message": message,
+		"quotes": shop_buy_quotes(stock, context),
+	}
+
+
 func sell_inventory_item(request: Dictionary) -> Dictionary:
 	var quote := _shop_sell_quote(request)
 	var quote_id := str(request.get("quote_id", ""))
@@ -483,21 +845,18 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 	):
 		return rejection
 	var catalog := GameData.get_item_record(item_name)
-	var kind := str(catalog.get("kind", "unknown"))
 	var base_price := _shop_sell_base_price(item_name, catalog)
 	var count := maxi(1, int(record.get("count", 1)))
-	if kind in ["currency", "quest_item"]:
-		rejection["reason"] = "该物品不能出售。"
-		return rejection
-	if base_price <= 0:
-		rejection["reason"] = "当前物品没有有效玩法价格。"
-		return rejection
-	var unit_price := maxi(
-		1,
-		floori(float(base_price) / float(SHOP_SELL_PRICE_DIVISOR))
+	var pricing_quote := PricingServiceScript.quote_sell(
+		GameData.get_item_price_record(item_name), catalog, record, 1
 	)
+	if not bool(pricing_quote.get("valid", false)):
+		rejection["reason"] = str(pricing_quote.get("reason", "该物品不能出售。"))
+		return rejection
+	var unit_price := int(pricing_quote.get("unit_price", 0))
 	var risk_flags := _shop_sell_risk_flags(record, catalog, base_price)
 	var quote_seed := JSON.stringify([
+		_shop_pricing_session_nonce,
 		active_profile_id,
 		expected_key,
 		inventory_index,
@@ -505,6 +864,7 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		item_name,
 		count,
 		unit_price,
+		pricing_quote,
 		record,
 	])
 	var quote_id := "%s:%s" % [
@@ -517,9 +877,10 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		"quote_id": quote_id,
 		"item_name": item_name,
 		"sellable": true,
-		# Deterministic gameplay derivation from the existing runtime item price;
-		# this is not a second price-data authority.
 		"unit_price": unit_price,
+		"policy_version": str(pricing_quote.get("policy_version", "")),
+		"formula_snapshot": (pricing_quote.get("formula_snapshot", {}) as Dictionary).duplicate(true),
+		"price_source": (pricing_quote.get("source", {}) as Dictionary).duplicate(true),
 		"max_quantity": count,
 		"reason": "",
 		"requires_confirmation": not risk_flags.is_empty(),
@@ -532,11 +893,8 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 	}
 
 
-func _shop_sell_base_price(item_name: String, catalog: Dictionary) -> int:
-	return maxi(
-		maxi(0, int(catalog.get("price", 0))),
-		GameData.get_item_shop_price(item_name),
-	)
+func _shop_sell_base_price(item_name: String, _catalog: Dictionary) -> int:
+	return GameData.get_item_shop_price(item_name)
 
 
 func _shop_sell_risk_flags(
@@ -783,12 +1141,25 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		if prospective_wear > max_wear:
 			return "穿戴重量不足：需要%d，上限%d" % [prospective_wear, max_wear]
 	var previous: Variant = equipment.get(slot, {})
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var inventory_after := inventory.duplicate(true)
+	inventory_after.remove_at(index)
 	if previous is Dictionary and not previous.is_empty():
-		inventory[index] = previous.duplicate(true)
+		var return_preview := _build_receive_result_for_record(previous, inventory_after)
+		if not bool(return_preview.get("success", false)):
+			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+		# Preserve the selected slot during a replacement. Besides keeping the
+		# inventory deterministic, this prevents the old item from jumping to the
+		# tail and breaking the two-slot equip-cycle contract.
+		inventory_after.insert(index, previous.duplicate(true))
 	elif not previous is Dictionary and not str(previous).is_empty():
-		inventory[index] = _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
-	else:
-		inventory.remove_at(index)
+		var legacy_previous := _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
+		var return_preview := _build_receive_result_for_record(legacy_previous, inventory_after)
+		if not bool(return_preview.get("success", false)):
+			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+		inventory_after.insert(index, legacy_previous)
+	inventory = inventory_after
 	equipment[slot] = inventory_record.duplicate(true)
 	recalculate_stats()
 	if not explicit_slot:
@@ -796,7 +1167,11 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats()
+		return "装备存档失败，装备和背包均未改变"
 	return "已装备：%s" % item_name
 
 
@@ -806,13 +1181,22 @@ func unequip_slot(slot: String) -> String:
 	var equipped_value: Variant = equipment.get(slot, {})
 	if not equipped_value is Dictionary or equipped_value.is_empty():
 		return "%s为空" % slot
-	inventory.append(equipped_value.duplicate(true))
+	var return_preview := _build_receive_result_for_record(equipped_value, inventory)
+	if not bool(return_preview.get("success", false)):
+		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	inventory = (return_preview.get("inventory", inventory) as Array).duplicate(true)
 	equipment[slot] = {}
 	recalculate_stats()
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats()
+		return "卸装存档失败，装备和背包均未改变"
 	return "已卸下：%s" % str(equipped_value.get("name", ""))
 
 
@@ -982,17 +1366,29 @@ func claim_quest(quest_id: String) -> String:
 	var quest := GameData.get_bich_quest(quest_id)
 	if quest.is_empty() or not _quest_objectives_complete(quest, state):
 		return "任务尚未完成"
-	state["status"] = "claimed"
-	state["claimed_at_unix"] = int(Time.get_unix_time_from_system())
 	var rewards: Dictionary = quest.get("rewards", {})
-	gold = maxi(0, gold + int(rewards.get("gold", 0)))
+	var reward_items: Array = []
 	for reward: Variant in rewards.get("items", []):
 		if reward is Dictionary:
-			_grant_quest_item_without_commit(str(reward.get("name", "")), maxi(1, int(reward.get("count", 1))))
+			reward_items.append(reward)
+	var reward_preview := _build_receive_batch_result(reward_items, inventory)
+	if not bool(reward_preview.get("success", false)):
+		return str(reward_preview.get("message", "超过负重，无法领取任务奖励。"))
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var state_before := quest_states.duplicate(true)
+	_apply_receive_result(reward_preview)
+	state["status"] = "claimed"
+	state["claimed_at_unix"] = int(Time.get_unix_time_from_system())
+	gold = maxi(0, gold + int(rewards.get("gold", 0)))
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		quest_states = state_before
+		return "任务奖励存档失败，奖励未发放。"
 	inventory_changed.emit()
 	profile_changed.emit()
 	quests_changed.emit()
-	_commit_save()
 	return "已领取：%s" % quest_reward_label(quest_id)
 
 
@@ -1115,6 +1511,8 @@ func recalculate_stats() -> void:
 		"luck": 0,
 		"max_wear_weight": EquipmentRulesScript.max_wear_weight(profession, level),
 		"max_hand_weight": EquipmentRulesScript.max_hand_weight(profession, level),
+		"max_bag_weight": EquipmentRulesScript.max_bag_weight(profession, level),
+		"bag_weight": inventory_weight(inventory),
 		"wear_weight": current_wear_weight(),
 		"critical_chance": 0.0,
 		"critical_damage_multiplier": 1.5,
@@ -1211,6 +1609,7 @@ func recalculate_stats() -> void:
 	if computed_special_effects.has("double_weight"):
 		result["max_wear_weight"] = int(result.get("max_wear_weight", 0)) * 2
 		result["max_hand_weight"] = int(result.get("max_hand_weight", 0)) * 2
+		result["max_bag_weight"] = int(result.get("max_bag_weight", 0)) * 2
 	var magic_blood_power := int(set_powers.get("magic_blood", 0))
 	if set_pieces["magic_blood"].size() == 3:
 		magic_blood_power += 50
@@ -1396,6 +1795,47 @@ func current_wear_weight(excluded_slot := "") -> int:
 	return total
 
 
+## Weight is derived from the primary item catalog on every query. Currency
+## records intentionally contribute zero so picking up gold never gets blocked
+## by a full or legacy-overweight bag.
+func inventory_weight(records: Array = inventory) -> int:
+	var total := 0
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		var item := GameData.get_item_record(str(record.get("name", "")))
+		if item.is_empty() or str(item.get("kind", "")) == "currency":
+			continue
+		var unit_weight := maxi(0, int(item.get("weight", 0)))
+		var count := maxi(1, int(record.get("count", 1)))
+		if unit_weight > 0 and count > MAX_SAFE_WEIGHT / unit_weight:
+			return MAX_SAFE_WEIGHT
+		var contribution := unit_weight * count
+		if total > MAX_SAFE_WEIGHT - contribution:
+			return MAX_SAFE_WEIGHT
+		total += contribution
+	return total
+
+
+func max_inventory_weight() -> int:
+	var maximum := EquipmentRulesScript.max_bag_weight(profession, level)
+	if _active_double_weight_effect():
+		maximum *= 2
+	return maximum
+
+
+func _active_double_weight_effect() -> bool:
+	for value: Variant in equipment.values():
+		if not value is Dictionary or value.is_empty() or int(value.get("durability", 1)) <= 0:
+			continue
+		var item := GameData.get_item_record(str(value.get("name", "")))
+		var special := EquipmentRulesScript.special_effect_for(item)
+		if str(special.get("id", "")) == "double_weight" and bool(special.get("runtime", false)):
+			return true
+	return false
+
+
 func _slots_for_category(category: String) -> Array[String]:
 	match category:
 		"武器": return ["武器"]
@@ -1490,30 +1930,115 @@ func damage_equipment_durability(slot: String, amount := 1) -> void:
 	_commit_save()
 
 
-func repair_cost() -> int:
+func repair_cost(context := {}) -> int:
+	return int(_repair_plan(context).get("total_price", 0))
+
+
+func _repair_plan(context := {}) -> Dictionary:
 	var total := 0
-	for equipped: Variant in equipment.values():
+	var slots: Array[String] = []
+	for slot: String in EQUIPMENT_SLOTS:
+		var equipped: Variant = equipment.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
-		var item := GameData.get_item(str(equipped.get("name", "")))
-		total += EquipmentRulesScript.repair_cost(item, int(equipped.get("durability", 0)), int(equipped.get("max_durability", 1)))
-	return total
+		var item_name := str(equipped.get("name", ""))
+		var quote := PricingServiceScript.quote_repair(
+			GameData.get_item_price_record(item_name),
+			GameData.get_item_record(item_name),
+			equipped,
+			context
+		)
+		var quoted_cost := int(quote.get("total_price", 0))
+		if not bool(quote.get("valid", false)) or quoted_cost <= 0:
+			continue
+		total += quoted_cost
+		slots.append(slot)
+	return {"total_price": total, "slots": slots}
 
 
-func repair_all_equipment() -> String:
-	var cost := repair_cost()
-	if cost <= 0:
+func repair_all_equipment(context := {}) -> String:
+	if context is Dictionary and context.has("supports_repair") and not bool(context.get("supports_repair", false)):
+		return "该商人不提供维修服务"
+	var plan := _repair_plan(context)
+	var full_cost := int(plan.get("total_price", 0))
+	if full_cost <= 0:
 		return "装备无需维修"
-	if not spend_gold(cost):
-		return "维修需要%d金币" % cost
-	for equipped: Variant in equipment.values():
-		if equipped is Dictionary and not equipped.is_empty():
-			equipped["durability"] = int(equipped.get("max_durability", 1))
+	var equipment_before := equipment.duplicate(true)
+	var gold_before := gold
+	var remaining_gold := gold
+	var spent := 0
+	var repaired_slots := 0
+	for slot: String in plan.get("slots", []):
+		var equipped: Variant = equipment.get(slot, {})
+		if not equipped is Dictionary or equipped.is_empty():
+			continue
+		var item_name := str(equipped.get("name", ""))
+		var price_record := GameData.get_item_price_record(item_name)
+		var catalog := GameData.get_item_record(item_name)
+		var current := int(equipped.get("durability", 0))
+		var maximum := maxi(1, int(equipped.get("max_durability", catalog.get("maxDurability", 1))))
+		var missing := maximum - clampi(current, 0, maximum)
+		if missing <= 0 or remaining_gold <= 0:
+			continue
+		var chosen_quote := PricingServiceScript.quote_repair_delta(
+			price_record, catalog, equipped, missing, context
+		)
+		if not bool(chosen_quote.get("valid", false)):
+			continue
+		if int(chosen_quote.get("total_price", 0)) > remaining_gold:
+			chosen_quote = _maximum_affordable_repair_quote(
+				price_record, catalog, equipped, missing, remaining_gold, context
+			)
+		if not bool(chosen_quote.get("valid", false)):
+			continue
+		var slot_cost := int(chosen_quote.get("total_price", 0))
+		var target := int(chosen_quote.get("formula_snapshot", {}).get("target_durability", current))
+		if slot_cost <= 0 or slot_cost > remaining_gold or target <= current:
+			continue
+		equipped["durability"] = mini(maximum, target)
+		remaining_gold -= slot_cost
+		spent += slot_cost
+		repaired_slots += 1
+	if repaired_slots <= 0:
+		return "金币不足，未能维修任何装备"
+	gold = remaining_gold
 	recalculate_stats()
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
-	return "全部装备维修完成，花费%d金币" % cost
+	if not _commit_save():
+		equipment = equipment_before
+		gold = gold_before
+		recalculate_stats()
+		equipment_changed.emit()
+		profile_changed.emit()
+		return "维修存档失败，装备和金币均未改变"
+	if spent >= full_cost:
+		return "全部装备维修完成，花费%d金币" % spent
+	return "金币不足，已优先维修%d件装备，花费%d金币" % [repaired_slots, spent]
+
+
+func _maximum_affordable_repair_quote(
+	price_record: Dictionary,
+	catalog: Dictionary,
+	instance: Dictionary,
+	maximum_amount: int,
+	budget: int,
+	context: Dictionary
+) -> Dictionary:
+	var low := 1
+	var high := maxi(0, maximum_amount)
+	var best: Dictionary = {}
+	while low <= high:
+		var amount := int((low + high) / 2)
+		var quote := PricingServiceScript.quote_repair_delta(
+			price_record, catalog, instance, amount, context
+		)
+		if bool(quote.get("valid", false)) and int(quote.get("total_price", 0)) <= budget:
+			best = quote
+			low = amount + 1
+		else:
+			high = amount - 1
+	return best
 
 
 func _profile_path(profile_id: String) -> String:
@@ -1794,6 +2319,67 @@ func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
 	result["inventoryCount"] = inventory.size()
 	result["warehouseCount"] = warehouse_inventory.size()
 	return result
+
+
+func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictionary:
+	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	if inventory_index < 0 or inventory_index >= inventory.size() or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
+		result["message"] = "存入位置无效。"
+		return result
+	while warehouse_inventory.size() <= warehouse_slot:
+		warehouse_inventory.append({})
+	var target: Variant = warehouse_inventory[warehouse_slot]
+	if target is Dictionary and not target.is_empty():
+		result["message"] = "仓库位置已被占用。"
+		return result
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	warehouse_inventory[warehouse_slot] = inventory[inventory_index].duplicate(true) if inventory[inventory_index] is Dictionary else inventory[inventory_index]
+	inventory.remove_at(inventory_index)
+	if not _commit_save():
+		inventory = inventory_before
+		warehouse_inventory = warehouse_before
+		result["message"] = "仓库存档失败，物品未改变。"
+		return result
+	inventory_changed.emit()
+	result["success"] = true
+	result["message"] = "已存入仓库。"
+	return result
+
+
+func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
+	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	if warehouse_slot < 0 or warehouse_slot >= warehouse_inventory.size() or not warehouse_inventory[warehouse_slot] is Dictionary or (warehouse_inventory[warehouse_slot] as Dictionary).is_empty():
+		result["message"] = "仓库位置无效。"
+		return result
+	var record: Dictionary = warehouse_inventory[warehouse_slot]
+	var preview := _build_receive_result_for_record(record, inventory)
+	if not bool(preview.get("success", false)):
+		result["message"] = str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+		result["reason"] = str(preview.get("reason", "rejected"))
+		return result
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
+	warehouse_inventory[warehouse_slot] = {}
+	_trim_warehouse_empty_tail()
+	if not _commit_save():
+		inventory = inventory_before
+		warehouse_inventory = warehouse_before
+		result["message"] = "仓库存档失败，物品未改变。"
+		return result
+	inventory_changed.emit()
+	result["success"] = true
+	result["message"] = "已取出仓库物品。"
+	return result
+
+
+func _trim_warehouse_empty_tail() -> void:
+	while not warehouse_inventory.is_empty():
+		var tail: Variant = warehouse_inventory.back()
+		if tail is Dictionary and not tail.is_empty():
+			break
+		warehouse_inventory.pop_back()
 
 
 func _validate_device_lab_save_document(document: Dictionary) -> Dictionary:

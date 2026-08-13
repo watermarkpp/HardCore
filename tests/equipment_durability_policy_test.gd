@@ -43,10 +43,13 @@ func _run() -> void:
 	var expected_cost := EquipmentRulesScript.repair_cost(item, 0, maximum)
 	assert(expected_cost > 0 and PlayerState.repair_cost() == expected_cost, "服务端比例维修价格没有接入")
 	PlayerState.gold = expected_cost - 1
-	assert(PlayerState.repair_all_equipment() == "维修需要%d金币" % expected_cost, "金币不足时维修结果错误")
-	assert(int(weapon.get("durability", -1)) == 0 and int(weapon.get("max_durability", -1)) == maximum, "维修失败却改变了耐久")
+	var partial_message := PlayerState.repair_all_equipment()
+	assert(partial_message.begins_with("金币不足，已优先维修"), "金币不足时未执行武器优先的部分维修")
+	assert(int(weapon.get("durability", -1)) > 0 and int(weapon.get("durability", -1)) < maximum, "余额不足时部分维修量错误")
+	assert(PlayerState.gold >= 0 and PlayerState.gold < expected_cost - 1, "部分维修扣费错误")
+	assert(int(weapon.get("max_durability", -1)) == maximum, "部分维修错误降低最大耐久")
 
-	PlayerState.gold = expected_cost
+	PlayerState.gold = PlayerState.repair_cost()
 	assert(PlayerState.repair_all_equipment().begins_with("全部装备维修完成"), "唯一维修功能执行失败")
 	assert(PlayerState.gold == 0, "维修扣费错误")
 	assert(int(weapon.get("durability", -1)) == maximum and int(weapon.get("max_durability", -1)) == maximum, "维修没有恢复原最大耐久")
@@ -56,6 +59,7 @@ func _run() -> void:
 	var shop := ShopPanel.new()
 	add_child(shop)
 	await get_tree().process_frame
+	shop.open_for("比奇铁匠", GameData.merchant_stock("starter_gear"))
 	assert(shop.repair_button.text == "装备无需维修", "商店维修按钮初始预览错误")
 	PlayerState.damage_equipment_durability("武器", 1)
 	assert("金币" in shop.repair_button.text and str(PlayerState.repair_cost()) in shop.repair_button.text, "商店没有显示唯一维修价格预览")

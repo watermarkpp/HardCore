@@ -1,15 +1,20 @@
 class_name LootPickup
 extends Node2D
 
-signal collected(item_name: String)
+signal collected(item_name: String, pickup: LootPickup)
+signal collection_rejected(item_name: String, message: String)
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const COLLECTION_RADIUS_GU := 0.75
+const OVERWEIGHT_RETRY_COOLDOWN_SECONDS := 5.0
 
 var item_name := "金币"
 var target: PlayerCharacter
 var _bob_time := 0.0
 var icon_sprite: Sprite2D
+var _overweight_retry_remaining := 0.0
+var _collection_pending := false
+var _collection_authority_check_count := 0
 
 
 func setup(label_text: String, player_target: PlayerCharacter) -> void:
@@ -56,18 +61,59 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_bob_time += delta
+	_overweight_retry_remaining = maxf(0.0, _overweight_retry_remaining - delta)
 	if icon_sprite != null:
 		icon_sprite.position.y = -5.0 + sin(_bob_time * 3.0) * 2.0
 	queue_redraw()
-	if (
-		is_instance_valid(target)
-		and target_is_within_collection_range_screen_px(
-			global_position,
-			target.global_position
-		)
-	):
-		collected.emit(item_name)
-		queue_free()
+	if not is_instance_valid(target):
+		return
+	if _collection_pending:
+		return
+	var in_range := target_is_within_collection_range_screen_px(global_position, target.global_position)
+	if not in_range:
+		# Leaving the pickup radius is a new attempt context, so don't carry a
+		# stale failure cooldown back when the player returns.
+		_overweight_retry_remaining = 0.0
+		return
+	if _overweight_retry_remaining > 0.0:
+		return
+	_collection_authority_check_count += 1
+	if not PlayerState.can_receive(item_name):
+		_arm_collection_retry_cooldown()
+		var message := str(PlayerState.last_receive_result.get("message", "超过负重，无法拾取。"))
+		collection_rejected.emit(item_name, message)
+		return
+	_collection_pending = true
+	collected.emit(item_name, self)
+
+
+func _arm_collection_retry_cooldown() -> void:
+	_overweight_retry_remaining = OVERWEIGHT_RETRY_COOLDOWN_SECONDS
+
+
+func retry_cooldown_remaining() -> float:
+	return _overweight_retry_remaining
+
+
+func collection_pending() -> bool:
+	return _collection_pending
+
+
+func collection_authority_check_count() -> int:
+	return _collection_authority_check_count
+
+
+func confirm_collect() -> void:
+	if not _collection_pending:
+		return
+	_collection_pending = false
+	queue_free()
+
+
+func reject_collection(message := "超过负重，无法拾取。") -> void:
+	_collection_pending = false
+	_arm_collection_retry_cooldown()
+	collection_rejected.emit(item_name, message)
 
 
 static func target_is_within_collection_range_screen_px(

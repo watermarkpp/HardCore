@@ -448,28 +448,23 @@ func _deposit() -> void:
 	var target_slot := _first_free_slot_on_current_page()
 	if selected_bag_index < 0 or selected_bag_index >= PlayerState.inventory.size() or target_slot < 0:
 		return
-	_ensure_warehouse_slot(target_slot)
-	PlayerState.warehouse_inventory[target_slot] = PlayerState.inventory.pop_at(selected_bag_index)
+	var result: Dictionary = PlayerState.deposit_to_warehouse(selected_bag_index, target_slot)
 	selected_bag_index = -1
-	PlayerState.inventory_changed.emit()
-	PlayerState.save_game()
 	refresh()
+	transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
 
 
 func _withdraw() -> void:
 	if not _warehouse_slot_has_item(selected_stash_index):
 		return
-	if PlayerState.inventory.size() >= BAG_CAPACITY:
-		withdraw_button.disabled = true
-		transfer_detail_label.text = "背包已满，无法取出"
+	var result: Dictionary = PlayerState.withdraw_from_warehouse(selected_stash_index)
+	if not bool(result.get("success", false)):
+		withdraw_button.disabled = true if str(result.get("reason", "")) == "inventory_full" else withdraw_button.disabled
+		transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
 		return
-	PlayerState.inventory.append(PlayerState.warehouse_inventory[selected_stash_index])
-	PlayerState.warehouse_inventory[selected_stash_index] = {}
-	_trim_empty_warehouse_tail()
 	selected_stash_index = -1
-	PlayerState.inventory_changed.emit()
-	PlayerState.save_game()
 	refresh()
+	transfer_detail_label.text = str(result.get("message", "已取出仓库物品。"))
 
 
 func apply_sort_result(result: Dictionary) -> void:

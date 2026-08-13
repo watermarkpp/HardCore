@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "contractId": "gameplay.pricing.authority.v1",
+  "policyVersion": "2026-08-13.1",
+  "currencyId": "gold",
+  "source": {
+    "distribution": "server.crystal.cjlaaa",
+    "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+    "field": "StdItem.Price",
+    "parser": "tools/build_complete_item_system.py:ItemInfo.price:uint32_le",
+    "originalRules": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:GetItemPrice/GetUserPrice/GetUserItemPrice/GetSellItemPrice/RepairItem"
+  },
+  "rounding": "half_up_integer",
+  "merchant": {
+    "stockMarkupBps": 11000,
+    "defaultPriceRateBps": 10000
+  },
+  "modifiers": {
+    "globalBps": 10000,
+    "categoryBps": {},
+    "itemBps": {}
+  },
+  "sell": {
+    "rateBps": 5000,
+    "minimumPositivePrice": 1,
+    "nonTradableKinds": ["currency", "quest_item"],
+    "rejectBoundItems": true,
+    "durabilityValuation": "original_get_user_item_price"
+  },
+  "repair": {
+    "priceDivisor": 3,
+    "partialRepair": "deterministic_per_instance_delta_minimum_positive_price_1",
+    "batchOrderOwner": "player_state_equipment_slot_priority",
+    "preserveMaximumDurability": true,
+    "specialRepairEnabled": false,
+    "projectOverrideReason": "user_accepted_normal_repair_preserves_maximum_durability"
+  },
+  "forge": {
+    "valuationOnly": true,
+    "recipeCostPolicy": "not_defined"
+  }
+}

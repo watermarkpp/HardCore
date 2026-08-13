@@ -141,6 +141,21 @@ static func max_hand_weight(profession: String, level: int) -> int:
 		_: return 12 + int(round((safe_level / 13.0) * safe_level))
 
 
+## Canonical inventory/bag carrying capacity. This is separate from the
+## classic hand/wear equipment requirements: bag capacity is consumed by every
+## non-currency inventory record. Keep this formula in one authority so callers
+## cannot drift on division or profession-name mapping.
+static func max_bag_weight(profession: String, level: int) -> int:
+	var safe_level := maxi(1, level)
+	var profession_id := ProfessionRules.profession_id(profession)
+	var divisor := 3.0
+	match profession_id:
+		"wizard": divisor = 5.0
+		"taoist": divisor = 4.0
+		_: divisor = 3.0
+	return 50 + roundi(float(safe_level) / divisor * float(safe_level))
+
+
 static func attribute_source_distribution(item: Dictionary) -> String:
 	var source: Variant = item.get("source", ATTRIBUTE_MASTER_DISTRIBUTION)
 	if source is Dictionary:
@@ -216,22 +231,22 @@ static func requirement_label(item: Dictionary) -> String:
 
 
 static func reference_price(item: Dictionary) -> int:
-	if int(item.get("servicePrice", 0)) > 0:
-		return int(item.get("servicePrice", 0))
-	if int(item.get("price", 0)) > 0:
-		return int(item.get("price", 0))
-	var requirement := requirement_for(item)
-	var required := maxi(1, int(requirement.get("value", 1)))
-	return maxi(50, required * required * 3)
+	return GameData.get_item_shop_price(str(item.get("name", "")))
 
 
 static func repair_cost(item: Dictionary, durability: int, max_durability: int) -> int:
-	var maximum := maxi(1, max_durability)
-	var missing := maximum - clampi(durability, 0, maximum)
-	if missing <= 0:
-		return 0
-	# ObjNpc.pas: Round(nPrice div 3 / DuraMax * missing). 本项目持久已换算为显示单位。
-	return maxi(0, int(round(float(reference_price(item) / 3) / maximum * missing)))
+	var equipment_catalog := item.duplicate(true)
+	equipment_catalog["kind"] = "equipment"
+	var quote := preload("res://scripts/pricing_service.gd").quote_repair(
+		GameData.get_item_price_record(str(item.get("name", ""))),
+		equipment_catalog,
+		{
+			"name": str(item.get("name", "")),
+			"durability": durability,
+			"max_durability": max_durability,
+		}
+	)
+	return int(quote.get("total_price", 0)) if bool(quote.get("valid", false)) else 0
 
 
 static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max: int, unlucky_roll: int, success_roll: int) -> Dictionary:
@@ -436,7 +451,7 @@ static func enrich_catalog_record(item: Dictionary) -> Dictionary:
 	result["fieldSemanticsSource"] = "M2Server/Common/Grobal2.pas:TStdItem + M2Server/ObjBase.pas:CanUseItem"
 	result["concreteStdItemsStatus"] = "项目装备属性主表已接入" if result.has("requirementType") else ("已接入" if result.has("serviceNeed") else "数据库缺失·保留候选值")
 	result["referencePrice"] = reference_price(result)
-	result["referencePriceSource"] = "服务端StdItems.Price" if result.has("servicePrice") else "项目价格候选·待StdItems.Price替换"
+	result["referencePriceSource"] = "server.crystal.cjlaaa:Server.MirDB:StdItem.Price" if int(result.get("referencePrice", 0)) > 0 else "missing_primary_price"
 	var special := special_effect_for(result)
 	if not special.is_empty():
 		result["specialEffect"] = special

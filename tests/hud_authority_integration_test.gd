@@ -55,18 +55,14 @@ func _run() -> void:
 	_hud._toggle_skill_book()
 	_hud._ensure_shop_panel()
 
-	# Quote goes HUD -> GameRoot -> PlayerState authority -> HUD. Its price is a
-	# deterministic 50% derivation of the existing runtime catalog price.
+	# Quote goes HUD -> GameRoot -> PlayerState pricing authority -> HUD.
 	var quote_item := _quote_request(0)
 	_hud.shop_sell_quotes_requested.emit([quote_item])
 	var quote: Dictionary = _hud.shop_panel._sell_quotes.get(
 		"inventory:0", {}
 	)
 	assert(bool(quote.get("sellable", false)), "authority did not quote item")
-	var runtime_price := int(
-		GameData.get_item_record("金创药(小量)").get("price", 0)
-	)
-	assert(int(quote.get("unit_price", 0)) == maxi(1, floori(runtime_price / 2.0)))
+	assert(int(quote.get("unit_price", 0)) == 22, "主库40金币药品未按商店110%后半价报价")
 
 	var sell_request := quote_item.duplicate(true)
 	sell_request["quote_id"] = str(quote.get("quote_id", ""))
@@ -111,7 +107,7 @@ func _run() -> void:
 	var equipment_quote: Dictionary = _hud.shop_panel._sell_quotes.get(equipment_key, {})
 	assert(bool(equipment_quote.get("sellable", false)), "数量1的装备没有获得可出售报价")
 	assert(int(equipment_quote.get("max_quantity", 0)) == 1, "非堆叠装备的最大出售数量不是1")
-	assert(int(equipment_quote.get("unit_price", 0)) == 25, "木剑没有使用服务端价格50的半价出售规则")
+	assert(int(equipment_quote.get("unit_price", 0)) == 28, "木剑没有使用主库50、商店110%再半价的规则")
 	assert(PlayerState._shop_sell_base_price("木剑", {}) == 50, "报价入口不能在目录索引缺价时即时读取正式服务价格")
 	var saved_wooden_sword: Dictionary = GameData._catalog_by_name.get("木剑", {}).duplicate(true)
 	var unpriced_wooden_sword := saved_wooden_sword.duplicate(true)
@@ -128,7 +124,7 @@ func _run() -> void:
 	var equipment_gold_before := PlayerState.gold
 	_hud.shop_sell_requested.emit(equipment_sell_request)
 	assert(PlayerState.inventory.is_empty(), "数量1的装备出售后没有从背包移除")
-	assert(PlayerState.gold == equipment_gold_before + 25, "数量1的装备出售金币错误")
+	assert(PlayerState.gold == equipment_gold_before + int(equipment_quote.get("unit_price", 0)), "数量1的装备出售金币错误")
 
 	# Quest abandon and warehouse sort traverse the same HUD-only-forwarding
 	# path and mutate only PlayerState's authoritative containers.

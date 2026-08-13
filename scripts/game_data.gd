@@ -1,6 +1,7 @@
 extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const PricingServiceScript = preload("res://scripts/pricing_service.gd")
 
 signal database_reloaded
 
@@ -17,6 +18,7 @@ const BICH_COMMON_ART_PATH := "res://assets/data/bich_common_client_art_sources.
 const BOSS_SERVICE_RULES_PATH := "res://assets/data/boss_service_rules.json"
 const BICH_COMMUNITY_BASELINE_PATH := "res://assets/data/bich_community_baseline.json"
 const SERVICE_ITEM_CATALOG_PATH := "res://assets/data/service_item_catalog.json"
+const MERCHANT_CATALOG_PATH := "res://assets/data/merchant_catalog_v1.json"
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
 	"金疮药(小量)": "金创药(小量)",
@@ -48,6 +50,7 @@ var bich_common_art: Dictionary = {}
 var boss_service_rules: Dictionary = {}
 var bich_community_baseline: Dictionary = {}
 var service_item_catalog: Dictionary = {}
+var merchant_catalog: Dictionary = {}
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -64,6 +67,7 @@ var _drops_by_boss_id: Dictionary = {}
 var _maps_by_id: Dictionary = {}
 var _maps_by_name: Dictionary = {}
 var _catalog_by_name: Dictionary = {}
+var _price_by_name: Dictionary = {}
 var _bich_quests_by_id: Dictionary = {}
 
 
@@ -105,6 +109,7 @@ func load_database() -> bool:
 	_load_boss_service_rules()
 	_load_service_reference()
 	_load_service_item_catalog()
+	_load_merchant_catalog()
 	_build_indexes()
 	database_reloaded.emit()
 	print("数据库载入完成：地图%d 怪物%d Boss%d 装备%d 技能等级%d 掉落槽%d 任务%d" % [
@@ -140,6 +145,60 @@ func _load_service_item_catalog() -> void:
 		service_item_catalog = parsed
 	else:
 		push_error("完整物品目录不是有效JSON：%s" % SERVICE_ITEM_CATALOG_PATH)
+
+
+func _load_merchant_catalog() -> void:
+	merchant_catalog = {}
+	if not FileAccess.file_exists(MERCHANT_CATALOG_PATH):
+		push_error("正式商人目录不存在：%s" % MERCHANT_CATALOG_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MERCHANT_CATALOG_PATH))
+	if parsed is Dictionary and str(parsed.get("contractId", "")) == "gameplay.merchant_catalog.v1":
+		merchant_catalog = parsed
+	else:
+		push_error("正式商人目录无效：%s" % MERCHANT_CATALOG_PATH)
+
+
+func merchant_stock(stock_key: String) -> Array:
+	var merchant: Dictionary = merchant_catalog.get("merchants", {}).get(stock_key, {})
+	if merchant.is_empty():
+		return []
+	var result: Array = []
+	for raw_offer: Variant in merchant.get("offers", []):
+		if not raw_offer is Dictionary or not bool(raw_offer.get("resolved", false)):
+			continue
+		var offer: Dictionary = raw_offer
+		var merchant_types: Array[int] = []
+		for raw_type: Variant in merchant.get("types", []):
+			merchant_types.append(int(raw_type))
+		result.append({
+			"name": str(offer.get("itemName", "")),
+			"pack_count": maxi(1, int(offer.get("packCount", 1))),
+			"offer_id": str(offer.get("offerId", "")),
+			"merchant_id": str(merchant.get("merchantId", "")),
+			"merchant_context": {
+				"merchant_id": str(merchant.get("merchantId", "")),
+				"merchant_rate_bps": int(merchant.get("merchantRateBps", 10000)),
+				"stock_markup_bps": int(merchant.get("stockMarkupBps", 11000)),
+				"types": merchant_types,
+				"supports_repair": bool(merchant.get("supportsRepair", false)),
+			},
+		})
+	return result
+
+
+func merchant_context(stock_key: String) -> Dictionary:
+	var merchant: Dictionary = merchant_catalog.get("merchants", {}).get(stock_key, {})
+	var merchant_types: Array[int] = []
+	for raw_type: Variant in merchant.get("types", []):
+		merchant_types.append(int(raw_type))
+	return {
+		"merchant_id": str(merchant.get("merchantId", "")),
+		"merchant_rate_bps": int(merchant.get("merchantRateBps", 10000)),
+		"stock_markup_bps": int(merchant.get("stockMarkupBps", 11000)),
+		"types": merchant_types,
+		"supports_repair": bool(merchant.get("supportsRepair", false)),
+	} if not merchant.is_empty() else {}
 
 
 func _load_bich_quest_chain() -> void:
@@ -428,16 +487,8 @@ func _build_indexes() -> void:
 func _build_item_catalog() -> void:
 	item_catalog.clear()
 	_catalog_by_name.clear()
+	_build_price_index()
 	var skill_names := {}
-	var service_equipment_prices := {}
-	for service_equipment: Variant in service_item_catalog.get("serviceEquipmentReference", []):
-		if not service_equipment is Dictionary:
-			continue
-		var service_name := str(service_equipment.get("serviceName", ""))
-		var service_price := int(service_equipment.get("price", 0))
-		if service_name.is_empty() or service_price <= 0 or service_equipment_prices.has(service_name):
-			continue
-		service_equipment_prices[service_name] = service_price
 	for skill: Variant in skills:
 		if skill is Dictionary:
 			skill_names[str(skill.get("skillName", ""))] = true
@@ -447,13 +498,6 @@ func _build_item_catalog() -> void:
 		var record: Dictionary = EquipmentRulesScript.enrich_catalog_record(equipment)
 		record["kind"] = "equipment"
 		record["stackable"] = false
-		# Equipment attributes remain owned by equipment_attribute_master.  Price
-		# is a server-data/shop field, so use the existing primary service record
-		# without allowing it to overwrite any equipment attribute.
-		var equipment_name := str(record.get("name", ""))
-		if service_equipment_prices.has(equipment_name):
-			record["price"] = int(service_equipment_prices[equipment_name])
-			record["priceSource"] = "server.crystal.cjlaaa"
 		if record.has("maxDurability"):
 			record["maxDurability"] = maxi(1, int(record.get("maxDurability", 1)))
 		elif record.has("serviceDuraMax"):
@@ -494,6 +538,44 @@ func _build_item_catalog() -> void:
 		if item_name.is_empty() or _catalog_by_name.has(canonical_name):
 			continue
 		_register_catalog_item(_make_runtime_item(item_name, skill_names))
+	# Catalog category/kind is the player-facing canonical classification. Price
+	# records keep the database identity and adopt only these non-price fields.
+	for item_name: String in _price_by_name.keys():
+		var catalog: Dictionary = _catalog_by_name.get(item_name, {})
+		if not catalog.is_empty():
+			_price_by_name[item_name]["kind"] = str(catalog.get("kind", _price_by_name[item_name].get("kind", "unknown")))
+			_price_by_name[item_name]["category"] = str(catalog.get("category", _price_by_name[item_name].get("category", "")))
+
+
+func _build_price_index() -> void:
+	_price_by_name.clear()
+	for raw: Variant in service_item_catalog.get("serviceEquipmentReference", []):
+		_register_price_record(raw)
+	for raw: Variant in service_item_catalog.get("runtimeItems", []):
+		_register_price_record(raw)
+	for raw: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
+		_register_price_record(raw)
+
+
+func _register_price_record(raw: Variant) -> void:
+	if not raw is Dictionary:
+		return
+	var source_record: Dictionary = raw
+	var canonical_name := str(ITEM_ALIASES.get(str(source_record.get("name", source_record.get("serviceName", ""))), str(source_record.get("name", source_record.get("serviceName", "")))))
+	var base_price := maxi(0, int(source_record.get("price", 0)))
+	if canonical_name.is_empty() or base_price <= 0 or _price_by_name.has(canonical_name):
+		return
+	var service_index := int(source_record.get("serviceIndex", -1))
+	_price_by_name[canonical_name] = {
+		"item_key": "service:%d" % service_index if service_index >= 0 else "name:%s" % canonical_name,
+		"item_name": canonical_name,
+		"service_index": service_index,
+		"service_type": int(source_record.get("serviceType", -1)),
+		"base_price": base_price,
+		"kind": str(source_record.get("kind", "unknown")),
+		"category": str(source_record.get("category", "")),
+		"source": (source_record.get("source", {}) as Dictionary).duplicate(true),
+	}
 
 
 func _register_catalog_item(record: Dictionary) -> void:
@@ -654,25 +736,16 @@ func get_item_record(item_name: String) -> Dictionary:
 
 
 func get_item_shop_price(item_name: String) -> int:
+	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_name))
+
+
+func get_item_price_record(item_name: String) -> Dictionary:
 	var canonical_name := str(ITEM_ALIASES.get(item_name, item_name))
-	var indexed_record: Dictionary = _catalog_by_name.get(canonical_name, {})
-	var indexed_price := maxi(0, int(indexed_record.get("price", 0)))
-	if indexed_price > 0:
-		return indexed_price
-	# Price is gameplay data. Resolve it on demand from the formal catalog so
-	# quotes do not depend on whether a UI/loading warm-up rebuilt the index.
-	if service_item_catalog.is_empty():
-		_load_service_item_catalog()
-	for raw_equipment: Variant in service_item_catalog.get("serviceEquipmentReference", []):
-		if raw_equipment is Dictionary and str(raw_equipment.get("serviceName", "")) == canonical_name:
-			return maxi(0, int(raw_equipment.get("price", 0)))
-	for raw_item: Variant in service_item_catalog.get("runtimeItems", []):
-		if raw_item is Dictionary and str(raw_item.get("name", "")) == canonical_name:
-			return maxi(0, int(raw_item.get("price", 0)))
-	for raw_special: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
-		if raw_special is Dictionary and str(raw_special.get("name", "")) == canonical_name:
-			return maxi(0, int(raw_special.get("price", 0)))
-	return 0
+	if _price_by_name.is_empty():
+		if service_item_catalog.is_empty():
+			_load_service_item_catalog()
+		_build_price_index()
+	return (_price_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
 
 
 func get_item_kind(item_name: String) -> String:

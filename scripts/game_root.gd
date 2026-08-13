@@ -359,6 +359,8 @@ func _ready() -> void:
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
+	hud.shop_buy_quotes_requested.connect(_on_shop_buy_quotes_requested)
+	hud.shop_buy_requested.connect(_on_shop_buy_requested)
 	hud.shop_sell_quotes_requested.connect(_on_shop_sell_quotes_requested)
 	hud.shop_sell_requested.connect(_on_shop_sell_requested)
 	hud.quest_abandon_requested.connect(_on_quest_abandon_requested)
@@ -628,6 +630,17 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 func _on_shop_sell_quotes_requested(items: Array) -> void:
 	if is_instance_valid(hud):
 		hud.set_shop_sell_quotes(PlayerState.shop_sell_quotes(items))
+
+
+func _on_shop_buy_quotes_requested(stock: Array) -> void:
+	if is_instance_valid(hud):
+		hud.set_shop_buy_quotes(PlayerState.shop_buy_quotes(stock))
+
+
+func _on_shop_buy_requested(request: Dictionary) -> void:
+	if not is_instance_valid(hud) or not is_instance_valid(hud.shop_panel):
+		return
+	hud.apply_shop_buy_result(PlayerState.buy_shop_item(request, hud.shop_panel.stock))
 
 
 func _on_shop_sell_requested(request: Dictionary) -> void:
@@ -1890,34 +1903,17 @@ func _enforce_bich_safe_zone() -> void:
 
 
 func _general_shop_stock() -> Array:
-	return [
-		{"name": "金创药(小量)", "price": 20, "description": "恢复生命值的基础药品。"},
-		{"name": "魔法药(小量)", "price": 20, "description": "恢复魔法值的基础药品。"},
-		{"name": "回城卷", "price": 100, "description": "返回服务端HomeMap=0的比奇省安全区。"},
-	]
+	return GameData.merchant_stock("general")
 
 
 func _starter_gear_stock() -> Array:
-	var names := ["木剑", "乌木剑", "青铜剑", "铁剑", "八荒", "凌风", "海魂", "偃月", "半月", "降魔", "轻型盔甲(男)", "中型盔甲(男)", "青铜头盔"]
-	var stock: Array = []
-	for item_name: String in names:
-		var item := GameData.get_item(item_name)
-		if item.is_empty():
-			continue
-		var required_level := int(item.get("reqLevel", 1) if item.get("reqLevel", null) != null else 1)
-		stock.append({"name": item_name, "price": maxi(50, required_level * required_level * 3), "description": "%s级成长装备。" % required_level})
-	return stock
+	return GameData.merchant_stock("starter_gear")
 
 
 func _mid_gear_stock() -> Array:
-	var names := ["炼狱", "魔杖", "银蛇", "重盔甲(男)", "魔法长袍(男)", "灵魂战衣(男)", "骷髅头盔", "降妖除魔戒指"]
-	var stock: Array = []
-	for item_name: String in names:
-		var item := GameData.get_item(item_name)
-		if not item.is_empty():
-			var required_level := int(item.get("reqLevel", 25) if item.get("reqLevel", null) != null else 25)
-			stock.append({"name": item_name, "price": maxi(1500, required_level * required_level * 8), "description": "盟重阶段成长装备。"})
-	return stock
+	# Fail closed until the stable stock key is mapped to an exact primary NPC
+	# [Trade] script.  Guessed/project-authored inventories are forbidden.
+	return GameData.merchant_stock("mid_gear")
 
 
 func _spawn_outskirts_content() -> void:
@@ -1936,12 +1932,7 @@ func _spawn_outskirts_content() -> void:
 
 
 func _spawn_city_content() -> void:
-	var general_stock := [
-		{"name": "金创药(小量)", "price": 20, "description": "恢复生命值的基础药品。"},
-		{"name": "魔法药(小量)", "price": 20, "description": "恢复魔法值的基础药品。"},
-		{"name": "木剑", "price": 50, "description": "新手武器。"},
-		{"name": "布衣", "price": 80, "description": "新手防具。"},
-	]
+	var general_stock := _general_shop_stock()
 	var book_stock := _build_skill_book_stock(PlayerState.profession)
 	_spawn_npc(Vector2(-250, -60), "杂货商", "shop", general_stock)
 	_spawn_npc(Vector2(250, -60), "书店老板", "shop", book_stock)
@@ -1951,16 +1942,15 @@ func _spawn_city_content() -> void:
 
 
 func _build_skill_book_stock(profession: String) -> Array:
-	var stock: Array = []
+	var allowed := {}
 	for skill: Variant in GameData.get_profession_skills(profession):
 		if not skill is Dictionary:
 			continue
-		var required_level := int(skill.get("requiredCharacterLevel", 1))
-		stock.append({
-			"name": str(skill.get("skillName", "技能书")),
-			"price": maxi(50, required_level * required_level / 2),
-			"description": "%s%d级技能书。" % [profession, required_level],
-		})
+		allowed[str(skill.get("skillName", ""))] = true
+	var stock: Array = []
+	for raw_entry: Variant in GameData.merchant_stock("books"):
+		if raw_entry is Dictionary and allowed.has(str(raw_entry.get("name", ""))):
+			stock.append(raw_entry)
 	return stock
 
 
@@ -8221,12 +8211,27 @@ func _spawn_loot(item_name: String, position: Vector2) -> void:
 	loot.global_position = position
 	loot.add_to_group("zone_content")
 	loot.collected.connect(_on_loot_collected)
+	loot.collection_rejected.connect(_on_loot_collection_rejected)
 	add_child(loot)
 
 
-func _on_loot_collected(item_name: String) -> void:
-	PlayerState.add_item(item_name)
-	hud.show_loot(item_name)
+func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
+	var result: Dictionary = PlayerState.receive(item_name, 1)
+	if bool(result.get("success", false)):
+		hud.show_loot(item_name)
+		if is_instance_valid(pickup):
+			pickup.confirm_collect()
+	else:
+		var message := str(result.get("message", "超过负重，无法拾取。"))
+		if is_instance_valid(pickup):
+			pickup.reject_collection(message)
+		else:
+			hud.show_message(message)
+
+
+func _on_loot_collection_rejected(_item_name: String, message: String) -> void:
+	if is_instance_valid(hud):
+		hud.show_message(message)
 
 
 func _on_player_stats_changed(current_hp: int, max_hp: int) -> void:
