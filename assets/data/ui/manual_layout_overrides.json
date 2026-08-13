@@ -71968,14 +71968,14 @@
 				"CloseButton": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						1800.45056819916,
 						13.3333330154419,
 						93.3566961288452,
 						93.3333311080933
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						1080.0,
 						8.0,
@@ -72000,13 +72000,13 @@
 						93.3333311080933
 					],
 					"text": "×",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicComponentCloseButton",
 					"visible": true
 				},
 				"MapDetailPanel": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						1341.3476391935,
 						86.6666646003723,
@@ -72036,30 +72036,30 @@
 						510.127660989761,
 						913.33331155777
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
-				"MapDetailPanel/@Label@455": {
+				"MapDetailPanel/@Label@441": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						40.0100126266479,
-						49.0000045537947,
+						49.0000013748804,
 						430.107635736465,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
 						24.0,
-						29.4000034332275,
+						29.4000015258789,
 						258.0,
 						28.0
 					],
 					"normalized": [
 						0.0784313725490196,
-						0.0536496413015101,
+						0.0536496378209469,
 						0.843137254901961,
 						0.0510948905109489
 					],
@@ -72075,21 +72075,21 @@
 						46.6666655540466
 					],
 					"text": "区域信息",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"MapDetailPanel/MapDetail": {
 					"deleted": false,
 					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						50.0100101717353,
 						237.333470090227,
 						410.000013818146,
 						449.999989271164
 					],
-					"logicalFontSize": 15.0,
+					"logicalFontSize": 15,
 					"logicalRect": [
 						29.9984970092773,
 						142.400085449219,
@@ -72113,14 +72113,14 @@
 						410.000013818146,
 						449.999989271164
 					],
-					"text": "[color=#d8c8ae]地图说明：比奇省位于比奇，是一处可供玩家探索的区域。\n\n营地：有安全营地，可在此休整。\n\n常见怪物：稻草人、多钩猫、钉耙猫、毒蜘蛛、蛤蟆、森林雪人0、森林雪人\n\n首领：未发现首领刷新\n\n入口：可从沃玛森林、毒蛇山谷、兽人古墓一层、洞穴一层、废矿入口、矿区一层进入。\n\n出口：前往沃玛森林（目的地：沃玛森林）；进入兽人古墓一层（目的地：兽人古墓一层）；进入矿区一层（目的地：矿区一层）[/color]\n\n[color=#8f7d6a]传送状态：该地图尚未开放传送[/color]",
-					"textRevision": 0.0,
+					"text": "[color=#d8c8ae]地图说明：毒蛇山谷位于毒蛇，是一处可供玩家探索的区域。\n\n营地：未发现可供休整的安全营地。\n\n常见怪物：红蛇、虎蛇、多钩猫、钉耙猫、半兽人、半兽战士\n\n首领：未发现首领刷新\n\n入口：可从盟重省、山谷矿区进入。\n\n出口：返回比奇省（目的地：比奇省）；进入山谷矿区（目的地：山谷矿区）；前往盟重省（目的地：盟重省）[/color]\n\n[color=#8f7d6a]传送状态：该地图尚未开放传送[/color]",
+					"textRevision": 0,
 					"themeVariation": "GothicDetailText",
 					"visible": true
 				},
 				"MapDetailPanel/MapDetailPanelDecoration": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						-23.9999972879198,
 						55.0000050465264,
@@ -72150,21 +72150,21 @@
 						550.00000488705,
 						850.000081459679
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapDetailPanel/MapName": {
 					"deleted": false,
 					"fontSize": 34.999999165535,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						43.0100118901742,
 						114.666618156434,
 						430.107635736465,
 						59.9999985694885
 					],
-					"logicalFontSize": 21.0,
+					"logicalFontSize": 21,
 					"logicalRect": [
 						25.7995491027832,
 						68.7999725341797,
@@ -72188,22 +72188,22 @@
 						430.107635736465,
 						59.9999985694885
 					],
-					"text": "比奇省",
-					"textRevision": 0.0,
+					"text": "毒蛇山谷",
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapDetailPanel/TeleportButton": {
 					"deleted": false,
 					"fontSize": 29.9999992847443,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						54.5609702811194,
 						742.333203736944,
 						400.00005442958,
 						89.9999978542328
 					],
-					"logicalFontSize": 18.0,
+					"logicalFontSize": 18,
 					"logicalRect": [
 						32.7283897399902,
 						445.399932861328,
@@ -72228,13 +72228,13 @@
 						89.9999978542328
 					],
 					"text": "传送未开放",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicComponentSelectedButton",
 					"visible": true
 				},
 				"MapListPanel": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						80.3416656507839,
 						86.6666646003723,
@@ -72264,31 +72264,31 @@
 						450.112642049789,
 						913.33331155777
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
-				"MapListPanel/@Label@449": {
+				"MapListPanel/@Label@435": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						66.0100062438751,
-						49.0000045537947,
-						370.092667671855,
+						66.0090268931581,
+						49.0000013748804,
+						370.092693109536,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						39.5960922241211,
-						29.4000034332275,
-						222.000030517578,
+						39.5955047607422,
+						29.4000015258789,
+						222.000045776367,
 						28.0
 					],
 					"normalized": [
-						0.146652193422671,
-						0.0536496413015101,
-						0.822222335250289,
+						0.146650017632378,
+						0.0536496378209469,
+						0.822222391764323,
 						0.0510948905109489
 					],
 					"parent": "MapListPanel",
@@ -72297,19 +72297,19 @@
 						913.33331155777
 					],
 					"rect": [
-						511.443043472242,
+						511.443094347604,
 						193.999997917811,
-						370.092667671855,
+						370.092693109536,
 						46.6666655540466
 					],
 					"text": "区域地图",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"MapListPanel/MapListPanelDecoration": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						-19.9999950901747,
 						55.0000114043551,
@@ -72339,13 +72339,13 @@
 						550.00000488705,
 						849.999776283905
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapListPanel/MapListScroll": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						50.0075045601607,
 						169.000011229515,
@@ -72375,2236 +72375,13 @@
 						413.436924330434,
 						649.999984502792
 					],
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_1578": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1949.99995350838,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						1170.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.952768729641694,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						2272.33331984679,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_1578/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_1578",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						2283.9999862353,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "尸王殿",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_1578/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_1578",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						2318.99998540083,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_217": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						108.333330750465,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						65.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.0529315960912052,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						430.666697088876,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_217/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_217",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						442.333363477388,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "兽人古墓一层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_217/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_217",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						477.333362642923,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_218": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						216.666661500931,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						130.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.10586319218241,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						539.000027839342,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_218/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_218",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						550.666694227853,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "兽人古墓二层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_218/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_218",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						585.666693393388,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_221": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						324.999992251396,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						195.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.158794788273616,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						647.333358589807,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_221/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_221",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						659.000024978319,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "兽人古墓三层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_221/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_221",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						694.000024143854,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_248": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						433.333323001862,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						260.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.211726384364821,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						755.666689340273,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_248/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_248",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						767.333355728784,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "洞穴一层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_248/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_248",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						802.333354894319,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "探索区域",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_249": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						541.666653752327,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						325.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.264657980456026,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						864.000020090738,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_249/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_249",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						875.66668647925,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "洞穴二层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_249/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_249",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						910.666685644785,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "探索区域",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_4": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						0.0,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						0.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.0,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						322.333340907097,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentSelectedButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_4/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_4",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						334.000007295608,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "比奇省",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_4/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_4",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						369.000006461143,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "探索区域",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_401": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						649.999984502792,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						390.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.317589576547231,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						972.333350841203,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_401/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_401",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						984.000017229715,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "废矿入口",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_401/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_401",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1019.00001639525,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_402": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						758.333315253258,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						455.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.370521172638436,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1080.66668159167,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_402/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_402",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1092.33334798018,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "矿区B一层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_402/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_402",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1127.33334714572,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_403": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						866.666646003723,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						520.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.423452768729642,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1189.00001234213,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_403/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_403",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1200.66667873065,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "矿区A一层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_403/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_403",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1235.66667789618,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_404": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						974.999976754189,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						585.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.476384364820847,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1297.3333430926,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_404/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_404",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1309.00000948111,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "废矿区东部",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_404/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_404",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1344.00000864665,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_405": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1083.33330750465,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						650.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.529315960912052,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1405.66667384306,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_405/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_405",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1417.33334023158,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "矿区C一层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_405/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_405",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1452.33333939711,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_406": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1191.66663825512,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						715.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.582247557003257,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1514.00000459353,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_406/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_406",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1525.66667098204,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "矿区一层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_406/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_406",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1560.66667014758,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_407": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1299.99996900558,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						780.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.635179153094462,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1622.333335344,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_407/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_407",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1634.00000173251,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "桥",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_407/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_407",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1669.00000089804,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_408": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1408.33329975605,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						845.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.688110749185668,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1730.66666609446,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_408/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_408",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1742.33333248297,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "矿区B二层",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_408/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_408",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1777.33333164851,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_409": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1516.66663050652,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						910.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.741042345276873,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1838.99999684493,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_409/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_409",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1850.66666323344,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "桥",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_409/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_409",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1885.66666239897,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_410": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1624.99996125698,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						975.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.793973941368078,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						1947.33332759539,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_410/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_410",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1958.9999939839,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "矿物回收站",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_410/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_410",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						1993.99999314944,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_411": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1733.33329200745,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						1040.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.846905537459283,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						2055.66665834586,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_411/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_411",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						2067.33332473437,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "桥",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_411/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_411",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						2102.3333238999,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_412": {
-					"deleted": false,
-					"fontSize": 26.6666660308838,
-					"layoutRevision": 0.0,
-					"localRect": [
-						0.0,
-						1841.66662275791,
-						376.760952234268,
-						96.6666643619537
-					],
-					"logicalFontSize": 16.0,
-					"logicalRect": [
-						0.0,
-						1105.0,
-						226.0,
-						58.0
-					],
-					"normalized": [
-						0.0,
-						0.899837133550489,
-						0.999999662416285,
-						0.0472312703583062
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards",
-					"parentSize": [
-						376.761079422673,
-						2046.66661787033
-					],
-					"rect": [
-						507.110141523473,
-						2163.99998909632,
-						376.760952234268,
-						96.6666643619537
-					],
-					"text": "",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_412/MapName": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						11.6666663885117,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						10.0,
-						7.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.120689655172414,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_412",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						2175.66665548483,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "废矿区南部",
-					"textRevision": 0.0,
-					"themeVariation": "",
-					"visible": true
-				},
-				"MapListPanel/MapListScroll/MapCards/MapCard_412/MapSubtitle": {
-					"deleted": false,
-					"fontSize": 19.9999995231628,
-					"layoutRevision": 0.0,
-					"localRect": [
-						16.6708385944366,
-						46.6666655540466,
-						343.419275045395,
-						38.3333324193954
-					],
-					"logicalFontSize": 12.0,
-					"logicalRect": [
-						10.0,
-						28.0,
-						206.0,
-						23.0
-					],
-					"normalized": [
-						0.0442477876106195,
-						0.482758620689655,
-						0.911504424778761,
-						0.396551724137931
-					],
-					"parent": "MapListPanel/MapListScroll/MapCards/MapCard_412",
-					"parentSize": [
-						376.760952234268,
-						96.6666643619537
-					],
-					"rect": [
-						523.78098011791,
-						2210.66665465037,
-						343.419275045395,
-						38.3333324193954
-					],
-					"text": "有首领",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapPreviewPanel": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						503.459325551987,
 						86.6666646003723,
@@ -74634,29 +72411,29 @@
 						866.883606910706,
 						913.33331155777
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
-				"MapPreviewPanel/@Label@452": {
+				"MapPreviewPanel/@Label@438": {
 					"deleted": false,
 					"fontSize": 33.3333325386047,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
-						60.0100077168227,
+						60.0100331545036,
 						49.0000140905377,
 						786.86358165741,
 						46.6666655540466
 					],
-					"logicalFontSize": 20.0,
+					"logicalFontSize": 20,
 					"logicalRect": [
-						35.9969940185547,
+						35.9970092773438,
 						29.4000091552734,
 						472.0,
 						28.0
 					],
 					"normalized": [
-						0.0692249884972206,
+						0.0692250178410457,
 						0.0536496517431997,
 						0.907692307692308,
 						0.0510948905109489
@@ -74673,13 +72450,13 @@
 						46.6666655540466
 					],
 					"text": "HardCore 世界地图树",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
 				},
 				"MapPreviewPanel/MapListV3Frame": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						28.3366671931803,
 						66.6666650772095,
@@ -74709,13 +72486,13 @@
 						703.346689277801,
 						809.999980688095
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicInsetFrame",
 					"visible": true
 				},
 				"MapPreviewPanel/MapListV3Frame/MapListV3FrameDecoration": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						39.9999933600595,
 						-11.6666576464973,
@@ -74745,13 +72522,13 @@
 						800.000007108436,
 						849.999979734421
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				},
 				"MapPreviewPanel/MapPreviewPanelDecoration": {
 					"deleted": true,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						17.9999971710123,
 						0.0,
@@ -74781,21 +72558,21 @@
 						800.000007108436,
 						913.33331155777
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": false
 				},
 				"MapPreviewPanel/WorldTreeHint": {
 					"deleted": false,
 					"fontSize": 23.3333327770233,
-					"layoutRevision": 2.0,
+					"layoutRevision": 2,
 					"localRect": [
 						138.449335475218,
 						118.999986990293,
 						650.000005775604,
 						38.3333324193954
 					],
-					"logicalFontSize": 14.0,
+					"logicalFontSize": 14,
 					"logicalRect": [
 						83.0488128662109,
 						71.3999938964844,
@@ -74820,13 +72597,13 @@
 						38.3333324193954
 					],
 					"text": "选择大地图节点，在左侧展开其包含的全部地图",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
 				},
 				"MapPreviewPanel/WorldTreeScroll": {
 					"deleted": false,
-					"layoutRevision": 2.0,
+					"layoutRevision": 2,
 					"localRect": [
 						147.449237874493,
 						168.999973082543,
@@ -74856,325 +72633,13 @@
 						646.828537464142,
 						669.999984025955
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bich_province/WorldNode_bich_province": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_bich_province",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						322.333315475782,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "比奇",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentSelectedButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_cangyue_island/WorldNode_cangyue_island": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_cangyue_island",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						892.333352748552,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "苍月",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_fengmo_valley/WorldNode_fengmo_valley": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_fengmo_valley",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						797.333304150899,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "封魔谷",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_mengzhong_province/WorldNode_mengzhong_province": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_mengzhong_province",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						607.333308680853,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "盟重",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_region_c1a88abe7247/WorldNode_region_c1a88abe7247": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_region_c1a88abe7247",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						987.333350483575,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "其他",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_viper_valley/WorldNode_viper_valley": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_viper_valley",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						512.333310945829,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "毒蛇",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_white_sun_red_moon/WorldNode_white_sun_red_moon": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_white_sun_red_moon",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						702.333306415876,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "白日门",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
-					"visible": true
-				},
-				"MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_wooma_forest/WorldNode_wooma_forest": {
-					"deleted": false,
-					"fontSize": 24.9999994039536,
-					"layoutRevision": 0.0,
-					"localRect": [
-						20.005006313324,
-						0.0,
-						569.979980522308,
-						83.3333313465118
-					],
-					"logicalFontSize": 15.0,
-					"logicalRect": [
-						12.0,
-						0.0,
-						341.902404785156,
-						50.0
-					],
-					"normalized": [
-						0.0327868852459016,
-						0.0,
-						0.934159575915728,
-						1.0
-					],
-					"parent": "MapPreviewPanel/WorldTreeScroll/WorldTree/WorldNodeHolder_wooma_forest",
-					"parentSize": [
-						610.152692556381,
-						83.3333313465118
-					],
-					"rect": [
-						1047.67449653639,
-						417.333313210806,
-						569.979980522308,
-						83.3333313465118
-					],
-					"text": "沃玛",
-					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
 					"visible": true
 				},
 				"TitleFrame": {
 					"deleted": false,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						583.479350805283,
 						16.6666662693024,
@@ -75204,21 +72669,21 @@
 						766.858575344086,
 						106.666664123535
 					],
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "GothicTitleBar",
 					"visible": true
 				},
 				"TitleFrame/TitleLabel": {
 					"deleted": false,
 					"fontSize": 39.9999990463257,
-					"layoutRevision": 0.0,
+					"layoutRevision": 0,
 					"localRect": [
 						50.0125157833099,
 						24.9999994039536,
 						666.833543777466,
 						56.6666653156281
 					],
-					"logicalFontSize": 24.0,
+					"logicalFontSize": 24,
 					"logicalRect": [
 						30.0,
 						15.0,
@@ -75243,7 +72708,7 @@
 						56.6666653156281
 					],
 					"text": "世界地图",
-					"textRevision": 0.0,
+					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true
 				}
