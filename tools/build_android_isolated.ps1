@@ -164,6 +164,8 @@ try {
         $StageThemesText = $StageThemesText -replace '(?s)<style name="GodotAppSplashTheme".*?</style>', $SplashThemeReplacement
         $Utf8WithoutBom = New-Object System.Text.UTF8Encoding($false)
         [System.IO.File]::WriteAllText($StageThemesPath, $StageThemesText, $Utf8WithoutBom)
+        [System.IO.File]::WriteAllText((Join-Path $StageProjectPath "android\.build_version"), "4.7.stable`n", $Utf8WithoutBom)
+        [System.IO.File]::WriteAllText((Join-Path $StageAndroidPath ".gdignore"), "`n", $Utf8WithoutBom)
         if ($StageThemesText -notmatch 'windowSplashScreenAnimatedIcon.*@null' -or $StageThemesText -notmatch 'windowSplashScreenBrandingImage.*@null') {
             throw "Offline Android template splash patch did not apply: $StageThemesPath"
         }
@@ -182,19 +184,28 @@ try {
     $PreviousJavaHome = $env:JAVA_HOME
     $PreviousAndroidHome = $env:ANDROID_HOME
     $PreviousAndroidSdkRoot = $env:ANDROID_SDK_ROOT
+    $PortableEditorSettings = Join-Path (Split-Path $GodotConsole -Parent) "editor_data\editor_settings-4.7.tres"
+    $PortableEditorSettingsBackup = $null
     try {
         $JavaHome = Get-ChildItem (Join-Path $AndroidRoot "jdk") -Directory | Select-Object -First 1 -ExpandProperty FullName
         $env:APPDATA = $RuntimeAppData
         $env:JAVA_HOME = $JavaHome
         $env:ANDROID_HOME = Join-Path $AndroidRoot "sdk"
         $env:ANDROID_SDK_ROOT = Join-Path $AndroidRoot "sdk"
+        if (Test-Path -LiteralPath $PortableEditorSettings -PathType Leaf) {
+            $PortableEditorSettingsBackup = [System.IO.File]::ReadAllBytes($PortableEditorSettings)
+            $PortableSettingsText = [System.IO.File]::ReadAllText($PortableEditorSettings)
+            $PortableSettingsText = [regex]::Replace($PortableSettingsText, '(?m)^export/android/java_sdk_path = ".*"$', 'export/android/java_sdk_path = "' + ($JavaHome -replace '\\', '/') + '"')
+            $PortableSettingsText = [regex]::Replace($PortableSettingsText, '(?m)^export/android/android_sdk_path = ".*"$', 'export/android/android_sdk_path = "' + ($env:ANDROID_HOME -replace '\\', '/') + '"')
+            [System.IO.File]::WriteAllText($PortableEditorSettings, $PortableSettingsText, (New-Object System.Text.UTF8Encoding($false)))
+        }
 
         # P1-014: generate build_info.json before Godot import so it is included in the APK
         $BuildInfoScript = Join-Path $StageProjectPath "tools/generate_build_info.ps1"
         if (-not (Test-Path -LiteralPath $BuildInfoScript -PathType Leaf)) {
             throw "Staged project has no build-info generator: $BuildInfoScript"
         }
-        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -SkipDirtyCheck
+        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -IgnoreAndroidBuildTemplate
         $BuildInfoExitCode = $LASTEXITCODE
         if ($BuildInfoExitCode -ne 0) {
             throw "Build-info generation failed with exit code $BuildInfoExitCode."
@@ -213,6 +224,9 @@ try {
         }
     }
     finally {
+        if ($null -ne $PortableEditorSettingsBackup) {
+            [System.IO.File]::WriteAllBytes($PortableEditorSettings, $PortableEditorSettingsBackup)
+        }
         $env:APPDATA = $PreviousAppData
         $env:JAVA_HOME = $PreviousJavaHome
         $env:ANDROID_HOME = $PreviousAndroidHome

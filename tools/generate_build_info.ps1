@@ -6,7 +6,8 @@
 param(
     [switch]$AllowDirty,
     [string]$StageRoot,
-    [switch]$SkipDirtyCheck
+    [switch]$SkipDirtyCheck,
+    [switch]$IgnoreAndroidBuildTemplate
 )
 
 $ErrorActionPreference = "Stop"
@@ -34,6 +35,9 @@ if ($TrackedDirtyExitCode -notin @(0, 1)) {
 $UntrackedPaths = @(& git ls-files --others --exclude-standard)
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to inspect untracked Git state for build-info."
+}
+if ($IgnoreAndroidBuildTemplate) {
+    $UntrackedPaths = @($UntrackedPaths | Where-Object { $_ -notmatch '^android/' })
 }
 $dirty = ($TrackedDirtyExitCode -eq 1 -or $UntrackedPaths.Count -gt 0)
 
