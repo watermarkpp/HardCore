@@ -44,8 +44,6 @@ def main() -> int:
     runtime_profiles = runtime.get("profiles", {})
     if args.profile not in saved_profiles:
         raise SystemExit(f"saved profile not found: {args.profile}")
-    if args.profile not in runtime_profiles:
-        raise SystemExit(f"runtime profile not found: {args.profile}")
     if saved.get("schemaVersion") != runtime.get("schemaVersion"):
         raise SystemExit("schemaVersion mismatch")
     if saved.get("coordinateSpace") != runtime.get("coordinateSpace"):

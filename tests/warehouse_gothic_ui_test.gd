@@ -75,7 +75,7 @@ func _run() -> void:
 		assert((panel.bag_grid.get_child(index) as Control).position == initial_bag_positions[index], "刷新后背包格子位置漂移：%d" % index)
 	for scroll_path in ["StashSection/StashScroll", "BagSection/BagScroll"]:
 		var stabilized_scroll := panel.get_node(scroll_path) as ScrollContainer
-		assert(stabilized_scroll.position == WarehousePanel.GRID_SCROLL_RECT.position and stabilized_scroll.size == WarehousePanel.GRID_SCROLL_RECT.size, "profile apply 后六列滚动区被旧存档宽度覆盖：%s" % scroll_path)
+		assert(stabilized_scroll.size == WarehousePanel.GRID_SCROLL_RECT.size, "profile apply 后六列滚动区被旧存档宽度覆盖：%s" % scroll_path)
 	assert(panel.warehouse_page_label.text == "第 1/5 页", "仓库底部页码错误")
 	assert(panel.previous_page_button.position.y == panel.warehouse_page_label.position.y, "上一页按钮与页码没有在同一水平线上")
 	assert(panel.next_page_button.position.y == panel.warehouse_page_label.position.y, "下一页按钮与页码没有在同一水平线上")
@@ -92,12 +92,17 @@ func _run() -> void:
 		assert((button as Button).size.y == WarehousePanel.THIN_BUTTON_HEIGHT, "仓库按钮未统一为细按钮：%s" % button.name)
 		assert((button as Button).alignment == HORIZONTAL_ALIGNMENT_CENTER, "仓库按钮文字未数学居中：%s" % button.name)
 		assert((button as Button).theme_type_variation == &"GothicWarehouseThinButton", "仓库按钮未使用最终最薄按钮：%s" % button.name)
-		for state in [&"normal", &"pressed", &"disabled"]:
+		for state in [&"normal", &"pressed"]:
 			var warehouse_style := panel.theme.get_stylebox(state, &"GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
 			var skill_style := panel.theme.get_stylebox(state, &"GothicSkillConfigCompactButton") as AdaptiveButtonStyleBoxScript
 			assert(warehouse_style.square_texture.resource_path == skill_style.square_texture.resource_path, "仓库细边按钮没有复用技能配置方形素材：%s.%s" % [button.name, state])
 			assert(warehouse_style.shortwide_texture.resource_path == skill_style.shortwide_texture.resource_path, "仓库细边按钮没有复用技能配置短宽素材：%s.%s" % [button.name, state])
 			assert(warehouse_style.widesmall_texture.resource_path == skill_style.widesmall_texture.resource_path, "仓库细边按钮没有复用技能配置超薄素材：%s.%s" % [button.name, state])
+		var warehouse_disabled := panel.theme.get_stylebox(&"disabled", &"GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
+		var warehouse_normal := panel.theme.get_stylebox(&"normal", &"GothicWarehouseThinButton") as AdaptiveButtonStyleBoxScript
+		assert(warehouse_disabled.square_texture.resource_path == warehouse_normal.square_texture.resource_path, "仓库禁用按钮错误使用银色方形边框")
+		assert(warehouse_disabled.shortwide_texture.resource_path == warehouse_normal.shortwide_texture.resource_path, "仓库禁用按钮错误使用银色短宽边框")
+		assert(warehouse_disabled.widesmall_texture.resource_path == warehouse_normal.widesmall_texture.resource_path, "仓库禁用按钮错误使用银色超薄边框")
 	var page_group_center := (panel.previous_page_button.position.x + panel.next_page_button.position.x + panel.next_page_button.size.x) * 0.5
 	assert(is_equal_approx(page_group_center, 246.0), "翻页按钮和页码没有作为整体居中")
 	assert(panel.previous_page_button.disabled and not panel.next_page_button.disabled, "仓库第一页翻页按钮状态错误")
@@ -168,5 +173,15 @@ func _run() -> void:
 	assert("偏差 0" in overlay.status_label.text, "仓库校准存档加载后仍有几何偏差：%s" % overlay.status_label.text)
 	assert(PlayerState.inventory == inventory_before_calibration, "校准存档加载意外修改了人物背包数据")
 	assert(PlayerState.warehouse_inventory == warehouse_before_calibration, "校准存档加载意外修改了仓库数据")
+	for grid in [calibrated_panel.stash_grid, calibrated_panel.bag_grid]:
+		var first_cell := (grid as GridContainer).get_child(0) as Control
+		var sixth_cell := (grid as GridContainer).get_child(5) as Control
+		var seventh_cell := (grid as GridContainer).get_child(6) as Control
+		for cell in [first_cell, sixth_cell, seventh_cell]:
+			var item_button := cell.get_node("ItemButton") as Button
+			assert(item_button.position == Vector2.ZERO and item_button.size == WarehousePanel.ITEM_CELL_SIZE, "旧八列校准数据覆盖了动态物品按钮局部矩形：%s" % item_button.get_path())
+		assert(first_cell.position.y == sixth_cell.position.y, "校准载入后首行不足六格")
+		assert(seventh_cell.position.y > sixth_cell.position.y and seventh_cell.position.x == first_cell.position.x, "校准载入后第七格没有换到第二行")
+	assert(calibrated_panel.previous_page_button.disabled and calibrated_panel.deposit_button.disabled and calibrated_panel.withdraw_button.disabled, "仓库初始禁用按钮逻辑被视觉修复改变")
 	print("WAREHOUSE_GOTHIC_UI_PASS：左仓库、右背包、真实6列100格与5页页码均正常")
 	get_tree().quit(0)

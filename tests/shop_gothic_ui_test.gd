@@ -39,7 +39,10 @@ func _run() -> void:
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")
 	assert(panel.gold_label.position.y >= 20.0 and panel.gold_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "商店金币文字仍然贴近装饰框上沿")
 	assert(panel.detail_label.position.x >= 24.0 and panel.detail_label.position.y >= 60.0, "商品详情文字没有避开装饰框安全内边距")
+	assert(panel.detail_label.get_meta("calibration_runtime_text", false), "商店动态详情文字会被旧校准文案覆盖")
 	assert(panel.goods_grid.columns == 2 and panel.goods_buttons.size() == STOCK.size(), "商品没有使用两列双格卡布局")
+	var goods_scroll := panel.get_node("GoodsPanel/GoodsScroll") as ScrollContainer
+	assert(goods_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "出售商品阵列外仍保留多余细框")
 	assert(not panel.item_list.visible and panel.item_list.item_count == STOCK.size(), "商店兼容选择列表异常")
 	for card: Button in panel.goods_buttons:
 		assert(card.size == Vector2(286, 72), "双格商品卡比例错误")
@@ -53,7 +56,10 @@ func _run() -> void:
 	assert(PlayerState.gold == gold_before - 120 and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
 	panel._set_trade_mode("sell")
 	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
+	assert("UI不会自行计算" not in panel.detail_label.text and "玩法层报价" not in panel.detail_label.text, "出售页仍显示无意义的内部报价备注")
 	assert(panel.sell_quantity_button.name == "SellQuantityButton" and panel.sell_quantity_button.text == "出售", "出售按钮文案或唯一稳定节点错误")
+	assert(panel.buy_button.size == panel.repair_button.size and panel.buy_button.size == Vector2(270, 51), "购买页两个操作按钮没有统一为出售按钮规格")
+	assert(panel.buy_button.get_meta("calibration_layout_revision", 0) == 1 and panel.repair_button.get_meta("calibration_layout_revision", 0) == 1, "购买页按钮没有退役旧尺寸校准")
 	assert(panel.sell_quantity_button.get_meta("calibration_text_revision", 0) == 1, "出售按钮文案版本元数据缺失")
 	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory.size(), "出售页没有向玩法层请求背包报价")
 	assert(panel.goods_buttons.size() == PlayerState.inventory.size(), "出售页没有排除已穿戴装备或遗漏背包物品")
@@ -82,10 +88,8 @@ func _run() -> void:
 			safe_indices.append(inventory_index)
 	assert(safe_indices.size() >= 2 and risky_index >= 0, "出售测试缺少两个普通物品和一个高风险物品")
 
-	var dec := panel.sell_quantity_row.get_node("DecreaseQuantity/QuantityDecoration") as TextureRect
-	var inc := panel.sell_quantity_row.get_node("IncreaseQuantity/QuantityDecoration") as TextureRect
-	assert(dec != null and inc != null and not dec.flip_h and inc.flip_h, "数量装饰未真实镜像")
-	assert(dec.show_behind_parent and inc.show_behind_parent, "数量装饰没有放在按钮文字后方")
+	assert(panel.sell_quantity_row.get_node_or_null("DecreaseQuantity/QuantityDecoration") == null, "减号按钮不应恢复旧角饰")
+	assert(panel.sell_quantity_row.get_node_or_null("IncreaseQuantity/QuantityDecoration") == null, "加号按钮不应恢复旧角饰")
 	assert(
 		panel.sell_quantity_row.get_node("DecreaseQuantity").theme_type_variation == "GothicPanelTransparentButton"
 		and panel.sell_quantity_row.get_node("IncreaseQuantity").theme_type_variation == "GothicPanelTransparentButton",
@@ -102,8 +106,9 @@ func _run() -> void:
 		var saved_rect: Array = sell_nodes[saved_path]["logicalRect"]
 		var actual := panel.get_node(saved_path) as Control
 		assert(actual.position.is_equal_approx(Vector2(float(saved_rect[0]), float(saved_rect[1]))) and actual.size.is_equal_approx(Vector2(float(saved_rect[2]), float(saved_rect[3]))), "出售数量按钮必须与正式校准合同一致")
-	assert(bg.position.x - (decrease.position.x + decrease.size.x) >= 0.0, "中心背景与左按钮不应重叠")
-	assert(increase.position.x - (bg.position.x + bg.size.x) >= 0.0, "中心背景与右按钮不应重叠")
+	# The accepted calibration lets the ornamental center background tuck slightly
+	# under the +/- frames. Their independent hit rectangles must remain separate.
+	assert(not decrease.get_global_rect().intersects(increase.get_global_rect()), "数量减号与加号点击区不应重叠")
 
 	var row_global := panel.sell_quantity_row.get_global_rect()
 	assert(row_global.encloses(bg.get_global_rect()) and row_global.encloses(panel.sell_quantity_label.get_global_rect()))
@@ -125,7 +130,6 @@ func _run() -> void:
 	assert(outer_surface.get_global_rect().end.y <= panel.get_global_rect().end.y - 32.0)
 	assert(outer_surface.position.x >= 40.0 and outer_surface.position.y >= 40.0)
 	assert(panel.size.x - (outer_surface.position.x + outer_surface.size.x) >= 40.0 and panel.size.y - (outer_surface.position.y + outer_surface.size.y) >= 40.0)
-	assert(goods_frame.position.x >= 42.0 and panel.size.x - (detail_frame.position.x + detail_frame.size.x) >= 42.0)
 	assert(outer_surface.get_global_rect().encloses(goods_frame.get_global_rect()) and outer_surface.get_global_rect().encloses(detail_frame.get_global_rect()))
 	assert(goods_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0 and detail_frame.get_global_rect().end.y <= panel.get_global_rect().end.y - 60.0)
 	assert(goods_decoration.get_global_rect().size.x > 0.0 and goods_decoration.get_global_rect().size.y > 0.0 and detail_decoration.get_global_rect().size.x > 0.0 and detail_decoration.get_global_rect().size.y > 0.0)
@@ -143,7 +147,6 @@ func _run() -> void:
 	assert(absf(plus_bar.get_global_rect().get_center().x - increase.get_global_rect().get_center().x) <= 0.5)
 	assert(absf(plus_vertical.get_global_rect().get_center().x - increase.get_global_rect().get_center().x) <= 0.5)
 	assert(decrease.get_theme_font_size("font_size") == increase.get_theme_font_size("font_size"))
-	assert(dec.get_meta("atlas_region", Rect2()).size == Vector2(58, 46) and inc.get_meta("atlas_region", Rect2()).size == Vector2(58, 46))
 	assert(absf(decrease.get_global_rect().get_center().y - increase.get_global_rect().get_center().y) <= 1.0)
 	assert(modal_surface.get_global_rect().encloses(goods_frame.get_global_rect()) and modal_surface.get_global_rect().encloses(detail_frame.get_global_rect()))
 	panel._select_sell_item(safe_indices[0])

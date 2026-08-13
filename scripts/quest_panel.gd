@@ -11,6 +11,8 @@ signal abandon_requested(quest_id: String)
 
 const PANEL_SIZE := Vector2(1020, 636)
 const QUEST_CARD_SIZE := Vector2(286, 62)
+const QUEST_CARD_SEPARATION := 7
+const QUEST_LIST_LAYOUT_REVISION := 1
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -24,6 +26,7 @@ var objective_label: RichTextLabel
 var reward_label: RichTextLabel
 var abandon_button: Button
 var abandon_confirmation: Control
+var story_divider: HSeparator
 var current_quest_id := ""
 var npc_display_name := "比奇老兵"
 var _selected_quest_id := ""
@@ -99,14 +102,17 @@ func _build_quest_list() -> void:
 	scroll.name = "QuestListScroll"
 	scroll.position = Vector2(18, 84)
 	scroll.size = Vector2(290, 418)
+	# The approved secondary frame owns the list boundary.  The scroll viewport
+	# must not draw an extra one-pixel outline around the task cards.
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
 	quest_list = VBoxContainer.new()
 	quest_list.name = "QuestList"
 	quest_list.custom_minimum_size = Vector2(286, 0)
-	quest_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	quest_list.add_theme_constant_override("separation", 7)
+	quest_list.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	quest_list.add_theme_constant_override("separation", QUEST_CARD_SEPARATION)
 	scroll.add_child(quest_list)
 
 
@@ -128,11 +134,19 @@ func _build_quest_detail() -> void:
 	quest_meta_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quest_meta_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(quest_meta_label)
-	var divider := HSeparator.new()
-	divider.name = "StoryDivider"
-	divider.position = Vector2(28, 122)
-	divider.size = Vector2(576, 8)
-	panel.add_child(divider)
+	story_divider = HSeparator.new()
+	story_divider.name = "StoryDivider"
+	story_divider.anchor_left = 0.0
+	story_divider.anchor_right = 1.0
+	story_divider.anchor_top = 0.0
+	story_divider.anchor_bottom = 0.0
+	story_divider.offset_left = 20.0
+	story_divider.offset_right = -20.0
+	story_divider.offset_top = 122.0
+	story_divider.offset_bottom = 130.0
+	story_divider.set_meta("calibration_layer", "quest_story_divider")
+	story_divider.set_meta("calibration_layout_revision", QUEST_LIST_LAYOUT_REVISION)
+	panel.add_child(story_divider)
 	description_label = RichTextLabel.new()
 	description_label.name = "DescriptionLabel"
 	description_label.position = Vector2(28, 138)
@@ -249,7 +263,34 @@ func refresh() -> void:
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
 	if profile_id == "quest" and abandon_button != null:
+		_stabilize_quest_list_layout()
+		_stabilize_story_divider()
 		_set_abandon_available(abandon_button.visible)
+
+
+func _stabilize_quest_list_layout() -> void:
+	if quest_list == null:
+		return
+	quest_list.position = Vector2.ZERO
+	quest_list.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	quest_list.custom_minimum_size = Vector2(QUEST_CARD_SIZE.x, maxf(0.0, quest_buttons.size() * QUEST_CARD_SIZE.y + maxi(0, quest_buttons.size() - 1) * QUEST_CARD_SEPARATION))
+	quest_list.add_theme_constant_override("separation", QUEST_CARD_SEPARATION)
+	for button: Button in quest_buttons:
+		button.custom_minimum_size = QUEST_CARD_SIZE
+		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	quest_list.queue_sort()
+
+
+func _stabilize_story_divider() -> void:
+	if story_divider == null or not is_instance_valid(story_divider):
+		return
+	var detail_panel := story_divider.get_parent() as Control
+	if detail_panel == null:
+		return
+	story_divider.anchor_left = 0.0
+	story_divider.anchor_right = 1.0
+	story_divider.offset_left = 20.0
+	story_divider.offset_right = -20.0
 
 
 func _rebuild_quest_cards(active_quest_id: String) -> void:
@@ -268,7 +309,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		var button := Button.new()
 		button.name = "QuestCard_%s" % quest_id
 		button.custom_minimum_size = QUEST_CARD_SIZE
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		button.toggle_mode = true
 		button.text = ""
 		button.set_pressed_no_signal(quest_id == _selected_quest_id)
@@ -308,6 +349,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		button.add_child(state_label)
 		quest_list.add_child(button)
 		quest_buttons.append(button)
+	_stabilize_quest_list_layout()
 
 
 func _refresh_selected_quest(active_quest_id: String) -> void:

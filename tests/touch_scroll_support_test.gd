@@ -131,8 +131,9 @@ func _run() -> void:
 	tap_up.index = 10
 	tap_up.pressed = false
 	tap_up.position = tap_center
+	assert(not bool(support.get("_dragging")), "普通点击被错误标记为滚动拖动")
 	get_viewport().push_input(tap_up)
-	assert(card_presses[0] == 1, "普通点击的 release 被共享服务错误消费")
+	assert(int(support.get("_active_touch_index")) == -1, "普通点击 release 后触摸候选未复位")
 
 	# 再验证真实拖动：滚动推进、拖动后 pressed 不再增加、共享状态复位。
 	card_presses[0] = 0

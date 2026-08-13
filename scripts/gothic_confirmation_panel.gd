@@ -8,6 +8,7 @@ const CONTRACT_ID := "ui.confirmation.dialog.v1"
 const STABLE_ID := "ui.confirmation.dialog"
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 var modal_frame: Panel
 var inner_fill: Control
@@ -26,6 +27,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	theme = GothicUIThemeScript.build()
 	_build_interface()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "confirmation_dialog")
 	hide()
 
 

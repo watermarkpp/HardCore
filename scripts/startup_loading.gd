@@ -3,11 +3,9 @@ extends Control
 
 const TARGET_SCENE_PATH := "res://scenes/character_select.tscn"
 const LOADING_CONTRACT_ID := "startup.loading.character_select.v1"
-const FINITE_ANIMATION_SECONDS := 1.20
-const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 
 @export var auto_start := true
-@onready var loading_overlay: LoadingTransitionOverlay = $LoadingOverlay
+@onready var brand_intro: Control = $BrandIntro
 
 var _target_scene: PackedScene
 var _resource_ready := false
@@ -19,10 +17,8 @@ var _load_requested := false
 func _ready() -> void:
 	if not auto_start:
 		return
-	loading_overlay.show_loading_immediately(LOADING_CONTRACT_ID)
-	# The finite visual phase is independent of resource-request success. A
-	# failed request must still reach its final frame and hold there rather
-	# than leaving an unbounded animation running forever.
+	# The authored intro plays independently while character selection loads.
+	# If loading takes longer, BrandIntro remains on its completed final frame.
 	_run_finite_loading_phase.call_deferred()
 	_load_requested = ResourceLoader.load_threaded_request(TARGET_SCENE_PATH) == OK
 	if not _load_requested:
@@ -45,17 +41,14 @@ func _process(_delta: float) -> void:
 
 
 func _run_finite_loading_phase() -> void:
-	# Present the startup scene for at least one real frame before the minimum
-	# duration begins. Cold Android launches can otherwise replace this scene
-	# before the custom loading surface is ever composited.
 	await get_tree().process_frame
 	if not is_inside_tree():
 		return
-	await get_tree().create_timer(FINITE_ANIMATION_SECONDS).timeout
+	if not bool(brand_intro.get("animation_complete")):
+		await brand_intro.intro_animation_finished
 	if not is_inside_tree():
 		return
 	_animation_finished = true
-	loading_overlay.freeze_final_visual()
 	_check_transition()
 
 

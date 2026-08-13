@@ -364,7 +364,8 @@ func _build_creation_panel() -> void:
 		button.text = "%s\n%s\n%s" % [presentation.glyph, profession_name, presentation.role]
 		button.position = Vector2(26 + index * 104, 190)
 		button.size = Vector2(98, 132)
-		button.add_theme_font_size_override("font_size", 14)
+		button.add_theme_font_size_override("font_size", 13)
+		button.theme_type_variation = "GothicCharacterProfessionButton"
 		button.set_meta("stable_id", "character.profession.%s" % presentation.id)
 		button.set_meta("profession_id", presentation.id)
 		button.pressed.connect(_select_creation_profession.bind(profession_name))
@@ -481,12 +482,12 @@ func _refresh_selection_state() -> void:
 		var main_button: Button = entry.main_button
 		var ai_button: Button = entry.ai_button
 		main_button.theme_type_variation = (
-			"GothicComponentSelectedButton"
+			"GothicCharacterSelectedProfileButton"
 			if profile_id == selected_main_profile_id
-			else "GothicComponentButton"
+			else "GothicCharacterProfileButton"
 		)
 		ai_button.disabled = true
-		ai_button.theme_type_variation = "GothicComponentButton"
+		ai_button.theme_type_variation = "GothicCharacterAIStatusButton"
 		ai_button.text = "AI队友\n暂未开放"
 	ai_teammate_toggle.disabled = true
 	ai_teammate_toggle.set_pressed_no_signal(false)
@@ -591,9 +592,9 @@ func _refresh_creation_controls() -> void:
 	for profession_name: String in profession_buttons:
 		var button: Button = profession_buttons[profession_name]
 		button.theme_type_variation = (
-			"GothicComponentSelectedButton"
+			"GothicCharacterSelectedProfessionButton"
 			if profession_name == selected_creation_profession
-			else "GothicComponentButton"
+			else "GothicCharacterProfessionButton"
 		)
 
 

@@ -3,6 +3,7 @@ extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const GAME_ICON := preload("res://assets/branding/game_icon.png")
 
 signal revival_requested(request: Dictionary)
@@ -34,6 +35,7 @@ func _ready() -> void:
 	theme = GothicUIThemeScript.build()
 	_build_background()
 	_build_modal()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "death_revival")
 	hide()
 
 

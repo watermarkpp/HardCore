@@ -6,7 +6,6 @@ const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
-const QUANTITY_BUTTON_TEXTURE := preload("res://assets/ui/gothic_theme/v1/sample/button_normal.png")
 
 signal closed
 signal sell_quotes_requested(items: Array)
@@ -15,6 +14,7 @@ signal sell_requested(request: Dictionary)
 const PANEL_SIZE := Vector2(1080, 620)
 const CARD_SIZE := Vector2(286, 72)
 const CARD_COLUMNS := 2
+const SHARED_SHOP_LAYOUT_REVISION := 1
 
 var shop_title: Label
 var gold_label: Label
@@ -48,7 +48,11 @@ var _inventory_refresh_execution_count := 0
 
 
 func _ready() -> void:
-	set_meta("calibration_retired_paths", ["DetailPanel/SellOneButton"])
+	set_meta("calibration_retired_paths", [
+		"DetailPanel/SellOneButton",
+		"DetailPanel/SellQuantityRow/DecreaseQuantity/QuantityDecoration",
+		"DetailPanel/SellQuantityRow/IncreaseQuantity/QuantityDecoration",
+	])
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -107,27 +111,36 @@ func _build_header() -> void:
 
 
 func _build_goods_section() -> void:
-	var panel := _framed_section("GoodsPanel", Rect2(42, 76, 620, 476))
+	var panel := _framed_section("GoodsPanel", Rect2(41.400146484375, 76, 620, 476))
+	panel.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
+	var decoration := panel.get_node("GoodsPanelDecoration") as Control
+	decoration.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	decoration.position = Vector2(-0.599853515625, -26.4000091552734)
+	decoration.size = Vector2(659.834838867188, 510)
+	decoration.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	buy_tab_button = Button.new()
 	buy_tab_button.name = "BuyTab"
 	buy_tab_button.text = "购买"
-	buy_tab_button.position = Vector2(20, 10)
-	buy_tab_button.size = Vector2(128, 40)
+	buy_tab_button.position = Vector2(47.5127563476563, 10)
+	buy_tab_button.size = Vector2(128, 51)
+	buy_tab_button.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	buy_tab_button.theme_type_variation = "GothicComponentSelectedButton"
 	buy_tab_button.pressed.connect(_set_trade_mode.bind("buy"))
 	panel.add_child(buy_tab_button)
 	sell_tab_button = Button.new()
 	sell_tab_button.name = "SellTab"
 	sell_tab_button.text = "出售"
-	sell_tab_button.position = Vector2(156, 10)
-	sell_tab_button.size = Vector2(128, 40)
+	sell_tab_button.position = Vector2(191.476745605469, 10)
+	sell_tab_button.size = Vector2(128, 51)
+	sell_tab_button.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	sell_tab_button.theme_type_variation = "GothicComponentButton"
 	sell_tab_button.pressed.connect(_set_trade_mode.bind("sell"))
 	panel.add_child(sell_tab_button)
 	gold_label = Label.new()
 	gold_label.name = "GoldLabel"
-	gold_label.position = Vector2(372, 20)
+	gold_label.position = Vector2(331.2099609375, 23)
 	gold_label.size = Vector2(246, 28)
+	gold_label.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	gold_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	gold_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	gold_label.theme_type_variation = "GothicMutedLabel"
@@ -135,8 +148,13 @@ func _build_goods_section() -> void:
 	panel.add_child(gold_label)
 	var scroll := ScrollContainer.new()
 	scroll.name = "GoodsScroll"
-	scroll.position = Vector2(18, 58)
-	scroll.size = Vector2(584, 398)
+	scroll.position = Vector2(37.7950286865234, 66.3999786376953)
+	scroll.size = Vector2(587.852905273438, 360)
+	scroll.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
+	# The section's approved secondary frame already defines the list boundary.
+	# Keep the scroll viewport visually borderless so it does not add a third,
+	# thin outline around the sellable-goods array.
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
@@ -151,11 +169,21 @@ func _build_goods_section() -> void:
 
 func _build_detail_section() -> void:
 	var panel := _framed_section("DetailPanel", Rect2(674, 76, 364, 476))
-	panel.add_child(_section_title("商品详情", 366))
+	panel.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
+	var decoration := panel.get_node("DetailPanelDecoration") as Control
+	decoration.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	decoration.position = Vector2(-4.19891357421875, -26.3999938964844)
+	decoration.size = Vector2(365.908416748047, 510)
+	decoration.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
+	var detail_title := _section_title("商品详情", 366)
+	detail_title.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
+	panel.add_child(detail_title)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "DetailLabel"
-	detail_label.position = Vector2(26, 62)
-	detail_label.size = Vector2(314, 230)
+	detail_label.set_meta("calibration_runtime_text", true)
+	detail_label.position = Vector2(36.1974487304688, 129.199844360352)
+	detail_label.size = Vector2(287.927917480469, 150.000259399414)
+	detail_label.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -164,8 +192,9 @@ func _build_detail_section() -> void:
 	buy_button = Button.new()
 	buy_button.name = "BuyButton"
 	buy_button.text = "购买"
-	buy_button.position = Vector2(20, 312)
-	buy_button.size = Vector2(326, 58)
+	buy_button.position = Vector2(47, 318)
+	buy_button.size = Vector2(270, 51)
+	buy_button.set_meta("calibration_layout_revision", 1)
 	buy_button.theme_type_variation = "GothicComponentSelectedButton"
 	buy_button.add_theme_font_size_override("font_size", 18)
 	buy_button.pressed.connect(_buy_selected)
@@ -173,8 +202,9 @@ func _build_detail_section() -> void:
 	repair_button = Button.new()
 	repair_button.name = "RepairButton"
 	repair_button.text = "维修全部装备"
-	repair_button.position = Vector2(20, 382)
-	repair_button.size = Vector2(326, 58)
+	repair_button.position = Vector2(47, 381)
+	repair_button.size = Vector2(270, 51)
+	repair_button.set_meta("calibration_layout_revision", 1)
 	repair_button.theme_type_variation = "GothicComponentButton"
 	repair_button.add_theme_font_size_override("font_size", 16)
 	repair_button.pressed.connect(_repair_all)
@@ -197,7 +227,6 @@ func _build_detail_section() -> void:
 	minus_button.size = Vector2(58, 46)
 	minus_button.theme_type_variation = "GothicPanelTransparentButton"
 	minus_button.clip_contents = true
-	_add_quantity_decoration(minus_button, false)
 	_add_quantity_symbol(minus_button, false)
 	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
 	sell_quantity_row.add_child(minus_button)
@@ -228,7 +257,6 @@ func _build_detail_section() -> void:
 	plus_button.size = Vector2(58, 46)
 	plus_button.theme_type_variation = "GothicPanelTransparentButton"
 	plus_button.clip_contents = true
-	_add_quantity_decoration(plus_button, true)
 	_add_quantity_symbol(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
 	sell_quantity_row.add_child(plus_button)
@@ -247,23 +275,6 @@ func _build_detail_section() -> void:
 	sell_confirmation.confirmed.connect(_on_sell_confirmation_confirmed)
 	sell_confirmation.cancelled.connect(_cancel_pending_sell)
 	add_child(sell_confirmation)
-
-func _add_quantity_decoration(button: Button, flip_h: bool) -> void:
-	var decoration := TextureRect.new()
-	decoration.name = "QuantityDecoration"
-	var atlas := AtlasTexture.new()
-	atlas.atlas = QUANTITY_BUTTON_TEXTURE
-	atlas.region = Rect2(0, 0, 58, 46)
-	decoration.texture = atlas
-	decoration.position = Vector2(3, 3)
-	decoration.size = Vector2(52, 40)
-	decoration.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	decoration.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	decoration.flip_h = flip_h
-	decoration.set_meta("atlas_region", atlas.region)
-	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	decoration.show_behind_parent = true
-	button.add_child(decoration)
 
 func _add_quantity_symbol(button: Button, plus: bool) -> void:
 	var color := Color("f2c783")
@@ -443,7 +454,7 @@ func _set_trade_mode(mode: String) -> void:
 		_rebuild_sell_cards()
 		_set_sell_actions_enabled(false)
 		_update_sell_quantity_label()
-		detail_label.text = "[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]\n\n[color=#a99479]出售价格由玩法层报价，UI不会自行计算。[/color]"
+		detail_label.text = "[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]"
 		_request_sell_quotes()
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "shop_sell" if not buying else "shop_buy")
 

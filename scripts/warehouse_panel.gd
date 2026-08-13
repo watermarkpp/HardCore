@@ -322,7 +322,6 @@ func _stabilize_grid_layout() -> void:
 	for scroll_path in ["StashSection/StashScroll", "BagSection/BagScroll"]:
 		var scroll := get_node_or_null(scroll_path) as ScrollContainer
 		if scroll != null:
-			scroll.position = GRID_SCROLL_RECT.position
 			scroll.size = GRID_SCROLL_RECT.size
 			scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 			scroll.clip_contents = true

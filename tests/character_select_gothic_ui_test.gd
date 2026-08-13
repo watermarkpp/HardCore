@@ -19,7 +19,14 @@ func _run() -> void:
 	assert(not launcher.ai_teammate_enabled and launcher.selected_ai_profile_id.is_empty(), "direct AI calls must remain disabled")
 	for profile_id: String in launcher.profile_cards:
 		assert(launcher.profile_cards[profile_id].ai_button.disabled, "AI teammate card buttons must remain disabled")
+		assert(launcher.profile_cards[profile_id].ai_button.theme_type_variation == &"GothicCharacterAIStatusButton", "AI 队友状态没有使用配套近方形框")
+		assert(launcher.profile_cards[profile_id].main_button.theme_type_variation in [&"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton"], "人物主卡没有使用配套横向框")
 	assert(launcher.teammate_status_label.text == "AI队友功能暂未开放", "AI disabled status text mismatch")
+	for profession_name: String in launcher.profession_buttons:
+		var profession_button: Button = launcher.profession_buttons[profession_name]
+		assert(profession_button.theme_type_variation in [&"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton"], "职业选择没有使用专用协调框")
+		var text_minimum := profession_button.get_minimum_size()
+		assert(profession_button.size.x + 0.5 >= text_minimum.x and profession_button.size.y + 0.5 >= text_minimum.y, "职业选择框没有完整包住三行文字：button=%s minimum=%s" % [profession_button.size, text_minimum])
 	if not launcher.profile_cards.is_empty():
 		var main_profile_id := str(launcher.profile_cards.keys()[0])
 		launcher._select_main_profile(main_profile_id)

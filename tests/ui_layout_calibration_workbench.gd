@@ -243,8 +243,8 @@ func _show_panel(index: int) -> void:
 		get_tree().paused = false
 		hud.call("show_death_screen", {
 			"death_id": "death:calibration:001",
-			"message": "校准用：角色已经倒下",
-			"loss_text": "校准用：经验损失说明（不会实际扣除）",
+			"message": "角色已经倒下",
+			"loss_text": "死亡损失：当前等级经验 10%",
 			"revival_options": [
 				{
 					"option_slot": "town",
@@ -260,7 +260,7 @@ func _show_panel(index: int) -> void:
 					"label": "特殊复活",
 					"enabled": false,
 					"countdown_seconds": 0,
-					"reason": "校准用：特殊复活暂不可用",
+					"reason": "特殊复活暂不可用",
 				},
 			],
 		})

@@ -20,6 +20,9 @@ const BUTTON_WIDE_V4 := preload(COMPONENT_V3_ROOT + "/button_wide_normal_v4.png"
 const BUTTON_SQUARE_V5 := preload(COMPONENT_V3_ROOT + "/button_square_normal_v5.png")
 const BUTTON_SHORTWIDE_V5 := preload(COMPONENT_V3_ROOT + "/button_shortwide_normal_v5.png")
 const BUTTON_WIDESMALL_V5 := preload(COMPONENT_V3_ROOT + "/button_widesmall_normal_v5.png")
+const CHARACTER_AI_STATUS_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_ai_status_frame_v7.png")
+const CHARACTER_PROFESSION_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_profession_frame_v7.png")
+const CHARACTER_PROFILE_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7.png")
 const COMPONENT_INSET_FRAME_V3 := preload(COMPONENT_V3_ROOT + "/inset_frame_v3.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
@@ -78,6 +81,13 @@ static func build() -> Theme:
 	result.set_color("font_hover_color", "GothicContentToggle", Color.WHITE)
 	result.set_color("font_pressed_color", "GothicContentToggle", Color("ffe2ad"))
 	result.set_font_size("font_size", "GothicContentToggle", 14)
+	result.set_type_variation("GothicSettingsSwitch", "CheckButton")
+	var settings_switch_empty := StyleBoxEmpty.new()
+	result.set_stylebox("normal", "GothicSettingsSwitch", settings_switch_empty)
+	result.set_stylebox("hover", "GothicSettingsSwitch", settings_switch_empty)
+	result.set_stylebox("pressed", "GothicSettingsSwitch", settings_switch_empty)
+	result.set_stylebox("focus", "GothicSettingsSwitch", settings_switch_empty)
+	result.set_stylebox("disabled", "GothicSettingsSwitch", settings_switch_empty)
 	result.set_type_variation("GothicInfoPanel", "Panel")
 	result.set_stylebox("panel", "GothicInfoPanel", _flat(Color(0.025, 0.02, 0.018, 0.88), Color(0.42, 0.31, 0.20, 0.92), 1, 16))
 	result.set_type_variation("GothicTargetPanel", "Panel")
@@ -140,8 +150,9 @@ static func build() -> Theme:
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")
 	# 仓库操作按钮复用技能配置区已验收的 v5 细边按钮三态族。
-	_apply_small_button(result, &"GothicWarehouseThinButton")
+	_apply_warehouse_thin_button(result)
 	_apply_small_button(result, &"GothicSkillConfigCompactButton")
+	_apply_character_hall_buttons(result)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
@@ -213,6 +224,72 @@ static func _apply_small_button(theme: Theme, variation: StringName) -> void:
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
 	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
+
+
+static func _apply_warehouse_thin_button(theme: Theme) -> void:
+	var variation := &"GothicWarehouseThinButton"
+	_apply_small_button(theme, variation)
+	# Keep disabled actions disabled, but retain the accepted antique-gold frame.
+	var disabled := AdaptiveButtonStyleBoxScript.new().configure_small(
+		BUTTON_SQUARE_V5,
+		BUTTON_SHORTWIDE_V5,
+		BUTTON_WIDESMALL_V5
+	)
+	theme.set_stylebox("disabled", variation, disabled)
+
+
+static func _character_frame_style(texture: Texture2D, fill: Color) -> AdaptiveButtonStyleBox:
+	return AdaptiveButtonStyleBoxScript.new().configure_small(texture, texture, texture, fill)
+
+
+static func _apply_character_hall_buttons(theme: Theme) -> void:
+	for variation: StringName in [&"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton"]:
+		theme.set_type_variation(variation, "Button")
+		var selected := variation == &"GothicCharacterSelectedProfileButton"
+		var normal_fill := Color(0.12, 0.045, 0.04, 0.98) if selected else Color(0.045, 0.024, 0.025, 0.96)
+		var hover_fill := Color(0.15, 0.055, 0.04, 0.98)
+		theme.set_stylebox("normal", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, normal_fill))
+		theme.set_stylebox("hover", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, hover_fill))
+		theme.set_stylebox("focus", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, hover_fill))
+		theme.set_stylebox("pressed", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, Color(0.20, 0.06, 0.035, 1.0)))
+		theme.set_stylebox("disabled", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, Color(0.028, 0.022, 0.022, 0.92)))
+		theme.set_color("font_color", variation, Color("ffe0b0") if selected else PARCHMENT)
+		theme.set_color("font_hover_color", variation, Color.WHITE)
+		theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+		theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
+		theme.set_constant("outline_size", variation, 3)
+	var ai_variation := &"GothicCharacterAIStatusButton"
+	theme.set_type_variation(ai_variation, "Button")
+	var ai_normal := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.045, 0.025, 0.032, 0.94))
+	var ai_hover := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.075, 0.038, 0.045, 0.96))
+	var ai_pressed := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.11, 0.045, 0.045, 0.98))
+	theme.set_stylebox("normal", ai_variation, ai_normal)
+	theme.set_stylebox("hover", ai_variation, ai_hover)
+	theme.set_stylebox("focus", ai_variation, ai_hover)
+	theme.set_stylebox("pressed", ai_variation, ai_pressed)
+	# AI teammates are temporarily unavailable, but the approved bronze frame
+	# remains visible instead of turning into an unrelated grey asset.
+	theme.set_stylebox("disabled", ai_variation, ai_normal)
+	theme.set_color("font_color", ai_variation, PARCHMENT)
+	theme.set_color("font_hover_color", ai_variation, Color.WHITE)
+	theme.set_color("font_pressed_color", ai_variation, Color("ffe2ad"))
+	theme.set_color("font_disabled_color", ai_variation, MUTED.darkened(0.12))
+	theme.set_constant("outline_size", ai_variation, 3)
+	for variation: StringName in [&"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton"]:
+		theme.set_type_variation(variation, "Button")
+		var selected := variation == &"GothicCharacterSelectedProfessionButton"
+		var normal_fill := Color(0.12, 0.045, 0.04, 0.98) if selected else Color(0.045, 0.024, 0.025, 0.96)
+		var hover_fill := Color(0.15, 0.055, 0.04, 0.98)
+		theme.set_stylebox("normal", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, normal_fill))
+		theme.set_stylebox("hover", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, hover_fill))
+		theme.set_stylebox("focus", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, hover_fill))
+		theme.set_stylebox("pressed", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, Color(0.20, 0.06, 0.035, 1.0)))
+		theme.set_stylebox("disabled", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, Color(0.028, 0.022, 0.022, 0.92)))
+		theme.set_color("font_color", variation, Color("ffe0b0") if selected else PARCHMENT)
+		theme.set_color("font_hover_color", variation, Color.WHITE)
+		theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+		theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
+		theme.set_constant("outline_size", variation, 3)
 
 
 

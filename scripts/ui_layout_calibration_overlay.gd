@@ -580,6 +580,9 @@ func save_profile() -> void:
 	var profiles: Dictionary = data.get("profiles", {})
 	var nodes := {}
 	for control in selectable_nodes:
+		var control_path := str(target.get_path_to(control))
+		if _is_deferred_dynamic_saved_path(control_path):
+			continue
 		var parent_control := control.get_parent() as Control
 		var parent_size := parent_control.size if parent_control != null else Vector2.ZERO
 		var scale := _device_scale(control)
@@ -601,7 +604,7 @@ func save_profile() -> void:
 			entry["text"] = _control_text(control)
 			entry["fontSize"] = float(_control_font_size(control)) * scale.y
 			entry["logicalFontSize"] = _control_font_size(control)
-		nodes[str(target.get_path_to(control))] = entry
+		nodes[control_path] = entry
 	profiles[profile_id] = {
 		"designSize": [target.size.x * _device_scale(target).x, target.size.y * _device_scale(target).y],
 		"logicalDesignSize": [target.size.x, target.size.y],
@@ -788,6 +791,10 @@ func _is_deferred_dynamic_saved_path(saved_path: String) -> bool:
 	return (
 		saved_path.begins_with("MapListPanel/MapListScroll/MapCards/")
 		or saved_path.begins_with("MapPreviewPanel/WorldTreeScroll/WorldTree/")
+		or saved_path.begins_with("GoodsPanel/GoodsScroll/GoodsGrid/")
+		or saved_path.begins_with("QuestListPanel/QuestListScroll/QuestList/")
+		or saved_path.begins_with("StashSection/StashScroll/StashGrid/")
+		or saved_path.begins_with("BagSection/BagScroll/BagGrid/")
 	)
 
 

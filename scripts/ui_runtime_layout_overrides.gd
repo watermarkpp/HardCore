@@ -2,7 +2,7 @@ class_name UIRuntimeLayoutOverrides
 extends RefCounted
 
 const CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
-const CONTRACT_SHA256 := "0EEA86E7FE890D791CBEAE3ABB48B0424E45DA283C5FB43D588D3BC6B9377E8E"
+const CONTRACT_SHA256 := "F50245E17C67C9C43E7FCDFAADE8CB739782974EEA1C59A024D047A50E042354"
 const SCHEMA_VERSION := 3
 
 static var _contract: Dictionary = {}
@@ -273,4 +273,11 @@ static func _dependency_retired(target: Control, entries: Dictionary, control: C
 
 
 static func _dynamic_map_path(path: String) -> bool:
-	return path.begins_with("MapListPanel/MapListScroll/MapCards/") or path.begins_with("MapPreviewPanel/WorldTreeScroll/WorldTree/")
+	return (
+		path.begins_with("MapListPanel/MapListScroll/MapCards/")
+		or path.begins_with("MapPreviewPanel/WorldTreeScroll/WorldTree/")
+		or path.begins_with("GoodsPanel/GoodsScroll/GoodsGrid/")
+		or path.begins_with("QuestListPanel/QuestListScroll/QuestList/")
+		or path.begins_with("StashSection/StashScroll/StashGrid/")
+		or path.begins_with("BagSection/BagScroll/BagGrid/")
+	)

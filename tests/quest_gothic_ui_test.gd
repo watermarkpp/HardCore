@@ -27,12 +27,21 @@ func _run() -> void:
 	assert(panel.theme_type_variation == "GothicModalFrame", "任务面板没有复用公共哥特外框")
 	assert(panel.get_node("QuestListPanel").theme_type_variation == "GothicInsetFrame", "任务列表没有复用公共内框")
 	assert(panel.get_node("QuestDetailPanel").theme_type_variation == "GothicInsetFrame", "任务详情没有复用公共内框")
+	var list_scroll := panel.get_node("QuestListPanel/QuestListScroll") as ScrollContainer
+	assert(list_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "任务人物列表外仍有多余细框")
+	var divider := panel.get_node("QuestDetailPanel/StoryDivider") as HSeparator
+	var detail_panel := panel.get_node("QuestDetailPanel") as Control
+	assert(divider.position.x == 20.0 and is_equal_approx(divider.size.x, detail_panel.size.x - 40.0), "任务详情横线没有在二级框内左右各留20像素")
+	assert(divider.get_meta("calibration_layer", "") == "quest_story_divider", "任务详情横线仍无法独立选中")
 	var rewards_panel := panel.get_node("QuestDetailPanel/RewardsPanel") as Panel
 	assert(rewards_panel.theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
 	assert(rewards_panel.get_meta("calibration_layer", "") == "quest_rewards_panel", "任务奖励外框没有暴露为可校准层")
 	var rewards_title := panel.get_node("QuestDetailPanel/RewardsPanel/RewardsTitle") as Label
 	assert(rewards_title.text == "任务奖励：" and rewards_title.position.y < panel.reward_label.position.y, "任务奖励标题没有上移、补冒号或与奖励内容对齐")
 	assert(panel.quest_buttons.size() == GameData.bich_quest_count(), "任务列表没有完整显示六段比奇任务")
+	for index in range(panel.quest_buttons.size()):
+		var card := panel.quest_buttons[index]
+		assert(card.position.x == 0.0 and card.position.y == index * (QuestPanel.QUEST_CARD_SIZE.y + QuestPanel.QUEST_CARD_SEPARATION), "任务卡没有按六段主线顺序完整排列")
 	var stable_quest_paths: Array[String] = []
 	for quest_button: Button in panel.quest_buttons:
 		var quest_id := str(quest_button.get_meta("quest_id", ""))

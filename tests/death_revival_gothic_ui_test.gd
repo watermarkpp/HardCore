@@ -1,6 +1,7 @@
 extends Node
 
 const CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/death_revival_contract_v1.json"
+const LAYOUT_CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
 const GAME_ICON_PATH := "res://assets/branding/game_icon.png"
@@ -20,10 +21,14 @@ func _run() -> void:
 	var panel: Control = DeathRevivalPanelScript.new()
 	host.add_child(panel)
 	await get_tree().process_frame
-	assert(panel.modal.position + panel.modal.size * 0.5 == host.size * 0.5, "死亡复活框没有在 1280×720 居中")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_assert_saved_local_rect(panel, "DeathRevivalModal")
 	host.size = Vector2(1600, 720)
 	await get_tree().process_frame
-	assert(panel.modal.position + panel.modal.size * 0.5 == host.size * 0.5, "死亡复活框没有随 expand 宽屏重新居中")
+	var modal_rect: Rect2 = (panel.modal as Control).get_global_rect()
+	assert(modal_rect.position.x >= 0.0 and modal_rect.position.y >= 0.0, "死亡复活框超出屏幕左上安全范围")
+	assert(modal_rect.end.x <= host.get_global_rect().end.x and modal_rect.end.y <= host.get_global_rect().end.y, "死亡复活框超出屏幕右下安全范围")
 	assert(panel.process_mode == Node.PROCESS_MODE_WHEN_PAUSED, "死亡界面必须能在暂停状态工作")
 	assert(panel.modal.theme_type_variation == "GothicModalFrame", "死亡界面没有复用公共哥特外框")
 	assert(panel.modal.get_node("ModalSurface").get_script() == GothicFrameFillScript, "死亡界面一级框没有使用代码背景")
@@ -88,3 +93,19 @@ func _tree_contains_exact_text(root: Node, value: String) -> bool:
 		if _tree_contains_exact_text(child, value):
 			return true
 	return false
+
+
+func _assert_saved_local_rect(panel: Control, path: String) -> void:
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(LAYOUT_CONTRACT_PATH))
+	assert(data is Dictionary, "正式 UI 布局合同无法解析")
+	var entry: Dictionary = data.get("profiles", {}).get("death_revival", {}).get("nodes", {}).get(path, {})
+	assert(not entry.is_empty(), "死亡复活页缺少保存布局：%s" % path)
+	var values: Array = entry.get("logicalRect", [])
+	assert(values.size() == 4, "死亡复活页保存矩形无效：%s" % path)
+	var profile: Dictionary = data.get("profiles", {}).get("death_revival", {})
+	var design: Array = profile.get("logicalDesignSize", [])
+	assert(design.size() == 2, "死亡复活页缺少逻辑设计尺寸")
+	var scale := Vector2(panel.size.x / float(design[0]), panel.size.y / float(design[1]))
+	var expected := Rect2(float(values[0]) * scale.x, float(values[1]) * scale.y, float(values[2]) * scale.x, float(values[3]) * scale.y)
+	var actual := (panel.get_node(path) as Control).get_rect()
+	assert(actual.is_equal_approx(expected), "死亡复活页没有加载最新人工保存矩形：%s" % path)

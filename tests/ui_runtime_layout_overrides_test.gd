@@ -7,8 +7,9 @@ const ShopPanel := preload("res://scripts/shop_panel.gd")
 const SkillPanelScript := preload("res://scripts/skill_panel.gd")
 const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
+const ConfirmationPanel := preload("res://scripts/gothic_confirmation_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "0EEA86E7FE890D791CBEAE3ABB48B0424E45DA283C5FB43D588D3BC6B9377E8E"
+const EXPECTED_HASH := "F50245E17C67C9C43E7FCDFAADE8CB739782974EEA1C59A024D047A50E042354"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
@@ -16,7 +17,7 @@ func _ready() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTRACT))
 	assert(data is Dictionary and int(data.get("schemaVersion", 0)) == 3)
 	var profiles: Dictionary = data.get("profiles", {})
-	for profile_id in ["character_hall", "inventory", "map", "quest", "shop_buy", "shop_sell", "skill", "system_menu", "warehouse"]:
+	for profile_id in ["character_hall", "confirmation_dialog", "death_revival", "inventory", "map", "quest", "shop_buy", "shop_sell", "skill", "system_menu", "warehouse"]:
 		assert(profiles.has(profile_id), "missing profile: %s" % profile_id)
 	var root := Control.new()
 	root.name = "SystemMenuRoot"
@@ -56,17 +57,22 @@ func _ready() -> void:
 	var shop := ShopPanel.new()
 	var skill := SkillPanelScript.new()
 	var character_hall := CharacterHallScene.instantiate() as Control
+	var warehouse := WarehousePanel.new()
+	var confirmation := ConfirmationPanel.new()
 	add_child(inventory)
 	add_child(map_panel)
 	add_child(shop)
 	add_child(skill)
 	add_child(character_hall)
+	add_child(warehouse)
+	add_child(confirmation)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_assert_saved_local_rect(inventory, "inventory", "BagPanel")
 	_assert_saved_local_rect(map_panel, "map", "MapListPanel")
-	_assert_saved_local_rect(shop, "shop_buy", "GoodsPanel")
+	_assert_saved_local_rect(shop, "shop_sell", "GoodsPanel")
+	_assert_saved_local_rect(shop, "shop_sell", "DetailPanel")
 	Loader.apply_profile(skill, "skill")
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -76,6 +82,20 @@ func _ready() -> void:
 	var skill_retired: Array = skill.get_meta("calibration_retired_paths", [])
 	assert("SkillDetailPanel/SkillDetailV3Frame" in skill_retired and "SkillDetailPanel/LearnButton" in skill_retired)
 	_assert_saved_local_rect(character_hall, "character_hall", "CenteredContent")
+	_assert_saved_local_rect(confirmation, "confirmation_dialog", "ModalFrame")
+	Loader.apply_profile(warehouse, "warehouse")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	for grid in [warehouse.stash_grid, warehouse.bag_grid]:
+		var first_cell := (grid as GridContainer).get_child(0) as Control
+		var sixth_cell := (grid as GridContainer).get_child(5) as Control
+		var seventh_cell := (grid as GridContainer).get_child(6) as Control
+		for cell in [first_cell, sixth_cell, seventh_cell]:
+			var item_button := cell.get_node("ItemButton") as Button
+			assert(item_button.position == Vector2.ZERO and item_button.size == WarehousePanel.ITEM_CELL_SIZE, "runtime旧八列数据覆盖了动态物品按钮局部矩形")
+		assert(first_cell.position.y == sixth_cell.position.y, "runtime profile载入后首行不足六格")
+		assert(seventh_cell.position.y > sixth_cell.position.y and seventh_cell.position.x == first_cell.position.x, "runtime profile载入后第七格没有换行")
 	var retired_path := "BagPanel/BagPanelDecoration"
 	var retired_entry: Dictionary = data["profiles"]["inventory"]["nodes"].get(retired_path, {})
 	var retired_decoration := inventory.get_node_or_null(retired_path) as Control
@@ -86,7 +106,7 @@ func _ready() -> void:
 	if stats != null and stats_entry.has("logicalFontSize"):
 		assert(stats.get_theme_font_size("font_size") == int(stats_entry["logicalFontSize"]), "logical font size not restored")
 	var buy_button := shop.get_node_or_null("DetailPanel/BuyButton") as Button
-	assert(buy_button != null and buy_button.size.x >= 326.0 and buy_button.size.y >= 58.0, "button minimum clamp blocked saved size")
+	assert(buy_button != null and buy_button.size.is_equal_approx(Vector2(270, 51)), "购买按钮没有保持新的统一操作按钮尺寸")
 	shop._set_trade_mode("buy")
 	shop._set_trade_mode("sell")
 	await get_tree().process_frame

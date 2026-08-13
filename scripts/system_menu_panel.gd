@@ -194,14 +194,35 @@ func _menu_button(parent: Control, node_name: String, text_value: String, y: flo
 
 
 func _audio_toggle(parent: Control, node_name: String, label_text: String, y: float, setting_id: String) -> CheckButton:
+	var frame := Button.new()
+	frame.name = node_name.trim_suffix("Toggle") + "Frame"
+	frame.position = Vector2(72, y)
+	frame.size = Vector2(356, 68)
+	frame.theme_type_variation = "GothicComponentButton"
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.focus_mode = Control.FOCUS_NONE
+	frame.set_meta("calibration_layout_revision", 3)
+	parent.add_child(frame)
+	var title := Label.new()
+	title.name = node_name.trim_suffix("Toggle") + "Title"
+	title.text = label_text
+	title.position = Vector2(104, y + 18)
+	title.size = Vector2(118, 32)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", Color("f2d29b"))
+	title.set_meta("calibration_layout_revision", 3)
+	parent.add_child(title)
 	var toggle := CheckButton.new()
 	toggle.name = node_name
-	toggle.text = label_text
-	toggle.position = Vector2(72, y)
-	toggle.size = Vector2(356, 68)
-	toggle.theme_type_variation = "GothicContentToggle"
-	toggle.add_theme_font_size_override("font_size", 18)
+	toggle.text = ""
+	toggle.position = Vector2(332, y + 16)
+	toggle.size = Vector2(52, 36)
+	toggle.theme_type_variation = "GothicSettingsSwitch"
 	toggle.set_meta("setting_id", setting_id)
+	toggle.set_meta("calibration_layout_revision", 3)
 	parent.add_child(toggle)
 	return toggle
 
@@ -209,11 +230,12 @@ func _audio_toggle(parent: Control, node_name: String, label_text: String, y: fl
 func _toggle_status(parent: Control, node_name: String, y: float) -> Label:
 	var status := Label.new()
 	status.name = node_name
-	status.position = Vector2(276, y + 18)
-	status.size = Vector2(116, 32)
+	status.position = Vector2(230, y + 18)
+	status.size = Vector2(88, 32)
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status.set_meta("calibration_layout_revision", 3)
 	parent.add_child(status)
 	return status
 
