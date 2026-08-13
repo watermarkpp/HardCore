@@ -2,7 +2,7 @@ class_name UIRuntimeLayoutOverrides
 extends RefCounted
 
 const CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
-const CONTRACT_SHA256 := "BD3E17BD59EE23D2463CF193C097A94C3F8705E4FBDB5A90D93DAED9122E68FC"
+const CONTRACT_SHA256 := "4D77B33D45286CB2C60FF10FF9382CF837264C9B00D2453C9D186F299C53B9A4"
 const SCHEMA_VERSION := 3
 const KNOWN_PROFILE_IDS := {
 	"character_hall": true,

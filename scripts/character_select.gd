@@ -235,7 +235,7 @@ func _build_fingerprint_text() -> String:
 
 func _build_roster_panel() -> void:
 	var panel := _section_panel("RosterPanel", Rect2(38, 108, 326, 574))
-	panel.add_child(_section_title("已有角色", 326))
+	panel.add_child(_section_title("RosterTitle", "已有角色", 326))
 	roster_count_label = Label.new()
 	roster_count_label.name = "RosterCount"
 	roster_count_label.position = Vector2(24, 46)
@@ -280,7 +280,7 @@ func _build_roster_panel() -> void:
 
 func _build_preview_panel() -> void:
 	var panel := _section_panel("CharacterPreviewPanel", Rect2(380, 108, 484, 574))
-	panel.add_child(_section_title("人物预览", 484))
+	panel.add_child(_section_title("CharacterPreviewTitle", "人物预览", 484))
 	var stage := Control.new()
 	stage.name = "PreviewStage"
 	stage.position = Vector2.ZERO
@@ -334,8 +334,9 @@ func _build_preview_panel() -> void:
 
 func _build_creation_panel() -> void:
 	var panel := _section_panel("CreationPanel", Rect2(880, 108, 362, 574))
-	panel.add_child(_section_title("创建人物", 362))
+	panel.add_child(_section_title("CreationTitle", "创建人物", 362))
 	var name_caption := Label.new()
+	name_caption.name = "CharacterNameCaption"
 	name_caption.text = "角色名称"
 	name_caption.position = Vector2(26, 56)
 	name_caption.size = Vector2(310, 24)
@@ -351,6 +352,7 @@ func _build_creation_panel() -> void:
 	name_input.text_submitted.connect(func(_text: String) -> void: _create_character())
 	panel.add_child(name_input)
 	var profession_caption := Label.new()
+	profession_caption.name = "ProfessionCaption"
 	profession_caption.text = "选择职业"
 	profession_caption.position = Vector2(26, 158)
 	profession_caption.size = Vector2(310, 24)
@@ -675,8 +677,9 @@ func _section_panel(node_name: String, rect: Rect2) -> Control:
 	return GothicFrameFactoryScript.add_filled_section(content_root, node_name, rect)
 
 
-func _section_title(text_value: String, width: float) -> Label:
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
 	var title := Label.new()
+	title.name = node_name
 	title.text = text_value
 	title.position = Vector2(18, 12)
 	title.size = Vector2(width - 36.0, 30)

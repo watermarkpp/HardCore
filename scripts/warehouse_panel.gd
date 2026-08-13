@@ -117,7 +117,7 @@ func _build_storage_sections() -> void:
 	var stash_frame := GothicFrameFactoryScript.add_filled_section(stash_panel, "StashGridV3Frame", GRID_FRAME_RECT)
 	stash_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stash_frame.set_meta("calibration_layer", "warehouse_stash_grid_decoration")
-	stash_panel.add_child(_section_title("个人仓库", 492))
+	stash_panel.add_child(_section_title("StashTitle", "个人仓库", 492))
 	stash_grid = _build_item_grid(stash_panel, "StashScroll", "StashGrid")
 	stash_panel.add_child(_paging_hint("StashPagingHint", "每页 100 格　·　下拉查看本页后 70 格"))
 	_build_page_controls(stash_panel)
@@ -125,7 +125,7 @@ func _build_storage_sections() -> void:
 	stash_panel.add_child(stash_summary_label)
 
 	var transfer_panel := _section_panel("TransferSection", Rect2(520, 72, 124, 566))
-	transfer_panel.add_child(_section_title("转移", 124))
+	transfer_panel.add_child(_section_title("TransferTitle", "转移", 124))
 	transfer_detail_label = Label.new()
 	transfer_detail_label.name = "TransferDetail"
 	transfer_detail_label.text = "选择两侧物品"
@@ -155,7 +155,7 @@ func _build_storage_sections() -> void:
 	var bag_frame := GothicFrameFactoryScript.add_filled_section(bag_panel, "BagGridV3Frame", GRID_FRAME_RECT)
 	bag_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bag_frame.set_meta("calibration_layer", "warehouse_bag_grid_decoration")
-	bag_panel.add_child(_section_title("人物背包", 492))
+	bag_panel.add_child(_section_title("BagTitle", "人物背包", 492))
 	bag_grid = _build_item_grid(bag_panel, "BagScroll", "BagGrid")
 	bag_panel.add_child(_paging_hint("BagPagingHint", "首屏 30 格　·　下拉查看 31–100 格"))
 	bag_summary_label = _summary_label("BagSummary")
@@ -542,8 +542,9 @@ func _section_panel(node_name: String, rect: Rect2) -> Control:
 	return GothicFrameFactoryScript.add_filled_section(self, node_name, adjusted_rect)
 
 
-func _section_title(text_value: String, width: float) -> Label:
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
 	var title := Label.new()
+	title.name = node_name
 	title.text = text_value
 	title.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	title.position = Vector2(18, 16)

@@ -63,6 +63,7 @@ func _ready() -> void:
 		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFill",
 		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFrame",
 		"SkillDetailPanel/LearnButton",
+		"SkillDetailPanel/LegacySkillDetailTitle",
 		"SkillListPanel/SkillCount",
 		"SkillDetailPanel/@Label@451",
 		"AssignmentPanel/AttackSlotTitle",

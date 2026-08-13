@@ -101,7 +101,7 @@ func _build_header() -> void:
 
 func _build_map_list_section() -> void:
 	var panel := _framed_section("MapListPanel", Rect2(20, 76, 270, 548))
-	panel.add_child(_section_title("区域地图", 270))
+	panel.add_child(_section_title("MapListTitle", "区域地图", 270))
 	var scroll := ScrollContainer.new()
 	scroll.name = "MapListScroll"
 	scroll.position = Vector2(18, 54)
@@ -125,7 +125,7 @@ func _build_world_tree_section() -> void:
 	tree_frame.set_meta("calibration_layer", "map_world_tree_decoration")
 	tree_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.move_child(tree_frame, 0)
-	panel.add_child(_section_title("HardCore 世界地图树", 520))
+	panel.add_child(_section_title("WorldTreeTitle", "HardCore 世界地图树", 520))
 	var hint := Label.new()
 	hint.name = "WorldTreeHint"
 	hint.text = "选择大地图节点，在左侧展开其包含的全部地图"
@@ -182,7 +182,7 @@ func _stable_catalog_id(value: String, suffix: String) -> String:
 
 func _build_map_detail_section() -> void:
 	var panel := _framed_section("MapDetailPanel", Rect2(834, 76, 306, 548))
-	panel.add_child(_section_title("区域信息", 306))
+	panel.add_child(_section_title("MapDetailTitle", "区域信息", 306))
 	map_name_label = Label.new()
 	map_name_label.name = "MapName"
 	map_name_label.set_meta("calibration_runtime_text", true)
@@ -618,8 +618,9 @@ func _framed_section(node_name: String, rect: Rect2) -> Control:
 	return GothicFrameFactoryScript.add_filled_section(self, node_name, adjusted_rect)
 
 
-func _section_title(text_value: String, section_width: float) -> Label:
+func _section_title(node_name: String, text_value: String, section_width: float) -> Label:
 	var label := Label.new()
+	label.name = node_name
 	label.text = text_value
 	label.position = Vector2(24, 18)
 	label.size = Vector2(section_width - 48.0, 28)

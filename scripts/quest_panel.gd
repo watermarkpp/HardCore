@@ -88,7 +88,7 @@ func _build_header() -> void:
 
 func _build_quest_list() -> void:
 	var panel := _framed_section("QuestListPanel", Rect2(24, 76, 326, 528))
-	panel.add_child(_section_title("任务列表", 326))
+	panel.add_child(_section_title("QuestListTitle", "任务列表", 326))
 	var chain_label := Label.new()
 	chain_label.name = "QuestChainLabel"
 	chain_label.text = "比奇主线 · 六段任务"
@@ -118,7 +118,7 @@ func _build_quest_list() -> void:
 
 func _build_quest_detail() -> void:
 	var panel := _framed_section("QuestDetailPanel", Rect2(364, 76, 632, 528))
-	panel.add_child(_section_title("任务详情", 632))
+	panel.add_child(_section_title("QuestDetailTitle", "任务详情", 632))
 	quest_name_label = Label.new()
 	quest_name_label.name = "QuestName"
 	quest_name_label.position = Vector2(28, 58)
@@ -506,8 +506,9 @@ func _framed_section(node_name: String, rect: Rect2) -> Control:
 	return GothicFrameFactoryScript.add_filled_section(self, node_name, rect)
 
 
-func _section_title(text_value: String, section_width: float) -> Label:
+func _section_title(node_name: String, text_value: String, section_width: float) -> Label:
 	var label := Label.new()
+	label.name = node_name
 	label.text = text_value
 	label.position = Vector2(24, 18)
 	label.size = Vector2(section_width - 48.0, 28)

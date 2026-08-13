@@ -175,7 +175,7 @@ func _build_detail_section() -> void:
 	decoration.position = Vector2(-4.19891357421875, -26.3999938964844)
 	decoration.size = Vector2(365.908416748047, 510)
 	decoration.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
-	var detail_title := _section_title("商品详情", 366)
+	var detail_title := _section_title("DetailTitle", "商品详情", 366)
 	detail_title.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	panel.add_child(detail_title)
 	detail_label = RichTextLabel.new()
@@ -309,8 +309,9 @@ func _framed_section(node_name: String, rect: Rect2) -> Control:
 	return GothicFrameFactoryScript.add_filled_section(self, node_name, rect)
 
 
-func _section_title(text_value: String, section_width: float) -> Label:
+func _section_title(node_name: String, text_value: String, section_width: float) -> Label:
 	var label := Label.new()
+	label.name = node_name
 	label.text = text_value
 	label.position = Vector2(24, 18)
 	label.size = Vector2(section_width - 48.0, 28)

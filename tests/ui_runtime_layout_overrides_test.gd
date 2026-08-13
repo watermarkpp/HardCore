@@ -9,7 +9,7 @@ const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const ConfirmationPanel := preload("res://scripts/gothic_confirmation_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "BD3E17BD59EE23D2463CF193C097A94C3F8705E4FBDB5A90D93DAED9122E68FC"
+const EXPECTED_HASH := "4D77B33D45286CB2C60FF10FF9382CF837264C9B00D2453C9D186F299C53B9A4"
 
 func _ready() -> void:
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
@@ -26,6 +26,11 @@ func _ready() -> void:
 		)
 	for profile_id in ["character_hall", "confirmation_dialog", "death_revival", "inventory", "map", "quest", "shop_buy", "shop_sell", "skill", "system_menu", "warehouse"]:
 		assert(profiles.has(profile_id), "missing profile: %s" % profile_id)
+		for saved_path: String in (profiles[profile_id] as Dictionary).get("nodes", {}).keys():
+			assert(
+				not saved_path.contains("@Label@"),
+				"authored text layers require stable semantic paths: %s/%s" % [profile_id, saved_path]
+			)
 	var root := Control.new()
 	root.name = "SystemMenuRoot"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
