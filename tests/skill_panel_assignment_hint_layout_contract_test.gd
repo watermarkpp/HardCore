@@ -93,10 +93,16 @@ func _run() -> void:
 		if index % 3 < 2:
 			var next_ring := assignment_panel.find_child("AttackRingSkillSlot_%d" % (index + 2), true, false) as Control
 			assert(not ring.get_rect().intersects(next_ring.get_rect()))
-	var mode_label := attack_slot.get_node("Content/InteractionMode") as Label
 	var slot_label := attack_slot.get_node("Content/SlotLabel") as Label
 	var name_label := attack_slot.get_node("Content/SkillName") as Label
-	assert(mode_label.position.x == slot_label.position.x and mode_label.position.x == name_label.position.x)
+	assert(name_label.position.x == slot_label.position.x)
+	assert(attack_slot.get_node_or_null("Content/InteractionMode") == null, "retired primary interaction label was recreated")
+	for index in range(6):
+		var ring_button := assignment_panel.get_node("AttackRingSkillSlot_%d" % (index + 1)) as Button
+		assert(ring_button.get_node_or_null("Content/SkillName") == null, "retired ring skill name was recreated")
+	assert(assignment_panel.get_node_or_null("AttackSlotTitle") == null, "retired attack title was recreated")
+	assert(panel.get_node_or_null("SkillListPanel/SkillCount") == null, "retired skill count was recreated")
+	assert(panel.get_node_or_null("SkillDetailPanel/@Label@451") == null, "retired skill detail title was recreated")
 	var title := panel.get_node("SkillDetailPanel/SkillName") as Label
 	assert(title != null)
 	var learned_index := -1

@@ -63,6 +63,16 @@ func _ready() -> void:
 		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFill",
 		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFrame",
 		"SkillDetailPanel/LearnButton",
+		"SkillListPanel/SkillCount",
+		"SkillDetailPanel/@Label@451",
+		"AssignmentPanel/AttackSlotTitle",
+		"AssignmentPanel/AttackSkillSlot/Content/InteractionMode",
+		"AssignmentPanel/AttackRingSkillSlot_1/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_2/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_3/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_4/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_5/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_6/Content/SkillName",
 	])
 	_load_formal_skill_rules()
 	set_anchors_preset(Control.PRESET_CENTER)
@@ -160,19 +170,10 @@ func _build_skill_list_section() -> void:
 	skill_list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	skill_list_container.add_theme_constant_override("separation", 7)
 	scroll.add_child(skill_list_container)
-	skill_count_label = Label.new()
-	skill_count_label.name = "SkillCount"
-	skill_count_label.position = Vector2(18, 500)
-	skill_count_label.size = Vector2(274, 26)
-	skill_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	skill_count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	skill_count_label.theme_type_variation = "GothicMutedLabel"
-	panel.add_child(skill_count_label)
 
 
 func _build_skill_detail_section() -> void:
 	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 460, 548))
-	panel.add_child(_section_title("技能详情", 460))
 	var icon_frame := Button.new()
 	icon_frame.name = "SkillIconFrame"
 	icon_frame.position = Vector2(24, 58)
@@ -233,15 +234,6 @@ func _build_skill_detail_section() -> void:
 func _build_assignment_section() -> void:
 	var panel := _section_panel("AssignmentPanel", Rect2(814, 76, 374, 548))
 	panel.add_child(_section_title("技能按钮配置", 374))
-	var attack_title := Label.new()
-	attack_title.name = "AttackSlotTitle"
-	attack_title.text = "攻击主键"
-	attack_title.position = Vector2(22, 50)
-	attack_title.size = Vector2(330, 26)
-	attack_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	attack_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	attack_title.theme_type_variation = "GothicMutedLabel"
-	panel.add_child(attack_title)
 	var attack_slot := Button.new()
 	attack_slot.name = "AttackSkillSlot"
 	attack_slot.position = Vector2(18, 80)
@@ -477,7 +469,8 @@ func refresh() -> void:
 	_rebuild_skill_cards()
 	_refresh_assignment_slots()
 	trainer_context_label.text = "%s　·　%s" % [_trainer_name, PlayerState.profession]
-	skill_count_label.text = "%s技能　%d 项" % [PlayerState.profession, skill_entries.size()]
+	if is_instance_valid(skill_count_label):
+		skill_count_label.text = "%s技能　%d 项" % [PlayerState.profession, skill_entries.size()]
 	if selected_skill_index >= 0 and selected_skill_index < skill_entries.size():
 		skill_list.select(selected_skill_index)
 		_show_skill_detail(selected_skill_index)
@@ -787,27 +780,21 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	slot_label.theme_type_variation = "GothicMutedLabel"
 	slot_label.add_theme_font_size_override("font_size", 12)
 	content.add_child(slot_label)
-	var name_label := Label.new()
-	name_label.name = "SkillName"
-	name_label.text = skill_name if not skill_name.is_empty() else "空"
-	name_label.position = Vector2(4, 70) if compact else (Vector2(58, 28) if primary_attack else Vector2(52, 28))
-	name_label.size = Vector2(button.size.x - 8, 24) if compact else (Vector2(button.size.x - 64, 26) if primary_attack else Vector2(button.size.x - 58, 26))
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.clip_text = true
-	name_label.add_theme_font_size_override("font_size", 13 if compact else 14)
-	name_label.add_theme_color_override("font_color", Color("f0c77f"))
-	content.add_child(name_label)
-	var mode_label := Label.new()
-	mode_label.name = "InteractionMode"
-	mode_label.text = _skill_presentation_label(skill_name)
-	mode_label.position = Vector2(4, 94) if compact else (Vector2(58, 56) if primary_attack else Vector2(52, 56))
-	mode_label.size = Vector2(button.size.x - 8, 18) if compact else (Vector2(button.size.x - 64, 20) if primary_attack else Vector2(button.size.x - 58, 20))
-	mode_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	mode_label.add_theme_font_size_override("font_size", 12)
-	mode_label.add_theme_color_override("font_color", Color("7fb789") if _skill_interaction_mode(skill_name) == "toggle" else Color("c8a871"))
-	content.add_child(mode_label)
+	# These labels were explicitly deleted in the approved skill profile.  They
+	# must not be recreated during assignment refresh, otherwise they are visible
+	# for one frame before the asynchronous layout contract hides them again.
+	if primary_attack:
+		var name_label := Label.new()
+		name_label.name = "SkillName"
+		name_label.text = skill_name if not skill_name.is_empty() else "空"
+		name_label.position = Vector2(58, 28)
+		name_label.size = Vector2(button.size.x - 64, 26)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.clip_text = true
+		name_label.add_theme_font_size_override("font_size", 14)
+		name_label.add_theme_color_override("font_color", Color("f0c77f"))
+		content.add_child(name_label)
 	button.set_meta("skill_name", skill_name)
 	button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
 
