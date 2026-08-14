@@ -103,6 +103,26 @@ func set_feedback(
 	return self
 
 
+func set_precomputed_layered_feedback(
+	fill: Color,
+	source_texture: Texture2D,
+	background_mask: Texture2D,
+	frame_texture: Texture2D,
+	shadow := Color.TRANSPARENT,
+	shadow_size := 0.0,
+	inset := 0.0,
+	border_width := 0,
+) -> AdaptiveButtonStyleBox:
+	set_feedback(fill, Color.TRANSPARENT, shadow, shadow_size, inset, border_width, false)
+	feedback_layered = true
+	var key := _texture_key(source_texture)
+	if key.is_empty() or background_mask == null or frame_texture == null:
+		return self
+	feedback_background_styles[key] = _texture_layer_style(background_mask, Vector4.ZERO, fill)
+	feedback_frame_styles[key] = _texture_layer_style(frame_texture, Vector4.ZERO)
+	return self
+
+
 func has_feedback() -> bool:
 	return feedback_style != null
 
@@ -268,20 +288,14 @@ func _prepare_layered_feedback() -> void:
 		var geometry: Variant = texture.get_meta(geometry_token) if texture.has_meta(geometry_token) else null
 		var layers: Dictionary
 		if geometry is Dictionary and geometry.has("background") and geometry.has("frame"):
-			layers = {
-				"background": _recolor_layer_image(geometry.background, feedback_style.bg_color),
-				"frame": geometry.frame,
-			}
+			layers = geometry
 		else:
 			layers = _build_layer_images(texture)
 			if not layers.is_empty():
-				texture.set_meta(geometry_token, {
-					"background": _normalize_layer_mask(layers.background, feedback_style.bg_color.a),
-					"frame": layers.frame,
-				})
+				texture.set_meta(geometry_token, layers)
 		if layers.is_empty():
 			continue
-		var background_style := _layer_style(layers.background, margins)
+		var background_style := _layer_style(layers.background, margins, feedback_style.bg_color)
 		var frame_style := _layer_style(layers.frame, margins)
 		texture.set_meta(cache_token, {"background": background_style, "frame": frame_style})
 		feedback_background_styles[key] = background_style
@@ -299,33 +313,23 @@ func _layer_geometry_token(texture: Texture2D) -> StringName:
 	return StringName("hardcore_feedback_geometry_%s" % digest)
 
 
-func _recolor_layer_image(source: Image, fill: Color) -> Image:
-	var recolored := source.duplicate()
-	for y in range(recolored.get_height()):
-		for x in range(recolored.get_width()):
-			var alpha := source.get_pixel(x, y).a
-			if alpha > 0.01:
-				recolored.set_pixel(x, y, Color(fill.r, fill.g, fill.b, alpha * fill.a))
-			else:
-				recolored.set_pixel(x, y, Color.TRANSPARENT)
-	return recolored
-
-
-func _normalize_layer_mask(source: Image, source_alpha: float) -> Image:
-	var normalized := source.duplicate()
-	var divisor := maxf(source_alpha, 0.001)
-	for y in range(normalized.get_height()):
-		for x in range(normalized.get_width()):
-			var alpha := clampf(source.get_pixel(x, y).a / divisor, 0.0, 1.0)
-			normalized.set_pixel(x, y, Color.WHITE if alpha > 0.01 else Color.TRANSPARENT)
-			if alpha > 0.01:
-				normalized.set_pixel(x, y, Color(1.0, 1.0, 1.0, alpha))
-	return normalized
-
-
-func _layer_style(image: Image, margins: Vector4) -> StyleBoxTexture:
+func _layer_style(image: Image, margins: Vector4, modulate := Color.WHITE) -> StyleBoxTexture:
 	var style := StyleBoxTexture.new()
 	style.texture = ImageTexture.create_from_image(image)
+	style.modulate_color = modulate
+	_apply_layer_style_margins(style, margins)
+	return style
+
+
+func _texture_layer_style(texture: Texture2D, margins: Vector4, modulate := Color.WHITE) -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = texture
+	style.modulate_color = modulate
+	_apply_layer_style_margins(style, margins)
+	return style
+
+
+func _apply_layer_style_margins(style: StyleBoxTexture, margins: Vector4) -> void:
 	style.set_texture_margin(SIDE_LEFT, margins.x)
 	style.set_texture_margin(SIDE_TOP, margins.y)
 	style.set_texture_margin(SIDE_RIGHT, margins.z)
@@ -333,7 +337,6 @@ func _layer_style(image: Image, margins: Vector4) -> StyleBoxTexture:
 	style.content_margin_left = margins.x
 	style.content_margin_right = margins.z
 	style.draw_center = true
-	return style
 
 
 func _build_layer_images(texture: Texture2D) -> Dictionary:
@@ -371,12 +374,11 @@ func _build_transparent_layer_images(source: Image) -> Dictionary:
 			_queue_outside(next, barrier, outside, queue, width, height)
 	var background := Image.create(width, height, false, Image.FORMAT_RGBA8)
 	var frame := source.duplicate()
-	var fill := feedback_style.bg_color
 	for index in range(width * height):
 		if barrier[index] == 0 and outside[index] == 0:
 			var x := index % width
 			var y := index / width
-			background.set_pixel(x, y, Color(fill.r, fill.g, fill.b, fill.a))
+			background.set_pixel(x, y, Color.WHITE)
 			frame.set_pixel(x, y, Color.TRANSPARENT)
 	return {"background": background, "frame": frame}
 
@@ -416,12 +418,11 @@ func _build_opaque_layer_images(source: Image) -> Dictionary:
 			queue.append(next)
 	var background := Image.create(width, height, false, Image.FORMAT_RGBA8)
 	var frame := source.duplicate()
-	var fill := feedback_style.bg_color
 	for index in range(width * height):
 		if visited[index] == 1:
 			var x := index % width
 			var y := index / width
-			background.set_pixel(x, y, Color(fill.r, fill.g, fill.b, fill.a))
+			background.set_pixel(x, y, Color.WHITE)
 			frame.set_pixel(x, y, Color.TRANSPARENT)
 	return {"background": background, "frame": frame}
 

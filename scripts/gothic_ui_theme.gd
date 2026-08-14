@@ -23,6 +23,12 @@ const BUTTON_WIDESMALL_V5 := preload(COMPONENT_V3_ROOT + "/button_widesmall_norm
 const CHARACTER_AI_STATUS_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_ai_status_frame_v7.png")
 const CHARACTER_PROFESSION_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_profession_frame_v7.png")
 const CHARACTER_PROFILE_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7.png")
+const CHARACTER_AI_STATUS_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/character_ai_status_frame_v7_feedback_mask_v1.png")
+const CHARACTER_AI_STATUS_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/character_ai_status_frame_v7_frame_only_v1.png")
+const CHARACTER_PROFESSION_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/character_profession_frame_v7_feedback_mask_v1.png")
+const CHARACTER_PROFESSION_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/character_profession_frame_v7_frame_only_v1.png")
+const CHARACTER_PROFILE_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7_feedback_mask_v1.png")
+const CHARACTER_PROFILE_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7_frame_only_v1.png")
 const COMPONENT_INSET_FRAME_V3 := preload(COMPONENT_V3_ROOT + "/inset_frame_v3.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
@@ -86,22 +92,19 @@ const CHARACTER_TRANSITION_FONT := Color("ffe5b8")
 const CHARACTER_TRANSITION_FONT_OUTLINE := Color(0.62, 0.24, 0.20, 0.86)
 const CHARACTER_TRANSITION_FONT_SHADOW := Color(0.80, 0.34, 0.22, 0.68)
 
+static var _shared_full_theme: Theme
+static var _shared_character_hall_theme: Theme
+
 
 static func build() -> Theme:
-	var result := Theme.new()
-	result.default_font_size = 16
-	result.set_color("font_color", "Label", PARCHMENT)
-	result.set_color("font_shadow_color", "Label", Color(0.02, 0.01, 0.01, 0.95))
-	result.set_constant("shadow_offset_x", "Label", 2)
-	result.set_constant("shadow_offset_y", "Label", 2)
-	result.set_color("default_color", "RichTextLabel", PARCHMENT)
+	if _shared_full_theme != null:
+		return _shared_full_theme
+	var result := _build_base_theme()
 	result.set_color("font_color", "PopupMenu", PARCHMENT)
 	result.set_color("font_hover_color", "PopupMenu", Color.WHITE)
-	result.set_stylebox("panel", "ScrollContainer", _flat(Color(0.008, 0.007, 0.006, 0.72), Color(0.28, 0.20, 0.13, 0.62), 1, 8))
 	result.set_stylebox("panel", "PopupMenu", _flat(Color(0.025, 0.018, 0.014, 0.98), BRONZE, 2, 8))
 	result.set_stylebox("hover", "PopupMenu", _flat(Color(0.22, 0.08, 0.035, 0.96), BRONZE_BRIGHT, 1, 5))
 	result.set_stylebox("separator", "PopupMenu", _flat(Color(0.18, 0.09, 0.04, 0.78), Color.TRANSPARENT, 0, 0))
-	_apply_base_button(result)
 	result.set_type_variation("GothicSectionTitle", "Label")
 	result.set_color("font_color", "GothicSectionTitle", Color("f0c77f"))
 	result.set_font_size("font_size", "GothicSectionTitle", 20)
@@ -230,6 +233,61 @@ static func build() -> Theme:
 	)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
 	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, Vector4.ZERO, 8)
+	_shared_full_theme = result
+	return _shared_full_theme
+
+
+## Character selection is the first interactive screen and must not pay for
+## every in-game panel variation while the brand intro is holding its final
+## frame. Keep this contract intentionally limited to the types instantiated by
+## character_select.gd; build() creates and caches the complete theme later,
+## behind the character launch loading overlay.
+static func build_character_hall() -> Theme:
+	if _shared_character_hall_theme != null:
+		return _shared_character_hall_theme
+	var result := _build_base_theme()
+	result.set_type_variation("GothicSectionTitle", "Label")
+	result.set_color("font_color", "GothicSectionTitle", Color("f0c77f"))
+	result.set_font_size("font_size", "GothicSectionTitle", 20)
+	result.set_type_variation("GothicMutedLabel", "Label")
+	result.set_color("font_color", "GothicMutedLabel", MUTED)
+	result.set_font_size("font_size", "GothicMutedLabel", 14)
+	result.set_type_variation("GothicSearchField", "LineEdit")
+	result.set_stylebox("normal", "GothicSearchField", _flat(Color(0.02, 0.016, 0.014, 0.96), Color(0.42, 0.31, 0.20, 0.92), 2, 8))
+	result.set_stylebox("focus", "GothicSearchField", _flat(Color(0.035, 0.024, 0.018, 0.98), BRONZE_BRIGHT, 2, 8))
+	result.set_stylebox("read_only", "GothicSearchField", _flat(Color(0.014, 0.012, 0.011, 0.90), Color(0.24, 0.19, 0.15, 0.9), 1, 8))
+	result.set_color("font_color", "GothicSearchField", PARCHMENT)
+	result.set_color("font_placeholder_color", "GothicSearchField", MUTED.darkened(0.12))
+	result.set_color("caret_color", "GothicSearchField", BRONZE_BRIGHT)
+	result.set_font_size("font_size", "GothicSearchField", 16)
+	result.set_type_variation("GothicContentToggle", "CheckButton")
+	result.set_stylebox("normal", "GothicContentToggle", _flat(Color(0.018, 0.015, 0.014, 0.86), Color(0.38, 0.28, 0.19, 0.8), 1, 8))
+	result.set_stylebox("hover", "GothicContentToggle", _flat(Color(0.09, 0.055, 0.028, 0.92), BRONZE, 1, 8))
+	result.set_stylebox("pressed", "GothicContentToggle", _flat(Color(0.14, 0.065, 0.025, 0.96), BRONZE_BRIGHT, 1, 8))
+	result.set_stylebox("focus", "GothicContentToggle", _flat(Color(0.09, 0.055, 0.028, 0.92), BRONZE_BRIGHT, 1, 8))
+	result.set_color("font_color", "GothicContentToggle", PARCHMENT)
+	result.set_color("font_hover_color", "GothicContentToggle", Color.WHITE)
+	result.set_color("font_pressed_color", "GothicContentToggle", Color("ffe2ad"))
+	result.set_font_size("font_size", "GothicContentToggle", 14)
+	result.set_type_variation("GothicInsetFrame", "Panel")
+	result.set_stylebox("panel", "GothicInsetFrame", GothicFrameFactoryScript.create_inset_frame_style_v3())
+	_apply_adaptive_button(result, "GothicComponentButton")
+	_apply_character_hall_buttons(result)
+	_apply_character_launch_button(result)
+	_shared_character_hall_theme = result
+	return _shared_character_hall_theme
+
+
+static func _build_base_theme() -> Theme:
+	var result := Theme.new()
+	result.default_font_size = 16
+	result.set_color("font_color", "Label", PARCHMENT)
+	result.set_color("font_shadow_color", "Label", Color(0.02, 0.01, 0.01, 0.95))
+	result.set_constant("shadow_offset_x", "Label", 2)
+	result.set_constant("shadow_offset_y", "Label", 2)
+	result.set_color("default_color", "RichTextLabel", PARCHMENT)
+	result.set_stylebox("panel", "ScrollContainer", _flat(Color(0.008, 0.007, 0.006, 0.72), Color(0.28, 0.20, 0.13, 0.62), 1, 8))
+	_apply_base_button(result)
 	return result
 
 
@@ -514,10 +572,19 @@ static func _apply_warehouse_thin_button(theme: Theme) -> void:
 	theme.set_stylebox("disabled", variation, disabled)
 
 
-static func _character_frame_style(texture: Texture2D, fill: Color, feedback_fill := Color.TRANSPARENT) -> AdaptiveButtonStyleBox:
+static func _character_frame_style(
+	texture: Texture2D,
+	fill: Color,
+	feedback_fill := Color.TRANSPARENT,
+	feedback_mask: Texture2D = null,
+	frame_only: Texture2D = null,
+) -> AdaptiveButtonStyleBox:
 	var style := AdaptiveButtonStyleBoxScript.new().configure_small(texture, texture, texture, fill)
 	if feedback_fill != Color.TRANSPARENT:
-		style.set_feedback(feedback_fill, Color.TRANSPARENT, Color.TRANSPARENT, 0, 0, 0, true)
+		if feedback_mask != null and frame_only != null:
+			style.set_precomputed_layered_feedback(feedback_fill, texture, feedback_mask, frame_only)
+		else:
+			style.set_feedback(feedback_fill, Color.TRANSPARENT, Color.TRANSPARENT, 0, 0, 0, true)
 	return style
 
 
@@ -526,16 +593,18 @@ static func _apply_character_choice_variations(
 	normal_variation: StringName,
 	selected_variation: StringName,
 	texture: Texture2D,
+	feedback_mask: Texture2D,
+	frame_only: Texture2D,
 ) -> void:
 	for variation: StringName in [normal_variation, selected_variation]:
 		theme.set_type_variation(variation, "Button")
 		var selected := variation == selected_variation
 		var normal_fill := CHARACTER_SELECTED_FILL if selected else CHARACTER_FRAME_BASE_FILL
 		var hover_fill := CHARACTER_SELECTED_HOVER_FILL if selected else CHARACTER_FRAME_BASE_FILL
-		theme.set_stylebox("normal", variation, _character_frame_style(texture, normal_fill, CHARACTER_SELECTED_FILL if selected else Color.TRANSPARENT))
-		theme.set_stylebox("hover", variation, _character_frame_style(texture, hover_fill, CHARACTER_SELECTED_HOVER_FILL if selected else Color.TRANSPARENT))
-		theme.set_stylebox("focus", variation, _character_frame_style(texture, hover_fill, CHARACTER_SELECTED_HOVER_FILL if selected else Color.TRANSPARENT))
-		theme.set_stylebox("pressed", variation, _character_frame_style(texture, CHARACTER_SELECTED_PRESSED_FILL if selected else CHARACTER_FRAME_BASE_FILL, CHARACTER_SELECTED_PRESSED_FILL if selected else CHARACTER_PRESS_FILL))
+		theme.set_stylebox("normal", variation, _character_frame_style(texture, normal_fill, CHARACTER_SELECTED_FILL if selected else Color.TRANSPARENT, feedback_mask, frame_only))
+		theme.set_stylebox("hover", variation, _character_frame_style(texture, hover_fill, CHARACTER_SELECTED_HOVER_FILL if selected else Color.TRANSPARENT, feedback_mask, frame_only))
+		theme.set_stylebox("focus", variation, _character_frame_style(texture, hover_fill, CHARACTER_SELECTED_HOVER_FILL if selected else Color.TRANSPARENT, feedback_mask, frame_only))
+		theme.set_stylebox("pressed", variation, _character_frame_style(texture, CHARACTER_SELECTED_PRESSED_FILL if selected else CHARACTER_FRAME_BASE_FILL, CHARACTER_SELECTED_PRESSED_FILL if selected else CHARACTER_PRESS_FILL, feedback_mask, frame_only))
 		theme.set_stylebox("disabled", variation, _character_frame_style(texture, CHARACTER_FRAME_BASE_FILL))
 		theme.set_color("font_color", variation, CHARACTER_SELECTED_FONT if selected else PARCHMENT)
 		theme.set_color("font_hover_color", variation, CHARACTER_SELECTED_FONT if selected else Color.WHITE)
@@ -549,13 +618,13 @@ static func _apply_character_choice_variations(
 
 
 static func _apply_character_hall_buttons(theme: Theme) -> void:
-	_apply_character_choice_variations(theme, &"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton", CHARACTER_PROFILE_FRAME_V7)
-	_apply_character_choice_variations(theme, &"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton", CHARACTER_PROFESSION_FRAME_V7)
+	_apply_character_choice_variations(theme, &"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton", CHARACTER_PROFILE_FRAME_V7, CHARACTER_PROFILE_FEEDBACK_MASK_V1, CHARACTER_PROFILE_FRAME_ONLY_V1)
+	_apply_character_choice_variations(theme, &"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton", CHARACTER_PROFESSION_FRAME_V7, CHARACTER_PROFESSION_FEEDBACK_MASK_V1, CHARACTER_PROFESSION_FRAME_ONLY_V1)
 	var ai_variation := &"GothicCharacterAIStatusButton"
 	theme.set_type_variation(ai_variation, "Button")
 	var ai_normal := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, CHARACTER_FRAME_BASE_FILL)
 	var ai_hover := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.075, 0.038, 0.045, 0.96))
-	var ai_pressed := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.11, 0.045, 0.045, 0.98), CHARACTER_PRESS_FILL)
+	var ai_pressed := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.11, 0.045, 0.045, 0.98), CHARACTER_PRESS_FILL, CHARACTER_AI_STATUS_FEEDBACK_MASK_V1, CHARACTER_AI_STATUS_FRAME_ONLY_V1)
 	theme.set_stylebox("normal", ai_variation, ai_normal)
 	theme.set_stylebox("hover", ai_variation, ai_hover)
 	theme.set_stylebox("focus", ai_variation, ai_hover)

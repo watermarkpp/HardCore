@@ -79,7 +79,7 @@ var launch_scene_path := "res://scenes/main.tscn"
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	theme = GothicUIThemeScript.build()
+	theme = GothicUIThemeScript.build_character_hall()
 	_build_background()
 	_build_content_root()
 	_build_header()

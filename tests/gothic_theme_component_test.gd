@@ -8,6 +8,7 @@ const MANIFEST_PATH := "res://assets/ui/gothic_theme/v1/sample/component_manifes
 
 func _ready() -> void:
 	var theme := GothicUIThemeScript.build()
+	assert(GothicUIThemeScript.build() == theme, "full Gothic theme must be shared after its first build")
 	for variation in ["GothicModalFrame", "GothicTitleBar", "GothicInsetFrame", "GothicTabFrame"]:
 		assert(theme.has_stylebox("panel", variation), "%s 缺少公共Panel样式" % variation)
 	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicWarehouseThinButton", "GothicSkillConfigCompactButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentSelectedShopCard", "GothicComponentCloseButton", "GothicCharacterProfileButton", "GothicCharacterSelectedProfileButton", "GothicCharacterProfessionButton", "GothicCharacterSelectedProfessionButton", "GothicCharacterLaunchButton"]:
@@ -243,6 +244,8 @@ func _assert_source_frame_preserved(style: AdaptiveButtonStyleBoxScript) -> void
 		var frame_style := style.feedback_frame_styles[key] as StyleBoxTexture
 		var background_style := style.feedback_background_styles[key] as StyleBoxTexture
 		assert(source_texture != null and frame_style != null and background_style != null)
+		assert(frame_style.modulate_color == Color.WHITE, "source frame layer must remain unmodulated for %s" % key)
+		assert(background_style.modulate_color == style.feedback_style.bg_color, "feedback mask runtime color differs for %s" % key)
 		var source := source_texture.get_image()
 		var frame := frame_style.texture.get_image()
 		var background := background_style.texture.get_image()
@@ -259,5 +262,6 @@ func _assert_source_frame_preserved(style: AdaptiveButtonStyleBoxScript) -> void
 					assert(frame_pixel.is_equal_approx(source_pixel), "source frame pixel changed for %s" % key)
 				if background_pixel.a > 0.01:
 					interior_pixels += 1
+					assert(background_pixel.r > 0.99 and background_pixel.g > 0.99 and background_pixel.b > 0.99, "feedback asset must remain a white alpha mask for %s" % key)
 					assert(frame_pixel.a <= 0.01, "feedback interior overlaps source frame for %s" % key)
 		assert(frame_pixels > 0 and interior_pixels > 0, "layer split produced an empty frame or interior for %s" % key)

@@ -25,6 +25,9 @@ func _run() -> void:
 	assert(startup_source.contains("GameData.ensure_loaded()"), "startup must explicitly open the GameData gate")
 	assert(startup_source.find("_run_finite_loading_phase.call_deferred()") < startup_source.find("load_threaded_request"), "finite loading phase must start before request result is known")
 	assert(startup_source.contains("if not _load_requested or _resource_ready"), "failed request must not transition")
+	var intro_source := FileAccess.get_file_as_string("res://scripts/brand_intro.gd")
+	assert(not intro_source.contains("brand_logo, \"modulate:a\""), "BrandIntro must not fade the approved logo in from transparency")
+	assert(not intro_source.contains("create_timer(0.12)"), "BrandIntro must not add an empty black lead-in before its first frame")
 	var startup: Node = load("res://scenes/startup_loading.tscn").instantiate()
 	startup.auto_start = false
 	add_child(startup)
@@ -74,6 +77,7 @@ func _run() -> void:
 	var android_icon_registered := false
 	var adaptive_foreground_registered := false
 	var adaptive_background_registered := false
+	var intro_first_frame_registered := false
 	for output: Dictionary in outputs:
 		var output_size: Array = output.get("size", [])
 		if output.get("path") == "assets/branding/android_icon_192.png" and output_size.size() == 2 and int(output_size[0]) == 192 and int(output_size[1]) == 192:
@@ -82,9 +86,12 @@ func _run() -> void:
 			adaptive_foreground_registered = true
 		if output.get("path") == "assets/branding/android_adaptive_background_432.png" and output_size.size() == 2 and int(output_size[0]) == 432 and int(output_size[1]) == 432:
 			adaptive_background_registered = true
+		if output.get("path") == "assets/branding/brand_intro_first_frame_1598x720.png" and output_size.size() == 2 and int(output_size[0]) == 1598 and int(output_size[1]) == 720:
+			intro_first_frame_registered = true
 	assert(android_icon_registered)
 	assert(adaptive_foreground_registered)
 	assert(adaptive_background_registered)
+	assert(intro_first_frame_registered, "deterministic opaque BrandIntro first-frame surface is not registered")
 	var legacy_icon := Image.load_from_file("res://assets/branding/android_icon_192.png")
 	var adaptive_foreground := Image.load_from_file("res://assets/branding/android_adaptive_foreground_432.png")
 	var adaptive_background := Image.load_from_file("res://assets/branding/android_adaptive_background_432.png")
@@ -94,6 +101,11 @@ func _run() -> void:
 	assert(adaptive_foreground.get_pixel(0, 0).a == 0.0, "adaptive foreground must leave a transparent Android mask-safe margin")
 	assert(adaptive_foreground.get_pixel(84, 84).a > 0.99, "complete approved logo must begin inside the 264px adaptive safe zone")
 	assert(adaptive_background.get_pixel(0, 0).is_equal_approx(Color.BLACK), "adaptive launcher background must be black")
+	var intro_first_frame := Image.load_from_file("res://assets/branding/brand_intro_first_frame_1598x720.png")
+	assert(intro_first_frame.get_size() == Vector2i(1598, 720))
+	assert(intro_first_frame.get_pixel(0, 0).is_equal_approx(Color.BLACK), "first-frame surface must retain the native black surround")
+	assert(intro_first_frame.get_pixel(799, 317).get_luminance() > 0.02, "first-frame surface center must contain the approved opaque CG artwork")
+	assert(FileAccess.get_sha256("res://assets/branding/brand_intro_first_frame_1598x720.png") == "938d4f7189a90fa08f3565921e316c97d607354110c6b140d46764ef803ea51a")
 	var export_preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	assert(export_preset.contains("launcher_icons/main_192x192=\"res://assets/branding/android_icon_192.png\""))
 	assert(export_preset.contains("launcher_icons/adaptive_foreground_432x432=\"res://assets/branding/android_adaptive_foreground_432.png\""))
@@ -109,8 +121,11 @@ func _run() -> void:
 	var intro: Control = load("res://scenes/brand_intro.tscn").instantiate()
 	intro.auto_advance = false
 	add_child(intro)
+	assert(is_equal_approx((intro.get_node("BrandLogo") as TextureRect).modulate.a, 1.0), "first authored logo frame must be fully opaque before the first draw")
+	assert((intro.get_node("GlowLogo") as TextureRect).modulate.a > 0.0, "first authored frame must include the intended glow instead of an empty black surface")
 	await get_tree().process_frame
 	await get_tree().process_frame
+	assert(is_equal_approx((intro.get_node("BrandLogo") as TextureRect).modulate.a, 1.0), "logo became translucent after the first rendered frame")
 	assert(intro.get_node("Slogan").text == "刷是一种状态，刷没有目的没有终点")
 	var texture: Texture2D = intro.get_node("BrandLogo").texture
 	assert(texture != null)

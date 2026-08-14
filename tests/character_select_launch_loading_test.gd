@@ -20,6 +20,23 @@ func _run() -> void:
 	PlayerState.test_mode = false
 	assert(PlayerState.create_character("首帧", "战士", "男").is_empty())
 	var profile_id := PlayerState.active_profile_id
+	var hall_theme_started := Time.get_ticks_usec()
+	var hall_theme := GothicUIThemeScript.build_character_hall()
+	var first_hall_theme_ms := float(Time.get_ticks_usec() - hall_theme_started) / 1000.0
+	assert(first_hall_theme_ms < 1500.0, "cold character hall theme build regressed: %.3f ms" % first_hall_theme_ms)
+	hall_theme_started = Time.get_ticks_usec()
+	assert(GothicUIThemeScript.build_character_hall() == hall_theme, "character hall theme must be shared")
+	assert(float(Time.get_ticks_usec() - hall_theme_started) / 1000.0 < 100.0, "shared character hall theme lookup regressed")
+	for variation in [
+		&"GothicCharacterProfileButton",
+		&"GothicCharacterSelectedProfileButton",
+		&"GothicCharacterProfessionButton",
+		&"GothicCharacterSelectedProfessionButton",
+		&"GothicCharacterAIStatusButton",
+		&"GothicCharacterLaunchButton",
+		&"GothicComponentButton",
+	]:
+		assert(hall_theme.has_stylebox("normal", variation), "character hall theme missing %s" % variation)
 
 	var launcher: Control = load("res://scenes/character_select.tscn").instantiate()
 	launcher.suppress_scene_change_for_test = true
@@ -94,7 +111,7 @@ func _run() -> void:
 	PlayerState.test_mode = old_test_mode
 	PlayerState.active_profile_id = ""
 	_cleanup()
-	print("CHARACTER_SELECT_LAUNCH_LOADING_PASS: Loading is visible before hydration, duplicate launch is blocked, and failure recovers")
+	print("CHARACTER_SELECT_LAUNCH_LOADING_PASS: cold hall theme %.3f ms, shared reuse, Loading-first hydration, and failure recovery" % first_hall_theme_ms)
 	get_tree().quit(0)
 
 
