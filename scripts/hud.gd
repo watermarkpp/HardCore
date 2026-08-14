@@ -1837,10 +1837,10 @@ func set_zone_name(zone_name: String) -> void:
 			zone_label.text = current_zone_name
 
 
-func open_shop(display_name: String, stock: Array) -> void:
+func open_shop(display_name: String, stock: Array, merchant_context: Dictionary = {}) -> void:
 	_close_modal_panels()
 	_ensure_shop_panel()
-	shop_panel.open_for(display_name, stock)
+	shop_panel.open_for(display_name, stock, merchant_context)
 
 
 func set_shop_sell_quotes(quotes: Dictionary) -> void:

@@ -5,10 +5,12 @@ class MockHUD:
 	extends RefCounted
 	var opened_shop := ""
 	var opened_stock: Array = []
+	var opened_context: Dictionary = {}
 
-	func open_shop(shop_name: String, stock: Array) -> void:
+	func open_shop(shop_name: String, stock: Array, merchant_context: Dictionary = {}) -> void:
 		opened_shop = shop_name
 		opened_stock = stock
+		opened_context = merchant_context.duplicate(true)
 
 
 class MockGame:

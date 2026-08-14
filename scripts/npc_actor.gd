@@ -66,7 +66,10 @@ func interact(game: Node) -> void:
 		var active_stock := shop_stock
 		if stock_key == "books":
 			active_stock = game._build_skill_book_stock(PlayerState.profession)
-		game.hud.open_shop(npc_name, active_stock)
+		# Keep the merchant identity explicit even when the stock is empty or
+		# filtered. ShopPanel must not infer authority from stock[0].
+		var merchant_context := GameData.merchant_context(stock_key)
+		game.hud.open_shop(npc_name, active_stock, merchant_context)
 	elif npc_kind == "trainer":
 		game.hud.open_skill_trainer(npc_name)
 	elif npc_kind == "quest":

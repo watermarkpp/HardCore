@@ -35,6 +35,15 @@ func _run() -> void:
 	panel.sell_requested.connect(func(request: Dictionary) -> void: sell_requests.append(request))
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
+	var medicine_context := GameData.merchant_context("medicine")
+	panel.open_for("空库存药剂商", [], medicine_context)
+	assert(
+		str(panel._active_merchant_context().get("merchant_id", ""))
+		== str(medicine_context.get("merchant_id", "")),
+		"空库存商店必须使用显式 merchant_context"
+	)
+	panel.open_for("测试商店", STOCK)
+	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	await get_tree().process_frame
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")

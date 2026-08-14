@@ -38,6 +38,7 @@ var decrease_quantity_button: Button
 var increase_quantity_button: Button
 var sell_confirmation: Control
 var stock: Array = []
+var _merchant_context: Dictionary = {}
 var _trade_mode := "buy"
 var _buy_quotes: Array = []
 var _sell_quotes: Dictionary = {}
@@ -326,8 +327,9 @@ func _section_title(node_name: String, text_value: String, section_width: float)
 	return label
 
 
-func open_for(display_name: String, new_stock: Array) -> void:
+func open_for(display_name: String, new_stock: Array, merchant_context: Dictionary = {}) -> void:
 	stock = new_stock
+	_merchant_context = merchant_context.duplicate(true) if not merchant_context.is_empty() else {}
 	_buy_quotes.clear()
 	_sell_quotes.clear()
 	_selected_sell_index = -1
@@ -908,6 +910,8 @@ func _buy_selected() -> void:
 
 
 func _active_merchant_context() -> Dictionary:
+	if not _merchant_context.is_empty():
+		return _merchant_context.duplicate(true)
 	if stock.is_empty() or not stock[0] is Dictionary:
 		return {}
 	return (stock[0].get("merchant_context", {}) as Dictionary).duplicate(true)

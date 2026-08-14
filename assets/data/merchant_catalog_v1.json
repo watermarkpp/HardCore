@@ -216,17 +216,6 @@
           "resolved": true
         },
         {
-          "offerIndex": 1,
-          "offerId": "offer:1:298:1",
-          "tradeLine": "WoodenBow",
-          "itemName": "WoodenBow",
-          "itemKey": "service:298",
-          "serviceIndex": 298,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
           "offerIndex": 2,
           "offerId": "offer:2:281:1",
           "tradeLine": "虎牙刀",
@@ -255,17 +244,6 @@
           "itemName": "乌木剑",
           "itemKey": "service:223",
           "serviceIndex": 223,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
-          "offerIndex": 5,
-          "offerId": "offer:5:299:1",
-          "tradeLine": "EbonyBow",
-          "itemName": "EbonyBow",
-          "itemKey": "service:299",
-          "serviceIndex": 299,
           "packCount": 1,
           "supply": "unlimited_static_trade",
           "resolved": true
@@ -304,34 +282,12 @@
           "resolved": true
         },
         {
-          "offerIndex": 9,
-          "offerId": "offer:9:300:1",
-          "tradeLine": "ShortBow",
-          "itemName": "ShortBow",
-          "itemKey": "service:300",
-          "serviceIndex": 300,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
           "offerIndex": 10,
           "offerId": "offer:10:226:1",
           "tradeLine": "铁剑",
           "itemName": "铁剑",
           "itemKey": "service:226",
           "serviceIndex": 226,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
-          "offerIndex": 11,
-          "offerId": "offer:11:301:1",
-          "tradeLine": "BoneBow",
-          "itemName": "BoneBow",
-          "itemKey": "service:301",
-          "serviceIndex": 301,
           "packCount": 1,
           "supply": "unlimited_static_trade",
           "resolved": true
@@ -392,17 +348,6 @@
           "resolved": true
         },
         {
-          "offerIndex": 17,
-          "offerId": "offer:17:302:1",
-          "tradeLine": "CompoundBow",
-          "itemName": "CompoundBow",
-          "itemKey": "service:302",
-          "serviceIndex": 302,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
           "offerIndex": 18,
           "offerId": "offer:18:836:1",
           "tradeLine": "鹤嘴锄",
@@ -414,9 +359,76 @@
           "resolved": true
         }
       ],
-      "excludedOffers": [],
+      "excludedOffers": [
+        {
+          "offerIndex": 1,
+          "offerId": "offer:1:298:1",
+          "tradeLine": "WoodenBow",
+          "itemName": "WoodenBow",
+          "itemKey": "service:298",
+          "serviceIndex": 298,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 5,
+          "offerId": "offer:5:299:1",
+          "tradeLine": "EbonyBow",
+          "itemName": "EbonyBow",
+          "itemKey": "service:299",
+          "serviceIndex": 299,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 9,
+          "offerId": "offer:9:300:1",
+          "tradeLine": "ShortBow",
+          "itemName": "ShortBow",
+          "itemKey": "service:300",
+          "serviceIndex": 300,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 11,
+          "offerId": "offer:11:301:1",
+          "tradeLine": "BoneBow",
+          "itemName": "BoneBow",
+          "itemKey": "service:301",
+          "serviceIndex": 301,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 17,
+          "offerId": "offer:17:302:1",
+          "tradeLine": "CompoundBow",
+          "itemName": "CompoundBow",
+          "itemKey": "service:302",
+          "serviceIndex": 302,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        }
+      ],
       "projectOverrides": {
-        "excludedItemNames": [],
+        "excludedItemNames": [
+          "BoneBow",
+          "CompoundBow",
+          "EbonyBow",
+          "ShortBow",
+          "WoodenBow"
+        ],
         "singleUnitOffersOnly": false
       },
       "unresolvedTradeLines": []

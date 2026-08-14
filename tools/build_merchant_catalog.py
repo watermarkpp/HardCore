@@ -34,6 +34,18 @@ EXCLUDED_OFFER_NAMES = {
 }
 SINGLE_UNIT_STOCK_KEYS = {"medicine"}
 
+# The primary blacksmith script contains these legacy bow lines, but the
+# project item/runtime catalog does not support them as buyable gameplay
+# instances. Keep them in excludedOffers for source auditability while
+# removing them from the live starter_gear stock.
+EXCLUDED_OFFER_NAMES["starter_gear"] = {
+    "WoodenBow",
+    "EbonyBow",
+    "ShortBow",
+    "BoneBow",
+    "CompoundBow",
+}
+
 
 def sections(text: str) -> dict[str, list[str]]:
     result: dict[str, list[str]] = {}
@@ -95,7 +107,11 @@ def parse_merchant(stock_key: str, npc_id: str, merchant_id: str, relative: str,
     for offer in source_offers:
         exclusion_reason = ""
         if offer["itemName"] in excluded_names:
-            exclusion_reason = "project_owner_removed_unrelated_general_goods"
+            exclusion_reason = (
+                "project_owner_removed_unsupported_legacy_bow_offer"
+                if stock_key == "starter_gear"
+                else "project_owner_removed_unrelated_general_goods"
+            )
         elif stock_key in SINGLE_UNIT_STOCK_KEYS and int(offer["packCount"]) != 1:
             exclusion_reason = "project_stackable_consumables_use_single_unit_offers"
         if exclusion_reason:

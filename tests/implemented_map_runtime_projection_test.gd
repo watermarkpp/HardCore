@@ -60,6 +60,19 @@ func _run() -> void:
 		await get_tree().process_frame
 	await get_tree().process_frame
 	assert(int(game.current_map_id) == 4, "game must boot on runtime map 4")
+	var pharmacist: NPCActor = null
+	for candidate: Node in get_tree().get_nodes_in_group("interactable"):
+		if candidate is NPCActor and str((candidate as NPCActor).stock_key) == "medicine":
+			pharmacist = candidate as NPCActor
+			break
+	assert(pharmacist != null, "runtime map 4 must spawn the Bichon pharmacist")
+	assert(not pharmacist.shop_stock.is_empty(), "Bichon pharmacist must receive the primary medicine stock")
+	game.hud.open_shop("比奇药剂商", [], GameData.merchant_context("medicine"))
+	assert(
+		str(game.hud.shop_panel._active_merchant_context().get("merchant_id", ""))
+		== str(GameData.merchant_context("medicine").get("merchant_id", "")),
+		"shop sell authority must survive an empty stock via explicit context"
+	)
 	var monster := GameData.get_monster_by_id(21)
 	assert(not monster.is_empty(), "monster 21 must exist")
 	var enemy: EnemyActor = game._spawn_enemy(

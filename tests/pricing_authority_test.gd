@@ -18,6 +18,9 @@ func _run() -> void:
 	var weapon_stock := GameData.merchant_stock("starter_gear")
 	var book_stock := GameData.merchant_stock("books")
 	var medicine_stock := GameData.merchant_stock("medicine")
+	assert(not weapon_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")).ends_with("Bow")), "铁匠货单不应暴露不受支持的 Bow 弓类")
+	var starter_catalog: Dictionary = GameData.merchant_catalog.get("merchants", {}).get("starter_gear", {})
+	assert((starter_catalog.get("excludedOffers", []) as Array).size() == 5, "Bow 主源行必须保留在 excludedOffers 审计证据中")
 	assert(str(general_stock[0].get("name", "")) == "随机传送卷")
 	assert(not general_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) in ["蜡烛", "火把", "护身符"]))
 	assert(str(weapon_stock[0].get("name", "")) == "木剑")
@@ -42,14 +45,24 @@ func _run() -> void:
 	assert(bool(sell.get("valid", false)) and int(sell.get("unit_price", 0)) == 28)
 	var starter_context := GameData.merchant_context("starter_gear")
 	var general_context := GameData.merchant_context("general")
+	var book_context := GameData.merchant_context("books")
+	var medicine_context := GameData.merchant_context("medicine")
 	var accepted_sell := PricingServiceScript.quote_sell(
 		wood, GameData.get_item_record("木剑"), full_instance, 1, starter_context
 	)
 	var cross_merchant_sell := PricingServiceScript.quote_sell(
 		wood, GameData.get_item_record("木剑"), full_instance, 1, general_context
 	)
+	var book_merchant_sell := PricingServiceScript.quote_sell(
+		wood, GameData.get_item_record("木剑"), full_instance, 1, book_context
+	)
+	var medicine_merchant_sell := PricingServiceScript.quote_sell(
+		wood, GameData.get_item_record("木剑"), full_instance, 1, medicine_context
+	)
 	assert(bool(accepted_sell.get("valid", false)), "主库Types允许的武器没有出售报价")
 	assert(bool(cross_merchant_sell.get("valid", false)), "项目统一回收规则没有允许杂货商回收武器")
+	assert(bool(book_merchant_sell.get("valid", false)), "项目统一回收规则没有允许书店回收武器")
+	assert(bool(medicine_merchant_sell.get("valid", false)), "项目统一回收规则没有允许药剂商回收武器")
 	var rated_context := starter_context.duplicate(true)
 	rated_context["merchant_id"] = "merchant.test.rate"
 	rated_context["merchant_rate_bps"] = 13000

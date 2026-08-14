@@ -1774,6 +1774,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 		match stock_key:
 			"general": stock = _general_shop_stock()
 			"starter_gear": stock = _starter_gear_stock()
+			"medicine": stock = _medicine_shop_stock()
 			"books": stock = _build_skill_book_stock(PlayerState.profession)
 		_spawn_npc(npc_data.get("screen_position_px", Vector2.ZERO), name, role, stock, stock_key, int(npc_data.get("appearance", -1)), content.get("map_center_screen_position_px", _current_map_center_screen_position_px()))
 	for portal: Dictionary in content.get("portals", []):
@@ -1863,6 +1864,7 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 			"general": stock = _general_shop_stock()
 			"starter_gear": stock = _starter_gear_stock()
 			"mid_gear": stock = _mid_gear_stock()
+			"medicine": stock = _medicine_shop_stock()
 			"books": stock = _build_skill_book_stock(PlayerState.profession)
 		var npc_name := str(npc_data.get("name", "NPC"))
 		var npc_position: Vector2 = npc_data.get("position", Vector2.ZERO)
@@ -1910,6 +1912,10 @@ func _starter_gear_stock() -> Array:
 	return GameData.merchant_stock("starter_gear")
 
 
+func _medicine_shop_stock() -> Array:
+	return GameData.merchant_stock("medicine")
+
+
 func _mid_gear_stock() -> Array:
 	# Fail closed until the stable stock key is mapped to an exact primary NPC
 	# [Trade] script.  Guessed/project-authored inventories are forbidden.
@@ -1934,8 +1940,8 @@ func _spawn_outskirts_content() -> void:
 func _spawn_city_content() -> void:
 	var general_stock := _general_shop_stock()
 	var book_stock := _build_skill_book_stock(PlayerState.profession)
-	_spawn_npc(Vector2(-250, -60), "杂货商", "shop", general_stock)
-	_spawn_npc(Vector2(250, -60), "书店老板", "shop", book_stock)
+	_spawn_npc(Vector2(-250, -60), "杂货商", "shop", general_stock, "general")
+	_spawn_npc(Vector2(250, -60), "书店老板", "shop", book_stock, "books")
 	_spawn_npc(Vector2(0, -255), "武馆教头", "trainer")
 	_spawn_npc(Vector2(-420, 210), "比奇老兵", "quest")
 	_spawn_portal(Vector2(0, 390), "比奇郊外", "前往比奇郊外")
