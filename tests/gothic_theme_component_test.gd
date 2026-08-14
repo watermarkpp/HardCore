@@ -123,15 +123,22 @@ func _assert_main_hud_styles_preserved(theme: Theme) -> void:
 			var state: String = ["normal", "hover", "pressed"][index]
 			var style := theme.get_stylebox(state, variation) as StyleBoxFlat
 			assert(style.border_width_left == int(widths[index]), "Main HUD style changed: %s.%s" % [variation, state])
-	for fill_variation: StringName in [&"GothicArtToggleFill", &"GothicArtNavFill", &"GothicArtBagFill", &"GothicArtAttackFill"]:
+	var original_fill_colors := {
+		&"GothicArtToggleFill": Color(0.19, 0.08, 0.16, 0.82),
+		&"GothicArtNavFill": Color(0.055, 0.11, 0.16, 0.82),
+		&"GothicArtBagFill": Color(0.17, 0.085, 0.025, 0.82),
+		&"GothicArtAttackFill": Color(0.30, 0.018, 0.018, 0.90),
+	}
+	for fill_variation: StringName in original_fill_colors:
 		var fill := theme.get_stylebox("panel", fill_variation) as StyleBoxFlat
 		assert(fill != null, "Main HUD fill is missing: %s" % fill_variation)
-		assert(fill.bg_color.a == 0.0 and fill.border_color.a == 0.0, "Main HUD fill must remain transparent: %s" % fill_variation)
+		assert(fill.bg_color.is_equal_approx(original_fill_colors[fill_variation]), "Main HUD original fill changed: %s" % fill_variation)
 	var transparent_hover := theme.get_stylebox("hover", "GothicTransparentButton") as StyleBoxFlat
 	var transparent_pressed := theme.get_stylebox("pressed", "GothicTransparentButton") as StyleBoxFlat
 	assert(transparent_hover != null and transparent_pressed != null)
 	assert(transparent_hover.bg_color.a == 0.0 and transparent_hover.border_color.a == 0.0)
 	assert(transparent_pressed.bg_color.a == 0.0 and transparent_pressed.border_color.a == 0.0)
+	assert(transparent_pressed.shadow_size == 0 and transparent_pressed.shadow_color.a == 0.0, "transparent HUD press state retained the synthetic dark-red shadow")
 
 
 func _assert_shop_card_contract(manifest: Dictionary) -> void:

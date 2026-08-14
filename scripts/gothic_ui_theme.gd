@@ -147,15 +147,15 @@ static func build() -> Theme:
 	result.set_type_variation("GothicArtPanelFill", "Panel")
 	result.set_stylebox("panel", "GothicArtPanelFill", _flat(Color(0.018, 0.016, 0.015, 0.86), Color.TRANSPARENT, 0, 14))
 	result.set_type_variation("GothicArtToggleFill", "Panel")
-	result.set_stylebox("panel", "GothicArtToggleFill", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 12))
+	result.set_stylebox("panel", "GothicArtToggleFill", _flat(Color(0.19, 0.08, 0.16, 0.82), Color.TRANSPARENT, 0, 12))
 	result.set_type_variation("GothicArtNavFill", "Panel")
-	result.set_stylebox("panel", "GothicArtNavFill", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 12))
+	result.set_stylebox("panel", "GothicArtNavFill", _flat(Color(0.055, 0.11, 0.16, 0.82), Color.TRANSPARENT, 0, 12))
 	result.set_type_variation("GothicArtBagFill", "Panel")
-	result.set_stylebox("panel", "GothicArtBagFill", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 12))
+	result.set_stylebox("panel", "GothicArtBagFill", _flat(Color(0.17, 0.085, 0.025, 0.82), Color.TRANSPARENT, 0, 12))
 	result.set_type_variation("GothicArtCircleFill", "Panel")
 	result.set_stylebox("panel", "GothicArtCircleFill", _flat(Color(0.018, 0.022, 0.022, 0.88), Color.TRANSPARENT, 0, 40))
 	result.set_type_variation("GothicArtAttackFill", "Panel")
-	result.set_stylebox("panel", "GothicArtAttackFill", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 60))
+	result.set_stylebox("panel", "GothicArtAttackFill", _flat(Color(0.30, 0.018, 0.018, 0.90), Color.TRANSPARENT, 0, 60))
 	result.set_type_variation("GothicArtItemFill", "Panel")
 	result.set_stylebox("panel", "GothicArtItemFill", _flat(Color(0.018, 0.015, 0.014, 0.94), Color.TRANSPARENT, 0, 7))
 	result.set_type_variation("GothicModalSurface", "Panel")
@@ -352,6 +352,11 @@ static func _apply_flat_press_feedback(style: StyleBox) -> void:
 	if not style is StyleBoxFlat:
 		return
 	var flat := style as StyleBoxFlat
+	if flat.bg_color.a <= 0.0 and flat.border_color.a <= 0.0:
+		flat.shadow_color = Color.TRANSPARENT
+		flat.shadow_size = 0
+		flat.shadow_offset = Vector2.ZERO
+		return
 	flat.shadow_color = BUTTON_PRESS_SHADOW
 	flat.shadow_size = 4
 	flat.shadow_offset = Vector2.ZERO
