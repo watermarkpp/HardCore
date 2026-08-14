@@ -94,7 +94,7 @@ func _build_main_page() -> void:
 	status_label.add_theme_color_override("font_color", Color("b9c9a8"))
 	status.add_child(status_label)
 	continue_button = _menu_button(main_page, "ContinueButton", "继续游戏", 198, "system_menu.continue")
-	continue_button.theme_type_variation = "GothicComponentSelectedButton"
+	continue_button.theme_type_variation = "GothicComponentButton"
 	continue_button.pressed.connect(_request_continue)
 	settings_button = _menu_button(main_page, "SettingsButton", "游戏设置", 270, "system_menu.settings")
 	settings_button.pressed.connect(show_settings_page)
@@ -136,7 +136,7 @@ func _build_settings_page() -> void:
 	note.theme_type_variation = "GothicMutedLabel"
 	settings_page.add_child(note)
 	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 430, "system_menu.settings.back")
-	settings_back_button.theme_type_variation = "GothicComponentSelectedButton"
+	settings_back_button.theme_type_variation = "GothicComponentButton"
 	settings_back_button.pressed.connect(show_main_page)
 	var footer := Label.new()
 	footer.name = "SettingsFooter"

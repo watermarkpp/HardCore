@@ -29,7 +29,7 @@ func _run() -> void:
 	var modal_rect: Rect2 = (panel.modal as Control).get_global_rect()
 	assert(modal_rect.position.x >= 0.0 and modal_rect.position.y >= 0.0, "死亡复活框超出屏幕左上安全范围")
 	assert(modal_rect.end.x <= host.get_global_rect().end.x and modal_rect.end.y <= host.get_global_rect().end.y, "死亡复活框超出屏幕右下安全范围")
-	assert(panel.process_mode == Node.PROCESS_MODE_WHEN_PAUSED, "死亡界面必须能在暂停状态工作")
+	assert(panel.process_mode == Node.PROCESS_MODE_ALWAYS, "死亡界面必须在正常运行与暂停状态都能接收输入")
 	assert(panel.modal.theme_type_variation == "GothicModalFrame", "死亡界面没有复用公共哥特外框")
 	assert(panel.modal.get_node("ModalSurface").get_script() == GothicFrameFillScript, "死亡界面一级框没有使用代码背景")
 	assert(panel.modal.has_node("ModalFrameSafetyOverlay"), "死亡界面缺少双圈安全覆盖层")

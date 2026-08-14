@@ -29,7 +29,7 @@ func _run() -> void:
 	assert(dialog.inner_fill.get_script() == GothicFrameFillScript and dialog.inner_fill.show_behind_parent, "确认框没有使用贴合单圈框的代码背景")
 	assert(dialog.cancel_button.size.y >= 56 and dialog.confirm_button.size.y >= 56, "确认按钮触控高度不足")
 	assert(dialog.cancel_button.theme_type_variation == "GothicComponentButton", "取消按钮未复用公共 Theme")
-	assert(dialog.confirm_button.theme_type_variation == "GothicComponentSelectedButton", "确认按钮未复用公共 Theme")
+	assert(dialog.confirm_button.theme_type_variation == "GothicComponentButton", "确认按钮不应作为持久选择")
 	var safe_rect := Rect2(Vector2(20, 16), dialog.modal_frame.size - Vector2(40, 32))
 	for control: Control in [dialog.title_label, dialog.message_label, dialog.cancel_button, dialog.confirm_button]:
 		assert(safe_rect.encloses(Rect2(control.position, control.size)), "%s 超出确认框安全内容区" % control.name)
@@ -62,6 +62,7 @@ func _run() -> void:
 	assert(dialog.current_request.tone == "danger", "危险确认 tone 错误")
 	assert(dialog.confirm_button.text == "确认放弃", "危险确认按钮文字没有更新")
 	dialog.confirm_button.pressed.emit()
+	assert(dialog.confirm_button.get_meta("gothic_feedback_state", "") == "busy", "confirmation action missing busy feedback")
 	assert(not dialog.visible and confirmed_requests.size() == 1, "确认操作没有关闭并发出信号")
 	assert(confirmed_requests[0].action_id == "quest.abandon", "确认信号 action_id 错误")
 	assert(confirmed_requests[0].context.quest_id == "Q001", "确认信号没有原样返回 context")

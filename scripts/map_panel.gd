@@ -41,6 +41,7 @@ var teleport_rules: Dictionary = {}
 var _selected_map_id := -1
 var _selected_world_node_id := "bich_province"
 var _detail_base_text := ""
+var _teleport_request_locked := false
 
 
 func _ready() -> void:
@@ -211,7 +212,8 @@ func _build_map_detail_section() -> void:
 	teleport_button.text = "传送未开放"
 	teleport_button.position = Vector2(20, 452)
 	teleport_button.size = Vector2(266, 54)
-	teleport_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Teleport is a transition action; map/world cards own persistent selection.
+	teleport_button.theme_type_variation = "GothicComponentButton"
 	teleport_button.add_theme_font_size_override("font_size", 18)
 	teleport_button.disabled = true
 	teleport_button.pressed.connect(_teleport_selected)
@@ -228,6 +230,8 @@ func _build_compatibility_list() -> void:
 
 
 func open_panel() -> void:
+	_teleport_request_locked = false
+	GothicUIThemeScript.clear_button_feedback(teleport_button)
 	var previous := _selected_world_node_id
 	world_tree_nodes = _build_runtime_catalog()
 	if not _world_node(previous).is_empty():
@@ -512,7 +516,7 @@ func _refresh_teleport_button() -> void:
 		return
 	var rule := _teleport_rule(_selected_map_id)
 	var enabled := bool(rule.get("enabled", false))
-	teleport_button.disabled = not enabled
+	teleport_button.disabled = _teleport_request_locked or not enabled
 	teleport_button.text = "传送" if enabled else "传送未开放"
 	var destination_label := str(rule.get("destination_label", ""))
 	var reason := str(rule.get("reason", "该地图尚未开放传送"))
@@ -522,11 +526,20 @@ func _refresh_teleport_button() -> void:
 
 
 func _teleport_selected() -> void:
+	if _teleport_request_locked:
+		return
 	if _selected_map_id <= 0:
 		return
 	var rule := _teleport_rule(_selected_map_id)
 	if not bool(rule.get("enabled", false)):
 		return
+	_teleport_request_locked = true
+	GothicUIThemeScript.set_button_feedback(
+		teleport_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+		"map.teleport",
+	)
+	_refresh_teleport_button()
 	var destination_map_id := int(rule.get("destination_map_id", _selected_map_id))
 	var request := {
 		"contract_id": "ui.map.teleport.v1",
@@ -642,5 +655,7 @@ func _section_title(node_name: String, text_value: String, section_width: float)
 
 
 func _close() -> void:
+	_teleport_request_locked = false
+	GothicUIThemeScript.clear_button_feedback(teleport_button)
 	hide()
 	closed.emit()

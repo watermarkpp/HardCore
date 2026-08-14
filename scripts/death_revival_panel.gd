@@ -26,10 +26,18 @@ var special_status_label: Label
 var result_label: Label
 var death_context: Dictionary = {}
 var revival_options: Dictionary = {}
+var _revival_request_locked := false
+var _revival_feedback_serial := 0
 
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	# Death choices are shown while the gameplay tree is still running.  A
+	# WHEN_PAUSED panel renders correctly but rejects real Control GUI input when
+	# the tree is not paused (the Android touch path never reaches Button._gui_input).
+	# ALWAYS keeps the modal interactive in both the normal death flow and any
+	# future paused presentation; GameRoot's death input lock still blocks all
+	# gameplay actions behind this panel.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	theme = GothicUIThemeScript.build()
@@ -126,7 +134,6 @@ func _build_modal() -> void:
 	modal.add_child(loss_label)
 
 	town_button = _revival_button("TownRevivalButton", "最近城镇复活", 270, "death.revival.town")
-	town_button.theme_type_variation = "GothicComponentSelectedButton"
 	town_button.pressed.connect(_request_revival.bind(TOWN_SLOT))
 	town_status_label = _status_label("TownStatus", 336)
 	special_button = _revival_button("SpecialRevivalButton", "特殊复活", 370, "death.revival.special")
@@ -182,6 +189,8 @@ func _status_label(node_name: String, y: float) -> Label:
 
 
 func open_death_screen(context := {}) -> void:
+	_clear_revival_feedback()
+	_revival_request_locked = false
 	death_context = context.duplicate(true) if context is Dictionary else {}
 	message_label.text = str(death_context.get("message", "你的灵魂正在等待归来"))
 	loss_label.text = str(death_context.get("loss_text", ""))
@@ -191,6 +200,8 @@ func open_death_screen(context := {}) -> void:
 
 
 func close_death_screen() -> void:
+	_revival_request_locked = false
+	_clear_revival_feedback()
 	hide()
 
 
@@ -222,12 +233,17 @@ func update_revival_option(option_slot: String, state: Dictionary) -> void:
 
 func apply_revival_result(result: Dictionary) -> void:
 	var success := bool(result.get("success", false))
+	_revival_request_locked = false
 	result_label.text = str(result.get("message", "复活成功" if success else "当前无法复活"))
 	result_label.add_theme_color_override("font_color", Color("a9c28e") if success else Color("d47868"))
 	if result.get("revival_options", null) is Array:
 		set_revival_options(result.get("revival_options", []))
 	if success:
 		close_death_screen()
+	else:
+		_refresh_option(TOWN_SLOT, town_button, town_status_label, "最近城镇复活")
+		_refresh_option(SPECIAL_SLOT, special_button, special_status_label, "特殊复活")
+		_show_revival_result_feedback(false)
 
 
 func _refresh_option(slot: String, button: Button, status: Label, fallback_label: String) -> void:
@@ -236,7 +252,7 @@ func _refresh_option(slot: String, button: Button, status: Label, fallback_label
 	var enabled := configured and bool(option.get("enabled", false))
 	var countdown := maxi(0, int(option.get("countdown_seconds", 0)))
 	button.text = str(option.get("label", fallback_label))
-	button.disabled = not enabled or countdown > 0
+	button.disabled = _revival_request_locked or not enabled or countdown > 0
 	button.set_meta("method_id", str(option.get("method_id", "")))
 	if not configured:
 		status.text = "等待复活规则"
@@ -253,15 +269,51 @@ func _refresh_option(slot: String, button: Button, status: Label, fallback_label
 
 
 func _request_revival(option_slot: String) -> void:
+	if _revival_request_locked:
+		return
 	var option: Dictionary = revival_options.get(option_slot, {})
 	if option.is_empty() or not bool(option.get("enabled", false)) or int(option.get("countdown_seconds", 0)) > 0:
 		return
 	var method_id := str(option.get("method_id", ""))
 	if method_id.is_empty():
 		return
+	_revival_request_locked = true
+	var button := town_button if option_slot == TOWN_SLOT else special_button
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+		"death.revival",
+	)
+	_refresh_option(TOWN_SLOT, town_button, town_status_label, "最近城镇复活")
+	_refresh_option(SPECIAL_SLOT, special_button, special_status_label, "特殊复活")
 	revival_requested.emit({
 		"contract_id": CONTRACT_ID,
 		"death_id": str(death_context.get("death_id", "")),
 		"option_slot": option_slot,
 		"method_id": method_id,
 	})
+
+
+func _clear_revival_feedback() -> void:
+	_revival_feedback_serial += 1
+	GothicUIThemeScript.clear_button_feedback(town_button)
+	GothicUIThemeScript.clear_button_feedback(special_button)
+
+
+func _show_revival_result_feedback(success: bool) -> void:
+	_revival_feedback_serial += 1
+	var serial := _revival_feedback_serial
+	var button := town_button
+	if special_button.has_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE):
+		button = special_button
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"death.revival",
+	)
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _revival_feedback_serial and is_instance_valid(button):
+			GothicUIThemeScript.clear_button_feedback(button)
+	)

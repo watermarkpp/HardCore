@@ -201,6 +201,8 @@ func _run() -> void:
 	panel.map_selected.connect(func(map_id: int) -> void: travel_ids.append(map_id))
 	panel._teleport_selected()
 	assert(teleport_requests.size() == 1, "传送按钮没有发出结构化传送请求")
+	assert(panel.teleport_button.theme_type_variation == "GothicComponentButton", "传送动作不应伪装为持久地图选择")
+	assert(panel.teleport_button.get_meta("gothic_feedback_state", "") == "transition", "传送请求没有保持过渡反馈")
 	assert(teleport_requests[0].get("selected_map_id", -1) == COW_TEMPLE_FLOOR_ONE_ID, "传送请求没有保留选中的牛魔寺庙一层")
 	assert(teleport_requests[0].get("destination_map_id", -1) == COW_TEMPLE_FLOOR_ONE_ID, "传送请求目的地图错误")
 	assert(teleport_requests[0].get("arrival_anchor_id", "") == "cow_temple.floor1.exit", "传送请求没有携带一层出口锚点")

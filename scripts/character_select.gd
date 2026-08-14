@@ -5,6 +5,7 @@ const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd
 const EquipmentCharacterPreviewScript := preload("res://scripts/equipment_character_preview.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 
 signal character_creation_requested(request: Dictionary)
 signal character_launch_requested(request: Dictionary)
@@ -47,6 +48,7 @@ var profile_cards: Dictionary = {}
 var profile_scroll: ScrollContainer
 var ai_teammate_toggle: CheckButton
 var enter_button: Button
+var launch_loading_overlay: Control
 var preview_visual_root: Control
 var preview_name_label: Label
 var preview_detail_label: Label
@@ -68,6 +70,8 @@ var _roster_drag_start_position := Vector2.ZERO
 var _roster_drag_start_scroll := 0
 var _roster_drag_touch_index := -1
 var _roster_suppress_press_until_msec := 0
+var _launch_in_progress := false
+var launch_scene_path := "res://scenes/main.tscn"
 
 
 func _ready() -> void:
@@ -79,6 +83,7 @@ func _ready() -> void:
 	_build_roster_panel()
 	_build_preview_panel()
 	_build_creation_panel()
+	_build_launch_loading_overlay()
 	_refresh_profiles()
 	TouchScrollSupportScript.attach_tree(self)
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
@@ -318,7 +323,10 @@ func _build_preview_panel() -> void:
 	enter_button.text = "进入 HardCore"
 	enter_button.position = Vector2(94, 458)
 	enter_button.size = Vector2(296, 62)
-	enter_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Enter is a transition action, not a persistent selection.  The selected
+	# character card owns the persistent selection highlight; this button only
+	# receives an explicit transition cue while the loading surface takes over.
+	enter_button.theme_type_variation = "GothicComponentButton"
 	enter_button.add_theme_font_size_override("font_size", 20)
 	enter_button.set_meta("stable_id", "character.launch")
 	enter_button.pressed.connect(_enter_selected_character)
@@ -333,6 +341,13 @@ func _build_preview_panel() -> void:
 	launch_hint.theme_type_variation = "GothicMutedLabel"
 	launch_hint.add_theme_font_size_override("font_size", 12)
 	panel.add_child(launch_hint)
+
+
+func _build_launch_loading_overlay() -> void:
+	launch_loading_overlay = LoadingTransitionOverlayScript.new()
+	launch_loading_overlay.name = "CharacterLaunchLoading"
+	launch_loading_overlay.set_meta("stable_id", "character.launch.loading")
+	add_child(launch_loading_overlay)
 
 
 func _build_creation_panel() -> void:
@@ -636,10 +651,33 @@ func build_creation_request() -> Dictionary:
 
 
 func _enter_selected_character() -> void:
+	if _launch_in_progress:
+		return
 	if selected_main_profile_id.is_empty():
 		message_label.text = "请先选择主角色"
 		return
-	if not PlayerState.select_character(selected_main_profile_id):
+	_launch_in_progress = true
+	enter_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		enter_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+		"character.launch",
+	)
+	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
+	# Give the renderer one frame to present the final Loading surface before
+	# profile hydration and main-scene construction perform blocking work.
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	# The hall already hydrates a profile when it becomes selected. Do not parse
+	# the same save a second time on launch; only hydrate when the authority no
+	# longer matches the requested profile.
+	if (
+		PlayerState.active_profile_id != selected_main_profile_id
+		and not PlayerState.select_character(selected_main_profile_id)
+	):
+		_launch_in_progress = false
+		launch_loading_overlay.hide()
 		message_label.text = "角色存档不存在或已损坏"
 		_refresh_profiles()
 		return
@@ -648,7 +686,20 @@ func _enter_selected_character() -> void:
 	character_launch_requested.emit(last_launch_request.duplicate(true))
 	if suppress_scene_change_for_test:
 		return
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	if not ResourceLoader.exists(launch_scene_path):
+		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+		return
+	var scene_error := get_tree().change_scene_to_file(launch_scene_path)
+	if scene_error != OK:
+		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+
+
+func _restore_after_launch_failure(reason: String) -> void:
+	_launch_in_progress = false
+	launch_loading_overlay.hide()
+	GothicUIThemeScript.clear_button_feedback(enter_button)
+	enter_button.disabled = selected_main_profile_id.is_empty()
+	message_label.text = reason
 
 
 func build_launch_request() -> Dictionary:

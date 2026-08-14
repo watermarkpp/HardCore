@@ -44,6 +44,7 @@ var _buy_quotes: Array = []
 var _selected_buy_index := -1
 var _buy_request_locked := false
 var _buy_lock_serial := 0
+var _transaction_feedback_serial := 0
 var _sell_quotes: Dictionary = {}
 var _selected_sell_index := -1
 var _sell_quantity := 1
@@ -204,7 +205,8 @@ func _build_detail_section() -> void:
 	buy_button.position = Vector2(47, 318)
 	buy_button.size = Vector2(270, 51)
 	buy_button.set_meta("calibration_layout_revision", 1)
-	buy_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Buying is a transaction action; the buy/sell tabs own persistent selection.
+	buy_button.theme_type_variation = "GothicComponentButton"
 	buy_button.add_theme_font_size_override("font_size", 18)
 	buy_button.pressed.connect(_buy_selected)
 	panel.add_child(buy_button)
@@ -374,6 +376,7 @@ func set_buy_quotes(quotes: Array) -> void:
 
 
 func apply_buy_result(result: Dictionary) -> void:
+	_show_transaction_result_feedback(buy_button, bool(result.get("success", false)), "shop.buy")
 	detail_label.text = "[color=#e8c277]%s[/color]" % str(result.get("message", "购买请求已处理。"))
 	if result.get("quotes", null) is Array:
 		set_buy_quotes(result.get("quotes", []))
@@ -502,6 +505,7 @@ func _select_shop_item(index: int) -> void:
 
 
 func _set_trade_mode(mode: String) -> void:
+	_clear_transaction_feedback()
 	_trade_mode = "sell" if mode == "sell" else "buy"
 	var buying := _trade_mode == "buy"
 	buy_tab_button.theme_type_variation = "GothicComponentSelectedButton" if buying else "GothicComponentButton"
@@ -566,6 +570,7 @@ func apply_sell_result(result: Dictionary) -> void:
 		if not bool(result.get("success", false)):
 			_batch_sell_queue.clear()
 			_batch_sell_active = false
+			_show_transaction_result_feedback(sell_quantity_button, false, "shop.sell")
 			_selected_sell_indices.clear()
 			_sell_quantities.clear()
 			_apply_inventory_change()
@@ -586,6 +591,7 @@ func apply_sell_result(result: Dictionary) -> void:
 		_rebuild_sell_cards()
 		_set_sell_actions_enabled(false)
 		_request_sell_quotes()
+	_show_transaction_result_feedback(sell_quantity_button, bool(result.get("success", false)), "shop.sell")
 
 
 func _request_sell_quotes() -> void:
@@ -728,6 +734,8 @@ func _request_selected_quantity() -> void:
 
 
 func _request_sell_batch() -> void:
+	if _batch_sell_active:
+		return
 	if _selected_sell_indices.is_empty() and _selected_sell_index >= 0:
 		_selected_sell_indices[_selected_sell_index] = true
 		_sell_quantities[_selected_sell_index] = _sell_quantity
@@ -792,6 +800,11 @@ func _confirm_pending_sell() -> void:
 
 
 func _emit_sell_request(request: Dictionary) -> void:
+	GothicUIThemeScript.set_button_feedback(
+		sell_quantity_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"shop.sell",
+	)
 	detail_label.text = "[color=#d8bd8c]出售请求已提交，等待玩法层返回交易结果。[/color]"
 	sell_requested.emit(request.duplicate(true))
 
@@ -953,8 +966,20 @@ func _set_shop_card_selected(card: Button, selected: bool) -> void:
 
 
 func _repair_all() -> void:
+	GothicUIThemeScript.set_button_feedback(
+		repair_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"shop.repair",
+	)
+	var equipment_before := PlayerState.equipment.duplicate(true)
+	var gold_before := PlayerState.gold
 	detail_label.text = PlayerState.repair_all_equipment(_active_merchant_context())
 	_refresh_gold()
+	var repair_changed_state := (
+		PlayerState.gold < gold_before
+		and PlayerState.equipment != equipment_before
+	)
+	_show_transaction_result_feedback(repair_button, repair_changed_state, "shop.repair")
 
 
 func _buy_selected() -> void:
@@ -970,6 +995,11 @@ func _buy_selected() -> void:
 		detail_label.text = str(quote.get("reason", "该商品暂时无法购买。"))
 		return
 	detail_label.text = "[color=#d8bd8c]购买请求已提交，等待玩法层返回交易结果。[/color]"
+	GothicUIThemeScript.set_button_feedback(
+		buy_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"shop.buy",
+	)
 	_buy_request_locked = true
 	_buy_lock_serial += 1
 	var lock_serial := _buy_lock_serial
@@ -1000,6 +1030,29 @@ func _refresh_buy_action_enabled() -> void:
 	buy_button.disabled = _buy_request_locked or not bool(quote.get("valid", false))
 
 
+func _clear_transaction_feedback() -> void:
+	_transaction_feedback_serial += 1
+	GothicUIThemeScript.clear_button_feedback(buy_button)
+	GothicUIThemeScript.clear_button_feedback(repair_button)
+	GothicUIThemeScript.clear_button_feedback(sell_quantity_button)
+
+
+func _show_transaction_result_feedback(button: Button, success: bool, group: String) -> void:
+	_transaction_feedback_serial += 1
+	var serial := _transaction_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		group,
+	)
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _transaction_feedback_serial and is_instance_valid(button):
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
 func _active_merchant_context() -> Dictionary:
 	if not _merchant_context.is_empty():
 		return _merchant_context.duplicate(true)
@@ -1017,6 +1070,7 @@ func _value(value: Variant) -> String:
 
 
 func _close() -> void:
+	_clear_transaction_feedback()
 	sell_confirmation.close_confirmation()
 	_pending_sell_request.clear()
 	hide()

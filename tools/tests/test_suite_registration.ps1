@@ -74,6 +74,8 @@ $SafeLogoutExpected = @(
     'tests/home_resolution_side_effect_guard_test.tscn',
     'tests/service_home_no_current_position_fallback_test.tscn',
     'tests/death_revival_home_failure_test.tscn',
+    'tests/death_revival_touch_input_test.tscn',
+    'tests/character_select_launch_loading_test.tscn',
     'tests/map_transition_missing_arrival_test.tscn',
     'tests/portal_home_lookup_failure_test.tscn'
 )

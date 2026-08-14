@@ -29,6 +29,7 @@ func _run() -> void:
 	assert(absf(modal_center.x - menu.size.x * 0.5) <= 1.0 and absf(modal_center.y - menu.size.y * 0.5) <= 1.0, "暂停菜单数学上未相对完整屏幕居中")
 	assert(menu.current_page == "main" and menu.main_page.visible and not menu.settings_page.visible, "暂停菜单默认页面错误")
 	assert(menu.continue_button.size.y >= 56, "继续游戏按钮触控区不足")
+	assert(menu.continue_button.theme_type_variation == &"GothicComponentButton", "继续游戏动作不应伪装为持久选择")
 	assert(menu.character_select_button.size.y >= 56, "返回人物选择按钮触控区不足")
 	assert(menu.save_exit_button.size.y >= 56, "保存并退出按钮触控区不足")
 	assert(menu.settings_button.size.y >= 56, "游戏设置按钮触控区不足")
@@ -68,6 +69,7 @@ func _run() -> void:
 	assert(menu.music_status_label.text == "已关闭" and menu.sfx_status_label.text == "已关闭", "关闭音频后状态文字没有更新")
 	menu.settings_back_button.pressed.emit()
 	assert(menu.current_page == "main", "设置返回按钮没有回到游戏菜单")
+	assert(menu.settings_back_button.theme_type_variation == &"GothicComponentButton", "设置返回动作不应伪装为持久选择")
 
 	var action_counts := {"continue": 0, "character": 0, "exit": 0}
 	menu.continue_requested.connect(func() -> void: action_counts["continue"] += 1)

@@ -96,6 +96,8 @@ func _run() -> void:
 	assert(panel.status_label.text.is_empty(), "可接任务不应在接受按钮左侧重复显示尚未接受")
 	assert(not panel.abandon_button.visible, "未接受任务不应显示放弃任务按钮")
 	panel._act()
+	assert(panel.action_button.theme_type_variation == "GothicComponentButton", "任务操作不应伪装为持久任务选择")
+	assert(panel.action_button.get_meta("gothic_feedback_state", "") == "success", "接取任务成功没有进入一秒成功反馈")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(str(PlayerState.quest_states.get("bich_beginner_gear", {}).get("status", "")) == "active", "接受任务按钮没有调用现有任务接取接口")

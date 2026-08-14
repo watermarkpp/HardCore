@@ -27,6 +27,7 @@ func _ready() -> void:
 		assert(image.get_pixel(0, 0).a < 0.04, "%s 的透明角未清理干净" % entry.get("id", ""))
 	_assert_shop_card_contract(manifest)
 	_assert_shop_card_inventory_feedback(theme)
+	_assert_button_interaction_feedback(theme)
 	_assert_v3_fill_geometry()
 	print("GOTHIC_THEME_COMPONENT_TEST_PASS：10类公共组件、透明角、商品卡安全区与Theme状态样式均通过")
 	get_tree().quit(0)
@@ -152,3 +153,50 @@ func _assert_shop_card_inventory_feedback(theme: Theme) -> void:
 	var selected_inventory := theme.get_stylebox("normal", "GothicComponentSelectedSlotButton") as StyleBoxFlat
 	var selected_shop := theme.get_stylebox("normal", "GothicComponentSelectedShopCard") as StyleBoxFlat
 	assert(selected_shop.bg_color == selected_inventory.bg_color and selected_shop.border_color == selected_inventory.border_color, "交易卡选中态没有复用背包格高亮")
+
+
+func _assert_button_interaction_feedback(theme: Theme) -> void:
+	# A real Button must expose every transient state through the public Theme,
+	# while persistent selection is represented by the selected variation rather
+	# than a hidden global timer or a second node layered on the layout.
+	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		assert(theme.has_stylebox(state, "Button"), "基础 Button 缺少 %s 状态" % state)
+		assert(theme.has_stylebox(state, "GothicComponentButton"), "公共按钮缺少 %s 状态" % state)
+	var button := Button.new()
+	button.theme = theme
+	button.theme_type_variation = &"GothicComponentButton"
+	button.toggle_mode = true
+	button.custom_minimum_size = Vector2(260, 56)
+	var minimum_before := button.custom_minimum_size
+	button.set_pressed_no_signal(true)
+	assert(button.button_pressed, "真实 Button 无法保持 toggle 选中态")
+	var regular_normal := button.get_theme_stylebox("normal")
+	var regular_pressed := button.get_theme_stylebox("pressed")
+	assert(regular_normal != null and regular_pressed != null and regular_normal != regular_pressed, "normal/pressed 没有可区分的视觉状态")
+	var selected := Button.new()
+	selected.theme = theme
+	selected.theme_type_variation = &"GothicComponentSelectedButton"
+	var selected_style := theme.get_stylebox("normal", &"GothicComponentSelectedButton") as AdaptiveButtonStyleBoxScript
+	assert(selected_style != null and selected_style.has_feedback(), "持久选中变体没有代码高亮层")
+	assert(selected_style != theme.get_stylebox("normal", &"GothicComponentButton"), "持久选中态与普通态复用了同一框体")
+	assert(selected_style.compact.texture.resource_path.ends_with("button_compact_pressed_v4.png"), "持久选中态没有使用按下后的暗金框体")
+	var pressed_style := theme.get_stylebox("pressed", &"GothicComponentButton") as AdaptiveButtonStyleBoxScript
+	assert(pressed_style != null and pressed_style.has_feedback(), "按下态没有代码高亮层")
+	GothicUIThemeScript.set_button_feedback(button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "entry")
+	assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE, "") == GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION)
+	assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_GROUP, "") == "entry")
+	assert(button.has_theme_stylebox_override("normal"), "transition 反馈没有接管 normal 状态")
+	assert(button.custom_minimum_size == minimum_before, "反馈状态修改了按钮校准尺寸")
+	GothicUIThemeScript.clear_button_feedback(button)
+	assert(not button.has_theme_stylebox_override("normal"), "清除反馈后残留 normal 覆盖")
+	assert(not button.has_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE), "清除反馈后残留状态元数据")
+	assert(GothicUIThemeScript.feedback_state_is_persistent(GothicUIThemeScript.BUTTON_FEEDBACK_SELECTED))
+	assert(not GothicUIThemeScript.feedback_state_is_persistent(GothicUIThemeScript.BUTTON_FEEDBACK_BUSY))
+	assert(GothicUIThemeScript.feedback_state_is_transient(GothicUIThemeScript.BUTTON_FEEDBACK_BUSY))
+	for transient_state in [GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS, GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE]:
+		GothicUIThemeScript.set_button_feedback(button, transient_state)
+		assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE, "") == transient_state)
+		assert(button.has_theme_stylebox_override("normal"), "%s 反馈没有接管 normal 状态" % transient_state)
+		GothicUIThemeScript.clear_button_feedback(button)
+	button.free()
+	selected.free()

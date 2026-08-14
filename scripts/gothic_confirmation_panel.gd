@@ -96,7 +96,9 @@ func _build_interface() -> void:
 	confirm_button.name = "Confirm"
 	confirm_button.position = Vector2(300, 207)
 	confirm_button.size = Vector2(202, 58)
-	confirm_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Confirmation is an action, not a persistent selection.  The owner drives
+	# the transaction/transition feedback explicitly after this dialog emits.
+	confirm_button.theme_type_variation = "GothicComponentButton"
 	confirm_button.add_theme_font_size_override("font_size", 17)
 	confirm_button.set_meta("stable_id", "confirmation.confirm")
 	confirm_button.pressed.connect(_confirm)
@@ -104,6 +106,7 @@ func _build_interface() -> void:
 
 
 func open_confirmation(config: Dictionary) -> void:
+	GothicUIThemeScript.clear_button_feedback(confirm_button)
 	var tone := str(config.get("tone", "normal"))
 	if tone != "danger":
 		tone = "normal"
@@ -145,6 +148,11 @@ func _apply_tone(tone: String) -> void:
 func _confirm() -> void:
 	if not visible:
 		return
+	GothicUIThemeScript.set_button_feedback(
+		confirm_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"confirmation",
+	)
 	var request := current_request.duplicate(true)
 	close_confirmation()
 	confirmed.emit(request)
@@ -153,6 +161,7 @@ func _confirm() -> void:
 func _cancel() -> void:
 	if not visible:
 		return
+	GothicUIThemeScript.clear_button_feedback(confirm_button)
 	var request := current_request.duplicate(true)
 	close_confirmation()
 	cancelled.emit(request)

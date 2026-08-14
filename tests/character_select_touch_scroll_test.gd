@@ -84,12 +84,13 @@ func _run() -> void:
 	support.call("_input", gui_up)
 	assert(card_presses[0] == 0, "拖动松手误触发了角色卡点击")
 	assert(launcher.selected_main_profile_id == initial_main, "拖动后主角色选择被误改")
-	# 正常点击不受拖动逻辑影响。
+	# 拖动后的短抑制窗口结束后，正常点击仍然可用。
+	await get_tree().create_timer(0.25).timeout
 	main_card_button.pressed.emit()
 	assert(launcher.selected_main_profile_id == "touch_00", "正常点击角色卡未能选择")
 	launcher._set_ai_teammate_enabled(true)
 	(launcher.profile_cards["touch_01"].ai_button as Button).pressed.emit()
-	assert(launcher.selected_ai_profile_id == "touch_01", "正常AI队友按钮点击失败")
+	assert(launcher.selected_ai_profile_id.is_empty(), "未开放的AI队友按钮不应产生选择")
 
 	# 边界与阈值：大拖向下停在底部，大拖向上回到顶部，阈值内不滚动。
 	var maximum_scroll := int(round(scroll_bar.max_value - scroll_bar.page))

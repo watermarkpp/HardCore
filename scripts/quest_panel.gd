@@ -32,6 +32,8 @@ var current_quest_id := ""
 var npc_display_name := "比奇老兵"
 var _selected_quest_id := ""
 var _pending_abandon_quest_id := ""
+var _action_request_locked := false
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
@@ -228,7 +230,9 @@ func _build_quest_detail() -> void:
 	action_button.name = "ActionButton"
 	action_button.position = Vector2(204, 436)
 	action_button.size = Vector2(400, 52)
-	action_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Accept/claim is a transaction action.  Quest cards keep the persistent
+	# selection state; this button receives only an explicit operation cue.
+	action_button.theme_type_variation = "GothicComponentButton"
 	action_button.add_theme_font_size_override("font_size", 18)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
@@ -240,6 +244,8 @@ func _build_quest_detail() -> void:
 
 
 func open_for(display_name: String) -> void:
+	_action_request_locked = false
+	_clear_action_feedback()
 	npc_display_name = display_name
 	_selected_quest_id = PlayerState.current_bich_quest_id()
 	refresh()
@@ -431,13 +437,25 @@ func _quest_state_text(quest_id: String, active_quest_id: String) -> String:
 
 
 func _act() -> void:
-	action_button.disabled = false
+	if _action_request_locked:
+		return
 	if current_quest_id.is_empty():
 		return
+	_action_request_locked = true
+	action_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		action_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"quest.action",
+	)
+	var before_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
 	if not PlayerState.quest_states.has(current_quest_id):
 		status_label.text = PlayerState.accept_quest(current_quest_id)
 	else:
 		status_label.text = PlayerState.claim_quest(current_quest_id)
+	var after_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
+	_action_request_locked = false
+	_show_action_result_feedback(after_state != before_state and not after_state.is_empty())
 	_selected_quest_id = PlayerState.current_bich_quest_id()
 	refresh.call_deferred()
 
@@ -495,6 +513,11 @@ func _confirm_abandon() -> void:
 	var quest_id := _pending_abandon_quest_id
 	_pending_abandon_quest_id = ""
 	abandon_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		abandon_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"quest.abandon",
+	)
 	status_label.text = "等待放弃结果"
 	abandon_requested.emit(quest_id)
 
@@ -503,12 +526,51 @@ func apply_abandon_result(result: Dictionary) -> void:
 	var quest_id := str(result.get("quest_id", ""))
 	if not quest_id.is_empty() and quest_id != current_quest_id:
 		return
+	_show_abandon_result_feedback(bool(result.get("success", false)))
 	status_label.text = str(result.get("message", "放弃任务请求已处理"))
 	if bool(result.get("success", false)):
 		_selected_quest_id = PlayerState.current_bich_quest_id()
 		refresh.call_deferred()
 	else:
 		abandon_button.disabled = false
+
+
+func _clear_action_feedback() -> void:
+	_action_feedback_serial += 1
+	GothicUIThemeScript.clear_button_feedback(action_button)
+	GothicUIThemeScript.clear_button_feedback(abandon_button)
+
+
+func _show_action_result_feedback(success: bool) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		action_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"quest.action",
+	)
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(action_button):
+			GothicUIThemeScript.clear_button_feedback(action_button)
+	)
+
+
+func _show_abandon_result_feedback(success: bool) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		abandon_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"quest.abandon",
+	)
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(abandon_button):
+			GothicUIThemeScript.clear_button_feedback(abandon_button)
+	)
 
 
 func _framed_section(node_name: String, rect: Rect2) -> Control:
