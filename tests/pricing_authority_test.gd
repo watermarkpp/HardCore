@@ -14,6 +14,25 @@ func _run() -> void:
 	var potion := GameData.get_item_price_record("金创药(小量)")
 	assert(int(wood.get("base_price", 0)) == 50 and str(wood.get("item_key", "")) == "service:221")
 	assert(int(potion.get("base_price", 0)) == 40 and str(potion.get("source", {}).get("distribution", "")) == "server.crystal.cjlaaa")
+	var candidate_file := FileAccess.open("res://assets/data/equipment_price_candidates_v1.json", FileAccess.READ)
+	assert(candidate_file != null, "正式装备缺价候选合同缺失")
+	var candidate_contract: Variant = JSON.parse_string(candidate_file.get_as_text())
+	assert(candidate_contract is Dictionary and str(candidate_contract.get("contractId", "")) == "gameplay.pricing.equipment_missing_server_price_candidates.v1")
+	assert(candidate_contract.get("configuredServerDataFallbackEvidence", []).size() == 4)
+	for evidence: Variant in candidate_contract.get("configuredServerDataFallbackEvidence", []):
+		assert(evidence is Dictionary and str((evidence as Dictionary).get("status", "")) == "missing", "价格候选没有耗尽配置中的更高优先级来源")
+	var expected_candidate_prices := {
+		"天魔神甲": 50000,
+		"圣战头盔": 35000,
+		"圣战项链": 35000,
+		"圣战手镯": 35000,
+		"圣战戒指": 35000,
+	}
+	for item_name: String in expected_candidate_prices:
+		var candidate_record := GameData.get_item_price_record(item_name)
+		assert(int(candidate_record.get("base_price", 0)) == int(expected_candidate_prices[item_name]), "%s缺少已审核价格候选" % item_name)
+		assert(str(candidate_record.get("source", {}).get("distribution", "")) == "reference.21cq.classic_176")
+	assert(str(wood.get("source", {}).get("distribution", "")) == "server.crystal.cjlaaa", "候选价格不得覆盖主数据库已有价格")
 	var general_stock := GameData.merchant_stock("general")
 	var weapon_stock := GameData.merchant_stock("starter_gear")
 	var book_stock := GameData.merchant_stock("books")

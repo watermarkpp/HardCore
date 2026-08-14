@@ -20,6 +20,7 @@ const BAG_COLUMNS := 6
 const BAG_VISIBLE_CAPACITY := 30
 const BAG_CAPACITY := 100
 const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
+const ITEM_DETAIL_LAYOUT_REVISION := 1
 const BAG_CELL_SIZE := Vector2(56, 64)
 const BAG_HORIZONTAL_SEPARATION := 1
 const BAG_VERTICAL_SEPARATION := 4
@@ -98,8 +99,8 @@ func _ready() -> void:
 	_build_context_menu()
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
-	PlayerState.inventory_changed.connect(_on_panel_data_changed)
-	PlayerState.equipment_changed.connect(_on_panel_data_changed)
+	PlayerState.inventory_changed.connect(_on_inventory_data_changed)
+	PlayerState.equipment_changed.connect(_on_equipment_data_changed)
 	PlayerState.profile_changed.connect(_refresh_character_stats)
 	refresh()
 	_refresh_bag_grid.call_deferred()
@@ -170,8 +171,9 @@ func _build_attribute_panel() -> void:
 	detail_label = RichTextLabel.new()
 	detail_label.name = "ItemDetail"
 	detail_label.set_meta("calibration_runtime_text", true)
+	detail_label.set_meta("calibration_layout_revision", ITEM_DETAIL_LAYOUT_REVISION)
 	detail_label.position = Vector2(16, 312)
-	detail_label.size = Vector2(218, 220)
+	detail_label.size = Vector2(218, 204)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -363,7 +365,7 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	equipment_slot_labels[slot] = slot_label
 
 
-func _on_panel_data_changed() -> void:
+func _on_inventory_data_changed() -> void:
 	# PlayerState emits inventory_changed without an index remap contract.  A
 	# removal/sort can therefore make the previous numeric selection refer to a
 	# different item.  Drop it before rebuilding so details never describe the
@@ -371,6 +373,18 @@ func _on_panel_data_changed() -> void:
 	# semantic selection after their mutation completes.
 	selected_inventory_index = -1
 	selected_inventory_indices.clear()
+	if not visible:
+		_refresh_pending = true
+		return
+	refresh()
+
+
+func _on_equipment_data_changed() -> void:
+	# Durability ticks emit equipment_changed while the player is inspecting a
+	# bag item. They do not change inventory indices, so preserve the semantic
+	# bag selection and its detail instead of treating the tick as a removal or
+	# sort. Equip/unequip mutations also emit inventory_changed and still take
+	# the fail-closed path above.
 	if not visible:
 		_refresh_pending = true
 		return
@@ -881,10 +895,22 @@ func _item_equipment_detail(stack: Dictionary, item: Dictionary) -> String:
 	var category := str(item.get("category", ""))
 	var current_durability := int(stack.get("durability", item.get("maxDurability", 1)))
 	var maximum_durability := int(stack.get("max_durability", item.get("maxDurability", 1)))
-	return "[color=#f2c783][font_size=18]%s[/font_size][/color]\n%s　重量 %d\n耐久 %d/%d\n%s\n%s\n穿戴要求：%s%s" % [
+	return "[color=#f2c783][font_size=18]%s[/font_size][/color]\n%s　重量 %d\n耐久 %d/%d\n%s\n%s\n穿戴要求：%s" % [
 		stack.get("name", ""), category, int(item.get("weight", 0)), current_durability, maximum_durability,
-		_stat_line(item), _advanced_stat_line(item), EquipmentRulesScript.requirement_label(item), _comparison_text(item, _comparison_slot(category)),
+		_stat_line(item), _advanced_stat_line(item), _player_requirement_label(item),
 	]
+
+
+func _player_requirement_label(item: Dictionary) -> String:
+	var requirement := EquipmentRulesScript.requirement_for(item)
+	var labels := {
+		EquipmentRulesScript.NEED_LEVEL: "等级",
+		EquipmentRulesScript.NEED_ATTACK: "攻击",
+		EquipmentRulesScript.NEED_MAGIC: "魔法",
+		EquipmentRulesScript.NEED_TAO: "道术",
+	}
+	var need_type := int(requirement.get("type", EquipmentRulesScript.NEED_LEVEL))
+	return "%s%d" % [str(labels.get(need_type, "特殊条件")), maxi(0, int(requirement.get("value", 0)))]
 
 
 func _equipment_detail(slot: String, record: Dictionary) -> String:
@@ -924,31 +950,6 @@ func _advanced_stat_line(item: Dictionary) -> String:
 		if float(modifiers.get("criticalChance", 0.0)) != 0.0:
 			parts.append("暴击 +%.1f%%" % (float(modifiers.get("criticalChance", 0.0)) * 100.0))
 	return "　".join(parts) if not parts.is_empty() else "无额外属性"
-
-
-func _comparison_text(item: Dictionary, slot: String) -> String:
-	if slot.is_empty() or _slot_is_empty(slot):
-		return ""
-	var current := GameData.get_item_record(str(PlayerState.equipment.get(slot, {}).get("name", "")))
-	var delta := _simple_power(item) - _simple_power(current)
-	var color := "#65d67d" if delta > 0 else ("#ef6e63" if delta < 0 else "#c9bda8")
-	return "\n对比%s：[color=%s]%+d综合基础值[/color]" % [slot, color, delta]
-
-
-func _simple_power(item: Dictionary) -> int:
-	var result := 0
-	for key: String in ["attackMin", "attackMax", "magicMin", "magicMax", "taoMin", "taoMax", "defenseMin", "defenseMax", "mdefMin", "mdefMax", "hpBonus", "mpBonus"]:
-		if item.get(key, null) != null:
-			result += int(item.get(key, 0))
-	return result
-
-
-func _comparison_slot(category: String) -> String:
-	var slots := _slots_for_category(category)
-	for slot: String in slots:
-		if not _slot_is_empty(slot):
-			return slot
-	return slots[0] if not slots.is_empty() else ""
 
 
 func _slots_for_category(category: String) -> Array[String]:

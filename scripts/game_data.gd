@@ -19,6 +19,7 @@ const BICH_COMMON_ART_PATH := "res://assets/data/bich_common_client_art_sources.
 const BOSS_SERVICE_RULES_PATH := "res://assets/data/boss_service_rules.json"
 const BICH_COMMUNITY_BASELINE_PATH := "res://assets/data/bich_community_baseline.json"
 const SERVICE_ITEM_CATALOG_PATH := "res://assets/data/service_item_catalog.json"
+const EQUIPMENT_PRICE_CANDIDATES_PATH := "res://assets/data/equipment_price_candidates_v1.json"
 const MERCHANT_CATALOG_PATH := "res://assets/data/merchant_catalog_v1.json"
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
@@ -51,6 +52,7 @@ var bich_common_art: Dictionary = {}
 var boss_service_rules: Dictionary = {}
 var bich_community_baseline: Dictionary = {}
 var service_item_catalog: Dictionary = {}
+var equipment_price_candidates: Dictionary = {}
 var merchant_catalog: Dictionary = {}
 var maps: Array = []
 var monsters: Array = []
@@ -142,6 +144,7 @@ func load_database() -> bool:
 	_load_boss_service_rules()
 	_load_service_reference()
 	_load_service_item_catalog()
+	_load_equipment_price_candidates()
 	_load_merchant_catalog()
 	_build_indexes()
 	load_error = ""
@@ -180,6 +183,18 @@ func _load_service_item_catalog() -> void:
 		service_item_catalog = parsed
 	else:
 		push_error("完整物品目录不是有效JSON：%s" % SERVICE_ITEM_CATALOG_PATH)
+
+
+func _load_equipment_price_candidates() -> void:
+	equipment_price_candidates = {}
+	if not FileAccess.file_exists(EQUIPMENT_PRICE_CANDIDATES_PATH):
+		return
+	var file := FileAccess.open(EQUIPMENT_PRICE_CANDIDATES_PATH, FileAccess.READ)
+	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+	if parsed is Dictionary:
+		equipment_price_candidates = parsed
+	else:
+		push_warning("装备价格候选文件不是有效JSON：%s" % EQUIPMENT_PRICE_CANDIDATES_PATH)
 
 
 func _load_merchant_catalog() -> void:
@@ -682,6 +697,12 @@ func _build_price_index() -> void:
 	for raw: Variant in service_item_catalog.get("runtimeItems", []):
 		_register_price_record(raw)
 	for raw: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
+		_register_price_record(raw)
+	# Primary database records always register first. These candidates are used
+	# only for exact official items proven missing from every configured
+	# server_data source; _register_price_record never overwrites an existing
+	# primary record.
+	for raw: Variant in equipment_price_candidates.get("records", []):
 		_register_price_record(raw)
 
 

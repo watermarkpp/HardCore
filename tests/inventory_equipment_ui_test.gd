@@ -77,6 +77,21 @@ func _run() -> void:
 	_assert_six_column_geometry(panel, "刷新后")
 	for cell_index in range(100):
 		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
+	panel._select_inventory_item(0)
+	var selected_detail_before_durability := panel.detail_label.text
+	PlayerState.equipment_changed.emit()
+	assert(
+		panel.selected_inventory_index == 0
+		and panel.selected_inventory_indices.has(0)
+		and panel.detail_label.text == selected_detail_before_durability,
+		"装备耐久刷新不得清空背包选择或把属性详情恢复成默认提示"
+	)
+	PlayerState.inventory_changed.emit()
+	assert(
+		panel.selected_inventory_index == -1
+		and panel.selected_inventory_indices.is_empty(),
+		"没有索引重映射合同的背包结构变化仍必须清空旧选择"
+	)
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
 	assert(bag_scroll.has_theme_stylebox_override("panel"), "背包物品阵列外框必须由局部样式覆盖移除")
 	var bag_viewport_style := bag_scroll.get_theme_stylebox("panel") as StyleBoxEmpty
@@ -110,11 +125,22 @@ func _run() -> void:
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")
 	assert(panel.equipment_stats_label is RichTextLabel and panel.equipment_stats_label.scroll_active, "人物属性超长时没有右侧滑块")
 	assert(panel.detail_label.scroll_active, "物品属性超长时没有右侧滑块")
+	assert(
+		panel.detail_label.position.is_equal_approx(Vector2(16, 312))
+		and panel.detail_label.size.is_equal_approx(Vector2(218, 204))
+		and int(panel.detail_label.get_meta("calibration_layout_revision", 0)) == InventoryPanel.ITEM_DETAIL_LAYOUT_REVISION,
+		"物品属性文字区必须上收并拒绝旧存档把它压回下方"
+	)
+	var attribute_decoration := panel.get_node("AttributePanel/AttributePanelDecoration") as Control
+	assert(
+		panel.detail_label.position.y + panel.detail_label.size.y
+		<= attribute_decoration.position.y + attribute_decoration.size.y,
+		"物品属性文字区超出了人物属性二级装饰框下边缘"
+	)
 	for saved_path: String in [
 		"AttributePanel/AttributeTitle",
 		"AttributePanel/CharacterStats",
 		"AttributePanel/ItemDetailTitle",
-		"AttributePanel/ItemDetail",
 		"EquipmentPanel/EquipmentTitle",
 		"BagPanel/BagTitle",
 	]:
@@ -158,6 +184,10 @@ func _run() -> void:
 	var attack_before := int(PlayerState.computed_stats.get("attack_max", 0))
 	panel._select_inventory_item(0)
 	assert("匕首" in panel.detail_label.text, "点击背包物品没有显示物品属性")
+	assert("穿戴要求：" in panel.detail_label.text, "装备详情缺少玩家可读的穿戴要求")
+	assert("（" not in panel.detail_label.text and "对比武器" not in panel.detail_label.text, "装备详情仍显示来源括号或无意义的武器对比")
+	for forbidden_source_word: String in ["equipment.attribute", "confidence", "source", "StdItems"]:
+		assert(forbidden_source_word not in panel.detail_label.text, "装备详情泄露程序来源字段：%s" % forbidden_source_word)
 	panel.context_menu.clear()
 	panel._context_actions.clear()
 	panel._add_inventory_context_actions(0)

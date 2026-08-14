@@ -77,6 +77,7 @@ func _run() -> void:
 	assert("金币" in shop.repair_button.text and str(PlayerState.repair_cost(blacksmith_context)) in shop.repair_button.text, "商店没有显示唯一维修价格预览")
 
 	_verify_batch_all_equipment_contract(blacksmith_context)
+	_verify_live_high_gear_repair_contract(blacksmith_context)
 
 	print("EQUIPMENT_DURABILITY_POLICY_PASS：零耐久保留且零属性、唯一维修、价格预览和原最大耐久恢复正常")
 	get_tree().quit(0)
@@ -174,6 +175,48 @@ func _verify_batch_all_equipment_contract(blacksmith_context: Dictionary) -> voi
 			GameData.get_item_price_record(item_name), GameData.get_item_record(item_name), equipped, blacksmith_context
 		)
 		assert(bool(quote.get("valid", false)), "铁匠[Types]错误阻止维修%s" % slot)
+
+
+func _verify_live_high_gear_repair_contract(blacksmith_context: Dictionary) -> void:
+	# Regression from the device save: raw durability damage existed on every
+	# slot, but only 乌木剑 had a database price, so the old plan silently skipped
+	# the armor and 圣战 jewelry. Every exact reviewed candidate must now enter the
+	# same atomic full-repair plan.
+	PlayerState.reset_progress(false)
+	PlayerState.level = 50
+	PlayerState.gender = "男"
+	var item_by_slot := {
+		"武器": "乌木剑",
+		"衣服": "天魔神甲",
+		"头盔": "圣战头盔",
+		"项链": "圣战项链",
+		"左手镯": "圣战手镯",
+		"右手镯": "圣战手镯",
+		"左戒指": "圣战戒指",
+		"右戒指": "圣战戒指",
+	}
+	for slot: String in item_by_slot:
+		var item_name := str(item_by_slot[slot])
+		var instance: Dictionary = PlayerState._make_item_instance(item_name, GameData.get_item_record(item_name))
+		assert(not instance.is_empty(), "实机维修回归装备不存在: %s" % item_name)
+		instance["instance_id"] = "repair-live:%s" % slot
+		var maximum_raw := int(instance.get("max_durability_raw", 0))
+		assert(maximum_raw > 1000)
+		instance["durability_raw"] = maximum_raw - 857
+		PlayerState._sync_durability_compatibility_fields(instance)
+		PlayerState.equipment[slot] = instance
+	PlayerState.recalculate_stats(false)
+	var expected_slots := ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
+	var plan := PlayerState._repair_plan(blacksmith_context)
+	assert(bool(plan.get("valid", false)) and plan.get("slots", []) == expected_slots, "实机高阶装备没有全部进入维修报价清单")
+	var total_cost := int(plan.get("total_price", 0))
+	assert(total_cost > 0)
+	PlayerState.gold = total_cost
+	assert(PlayerState.repair_all_equipment(blacksmith_context).begins_with("全部装备维修完成"))
+	assert(PlayerState.gold == 0)
+	for slot: String in expected_slots:
+		var equipped: Dictionary = PlayerState.equipment[slot]
+		assert(int(equipped.get("durability_raw", -1)) == int(equipped.get("max_durability_raw", 0)), "%s没有被铁匠修满" % slot)
 
 
 func _install_batch_fixture(damage_every_slot: bool, full_slot := "") -> void:
