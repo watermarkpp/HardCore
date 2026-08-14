@@ -44,6 +44,48 @@ $GodotConsole = (Resolve-Path -LiteralPath $GodotConsole).Path
 $BaselineApkPath = (Resolve-Path -LiteralPath $BaselineApkPath).Path
 $AndroidRoot = (Resolve-Path -LiteralPath $AndroidRoot).Path
 
+function Assert-AndroidSplashTheme {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ApkPath,
+        [Parameter(Mandatory = $true)]
+        [string]$AndroidRoot
+    )
+
+    $BuildToolsPath = Join-Path $AndroidRoot "sdk\build-tools"
+    $Aapt2 = Get-ChildItem -LiteralPath $BuildToolsPath -Directory |
+        Sort-Object Name -Descending |
+        ForEach-Object { Join-Path $_.FullName "aapt2.exe" } |
+        Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } |
+        Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace([string]$Aapt2)) {
+        throw "Android splash verification requires aapt2.exe under: $BuildToolsPath"
+    }
+
+    $ResourceDump = ((& $Aapt2 dump resources $ApkPath 2>&1) -join "`n")
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ResourceDump)) {
+        throw "Unable to dump Android resources for splash verification: $ApkPath"
+    }
+    $SplashMatches = [regex]::Matches(
+        $ResourceDump,
+        '(?ms)^\s*resource\s+0x[0-9a-f]+\s+style/GodotAppSplashTheme.*?(?=^\s*resource\s+0x[0-9a-f]+\s+style/|\z)'
+    )
+    if ($SplashMatches.Count -lt 1) {
+        throw "APK has no GodotAppSplashTheme resource: $ApkPath"
+    }
+    $SplashBlock = ($SplashMatches | ForEach-Object { $_.Value }) -join "`n"
+    if ($SplashBlock -match 'splash_icon|icon_background') {
+        throw "APK GodotAppSplashTheme still references the launcher/splash icon: $ApkPath"
+    }
+    if ($SplashBlock -notmatch '(?i)windowSplashScreenAnimatedIcon[\s\S]{0,120}@null') {
+        throw "APK GodotAppSplashTheme does not disable the Android 12 splash icon: $ApkPath"
+    }
+    if ($SplashBlock -notmatch '(?i)(#ff000000|#000000|0xff000000)') {
+        throw "APK GodotAppSplashTheme does not contain the black BrandIntro startup background: $ApkPath"
+    }
+    Write-Output "ANDROID_SPLASH_THEME_VERIFY_PASS"
+}
+
 $ResolvedCommitOutput = @(& git -C $ProjectRoot rev-parse --verify "$Commit^{commit}")
 if ($LASTEXITCODE -ne 0 -or $ResolvedCommitOutput.Count -ne 1) {
     throw "Unable to resolve build commit: $Commit"
@@ -55,6 +97,21 @@ if ([string]::IsNullOrWhiteSpace($ResolvedCommit)) {
 $ExportPresetText = (@(& git -C $ProjectRoot show "${ResolvedCommit}:export_presets.cfg")) -join "`n"
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ExportPresetText)) {
     throw "Build commit has no readable export_presets.cfg: $ResolvedCommit"
+}
+if ($ExportPresetText -notmatch '(?m)^gradle_build/custom_theme_attributes=\{') {
+    throw "Build commit Android preset must use a Dictionary for gradle_build/custom_theme_attributes."
+}
+foreach ($RequiredSplashAttribute in @(
+    '"[splash]android:windowSplashScreenBackground": "#000000"',
+    '"[splash]windowSplashScreenBackground": "#000000"',
+    '"[splash]android:windowSplashScreenBrandingImage": "@null"',
+    '"[splash]windowSplashScreenAnimatedIcon": "@null"',
+    '"[splash]android:windowSplashScreenIconBackgroundColor": "#000000"',
+    '"[splash]windowSplashScreenIconBackgroundColor": "#000000"'
+)) {
+    if (-not $ExportPresetText.Contains($RequiredSplashAttribute)) {
+        throw "Build commit Android preset is missing required splash theme attribute: $RequiredSplashAttribute"
+    }
 }
 $VersionCodeMatch = [regex]::Match($ExportPresetText, '(?m)^version/code=(\d+)\r?$')
 if (-not $VersionCodeMatch.Success) {
@@ -153,10 +210,10 @@ try {
         $Tab = [char]9
         $SplashThemeReplacement = @(
             '<style name="GodotAppSplashTheme" parent="Theme.SplashScreen">',
-            ($Tab + $Tab + '<item name="android:windowSplashScreenBackground">#12191f</item>'),
+            ($Tab + $Tab + '<item name="android:windowSplashScreenBackground">#000000</item>'),
             ($Tab + $Tab + '<item name="android:windowSplashScreenBrandingImage">@null</item>'),
             ($Tab + $Tab + '<item name="windowSplashScreenAnimatedIcon">@null</item>'),
-            ($Tab + $Tab + '<item name="android:windowSplashScreenIconBackgroundColor">#12191f</item>'),
+            ($Tab + $Tab + '<item name="android:windowSplashScreenIconBackgroundColor">#000000</item>'),
             ($Tab + $Tab + '<item name="postSplashScreenTheme">@style/GodotAppMainTheme</item>'),
             ($Tab + $Tab + '<item name="android:windowIsTranslucent">false</item>'),
             ($Tab + '</style>')
@@ -263,6 +320,8 @@ try {
         throw "Godot reported success but did not create the isolated APK: $StageApk"
     }
     Copy-Item -LiteralPath $StageApk -Destination $ResolvedOutputApk -Force
+
+    Assert-AndroidSplashTheme -ApkPath $ResolvedOutputApk -AndroidRoot $AndroidRoot
 
     & (Join-Path $PSScriptRoot "verify_android_build.ps1") `
         -ApkPath $ResolvedOutputApk `
