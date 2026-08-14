@@ -54,15 +54,14 @@ func _run() -> void:
 		handoff._authoritative_data_ready = true
 		handoff._check_transition()
 		await get_tree().process_frame
+		assert(not handoff._target_prepare_started, "target preparation froze the authored CG before completion on launch %d" % launch_index)
+		handoff._animation_finished = true
+		handoff._check_transition()
+		await get_tree().process_frame
 		await get_tree().process_frame
 		await get_tree().process_frame
 		assert(is_instance_valid(handoff._target_scene_instance), "prepared handoff did not instantiate on launch %d" % launch_index)
 		assert(handoff._target_scene_ready, "target did not settle behind the CG on launch %d" % launch_index)
-		assert(not (handoff._target_scene_instance as CanvasItem).visible, "target became visible before the CG completed on launch %d" % launch_index)
-		assert(handoff.is_inside_tree(), "startup intro was removed during hidden target preparation on launch %d" % launch_index)
-		handoff._animation_finished = true
-		handoff._check_transition()
-		await get_tree().process_frame
 		assert((handoff._target_scene_instance as CanvasItem).visible, "prepared handoff did not reveal a settled target on launch %d" % launch_index)
 		assert(handoff.is_inside_tree(), "startup intro was removed before target readiness on launch %d" % launch_index)
 		handoff._target_scene_instance.queue_free()

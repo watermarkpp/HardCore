@@ -108,14 +108,15 @@ func _run_finite_loading_phase() -> void:
 
 
 func _check_transition() -> void:
-	# Construct the expensive character-selection tree behind the still-visible
-	# CG as soon as its resource and authoritative data are ready.  Waiting until
-	# the animation ended made Android expose a black frame while _ready() built
-	# the next UI.
-	if not _target_prepare_started and _resource_ready and _authoritative_data_ready:
+	# Let the authored CG complete at its intended speed. Character-selection
+	# construction is intentionally delayed until then; its expensive _ready()
+	# work may block Android's main thread, so the already-rendered final CG frame
+	# remains visible as the loading surface instead of freezing the intro near
+	# its first semi-transparent logo frame.
+	if not _target_prepare_started and _resource_ready and _authoritative_data_ready and _animation_finished:
 		_target_prepare_started = true
 		_prepare_target_scene.call_deferred()
-	if _transition_started or not _animation_finished or not _target_scene_ready:
+	if _transition_started or not _target_scene_ready:
 		return
 	_transition_started = true
 	_reveal_target_scene.call_deferred()
