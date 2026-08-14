@@ -326,6 +326,8 @@ func _click_preview_tile(editor: MapEditorApp, tile: Vector2i, button: MouseButt
 	event.pressed = true
 	event.position = editor.preview._draw_offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
 	editor.preview._gui_input(event)
+	event.pressed = false
+	editor.preview._gui_input(event)
 
 
 func _drag_preview_tile(editor: MapEditorApp, tile: Vector2i) -> void:
