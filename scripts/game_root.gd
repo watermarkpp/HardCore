@@ -240,6 +240,9 @@ var _active_physical_hit_diagnostics: Array[Dictionary] = []
 var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
 var _death_experience_penalty_applied := false
+var _death_event_serial := 0
+var _active_death_id := ""
+var _death_revival_request_in_flight := false
 var _world_bootstrap_coordinator := WorldBootstrapCoordinator.new()
 var _gameplay_input_locks: Dictionary = {}
 var _device_lab_runtime: DeviceLabRuntimeScript
@@ -248,6 +251,9 @@ var _device_lab_runtime: DeviceLabRuntimeScript
 
 const INPUT_LOCK_INITIAL_BOOTSTRAP := &"initial_world_bootstrap"
 const INPUT_LOCK_MAP_TRANSITION := &"map_transition"
+const INPUT_LOCK_PLAYER_DEATH := &"player_death"
+const DEATH_REVIVAL_CONTRACT_ID := "ui.death.revival.v1"
+const DEATH_REVIVAL_FLOW_ID := "player.death.lifecycle.ui_gated.v1"
 
 
 func gameplay_input_is_enabled() -> bool:
@@ -365,6 +371,7 @@ func _ready() -> void:
 	hud.shop_sell_requested.connect(_on_shop_sell_requested)
 	hud.quest_abandon_requested.connect(_on_quest_abandon_requested)
 	hud.warehouse_sort_requested.connect(_on_warehouse_sort_requested)
+	hud.revival_requested.connect(_on_revival_requested)
 	add_child(hud)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	# Device Lab is intentionally a Debug-only child.  It exposes only the
@@ -2988,13 +2995,19 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 
 func _on_player_death_requested() -> void:
-	if not gameplay_input_is_enabled(): return
+	if not gameplay_input_is_enabled():
+		return
 	# player.gd emits this only after the automatic-revival branch has failed,
-	# making it the formal-death boundary.  Guard retries during travel and
-	# revival failure so one lifecycle can never deduct twice.
+	# making it the formal-death boundary.  This boundary opens the gameplay-
+	# owned revival choices; no map transition may start before the player
+	# explicitly selects one of those choices.
 	if not _death_experience_penalty_applied:
 		PlayerState.apply_death_experience_penalty()
 		_death_experience_penalty_applied = true
+	_death_event_serial += 1
+	_active_death_id = "death:%d:%d" % [Time.get_ticks_msec(), _death_event_serial]
+	_death_revival_request_in_flight = false
+	_acquire_gameplay_input_lock(INPUT_LOCK_PLAYER_DEATH)
 	_cancel_all_combat_targets()
 	_magic_shield_auto_enabled = false
 	if is_instance_valid(hud):
@@ -3002,14 +3015,66 @@ func _on_player_death_requested() -> void:
 		hud.cancel_skill_inputs(&"player_death")
 	_cancel_all_mobile_attack_inputs(true)
 	_cancel_all_skill_inputs(true)
+	if is_instance_valid(hud):
+		hud.show_death_screen(_death_revival_context())
+
+
+func _death_revival_context() -> Dictionary:
+	return {
+		"contract_id": DEATH_REVIVAL_CONTRACT_ID,
+		"flow_id": DEATH_REVIVAL_FLOW_ID,
+		"death_id": _active_death_id,
+		"message": "你倒在了%s" % (current_zone if not current_zone.is_empty() else "冒险途中"),
+		"loss_text": "死亡损失：经验 10%",
+		"revival_options": [
+			{
+				"option_slot": "town",
+				"method_id": "revive.nearest_town",
+				"label": "最近城镇复活",
+				"enabled": true,
+				"countdown_seconds": 0,
+				"hint": "返回比奇省安全区",
+			},
+			{
+				"option_slot": "special",
+				"method_id": "revive.special.scroll",
+				"label": "特殊复活",
+				"enabled": false,
+				"countdown_seconds": 0,
+				"reason": "特殊复活暂不可用",
+			},
+		],
+	}
+
+
+func _on_revival_requested(request: Dictionary) -> void:
+	if _active_death_id.is_empty() or _death_revival_request_in_flight:
+		return
+	if str(request.get("contract_id", "")) != DEATH_REVIVAL_CONTRACT_ID:
+		return
+	if str(request.get("death_id", "")) != _active_death_id:
+		return
+	if (
+		str(request.get("option_slot", "")) != "town"
+		or str(request.get("method_id", "")) != "revive.nearest_town"
+	):
+		return
+	_death_revival_request_in_flight = true
 	var accepted := travel_to_service_home(
 		false,
 		false,
 		"比奇省",
 		Callable(self, "_finish_death_revival")
 	)
-	if not accepted:
-		call_deferred("_on_player_death_requested")
+	if accepted:
+		return
+	_death_revival_request_in_flight = false
+	if is_instance_valid(hud):
+		hud.apply_revival_result({
+			"success": false,
+			"message": "复活位置暂不可用",
+			"revival_options": _death_revival_context().get("revival_options", []),
+		})
 
 
 func _finish_death_revival() -> void:
@@ -3017,14 +3082,27 @@ func _finish_death_revival() -> void:
 	if not bool(home.get("valid", false)):
 		# Keep the death state; never revive at a source-map current position.
 		_handle_home_resolution_failure(&"death_revival", home)
+		_death_revival_request_in_flight = false
+		if is_instance_valid(hud):
+			hud.apply_revival_result({
+				"success": false,
+				"message": "复活位置暂不可用",
+				"revival_options": _death_revival_context().get("revival_options", []),
+			})
 		return
 	player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
 	player.velocity = Vector2.ZERO
+	player.complete_death_revival()
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
 	PlayerState.save_game()
 	_death_experience_penalty_applied = false
-	if hud != null:
+	_active_death_id = ""
+	_death_revival_request_in_flight = false
+	if _gameplay_input_locks.has(INPUT_LOCK_PLAYER_DEATH):
+		_release_gameplay_input_lock(INPUT_LOCK_PLAYER_DEATH)
+	if is_instance_valid(hud):
+		hud.apply_revival_result({"success": true, "message": "已经复活"})
 		hud.show_message("你已在最近的城镇复活", 2.0)
 
 

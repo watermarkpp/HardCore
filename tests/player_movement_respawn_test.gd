@@ -44,6 +44,14 @@ func _run() -> void:
 		"重复死亡伤害不得再次扣除金币"
 	)
 	await get_tree().create_timer(0.9).timeout
+	assert(game.hud.death_revival_panel.visible, "死亡动作结束后没有显示死亡复活界面")
+	assert(game.current_map_id == 217, "玩家未选择复活方式时提前回城")
+	assert(player.current_hp == 0 and player._dead, "死亡界面显示时人物被提前复活")
+	game.hud.death_revival_panel.town_button.pressed.emit()
+	var revival_deadline := Time.get_ticks_msec() + 3000
+	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < revival_deadline:
+		await get_tree().process_frame
+	assert(not game._map_transition_in_progress, "城镇复活过渡没有完成")
 	assert(game.current_map_id == GameData.service_home_runtime_map_id(false), "人物死亡后没有回到服务端HomeMap")
 	assert(player.global_position.is_equal_approx(game._bich_home_screen_position_px()), "人物死亡后复活坐标不是比奇城镇出生点")
 	assert(player.current_hp == player.max_hp and not player._dead, "城镇复活后人物状态没有恢复")

@@ -649,8 +649,8 @@ func _apply_resolved_damage(
 	durability_context := {}
 ) -> void:
 	# Death is a single lifecycle transition.  Damage arriving while the death
-	# animation/respawn timer is active must not repeat durability, gold loss,
-	# signals or schedule another respawn coroutine.
+	# animation/UI selection/respawn transition is active must not repeat
+	# durability, gold loss, signals or schedule another death coroutine.
 	if _dead:
 		return
 	var incoming_damage := maxi(1, amount)
@@ -741,12 +741,25 @@ func _apply_resolved_damage(
 		await get_tree().create_timer(0.8).timeout
 		if not is_inside_tree():
 			return
-		current_hp = max_hp
-		current_mp = max_mp
-		_dead = false
 		death_requested.emit()
-		stats_changed.emit(current_hp, max_hp)
-		resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+
+
+func complete_death_revival() -> void:
+	## The gameplay authority calls this only after a selected revival method
+	## has completed its destination transition.  Formal death stays at 0 HP
+	## and rejects movement/combat until this explicit completion boundary.
+	if not _dead:
+		return
+	current_hp = max_hp
+	current_mp = max_mp
+	_dead = false
+	velocity = Vector2.ZERO
+	touch_vector = Vector2.ZERO
+	if visual != null:
+		visual.play_action("idle", 0.0)
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
 
 
 func _incoming_red_poison_active(context: Dictionary) -> bool:

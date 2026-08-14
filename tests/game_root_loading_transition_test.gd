@@ -68,7 +68,12 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	game.travel_to_map(217)
 	PlayerState.test_mode = false
+	game.player._dead = true
+	game.player.current_hp = 0
 	game._on_player_death_requested()
+	assert(game.hud.death_revival_panel.visible, "death UI did not open before revival travel")
+	assert(not game._map_transition_in_progress, "death started Loading before the player selected revival")
+	game.hud.death_revival_panel.town_button.pressed.emit()
 	assert(game.current_map_id == 217, "death revival moved before Loading covered the scene")
 	await _wait_for_transition(game)
 	assert(game.current_map_id == GameData.service_runtime_map_id(0))
@@ -76,6 +81,7 @@ func _run() -> void:
 		game.player.global_position.is_equal_approx(game._bich_home_screen_position_px()),
 		"death revival did not finish at the service-home anchor"
 	)
+	assert(not game.player._dead and game.player.current_hp == game.player.max_hp)
 
 	PlayerState.test_mode = previous_test_mode
 	game.queue_free()

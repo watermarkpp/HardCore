@@ -27,51 +27,38 @@ func _run() -> void:
 
 	game.player.global_position = Vector2(321.0, 654.0)
 	game.player._dead = true
+	game.player.current_hp = 0
 	game._test_force_home_failure = true
-	game._map_transition_in_progress = true
 	PlayerState.experience = 100
 	game._on_player_death_requested()
 	assert(PlayerState.experience == 90, "formal death did not deduct 10% experience")
 	assert(game._death_experience_penalty_applied, "formal death did not latch penalty")
+	assert(game.hud.death_revival_panel.visible, "formal death did not open the real death UI")
+	assert(not game._map_transition_in_progress, "formal death started Loading before a revival choice")
+	assert(game.player._dead and game.player.current_hp == 0, "death UI did not preserve the dead state")
 	game._on_player_death_requested()
 	assert(PlayerState.experience == 90, "duplicate active death request deducted twice")
-	# Stop the deferred retry issued by the intentionally failed home travel;
-	# the duplicate callback above already crossed the enabled gameplay handler.
-	game._player_input_enabled = false
-	await get_tree().process_frame
-	var position_before: Vector2 = game.player.global_position
-	var dead_before: bool = game.player._dead
-
-	game._finish_death_revival()
+	game.hud.death_revival_panel.town_button.pressed.emit()
+	assert(not game._map_transition_in_progress, "failed Home resolution started Loading")
+	assert(game.hud.death_revival_panel.visible, "failed Home resolution closed death UI")
+	assert(game.player.global_position == Vector2(321.0, 654.0), "failed revival moved the player")
+	assert(game.player._dead and game.player.current_hp == 0, "failed revival cleared death state")
 	assert(
-		game.player.global_position == position_before,
-		"death revival must not move the player on Home failure"
-	)
-	assert(
-		game.player.global_position != Vector2.ZERO,
-		"death revival must not write Vector2.ZERO"
-	)
-	assert(
-		game.player._dead == dead_before,
-		"death state must be preserved when revival cannot resolve Home"
-	)
-	assert(
-		_captured_error_reason.contains("death_revival"),
+		_captured_error_reason.contains("travel_to_service_home"),
 		"death revival must report the home-resolution failure"
 	)
 	assert(game._death_experience_penalty_applied, "home failure cleared death penalty latch")
-	game._player_input_enabled = false
 	game._test_force_home_failure = false
-	game._finish_death_revival()
+	game.hud.death_revival_panel.town_button.pressed.emit()
+	assert(
+		game._map_transition_in_progress or not game.player._dead,
+		"selected revival neither began Loading nor completed the test-mode fast path"
+	)
+	await _wait_for_transition(game)
+	assert(not game.hud.death_revival_panel.visible, "successful revival did not close death UI")
+	assert(not game.player._dead and game.player.current_hp == game.player.max_hp, "successful revival did not restore player")
 	assert(not game._death_experience_penalty_applied, "successful revival did not clear latch")
 	_run_automatic_revival_boundary(game)
-	PlayerState.experience = 90
-	game._test_force_home_failure = true
-	game._player_input_enabled = true
-	game._on_player_death_requested()
-	assert(PlayerState.experience == 81, "next death did not deduct from revived experience")
-	game._player_input_enabled = false
-	await get_tree().process_frame
 	game.queue_free()
 	print("DEATH_REVIVAL_HOME_FAILURE_TEST_PASS")
 	get_tree().quit(0)
@@ -115,3 +102,14 @@ func _run_automatic_revival_boundary(game: Node) -> void:
 	assert(game.player.current_hp == game.player.max_hp, "automatic revival did not restore health")
 	assert(PlayerState.experience == 100, "automatic revival incorrectly deducted experience")
 	assert(death_signal_count == 0, "automatic revival emitted formal death_requested")
+	assert(
+		game.hud.death_revival_panel == null or not game.hud.death_revival_panel.visible,
+		"automatic revival incorrectly opened the death UI"
+	)
+
+
+func _wait_for_transition(game: Node) -> void:
+	var deadline := Time.get_ticks_msec() + 3000
+	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	assert(not game._map_transition_in_progress, "death revival transition did not finish")
