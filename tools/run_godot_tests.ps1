@@ -156,6 +156,7 @@ $Suites = @{
 		'tests/complete_item_system_test.tscn',
 		'tests/inventory_equipment_ui_test.tscn',
 		'tests/multi_character_save_test.tscn',
+		'tests/new_character_starter_loadout_test.tscn',
 		'tests/system_menu_test.tscn',
 		'tests/equipment_client_art_test.tscn',
         'tests/equipment_future_modifiers_test.tscn',

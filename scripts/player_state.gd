@@ -84,6 +84,9 @@ const WAREHOUSE_TRANSFER_CONTRACT_ID := "gameplay.warehouse.transfer_authority.v
 const MAX_SAFE_WEIGHT := 9223372036854775807
 const SHOP_SELL_HIGH_VALUE_PRICE := 10000
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
+const STARTER_LOADOUT_CONTRACT_ID := "gameplay.character.starter_loadout.v1"
+const STARTER_WEAPON_ITEM_NAME := "木剑"
+const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
 	10: 6000, 11: 8000, 12: 10000, 13: 15000, 14: 30000, 15: 40000, 16: 50000,
@@ -3707,18 +3710,227 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	var clean_name := new_name.strip_edges().substr(0, 12)
 	if clean_name.is_empty():
 		return "角色名不能为空"
-	if new_profession != "战士":
-		return "当前版本仅开放战士"
+	if not ProfessionRules.is_valid_profession(new_profession):
+		return "职业无效"
 	if new_gender not in ["男", "女"]:
 		return "性别无效"
-	active_profile_id = "%d_%d" % [int(Time.get_unix_time_from_system()), randi_range(1000, 9999)]
+	if _character_name_exists(clean_name):
+		return "角色名已存在"
+
+	# Character creation is one transaction.  Build and validate the starter
+	# loadout before exposing the new profile or writing anything to disk.  This
+	# keeps a missing primary item record from producing a half-created profile.
+	var new_profile_id := _new_profile_id()
+	if new_profile_id.is_empty():
+		return "角色存档ID生成失败"
+	var previous_runtime := _creation_runtime_snapshot()
+	active_profile_id = new_profile_id
 	character_name = clean_name
 	reset_progress(false)
 	profession = new_profession
 	gender = new_gender
-	recalculate_stats()
-	save_game()
+	recalculate_stats(false)
+	var starter_result := _build_starter_loadout(new_profession, new_gender, new_profile_id)
+	if not bool(starter_result.get("ok", false)):
+		_restore_creation_runtime(previous_runtime)
+		return str(starter_result.get("error", "初始装备数据缺失，角色创建失败"))
+	equipment = (starter_result.get("equipment", {}) as Dictionary).duplicate(true)
+	# Keep圣物/徽章 empty for the future new-player rewards.  The helper already
+	# returns the complete canonical slot map; this assertion also makes a future
+	# loadout edit fail closed instead of silently filling those reserved slots.
+	if not equipment.has("圣物") or not equipment.has("徽章"):
+		_restore_creation_runtime(previous_runtime)
+		return "初始装备槽位数据不完整，角色创建失败"
+	recalculate_stats(false)
+	if not save_game() or not bool(last_save_result.get("profile_index_updated", false)):
+		_remove_new_profile_files(new_profile_id)
+		_restore_creation_runtime(previous_runtime)
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "atomic_character_creation_failed",
+		}
+		return "角色存档失败，角色未创建"
 	return ""
+
+
+func _character_name_exists(candidate: String) -> bool:
+	for entry: Dictionary in list_characters():
+		if str(entry.get("name", "")) == candidate:
+			return true
+	# A stale index must not allow a duplicate name.  Read only canonical profile
+	# JSON files; backups and temporary files are deliberately excluded.
+	var directory := DirAccess.open(profile_directory)
+	if directory == null:
+		return false
+	for file_name: String in directory.get_files():
+		if not file_name.ends_with(".json") or file_name.ends_with(".bak"):
+			continue
+		var document := _read_json(profile_directory.path_join(file_name))
+		if str(document.get("character_name", "")) == candidate:
+			return true
+	return false
+
+
+func _new_profile_id() -> String:
+	for _attempt in range(16):
+		var candidate := "%d_%d" % [int(Time.get_unix_time_from_system()), randi_range(1000, 9999)]
+		if (
+			not FileAccess.file_exists(_profile_path(candidate))
+			and not FileAccess.file_exists(_profile_path(candidate) + ".bak")
+		):
+			return candidate
+	# A hostile fixture may occupy every generated id.  Never overwrite a
+	# profile in that case; creation fails closed instead.
+	return ""
+
+
+func _build_starter_loadout(starter_profession: String, starter_gender: String, profile_id: String) -> Dictionary:
+	var result := {
+		"contract_id": STARTER_LOADOUT_CONTRACT_ID,
+		"ok": false,
+		"equipment": _empty_equipment(),
+		"error": "初始装备数据缺失，角色创建失败",
+	}
+	var starter_items := {
+		"武器": STARTER_WEAPON_ITEM_NAME,
+		"衣服": str(STARTER_ARMOR_BY_GENDER.get(starter_gender, "")),
+	}
+	for slot: String in starter_items.keys():
+		var item_name := str(starter_items.get(slot, ""))
+		var runtime_item := GameData.get_item(item_name)
+		var catalog_item := GameData.get_item_record(item_name)
+		if runtime_item.is_empty() or catalog_item.is_empty():
+			return result
+		if str(runtime_item.get("itemId", "")) != str(catalog_item.get("itemId", "")):
+			result["error"] = "初始装备主数据不一致，角色创建失败"
+			return result
+		if str(catalog_item.get("kind", "")) != "equipment":
+			result["error"] = "初始装备不是合法装备，角色创建失败"
+			return result
+		var category := str(runtime_item.get("category", ""))
+		if slot not in _slots_for_category(category):
+			result["error"] = "初始装备槽位不匹配，角色创建失败"
+			return result
+		var item_profession := EquipmentRulesScript.effective_profession(runtime_item)
+		if item_profession not in ["", "通用", starter_profession]:
+			result["error"] = "%s不适合当前职业，角色创建失败" % item_name
+			return result
+		var required_gender := EquipmentRulesScript.required_gender(runtime_item)
+		if not required_gender.is_empty() and required_gender != starter_gender:
+			result["error"] = "%s不适合当前性别，角色创建失败" % item_name
+			return result
+		var requirement_error := EquipmentRulesScript.requirement_error(runtime_item, 1, computed_stats)
+		if not requirement_error.is_empty():
+			result["error"] = "%s，角色创建失败" % requirement_error
+			return result
+		var item_weight := maxi(0, int(runtime_item.get("weight", 0)))
+		if category == "武器":
+			if item_weight > EquipmentRulesScript.max_hand_weight(starter_profession, 1):
+				result["error"] = "%s超出初始手持负重，角色创建失败" % item_name
+				return result
+		elif item_weight > EquipmentRulesScript.max_wear_weight(starter_profession, 1):
+			result["error"] = "%s超出初始穿戴负重，角色创建失败" % item_name
+			return result
+		var instance := _make_item_instance(item_name, catalog_item)
+		if instance.is_empty() or str(instance.get("instance_id", "")).is_empty():
+			result["error"] = "初始装备实例化失败，角色创建失败"
+			return result
+		# Slot and profile are part of the instance identity, so the two starter
+		# pieces can never collapse into one another even on the same microsecond.
+		instance["instance_id"] = "%s:starter:%s:%s" % [profile_id, slot, str(runtime_item.get("itemId", item_name))]
+		(result["equipment"] as Dictionary)[slot] = instance
+	result["ok"] = true
+	return result
+
+
+func _remove_new_profile_files(profile_id: String) -> void:
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+		var path := _profile_path(profile_id) + suffix
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+
+
+func _creation_runtime_snapshot() -> Dictionary:
+	return {
+		"level": level,
+		"profession": profession,
+		"gender": gender,
+		"later_content_enabled": later_content_enabled,
+		"game_mode_id": game_mode_id,
+		"experience": experience,
+		"gold": gold,
+		"inventory": inventory.duplicate(true),
+		"warehouse_inventory": warehouse_inventory.duplicate(true),
+		"equipment": equipment.duplicate(true),
+		"learned_skills": learned_skills.duplicate(true),
+		"skill_progression": _skill_progression.snapshot(),
+		"quick_slots": quick_slots.duplicate(),
+		"quick_item_slots": quick_item_slots.duplicate(),
+		"equip_cycle_cursor": equip_cycle_cursor.duplicate(true),
+		"attack_skill_slots": attack_skill_slots.duplicate(),
+		"attack_ring_slots": attack_ring_slots.duplicate(),
+		"warrior_runtime_state": warrior_runtime_state.duplicate(true),
+		"taoist_main_pet_runtime_states": taoist_main_pet_runtime_states.duplicate(true),
+		"quest_states": quest_states.duplicate(true),
+		"saved_map_id": saved_map_id,
+		"saved_position": saved_position,
+		"saved_ground_position_gu": saved_ground_position_gu,
+		"saved_ground_position_gu_valid": saved_ground_position_gu_valid,
+		"computed_stats": computed_stats.duplicate(true),
+		"computed_special_effects": computed_special_effects.duplicate(true),
+		"durability_event_commit_count": durability_event_commit_count,
+		"active_profile_id": active_profile_id,
+		"character_name": character_name,
+		"autosave_elapsed": _autosave_elapsed,
+		"consumed_shop_sell_quote_ids": _consumed_shop_sell_quote_ids.duplicate(true),
+		"consumed_shop_buy_quote_ids": _consumed_shop_buy_quote_ids.duplicate(true),
+		"shop_buy_quote_serial": _shop_buy_quote_serial,
+		"shop_pricing_session_nonce": _shop_pricing_session_nonce,
+		"last_receive_result": last_receive_result.duplicate(true),
+		"last_save_result": last_save_result.duplicate(true),
+		"last_load_result": last_load_result.duplicate(true),
+	}
+
+
+func _restore_creation_runtime(snapshot: Dictionary) -> void:
+	level = int(snapshot.get("level", 1))
+	profession = str(snapshot.get("profession", "战士"))
+	gender = str(snapshot.get("gender", "男"))
+	later_content_enabled = bool(snapshot.get("later_content_enabled", false))
+	game_mode_id = str(snapshot.get("game_mode_id", "classic_176"))
+	experience = int(snapshot.get("experience", 0))
+	gold = int(snapshot.get("gold", 0))
+	inventory = (snapshot.get("inventory", []) as Array).duplicate(true)
+	warehouse_inventory = (snapshot.get("warehouse_inventory", []) as Array).duplicate(true)
+	equipment = (snapshot.get("equipment", {}) as Dictionary).duplicate(true)
+	learned_skills = (snapshot.get("learned_skills", {}) as Dictionary).duplicate(true)
+	_skill_progression.load_snapshot(snapshot.get("skill_progression", {}))
+	quick_slots = (snapshot.get("quick_slots", []) as Array).duplicate()
+	quick_item_slots = (snapshot.get("quick_item_slots", []) as Array).duplicate()
+	equip_cycle_cursor = (snapshot.get("equip_cycle_cursor", {}) as Dictionary).duplicate(true)
+	attack_skill_slots = (snapshot.get("attack_skill_slots", []) as Array).duplicate()
+	attack_ring_slots = (snapshot.get("attack_ring_slots", []) as Array).duplicate()
+	warrior_runtime_state = (snapshot.get("warrior_runtime_state", {}) as Dictionary).duplicate(true)
+	taoist_main_pet_runtime_states = (snapshot.get("taoist_main_pet_runtime_states", {}) as Dictionary).duplicate(true)
+	quest_states = (snapshot.get("quest_states", {}) as Dictionary).duplicate(true)
+	saved_map_id = int(snapshot.get("saved_map_id", 4))
+	saved_position = snapshot.get("saved_position", Vector2.ZERO)
+	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
+	saved_ground_position_gu_valid = bool(snapshot.get("saved_ground_position_gu_valid", false))
+	computed_stats = (snapshot.get("computed_stats", {}) as Dictionary).duplicate(true)
+	computed_special_effects = (snapshot.get("computed_special_effects", {}) as Dictionary).duplicate(true)
+	durability_event_commit_count = int(snapshot.get("durability_event_commit_count", 0))
+	active_profile_id = str(snapshot.get("active_profile_id", ""))
+	character_name = str(snapshot.get("character_name", ""))
+	_autosave_elapsed = float(snapshot.get("autosave_elapsed", 0.0))
+	_consumed_shop_sell_quote_ids = (snapshot.get("consumed_shop_sell_quote_ids", {}) as Dictionary).duplicate(true)
+	_consumed_shop_buy_quote_ids = (snapshot.get("consumed_shop_buy_quote_ids", {}) as Dictionary).duplicate(true)
+	_shop_buy_quote_serial = int(snapshot.get("shop_buy_quote_serial", 0))
+	_shop_pricing_session_nonce = str(snapshot.get("shop_pricing_session_nonce", ""))
+	last_receive_result = (snapshot.get("last_receive_result", {}) as Dictionary).duplicate(true)
+	last_save_result = (snapshot.get("last_save_result", {}) as Dictionary).duplicate(true)
+	last_load_result = (snapshot.get("last_load_result", {}) as Dictionary).duplicate(true)
 
 
 func select_character(profile_id: String) -> bool:
