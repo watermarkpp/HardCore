@@ -8,7 +8,7 @@ func _ready() -> void:
 	preview.set_document(MapEditorTypes.new_map("normal_place_input", 990010, "Normal Place", Vector2i(32, 32)))
 	preview.activate_normal_placement("v1_5.a001_01")
 	await get_tree().process_frame
-	preview._draw()
+	await get_tree().process_frame
 	var received: Array = []
 	preview.paint_requested.connect(func(tile: Vector2i, asset_id: String): received.append([tile, asset_id]))
 	var design_size := Vector2i(32, 32)
