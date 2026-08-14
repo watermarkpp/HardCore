@@ -14,10 +14,12 @@ def main():
     scale_policy=overrides.get("scale_policy", {})
     maps=[]; blank_templates=[]
     for raw in overrides["overrides"]:
-        row=dict(raw); template=by_type[row["map_type"]]; source=by_map.get(row["map_id"],{"status":"not_audited"})
+        row=dict(raw); template=by_type[row["map_type"]]; source=by_map.get(row["map_id"],{})
+        source_size=[source.get("width"),source.get("height")] if source else row.get("source_size",[None,None])
+        source_status=source.get("status",row.get("source_status","not_audited"))
         row.update({"template_default_size":template["default_size"],"template_max_size":template["max_size"],
-                    "coordinate_systems":templates["coordinate_system"],"source_size":[source.get("width"),source.get("height")],
-                    "source_audit_status":source.get("status","not_audited"),"source_size_is_design_size":False,
+                    "coordinate_systems":templates["coordinate_system"],"source_size":source_size,
+                    "source_audit_status":source_status,"source_size_is_design_size":False,
                     "editable_layer":"expansion","scale_factor":scale_policy.get("factor"),
                     "scale_rounding":scale_policy.get("rounding")})
         maps.append(row)
@@ -31,6 +33,12 @@ def main():
         for key in ("size_status", "size_decision_source", "clone_source_map_id"):
             if key in row:
                 blank_template[key] = row[key]
+        if row.get("workspace_status") == "ready":
+            blank_template.update({
+                "template_kind":"existing_map_or_empty_template",
+                "content_policy":"open_existing_workspace_first",
+                "workspace_status":"ready",
+            })
         if row["map_id"] == "bich_province":
             blank_template.update({
                 "template_kind":"existing_map_or_empty_template",
