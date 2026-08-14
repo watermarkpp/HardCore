@@ -381,6 +381,7 @@ func _test_powershell_contract() -> void:
 	assert(not source.contains("ConvertFrom-Json -Depth"), "PS tool must remain compatible with Windows PowerShell 5.1")
 	assert(source.contains("Invoke-Adb -Arguments @('pull', $remoteScreenshot, $target)"), "PS screenshot must use binary-safe adb pull")
 	assert(source.contains("'export_player_state' { $result.document; break }"), "PS player-state export routing missing")
+	assert(source.contains("'repair_diagnostics' { $result; break }"), "PS repair diagnostics export routing missing")
 	assert(source.contains("ConvertTo-Json -Depth 100"), "PS structured export must preserve nested save data")
 
 

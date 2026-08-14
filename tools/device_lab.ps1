@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('push', 'status', 'snapshot', 'apply_ui_profile', 'export_player_state', 'apply_player_state', 'list_checkpoints', 'rollback_player_state', 'rollback_ui_profile', 'pull', 'screenshot')]
+    [ValidateSet('push', 'status', 'snapshot', 'repair_diagnostics', 'apply_ui_profile', 'export_player_state', 'apply_player_state', 'list_checkpoints', 'rollback_player_state', 'rollback_ui_profile', 'pull', 'screenshot')]
     [string]$Action = 'status',
     [ValidatePattern('^$|^[A-Za-z0-9._:-]{1,128}$')]
     [string]$Serial = '',
@@ -355,7 +355,7 @@ switch ($Action) {
 
 if ($Action -eq 'push') { exit 0 }
 $result = Read-Result -NonceValue $nonceValue
-$documentActions = @('snapshot', 'export_player_state', 'list_checkpoints')
+$documentActions = @('snapshot', 'repair_diagnostics', 'export_player_state', 'list_checkpoints')
 if ($documentActions -contains $Action -and -not [string]::IsNullOrWhiteSpace($OutputPath)) {
     $targetPath = [IO.Path]::GetFullPath($OutputPath)
     $parent = Split-Path -Parent $targetPath
@@ -364,6 +364,7 @@ if ($documentActions -contains $Action -and -not [string]::IsNullOrWhiteSpace($O
     }
     $document = switch ($Action) {
         'snapshot' { $result.snapshot; break }
+        'repair_diagnostics' { $result; break }
         'export_player_state' { $result.document; break }
         'list_checkpoints' { $result.checkpoints; break }
     }

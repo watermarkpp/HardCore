@@ -48,6 +48,7 @@ const COMMON_COMMAND_FIELDS := {
 const ACTION_COMMAND_FIELDS := {
 	"status": {},
 	"snapshot": {},
+	"repair_diagnostics": {},
 	"export_player_state": {},
 	"list_checkpoints": {},
 	"apply_ui_profile": {
@@ -239,7 +240,7 @@ static func validate_command(command: Dictionary) -> Dictionary:
 	if nonce.is_empty() or nonce.length() > MAX_NONCE_LENGTH or not _is_safe_token(nonce):
 		return {"ok": false, "error": "nonce"}
 	var action := str(command.get("action", ""))
-	if action not in ["status", "snapshot", "export_player_state", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
+	if action not in ["status", "snapshot", "repair_diagnostics", "export_player_state", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
 		return {"ok": false, "error": "unknown_action"}
 	var allowed_fields: Dictionary = COMMON_COMMAND_FIELDS.duplicate()
 	var action_fields: Dictionary = ACTION_COMMAND_FIELDS.get(action, {})
@@ -323,6 +324,8 @@ func _execute(command: Dictionary) -> Dictionary:
 			return {"ok": true, "action": action, "status": status_snapshot()}
 		"snapshot":
 			return {"ok": true, "action": action, "snapshot": build_snapshot(_game_root)}
+		"repair_diagnostics":
+			return _repair_diagnostics()
 		"export_player_state":
 			return _export_player_state()
 		"list_checkpoints":
@@ -358,8 +361,46 @@ func status_snapshot() -> Dictionary:
 		"inbox": PENDING_PATH,
 		"outbox": OUTBOX_DIR,
 		"lastCommandNonce": _last_command_nonce,
-		"capabilities": ["ui_profile", "player_state", "checkpoints", "snapshot", "resource_patch"],
+		"capabilities": ["ui_profile", "player_state", "checkpoints", "snapshot", "repair_diagnostics", "resource_patch"],
 		"resourcePatch": patch_status,
+	}
+
+
+func _repair_diagnostics() -> Dictionary:
+	var context: Dictionary = GameData.merchant_context("starter_gear")
+	var plan: Dictionary = PlayerState._repair_plan(context)
+	var quoted_by_slot := {}
+	for raw_entry: Variant in plan.get("entries", []):
+		if raw_entry is Dictionary:
+			quoted_by_slot[str((raw_entry as Dictionary).get("slot", ""))] = (raw_entry as Dictionary).get("quote", {})
+	var equipment_rows: Array[Dictionary] = []
+	for slot: String in PlayerState.EQUIPMENT_SLOTS:
+		var instance: Variant = PlayerState.equipment.get(slot, {})
+		if not instance is Dictionary or instance.is_empty():
+			continue
+		var item_name := str((instance as Dictionary).get("name", ""))
+		var price_record: Dictionary = GameData.get_item_price_record(item_name)
+		var direct_quote: Dictionary = PricingService.quote_repair(
+			price_record,
+			GameData.get_item_record(item_name),
+			(instance as Dictionary).duplicate(true),
+			context
+		)
+		equipment_rows.append({
+			"slot": slot,
+			"item": item_name,
+			"durabilityRaw": int((instance as Dictionary).get("durability_raw", -1)),
+			"maximumDurabilityRaw": int((instance as Dictionary).get("max_durability_raw", -1)),
+			"priceRecord": price_record,
+			"quote": direct_quote,
+			"planned": quoted_by_slot.has(slot),
+		})
+	return {
+		"ok": true,
+		"action": "repair_diagnostics",
+		"context": context,
+		"plan": plan,
+		"equipment": equipment_rows,
 	}
 
 
