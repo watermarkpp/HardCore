@@ -88,7 +88,6 @@ func _ready() -> void:
 	placement.set_document(MapEditorTypes.new_map("placement_input_regression", 990192, "Placement Input Regression", Vector2i(32, 32)))
 	await get_tree().process_frame
 	await get_tree().process_frame
-	placement._draw()
 	var paints: Array = []
 	placement.paint_requested.connect(func(tile: Vector2i, asset_id: String) -> void: paints.append([tile, asset_id]))
 	placement.set_placement_layer("object_base")
