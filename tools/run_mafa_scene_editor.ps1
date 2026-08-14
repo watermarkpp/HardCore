@@ -9,8 +9,7 @@ if (-not (Test-Path -LiteralPath $Godot)) {
 # Keep the editor's user data and logs inside this worktree. This prevents a
 # launch from reading or writing the normal Godot APPDATA profile and makes
 # the startup markers available for black-screen diagnosis.
-$SessionId = Get-Date -Format 'yyyyMMdd-HHmmssfff'
-$RuntimeRoot = Join-Path $ProjectRoot ('.godot\runtime_appdata\mse_launcher\session_{0}' -f $SessionId)
+$RuntimeRoot = Join-Path $ProjectRoot '.godot\runtime_appdata\mse_launcher'
 $AppDataRoot = Join-Path $RuntimeRoot 'Roaming'
 $LocalAppDataRoot = Join-Path $RuntimeRoot 'Local'
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
