@@ -77,8 +77,31 @@ function Assert-AndroidSplashTheme {
     if ($SplashBlock -match 'splash_icon|icon_background') {
         throw "APK GodotAppSplashTheme still references the launcher/splash icon: $ApkPath"
     }
-    if ($SplashBlock -notmatch '(?i)windowSplashScreenAnimatedIcon[\s\S]{0,120}@null') {
-        throw "APK GodotAppSplashTheme does not disable the Android 12 splash icon: $ApkPath"
+    $TransparentIconMatch = [regex]::Match(
+        $SplashBlock,
+        '(?i)windowSplashScreenAnimatedIcon[^\r\n]*=@(?<resource>android:color/transparent|0x[0-9a-f]+)'
+    )
+    if (-not $TransparentIconMatch.Success) {
+        throw "APK GodotAppSplashTheme does not use a transparent Android 12 splash icon: $ApkPath"
+    }
+    $TransparentIconResource = $TransparentIconMatch.Groups['resource'].Value
+    if ($TransparentIconResource.StartsWith('0x', [System.StringComparison]::OrdinalIgnoreCase)) {
+        # aapt2 resolves @android:color/transparent to its public framework
+        # resource id in the compiled APK. Verify that id against the same SDK
+        # platform instead of accepting an arbitrary reference.
+        $PlatformJar = Get-ChildItem -LiteralPath (Join-Path $AndroidRoot 'sdk\platforms') -Directory |
+            Sort-Object Name -Descending |
+            ForEach-Object { Join-Path $_.FullName 'android.jar' } |
+            Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } |
+            Select-Object -First 1
+        if ([string]::IsNullOrWhiteSpace([string]$PlatformJar)) {
+            throw "Android splash verification requires android.jar under the configured SDK."
+        }
+        $FrameworkDump = ((& $Aapt2 dump resources $PlatformJar 2>&1) -join "`n")
+        $TransparentPattern = '(?ims)^\s*resource\s+' + [regex]::Escape($TransparentIconResource) + '\s+color/transparent\s+PUBLIC\s*$[\s\S]{0,120}?#[0]{8}'
+        if ($LASTEXITCODE -ne 0 -or $FrameworkDump -notmatch $TransparentPattern) {
+            throw "APK splash icon resource is not the SDK public transparent color: @$TransparentIconResource"
+        }
     }
     if ($SplashBlock -notmatch '(?i)(#ff000000|#000000|0xff000000)') {
         throw "APK GodotAppSplashTheme does not contain the black BrandIntro startup background: $ApkPath"
@@ -105,7 +128,7 @@ foreach ($RequiredSplashAttribute in @(
     '"[splash]android:windowSplashScreenBackground": "#000000"',
     '"[splash]windowSplashScreenBackground": "#000000"',
     '"[splash]android:windowSplashScreenBrandingImage": "@null"',
-    '"[splash]windowSplashScreenAnimatedIcon": "@null"',
+    '"[splash]windowSplashScreenAnimatedIcon": "@android:color/transparent"',
     '"[splash]android:windowSplashScreenIconBackgroundColor": "#000000"',
     '"[splash]windowSplashScreenIconBackgroundColor": "#000000"'
 )) {
@@ -212,7 +235,7 @@ try {
             '<style name="GodotAppSplashTheme" parent="Theme.SplashScreen">',
             ($Tab + $Tab + '<item name="android:windowSplashScreenBackground">#000000</item>'),
             ($Tab + $Tab + '<item name="android:windowSplashScreenBrandingImage">@null</item>'),
-            ($Tab + $Tab + '<item name="windowSplashScreenAnimatedIcon">@null</item>'),
+            ($Tab + $Tab + '<item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>'),
             ($Tab + $Tab + '<item name="android:windowSplashScreenIconBackgroundColor">#000000</item>'),
             ($Tab + $Tab + '<item name="postSplashScreenTheme">@style/GodotAppMainTheme</item>'),
             ($Tab + $Tab + '<item name="android:windowIsTranslucent">false</item>'),
@@ -223,7 +246,7 @@ try {
         [System.IO.File]::WriteAllText($StageThemesPath, $StageThemesText, $Utf8WithoutBom)
         [System.IO.File]::WriteAllText((Join-Path $StageProjectPath "android\.build_version"), "4.7.stable`n", $Utf8WithoutBom)
         [System.IO.File]::WriteAllText((Join-Path $StageAndroidPath ".gdignore"), "`n", $Utf8WithoutBom)
-        if ($StageThemesText -notmatch 'windowSplashScreenAnimatedIcon.*@null' -or $StageThemesText -notmatch 'windowSplashScreenBrandingImage.*@null') {
+        if ($StageThemesText -notmatch 'windowSplashScreenAnimatedIcon.*@android:color/transparent' -or $StageThemesText -notmatch 'windowSplashScreenBrandingImage.*@null') {
             throw "Offline Android template splash patch did not apply: $StageThemesPath"
         }
         Write-Output "ANDROID_GRADLE_TEMPLATE_BOOTSTRAP_PASS"

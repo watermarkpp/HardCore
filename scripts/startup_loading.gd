@@ -13,6 +13,8 @@ var _authoritative_data_ready := false
 var _authoritative_data_failed := false
 var _animation_finished := false
 var _transition_started := false
+var _target_prepare_started := false
+var _target_scene_ready := false
 var _load_requested := false
 var _target_scene_instance: Node
 @export var suppress_scene_handoff_for_test := false
@@ -106,19 +108,26 @@ func _run_finite_loading_phase() -> void:
 
 
 func _check_transition() -> void:
-	if _transition_started or not _resource_ready or not _animation_finished or not _authoritative_data_ready:
+	# Construct the expensive character-selection tree behind the still-visible
+	# CG as soon as its resource and authoritative data are ready.  Waiting until
+	# the animation ended made Android expose a black frame while _ready() built
+	# the next UI.
+	if not _target_prepare_started and _resource_ready and _authoritative_data_ready:
+		_target_prepare_started = true
+		_prepare_target_scene.call_deferred()
+	if _transition_started or not _animation_finished or not _target_scene_ready:
 		return
 	_transition_started = true
-	_prepare_target_scene.call_deferred()
+	_reveal_target_scene.call_deferred()
 
 
 func _prepare_target_scene() -> void:
 	if not is_inside_tree() or _target_scene == null:
-		_transition_started = false
+		_target_prepare_started = false
 		return
 	_target_scene_instance = _target_scene.instantiate()
 	if _target_scene_instance == null:
-		_transition_started = false
+		_target_prepare_started = false
 		return
 	# Build and settle the next UI behind the completed intro. PackedScene
 	# instantiation and _ready() may be expensive on Android, but the already
@@ -130,6 +139,14 @@ func _prepare_target_scene() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if not is_inside_tree() or not is_instance_valid(_target_scene_instance):
+		return
+	_target_scene_ready = true
+	_check_transition()
+
+
+func _reveal_target_scene() -> void:
+	if not is_inside_tree() or not _target_scene_ready or not is_instance_valid(_target_scene_instance):
+		_transition_started = false
 		return
 	if _target_scene_instance is CanvasItem:
 		(_target_scene_instance as CanvasItem).visible = true

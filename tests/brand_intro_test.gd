@@ -48,15 +48,21 @@ func _run() -> void:
 		target_control.free()
 		handoff._target_scene = packed_target
 		handoff._resource_ready = true
-		handoff._animation_finished = true
+		handoff._animation_finished = false
 		handoff._check_transition()
-		assert(not handoff._transition_started, "handoff escaped before authoritative data readiness on launch %d" % launch_index)
+		assert(not handoff._target_prepare_started, "target preparation escaped before authoritative data readiness on launch %d" % launch_index)
 		handoff._authoritative_data_ready = true
 		handoff._check_transition()
 		await get_tree().process_frame
 		await get_tree().process_frame
 		await get_tree().process_frame
 		assert(is_instance_valid(handoff._target_scene_instance), "prepared handoff did not instantiate on launch %d" % launch_index)
+		assert(handoff._target_scene_ready, "target did not settle behind the CG on launch %d" % launch_index)
+		assert(not (handoff._target_scene_instance as CanvasItem).visible, "target became visible before the CG completed on launch %d" % launch_index)
+		assert(handoff.is_inside_tree(), "startup intro was removed during hidden target preparation on launch %d" % launch_index)
+		handoff._animation_finished = true
+		handoff._check_transition()
+		await get_tree().process_frame
 		assert((handoff._target_scene_instance as CanvasItem).visible, "prepared handoff did not reveal a settled target on launch %d" % launch_index)
 		assert(handoff.is_inside_tree(), "startup intro was removed before target readiness on launch %d" % launch_index)
 		handoff._target_scene_instance.queue_free()
@@ -67,16 +73,35 @@ func _run() -> void:
 	assert(manifest.get("displayName", "") == "HardCore")
 	var outputs: Array = manifest.get("outputs", [])
 	var android_icon_registered := false
+	var adaptive_foreground_registered := false
+	var adaptive_background_registered := false
 	for output: Dictionary in outputs:
 		var output_size: Array = output.get("size", [])
 		if output.get("path") == "assets/branding/android_icon_192.png" and output_size.size() == 2 and int(output_size[0]) == 192 and int(output_size[1]) == 192:
 			android_icon_registered = true
+		if output.get("path") == "assets/branding/android_adaptive_foreground_432.png" and output_size.size() == 2 and int(output_size[0]) == 432 and int(output_size[1]) == 432:
+			adaptive_foreground_registered = true
+		if output.get("path") == "assets/branding/android_adaptive_background_432.png" and output_size.size() == 2 and int(output_size[0]) == 432 and int(output_size[1]) == 432:
+			adaptive_background_registered = true
 	assert(android_icon_registered)
+	assert(adaptive_foreground_registered)
+	assert(adaptive_background_registered)
+	var legacy_icon := Image.load_from_file("res://assets/branding/android_icon_192.png")
+	var adaptive_foreground := Image.load_from_file("res://assets/branding/android_adaptive_foreground_432.png")
+	var adaptive_background := Image.load_from_file("res://assets/branding/android_adaptive_background_432.png")
+	assert(legacy_icon.get_size() == Vector2i(192, 192))
+	assert(adaptive_foreground.get_size() == Vector2i(432, 432))
+	assert(adaptive_background.get_size() == Vector2i(432, 432))
+	assert(adaptive_foreground.get_pixel(0, 0).a == 0.0, "adaptive foreground must leave a transparent Android mask-safe margin")
+	assert(adaptive_foreground.get_pixel(84, 84).a > 0.99, "complete approved logo must begin inside the 264px adaptive safe zone")
+	assert(adaptive_background.get_pixel(0, 0).is_equal_approx(Color.BLACK), "adaptive launcher background must be black")
 	var export_preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	assert(export_preset.contains("launcher_icons/main_192x192=\"res://assets/branding/android_icon_192.png\""))
+	assert(export_preset.contains("launcher_icons/adaptive_foreground_432x432=\"res://assets/branding/android_adaptive_foreground_432.png\""))
+	assert(export_preset.contains("launcher_icons/adaptive_background_432x432=\"res://assets/branding/android_adaptive_background_432.png\""))
 	assert(export_preset.contains("gradle_build/use_gradle_build=true"), "Android export must use Gradle for splash theme overrides")
 	assert(export_preset.contains("gradle_build/custom_theme_attributes={"), "Android export must define theme attributes as a Dictionary")
-	assert(export_preset.contains("\"[splash]windowSplashScreenAnimatedIcon\": \"@null\""), "Android 12 splash icon must be disabled")
+	assert(export_preset.contains("\"[splash]windowSplashScreenAnimatedIcon\": \"@android:color/transparent\""), "Android 12 splash icon must be transparent instead of falling back to the launcher icon")
 	assert(export_preset.contains("\"[splash]android:windowSplashScreenBrandingImage\": \"@null\""), "Android splash branding image must be disabled")
 	assert(export_preset.contains("\"[splash]android:windowSplashScreenBackground\": \"#000000\""), "Android splash background must match BrandIntro's first black frame")
 	assert(export_preset.contains("\"[splash]windowSplashScreenBackground\": \"#000000\""), "AndroidX splash background must match BrandIntro's first black frame")
