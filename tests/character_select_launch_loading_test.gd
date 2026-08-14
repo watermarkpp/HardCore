@@ -34,11 +34,8 @@ func _run() -> void:
 	launcher.selected_main_profile_id = profile_id
 	launcher._enter_selected_character()
 	assert(launcher._launch_in_progress, "launch must enter busy state synchronously")
-	assert(launcher.enter_button.disabled, "launch button must lock synchronously")
+	assert(not launcher.enter_button.disabled, "expensive button feedback must wait until Loading has been drawn")
 	assert(launcher.enter_button.theme_type_variation == "GothicCharacterLaunchButton", "launch action must use the character-specific transition frame")
-	assert(launcher.enter_button.get_meta("gothic_feedback_state", "") == "transition", "launch action must stay highlighted until Loading takes over")
-	assert(launcher.enter_button.get_theme_color("font_color") == GothicUIThemeScript.CHARACTER_TRANSITION_FONT, "launch transition must use the restrained warm-gold text cue")
-	assert(launcher.enter_button.get_theme_constant("outline_size") == 2, "launch transition must add only a restrained text outline")
 	assert(launcher.launch_loading_overlay.visible, "Loading must be visible in the click frame")
 	assert(PlayerState.active_profile_id.is_empty(), "profile hydration ran before the Loading frame")
 
@@ -46,6 +43,11 @@ func _run() -> void:
 	launcher._enter_selected_character()
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(launcher.enter_button.disabled, "launch button must lock after Loading has been presented")
+	assert(launcher.enter_button.get_meta("gothic_feedback_state", "") == "transition", "launch action must stay highlighted until Loading takes over")
+	assert(launcher.enter_button.get_theme_color("font_color") == GothicUIThemeScript.CHARACTER_TRANSITION_FONT, "launch transition must use the restrained warm-gold text cue")
+	assert(launcher.enter_button.get_theme_constant("outline_size") == 2, "launch transition must add only a restrained text outline")
 	assert(PlayerState.active_profile_id == profile_id, "profile hydration did not run beneath Loading")
 	assert(launcher.last_launch_request.main_profile_id == profile_id, "launch request was not completed")
 	assert(launcher.launch_loading_overlay.visible, "Loading disappeared before scene handoff")
@@ -63,6 +65,7 @@ func _run() -> void:
 	assert(failed_launcher.launch_loading_overlay.visible, "failed launch did not show Loading first")
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await get_tree().process_frame
 	assert(not failed_launcher._launch_in_progress, "failed launch did not clear busy state")
 	assert(not failed_launcher.launch_loading_overlay.visible, "failed launch left Loading visible")
 	assert("存档" in failed_launcher.message_label.text, "failed launch did not show a readable reason")
@@ -77,6 +80,7 @@ func _run() -> void:
 	missing_scene_launcher.selected_main_profile_id = profile_id
 	missing_scene_launcher._enter_selected_character()
 	assert(missing_scene_launcher.launch_loading_overlay.visible, "scene failure did not show Loading first")
+	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(not missing_scene_launcher._launch_in_progress, "scene failure did not clear busy state")

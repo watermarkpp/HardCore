@@ -4,6 +4,7 @@ const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
 
 signal database_reloaded
+signal initial_load_finished(success: bool)
 
 const DATA_PATH := "res://assets/data/legend176_data.json"
 const SERVICE_REFERENCE_PATH := "res://assets/data/service_reference.json"
@@ -60,6 +61,9 @@ var drops: Array = []
 var tasks: Array = []
 var item_catalog: Array = []
 var load_error := ""
+var initial_load_deferred := OS.get_name() == "Android"
+var _initial_load_started := false
+var _initial_load_complete := false
 
 var _monsters_by_name: Dictionary = {}
 var _items_by_name: Dictionary = {}
@@ -72,11 +76,40 @@ var _bich_quests_by_id: Dictionary = {}
 
 
 func _ready() -> void:
-	load_database()
+	if not initial_load_deferred:
+		ensure_loaded()
+
+
+func is_loaded() -> bool:
+	return _initial_load_complete
+
+
+func ensure_loaded() -> bool:
+	if _initial_load_complete:
+		return true
+	if _initial_load_started:
+		return false
+	if not ContentLayers.is_loaded():
+		load_error = "content_layers_not_ready"
+		return false
+	_initial_load_started = true
+	var success := load_database()
+	_initial_load_complete = success
+	_initial_load_started = false
+	initial_load_finished.emit(success)
+	return success
 
 
 func load_database() -> bool:
-	var parsed: Variant = ContentLayers.build_merged_database()
+	# Consumers that run during Android autoload construction must fail closed.
+	# StartupLoading explicitly opens this gate only after the intro has drawn.
+	if not ContentLayers.is_loaded():
+		load_error = "content_layers_not_ready"
+		return false
+	# ContentLayers has already parsed and merged the authoritative tables at
+	# this boundary. Keep GameData's private mutable copy without parsing every
+	# base JSON table a second time during the same startup.
+	var parsed: Variant = ContentLayers.merged_database.duplicate(true)
 	if not parsed is Dictionary or parsed.get("maps", []).is_empty():
 		load_error = "五层内容注册表未能生成Merged Game Database"
 		push_error(load_error)
@@ -111,6 +144,8 @@ func load_database() -> bool:
 	_load_service_item_catalog()
 	_load_merchant_catalog()
 	_build_indexes()
+	load_error = ""
+	_initial_load_complete = true
 	database_reloaded.emit()
 	print("数据库载入完成：地图%d 怪物%d Boss%d 装备%d 技能等级%d 掉落槽%d 任务%d" % [
 		maps.size(), monsters.size(), bosses.size(), items.size(), skills.size(), drops.size(), tasks.size()

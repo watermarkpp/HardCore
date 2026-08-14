@@ -712,18 +712,22 @@ func _enter_selected_character() -> void:
 		message_label.text = "请先选择主角色"
 		return
 	_launch_in_progress = true
+	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
+	# Global button feedback may perform its first texture preparation on this
+	# activation. Present Loading in a completed draw before that work, profile
+	# hydration, or main-scene construction is allowed to begin.
+	# The first resume happens before that frame is drawn; yielding a second
+	# process frame lets the visible overlay complete one full render cycle.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
 	enter_button.disabled = true
 	GothicUIThemeScript.set_button_feedback(
 		enter_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
 		"character.launch",
 	)
-	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
-	# Give the renderer one frame to present the final Loading surface before
-	# profile hydration and main-scene construction perform blocking work.
-	await get_tree().process_frame
-	if not is_inside_tree():
-		return
 	# The hall already hydrates a profile when it becomes selected. Do not parse
 	# the same save a second time on launch; only hydrate when the authority no
 	# longer matches the requested profile.

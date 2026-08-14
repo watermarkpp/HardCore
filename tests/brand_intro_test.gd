@@ -19,6 +19,10 @@ func _run() -> void:
 	assert(startup_source.contains("load_threaded_request"), "startup must request character select asynchronously")
 	assert(startup_source.contains("intro_animation_finished"), "startup must await the authored game-entry animation")
 	assert(startup_source.contains("await get_tree().process_frame"), "startup animation must present one real frame before waiting")
+	assert(startup_source.contains("intro_first_frame_presented"), "authoritative data must wait for a rendered authored CG frame")
+	assert(startup_source.contains("ContentLayers.ensure_loaded()"), "startup must explicitly open the content-layer gate")
+	assert(startup_source.contains("WorldContent.ensure_loaded()"), "startup must explicitly open the world-content gate")
+	assert(startup_source.contains("GameData.ensure_loaded()"), "startup must explicitly open the GameData gate")
 	assert(startup_source.find("_run_finite_loading_phase.call_deferred()") < startup_source.find("load_threaded_request"), "finite loading phase must start before request result is known")
 	assert(startup_source.contains("if not _load_requested or _resource_ready"), "failed request must not transition")
 	var startup: Node = load("res://scenes/startup_loading.tscn").instantiate()
@@ -27,6 +31,37 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(startup.brand_intro != null and not startup.brand_intro.auto_advance, "startup must own intro scene transitions")
 	startup.queue_free()
+	await get_tree().process_frame
+	# Exercise the prepared handoff twice.  The next scene must settle invisibly
+	# while the intro remains alive, then become visible without clearing the
+	# viewport between scenes.  Repeating this covers cached/restarted launches.
+	for launch_index in range(2):
+		var handoff: Control = load("res://scenes/startup_loading.tscn").instantiate()
+		handoff.auto_start = false
+		handoff.suppress_scene_handoff_for_test = true
+		add_child(handoff)
+		await get_tree().process_frame
+		var packed_target := PackedScene.new()
+		var target_control := Control.new()
+		target_control.name = "PreparedCharacterSelect%d" % launch_index
+		assert(packed_target.pack(target_control) == OK)
+		target_control.free()
+		handoff._target_scene = packed_target
+		handoff._resource_ready = true
+		handoff._animation_finished = true
+		handoff._check_transition()
+		assert(not handoff._transition_started, "handoff escaped before authoritative data readiness on launch %d" % launch_index)
+		handoff._authoritative_data_ready = true
+		handoff._check_transition()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		await get_tree().process_frame
+		assert(is_instance_valid(handoff._target_scene_instance), "prepared handoff did not instantiate on launch %d" % launch_index)
+		assert((handoff._target_scene_instance as CanvasItem).visible, "prepared handoff did not reveal a settled target on launch %d" % launch_index)
+		assert(handoff.is_inside_tree(), "startup intro was removed before target readiness on launch %d" % launch_index)
+		handoff._target_scene_instance.queue_free()
+		handoff.queue_free()
+		await get_tree().process_frame
 	assert(FileAccess.file_exists("res://assets/branding/brand_manifest.json"))
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/branding/brand_manifest.json"))
 	assert(manifest.get("displayName", "") == "HardCore")
@@ -57,6 +92,22 @@ func _run() -> void:
 	assert(texture != null)
 	assert(texture.get_width() == 1024 and texture.get_height() == 1024)
 	assert(intro.NEXT_SCENE == "res://scenes/character_select.tscn")
-	assert(intro.FINAL_PRESENTATION_SECONDS >= 4.5, "entry animation final composition is not visible long enough on cold Android launch")
+	assert(intro.FINAL_PRESENTATION_SECONDS == 0.0, "startup must not add an arbitrary final-frame delay")
+	# Fresh Android-mode autoload instances must remain cold until StartupLoading
+	# invokes their explicit ensure_loaded() boundary.
+	for lazy_script_path: String in [
+		"res://scripts/layers/runtime/content_layer_registry.gd",
+		"res://scripts/layers/runtime/world_content_service.gd",
+		"res://scripts/game_data.gd",
+	]:
+		var lazy_node: Node = load(lazy_script_path).new()
+		lazy_node.initial_load_deferred = true
+		add_child(lazy_node)
+		await get_tree().process_frame
+		assert(not lazy_node.is_loaded(), "%s performed eager Android startup work" % lazy_script_path)
+		assert(lazy_node.ensure_loaded(), "%s explicit startup load failed" % lazy_script_path)
+		assert(lazy_node.is_loaded(), "%s did not publish a ready state atomically" % lazy_script_path)
+		lazy_node.queue_free()
+		await get_tree().process_frame
 	print("BRAND_INTRO_PASS: icon, boot splash, animation and exact slogan are connected")
 	get_tree().quit(0)

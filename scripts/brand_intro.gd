@@ -1,11 +1,15 @@
 extends Control
 
 signal intro_animation_finished
+signal intro_first_frame_presented
 
 const SLOGAN := "刷是一种状态，刷没有目的没有终点"
 const NEXT_SCENE := "res://scenes/character_select.tscn"
 const MINIMUM_SKIP_SECONDS := 1.0
-const FINAL_PRESENTATION_SECONDS := 4.75
+# StartupLoading, rather than a fixed timer, owns the final-frame hold. The
+# authored motion completes once and remains visible exactly as long as the
+# character-selection scene still needs to become ready.
+const FINAL_PRESENTATION_SECONDS := 0.0
 
 @export var auto_advance := true
 
@@ -17,6 +21,7 @@ const FINAL_PRESENTATION_SECONDS := 4.75
 var _elapsed := 0.0
 var _transitioning := false
 var animation_complete := false
+var first_frame_presented := false
 
 
 func _ready() -> void:
@@ -57,6 +62,7 @@ func _layout_brand() -> void:
 
 func _prepare_animation_state() -> void:
 	animation_complete = false
+	first_frame_presented = false
 	brand_logo.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	brand_logo.scale = Vector2(0.90, 0.90)
 	glow_logo.modulate = Color(1.0, 0.12, 0.04, 0.0)
@@ -76,6 +82,16 @@ func _play_intro() -> void:
 	reveal.tween_property(brand_logo, "scale", Vector2.ONE, 2.20).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	reveal.tween_property(glow_logo, "modulate:a", 0.16, 1.20).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	reveal.tween_property(glow_logo, "scale", Vector2.ONE, 2.20).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	# This is the first frame on which authored CG pixels have non-zero alpha.
+	# Android database preparation may start only after the renderer presents it.
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	await RenderingServer.frame_post_draw
+	if not is_inside_tree():
+		return
+	first_frame_presented = true
+	intro_first_frame_presented.emit()
 
 	await get_tree().create_timer(0.92).timeout
 	if not is_inside_tree():
@@ -88,9 +104,10 @@ func _play_intro() -> void:
 	pulse.tween_property(glow_logo, "modulate:a", 0.28, 0.48).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	pulse.tween_property(glow_logo, "modulate:a", 0.08, 0.62).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	# Keep the authored final composition visible long enough to survive cold
-	# Android window creation and make the entry animation perceptible.
-	await get_tree().create_timer(FINAL_PRESENTATION_SECONDS).timeout
+	# The pulse is the longest authored tween. Waiting for it means all logo and
+	# slogan motion has reached its exact final frame without an arbitrary delay.
+	# StartupLoading keeps this node unchanged until handoff.
+	await pulse.finished
 	if not is_inside_tree():
 		return
 	animation_complete = true
