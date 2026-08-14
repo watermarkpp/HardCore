@@ -50,7 +50,7 @@ func _run() -> void:
 	PlayerState.inventory = [{"name": "匕首", "count": 1, "instance_id": "shop-context-dagger"}]
 	for context_key: String in ["general", "books", "medicine"]:
 		var context := GameData.merchant_context(context_key)
-		panel.open_for("上下文测试", [], context)
+		panel.open_for("上下文测试", GameData.merchant_stock(context_key), context)
 		panel._set_trade_mode("sell")
 		assert(not quote_batches.is_empty() and not quote_batches[-1].is_empty(), "%s 没有发出出售报价请求" % context_key)
 		var context_quotes := PlayerState.shop_sell_quotes(quote_batches[-1])
@@ -105,6 +105,25 @@ func _run() -> void:
 	panel._select_shop_item(0)
 	assert("持续恢复生命：" in panel.detail_label.text and "点/秒" in panel.detail_label.text, "药水详情没有显示玩法层实际持续恢复速度")
 	assert("生命总恢复：30点" in panel.detail_label.text and "攻击：" not in panel.detail_label.text, "药水详情没有显示主库恢复总量")
+	var official_weapon_stock := GameData.merchant_stock("starter_gear")
+	panel.open_for("铁匠", official_weapon_stock, GameData.merchant_context("starter_gear"))
+	panel.set_buy_quotes(PlayerState.shop_buy_quotes(official_weapon_stock))
+	for official_weapon_index in range(official_weapon_stock.size()):
+		panel._select_shop_item(official_weapon_index)
+		assert(
+			"类别：" in panel.detail_label.text
+			and "重量：" in panel.detail_label.text
+			and "耐久上限：" in panel.detail_label.text
+			and "攻击" in panel.detail_label.text
+			and "魔法" in panel.detail_label.text
+			and "道术" in panel.detail_label.text
+			and "防御" in panel.detail_label.text
+			and "魔防" in panel.detail_label.text
+			and "穿戴要求：" in panel.detail_label.text
+			and "equipment.attribute" not in panel.detail_label.text
+			and "confidence" not in panel.detail_label.text,
+			"正式武器详情没有完整解析玩家可读属性",
+		)
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	panel._set_trade_mode("sell")

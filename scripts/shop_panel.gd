@@ -917,14 +917,28 @@ func _buy_item_detail(item_name: String, item: Dictionary, entry: Dictionary) ->
 		lines.append("可叠加：是")
 		return "\n".join(lines)
 	if not item.is_empty():
-		lines.append("类别：%s" % str(item.get("category", "")))
-		lines.append("攻击：%s-%s" % [_value(item.get("attackMin")), _value(item.get("attackMax"))])
-		lines.append("防御：%s-%s" % [_value(item.get("defenseMin")), _value(item.get("defenseMax"))])
-		lines.append("需要等级：%s" % _value(item.get("reqLevel")))
+		lines.append("类别：%s　重量：%d" % [str(item.get("category", "")), int(item.get("weight", 0))])
+		var maximum_durability := int(item.get("maxDurability", item.get("serviceDuraMax", 0)))
+		if maximum_durability > 0:
+			lines.append("耐久上限：%d" % maximum_durability)
+		lines.append(_equipment_stat_text(item))
+		lines.append("穿戴要求：%s" % _player_requirement_label(item))
 	var entry_description := str(entry.get("description", ""))
 	if not entry_description.is_empty():
 		lines.append(entry_description)
 	return "\n".join(lines)
+
+
+func _player_requirement_label(item: Dictionary) -> String:
+	# EquipmentRules is authoritative for the requirement type/value. Strip its
+	# source/confidence suffix from the player-facing label; those are audit
+	# metadata, not gameplay instructions.
+	var label := EquipmentRulesScript.requirement_label(item)
+	for marker: String in ["（", "("]:
+		var marker_index := label.find(marker)
+		if marker_index >= 0:
+			label = label.substr(0, marker_index)
+	return label
 
 
 func _set_shop_card_selected(card: Button, selected: bool) -> void:

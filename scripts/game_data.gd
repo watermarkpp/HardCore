@@ -177,6 +177,7 @@ func merchant_stock(stock_key: String) -> Array:
 			"offer_id": str(offer.get("offerId", "")),
 			"merchant_id": str(merchant.get("merchantId", "")),
 			"merchant_context": {
+				"stock_key": stock_key,
 				"merchant_id": str(merchant.get("merchantId", "")),
 				"merchant_rate_bps": int(merchant.get("merchantRateBps", 10000)),
 				"stock_markup_bps": int(merchant.get("stockMarkupBps", 11000)),

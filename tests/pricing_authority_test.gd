@@ -40,6 +40,8 @@ func _run() -> void:
 	assert(not general_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) in ["蜡烛", "火把", "护身符"]))
 	assert(str(weapon_stock[0].get("name", "")) == "木剑")
 	assert(str(book_stock[0].get("name", "")) == "基本剑术")
+	for official_weapon: Dictionary in weapon_stock:
+		assert(not GameData.get_item_record(str(official_weapon.get("name", ""))).is_empty(), "正式武器货单必须解析到玩家物品记录")
 	var medicine_names := [
 		"金疮药(小量)", "魔法药(小量)",
 		"金疮药(中量)", "魔法药(中量)",
@@ -54,10 +56,19 @@ func _run() -> void:
 		)
 	for medicine_name: String in medicine_names:
 		assert(medicine_stock.filter(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) == medicine_name).size() == 2)
+	for medicine_offer: Dictionary in medicine_stock:
+		assert(not GameData.get_item_record(str(medicine_offer.get("name", ""))).is_empty(), "正式药品货单必须解析到玩家物品记录")
 	assert(not medicine_stock.any(func(entry: Dictionary) -> bool: return "特大" in str(entry.get("name", "")) or "超级" in str(entry.get("name", ""))))
 	assert(str(medicine_stock[0].get("merchant_id", "")) == "merchant.server.crystal.cjlaaa.29")
 	var potion_summary := GameData.item_usage_summary("金疮药(小量)")
 	assert(int(potion_summary.get("restore_health", 0)) == 30 and int(GameData.item_usage_summary("魔法药(小量)").get("restore_mana", 0)) == 40, "药水详情没有使用主库实际恢复数值")
+	for medicine_name: String in medicine_names:
+		var delayed_summary := GameData.item_usage_summary(medicine_name, 1)
+		assert(str(delayed_summary.get("effect_type", "")) == "delayed_restore", "正式药水必须使用主库持续恢复效果")
+		assert(int(delayed_summary.get("tick_amount", 0)) == 5 and is_equal_approx(float(delayed_summary.get("tick_interval_seconds", 0.0)), 0.59), "等级1药水恢复节奏没有遵循主库公式")
+	var level_50_summary := GameData.item_usage_summary("金疮药(大量)", 50)
+	assert(int(level_50_summary.get("tick_amount", 0)) == 10 and is_equal_approx(float(level_50_summary.get("tick_interval_seconds", 0.0)), 0.2), "等级50药水恢复节奏没有遵循主库公式")
+	assert(is_equal_approx(float(level_50_summary.get("recovery_per_second", 0.0)), 50.0) and is_equal_approx(float(level_50_summary.get("duration_seconds", 0.0)), 2.0), "药水每秒恢复/持续时间显示投影错误")
 	var level_1_restore := GameData.potion_recovery_profile(1, 30, 0, "delayed_restore")
 	var level_50_restore := GameData.potion_recovery_profile(50, 0, 40, "delayed_restore")
 	assert(int(level_1_restore.get("tick_amount", 0)) == 5 and is_equal_approx(float(level_1_restore.get("tick_interval_seconds", 0.0)), 0.59), "1级药水持续恢复节奏与玩法公式不一致")
