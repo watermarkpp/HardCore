@@ -53,12 +53,17 @@ const BUTTON_FEEDBACK_META_STATE := &"gothic_feedback_state"
 const BUTTON_FEEDBACK_META_GROUP := &"gothic_feedback_selection_group"
 const BUTTON_FEEDBACK_META_BACKUP := &"gothic_feedback_override_backup"
 const BUTTON_FEEDBACK_META_FONT_BACKUP := &"gothic_feedback_font_override_backup"
-const BUTTON_PRESS_FILL := Color(0.48, 0.16, 0.035, 0.22)
-const BUTTON_PRESS_BORDER := Color(0.94, 0.63, 0.28, 0.86)
-const BUTTON_PRESS_SHADOW := Color(0.90, 0.42, 0.08, 0.62)
-const BUTTON_SELECTED_FILL := Color(0.56, 0.20, 0.045, 0.27)
-const BUTTON_SELECTED_BORDER := Color(1.0, 0.72, 0.34, 0.96)
-const BUTTON_SELECTED_SHADOW := Color(0.96, 0.50, 0.10, 0.74)
+## Interaction feedback is an interior cue, not a replacement frame.  Keep it
+## in the approved dark-red family so a pressed/selected state never turns an
+## otherwise antique-gold control orange.  Layered adaptive buttons draw the
+## original source frame on top; flat HUD controls use the same restrained
+## red-copper border instead of a second rectangular gold frame.
+const BUTTON_PRESS_FILL := Color(0.24, 0.035, 0.075, 0.88)
+const BUTTON_PRESS_BORDER := Color(0.66, 0.16, 0.20, 0.82)
+const BUTTON_PRESS_SHADOW := Color(0.68, 0.12, 0.18, 0.68)
+const BUTTON_SELECTED_FILL := Color(0.30, 0.045, 0.105, 0.90)
+const BUTTON_SELECTED_BORDER := Color(0.78, 0.26, 0.28, 0.90)
+const BUTTON_SELECTED_SHADOW := Color(0.76, 0.16, 0.24, 0.76)
 const BUTTON_SUCCESS_FILL := Color(0.36, 0.28, 0.075, 0.28)
 const BUTTON_SUCCESS_BORDER := Color(0.93, 0.82, 0.38, 0.96)
 const BUTTON_SUCCESS_SHADOW := Color(0.94, 0.68, 0.18, 0.74)
@@ -143,7 +148,11 @@ static func build() -> Theme:
 	result.set_type_variation("GothicArtNavFill", "Panel")
 	result.set_stylebox("panel", "GothicArtNavFill", _flat(Color(0.055, 0.11, 0.16, 0.82), Color.TRANSPARENT, 0, 12))
 	result.set_type_variation("GothicArtBagFill", "Panel")
-	result.set_stylebox("panel", "GothicArtBagFill", _flat(Color(0.17, 0.085, 0.025, 0.82), Color.TRANSPARENT, 0, 12))
+	# Main HUD bag/skill controls used to retain an orange code-fill even after
+	# the other panels moved to the approved dark-red feedback family.  The
+	# decorative UtilityStackArt remains untouched; only this interior fill is
+	# changed so the frame can continue to supply its original pixels.
+	result.set_stylebox("panel", "GothicArtBagFill", _flat(Color(0.22, 0.035, 0.075, 0.84), Color.TRANSPARENT, 0, 12))
 	result.set_type_variation("GothicArtCircleFill", "Panel")
 	result.set_stylebox("panel", "GothicArtCircleFill", _flat(Color(0.018, 0.022, 0.022, 0.88), Color.TRANSPARENT, 0, 40))
 	result.set_type_variation("GothicArtAttackFill", "Panel")
@@ -182,12 +191,16 @@ static func build() -> Theme:
 	result.set_type_variation("GothicLootRareBanner", "Panel")
 	result.set_stylebox("panel", "GothicLootRareBanner", _flat(Color(0.13, 0.13, 0.125, 0.72), Color(0.76, 0.56, 0.30, 0.78), 1, 4))
 	_apply_button_variation(result, "GothicUtilityButton", _flat(IRON, BRONZE, 2, 13), _flat(IRON_HOVER, BRONZE_BRIGHT, 2, 13), _flat(IRON_PRESSED, BRONZE_BRIGHT, 3, 13))
-	_apply_button_variation(result, "GothicSkillButton", _flat(Color(0.08, 0.055, 0.045, 0.96), BRONZE, 3, 36), _flat(Color(0.18, 0.09, 0.05, 0.98), BRONZE_BRIGHT, 3, 36), _flat(Color(0.28, 0.07, 0.04, 1.0), Color("f0bd70"), 4, 36))
-	_apply_button_variation(result, "GothicAttackButton", _flat(Color(0.24, 0.035, 0.035, 0.96), BRONZE, 4, 60), _flat(Color(0.38, 0.055, 0.04, 1.0), BRONZE_BRIGHT, 4, 60), _flat(Color(0.52, 0.08, 0.035, 1.0), Color("ffd08a"), 5, 60))
-	_apply_button_variation(result, "GothicItemButton", _flat(Color(0.018, 0.015, 0.014, 0.86), Color(0.55, 0.39, 0.22, 0.22), 1, 5), _flat(Color(0.16, 0.09, 0.045, 0.88), BRONZE_BRIGHT, 2, 5), _flat(Color(0.25, 0.11, 0.04, 0.92), Color("e6b56f"), 2, 5))
-	_apply_button_variation(result, "GothicHUDItemHitButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.18, 0.09, 0.045, 0.18), Color.TRANSPARENT, 0, 7), _flat(Color(0.30, 0.11, 0.04, 0.24), Color.TRANSPARENT, 0, 7))
-	_apply_button_variation(result, "GothicTransparentButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.45, 0.22, 0.06, 0.12), Color(0.85, 0.66, 0.38, 0.55), 1, 9), _flat(Color(0.55, 0.12, 0.04, 0.20), BRONZE_BRIGHT, 2, 9))
-	_apply_button_variation(result, "GothicPanelTransparentButton", _flat(Color.TRANSPARENT, Color(0.46, 0.33, 0.21, 0.86), 1, 9), _flat(Color(0.16, 0.08, 0.04, 0.72), BRONZE_BRIGHT, 1, 9), _flat(Color(0.26, 0.08, 0.035, 0.82), BRONZE_BRIGHT, 1, 9))
+	_apply_button_variation(result, "GothicSkillButton", _flat(Color(0.08, 0.035, 0.055, 0.96), BRONZE, 3, 36), _flat(Color(0.18, 0.045, 0.085, 0.98), BRONZE_BRIGHT, 3, 36), _flat(Color(0.28, 0.06, 0.12, 1.0), Color("f0bd70"), 4, 36))
+	_apply_button_variation(result, "GothicAttackButton", _flat(Color(0.24, 0.025, 0.045, 0.96), BRONZE, 4, 60), _flat(Color(0.38, 0.045, 0.075, 1.0), BRONZE_BRIGHT, 4, 60), _flat(Color(0.52, 0.06, 0.12, 1.0), Color("ffd08a"), 5, 60))
+	_apply_button_variation(result, "GothicItemButton", _flat(Color(0.018, 0.012, 0.018, 0.86), Color(0.55, 0.30, 0.34, 0.22), 1, 5), _flat(Color(0.16, 0.045, 0.085, 0.88), BRONZE_BRIGHT, 2, 5), _flat(Color(0.25, 0.06, 0.12, 0.92), Color("e6b56f"), 2, 5))
+	_apply_button_variation(result, "GothicHUDItemHitButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.18, 0.035, 0.075, 0.18), Color.TRANSPARENT, 0, 7), _flat(Color(0.30, 0.045, 0.09, 0.24), Color.TRANSPARENT, 0, 7))
+	# These controls sit above separately-authored HUD frames.  A synthetic
+	# Android hover must therefore not paint an orange rectangle over the frame;
+	# use a dark-red interior and a transparent border while preserving the
+	# existing state widths for hit-testing/style contracts.
+	_apply_button_variation(result, "GothicTransparentButton", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0), _flat(Color(0.20, 0.03, 0.065, 0.18), Color(0.62, 0.14, 0.18, 0.36), 1, 9), _flat(Color(0.30, 0.045, 0.09, 0.28), Color(0.70, 0.18, 0.22, 0.52), 2, 9))
+	_apply_button_variation(result, "GothicPanelTransparentButton", _flat(Color.TRANSPARENT, Color(0.46, 0.33, 0.21, 0.86), 1, 9), _flat(Color(0.20, 0.03, 0.065, 0.72), Color(0.62, 0.14, 0.18, 0.58), 1, 9), _flat(Color(0.30, 0.045, 0.09, 0.82), Color(0.70, 0.18, 0.22, 0.70), 1, 9))
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")

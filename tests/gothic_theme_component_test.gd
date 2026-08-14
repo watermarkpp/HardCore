@@ -122,6 +122,13 @@ func _assert_main_hud_styles_preserved(theme: Theme) -> void:
 			var state: String = ["normal", "hover", "pressed"][index]
 			var style := theme.get_stylebox(state, variation) as StyleBoxFlat
 			assert(style.border_width_left == int(widths[index]), "Main HUD style changed: %s.%s" % [variation, state])
+	var bag_fill := theme.get_stylebox("panel", "GothicArtBagFill") as StyleBoxFlat
+	assert(bag_fill != null, "Main HUD bag/skill fill is missing")
+	assert(bag_fill.bg_color.g < 0.08 and bag_fill.bg_color.b > bag_fill.bg_color.g, "Main HUD bag/skill fill retained the old orange tint")
+	var transparent_hover := theme.get_stylebox("hover", "GothicTransparentButton") as StyleBoxFlat
+	var transparent_pressed := theme.get_stylebox("pressed", "GothicTransparentButton") as StyleBoxFlat
+	assert(transparent_hover != null and transparent_pressed != null)
+	assert(transparent_hover.bg_color.g < 0.08 and transparent_pressed.bg_color.g < 0.08, "HUD transparent controls still use orange feedback")
 
 
 func _assert_shop_card_contract(manifest: Dictionary) -> void:
