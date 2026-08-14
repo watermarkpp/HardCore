@@ -174,6 +174,10 @@ var locked_target: EnemyActor
 var manual_target_lock := false
 var magic_locked_target: EnemyActor
 var manual_magic_target_lock := false
+## Presentation/selection follows the latest combat action. Caster
+## professions still own an independent magic lock, but an empty primary slot
+## temporarily presents and consumes the physical lock just like a warrior.
+var _active_target_domain_magic := true
 var auto_target_enabled := true
 var _mobile_attack_held := false
 var _queued_mobile_attack_tickets: Array[int] = []
@@ -2084,6 +2088,7 @@ func _spawn_enemy(
 
 
 func _request_mobile_attack() -> bool:
+	_activate_physical_attack_domain()
 	var target := _ensure_attack_locked_target()
 	var facing_before := player.facing
 	var touch_before := player.touch_vector
@@ -2415,6 +2420,7 @@ func _on_skill_input_started(
 	var metadata := SkillInputPolicyScript.metadata(skill_name)
 	if metadata.is_empty() or bool(metadata.get("passive", false)):
 		return
+	_activate_magic_skill_domain()
 	var entry := {
 		"contract_id": SKILL_INPUT_TICKET_CONTRACT_ID,
 		"input_key": input_key,
@@ -2666,6 +2672,44 @@ func _uses_magic_lock_domain() -> bool:
 	]
 
 
+func _magic_target_domain_is_active() -> bool:
+	return _uses_magic_lock_domain() and _active_target_domain_magic
+
+
+func _set_active_target_domain_magic(active: bool) -> void:
+	_active_target_domain_magic = active
+	_refresh_target_highlights()
+	_update_target_hud()
+
+
+func _activate_physical_attack_domain() -> void:
+	_set_active_target_domain_magic(false)
+	# A manual caster selection is stored in the independent magic domain. If
+	# that exact target is also inside the physical lock range, carry it across
+	# before the ordinary attack asks the normal auto-target policy for a target.
+	# Never widen the physical range or replace an existing physical lock with an
+	# automatically selected magic target.
+	if _is_attack_target_in_range(magic_locked_target) and (
+		not _is_attack_target_in_range(locked_target)
+		or manual_magic_target_lock
+	):
+		_set_attack_locked_target(magic_locked_target, manual_magic_target_lock)
+
+
+func _activate_magic_skill_domain() -> void:
+	if not _uses_magic_lock_domain():
+		return
+	_set_active_target_domain_magic(true)
+	# Preserve a manually selected physical target when a caster switches back
+	# to a bound/ring skill, but only when that same target satisfies the magic
+	# lock range. The two lock domains remain independent outside this bridge.
+	if (
+		_is_magic_target_in_range(locked_target)
+		and not _is_magic_target_in_range(magic_locked_target)
+	):
+		_set_magic_locked_target(locked_target, manual_target_lock)
+
+
 func _spell_lock_ground_gu(screen_position_px: Vector2) -> Vector2:
 	return _canonical_screen_px_to_ground_gu(screen_position_px)
 
@@ -2724,7 +2768,7 @@ func _set_magic_locked_target(target: EnemyActor, manual := false) -> void:
 
 
 func _active_display_target() -> EnemyActor:
-	return magic_locked_target if _uses_magic_lock_domain() else locked_target
+	return magic_locked_target if _magic_target_domain_is_active() else locked_target
 
 
 func _refresh_target_highlights() -> void:
@@ -2754,11 +2798,22 @@ func _is_attack_target_in_range(target: EnemyActor) -> bool:
 
 
 func _on_enemy_target_requested(enemy: EnemyActor) -> void:
-	if _uses_magic_lock_domain() and _is_magic_target_in_range(enemy):
-		_set_magic_locked_target(enemy, true)
-		_skill_cast_target = enemy
-		_face_skill_cast_target()
-	elif not _uses_magic_lock_domain() and _is_attack_target_in_range(enemy):
+	var magic_domain_active := _magic_target_domain_is_active()
+	if _uses_magic_lock_domain():
+		# A caster click may be valid in one or both lock domains. Keep each
+		# domain's range contract independent while only the active action domain
+		# controls presentation and facing.
+		if _is_attack_target_in_range(enemy):
+			_set_attack_locked_target(enemy, true)
+		if _is_magic_target_in_range(enemy):
+			_set_magic_locked_target(enemy, true)
+			_skill_cast_target = enemy
+		if magic_domain_active and _is_magic_target_in_range(enemy):
+			_face_skill_cast_target()
+		elif not magic_domain_active and _is_attack_target_in_range(enemy):
+			_face_locked_target()
+		return
+	if _is_attack_target_in_range(enemy):
 		_set_attack_locked_target(enemy, true)
 		_face_locked_target()
 
@@ -2943,7 +2998,7 @@ func _find_valid_enemy_landing(
 
 func _cycle_target() -> void:
 	_validate_locked_target()
-	var magic_domain := _uses_magic_lock_domain()
+	var magic_domain := _magic_target_domain_is_active()
 	var candidates := (
 		_spell_lock_candidates()
 		if magic_domain
@@ -2979,11 +3034,16 @@ func _set_auto_target_enabled(enabled: bool) -> void:
 	hud.set_auto_target_enabled(enabled)
 	if enabled:
 		if _uses_magic_lock_domain():
+			# Re-enabling auto-target is a fresh selection boundary for casters;
+			# clear both independent domains so an inactive stale lock cannot
+			# reappear when the next action switches domains.
+			_cancel_target()
 			_cancel_magic_target()
 		else:
 			_cancel_target()
 	else:
 		if _uses_magic_lock_domain():
+			manual_target_lock = is_instance_valid(locked_target)
 			manual_magic_target_lock = is_instance_valid(magic_locked_target)
 		else:
 			manual_target_lock = is_instance_valid(locked_target)
@@ -3153,6 +3213,7 @@ func _face_locked_target() -> Vector2:
 
 
 func _ensure_skill_cast_target(excluded: EnemyActor = null) -> EnemyActor:
+	_activate_magic_skill_domain()
 	if _is_magic_target_in_range(magic_locked_target) and magic_locked_target != excluded:
 		_skill_cast_target = magic_locked_target
 		return _skill_cast_target
@@ -3447,7 +3508,7 @@ func _apply_wild_rush_displacement(
 func _update_target_hud() -> void:
 	if not is_instance_valid(hud):
 		return
-	var magic_domain := _uses_magic_lock_domain()
+	var magic_domain := _magic_target_domain_is_active()
 	var active_target := magic_locked_target if magic_domain else locked_target
 	var target_valid := (
 		_is_magic_target_in_range(active_target)
@@ -3529,6 +3590,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		if show_failure:
 			hud.show_message("该技能已隐藏，无法使用")
 		return &"rejected"
+	_activate_magic_skill_domain()
 	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
 	if (
 		PlayerState.profession == "战士"
@@ -3646,11 +3708,21 @@ func _spell_definition_allows_target(
 	definition: Dictionary,
 	target: EnemyActor
 ) -> bool:
-	## Hostile cast eligibility is decided ONLY by the existing auto/manual
-	## enemy lock eligibility (alive, within the 12-GU lock domain). The
-	## skill's own maximum_range_gu no longer double-rejects a locked target
-	## (e.g. taoist.soul_fire_talisman 9-tile geometry vs the 12-GU lock).
-	return _is_magic_target_in_range(target)
+	if not _is_magic_target_in_range(target):
+		return false
+	var target_contract: Dictionary = definition.get("target", {})
+	if not str(target_contract.get("relation", "")).contains("hostile"):
+		return true
+	var geometry: Dictionary = definition.get("geometry", {})
+	if str(geometry.get("shape", "")) != "projectile":
+		return true
+	var maximum_range_gu := float(geometry.get("maximum_range_gu", 0.0))
+	if maximum_range_gu <= 0.0:
+		return true
+	return (
+		_spell_lock_distance_gu(target)
+		<= maximum_range_gu + GroundUnitSpaceScript.EPSILON_GU
+	)
 
 
 func _wire_item_quick_slots_hud() -> void:

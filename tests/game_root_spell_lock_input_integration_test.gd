@@ -4,6 +4,8 @@ const SpellLockPolicy := preload("res://scripts/skills/spell_target_lock_policy.
 const SkillDataLoader := preload("res://scripts/skills/skill_data_loader.gd")
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
+var _skill_request_probe_count := 0
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -49,6 +51,8 @@ func _run() -> void:
 	_test_magic_shield_toggle_and_auto_refresh(game)
 	_test_projectile_exact_gu_range(game)
 	await _test_taoist_entrapment_retains_locked_monster(game, origin_tile)
+	await _test_projectile_target_range_contract(game, origin_tile)
+	await _test_caster_empty_primary_uses_physical_lock(game, origin_tile)
 
 	game.queue_free()
 	await get_tree().process_frame
@@ -595,6 +599,219 @@ func _reset_cast_gate(game: Node) -> void:
 	game.player._attack_action_timer = 0.0
 	game.player._skill_cooldown_remaining.clear()
 	game._skill_input_retry_remaining = 0.0
+
+
+func _test_projectile_target_range_contract(
+	game: Node,
+	origin_tile: Vector2
+) -> void:
+	var original_profession: String = PlayerState.profession
+	var original_learned: Dictionary = PlayerState.learned_skills.duplicate(true)
+	var original_inventory: Array = PlayerState.inventory.duplicate(true)
+	var original_mp: int = game.player.current_mp
+	var original_attack_slots: Array[String] = PlayerState.attack_skill_slots.duplicate()
+	var original_auto_target: bool = game.auto_target_enabled
+	var original_domain_magic: bool = game._active_target_domain_magic
+	var original_safe_zones: Array = game._active_safe_zones.duplicate(true)
+	game._active_safe_zones = []
+	game.auto_target_enabled = false
+	var boundary_target := _make_enemy(
+		game,
+		origin_tile + Vector2(9.0, 0.0),
+		"projectile-range-boundary"
+	)
+	var outer_target := _make_enemy(
+		game,
+		origin_tile + Vector2(11.0, 0.0),
+		"projectile-range-outer"
+	)
+	var projectile_skill_ids: Array[String] = [
+		"wizard.fireball",
+		"wizard.great_fireball",
+		"taoist.soul_fire_talisman",
+	]
+	for stable_skill_id: String in projectile_skill_ids:
+		var definition: Dictionary = SkillDataLoader.skill(stable_skill_id)
+		assert(str(definition.get("geometry", {}).get("shape", "")) == "projectile")
+		var maximum_range_gu: float = float(
+			definition.get("geometry", {}).get("maximum_range_gu", 0.0)
+		)
+		assert(is_equal_approx(maximum_range_gu, 9.0))
+		game._set_magic_locked_target(boundary_target, true)
+		assert(game._spell_definition_allows_target(definition, boundary_target))
+		game._set_magic_locked_target(outer_target, true)
+		assert(not game._spell_definition_allows_target(definition, outer_target))
+	game._set_active_target_domain_magic(true)
+	game._on_enemy_target_requested(outer_target)
+	assert(game.magic_locked_target == outer_target)
+	assert(game._active_display_target() == outer_target)
+	var lightning_definition: Dictionary = SkillDataLoader.skill("wizard.lightning")
+	assert(str(lightning_definition.get("geometry", {}).get("shape", "")) != "projectile")
+	assert(game._spell_definition_allows_target(lightning_definition, outer_target))
+	var skill_request_callback := Callable(self, "_capture_skill_request")
+	game.player.skill_requested.connect(skill_request_callback)
+	for stable_skill_id: String in [
+		"wizard.fireball",
+		"taoist.soul_fire_talisman",
+	]:
+		var profession_id := "taoist" if stable_skill_id.begins_with("taoist.") else "wizard"
+		var profession_name := ProfessionRules.profession_display_name(profession_id)
+		var skill_name := SkillDataLoader.display_name(stable_skill_id)
+		PlayerState.profession = profession_name
+		PlayerState.learned_skills = {skill_name: 0}
+		if stable_skill_id == "taoist.soul_fire_talisman":
+			var amulet_name := str(PlayerState.CANONICAL_MATERIAL_ITEMS.get("amulet", ""))
+			if PlayerState.item_count(amulet_name) < 1:
+				PlayerState.inventory.append({"name": amulet_name, "count": 1})
+		PlayerState.recalculate_stats()
+		game.player.current_mp = 999
+		game._set_active_target_domain_magic(true)
+		game._set_magic_locked_target(outer_target, true)
+		game._skill_cast_target = outer_target
+		_reset_cast_gate(game)
+		var mp_before: int = game.player.current_mp
+		var action_sequence_before: int = game.player._combat_action_sequence
+		var attack_timer_before: float = game.player._attack_timer
+		var action_timer_before: float = game.player._attack_action_timer
+		var cooldown_before: Dictionary = game.player._skill_cooldown_remaining.duplicate(true)
+		var inventory_before: Array = PlayerState.inventory.duplicate(true)
+		var projectile_count_before: int = _projectile_count(game)
+		_skill_request_probe_count = 0
+		var result: StringName = game._try_release_skill(skill_name, false)
+		assert(result == &"rejected")
+		assert(game.player.current_mp == mp_before)
+		assert(game.player._combat_action_sequence == action_sequence_before)
+		assert(is_equal_approx(game.player._attack_timer, attack_timer_before))
+		assert(is_equal_approx(game.player._attack_action_timer, action_timer_before))
+		assert(game.player._skill_cooldown_remaining == cooldown_before)
+		assert(PlayerState.inventory == inventory_before)
+		assert(_skill_request_probe_count == 0)
+		assert(_projectile_count(game) == projectile_count_before)
+	game.player.skill_requested.disconnect(skill_request_callback)
+	boundary_target.queue_free()
+	outer_target.queue_free()
+	await get_tree().process_frame
+	PlayerState.profession = original_profession
+	PlayerState.learned_skills = original_learned
+	PlayerState.inventory = original_inventory
+	PlayerState.attack_skill_slots = original_attack_slots
+	PlayerState.recalculate_stats()
+	game.player.current_mp = original_mp
+	game.auto_target_enabled = original_auto_target
+	game._active_safe_zones = original_safe_zones
+	game._cancel_all_combat_targets()
+	game._set_active_target_domain_magic(original_domain_magic)
+
+
+func _projectile_count(game: Node) -> int:
+	var count := 0
+	for child: Node in game.get_children():
+		if child is SkillProjectile:
+			count += 1
+	return count
+
+
+func _test_caster_empty_primary_uses_physical_lock(
+	game: Node,
+	origin_tile: Vector2
+) -> void:
+	var original_profession := PlayerState.profession
+	var original_attack_slots: Array[String] = PlayerState.attack_skill_slots.duplicate()
+	var original_auto_target: bool = game.auto_target_enabled
+	var original_domain_magic: bool = game._active_target_domain_magic
+	var original_safe_zones: Array = game._active_safe_zones.duplicate(true)
+	var skill_request_callback := Callable(self, "_capture_skill_request")
+	game.player.skill_requested.connect(skill_request_callback)
+	PlayerState.attack_skill_slots = [""]
+	game.auto_target_enabled = false
+	game._active_safe_zones = []
+	game._cancel_all_combat_targets()
+	for profession_id: String in ["wizard", "taoist"]:
+		var profession_name := ProfessionRules.profession_display_name(profession_id)
+		PlayerState.profession = profession_name
+		PlayerState.recalculate_stats()
+		game._set_active_target_domain_magic(false)
+		var stale_physical_target := _make_enemy(
+			game,
+			origin_tile + Vector2(2.0, 0.0),
+			"caster-basic-stale-%s" % profession_id
+		)
+		game._set_attack_locked_target(stale_physical_target, true)
+		var far_target := _make_enemy(
+			game,
+			origin_tile + Vector2(11.0, 0.0),
+			"caster-basic-far-%s" % profession_id
+		)
+		game._on_enemy_target_requested(far_target)
+		assert(game.locked_target == stale_physical_target)
+		assert(game.magic_locked_target == far_target)
+		game._activate_magic_skill_domain()
+		assert(game._active_display_target() == far_target)
+		assert(game._ensure_skill_cast_target() == far_target)
+		game._set_auto_target_enabled(true)
+		assert(game.locked_target == null and game.magic_locked_target == null)
+		stale_physical_target.queue_free()
+		far_target.queue_free()
+		await get_tree().process_frame
+		game._set_auto_target_enabled(false)
+		game._set_active_target_domain_magic(true)
+		var target := _make_enemy(
+			game,
+			origin_tile + Vector2(1.0, 0.0),
+			"caster-basic-%s" % profession_id
+		)
+		game._on_enemy_target_requested(target)
+		assert(game.magic_locked_target == target)
+		assert(game.locked_target == target)
+		var hp_before: int = target.current_hp
+		var mp_before: int = game.player.current_mp
+		_skill_request_probe_count = 0
+		_reset_cast_gate(game)
+		assert(game.gameplay_input_is_enabled())
+		game._on_mobile_attack_input_started(
+			9000 + profession_name.length(),
+			-1,
+			&"test"
+		)
+		assert(
+			game.locked_target == target
+			and game._active_display_target() == target
+			and target.is_targeted,
+			"empty caster primary attack did not switch presentation to physical lock"
+		)
+		assert(game.magic_locked_target == target)
+		assert(game.player.current_mp == mp_before)
+		assert(_skill_request_probe_count == 0)
+		game._on_mobile_attack_input_ended(
+			9000 + profession_name.length(),
+			-1,
+			&"test"
+		)
+		await get_tree().create_timer(0.70).timeout
+		assert(
+			target.current_hp < hp_before,
+			"%s empty primary physical attack did not reduce target HP" % profession_name
+		)
+		target.queue_free()
+		await get_tree().process_frame
+		_reset_cast_gate(game)
+		game._cancel_all_combat_targets()
+	game.player.skill_requested.disconnect(skill_request_callback)
+	PlayerState.profession = original_profession
+	PlayerState.recalculate_stats()
+	PlayerState.attack_skill_slots = original_attack_slots
+	game.auto_target_enabled = original_auto_target
+	game._active_safe_zones = original_safe_zones
+	game._set_active_target_domain_magic(original_domain_magic)
+
+
+func _capture_skill_request(
+	_skill_name: String,
+	_origin: Vector2,
+	_direction: Vector2,
+	_damage: int
+) -> void:
+	_skill_request_probe_count += 1
 
 
 func _make_enemy(game: Node, tile: Vector2, display_name: String) -> EnemyActor:
