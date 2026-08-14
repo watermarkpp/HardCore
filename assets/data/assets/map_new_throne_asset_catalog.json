@@ -91,8 +91,8 @@
       "palette_path": "装饰物1/王座",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\1.png",
       "source_sha256": "99868ff158b5357618df1b6534017b2d6f33154bf8049f904c51f21961b65432",
-      "output_sha256": "385a8b5c5033e6ab9091ddb4d7e8ad6cd63e56ae98f8e33d6cf21a20d540525f",
-      "thumbnail_source_sha256": "385a8b5c5033e6ab9091ddb4d7e8ad6cd63e56ae98f8e33d6cf21a20d540525f",
+      "output_sha256": "d695ca36375e42350d2dd77a7f73cfb005e92119b987be7f9c796bb95089b07d",
+      "thumbnail_source_sha256": "d695ca36375e42350d2dd77a7f73cfb005e92119b987be7f9c796bb95089b07d",
       "processing": {
         "pipeline": "single_rgba_alpha_bbox_crop_v1",
         "source_canvas": [
@@ -106,7 +106,8 @@
           501
         ],
         "padding_px": 4,
-        "discarded_alpha_pixels": 0
+        "discarded_alpha_pixels": 0,
+        "alpha_edge_repair": "opaque_rgb_nearest_fill_alpha_preserved_v1"
       },
       "tags": [
         "new_local_asset",
@@ -205,8 +206,8 @@
       "palette_path": "装饰物1/王座",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\2.png",
       "source_sha256": "c83d34df3fa523e70b211d3dcb2ab851482b1f0299725a3579eddf35116d51bc",
-      "output_sha256": "c48631a906cfa885a0b6d888179c2054346bb70d86046f3b35bbabf407ab9f2a",
-      "thumbnail_source_sha256": "c48631a906cfa885a0b6d888179c2054346bb70d86046f3b35bbabf407ab9f2a",
+      "output_sha256": "3c9960ce3696afccbd3e633cb08e7c8042e317d897ead96f4845c3de761c7c98",
+      "thumbnail_source_sha256": "3c9960ce3696afccbd3e633cb08e7c8042e317d897ead96f4845c3de761c7c98",
       "processing": {
         "pipeline": "single_rgba_alpha_bbox_crop_v1",
         "source_canvas": [
@@ -220,7 +221,8 @@
           497
         ],
         "padding_px": 4,
-        "discarded_alpha_pixels": 0
+        "discarded_alpha_pixels": 0,
+        "alpha_edge_repair": "opaque_rgb_nearest_fill_alpha_preserved_v1"
       },
       "tags": [
         "new_local_asset",
@@ -319,8 +321,8 @@
       "palette_path": "装饰物1/王座",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\3.png",
       "source_sha256": "31cb9562d6921c72c4d08292b12e6d5cb8fbfa34f2592b5fd77fe7096a6e30d7",
-      "output_sha256": "ac53886b6f4eefd60c202cdec1ff25753c1cd714cc797a181ae59d9f9f41df91",
-      "thumbnail_source_sha256": "ac53886b6f4eefd60c202cdec1ff25753c1cd714cc797a181ae59d9f9f41df91",
+      "output_sha256": "a0d6d4a9b8f3f25caa940da06af0bb85a5f5b4e7a837ad9ef09ba5550f80ad30",
+      "thumbnail_source_sha256": "a0d6d4a9b8f3f25caa940da06af0bb85a5f5b4e7a837ad9ef09ba5550f80ad30",
       "processing": {
         "pipeline": "single_rgba_alpha_bbox_crop_v1",
         "source_canvas": [
@@ -334,7 +336,8 @@
           463
         ],
         "padding_px": 4,
-        "discarded_alpha_pixels": 0
+        "discarded_alpha_pixels": 0,
+        "alpha_edge_repair": "opaque_rgb_nearest_fill_alpha_preserved_v1"
       },
       "tags": [
         "new_local_asset",
@@ -433,8 +436,8 @@
       "palette_path": "装饰物1/王座",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\4.png",
       "source_sha256": "b09712248940ea1ca10100a0fb73ea6f5d512373e6479215fe04f0b430c84969",
-      "output_sha256": "bd7300fb0b4264bb03641277feb6a37e8b2269d29ffa32a207caf53f134aca95",
-      "thumbnail_source_sha256": "bd7300fb0b4264bb03641277feb6a37e8b2269d29ffa32a207caf53f134aca95",
+      "output_sha256": "211a462cee5de706743bea5e711f069d9f0ee86f20f5c09ede671257d09e381a",
+      "thumbnail_source_sha256": "211a462cee5de706743bea5e711f069d9f0ee86f20f5c09ede671257d09e381a",
       "processing": {
         "pipeline": "single_rgba_alpha_bbox_crop_v1",
         "source_canvas": [
@@ -448,7 +451,8 @@
           478
         ],
         "padding_px": 4,
-        "discarded_alpha_pixels": 0
+        "discarded_alpha_pixels": 0,
+        "alpha_edge_repair": "opaque_rgb_nearest_fill_alpha_preserved_v1"
       },
       "tags": [
         "new_local_asset",
@@ -547,8 +551,8 @@
       "palette_path": "装饰物1/王座",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\5.png",
       "source_sha256": "a1cfa840ed2848f101ffe4101ac6736ea69643b43bbe5e8fc8b3613f3d2f17ce",
-      "output_sha256": "5a62902b113230beb81a1f3e0b0005387254fb04b66844ee3b5ac167d4b4f7ac",
-      "thumbnail_source_sha256": "5a62902b113230beb81a1f3e0b0005387254fb04b66844ee3b5ac167d4b4f7ac",
+      "output_sha256": "ebc77a2123ddad94977457bbd992a0eb89360e0a4fdd3df27c7b3022dffaba44",
+      "thumbnail_source_sha256": "ebc77a2123ddad94977457bbd992a0eb89360e0a4fdd3df27c7b3022dffaba44",
       "processing": {
         "pipeline": "single_rgba_alpha_bbox_crop_v1",
         "source_canvas": [
@@ -562,7 +566,8 @@
           484
         ],
         "padding_px": 4,
-        "discarded_alpha_pixels": 0
+        "discarded_alpha_pixels": 0,
+        "alpha_edge_repair": "opaque_rgb_nearest_fill_alpha_preserved_v1"
       },
       "tags": [
         "new_local_asset",
@@ -661,8 +666,8 @@
       "palette_path": "装饰物1/王座",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\6.png",
       "source_sha256": "e7586fa081584cffa7ea2a50487cc45a93f353f62265a4f56f99bcab773a265f",
-      "output_sha256": "99013a62002de18b2eedd8d82590c9f67049e441a602db8cc26648db515ed6e0",
-      "thumbnail_source_sha256": "99013a62002de18b2eedd8d82590c9f67049e441a602db8cc26648db515ed6e0",
+      "output_sha256": "ccd4e404bad7cdf70cf43ece78b3c058d121b223c996add3d291bdcc8261768d",
+      "thumbnail_source_sha256": "ccd4e404bad7cdf70cf43ece78b3c058d121b223c996add3d291bdcc8261768d",
       "processing": {
         "pipeline": "single_rgba_alpha_bbox_crop_v1",
         "source_canvas": [
@@ -676,7 +681,8 @@
           465
         ],
         "padding_px": 4,
-        "discarded_alpha_pixels": 0
+        "discarded_alpha_pixels": 0,
+        "alpha_edge_repair": "opaque_rgb_nearest_fill_alpha_preserved_v1"
       },
       "tags": [
         "new_local_asset",
