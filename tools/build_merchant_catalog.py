@@ -18,6 +18,7 @@ PRIMARY = ROOT / "dev_art_sources/reference/mir2_database_candidates/suprcode_cr
 NPC_ROOT = PRIMARY / "Envir/NPCs"
 ITEM_CATALOG = ROOT / "assets/data/service_item_catalog.json"
 EQUIPMENT_ATTRIBUTE_MASTER = ROOT / "assets/data/equipment_attribute_master.json"
+BOOK_SHOP_POLICY = ROOT / "assets/data/official_book_shop_policy_v1.json"
 OUTPUT = ROOT / "assets/data/merchant_catalog_v1.json"
 
 RUNTIME_MERCHANTS = {
@@ -69,6 +70,10 @@ MEDICINE_ALLOWED_NAMES = {
 MEDICINE_ALLOWED_PACK_COUNTS = {1, 20}
 
 
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def sections(text: str) -> dict[str, list[str]]:
     result: dict[str, list[str]] = {}
     active = ""
@@ -81,6 +86,158 @@ def sections(text: str) -> dict[str, list[str]]:
         elif active and line and not line.startswith(";"):
             result[active].append(line)
     return result
+
+
+def section_line_entries(text: str, section_name: str) -> list[dict]:
+    """Return source ordinals and physical lines for one audited section."""
+    result: list[dict] = []
+    active = ""
+    for source_line, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        match = re.fullmatch(r"\[([^]]+)\]", line)
+        if match:
+            active = match.group(1).lower()
+        elif active == section_name.lower() and line and not line.startswith(";"):
+            result.append({
+                "value": line,
+                "sourceOrdinal": len(result) + 1,
+                "sourceLine": source_line,
+            })
+    return result
+
+
+def _require_evidence_hash(record: dict) -> Path:
+    path = ROOT / str(record.get("path", ""))
+    if not path.is_file():
+        raise ValueError(f"book-shop evidence missing: {path}")
+    expected = str(record.get("sha256", "")).lower()
+    actual = sha256_file(path)
+    if not expected or actual != expected:
+        raise ValueError(f"book-shop evidence hash drift: {path} expected {expected}, got {actual}")
+    return path
+
+
+def load_book_shop_policy() -> dict:
+    policy = json.loads(BOOK_SHOP_POLICY.read_text(encoding="utf-8-sig"))
+    if policy.get("contractId") != "gameplay.official_book_shop.v1":
+        raise ValueError("unsupported official book-shop policy contract")
+
+    _require_evidence_hash(policy["sourcePriorityPolicy"])
+    skill_master_path = _require_evidence_hash(policy["formalVanillaSkillMaster"])
+    candidate_record = policy["primaryCandidateTrade"]
+    candidate_path = _require_evidence_hash(candidate_record)
+    candidate_entries = section_line_entries(candidate_path.read_text(encoding="utf-8-sig"), "trade")
+    candidate_names = [entry["value"] for entry in candidate_entries]
+    if len(candidate_names) != int(candidate_record.get("tradeLineCount", -1)):
+        raise ValueError("BookStore-0104 trade-line count drift")
+
+    original_audit = policy["originalGameofmirMerchantDataAudit"]
+    original_root = ROOT / str(original_audit.get("searchRoot", ""))
+    unexpected_original_data = [
+        path
+        for pattern in original_audit.get("searchedPatterns", [])
+        for path in original_root.glob(str(pattern))
+        if path.is_file()
+    ]
+    if unexpected_original_data:
+        raise ValueError(
+            "original_gameofmir merchant data is no longer missing; audit it before regenerating: "
+            + ", ".join(path.as_posix() for path in unexpected_original_data[:5])
+        )
+    for reference in original_audit.get("engineReferences", []):
+        _require_evidence_hash(reference)
+
+    conservative_name_sets: list[set[str]] = []
+    conservative_paths: list[str] = []
+    for record in policy.get("conservativeShopEvidence", []):
+        path = _require_evidence_hash(record)
+        conservative_paths.append(path.relative_to(ROOT).as_posix())
+        conservative_name_sets.append(set(sections(path.read_text(encoding="utf-8-sig")).get("trade", [])))
+    if not conservative_name_sets:
+        raise ValueError("official book-shop policy has no conservative shop evidence")
+
+    skill_master = json.loads(skill_master_path.read_text(encoding="utf-8-sig"))
+    formal_skills = {
+        str(record.get("display_name", "")): record
+        for record in skill_master.get("skills", [])
+        if str(record.get("display_name", ""))
+    }
+    live_names = list(policy.get("officialShopLive", []))
+    computed_live = [
+        name
+        for name in candidate_names
+        if name in formal_skills and all(name in names for names in conservative_name_sets)
+    ]
+    if live_names != computed_live:
+        raise ValueError(f"official_shop_live policy drift: expected {computed_live}, got {live_names}")
+
+    advanced_records = list(policy.get("officialAdvancedDropOnly", []))
+    advanced_names = [str(record.get("name", "")) for record in advanced_records]
+    expected_advanced = [name for name in candidate_names if name in formal_skills and name not in live_names]
+    if advanced_names != expected_advanced:
+        raise ValueError(f"official_advanced_drop_only policy drift: expected {expected_advanced}, got {advanced_names}")
+    for record in advanced_records:
+        evidence = record.get("dropEvidence", {})
+        path = _require_evidence_hash(evidence)
+        source_line = int(evidence.get("sourceLine", 0))
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
+        if source_line < 1 or source_line > len(lines) or lines[source_line - 1].strip() != evidence.get("rawLine"):
+            raise ValueError(f"drop evidence line drift for {record.get('name', '')}: {path}:{source_line}")
+        if str(evidence.get("rawLine", "")).split(maxsplit=1)[-1] != str(record.get("name", "")):
+            raise ValueError(f"drop evidence item mismatch for {record.get('name', '')}")
+
+    private_names = list(policy.get("privateExtensionExcluded", []))
+    expected_private = [name for name in candidate_names if name not in formal_skills]
+    if private_names != expected_private:
+        raise ValueError(f"private_extension_excluded policy drift: expected {expected_private}, got {private_names}")
+    unresolved_names = list(policy.get("unresolvedFailClosed", []))
+    classified = live_names + advanced_names + private_names + unresolved_names
+    if (
+        len(classified) != len(set(classified))
+        or len(classified) != len(candidate_names)
+        or set(classified) != set(candidate_names)
+    ):
+        raise ValueError("book-shop classifications must account for all source lines once and in source order")
+
+    classification_by_name: dict[str, dict] = {}
+    for name in live_names:
+        skill = formal_skills[name]
+        classification_by_name[name] = {
+            "classification": "official_shop_live",
+            "policyId": policy["policyId"],
+            "formalSkillId": skill["skill_id"],
+            "membershipStatus": skill["membership_status"],
+            "conservativeShopPaths": conservative_paths,
+        }
+    for record in advanced_records:
+        name = str(record["name"])
+        skill = formal_skills[name]
+        classification_by_name[name] = {
+            "classification": "official_advanced_drop_only",
+            "policyId": policy["policyId"],
+            "formalSkillId": skill["skill_id"],
+            "membershipStatus": skill["membership_status"],
+            "absentFromConservativeShopPaths": conservative_paths,
+            "dropEvidence": record["dropEvidence"],
+        }
+    for name in private_names:
+        classification_by_name[name] = {
+            "classification": "private_extension_excluded",
+            "policyId": policy["policyId"],
+            "formalSkillMasterPath": skill_master_path.relative_to(ROOT).as_posix(),
+            "formalSkillMasterMembership": "missing",
+        }
+    for name in unresolved_names:
+        classification_by_name[name] = {
+            "classification": "unresolved_fail_closed",
+            "policyId": policy["policyId"],
+        }
+    return {
+        "policy": policy,
+        "candidatePath": candidate_path,
+        "candidateEntries": candidate_entries,
+        "classificationByName": classification_by_name,
+    }
 
 
 def item_index() -> dict[str, dict]:
@@ -111,7 +268,13 @@ def equipment_master_names() -> set[str]:
     return names
 
 
-def parse_offer(line: str, by_name: dict[str, dict], offer_index: int) -> dict:
+def parse_offer(
+    line: str,
+    by_name: dict[str, dict],
+    offer_index: int,
+    source_ordinal: int = 0,
+    source_line: int = 0,
+) -> dict:
     item_name = line
     pack_count = 1
     match = re.fullmatch(r"(.+?)\s+(\d+)", line)
@@ -119,7 +282,7 @@ def parse_offer(line: str, by_name: dict[str, dict], offer_index: int) -> dict:
         item_name = match.group(1)
         pack_count = int(match.group(2))
     record = by_name.get(item_name, {})
-    return {
+    offer = {
         "offerIndex": offer_index,
         "offerId": f"offer:{offer_index}:{int(record.get('serviceIndex', -1))}:{pack_count}",
         "tradeLine": line,
@@ -130,6 +293,11 @@ def parse_offer(line: str, by_name: dict[str, dict], offer_index: int) -> dict:
         "supply": "unlimited_static_trade",
         "resolved": bool(record),
     }
+    if source_ordinal > 0:
+        offer["sourceOrdinal"] = source_ordinal
+    if source_line > 0:
+        offer["sourceLine"] = source_line
+    return offer
 
 
 def parse_merchant(
@@ -139,19 +307,42 @@ def parse_merchant(
     relative: str,
     by_name: dict[str, dict],
     equipment_names: set[str],
+    book_shop_policy: dict,
 ) -> dict:
     path = NPC_ROOT / relative
     raw = path.read_bytes()
     text = raw.decode("utf-8-sig")
     parsed = sections(text)
-    source_offers = [parse_offer(line, by_name, index) for index, line in enumerate(parsed.get("trade", []))]
+    if stock_key == "books":
+        expected_path = book_shop_policy["candidatePath"]
+        if path != expected_path:
+            raise ValueError(f"book-shop policy source mismatch: {path} != {expected_path}")
+        source_offers = [
+            parse_offer(
+                entry["value"],
+                by_name,
+                index,
+                int(entry["sourceOrdinal"]),
+                int(entry["sourceLine"]),
+            )
+            for index, entry in enumerate(book_shop_policy["candidateEntries"])
+        ]
+    else:
+        source_offers = [parse_offer(line, by_name, index) for index, line in enumerate(parsed.get("trade", []))]
     excluded_offers: list[dict] = []
     offers: list[dict] = []
     excluded_names = EXCLUDED_OFFER_NAMES.get(stock_key, set())
     project_excluded_names = set(excluded_names)
     for offer in source_offers:
         exclusion_reason = ""
-        if offer["itemName"] in excluded_names:
+        classification_evidence: dict = {}
+        if stock_key == "books":
+            classification_evidence = dict(book_shop_policy["classificationByName"].get(offer["itemName"], {}))
+            classification = str(classification_evidence.get("classification", "unresolved_fail_closed"))
+            offer["catalogClassification"] = classification
+            if classification != "official_shop_live":
+                exclusion_reason = classification
+        elif offer["itemName"] in excluded_names:
             if stock_key == "starter_gear":
                 exclusion_reason = "project_owner_removed_unsupported_legacy_bow_offer"
             elif stock_key == "general":
@@ -172,10 +363,36 @@ def parse_merchant(
         if exclusion_reason:
             excluded = dict(offer)
             excluded["exclusionReason"] = exclusion_reason
+            if stock_key == "books":
+                excluded["exclusionEvidence"] = classification_evidence
             excluded_offers.append(excluded)
             project_excluded_names.add(str(offer["itemName"]))
         else:
+            if stock_key == "books":
+                offer["classificationEvidence"] = classification_evidence
             offers.append(offer)
+    project_overrides = {
+        "excludedItemNames": sorted(project_excluded_names),
+        "singleUnitOffersOnly": False,
+        "allowedPackCounts": sorted(MEDICINE_ALLOWED_PACK_COUNTS) if stock_key == "medicine" else [1],
+        "officialEquipmentEvidence": {
+            "path": EQUIPMENT_ATTRIBUTE_MASTER.relative_to(ROOT).as_posix(),
+            "recordCount": len(equipment_names),
+            "matchingPolicy": "starter_gear_equipment_name_must_exist_in_equipment_attribute_master",
+        } if stock_key == "starter_gear" else {},
+    }
+    if stock_key == "books":
+        project_overrides["officialBookShopPolicy"] = {
+            "contractId": book_shop_policy["policy"]["contractId"],
+            "policyId": book_shop_policy["policy"]["policyId"],
+            "path": BOOK_SHOP_POLICY.relative_to(ROOT).as_posix(),
+            "classificationCounts": {
+                "official_shop_live": len(book_shop_policy["policy"]["officialShopLive"]),
+                "official_advanced_drop_only": len(book_shop_policy["policy"]["officialAdvancedDropOnly"]),
+                "private_extension_excluded": len(book_shop_policy["policy"]["privateExtensionExcluded"]),
+                "unresolved_fail_closed": len(book_shop_policy["policy"]["unresolvedFailClosed"]),
+            },
+        }
     return {
         "stockKey": stock_key,
         "npcId": npc_id,
@@ -205,16 +422,7 @@ def parse_merchant(
         "supportsRepair": bool(re.search(r"(?:\[@Repair\]|/@Repair\b)", text, re.IGNORECASE)),
         "offers": offers,
         "excludedOffers": excluded_offers,
-        "projectOverrides": {
-            "excludedItemNames": sorted(project_excluded_names),
-            "singleUnitOffersOnly": False,
-            "allowedPackCounts": sorted(MEDICINE_ALLOWED_PACK_COUNTS) if stock_key == "medicine" else [1],
-            "officialEquipmentEvidence": {
-                "path": EQUIPMENT_ATTRIBUTE_MASTER.relative_to(ROOT).as_posix(),
-                "recordCount": len(equipment_names),
-                "matchingPolicy": "starter_gear_equipment_name_must_exist_in_equipment_attribute_master",
-            } if stock_key == "starter_gear" else {},
-        },
+        "projectOverrides": project_overrides,
         "unresolvedTradeLines": [offer["tradeLine"] for offer in source_offers if not offer["resolved"]],
     }
 
@@ -241,8 +449,17 @@ def discover_standard_merchants() -> list[dict]:
 def build_payload() -> dict:
     by_name = item_index()
     equipment_names = equipment_master_names()
+    book_shop_policy = load_book_shop_policy()
     merchants = {
-        stock_key: parse_merchant(stock_key, npc_id, merchant_id, relative, by_name, equipment_names)
+        stock_key: parse_merchant(
+            stock_key,
+            npc_id,
+            merchant_id,
+            relative,
+            by_name,
+            equipment_names,
+            book_shop_policy,
+        )
         for stock_key, (npc_id, merchant_id, relative) in RUNTIME_MERCHANTS.items()
     }
     required_exact = {

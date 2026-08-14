@@ -40,6 +40,85 @@ func _run() -> void:
 	assert(not general_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) in ["蜡烛", "火把", "护身符"]))
 	assert(str(weapon_stock[0].get("name", "")) == "木剑")
 	assert(str(book_stock[0].get("name", "")) == "基本剑术")
+	var expected_book_names := [
+		"基本剑术", "攻杀剑术",
+		"火球术", "抗拒火环", "诱惑之光", "大火球", "地狱火", "雷电术", "瞬息移动",
+		"治愈术", "精神力战法", "施毒术", "灵魂火符", "召唤骷髅",
+	]
+	var actual_book_names: Array[String] = []
+	for book_offer: Dictionary in book_stock:
+		actual_book_names.append(str(book_offer.get("name", "")))
+		assert(not GameData.get_item_record(str(book_offer.get("name", ""))).is_empty(), "书店常售技能书必须解析到正式物品记录")
+	assert(actual_book_names == expected_book_names, "书店必须只出售正式合同锁定的14本常规技能书")
+	var book_catalog: Dictionary = GameData.merchant_catalog.get("merchants", {}).get("books", {})
+	var catalog_book_names: Array[String] = []
+	for book_offer: Variant in book_catalog.get("offers", []):
+		assert(book_offer is Dictionary)
+		catalog_book_names.append(str((book_offer as Dictionary).get("itemName", "")))
+		assert(str((book_offer as Dictionary).get("catalogClassification", "")) == "official_shop_live")
+	assert(catalog_book_names == actual_book_names, "GameData books stock必须与生成目录live货单完全一致")
+	var expected_advanced_names := [
+		"刺杀剑术", "半月弯刀", "野蛮冲撞", "烈火剑法",
+		"爆裂火焰", "火墙", "疾光电影", "地狱雷光", "魔法盾", "圣言术", "冰咆哮",
+		"隐身术", "集体隐身术", "幽灵盾", "心灵启示", "神圣战甲术", "困魔咒", "群体治疗术", "召唤神兽",
+	]
+	var expected_private_names := [
+		"双龙斩", "捕绳剑", "寒冰掌", "嗜血术", "气功波", "净化术", "迷魂术", "无极真气",
+		"绝命剑法", "双刀术", "体迅风", "拔刀术", "风身术", "迁移剑", "烈风击", "捕缚术", "猛毒剑气",
+	]
+	var advanced_names: Array[String] = []
+	var private_names: Array[String] = []
+	var unresolved_names: Array[String] = []
+	var audited_source_ordinals := {}
+	for book_offer: Variant in book_catalog.get("offers", []):
+		var live_offer := book_offer as Dictionary
+		var live_ordinal := int(live_offer.get("sourceOrdinal", 0))
+		assert(live_ordinal == int(live_offer.get("offerIndex", -1)) + 1)
+		assert(int(live_offer.get("sourceLine", 0)) == 201 + live_ordinal)
+		audited_source_ordinals[live_ordinal] = true
+	for excluded: Variant in book_catalog.get("excludedOffers", []):
+		assert(excluded is Dictionary)
+		var excluded_offer := excluded as Dictionary
+		var classification := str(excluded_offer.get("catalogClassification", ""))
+		var source_ordinal := int(excluded_offer.get("sourceOrdinal", 0))
+		assert(source_ordinal == int(excluded_offer.get("offerIndex", -1)) + 1)
+		assert(int(excluded_offer.get("sourceLine", 0)) == 201 + source_ordinal)
+		assert(int(excluded_offer.get("serviceIndex", -1)) >= 0)
+		assert(str(excluded_offer.get("tradeLine", "")) == str(excluded_offer.get("itemName", "")))
+		assert(str(excluded_offer.get("exclusionReason", "")) == classification)
+		var evidence: Dictionary = excluded_offer.get("exclusionEvidence", {})
+		assert(str(evidence.get("policyId", "")) == "BOOK-SHOP-OFFICIAL-176-1")
+		match classification:
+			"official_advanced_drop_only":
+				advanced_names.append(str(excluded_offer.get("itemName", "")))
+				var drop_evidence: Dictionary = evidence.get("dropEvidence", {})
+				assert(not str(evidence.get("formalSkillId", "")).is_empty())
+				assert(not str(drop_evidence.get("path", "")).is_empty())
+				assert(str(drop_evidence.get("sha256", "")).length() == 64)
+				assert(int(drop_evidence.get("sourceLine", 0)) > 0)
+			"private_extension_excluded":
+				private_names.append(str(excluded_offer.get("itemName", "")))
+				assert(str(evidence.get("formalSkillMasterMembership", "")) == "missing")
+			"unresolved_fail_closed":
+				unresolved_names.append(str(excluded_offer.get("itemName", "")))
+			_:
+				assert(false, "书店排除项出现未知分类: %s" % classification)
+		audited_source_ordinals[source_ordinal] = true
+	advanced_names.sort()
+	private_names.sort()
+	expected_advanced_names.sort()
+	expected_private_names.sort()
+	assert(advanced_names == expected_advanced_names, "19本正式高级技能书必须保持掉落专属、不得进书店")
+	assert(private_names == expected_private_names, "17本私服扩展技能书必须明确排除")
+	assert(unresolved_names.is_empty(), "本次50条审计没有未决项；未来未知书籍必须fail-closed")
+	assert(book_catalog.get("excludedOffers", []).size() == 36)
+	assert(audited_source_ordinals.size() == 50 and not audited_source_ordinals.has(0))
+	var classification_counts: Dictionary = book_catalog.get("projectOverrides", {}).get("officialBookShopPolicy", {}).get("classificationCounts", {})
+	assert(classification_counts.size() == 4)
+	assert(int(classification_counts.get("official_shop_live", -1)) == 14)
+	assert(int(classification_counts.get("official_advanced_drop_only", -1)) == 19)
+	assert(int(classification_counts.get("private_extension_excluded", -1)) == 17)
+	assert(int(classification_counts.get("unresolved_fail_closed", -1)) == 0)
 	for official_weapon: Dictionary in weapon_stock:
 		assert(not GameData.get_item_record(str(official_weapon.get("name", ""))).is_empty(), "正式武器货单必须解析到玩家物品记录")
 	var medicine_names := [
