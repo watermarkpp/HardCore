@@ -79,6 +79,10 @@ var element_clipboard: Dictionary = {}
 var active_tool_mode := "select"
 var load_default_workspace_on_ready := true
 var persist_last_document_path := true
+## Keep startup work out of _ready so the editor shell can paint first.
+var startup_document_load_scheduled := false
+var startup_document_load_started := false
+var startup_document_load_finished := false
 
 
 func _notification(what:int)->void:
@@ -91,11 +95,33 @@ func _ready() -> void:
 	_build_ui()
 	if not load_default_workspace_on_ready:
 		return
+	# Opening a document can migrate ground state, repair semantic IDs, and
+	# rebuild the preview. Schedule it after the shell is in the tree so the
+	# first frame shows a useful status instead of a black window.
+	startup_document_load_scheduled = true
+	status_label.text = "启动界面已就绪，正在加载最近地图…"
+	print("MSE_STARTUP_SHELL_READY")
+	print("MSE_STARTUP_DOCUMENT_LOAD_SCHEDULED")
+	call_deferred("_load_default_workspace_deferred")
+
+
+func _load_default_workspace_deferred() -> void:
+	if not is_inside_tree() or not load_default_workspace_on_ready:
+		return
+	startup_document_load_started = true
+	print("MSE_STARTUP_DOCUMENT_LOAD_STARTED")
+	# Yield one frame after the deferred callback to give the shell a paint
+	# opportunity before any document/ground work begins.
+	await get_tree().process_frame
+	if not is_inside_tree() or not load_default_workspace_on_ready:
+		return
 	var recent_path := _startup_document_path()
 	if FileAccess.file_exists(recent_path):
 		_open_document_path(recent_path)
 	else:
 		_create_map("sandbox_64", "quest_room", 990001, "64格沙盒")
+	startup_document_load_finished = true
+	print("MSE_STARTUP_DOCUMENT_LOAD_FINISHED")
 
 
 func _startup_document_path() -> String:
