@@ -800,6 +800,7 @@ func _confirm_pending_sell() -> void:
 
 
 func _emit_sell_request(request: Dictionary) -> void:
+	_clear_transaction_feedback()
 	GothicUIThemeScript.set_button_feedback(
 		sell_quantity_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
@@ -966,6 +967,7 @@ func _set_shop_card_selected(card: Button, selected: bool) -> void:
 
 
 func _repair_all() -> void:
+	_clear_transaction_feedback()
 	GothicUIThemeScript.set_button_feedback(
 		repair_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
@@ -994,6 +996,7 @@ func _buy_selected() -> void:
 	if not bool(quote.get("valid", false)):
 		detail_label.text = str(quote.get("reason", "该商品暂时无法购买。"))
 		return
+	_clear_transaction_feedback()
 	detail_label.text = "[color=#d8bd8c]购买请求已提交，等待玩法层返回交易结果。[/color]"
 	GothicUIThemeScript.set_button_feedback(
 		buy_button,
@@ -1038,6 +1041,7 @@ func _clear_transaction_feedback() -> void:
 
 
 func _show_transaction_result_feedback(button: Button, success: bool, group: String) -> void:
+	_clear_transaction_feedback()
 	_transaction_feedback_serial += 1
 	var serial := _transaction_feedback_serial
 	GothicUIThemeScript.set_button_feedback(
@@ -1048,7 +1052,7 @@ func _show_transaction_result_feedback(button: Button, success: bool, group: Str
 	if not is_inside_tree():
 		return
 	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
-		if serial == _transaction_feedback_serial and is_instance_valid(button):
+		if serial == _transaction_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)
 

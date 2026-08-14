@@ -43,10 +43,13 @@ const PROFESSION_PRESENTATION := {
 var list_box: VBoxContainer
 var name_input: LineEdit
 var message_label: Label
+var create_button: Button
 var profession_buttons: Dictionary = {}
 var profile_cards: Dictionary = {}
+var profession_button_group: ButtonGroup
 var profile_scroll: ScrollContainer
 var ai_teammate_toggle: CheckButton
+var _creation_feedback_serial := 0
 var enter_button: Button
 var launch_loading_overlay: Control
 var preview_visual_root: Control
@@ -87,6 +90,8 @@ func _ready() -> void:
 	_refresh_profiles()
 	TouchScrollSupportScript.attach_tree(self)
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
+	_restore_character_action_visual_contract()
+	call_deferred("_restore_character_action_visual_contract")
 
 
 func _input(event: InputEvent) -> void:
@@ -326,7 +331,7 @@ func _build_preview_panel() -> void:
 	# Enter is a transition action, not a persistent selection.  The selected
 	# character card owns the persistent selection highlight; this button only
 	# receives an explicit transition cue while the loading surface takes over.
-	enter_button.theme_type_variation = "GothicComponentButton"
+	enter_button.theme_type_variation = "GothicCharacterLaunchButton"
 	enter_button.add_theme_font_size_override("font_size", 20)
 	enter_button.set_meta("stable_id", "character.launch")
 	enter_button.pressed.connect(_enter_selected_character)
@@ -376,11 +381,15 @@ func _build_creation_panel() -> void:
 	profession_caption.size = Vector2(310, 24)
 	profession_caption.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(profession_caption)
+	profession_button_group = ButtonGroup.new()
+	profession_button_group.allow_unpress = false
 	for index in range(ProfessionRules.PROFESSIONS.size()):
 		var profession_name: String = ProfessionRules.PROFESSIONS[index]
 		var presentation: Dictionary = PROFESSION_PRESENTATION[profession_name]
 		var button := Button.new()
 		button.name = "%sProfession" % str(presentation.id).capitalize()
+		button.toggle_mode = true
+		button.button_group = profession_button_group
 		button.text = "%s\n%s\n%s" % [presentation.glyph, profession_name, presentation.role]
 		button.position = Vector2(26 + index * 104, 190)
 		button.size = Vector2(98, 132)
@@ -401,7 +410,7 @@ func _build_creation_panel() -> void:
 	create_hint.theme_type_variation = "GothicMutedLabel"
 	create_hint.add_theme_font_size_override("font_size", 12)
 	panel.add_child(create_hint)
-	var create_button := Button.new()
+	create_button = Button.new()
 	create_button.name = "CreateCharacter"
 	create_button.text = "创建角色"
 	create_button.position = Vector2(26, 374)
@@ -410,6 +419,7 @@ func _build_creation_panel() -> void:
 	create_button.add_theme_font_size_override("font_size", 18)
 	create_button.set_meta("stable_id", "character.create")
 	create_button.pressed.connect(_create_character)
+	create_button.z_index = 2
 	panel.add_child(create_button)
 	message_label = Label.new()
 	message_label.name = "Message"
@@ -419,6 +429,7 @@ func _build_creation_panel() -> void:
 	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message_label.theme_type_variation = "GothicMutedLabel"
+	message_label.z_index = 1
 	panel.add_child(message_label)
 	_refresh_creation_controls()
 
@@ -501,14 +512,19 @@ func _refresh_selection_state() -> void:
 		var entry: Dictionary = profile_cards[profile_id]
 		var main_button: Button = entry.main_button
 		var ai_button: Button = entry.ai_button
-		main_button.theme_type_variation = (
-			"GothicCharacterSelectedProfileButton"
-			if profile_id == selected_main_profile_id
-			else "GothicCharacterProfileButton"
+		var selected := profile_id == selected_main_profile_id
+		GothicUIThemeScript.set_character_selection_feedback(
+			main_button,
+			selected,
+			&"GothicCharacterProfileButton",
+			&"GothicCharacterSelectedProfileButton",
+			"character.profile",
 		)
 		ai_button.disabled = true
 		ai_button.theme_type_variation = "GothicCharacterAIStatusButton"
 		ai_button.text = "AI队友\n暂未开放"
+	if create_button != null:
+		create_button.text = "创建角色"
 	ai_teammate_toggle.disabled = true
 	ai_teammate_toggle.set_pressed_no_signal(false)
 	teammate_status_label.text = "AI队友功能暂未开放"
@@ -584,6 +600,8 @@ func _select_main_profile(profile_id: String) -> void:
 		message_label.text = "角色存档不存在或已损坏"
 		_refresh_profiles()
 		return
+	# The preview already identifies the selected character.  Keep the creation
+	# action's label isolated so a selection message cannot look like button text.
 	message_label.text = "已选择主角色：%s" % PlayerState.character_name
 	_refresh_selection_state()
 
@@ -611,14 +629,36 @@ func _select_creation_profession(profession_name: String) -> void:
 func _refresh_creation_controls() -> void:
 	for profession_name: String in profession_buttons:
 		var button: Button = profession_buttons[profession_name]
-		button.theme_type_variation = (
-			"GothicCharacterSelectedProfessionButton"
-			if profession_name == selected_creation_profession
-			else "GothicCharacterProfessionButton"
+		var selected := profession_name == selected_creation_profession
+		GothicUIThemeScript.set_character_selection_feedback(
+			button,
+			selected,
+			&"GothicCharacterProfessionButton",
+			&"GothicCharacterSelectedProfessionButton",
+			"character.profession",
 		)
+	if create_button != null:
+		create_button.text = "创建角色"
+		create_button.theme_type_variation = "GothicCharacterLaunchButton"
+		create_button.z_index = 2
+	if message_label != null:
+		message_label.z_index = 1
+
+
+func _restore_character_action_visual_contract() -> void:
+	if create_button != null:
+		create_button.theme_type_variation = "GothicCharacterLaunchButton"
+		create_button.text = "创建角色"
+		create_button.z_index = 2
+	if message_label != null:
+		message_label.z_index = 1
 
 
 func _create_character() -> void:
+	if create_button == null:
+		return
+	_creation_feedback_serial += 1
+	GothicUIThemeScript.set_button_feedback(create_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "character.create")
 	last_creation_request = build_creation_request()
 	character_creation_requested.emit(last_creation_request.duplicate(true))
 	var error := PlayerState.create_character(
@@ -629,6 +669,7 @@ func _create_character() -> void:
 	if not error.is_empty():
 		message_label.add_theme_color_override("font_color", Color("d47868"))
 		message_label.text = error
+		_show_creation_result(false)
 		return
 	selected_main_profile_id = PlayerState.active_profile_id
 	selected_ai_profile_id = ""
@@ -636,6 +677,20 @@ func _create_character() -> void:
 	message_label.text = "角色创建成功，请选择是否携带 AI 队友"
 	name_input.clear()
 	_refresh_profiles()
+	_show_creation_result(true)
+
+
+func _show_creation_result(success: bool) -> void:
+	var serial := _creation_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		create_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"character.create",
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _creation_feedback_serial and is_instance_valid(create_button) and create_button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(create_button)
+	)
 
 
 func build_creation_request() -> Dictionary:
@@ -676,9 +731,7 @@ func _enter_selected_character() -> void:
 		PlayerState.active_profile_id != selected_main_profile_id
 		and not PlayerState.select_character(selected_main_profile_id)
 	):
-		_launch_in_progress = false
-		launch_loading_overlay.hide()
-		message_label.text = "角色存档不存在或已损坏"
+		_restore_after_launch_failure("角色存档不存在或已损坏")
 		_refresh_profiles()
 		return
 	last_launch_request = build_launch_request()

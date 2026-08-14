@@ -54,6 +54,7 @@ var skill_button_modes: Dictionary = {}
 var _refresh_pending := false
 var _refresh_execution_count := 0
 var _formal_skill_rules: Dictionary = {}
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
@@ -859,6 +860,11 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 		"interaction_mode": interaction_mode,
 	}
 	skill_button_assignment_requested.emit(request.duplicate(true))
+	_clear_assignment_feedback()
+	var feedback_button := _assignment_button_for(slot_group, slot_index, false)
+	if feedback_button != null:
+		GothicUIThemeScript.set_button_feedback(feedback_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "skill.assignment")
+		_show_assignment_sent(feedback_button, "skill.assignment")
 	_hide_assignment_popup()
 
 
@@ -882,6 +888,42 @@ func _request_clear_target(slot_group: String, slot_index: int) -> void:
 		"interaction_mode": "empty",
 		"clear": true,
 	})
+	_clear_assignment_feedback()
+	var feedback_button := _assignment_button_for(slot_group, slot_index, true)
+	if feedback_button != null:
+		GothicUIThemeScript.set_button_feedback(feedback_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "skill.assignment.clear")
+		_show_assignment_sent(feedback_button, "skill.assignment.clear")
+
+
+func _assignment_button_for(slot_group: String, slot_index: int, clear: bool) -> Button:
+	for node in find_children("*", "Button", true, false):
+		if not node is Button:
+			continue
+		var button := node as Button
+		if str(button.get_meta("slot_group", "")) != slot_group:
+			continue
+		if int(button.get_meta("slot_index", -1)) != slot_index:
+			continue
+		var is_clear := button.has_meta("assignment_action") and str(button.get_meta("assignment_action", "")) == "clear"
+		if is_clear == clear:
+			return button
+	return null
+
+
+func _show_assignment_sent(button: Button, group: String) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	get_tree().create_timer(0.25).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_assignment_feedback() -> void:
+	_action_feedback_serial += 1
+	for node in find_children("*", "Button", true, false):
+		if node is Button:
+			GothicUIThemeScript.clear_button_feedback(node as Button)
 
 
 func _hide_assignment_popup() -> void:
@@ -1044,6 +1086,7 @@ func _section_title(node_name: String, text_value: String, width: float) -> Labe
 
 
 func _close() -> void:
+	_clear_assignment_feedback()
 	_cancel_skill_long_press()
 	_hide_assignment_popup()
 	hide()

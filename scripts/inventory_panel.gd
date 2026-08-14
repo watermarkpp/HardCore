@@ -65,6 +65,7 @@ var _press_origin := Vector2.ZERO
 var _long_press_opened := false
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _action_feedback_serial := 0
 # Production policy: the long-press context menu is intentionally suppressed.
 # The PopupMenu builder/action helpers remain for special items enabled later
 # through _context_menu_policy (enabled + optional enabled_kinds whitelist).
@@ -825,20 +826,46 @@ func _clear_pressed_suppression(index: int) -> void:
 
 
 func _on_auto_sort_pressed() -> void:
+	_clear_inventory_action_feedback()
+	GothicUIThemeScript.set_button_feedback(auto_sort_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.sort")
 	var result: Dictionary = PlayerState.sort_inventory_deterministic()
 	selected_inventory_indices.clear()
 	selected_inventory_index = -1
 	refresh()
 	detail_label.text = "[color=#e8c277]自动整理%s[/color]" % ("完成" if bool(result.get("success", false)) else "失败")
+	_show_inventory_action_result(auto_sort_button, bool(result.get("success", false)), "inventory.sort")
 
 
 func _on_discard_pressed() -> void:
 	var indices: Array = selected_inventory_indices.keys()
+	_clear_inventory_action_feedback()
+	GothicUIThemeScript.set_button_feedback(discard_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.discard")
 	var result: Dictionary = PlayerState.destroy_inventory_indices(indices)
 	selected_inventory_indices.clear()
 	selected_inventory_index = -1
 	refresh()
 	detail_label.text = "[color=#e8c277]丢弃 %d 个物品格[/color]" % int(result.get("destroyed", 0))
+	_show_inventory_action_result(discard_button, int(result.get("destroyed", 0)) > 0, "inventory.discard")
+
+
+func _show_inventory_action_result(button: Button, success: bool, group: String) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		group,
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_inventory_action_feedback() -> void:
+	_action_feedback_serial += 1
+	GothicUIThemeScript.clear_button_feedback(auto_sort_button)
+	GothicUIThemeScript.clear_button_feedback(discard_button)
 
 
 func _unequip_selected() -> void:
@@ -1021,6 +1048,7 @@ func _section_title(text_value: String, section_width: float) -> Label:
 
 
 func _close() -> void:
+	_clear_inventory_action_feedback()
 	_cancel_long_press()
 	context_menu.hide()
 	hide()

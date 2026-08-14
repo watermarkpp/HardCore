@@ -279,6 +279,7 @@ func _request_revival(option_slot: String) -> void:
 		return
 	_revival_request_locked = true
 	var button := town_button if option_slot == TOWN_SLOT else special_button
+	_clear_revival_feedback()
 	GothicUIThemeScript.set_button_feedback(
 		button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
@@ -306,6 +307,8 @@ func _show_revival_result_feedback(success: bool) -> void:
 	var button := town_button
 	if special_button.has_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE):
 		button = special_button
+	GothicUIThemeScript.clear_button_feedback(town_button)
+	GothicUIThemeScript.clear_button_feedback(special_button)
 	GothicUIThemeScript.set_button_feedback(
 		button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
@@ -314,6 +317,6 @@ func _show_revival_result_feedback(success: bool) -> void:
 	if not is_inside_tree():
 		return
 	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
-		if serial == _revival_feedback_serial and is_instance_valid(button):
+		if serial == _revival_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

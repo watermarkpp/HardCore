@@ -31,6 +31,7 @@ var settings_back_button: Button
 var current_page := "main"
 var music_enabled := true
 var sfx_enabled := true
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
@@ -241,11 +242,13 @@ func _toggle_status(parent: Control, node_name: String, y: float) -> Label:
 
 
 func open_menu() -> void:
+	_clear_action_feedback()
 	show()
 	show_main_page()
 
 
 func close_menu() -> void:
+	_clear_action_feedback()
 	hide()
 
 
@@ -259,6 +262,8 @@ func show_main_page() -> void:
 
 
 func show_settings_page() -> void:
+	_clear_action_feedback()
+	_show_menu_action_result(settings_button, true, "system_menu.settings")
 	current_page = "settings"
 	main_page.hide()
 	settings_page.show()
@@ -300,12 +305,38 @@ func _emit_audio_setting(setting_id: String, enabled: bool) -> void:
 
 
 func _request_continue() -> void:
+	_clear_action_feedback()
+	GothicUIThemeScript.set_button_feedback(continue_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.continue")
 	continue_requested.emit()
 
 
 func _request_character_select() -> void:
+	_clear_action_feedback()
+	GothicUIThemeScript.set_button_feedback(character_select_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.character_select")
 	return_to_character_select_requested.emit()
 
 
 func _request_save_exit() -> void:
+	_clear_action_feedback()
+	GothicUIThemeScript.set_button_feedback(save_exit_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.save_exit")
 	save_and_exit_requested.emit()
+
+
+func _show_menu_action_result(button: Button, success: bool, group: String) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		group,
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_action_feedback() -> void:
+	_action_feedback_serial += 1
+	for button in [continue_button, settings_button, character_select_button, save_exit_button, settings_back_button]:
+		GothicUIThemeScript.clear_button_feedback(button)

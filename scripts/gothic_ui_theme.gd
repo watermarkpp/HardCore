@@ -52,6 +52,7 @@ const BUTTON_FEEDBACK_TRANSITION := &"transition"
 const BUTTON_FEEDBACK_META_STATE := &"gothic_feedback_state"
 const BUTTON_FEEDBACK_META_GROUP := &"gothic_feedback_selection_group"
 const BUTTON_FEEDBACK_META_BACKUP := &"gothic_feedback_override_backup"
+const BUTTON_FEEDBACK_META_FONT_BACKUP := &"gothic_feedback_font_override_backup"
 const BUTTON_PRESS_FILL := Color(0.48, 0.16, 0.035, 0.22)
 const BUTTON_PRESS_BORDER := Color(0.94, 0.63, 0.28, 0.86)
 const BUTTON_PRESS_SHADOW := Color(0.90, 0.42, 0.08, 0.62)
@@ -65,6 +66,20 @@ const BUTTON_FAILURE_FILL := Color(0.40, 0.055, 0.035, 0.28)
 const BUTTON_FAILURE_BORDER := Color(0.94, 0.30, 0.20, 0.94)
 const BUTTON_FAILURE_SHADOW := Color(0.86, 0.16, 0.08, 0.68)
 const BUTTON_PRESS_MODULATE := Color(1.24, 1.08, 0.86, 1.0)
+# Character-hall feedback follows each source frame's alpha.  Character
+# variations never draw the generic rectangular feedback layer.
+const CHARACTER_SELECTED_FILL := Color(0.12, 0.035, 0.075, 0.94)
+const CHARACTER_SELECTED_HOVER_FILL := Color(0.16, 0.045, 0.09, 0.96)
+const CHARACTER_SELECTED_PRESSED_FILL := Color(0.20, 0.06, 0.11, 0.98)
+const CHARACTER_PRESS_FILL := Color(0.10, 0.03, 0.045, 0.96)
+const CHARACTER_FRAME_BASE_FILL := Color(0.045, 0.024, 0.025, 0.96)
+const CHARACTER_TRANSITION_FILL := Color(0.18, 0.045, 0.085, 0.96)
+const CHARACTER_SELECTED_FONT := Color("ffe0a6")
+const CHARACTER_SELECTED_FONT_OUTLINE := Color(0.58, 0.22, 0.20, 0.82)
+const CHARACTER_SELECTED_FONT_SHADOW := Color(0.78, 0.32, 0.20, 0.62)
+const CHARACTER_TRANSITION_FONT := Color("ffe5b8")
+const CHARACTER_TRANSITION_FONT_OUTLINE := Color(0.62, 0.24, 0.20, 0.86)
+const CHARACTER_TRANSITION_FONT_SHADOW := Color(0.80, 0.34, 0.22, 0.68)
 
 
 static func build() -> Theme:
@@ -180,6 +195,7 @@ static func build() -> Theme:
 	_apply_warehouse_thin_button(result)
 	_apply_small_button(result, &"GothicSkillConfigCompactButton")
 	_apply_character_hall_buttons(result)
+	_apply_character_launch_button(result)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
@@ -307,6 +323,8 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 	if state == BUTTON_FEEDBACK_NORMAL or not feedback_states().has(state):
 		clear_button_feedback(button)
 		return
+	if state != BUTTON_FEEDBACK_TRANSITION:
+		_clear_character_transition_font_feedback(button)
 	if not button.has_meta(BUTTON_FEEDBACK_META_BACKUP):
 		var backup := {"styles": {}}
 		for state_name: StringName in [&"normal", &"hover", &"focus"]:
@@ -344,6 +362,55 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 			button.remove_meta(BUTTON_FEEDBACK_META_GROUP)
 	else:
 		button.set_meta(BUTTON_FEEDBACK_META_GROUP, selection_group)
+	if state == BUTTON_FEEDBACK_TRANSITION:
+		_set_character_transition_font_feedback(button)
+
+
+static func _set_character_transition_font_feedback(button: BaseButton) -> void:
+	if button.theme_type_variation != &"GothicCharacterLaunchButton":
+		return
+	if not button.has_meta(BUTTON_FEEDBACK_META_FONT_BACKUP):
+		var backup := {"colors": {}, "constants": {}}
+		for property_name: String in ["font_color", "font_pressed_color", "font_disabled_color", "font_outline_color", "font_shadow_color"]:
+			backup["colors"][property_name] = {
+				"overridden": button.has_theme_color_override(property_name),
+				"value": button.get_theme_color(property_name),
+			}
+		for property_name: String in ["outline_size", "shadow_offset_x", "shadow_offset_y"]:
+			backup["constants"][property_name] = {
+				"overridden": button.has_theme_constant_override(property_name),
+				"value": button.get_theme_constant(property_name),
+			}
+		button.set_meta(BUTTON_FEEDBACK_META_FONT_BACKUP, backup)
+	button.add_theme_color_override("font_color", CHARACTER_TRANSITION_FONT)
+	button.add_theme_color_override("font_pressed_color", CHARACTER_TRANSITION_FONT)
+	button.add_theme_color_override("font_disabled_color", CHARACTER_TRANSITION_FONT)
+	button.add_theme_color_override("font_outline_color", CHARACTER_TRANSITION_FONT_OUTLINE)
+	button.add_theme_color_override("font_shadow_color", CHARACTER_TRANSITION_FONT_SHADOW)
+	button.add_theme_constant_override("outline_size", 2)
+	button.add_theme_constant_override("shadow_offset_x", 1)
+	button.add_theme_constant_override("shadow_offset_y", 1)
+
+
+static func _clear_character_transition_font_feedback(button: BaseButton) -> void:
+	if not is_instance_valid(button) or not button.has_meta(BUTTON_FEEDBACK_META_FONT_BACKUP):
+		return
+	var backup: Dictionary = button.get_meta(BUTTON_FEEDBACK_META_FONT_BACKUP, {})
+	var color_backup: Dictionary = backup.get("colors", {})
+	for property_name: String in ["font_color", "font_pressed_color", "font_disabled_color", "font_outline_color", "font_shadow_color"]:
+		var entry: Dictionary = color_backup.get(property_name, {})
+		if bool(entry.get("overridden", false)):
+			button.add_theme_color_override(property_name, entry.get("value", Color.WHITE))
+		else:
+			button.remove_theme_color_override(property_name)
+	var constant_backup: Dictionary = backup.get("constants", {})
+	for property_name: String in ["outline_size", "shadow_offset_x", "shadow_offset_y"]:
+		var entry: Dictionary = constant_backup.get(property_name, {})
+		if bool(entry.get("overridden", false)):
+			button.add_theme_constant_override(property_name, int(entry.get("value", 0)))
+		else:
+			button.remove_theme_constant_override(property_name)
+	button.remove_meta(BUTTON_FEEDBACK_META_FONT_BACKUP)
 
 
 static func clear_button_feedback(button: BaseButton) -> void:
@@ -364,18 +431,48 @@ static func clear_button_feedback(button: BaseButton) -> void:
 		button.remove_meta(BUTTON_FEEDBACK_META_STATE)
 	if button.has_meta(BUTTON_FEEDBACK_META_GROUP):
 		button.remove_meta(BUTTON_FEEDBACK_META_GROUP)
+	_clear_character_transition_font_feedback(button)
+
+
+static func set_character_selection_feedback(
+	button: BaseButton,
+	selected: bool,
+	normal_variation: StringName,
+	selected_variation: StringName,
+	selection_group := "",
+) -> void:
+	"""Drive a character-hall selection without a rectangular overlay.
+
+	Character cards use their own irregular-frame Theme variations.  The
+	variation owns the alpha-safe inner background; this helper only applies the
+	semantic state and keeps the group metadata available to tests/owners.
+	"""
+	if not is_instance_valid(button):
+		return
+	if button.has_meta(BUTTON_FEEDBACK_META_BACKUP):
+		clear_button_feedback(button)
+	button.theme_type_variation = selected_variation if selected else normal_variation
+	button.set_pressed_no_signal(selected)
+	if selected:
+		button.set_meta(BUTTON_FEEDBACK_META_STATE, BUTTON_FEEDBACK_SELECTED)
+		if not selection_group.is_empty():
+			button.set_meta(BUTTON_FEEDBACK_META_GROUP, selection_group)
+	elif button.has_meta(BUTTON_FEEDBACK_META_STATE):
+		button.remove_meta(BUTTON_FEEDBACK_META_STATE)
+		if button.has_meta(BUTTON_FEEDBACK_META_GROUP):
+			button.remove_meta(BUTTON_FEEDBACK_META_GROUP)
 
 static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 	theme.set_type_variation(variation, "Button")
 	var selected := variation == &"GothicComponentSelectedButton"
-	var n_compact := preload(COMPONENT_V3_ROOT + "/button_compact_pressed_v4.png") if selected else BUTTON_COMPACT_V4
-	var n_standard := preload(COMPONENT_V3_ROOT + "/button_standard_pressed_v4.png") if selected else BUTTON_STANDARD_V4
-	var n_wide := preload(COMPONENT_V3_ROOT + "/button_wide_pressed_v4.png") if selected else BUTTON_WIDE_V4
+	var n_compact := BUTTON_COMPACT_V4
+	var n_standard := BUTTON_STANDARD_V4
+	var n_wide := BUTTON_WIDE_V4
 	var n := AdaptiveButtonStyleBoxScript.new().configure(n_compact, n_standard, n_wide)
 	if selected:
-		n.set_feedback(BUTTON_SELECTED_FILL, BUTTON_SELECTED_BORDER, BUTTON_SELECTED_SHADOW, 6, 10, 1)
-	var p := AdaptiveButtonStyleBoxScript.new().configure(preload(COMPONENT_V3_ROOT + "/button_compact_pressed_v4.png"), preload(COMPONENT_V3_ROOT + "/button_standard_pressed_v4.png"), preload(COMPONENT_V3_ROOT + "/button_wide_pressed_v4.png"))
-	p.set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 5, 10, 1)
+		n.set_feedback(BUTTON_SELECTED_FILL, BUTTON_SELECTED_BORDER, BUTTON_SELECTED_SHADOW, 6, 10, 1, true)
+	var p := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
+	p.set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 5, 10, 1, true)
 	var d := AdaptiveButtonStyleBoxScript.new().configure(preload(COMPONENT_V3_ROOT + "/button_compact_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_standard_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_wide_disabled_v4.png"))
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
@@ -384,8 +481,8 @@ static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 static func _apply_small_button(theme: Theme, variation: StringName) -> void:
 	theme.set_type_variation(variation, "Button")
 	var n := AdaptiveButtonStyleBoxScript.new().configure_small(BUTTON_SQUARE_V5, BUTTON_SHORTWIDE_V5, BUTTON_WIDESMALL_V5)
-	var p := AdaptiveButtonStyleBoxScript.new().configure_small(preload(COMPONENT_V3_ROOT + "/button_square_pressed_v5.png"), preload(COMPONENT_V3_ROOT + "/button_shortwide_pressed_v5.png"), preload(COMPONENT_V3_ROOT + "/button_widesmall_pressed_v5.png"))
-	p.set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 4, 8, 1)
+	var p := AdaptiveButtonStyleBoxScript.new().configure_small(BUTTON_SQUARE_V5, BUTTON_SHORTWIDE_V5, BUTTON_WIDESMALL_V5)
+	p.set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 4, 8, 1, true)
 	var d := AdaptiveButtonStyleBoxScript.new().configure_small(preload(COMPONENT_V3_ROOT + "/button_square_disabled_v5.png"), preload(COMPONENT_V3_ROOT + "/button_shortwide_disabled_v5.png"), preload(COMPONENT_V3_ROOT + "/button_widesmall_disabled_v5.png"))
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
@@ -404,62 +501,77 @@ static func _apply_warehouse_thin_button(theme: Theme) -> void:
 	theme.set_stylebox("disabled", variation, disabled)
 
 
-static func _character_frame_style(texture: Texture2D, fill: Color, selected := false) -> AdaptiveButtonStyleBox:
+static func _character_frame_style(texture: Texture2D, fill: Color, feedback_fill := Color.TRANSPARENT) -> AdaptiveButtonStyleBox:
 	var style := AdaptiveButtonStyleBoxScript.new().configure_small(texture, texture, texture, fill)
-	if selected:
-		style.set_feedback(BUTTON_SELECTED_FILL, BUTTON_SELECTED_BORDER, BUTTON_SELECTED_SHADOW, 6, 8, 1)
+	if feedback_fill != Color.TRANSPARENT:
+		style.set_feedback(feedback_fill, Color.TRANSPARENT, Color.TRANSPARENT, 0, 0, 0, true)
 	return style
 
 
-static func _apply_character_hall_buttons(theme: Theme) -> void:
-	for variation: StringName in [&"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton"]:
+static func _apply_character_choice_variations(
+	theme: Theme,
+	normal_variation: StringName,
+	selected_variation: StringName,
+	texture: Texture2D,
+) -> void:
+	for variation: StringName in [normal_variation, selected_variation]:
 		theme.set_type_variation(variation, "Button")
-		var selected := variation == &"GothicCharacterSelectedProfileButton"
-		var normal_fill := Color(0.12, 0.045, 0.04, 0.98) if selected else Color(0.045, 0.024, 0.025, 0.96)
-		var hover_fill := Color(0.15, 0.055, 0.04, 0.98)
-		theme.set_stylebox("normal", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, normal_fill, selected))
-		theme.set_stylebox("hover", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, hover_fill))
-		theme.set_stylebox("focus", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, hover_fill))
-		theme.set_stylebox("pressed", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, Color(0.20, 0.06, 0.035, 1.0)).set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 5, 8, 1))
-		theme.set_stylebox("disabled", variation, _character_frame_style(CHARACTER_PROFILE_FRAME_V7, Color(0.028, 0.022, 0.022, 0.92)))
-		theme.set_color("font_color", variation, Color("ffe0b0") if selected else PARCHMENT)
-		theme.set_color("font_hover_color", variation, Color.WHITE)
-		theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+		var selected := variation == selected_variation
+		var normal_fill := CHARACTER_SELECTED_FILL if selected else CHARACTER_FRAME_BASE_FILL
+		var hover_fill := CHARACTER_SELECTED_HOVER_FILL if selected else CHARACTER_FRAME_BASE_FILL
+		theme.set_stylebox("normal", variation, _character_frame_style(texture, normal_fill, CHARACTER_SELECTED_FILL if selected else Color.TRANSPARENT))
+		theme.set_stylebox("hover", variation, _character_frame_style(texture, hover_fill, CHARACTER_SELECTED_HOVER_FILL if selected else Color.TRANSPARENT))
+		theme.set_stylebox("focus", variation, _character_frame_style(texture, hover_fill, CHARACTER_SELECTED_HOVER_FILL if selected else Color.TRANSPARENT))
+		theme.set_stylebox("pressed", variation, _character_frame_style(texture, CHARACTER_SELECTED_PRESSED_FILL if selected else CHARACTER_FRAME_BASE_FILL, CHARACTER_SELECTED_PRESSED_FILL if selected else CHARACTER_PRESS_FILL))
+		theme.set_stylebox("disabled", variation, _character_frame_style(texture, CHARACTER_FRAME_BASE_FILL))
+		theme.set_color("font_color", variation, CHARACTER_SELECTED_FONT if selected else PARCHMENT)
+		theme.set_color("font_hover_color", variation, CHARACTER_SELECTED_FONT if selected else Color.WHITE)
+		theme.set_color("font_pressed_color", variation, CHARACTER_SELECTED_FONT if selected else PARCHMENT)
 		theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
-		theme.set_constant("outline_size", variation, 3)
+		theme.set_color("font_outline_color", variation, CHARACTER_SELECTED_FONT_OUTLINE if selected else Color.TRANSPARENT)
+		theme.set_color("font_shadow_color", variation, CHARACTER_SELECTED_FONT_SHADOW if selected else Color.TRANSPARENT)
+		theme.set_constant("outline_size", variation, 2 if selected else 0)
+		theme.set_constant("shadow_offset_x", variation, 1 if selected else 0)
+		theme.set_constant("shadow_offset_y", variation, 1 if selected else 0)
+
+
+static func _apply_character_hall_buttons(theme: Theme) -> void:
+	_apply_character_choice_variations(theme, &"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton", CHARACTER_PROFILE_FRAME_V7)
+	_apply_character_choice_variations(theme, &"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton", CHARACTER_PROFESSION_FRAME_V7)
 	var ai_variation := &"GothicCharacterAIStatusButton"
 	theme.set_type_variation(ai_variation, "Button")
-	var ai_normal := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.045, 0.025, 0.032, 0.94))
+	var ai_normal := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, CHARACTER_FRAME_BASE_FILL)
 	var ai_hover := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.075, 0.038, 0.045, 0.96))
-	var ai_pressed := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.11, 0.045, 0.045, 0.98)).set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 5, 8, 1)
+	var ai_pressed := _character_frame_style(CHARACTER_AI_STATUS_FRAME_V7, Color(0.11, 0.045, 0.045, 0.98), CHARACTER_PRESS_FILL)
 	theme.set_stylebox("normal", ai_variation, ai_normal)
 	theme.set_stylebox("hover", ai_variation, ai_hover)
 	theme.set_stylebox("focus", ai_variation, ai_hover)
 	theme.set_stylebox("pressed", ai_variation, ai_pressed)
-	# AI teammates are temporarily unavailable, but the approved bronze frame
-	# remains visible instead of turning into an unrelated grey asset.
 	theme.set_stylebox("disabled", ai_variation, ai_normal)
 	theme.set_color("font_color", ai_variation, PARCHMENT)
 	theme.set_color("font_hover_color", ai_variation, Color.WHITE)
 	theme.set_color("font_pressed_color", ai_variation, Color("ffe2ad"))
 	theme.set_color("font_disabled_color", ai_variation, MUTED.darkened(0.12))
 	theme.set_constant("outline_size", ai_variation, 3)
-	for variation: StringName in [&"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton"]:
-		theme.set_type_variation(variation, "Button")
-		var selected := variation == &"GothicCharacterSelectedProfessionButton"
-		var normal_fill := Color(0.12, 0.045, 0.04, 0.98) if selected else Color(0.045, 0.024, 0.025, 0.96)
-		var hover_fill := Color(0.15, 0.055, 0.04, 0.98)
-		theme.set_stylebox("normal", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, normal_fill, selected))
-		theme.set_stylebox("hover", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, hover_fill))
-		theme.set_stylebox("focus", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, hover_fill))
-		theme.set_stylebox("pressed", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, Color(0.20, 0.06, 0.035, 1.0)).set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 5, 8, 1))
-		theme.set_stylebox("disabled", variation, _character_frame_style(CHARACTER_PROFESSION_FRAME_V7, Color(0.028, 0.022, 0.022, 0.92)))
-		theme.set_color("font_color", variation, Color("ffe0b0") if selected else PARCHMENT)
-		theme.set_color("font_hover_color", variation, Color.WHITE)
-		theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
-		theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
-		theme.set_constant("outline_size", variation, 3)
 
+
+static func _apply_character_launch_button(theme: Theme) -> void:
+	var variation := &"GothicCharacterLaunchButton"
+	theme.set_type_variation(variation, "Button")
+	var normal := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
+	var hover := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
+	var pressed := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
+	pressed.set_feedback(CHARACTER_TRANSITION_FILL, Color.TRANSPARENT, Color.TRANSPARENT, 0, 0, 0, true)
+	theme.set_stylebox("normal", variation, normal)
+	theme.set_stylebox("hover", variation, hover)
+	theme.set_stylebox("focus", variation, hover)
+	theme.set_stylebox("pressed", variation, pressed)
+	theme.set_stylebox("disabled", variation, normal)
+	theme.set_color("font_color", variation, PARCHMENT)
+	theme.set_color("font_hover_color", variation, Color.WHITE)
+	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+	theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
+	theme.set_constant("outline_size", variation, 3)
 
 
 static func _apply_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:

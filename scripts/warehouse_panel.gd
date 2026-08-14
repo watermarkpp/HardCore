@@ -50,11 +50,13 @@ var previous_page_button: Button
 var next_page_button: Button
 var deposit_button: Button
 var withdraw_button: Button
+var sort_button: Button
 var selected_bag_index := -1
 var selected_stash_index := -1
 var warehouse_page := 0
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
@@ -157,9 +159,9 @@ func _build_storage_sections() -> void:
 	divider.position = Vector2(16, 346)
 	divider.size = Vector2(92, 8)
 	transfer_panel.add_child(divider)
-	var sort_button := _transfer_button("SortStashButton", "整理", Vector2(14, 382))
+	sort_button = _transfer_button("SortStashButton", "整理", Vector2(14, 382))
 	sort_button.tooltip_text = "请求玩法层按既定规则整理仓库"
-	sort_button.pressed.connect(func() -> void: warehouse_sort_requested.emit())
+	sort_button.pressed.connect(_sort_requested)
 	transfer_panel.add_child(sort_button)
 
 	var bag_panel := _section_panel("BagSection", Rect2(652, 72, 492, 566))
@@ -448,28 +450,65 @@ func _deposit() -> void:
 	var target_slot := _first_free_slot_on_current_page()
 	if selected_bag_index < 0 or selected_bag_index >= PlayerState.inventory.size() or target_slot < 0:
 		return
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
 	var result: Dictionary = PlayerState.deposit_to_warehouse(selected_bag_index, target_slot)
 	selected_bag_index = -1
 	refresh()
 	transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
+	_show_transfer_result(deposit_button, bool(result.get("success", false)), "warehouse.deposit")
 
 
 func _withdraw() -> void:
 	if not _warehouse_slot_has_item(selected_stash_index):
 		return
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
 	var result: Dictionary = PlayerState.withdraw_from_warehouse(selected_stash_index)
 	if not bool(result.get("success", false)):
 		withdraw_button.disabled = true if str(result.get("reason", "")) == "inventory_full" else withdraw_button.disabled
 		transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
+		_show_transfer_result(withdraw_button, false, "warehouse.withdraw")
 		return
 	selected_stash_index = -1
 	refresh()
 	transfer_detail_label.text = str(result.get("message", "已取出仓库物品。"))
+	_show_transfer_result(withdraw_button, true, "warehouse.withdraw")
+
+
+func _sort_requested() -> void:
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(sort_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.sort")
+	warehouse_sort_requested.emit()
+
+
+func _show_transfer_result(button: Button, success: bool, group: String) -> void:
+	# A late authority result (for example sort completing after deposit) must
+	# invalidate and clear every transfer action before showing its own result.
+	_clear_transfer_feedback()
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		group,
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_transfer_feedback() -> void:
+	_action_feedback_serial += 1
+	for button in [deposit_button, withdraw_button, sort_button]:
+		GothicUIThemeScript.clear_button_feedback(button)
 
 
 func apply_sort_result(result: Dictionary) -> void:
 	refresh()
 	transfer_detail_label.text = str(result.get("message", "仓库整理请求已处理"))
+	_show_transfer_result(sort_button, bool(result.get("success", false)), "warehouse.sort")
 
 
 func _warehouse_record(slot_index: int) -> Dictionary:
@@ -572,5 +611,8 @@ func _section_title(node_name: String, text_value: String, width: float) -> Labe
 
 
 func _close() -> void:
+	_clear_transfer_feedback()
+	GothicUIThemeScript.clear_button_feedback(previous_page_button)
+	GothicUIThemeScript.clear_button_feedback(next_page_button)
 	hide()
 	closed.emit()

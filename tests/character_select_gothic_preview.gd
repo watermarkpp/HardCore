@@ -1,5 +1,6 @@
 extends Node
 
+const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const OUTPUT_PATH := "res://outputs/visual_acceptance/character_select/character_select_ai_teammate_v1.png"
 const WIDE_OUTPUT_PATH := "res://outputs/visual_acceptance/final_consistency/character_select_2400x1080.png"
 const TEST_DIRECTORY := "user://character_select_gothic_preview_profiles"
@@ -11,16 +12,59 @@ func _ready() -> void:
 	var launcher: Control = load("res://scenes/character_select.tscn").instantiate()
 	add_child(launcher)
 	await get_tree().process_frame
-	launcher._set_ai_teammate_enabled(true)
-	launcher._select_ai_profile("taoist_preview")
+	# Exercise the same production selection path used by the live hall, then
+	# apply only the official transition feedback API.  This intentionally does
+	# not invoke _enter_selected_character(), so the capture compares a normal
+	# 创建角色 button with a transition-state 进入 HardCore button without a
+	# Loading overlay or a scene change.
+	launcher._select_main_profile("warrior_preview")
+	launcher._select_creation_profession("战士")
+	var cards_normal_preview := OS.get_environment("UI_PREVIEW_CARDS_NORMAL") == "1"
+	if cards_normal_preview:
+		for profile_id: String in launcher.profile_cards:
+			var profile_button: Button = launcher.profile_cards[profile_id].main_button
+			GothicUIThemeScript.set_character_selection_feedback(
+				profile_button,
+				false,
+				&"GothicCharacterProfileButton",
+				&"GothicCharacterSelectedProfileButton",
+				"character.profile",
+			)
+		for profession_name: String in launcher.profession_buttons:
+			GothicUIThemeScript.set_character_selection_feedback(
+				launcher.profession_buttons[profession_name],
+				false,
+				&"GothicCharacterProfessionButton",
+				&"GothicCharacterSelectedProfessionButton",
+				"character.profession",
+			)
+	var transition_preview := OS.get_environment("UI_PREVIEW_NORMAL") != "1"
+	if transition_preview:
+		GothicUIThemeScript.set_button_feedback(
+			launcher.enter_button,
+			GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+			"character.launch.preview",
+		)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var output_path := WIDE_OUTPUT_PATH if OS.get_environment("UI_WIDE_CAPTURE") == "1" else OUTPUT_PATH
+	if not transition_preview:
+		output_path = output_path.replace(".png", "_normal.png")
+	if cards_normal_preview:
+		output_path = output_path.replace(".png", "_cards_normal.png")
 	var output_dir := ProjectSettings.globalize_path(output_path.get_base_dir())
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(output_path))
 	assert(error == OK, "无法保存人物选择与 AI 队友哥特样板")
-	print("CHARACTER_SELECT_GOTHIC_PREVIEW_CAPTURE_PASS output=%s" % output_path)
+	print(
+		"CHARACTER_SELECT_GOTHIC_PREVIEW_CAPTURE_PASS output=%s transition=%s create_text=%s profile=%s profession=%s" % [
+			output_path,
+			str(launcher.enter_button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE, "normal")),
+			launcher.create_button.text,
+			launcher.selected_main_profile_id,
+			launcher.selected_creation_profession,
+		]
+	)
 	get_tree().quit(0)
 
 

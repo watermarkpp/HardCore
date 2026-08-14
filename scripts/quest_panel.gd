@@ -441,6 +441,7 @@ func _act() -> void:
 		return
 	if current_quest_id.is_empty():
 		return
+	_clear_action_feedback()
 	_action_request_locked = true
 	action_button.disabled = true
 	GothicUIThemeScript.set_button_feedback(
@@ -512,6 +513,7 @@ func _confirm_abandon() -> void:
 		return
 	var quest_id := _pending_abandon_quest_id
 	_pending_abandon_quest_id = ""
+	_clear_action_feedback()
 	abandon_button.disabled = true
 	GothicUIThemeScript.set_button_feedback(
 		abandon_button,
@@ -542,6 +544,7 @@ func _clear_action_feedback() -> void:
 
 
 func _show_action_result_feedback(success: bool) -> void:
+	_clear_action_feedback()
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
 	GothicUIThemeScript.set_button_feedback(
@@ -552,12 +555,13 @@ func _show_action_result_feedback(success: bool) -> void:
 	if not is_inside_tree():
 		return
 	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
-		if serial == _action_feedback_serial and is_instance_valid(action_button):
+		if serial == _action_feedback_serial and is_instance_valid(action_button) and action_button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(action_button)
 	)
 
 
 func _show_abandon_result_feedback(success: bool) -> void:
+	_clear_action_feedback()
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
 	GothicUIThemeScript.set_button_feedback(
@@ -568,7 +572,7 @@ func _show_abandon_result_feedback(success: bool) -> void:
 	if not is_inside_tree():
 		return
 	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
-		if serial == _action_feedback_serial and is_instance_valid(abandon_button):
+		if serial == _action_feedback_serial and is_instance_valid(abandon_button) and abandon_button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(abandon_button)
 	)
 

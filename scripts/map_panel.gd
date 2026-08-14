@@ -534,6 +534,7 @@ func _teleport_selected() -> void:
 	if not bool(rule.get("enabled", false)):
 		return
 	_teleport_request_locked = true
+	GothicUIThemeScript.clear_button_feedback(teleport_button)
 	GothicUIThemeScript.set_button_feedback(
 		teleport_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,

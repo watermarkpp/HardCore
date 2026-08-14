@@ -1,5 +1,6 @@
 extends Node
 
+const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const TEST_DIRECTORY := "user://character_launch_loading_profiles"
 const TEST_INDEX := "user://character_launch_loading_index.json"
 
@@ -34,8 +35,10 @@ func _run() -> void:
 	launcher._enter_selected_character()
 	assert(launcher._launch_in_progress, "launch must enter busy state synchronously")
 	assert(launcher.enter_button.disabled, "launch button must lock synchronously")
-	assert(launcher.enter_button.theme_type_variation == "GothicComponentButton", "launch action must not masquerade as a persistent selection")
+	assert(launcher.enter_button.theme_type_variation == "GothicCharacterLaunchButton", "launch action must use the character-specific transition frame")
 	assert(launcher.enter_button.get_meta("gothic_feedback_state", "") == "transition", "launch action must stay highlighted until Loading takes over")
+	assert(launcher.enter_button.get_theme_color("font_color") == GothicUIThemeScript.CHARACTER_TRANSITION_FONT, "launch transition must use the restrained warm-gold text cue")
+	assert(launcher.enter_button.get_theme_constant("outline_size") == 2, "launch transition must add only a restrained text outline")
 	assert(launcher.launch_loading_overlay.visible, "Loading must be visible in the click frame")
 	assert(PlayerState.active_profile_id.is_empty(), "profile hydration ran before the Loading frame")
 

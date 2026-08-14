@@ -10,7 +10,7 @@ func _ready() -> void:
 	var theme := GothicUIThemeScript.build()
 	for variation in ["GothicModalFrame", "GothicTitleBar", "GothicInsetFrame", "GothicTabFrame"]:
 		assert(theme.has_stylebox("panel", variation), "%s 缺少公共Panel样式" % variation)
-	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicWarehouseThinButton", "GothicSkillConfigCompactButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentSelectedShopCard", "GothicComponentCloseButton"]:
+	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicWarehouseThinButton", "GothicSkillConfigCompactButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentSelectedShopCard", "GothicComponentCloseButton", "GothicCharacterProfileButton", "GothicCharacterSelectedProfileButton", "GothicCharacterProfessionButton", "GothicCharacterSelectedProfessionButton", "GothicCharacterLaunchButton"]:
 		assert(theme.has_stylebox("normal", variation), "%s 缺少normal样式" % variation)
 		assert(theme.has_stylebox("pressed", variation), "%s 缺少pressed样式" % variation)
 		assert(theme.has_stylebox("disabled", variation), "%s 缺少disabled样式" % variation)
@@ -28,6 +28,7 @@ func _ready() -> void:
 	_assert_shop_card_contract(manifest)
 	_assert_shop_card_inventory_feedback(theme)
 	_assert_button_interaction_feedback(theme)
+	_assert_character_feedback(theme)
 	_assert_v3_fill_geometry()
 	print("GOTHIC_THEME_COMPONENT_TEST_PASS：10类公共组件、透明角、商品卡安全区与Theme状态样式均通过")
 	get_tree().quit(0)
@@ -179,9 +180,17 @@ func _assert_button_interaction_feedback(theme: Theme) -> void:
 	var selected_style := theme.get_stylebox("normal", &"GothicComponentSelectedButton") as AdaptiveButtonStyleBoxScript
 	assert(selected_style != null and selected_style.has_feedback(), "持久选中变体没有代码高亮层")
 	assert(selected_style != theme.get_stylebox("normal", &"GothicComponentButton"), "持久选中态与普通态复用了同一框体")
-	assert(selected_style.compact.texture.resource_path.ends_with("button_compact_pressed_v4.png"), "持久选中态没有使用按下后的暗金框体")
+	assert(selected_style.compact.texture.resource_path.ends_with("button_compact_normal_v4.png"), "持久选中态必须复用正常暗金框体")
 	var pressed_style := theme.get_stylebox("pressed", &"GothicComponentButton") as AdaptiveButtonStyleBoxScript
 	assert(pressed_style != null and pressed_style.has_feedback(), "按下态没有代码高亮层")
+	for variation in [&"GothicComponentButton", &"GothicComponentSelectedButton", &"GothicSkillConfigCompactButton", &"GothicWarehouseThinButton"]:
+		var adaptive_pressed := theme.get_stylebox("pressed", variation) as AdaptiveButtonStyleBoxScript
+		assert(adaptive_pressed != null and adaptive_pressed.feedback_layered, "%s must preserve its source frame in layered feedback" % variation)
+		assert(adaptive_pressed.feedback_background_styles.size() > 0 and adaptive_pressed.feedback_frame_styles.size() > 0, "%s layered feedback cache missing" % variation)
+		if variation in [&"GothicComponentButton", &"GothicComponentSelectedButton"]:
+			assert(adaptive_pressed.compact.texture.resource_path.ends_with("button_compact_normal_v4.png"), "%s pressed state must preserve the normal source frame" % variation)
+		else:
+			assert(adaptive_pressed.square_texture.resource_path.ends_with("button_square_normal_v5.png"), "%s pressed state must preserve the normal source frame" % variation)
 	GothicUIThemeScript.set_button_feedback(button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "entry")
 	assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE, "") == GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION)
 	assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_GROUP, "") == "entry")
@@ -200,3 +209,48 @@ func _assert_button_interaction_feedback(theme: Theme) -> void:
 		GothicUIThemeScript.clear_button_feedback(button)
 	button.free()
 	selected.free()
+
+
+func _assert_character_feedback(theme: Theme) -> void:
+	for variation in [&"GothicCharacterSelectedProfileButton", &"GothicCharacterSelectedProfessionButton"]:
+		for state in [&"normal", &"hover", &"focus", &"pressed"]:
+			var style := theme.get_stylebox(state, variation) as AdaptiveButtonStyleBoxScript
+			assert(style != null and style.feedback_layered, "character selected feedback must use the source-derived interior layer")
+			assert(style.feedback_style.bg_color != Color.TRANSPARENT, "character selected feedback must provide an internal background")
+			assert(style.feedback_background_styles.size() > 0 and style.feedback_frame_styles.size() > 0, "character selected feedback must cache background and frame-only layers")
+			assert(style.feedback_style.border_color == Color.TRANSPARENT, "character selected feedback must not add a border over the source frame")
+			_assert_source_frame_preserved(style)
+	var launch_pressed := theme.get_stylebox("pressed", &"GothicCharacterLaunchButton") as AdaptiveButtonStyleBoxScript
+	assert(launch_pressed != null, "character launch transition style must exist")
+	assert(launch_pressed.feedback_layered, "opaque wide frame must draw transition feedback through cached layers")
+	assert(launch_pressed.feedback_style.bg_color != Color.TRANSPARENT, "character launch transition must provide an internal background")
+	assert(launch_pressed.wide != null and launch_pressed.wide.modulate_color == Color.WHITE, "character launch frame must remain unmodulated")
+	assert(launch_pressed.feedback_background_styles.size() > 0 and launch_pressed.feedback_frame_styles.size() > 0, "character launch transition must cache background and frame-only layers")
+	assert(launch_pressed.feedback_style.border_color == Color.TRANSPARENT, "character launch transition must not add a border over the source frame")
+	_assert_source_frame_preserved(launch_pressed)
+
+
+func _assert_source_frame_preserved(style: AdaptiveButtonStyleBoxScript) -> void:
+	for key: String in style.feedback_frame_styles:
+		var source_texture := ResourceLoader.load(key) as Texture2D
+		var frame_style := style.feedback_frame_styles[key] as StyleBoxTexture
+		var background_style := style.feedback_background_styles[key] as StyleBoxTexture
+		assert(source_texture != null and frame_style != null and background_style != null)
+		var source := source_texture.get_image()
+		var frame := frame_style.texture.get_image()
+		var background := background_style.texture.get_image()
+		assert(source.get_size() == frame.get_size() and frame.get_size() == background.get_size())
+		var frame_pixels := 0
+		var interior_pixels := 0
+		for y in range(source.get_height()):
+			for x in range(source.get_width()):
+				var source_pixel := source.get_pixel(x, y)
+				var frame_pixel := frame.get_pixel(x, y)
+				var background_pixel := background.get_pixel(x, y)
+				if frame_pixel.a > 0.01:
+					frame_pixels += 1
+					assert(frame_pixel.is_equal_approx(source_pixel), "source frame pixel changed for %s" % key)
+				if background_pixel.a > 0.01:
+					interior_pixels += 1
+					assert(frame_pixel.a <= 0.01, "feedback interior overlaps source frame for %s" % key)
+		assert(frame_pixels > 0 and interior_pixels > 0, "layer split produced an empty frame or interior for %s" % key)
