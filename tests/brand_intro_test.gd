@@ -28,6 +28,8 @@ func _run() -> void:
 	var intro_source := FileAccess.get_file_as_string("res://scripts/brand_intro.gd")
 	assert(not intro_source.contains("brand_logo, \"modulate:a\""), "BrandIntro must not fade the approved logo in from transparency")
 	assert(not intro_source.contains("create_timer(0.12)"), "BrandIntro must not add an empty black lead-in before its first frame")
+	assert(not intro_source.contains("create_timer(0.92)"), "BrandIntro must not hold on a dim logo before the authored text motion")
+	assert(not intro_source.contains("brand_logo, \"scale\""), "BrandIntro must begin at the approved full logo size instead of replaying a dark scale-up lead-in")
 	var startup: Node = load("res://scenes/startup_loading.tscn").instantiate()
 	startup.auto_start = false
 	add_child(startup)
@@ -105,7 +107,7 @@ func _run() -> void:
 	assert(intro_first_frame.get_size() == Vector2i(1598, 720))
 	assert(intro_first_frame.get_pixel(0, 0).is_equal_approx(Color.BLACK), "first-frame surface must retain the native black surround")
 	assert(intro_first_frame.get_pixel(799, 317).get_luminance() > 0.02, "first-frame surface center must contain the approved opaque CG artwork")
-	assert(FileAccess.get_sha256("res://assets/branding/brand_intro_first_frame_1598x720.png") == "938d4f7189a90fa08f3565921e316c97d607354110c6b140d46764ef803ea51a")
+	assert(FileAccess.get_sha256("res://assets/branding/brand_intro_first_frame_1598x720.png") == "0eea4e0440a4f565c4f2e8241acf04a0e3b8380eae48a5b5557a6054baaa0b52")
 	var export_preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	assert(export_preset.contains("launcher_icons/main_192x192=\"res://assets/branding/android_icon_192.png\""))
 	assert(export_preset.contains("launcher_icons/adaptive_foreground_432x432=\"res://assets/branding/android_adaptive_foreground_432.png\""))
@@ -123,6 +125,7 @@ func _run() -> void:
 	add_child(intro)
 	assert(is_equal_approx((intro.get_node("BrandLogo") as TextureRect).modulate.a, 1.0), "first authored logo frame must be fully opaque before the first draw")
 	assert((intro.get_node("GlowLogo") as TextureRect).modulate.a > 0.0, "first authored frame must include the intended glow instead of an empty black surface")
+	assert((intro.get_node("BrandLogo") as TextureRect).scale.is_equal_approx(Vector2.ONE), "first authored frame must use the final approved logo scale")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(is_equal_approx((intro.get_node("BrandLogo") as TextureRect).modulate.a, 1.0), "logo became translucent after the first rendered frame")

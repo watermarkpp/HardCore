@@ -11,7 +11,7 @@ const MINIMUM_SKIP_SECONDS := 1.0
 # runtime intro must never begin from an empty black frame or a translucent
 # logo that reveals a different startup surface underneath it.
 const INITIAL_LOGO_ALPHA := 1.0
-const INITIAL_GLOW_ALPHA := 0.08
+const INITIAL_GLOW_ALPHA := 0.16
 # StartupLoading, rather than a fixed timer, owns the final-frame hold. The
 # authored motion completes once and remains visible exactly as long as the
 # character-selection scene still needs to become ready.
@@ -70,9 +70,9 @@ func _prepare_animation_state() -> void:
 	animation_complete = false
 	first_frame_presented = false
 	brand_logo.modulate = Color(1.0, 1.0, 1.0, INITIAL_LOGO_ALPHA)
-	brand_logo.scale = Vector2(0.90, 0.90)
+	brand_logo.scale = Vector2.ONE
 	glow_logo.modulate = Color(1.0, 0.12, 0.04, INITIAL_GLOW_ALPHA)
-	glow_logo.scale = Vector2(0.92, 0.92)
+	glow_logo.scale = Vector2.ONE
 	slogan.text = SLOGAN
 	slogan.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	slogan.visible_ratio = 0.0
@@ -92,14 +92,6 @@ func _play_intro() -> void:
 	first_frame_presented = true
 	intro_first_frame_presented.emit()
 
-	var reveal := create_tween().set_parallel(true)
-	reveal.tween_property(brand_logo, "scale", Vector2.ONE, 2.20).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-	reveal.tween_property(glow_logo, "modulate:a", 0.16, 1.20).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	reveal.tween_property(glow_logo, "scale", Vector2.ONE, 2.20).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-
-	await get_tree().create_timer(0.92).timeout
-	if not is_inside_tree():
-		return
 	var text_reveal := create_tween().set_parallel(true)
 	text_reveal.tween_property(slogan, "modulate:a", 1.0, 0.52).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	text_reveal.tween_property(slogan, "visible_ratio", 1.0, 1.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
