@@ -23,7 +23,16 @@ RUNTIME_MERCHANTS = {
     "general": ("npc.4.001", "merchant.server.crystal.cjlaaa.33", "BichonProvince/BichonWall/Grocery-0.txt"),
     "starter_gear": ("npc.4.002", "merchant.server.crystal.cjlaaa.46", "BichonProvince/BichonWall/Blacksmith-0103.txt"),
     "books": ("npc.4.003", "merchant.server.crystal.cjlaaa.45", "BichonProvince/BichonWall/BookStore-0104.txt"),
+    "medicine": ("npc.expansion.bich_pharmacist", "merchant.server.crystal.cjlaaa.29", "BichonProvince/BichonWall/Potion-0108.txt"),
 }
+
+# Explicit gameplay overrides requested by the project owner.  The primary
+# [Trade] lines remain recorded in excludedOffers so the runtime catalog stays
+# auditable instead of pretending the source NPC script contained our subset.
+EXCLUDED_OFFER_NAMES = {
+    "general": {"蜡烛", "火把", "护身符"},
+}
+SINGLE_UNIT_STOCK_KEYS = {"medicine"}
 
 
 def sections(text: str) -> dict[str, list[str]]:
@@ -79,7 +88,22 @@ def parse_merchant(stock_key: str, npc_id: str, merchant_id: str, relative: str,
     raw = path.read_bytes()
     text = raw.decode("utf-8-sig")
     parsed = sections(text)
-    offers = [parse_offer(line, by_name, index) for index, line in enumerate(parsed.get("trade", []))]
+    source_offers = [parse_offer(line, by_name, index) for index, line in enumerate(parsed.get("trade", []))]
+    excluded_offers: list[dict] = []
+    offers: list[dict] = []
+    excluded_names = EXCLUDED_OFFER_NAMES.get(stock_key, set())
+    for offer in source_offers:
+        exclusion_reason = ""
+        if offer["itemName"] in excluded_names:
+            exclusion_reason = "project_owner_removed_unrelated_general_goods"
+        elif stock_key in SINGLE_UNIT_STOCK_KEYS and int(offer["packCount"]) != 1:
+            exclusion_reason = "project_stackable_consumables_use_single_unit_offers"
+        if exclusion_reason:
+            excluded = dict(offer)
+            excluded["exclusionReason"] = exclusion_reason
+            excluded_offers.append(excluded)
+        else:
+            offers.append(offer)
     return {
         "stockKey": stock_key,
         "npcId": npc_id,
@@ -108,7 +132,12 @@ def parse_merchant(stock_key: str, npc_id: str, merchant_id: str, relative: str,
         },
         "supportsRepair": bool(re.search(r"(?:\[@Repair\]|/@Repair\b)", text, re.IGNORECASE)),
         "offers": offers,
-        "unresolvedTradeLines": [offer["tradeLine"] for offer in offers if not offer["resolved"]],
+        "excludedOffers": excluded_offers,
+        "projectOverrides": {
+            "excludedItemNames": sorted(excluded_names),
+            "singleUnitOffersOnly": stock_key in SINGLE_UNIT_STOCK_KEYS,
+        },
+        "unresolvedTradeLines": [offer["tradeLine"] for offer in source_offers if not offer["resolved"]],
     }
 
 
@@ -138,9 +167,10 @@ def build_payload() -> dict:
         for stock_key, (npc_id, merchant_id, relative) in RUNTIME_MERCHANTS.items()
     }
     required_exact = {
-        "general": "蜡烛",
+        "general": "随机传送卷",
         "starter_gear": "木剑",
         "books": "基本剑术",
+        "medicine": "金疮药(小量)",
     }
     for stock_key, expected in required_exact.items():
         actual = merchants[stock_key]["offers"][0]["itemName"]
@@ -158,6 +188,7 @@ def build_payload() -> dict:
             "trailingInteger": "pack_count",
             "duplicateLines": "preserve_as_distinct_offers",
             "supply": "unlimited_static_trade",
+            "projectOverrides": "excludedOffers_preserve_primary_evidence",
         },
         "merchants": merchants,
         "discoveredStandardMerchants": discover_standard_merchants(),

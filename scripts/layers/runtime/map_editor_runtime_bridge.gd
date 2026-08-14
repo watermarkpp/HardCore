@@ -562,6 +562,7 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 			"npc.4.001": "general",
 			"npc.4.002": "starter_gear",
 			"npc.4.003": "books",
+			"npc.expansion.bich_pharmacist": "medicine",
 		}.get(npc_id, ""))
 		result.npcs.append({
 			"name": entry.get("display_name", "NPC"),

@@ -17,11 +17,20 @@ func _run() -> void:
 	var general_stock := GameData.merchant_stock("general")
 	var weapon_stock := GameData.merchant_stock("starter_gear")
 	var book_stock := GameData.merchant_stock("books")
-	assert(str(general_stock[0].get("name", "")) == "蜡烛")
+	var medicine_stock := GameData.merchant_stock("medicine")
+	assert(str(general_stock[0].get("name", "")) == "随机传送卷")
+	assert(not general_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) in ["蜡烛", "火把", "护身符"]))
 	assert(str(weapon_stock[0].get("name", "")) == "木剑")
 	assert(str(book_stock[0].get("name", "")) == "基本剑术")
-	assert(int(general_stock[2].get("pack_count", 0)) == 1 and int(general_stock[3].get("pack_count", 0)) == 20)
-	assert(str(general_stock[2].get("offer_id", "")) != str(general_stock[3].get("offer_id", "")))
+	assert(not medicine_stock.is_empty() and str(medicine_stock[0].get("name", "")) == "金疮药(小量)")
+	assert(medicine_stock.all(func(entry: Dictionary) -> bool: return int(entry.get("pack_count", 0)) == 1))
+	assert(str(medicine_stock[0].get("merchant_id", "")) == "merchant.server.crystal.cjlaaa.29")
+	var bich_content := MapEditorRuntimeBridge.game_content_for_map(4)
+	var pharmacist_rows: Array = (bich_content.get("npcs", []) as Array).filter(
+		func(entry: Dictionary) -> bool:
+			return str(entry.get("npc_id", "")) == "npc.expansion.bich_pharmacist"
+	)
+	assert(pharmacist_rows.size() == 1 and str((pharmacist_rows[0] as Dictionary).get("stock", "")) == "medicine", "比奇药剂商没有绑定主库药店货单")
 	assert(str(general_stock[0].get("merchant_id", "")) == "merchant.server.crystal.cjlaaa.33")
 	assert(not bool(GameData.merchant_context("general").get("supports_repair", true)))
 	assert(bool(GameData.merchant_context("starter_gear").get("supports_repair", false)))
@@ -36,11 +45,11 @@ func _run() -> void:
 	var accepted_sell := PricingServiceScript.quote_sell(
 		wood, GameData.get_item_record("木剑"), full_instance, 1, starter_context
 	)
-	var rejected_sell := PricingServiceScript.quote_sell(
+	var cross_merchant_sell := PricingServiceScript.quote_sell(
 		wood, GameData.get_item_record("木剑"), full_instance, 1, general_context
 	)
 	assert(bool(accepted_sell.get("valid", false)), "主库Types允许的武器没有出售报价")
-	assert(not bool(rejected_sell.get("valid", true)), "主库Types不允许的武器仍获得出售报价")
+	assert(bool(cross_merchant_sell.get("valid", false)), "项目统一回收规则没有允许杂货商回收武器")
 	var rated_context := starter_context.duplicate(true)
 	rated_context["merchant_id"] = "merchant.test.rate"
 	rated_context["merchant_rate_bps"] = 13000
@@ -149,7 +158,7 @@ func _run() -> void:
 	var second_buy := PlayerState.buy_shop_item({"stock_index": 0, "quote_id": renewed_quotes[0].get("quote_id", ""), "quantity": 1}, stock)
 	assert(bool(second_buy.get("success", false)) and PlayerState.item_count("木剑") == 2)
 
-	var pack_stock := [general_stock[3]]
+	var pack_stock := [{"name": "随机传送卷", "pack_count": 20}]
 	PlayerState.gold = 100000
 	var pack_quotes := PlayerState.shop_buy_quotes(pack_stock)
 	assert(int(pack_quotes[0].get("quantity", 0)) == 20)

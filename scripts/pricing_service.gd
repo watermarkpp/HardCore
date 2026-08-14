@@ -53,6 +53,19 @@ static func merchant_accepts_service_type(
 	return false
 
 
+static func merchant_accepts_sell_item(
+	context: Dictionary, price_record: Dictionary, policy_override := {}
+) -> bool:
+	var active := _policy(policy_override)
+	var sell_policy: Dictionary = active.get("sell", {})
+	if str(sell_policy.get("merchantTypeGate", "source_types")) == "all_shop_merchants":
+		# PlayerState still reconstructs and validates merchant_id at the
+		# authority boundary.  This override only removes the source [Types]
+		# category restriction from player-to-NPC selling; repair keeps it.
+		return true
+	return merchant_accepts_service_type(context, price_record)
+
+
 static func quote_buy(
 	price_record: Dictionary,
 	quantity := 1,
@@ -98,7 +111,7 @@ static func quote_sell(
 	if quantity <= 0:
 		rejection["reason"] = "出售数量无效。"
 		return rejection
-	if not merchant_accepts_service_type(context, price_record):
+	if not merchant_accepts_sell_item(context, price_record, active):
 		rejection["reason"] = "该商人不回收此类物品。"
 		return rejection
 	if str(price_record.get("kind", "unknown")) in sell_policy.get("nonTradableKinds", []):

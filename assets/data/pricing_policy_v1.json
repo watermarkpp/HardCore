@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractId": "gameplay.pricing.authority.v1",
-  "policyVersion": "2026-08-13.1",
+  "policyVersion": "2026-08-14.2",
   "currencyId": "gold",
   "source": {
     "distribution": "server.crystal.cjlaaa",
@@ -25,6 +25,8 @@
     "minimumPositivePrice": 1,
     "nonTradableKinds": ["currency", "quest_item"],
     "rejectBoundItems": true,
+    "merchantTypeGate": "all_shop_merchants",
+    "projectOverrideReason": "all_shop_npcs_buy_all_tradable_player_items",
     "durabilityValuation": "original_get_user_item_price"
   },
   "repair": {

@@ -163,6 +163,15 @@ static func build() -> Theme:
 	# content layout; it must not weaken the border or selection feedback.
 	_apply_slot_button_variation(result, &"GothicComponentShopCard", false)
 	_apply_slot_button_variation(result, &"GothicComponentSelectedShopCard", true)
+	# Android keeps a synthetic mouse hover at the last touch coordinate.  A
+	# shop card's semantic selection is represented by the selected variation,
+	# never by hover, so an unselected card must look exactly normal after a
+	# swipe or a second tap that cancels selection.
+	result.set_stylebox(
+		"hover",
+		"GothicComponentShopCard",
+		result.get_stylebox("normal", "GothicComponentShopCard"),
+	)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
 	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, Vector4.ZERO, 8)
 	return result

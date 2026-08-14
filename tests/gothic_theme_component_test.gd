@@ -139,13 +139,16 @@ func _assert_shop_card_contract(manifest: Dictionary) -> void:
 
 
 func _assert_shop_card_inventory_feedback(theme: Theme) -> void:
-	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+	for state in ["normal", "pressed", "focus", "disabled"]:
 		var inventory_style := theme.get_stylebox(state, "GothicComponentSlotButton") as StyleBoxFlat
 		var shop_style := theme.get_stylebox(state, "GothicComponentShopCard") as StyleBoxFlat
 		assert(shop_style != null and inventory_style != null)
 		assert(shop_style.bg_color == inventory_style.bg_color, "交易卡%s背景没有复用背包格" % state)
 		assert(shop_style.border_color == inventory_style.border_color, "交易卡%s边框没有复用背包格" % state)
 		assert(shop_style.border_width_left == inventory_style.border_width_left, "交易卡%s边宽没有复用背包格" % state)
+	var shop_normal := theme.get_stylebox("normal", "GothicComponentShopCard") as StyleBoxFlat
+	var shop_hover := theme.get_stylebox("hover", "GothicComponentShopCard") as StyleBoxFlat
+	assert(shop_hover.bg_color == shop_normal.bg_color and shop_hover.border_color == shop_normal.border_color, "交易卡触摸结束后仍会遗留hover边框")
 	var selected_inventory := theme.get_stylebox("normal", "GothicComponentSelectedSlotButton") as StyleBoxFlat
 	var selected_shop := theme.get_stylebox("normal", "GothicComponentSelectedShopCard") as StyleBoxFlat
 	assert(selected_shop.bg_color == selected_inventory.bg_color and selected_shop.border_color == selected_inventory.border_color, "交易卡选中态没有复用背包格高亮")
