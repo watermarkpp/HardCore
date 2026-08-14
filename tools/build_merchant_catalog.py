@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PRIMARY = ROOT / "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa"
 NPC_ROOT = PRIMARY / "Envir/NPCs"
 ITEM_CATALOG = ROOT / "assets/data/service_item_catalog.json"
+EQUIPMENT_ATTRIBUTE_MASTER = ROOT / "assets/data/equipment_attribute_master.json"
 OUTPUT = ROOT / "assets/data/merchant_catalog_v1.json"
 
 RUNTIME_MERCHANTS = {
@@ -31,13 +32,24 @@ RUNTIME_MERCHANTS = {
 # auditable instead of pretending the source NPC script contained our subset.
 EXCLUDED_OFFER_NAMES = {
     "general": {"蜡烛", "火把", "护身符"},
+    # These are private-server potion extensions.  The official shop keeps
+    # only the small/medium/large health and mana potions, each as a single
+    # bottle offer and a 20-bottle purchase option.
+    "medicine": {
+        "金疮药(特大)",
+        "魔法药(特大)",
+        "超级金疮药",
+        "超级魔法药",
+    },
 }
-SINGLE_UNIT_STOCK_KEYS = {"medicine"}
 
 # The primary blacksmith script contains these legacy bow lines, but the
 # project item/runtime catalog does not support them as buyable gameplay
 # instances. Keep them in excludedOffers for source auditability while
-# removing them from the live starter_gear stock.
+# removing them from the live starter_gear stock.  The parser below also
+# rejects any other equipment reference missing from the project-owned
+# equipment_attribute_master, which covers private-server additions such as
+# 虎牙刀/暴虎刀/音速刀 without relying on names alone.
 EXCLUDED_OFFER_NAMES["starter_gear"] = {
     "WoodenBow",
     "EbonyBow",
@@ -45,6 +57,16 @@ EXCLUDED_OFFER_NAMES["starter_gear"] = {
     "BoneBow",
     "CompoundBow",
 }
+
+MEDICINE_ALLOWED_NAMES = {
+    "金疮药(小量)",
+    "魔法药(小量)",
+    "金疮药(中量)",
+    "魔法药(中量)",
+    "金疮药(大量)",
+    "魔法药(大量)",
+}
+MEDICINE_ALLOWED_PACK_COUNTS = {1, 20}
 
 
 def sections(text: str) -> dict[str, list[str]]:
@@ -74,6 +96,21 @@ def item_index() -> dict[str, dict]:
     return by_name
 
 
+def equipment_master_names() -> set[str]:
+    """Return the project-owned equipment names used as the live whitelist."""
+    source = json.loads(EQUIPMENT_ATTRIBUTE_MASTER.read_text(encoding="utf-8-sig"))
+    names: set[str] = set()
+    for record in source.get("records", []):
+        if not isinstance(record, dict):
+            continue
+        name = str(record.get("name", "")).strip()
+        if name:
+            names.add(name)
+    if not names:
+        raise ValueError("equipment_attribute_master has no usable project equipment records")
+    return names
+
+
 def parse_offer(line: str, by_name: dict[str, dict], offer_index: int) -> dict:
     item_name = line
     pack_count = 1
@@ -95,7 +132,14 @@ def parse_offer(line: str, by_name: dict[str, dict], offer_index: int) -> dict:
     }
 
 
-def parse_merchant(stock_key: str, npc_id: str, merchant_id: str, relative: str, by_name: dict[str, dict]) -> dict:
+def parse_merchant(
+    stock_key: str,
+    npc_id: str,
+    merchant_id: str,
+    relative: str,
+    by_name: dict[str, dict],
+    equipment_names: set[str],
+) -> dict:
     path = NPC_ROOT / relative
     raw = path.read_bytes()
     text = raw.decode("utf-8-sig")
@@ -104,20 +148,32 @@ def parse_merchant(stock_key: str, npc_id: str, merchant_id: str, relative: str,
     excluded_offers: list[dict] = []
     offers: list[dict] = []
     excluded_names = EXCLUDED_OFFER_NAMES.get(stock_key, set())
+    project_excluded_names = set(excluded_names)
     for offer in source_offers:
         exclusion_reason = ""
         if offer["itemName"] in excluded_names:
+            if stock_key == "starter_gear":
+                exclusion_reason = "project_owner_removed_unsupported_legacy_bow_offer"
+            elif stock_key == "general":
+                exclusion_reason = "project_owner_removed_unrelated_general_goods"
+            else:
+                exclusion_reason = "project_owner_removed_private_server_potion_tier"
+        elif stock_key == "starter_gear" and (
+            not bool(offer["resolved"])
+            or offer["itemName"] not in equipment_names
+        ):
             exclusion_reason = (
-                "project_owner_removed_unsupported_legacy_bow_offer"
-                if stock_key == "starter_gear"
-                else "project_owner_removed_unrelated_general_goods"
+                "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
             )
-        elif stock_key in SINGLE_UNIT_STOCK_KEYS and int(offer["packCount"]) != 1:
-            exclusion_reason = "project_stackable_consumables_use_single_unit_offers"
+        elif stock_key == "medicine" and offer["itemName"] not in MEDICINE_ALLOWED_NAMES:
+            exclusion_reason = "project_owner_removed_private_server_potion_tier"
+        elif stock_key == "medicine" and int(offer["packCount"]) not in MEDICINE_ALLOWED_PACK_COUNTS:
+            exclusion_reason = "project_medicine_pack_size_not_in_allowed_options"
         if exclusion_reason:
             excluded = dict(offer)
             excluded["exclusionReason"] = exclusion_reason
             excluded_offers.append(excluded)
+            project_excluded_names.add(str(offer["itemName"]))
         else:
             offers.append(offer)
     return {
@@ -150,8 +206,14 @@ def parse_merchant(stock_key: str, npc_id: str, merchant_id: str, relative: str,
         "offers": offers,
         "excludedOffers": excluded_offers,
         "projectOverrides": {
-            "excludedItemNames": sorted(excluded_names),
-            "singleUnitOffersOnly": stock_key in SINGLE_UNIT_STOCK_KEYS,
+            "excludedItemNames": sorted(project_excluded_names),
+            "singleUnitOffersOnly": False,
+            "allowedPackCounts": sorted(MEDICINE_ALLOWED_PACK_COUNTS) if stock_key == "medicine" else [1],
+            "officialEquipmentEvidence": {
+                "path": EQUIPMENT_ATTRIBUTE_MASTER.relative_to(ROOT).as_posix(),
+                "recordCount": len(equipment_names),
+                "matchingPolicy": "starter_gear_equipment_name_must_exist_in_equipment_attribute_master",
+            } if stock_key == "starter_gear" else {},
         },
         "unresolvedTradeLines": [offer["tradeLine"] for offer in source_offers if not offer["resolved"]],
     }
@@ -178,8 +240,9 @@ def discover_standard_merchants() -> list[dict]:
 
 def build_payload() -> dict:
     by_name = item_index()
+    equipment_names = equipment_master_names()
     merchants = {
-        stock_key: parse_merchant(stock_key, npc_id, merchant_id, relative, by_name)
+        stock_key: parse_merchant(stock_key, npc_id, merchant_id, relative, by_name, equipment_names)
         for stock_key, (npc_id, merchant_id, relative) in RUNTIME_MERCHANTS.items()
     }
     required_exact = {

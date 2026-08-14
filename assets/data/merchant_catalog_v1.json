@@ -166,7 +166,11 @@
           "火把",
           "蜡烛"
         ],
-        "singleUnitOffersOnly": false
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1
+        ],
+        "officialEquipmentEvidence": {}
       },
       "unresolvedTradeLines": []
     },
@@ -216,17 +220,6 @@
           "resolved": true
         },
         {
-          "offerIndex": 2,
-          "offerId": "offer:2:281:1",
-          "tradeLine": "虎牙刀",
-          "itemName": "虎牙刀",
-          "itemKey": "service:281",
-          "serviceIndex": 281,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
           "offerIndex": 3,
           "offerId": "offer:3:222:1",
           "tradeLine": "匕首",
@@ -255,17 +248,6 @@
           "itemName": "青铜剑",
           "itemKey": "service:224",
           "serviceIndex": 224,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
-          "offerIndex": 7,
-          "offerId": "offer:7:283:1",
-          "tradeLine": "暴虎刀",
-          "itemName": "暴虎刀",
-          "itemKey": "service:283",
-          "serviceIndex": 283,
           "packCount": 1,
           "supply": "unlimited_static_trade",
           "resolved": true
@@ -337,17 +319,6 @@
           "resolved": true
         },
         {
-          "offerIndex": 16,
-          "offerId": "offer:16:284:1",
-          "tradeLine": "音速刀",
-          "itemName": "音速刀",
-          "itemKey": "service:284",
-          "serviceIndex": 284,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
           "offerIndex": 18,
           "offerId": "offer:18:836:1",
           "tradeLine": "鹤嘴锄",
@@ -373,6 +344,18 @@
           "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
         },
         {
+          "offerIndex": 2,
+          "offerId": "offer:2:281:1",
+          "tradeLine": "虎牙刀",
+          "itemName": "虎牙刀",
+          "itemKey": "service:281",
+          "serviceIndex": 281,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
+        },
+        {
           "offerIndex": 5,
           "offerId": "offer:5:299:1",
           "tradeLine": "EbonyBow",
@@ -383,6 +366,18 @@
           "supply": "unlimited_static_trade",
           "resolved": true,
           "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 7,
+          "offerId": "offer:7:283:1",
+          "tradeLine": "暴虎刀",
+          "itemName": "暴虎刀",
+          "itemKey": "service:283",
+          "serviceIndex": 283,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
         },
         {
           "offerIndex": 9,
@@ -409,6 +404,18 @@
           "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
         },
         {
+          "offerIndex": 16,
+          "offerId": "offer:16:284:1",
+          "tradeLine": "音速刀",
+          "itemName": "音速刀",
+          "itemKey": "service:284",
+          "serviceIndex": 284,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
+        },
+        {
           "offerIndex": 17,
           "offerId": "offer:17:302:1",
           "tradeLine": "CompoundBow",
@@ -427,9 +434,20 @@
           "CompoundBow",
           "EbonyBow",
           "ShortBow",
-          "WoodenBow"
+          "WoodenBow",
+          "暴虎刀",
+          "虎牙刀",
+          "音速刀"
         ],
-        "singleUnitOffersOnly": false
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1
+        ],
+        "officialEquipmentEvidence": {
+          "path": "assets/data/equipment_attribute_master.json",
+          "recordCount": 175,
+          "matchingPolicy": "starter_gear_equipment_name_must_exist_in_equipment_attribute_master"
+        }
       },
       "unresolvedTradeLines": []
     },
@@ -1020,7 +1038,11 @@
       "excludedOffers": [],
       "projectOverrides": {
         "excludedItemNames": [],
-        "singleUnitOffersOnly": false
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1
+        ],
+        "officialEquipmentEvidence": {}
       },
       "unresolvedTradeLines": []
     },
@@ -1069,6 +1091,17 @@
           "resolved": true
         },
         {
+          "offerIndex": 1,
+          "offerId": "offer:1:658:20",
+          "tradeLine": "金疮药(小量) 20",
+          "itemName": "金疮药(小量)",
+          "itemKey": "service:658",
+          "serviceIndex": 658,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
           "offerIndex": 2,
           "offerId": "offer:2:659:1",
           "tradeLine": "魔法药(小量) 1",
@@ -1076,6 +1109,17 @@
           "itemKey": "service:659",
           "serviceIndex": 659,
           "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 3,
+          "offerId": "offer:3:659:20",
+          "tradeLine": "魔法药(小量) 20",
+          "itemName": "魔法药(小量)",
+          "itemKey": "service:659",
+          "serviceIndex": 659,
+          "packCount": 20,
           "supply": "unlimited_static_trade",
           "resolved": true
         },
@@ -1091,6 +1135,17 @@
           "resolved": true
         },
         {
+          "offerIndex": 5,
+          "offerId": "offer:5:660:20",
+          "tradeLine": "金疮药(中量) 20",
+          "itemName": "金疮药(中量)",
+          "itemKey": "service:660",
+          "serviceIndex": 660,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
           "offerIndex": 6,
           "offerId": "offer:6:661:1",
           "tradeLine": "魔法药(中量) 1",
@@ -1098,6 +1153,17 @@
           "itemKey": "service:661",
           "serviceIndex": 661,
           "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 7,
+          "offerId": "offer:7:661:20",
+          "tradeLine": "魔法药(中量) 20",
+          "itemName": "魔法药(中量)",
+          "itemKey": "service:661",
+          "serviceIndex": 661,
+          "packCount": 20,
           "supply": "unlimited_static_trade",
           "resolved": true
         },
@@ -1113,6 +1179,17 @@
           "resolved": true
         },
         {
+          "offerIndex": 9,
+          "offerId": "offer:9:662:20",
+          "tradeLine": "金疮药(大量) 20",
+          "itemName": "金疮药(大量)",
+          "itemKey": "service:662",
+          "serviceIndex": 662,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
           "offerIndex": 10,
           "offerId": "offer:10:663:1",
           "tradeLine": "魔法药(大量) 1",
@@ -1124,112 +1201,6 @@
           "resolved": true
         },
         {
-          "offerIndex": 12,
-          "offerId": "offer:12:664:1",
-          "tradeLine": "金疮药(特大) 1",
-          "itemName": "金疮药(特大)",
-          "itemKey": "service:664",
-          "serviceIndex": 664,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
-          "offerIndex": 14,
-          "offerId": "offer:14:665:1",
-          "tradeLine": "魔法药(特大) 1",
-          "itemName": "魔法药(特大)",
-          "itemKey": "service:665",
-          "serviceIndex": 665,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
-          "offerIndex": 16,
-          "offerId": "offer:16:666:1",
-          "tradeLine": "超级金疮药",
-          "itemName": "超级金疮药",
-          "itemKey": "service:666",
-          "serviceIndex": 666,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        },
-        {
-          "offerIndex": 18,
-          "offerId": "offer:18:667:1",
-          "tradeLine": "超级魔法药",
-          "itemName": "超级魔法药",
-          "itemKey": "service:667",
-          "serviceIndex": 667,
-          "packCount": 1,
-          "supply": "unlimited_static_trade",
-          "resolved": true
-        }
-      ],
-      "excludedOffers": [
-        {
-          "offerIndex": 1,
-          "offerId": "offer:1:658:20",
-          "tradeLine": "金疮药(小量) 20",
-          "itemName": "金疮药(小量)",
-          "itemKey": "service:658",
-          "serviceIndex": 658,
-          "packCount": 20,
-          "supply": "unlimited_static_trade",
-          "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
-        },
-        {
-          "offerIndex": 3,
-          "offerId": "offer:3:659:20",
-          "tradeLine": "魔法药(小量) 20",
-          "itemName": "魔法药(小量)",
-          "itemKey": "service:659",
-          "serviceIndex": 659,
-          "packCount": 20,
-          "supply": "unlimited_static_trade",
-          "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
-        },
-        {
-          "offerIndex": 5,
-          "offerId": "offer:5:660:20",
-          "tradeLine": "金疮药(中量) 20",
-          "itemName": "金疮药(中量)",
-          "itemKey": "service:660",
-          "serviceIndex": 660,
-          "packCount": 20,
-          "supply": "unlimited_static_trade",
-          "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
-        },
-        {
-          "offerIndex": 7,
-          "offerId": "offer:7:661:20",
-          "tradeLine": "魔法药(中量) 20",
-          "itemName": "魔法药(中量)",
-          "itemKey": "service:661",
-          "serviceIndex": 661,
-          "packCount": 20,
-          "supply": "unlimited_static_trade",
-          "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
-        },
-        {
-          "offerIndex": 9,
-          "offerId": "offer:9:662:20",
-          "tradeLine": "金疮药(大量) 20",
-          "itemName": "金疮药(大量)",
-          "itemKey": "service:662",
-          "serviceIndex": 662,
-          "packCount": 20,
-          "supply": "unlimited_static_trade",
-          "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
-        },
-        {
           "offerIndex": 11,
           "offerId": "offer:11:663:20",
           "tradeLine": "魔法药(大量) 20",
@@ -1238,8 +1209,21 @@
           "serviceIndex": 663,
           "packCount": 20,
           "supply": "unlimited_static_trade",
+          "resolved": true
+        }
+      ],
+      "excludedOffers": [
+        {
+          "offerIndex": 12,
+          "offerId": "offer:12:664:1",
+          "tradeLine": "金疮药(特大) 1",
+          "itemName": "金疮药(特大)",
+          "itemKey": "service:664",
+          "serviceIndex": 664,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
           "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
         },
         {
           "offerIndex": 13,
@@ -1251,7 +1235,19 @@
           "packCount": 20,
           "supply": "unlimited_static_trade",
           "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 14,
+          "offerId": "offer:14:665:1",
+          "tradeLine": "魔法药(特大) 1",
+          "itemName": "魔法药(特大)",
+          "itemKey": "service:665",
+          "serviceIndex": 665,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
         },
         {
           "offerIndex": 15,
@@ -1263,7 +1259,19 @@
           "packCount": 20,
           "supply": "unlimited_static_trade",
           "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 16,
+          "offerId": "offer:16:666:1",
+          "tradeLine": "超级金疮药",
+          "itemName": "超级金疮药",
+          "itemKey": "service:666",
+          "serviceIndex": 666,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
         },
         {
           "offerIndex": 17,
@@ -1275,7 +1283,19 @@
           "packCount": 20,
           "supply": "unlimited_static_trade",
           "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 18,
+          "offerId": "offer:18:667:1",
+          "tradeLine": "超级魔法药",
+          "itemName": "超级魔法药",
+          "itemKey": "service:667",
+          "serviceIndex": 667,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
         },
         {
           "offerIndex": 19,
@@ -1287,12 +1307,22 @@
           "packCount": 20,
           "supply": "unlimited_static_trade",
           "resolved": true,
-          "exclusionReason": "project_stackable_consumables_use_single_unit_offers"
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
         }
       ],
       "projectOverrides": {
-        "excludedItemNames": [],
-        "singleUnitOffersOnly": true
+        "excludedItemNames": [
+          "超级金疮药",
+          "超级魔法药",
+          "金疮药(特大)",
+          "魔法药(特大)"
+        ],
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1,
+          20
+        ],
+        "officialEquipmentEvidence": {}
       },
       "unresolvedTradeLines": []
     }

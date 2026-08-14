@@ -1132,10 +1132,14 @@ func _process_potion_restore(delta: float) -> void:
 	_potion_tick_remaining -= delta
 	if _potion_tick_remaining > 0.0:
 		return
-	# Original M2Server ObjBase.pas: interval = 600-min(400, level*10) ms;
-	# each tick restores level div 10 + 5 from the queued potion pools.
-	_potion_tick_remaining = float(600 - mini(400, PlayerState.level * 10)) / 1000.0
-	var per_tick: int = 5 + int(PlayerState.level / 10)
+	var restore_profile := GameData.potion_recovery_profile(
+		PlayerState.level,
+		1,
+		0,
+		"delayed_restore",
+	)
+	_potion_tick_remaining = float(restore_profile.get("tick_interval_seconds", 0.6))
+	var per_tick := int(restore_profile.get("tick_amount", 5))
 	if _pending_potion_health > 0:
 		var hp_tick := mini(per_tick, _pending_potion_health)
 		_pending_potion_health -= hp_tick

@@ -41,6 +41,9 @@ var stock: Array = []
 var _merchant_context: Dictionary = {}
 var _trade_mode := "buy"
 var _buy_quotes: Array = []
+var _selected_buy_index := -1
+var _buy_request_locked := false
+var _buy_lock_serial := 0
 var _sell_quotes: Dictionary = {}
 var _selected_sell_index := -1
 var _sell_quantity := 1
@@ -331,6 +334,9 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 	stock = new_stock
 	_merchant_context = merchant_context.duplicate(true) if not merchant_context.is_empty() else {}
 	_buy_quotes.clear()
+	_selected_buy_index = -1
+	_buy_request_locked = false
+	_buy_lock_serial += 1
 	_sell_quotes.clear()
 	_selected_sell_index = -1
 	_sell_quantity = 1
@@ -348,9 +354,12 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 
 
 func set_buy_quotes(quotes: Array) -> void:
+	var preserved_index := _selected_buy_index
 	_buy_quotes = quotes.duplicate(true)
 	if _trade_mode != "buy":
 		return
+	if preserved_index < 0 or preserved_index >= stock.size():
+		_selected_buy_index = -1
 	item_list.clear()
 	for index in range(stock.size()):
 		var quote := _buy_quote_for_index(index)
@@ -358,6 +367,10 @@ func set_buy_quotes(quotes: Array) -> void:
 		var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
 		item_list.add_item("%s ×%d　%d金币" % [item_name, pack_count, int(quote.get("total_price", 0))])
 	_rebuild_goods_cards()
+	if _selected_buy_index >= 0 and _selected_buy_index < item_list.item_count:
+		item_list.select(_selected_buy_index)
+		_set_shop_card_selected(goods_buttons[_selected_buy_index], true)
+		_refresh_buy_action_enabled()
 
 
 func apply_buy_result(result: Dictionary) -> void:
@@ -365,6 +378,7 @@ func apply_buy_result(result: Dictionary) -> void:
 	if result.get("quotes", null) is Array:
 		set_buy_quotes(result.get("quotes", []))
 	_refresh_gold()
+	_refresh_buy_action_enabled()
 
 
 func _buy_quote_for_index(stock_index: int) -> Dictionary:
@@ -390,6 +404,7 @@ func _rebuild_goods_cards() -> void:
 		card.set_meta("stock_index", index)
 		goods_grid.add_child(card)
 		goods_buttons.append(card)
+		_set_shop_card_selected(card, index == _selected_buy_index)
 		var display_entry: Dictionary = entry.duplicate(true)
 		var quote := _buy_quote_for_index(index)
 		var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
@@ -498,6 +513,7 @@ func _set_trade_mode(mode: String) -> void:
 	if buying:
 		_rebuild_goods_cards()
 		detail_label.text = "[color=#cdbb9e]选择商品查看属性、价格与穿戴要求。[/color]"
+		_refresh_buy_action_enabled()
 	else:
 		_selected_sell_index = -1
 		_sell_quantity = 1
@@ -574,7 +590,9 @@ func apply_sell_result(result: Dictionary) -> void:
 
 func _request_sell_quotes() -> void:
 	var items: Array = []
-	var merchant_id := str(_active_merchant_context().get("merchant_id", ""))
+	var merchant_context := _active_merchant_context()
+	var merchant_id := str(merchant_context.get("merchant_id", ""))
+	var merchant_stock_key := str(merchant_context.get("stock_key", ""))
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Variant = PlayerState.inventory[inventory_index]
 		if not record is Dictionary:
@@ -586,6 +604,7 @@ func _request_sell_quotes() -> void:
 			"item_name": str(record.get("name", "")),
 			"count": int(record.get("count", 1)),
 			"merchant_id": merchant_id,
+			"merchant_stock_key": merchant_stock_key,
 		})
 	sell_quotes_requested.emit(items)
 
@@ -846,6 +865,7 @@ func _on_item_selected(index: int) -> void:
 		return
 	if index < 0 or index >= stock.size():
 		return
+	_selected_buy_index = index
 	for card_index in range(goods_buttons.size()):
 		var card := goods_buttons[card_index]
 		var selected := card_index == index
@@ -853,12 +873,7 @@ func _on_item_selected(index: int) -> void:
 	var entry: Dictionary = stock[index]
 	var item_name := str(entry.get("name", ""))
 	var item := GameData.get_item_record(item_name)
-	var description := str(entry.get("description", ""))
-	if not item.is_empty():
-		description += "\n类别：%s\n攻击：%s-%s\n防御：%s-%s\n需要等级：%s" % [
-			item.get("category", ""), _value(item.get("attackMin")), _value(item.get("attackMax")),
-			_value(item.get("defenseMin")), _value(item.get("defenseMax")), _value(item.get("reqLevel")),
-		]
+	var description := _buy_item_detail(item_name, item, entry)
 	var quote := _buy_quote_for_index(index)
 	var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
 	var price_line := (
@@ -869,6 +884,47 @@ func _on_item_selected(index: int) -> void:
 		else "[color=#b8a58a]%s[/color]" % str(quote.get("reason", "等待玩法价格报价"))
 	)
 	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n%s\n\n%s" % [item_name, price_line, description]
+	_refresh_buy_action_enabled()
+
+
+func _buy_item_detail(item_name: String, item: Dictionary, entry: Dictionary) -> String:
+	var lines: Array[String] = []
+	var summary := GameData.item_usage_summary(item_name)
+	if not item.is_empty() and str(summary.get("kind", item.get("kind", ""))) == "consumable":
+		lines.append("类别：%s" % str(summary.get("category", item.get("category", "药品"))))
+		var restore_health := int(summary.get("restore_health", 0))
+		var restore_mana := int(summary.get("restore_mana", 0))
+		var delayed := str(summary.get("effect_type", "instant")) == "delayed_restore"
+		var tick_amount := int(summary.get("tick_amount", 0))
+		var tick_interval := float(summary.get("tick_interval_seconds", 0.0))
+		var recovery_per_second := float(summary.get("recovery_per_second", 0.0))
+		var duration_seconds := float(summary.get("duration_seconds", 0.0))
+		if restore_health > 0:
+			if delayed:
+				lines.append("持续恢复生命：每%.2f秒%d点（约%.1f点/秒）" % [tick_interval, tick_amount, recovery_per_second])
+				lines.append("生命总恢复：%d点，持续约%.2f秒" % [restore_health, duration_seconds])
+			else:
+				lines.append("立即恢复生命：%d点" % restore_health)
+		if restore_mana > 0:
+			if delayed:
+				lines.append("持续恢复魔法：每%.2f秒%d点（约%.1f点/秒）" % [tick_interval, tick_amount, recovery_per_second])
+				lines.append("魔法总恢复：%d点，持续约%.2f秒" % [restore_mana, duration_seconds])
+			else:
+				lines.append("立即恢复魔法：%d点" % restore_mana)
+		if restore_health <= 0 and restore_mana <= 0:
+			lines.append("效果：%s" % str(summary.get("use_effect", "消耗品")))
+		lines.append("使用方式：双击使用")
+		lines.append("可叠加：是")
+		return "\n".join(lines)
+	if not item.is_empty():
+		lines.append("类别：%s" % str(item.get("category", "")))
+		lines.append("攻击：%s-%s" % [_value(item.get("attackMin")), _value(item.get("attackMax"))])
+		lines.append("防御：%s-%s" % [_value(item.get("defenseMin")), _value(item.get("defenseMax"))])
+		lines.append("需要等级：%s" % _value(item.get("reqLevel")))
+	var entry_description := str(entry.get("description", ""))
+	if not entry_description.is_empty():
+		lines.append(entry_description)
+	return "\n".join(lines)
 
 
 func _set_shop_card_selected(card: Button, selected: bool) -> void:
@@ -888,6 +944,8 @@ func _repair_all() -> void:
 
 
 func _buy_selected() -> void:
+	if _buy_request_locked:
+		return
 	var selected := item_list.get_selected_items()
 	if selected.is_empty():
 		detail_label.text = "请先选择商品。"
@@ -898,6 +956,17 @@ func _buy_selected() -> void:
 		detail_label.text = str(quote.get("reason", "该商品暂时无法购买。"))
 		return
 	detail_label.text = "[color=#d8bd8c]购买请求已提交，等待玩法层返回交易结果。[/color]"
+	_buy_request_locked = true
+	_buy_lock_serial += 1
+	var lock_serial := _buy_lock_serial
+	_refresh_buy_action_enabled()
+	if is_inside_tree():
+		get_tree().create_timer(0.2).timeout.connect(func() -> void:
+			if lock_serial != _buy_lock_serial:
+				return
+			_buy_request_locked = false
+			_refresh_buy_action_enabled()
+		)
 	buy_requested.emit({
 		"contract_id": str(quote.get("contract_id", "")),
 		"quote_id": str(quote.get("quote_id", "")),
@@ -907,6 +976,14 @@ func _buy_selected() -> void:
 		"quantity": int(quote.get("pack_count", 1)),
 		"merchant_id": str(quote.get("merchant_id", "")),
 	})
+
+
+func _refresh_buy_action_enabled() -> void:
+	if buy_button == null:
+		return
+	var selected := _selected_buy_index >= 0 and _selected_buy_index < stock.size()
+	var quote := _buy_quote_for_index(_selected_buy_index) if selected else {}
+	buy_button.disabled = _buy_request_locked or not bool(quote.get("valid", false))
 
 
 func _active_merchant_context() -> Dictionary:

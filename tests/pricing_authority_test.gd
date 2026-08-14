@@ -18,16 +18,53 @@ func _run() -> void:
 	var weapon_stock := GameData.merchant_stock("starter_gear")
 	var book_stock := GameData.merchant_stock("books")
 	var medicine_stock := GameData.merchant_stock("medicine")
-	assert(not weapon_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")).ends_with("Bow")), "铁匠货单不应暴露不受支持的 Bow 弓类")
+	for weapon_offer: Dictionary in weapon_stock:
+		assert(
+			not str(weapon_offer.get("name", "")).ends_with("Bow")
+			and str(weapon_offer.get("name", "")) not in ["虎牙刀", "暴虎刀", "音速刀"],
+			"铁匠货单不应暴露无项目装备主表/贴图支持的私服装备"
+		)
 	var starter_catalog: Dictionary = GameData.merchant_catalog.get("merchants", {}).get("starter_gear", {})
-	assert((starter_catalog.get("excludedOffers", []) as Array).size() == 5, "Bow 主源行必须保留在 excludedOffers 审计证据中")
+	var starter_excluded_names := {}
+	for excluded: Variant in starter_catalog.get("excludedOffers", []):
+		if excluded is Dictionary:
+			starter_excluded_names[str(excluded.get("itemName", ""))] = true
+	assert(
+		starter_excluded_names.keys().size() == 8
+			and starter_excluded_names.has("虎牙刀")
+			and starter_excluded_names.has("暴虎刀")
+			and starter_excluded_names.has("音速刀"),
+		"私服装备主源行必须保留在 excludedOffers 审计证据中"
+	)
 	assert(str(general_stock[0].get("name", "")) == "随机传送卷")
 	assert(not general_stock.any(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) in ["蜡烛", "火把", "护身符"]))
 	assert(str(weapon_stock[0].get("name", "")) == "木剑")
 	assert(str(book_stock[0].get("name", "")) == "基本剑术")
-	assert(not medicine_stock.is_empty() and str(medicine_stock[0].get("name", "")) == "金疮药(小量)")
-	assert(medicine_stock.all(func(entry: Dictionary) -> bool: return int(entry.get("pack_count", 0)) == 1))
+	var medicine_names := [
+		"金疮药(小量)", "魔法药(小量)",
+		"金疮药(中量)", "魔法药(中量)",
+		"金疮药(大量)", "魔法药(大量)",
+	]
+	assert(medicine_stock.size() == 12, "药店必须提供六种正式药品各单瓶/20瓶两种报价")
+	for medicine_offer: Dictionary in medicine_stock:
+		assert(
+			str(medicine_offer.get("name", "")) in medicine_names
+			and int(medicine_offer.get("pack_count", 0)) in [1, 20],
+			"药店混入特大/超级药品或非法包装数量"
+		)
+	for medicine_name: String in medicine_names:
+		assert(medicine_stock.filter(func(entry: Dictionary) -> bool: return str(entry.get("name", "")) == medicine_name).size() == 2)
+	assert(not medicine_stock.any(func(entry: Dictionary) -> bool: return "特大" in str(entry.get("name", "")) or "超级" in str(entry.get("name", ""))))
 	assert(str(medicine_stock[0].get("merchant_id", "")) == "merchant.server.crystal.cjlaaa.29")
+	var potion_summary := GameData.item_usage_summary("金疮药(小量)")
+	assert(int(potion_summary.get("restore_health", 0)) == 30 and int(GameData.item_usage_summary("魔法药(小量)").get("restore_mana", 0)) == 40, "药水详情没有使用主库实际恢复数值")
+	var level_1_restore := GameData.potion_recovery_profile(1, 30, 0, "delayed_restore")
+	var level_50_restore := GameData.potion_recovery_profile(50, 0, 40, "delayed_restore")
+	assert(int(level_1_restore.get("tick_amount", 0)) == 5 and is_equal_approx(float(level_1_restore.get("tick_interval_seconds", 0.0)), 0.59), "1级药水持续恢复节奏与玩法公式不一致")
+	assert(int(level_50_restore.get("tick_amount", 0)) == 10 and is_equal_approx(float(level_50_restore.get("tick_interval_seconds", 0.0)), 0.2), "50级药水持续恢复节奏与玩法公式不一致")
+	assert(is_equal_approx(float(level_50_restore.get("recovery_per_second", 0.0)), 50.0), "药水每秒恢复量计算错误")
+	assert(is_equal_approx(float(level_1_restore.get("duration_seconds", 0.0)), 2.95) and is_equal_approx(float(level_50_restore.get("duration_seconds", 0.0)), 0.6), "药水首次立即跳与后续持续时间计算错误")
+	assert(str(potion_summary.get("effect_type", "")) == "delayed_restore" and int(potion_summary.get("tick_amount", 0)) > 0, "正式药水被错误投影为即时恢复")
 	var bich_content := MapEditorRuntimeBridge.game_content_for_map(4)
 	var pharmacist_rows: Array = (bich_content.get("npcs", []) as Array).filter(
 		func(entry: Dictionary) -> bool:

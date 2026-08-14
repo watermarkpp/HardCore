@@ -848,8 +848,17 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		return rejection
 	var record: Dictionary = raw_record
 	var merchant_id := str(request.get("merchant_id", ""))
-	var merchant_context := GameData.merchant_context_by_id(merchant_id)
-	if merchant_id.is_empty() or merchant_context.is_empty():
+	var merchant_stock_key := str(request.get("merchant_stock_key", ""))
+	var merchant_context := GameData.merchant_context(merchant_stock_key) if not merchant_stock_key.is_empty() else {}
+	if merchant_context.is_empty():
+		merchant_context = GameData.merchant_context_by_id(merchant_id)
+	var authoritative_merchant_id := str(merchant_context.get("merchant_id", ""))
+	if (
+		merchant_id.is_empty()
+		or merchant_context.is_empty()
+		or authoritative_merchant_id.is_empty()
+		or authoritative_merchant_id != merchant_id
+	):
 		rejection["reason"] = "商人状态已变化。"
 		return rejection
 	var item_name := str(record.get("name", ""))
@@ -898,7 +907,8 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		"quote_key": expected_key,
 		"quote_id": quote_id,
 		"item_name": item_name,
-		"merchant_id": merchant_id,
+		"merchant_id": authoritative_merchant_id,
+		"merchant_stock_key": str(merchant_context.get("stock_key", merchant_stock_key)),
 		"sellable": true,
 		"unit_price": unit_price,
 		"policy_version": str(pricing_quote.get("policy_version", "")),
@@ -971,6 +981,7 @@ func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 			"item_name": str(record.get("name", "")),
 			"count": int(record.get("count", 1)),
 			"merchant_id": merchant_id,
+			"merchant_stock_key": str(GameData.merchant_context_by_id(merchant_id).get("stock_key", "")),
 		})
 	return items
 

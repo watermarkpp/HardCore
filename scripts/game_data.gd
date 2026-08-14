@@ -193,12 +193,93 @@ func merchant_context(stock_key: String) -> Dictionary:
 	for raw_type: Variant in merchant.get("types", []):
 		merchant_types.append(int(raw_type))
 	return {
+		"stock_key": stock_key,
 		"merchant_id": str(merchant.get("merchantId", "")),
 		"merchant_rate_bps": int(merchant.get("merchantRateBps", 10000)),
 		"stock_markup_bps": int(merchant.get("stockMarkupBps", 11000)),
 		"types": merchant_types,
 		"supports_repair": bool(merchant.get("supportsRepair", false)),
 	} if not merchant.is_empty() else {}
+
+
+func item_usage_summary(item_name: String, player_level := -1) -> Dictionary:
+	# Return canonical player-facing use values for a catalog item. The service
+	# catalog is authoritative; UI must not guess from names or render equipment
+	# template fields for consumables.
+	var record := get_item_record(item_name)
+	if record.is_empty():
+		return {}
+	var stats: Dictionary = record.get("stats", {}) if record.get("stats", {}) is Dictionary else {}
+	var restore_health := int(record.get("restoreHealth", record.get("healthRestore", stats.get("HP", 0))))
+	var restore_mana := int(record.get("restoreMana", record.get("manaRestore", stats.get("MP", 0))))
+	var effect_type := str(record.get("useEffect", ""))
+	var recovery := potion_recovery_profile(
+		player_level if player_level >= 0 else int(PlayerState.level),
+		restore_health,
+		restore_mana,
+		effect_type,
+	)
+	return {
+		"item_name": str(record.get("name", item_name)),
+		"kind": str(record.get("kind", "unknown")),
+		"category": str(record.get("category", "")),
+		"restore_health": maxi(0, restore_health),
+		"restore_mana": maxi(0, restore_mana),
+		"use_effect": effect_type,
+		"effect_type": str(recovery.get("effect_type", "instant")),
+		"total_restore_health": int(recovery.get("total_restore_health", 0)),
+		"total_restore_mana": int(recovery.get("total_restore_mana", 0)),
+		"total_restore": int(recovery.get("total_restore", 0)),
+		"tick_amount": int(recovery.get("tick_amount", 0)),
+		"tick_interval_seconds": float(recovery.get("tick_interval_seconds", 0.0)),
+		"recovery_per_second": float(recovery.get("recovery_per_second", 0.0)),
+		"duration_seconds": float(recovery.get("duration_seconds", 0.0)),
+		"tick_count": int(recovery.get("tick_count", 0)),
+		"player_level": int(recovery.get("player_level", 1)),
+		"usable": bool(record.get("usable", str(record.get("kind", "")) == "consumable")),
+		"stackable": bool(record.get("stackable", false)),
+		"description": str(record.get("description", record.get("toolTip", ""))),
+	}
+
+
+func potion_recovery_profile(player_level: int, restore_health: int, restore_mana: int, use_effect: String) -> Dictionary:
+	# Keep this display projection identical to Player._process_potion_restore:
+	# interval=(600-min(400, level*10))/1000s; tick=5+floor(level/10).
+	var level := maxi(1, player_level)
+	var health_total := maxi(0, restore_health)
+	var mana_total := maxi(0, restore_mana)
+	var total_restore := health_total + mana_total
+	var delayed := use_effect == "delayed_restore" and total_restore > 0
+	if not delayed:
+		return {
+			"effect_type": "instant",
+			"total_restore_health": health_total,
+			"total_restore_mana": mana_total,
+			"total_restore": total_restore,
+			"tick_amount": 0,
+			"tick_interval_seconds": 0.0,
+			"recovery_per_second": 0.0,
+			"duration_seconds": 0.0,
+			"tick_count": 0,
+			"player_level": level,
+		}
+	var tick_amount := 5 + int(level / 10)
+	var tick_interval_seconds := float(600 - mini(400, level * 10)) / 1000.0
+	var ticks := int(ceil(float(maxi(health_total, mana_total)) / float(tick_amount)))
+	return {
+		"effect_type": "delayed_restore",
+		"total_restore_health": health_total,
+		"total_restore_mana": mana_total,
+		"total_restore": total_restore,
+		"tick_amount": tick_amount,
+		"tick_interval_seconds": tick_interval_seconds,
+		"recovery_per_second": float(tick_amount) / tick_interval_seconds,
+		# The first queued tick resolves immediately on the next process frame;
+		# only the remaining ticks wait for the interval.
+		"duration_seconds": float(maxi(0, ticks - 1)) * tick_interval_seconds,
+		"tick_count": ticks,
+		"player_level": level,
+	}
 
 
 func merchant_context_by_id(merchant_id: String) -> Dictionary:

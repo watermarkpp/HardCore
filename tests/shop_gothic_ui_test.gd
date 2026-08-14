@@ -31,8 +31,10 @@ func _run() -> void:
 	await get_tree().process_frame
 	var quote_batches: Array = []
 	var sell_requests: Array = []
+	var buy_requests: Array = []
 	panel.sell_quotes_requested.connect(func(items: Array) -> void: quote_batches.append(items))
 	panel.sell_requested.connect(func(request: Dictionary) -> void: sell_requests.append(request))
+	panel.buy_requested.connect(func(request: Dictionary) -> void: buy_requests.append(request))
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	var medicine_context := GameData.merchant_context("medicine")
@@ -42,6 +44,23 @@ func _run() -> void:
 		== str(medicine_context.get("merchant_id", "")),
 		"空库存商店必须使用显式 merchant_context"
 	)
+	# The NPC-provided context must survive an empty/filtered stock and reach
+	# the authoritative PlayerState quote path for every shop category.
+	var saved_inventory := PlayerState.inventory.duplicate(true)
+	PlayerState.inventory = [{"name": "匕首", "count": 1, "instance_id": "shop-context-dagger"}]
+	for context_key: String in ["general", "books", "medicine"]:
+		var context := GameData.merchant_context(context_key)
+		panel.open_for("上下文测试", [], context)
+		panel._set_trade_mode("sell")
+		assert(not quote_batches.is_empty() and not quote_batches[-1].is_empty(), "%s 没有发出出售报价请求" % context_key)
+		var context_quotes := PlayerState.shop_sell_quotes(quote_batches[-1])
+		var context_quote: Dictionary = context_quotes.get("instance:shop-context-dagger", {})
+		assert(bool(context_quote.get("sellable", false)), "%s NPC 上下文下匕首出售报价无效" % context_key)
+		assert(int(context_quote.get("unit_price", 0)) > 0, "%s NPC 上下文下匕首没有出售价格" % context_key)
+		panel.set_sell_quotes(context_quotes)
+		panel._select_sell_item(0)
+		assert(not panel.sell_quantity_button.disabled, "%s NPC 下出售按钮未因有效装备报价启用" % context_key)
+	PlayerState.inventory = saved_inventory
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	await get_tree().process_frame
@@ -65,9 +84,29 @@ func _run() -> void:
 	var gold_before := PlayerState.gold
 	var buy_quote := panel._buy_quote_for_index(0)
 	panel._buy_selected()
-	var buy_result := PlayerState.buy_shop_item({"stock_index": 0, "quote_id": buy_quote.get("quote_id", ""), "quantity": 1}, STOCK)
+	assert(buy_requests.size() == 1 and panel.buy_button.disabled, "购买提交后没有立即锁定按钮")
+	var buy_result := PlayerState.buy_shop_item(buy_requests[-1], STOCK)
 	panel.apply_buy_result(buy_result)
 	assert(PlayerState.gold == gold_before - int(buy_quote.get("unit_price", 0)) and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
+	assert(panel._selected_buy_index == 0 and panel.item_list.get_selected_items() == PackedInt32Array([0]), "购买刷新报价后丢失当前商品选择")
+	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "购买刷新报价后丢失商品卡高亮")
+	await get_tree().create_timer(0.25).timeout
+	assert(not panel.buy_button.disabled, "购买短冷却结束后按钮没有恢复")
+	var second_quote := panel._buy_quote_for_index(0)
+	panel._buy_selected()
+	assert(buy_requests.size() == 2 and panel.buy_button.disabled, "购买冷却结束后无法再次提交")
+	var second_result := PlayerState.buy_shop_item(buy_requests[-1], STOCK)
+	panel.apply_buy_result(second_result)
+	assert(panel._selected_buy_index == 0 and panel.item_list.get_selected_items() == PackedInt32Array([0]), "第二次购买后丢失当前商品选择")
+	await get_tree().create_timer(0.25).timeout
+	var official_potion_stock := GameData.merchant_stock("medicine")
+	panel.open_for("药剂商", official_potion_stock, GameData.merchant_context("medicine"))
+	panel.set_buy_quotes(PlayerState.shop_buy_quotes(official_potion_stock))
+	panel._select_shop_item(0)
+	assert("持续恢复生命：" in panel.detail_label.text and "点/秒" in panel.detail_label.text, "药水详情没有显示玩法层实际持续恢复速度")
+	assert("生命总恢复：30点" in panel.detail_label.text and "攻击：" not in panel.detail_label.text, "药水详情没有显示主库恢复总量")
+	panel.open_for("测试商店", STOCK)
+	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	panel._set_trade_mode("sell")
 	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
 	assert("UI不会自行计算" not in panel.detail_label.text and "玩法层报价" not in panel.detail_label.text, "出售页仍显示无意义的内部报价备注")
