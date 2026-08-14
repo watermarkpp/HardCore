@@ -9,10 +9,13 @@ func _run() -> void:
 	assert(ProjectSettings.get_setting("application/config/name") == "HardCore")
 	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/startup_loading.tscn")
 	assert(ProjectSettings.get_setting("application/config/icon") == "res://assets/branding/game_icon.png")
-	assert(ProjectSettings.get_setting("application/boot_splash/image", "") == "")
-	assert(ProjectSettings.get_setting("application/boot_splash/bg_color", Color.WHITE) == Color.BLACK, "Godot boot splash must match BrandIntro's first black frame")
-	assert(not bool(ProjectSettings.get_setting("application/boot_splash/show_image", true)))
+	assert(ProjectSettings.get_setting("application/boot_splash/image", "") == "res://assets/branding/hardcore_demonic_startup_1598x720_v1.png")
+	assert(ProjectSettings.get_setting("application/boot_splash/bg_color", Color.WHITE) == Color.BLACK, "Godot boot splash surround must remain black")
+	assert(bool(ProjectSettings.get_setting("application/boot_splash/show_image", false)))
 	assert(int(ProjectSettings.get_setting("application/boot_splash/minimum_display_time", -1)) == 0)
+	var project_source := FileAccess.get_file_as_string("res://project.godot")
+	assert(project_source.contains("boot_splash/fullsize=false"), "startup plate must preserve authored 1598x720 pixels")
+	assert(project_source.contains("boot_splash/use_filter=false"), "startup plate must avoid filtered startup scaling")
 	assert(FileAccess.file_exists("res://scenes/startup_loading.tscn"))
 	var startup_source := FileAccess.get_file_as_string("res://scripts/startup_loading.gd")
 	assert(startup_source.contains("brand_intro"), "startup runtime must host the authored game-entry animation")
@@ -80,6 +83,7 @@ func _run() -> void:
 	var adaptive_foreground_registered := false
 	var adaptive_background_registered := false
 	var intro_first_frame_registered := false
+	var demonic_startup_registered := false
 	for output: Dictionary in outputs:
 		var output_size: Array = output.get("size", [])
 		if output.get("path") == "assets/branding/android_icon_192.png" and output_size.size() == 2 and int(output_size[0]) == 192 and int(output_size[1]) == 192:
@@ -90,10 +94,13 @@ func _run() -> void:
 			adaptive_background_registered = true
 		if output.get("path") == "assets/branding/brand_intro_first_frame_1598x720.png" and output_size.size() == 2 and int(output_size[0]) == 1598 and int(output_size[1]) == 720:
 			intro_first_frame_registered = true
+		if output.get("path") == "assets/branding/hardcore_demonic_startup_1598x720_v1.png" and output_size.size() == 2 and int(output_size[0]) == 1598 and int(output_size[1]) == 720:
+			demonic_startup_registered = true
 	assert(android_icon_registered)
 	assert(adaptive_foreground_registered)
 	assert(adaptive_background_registered)
 	assert(intro_first_frame_registered, "deterministic opaque BrandIntro first-frame surface is not registered")
+	assert(demonic_startup_registered, "HardCore demonic startup plate is not registered")
 	var legacy_icon := Image.load_from_file("res://assets/branding/android_icon_192.png")
 	var adaptive_foreground := Image.load_from_file("res://assets/branding/android_adaptive_foreground_432.png")
 	var adaptive_background := Image.load_from_file("res://assets/branding/android_adaptive_background_432.png")
@@ -108,6 +115,11 @@ func _run() -> void:
 	assert(intro_first_frame.get_pixel(0, 0).is_equal_approx(Color.BLACK), "first-frame surface must retain the native black surround")
 	assert(intro_first_frame.get_pixel(799, 317).get_luminance() > 0.02, "first-frame surface center must contain the approved opaque CG artwork")
 	assert(FileAccess.get_sha256("res://assets/branding/brand_intro_first_frame_1598x720.png") == "0eea4e0440a4f565c4f2e8241acf04a0e3b8380eae48a5b5557a6054baaa0b52")
+	var demonic_startup := Image.load_from_file("res://assets/branding/hardcore_demonic_startup_1598x720_v1.png")
+	assert(demonic_startup.get_size() == Vector2i(1598, 720))
+	assert(demonic_startup.get_pixel(0, 0).get_luminance() < 0.01, "startup plate must retain a near-black screen-safe surround")
+	assert(demonic_startup.get_pixel(799, 360).get_luminance() > 0.02, "startup plate center must contain the HardCore title artwork")
+	assert(FileAccess.get_sha256("res://assets/branding/hardcore_demonic_startup_1598x720_v1.png") == "f21e6abb6e57242b162e871d333f8c63adc43f16ffea45923b449f8476da04f4")
 	var export_preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	assert(export_preset.contains("launcher_icons/main_192x192=\"res://assets/branding/android_icon_192.png\""))
 	assert(export_preset.contains("launcher_icons/adaptive_foreground_432x432=\"res://assets/branding/android_adaptive_foreground_432.png\""))

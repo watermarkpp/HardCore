@@ -18,6 +18,17 @@
     ],
     "sha256": "079c9afa23139a73b79ca6cb5910c46678ac3910d191803d1e0c6f78c1904664"
   },
+  "startupPlate": {
+    "assetId": "branding.hardcore.demonic-startup.v1",
+    "generationMode": "openai_builtin_imagegen",
+    "referencePalette": "approved_game_icon",
+    "sourceSize": [
+      1870,
+      841
+    ],
+    "finalization": "deterministic_high_quality_resize_to_1598x720",
+    "text": "HardCore"
+  },
   "outputs": [
     {
       "path": "assets/branding/game_icon.png",
@@ -66,6 +77,14 @@
         720
       ],
       "sha256": "0eea4e0440a4f565c4f2e8241acf04a0e3b8380eae48a5b5557a6054baaa0b52"
+    },
+    {
+      "path": "assets/branding/hardcore_demonic_startup_1598x720_v1.png",
+      "size": [
+        1598,
+        720
+      ],
+      "sha256": "f21e6abb6e57242b162e871d333f8c63adc43f16ffea45923b449f8476da04f4"
     }
   ]
 }
