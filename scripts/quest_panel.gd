@@ -445,6 +445,12 @@ func _act() -> void:
 func _set_abandon_available(enabled: bool) -> void:
 	abandon_button.visible = enabled
 	abandon_button.disabled = not enabled
+	# The authored quest profile owns the action button rectangle. Refreshes
+	# and state transitions still toggle the abandon control, but must not
+	# replace the user's saved action-button geometry with procedural presets
+	# after the profile has been applied.
+	if UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest"):
+		return
 	if enabled:
 		action_button.position = Vector2(344, 436)
 		action_button.size = Vector2(260, 52)

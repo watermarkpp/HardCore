@@ -51,6 +51,11 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
+	assert(UIRuntimeLayoutOverrides.profile_is_ready(panel, "quest"), "任务面板没有完成最新人工存档布局加载")
+	var saved_contract := JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/manual_layout_overrides.json")) as Dictionary
+	var saved_action: Array = saved_contract.get("profiles", {}).get("quest", {}).get("nodes", {}).get("QuestDetailPanel/ActionButton", {}).get("logicalRect", [])
+	assert(saved_action.size() == 4, "任务面板人工存档缺少操作按钮布局")
+	assert(panel.action_button.position.is_equal_approx(Vector2(float(saved_action[0]), float(saved_action[1]))) and panel.action_button.size.is_equal_approx(Vector2(float(saved_action[2]), float(saved_action[3]))), "任务状态刷新覆盖了人工存档的操作按钮布局")
 	var rebuilt_quest_paths: Array[String] = []
 	for quest_button: Button in panel.quest_buttons:
 		rebuilt_quest_paths.append(str(panel.get_path_to(quest_button)))
