@@ -2259,23 +2259,34 @@ func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
 
 
 func repair_cost(context := {}) -> int:
-	return int(_repair_plan(_authoritative_merchant_context(context)).get("total_price", 0))
+	var authoritative_context := _authoritative_merchant_context(context)
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(authoritative_context):
+		return 0
+	return int(_repair_plan(authoritative_context).get("total_price", 0))
 
 
 func _repair_plan(context := {}) -> Dictionary:
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
+		return {"valid": false, "total_price": 0, "slots": [], "entries": []}
+	var priority_slots := PricingServiceScript.repair_batch_slot_order()
+	if priority_slots != EQUIPMENT_SLOTS:
+		return {"valid": false, "total_price": 0, "slots": [], "entries": []}
 	var total := 0
 	var slots: Array[String] = []
-	for slot: String in EQUIPMENT_SLOTS:
+	var entries: Array[Dictionary] = []
+	for slot: String in priority_slots:
 		var equipped: Variant = equipment.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
-		_adopt_legacy_durability_compatibility_override(equipped)
-		_ensure_raw_durability_fields(equipped)
-		var item_name := str(equipped.get("name", ""))
+		# Planning must never mutate live equipment. Raw durability is authoritative;
+		# display compatibility fields are not allowed to overwrite it here.
+		var quote_instance: Dictionary = (equipped as Dictionary).duplicate(true)
+		_ensure_raw_durability_fields(quote_instance)
+		var item_name := str(quote_instance.get("name", ""))
 		var quote := PricingServiceScript.quote_repair(
 			GameData.get_item_price_record(item_name),
 			GameData.get_item_record(item_name),
-			equipped,
+			quote_instance,
 			context
 		)
 		var quoted_cost := int(quote.get("total_price", 0))
@@ -2283,14 +2294,23 @@ func _repair_plan(context := {}) -> Dictionary:
 			continue
 		total += quoted_cost
 		slots.append(slot)
-	return {"total_price": total, "slots": slots}
+		entries.append({"slot": slot, "quote": quote})
+	return {
+		"valid": true,
+		"contract_id": "gameplay.repair.batch_all_equipment.v1",
+		"total_price": total,
+		"slots": slots,
+		"entries": entries,
+	}
 
 
 func repair_all_equipment(context := {}) -> String:
 	context = _authoritative_merchant_context(context)
-	if context is Dictionary and context.has("supports_repair") and not bool(context.get("supports_repair", false)):
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
 		return "该商人不提供维修服务"
 	var plan := _repair_plan(context)
+	if not bool(plan.get("valid", false)):
+		return "维修规则无效，未改变装备和金币"
 	var full_cost := int(plan.get("total_price", 0))
 	if full_cost <= 0:
 		return "装备无需维修"
@@ -2299,7 +2319,11 @@ func repair_all_equipment(context := {}) -> String:
 	var remaining_gold := gold
 	var spent := 0
 	var repaired_slots := 0
-	for slot: String in plan.get("slots", []):
+	for raw_entry: Variant in plan.get("entries", []):
+		if not raw_entry is Dictionary:
+			continue
+		var entry: Dictionary = raw_entry
+		var slot := str(entry.get("slot", ""))
 		var equipped: Variant = equipment.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
@@ -2312,9 +2336,8 @@ func repair_all_equipment(context := {}) -> String:
 		var missing_raw := maximum_raw - clampi(current_raw, 0, maximum_raw)
 		if missing_raw <= 0 or remaining_gold <= 0:
 			continue
-		var chosen_quote := PricingServiceScript.quote_repair_raw_delta(
-			price_record, catalog, equipped, missing_raw, context
-		)
+		var planned_quote: Dictionary = entry.get("quote", {})
+		var chosen_quote: Dictionary = planned_quote.duplicate(true)
 		if not bool(chosen_quote.get("valid", false)):
 			continue
 		if int(chosen_quote.get("total_price", 0)) > remaining_gold:
@@ -2336,15 +2359,13 @@ func repair_all_equipment(context := {}) -> String:
 		return "金币不足，未能维修任何装备"
 	gold = remaining_gold
 	recalculate_stats()
-	equipment_changed.emit()
-	profile_changed.emit()
 	if not _commit_save():
 		equipment = equipment_before
 		gold = gold_before
 		recalculate_stats()
-		equipment_changed.emit()
-		profile_changed.emit()
 		return "维修存档失败，装备和金币均未改变"
+	equipment_changed.emit()
+	profile_changed.emit()
 	if spent >= full_cost:
 		return "全部装备维修完成，花费%d金币" % spent
 	return "金币不足，已优先维修%d件装备，花费%d金币" % [repaired_slots, spent]

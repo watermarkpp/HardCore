@@ -41,12 +41,15 @@ func _run() -> void:
 	assert(str(PlayerState.equipment["左手镯"].get("instance_id", "")) == bracelet_a, "左手镯槽错误")
 	assert(str(PlayerState.equipment["右手镯"].get("instance_id", "")) == bracelet_b, "右手镯槽错误")
 
-	PlayerState.equipment["左戒指"]["durability"] = 1
-	PlayerState.equipment["右戒指"]["durability"] = 2
-	var dual_repair_cost := PlayerState.repair_cost()
+	var left_ring_maximum := int(PlayerState.equipment["左戒指"].get("max_durability", 1))
+	var right_ring_maximum := int(PlayerState.equipment["右戒指"].get("max_durability", 1))
+	PlayerState.damage_equipment_durability("左戒指", maxi(1, left_ring_maximum - 1))
+	PlayerState.damage_equipment_durability("右戒指", maxi(1, right_ring_maximum - 2))
+	var blacksmith_context := GameData.merchant_context("starter_gear")
+	var dual_repair_cost := PlayerState.repair_cost(blacksmith_context)
 	assert(dual_repair_cost > 0, "双戒指耐久没有进入修理价格")
 	PlayerState.gold = dual_repair_cost
-	assert(PlayerState.repair_all_equipment().begins_with("全部装备维修完成"), "双槽装备修理失败")
+	assert(PlayerState.repair_all_equipment(blacksmith_context).begins_with("全部装备维修完成"), "双槽装备修理失败")
 	assert(PlayerState.gold == 0, "双槽修理扣费错误")
 
 	var right_id := str(PlayerState.equipment["右戒指"].get("instance_id", ""))

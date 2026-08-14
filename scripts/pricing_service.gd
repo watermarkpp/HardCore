@@ -66,6 +66,40 @@ static func merchant_accepts_sell_item(
 	return merchant_accepts_service_type(context, price_record)
 
 
+static func merchant_supports_full_equipment_repair(
+	context: Dictionary, policy_override := {}
+) -> bool:
+	if not bool(context.get("supports_repair", false)):
+		return false
+	var merchant_id := str(context.get("merchant_id", ""))
+	if merchant_id.is_empty():
+		return false
+	var active := _policy(policy_override)
+	var repair_policy: Dictionary = active.get("repair", {})
+	var authorized_ids: Variant = repair_policy.get("authorizedFullEquipmentMerchantIds", [])
+	if not authorized_ids is Array:
+		return false
+	for authorized_id: Variant in authorized_ids:
+		if str(authorized_id) == merchant_id:
+			return true
+	return false
+
+
+static func repair_batch_slot_order(policy_override := {}) -> Array[String]:
+	var active := _policy(policy_override)
+	var repair_policy: Dictionary = active.get("repair", {})
+	var raw_slots: Variant = repair_policy.get("batchPrioritySlots", [])
+	var slots: Array[String] = []
+	if not raw_slots is Array:
+		return slots
+	for raw_slot: Variant in raw_slots:
+		var slot := str(raw_slot)
+		if slot.is_empty() or slot in slots:
+			return []
+		slots.append(slot)
+	return slots
+
+
 static func quote_buy(
 	price_record: Dictionary,
 	quantity := 1,
@@ -209,9 +243,11 @@ static func quote_repair_raw_delta(
 	if not bool(context.get("supports_repair", true)):
 		result["reason"] = "该商人不提供维修服务。"
 		return result
-	if not merchant_accepts_service_type(context, price_record):
-		result["reason"] = "该商人不能维修此类装备。"
+	var merchant_id := str(context.get("merchant_id", ""))
+	if not merchant_id.is_empty() and not merchant_supports_full_equipment_repair(context, active):
+		result["reason"] = "该商人不提供全装备维修服务。"
 		return result
+	var repair_policy: Dictionary = active.get("repair", {})
 	var display_maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
 	var maximum_raw := (
 		maximum_raw_override
@@ -244,6 +280,9 @@ static func quote_repair_raw_delta(
 	var cost := _round_half_up_ratio(one_third, applied_raw, maximum_raw)
 	cost = maxi(1, cost)
 	return _complete_quote(result, cost, 1, {
+		"repair_contract_id": str(repair_policy.get("contractId", "")),
+		"repair_scope": "all_equipped_repairable_items",
+		"merchant_id": merchant_id,
 		"instance_value": user_item_price,
 		"price_divisor": divisor,
 		"missing_durability": int(ceil(float(missing_raw) / 1000.0)),

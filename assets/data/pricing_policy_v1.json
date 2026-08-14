@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractId": "gameplay.pricing.authority.v1",
-  "policyVersion": "2026-08-14.2",
+  "policyVersion": "2026-08-14.3",
   "currencyId": "gold",
   "source": {
     "distribution": "server.crystal.cjlaaa",
@@ -30,12 +30,20 @@
     "durabilityValuation": "original_get_user_item_price"
   },
   "repair": {
+    "contractId": "gameplay.repair.batch_all_equipment.v1",
     "priceDivisor": 3,
     "partialRepair": "deterministic_per_instance_delta_minimum_positive_price_1",
     "batchOrderOwner": "player_state_equipment_slot_priority",
+    "batchPrioritySlots": ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"],
+    "authorizedFullEquipmentMerchantIds": ["merchant.server.crystal.cjlaaa.46"],
+    "merchantCapabilityGate": "authoritative_merchant_id_and_supports_repair",
+    "sourceTypesApplyToRepair": false,
+    "sourceTypesMeaning": "trade_catalog_categories_only",
+    "insufficientGoldPolicy": "weapon_first_then_stable_slot_order_maximum_affordable_raw_delta",
+    "transactionPolicy": "single_save_commit_with_equipment_and_gold_rollback",
     "preserveMaximumDurability": true,
     "specialRepairEnabled": false,
-    "projectOverrideReason": "user_accepted_normal_repair_preserves_maximum_durability"
+    "projectOverrideReason": "user_accepted_normal_repair_preserves_maximum_durability_and_blacksmith_repairs_all_equipped_items"
   },
   "forge": {
     "valuationOnly": true,

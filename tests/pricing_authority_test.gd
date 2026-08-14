@@ -214,6 +214,17 @@ func _run() -> void:
 		GameData.merchant_context("starter_gear")
 	)
 	assert(bool(blacksmith_repair.get("valid", false)) and int(blacksmith_repair.get("total_price", 0)) == 9)
+	var clothing := GameData.get_item_price_record("布衣(男)")
+	var blacksmith_clothing_repair := PricingServiceScript.quote_repair(
+		clothing,
+		GameData.get_item_record("布衣(男)"),
+		{"durability": 0, "max_durability": 5},
+		starter_context
+	)
+	assert(
+		bool(blacksmith_clothing_repair.get("valid", false)),
+		"铁匠[Types]=[1,14]仅是交易品类，不得阻止衣服维修"
+	)
 	var grocery_repair := PricingServiceScript.quote_repair(
 		wood,
 		GameData.get_item_record("木剑"),
@@ -221,16 +232,16 @@ func _run() -> void:
 		GameData.merchant_context("general")
 	)
 	assert(not bool(grocery_repair.get("valid", true)))
-	var wrong_type_repair_context := starter_context.duplicate(true)
-	wrong_type_repair_context["merchant_id"] = "merchant.test.wrong_type"
-	wrong_type_repair_context["types"] = [13]
-	var wrong_type_repair := PricingServiceScript.quote_repair(
+	var forged_repair_context := starter_context.duplicate(true)
+	forged_repair_context["merchant_id"] = "merchant.test.forged"
+	forged_repair_context["types"] = [1, 2, 4, 5, 6, 7]
+	var forged_repair := PricingServiceScript.quote_repair(
 		wood,
 		GameData.get_item_record("木剑"),
 		{"durability": 0, "max_durability": 4},
-		wrong_type_repair_context
+		forged_repair_context
 	)
-	assert(not bool(wrong_type_repair.get("valid", true)), "主库Types不允许的装备仍可维修")
+	assert(not bool(forged_repair.get("valid", true)), "非权威铁匠不得伪造全装备维修权限")
 	var partial_repair := PricingServiceScript.quote_repair_delta(
 		wood,
 		GameData.get_item_record("木剑"),
