@@ -98,3 +98,5 @@ func _click(preview: MapEditorCanvasPreview, position: Vector2) -> void:
 	event.pressed = true
 	event.position = position
 	preview._gui_input(event)
+	event.pressed = false
+	preview._gui_input(event)

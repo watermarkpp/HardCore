@@ -40,6 +40,7 @@ var _blocked_tiles := {}
 var _draw_offset := Vector2.ZERO
 var _draw_scale := 1.0
 var _last_drag_tile := Vector2i(-1, -1)
+var _left_button_latched := false
 var _hover_tile := Vector2i(-1, -1)
 var _view_pan := Vector2.ZERO
 var _zoom_multiplier := 1.0
@@ -87,6 +88,7 @@ func reset_for_document_open() -> void:
 func _reset_transient_document_state() -> void:
 	_blocked_tiles.clear()
 	_last_drag_tile = Vector2i(-1, -1)
+	_left_button_latched = false
 	_hover_tile = Vector2i(-1, -1)
 	_view_pan = Vector2.ZERO
 	_zoom_multiplier = 1.0
@@ -161,12 +163,15 @@ func set_selected_brush(asset_id: String) -> void:
 
 func set_placement_layer(layer: String) -> void:
 	selected_placement_layer = layer
+	_left_button_latched = false
+	_last_drag_tile = Vector2i(-1, -1)
 	queue_redraw()
 
 
 func set_interaction_mode(mode: String) -> void:
 	interaction_mode = mode
 	_last_drag_tile = Vector2i(-1, -1)
+	_left_button_latched = false
 	if mode != "manual_collision":
 		_manual_collision_start = Vector2i(-1, -1)
 		_manual_collision_points.clear()
@@ -187,6 +192,7 @@ func set_semantic_polygon_draft(points: Array[Vector2i]) -> void:
 
 func begin_clipboard_paste(payload: Dictionary) -> void:
 	_clipboard_preview_payload = payload.duplicate(true)
+	_left_button_latched = false
 	queue_redraw()
 
 
@@ -201,6 +207,7 @@ func is_clipboard_paste_active() -> bool:
 
 func set_region_paint_mode(enabled: bool) -> void:
 	_region_paint_mode = enabled
+	_left_button_latched = false
 	_lasso_drawing = false
 	_lasso_points.clear()
 	_selected_lasso_points.clear()
@@ -210,6 +217,7 @@ func set_region_paint_mode(enabled: bool) -> void:
 
 func activate_normal_placement(asset_id: String) -> void:
 	interaction_mode = "place"
+	_left_button_latched = false
 	_region_paint_mode = false
 	_lasso_drawing = false
 	_lasso_points.clear()
@@ -260,7 +268,20 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			# Godot can deliver a second pressed event for one physical click, and
+			# its double-click event is a new pressed event after the first release.
+			# Treat both as input bookkeeping only; exactly one action is allowed
+			# between a press and its matching release.
+			if event.double_click or _left_button_latched:
+				_left_button_latched = true
+				accept_event()
+				return
+			_left_button_latched = true
+			_last_drag_tile = Vector2i(-1, -1)
 			if is_clipboard_paste_active():
+				# A paste preview owns every left click, including clicks outside the
+				# map.  Only a valid tile requests a placement; invalid clicks must
+				# not fall through to semantic or normal placement.
 				var paste_tile := screen_to_tile(event.position)
 				if paste_tile.x >= 0:
 					clipboard_paste_requested.emit(paste_tile)
@@ -270,7 +291,6 @@ func _gui_input(event: InputEvent) -> void:
 				selected_selectable_id = _hit_selectable(event.position)
 				selectable_selected.emit(selected_selectable_id,event.ctrl_pressed)
 				queue_redraw(); accept_event(); return
-			_last_drag_tile = Vector2i(-1, -1)
 			if interaction_mode == "place" and _region_paint_mode:
 				_lasso_drawing = true
 				_lasso_points = PackedVector2Array([event.position])
@@ -302,16 +322,23 @@ func _gui_input(event: InputEvent) -> void:
 			else:
 				_request_paint(event.position)
 			accept_event()
-		elif interaction_mode == "place" and _region_paint_mode and _lasso_drawing:
-			_lasso_drawing = false
-			if _lasso_points.size() >= 3:
-				_selected_lasso_points = _lasso_points.duplicate()
-				_selected_lasso_tiles = _tiles_inside_lasso(_selected_lasso_points)
-			_lasso_points.clear()
-			queue_redraw()
+		else:
+			_left_button_latched = false
+			if interaction_mode == "place" and _region_paint_mode and _lasso_drawing:
+				_lasso_drawing = false
+				if _lasso_points.size() >= 3:
+					_selected_lasso_points = _lasso_points.duplicate()
+					_selected_lasso_tiles = _tiles_inside_lasso(_selected_lasso_points)
+				_lasso_points.clear()
+				queue_redraw()
 			accept_event()
 		return
 	if event is InputEventMouseMotion:
+		# Some window/focus transitions lose the matching release.  A motion
+		# event without the left mask is authoritative evidence that the button
+		# is no longer held, so allow the next physical click to act normally.
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) == 0:
+			_left_button_latched = false
 		if _panning:
 			_view_pan += event.relative
 			queue_redraw()
@@ -336,7 +363,9 @@ func _gui_input(event: InputEvent) -> void:
 			queue_redraw()
 		if tile.x >= 0:
 			tile_hovered.emit(tile)
-		if interaction_mode == "place" and not _region_paint_mode and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		if interaction_mode == "place" and not _region_paint_mode \
+			and selected_placement_layer == "ground_base" \
+			and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 			_request_paint(event.position)
 		elif interaction_mode == "erase" and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
 			_last_drag_tile = tile
@@ -347,7 +376,15 @@ func _gui_input(event: InputEvent) -> void:
 		elif interaction_mode in ["manual_collision_erase", "manual_collision_erase_whole"] and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
 			_last_drag_tile = tile
 			manual_collision_erase_requested.emit(tile)
-	if event is InputEventKey and event.pressed and not event.echo and not selected_selectable_id.is_empty() and not is_clipboard_paste_active():
+	if event is InputEventKey and event.pressed and not event.echo:
+		if is_clipboard_paste_active():
+			if event.keycode in [KEY_DELETE, KEY_BACKSPACE]:
+				end_clipboard_paste()
+				clipboard_paste_cancelled.emit()
+				accept_event()
+			return
+		if selected_selectable_id.is_empty():
+			return
 		# Deletion is valid in every tool mode. Semantic placement deliberately
 		# remains active after adding an entrance/exit, so restricting this key
 		# to selection mode made newly placed markers impossible to remove.
