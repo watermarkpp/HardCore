@@ -515,6 +515,132 @@
       "scale_rounding": "nearest_integer_half_up"
     },
     {
+      "map_id": "connection_passage_1",
+      "runtime_map_id": 1544,
+      "name": "连接通道1",
+      "map_type": "corridor",
+      "pre_scale_design_size": [
+        160,
+        160
+      ],
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "preserve_route",
+      "size_status": "user_confirmed_workspace_clone",
+      "size_decision_source": "user_request_2026-08-15",
+      "clone_source_map_id": "bich_mine_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/bich_mine_1/bich_mine_1.editor.json",
+      "source_status": "workspace_clone",
+      "source_size": [
+        200,
+        200
+      ],
+      "template_default_size": [
+        96,
+        96
+      ],
+      "template_max_size": [
+        120,
+        120
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "workspace_clone",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "connection_passage_2",
+      "runtime_map_id": 1545,
+      "name": "连接通道2",
+      "map_type": "corridor",
+      "pre_scale_design_size": [
+        160,
+        160
+      ],
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "preserve_route",
+      "size_status": "user_confirmed_workspace_clone",
+      "size_decision_source": "user_request_2026-08-15",
+      "clone_source_map_id": "bich_mine_2",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/bich_mine_2/bich_mine_2.editor.json",
+      "source_status": "workspace_clone",
+      "source_size": [
+        200,
+        200
+      ],
+      "template_default_size": [
+        96,
+        96
+      ],
+      "template_max_size": [
+        120,
+        120
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "workspace_clone",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "unknown_dark_palace",
+      "runtime_map_id": 1571,
+      "name": "未知暗殿",
+      "map_type": "dungeon_floor",
+      "pre_scale_design_size": [
+        128,
+        128
+      ],
+      "design_size": [
+        40,
+        40
+      ],
+      "strategy": "shrink_and_recompose",
+      "size_status": "template_pending_human_authoring",
+      "size_decision_source": "primary_and_local_candidate_source_mapping_unresolved_2026-08-15",
+      "source_map_path": null,
+      "source_status": "unresolved",
+      "source_size": [
+        null,
+        null
+      ],
+      "template_default_size": [
+        128,
+        128
+      ],
+      "template_max_size": [
+        180,
+        180
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "unresolved",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
       "map_id": "corpse_king_hall",
       "runtime_map_id": 1578,
       "name": "尸王殿",
