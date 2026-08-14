@@ -11,7 +11,7 @@ const MINIMUM_SKIP_SECONDS := 1.0
 # runtime intro must never begin from an empty black frame or a translucent
 # logo that reveals a different startup surface underneath it.
 const INITIAL_LOGO_ALPHA := 1.0
-const INITIAL_GLOW_ALPHA := 0.16
+const INITIAL_GLOW_ALPHA := 0.28
 # StartupLoading, rather than a fixed timer, owns the final-frame hold. The
 # authored motion completes once and remains visible exactly as long as the
 # character-selection scene still needs to become ready.

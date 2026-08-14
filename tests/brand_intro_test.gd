@@ -124,7 +124,7 @@ func _run() -> void:
 	intro.auto_advance = false
 	add_child(intro)
 	assert(is_equal_approx((intro.get_node("BrandLogo") as TextureRect).modulate.a, 1.0), "first authored logo frame must be fully opaque before the first draw")
-	assert((intro.get_node("GlowLogo") as TextureRect).modulate.a > 0.0, "first authored frame must include the intended glow instead of an empty black surface")
+	assert((intro.get_node("GlowLogo") as TextureRect).modulate.a >= 0.28, "first authored frame must begin at the approved bright glow instead of looking translucent")
 	assert((intro.get_node("BrandLogo") as TextureRect).scale.is_equal_approx(Vector2.ONE), "first authored frame must use the final approved logo scale")
 	await get_tree().process_frame
 	await get_tree().process_frame
