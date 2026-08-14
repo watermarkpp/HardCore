@@ -4,10 +4,15 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const AdaptiveButtonStyleBoxScript := preload("res://scripts/adaptive_button_style_box.gd")
 const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
 const MANIFEST_PATH := "res://assets/ui/gothic_theme/v1/sample/component_manifest.json"
+var _verified_layer_pairs: Dictionary = {}
 
 
 func _ready() -> void:
+	var build_started := Time.get_ticks_usec()
 	var theme := GothicUIThemeScript.build()
+	var cold_build_ms := float(Time.get_ticks_usec() - build_started) / 1000.0
+	assert(cold_build_ms < 1000.0, "cold full Gothic theme build regressed: %.3f ms" % cold_build_ms)
+	print("GOTHIC_FULL_THEME_COLD_BUILD_MS=%.3f" % cold_build_ms)
 	assert(GothicUIThemeScript.build() == theme, "full Gothic theme must be shared after its first build")
 	for variation in ["GothicModalFrame", "GothicTitleBar", "GothicInsetFrame", "GothicTabFrame"]:
 		assert(theme.has_stylebox("panel", variation), "%s 缺少公共Panel样式" % variation)
@@ -208,6 +213,11 @@ func _assert_button_interaction_feedback(theme: Theme) -> void:
 			assert(adaptive_pressed.compact.texture.resource_path.ends_with("button_compact_normal_v4.png"), "%s pressed state must preserve the normal source frame" % variation)
 		else:
 			assert(adaptive_pressed.square_texture.resource_path.ends_with("button_square_normal_v5.png"), "%s pressed state must preserve the normal source frame" % variation)
+		for layer_key: String in adaptive_pressed.feedback_background_styles:
+			var background := adaptive_pressed.feedback_background_styles[layer_key] as StyleBoxTexture
+			var frame := adaptive_pressed.feedback_frame_styles[layer_key] as StyleBoxTexture
+			assert(background.texture.resource_path.ends_with("_feedback_mask_v1.png"), "%s must use a precomputed feedback mask" % variation)
+			assert(frame.texture.resource_path.ends_with("_frame_only_v1.png"), "%s must use a precomputed source frame" % variation)
 	GothicUIThemeScript.set_button_feedback(button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "entry")
 	assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE, "") == GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION)
 	assert(button.get_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_GROUP, "") == "entry")
@@ -253,6 +263,10 @@ func _assert_source_frame_preserved(style: AdaptiveButtonStyleBoxScript) -> void
 		var frame_style := style.feedback_frame_styles[key] as StyleBoxTexture
 		var background_style := style.feedback_background_styles[key] as StyleBoxTexture
 		assert(source_texture != null and frame_style != null and background_style != null)
+		var layer_pair_key := "%s|%s|%s" % [key, frame_style.texture.resource_path, background_style.texture.resource_path]
+		if _verified_layer_pairs.has(layer_pair_key):
+			continue
+		_verified_layer_pairs[layer_pair_key] = true
 		assert(frame_style.modulate_color == Color.WHITE, "source frame layer must remain unmodulated for %s" % key)
 		assert(background_style.modulate_color == style.feedback_style.bg_color, "feedback mask runtime color differs for %s" % key)
 		var source := source_texture.get_image()

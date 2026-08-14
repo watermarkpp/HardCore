@@ -113,13 +113,43 @@ func set_precomputed_layered_feedback(
 	inset := 0.0,
 	border_width := 0,
 ) -> AdaptiveButtonStyleBox:
+	return set_precomputed_layered_feedback_family(
+		fill,
+		[source_texture],
+		[background_mask],
+		[frame_texture],
+		[Vector4.ZERO],
+		shadow,
+		shadow_size,
+		inset,
+		border_width,
+	)
+
+
+func set_precomputed_layered_feedback_family(
+	fill: Color,
+	source_textures: Array,
+	background_masks: Array,
+	frame_textures: Array,
+	margins: Array = [],
+	shadow := Color.TRANSPARENT,
+	shadow_size := 0.0,
+	inset := 0.0,
+	border_width := 0,
+) -> AdaptiveButtonStyleBox:
 	set_feedback(fill, Color.TRANSPARENT, shadow, shadow_size, inset, border_width, false)
 	feedback_layered = true
-	var key := _texture_key(source_texture)
-	if key.is_empty() or background_mask == null or frame_texture == null:
-		return self
-	feedback_background_styles[key] = _texture_layer_style(background_mask, Vector4.ZERO, fill)
-	feedback_frame_styles[key] = _texture_layer_style(frame_texture, Vector4.ZERO)
+	var count := mini(source_textures.size(), mini(background_masks.size(), frame_textures.size()))
+	for index in range(count):
+		var source_texture := source_textures[index] as Texture2D
+		var background_mask := background_masks[index] as Texture2D
+		var frame_texture := frame_textures[index] as Texture2D
+		var key := _texture_key(source_texture)
+		if key.is_empty() or background_mask == null or frame_texture == null:
+			continue
+		var layer_margins := margins[index] as Vector4 if index < margins.size() else Vector4.ZERO
+		feedback_background_styles[key] = _texture_layer_style(background_mask, layer_margins, fill)
+		feedback_frame_styles[key] = _texture_layer_style(frame_texture, layer_margins)
 	return self
 
 
@@ -141,7 +171,24 @@ func clone_with_feedback(fill: Color, border: Color, shadow: Color, shadow_size 
 	copy.square_alpha_safe_inset = square_alpha_safe_inset
 	copy.force_square = force_square
 	copy.force_widesmall = force_widesmall
-	copy.set_feedback(fill, border, shadow, shadow_size, inset, border_width, feedback_layered)
+	if feedback_layered and not feedback_background_styles.is_empty():
+		copy.set_feedback(fill, Color.TRANSPARENT, shadow, shadow_size, inset, border_width, false)
+		copy.feedback_layered = true
+		for key: String in feedback_background_styles:
+			var background := feedback_background_styles[key] as StyleBoxTexture
+			var frame := feedback_frame_styles.get(key) as StyleBoxTexture
+			if background == null or frame == null:
+				continue
+			var layer_margins := Vector4(
+				background.get_texture_margin(SIDE_LEFT),
+				background.get_texture_margin(SIDE_TOP),
+				background.get_texture_margin(SIDE_RIGHT),
+				background.get_texture_margin(SIDE_BOTTOM),
+			)
+			copy.feedback_background_styles[key] = copy._texture_layer_style(background.texture, layer_margins, fill)
+			copy.feedback_frame_styles[key] = frame
+	else:
+		copy.set_feedback(fill, border, shadow, shadow_size, inset, border_width, feedback_layered)
 	return copy
 
 

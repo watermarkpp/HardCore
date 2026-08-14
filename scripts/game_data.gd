@@ -894,6 +894,14 @@ func get_item_price_record(item_name: String) -> Dictionary:
 		if service_item_catalog.is_empty():
 			_load_service_item_catalog()
 		_build_price_index()
+	elif not _price_by_name.has(canonical_name):
+		# Resource patches can add a pricing evidence file after the base APK's
+		# catalog was constructed.  Repair the one missing overlay in place; do
+		# not rebuild or reload the complete gameplay database.
+		if (equipment_price_candidates.get("records", []) as Array).is_empty():
+			_load_equipment_price_candidates()
+		for raw: Variant in equipment_price_candidates.get("records", []):
+			_register_price_record(raw)
 	return (_price_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
 
 

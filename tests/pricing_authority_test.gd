@@ -32,6 +32,13 @@ func _run() -> void:
 		var candidate_record := GameData.get_item_price_record(item_name)
 		assert(int(candidate_record.get("base_price", 0)) == int(expected_candidate_prices[item_name]), "%s缺少已审核价格候选" % item_name)
 		assert(str(candidate_record.get("source", {}).get("distribution", "")) == "reference.21cq.classic_176")
+	# A cumulative resource patch may add the evidence JSON after the base APK
+	# price index already exists. The missing record must repair in place without
+	# reloading the full gameplay database.
+	GameData.equipment_price_candidates = {}
+	GameData._price_by_name.erase("天魔神甲")
+	var lazy_candidate := GameData.get_item_price_record("天魔神甲")
+	assert(int(lazy_candidate.get("base_price", 0)) == 50000, "late patch price candidate was not indexed lazily")
 	assert(str(wood.get("source", {}).get("distribution", "")) == "server.crystal.cjlaaa", "候选价格不得覆盖主数据库已有价格")
 	var general_stock := GameData.merchant_stock("general")
 	var weapon_stock := GameData.merchant_stock("starter_gear")

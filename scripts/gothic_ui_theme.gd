@@ -20,6 +20,22 @@ const BUTTON_WIDE_V4 := preload(COMPONENT_V3_ROOT + "/button_wide_normal_v4.png"
 const BUTTON_SQUARE_V5 := preload(COMPONENT_V3_ROOT + "/button_square_normal_v5.png")
 const BUTTON_SHORTWIDE_V5 := preload(COMPONENT_V3_ROOT + "/button_shortwide_normal_v5.png")
 const BUTTON_WIDESMALL_V5 := preload(COMPONENT_V3_ROOT + "/button_widesmall_normal_v5.png")
+const BUTTON_COMPACT_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/button_compact_normal_v4_feedback_mask_v1.png")
+const BUTTON_COMPACT_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/button_compact_normal_v4_frame_only_v1.png")
+const BUTTON_STANDARD_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/button_standard_normal_v4_feedback_mask_v1.png")
+const BUTTON_STANDARD_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/button_standard_normal_v4_frame_only_v1.png")
+const BUTTON_WIDE_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/button_wide_normal_v4_feedback_mask_v1.png")
+const BUTTON_WIDE_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/button_wide_normal_v4_frame_only_v1.png")
+const BUTTON_V5_FEEDBACK_MASK_PATHS := [
+	COMPONENT_V3_ROOT + "/button_square_normal_v5_feedback_mask_v1.png",
+	COMPONENT_V3_ROOT + "/button_shortwide_normal_v5_feedback_mask_v1.png",
+	COMPONENT_V3_ROOT + "/button_widesmall_normal_v5_feedback_mask_v1.png",
+]
+const BUTTON_V5_FRAME_ONLY_PATHS := [
+	COMPONENT_V3_ROOT + "/button_square_normal_v5_frame_only_v1.png",
+	COMPONENT_V3_ROOT + "/button_shortwide_normal_v5_frame_only_v1.png",
+	COMPONENT_V3_ROOT + "/button_widesmall_normal_v5_frame_only_v1.png",
+]
 const CHARACTER_AI_STATUS_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_ai_status_frame_v7.png")
 const CHARACTER_PROFESSION_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_profession_frame_v7.png")
 const CHARACTER_PROFILE_FRAME_V7 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7.png")
@@ -31,6 +47,7 @@ const CHARACTER_PROFILE_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/charac
 const CHARACTER_PROFILE_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7_frame_only_v1.png")
 const COMPONENT_INSET_FRAME_V3 := preload(COMPONENT_V3_ROOT + "/inset_frame_v3.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
+const BUTTON_ADAPTIVE_PATCH := Vector4(36, 0, 36, 0)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
 const COMPONENT_SHOP_CARD := preload(COMPONENT_ROOT + "/shop_card_single_v2.png")
 const COMPONENT_CLOSE_RING := preload(COMPONENT_ROOT + "/close_ring_single_v2.png")
@@ -94,6 +111,8 @@ const CHARACTER_TRANSITION_FONT_SHADOW := Color(0.80, 0.34, 0.22, 0.68)
 
 static var _shared_full_theme: Theme
 static var _shared_character_hall_theme: Theme
+static var _button_v5_feedback_masks: Array[Texture2D] = []
+static var _button_v5_frame_only: Array[Texture2D] = []
 
 
 static func build() -> Theme:
@@ -540,9 +559,9 @@ static func _apply_adaptive_button(theme: Theme, variation: StringName) -> void:
 	var n_wide := BUTTON_WIDE_V4
 	var n := AdaptiveButtonStyleBoxScript.new().configure(n_compact, n_standard, n_wide)
 	if selected:
-		n.set_feedback(BUTTON_SELECTED_FILL, BUTTON_SELECTED_BORDER, BUTTON_SELECTED_SHADOW, 6, 10, 1, true)
+		_set_v4_feedback(n, BUTTON_SELECTED_FILL, BUTTON_SELECTED_SHADOW, 6)
 	var p := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
-	p.set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 5, 10, 1, true)
+	_set_v4_feedback(p, BUTTON_PRESS_FILL, BUTTON_PRESS_SHADOW, 5)
 	var d := AdaptiveButtonStyleBoxScript.new().configure(preload(COMPONENT_V3_ROOT + "/button_compact_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_standard_disabled_v4.png"), preload(COMPONENT_V3_ROOT + "/button_wide_disabled_v4.png"))
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
@@ -552,7 +571,7 @@ static func _apply_small_button(theme: Theme, variation: StringName) -> void:
 	theme.set_type_variation(variation, "Button")
 	var n := AdaptiveButtonStyleBoxScript.new().configure_small(BUTTON_SQUARE_V5, BUTTON_SHORTWIDE_V5, BUTTON_WIDESMALL_V5)
 	var p := AdaptiveButtonStyleBoxScript.new().configure_small(BUTTON_SQUARE_V5, BUTTON_SHORTWIDE_V5, BUTTON_WIDESMALL_V5)
-	p.set_feedback(BUTTON_PRESS_FILL, BUTTON_PRESS_BORDER, BUTTON_PRESS_SHADOW, 4, 8, 1, true)
+	_set_v5_feedback(p, BUTTON_PRESS_FILL, BUTTON_PRESS_SHADOW, 4)
 	var d := AdaptiveButtonStyleBoxScript.new().configure_small(preload(COMPONENT_V3_ROOT + "/button_square_disabled_v5.png"), preload(COMPONENT_V3_ROOT + "/button_shortwide_disabled_v5.png"), preload(COMPONENT_V3_ROOT + "/button_widesmall_disabled_v5.png"))
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
@@ -569,6 +588,53 @@ static func _apply_warehouse_thin_button(theme: Theme) -> void:
 		BUTTON_WIDESMALL_V5
 	)
 	theme.set_stylebox("disabled", variation, disabled)
+
+
+static func _set_v4_feedback(style: AdaptiveButtonStyleBox, fill: Color, shadow: Color, shadow_size: float) -> void:
+	style.set_precomputed_layered_feedback_family(
+		fill,
+		[BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4],
+		[BUTTON_COMPACT_FEEDBACK_MASK_V1, BUTTON_STANDARD_FEEDBACK_MASK_V1, BUTTON_WIDE_FEEDBACK_MASK_V1],
+		[BUTTON_COMPACT_FRAME_ONLY_V1, BUTTON_STANDARD_FRAME_ONLY_V1, BUTTON_WIDE_FRAME_ONLY_V1],
+		[BUTTON_ADAPTIVE_PATCH, BUTTON_ADAPTIVE_PATCH, BUTTON_ADAPTIVE_PATCH],
+		shadow,
+		shadow_size,
+	)
+
+
+static func _set_v5_feedback(style: AdaptiveButtonStyleBox, fill: Color, shadow: Color, shadow_size: float) -> void:
+	_ensure_v5_feedback_layers()
+	if _button_v5_feedback_masks.size() != 3 or _button_v5_frame_only.size() != 3:
+		return
+	style.set_precomputed_layered_feedback_family(
+		fill,
+		[BUTTON_SQUARE_V5, BUTTON_SHORTWIDE_V5, BUTTON_WIDESMALL_V5],
+		_button_v5_feedback_masks,
+		_button_v5_frame_only,
+	)
+
+
+static func _ensure_v5_feedback_layers() -> void:
+	if _button_v5_feedback_masks.size() == 3 and _button_v5_frame_only.size() == 3:
+		return
+	_button_v5_feedback_masks.clear()
+	_button_v5_frame_only.clear()
+	for path: String in BUTTON_V5_FEEDBACK_MASK_PATHS:
+		var texture := ResourceLoader.load(path) as Texture2D
+		if texture == null:
+			push_error("按钮反馈遮罩缺失：%s" % path)
+			_button_v5_feedback_masks.clear()
+			_button_v5_frame_only.clear()
+			return
+		_button_v5_feedback_masks.append(texture)
+	for path: String in BUTTON_V5_FRAME_ONLY_PATHS:
+		var texture := ResourceLoader.load(path) as Texture2D
+		if texture == null:
+			push_error("按钮原框分层缺失：%s" % path)
+			_button_v5_feedback_masks.clear()
+			_button_v5_frame_only.clear()
+			return
+		_button_v5_frame_only.append(texture)
 
 
 static func _character_frame_style(
@@ -642,7 +708,7 @@ static func _apply_character_launch_button(theme: Theme) -> void:
 	var normal := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
 	var hover := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
 	var pressed := AdaptiveButtonStyleBoxScript.new().configure(BUTTON_COMPACT_V4, BUTTON_STANDARD_V4, BUTTON_WIDE_V4)
-	pressed.set_feedback(CHARACTER_TRANSITION_FILL, Color.TRANSPARENT, Color.TRANSPARENT, 0, 0, 0, true)
+	_set_v4_feedback(pressed, CHARACTER_TRANSITION_FILL, Color.TRANSPARENT, 0)
 	theme.set_stylebox("normal", variation, normal)
 	theme.set_stylebox("hover", variation, hover)
 	theme.set_stylebox("focus", variation, hover)
