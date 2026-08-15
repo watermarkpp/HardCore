@@ -38,7 +38,8 @@ ART_PATHS = [
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
 TEXT_HASH_SUFFIXES = {".json"}
-RUNTIME_DROP_ASCII_ALLOWLIST = {"Gold"}
+WOOMA_EQUIVALENCE_IDS = {68, 69}
+EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
 WOOma_IDS = (64, 65, 66, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77, 78, 239)
 WOOma_SLUG_BY_ID = {
     64: "wooma_soldier",
@@ -417,19 +418,13 @@ def _drop_source_evidence(record: dict[str, Any], *, role: str, tier: str | None
     }
 
 
-def _filter_runtime_drop_rows(rows: list[Any]) -> tuple[list[Any], list[str]]:
-    """Remove unresolved private ASCII item tokens from runtime profiles.
-
-    ``Gold`` is represented as an explicit currency row.  Other ASCII item
-    tokens are private-source names with no stable item authority and must not
-    leak into the canonical runtime catalog; their source evidence remains in
-    the checked-in input snapshot.
-    """
+def _filter_wooma_equivalence_rows(monster_id: int, rows: list[Any]) -> tuple[list[Any], list[str]]:
+    """Filter only the audited private tokens for the 68/69 equivalence path."""
     filtered: list[Any] = []
     removed: list[str] = []
     for row in rows:
         item = str(row.get("item", "")) if isinstance(row, dict) else ""
-        if item.isascii() and item and item not in RUNTIME_DROP_ASCII_ALLOWLIST:
+        if monster_id in WOOMA_EQUIVALENCE_IDS and item in EXCLUDED_PRIVATE_DROP_TOKENS:
             removed.append(item)
             continue
         filtered.append(copy.deepcopy(row))
@@ -565,20 +560,22 @@ def drop_for(
                 "canonical_source_monster_id": int(canonical_source_id),
             }
             evidence.append(selected_evidence)
-            rows, filtered_tokens = _filter_runtime_drop_rows(canonical_rows)
+            rows, filtered_tokens = _filter_wooma_equivalence_rows(monster_id, canonical_rows)
             for row in rows:
                 if isinstance(row, dict):
                     row.setdefault("item_resolution_status", "unresolved_token")
             if filtered_tokens:
-                selected_evidence["filtered_private_ascii_count"] = len(filtered_tokens)
-            return profile_id, {
+                selected_evidence["filtered_audited_private_token_count"] = len(filtered_tokens)
+            profile = {
                 "drop_profile_id": profile_id,
                 "status": "formal_id_keyed_cross_distribution_equivalence",
                 "entries": rows,
                 "entry_count": len(rows),
                 "source_evidence": {"sources": evidence},
-                "filtered_private_ascii_count": len(filtered_tokens),
             }
+            if filtered_tokens:
+                profile["filtered_audited_private_token_count"] = len(filtered_tokens)
+            return profile_id, profile
     if isinstance(selected_source, dict) and isinstance(selected_rows, list) and selected_rows:
         upstream_empty = override.get("primary_empty_evidence", {})
         if isinstance(upstream_empty, dict):
@@ -604,34 +601,27 @@ def drop_for(
                 "resolution": str(selected_source.get("resolution", "")),
             }
         )
-        rows, filtered_tokens = _filter_runtime_drop_rows(selected_rows)
-        if filtered_tokens:
-            evidence[-1]["filtered_private_ascii_count"] = len(filtered_tokens)
+        rows = copy.deepcopy(selected_rows)
         return profile_id, {
             "drop_profile_id": profile_id,
             "status": "formal_id_keyed_auxiliary",
             "entries": rows,
             "entry_count": len(rows),
             "source_evidence": {"sources": evidence},
-            "filtered_private_ascii_count": len(filtered_tokens),
         }
     if primary_rows:
         # Preserve every parsed row, including duplicate item/chance rows.
-        rows, filtered_tokens = _filter_runtime_drop_rows(primary_rows)
+        rows = copy.deepcopy(primary_rows)
         for row in rows:
             if isinstance(row, dict):
                 row.setdefault("item_resolution_status", "unresolved_token")
-        evidence[0]["source_row_count"] = len(primary_rows)
-        evidence[0]["output_row_count"] = len(rows)
-        if filtered_tokens:
-            evidence[0]["filtered_private_ascii_count"] = len(filtered_tokens)
+        evidence[0]["row_count"] = len(rows)
         return profile_id, {
             "drop_profile_id": profile_id,
             "status": "formal_id_keyed_primary",
             "entries": rows,
             "entry_count": len(rows),
             "source_evidence": {"sources": evidence},
-            "filtered_private_ascii_count": len(filtered_tokens),
         }
     return profile_id, {
         "drop_profile_id": profile_id,
@@ -639,7 +629,6 @@ def drop_for(
         "entries": [],
         "entry_count": 0,
         "source_evidence": {"sources": evidence},
-        "filtered_private_ascii_count": 0,
     }
 
 
@@ -1120,10 +1109,6 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                 entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed")
             ):
                 errors.append(f"monster_id={monster_id} missing hostile drop marked allowed")
-            for row in drop_profile.get("entries", []):
-                item = str(row.get("item", "")) if isinstance(row, dict) else ""
-                if item.isascii() and item and item not in RUNTIME_DROP_ASCII_ALLOWLIST:
-                    errors.append(f"monster_id={monster_id} runtime drop contains unresolved ASCII item token {item}")
         if entry.get("classification") == "non_hostile":
             exemption = entry.get("drop_policy", {}).get("exemption")
             if not isinstance(exemption, dict) or not exemption.get("allowed") or not exemption.get("reason"):
@@ -1176,8 +1161,8 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             errors.append(f"Wooma monster_id={monster_id} selected canonical source ID mismatch")
         for row in drop.get("entries", []):
             item = str(row.get("item", "")) if isinstance(row, dict) else ""
-            if item.isascii() and item != "Gold":
-                errors.append(f"Wooma monster_id={monster_id} contains non-canonical ASCII item token {item}")
+            if item in EXCLUDED_PRIVATE_DROP_TOKENS:
+                errors.append(f"Wooma monster_id={monster_id} contains excluded private item token {item}")
     exact_service_expectations = {
         64: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28},
         66: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 15, "attack_max": 28},

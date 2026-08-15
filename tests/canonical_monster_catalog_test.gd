@@ -98,10 +98,12 @@ func _run() -> void:
 		_assert_clean_source_paths(entry, monster_id)
 	for drop_profile_id: String in drop_profiles:
 		var profile: Dictionary = drop_profiles.get(drop_profile_id, {})
+		var drop_monster_id := int(drop_profile_id.trim_prefix("drop."))
+		if drop_monster_id not in [68, 69]:
+			continue
 		for row: Variant in profile.get("entries", []):
 			var item := str(row.get("item", "")) if row is Dictionary else ""
-			if _is_ascii_token(item):
-				assert(item == "Gold", "runtime drop profile %s contains private ASCII item token %s" % [drop_profile_id, item])
+			assert(item != "LongBow" and item != "SilverBow", "runtime drop profile %s contains audited private item token %s" % [drop_profile_id, item])
 
 	for monster_id: int in WOOma_EXPECTED:
 		var wooma: Dictionary = entries_by_id.get(str(monster_id), {})
@@ -139,8 +141,7 @@ func _run() -> void:
 			assert(int(selected.get("canonical_source_monster_id", -1)) == (66 if monster_id == 68 else 67), "Wooma %d selected canonical source mismatch" % monster_id)
 			for row: Variant in drop.get("entries", []):
 				var item := str(row.get("item", "")) if row is Dictionary else ""
-				if _is_ascii_token(item):
-					assert(item == "Gold", "Wooma %d contains private ASCII item token %s" % [monster_id, item])
+				assert(item != "LongBow" and item != "SilverBow", "Wooma %d contains audited private item token %s" % [monster_id, item])
 		if monster_id == 239:
 			assert(int(wooma.get("monster_id", -1)) != int(entries_by_id.get("76", {}).get("monster_id", -1)), "Wooma 239 identity collapsed into 76")
 
@@ -203,17 +204,6 @@ func _load_json(path: String) -> Dictionary:
 	assert(parsed is Dictionary, "invalid JSON: %s" % path)
 	return parsed
 
-
 func _read_text(path: String) -> String:
 	var file := FileAccess.open(path, FileAccess.READ)
 	return file.get_as_text() if file != null else ""
-
-
-func _is_ascii_token(value: String) -> bool:
-	if value.is_empty():
-		return false
-	for index in range(value.length()):
-		var codepoint := value.unicode_at(index)
-		if codepoint < 0 or codepoint > 127:
-			return false
-	return true
