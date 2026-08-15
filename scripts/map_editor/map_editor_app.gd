@@ -67,6 +67,8 @@ var semantic_max_alive: SpinBox
 var semantic_facing: OptionButton
 var semantic_place_toggle: CheckBox
 var semantic_catalog_tree: Tree
+var semantic_detail_scroll: ScrollContainer
+var semantic_detail_label: Label
 var random_region_fill_toggle: CheckBox
 var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
@@ -226,17 +228,28 @@ func _build_ui() -> void:
 	var semantic_title := Label.new(); semantic_title.text = "NPC、怪物与地图功能点"; semantic_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(semantic_title)
 	semantic_kind_option = OptionButton.new()
 	for kind: Array in [
-		["NPC","npc"],["普通怪物刷新点","monster_spawn"],["Boss刷新点","boss_spawn"],
+		["NPC","npc"],["普通怪物刷新点","monster_spawn"],["精英与Boss刷新点","boss_spawn"],["特殊地图怪物","special_monster"],
 		["地图传送点（默认双向）","map_exit"],["独立到达点（特殊用途）","map_entrance"],
 		["出生／复活点","respawn_point"],["多边形安全区","safe_area"],
 		["光效点","light"],["区域触发器","region_trigger"],
 	]:
 		semantic_kind_option.add_item(kind[0]); semantic_kind_option.set_item_metadata(semantic_kind_option.item_count-1,kind[1])
-	semantic_kind_option.item_selected.connect(_on_semantic_kind_selected); semantic_kind_option.pressed.connect(_activate_semantic_placement)
+	semantic_kind_option.alignment = HORIZONTAL_ALIGNMENT_LEFT; semantic_kind_option.item_selected.connect(_on_semantic_kind_selected); semantic_kind_option.pressed.connect(_activate_semantic_placement)
 	sidebar.add_child(semantic_kind_option)
-	var content_label := Label.new(); content_label.text = "NPC / 怪物 / Boss 目录"; sidebar.add_child(content_label)
-	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
+	var content_label := Label.new(); content_label.text = "NPC / 怪物 / Boss / 特殊地图目录"; sidebar.add_child(content_label)
+	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.alignment = HORIZONTAL_ALIGNMENT_LEFT; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
 	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size.y = 150; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
+	semantic_detail_scroll = ScrollContainer.new()
+	semantic_detail_scroll.custom_minimum_size = Vector2(0, 180)
+	semantic_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	semantic_detail_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	semantic_detail_label = Label.new()
+	semantic_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	semantic_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	semantic_detail_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	semantic_detail_label.text = "选择目录条目查看 canonical 属性、贴图、分类与完整掉落。"
+	semantic_detail_scroll.add_child(semantic_detail_label)
+	sidebar.add_child(semantic_detail_scroll)
 	semantic_content_id = _field(sidebar, "内容ID（高级选项，可手工覆盖）", "")
 	semantic_display_name = _field(sidebar, "标注名称", "")
 	semantic_target_map = _field(sidebar, "传送点连接的目标地图 ID（由连接工具配置）", "")
@@ -1183,6 +1196,7 @@ func _activate_semantic_placement() -> void:
 	var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected)) if semantic_kind_option != null and semantic_kind_option.selected >= 0 else "semantic"
 	var content_id := semantic_content_id.text.strip_edges() if semantic_content_id != null else ""
 	var kind_name := str({
+		"monster_spawn": "普通怪物刷新", "boss_spawn": "精英与Boss刷新", "special_monster": "特殊地图怪物",
 		"map_entrance": "独立到达点", "map_exit": "地图传送点",
 		"respawn_point": "出生／复活点", "safe_area": "多边形安全区",
 	}.get(kind, kind))
@@ -1218,9 +1232,20 @@ func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 	var content_field := str({
 		"npc": "npc_id",
 		"monster_spawn": "monster_id",
-		"boss_spawn": "boss_id",
+		"boss_spawn": "monster_id",
 	}.get(kind, "content_id"))
-	var content_id := str(entry.get("content_id", entry.get(content_field, "")))
+	var content_id := str(entry.get("content_id", ""))
+	if kind == "npc" and content_id.is_empty():
+		content_id = str(entry.get(content_field, ""))
+	if kind in ["monster_spawn", "boss_spawn", "special_monster"] and content_id.is_empty():
+		var numeric_id := int(entry.get("monster_id", -1))
+		var catalog_entry := MapEditorContentCatalogService.find_by_monster_id(kind, numeric_id)
+		if catalog_entry.is_empty() and kind in ["monster_spawn", "boss_spawn"]:
+			catalog_entry = MapEditorContentCatalogService.find_by_monster_id(
+				"special_monster", numeric_id
+			)
+		if not catalog_entry.is_empty():
+			content_id = str(catalog_entry.get("content_id", ""))
 	semantic_content_id.text = content_id
 	var selectable_content_id := content_id
 	if kind == "npc":
@@ -1390,6 +1415,19 @@ func _on_clipboard_paste_requested(tile: Vector2i) -> void:
 			tile
 		)
 	elif element_type == "semantic":
+		# Clipboard snapshots are persisted editor entries, so the new combat
+		# contract intentionally has no content_id/boss_id.  The legacy semantic
+		# service still validates a UI catalog key while cloning; inject that key
+		# only into this temporary copy, then normalize the new entry immediately.
+		snapshot = snapshot.duplicate(true)
+		var snapshot_kind := str(snapshot.get("kind", ""))
+		if snapshot_kind in ["monster_spawn", "boss_spawn"]:
+			var snapshot_id := int(snapshot.get("monster_id", -1))
+			var snapshot_catalog := MapEditorContentCatalogService.find_by_monster_id(snapshot_kind, snapshot_id)
+			if snapshot_catalog.is_empty():
+				snapshot_catalog = MapEditorContentCatalogService.find_by_monster_id("special_monster", snapshot_id)
+			if not snapshot_catalog.is_empty():
+				snapshot["content_id"] = str(snapshot_catalog.get("content_id", ""))
 		result = MapEditorGameplaySemanticService.duplicate_entry_snapshot(
 			current_document,
 			snapshot,
@@ -1406,6 +1444,19 @@ func _on_clipboard_paste_requested(tile: Vector2i) -> void:
 		pasted_id = str(result.instance.instance_id)
 	else:
 		pasted_id = str(result.entry.semantic_id)
+		var pasted_kind := str(result.entry.get("kind", ""))
+		if pasted_kind in ["monster_spawn", "boss_spawn"]:
+			var pasted_id_number := int(result.entry.get("monster_id", -1))
+			var pasted_entries: Array = current_document.layers.get(pasted_kind, [])
+			for pasted_index in pasted_entries.size():
+				if str(pasted_entries[pasted_index].get("semantic_id", "")) != pasted_id:
+					continue
+				pasted_entries[pasted_index]["monster_id"] = pasted_id_number
+				pasted_entries[pasted_index].erase("boss_id")
+				pasted_entries[pasted_index].erase("content_id")
+				pasted_entries[pasted_index].erase("is_boss")
+				current_document.layers[pasted_kind] = pasted_entries
+				break
 		if str(result.entry.get("kind", "")) == "npc":
 			MapEditorNpcPlaceholderService.ensure_entry(current_document, pasted_id)
 	preview.selected_selectable_id = pasted_id
@@ -1625,21 +1676,27 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 	semantic_content_option.clear()
 	for entry: Dictionary in MapEditorContentCatalogService.entries(kind, 4):
 		var detail := ""
-		if kind in ["monster_spawn", "boss_spawn"]:
-			detail = "  等级%d  生命%d" % [int(entry.get("level", 0)), int(entry.get("hp", 0))]
+		if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
+			if bool(entry.get("attributes_verified", false)):
+				detail = "  等级%s  生命%s  攻击%s-%s  防御%s-%s  魔防%s-%s  经验%s" % [entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""), entry.get("defense_min", ""), entry.get("defense_max", ""), entry.get("magic_defense_min", ""), entry.get("magic_defense_max", ""), entry.get("experience", "")]
+			else:
+				detail = "  属性未通过 canonical 核验"
+			detail += "  %s  %s  默认%d秒" % [str(entry.get("classification", "")), str(entry.get("drop_summary", "")), int(entry.get("default_respawn_seconds", 60))]
+			if not bool(entry.get("placement_allowed", false)):
+				detail += "  禁止放置：%s" % str(entry.get("placement_rejection_reason", "canonical策略拒绝"))
 		elif kind == "npc":
 			detail = "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
 		semantic_content_option.add_item(str(entry.get("display_name", entry.get("content_id", ""))) + detail)
 		semantic_content_option.set_item_metadata(semantic_content_option.item_count - 1, entry)
-	semantic_content_option.visible = kind in ["npc", "monster_spawn", "boss_spawn"]
+	semantic_content_option.visible = kind in ["npc", "monster_spawn", "boss_spawn", "special_monster"]
 	semantic_content_id.visible = semantic_content_option.visible
 	semantic_display_name.visible = kind in ["map_entrance", "map_exit", "respawn_point", "safe_area", "light", "region_trigger"]
 	semantic_target_map.visible = kind == "map_exit"
 	semantic_target_entrance.visible = kind == "map_exit"
-	var is_spawn := kind in ["monster_spawn", "boss_spawn"]
+	var is_spawn := kind in ["monster_spawn", "boss_spawn", "special_monster"]
 	semantic_count.visible = is_spawn; semantic_respawn.visible = is_spawn; semantic_max_alive.visible = is_spawn
 	semantic_facing.visible = kind == "npc"
-	semantic_radius.visible = kind in ["monster_spawn", "boss_spawn", "light", "region_trigger"]
+	semantic_radius.visible = kind in ["monster_spawn", "boss_spawn", "special_monster", "light", "region_trigger"]
 	if kind == "boss_spawn": semantic_radius.value = 0
 	elif kind == "monster_spawn" and semantic_radius.value <= 0: semantic_radius.value = 3
 	if semantic_content_option.item_count > 0:
@@ -1647,6 +1704,10 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 		var first_entry: Variant = semantic_content_option.get_item_metadata(0)
 		if first_entry is Dictionary:
 			semantic_content_id.text = str(first_entry.get("content_id", ""))
+			_apply_semantic_combat_entry_defaults(kind, first_entry)
+			_show_semantic_entry_details(first_entry)
+	else:
+		_show_semantic_entry_details({})
 	if preview != null and activate_placement:
 		_activate_semantic_placement()
 
@@ -1654,12 +1715,34 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 func _refresh_semantic_catalog_tree() -> void:
 	semantic_catalog_tree.clear()
 	var root := semantic_catalog_tree.create_item()
-	for group: Array in [["NPC目录", "npc"], ["怪物目录", "monster_spawn"], ["Boss目录", "boss_spawn"]]:
-		var folder := semantic_catalog_tree.create_item(root); folder.set_text(0, group[0]); folder.set_selectable(0, false); folder.collapsed = true
+	for group: Array in [["NPC目录", "npc"], ["普通怪物目录", "monster_spawn"], ["精英与Boss目录", "boss_spawn"], ["特殊地图怪物", "special_monster"]]:
+		var folder := semantic_catalog_tree.create_item(root); folder.set_text(0, group[0]); folder.set_text_alignment(0, HORIZONTAL_ALIGNMENT_LEFT); folder.set_selectable(0, false); folder.collapsed = true
 		for entry: Dictionary in MapEditorContentCatalogService.entries(group[1], 4):
 			var item := semantic_catalog_tree.create_item(folder)
-			item.set_text(0, str(entry.get("display_name", entry.get("content_id", ""))))
+			item.set_text(0, _semantic_catalog_tree_label(group[1], entry)); item.set_text_alignment(0, HORIZONTAL_ALIGNMENT_LEFT)
 			item.set_metadata(0, {"kind": group[1], "entry": entry})
+
+
+func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
+	var label := str(entry.get("display_name", entry.get("content_id", "")))
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
+		return label
+	if bool(entry.get("attributes_verified", false)):
+		label += "｜Lv%s HP%s 攻%s-%s 防%s-%s 魔防%s-%s 经验%s" % [
+			entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""),
+			entry.get("defense_min", ""), entry.get("defense_max", ""), entry.get("magic_defense_min", ""),
+			entry.get("magic_defense_max", ""), entry.get("experience", ""),
+		]
+	else:
+		label += "｜属性未通过 canonical 核验"
+	label += "｜%s｜%s｜默认%s秒" % [
+		str(entry.get("classification", "")), str(entry.get("drop_summary", "")), str(entry.get("default_respawn_seconds", 60)),
+	]
+	if not bool(entry.get("placement_allowed", false)):
+		label += "｜禁止：%s" % str(entry.get("placement_rejection_reason", "canonical策略拒绝"))
+	if kind == "special_monster":
+		label += "｜实际%s" % ("Boss刷新" if str(entry.get("placement_kind", "")) == "boss_spawn" else "普通刷新")
+	return label
 
 
 func _on_semantic_catalog_selected() -> void:
@@ -1683,16 +1766,65 @@ func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	for index in semantic_kind_option.item_count:
 		if str(semantic_kind_option.get_item_metadata(index))==kind: semantic_kind_option.select(index); _on_semantic_kind_selected(index); break
 	semantic_content_id.text=str(entry.get("content_id",""))
+	_apply_semantic_combat_entry_defaults(kind, entry)
+	_show_semantic_entry_details(entry)
 	_activate_semantic_placement()
-	status_label.text="已选择%s：%s；请在地图左键放置"%["NPC" if kind=="npc" else "怪物/Boss",str(entry.get("display_name",""))]
+	var catalog_name := "NPC" if kind == "npc" else "特殊地图怪物" if kind == "special_monster" else "怪物/Boss"
+	status_label.text="已选择%s：%s；请在地图左键放置"%[catalog_name,str(entry.get("display_name",""))]
 
 
 func _on_semantic_content_selected(index: int) -> void:
 	var entry: Variant = semantic_content_option.get_item_metadata(index)
 	if entry is Dictionary:
 		semantic_content_id.text = str(entry.get("content_id", ""))
+		var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
+		_apply_semantic_combat_entry_defaults(kind, entry)
+		_show_semantic_entry_details(entry)
 		if preview != null:
 			_activate_semantic_placement()
+
+
+func _apply_semantic_combat_entry_defaults(kind: String, entry: Variant) -> void:
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster"] or not entry is Dictionary:
+		return
+	semantic_respawn.value = int(entry.get("default_respawn_seconds", 60 if kind == "monster_spawn" else 1800))
+	var placement_kind := str(entry.get("placement_kind", kind))
+	if placement_kind == "boss_spawn":
+		semantic_radius.value = 0
+	elif placement_kind == "monster_spawn" and semantic_radius.value <= 0:
+		semantic_radius.value = 3
+
+
+func _show_semantic_entry_details(entry: Dictionary) -> void:
+	if semantic_detail_label == null:
+		return
+	if entry.is_empty():
+		semantic_detail_label.text = "选择目录条目查看 canonical 属性、贴图、分类与完整掉落。"
+		return
+	var lines: Array[String] = []
+	lines.append("内容：%s  |  稳定 ID：%s" % [str(entry.get("display_name", "")), str(entry.get("monster_id", entry.get("numeric_id", "")))])
+	lines.append("分类：%s  |  实际语义：%s  |  默认刷新：%s 秒" % [str(entry.get("classification", "")), str(entry.get("placement_kind", "")), str(entry.get("default_respawn_seconds", 0))])
+	if bool(entry.get("placement_allowed", false)):
+		lines.append("放置：允许")
+	else:
+		lines.append("放置：禁止（%s）" % str(entry.get("placement_rejection_reason", "canonical策略拒绝")))
+	if bool(entry.get("attributes_verified", false)):
+		lines.append("属性：Lv%s  HP%s  攻%s-%s  防%s  魔防%s  经验%s" % [entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""), entry.get("defense_min", ""), entry.get("magic_defense_min", ""), entry.get("experience", "")])
+	else:
+		lines.append("属性：canonical 未闭环")
+	lines.append("贴图：%s（%s）" % [str(entry.get("appearance_profile_id", "")), str(entry.get("appearance_status", "未找到"))])
+	var drop_entries: Array = entry.get("drop_entries", [])
+	var drop_count := int(entry.get("drop_entry_count", drop_entries.size()))
+	lines.append("掉落：%s  |  来源：%s" % [str(entry.get("drop_summary", "主源掉落为空")), str(entry.get("drop_source", ""))])
+	if drop_entries.is_empty():
+		lines.append("主源掉落文件为空或缺失。")
+	else:
+		lines.append("完整掉落（%d 条，滚动查看）：" % drop_count)
+		for drop: Dictionary in drop_entries:
+			var line_number := int(drop.get("line_number", 0))
+			var raw_text := str(drop.get("raw_text", ""))
+			lines.append("  %d. %s" % [line_number, raw_text])
+	semantic_detail_label.text = "\n".join(lines)
 
 
 func _service_role_chinese(role: String) -> String:
@@ -1706,10 +1838,25 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		preview.set_semantic_polygon_draft(safe_polygon_points)
 		status_label.text = "安全区已记录第 %d 点：(%d,%d)；继续左键加点，Enter 闭合，右键取消" % [safe_polygon_points.size(), tile.x, tile.y]
 		return
-	var properties := {}
-	if kind in ["monster_spawn", "boss_spawn", "light", "region_trigger"]:
-		properties["radius_gu"] = float(semantic_radius.value)
+	var actual_kind := kind
+	var combat_entry: Dictionary = {}
 	var content_id := semantic_content_id.text.strip_edges()
+	if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
+		combat_entry = MapEditorContentCatalogService.find(kind, content_id)
+		if combat_entry.is_empty():
+			status_label.text = "放置拒绝：目录中未找到内容 %s" % content_id
+			return
+		if not bool(combat_entry.get("placement_allowed", false)):
+			status_label.text = "放置拒绝：该条目的属性尚未通过主源核验，不能新建刷新点"
+			return
+		if kind == "special_monster":
+			actual_kind = str(combat_entry.get("placement_kind", ""))
+			if actual_kind not in ["monster_spawn", "boss_spawn"]:
+				status_label.text = "放置拒绝：特殊条目没有有效的运行时刷新类型"
+				return
+	var properties := {}
+	if actual_kind in ["monster_spawn", "boss_spawn", "light", "region_trigger"]:
+		properties["radius_gu"] = float(semantic_radius.value)
 	var marker_name := semantic_display_name.text.strip_edges()
 	if not marker_name.is_empty():
 		properties["display_name"] = marker_name
@@ -1721,26 +1868,42 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		properties["display_name"] = str(npc_entry.get("display_name", content_id))
 		properties["service_role"] = str(npc_entry.get("service_role", "dialogue"))
 		properties["service_identity_id"] = str(npc_entry.get("service_identity_id", ""))
-	elif kind == "monster_spawn":
-		properties["monster_id"] = content_id
-		properties["content_id"] = content_id
-	elif kind == "boss_spawn":
-		properties["boss_id"] = content_id
+	elif actual_kind in ["monster_spawn", "boss_spawn"]:
+		var canonical_id := int(combat_entry.get("monster_id", -1))
+		if canonical_id <= 0:
+			status_label.text = "放置拒绝：有效的 canonical monster_id 缺失"
+			return
+		# MapEditorGameplaySemanticService currently validates the UI-only
+		# content key.  It is supplied for that validation and removed again
+		# immediately after insertion; persisted documents carry only the
+		# canonical positive integer monster_id.
+		properties["monster_id"] = canonical_id
 		properties["content_id"] = content_id
 	elif kind == "door":
 		properties["target_map_id"] = semantic_target_map.text.strip_edges()
 	elif kind == "map_exit":
 		properties["target_map_id"] = semantic_target_map.text.strip_edges()
 		properties["target_entrance_id"] = semantic_target_entrance.text.strip_edges()
-	if kind in ["monster_spawn", "boss_spawn"]:
-		var combat_entry := MapEditorContentCatalogService.find(kind, content_id)
+	if actual_kind in ["monster_spawn", "boss_spawn"]:
 		properties["display_name"] = str(combat_entry.get("display_name", content_id))
 		properties["count"] = int(semantic_count.value)
 		properties["respawn_seconds"] = int(semantic_respawn.value)
 		properties["max_alive"] = int(semantic_max_alive.value)
-	var result := MapEditorGameplaySemanticService.add_entry(current_document, kind, tile, properties)
+	var result := MapEditorGameplaySemanticService.add_entry(current_document, actual_kind, tile, properties)
 	if result.ok:
-		if kind=="npc": MapEditorNpcPlaceholderService.ensure_entry(current_document,str(result.entry.semantic_id))
+		if actual_kind in ["monster_spawn", "boss_spawn"]:
+			var canonical_id := int(combat_entry.get("monster_id", -1))
+			var layer_entries: Array = current_document.layers.get(actual_kind, [])
+			for layer_index in layer_entries.size():
+				if str(layer_entries[layer_index].get("semantic_id", "")) != str(result.entry.get("semantic_id", "")):
+					continue
+				layer_entries[layer_index]["monster_id"] = canonical_id
+				layer_entries[layer_index].erase("boss_id")
+				layer_entries[layer_index].erase("content_id")
+				layer_entries[layer_index].erase("is_boss")
+				current_document.layers[actual_kind] = layer_entries
+				break
+		if actual_kind=="npc": MapEditorNpcPlaceholderService.ensure_entry(current_document,str(result.entry.semantic_id))
 		_select_new_semantic_marker(str(result.entry.semantic_id))
 		preview.queue_redraw()
 		if kind == "map_exit" and str(result.entry.get("target_map_id", "")).is_empty():

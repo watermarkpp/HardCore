@@ -2,18 +2,43 @@ class_name MapEditorContentCatalogService
 extends RefCounted
 
 const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
-const MONSTER_PATH := "res://assets/data/vanilla_176/monsters.json"
-const BOSS_PATH := "res://assets/data/vanilla_176/bosses.json"
+const CANONICAL_MONSTER_CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
 const NPC_PATH := "res://assets/data/vanilla_176/npcs.json"
 const EXPANSION_NPC_PATH := "res://assets/data/expansions/personal_expansion_001/npcs.json"
+const NORMAL_RESPAWN_SECONDS := 60
+const ELITE_RESPAWN_SECONDS := 900
+const BOSS_RESPAWN_SECONDS := 1800
+const SPECIAL_RESPAWN_SECONDS := 60
+
+static var _source_parse_counts: Dictionary = {}
+static var _canonical_cache: Dictionary = {}
+
+
+static func reset_source_parse_counts() -> void:
+	_source_parse_counts.clear()
+	_canonical_cache.clear()
+
+
+static func source_parse_counts() -> Dictionary:
+	return _source_parse_counts.duplicate()
 
 
 static func entries(kind: String, preferred_map_id := 4) -> Array[Dictionary]:
-	match kind:
-		"monster_spawn": return _combat_entries(MONSTER_PATH, "monster")
-		"boss_spawn": return _combat_entries(BOSS_PATH, "boss")
-		"npc": return _npc_entries(preferred_map_id)
-	return []
+	if kind == "npc":
+		return _npc_entries(preferred_map_id)
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
+		return []
+	var source := _canonical_source()
+	var result: Array[Dictionary] = []
+	for record: Dictionary in source.get("entries", []):
+		var classification := str(record.get("classification", ""))
+		var catalog_kind := _catalog_kind_for_classification(classification)
+		if catalog_kind != kind:
+			continue
+		var entry := _canonical_entry(record, source, catalog_kind)
+		if not entry.is_empty():
+			result.append(entry)
+	return _sort_catalog_entries(result)
 
 
 static func find(kind: String, content_id: String) -> Dictionary:
@@ -21,6 +46,15 @@ static func find(kind: String, content_id: String) -> Dictionary:
 		if str(entry.get("content_id", "")) == content_id:
 			return entry
 		if kind == "npc" and content_id in entry.get("legacy_content_ids", []):
+			return entry
+	return {}
+
+
+static func find_by_monster_id(kind: String, monster_id: int) -> Dictionary:
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster"] or monster_id <= 0:
+		return {}
+	for entry: Dictionary in entries(kind, 4):
+		if int(entry.get("monster_id", -1)) == monster_id:
 			return entry
 	return {}
 
@@ -55,16 +89,165 @@ static func canonicalize_document_npc_labels(document: Dictionary) -> int:
 	return changed
 
 
-static func _combat_entries(path: String, prefix: String) -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	for record: Dictionary in _read(path).get("records", []):
-		var numeric_id := int(record.get("monsterId", 0))
-		result.append({
-			"content_id": "%s.%d" % [prefix, numeric_id], "display_name": str(record.get("name", numeric_id)),
-			"numeric_id": numeric_id, "level": int(record.get("level", 0)), "hp": int(record.get("hp", 0)),
-			"source": str(record.get("source", "vanilla_176")), "confidence": str(record.get("confidence", "")),
-		})
-	return result
+static func _catalog_kind_for_classification(classification: String) -> String:
+	match classification:
+		"ordinary":
+			return "monster_spawn"
+		"elite", "boss":
+			return "boss_spawn"
+		"special", "version_difference", "non_hostile":
+			return "special_monster"
+	return ""
+
+
+static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kind: String) -> Dictionary:
+	var numeric_id := int(record.get("monster_id", -1))
+	if numeric_id <= 0:
+		return {}
+	var classification := str(record.get("classification", ""))
+	var placement: Dictionary = record.get("editor_placement", {})
+	var placement_kind := str(placement.get("placement_kind", ""))
+	if placement_kind not in ["monster_spawn", "boss_spawn"]:
+		placement_kind = "boss_spawn" if classification in ["elite", "boss"] else "monster_spawn"
+	var drop_policy: Dictionary = record.get("drop_policy", {})
+	var drop_count := int(drop_policy.get("entry_count", 0))
+	var drop_profile_id := str(record.get("drop_profile_id", ""))
+	var drop_profile: Dictionary = source.get("drop_profiles", {}).get(drop_profile_id, {})
+	var drop_entries: Array = drop_profile.get("entries", [])
+	var appearance_profile_id := str(record.get("appearance_profile_id", ""))
+	var appearance_profile: Dictionary = source.get("appearance_profiles", {}).get(appearance_profile_id, {})
+	var appearance_status := str(appearance_profile.get("status", ""))
+	var combat: Dictionary = record.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	var ai: Dictionary = combat.get("ai", {})
+	var reasons: Array[String] = []
+	if not bool(placement.get("allowed", false)):
+		reasons.append("编辑器策略禁止放置")
+	if not bool(record.get("runtime_allowed", false)):
+		reasons.append("运行时未允许")
+	if appearance_status != "formal":
+		reasons.append("正式贴图未闭环")
+	if bool(drop_policy.get("hostile_requires_non_empty", false)) and drop_count <= 0:
+		reasons.append("主源掉落为空")
+	var record_status := str(record.get("status", ""))
+	if record_status not in ["formal", ""]:
+		reasons.append("canonical状态：%s" % record_status)
+	var placement_allowed := reasons.is_empty()
+	var source_drop: Dictionary = _first_drop_source(drop_profile)
+	var attrs_verified := _combat_attributes_verified(record)
+	var display_name := str(record.get("canonical_name", numeric_id))
+	var content_prefix := "boss" if placement_kind == "boss_spawn" else "monster"
+	var map_codes: Array = placement.get("map_codes", [])
+	var drop_summary := "主源掉落 %d 项" % drop_count if drop_count > 0 else "主源掉落为空"
+	var evidence_status := str(source_drop.get("tier", "unverified"))
+	if evidence_status == "primary":
+		evidence_status = "primary_audited"
+	return {
+		"content_id": "%s.%d" % [content_prefix, numeric_id],
+		"display_name": display_name,
+		"editor_display_name": display_name,
+		"base_name": display_name,
+		"variant_code": str(record.get("variant_code", "")),
+		"numeric_id": numeric_id,
+		"monster_id": numeric_id,
+		"classification": classification,
+		"editor_catalog_kind": catalog_kind,
+		"placement_kind": placement_kind,
+		"placement_allowed": placement_allowed,
+		"placement_rejection_reason": ";".join(reasons),
+		"source_status": str(record.get("status", "")),
+		"runtime_allowed": bool(record.get("runtime_allowed", false)),
+		"attributes_verified": attrs_verified,
+		"level": stats.get("level", null),
+		"hp": stats.get("hp", null),
+		"attack_min": stats.get("attack_min", null),
+		"attack_max": stats.get("attack_max", null),
+		"defense_min": stats.get("defense", null),
+		"defense_max": stats.get("defense", null),
+		"magic_defense_min": stats.get("magic_defense", null),
+		"magic_defense_max": stats.get("magic_defense", null),
+		"experience": stats.get("exp", null),
+		"ai_code": ai.get("ai_code", null),
+		"appearance_profile_id": appearance_profile_id,
+		"appearance_status": appearance_status,
+		"appearance_verified": appearance_status == "formal",
+		"drop_profile_id": drop_profile_id,
+		"drop_summary": drop_summary,
+		"drop_entries": drop_entries,
+		"drop_rows": drop_entries,
+		"drop_entry_count": drop_count,
+		"drop_status": str(drop_profile.get("status", "")),
+		"drop_source": str(source_drop.get("distribution", "")),
+		"evidence_status": evidence_status,
+		"location_summary": ", ".join(map_codes),
+		"map_codes": map_codes,
+		"spawn_contexts": record.get("spawn_contexts", []),
+		"default_respawn_seconds": _default_respawn_seconds(classification),
+		"boss_class": classification,
+		"source_evidence": record.get("source_evidence", {}),
+	}
+
+
+static func _combat_attributes_verified(record: Dictionary) -> bool:
+	var combat: Dictionary = record.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	var ai: Dictionary = combat.get("ai", {})
+	if stats.is_empty():
+		return false
+	var resolution := str(ai.get("resolution_status", ""))
+	return resolution not in ["", "unresolved", "unresolved_project_fallback"]
+
+
+static func _first_drop_source(drop_profile: Dictionary) -> Dictionary:
+	var evidence: Dictionary = drop_profile.get("source_evidence", {})
+	var sources: Array = evidence.get("sources", [])
+	if not sources.is_empty() and sources[0] is Dictionary:
+		return sources[0]
+	return {}
+
+
+static func _default_respawn_seconds(classification: String) -> int:
+	match classification:
+		"ordinary": return NORMAL_RESPAWN_SECONDS
+		"elite": return ELITE_RESPAWN_SECONDS
+		"boss": return BOSS_RESPAWN_SECONDS
+		"special": return SPECIAL_RESPAWN_SECONDS
+	return 0
+
+
+static func _sort_catalog_entries(entries_to_sort: Array[Dictionary]) -> Array[Dictionary]:
+	entries_to_sort.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return int(a.get("numeric_id", 0)) < int(b.get("numeric_id", 0))
+	)
+	return entries_to_sort
+
+
+static func _canonical_source() -> Dictionary:
+	if not _canonical_cache.is_empty():
+		return _canonical_cache
+	var payload := _read_canonical_source()
+	var records: Array[Dictionary] = []
+	var by_id: Dictionary = {}
+	for raw: Dictionary in payload.get("entries", []):
+		var numeric_id := int(raw.get("monster_id", -1))
+		if numeric_id <= 0:
+			continue
+		records.append(raw)
+		by_id[str(numeric_id)] = raw
+	var drop_profiles: Dictionary = payload.get("drop_profiles", {})
+	var appearance_profiles: Dictionary = payload.get("appearance_profiles", {})
+	_canonical_cache = {
+		"entries": records,
+		"entries_by_id": by_id,
+		"drop_profiles": drop_profiles,
+		"appearance_profiles": appearance_profiles,
+	}
+	return _canonical_cache
+
+
+static func _read_canonical_source() -> Dictionary:
+	_source_parse_counts[CANONICAL_MONSTER_CATALOG_PATH] = int(_source_parse_counts.get(CANONICAL_MONSTER_CATALOG_PATH, 0)) + 1
+	return _read(CANONICAL_MONSTER_CATALOG_PATH)
 
 
 static func _npc_entries(preferred_map_id: int) -> Array[Dictionary]:
@@ -119,7 +302,8 @@ static func _npc_entries(preferred_map_id: int) -> Array[Dictionary]:
 
 
 static func _read(path: String) -> Dictionary:
-	if not FileAccess.file_exists(path): return {}
+	if not FileAccess.file_exists(path):
+		return {}
 	var file := FileAccess.open(path, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	return parsed if parsed is Dictionary else {}
