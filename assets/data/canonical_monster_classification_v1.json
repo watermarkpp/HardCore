@@ -1,0 +1,654 @@
+{
+  "schema_version": 1,
+  "source_attachment_sha256": "82B3EC564EE1645E2D39AA9B506C8C40E53F66D99CA5DDC0C12EF2FD4C3DDEEB",
+  "source_path": "assets/data/map_editor_monster_spawn_classification_v1.json",
+  "resolution_policy": "visibleName exact canonical name, unique only; no base-name, suffix trim, or alias",
+  "exact_id_overrides": {
+    "18": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "19": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "21": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "24": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "26": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "28": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "30": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "34": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "38": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "39": {
+      "classification": "special",
+      "placement_kind": "boss_spawn",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "41": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "attachment_exact_id_override"
+    },
+    "56": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "64": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "65": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "66": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "67": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "68": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "69": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "70": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "71": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "73": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "74": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "75": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "76": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "77": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "78": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "attachment_exact_id_override"
+    },
+    "89": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "120": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "124": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "135": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "136": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "137": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "141": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "143": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "144": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "12",
+        "M001",
+        "D2051",
+        "D2053",
+        "D2052",
+        "D2071",
+        "D2072",
+        "D2073",
+        "D2075",
+        "D2076",
+        "D2078",
+        "D2079",
+        "R001"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "156": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "157": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "158": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "159": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "160": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "162": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "163": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "180": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "186": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "12",
+        "M001",
+        "D2051",
+        "D2053",
+        "D2052",
+        "D2071",
+        "D2072",
+        "D2073",
+        "D2075",
+        "D2076",
+        "D2078",
+        "D2079",
+        "R001"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "188": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "191": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "193": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "194": {
+      "classification": "non_hostile",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "4",
+        "5",
+        "D601"
+      ],
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "non_hostile_guard_or_script_object"
+      },
+      "resolution": "offline_unique_exact_name"
+    },
+    "195": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "208": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "224": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "225": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "3",
+        "D717",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "235": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    }
+  }
+}

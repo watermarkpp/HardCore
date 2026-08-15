@@ -3,8 +3,6 @@ extends Node2D
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
-const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
-const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
 const MANUAL_ALIGNMENT_DATA_PATH := (
@@ -48,8 +46,6 @@ const CONTACT_CORE_RADIUS_SCALE := 0.42
 const CONTACT_CORE_ALPHA_GROUNDED := 0.24
 const CONTACT_CORE_ALPHA_AIRBORNE := 0.18
 
-static var _boss_art: Dictionary = {}
-static var _complete_art: Dictionary = {}
 static var _overhead_anchor_data: Dictionary = {}
 static var _ground_contact_data: Dictionary = {}
 static var _manual_alignment_data: Dictionary = {}
@@ -340,73 +336,34 @@ func _release_resources() -> void:
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:
 	var client_mapping := _client_mapping_for(monster_data)
-	if not client_mapping.is_empty():
-		return _client_resources(client_mapping)
-	var monster_name := str(monster_data.get("name", actor.display_name if is_instance_valid(actor) else ""))
-	var stable_lookup := MonsterIdentityScript.animation_lookup_name(monster_data)
-	var lookup_names := [stable_lookup] if not stable_lookup.is_empty() else []
-	if not monster_name.is_empty() and not lookup_names.has(monster_name):
-		lookup_names.append(monster_name)
-	if monster_name.ends_with("0"):
-		lookup_names.append(monster_name.trim_suffix("0"))
-	for lookup_name:String in lookup_names:
-		var resources:=PresentationAssets.monster_resources(lookup_name)
-		if not resources.is_empty():return resources
-	return {}
+	return _client_resources(client_mapping) if not client_mapping.is_empty() else {}
 
 
 func _client_mapping_for(monster_data: Dictionary) -> Dictionary:
-	var monster_name := str(monster_data.get("name", actor.display_name if is_instance_valid(actor) else ""))
-	var stable_lookup := MonsterIdentityScript.animation_lookup_name(monster_data)
-	var lookup_names := [stable_lookup] if not stable_lookup.is_empty() else []
-	if not monster_name.is_empty() and not lookup_names.has(monster_name):
-		lookup_names.append(monster_name)
-	if monster_name.ends_with("0"):
-		lookup_names.append(monster_name.trim_suffix("0"))
-	var monster_key := MonsterIdentityScript.stable_key(monster_data)
-	var complete_manifest := _complete_art_manifest()
-	if not monster_key.is_empty():
-		var complete_mapping: Variant = complete_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
-		if complete_mapping is Dictionary and not complete_mapping.is_empty():
-			return complete_mapping
-	var boss_manifest := _boss_art_manifest()
-	if not monster_key.is_empty():
-		var boss_mapping: Variant = boss_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
-		if boss_mapping is Dictionary and not boss_mapping.is_empty():
-			return boss_mapping
-	for lookup_name: String in lookup_names:
-		var legacy_boss_mapping: Variant = boss_manifest.get("runtimeMappings", {}).get(lookup_name, {})
-		if legacy_boss_mapping is Dictionary and not legacy_boss_mapping.is_empty():
-			return legacy_boss_mapping
-	for manifest: Dictionary in [GameData.bich_common_art, GameData.bich_undead_art]:
-		if not monster_key.is_empty():
-			var id_mapping: Variant = manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
-			if id_mapping is String:
-				id_mapping = manifest.get("runtimeMappings", {}).get(id_mapping, {})
-			if id_mapping is Dictionary and not id_mapping.is_empty():
-				return id_mapping
-		for lookup_name:String in lookup_names:
-			var canonical_name := str(manifest.get("legacyAliases", {}).get(lookup_name, lookup_name))
-			var mapping: Variant = manifest.get("runtimeMappings", {}).get(canonical_name, {})
-			if mapping is Dictionary and not mapping.is_empty():
-				return mapping
-	return {}
-
-
-func _boss_art_manifest() -> Dictionary:
-	if _boss_art.is_empty() and FileAccess.file_exists(BOSS_ART_PATH):
-		var file := FileAccess.open(BOSS_ART_PATH, FileAccess.READ)
-		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-		_boss_art = parsed if parsed is Dictionary else {}
-	return _boss_art
-
-
-func _complete_art_manifest() -> Dictionary:
-	if _complete_art.is_empty() and FileAccess.file_exists(COMPLETE_ART_PATH):
-		var file := FileAccess.open(COMPLETE_ART_PATH, FileAccess.READ)
-		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-		_complete_art = parsed if parsed is Dictionary else {}
-	return _complete_art
+	var monster_id := MonsterIdentityScript.monster_id(monster_data)
+	var profile := MonsterIdentityScript.appearance_profile(monster_id)
+	if profile.is_empty() or str(profile.get("status", "")) != "formal":
+		return {}
+	var atlas: Dictionary = profile.get("atlas", {}) if profile.get("atlas", {}) is Dictionary else {}
+	var frame_size: Array = atlas.get("frame_size", [160, 160])
+	var foot_anchor: Array = atlas.get("foot_anchor", [80, 138])
+	if frame_size.size() < 2 or foot_anchor.size() < 2:
+		return {}
+	var actions: Variant = profile.get("actions", {})
+	if not actions is Dictionary:
+		return {}
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Variant = actions.get(action_name, {})
+		if not action is Dictionary or str(action.get("path", "")).is_empty() or str(action.get("path_sha256", "")).is_empty():
+			return {}
+	return {
+		"appearance_profile_id": str(profile.get("appearance_profile_id", "")),
+		"frameSize": frame_size,
+		"footAnchor": foot_anchor,
+		"healthBarTopByDirection": [],
+		"directionPolicy": "mir2_directional",
+		"actions": actions,
+	}
 
 
 func ground_contact_offset() -> Vector2:
@@ -529,16 +486,6 @@ func ground_projection_strategy() -> String:
 func _ground_contact_profile_for_actor() -> Dictionary:
 	var manifest := _ground_contact_manifest()
 	var monster_key := str(actor.monster_id) if is_instance_valid(actor) else ""
-	if is_instance_valid(actor) and not manifest.get("entriesByMonsterId", {}).has(monster_key):
-		var legacy_ids: Dictionary = manifest.get("legacyNameToMonsterId", {})
-		for legacy_name: String in [
-			str(actor.monster_data.get("name", "")),
-			str(actor.monster_data.get("baseName", "")),
-			actor.display_name,
-		]:
-			if legacy_ids.has(legacy_name):
-				monster_key = str(int(legacy_ids[legacy_name]))
-				break
 	var profile: Variant = manifest.get("entriesByMonsterId", {}).get(monster_key, {})
 	return profile if profile is Dictionary else {}
 
