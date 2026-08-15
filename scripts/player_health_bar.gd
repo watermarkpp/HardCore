@@ -12,6 +12,9 @@ var max_hp := 1
 var _level_label := "Lv1"
 var _label_width := 0.0
 var _label_font: Font
+var _label_ascent := float(LABEL_FONT_SIZE)
+var _label_descent := 0.0
+var _label_height := float(LABEL_FONT_SIZE)
 
 
 func setup(current_value: int, maximum_value: int) -> void:
@@ -34,7 +37,16 @@ func _refresh_level_label() -> void:
 	_level_label = "Lv%d" % maxi(1, int(PlayerState.level))
 	if _label_font == null:
 		_label_font = ThemeDB.fallback_font
-	_label_width = _label_font.get_string_size(_level_label, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_FONT_SIZE).x if _label_font != null else 0.0
+	if _label_font != null:
+		_label_width = _label_font.get_string_size(_level_label, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_FONT_SIZE).x
+		_label_ascent = _label_font.get_ascent(LABEL_FONT_SIZE)
+		_label_descent = _label_font.get_descent(LABEL_FONT_SIZE)
+		_label_height = _label_ascent + _label_descent
+	else:
+		_label_width = 0.0
+		_label_ascent = float(LABEL_FONT_SIZE)
+		_label_descent = 0.0
+		_label_height = float(LABEL_FONT_SIZE)
 	queue_redraw()
 
 
@@ -52,9 +64,14 @@ func layout_snapshot() -> Dictionary:
 	var total_width := _label_width + LABEL_GAP + BAR_SIZE.x
 	var group_left := -total_width * 0.5
 	var bar_left := group_left + _label_width + LABEL_GAP
+	var bar_bottom := BAR_SIZE.y
+	var label_top := bar_bottom - _label_height
 	return {
 		"label_text": _level_label,
-		"label_rect": Rect2(group_left, 0.0, _label_width, float(LABEL_FONT_SIZE)),
+		"label_rect": Rect2(group_left, label_top, _label_width, _label_height),
+		"label_baseline": bar_bottom - _label_descent,
+		"label_ascent": _label_ascent,
+		"label_descent": _label_descent,
 		"gap": LABEL_GAP,
 		"bar_rect": Rect2(bar_left, 0.0, BAR_SIZE.x, BAR_SIZE.y),
 		"group_rect": Rect2(group_left, 0.0, total_width, BAR_SIZE.y),
@@ -70,7 +87,8 @@ func _draw() -> void:
 	var rect: Rect2 = snapshot["bar_rect"]
 	if _label_font != null:
 		var label_rect: Rect2 = snapshot["label_rect"]
-		draw_string(_label_font, Vector2(label_rect.position.x, LABEL_FONT_SIZE - 1.0), _level_label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, LABEL_FONT_SIZE, Color.WHITE)
+		var label_baseline := float(snapshot["label_baseline"])
+		draw_string(_label_font, Vector2(label_rect.position.x, label_baseline), _level_label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, LABEL_FONT_SIZE, Color.WHITE)
 	draw_rect(rect, BACKGROUND)
 	var ratio := float(current_hp) / float(max_hp)
 	draw_rect(Rect2(rect.position, Vector2(rect.size.x * ratio, rect.size.y)), HEALTH)

@@ -12,6 +12,7 @@ var foot_anchor := Vector2i.ZERO
 var frame_count := 4
 var _elapsed := 0.0
 var _valid := false
+var _stable_frame_center_offset := Vector2.ZERO
 
 
 func setup(owner_actor: Node2D) -> void:
@@ -31,6 +32,7 @@ func _ready() -> void:
 		return
 	frame_size = Vector2i(int(config.frameSize[0]), int(config.frameSize[1]))
 	foot_anchor = Vector2i(int(config.footAnchor[0]), int(config.footAnchor[1]))
+	_stable_frame_center_offset = Vector2(frame_size) * 0.5 - Vector2(foot_anchor)
 	frame_count = int(config.get("framesPerDirection", 4))
 	var path := str(config.get("path", ""))
 	if path.is_empty() or not ResourceLoader.exists(path):
@@ -59,6 +61,13 @@ func _update_region() -> void:
 
 func uses_final_art() -> bool:
 	return _valid and sprite != null and sprite.texture != null
+
+
+func stable_frame_center_offset() -> Vector2:
+	# Sprite2D is top-left anchored, so the source frame centre is offset from
+	# the actor origin by half the frame size minus the source foot anchor. Keep
+	# this cached source-space value independent of the animated region/frame.
+	return _stable_frame_center_offset
 
 
 func _appearance_config(appearance: int) -> Dictionary:

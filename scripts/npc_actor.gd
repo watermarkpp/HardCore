@@ -16,6 +16,7 @@ var facing := Vector2.DOWN
 var default_facing := Vector2.DOWN
 var map_center := Vector2.ZERO
 var visual: NPCVisual
+var name_label: Label
 
 
 func setup(display_name: String, kind: String, stock: Array = [], dynamic_stock_key := "", npc_appearance := -1, center := Vector2.ZERO) -> void:
@@ -35,14 +36,15 @@ func _ready() -> void:
 	visual.name = "NPCVisual"
 	visual.setup(self)
 	add_child(visual)
-	var label := Label.new()
-	label.text = npc_name
-	label.position = Vector2(-75, -76)
-	label.size = Vector2(150, 25)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 18)
-	label.add_theme_color_override("font_color", Color(0.98, 0.78, 0.42))
-	add_child(label)
+	name_label = Label.new()
+	name_label.text = npc_name
+	var visual_center_offset := visual.stable_frame_center_offset()
+	name_label.position = Vector2(-75.0 + visual_center_offset.x, -76.0)
+	name_label.size = Vector2(150, 25)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_color_override("font_color", Color(0.98, 0.78, 0.42))
+	add_child(name_label)
 	queue_redraw()
 
 

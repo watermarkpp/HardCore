@@ -53,6 +53,16 @@ func _run() -> void:
 	for npc in actors:
 		assert(npc.uses_final_art(), "NPC没有加载主客户端Npc.wil运行图集")
 
+	for npc in actors:
+		var expected_visual_center_x := float(npc.visual.frame_size.x) * 0.5 - float(npc.visual.foot_anchor.x)
+		var label_center_x := npc.name_label.position.x + npc.name_label.size.x * 0.5
+		assert(is_equal_approx(label_center_x, expected_visual_center_x), "NPC name center is not aligned with the source frame center")
+	var first_label_center_x := actors[0].name_label.position.x + actors[0].name_label.size.x * 0.5
+	for _frame in range(3):
+		await get_tree().process_frame
+	var stable_label_center_x := actors[0].name_label.position.x + actors[0].name_label.size.x * 0.5
+	assert(is_equal_approx(stable_label_center_x, first_label_center_x), "NPC name center moved with animation frames")
+
 	var game := MockGame.new()
 	game.player = Node2D.new()
 	game.player.global_position = actors[0].global_position + Vector2(120, -120)
