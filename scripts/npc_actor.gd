@@ -38,13 +38,13 @@ func _ready() -> void:
 	add_child(visual)
 	name_label = Label.new()
 	name_label.text = npc_name
-	var visual_center_offset := visual.stable_frame_center_offset()
-	name_label.position = Vector2(-75.0 + visual_center_offset.x, -76.0)
+	name_label.position = Vector2(-75.0, -76.0)
 	name_label.size = Vector2(150, 25)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 18)
 	name_label.add_theme_color_override("font_color", Color(0.98, 0.78, 0.42))
 	add_child(name_label)
+	_refresh_name_label_anchor()
 	queue_redraw()
 
 
@@ -55,10 +55,19 @@ func face_toward(target_position: Vector2, as_default := false) -> void:
 	facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction)]
 	if as_default:
 		default_facing = facing
+	_refresh_name_label_anchor()
 
 
 func reset_to_default_facing() -> void:
 	facing = default_facing
+	_refresh_name_label_anchor()
+
+
+func _refresh_name_label_anchor() -> void:
+	if name_label == null or visual == null:
+		return
+	var visual_center_offset := visual.stable_frame_center_offset()
+	name_label.position.x = -75.0 + visual_center_offset.x
 
 
 func interact(game: Node) -> void:
