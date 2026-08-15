@@ -28,6 +28,30 @@
         "sha256": "7850EA794B7E34CE27D1B03407AE64D5144379941E5C33E2122445B78BBF7284",
         "fields": ["level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"],
         "missing_primary_fields": ["canonical_name", "level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"]
+      },
+      "drop_equivalence_override": {
+        "strategy": "cross_distribution_equivalence",
+        "canonical_source_monster_id": 66,
+        "canonical_source_distribution": "server.crystal.cjlaaa",
+        "equivalence_status": "byte_exact_cross_distribution",
+        "auxiliary_2_pairs": [
+          {
+            "distribution": "server.crystal.Jev",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaFighter.txt",
+            "warrior_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "fighter_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "byte_equal": true
+          },
+          {
+            "distribution": "server.crystal.Daneo1989",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaWarrior.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaFighter.txt",
+            "warrior_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "fighter_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "byte_equal": true
+          }
+        ]
       }
     },
     "69": {
@@ -44,6 +68,30 @@
         "sha256": "7850EA794B7E34CE27D1B03407AE64D5144379941E5C33E2122445B78BBF7284",
         "fields": ["level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"],
         "missing_primary_fields": ["canonical_name", "level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"]
+      },
+      "drop_equivalence_override": {
+        "strategy": "cross_distribution_equivalence",
+        "canonical_source_monster_id": 67,
+        "canonical_source_distribution": "server.crystal.cjlaaa",
+        "equivalence_status": "byte_exact_cross_distribution",
+        "auxiliary_2_pairs": [
+          {
+            "distribution": "server.crystal.Jev",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior0.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaFighter0.txt",
+            "warrior_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "fighter_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "byte_equal": true
+          },
+          {
+            "distribution": "server.crystal.Daneo1989",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaWarrior0.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaFighter0.txt",
+            "warrior_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "fighter_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "byte_equal": true
+          }
+        ]
       }
     },
     "70": {"classification": "ordinary", "appearance_key": "flaming_wooma", "map_codes": ["D022", "D023", "D024"]},

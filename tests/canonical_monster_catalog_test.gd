@@ -96,6 +96,12 @@ func _run() -> void:
 				assert(not str(action.get("path", "")).is_empty() and not str(action.get("path_sha256", "")).is_empty(), "monster_id=%d action=%s missing path/hash" % [monster_id, action_name])
 				assert(bool(action.get("source_path_exists", false)), "monster_id=%d action=%s path missing" % [monster_id, action_name])
 		_assert_clean_source_paths(entry, monster_id)
+	for drop_profile_id: String in drop_profiles:
+		var profile: Dictionary = drop_profiles.get(drop_profile_id, {})
+		for row: Variant in profile.get("entries", []):
+			var item := str(row.get("item", "")) if row is Dictionary else ""
+			if _is_ascii_token(item):
+				assert(item == "Gold", "runtime drop profile %s contains private ASCII item token %s" % [drop_profile_id, item])
 
 	for monster_id: int in WOOma_EXPECTED:
 		var wooma: Dictionary = entries_by_id.get(str(monster_id), {})
@@ -108,8 +114,33 @@ func _run() -> void:
 			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
 			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)
 			var drop: Dictionary = drop_profiles.get(str(wooma.get("drop_profile_id", "")), {})
+			var expected_drop_count := 58 if monster_id == 68 else 62
+			assert(int(drop.get("entry_count", -1)) == expected_drop_count, "Wooma %d canonical drop count mismatch" % monster_id)
+			assert(drop.get("status", "") == "formal_id_keyed_cross_distribution_equivalence", "Wooma %d did not use cross-distribution canonical drops" % monster_id)
 			var source_rows: Array = drop.get("source_evidence", {}).get("sources", [])
-			assert(source_rows.size() >= 3 and int(source_rows[1].get("row_count", -1)) == 0 and int(source_rows[2].get("row_count", 0)) > 0, "Wooma %d drop source-priority descent missing" % monster_id)
+			var source_roles: Array[String] = []
+			for source: Variant in source_rows:
+				if source is Dictionary:
+					source_roles.append(str(source.get("role", "")))
+			for required_role: String in ["drop_profile_primary_exact_missing", "drop_profile_auxiliary_empty", "drop_profile_auxiliary_2_equivalence", "drop_profile_selected_canonical_source"]:
+				assert(source_roles.has(required_role), "Wooma %d drop evidence missing %s" % [monster_id, required_role])
+			var equivalence: Dictionary = {}
+			var selected: Dictionary = {}
+			for source: Variant in source_rows:
+				if source is Dictionary and source.get("role", "") == "drop_profile_auxiliary_2_equivalence":
+					equivalence = source
+				if source is Dictionary and source.get("role", "") == "drop_profile_selected_canonical_source":
+					selected = source
+			assert(int(equivalence.get("canonical_source_monster_id", -1)) == (66 if monster_id == 68 else 67), "Wooma %d selected equivalence source mismatch" % monster_id)
+			var pairs: Array = equivalence.get("pairs", [])
+			assert(pairs.size() == 2, "Wooma %d auxiliary-2 equality pairs missing" % monster_id)
+			for pair: Variant in pairs:
+				assert(pair is Dictionary and bool(pair.get("byte_equal", false)) and pair.get("warrior_sha256", "") == pair.get("fighter_sha256", ""), "Wooma %d auxiliary-2 equality hash mismatch" % monster_id)
+			assert(int(selected.get("canonical_source_monster_id", -1)) == (66 if monster_id == 68 else 67), "Wooma %d selected canonical source mismatch" % monster_id)
+			for row: Variant in drop.get("entries", []):
+				var item := str(row.get("item", "")) if row is Dictionary else ""
+				if _is_ascii_token(item):
+					assert(item == "Gold", "Wooma %d contains private ASCII item token %s" % [monster_id, item])
 		if monster_id == 239:
 			assert(int(wooma.get("monster_id", -1)) != int(entries_by_id.get("76", {}).get("monster_id", -1)), "Wooma 239 identity collapsed into 76")
 
@@ -176,3 +207,13 @@ func _load_json(path: String) -> Dictionary:
 func _read_text(path: String) -> String:
 	var file := FileAccess.open(path, FileAccess.READ)
 	return file.get_as_text() if file != null else ""
+
+
+func _is_ascii_token(value: String) -> bool:
+	if value.is_empty():
+		return false
+	for index in range(value.length()):
+		var codepoint := value.unicode_at(index)
+		if codepoint < 0 or codepoint > 127:
+			return false
+	return true
