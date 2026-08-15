@@ -175,29 +175,49 @@ var _last_environment_safe_position_px := Vector2.INF
 var actual_ground_motion_gu := Vector2.ZERO
 
 
-func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
-	monster_data = data
-	monster_id = MonsterIdentityScript.monster_id(data)
+func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	var requested_id := MonsterIdentityScript.monster_id(data)
+	var canonical_entry := MonsterIdentityScript.require_catalog_entry(requested_id, "runtime")
+	if canonical_entry.is_empty():
+		monster_data = {"monster_id": requested_id}
+		monster_id = -1
+		set_meta("canonical_rejected", true)
+		return
+	var classification := str(canonical_entry.get("classification", ""))
+	# Keep only canonical fields on the actor payload.  Legacy caller fields
+	# (including combat stats, control flags, names, and aliases) must not leak
+	# into later combat/death consumers.
+	monster_data = {
+		"monster_id": requested_id,
+		"monsterId": requested_id,
+		"canonical_name": str(canonical_entry.get("canonical_name", "")),
+		"classification": classification,
+		"appearance_profile_id": str(canonical_entry.get("appearance_profile_id", "")),
+		"drop_profile_id": str(canonical_entry.get("drop_profile_id", "")),
+	}
+	monster_id = requested_id
 	target = player_target
 	primary_target = player_target
-	is_boss = boss
-	display_name = str(data.get("name", "怪物"))
-	max_hp = maxi(1, int(data.get("hp", 20)))
+	is_boss = classification == "boss"
+	set_meta("caller_boss_ignored", bool(caller_boss) != is_boss)
+	display_name = str(canonical_entry.get("canonical_name", ""))
+	var combat: Dictionary = canonical_entry.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	var runtime_projection: Dictionary = combat.get("runtime_projection", {})
+	max_hp = maxi(1, int(stats.get("hp", 0)))
 	current_hp = max_hp
-	attack_min = maxi(1, int(data.get("attackMin", 1)))
-	attack_max = maxi(attack_min, int(data.get("attackMax", attack_min + 1)))
-	agility = maxi(1, int(data.get("agility", data.get("speedPoint", WarriorCombatMath.BASE_AGILITY))))
-	anti_poison = maxi(0, int(data.get("antiPoison", 0)))
-	level = maxi(1, int(data.get("level", 1)))
+	attack_min = maxi(1, int(stats.get("attack_min", 0)))
+	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
+	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
+	anti_poison = maxi(0, int(runtime_projection.get("anti_poison", 0)))
+	level = maxi(1, int(stats.get("level", 0)))
 	move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(
 		40.0 if is_boss else 58.0
 	)
-	if not is_boss and int(data.get("attackIntervalMs", 0)) > 0:
-		_attack_interval = float(data.get("attackIntervalMs")) / 1000.0
-	behavior_profile = MonsterIdentityScript.behavior_profile(data)
+	behavior_profile = MonsterIdentityScript.behavior_profile(monster_data)
 	_apply_behavior_profile()
 	if is_boss:
-		boss_rule = MonsterIdentityScript.boss_rule(data, GameData.boss_service_rules)
+		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:
@@ -263,6 +283,9 @@ func _apply_boss_rule() -> void:
 
 
 func _ready() -> void:
+	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
+		queue_free()
+		return
 	MonsterVisualScript.configure_actor_y_sort_item(self, "actor_root")
 	add_to_group("enemies")
 	input_pickable = true

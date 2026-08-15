@@ -1,0 +1,944 @@
+{
+  "schema_version": 1,
+  "source_policy": "explicit monster_id overrides only; upstream empty evidence is retained; duplicate rows preserved; item tokens require integration item_id resolution",
+  "records_by_id": {
+    "68": {
+      "primary_empty_evidence": {
+        "tier": "auxiliary_1",
+        "distribution": "source.angelk727.mir2_server_databases",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Envir/Drops/\u6c83\u739b\u6218\u5c06.txt",
+        "sha256": "36243086F8BB22D126F3607D66E302961B1B8C78F6F03AE6F684F2A7CA07E4A4",
+        "row_count": 0,
+        "resolution": "exact ID candidate file exists but has no valid rows"
+      },
+      "selected_source": {
+        "tier": "auxiliary_2",
+        "distribution": "server.crystal.Jev",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior.txt",
+        "sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+        "row_count": 62,
+        "resolution": "explicit ID policy override"
+      },
+      "rows": [
+        {
+          "line_number": 2,
+          "raw_text": "1/30 Gold 400",
+          "chance": "1/30",
+          "item": "Gold",
+          "gold": 400,
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 5,
+          "raw_text": "1/30 (HP)DrugMedium",
+          "chance": "1/30",
+          "item": "(HP)DrugMedium",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 6,
+          "raw_text": "1/30 (MP)DrugMedium",
+          "chance": "1/30",
+          "item": "(MP)DrugMedium",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 7,
+          "raw_text": "1/70 (HP)DrugLarge",
+          "chance": "1/70",
+          "item": "(HP)DrugLarge",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 8,
+          "raw_text": "1/70 (MP)DrugLarge",
+          "chance": "1/70",
+          "item": "(MP)DrugLarge",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 9,
+          "raw_text": "1/50 SunPotion",
+          "chance": "1/50",
+          "item": "SunPotion",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 10,
+          "raw_text": "1/100 SunPotion",
+          "chance": "1/100",
+          "item": "SunPotion",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 11,
+          "raw_text": "1/150 SunPotion(M)",
+          "chance": "1/150",
+          "item": "SunPotion(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 12,
+          "raw_text": "1/500 OldGinseng",
+          "chance": "1/500",
+          "item": "OldGinseng",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 15,
+          "raw_text": "1/400 HeavyArmour(M)",
+          "chance": "1/400",
+          "item": "HeavyArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 16,
+          "raw_text": "1/400 HeavyArmour(F)",
+          "chance": "1/400",
+          "item": "HeavyArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 17,
+          "raw_text": "1/400 MagicRobe(M)",
+          "chance": "1/400",
+          "item": "MagicRobe(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 18,
+          "raw_text": "1/400 MagicRobe(F)",
+          "chance": "1/400",
+          "item": "MagicRobe(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 19,
+          "raw_text": "1/400 SoulArmour(M)",
+          "chance": "1/400",
+          "item": "SoulArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 20,
+          "raw_text": "1/400 SoulArmour(F)",
+          "chance": "1/400",
+          "item": "SoulArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 21,
+          "raw_text": "1/400 RelicArmour(M)",
+          "chance": "1/400",
+          "item": "RelicArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 22,
+          "raw_text": "1/400 RelicArmour(F)",
+          "chance": "1/400",
+          "item": "RelicArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 23,
+          "raw_text": "1/400 LightLeatherArmour(M)",
+          "chance": "1/400",
+          "item": "LightLeatherArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 24,
+          "raw_text": "1/400 LightLeatherArmour(F)",
+          "chance": "1/400",
+          "item": "LightLeatherArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 27,
+          "raw_text": "1/250 MagicHelmet",
+          "chance": "1/250",
+          "item": "MagicHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 28,
+          "raw_text": "1/700 BrassHelmet",
+          "chance": "1/700",
+          "item": "BrassHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 29,
+          "raw_text": "1/1000 ShamanHelmet",
+          "chance": "1/1000",
+          "item": "ShamanHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 30,
+          "raw_text": "1/1000 SkeletonHelmet",
+          "chance": "1/1000",
+          "item": "SkeletonHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 31,
+          "raw_text": "1/4000 GoldenTiara",
+          "chance": "1/4000",
+          "item": "GoldenTiara",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 34,
+          "raw_text": "1/150 PrinceDagger",
+          "chance": "1/150",
+          "item": "PrinceDagger",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 35,
+          "raw_text": "1/150 MartialSword",
+          "chance": "1/150",
+          "item": "MartialSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 36,
+          "raw_text": "1/150 HookedSpear",
+          "chance": "1/150",
+          "item": "HookedSpear",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 37,
+          "raw_text": "1/150 KrissSword",
+          "chance": "1/150",
+          "item": "KrissSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 38,
+          "raw_text": "1/150 IronBlades",
+          "chance": "1/150",
+          "item": "IronBlades",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 39,
+          "raw_text": "1/150 LongBow",
+          "chance": "1/150",
+          "item": "LongBow",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 40,
+          "raw_text": "1/250 PowerAxe",
+          "chance": "1/250",
+          "item": "PowerAxe",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 41,
+          "raw_text": "1/400 PurifierSword",
+          "chance": "1/400",
+          "item": "PurifierSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 42,
+          "raw_text": "1/10000 FireBloodSword",
+          "chance": "1/10000",
+          "item": "FireBloodSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 43,
+          "raw_text": "1/1000000 GreatAxe",
+          "chance": "1/1000000",
+          "item": "GreatAxe",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 44,
+          "raw_text": "1/1000000 MageStaff",
+          "chance": "1/1000000",
+          "item": "MageStaff",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 45,
+          "raw_text": "1/1000000 SerpentSword",
+          "chance": "1/1000000",
+          "item": "SerpentSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 46,
+          "raw_text": "1/1000000 DoubleBlades",
+          "chance": "1/1000000",
+          "item": "DoubleBlades",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 47,
+          "raw_text": "1/1000000 SilverBow",
+          "chance": "1/1000000",
+          "item": "SilverBow",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 50,
+          "raw_text": "1/1000 BlackRing",
+          "chance": "1/1000",
+          "item": "BlackRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 51,
+          "raw_text": "1/1000 SerpentEyeRing",
+          "chance": "1/1000",
+          "item": "SerpentEyeRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 52,
+          "raw_text": "1/1000 PearlRing",
+          "chance": "1/1000",
+          "item": "PearlRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 53,
+          "raw_text": "1/1000 GoldRing",
+          "chance": "1/1000",
+          "item": "GoldRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 54,
+          "raw_text": "1/1250 SkeletonRing",
+          "chance": "1/1250",
+          "item": "SkeletonRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 55,
+          "raw_text": "1/1000 IronRing",
+          "chance": "1/1000",
+          "item": "IronRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 56,
+          "raw_text": "1/1500 CharmRing",
+          "chance": "1/1500",
+          "item": "CharmRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 57,
+          "raw_text": "1/1500 MoralRing",
+          "chance": "1/1500",
+          "item": "MoralRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 60,
+          "raw_text": "1/800 HardGlove",
+          "chance": "1/800",
+          "item": "HardGlove",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 61,
+          "raw_text": "1/800 MagicBracelet",
+          "chance": "1/800",
+          "item": "MagicBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 62,
+          "raw_text": "1/900 StrainBracelet",
+          "chance": "1/900",
+          "item": "StrainBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 63,
+          "raw_text": "1/1000 MonkBracelet",
+          "chance": "1/1000",
+          "item": "MonkBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 64,
+          "raw_text": "1/1000 EbonyBracelet",
+          "chance": "1/1000",
+          "item": "EbonyBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 65,
+          "raw_text": "1/1400 DeathGauntlet",
+          "chance": "1/1400",
+          "item": "DeathGauntlet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 66,
+          "raw_text": "1/1500 GoldBracelet",
+          "chance": "1/1500",
+          "item": "GoldBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 69,
+          "raw_text": "1/700 LanternNecklace",
+          "chance": "1/700",
+          "item": "LanternNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 70,
+          "raw_text": "1/700 TigerNecklace",
+          "chance": "1/700",
+          "item": "TigerNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 71,
+          "raw_text": "1/1000 ElusionNecklace",
+          "chance": "1/1000",
+          "item": "ElusionNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 72,
+          "raw_text": "1/600 PlatinumNecklace",
+          "chance": "1/600",
+          "item": "PlatinumNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 73,
+          "raw_text": "1/1250 BlueJadeNecklace",
+          "chance": "1/1250",
+          "item": "BlueJadeNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 74,
+          "raw_text": "1/1250 BambooPipe",
+          "chance": "1/1250",
+          "item": "BambooPipe",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 75,
+          "raw_text": "1/1250 ConvexLens",
+          "chance": "1/1250",
+          "item": "ConvexLens",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 78,
+          "raw_text": "1/2500 BronzeBelt",
+          "chance": "1/2500",
+          "item": "BronzeBelt",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 81,
+          "raw_text": "1/150 WoomaHeart",
+          "chance": "1/150",
+          "item": "WoomaHeart",
+          "item_resolution_status": "unresolved_token"
+        }
+      ]
+    },
+    "69": {
+      "primary_empty_evidence": {
+        "tier": "auxiliary_1",
+        "distribution": "source.angelk727.mir2_server_databases",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Envir/Drops/\u6c83\u739b\u6218\u5c06\u0030.txt",
+        "sha256": "36243086F8BB22D126F3607D66E302961B1B8C78F6F03AE6F684F2A7CA07E4A4",
+        "row_count": 0,
+        "resolution": "exact ID candidate file exists but has no valid rows"
+      },
+      "selected_source": {
+        "tier": "auxiliary_2",
+        "distribution": "server.crystal.Jev",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior0.txt",
+        "sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+        "row_count": 66,
+        "resolution": "explicit ID policy override"
+      },
+      "rows": [
+        {
+          "line_number": 2,
+          "raw_text": "1/3 Gold 4000",
+          "chance": "1/3",
+          "item": "Gold",
+          "gold": 4000,
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 5,
+          "raw_text": "1/3 (HP)DrugMedium",
+          "chance": "1/3",
+          "item": "(HP)DrugMedium",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 6,
+          "raw_text": "1/3 (MP)DrugMedium",
+          "chance": "1/3",
+          "item": "(MP)DrugMedium",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 7,
+          "raw_text": "1/3 (HP)DrugMedium",
+          "chance": "1/3",
+          "item": "(HP)DrugMedium",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 8,
+          "raw_text": "1/3 (MP)DrugMedium",
+          "chance": "1/3",
+          "item": "(MP)DrugMedium",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 9,
+          "raw_text": "1/7 (HP)DrugLarge",
+          "chance": "1/7",
+          "item": "(HP)DrugLarge",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 10,
+          "raw_text": "1/7 (MP)DrugLarge",
+          "chance": "1/7",
+          "item": "(MP)DrugLarge",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 11,
+          "raw_text": "1/7 (HP)DrugLarge",
+          "chance": "1/7",
+          "item": "(HP)DrugLarge",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 12,
+          "raw_text": "1/7 (MP)DrugLarge",
+          "chance": "1/7",
+          "item": "(MP)DrugLarge",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 13,
+          "raw_text": "1/5 SunPotion",
+          "chance": "1/5",
+          "item": "SunPotion",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 14,
+          "raw_text": "1/10 SunPotion",
+          "chance": "1/10",
+          "item": "SunPotion",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 15,
+          "raw_text": "1/15 SunPotion(M)",
+          "chance": "1/15",
+          "item": "SunPotion(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 16,
+          "raw_text": "1/50 OldGinseng",
+          "chance": "1/50",
+          "item": "OldGinseng",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 19,
+          "raw_text": "1/40 HeavyArmour(M)",
+          "chance": "1/40",
+          "item": "HeavyArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 20,
+          "raw_text": "1/40 HeavyArmour(F)",
+          "chance": "1/40",
+          "item": "HeavyArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 21,
+          "raw_text": "1/40 MagicRobe(M)",
+          "chance": "1/40",
+          "item": "MagicRobe(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 22,
+          "raw_text": "1/40 MagicRobe(F)",
+          "chance": "1/40",
+          "item": "MagicRobe(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 23,
+          "raw_text": "1/40 SoulArmour(M)",
+          "chance": "1/40",
+          "item": "SoulArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 24,
+          "raw_text": "1/40 SoulArmour(F)",
+          "chance": "1/40",
+          "item": "SoulArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 25,
+          "raw_text": "1/40 RelicArmour(M)",
+          "chance": "1/40",
+          "item": "RelicArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 26,
+          "raw_text": "1/40 RelicArmour(F)",
+          "chance": "1/40",
+          "item": "RelicArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 27,
+          "raw_text": "1/40 LightLeatherArmour(M)",
+          "chance": "1/40",
+          "item": "LightLeatherArmour(M)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 28,
+          "raw_text": "1/40 LightLeatherArmour(F)",
+          "chance": "1/40",
+          "item": "LightLeatherArmour(F)",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 31,
+          "raw_text": "1/25 MagicHelmet",
+          "chance": "1/25",
+          "item": "MagicHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 32,
+          "raw_text": "1/70 BrassHelmet",
+          "chance": "1/70",
+          "item": "BrassHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 33,
+          "raw_text": "1/100 ShamanHelmet",
+          "chance": "1/100",
+          "item": "ShamanHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 34,
+          "raw_text": "1/100 SkeletonHelmet",
+          "chance": "1/100",
+          "item": "SkeletonHelmet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 35,
+          "raw_text": "1/400 GoldenTiara",
+          "chance": "1/400",
+          "item": "GoldenTiara",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 38,
+          "raw_text": "1/15 PrinceDagger",
+          "chance": "1/15",
+          "item": "PrinceDagger",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 39,
+          "raw_text": "1/15 MartialSword",
+          "chance": "1/15",
+          "item": "MartialSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 40,
+          "raw_text": "1/15 HookedSpear",
+          "chance": "1/15",
+          "item": "HookedSpear",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 41,
+          "raw_text": "1/15 KrissSword",
+          "chance": "1/15",
+          "item": "KrissSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 42,
+          "raw_text": "1/15 IronBlades",
+          "chance": "1/15",
+          "item": "IronBlades",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 43,
+          "raw_text": "1/15 LongBow",
+          "chance": "1/15",
+          "item": "LongBow",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 44,
+          "raw_text": "1/25 PowerAxe",
+          "chance": "1/25",
+          "item": "PowerAxe",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 45,
+          "raw_text": "1/40 PurifierSword",
+          "chance": "1/40",
+          "item": "PurifierSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 46,
+          "raw_text": "1/1000 FireBloodSword",
+          "chance": "1/1000",
+          "item": "FireBloodSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 47,
+          "raw_text": "1/100000 GreatAxe",
+          "chance": "1/100000",
+          "item": "GreatAxe",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 48,
+          "raw_text": "1/100000 MageStaff",
+          "chance": "1/100000",
+          "item": "MageStaff",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 49,
+          "raw_text": "1/100000 SerpentSword",
+          "chance": "1/100000",
+          "item": "SerpentSword",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 50,
+          "raw_text": "1/100000 DoubleBlades",
+          "chance": "1/100000",
+          "item": "DoubleBlades",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 51,
+          "raw_text": "1/100000 SilverBow",
+          "chance": "1/100000",
+          "item": "SilverBow",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 54,
+          "raw_text": "1/100 BlackRing",
+          "chance": "1/100",
+          "item": "BlackRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 55,
+          "raw_text": "1/100 SerpentEyeRing",
+          "chance": "1/100",
+          "item": "SerpentEyeRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 56,
+          "raw_text": "1/100 PearlRing",
+          "chance": "1/100",
+          "item": "PearlRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 57,
+          "raw_text": "1/100 GoldRing",
+          "chance": "1/100",
+          "item": "GoldRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 58,
+          "raw_text": "1/125 SkeletonRing",
+          "chance": "1/125",
+          "item": "SkeletonRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 59,
+          "raw_text": "1/100 IronRing",
+          "chance": "1/100",
+          "item": "IronRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 60,
+          "raw_text": "1/150 CharmRing",
+          "chance": "1/150",
+          "item": "CharmRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 61,
+          "raw_text": "1/150 MoralRing",
+          "chance": "1/150",
+          "item": "MoralRing",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 64,
+          "raw_text": "1/80 HardGlove",
+          "chance": "1/80",
+          "item": "HardGlove",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 65,
+          "raw_text": "1/80 MagicBracelet",
+          "chance": "1/80",
+          "item": "MagicBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 66,
+          "raw_text": "1/90 StrainBracelet",
+          "chance": "1/90",
+          "item": "StrainBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 67,
+          "raw_text": "1/100 MonkBracelet",
+          "chance": "1/100",
+          "item": "MonkBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 68,
+          "raw_text": "1/100 EbonyBracelet",
+          "chance": "1/100",
+          "item": "EbonyBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 69,
+          "raw_text": "1/140 DeathGauntlet",
+          "chance": "1/140",
+          "item": "DeathGauntlet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 70,
+          "raw_text": "1/150 GoldBracelet",
+          "chance": "1/150",
+          "item": "GoldBracelet",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 73,
+          "raw_text": "1/70 LanternNecklace",
+          "chance": "1/70",
+          "item": "LanternNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 74,
+          "raw_text": "1/70 TigerNecklace",
+          "chance": "1/70",
+          "item": "TigerNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 75,
+          "raw_text": "1/100 ElusionNecklace",
+          "chance": "1/100",
+          "item": "ElusionNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 76,
+          "raw_text": "1/60 PlatinumNecklace",
+          "chance": "1/60",
+          "item": "PlatinumNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 77,
+          "raw_text": "1/125 BlueJadeNecklace",
+          "chance": "1/125",
+          "item": "BlueJadeNecklace",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 78,
+          "raw_text": "1/125 BambooPipe",
+          "chance": "1/125",
+          "item": "BambooPipe",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 79,
+          "raw_text": "1/125 ConvexLens",
+          "chance": "1/125",
+          "item": "ConvexLens",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 82,
+          "raw_text": "1/250 BronzeBelt",
+          "chance": "1/250",
+          "item": "BronzeBelt",
+          "item_resolution_status": "unresolved_token"
+        },
+        {
+          "line_number": 85,
+          "raw_text": "1/150 WoomaHeart",
+          "chance": "1/150",
+          "item": "WoomaHeart",
+          "item_resolution_status": "unresolved_token"
+        }
+      ]
+    }
+  }
+}

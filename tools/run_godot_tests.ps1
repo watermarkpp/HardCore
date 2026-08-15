@@ -65,6 +65,7 @@ New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 
 $Suites = @{
     monster = @(
+		'tests/canonical_monster_catalog_test.tscn',
 		'tests/monster_id_contract_test.tscn',
 		'tests/all_monster_loading_test.tscn',
 		'tests/monster_world_integration_test.tscn',
