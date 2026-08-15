@@ -299,20 +299,12 @@ static func implementation_state(runtime_map_id: int) -> Dictionary:
 			"runtime_map_id": runtime_map_id,
 			"formal_playable": false,
 		}
-	if WorldContent != null and WorldContent.has_map(runtime_map_id):
-		var content := WorldContent.map_content(runtime_map_id)
-		var has_actor_data := (
-			int(content.get("spawns", []).size()) > 0
-			or int(content.get("bosses", []).size()) > 0
-		)
-		if has_actor_data:
-			return {
-				"state": IMPLEMENTATION_STATE_PLANNED_UNBUILT,
-				"runtime_map_id": runtime_map_id,
-				"formal_playable": false,
-			}
+	# The retired WorldContent monster table is not an implementation-state
+	# authority.  A known map may still be reported as planned from GameData's
+	# map identity catalog, but its legacy actor rows never affect this state.
+	if not GameData.get_map_by_id(runtime_map_id).is_empty():
 		return {
-			"state": IMPLEMENTATION_STATE_REFERENCE_ONLY,
+			"state": IMPLEMENTATION_STATE_PLANNED_UNBUILT,
 			"runtime_map_id": runtime_map_id,
 			"formal_playable": false,
 		}
@@ -550,13 +542,18 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	}
 	var semantics: Dictionary = runtime.get("semantics", {})
 	for entry: Dictionary in semantics.get("monster_spawn", []):
-		result.spawns.append(_combat_spawn(runtime, entry))
+		var spawn := _combat_spawn(runtime, entry, "monster_spawn")
+		if not spawn.is_empty():
+			result.spawns.append(spawn)
 	for entry: Dictionary in semantics.get("boss_spawn", []):
-		result.bosses.append(_combat_spawn(
+		var spawn := _combat_spawn(
 			runtime,
 			entry,
+			"boss_spawn",
 			float(BOSS_RESPAWN_OVERRIDES.get(runtime_map_id, -1.0))
-		))
+		)
+		if not spawn.is_empty():
+			result.bosses.append(spawn)
 	for entry: Dictionary in semantics.get("npc_points", []):
 		var npc_id := str(entry.get("npc_id", ""))
 		var stock_key := str({
@@ -624,15 +621,42 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 static func _combat_spawn(
 	runtime: Dictionary,
 	entry: Dictionary,
+	placement_kind: String,
 	respawn_override := -1.0
 ) -> Dictionary:
-	var monster_key := str(entry.get("monster_id", "monster.-1"))
+	var numeric_id := _strict_spawn_monster_id(entry)
+	if numeric_id <= 0:
+		return {}
+	# The editor bridge is a production spawn boundary.  Both catalog/editor
+	# eligibility and GameData's resolved-drop runtime closure must succeed.
+	var canonical := GameData.get_canonical_monster_entry(
+		numeric_id, "runtime"
+	)
+	if canonical.is_empty() or GameData.get_canonical_monster_entry(
+		numeric_id, "editor"
+	).is_empty():
+		return {}
+	var classification := str(canonical.get("classification", ""))
+	var canonical_placement := str(
+		canonical.get("editor_placement", {}).get("placement_kind", "")
+	)
+	if placement_kind not in ["monster_spawn", "boss_spawn"]:
+		return {}
+	if not canonical_placement.is_empty() and canonical_placement != placement_kind:
+		return {}
+	if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
+		return {}
+	if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
+		return {}
 	var respawn_seconds := float(entry.get("respawn_seconds", 60.0))
 	if respawn_override > 0.0:
 		respawn_seconds = respawn_override
 	return {
-		"name": entry.get("display_name", ""),
-		"monster_id": int(monster_key.trim_prefix("monster.")),
+		"name": str(canonical.get("canonical_name", "")),
+		"monster_id": numeric_id,
+		"classification": classification,
+		"placement_kind": placement_kind,
+		"is_boss": classification == "boss",
 		"screen_position_px": grid_cell_to_screen_position_px(
 			runtime, entry.get("tile", [0, 0])
 		),
@@ -645,6 +669,36 @@ static func _combat_spawn(
 		"radius_gu": float(entry.get("radius_gu", 0.0)),
 		"spawn_group": entry.duplicate(true),
 	}
+
+
+static func _strict_spawn_monster_id(entry: Dictionary) -> int:
+	# Published runtime semantics use one stable integer field.  Legacy editor
+	# transport IDs and prefixed strings are deliberately not compatibility
+	# inputs for the new APK monster runtime.
+	var retired_camel_key := "monster" + "Id"
+	if (
+		not entry.has("monster_id")
+		or entry.has(retired_camel_key)
+		or entry.has("boss_id")
+		or entry.has("content_id")
+	):
+		return -1
+	var value: Variant = entry.get("monster_id")
+	if value is int:
+		return int(value) if int(value) > 0 else -1
+	# Godot's JSON parser represents JSON numbers as floats, including integer
+	# tokens written by the map compiler.  Accept only an exactly integral,
+	# finite, positive value; strings and every lossy numeric token stay closed.
+	if value is float:
+		var numeric_value := float(value)
+		if (
+			is_finite(numeric_value)
+			and numeric_value > 0.0
+			and numeric_value == floorf(numeric_value)
+			and numeric_value <= 9007199254740991.0
+		):
+			return int(numeric_value)
+	return -1
 
 
 static func _portal_record(

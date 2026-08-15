@@ -1415,10 +1415,15 @@ func _monster_ids_for_map(map_id: int) -> Array[int]:
 			if not raw_entry is Dictionary:
 				continue
 			var entry: Dictionary = raw_entry
-			var monster_id := int(entry.get(
-				"monster_id", entry.get("monsterId", -1)
-			))
-			if monster_id < 0 or seen.has(monster_id):
+			var raw_id: Variant = entry.get("monster_id", null)
+			var monster_id := GameData.canonical_monster_id(raw_id)
+			if (
+				monster_id <= 0
+				or GameData.get_canonical_monster_entry(
+					monster_id, "runtime"
+				).is_empty()
+				or seen.has(monster_id)
+			):
 				continue
 			seen[monster_id] = true
 			result.append(monster_id)
@@ -1689,45 +1694,19 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 		recommended_level = 35
 	elif "苍月" in region:
 		recommended_level = 38
-	var boss_ids := {}
-	for boss: Variant in GameData.bosses:
-		if boss is Dictionary:
-			boss_ids[int(boss.get("monsterId", -1))] = true
-	var candidates: Array = []
-	for monster: Variant in GameData.monsters:
-		if not monster is Dictionary or boss_ids.has(int(monster.get("monsterId", -1))):
-			continue
-		var monster_level := int(monster.get("level", 1))
-		if monster_level >= maxi(1, recommended_level - 12) and monster_level <= recommended_level + 8:
-			candidates.append(monster)
-	if candidates.is_empty():
-		candidates = GameData.monsters.duplicate()
-	var positions := [Vector2(-250, -130), Vector2(230, -150), Vector2(-390, 90), Vector2(380, 80), Vector2(-180, 260), Vector2(190, 250), Vector2(-520, -250), Vector2(520, 250)]
-	var seed_value := absi(int(map_data.get("mapId", 1)))
-	for index in range(mini(positions.size(), candidates.size())):
-		var candidate: Dictionary = candidates[(seed_value + index * 17) % candidates.size()]
-		_spawn_enemy(candidate, positions[index], false)
-	var spawned_boss_bases := {}
-	var boss_offset := 0
-	for boss: Variant in GameData.get_bosses_for_map(map_data):
-		if not boss is Dictionary:
-			continue
-		var base_name := str(boss.get("baseName", boss.get("name", "Boss")))
-		if spawned_boss_bases.has(base_name):
-			continue
-		spawned_boss_bases[base_name] = true
-		_spawn_enemy(boss, Vector2(650 + boss_offset * 120, -260 + boss_offset * 110), true)
-		boss_offset += 1
-		if boss_offset >= 2:
-			break
+	# A formal map without an editor/authored spawn plan remains empty.  The
+	# legacy region/level/base-name guesses could select the wrong variant and
+	# are no longer a production monster source.
 	_spawn_portal(Vector2(0, 390), "比奇城", "返回比奇城（临时门点）")
 
 
 func _spawn_editor_runtime_content(content: Dictionary) -> void:
 	_active_safe_zones = content.get("safe_areas", []).duplicate(true)
 	for spawn: Dictionary in content.get("spawns", []):
-		var monster := GameData.get_monster_by_id(int(spawn.get("monster_id",-1)))
-		if monster.is_empty():monster=GameData.get_monster(str(spawn.get("name","")))
+		var monster_id := GameData.canonical_monster_id(
+			spawn.get("monster_id", null)
+		)
+		var monster := GameData.get_monster_by_id(monster_id)
 		if not monster.is_empty():
 			var count:=mini(int(spawn.get("count",1)),int(spawn.get("max_alive",spawn.get("count",1))))
 			var center_screen_px: Vector2 = spawn.get("screen_position_px", Vector2.ZERO)
@@ -1766,11 +1745,10 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 					}
 				)
 	for spawn: Dictionary in content.get("bosses", []):
-		var boss := GameData.get_monster_by_id(
-			int(spawn.get("monster_id", -1))
+		var boss_id := GameData.canonical_monster_id(
+			spawn.get("monster_id", null)
 		)
-		if boss.is_empty():
-			boss = GameData.get_monster(str(spawn.get("name", "")))
+		var boss := GameData.get_monster_by_id(boss_id)
 		if boss.is_empty():
 			continue
 		var raw_group: Dictionary = spawn.get("spawn_group", {})
@@ -1826,13 +1804,11 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 	for spawn: Variant in content.get("spawns", []):
 		if not spawn is Dictionary:
 			continue
-		var monster := GameData.get_monster_by_id(int(spawn.get("monsterId", -1)))
-		if monster.is_empty():
-			monster = GameData.get_monster(str(spawn.get("name", "")))
+		var monster_id := GameData.canonical_monster_id(
+			spawn.get("monster_id", null)
+		)
+		var monster := GameData.get_monster_by_id(monster_id)
 		if not monster.is_empty():
-			if spawn.has("display_name"):
-				monster = monster.duplicate(true)
-				monster["name"] = str(spawn.get("display_name", monster.get("name", "怪物")))
 			var spawn_position: Vector2 = spawn.get("position", Vector2.ZERO)
 			if current_map_id == 4:
 				var copies := int(camp_layout.get("fieldSpawnCopies", 4))
@@ -1869,9 +1845,10 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 	for boss_spawn: Variant in content.get("bosses", []):
 		if not boss_spawn is Dictionary:
 			continue
-		var boss := GameData.get_monster_by_id(int(boss_spawn.get("monsterId", -1)))
-		if boss.is_empty():
-			boss = GameData.get_monster(str(boss_spawn.get("name", "")))
+		var boss_id := GameData.canonical_monster_id(
+			boss_spawn.get("monster_id", null)
+		)
+		var boss := GameData.get_monster_by_id(boss_id)
 		if not boss.is_empty():
 			_spawn_enemy(
 				boss,
@@ -1952,16 +1929,15 @@ func _mid_gear_stock() -> Array:
 
 func _spawn_outskirts_content() -> void:
 	var spawn_plan := [
-		["稻草人", Vector2(-320, 170), false], ["多钩猫", Vector2(310, 125), false],
-		["钉耙猫", Vector2(430, -35), false], ["森林雪人", Vector2(-470, -170), false],
-		["食人花", Vector2(520, 160), false],
-		["骷髅精灵", Vector2(670, 280), true],
+		[21, Vector2(-320, 170)], [24, Vector2(310, 125)],
+		[26, Vector2(430, -35)], [28, Vector2(-470, -170)],
+		[30, Vector2(520, 160)],
+		[56, Vector2(670, 280)],
 	]
 	for entry: Array in spawn_plan:
-		var monster := GameData.get_monster(entry[0])
-		if monster.is_empty():
-			monster = {"monsterId": 0, "name": entry[0], "hp": 20, "attackMin": 1, "attackMax": 2}
-		_spawn_enemy(monster, entry[1], entry[2])
+		var monster := GameData.get_monster_by_id(int(entry[0]))
+		if not monster.is_empty():
+			_spawn_enemy(monster, entry[1], false)
 	_spawn_portal(Vector2(560, -305), "比奇城", "进入比奇城")
 
 
@@ -2033,6 +2009,13 @@ func _spawn_enemy(
 	respawn_seconds := -1.0,
 	spawn_context: Dictionary = {}
 ) -> EnemyActor:
+	var monster_id := _strict_runtime_monster_id(monster_data)
+	var canonical_monster := GameData.get_monster_by_id(monster_id)
+	if canonical_monster.is_empty():
+		return null
+	monster_data = canonical_monster
+	# Classification is canonical data, never a caller-controlled flag.
+	is_boss = str(monster_data.get("classification", "")) == "boss"
 	if current_map_id >= 0:
 		var spawn_ground_result := _try_canonical_screen_px_to_ground_gu(
 			spawn_position
@@ -2102,6 +2085,29 @@ func _spawn_enemy(
 	enemy.relocation_requested.connect(_on_boss_relocation_requested)
 	add_child(enemy)
 	return enemy
+
+
+func _strict_runtime_monster_id(monster_data: Dictionary) -> int:
+	if (
+		not monster_data.has("monster_id")
+		or monster_data.has("monsterId")
+		or monster_data.has("boss_id")
+		or monster_data.has("content_id")
+	):
+		return -1
+	var raw_id: Variant = monster_data.get("monster_id", null)
+	if raw_id is int:
+		return int(raw_id) if int(raw_id) > 0 else -1
+	if raw_id is float:
+		var numeric_id := float(raw_id)
+		if (
+			is_finite(numeric_id)
+			and numeric_id > 0.0
+			and numeric_id == floorf(numeric_id)
+			and numeric_id <= 9007199254740991.0
+		):
+			return int(numeric_id)
+	return -1
 
 
 func _request_mobile_attack() -> bool:
@@ -2899,7 +2905,11 @@ func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int
 				active += 1
 	var allowed := mini(maxi(0, count), maxi(0, max_active - active))
 	for index in range(allowed):
-		var monster_id := int(monster_ids[index % monster_ids.size()])
+		var monster_id := GameData.canonical_monster_id(
+			monster_ids[index % monster_ids.size()]
+		)
+		if monster_id <= 0:
+			continue
 		var monster := GameData.get_monster_by_id(monster_id)
 		if monster.is_empty():
 			continue
@@ -8364,15 +8374,17 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	var configured_random_respawn := float(enemy.get_meta("respawn_random_seconds", 0.0))
 	var respawn_enabled := bool(enemy.get_meta("respawn_enabled", true))
 	var spawn_context: Dictionary = enemy.get_meta("spawn_context", {}).duplicate(true)
-	var monster_id := int(monster_data.get("monsterId", 0))
-	PlayerState.record_kill(str(monster_data.get("name", "")))
-	PlayerState.add_experience(int(monster_data.get("exp", 0)))
-	var drop_roll := LootRuntime.roll_monster_drops(monster_id, str(monster_data.get("name", "")), _rng, 6)
+	var monster_id := _strict_runtime_monster_id(monster_data)
+	var canonical_monster := GameData.get_monster_by_id(monster_id)
+	if canonical_monster.is_empty():
+		return
+	var combat: Dictionary = canonical_monster.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	PlayerState.record_kill(str(canonical_monster.get("canonical_name", "")))
+	PlayerState.add_experience(int(stats.get("exp", 0)))
+	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, 6)
 	for item_name: String in drop_roll.get("items", []):
 		_spawn_loot(item_name, death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18)))
-	if not bool(drop_roll.get("configured", false)) and _rng.randf() < 0.55:
-		var common_loot := ["金币", "金创药(小量)", "魔法药(小量)", "木剑"]
-		_spawn_loot(common_loot[_rng.randi_range(0, common_loot.size() - 1)], death_position)
 	if not respawn_enabled:
 		return
 	var respawn_seconds := configured_respawn if configured_respawn > 0.0 else (DEFAULT_BOSS_RESPAWN_SECONDS if was_boss else DEFAULT_NORMAL_RESPAWN_SECONDS)
@@ -8382,7 +8394,7 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 			60.0,
 			respawn_seconds - configured_random_respawn + _rng.randf_range(0.0, configured_random_respawn * 2.0)
 		)
-	_respawn_later(monster_data.duplicate(true), spawn_position, was_boss, respawn_wait_seconds, generation, spawn_context)
+	_respawn_later(canonical_monster, spawn_position, was_boss, respawn_wait_seconds, generation, spawn_context)
 
 
 func _spawn_loot(item_name: String, position: Vector2) -> void:

@@ -16,7 +16,17 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	assert(GameData.maps.size() == 142, "地图数据数量不符")
-	assert(GameData.monsters.size() == 214, "怪物数据数量不符（鸡、鹿已按规划删除）")
+	var monster_counts := GameData.canonical_monster_counts()
+	assert(
+		int(monster_counts.get("catalog_identity_count", 0)) == 214,
+		"canonical怪物身份目录数量不符"
+	)
+	assert(
+		int(monster_counts.get("runtime_spawnable_count", -1))
+		== GameData.monsters.size()
+		and GameData.monsters.size() > 0,
+		"运行时可生成怪物视图不符"
+	)
 	assert(GameData.items.size() == 175, "装备数据数量不符")
 	assert(GameData.drops.size() == 3424, "掉落槽数量不符")
 	PlayerState.add_item("木剑")
@@ -26,7 +36,7 @@ func _run() -> void:
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 10, "装备属性没有计入角色")
 	assert(game.player != null, "玩家未创建")
 
-	# 综合烟测的Boss仍使用旧演示场；正式启动点现在按服务端HomeMap=0进入比奇省。
+	# 综合烟测使用稳定ID的郊外样本；正式启动点按服务端HomeMap=0进入比奇省。
 	game.change_zone("比奇郊外")
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -40,8 +50,9 @@ func _run() -> void:
 		if actor is EnemyActor and actor.is_boss:
 			boss = actor
 			break
-	assert(boss != null, "Boss未生成")
-	# Boss阶段机制由双Boss专项测试验证；烟测只验证稳定主链，避免演示Boss规则差异造成误报。
+	# The retained outskirts sample contains canonical elite ID 56, not a boss.
+	# Caller placement must not promote an elite merely to preserve the old demo.
+	assert(boss == null, "canonical精英被旧演示调用提升成Boss")
 	game.player.take_damage(10)
 	var hp_after_skill: int = game.player.current_hp
 	PlayerState.add_item("金创药(小量)")

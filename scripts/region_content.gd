@@ -682,7 +682,20 @@ static func has_map(map_id: int) -> bool:
 
 
 static func get_map_content(map_id: int) -> Dictionary:
-	return WorldContent.map_content(map_id)
+	var world_content := WorldContent.map_content(map_id)
+	if world_content.is_empty():
+		return {}
+	# Production consumes only the canonical monster_id field.  Legacy
+	# WorldContent rows that still carry names or camelCase IDs fail closed; they
+	# must be migrated offline before they can re-enter the new APK runtime.
+	for layer_name: String in ["spawns", "bosses"]:
+		var canonical_entries: Array = []
+		for raw_entry: Variant in world_content.get(layer_name, []):
+			var normalized := _canonical_combat_entry(raw_entry)
+			if not normalized.is_empty():
+				canonical_entries.append(normalized)
+		world_content[layer_name] = canonical_entries
+	return world_content
 	# 下方构建代码只保留给离线导出工具追溯，运行时不再进入。
 	@warning_ignore("unreachable_code")
 	if MAPS.has(map_id):
@@ -743,11 +756,9 @@ static func _build_centipede_content(map_id: int) -> Dictionary:
 static func _build_unknown_dark_content(map_id: int) -> Dictionary:
 	var source: Dictionary = UNKNOWN_DARK_MAPS[map_id]
 	var content := {"name": source.get("name", ""), "status": "structure_candidate", "spawns": [], "bosses": [], "npcs": [], "portals": []}
-	var spawn_names: Array = source.get("spawn_names", [])
-	for index in range(spawn_names.size()):
-		var data_name := str(spawn_names[index])
-		var monster := GameData.get_monster(data_name)
-		content.spawns.append({"name": data_name, "display_name": str(monster.get("baseName", data_name)), "position": DUNGEON_SPAWN_POSITIONS[index % DUNGEON_SPAWN_POSITIONS.size()]})
+	# This retained offline/reference builder carries names only, so its combat
+	# rows deliberately fail closed.  An offline migration must add proven
+	# numeric monster_id values before any row can enter production.
 	if bool(source.get("npc", false)):
 		content.npcs.append({"name": "暗殿老人", "kind": "guide", "position": Vector2(0, 40)})
 	var targets: Array = source.get("targets", [])
@@ -788,5 +799,43 @@ static func _build_compact_dungeon_content(map_id: int, map_table: Dictionary, m
 	return content
 
 
-static func get_monster_drops(monster_name: String) -> Array:
-	return WorldContent.monster_drops(monster_name)
+static func _canonical_combat_entry(raw_entry: Variant) -> Dictionary:
+	if not raw_entry is Dictionary:
+		return {}
+	var source_entry: Dictionary = raw_entry
+	if (
+		not source_entry.has("monster_id")
+		or source_entry.has("monsterId")
+		or source_entry.has("boss_id")
+		or source_entry.has("content_id")
+	):
+		return {}
+	var raw_id: Variant = source_entry.get("monster_id", null)
+	var monster_id := -1
+	if raw_id is int:
+		monster_id = int(raw_id)
+	elif raw_id is float:
+		var numeric_id := float(raw_id)
+		if (
+			is_finite(numeric_id)
+			and numeric_id > 0.0
+			and numeric_id == floorf(numeric_id)
+			and numeric_id <= 9007199254740991.0
+		):
+			monster_id = int(numeric_id)
+	if monster_id <= 0:
+		return {}
+	var canonical := GameData.get_canonical_monster_entry(
+		monster_id, "runtime"
+	)
+	if canonical.is_empty():
+		return {}
+	var result := source_entry.duplicate(true)
+	result["monster_id"] = monster_id
+	result["name"] = str(canonical.get("canonical_name", ""))
+	result["classification"] = str(canonical.get("classification", ""))
+	for retired_key: String in [
+		"identityKey", "legacyNameCompatibility", "display_name",
+	]:
+		result.erase(retired_key)
+	return result

@@ -21,6 +21,9 @@ const BICH_COMMUNITY_BASELINE_PATH := "res://assets/data/bich_community_baseline
 const SERVICE_ITEM_CATALOG_PATH := "res://assets/data/service_item_catalog.json"
 const EQUIPMENT_PRICE_CANDIDATES_PATH := "res://assets/data/equipment_price_candidates_v1.json"
 const MERCHANT_CATALOG_PATH := "res://assets/data/merchant_catalog_v1.json"
+const CANONICAL_MONSTER_CATALOG_PATH := (
+	"res://assets/data/runtime/canonical_monster_catalog.json"
+)
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
 	"金疮药(小量)": "金创药(小量)",
@@ -54,6 +57,7 @@ var bich_community_baseline: Dictionary = {}
 var service_item_catalog: Dictionary = {}
 var equipment_price_candidates: Dictionary = {}
 var merchant_catalog: Dictionary = {}
+var canonical_monster_catalog: Dictionary = {}
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -67,7 +71,8 @@ var initial_load_deferred := OS.get_name() == "Android"
 var _initial_load_started := false
 var _initial_load_complete := false
 
-var _monsters_by_name: Dictionary = {}
+var _monsters_by_id: Dictionary = {}
+var _monster_runtime_drop_closure: Dictionary = {}
 var _items_by_name: Dictionary = {}
 var _items_by_id: Dictionary = {}
 var _drops_by_boss_id: Dictionary = {}
@@ -80,6 +85,10 @@ var _price_by_name: Dictionary = {}
 var _price_by_item_id: Dictionary = {}
 var _price_by_service_index: Dictionary = {}
 var _bich_quests_by_id: Dictionary = {}
+
+const CANONICAL_MONSTER_COUNTS_CONTRACT_ID := (
+	"monster.catalog.runtime_counts.v1"
+)
 
 
 func _ready() -> void:
@@ -125,11 +134,14 @@ func load_database() -> bool:
 	database = parsed
 	maps = database.get("maps", [])
 	_normalize_map_ids()
-	monsters = database.get("monsters", [])
-	bosses = database.get("bosses", [])
+	# The merged legacy database remains available for maps/items/tasks, but it
+	# is no longer a monster authority.  Runtime monster identity, combat,
+	# appearance and drops all come from the canonical ID-keyed catalog.
+	monsters = []
+	bosses = []
+	if not _load_canonical_monster_catalog():
+		return false
 	_load_bich_community_baseline()
-	monsters = apply_bich_community_overrides(monsters, bich_community_baseline)
-	bosses = apply_bich_community_overrides(bosses, bich_community_baseline)
 	items = database.get("items", [])
 	_load_equipment_client_art()
 	items = apply_equipment_art_mappings(items, equipment_client_art)
@@ -158,6 +170,50 @@ func load_database() -> bool:
 	print("数据库载入完成：地图%d 怪物%d Boss%d 装备%d 技能等级%d 掉落槽%d 任务%d" % [
 		maps.size(), monsters.size(), bosses.size(), items.size(), skills.size(), drops.size(), tasks.size()
 	])
+	return true
+
+
+func _load_canonical_monster_catalog() -> bool:
+	canonical_monster_catalog.clear()
+	_monsters_by_id.clear()
+	_monster_runtime_drop_closure.clear()
+	monsters.clear()
+	bosses.clear()
+	if not FileAccess.file_exists(CANONICAL_MONSTER_CATALOG_PATH):
+		load_error = "canonical_monster_catalog_missing"
+		return false
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(CANONICAL_MONSTER_CATALOG_PATH)
+	)
+	if not parsed is Dictionary:
+		load_error = "canonical_monster_catalog_invalid"
+		return false
+	var entries_value: Variant = parsed.get("entries_by_id", {})
+	if not entries_value is Dictionary or entries_value.is_empty():
+		load_error = "canonical_monster_entries_missing"
+		return false
+	canonical_monster_catalog = parsed
+	var entries_by_id: Dictionary = entries_value
+	for raw_key: Variant in entries_by_id.keys():
+		var key := str(raw_key)
+		if not key.is_valid_int():
+			load_error = "canonical_monster_id_key_invalid"
+			return false
+		var monster_id := int(key) if key.is_valid_int() else -1
+		var raw_entry: Variant = entries_by_id.get(raw_key, {})
+		if (
+			monster_id <= 0
+			or not raw_entry is Dictionary
+			or int(raw_entry.get("monster_id", -1)) != monster_id
+		):
+			load_error = "canonical_monster_entry_identity_invalid"
+			return false
+		var entry: Dictionary = raw_entry.duplicate(true)
+		# JSON numeric values arrive as floats in Godot.  Normalize the validated
+		# identity once at the authority boundary; downstream runtime accepts only
+		# the resulting integer monster_id.
+		entry["monster_id"] = monster_id
+		_monsters_by_id[monster_id] = entry
 	return true
 
 
@@ -604,7 +660,6 @@ func _normalize_map_ids() -> void:
 
 
 func _build_indexes() -> void:
-	_monsters_by_name.clear()
 	_items_by_name.clear()
 	_items_by_id.clear()
 	_drops_by_boss_id.clear()
@@ -617,9 +672,6 @@ func _build_indexes() -> void:
 		var map_name := str(entry.get("name", ""))
 		if not _maps_by_name.has(map_name):
 			_maps_by_name[map_name] = entry
-	for entry: Variant in monsters:
-		if entry is Dictionary and not _monsters_by_name.has(entry.get("name", "")):
-			_monsters_by_name[entry.get("name", "")] = entry
 	for entry: Variant in items:
 		if entry is Dictionary:
 			var item_name := str(entry.get("name", ""))
@@ -635,6 +687,45 @@ func _build_indexes() -> void:
 			_drops_by_boss_id[boss_id] = []
 		_drops_by_boss_id[boss_id].append(entry)
 	_build_item_catalog()
+	_build_canonical_monster_runtime_drop_closure()
+
+
+func _build_canonical_monster_runtime_drop_closure() -> void:
+	_monster_runtime_drop_closure.clear()
+	monsters.clear()
+	bosses.clear()
+	for raw_id: Variant in _monsters_by_id.keys():
+		var monster_id := int(raw_id)
+		var entry: Dictionary = _monsters_by_id.get(monster_id, {})
+		if not bool(entry.get("runtime_allowed", false)):
+			_monster_runtime_drop_closure[monster_id] = {
+				"allowed": false,
+				"reason": "catalog_runtime_disabled",
+				"resolved_non_gold_count": 0,
+			}
+			continue
+		var classification := str(entry.get("classification", ""))
+		var hostile := classification not in ["non_hostile", "script_object"]
+		var profile := _canonical_drop_profile_unchecked(entry)
+		var resolved_non_gold_count := 0
+		for raw_drop: Variant in profile.get("entries", []):
+			if not raw_drop is Dictionary or raw_drop.has("gold"):
+				continue
+			if bool(resolve_canonical_drop_item(raw_drop).get("ok", false)):
+				resolved_non_gold_count += 1
+		var allowed := (
+			not hostile
+			or (not profile.is_empty() and resolved_non_gold_count > 0)
+		)
+		_monster_runtime_drop_closure[monster_id] = {
+			"allowed": allowed,
+			"reason": "" if allowed else "drop_items_unresolved",
+			"resolved_non_gold_count": resolved_non_gold_count,
+		}
+		if allowed:
+			monsters.append(entry.duplicate(true))
+			if classification == "boss":
+				bosses.append(entry.duplicate(true))
 
 
 func _build_item_catalog() -> void:
@@ -819,14 +910,144 @@ func _make_runtime_item(item_name: String, skill_names: Dictionary) -> Dictionar
 	return record
 
 
-func get_monster(monster_name: String) -> Dictionary:
-	return _monsters_by_name.get(monster_name, {})
+func canonical_monster_id(raw_value: Variant) -> int:
+	if raw_value is int:
+		return int(raw_value) if int(raw_value) > 0 else -1
+	# Godot JSON numbers are floats.  Permit only a lossless positive integer
+	# token at this boundary; numeric strings and every legacy transport form
+	# remain rejected by the ID-only runtime API.
+	if raw_value is float:
+		var numeric_value := float(raw_value)
+		if (
+			is_finite(numeric_value)
+			and numeric_value > 0.0
+			and numeric_value == floorf(numeric_value)
+			and numeric_value <= 9007199254740991.0
+		):
+			return int(numeric_value)
+	return -1
 
 
-func get_monster_by_id(monster_id:int)->Dictionary:
-	for monster:Variant in monsters:
-		if monster is Dictionary and int(monster.get("monsterId",-1))==monster_id:return monster
+func get_canonical_monster_entry(
+	monster_id: int,
+	use_context := "runtime"
+) -> Dictionary:
+	var resolved_id := canonical_monster_id(monster_id)
+	if resolved_id <= 0:
+		return {}
+	var entry_value: Variant = _monsters_by_id.get(resolved_id, {})
+	if not entry_value is Dictionary or entry_value.is_empty():
+		return {}
+	var entry: Dictionary = entry_value
+	var context := str(use_context)
+	if context not in ["catalog", "runtime", "spawn", "combat", "editor"]:
+		return {}
+	if context in ["runtime", "spawn", "combat"]:
+		if not bool(entry.get("runtime_allowed", false)):
+			return {}
+		var closure: Dictionary = _monster_runtime_drop_closure.get(
+			resolved_id, {}
+		)
+		if not bool(closure.get("allowed", false)):
+			return {}
+	elif context == "editor":
+		if not bool(entry.get("editor_placement", {}).get("allowed", false)):
+			return {}
+	return entry.duplicate(true)
+
+
+func get_monster_by_id(monster_id: int) -> Dictionary:
+	return get_canonical_monster_entry(monster_id, "runtime")
+
+
+func get_monster(_monster_name: String) -> Dictionary:
+	# Name-only monster lookup is intentionally retired.  Keeping a fail-closed
+	# method makes stale callers obvious without silently selecting a same-name
+	# variant from the abandoned database.
 	return {}
+
+
+func get_canonical_monster_drop_profile(monster_id: int) -> Dictionary:
+	var entry := get_canonical_monster_entry(monster_id, "runtime")
+	if entry.is_empty():
+		return {}
+	return _canonical_drop_profile_unchecked(entry)
+
+
+func canonical_monster_runtime_drop_closure(monster_id: int) -> Dictionary:
+	var resolved_id := canonical_monster_id(monster_id)
+	var value: Variant = _monster_runtime_drop_closure.get(resolved_id, {})
+	return value.duplicate(true) if value is Dictionary else {}
+
+
+func canonical_monster_counts() -> Dictionary:
+	var catalog_runtime_allowed_count := 0
+	for raw_entry: Variant in _monsters_by_id.values():
+		if raw_entry is Dictionary and bool(raw_entry.get("runtime_allowed", false)):
+			catalog_runtime_allowed_count += 1
+	return {
+		"contract_id": CANONICAL_MONSTER_COUNTS_CONTRACT_ID,
+		"catalog_identity_count": _monsters_by_id.size(),
+		"catalog_runtime_allowed_count": catalog_runtime_allowed_count,
+		"runtime_spawnable_count": monsters.size(),
+		"runtime_rejected_count": (
+			catalog_runtime_allowed_count - monsters.size()
+		),
+		"runtime_boss_count": bosses.size(),
+	}
+
+
+func _canonical_drop_profile_unchecked(entry: Dictionary) -> Dictionary:
+	var profile_id := str(entry.get("drop_profile_id", ""))
+	var profiles: Variant = canonical_monster_catalog.get("drop_profiles", {})
+	if profile_id.is_empty() or not profiles is Dictionary:
+		return {}
+	var profile_value: Variant = profiles.get(profile_id, {})
+	if not profile_value is Dictionary:
+		return {}
+	var profile: Dictionary = profile_value
+	var drop_entries: Variant = profile.get("entries", [])
+	var hostile := str(entry.get("classification", "")) not in [
+		"non_hostile", "script_object"
+	]
+	if hostile and (not drop_entries is Array or drop_entries.is_empty()):
+		return {}
+	return profile.duplicate(true)
+
+
+func resolve_canonical_drop_item(drop_entry: Dictionary) -> Dictionary:
+	var token := str(drop_entry.get("item", ""))
+	if token.is_empty() or token != token.strip_edges():
+		return {"ok": false, "reason": "invalid_item_token"}
+	for index in range(token.length()):
+		var codepoint := token.unicode_at(index)
+		if codepoint < 32 or codepoint == 0x7f or codepoint == 0xfffd:
+			return {"ok": false, "reason": "invalid_item_token"}
+	# Gold rows carry an amount separate from their raw item token.  The current
+	# ground-pickup contract has no quantity-bearing currency identity, so do not
+	# silently collapse e.g. 15000 Gold into one coin.
+	if drop_entry.has("gold"):
+		return {"ok": false, "reason": "gold_amount_contract_unresolved"}
+	var item := get_item_record(token)
+	if item.is_empty():
+		return {"ok": false, "reason": "unknown_item_token"}
+	var canonical_name := _canonical_item_name(token)
+	if str(item.get("name", "")) != canonical_name:
+		return {"ok": false, "reason": "item_identity_mismatch"}
+	var item_id := _stable_item_id(item)
+	var service_index := _service_index(item)
+	var source: Variant = item.get("source", {})
+	if item_id < 0 and service_index < 0 and (
+		not source is Dictionary or source.is_empty()
+	):
+		return {"ok": false, "reason": "item_authority_unresolved"}
+	return {
+		"ok": true,
+		"reason": "",
+		"item_name": canonical_name,
+		"item_id": item_id,
+		"service_index": service_index,
+	}
 
 
 func get_map_by_id(map_id: int) -> Dictionary:
@@ -1090,11 +1311,10 @@ func get_drops_for_boss(boss_id: int) -> Array:
 	return _drops_by_boss_id.get(boss_id, [])
 
 
-func get_calibrated_drops(monster_id: int, monster_name: String) -> Array:
-	var community: Variant = bich_community_baseline.get("runtimeDrops", {}).get(monster_name, [])
-	if community is Array and not community.is_empty():
-		return community.duplicate(true)
-	return get_drops_for_boss(monster_id)
+func get_calibrated_drops(monster_id: int, _retired_name := "") -> Array:
+	var profile := get_canonical_monster_drop_profile(monster_id)
+	var entries: Variant = profile.get("entries", [])
+	return entries.duplicate(true) if entries is Array else []
 
 
 func get_skill(skill_name: String, skill_level := 0) -> Dictionary:
