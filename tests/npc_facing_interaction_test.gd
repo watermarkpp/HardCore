@@ -22,6 +22,33 @@ class MockGame:
 		return []
 
 
+func _primary_alpha_bbox_median_x(appearance_value: int) -> float:
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/classic_npc_art_sources.json"))
+	var config: Dictionary = manifest["appearances"][str(appearance_value)]
+	var frame_size_values: Array = config["frameSize"]
+	var foot_anchor_values: Array = config["footAnchor"]
+	var frame_width := int(frame_size_values[0])
+	var frame_height := int(frame_size_values[1])
+	var foot_anchor_x := float(foot_anchor_values[0])
+	var frame_count := int(config.get("framesPerDirection", 4))
+	var image := Image.load_from_file(ProjectSettings.globalize_path(str(config["path"])))
+	var samples: Array = []
+	for logical_row in range(8):
+		for frame in range(frame_count):
+			var min_x := frame_width
+			var max_x := -1
+			for y in range(frame_height):
+				for x in range(frame_width):
+					if image.get_pixel(frame * frame_width + x, logical_row * frame_height + y).a > 0.0:
+						min_x = mini(min_x, x)
+						max_x = maxi(max_x, x)
+			assert(max_x >= min_x, "primary NPC atlas contains an empty idle cell")
+			samples.append((float(min_x) + float(max_x)) * 0.5 - foot_anchor_x)
+	samples.sort()
+	var midpoint := samples.size() / 2
+	return (float(samples[midpoint - 1]) + float(samples[midpoint])) * 0.5 if samples.size() % 2 == 0 else float(samples[midpoint])
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -53,10 +80,33 @@ func _run() -> void:
 	for npc in actors:
 		assert(npc.uses_final_art(), "NPC没有加载主客户端Npc.wil运行图集")
 
+	var expected_visible_centers := {
+		0: 35.0,
+		1: 36.25,
+		2: 35.75,
+		3: 38.0,
+		8: 37.0,
+		10: 34.25,
+		11: 34.0,
+		14: 23.5,
+		15: 34.5,
+	}
+	for appearance_value in expected_visible_centers:
+		assert(is_equal_approx(_primary_alpha_bbox_median_x(int(appearance_value)), float(expected_visible_centers[appearance_value])), "frozen NPC visible-center table diverged from primary atlas alpha audit")
 	for npc in actors:
-		var expected_visual_center_x := float(npc.visual.frame_size.x) * 0.5 - float(npc.visual.foot_anchor.x)
+		var expected_visual_center_x := float(expected_visible_centers[npc.appearance])
 		var label_center_x := npc.name_label.position.x + npc.name_label.size.x * 0.5
-		assert(is_equal_approx(label_center_x, expected_visual_center_x), "NPC name center is not aligned with the source frame center")
+		assert(is_equal_approx(label_center_x, expected_visual_center_x), "NPC name center is not aligned with the visible source center")
+	for appearance_value in [8, 10, 11, 14, 15]:
+		var npc := NPCActor.new()
+		npc.setup("alignment-%d" % appearance_value, "shop", [], "", appearance_value, Vector2.ZERO)
+		add_child(npc)
+		await get_tree().process_frame
+		assert(npc.uses_final_art(), "formal Bich NPC appearance did not load")
+		var expected_center_x := float(expected_visible_centers[appearance_value])
+		var actual_center_x := npc.name_label.position.x + npc.name_label.size.x * 0.5
+		assert(is_equal_approx(actual_center_x, expected_center_x), "formal Bich NPC name center is not alpha aligned")
+		npc.queue_free()
 	var first_label_center_x := actors[0].name_label.position.x + actors[0].name_label.size.x * 0.5
 	for _frame in range(3):
 		await get_tree().process_frame

@@ -6,6 +6,10 @@ const BACKGROUND := Color(0.12, 0.05, 0.04, 0.92)
 const HEALTH := Color(0.75, 0.12, 0.08, 1.0)
 const LABEL_GAP := 3.0
 const LABEL_FONT_SIZE := 10
+# The fallback font's descent includes transparent leading below the visible
+# glyphs. Three logical pixels close the measured device crop gap at the current
+# 1598->2664 scale without moving the metric layout edge or bar/group geometry.
+const LABEL_OPTICAL_NUDGE_Y := 3.0
 
 var current_hp := 1
 var max_hp := 1
@@ -70,6 +74,8 @@ func layout_snapshot() -> Dictionary:
 		"label_text": _level_label,
 		"label_rect": Rect2(group_left, label_top, _label_width, _label_height),
 		"label_baseline": bar_bottom - _label_descent,
+		"label_draw_baseline": bar_bottom - _label_descent + LABEL_OPTICAL_NUDGE_Y,
+		"label_optical_nudge_y": LABEL_OPTICAL_NUDGE_Y,
 		"label_ascent": _label_ascent,
 		"label_descent": _label_descent,
 		"gap": LABEL_GAP,
@@ -87,7 +93,7 @@ func _draw() -> void:
 	var rect: Rect2 = snapshot["bar_rect"]
 	if _label_font != null:
 		var label_rect: Rect2 = snapshot["label_rect"]
-		var label_baseline := float(snapshot["label_baseline"])
+		var label_baseline := float(snapshot["label_draw_baseline"])
 		draw_string(_label_font, Vector2(label_rect.position.x, label_baseline), _level_label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, LABEL_FONT_SIZE, Color.WHITE)
 	draw_rect(rect, BACKGROUND)
 	var ratio := float(current_hp) / float(max_hp)

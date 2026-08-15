@@ -2,7 +2,36 @@ class_name NPCVisual
 extends Node2D
 
 const MANIFEST_PATH := "res://assets/data/classic_npc_art_sources.json"
-
+# Frozen from the primary Npc.wil atlas audit recorded by
+# tools/build_classic_npc_assets.py and assets/data/classic_npc_art_sources.json.
+# For each appearance, every one of the 32 idle cells was reduced to the
+# centre of its non-transparent alpha bbox in cell space, then the horizontal
+# centres were medianed. This is source calibration, not a runtime scan.
+const SOURCE_VISIBLE_CENTER_X: Dictionary = {
+	0: 35.0,
+	1: 36.25,
+	2: 35.75,
+	3: 38.0,
+	4: 38.25,
+	5: 38.5,
+	6: 38.75,
+	7: 37.5,
+	8: 37.0,
+	9: 36.75,
+	10: 34.25,
+	11: 34.0,
+	12: 32.5,
+	13: 35.5,
+	14: 23.5,
+	15: 34.5,
+	16: 34.0,
+	17: 28.5,
+	18: 35.0,
+	19: 26.0,
+	20: 39.0,
+	21: 33.25,
+	22: 36.5,
+}
 var actor: Node2D
 var sprite: Sprite2D
 var current_direction := 0
@@ -42,6 +71,10 @@ func _ready() -> void:
 	sprite.position = -Vector2(foot_anchor)
 	_valid = sprite.texture != null
 	visible = _valid
+	_stable_frame_center_offset = Vector2(
+		float(SOURCE_VISIBLE_CENTER_X.get(int(actor.appearance), Vector2(frame_size).x * 0.5 - float(foot_anchor.x))),
+		Vector2(frame_size).y * 0.5 - float(foot_anchor.y)
+	)
 	_update_region()
 
 
@@ -64,9 +97,8 @@ func uses_final_art() -> bool:
 
 
 func stable_frame_center_offset() -> Vector2:
-	# Sprite2D is top-left anchored, so the source frame centre is offset from
-	# the actor origin by half the frame size minus the source foot anchor. Keep
-	# this cached source-space value independent of the animated region/frame.
+	# Keep the appearance-level visible centre independent of the animated
+	# region/frame. Unknown appearances use the source frame geometry only.
 	return _stable_frame_center_offset
 
 
