@@ -69,5 +69,42 @@ func _ready() -> void:
 	assert(loaded.document.layers.respawn_points.size() == 2)
 	assert(str(loaded.document.layers.safe_area[1].shape) == "polygon")
 	assert(str(loaded.document.layers.safe_area[2].shape) == "polygon")
+
+	var legacy_document := MapEditorTypes.new_map(
+		"legacy_npc_names", 990106, "Legacy NPC Names", Vector2i(32, 32)
+	)
+	var legacy_npc := MapEditorGameplaySemanticService.add_entry(
+		legacy_document,
+		"npc",
+		Vector2i(7, 9),
+		{
+			"content_id": "npc.478.001",
+			"npc_id": "npc.478.001",
+			"display_name": "盟重杂货商",
+			"service_role": "shop",
+			"facing": "north_west",
+			"custom_editor_note": "preserve-me",
+		}
+	)
+	assert(legacy_npc.ok)
+	var legacy_path := "user://mse_legacy_npc_%s.editor.json" % Time.get_ticks_usec()
+	assert(MapEditorSaveService.save_document(legacy_document, legacy_path).ok)
+	var raw_file := FileAccess.open(legacy_path, FileAccess.READ)
+	var raw_before_load := raw_file.get_as_text() if raw_file != null else ""
+	assert("盟重杂货商" in raw_before_load)
+	var loaded_legacy := MapEditorLoadService.load_document(legacy_path)
+	assert(loaded_legacy.ok, str(loaded_legacy.get("errors", [])))
+	var migrated_npc: Dictionary = loaded_legacy.document.layers.npc_points[0]
+	assert(str(migrated_npc.display_name) == "杂货商")
+	assert(str(migrated_npc.service_identity_id) == "npc.service.general_vendor.v1")
+	assert(str(migrated_npc.npc_id) == "npc.478.001")
+	assert(str(migrated_npc.content_id) == "npc.478.001")
+	var migrated_tile: Array = migrated_npc.tile
+	assert(int(migrated_tile[0]) == 7 and int(migrated_tile[1]) == 9)
+	assert(str(migrated_npc.facing) == "north_west")
+	assert(str(migrated_npc.custom_editor_note) == "preserve-me")
+	var raw_after_load_file := FileAccess.open(legacy_path, FileAccess.READ)
+	var raw_after_load := raw_after_load_file.get_as_text() if raw_after_load_file != null else ""
+	assert(raw_after_load == raw_before_load, "打开地图只能内存迁移，不能静默改写人工存档")
 	print("MSE_STAGE6_GAMEPLAY_SEMANTICS_PASS")
 	get_tree().quit()

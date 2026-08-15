@@ -1222,9 +1222,14 @@ func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 	}.get(kind, "content_id"))
 	var content_id := str(entry.get("content_id", entry.get(content_field, "")))
 	semantic_content_id.text = content_id
+	var selectable_content_id := content_id
+	if kind == "npc":
+		var canonical_entry := MapEditorContentCatalogService.find("npc", content_id)
+		if not canonical_entry.is_empty():
+			selectable_content_id = str(canonical_entry.get("content_id", content_id))
 	for index in semantic_content_option.item_count:
 		var metadata: Variant = semantic_content_option.get_item_metadata(index)
-		if metadata is Dictionary and str(metadata.get("content_id", "")) == content_id:
+		if metadata is Dictionary and str(metadata.get("content_id", "")) == selectable_content_id:
 			semantic_content_option.select(index)
 			break
 	semantic_radius.value = float(entry.get("radius_gu", semantic_radius.value))
@@ -1715,6 +1720,7 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		var npc_entry := MapEditorContentCatalogService.find(kind, content_id)
 		properties["display_name"] = str(npc_entry.get("display_name", content_id))
 		properties["service_role"] = str(npc_entry.get("service_role", "dialogue"))
+		properties["service_identity_id"] = str(npc_entry.get("service_identity_id", ""))
 	elif kind == "monster_spawn":
 		properties["monster_id"] = content_id
 		properties["content_id"] = content_id
