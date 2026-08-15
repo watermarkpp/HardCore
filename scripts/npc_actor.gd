@@ -2,6 +2,7 @@ class_name NPCActor
 extends Node2D
 
 const NPCVisualScript := preload("res://scripts/npc_visual.gd")
+const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
 const FACING_DIRECTIONS: Array[Vector2] = [
 	Vector2.DOWN, Vector2(-0.70710678, 0.70710678), Vector2.LEFT, Vector2(-0.70710678, -0.70710678),
 	Vector2.UP, Vector2(0.70710678, -0.70710678), Vector2.RIGHT, Vector2(0.70710678, 0.70710678),
@@ -11,6 +12,7 @@ var npc_name := "NPC"
 var npc_kind := "shop"
 var shop_stock: Array = []
 var stock_key := ""
+var service_identity_id := ""
 var appearance := -1
 var facing := Vector2.DOWN
 var default_facing := Vector2.DOWN
@@ -20,10 +22,12 @@ var name_label: Label
 
 
 func setup(display_name: String, kind: String, stock: Array = [], dynamic_stock_key := "", npc_appearance := -1, center := Vector2.ZERO) -> void:
-	npc_name = display_name
 	npc_kind = kind
 	shop_stock = stock
 	stock_key = dynamic_stock_key
+	var service_identity := NPCServiceIdentityScript.resolve(display_name, kind, dynamic_stock_key)
+	service_identity_id = str(service_identity.get("id", ""))
+	npc_name = str(service_identity.get("display_name", display_name))
 	appearance = npc_appearance if npc_appearance >= 0 else _fallback_appearance(display_name, kind, dynamic_stock_key)
 	map_center = center
 

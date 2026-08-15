@@ -29,7 +29,7 @@ var abandon_button: Button
 var abandon_confirmation: Control
 var story_divider: HSeparator
 var current_quest_id := ""
-var npc_display_name := "比奇老兵"
+var npc_display_name := "老兵"
 var _selected_quest_id := ""
 var _pending_abandon_quest_id := ""
 var _action_request_locked := false

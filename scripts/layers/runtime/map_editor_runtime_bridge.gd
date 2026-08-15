@@ -1,6 +1,7 @@
 class_name MapEditorRuntimeBridge
 extends RefCounted
 
+const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
 const BICH_MAP_ID := 4
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
@@ -564,16 +565,21 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 			"npc.4.003": "books",
 			"npc.expansion.bich_pharmacist": "medicine",
 		}.get(npc_id, ""))
+		var service_role := str(entry.get("service_role", "dialogue"))
+		var service_identity := NPCServiceIdentityScript.resolve(
+			str(entry.get("display_name", "NPC")), service_role, stock_key
+		)
 		result.npcs.append({
-			"name": entry.get("display_name", "NPC"),
+			"name": service_identity.get("display_name", "NPC"),
 			"screen_position_px": grid_cell_to_screen_position_px(
 				runtime, entry.get("tile", [0, 0])
 			),
 			"position_ground_gu": cell_to_ground_position_gu(
 				entry.get("tile", [0, 0])
 			),
-			"kind": entry.get("service_role", "dialogue"),
+			"kind": service_role,
 			"npc_id": npc_id,
+			"service_identity_id": service_identity.get("id", ""),
 			"stock": stock_key,
 			"appearance": int(entry.get("appearance", -1)),
 		})

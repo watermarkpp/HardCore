@@ -21,8 +21,11 @@ func _run() -> void:
 	var panel := QuestPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	panel.open_for("比奇老兵")
+	panel.open_for("老兵")
 	await get_tree().process_frame
+	assert(panel.npc_display_name == "老兵", "任务NPC仍带地区前缀")
+	for quest: Dictionary in GameData.get_bich_quests():
+		assert(str(quest.get("npc", "")) == "老兵", "任务委托人没有合并为老兵")
 	assert(panel.size == Vector2(1020, 636), "任务面板没有使用既定横屏底板尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "任务面板没有复用公共哥特外框")
 	assert(panel.get_node("QuestListPanel").theme_type_variation == "GothicInsetFrame", "任务列表没有复用公共内框")
@@ -90,7 +93,7 @@ func _run() -> void:
 	panel.refresh()
 	assert(not panel.action_button.disabled and panel.action_button.text == "领取奖励", "完成目标后没有启用领取奖励按钮")
 	PlayerState.reset_progress()
-	panel.open_for("比奇老兵")
+	panel.open_for("老兵")
 	assert(panel.current_quest_id == "bich_beginner_gear", "未接任务没有默认选中当前可接任务")
 	assert(not panel.action_button.disabled and panel.action_button.text == "接受任务", "点击未接受任务没有切换为接受任务按钮")
 	assert(panel.status_label.text.is_empty(), "可接任务不应在接受按钮左侧重复显示尚未接受")

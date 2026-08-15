@@ -4,6 +4,7 @@ const Mapper := preload("res://scripts/map_coordinate_mapper.gd")
 const Bridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
+const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
 
 const EPSILON := 0.01
 
@@ -66,8 +67,30 @@ func _run() -> void:
 			pharmacist = candidate as NPCActor
 			break
 	assert(pharmacist != null, "runtime map 4 must spawn the Bichon pharmacist")
+	assert(pharmacist.npc_name == "药剂商", "药剂商仍带地区前缀")
+	assert(pharmacist.service_identity_id == NPCServiceIdentityScript.PHARMACIST_ID, "药剂商没有合并到全局功能身份")
 	assert(not pharmacist.shop_stock.is_empty(), "Bichon pharmacist must receive the primary medicine stock")
-	game.hud.open_shop("比奇药剂商", [], GameData.merchant_context("medicine"))
+	var expected_service_names := {
+		"general": ["杂货商", NPCServiceIdentityScript.GENERAL_VENDOR_ID],
+		"starter_gear": ["铁匠", NPCServiceIdentityScript.BLACKSMITH_ID],
+		"books": ["书店老板", NPCServiceIdentityScript.BOOK_VENDOR_ID],
+		"medicine": ["药剂商", NPCServiceIdentityScript.PHARMACIST_ID],
+	}
+	for candidate: Node in get_tree().get_nodes_in_group("interactable"):
+		if not candidate is NPCActor:
+			continue
+		var npc := candidate as NPCActor
+		if expected_service_names.has(npc.stock_key):
+			var expectation: Array = expected_service_names[npc.stock_key]
+			assert(npc.npc_name == str(expectation[0]), "商人显示名没有按功能合并")
+			assert(npc.service_identity_id == str(expectation[1]), "商人稳定功能身份错误")
+		elif npc.npc_kind == "trainer":
+			assert(npc.npc_name == "强化商人" and npc.service_identity_id == NPCServiceIdentityScript.ENHANCEMENT_VENDOR_ID, "武馆教头没有合并为强化商人")
+		elif npc.npc_kind == "quest":
+			assert(npc.npc_name == "老兵" and npc.service_identity_id == NPCServiceIdentityScript.VETERAN_ID, "地区老兵没有合并为老兵")
+		elif npc.npc_kind == "warehouse":
+			assert(npc.npc_name == "仓库管理员" and npc.service_identity_id == NPCServiceIdentityScript.WAREHOUSE_ID, "仓库管理员功能身份错误")
+	game.hud.open_shop("药剂商", [], GameData.merchant_context("medicine"))
 	assert(
 		str(game.hud.shop_panel._active_merchant_context().get("merchant_id", ""))
 		== str(GameData.merchant_context("medicine").get("merchant_id", "")),

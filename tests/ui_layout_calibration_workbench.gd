@@ -227,7 +227,7 @@ func _show_panel(index: int) -> void:
 			shop.get("buy_tab_button").pressed.emit()
 			shop.call("_select_shop_item", 0)
 	elif profile_id == "quest":
-		hud.call("open_quest", "比奇老兵")
+		hud.call("open_quest", "老兵")
 	elif profile_id == "system_menu":
 		game.call("_show_system_menu")
 	elif profile_id == "system_settings":

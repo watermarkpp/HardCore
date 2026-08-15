@@ -24,7 +24,7 @@ func _ready() -> void:
 	panel.name = "QuestPanel"
 	add_child(panel)
 	await get_tree().process_frame
-	panel.open_for("比奇老兵")
+	panel.open_for("老兵")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var output_dir := ProjectSettings.globalize_path(ACTIVE_OUTPUT_PATH.get_base_dir())
@@ -36,7 +36,7 @@ func _ready() -> void:
 	_capture(ABANDON_CONFIRM_OUTPUT_PATH)
 	panel.abandon_confirmation.cancel_button.pressed.emit()
 	PlayerState.quest_states = {}
-	panel.open_for("比奇老兵")
+	panel.open_for("老兵")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_capture(AVAILABLE_OUTPUT_PATH)

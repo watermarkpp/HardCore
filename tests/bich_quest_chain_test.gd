@@ -53,7 +53,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	var tracker: Label = game.hud.get_node("MobileSafeRoot").find_child("QuestTracker", true, false)
 	assert(tracker != null and "初级装备任务" in tracker.text and "可接" in tracker.text, "移动端任务追踪未显示当前可接任务")
-	game.hud.open_quest("比奇老兵")
+	game.hud.open_quest("老兵")
 	var panel: QuestPanel = game.hud.quest_panel
 	assert(panel.visible and panel.current_quest_id == "bich_beginner_gear", "老兵没有打开当前任务")
 	assert("经典任务改编" in panel.description_label.text and "B" in panel.description_label.text, "任务面板没有显示来源等级")
