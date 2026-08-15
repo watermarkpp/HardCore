@@ -75,7 +75,6 @@ var _monsters_by_id: Dictionary = {}
 var _monster_runtime_drop_closure: Dictionary = {}
 var _items_by_name: Dictionary = {}
 var _items_by_id: Dictionary = {}
-var _drops_by_boss_id: Dictionary = {}
 var _maps_by_id: Dictionary = {}
 var _maps_by_name: Dictionary = {}
 var _catalog_by_name: Dictionary = {}
@@ -662,7 +661,6 @@ func _normalize_map_ids() -> void:
 func _build_indexes() -> void:
 	_items_by_name.clear()
 	_items_by_id.clear()
-	_drops_by_boss_id.clear()
 	_maps_by_id.clear()
 	_maps_by_name.clear()
 	for entry: Variant in maps:
@@ -679,13 +677,6 @@ func _build_indexes() -> void:
 			var item_id := _stable_item_id(entry)
 			if item_id >= 0:
 				_items_by_id[item_id] = entry
-	for entry: Variant in drops:
-		if not entry is Dictionary:
-			continue
-		var boss_id := int(entry.get("bossId", 0))
-		if not _drops_by_boss_id.has(boss_id):
-			_drops_by_boss_id[boss_id] = []
-		_drops_by_boss_id[boss_id].append(entry)
 	_build_item_catalog()
 	_build_canonical_monster_runtime_drop_closure()
 
@@ -1076,25 +1067,11 @@ func get_available_maps(include_later_content: bool) -> Array:
 	return result
 
 
-func get_bosses_for_map(map_data: Dictionary) -> Array:
-	var result: Array = []
-	var map_name := str(map_data.get("name", ""))
-	var map_group := str(map_data.get("mapGroup", ""))
-	for boss: Variant in bosses:
-		if not boss is Dictionary:
-			continue
-		var location := str(boss.get("location", ""))
-		if location.is_empty() or location == "待核验":
-			continue
-		var matched := map_name in location or location in map_name
-		if not matched and not map_group.is_empty():
-			for segment: String in location.split("/", false):
-				if segment in map_name or map_name in segment or segment in map_group or map_group in segment:
-					matched = true
-					break
-		if matched:
-			result.append(boss)
-	return result
+func get_bosses_for_map(_map_data: Dictionary) -> Array:
+	# Retired compatibility boundary. Boss placement is authored by the formal
+	# map runtime and resolved from numeric monster_id; map/name substring
+	# matching is deliberately unavailable.
+	return []
 
 
 func get_item(item_name: String) -> Dictionary:
@@ -1308,7 +1285,9 @@ func unresolved_drop_item_names() -> PackedStringArray:
 
 
 func get_drops_for_boss(boss_id: int) -> Array:
-	return _drops_by_boss_id.get(boss_id, [])
+	# Retained for numeric-ID callers while the old merged drop table is retired.
+	# The canonical per-monster profile is the only returned authority.
+	return get_calibrated_drops(boss_id)
 
 
 func get_calibrated_drops(monster_id: int, _retired_name := "") -> Array:

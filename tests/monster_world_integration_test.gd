@@ -88,6 +88,15 @@ func _run() -> void:
 		)
 	assert(GameData.get_monster("沃玛战士").is_empty(), "name-only lookup must fail closed")
 	assert(
+		GameData.get_bosses_for_map({"name": "沃玛教主大殿"}).is_empty(),
+		"map-name Boss matching must remain retired"
+	)
+	assert(
+		GameData.get_drops_for_boss(76)
+		== GameData.get_calibrated_drops(76),
+		"numeric Boss drop compatibility API bypassed canonical drops"
+	)
+	assert(
 		GameData.get_canonical_monster_entry(64, "unknown_context").is_empty(),
 		"unknown GameData context bypassed runtime policy"
 	)
@@ -424,3 +433,10 @@ func _test_source_contract() -> void:
 			"baseName",
 		]:
 			assert(forbidden not in source, "%s retains production fallback %s" % [path, forbidden])
+	var map_panel_source := FileAccess.get_file_as_string(
+		"res://scripts/map_panel.gd"
+	)
+	assert(
+		"GameData.get_bosses_for_map(" not in map_panel_source,
+		"map panel still guesses Bosses from legacy map/name metadata"
+	)

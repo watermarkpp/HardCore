@@ -407,12 +407,7 @@ func _show_selected(index: int) -> void:
 		button.set_pressed_no_signal(selected)
 		button.theme_type_variation = "GothicComponentSelectedButton" if selected else "GothicComponentButton"
 	var content := _player_map_content(_selected_map_id)
-	var bosses := GameData.get_bosses_for_map(map_data)
 	var boss_names: Array[String] = []
-	for boss: Variant in bosses:
-		var boss_name := str(boss.get("name", "Boss"))
-		if not boss_names.has(boss_name):
-			boss_names.append(boss_name)
 	for boss: Variant in content.get("bosses", []):
 		if boss is Dictionary and not boss_names.has(str(boss.get("name", "Boss"))):
 			boss_names.append(str(boss.get("name", "Boss")))
@@ -430,11 +425,6 @@ func _map_card_summary(map_data: Dictionary) -> String:
 	var content := _player_map_content(int(map_data.get("mapId", -1)))
 	var bosses: Array[String] = []
 	for boss: Variant in content.get("bosses", []):
-		if boss is Dictionary:
-			var boss_name := str(boss.get("name", "")).strip_edges()
-			if not boss_name.is_empty() and not bosses.has(boss_name):
-				bosses.append(boss_name)
-	for boss: Variant in GameData.get_bosses_for_map(map_data):
 		if boss is Dictionary:
 			var boss_name := str(boss.get("name", "")).strip_edges()
 			if not boss_name.is_empty() and not bosses.has(boss_name):
