@@ -379,16 +379,21 @@ func _repair_diagnostics() -> Dictionary:
 		if not instance is Dictionary or instance.is_empty():
 			continue
 		var item_name := str((instance as Dictionary).get("name", ""))
-		var price_record: Dictionary = GameData.get_item_price_record(item_name)
+		# Repair authority resolves the stable item/service identity first. The
+		# display name is retained only for diagnostics and old-save fallback.
+		var price_record: Dictionary = GameData.get_item_price_record(instance)
+		var catalog: Dictionary = GameData.get_item_record(instance)
 		var direct_quote: Dictionary = PricingService.quote_repair(
 			price_record,
-			GameData.get_item_record(item_name),
+			catalog,
 			(instance as Dictionary).duplicate(true),
 			context
 		)
 		equipment_rows.append({
 			"slot": slot,
 			"item": item_name,
+			"itemId": int(catalog.get("itemId", (instance as Dictionary).get("item_id", (instance as Dictionary).get("itemId", -1)))),
+			"serviceIndex": int(price_record.get("service_index", (instance as Dictionary).get("service_index", (instance as Dictionary).get("serviceIndex", -1)))),
 			"durabilityRaw": int((instance as Dictionary).get("durability_raw", -1)),
 			"maximumDurabilityRaw": int((instance as Dictionary).get("max_durability_raw", -1)),
 			"priceRecord": price_record,

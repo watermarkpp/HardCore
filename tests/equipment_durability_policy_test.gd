@@ -195,10 +195,15 @@ func _verify_live_high_gear_repair_contract(blacksmith_context: Dictionary) -> v
 		"左戒指": "圣战戒指",
 		"右戒指": "圣战戒指",
 	}
+	var stable_item_ids: Array[int] = [82, 140, 232, 233, 234, 234, 235, 235]
 	for slot: String in item_by_slot:
 		var item_name := str(item_by_slot[slot])
 		var instance: Dictionary = PlayerState._make_item_instance(item_name, GameData.get_item_record(item_name))
 		assert(not instance.is_empty(), "实机维修回归装备不存在: %s" % item_name)
+		# Simulate a device save whose display text was damaged by an encoding
+		# boundary. Stable item_id must still resolve the exact catalog and price.
+		instance["item_id"] = stable_item_ids[item_by_slot.keys().find(slot)]
+		instance["name"] = "corrupted-display-name"
 		instance["instance_id"] = "repair-live:%s" % slot
 		var maximum_raw := int(instance.get("max_durability_raw", 0))
 		assert(maximum_raw > 1000)

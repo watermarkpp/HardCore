@@ -1146,6 +1146,12 @@ func _run_map_transition(
 				break
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
+	# Initial entry used to serialize all reusable-panel warm-up after the world
+	# had already reached FINALIZE. Start the same hidden, fully awaited warm-up
+	# now that Loading is opaque so its frame-separated layout passes overlap
+	# threaded resource waits and frame-budgeted map construction below.
+	if _world_bootstrap_in_progress and not PlayerState.test_mode:
+		hud.prewarm_all_panels(_system_menu_panel)
 	_last_monster_prefetch_status.clear()
 	if PlayerState.test_mode:
 		_last_monster_prefetch_status = {"complete": true}
@@ -1201,7 +1207,18 @@ func _run_map_transition(
 			hud.loading_transition_overlay.modulate.a = 1.0
 		_active_map_transition_id = ""
 		_map_transition_in_progress = false
-		_world_bootstrap_coordinator.finish(true, "map_transition_ready")
+		var bootstrap_profile := _world_bootstrap_coordinator.finish(
+			true, "map_transition_ready"
+		)
+		if OS.is_debug_build() and _world_bootstrap_in_progress:
+			print("[WorldBootstrapProfile] ", JSON.stringify({
+				"total_ms": float(bootstrap_profile.get("total_duration_ms", 0.0)),
+				"stages_ms": bootstrap_profile.get("stage_elapsed_ms", {}),
+				"map_slices": int(bootstrap_profile.get("map_slice_count", 0)),
+				"collision_slices": int(bootstrap_profile.get("collision_slice_count", 0)),
+				"max_slice_ms": float(bootstrap_profile.get("max_slice_ms", 0.0)),
+				"hud": hud.panel_prewarm_diagnostic(),
+			}))
 		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 	else:
 		# READY contract failed: keep the input lock and Loading overlay so the

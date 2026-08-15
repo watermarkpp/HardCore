@@ -29,6 +29,13 @@ func _ready() -> void:
 	assert(snap.success)
 	assert(snap.stage == "READY")
 	assert(snap.generation == 1)
+	var stage_elapsed_ms: Dictionary = snap.get("stage_elapsed_ms", {})
+	assert(stage_elapsed_ms.has("SHOW_LOADING"))
+	assert(stage_elapsed_ms.has("FINALIZE"))
+	assert(
+		float(stage_elapsed_ms.get("SHOW_LOADING", -1.0))
+		<= float(stage_elapsed_ms.get("FINALIZE", -1.0))
+	)
 
 	# Begin new transition → new generation
 	coord.begin_map_transition(1)

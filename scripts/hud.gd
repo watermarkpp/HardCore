@@ -190,6 +190,7 @@ var _skill_button_assignments: Dictionary = {}
 var _skill_button_modes: Dictionary = {}
 var _panel_prewarm_in_progress := false
 var _all_panels_prewarmed := false
+var _panel_prewarm_diagnostic: Dictionary = {}
 
 
 func _ready() -> void:
@@ -1391,6 +1392,11 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 			await get_tree().process_frame
 		return
 	_panel_prewarm_in_progress = true
+	var prewarm_started_usec := Time.get_ticks_usec()
+	_panel_prewarm_diagnostic = {
+		"started_at_usec": prewarm_started_usec,
+		"completed": false,
+	}
 	_ensure_inventory_panel()
 	_ensure_shop_panel()
 	_ensure_skill_panel()
@@ -1402,6 +1408,9 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	# refresh once while hidden so its dynamic cards, icons and saved profile are
 	# part of the Loading-phase warm-up as well.
 	skill_panel.refresh()
+	_panel_prewarm_diagnostic["construction_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
 	var panels: Array[Control] = [
 		inventory_panel,
 		shop_panel,
@@ -1429,20 +1438,30 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	]
 	if is_instance_valid(system_menu_panel):
 		initial_profiles.append([system_menu_panel, "system_menu"])
-	await _wait_for_layout_profiles(initial_profiles)
+	var initial_wait_frames := await _wait_for_layout_profiles(initial_profiles)
+	_panel_prewarm_diagnostic["initial_profiles_wait_frames"] = initial_wait_frames
+	_panel_prewarm_diagnostic["initial_profiles_elapsed_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
 	# The shop owns two independent saved layouts. Warm the sell layout without
 	# requesting quotes or changing its business state, then restore buy.
 	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_sell")
-	await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+	var shop_sell_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
 	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_buy")
-	await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	var shop_buy_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
+	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
+	_panel_prewarm_diagnostic["shop_profiles_elapsed_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
 	# Shop and quest already own the reusable public confirmation dialog.
 	var confirmation_profiles: Array = []
 	if is_instance_valid(shop_panel.sell_confirmation):
 		confirmation_profiles.append([shop_panel.sell_confirmation, "confirmation_dialog"])
 	if is_instance_valid(quest_panel.abandon_confirmation):
 		confirmation_profiles.append([quest_panel.abandon_confirmation, "confirmation_dialog"])
-	await _wait_for_layout_profiles(confirmation_profiles)
+	var confirmation_wait_frames := await _wait_for_layout_profiles(confirmation_profiles)
+	_panel_prewarm_diagnostic["confirmation_wait_frames"] = confirmation_wait_frames
 	# Flush deferred grid/list stabilizers once more while hidden.
 	await get_tree().process_frame
 	for panel: Control in panels:
@@ -1452,14 +1471,21 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 		+ [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
 		+ confirmation_profiles
 	)
+	_panel_prewarm_diagnostic["completed"] = _all_panels_prewarmed
+	_panel_prewarm_diagnostic["total_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
 	_panel_prewarm_in_progress = false
 
 
-func _wait_for_layout_profiles(profiles: Array) -> void:
+func _wait_for_layout_profiles(profiles: Array) -> int:
+	var waited_frames := 0
 	for _frame in 30:
 		if _profiles_are_ready(profiles):
 			break
 		await get_tree().process_frame
+		waited_frames += 1
+	return waited_frames
 
 
 func _profiles_are_ready(profiles: Array) -> bool:
@@ -1472,6 +1498,10 @@ func _profiles_are_ready(profiles: Array) -> bool:
 
 func all_panels_are_prewarmed() -> bool:
 	return _all_panels_prewarmed
+
+
+func panel_prewarm_diagnostic() -> Dictionary:
+	return _panel_prewarm_diagnostic.duplicate(true)
 
 
 func _ensure_quest_panel() -> void:

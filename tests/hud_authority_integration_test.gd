@@ -30,6 +30,19 @@ func _run() -> void:
 	}
 	await _hud.prewarm_all_panels(_game._system_menu_panel)
 	assert(_hud.all_panels_are_prewarmed(), "all reusable modal profiles did not settle")
+	var prewarm_diagnostic := _hud.panel_prewarm_diagnostic()
+	assert(bool(prewarm_diagnostic.get("completed", false)))
+	assert(float(prewarm_diagnostic.get("total_ms", -1.0)) >= 0.0)
+	for wait_key: String in [
+		"initial_profiles_wait_frames",
+		"shop_sell_wait_frames",
+		"shop_buy_wait_frames",
+		"confirmation_wait_frames",
+	]:
+		assert(
+			int(prewarm_diagnostic.get(wait_key, 30)) < 30,
+			"panel prewarm exhausted its readiness polling bound: %s" % wait_key
+		)
 	for panel in [
 		_hud.inventory_panel, _hud.shop_panel, _hud.skill_panel,
 		_hud.quest_panel, _hud.map_panel, _hud.warehouse_panel,

@@ -69,11 +69,16 @@ var _initial_load_complete := false
 
 var _monsters_by_name: Dictionary = {}
 var _items_by_name: Dictionary = {}
+var _items_by_id: Dictionary = {}
 var _drops_by_boss_id: Dictionary = {}
 var _maps_by_id: Dictionary = {}
 var _maps_by_name: Dictionary = {}
 var _catalog_by_name: Dictionary = {}
+var _catalog_by_item_id: Dictionary = {}
+var _catalog_by_service_index: Dictionary = {}
 var _price_by_name: Dictionary = {}
+var _price_by_item_id: Dictionary = {}
+var _price_by_service_index: Dictionary = {}
 var _bich_quests_by_id: Dictionary = {}
 
 
@@ -601,6 +606,7 @@ func _normalize_map_ids() -> void:
 func _build_indexes() -> void:
 	_monsters_by_name.clear()
 	_items_by_name.clear()
+	_items_by_id.clear()
 	_drops_by_boss_id.clear()
 	_maps_by_id.clear()
 	_maps_by_name.clear()
@@ -616,7 +622,11 @@ func _build_indexes() -> void:
 			_monsters_by_name[entry.get("name", "")] = entry
 	for entry: Variant in items:
 		if entry is Dictionary:
-			_items_by_name[entry.get("name", "")] = entry
+			var item_name := str(entry.get("name", ""))
+			_items_by_name[item_name] = entry
+			var item_id := _stable_item_id(entry)
+			if item_id >= 0:
+				_items_by_id[item_id] = entry
 	for entry: Variant in drops:
 		if not entry is Dictionary:
 			continue
@@ -630,6 +640,8 @@ func _build_indexes() -> void:
 func _build_item_catalog() -> void:
 	item_catalog.clear()
 	_catalog_by_name.clear()
+	_catalog_by_item_id.clear()
+	_catalog_by_service_index.clear()
 	_build_price_index()
 	var skill_names := {}
 	for skill: Variant in skills:
@@ -692,6 +704,8 @@ func _build_item_catalog() -> void:
 
 func _build_price_index() -> void:
 	_price_by_name.clear()
+	_price_by_item_id.clear()
+	_price_by_service_index.clear()
 	for raw: Variant in service_item_catalog.get("serviceEquipmentReference", []):
 		_register_price_record(raw)
 	for raw: Variant in service_item_catalog.get("runtimeItems", []):
@@ -710,14 +724,37 @@ func _register_price_record(raw: Variant) -> void:
 	if not raw is Dictionary:
 		return
 	var source_record: Dictionary = raw
-	var canonical_name := str(ITEM_ALIASES.get(str(source_record.get("name", source_record.get("serviceName", ""))), str(source_record.get("name", source_record.get("serviceName", "")))))
+	var source_name := str(source_record.get("name", source_record.get("serviceName", "")))
+	var canonical_name := _canonical_item_name(source_name)
 	var base_price := maxi(0, int(source_record.get("price", 0)))
-	if canonical_name.is_empty() or base_price <= 0 or _price_by_name.has(canonical_name):
+	if canonical_name.is_empty() or base_price <= 0:
 		return
-	var service_index := int(source_record.get("serviceIndex", -1))
-	_price_by_name[canonical_name] = {
-		"item_key": "service:%d" % service_index if service_index >= 0 else "name:%s" % canonical_name,
+	var service_index := _service_index(source_record)
+	var item_id := _stable_item_id(source_record)
+	# Candidate equipment records intentionally omit itemId because their source
+	# only carries the official item name. Resolve that identity against the
+	# already-loaded primary runtime item table; the candidate still supplies
+	# only the missing price and never replaces an existing primary record.
+	if item_id < 0:
+		item_id = _item_id_for_name(canonical_name)
+	if service_index < 0 and str(source_record.get("kind", "")) == "equipment" and item_id < 0:
+		return
+	if _price_by_name.has(canonical_name):
+		return
+	if service_index >= 0 and _price_by_service_index.has(service_index):
+		return
+	if item_id >= 0 and _price_by_item_id.has(item_id):
+		return
+	var price_record := {
+		"item_key": (
+			"service:%d" % service_index
+			if service_index >= 0
+			else "item:%d" % item_id
+			if item_id >= 0
+			else "name:%s" % canonical_name
+		),
 		"item_name": canonical_name,
+		"item_id": item_id,
 		"service_index": service_index,
 		"service_type": int(source_record.get("serviceType", -1)),
 		"base_price": base_price,
@@ -725,6 +762,11 @@ func _register_price_record(raw: Variant) -> void:
 		"category": str(source_record.get("category", "")),
 		"source": (source_record.get("source", {}) as Dictionary).duplicate(true),
 	}
+	_price_by_name[canonical_name] = price_record
+	if service_index >= 0:
+		_price_by_service_index[service_index] = price_record
+	if item_id >= 0:
+		_price_by_item_id[item_id] = price_record
 
 
 func _register_catalog_item(record: Dictionary) -> void:
@@ -732,6 +774,12 @@ func _register_catalog_item(record: Dictionary) -> void:
 	if item_name.is_empty() or _catalog_by_name.has(item_name):
 		return
 	_catalog_by_name[item_name] = record
+	var item_id := _stable_item_id(record)
+	if item_id >= 0 and not _catalog_by_item_id.has(item_id):
+		_catalog_by_item_id[item_id] = record
+	var service_index := _service_index(record)
+	if service_index >= 0 and not _catalog_by_service_index.has(service_index):
+		_catalog_by_service_index[service_index] = record
 	item_catalog.append(record)
 
 
@@ -880,29 +928,136 @@ func item_world_appearance(item_id: int, gender: String) -> Dictionary:
 	}
 
 
-func get_item_record(item_name: String) -> Dictionary:
-	return _catalog_by_name.get(str(ITEM_ALIASES.get(item_name, item_name)), {})
+func get_item_record(item_ref: Variant) -> Dictionary:
+	var identity := _stable_identity(item_ref)
+	var item_id := int(identity.get("item_id", -1))
+	if item_id >= 0 and _catalog_by_item_id.has(item_id):
+		return (_catalog_by_item_id.get(item_id, {}) as Dictionary).duplicate(true)
+	var service_index := int(identity.get("service_index", -1))
+	if service_index >= 0 and _catalog_by_service_index.has(service_index):
+		return (_catalog_by_service_index.get(service_index, {}) as Dictionary).duplicate(true)
+	var canonical_name := _canonical_item_name(str(identity.get("name", "")))
+	return (_catalog_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
 
 
 func get_item_shop_price(item_name: String) -> int:
 	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_name))
 
 
-func get_item_price_record(item_name: String) -> Dictionary:
-	var canonical_name := str(ITEM_ALIASES.get(item_name, item_name))
+func get_item_price_record(item_ref: Variant) -> Dictionary:
+	_ensure_price_index()
+	var identity := _stable_identity(item_ref)
+	# Stable service identity is the strongest authority for a service record;
+	# item identity is next. Names are deliberately only a compatibility fallback
+	# for old saves that predate stable equipment IDs.
+	var service_index := int(identity.get("service_index", -1))
+	if service_index >= 0 and _price_by_service_index.has(service_index):
+		return (_price_by_service_index.get(service_index, {}) as Dictionary).duplicate(true)
+	var item_id := int(identity.get("item_id", -1))
+	if item_id >= 0 and _price_by_item_id.has(item_id):
+		return (_price_by_item_id.get(item_id, {}) as Dictionary).duplicate(true)
+	var canonical_name := _canonical_item_name(str(identity.get("name", "")))
+	# A late resource patch test (and a device hot patch) may remove only the
+	# name index while retaining the stable identity index. Recover that record
+	# without depending on the display text being re-registered.
+	var name_item_id := _item_id_for_name(canonical_name)
+	if name_item_id >= 0 and _price_by_item_id.has(name_item_id):
+		return (_price_by_item_id.get(name_item_id, {}) as Dictionary).duplicate(true)
+	return (_price_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
+
+
+func _ensure_price_index() -> void:
 	if _price_by_name.is_empty():
 		if service_item_catalog.is_empty():
 			_load_service_item_catalog()
 		_build_price_index()
-	elif not _price_by_name.has(canonical_name):
-		# Resource patches can add a pricing evidence file after the base APK's
-		# catalog was constructed.  Repair the one missing overlay in place; do
-		# not rebuild or reload the complete gameplay database.
-		if (equipment_price_candidates.get("records", []) as Array).is_empty():
-			_load_equipment_price_candidates()
-		for raw: Variant in equipment_price_candidates.get("records", []):
-			_register_price_record(raw)
-	return (_price_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
+		return
+	# Resource patches can add a pricing evidence file after the base APK's
+	# catalog was constructed. Repair only the missing overlay in place; do not
+	# rebuild or reload the complete gameplay database.
+	if equipment_price_candidates.is_empty():
+		_load_equipment_price_candidates()
+	for raw: Variant in equipment_price_candidates.get("records", []):
+		_register_price_record(raw)
+
+
+func _canonical_item_name(item_name: String) -> String:
+	return str(ITEM_ALIASES.get(item_name, item_name))
+
+
+func _stable_identity(item_ref: Variant) -> Dictionary:
+	var result := {"item_id": -1, "service_index": -1, "name": ""}
+	if item_ref is Dictionary:
+		var record: Dictionary = item_ref
+		result["item_id"] = _stable_item_id(record)
+		result["service_index"] = _service_index(record)
+		result["name"] = str(record.get("name", record.get("item_name", record.get("itemName", ""))))
+		if int(result["item_id"]) < 0 and int(result["service_index"]) < 0:
+			var item_key := str(record.get("item_key", record.get("itemKey", "")))
+			if item_key.begins_with("service:"):
+				result["service_index"] = _parse_stable_number(item_key.trim_prefix("service:"))
+			elif item_key.begins_with("item:"):
+				result["item_id"] = _parse_stable_number(item_key.trim_prefix("item:"))
+		return result
+	if item_ref is int or item_ref is float:
+		result["item_id"] = _parse_stable_number(item_ref)
+		return result
+	var text := str(item_ref)
+	if text.begins_with("service:"):
+		result["service_index"] = _parse_stable_number(text.trim_prefix("service:"))
+	elif text.begins_with("item:"):
+		result["item_id"] = _parse_stable_number(text.trim_prefix("item:"))
+	elif text.is_valid_int():
+		result["item_id"] = _parse_stable_number(text)
+	else:
+		result["name"] = text
+	return result
+
+
+func _stable_item_id(record: Dictionary) -> int:
+	for key: String in ["item_id", "itemId", "stableItemId", "id"]:
+		if not record.has(key):
+			continue
+		var value := _parse_stable_number(record.get(key, -1))
+		if value >= 0:
+			return value
+	return -1
+
+
+func _service_index(record: Dictionary) -> int:
+	for key: String in ["service_index", "serviceIndex"]:
+		if not record.has(key):
+			continue
+		var value := _parse_stable_number(record.get(key, -1))
+		if value >= 0:
+			return value
+	return -1
+
+
+func _parse_stable_number(value: Variant) -> int:
+	if value is String:
+		var text := value as String
+		if not text.is_valid_int():
+			return -1
+	return maxi(-1, int(value))
+
+
+func _item_id_for_name(item_name: String) -> int:
+	var canonical_name := _canonical_item_name(item_name)
+	var matches: Array[int] = []
+	for raw_item: Variant in items:
+		if not raw_item is Dictionary:
+			continue
+		var item: Dictionary = raw_item
+		if _canonical_item_name(str(item.get("name", ""))) != canonical_name:
+			continue
+		var item_id := _stable_item_id(item)
+		if item_id >= 0 and item_id not in matches:
+			matches.append(item_id)
+	# A candidate without an explicit stable ID is safe only when the runtime
+	# table has one exact name-to-ID mapping. Refuse ambiguous same-name records
+	# instead of pricing the wrong equipment.
+	return matches[0] if matches.size() == 1 else -1
 
 
 func get_item_kind(item_name: String) -> String:

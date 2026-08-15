@@ -185,12 +185,19 @@ func _empty_diagnostic() -> Dictionary:
 		"unexpected_sync_load_count_spawn_actors": 0,
 		"unexpected_sync_load_paths": [],
 		"unexpected_sync_load_stages": [],
+		"stage_elapsed_ms": {},
 	}
 
 
 func advance(new_stage: Stage) -> void:
 	stage = new_stage
-	diagnostic["stage"] = Stage.keys()[new_stage]
+	var stage_name := str(Stage.keys()[new_stage])
+	diagnostic["stage"] = stage_name
+	var elapsed_by_stage: Dictionary = diagnostic.get("stage_elapsed_ms", {})
+	elapsed_by_stage[stage_name] = (
+		(Time.get_ticks_usec() - started_at_usec) / 1000.0
+	)
+	diagnostic["stage_elapsed_ms"] = elapsed_by_stage
 
 
 func is_generation_current(gen: int) -> bool:

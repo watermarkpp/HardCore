@@ -251,6 +251,27 @@ func _run() -> void:
 		bool(blacksmith_clothing_repair.get("valid", false)),
 		"铁匠[Types]=[1,14]仅是交易品类，不得阻止衣服维修"
 	)
+	# Repair pricing must be keyed by the stable runtime item/service identity;
+	# a corrupted or localized display name cannot make a valid record vanish.
+	var armor_by_id := GameData.get_item_price_record({"item_id": 140, "name": "corrupted-display-name"})
+	assert(
+		bool(armor_by_id.get("base_price", 0) == 50000)
+		and str(armor_by_id.get("item_key", "")) == "item:140",
+		"item_id repair price lookup must use the reviewed candidate record"
+	)
+	var service_by_id := GameData.get_item_price_record({"service_index": 223, "name": "corrupted-display-name"})
+	assert(
+		bool(service_by_id.get("base_price", 0) == 4000)
+		and str(service_by_id.get("item_key", "")) == "service:223",
+		"service_index repair price lookup must retain the primary service record"
+	)
+	var armor_quote_by_id := PricingServiceScript.quote_repair(
+		armor_by_id,
+		GameData.get_item_record({"item_id": 140, "name": "corrupted-display-name"}),
+		{"item_id": 140, "name": "corrupted-display-name", "durability_raw": 0, "max_durability_raw": 35000},
+		starter_context
+	)
+	assert(bool(armor_quote_by_id.get("valid", false)) and int(armor_quote_by_id.get("total_price", 0)) > 0)
 	var grocery_repair := PricingServiceScript.quote_repair(
 		wood,
 		GameData.get_item_record("木剑"),

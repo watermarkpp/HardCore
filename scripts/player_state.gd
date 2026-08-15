@@ -1914,7 +1914,7 @@ func _active_double_weight_effect() -> bool:
 	for value: Variant in equipment.values():
 		if not value is Dictionary or value.is_empty() or not _has_positive_raw_durability(value):
 			continue
-		var item := GameData.get_item_record(str(value.get("name", "")))
+		var item := GameData.get_item_record(value)
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if str(special.get("id", "")) == "double_weight" and bool(special.get("runtime", false)):
 			return true
@@ -1992,7 +1992,7 @@ func _equipment_instance_from_saved(saved_value: Variant) -> Dictionary:
 func _ensure_raw_durability_fields(instance: Dictionary) -> bool:
 	if instance.is_empty():
 		return false
-	var catalog := GameData.get_item_record(str(instance.get("name", "")))
+	var catalog := GameData.get_item_record(instance)
 	var catalog_maximum := maxi(1, int(catalog.get("maxDurability", 1)))
 	var migrated := false
 	if not instance.has("max_durability_raw"):
@@ -2076,7 +2076,7 @@ func _migrate_item_collection_durability(records: Array) -> bool:
 	var migrated := false
 	for value: Variant in records:
 		if value is Dictionary and not value.is_empty():
-			var catalog := GameData.get_item_record(str(value.get("name", "")))
+			var catalog := GameData.get_item_record(value)
 			if str(catalog.get("kind", "")) == "equipment":
 				migrated = _ensure_raw_durability_fields(value) or migrated
 	return migrated
@@ -2251,7 +2251,7 @@ func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
 	for key: String in ["weapon_strong", "WeaponStrong", "strong", "Strong"]:
 		if weapon.has(key):
 			return maxi(0, int(weapon.get(key, 0)))
-	var catalog := GameData.get_item_record(str(weapon.get("name", "")))
+	var catalog := GameData.get_item_record(weapon)
 	for key: String in ["weaponStrong", "WeaponStrong", "strong", "Strong"]:
 		if catalog.has(key):
 			return maxi(0, int(catalog.get(key, 0)))
@@ -2282,10 +2282,9 @@ func _repair_plan(context := {}) -> Dictionary:
 		# display compatibility fields are not allowed to overwrite it here.
 		var quote_instance: Dictionary = (equipped as Dictionary).duplicate(true)
 		_ensure_raw_durability_fields(quote_instance)
-		var item_name := str(quote_instance.get("name", ""))
 		var quote := PricingServiceScript.quote_repair(
-			GameData.get_item_price_record(item_name),
-			GameData.get_item_record(item_name),
+			GameData.get_item_price_record(quote_instance),
+			GameData.get_item_record(quote_instance),
 			quote_instance,
 			context
 		)
@@ -2328,9 +2327,8 @@ func repair_all_equipment(context := {}) -> String:
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
 		_ensure_raw_durability_fields(equipped)
-		var item_name := str(equipped.get("name", ""))
-		var price_record := GameData.get_item_price_record(item_name)
-		var catalog := GameData.get_item_record(item_name)
+		var price_record := GameData.get_item_price_record(equipped)
+		var catalog := GameData.get_item_record(equipped)
 		var current_raw := int(equipped.get("durability_raw", 0))
 		var maximum_raw := maxi(1, int(equipped.get("max_durability_raw", 1)))
 		var missing_raw := maximum_raw - clampi(current_raw, 0, maximum_raw)
