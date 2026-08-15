@@ -43,6 +43,16 @@ func _run() -> void:
 	add_child(launcher)
 	await get_tree().process_frame
 	assert(not launcher.launch_loading_overlay.visible, "Loading must start hidden")
+	assert(launcher._launch_scene_preload_path == launcher.launch_scene_path, "hall did not defer a preload for the launch scene")
+	assert(launcher._launch_scene_preload_request_count == 1, "hall must issue exactly one threaded preload request")
+	assert(str(launcher._launch_scene_preload_state) in ["requested", "ready"], "launch preload did not enter a valid threaded state")
+	var preload_wait_frames := 0
+	while str(launcher._launch_scene_preload_state) == "requested" and preload_wait_frames < 600:
+		await get_tree().process_frame
+		preload_wait_frames += 1
+	assert(str(launcher._launch_scene_preload_state) == "ready", "threaded launch preload did not complete")
+	assert(launcher._launch_scene_preload_resource is PackedScene, "threaded launch preload did not cache a PackedScene")
+	var cached_launch_scene: PackedScene = launcher._launch_scene_preload_resource
 
 	# Reset the authority marker after the hall has selected its default profile.
 	# The launch call must not hydrate it again until Loading has been made visible
@@ -68,6 +78,8 @@ func _run() -> void:
 	assert(PlayerState.active_profile_id == profile_id, "profile hydration did not run beneath Loading")
 	assert(launcher.last_launch_request.main_profile_id == profile_id, "launch request was not completed")
 	assert(launcher.launch_loading_overlay.visible, "Loading disappeared before scene handoff")
+	assert(launcher._launch_scene_preload_resource == cached_launch_scene, "launch did not reuse the cached PackedScene")
+	assert(launcher._launch_scene_preload_request_count == 1, "cached launch issued a duplicate preload request")
 
 	# A failed launch restores the control instead of trapping the player behind
 	# Loading. Use a fresh launcher so the successful test remains immutable.
@@ -94,6 +106,8 @@ func _run() -> void:
 	missing_scene_launcher.launch_scene_path = "res://scenes/__missing_character_launch__.tscn"
 	add_child(missing_scene_launcher)
 	await get_tree().process_frame
+	assert(str(missing_scene_launcher._launch_scene_preload_state) == "failed", "missing launch scene did not fail its background preload")
+	assert(missing_scene_launcher._launch_scene_preload_request_count == 0, "missing launch scene must fail before issuing a threaded request")
 	missing_scene_launcher.selected_main_profile_id = profile_id
 	missing_scene_launcher._enter_selected_character()
 	assert(missing_scene_launcher.launch_loading_overlay.visible, "scene failure did not show Loading first")
@@ -111,7 +125,7 @@ func _run() -> void:
 	PlayerState.test_mode = old_test_mode
 	PlayerState.active_profile_id = ""
 	_cleanup()
-	print("CHARACTER_SELECT_LAUNCH_LOADING_PASS: cold hall theme %.3f ms, shared reuse, Loading-first hydration, and failure recovery" % first_hall_theme_ms)
+	print("CHARACTER_SELECT_LAUNCH_LOADING_PASS: cold hall theme %.3f ms, threaded preload/cached PackedScene handoff, Loading-first hydration, and failure recovery" % first_hall_theme_ms)
 	get_tree().quit(0)
 
 

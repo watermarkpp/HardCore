@@ -18,6 +18,11 @@ const FIXED_CHARACTER_GENDER := "男"
 const ROSTER_DRAG_THRESHOLD := 12.0
 const ROSTER_PRESS_SUPPRESSION_MSEC := 220
 const AI_TEAMMATE_AVAILABLE := false
+const LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC := 30000
+const LAUNCH_PRELOAD_IDLE := &"idle"
+const LAUNCH_PRELOAD_REQUESTED := &"requested"
+const LAUNCH_PRELOAD_READY := &"ready"
+const LAUNCH_PRELOAD_FAILED := &"failed"
 const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
 const PROFESSION_PRESENTATION := {
 	"战士": {
@@ -75,6 +80,11 @@ var _roster_drag_touch_index := -1
 var _roster_suppress_press_until_msec := 0
 var _launch_in_progress := false
 var launch_scene_path := "res://scenes/main.tscn"
+var _launch_scene_preload_path := ""
+var _launch_scene_preload_state: StringName = LAUNCH_PRELOAD_IDLE
+var _launch_scene_preload_resource: PackedScene
+var _launch_scene_preload_request_count := 0
+var _launch_scene_preload_generation := 0
 
 
 func _ready() -> void:
@@ -92,7 +102,87 @@ func _ready() -> void:
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
 	_restore_character_action_visual_contract()
 	call_deferred("_restore_character_action_visual_contract")
+	# The request itself is deferred until the complete hall has entered the tree.
+	# Main-scene parsing can then overlap the player's stable hall interaction.
+	call_deferred("_request_launch_scene_preload")
 
+
+func _request_launch_scene_preload() -> void:
+	var requested_path := launch_scene_path
+	if (
+		requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_state in [LAUNCH_PRELOAD_REQUESTED, LAUNCH_PRELOAD_READY]
+	):
+		return
+	_launch_scene_preload_generation += 1
+	var generation := _launch_scene_preload_generation
+	_launch_scene_preload_path = requested_path
+	_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
+	_launch_scene_preload_resource = null
+	if requested_path.is_empty() or not ResourceLoader.exists(requested_path, "PackedScene"):
+		_mark_launch_scene_preload_failed(ERR_FILE_NOT_FOUND, generation, requested_path)
+		return
+	_launch_scene_preload_request_count += 1
+	var request_error := ResourceLoader.load_threaded_request(requested_path, "PackedScene")
+	if request_error != OK:
+		var existing_status := ResourceLoader.load_threaded_get_status(requested_path)
+		if existing_status not in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+			_mark_launch_scene_preload_failed(request_error, generation, requested_path)
+			return
+	_launch_scene_preload_state = LAUNCH_PRELOAD_REQUESTED
+	_monitor_launch_scene_preload.call_deferred(generation, requested_path)
+
+
+func _monitor_launch_scene_preload(generation: int, requested_path: String) -> void:
+	while (
+		is_inside_tree()
+		and generation == _launch_scene_preload_generation
+		and requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_state == LAUNCH_PRELOAD_REQUESTED
+	):
+		var status := ResourceLoader.load_threaded_get_status(requested_path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource := ResourceLoader.load_threaded_get(requested_path)
+			if resource is PackedScene:
+				_launch_scene_preload_resource = resource
+				_launch_scene_preload_state = LAUNCH_PRELOAD_READY
+			else:
+				_mark_launch_scene_preload_failed(ERR_FILE_CORRUPT, generation, requested_path)
+			return
+		if status in [ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE]:
+			_mark_launch_scene_preload_failed(ERR_CANT_OPEN, generation, requested_path)
+			return
+		await get_tree().process_frame
+
+
+func _mark_launch_scene_preload_failed(_error: int, generation: int, requested_path: String) -> void:
+	if generation != _launch_scene_preload_generation or requested_path != _launch_scene_preload_path:
+		return
+	_launch_scene_preload_resource = null
+	_launch_scene_preload_state = LAUNCH_PRELOAD_FAILED
+
+
+func _wait_for_launch_scene_preload() -> PackedScene:
+	_request_launch_scene_preload()
+	var requested_path := launch_scene_path
+	var generation := _launch_scene_preload_generation
+	var deadline_msec := Time.get_ticks_msec() + LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC
+	while (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_REQUESTED
+		and requested_path == _launch_scene_preload_path
+		and generation == _launch_scene_preload_generation
+	):
+		if Time.get_ticks_msec() >= deadline_msec:
+			_mark_launch_scene_preload_failed(ERR_TIMEOUT, generation, requested_path)
+			break
+		await get_tree().process_frame
+	if (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_READY
+		and requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_resource != null
+	):
+		return _launch_scene_preload_resource
+	return null
 
 func _input(event: InputEvent) -> void:
 	if profile_scroll == null or not is_instance_valid(profile_scroll):
@@ -741,12 +831,13 @@ func _enter_selected_character() -> void:
 	last_launch_request = build_launch_request()
 	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
 	character_launch_requested.emit(last_launch_request.duplicate(true))
-	if suppress_scene_change_for_test:
-		return
-	if not ResourceLoader.exists(launch_scene_path):
+	var launch_scene := await _wait_for_launch_scene_preload()
+	if launch_scene == null:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
 		return
-	var scene_error := get_tree().change_scene_to_file(launch_scene_path)
+	if suppress_scene_change_for_test:
+		return
+	var scene_error := get_tree().change_scene_to_packed(launch_scene)
 	if scene_error != OK:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
 
