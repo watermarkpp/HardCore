@@ -22,7 +22,15 @@ class MockGame:
 		return []
 
 
-func _primary_alpha_bbox_medians_x(appearance_value: int) -> Array:
+const BODY_LUMINANCE_THRESHOLD := 10.0 / 255.0
+
+
+func _is_body_confidence_pixel(pixel: Color) -> bool:
+	var luminance := 0.2126 * pixel.r + 0.7152 * pixel.g + 0.0722 * pixel.b
+	return pixel.a > 0.0 and luminance > BODY_LUMINANCE_THRESHOLD
+
+
+func _primary_body_bbox_medians_x(appearance_value: int) -> Array:
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/classic_npc_art_sources.json"))
 	var config: Dictionary = manifest["appearances"][str(appearance_value)]
 	var frame_size_values: Array = config["frameSize"]
@@ -40,15 +48,37 @@ func _primary_alpha_bbox_medians_x(appearance_value: int) -> Array:
 			var max_x := -1
 			for y in range(frame_height):
 				for x in range(frame_width):
-					if image.get_pixel(frame * frame_width + x, logical_row * frame_height + y).a > 0.0:
+					if _is_body_confidence_pixel(image.get_pixel(frame * frame_width + x, logical_row * frame_height + y)):
 						min_x = mini(min_x, x)
 						max_x = maxi(max_x, x)
-			assert(max_x >= min_x, "primary NPC atlas contains an empty idle cell")
+			assert(max_x >= min_x, "primary NPC atlas contains an empty body-confidence idle cell")
 			samples.append((float(min_x) + float(max_x)) * 0.5 - foot_anchor_x)
 		samples.sort()
 		var midpoint := samples.size() / 2
 		direction_medians.append((float(samples[midpoint - 1]) + float(samples[midpoint])) * 0.5 if samples.size() % 2 == 0 else float(samples[midpoint]))
 	return direction_medians
+
+
+func _primary_frame_bbox_center_x(appearance_value: int, direction_index: int, frame_index: int, body_only: bool) -> float:
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/classic_npc_art_sources.json"))
+	var config: Dictionary = manifest["appearances"][str(appearance_value)]
+	var frame_size_values: Array = config["frameSize"]
+	var foot_anchor_values: Array = config["footAnchor"]
+	var frame_width := int(frame_size_values[0])
+	var frame_height := int(frame_size_values[1])
+	var foot_anchor_x := float(foot_anchor_values[0])
+	var image := Image.load_from_file(ProjectSettings.globalize_path(str(config["path"])))
+	var min_x := frame_width
+	var max_x := -1
+	for y in range(frame_height):
+		for x in range(frame_width):
+			var pixel := image.get_pixel(frame_index * frame_width + x, direction_index * frame_height + y)
+			if pixel.a <= 0.0 or (body_only and not _is_body_confidence_pixel(pixel)):
+				continue
+			min_x = mini(min_x, x)
+			max_x = maxi(max_x, x)
+	assert(max_x >= min_x, "primary NPC atlas contains an empty audited cell")
+	return (float(min_x) + float(max_x)) * 0.5 - foot_anchor_x
 
 
 func _ready() -> void:
@@ -83,22 +113,33 @@ func _run() -> void:
 		assert(npc.uses_final_art(), "NPC没有加载主客户端Npc.wil运行图集")
 
 	var expected_visible_centers := {
-		0: [36.25, 40.25, 40.25, 28.0, 33.0, 36.25, 32.25, 32.25],
-		1: [36.0, 37.0, 37.0, 32.5, 37.75, 42.75, 33.5, 33.5],
-		2: [35.25, 44.0, 44.0, 25.5, 36.25, 44.5, 28.75, 28.75],
-		3: [38.0, 34.25, 34.25, 37.5, 39.0, 40.5, 39.5, 39.5],
-		8: [37.25, 37.0, 37.0, 33.25, 34.75, 36.5, 34.5, 34.5],
-		10: [32.75, 35.75, 35.75, 33.75, 35.25, 38.5, 33.5, 33.5],
-		11: [34.5, 34.25, 34.25, 35.25, 35.0, 34.25, 29.25, 29.25],
-		14: [23.5, 17.5, 17.5, 30.5, 23.5, 17.5, 30.5, 30.5],
-		15: [45.0, 45.5, 45.5, 29.5, 27.0, 35.25, 33.75, 33.75],
+		0: [20.75, 25.75, 25.75, 14.75, 19.25, 22.5, 16.25, 16.25],
+		1: [23.75, 26.0, 26.0, 19.5, 23.25, 27.75, 20.5, 20.5],
+		2: [23.5, 30.5, 30.5, 14.75, 26.0, 32.75, 17.5, 17.5],
+		3: [23.0, 21.0, 21.0, 22.0, 23.0, 23.75, 25.0, 25.0],
+		8: [23.25, 23.0, 23.0, 18.75, 20.75, 22.25, 20.0, 20.0],
+		10: [23.0, 25.25, 25.25, 21.0, 23.0, 24.75, 21.25, 21.25],
+		11: [23.75, 24.5, 24.5, 21.25, 24.5, 24.5, 15.0, 15.0],
+		14: [23.5, 15.5, 15.5, 30.5, 23.5, 15.5, 30.5, 30.5],
+		15: [22.5, 30.0, 30.0, 18.25, 12.5, 26.0, 16.5, 16.5],
 	}
 	for appearance_value in expected_visible_centers:
-		var audited_centers := _primary_alpha_bbox_medians_x(int(appearance_value))
+		var audited_centers := _primary_body_bbox_medians_x(int(appearance_value))
 		var expected_centers: Array = expected_visible_centers[appearance_value]
 		assert(audited_centers.size() == 8, "primary NPC atlas direction audit is incomplete")
 		for direction_index in range(8):
-			assert(is_equal_approx(float(audited_centers[direction_index]), float(expected_centers[direction_index])), "frozen NPC visible-center table diverged from primary atlas alpha audit")
+			assert(is_equal_approx(float(audited_centers[direction_index]), float(expected_centers[direction_index])), "frozen NPC visible-center table diverged from primary atlas body-confidence audit")
+
+	var appearance0_shadow_center := _primary_frame_bbox_center_x(0, 7, 0, false)
+	var appearance0_body_center := _primary_frame_bbox_center_x(0, 7, 0, true)
+	assert(is_equal_approx(appearance0_shadow_center, 34.5), "appearance 0 dir 7 alpha audit lost the source shadow evidence")
+	assert(is_equal_approx(appearance0_body_center, 16.5), "appearance 0 dir 7 body-confidence audit changed")
+	assert(abs(appearance0_shadow_center - appearance0_body_center) > 1.0, "appearance 0 dir 7 shadow pixels were not excluded")
+	var appearance15_shadow_center := _primary_frame_bbox_center_x(15, 5, 0, false)
+	var appearance15_body_center := _primary_frame_bbox_center_x(15, 5, 0, true)
+	assert(is_equal_approx(appearance15_shadow_center, 37.0), "appearance 15 dir 5 alpha audit lost the source shadow evidence")
+	assert(is_equal_approx(appearance15_body_center, 28.0), "appearance 15 dir 5 body-confidence audit changed")
+	assert(abs(appearance15_shadow_center - appearance15_body_center) > 1.0, "appearance 15 dir 5 shadow pixels were not excluded")
 	for npc in actors:
 		var direction_index := ArtSpec.direction_index(npc.facing)
 		var expected_visual_center_x := float(expected_visible_centers[npc.appearance][direction_index])
@@ -115,7 +156,7 @@ func _run() -> void:
 			npc.face_toward(npc.global_position + NPCActor.FACING_DIRECTIONS[direction_index])
 			var expected_center_x := float(expected_centers[direction_index])
 			var actual_center_x := npc.name_label.position.x + npc.name_label.size.x * 0.5
-			assert(is_equal_approx(actual_center_x, expected_center_x), "formal Bich NPC name center is not facing-specific alpha aligned")
+			assert(is_equal_approx(actual_center_x, expected_center_x), "formal Bich NPC name center is not facing-specific body-confidence aligned")
 			for _frame in range(4):
 				await get_tree().process_frame
 			var stable_center_x := npc.name_label.position.x + npc.name_label.size.x * 0.5
