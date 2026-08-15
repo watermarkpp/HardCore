@@ -38,6 +38,7 @@ ART_PATHS = [
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
 TEXT_HASH_SUFFIXES = {".json"}
+RUNTIME_DROP_ASCII_ALLOWLIST = {"Gold"}
 WOOma_IDS = (64, 65, 66, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77, 78, 239)
 WOOma_SLUG_BY_ID = {
     64: "wooma_soldier",
@@ -416,6 +417,62 @@ def _drop_source_evidence(record: dict[str, Any], *, role: str, tier: str | None
     }
 
 
+def _filter_runtime_drop_rows(rows: list[Any]) -> tuple[list[Any], list[str]]:
+    """Remove unresolved private ASCII item tokens from runtime profiles.
+
+    ``Gold`` is represented as an explicit currency row.  Other ASCII item
+    tokens are private-source names with no stable item authority and must not
+    leak into the canonical runtime catalog; their source evidence remains in
+    the checked-in input snapshot.
+    """
+    filtered: list[Any] = []
+    removed: list[str] = []
+    for row in rows:
+        item = str(row.get("item", "")) if isinstance(row, dict) else ""
+        if item.isascii() and item and item not in RUNTIME_DROP_ASCII_ALLOWLIST:
+            removed.append(item)
+            continue
+        filtered.append(copy.deepcopy(row))
+    return filtered, sorted(set(removed))
+
+
+def validate_drop_equivalence_inputs(
+    policy: dict[str, Any],
+    drop_overrides: dict[str, Any],
+    drop_source_by_id: dict[str, Any],
+) -> list[str]:
+    """Ensure the Wooma cross-distribution decision is explicit and aligned."""
+    errors: list[str] = []
+    expected_ids = {"68": 66, "69": 67}
+    for raw_id, canonical_id in expected_ids.items():
+        policy_entry = policy.get("wooma_matrix", {}).get(raw_id, {})
+        policy_equivalence = policy_entry.get("drop_equivalence_override", {}) if isinstance(policy_entry, dict) else {}
+        override = drop_overrides.get(raw_id, {})
+        override_equivalence = override.get("auxiliary_2_equivalence", {}) if isinstance(override, dict) else {}
+        selected_source = override.get("selected_source", {}) if isinstance(override, dict) else {}
+        if policy_equivalence.get("strategy") != "cross_distribution_equivalence" or policy_equivalence.get("equivalence_status") != "byte_exact_cross_distribution":
+            errors.append(f"Wooma monster_id={raw_id} policy lacks explicit cross-distribution equivalence")
+        if override_equivalence.get("strategy") != policy_equivalence.get("strategy") or override_equivalence.get("status") != policy_equivalence.get("equivalence_status"):
+            errors.append(f"Wooma monster_id={raw_id} override/policy equivalence strategy mismatch")
+        if int(override_equivalence.get("canonical_source_monster_id", -1)) != canonical_id:
+            errors.append(f"Wooma monster_id={raw_id} override canonical source mismatch")
+        policy_pairs = policy_equivalence.get("auxiliary_2_pairs", [])
+        override_pairs = override_equivalence.get("pairs", [])
+        if policy_pairs != override_pairs:
+            errors.append(f"Wooma monster_id={raw_id} policy/override equality evidence mismatch")
+        source_record = drop_source_by_id.get(str(canonical_id), {})
+        expected_count = 58 if canonical_id == 66 else 62
+        if not isinstance(source_record, dict) or int(source_record.get("line_count", 0)) != expected_count:
+            errors.append(f"Wooma monster_id={raw_id} canonical source {canonical_id} row count mismatch")
+        if int(selected_source.get("canonical_source_monster_id", -1)) != canonical_id:
+            errors.append(f"Wooma monster_id={raw_id} selected source canonical ID mismatch")
+        if str(selected_source.get("sha256", "")).upper() != str(source_record.get("source_sha256", "")).upper():
+            errors.append(f"Wooma monster_id={raw_id} selected source hash mismatch")
+        if int(selected_source.get("row_count", 0)) != expected_count:
+            errors.append(f"Wooma monster_id={raw_id} selected source row count mismatch")
+    return errors
+
+
 def drop_for(
     monster_id: int,
     drop_source_by_id: dict[str, Any],
@@ -424,8 +481,9 @@ def drop_for(
     """Build a complete drop profile from ID-keyed inputs only.
 
     Empty primary tables are retained as evidence and may descend through an
-    explicit ID override (for 68/69 this records the auxiliary-1 empty file
-    before selecting the non-empty Jev auxiliary-2 table).  No source name,
+    explicit ID override.  For Wooma 68/69, the override records the
+    auxiliary-1 empty file and the byte-exact auxiliary-2 equivalence, then
+    copies the ID-keyed primary rows for stable 66/67.  No source name,
     base-name, suffix, alias, or community runtime map participates.
     """
     profile_id = f"drop.{monster_id}"
@@ -439,8 +497,88 @@ def drop_for(
     override = drop_overrides.get(str(monster_id), {})
     if not isinstance(override, dict):
         override = {}
+    primary_exact = override.get("primary_exact_evidence", {})
+    if isinstance(primary_exact, dict) and primary_exact:
+        evidence[0] = {
+            "distribution": str(primary_exact.get("distribution", "")),
+            "tier": str(primary_exact.get("tier", "primary")),
+            "original_path": str(primary_exact.get("original_path", "")),
+            "sha256": str(primary_exact.get("sha256", "")),
+            "role": "drop_profile_primary_exact_missing",
+            "row_count": int(primary_exact.get("row_count", 0)),
+            "resolution": str(primary_exact.get("resolution", "")),
+        }
     selected_source = override.get("selected_source", {})
     selected_rows = override.get("rows", [])
+    equivalence = override.get("auxiliary_2_equivalence", {})
+    canonical_source_id = (
+        selected_source.get("canonical_source_monster_id")
+        if isinstance(selected_source, dict)
+        else None
+    )
+    if canonical_source_id is None and isinstance(equivalence, dict):
+        canonical_source_id = equivalence.get("canonical_source_monster_id")
+    if canonical_source_id is not None:
+        canonical_record = drop_source_by_id.get(str(int(canonical_source_id)), {})
+        canonical_rows = canonical_record.get("rows", []) if isinstance(canonical_record, dict) else []
+        if not isinstance(canonical_rows, list):
+            canonical_rows = []
+        if canonical_rows:
+            upstream_empty = override.get("primary_empty_evidence", {})
+            if isinstance(upstream_empty, dict):
+                evidence.append(
+                    {
+                        "distribution": str(upstream_empty.get("distribution", "")),
+                        "tier": str(upstream_empty.get("tier", "")),
+                        "original_path": str(upstream_empty.get("original_path", "")),
+                        "sha256": str(upstream_empty.get("sha256", "")),
+                        "role": "drop_profile_auxiliary_empty",
+                        "row_count": int(upstream_empty.get("row_count", 0)),
+                        "resolution": str(upstream_empty.get("resolution", "")),
+                    }
+                )
+            if isinstance(equivalence, dict) and equivalence:
+                pairs = equivalence.get("pairs", [])
+                first_pair = pairs[0] if isinstance(pairs, list) and pairs and isinstance(pairs[0], dict) else {}
+                evidence.append(
+                    {
+                        "distribution": str(first_pair.get("distribution", "")),
+                        "tier": "auxiliary_2",
+                        "original_path": str(first_pair.get("warrior_path", "")),
+                        "sha256": str(first_pair.get("warrior_sha256", "")),
+                        "role": "drop_profile_auxiliary_2_equivalence",
+                        "row_count": len(canonical_rows),
+                        "resolution": str(equivalence.get("status", "")),
+                        "strategy": str(equivalence.get("strategy", "")),
+                        "canonical_source_monster_id": int(canonical_source_id),
+                        "pairs": copy.deepcopy(pairs),
+                    }
+                )
+            selected_evidence = {
+                "distribution": str(selected_source.get("distribution", "")),
+                "tier": str(selected_source.get("tier", "primary")),
+                "original_path": str(selected_source.get("original_path", "")),
+                "sha256": str(selected_source.get("sha256", "")),
+                "role": "drop_profile_selected_canonical_source",
+                "row_count": int(selected_source.get("row_count", len(canonical_rows))),
+                "resolution": str(selected_source.get("resolution", "")),
+                "canonical_source_monster_id": int(canonical_source_id),
+            }
+            evidence.append(selected_evidence)
+            rows, filtered_tokens = _filter_runtime_drop_rows(canonical_rows)
+            for row in rows:
+                if isinstance(row, dict):
+                    row.setdefault("item_resolution_status", "unresolved_token")
+            if filtered_tokens:
+                selected_evidence["filtered_private_ascii_count"] = len(filtered_tokens)
+            return profile_id, {
+                "drop_profile_id": profile_id,
+                "status": "formal_id_keyed_cross_distribution_equivalence",
+                "entries": rows,
+                "entry_count": len(rows),
+                "source_evidence": {"sources": evidence},
+                "filtered_private_ascii_count": len(filtered_tokens),
+            }
     if isinstance(selected_source, dict) and isinstance(selected_rows, list) and selected_rows:
         upstream_empty = override.get("primary_empty_evidence", {})
         if isinstance(upstream_empty, dict):
@@ -466,26 +604,34 @@ def drop_for(
                 "resolution": str(selected_source.get("resolution", "")),
             }
         )
+        rows, filtered_tokens = _filter_runtime_drop_rows(selected_rows)
+        if filtered_tokens:
+            evidence[-1]["filtered_private_ascii_count"] = len(filtered_tokens)
         return profile_id, {
             "drop_profile_id": profile_id,
             "status": "formal_id_keyed_auxiliary",
-            "entries": copy.deepcopy(selected_rows),
-            "entry_count": len(selected_rows),
+            "entries": rows,
+            "entry_count": len(rows),
             "source_evidence": {"sources": evidence},
+            "filtered_private_ascii_count": len(filtered_tokens),
         }
     if primary_rows:
         # Preserve every parsed row, including duplicate item/chance rows.
-        rows = copy.deepcopy(primary_rows)
+        rows, filtered_tokens = _filter_runtime_drop_rows(primary_rows)
         for row in rows:
             if isinstance(row, dict):
                 row.setdefault("item_resolution_status", "unresolved_token")
-        evidence[0]["row_count"] = len(rows)
+        evidence[0]["source_row_count"] = len(primary_rows)
+        evidence[0]["output_row_count"] = len(rows)
+        if filtered_tokens:
+            evidence[0]["filtered_private_ascii_count"] = len(filtered_tokens)
         return profile_id, {
             "drop_profile_id": profile_id,
             "status": "formal_id_keyed_primary",
             "entries": rows,
             "entry_count": len(rows),
             "source_evidence": {"sources": evidence},
+            "filtered_private_ascii_count": len(filtered_tokens),
         }
     return profile_id, {
         "drop_profile_id": profile_id,
@@ -493,6 +639,7 @@ def drop_for(
         "entries": [],
         "entry_count": 0,
         "source_evidence": {"sources": evidence},
+        "filtered_private_ascii_count": 0,
     }
 
 
@@ -511,6 +658,9 @@ def build_catalog() -> dict[str, Any]:
         if isinstance(item, dict) and item.get("stable_monster_id") is not None
     }
     drop_overrides = drop_override_asset.get("records_by_id", {})
+    drop_equivalence_errors = validate_drop_equivalence_inputs(policy, drop_overrides, drop_source_by_id)
+    if drop_equivalence_errors:
+        raise RuntimeError("; ".join(drop_equivalence_errors))
     id_to_art, appearance_profiles, art_evidence = art_profiles()
     records = vanilla.get("records", [])
     entries: list[dict[str, Any]] = []
@@ -970,6 +1120,10 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                 entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed")
             ):
                 errors.append(f"monster_id={monster_id} missing hostile drop marked allowed")
+            for row in drop_profile.get("entries", []):
+                item = str(row.get("item", "")) if isinstance(row, dict) else ""
+                if item.isascii() and item and item not in RUNTIME_DROP_ASCII_ALLOWLIST:
+                    errors.append(f"monster_id={monster_id} runtime drop contains unresolved ASCII item token {item}")
         if entry.get("classification") == "non_hostile":
             exemption = entry.get("drop_policy", {}).get("exemption")
             if not isinstance(exemption, dict) or not exemption.get("allowed") or not exemption.get("reason"):
@@ -1001,6 +1155,29 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         evidence = matrix[str(monster_id)].get("source_evidence", {}).get("combat_auxiliary", {})
         if not all(field in evidence for field in ("level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image")):
             errors.append(f"Wooma monster_id={monster_id} auxiliary fields lack per-field evidence")
+        expected_drop_count = 58 if monster_id == 68 else 62
+        drop = catalog.get("drop_profiles", {}).get(str(matrix[str(monster_id)].get("drop_profile_id", "")), {})
+        if int(drop.get("entry_count", 0)) != expected_drop_count:
+            errors.append(f"Wooma monster_id={monster_id} canonical drop count={drop.get('entry_count')} expected {expected_drop_count}")
+        if drop.get("status") != "formal_id_keyed_cross_distribution_equivalence":
+            errors.append(f"Wooma monster_id={monster_id} drop did not use cross-distribution equivalence")
+        sources = drop.get("source_evidence", {}).get("sources", [])
+        roles = [str(source.get("role", "")) for source in sources if isinstance(source, dict)]
+        for required_role in ("drop_profile_primary_exact_missing", "drop_profile_auxiliary_empty", "drop_profile_auxiliary_2_equivalence", "drop_profile_selected_canonical_source"):
+            if required_role not in roles:
+                errors.append(f"Wooma monster_id={monster_id} drop evidence missing {required_role}")
+        equivalence = next((source for source in sources if isinstance(source, dict) and source.get("role") == "drop_profile_auxiliary_2_equivalence"), {})
+        pairs = equivalence.get("pairs", []) if isinstance(equivalence, dict) else []
+        if len(pairs) != 2 or any(not isinstance(pair, dict) or not pair.get("byte_equal") or pair.get("warrior_sha256") != pair.get("fighter_sha256") for pair in pairs):
+            errors.append(f"Wooma monster_id={monster_id} auxiliary-2 equality evidence incomplete")
+        selected = next((source for source in sources if isinstance(source, dict) and source.get("role") == "drop_profile_selected_canonical_source"), {})
+        expected_canonical_source = 66 if monster_id == 68 else 67
+        if int(selected.get("canonical_source_monster_id", -1)) != expected_canonical_source:
+            errors.append(f"Wooma monster_id={monster_id} selected canonical source ID mismatch")
+        for row in drop.get("entries", []):
+            item = str(row.get("item", "")) if isinstance(row, dict) else ""
+            if item.isascii() and item != "Gold":
+                errors.append(f"Wooma monster_id={monster_id} contains non-canonical ASCII item token {item}")
     exact_service_expectations = {
         64: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28},
         66: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 15, "attack_max": 28},
