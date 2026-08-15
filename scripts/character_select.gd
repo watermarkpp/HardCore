@@ -85,6 +85,7 @@ var _launch_scene_preload_state: StringName = LAUNCH_PRELOAD_IDLE
 var _launch_scene_preload_resource: PackedScene
 var _launch_scene_preload_request_count := 0
 var _launch_scene_preload_generation := 0
+@export var force_launch_preload_for_test := false
 
 
 func _ready() -> void:
@@ -104,7 +105,8 @@ func _ready() -> void:
 	call_deferred("_restore_character_action_visual_contract")
 	# The request itself is deferred until the complete hall has entered the tree.
 	# Main-scene parsing can then overlap the player's stable hall interaction.
-	call_deferred("_request_launch_scene_preload")
+	if not PlayerState.test_mode or force_launch_preload_for_test:
+		call_deferred("_request_launch_scene_preload")
 
 
 func _request_launch_scene_preload() -> void:
