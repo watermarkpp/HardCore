@@ -34,6 +34,10 @@ func _run() -> void:
 	var entries_by_id: Dictionary = catalog.get("entries_by_id", {})
 	var appearance_profiles: Dictionary = catalog.get("appearance_profiles", {})
 	var drop_profiles: Dictionary = catalog.get("drop_profiles", {})
+	for source_path: String in catalog.get("sources", {}):
+		var source_evidence: Dictionary = catalog.get("sources", {}).get(source_path, {})
+		var expected_hash_mode := "lf_text" if source_path.to_lower().ends_with(".json") else "raw_bytes"
+		assert(source_evidence.get("hash_normalization", "") == expected_hash_mode, "source hash normalization mismatch for %s" % source_path)
 	assert(entries.size() == 214, "canonical catalog must contain 214 stable identities")
 	assert(entries_by_id.size() == 214, "entries_by_id must close all 214 identities")
 	var seen_ids: Dictionary = {}
