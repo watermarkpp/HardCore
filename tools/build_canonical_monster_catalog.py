@@ -37,6 +37,7 @@ ART_PATHS = [
 ]
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
+TEXT_HASH_SUFFIXES = {".json"}
 WOOma_IDS = (64, 65, 66, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77, 78, 239)
 WOOma_SLUG_BY_ID = {
     64: "wooma_soldier",
@@ -68,8 +69,26 @@ def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest().upper()
 
 
+def hash_normalization_for(path: Path) -> str:
+    """Return the stable hash contract for a checked-in source file.
+
+    Git may materialize JSON as LF or CRLF depending on the checkout. JSON
+    source evidence is therefore hashed from UTF-8 text with all line endings
+    normalized to LF. Binary assets (including PNG atlases) retain raw bytes.
+    """
+    return "lf_text" if path.suffix.lower() in TEXT_HASH_SUFFIXES else "raw_bytes"
+
+
+def normalized_hash_bytes(path: Path) -> bytes:
+    data = path.read_bytes()
+    if hash_normalization_for(path) != "lf_text":
+        return data
+    text = data.decode("utf-8")
+    return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+
+
 def sha256_file(path: Path) -> str:
-    return sha256_bytes(path.read_bytes())
+    return sha256_bytes(normalized_hash_bytes(path))
 
 
 def load_json(path: Path) -> Any:
@@ -93,6 +112,7 @@ def source_ref(
         "tier": tier,
         "original_path": path.relative_to(ROOT).as_posix(),
         "sha256": sha256_file(path),
+        "hash_normalization": hash_normalization_for(path),
         "role": role,
     }
     if field:
@@ -239,6 +259,7 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
             "status": profiles[profile_id]["status"],
             "manifest": manifest_name,
             "manifest_sha256": sha256_file(manifest_path),
+            "manifest_hash_normalization": hash_normalization_for(manifest_path),
             "mapping_source": mapping.get("mappingSource", ""),
             "mapping_confidence": mapping.get("mappingConfidence", ""),
         }
@@ -832,7 +853,11 @@ def build_catalog() -> dict[str, Any]:
             "alias_fallback": False,
         },
         "sources": {
-            path.relative_to(ROOT).as_posix(): {"sha256": sha256_file(path), "role": "generator_input"}
+            path.relative_to(ROOT).as_posix(): {
+                "sha256": sha256_file(path),
+                "hash_normalization": hash_normalization_for(path),
+                "role": "generator_input",
+            }
             for path in source_files
             if path.is_file()
         },
@@ -872,6 +897,21 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     entries = catalog.get("entries", [])
     if len(entries) != 214:
         errors.append(f"identity_count={len(entries)} expected 214")
+    source_index = catalog.get("sources", {})
+    if not isinstance(source_index, dict):
+        errors.append("sources index is not a dictionary")
+        source_index = {}
+    for source_path, source_evidence in source_index.items():
+        if not isinstance(source_evidence, dict):
+            errors.append(f"source {source_path} evidence is not a dictionary")
+            continue
+        expected_hash_mode = (
+            "lf_text" if str(source_path).lower().endswith(".json") else "raw_bytes"
+        )
+        if source_evidence.get("hash_normalization") != expected_hash_mode:
+            errors.append(
+                f"source {source_path} hash_normalization={source_evidence.get('hash_normalization')} expected {expected_hash_mode}"
+            )
     ids = [entry.get("monster_id") for entry in entries if isinstance(entry, dict)]
     if len(ids) != len(set(ids)):
         errors.append("duplicate monster_id")
