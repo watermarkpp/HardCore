@@ -55,6 +55,11 @@ var safe_polygon_points: Array[Vector2i] = []
 var semantic_kind_option: OptionButton
 var semantic_content_id: LineEdit
 var semantic_content_option: OptionButton
+var monster_picker_button: Button
+var monster_picker_popup: PanelContainer
+var monster_picker_list: ItemList
+var monster_picker_shield: Button
+var monster_picker_entries: Array[Dictionary] = []
 var semantic_display_name: LineEdit
 var semantic_target_map: LineEdit
 var semantic_target_entrance: LineEdit
@@ -237,6 +242,7 @@ func _build_ui() -> void:
 	sidebar.add_child(semantic_kind_option)
 	var content_label := Label.new(); content_label.text = "NPC / 怪物 / Boss / 特殊地图目录"; sidebar.add_child(content_label)
 	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
+	_build_monster_picker()
 	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size = Vector2(0, 150); semantic_catalog_tree.size_flags_horizontal = Control.SIZE_EXPAND_FILL; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
 	semantic_detail_scroll = ScrollContainer.new()
 	semantic_detail_scroll.custom_minimum_size = Vector2(0, 180)
@@ -1653,24 +1659,20 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 		safe_polygon_points.clear()
 		if preview != null:
 			preview.set_semantic_polygon_draft(safe_polygon_points)
+	_close_monster_picker()
+	var is_monster := kind in ["monster_spawn", "boss_spawn", "special_monster"]
+	var is_npc := kind == "npc"
 	semantic_content_option.clear()
-	var catalog_kind := "special_monster" if kind == "special_monster" else kind
-	for entry: Dictionary in MapEditorContentCatalogService.entries(catalog_kind, 4):
-		var detail := ""
-		if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
-			var numeric_id := int(entry.get("monster_id", -1))
-			var name := str(entry.get("display_name", entry.get("content_id", "")))
-			detail = "[%d] %s" % [numeric_id, name]
-			if not bool(entry.get("authoring_allowed", false)):
-				detail += "（不可放置）"
-			elif not bool(entry.get("runtime_ready", false)):
-				detail += "（运行时未闭环）"
-		elif kind == "npc":
-			detail = str(entry.get("display_name", entry.get("content_id", ""))) + "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
-		semantic_content_option.add_item(detail)
-		semantic_content_option.set_item_metadata(semantic_content_option.item_count - 1, entry)
-	semantic_content_option.visible = kind in ["npc", "monster_spawn", "boss_spawn", "special_monster"]
-	semantic_content_id.visible = semantic_content_option.visible
+	if is_npc:
+		for entry: Dictionary in MapEditorContentCatalogService.entries("npc", 4):
+			var detail := str(entry.get("display_name", entry.get("content_id", ""))) + "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
+			semantic_content_option.add_item(detail)
+			semantic_content_option.set_item_metadata(semantic_content_option.item_count - 1, entry)
+	elif is_monster:
+		_refresh_monster_picker_list(kind)
+	semantic_content_option.visible = is_npc
+	monster_picker_button.visible = is_monster
+	semantic_content_id.visible = is_npc or is_monster
 	semantic_display_name.visible = kind in ["map_entrance", "map_exit", "respawn_point", "safe_area", "light", "region_trigger"]
 	semantic_target_map.visible = kind == "map_exit"
 	semantic_target_entrance.visible = kind == "map_exit"
@@ -1682,15 +1684,144 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 	elif kind == "monster_spawn" and semantic_radius.value <= 0: semantic_radius.value = 3
 	if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
 		semantic_respawn.value = 60 if kind == "monster_spawn" else 1800
-	if semantic_content_option.item_count > 0:
+	if is_npc and semantic_content_option.item_count > 0:
 		semantic_content_option.select(0)
 		var first_entry: Variant = semantic_content_option.get_item_metadata(0)
 		if first_entry is Dictionary:
 			semantic_content_id.text = str(first_entry.get("content_id", ""))
-			_apply_semantic_combat_entry_defaults(kind, first_entry)
 			_refresh_semantic_detail(first_entry)
+	elif is_monster and not monster_picker_entries.is_empty():
+		_apply_monster_picker_selection(0)
 	if preview != null and activate_placement:
 		_activate_semantic_placement()
+
+
+func _build_monster_picker() -> void:
+	monster_picker_button = Button.new()
+	monster_picker_button.text = "选择怪物…"
+	monster_picker_button.tooltip_text = "点击展开怪物列表；悬浮列表项可预览完整资料"
+	monster_picker_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_picker_button.pressed.connect(_on_monster_picker_button_pressed)
+	monster_picker_button.visible = false
+	sidebar.add_child(monster_picker_button)
+
+	monster_picker_shield = Button.new()
+	monster_picker_shield.flat = true
+	monster_picker_shield.text = ""
+	monster_picker_shield.mouse_filter = Control.MOUSE_FILTER_STOP
+	monster_picker_shield.pressed.connect(_close_monster_picker)
+	monster_picker_shield.visible = false
+	monster_picker_shield.top_level = true
+	monster_picker_shield.z_index = 80
+	add_child(monster_picker_shield)
+
+	monster_picker_popup = PanelContainer.new()
+	monster_picker_popup.visible = false
+	monster_picker_popup.top_level = true
+	monster_picker_popup.z_index = 90
+	monster_picker_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	var popup_style := StyleBoxFlat.new()
+	popup_style.bg_color = Color(0.09, 0.10, 0.13, 1.0)
+	popup_style.border_color = Color(0.36, 0.42, 0.50, 1.0)
+	popup_style.set_border_width_all(1)
+	popup_style.set_corner_radius_all(4)
+	popup_style.set_content_margin_all(4)
+	monster_picker_popup.add_theme_stylebox_override("panel", popup_style)
+	monster_picker_list = ItemList.new()
+	monster_picker_list.custom_minimum_size = Vector2(320, 380)
+	monster_picker_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_picker_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	monster_picker_list.item_selected.connect(_on_monster_picker_item_selected)
+	monster_picker_popup.add_child(monster_picker_list)
+	add_child(monster_picker_popup)
+
+
+func _refresh_monster_picker_list(kind: String) -> void:
+	monster_picker_entries.clear()
+	monster_picker_list.clear()
+	var catalog_kind := "special_monster" if kind == "special_monster" else kind
+	for entry: Dictionary in MapEditorContentCatalogService.entries(catalog_kind, 4):
+		monster_picker_list.add_item(_monster_entry_label(entry))
+		monster_picker_entries.append(entry)
+
+
+func _apply_monster_picker_selection(index: int) -> void:
+	if index < 0 or index >= monster_picker_entries.size():
+		return
+	var entry := monster_picker_entries[index]
+	var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
+	monster_picker_button.text = _monster_entry_label(entry)
+	semantic_content_id.text = str(entry.get("content_id", ""))
+	_apply_semantic_combat_entry_defaults(kind, entry)
+	_refresh_semantic_detail(entry)
+
+
+func _on_monster_picker_button_pressed() -> void:
+	if monster_picker_popup.visible:
+		_close_monster_picker()
+	else:
+		_open_monster_picker()
+
+
+func _on_monster_picker_item_selected(index: int) -> void:
+	if index < 0 or index >= monster_picker_entries.size():
+		return
+	var entry := monster_picker_entries[index]
+	var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
+	_close_monster_picker()
+	_close_monster_inspector()
+	monster_hover_suppressed_id = int(entry.get("monster_id", -1))
+	_apply_monster_picker_selection(index)
+	if preview != null:
+		_activate_semantic_placement()
+	status_label.text = "已选择%s：%s；请在地图左键放置" % [_monster_catalog_name(kind), str(entry.get("display_name", ""))]
+
+
+func _open_monster_picker() -> void:
+	if monster_picker_shield != null:
+		monster_picker_shield.position = Vector2.ZERO
+		monster_picker_shield.size = get_viewport_rect().size
+		monster_picker_shield.visible = true
+	if monster_picker_popup != null:
+		monster_picker_popup.visible = true
+		_layout_monster_picker_popup()
+
+
+func _close_monster_picker() -> void:
+	if monster_picker_popup != null:
+		monster_picker_popup.visible = false
+	if monster_picker_shield != null:
+		monster_picker_shield.visible = false
+
+
+func _layout_monster_picker_popup() -> void:
+	if monster_picker_button == null or monster_picker_popup == null:
+		return
+	var viewport := get_viewport_rect().size
+	var popup_size := Vector2(330.0, 400.0)
+	var button_rect := monster_picker_button.get_global_rect()
+	var x := clampf(button_rect.position.x, 8.0, maxf(8.0, viewport.x - popup_size.x - 8.0))
+	var y := button_rect.position.y + button_rect.size.y + 4.0
+	if y + popup_size.y > viewport.y:
+		y = maxf(8.0, viewport.y - popup_size.y - 8.0)
+	monster_picker_popup.position = Vector2(x, y)
+	monster_picker_popup.size = popup_size
+
+
+func _monster_status_suffix(entry: Dictionary) -> String:
+	if not bool(entry.get("authoring_allowed", false)):
+		return "（不可布置）"
+	if not bool(entry.get("runtime_ready", false)):
+		return "（可布置｜运行时未闭环）"
+	return ""
+
+
+func _monster_entry_label(entry: Dictionary) -> String:
+	return "[%d] %s%s" % [int(entry.get("monster_id", -1)), str(entry.get("display_name", entry.get("content_id", ""))), _monster_status_suffix(entry)]
+
+
+func _monster_catalog_name(kind: String) -> String:
+	return "特殊地图怪物" if kind == "special_monster" else "怪物/Boss"
 
 
 func _refresh_semantic_catalog_tree() -> void:
@@ -1722,12 +1853,7 @@ func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
 	var name := str(entry.get("display_name", entry.get("content_id", "")))
 	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
 		return name
-	var label := "[ID %d] %s" % [numeric_id, name]
-	if not bool(entry.get("authoring_allowed", false)):
-		label += "（不可放置）"
-	elif not bool(entry.get("runtime_ready", false)):
-		label += "（运行时未闭环）"
-	return label
+	return "[ID %d] %s%s" % [numeric_id, name, _monster_status_suffix(entry)]
 
 
 func _on_semantic_catalog_selected() -> void:
@@ -1776,29 +1902,26 @@ func _process(_delta: float) -> void:
 
 
 func _poll_monster_hover() -> void:
-	if semantic_catalog_tree == null or monster_inspector_panel == null:
+	if monster_inspector_panel == null:
 		return
-	_poll_monster_hover_at(semantic_catalog_tree.get_global_mouse_position())
+	_poll_monster_hover_at(monster_inspector_panel.get_global_mouse_position())
 
 
 func _poll_monster_hover_at(mouse_global: Vector2) -> void:
-	if semantic_catalog_tree == null or monster_inspector_panel == null:
+	if monster_inspector_panel == null:
 		return
-	var tree_hover_id := -1
-	if semantic_catalog_tree.get_global_rect().has_point(mouse_global):
-		var local := mouse_global - semantic_catalog_tree.get_global_rect().position
-		tree_hover_id = _monster_id_for_item(semantic_catalog_tree.get_item_at_position(local))
+	var hovered := _hovered_monster_entry_at(mouse_global)
+	var hovered_id := int(hovered.get("monster_id", -1))
 	var panel_has_mouse := monster_inspector_panel.visible and monster_inspector_panel.get_global_rect().has_point(mouse_global)
-	if tree_hover_id > 0:
-		if tree_hover_id == monster_hover_suppressed_id:
+	if hovered_id > 0:
+		if hovered_id == monster_hover_suppressed_id:
 			# Mouse is parked on the row that was just clicked: keep the
 			# inspector hidden until the pointer leaves the row.
 			return
 		monster_hover_suppressed_id = -1
-		if tree_hover_id != _last_hovered_monster_id:
-			var item := semantic_catalog_tree.get_item_at_position(mouse_global - semantic_catalog_tree.get_global_rect().position)
-			_preview_monster_catalog_item(item)
-			_last_hovered_monster_id = tree_hover_id
+		if hovered_id != _last_hovered_monster_id:
+			_show_monster_inspector(hovered)
+			_last_hovered_monster_id = hovered_id
 		_cancel_monster_inspector_close()
 		return
 	monster_hover_suppressed_id = -1
@@ -1807,6 +1930,29 @@ func _poll_monster_hover_at(mouse_global: Vector2) -> void:
 		_cancel_monster_inspector_close()
 	else:
 		_schedule_monster_inspector_close()
+
+
+func _hovered_monster_entry_at(mouse_global: Vector2) -> Dictionary:
+	# Primary: the monster picker popup list (the user's actual selection surface).
+	if monster_picker_popup != null and monster_picker_popup.visible and monster_picker_list != null:
+		if monster_picker_list.get_global_rect().has_point(mouse_global):
+			var local := mouse_global - monster_picker_list.get_global_rect().position
+			var index := monster_picker_list.get_item_at_position(local, true)
+			if index >= 0 and index < monster_picker_entries.size():
+				return monster_picker_entries[index]
+	# Secondary: the full directory tree.
+	if semantic_catalog_tree != null:
+		if semantic_catalog_tree.get_global_rect().has_point(mouse_global):
+			var local := mouse_global - semantic_catalog_tree.get_global_rect().position
+			var item := semantic_catalog_tree.get_item_at_position(local)
+			var metadata: Variant = item.get_metadata(0) if item != null else null
+			if metadata is Dictionary:
+				var kind := str(metadata.get("kind", ""))
+				if kind in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+					var entry: Dictionary = metadata.get("entry", {})
+					if not entry.is_empty():
+						return entry
+	return {}
 
 
 func _activate_semantic_catalog_item(item: TreeItem) -> void:
@@ -1819,7 +1965,7 @@ func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	var placeable := kind == "npc" or bool(entry.get("authoring_allowed", false))
 	if is_monster and not placeable:
 		semantic_content_id.text=str(entry.get("content_id",""))
-		status_label.text="当前条目不可放置：%s"%str(entry.get("display_name",""))
+		status_label.text="当前条目不可布置：%s"%str(entry.get("display_name",""))
 		return
 	for index in semantic_kind_option.item_count:
 		if str(semantic_kind_option.get_item_metadata(index))==kind: semantic_kind_option.select(index); _on_semantic_kind_selected(index); break
