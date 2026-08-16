@@ -78,9 +78,9 @@ func _run() -> void:
 
 	_test_runtime_no_drop_rejection()
 
-	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 78, 239, 999999]:
+	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 78, 999999]:
 		var monster_id := GameData.canonical_monster_id(rejected)
-		if rejected in [78, 239, 999999]:
+		if rejected in [78, 999999]:
 			monster_id = int(rejected)
 		assert(
 			GameData.get_monster_by_id(monster_id).is_empty(),
@@ -242,7 +242,7 @@ func _test_loot_contract() -> void:
 			int(ordinary_roll.get("resolved_entry_count", 0)) > 0,
 			"ID %d has no resolvable drop" % monster_id
 		)
-	for rejected: Variant in [0, 78, 239, 999999]:
+	for rejected: Variant in [0, 78, 999999]:
 		var rejected_roll := loot_runtime.roll_monster_drops(int(rejected), rng, 6)
 		assert(not bool(rejected_roll.get("configured", false)), "rejected monster rolled drops")
 		assert(not str(rejected_roll.get("reason", "")).is_empty(), "rejected roll has no reason")

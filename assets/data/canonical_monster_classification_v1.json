@@ -152,16 +152,16 @@
     "31": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "32": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "33": {
       "classification": "elite",
@@ -227,9 +227,9 @@
     "42": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "43": {
       "classification": "ordinary",
@@ -641,9 +641,9 @@
     "103": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决"
+      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "104": {
       "classification": "ordinary",
@@ -827,9 +827,9 @@
     "127": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "128": {
       "classification": "ordinary",
@@ -1175,16 +1175,16 @@
     "166": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "167": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "168": {
       "classification": "ordinary",
@@ -1196,9 +1196,9 @@
     "169": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "170": {
       "classification": "ordinary",
@@ -1231,16 +1231,16 @@
     "174": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "175": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "176": {
       "classification": "ordinary",
@@ -1313,9 +1313,9 @@
     "185": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "186": {
       "classification": "special",
@@ -1369,9 +1369,9 @@
     "189": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "190": {
       "classification": "version_difference",
@@ -1404,9 +1404,9 @@
     "192": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "193": {
       "classification": "boss",
@@ -1570,9 +1570,9 @@
     "209": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "210": {
       "classification": "ordinary",
@@ -1591,86 +1591,86 @@
     "212": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "213": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "214": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "215": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "216": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "217": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "218": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "219": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "220": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "221": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "222": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "223": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "224": {
       "classification": "boss",
@@ -1761,9 +1761,9 @@
     "234": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "235": {
       "classification": "boss",
@@ -1787,30 +1787,30 @@
     "236": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "237": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "238": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "240": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决"
+      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
     },
     "241": {
       "classification": "special",

@@ -53,7 +53,7 @@ func _run() -> void:
 	# Explicitly unresolved Wooma records remain inspectable but cannot spawn.
 	assert(MonsterIdentityScript.require_catalog_entry(77, "runtime").is_empty(), "Wooma 77 unresolved art must be runtime-disabled")
 	assert(MonsterIdentityScript.require_catalog_entry(78, "editor").is_empty(), "Wooma 78 version difference must be editor-disabled")
-	assert(MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 missing drops/art must be runtime-disabled")
+	assert(not MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must be runtime-enabled after R2 combat closure")
 	assert(MonsterIdentityScript.catalog_entry(239).get("classification", "") == "boss", "Wooma 239 must remain an independent boss identity")
 
 	print("MONSTER_ID_CANONICAL_CONTRACT_PASS: id_only=1 caller_boss_ignored=1 fail_closed=1")

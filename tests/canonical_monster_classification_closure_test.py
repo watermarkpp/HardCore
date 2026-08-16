@@ -49,7 +49,7 @@ def main() -> None:
 
     anchor_240 = by_id.get(240, {})
     assert anchor_240.get("classification") == "boss", anchor_240.get("classification")
-    assert not bool(anchor_240.get("editor_placement", {}).get("allowed", True)), "ID240 must not be placeable"
+    assert bool(anchor_240.get("editor_placement", {}).get("allowed", False)), "ID240 must be placeable after R2 combat closure"
     assert int(anchor_240.get("drop_policy", {}).get("entry_count", 0)) == 54
 
     assert by_id.get(241, {}).get("classification") == "special"

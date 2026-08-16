@@ -29,6 +29,7 @@ CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classificatio
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
+COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
 # Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
 # is no longer read by the generator and is intentionally absent from
 # source_files/generator_input below.
@@ -674,6 +675,8 @@ def build_catalog() -> dict[str, Any]:
     boss_rules = load_json(BOSS_RULE_PATH)
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
     policy = load_json(POLICY_PATH)
+    combat_source = load_json(COMBAT_SOURCE_PATH) if COMBAT_SOURCE_PATH.is_file() else {}
+    combat_source_by_id = combat_source.get("records_by_monster_id", {}) if isinstance(combat_source, dict) else {}
     drop_source = load_json(DROP_SOURCE_PATH)
     drop_source_by_id = {
         str(item.get("stable_monster_id")): item
@@ -765,6 +768,8 @@ def build_catalog() -> dict[str, Any]:
             and service_row.get("resolutionStatus") == "exact_service_name"
             and isinstance(service_record, dict)
         )
+        combat_db = combat_source_by_id.get(str(monster_id), {}) if isinstance(combat_source_by_id, dict) else {}
+        monsterdb_combat = bool(combat_db) and not service_exact
         if service_exact:
             service_stats = service_record.get("stats", {})
             stats = {
@@ -797,22 +802,47 @@ def build_catalog() -> dict[str, Any]:
                 for field in stats
             }
         else:
-            # The vanilla project table is an identity namespace only.  A
-            # missing/non-exact service row cannot silently supply combat
-            # numbers; unresolved records carry zeroed values and remain
-            # fail-closed until a tiered stat source is attached.
-            stats = {field: 0 for field in ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")}
-            stats_source = {
-                field: source_ref(
-                    SERVICE_PATH,
-                    role="combat_stats_primary_service",
-                    distribution="server.crystal.cjlaaa",
-                    tier="primary",
-                    field=field,
-                    evidence=f"runtimeByMonsterId[{monster_id}] exact_service_name row missing; unresolved",
-                )
-                for field in stats
-            }
+            if monsterdb_combat:
+                # Exact-ID local 1.76 Monster.DB row (priority A), bound by
+                # exact name and cross-checked against the 21CQ namespace.
+                stats = {
+                    "level": int(combat_db.get("level", 0)),
+                    "exp": int(combat_db.get("exp", 0)),
+                    "hp": int(combat_db.get("hp", 0)),
+                    "defense": int(combat_db.get("defense", 0)),
+                    "magic_defense": int(combat_db.get("magic_defense", 0)),
+                    "attack_min": int(combat_db.get("attack_min", 0)),
+                    "attack_max": int(combat_db.get("attack_max", 0)),
+                }
+                stats_source = {
+                    field: {
+                        "distribution": str(combat_source.get("distribution", "")),
+                        "tier": str(combat_source.get("tier", "primary")),
+                        "original_path": str(combat_source.get("source", "")),
+                        "sha256": str(combat_source.get("source_sha256", "")),
+                        "role": "combat_stats_monster_db",
+                        "field": field,
+                        "evidence": f"records_by_monster_id[{monster_id}].{field}; cross_verified_21cq={bool(combat_db.get('cross_verified_21cq', False))}",
+                    }
+                    for field in stats
+                }
+            else:
+                # The vanilla project table is an identity namespace only.  A
+                # missing/non-exact service row cannot silently supply combat
+                # numbers; unresolved records carry zeroed values and remain
+                # fail-closed until a tiered stat source is attached.
+                stats = {field: 0 for field in ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")}
+                stats_source = {
+                    field: source_ref(
+                        SERVICE_PATH,
+                        role="combat_stats_primary_service",
+                        distribution="server.crystal.cjlaaa",
+                        tier="primary",
+                        field=field,
+                        evidence=f"runtimeByMonsterId[{monster_id}] exact_service_name row missing; unresolved",
+                    )
+                    for field in stats
+                }
         auxiliary_combat_evidence: dict[str, Any] = {}
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
             override = policy_wooma["combat_override"]
@@ -890,6 +920,17 @@ def build_catalog() -> dict[str, Any]:
                     "resolutionStatus": "auxiliary_1_exact_row",
                     "sourceDistribution": "source.angelk727.mir2_server_databases",
                 }
+        if monsterdb_combat:
+            # Exact-ID local 1.76 Monster.DB AI/timing (priority A).
+            ai["ai_code"] = int(combat_db.get("ai_code", -1))
+            ai["view_range"] = int(combat_db.get("view_range", 0))
+            ai["image"] = int(combat_db.get("image", -1))
+            ai["resolution_status"] = "exact_monster_db"
+            ai["source_distribution"] = str(combat_source.get("distribution", ""))
+            timing["attack_interval_ms"] = int(combat_db.get("attack_interval_ms", 0))
+            timing["move_interval_ms"] = int(combat_db.get("move_interval_ms", 0))
+            timing["confidence"] = "monster_db_176"
+            timing["resolution_status"] = "exact_monster_db"
         drop_profile_id, drop_profile = drop_for(monster_id, drop_source_by_id, drop_overrides)
         drop_profiles[drop_profile_id] = drop_profile
         appearance = appearance_profiles[art_profile_id]
@@ -912,7 +953,7 @@ def build_catalog() -> dict[str, Any]:
         # A hostile spawn cannot be placed or run without a non-empty,
         # source-evidenced drop table.  The drop profile itself remains in the
         # catalog as missing_for_hostile for later source-priority repair.
-        combat_identity_ok = bool(service_exact_for_identity or auxiliary_combat_evidence)
+        combat_identity_ok = bool(service_exact_for_identity or auxiliary_combat_evidence or monsterdb_combat)
 
         # Full runtime closure: identity presence alone is not enough.  Stats
         # must be complete with valid domains, AI must carry a formal exact-ID
@@ -1059,6 +1100,7 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
         DROP_SOURCE_PATH,
+        COMBAT_SOURCE_PATH,
         *ART_PATHS,
     ]
     catalog: dict[str, Any] = {

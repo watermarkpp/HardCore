@@ -47,7 +47,7 @@ func _run() -> void:
 	assert(MonsterIdentityScript.appearance_profile(77).get("status", "") != "formal", "Wooma 77 art must remain unresolved")
 	assert(MonsterIdentityScript.appearance_profile(78).get("status", "") != "formal", "Wooma 78 art must remain unresolved")
 	assert(MonsterIdentityScript.appearance_profile(239).get("status", "") == "formal", "Wooma 239 art must retain its explicit profile")
-	assert(MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must remain runtime-disabled despite explicit art")
+	assert(not MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must be runtime-enabled after R2 combat closure")
 	assert(formal_profile_ids.size() > 0, "canonical catalog must expose formal client art")
 	print("COMPLETE_MONSTER_CLIENT_ART_CANONICAL_PASS: identities=217 allowed=%d formal_profiles=%d actions=5" % [allowed_count, formal_profile_ids.size()])
 	get_tree().quit(0)
