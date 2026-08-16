@@ -14,7 +14,7 @@ func _run() -> void:
 	var catalog := _load_json(CATALOG_PATH)
 	var entries: Array = catalog.get("entries", [])
 	var appearance_profiles: Dictionary = catalog.get("appearance_profiles", {})
-	assert(entries.size() == 214, "canonical appearance check must cover all 214 IDs")
+	assert(entries.size() == 217, "canonical appearance check must cover all 217 IDs")
 	assert(appearance_profiles.size() == int(catalog.get("summary", {}).get("appearance_profile_count", -1)), "appearance profile summary drifted")
 	var formal_profile_ids: Dictionary = {}
 	var allowed_count := 0
@@ -49,7 +49,7 @@ func _run() -> void:
 	assert(MonsterIdentityScript.appearance_profile(239).get("status", "") == "formal", "Wooma 239 art must retain its explicit profile")
 	assert(MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must remain runtime-disabled despite explicit art")
 	assert(formal_profile_ids.size() > 0, "canonical catalog must expose formal client art")
-	print("COMPLETE_MONSTER_CLIENT_ART_CANONICAL_PASS: identities=214 allowed=%d formal_profiles=%d actions=5" % [allowed_count, formal_profile_ids.size()])
+	print("COMPLETE_MONSTER_CLIENT_ART_CANONICAL_PASS: identities=217 allowed=%d formal_profiles=%d actions=5" % [allowed_count, formal_profile_ids.size()])
 	get_tree().quit(0)
 
 
