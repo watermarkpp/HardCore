@@ -120,10 +120,11 @@ def _build_source(wb: Workbook) -> dict:
                 pass
         assert total == 9590, f"{key} sum={total} != 9590"
 
-    # Per-monster drop conclusion from 掉落池_怪物汇总
-    # (EXACT_SLOTS / NO_DROP_CONFIRMED / NO_MONITEMS_FILE).
-    drop_type = {row.get("DB记录名", ""): row.get("掉落结论", "") for row in pool}
-    display = {row.get("DB记录名", ""): row.get("玩家显示名", "") for row in pool}
+    # Per-monster drop conclusion + record-level audit summary from
+    # 掉落池_怪物汇总 (EXACT_SLOTS / NO_DROP_CONFIRMED / NO_MONITEMS_FILE).
+    pool_by_name = {row.get("DB记录名", ""): row for row in pool}
+    drop_type = {name: r.get("掉落结论", "") for name, r in pool_by_name.items()}
+    display = {name: r.get("玩家显示名", "") for name, r in pool_by_name.items()}
 
     from collections import Counter as _Counter
     conclusion_counts = _Counter(r.get("掉落结论", "") for r in pool)
@@ -165,6 +166,9 @@ def _build_source(wb: Workbook) -> dict:
             row["gold"] = int(qty)
         row.update({
             "slot_index": si,
+            "excel_monster_id": s.get("monster_id", ""),
+            "source_note": s.get("备注", ""),
+            "source_quantity_or_gold": s.get("数量/金币", ""),
             "same_item_slot_ordinal": s.get("同物品槽序号", ""),
             "same_item_slot_total": s.get("同物品总槽数", ""),
             "source_rate": s.get("source_rate", ""),
@@ -195,6 +199,7 @@ def _build_source(wb: Workbook) -> dict:
             "no_drop_confirmed" if drop_type.get(dbname, "") == "NO_DROP_CONFIRMED"
             else "no_monitems_file"
         )
+        prow = pool_by_name.get(dbname, {})
         records.append({
             "stable_monster_id": mid,
             "name": dbname,
@@ -202,6 +207,11 @@ def _build_source(wb: Workbook) -> dict:
             "source_distribution": "user.excel.217_monster_drop_slots",
             "source_path": "热血传奇1.76_217怪物_完整掉落槽版.xlsx::掉落槽_完整版",
             "source_sha256": EXPECTED_WORKBOOK_SHA256,
+            "source_summary_kind": prow.get("source_kind", ""),
+            "source_summary_ref": prow.get("source_ref", ""),
+            "source_summary_note": prow.get("备注", ""),
+            "rate_policy": prow.get("掉率策略", ""),
+            "unique_item_count": prow.get("唯一物品数", ""),
             "status": status,
             "line_count": len(rows),
             "rows": rows,
@@ -222,6 +232,7 @@ def _build_source(wb: Workbook) -> dict:
 
 SLOT_COMPARE_FIELDS = [
     "line_number", "raw_text", "chance", "item", "gold", "slot_index",
+    "excel_monster_id", "source_note", "source_quantity_or_gold",
     "same_item_slot_ordinal", "same_item_slot_total", "source_rate",
     "source_denom", "rate_policy", "slot_status", "source_kind",
     "source_ref", "db_record_name", "display_name",
@@ -229,7 +240,8 @@ SLOT_COMPARE_FIELDS = [
 
 RECORD_COMPARE_FIELDS = [
     "stable_monster_id", "name", "display_name", "status", "line_count",
-    "source_sha256", "rows",
+    "source_sha256", "source_summary_kind", "source_summary_ref",
+    "source_summary_note", "rate_policy", "unique_item_count", "rows",
 ]
 
 TOP_COMPARE_FIELDS = [
@@ -310,6 +322,11 @@ def _check(wb: Workbook, expected: dict, actual: dict) -> int:
         if expected.get(k) != actual.get(k):
             meta_fail += 1
 
+    # Actual source structure: an extra duplicated record must not be hidden by
+    # the id-keyed dict comprehension below.
+    actual_record_count = len(actual.get("records", []))
+    actual_unique_ids = len({int(r.get("stable_monster_id", -1)) for r in actual.get("records", [])})
+
     # Per-monster reconciliation (all 217, including the 11 zero-slot records).
     exp_records = {int(r.get("stable_monster_id", -1)): r for r in expected.get("records", [])}
     act_records = {int(r.get("stable_monster_id", -1)): r for r in actual.get("records", [])}
@@ -346,6 +363,8 @@ def _check(wb: Workbook, expected: dict, actual: dict) -> int:
         and unmapped_records == 0
         and ambiguous_records == 0
         and suffix_variant_collapsed == 0
+        and actual_record_count == 217
+        and actual_unique_ids == 217
         and per_monster_pass == 217
         and per_monster_fail == 0
         and missing_slots == 0
@@ -358,6 +377,8 @@ def _check(wb: Workbook, expected: dict, actual: dict) -> int:
     print("mapped_records=%d" % mapped_records)
     print("unmapped_records=%d" % unmapped_records)
     print("ambiguous_records=%d" % ambiguous_records)
+    print("actual_record_count=%d" % actual_record_count)
+    print("actual_unique_ids=%d" % actual_unique_ids)
     print("excel_slot_count=%d" % excel_slot_count)
     print("generated_slot_count=%d" % generated_slot_count)
     print("missing_slots=%d" % missing_slots)
