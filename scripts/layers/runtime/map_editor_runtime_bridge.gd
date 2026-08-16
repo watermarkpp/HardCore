@@ -25,7 +25,10 @@ static func tile_to_world(runtime: Dictionary, raw_tile: Array) -> Vector2:
 	return MapEditorCoordinate.tile_to_world(Vector2(float(raw_tile[0]),float(raw_tile[1])), Vector2i(int(raw_size[0]),int(raw_size[1])))
 
 static func home_position() -> Vector2:
-	var runtime := load_bich()
+	return home_position_from_runtime(load_bich())
+
+
+static func home_position_from_runtime(runtime: Dictionary) -> Vector2:
 	for safe: Dictionary in runtime.get("semantics", {}).get("safe_area", []):
 		if bool(safe.get("return_anchor", false)):
 			return tile_to_world(runtime, safe.get("return_tile", safe.get("tile", [128,128])))
@@ -33,13 +36,33 @@ static func home_position() -> Vector2:
 
 static func game_content() -> Dictionary:
 	var runtime := load_bich()
+	return game_content_from_runtime(runtime)
+
+
+static func game_content_from_runtime(runtime: Dictionary) -> Dictionary:
 	if runtime.is_empty(): return {}
 	var design_size: Array = runtime.get("design", {}).get("design_size", [256, 256])
 	var map_center_world := tile_to_world(runtime, [(float(design_size[0]) - 1.0) * 0.5, (float(design_size[1]) - 1.0) * 0.5])
-	var result := {"name":"比奇省", "runtime_home_position":home_position(), "map_center_world":map_center_world, "spawns":[], "bosses":[], "npcs":[], "portals":[], "safe_areas":[], "editor_runtime":true}
+	var result := {"name":"比奇省", "runtime_home_position":home_position_from_runtime(runtime), "map_center_world":map_center_world, "spawns":[], "bosses":[], "npcs":[], "portals":[], "safe_areas":[], "editor_runtime":true}
 	for entry: Dictionary in runtime.semantics.get("monster_spawn", []):
 		var raw_id:=str(entry.get("monster_id","monster.-1")).trim_prefix("monster.")
 		result.spawns.append({"name":entry.get("display_name", ""), "monster_id":int(raw_id), "position":tile_to_world(runtime, entry.tile), "respawn_seconds":entry.get("respawn_seconds",60), "count":entry.get("count",1), "max_alive":entry.get("max_alive",1), "radius_tiles":entry.get("radius_tiles",0), "spawn_group":entry})
+	for entry: Dictionary in runtime.semantics.get("boss_spawn", []):
+		var raw_id := str(entry.get("monster_id", entry.get("boss_id", entry.get("content_id", "boss.-1")))).trim_prefix("boss.").trim_prefix("monster.")
+		var spawn_group_id := str(entry.get("spawnGroupId", entry.get("spawn_group_id", entry.get("semantic_id", ""))))
+		result.bosses.append({
+			"name": entry.get("display_name", ""),
+			"monster_id": int(raw_id),
+			"monsterId": int(raw_id),
+			"position": tile_to_world(runtime, entry.tile),
+			"respawn_seconds": entry.get("respawn_seconds", 1800),
+			"count": entry.get("count", 1),
+			"max_alive": entry.get("max_alive", 1),
+			"radius_tiles": entry.get("radius_tiles", 0),
+			"spawnGroupId": spawn_group_id,
+			"spawn_group_id": spawn_group_id,
+			"spawn_group": entry,
+		})
 	for entry: Dictionary in runtime.semantics.get("npc_points", []):
 		var npc_id := str(entry.get("npc_id", ""))
 		var stock_key := str({"npc.4.001":"general", "npc.4.002":"starter_gear", "npc.4.003":"books"}.get(npc_id, ""))
@@ -60,7 +83,7 @@ static func game_content() -> Dictionary:
 	# a radius of nine logical tiles around the actual resurrection/return point.
 	# Do not reuse the editor's former NPC-hull pentagon for combat rules.
 	result.safe_areas.append({
-		"center": home_position(),
+		"center": home_position_from_runtime(runtime),
 		"radius": SAFE_RADIUS_TILES * ArtSpec.TILE_SIZE,
 		"radius_tiles": SAFE_RADIUS_TILES,
 		"shape": "circle",

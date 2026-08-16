@@ -6,10 +6,10 @@ func _ready() -> void:
 	var boss_entries := MapEditorContentCatalogService.entries("boss_spawn", 4)
 	assert(not monster_entries.is_empty())
 	assert(not boss_entries.is_empty())
-	var monster_id := str(monster_entries[0].content_id)
-	var boss_id := str(boss_entries[0].content_id)
-	assert(MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", Vector2i(10,10), {"content_id":monster_id,"monster_id":monster_id,"count":1,"max_alive":1,"respawn_seconds":60}).ok)
-	assert(MapEditorGameplaySemanticService.add_entry(document, "boss_spawn", Vector2i(12,12), {"content_id":boss_id,"boss_id":boss_id,"count":1,"max_alive":1,"respawn_seconds":60}).ok)
+	var monster_id := int(monster_entries[0].get("monster_id", -1))
+	var boss_id := int(boss_entries[0].get("monster_id", -1))
+	assert(MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", Vector2i(10,10), {"monster_id":monster_id,"count":1,"max_alive":1,"respawn_seconds":60}).ok)
+	assert(MapEditorGameplaySemanticService.add_entry(document, "boss_spawn", Vector2i(12,12), {"monster_id":boss_id,"count":1,"max_alive":1,"respawn_seconds":60}).ok)
 	var monster_layer: Array = document.layers.monster_spawn
 	monster_layer.append(monster_layer[0].duplicate(true))
 	document.layers.monster_spawn = monster_layer

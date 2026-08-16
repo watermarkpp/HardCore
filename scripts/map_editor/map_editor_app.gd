@@ -1292,12 +1292,15 @@ func _select_semantic_kind(kind: String, activate_placement := true) -> void:
 
 func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 	var kind := str(entry.get("kind", ""))
-	var content_field := str({
-		"npc": "npc_id",
-		"monster_spawn": "monster_id",
-		"boss_spawn": "boss_id",
-	}.get(kind, "content_id"))
-	var content_id := str(entry.get("content_id", entry.get(content_field, "")))
+	var content_id := str(entry.get("content_id", ""))
+	if kind == "npc" and content_id.is_empty():
+		content_id = str(entry.get("npc_id", ""))
+	if kind in ["monster_spawn", "boss_spawn", "special_monster"] and content_id.is_empty():
+		var numeric_id := int(entry.get("monster_id", -1))
+		var catalog_entry := MapEditorContentCatalogService.find_by_monster_id(kind, numeric_id)
+		if catalog_entry.is_empty() and kind != "special_monster":
+			catalog_entry = MapEditorContentCatalogService.find_by_monster_id("special_monster", numeric_id)
+		content_id = str(catalog_entry.get("content_id", ""))
 	semantic_content_id.text = content_id
 	var selectable_content_id := content_id
 	if kind == "npc":
@@ -1851,12 +1854,8 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		properties["display_name"] = str(npc_entry.get("display_name", content_id))
 		properties["service_role"] = str(npc_entry.get("service_role", "dialogue"))
 		properties["service_identity_id"] = str(npc_entry.get("service_identity_id", ""))
-	elif actual_kind == "monster_spawn":
-		properties["monster_id"] = content_id
-		properties["content_id"] = content_id
-	elif actual_kind == "boss_spawn":
-		properties["boss_id"] = content_id
-		properties["content_id"] = content_id
+	elif actual_kind in ["monster_spawn", "boss_spawn"]:
+		properties["monster_id"] = int(combat_entry.get("monster_id", -1))
 	elif kind == "door":
 		properties["target_map_id"] = semantic_target_map.text.strip_edges()
 	elif kind == "map_exit":

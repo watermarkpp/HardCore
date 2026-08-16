@@ -10,7 +10,7 @@ func _ready() -> void:
 	assert(not npcs.is_empty() and int(npcs[0].map_id) == 4)
 	var document := MapEditorTypes.new_map("content_1", 990101, "Content 1", Vector2i(64, 64))
 	var spawn := MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", Vector2i(20, 20), {
-		"content_id": monsters[0].content_id, "monster_id": monsters[0].content_id,
+		"monster_id": int(monsters[0].get("monster_id", -1)),
 		"display_name": monsters[0].display_name, "count": 8, "max_alive": 6,
 		"respawn_seconds": 90, "radius_tiles": 5,
 	})
