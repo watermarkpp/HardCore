@@ -29,6 +29,9 @@ CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classificatio
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
+# Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
+# is no longer read by the generator and is intentionally absent from
+# source_files/generator_input below.
 DROP_OVERRIDE_PATH = ROOT / "assets/data/canonical_monster_drop_overrides_v1.json"
 ART_PATHS = [
     ROOT / "assets/data/bich_common_client_art_sources.json",
@@ -403,10 +406,12 @@ def behavior_for(
 def _drop_source_evidence(record: dict[str, Any], *, role: str, tier: str | None = None) -> dict[str, Any]:
     """Convert an ID-keyed drop source record into auditable evidence.
 
-    ``canonical_monster_drop_source_v1.json`` is a checked-in snapshot of the
-    primary parser output.  Its rows retain the original path/hash even when
-    the source file is not present in this worktree, so an empty table is
-    still an explicit, reviewable source result.
+    ``canonical_monster_drop_source_v2.json`` is the user-locked Excel drop
+    authority (217 MonsterDB records / 9590 independent drop slots), built
+    deterministically by tools/import_canonical_monster_drop_excel.py and
+    pinned to the workbook SHA256.  Its rows retain the source path and
+    workbook hash even when the workbook is not present in this worktree, so
+    the drop authority is always an explicit, reviewable source result.
     """
     return {
         "distribution": str(record.get("source_distribution", "")),
@@ -978,7 +983,6 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
         DROP_SOURCE_PATH,
-        DROP_OVERRIDE_PATH,
         *ART_PATHS,
     ]
     catalog: dict[str, Any] = {

@@ -37,6 +37,14 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     snowman = entries_by_id.get("33", {})
     assert drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status") == "no_drop_confirmed"
 
+    # 21CQ stable Mob.aspx?ID identity: 鸡=14, 鹿=16, 鹿1=17.
+    assert entries_by_id.get("14", {}).get("canonical_name") == "鸡", entries_by_id.get("14")
+    assert entries_by_id.get("16", {}).get("canonical_name") == "鹿", entries_by_id.get("16")
+    assert entries_by_id.get("17", {}).get("canonical_name") == "鹿1", entries_by_id.get("17")
+    # The Excel audit sequence IDs 1/2/3 are NOT canonical monster IDs.
+    for forbidden in ("1", "2", "3"):
+        assert forbidden not in entries_by_id, forbidden
+
     for profile in drop_profiles.values():
         for source in profile.get("source_evidence", {}).get("sources", []):
             if isinstance(source, dict) and str(source.get("distribution", "")) == "server.crystal.cjlaaa":
