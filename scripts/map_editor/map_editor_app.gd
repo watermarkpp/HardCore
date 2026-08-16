@@ -75,6 +75,7 @@ var monster_inspector_detail: RichTextLabel
 var monster_inspector_close_button: Button
 var monster_inspector_close_timer: Timer
 var monster_hover_suppressed_id := -1
+var _last_hovered_monster_id := -1
 var random_region_fill_toggle: CheckBox
 var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
@@ -1660,8 +1661,10 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 			var numeric_id := int(entry.get("monster_id", -1))
 			var name := str(entry.get("display_name", entry.get("content_id", "")))
 			detail = "[%d] %s" % [numeric_id, name]
-			if not bool(entry.get("placement_allowed", false)):
+			if not bool(entry.get("authoring_allowed", false)):
 				detail += "（不可放置）"
+			elif not bool(entry.get("runtime_ready", false)):
+				detail += "（运行时未闭环）"
 		elif kind == "npc":
 			detail = str(entry.get("display_name", entry.get("content_id", ""))) + "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
 		semantic_content_option.add_item(detail)
@@ -1720,8 +1723,10 @@ func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
 	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
 		return name
 	var label := "[ID %d] %s" % [numeric_id, name]
-	if not bool(entry.get("placement_allowed", false)):
+	if not bool(entry.get("authoring_allowed", false)):
 		label += "（不可放置）"
+	elif not bool(entry.get("runtime_ready", false)):
+		label += "（运行时未闭环）"
 	return label
 
 
@@ -1757,20 +1762,6 @@ func _monster_id_for_item(item: TreeItem) -> int:
 
 
 func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		var hover_item := semantic_catalog_tree.get_item_at_position(event.position)
-		var hover_id := _monster_id_for_item(hover_item)
-		if hover_id > 0 and hover_id == monster_hover_suppressed_id:
-			# Mouse is still parked on the row that was just clicked: keep the
-			# inspector hidden until the pointer leaves the row.
-			return
-		monster_hover_suppressed_id = -1
-		if hover_id > 0:
-			_preview_monster_catalog_item(hover_item)
-			_cancel_monster_inspector_close()
-		else:
-			_schedule_monster_inspector_close()
-		return
 	if not event is InputEventMouseButton or event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
 		return
 	var item := semantic_catalog_tree.get_item_at_position(event.position)
@@ -1780,6 +1771,44 @@ func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
 	_activate_semantic_catalog_item(item)
 
 
+func _process(_delta: float) -> void:
+	_poll_monster_hover()
+
+
+func _poll_monster_hover() -> void:
+	if semantic_catalog_tree == null or monster_inspector_panel == null:
+		return
+	_poll_monster_hover_at(semantic_catalog_tree.get_global_mouse_position())
+
+
+func _poll_monster_hover_at(mouse_global: Vector2) -> void:
+	if semantic_catalog_tree == null or monster_inspector_panel == null:
+		return
+	var tree_hover_id := -1
+	if semantic_catalog_tree.get_global_rect().has_point(mouse_global):
+		var local := mouse_global - semantic_catalog_tree.get_global_rect().position
+		tree_hover_id = _monster_id_for_item(semantic_catalog_tree.get_item_at_position(local))
+	var panel_has_mouse := monster_inspector_panel.visible and monster_inspector_panel.get_global_rect().has_point(mouse_global)
+	if tree_hover_id > 0:
+		if tree_hover_id == monster_hover_suppressed_id:
+			# Mouse is parked on the row that was just clicked: keep the
+			# inspector hidden until the pointer leaves the row.
+			return
+		monster_hover_suppressed_id = -1
+		if tree_hover_id != _last_hovered_monster_id:
+			var item := semantic_catalog_tree.get_item_at_position(mouse_global - semantic_catalog_tree.get_global_rect().position)
+			_preview_monster_catalog_item(item)
+			_last_hovered_monster_id = tree_hover_id
+		_cancel_monster_inspector_close()
+		return
+	monster_hover_suppressed_id = -1
+	_last_hovered_monster_id = -1
+	if panel_has_mouse:
+		_cancel_monster_inspector_close()
+	else:
+		_schedule_monster_inspector_close()
+
+
 func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	var metadata:Variant=item.get_metadata(0); if not metadata is Dictionary:return
 	var kind:=str(metadata.get("kind","")); var entry:Dictionary=metadata.get("entry",{})
@@ -1787,7 +1816,7 @@ func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	if is_monster:
 		monster_hover_suppressed_id = int(entry.get("monster_id", -1))
 		_close_monster_inspector()
-	var placeable := kind == "npc" or bool(entry.get("placement_allowed", false))
+	var placeable := kind == "npc" or bool(entry.get("authoring_allowed", false))
 	if is_monster and not placeable:
 		semantic_content_id.text=str(entry.get("content_id",""))
 		status_label.text="当前条目不可放置：%s"%str(entry.get("display_name",""))
@@ -1858,13 +1887,15 @@ func _build_monster_detail_text(entry: Dictionary) -> String:
 	elif placement_kind == "monster_spawn":
 		placement_label = "monster_spawn（普通刷新）"
 	lines.append("实际放置语义：%s" % placement_label)
-	var allowed := bool(entry.get("placement_allowed", false))
-	lines.append("允许放置：%s" % ("是" if allowed else "否"))
-	if not allowed:
-		var rejection := str(entry.get("placement_rejection_reason", "")).strip_edges()
+	var authoring := bool(entry.get("authoring_allowed", false))
+	var ready := bool(entry.get("runtime_ready", false))
+	lines.append("作者可布置：%s" % ("是" if authoring else "否"))
+	lines.append("运行时闭环：%s" % ("是" if ready else "否"))
+	if not ready:
+		var rejection := str(entry.get("runtime_rejection_reason", "")).strip_edges()
 		if rejection.is_empty():
 			rejection = "未记录具体原因"
-		lines.append("禁止原因：")
+		lines.append("运行时未闭环原因：")
 		for reason: String in rejection.split(";"):
 			var stripped := reason.strip_edges()
 			if not stripped.is_empty():
@@ -1971,10 +2002,6 @@ func _build_monster_inspector_panel() -> void:
 	monster_inspector_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	monster_inspector_detail.custom_minimum_size = Vector2(0, 400)
 	box.add_child(monster_inspector_detail)
-	monster_inspector_panel.mouse_entered.connect(_on_monster_inspector_mouse_entered)
-	monster_inspector_panel.mouse_exited.connect(_on_monster_inspector_mouse_exited)
-	if semantic_catalog_tree != null:
-		semantic_catalog_tree.mouse_exited.connect(_on_monster_catalog_mouse_exited)
 	monster_inspector_close_timer = Timer.new()
 	monster_inspector_close_timer.one_shot = true
 	monster_inspector_close_timer.wait_time = 0.15
@@ -1990,6 +2017,7 @@ func _show_monster_inspector(entry: Dictionary) -> void:
 	monster_inspector_detail.text = _build_monster_detail_text(entry)
 	monster_inspector_panel.visible = true
 	_layout_monster_inspector()
+	_cancel_monster_inspector_close()
 
 
 func _close_monster_inspector() -> void:
@@ -1998,7 +2026,7 @@ func _close_monster_inspector() -> void:
 
 
 func _schedule_monster_inspector_close() -> void:
-	if monster_inspector_close_timer == null:
+	if monster_inspector_close_timer == null or not monster_inspector_close_timer.is_stopped():
 		return
 	monster_inspector_close_timer.start()
 
@@ -2007,19 +2035,6 @@ func _cancel_monster_inspector_close() -> void:
 	if monster_inspector_close_timer == null:
 		return
 	monster_inspector_close_timer.stop()
-
-
-func _on_monster_inspector_mouse_entered() -> void:
-	_cancel_monster_inspector_close()
-
-
-func _on_monster_inspector_mouse_exited() -> void:
-	_schedule_monster_inspector_close()
-
-
-func _on_monster_catalog_mouse_exited() -> void:
-	monster_hover_suppressed_id = -1
-	_schedule_monster_inspector_close()
 
 
 func _on_monster_inspector_close_timer_timeout() -> void:
@@ -2057,8 +2072,8 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		if combat_entry.is_empty():
 			status_label.text = "放置拒绝：目录中未找到内容 %s" % content_id
 			return
-		if not bool(combat_entry.get("placement_allowed", false)):
-			status_label.text = "放置拒绝：该条目的属性尚未通过主源核验，不能新建刷新点"
+		if not bool(combat_entry.get("authoring_allowed", false)):
+			status_label.text = "放置拒绝：该条目不允许在地图编辑器布置"
 			return
 		if kind == "special_monster":
 			actual_kind = str(combat_entry.get("placement_kind", ""))

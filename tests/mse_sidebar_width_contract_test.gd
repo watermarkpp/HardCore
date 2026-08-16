@@ -31,15 +31,21 @@ func _run() -> void:
 	assert(MapEditorContentCatalogService.find_by_monster_id("unresolved_monster", 240).is_empty(), "ID 240 must NOT be in unresolved_monster")
 	assert(str(dark_rainbow.get("classification", "")) == "boss", "ID 240 must be classification boss")
 	assert(int(dark_rainbow.get("drop_entry_count", 0)) == 54, "ID 240 drops %d" % int(dark_rainbow.get("drop_entry_count", 0)))
-	assert(not bool(dark_rainbow.get("placement_allowed", false)), "ID 240 must be non-placeable")
+	assert(bool(dark_rainbow.get("authoring_allowed", false)), "ID 240 must be authoring-allowed")
+	assert(not bool(dark_rainbow.get("runtime_ready", false)), "ID 240 must not be runtime-ready")
 
 	for mid: int in [14, 16]:
 		var chicken_deer := MapEditorContentCatalogService.find_by_monster_id("monster_spawn", mid)
 		assert(not chicken_deer.is_empty(), "鸡/鹿 must be visible: %d" % mid)
-		assert(not bool(chicken_deer.get("placement_allowed", false)), "鸡/鹿 must be non-placeable: %d" % mid)
+		assert(bool(chicken_deer.get("authoring_allowed", false)), "鸡/鹿 must be authoring-allowed: %d" % mid)
+		assert(not bool(chicken_deer.get("runtime_ready", false)), "鸡/鹿 must not be runtime-ready: %d" % mid)
 	var deer1 := MapEditorContentCatalogService.find_by_monster_id("special_monster", 17)
 	assert(not deer1.is_empty(), "鹿1 must be visible")
-	assert(not bool(deer1.get("placement_allowed", false)), "鹿1 must be non-placeable")
+	assert(bool(deer1.get("authoring_allowed", false)), "鹿1 must be authoring-allowed")
+	assert(not bool(deer1.get("runtime_ready", false)), "鹿1 must not be runtime-ready")
+	var vd := MapEditorContentCatalogService.find_by_monster_id("special_monster", 78)
+	assert(not vd.is_empty(), "ID78 version_difference must be visible")
+	assert(not bool(vd.get("authoring_allowed", false)), "version_difference must not be authoring-allowed")
 
 	var editor := MapEditorAppScript.new()
 	editor.load_default_workspace_on_ready = false

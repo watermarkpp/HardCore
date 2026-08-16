@@ -57,8 +57,9 @@ func _run() -> void:
 	assert(text_240.contains("暗之虹魔教主"), "ID240 detail missing name")
 	assert(text_240.contains("boss"), "ID240 detail missing classification boss")
 	assert(text_240.contains("54"), "ID240 detail missing drop count 54")
-	assert(text_240.contains("允许放置：否"), "ID240 detail missing non-placeable status")
-	assert(text_240.contains("禁止原因"), "ID240 detail missing rejection reason")
+	assert(text_240.contains("作者可布置：是"), "ID240 detail missing authoring-allowed status")
+	assert(text_240.contains("运行时闭环：否"), "ID240 detail missing runtime-not-ready status")
+	assert(text_240.contains("运行时未闭环原因"), "ID240 detail missing runtime rejection reason")
 
 	# Reference attributes for an unverified entry that still carries stats.
 	var ref_entry := _find_unverified_with_stats()
@@ -69,14 +70,21 @@ func _run() -> void:
 		assert(ref_text.contains("参考数据"), "unverified entry must show reference-data status")
 		assert(ref_text.contains("等级：") or ref_text.contains("生命："), "unverified entry must still show stats")
 
-	# Hover contract: hovering a monster row shows the inspector with a
-	# real-height body and an opaque panel background; clicking hides it.
+	# Hover contract: a real hit-test over the monster row's laid-out area must
+	# show the inspector (real-height body, opaque background); clicking hides.
 	var hover_item := _find_monster_tree_item(editor, 76)
 	assert(hover_item != null, "ID76 tree item missing from semantic catalog")
-	editor._close_monster_inspector()
-	editor._preview_monster_catalog_item(hover_item)
+	_expand_item_folder(editor, hover_item)
+	editor.semantic_catalog_tree.scroll_to_item(hover_item)
 	await get_tree().process_frame
-	assert(editor.monster_inspector_panel.visible, "hover did not show inspector")
+	await get_tree().process_frame
+	var item_rect: Rect2 = editor.semantic_catalog_tree.get_item_area_rect(hover_item)
+	assert(item_rect.size.y > 0, "ID76 tree item must have a laid-out area")
+	var hover_center := editor.semantic_catalog_tree.get_global_rect().position + item_rect.get_center()
+	editor._close_monster_inspector()
+	editor._poll_monster_hover_at(hover_center)
+	await get_tree().process_frame
+	assert(editor.monster_inspector_panel.visible, "hover hit-test did not show inspector")
 	assert(editor.monster_inspector_detail.text.contains("沃玛教主"), "hover detail missing name")
 	assert(int(editor.monster_inspector_detail.size.y) > 0, "inspector body must have real height")
 	var panel_style: StyleBox = editor.monster_inspector_panel.get_theme_stylebox("panel")
@@ -122,3 +130,10 @@ func _find_monster_tree_item(editor: MapEditorApp, monster_id: int) -> TreeItem:
 			pending.push_back(child)
 			child = child.get_next()
 	return null
+
+
+func _expand_item_folder(editor: MapEditorApp, item: TreeItem) -> void:
+	var parent := item.get_parent()
+	while parent != null and parent != editor.semantic_catalog_tree.get_root():
+		parent.collapsed = false
+		parent = parent.get_parent()

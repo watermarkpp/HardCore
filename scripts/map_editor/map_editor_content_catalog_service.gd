@@ -64,6 +64,16 @@ static func find_by_monster_id(kind: String, monster_id: int) -> Dictionary:
 	return {}
 
 
+static func find_any_monster(monster_id: int) -> Dictionary:
+	if monster_id <= 0:
+		return {}
+	for kind: String in MONSTER_BROWSE_KINDS:
+		var entry := find_by_monster_id(kind, monster_id)
+		if not entry.is_empty():
+			return entry
+	return {}
+
+
 static func canonicalize_document_npc_labels(document: Dictionary) -> int:
 	var layers: Dictionary = document.get("layers", {})
 	var npc_points: Array = layers.get("npc_points", [])
@@ -129,19 +139,25 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	var combat: Dictionary = record.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
 	var ai: Dictionary = combat.get("ai", {})
-	var reasons: Array[String] = []
+	# Authoring (can the map editor place this monster now?) is classification
+	# based, independent of runtime closure. version_difference variants stay
+	# isolated from formal map authoring; unresolved is not authorable either.
+	var authoring_allowed := classification in ["ordinary", "elite", "boss", "special", "non_hostile"]
+	# Runtime readiness (can this monster safely enter the live game?) keeps the
+	# full closure contract, including the frozen runtime_allowed=37 gate.
+	var runtime_reasons: Array[String] = []
 	if not bool(placement.get("allowed", false)):
-		reasons.append("编辑器策略禁止放置")
+		runtime_reasons.append("运行时策略禁止放置")
 	if not bool(record.get("runtime_allowed", false)):
-		reasons.append("运行时未允许")
+		runtime_reasons.append("运行时未允许")
 	if appearance_status != "formal":
-		reasons.append("正式贴图未闭环")
+		runtime_reasons.append("正式战斗美术未闭环")
 	if bool(drop_policy.get("hostile_requires_non_empty", false)) and drop_count <= 0:
-		reasons.append("主源掉落为空")
+		runtime_reasons.append("主源掉落为空")
 	var record_status := str(record.get("status", ""))
 	if record_status not in ["formal", ""]:
-		reasons.append("canonical状态：%s" % record_status)
-	var placement_allowed := reasons.is_empty()
+		runtime_reasons.append("canonical状态：%s" % record_status)
+	var runtime_ready := runtime_reasons.is_empty()
 	var source_drop: Dictionary = _first_drop_source(drop_profile)
 	var attrs_verified := _combat_attributes_verified(record)
 	var display_name := str(record.get("canonical_name", numeric_id))
@@ -162,8 +178,9 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"classification": classification,
 		"editor_catalog_kind": catalog_kind,
 		"placement_kind": placement_kind,
-		"placement_allowed": placement_allowed,
-		"placement_rejection_reason": ";".join(reasons),
+		"authoring_allowed": authoring_allowed,
+		"runtime_ready": runtime_ready,
+		"runtime_rejection_reason": ";".join(runtime_reasons),
 		"source_status": str(record.get("status", "")),
 		"runtime_allowed": bool(record.get("runtime_allowed", false)),
 		"attributes_verified": attrs_verified,
