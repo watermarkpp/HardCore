@@ -1969,6 +1969,7 @@ func _fmt_attr(value: Variant) -> String:
 func _build_monster_inspector_panel() -> void:
 	monster_inspector_panel = PanelContainer.new()
 	monster_inspector_panel.visible = false
+	monster_inspector_panel.top_level = true
 	monster_inspector_panel.z_index = 100
 	monster_inspector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var panel_style := StyleBoxFlat.new()
