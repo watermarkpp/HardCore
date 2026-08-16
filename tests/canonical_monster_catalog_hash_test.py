@@ -45,10 +45,30 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     for forbidden in ("1", "2", "3"):
         assert forbidden not in entries_by_id, forbidden
 
+    # 鹿1 (17) is a hidden-suffix high-attribute variant from the Excel/21CQ
+    # offline audit; its classification evidence must not claim an attachment
+    # exact ID override (the attachment has no exactIdOverrides entry for 17).
+    deer1_classification = entries_by_id.get("17", {}).get("source_evidence", {}).get("classification", {})
+    assert deer1_classification.get("resolution") == "excel_offline_audit_hidden_suffix_variant", deer1_classification
+
+    workbook_sha = "6902A37DB839577D2CE440B9EFDC4628430CF063BF9DF505F03B41E24A5D67EE"
+    excel_primary_count = 0
+    crystal_primary_count = 0
     for profile in drop_profiles.values():
         for source in profile.get("source_evidence", {}).get("sources", []):
-            if isinstance(source, dict) and str(source.get("distribution", "")) == "server.crystal.cjlaaa":
-                assert not str(source.get("role", "")).startswith("drop_profile_primary"), source
+            if not isinstance(source, dict):
+                continue
+            distribution = str(source.get("distribution", ""))
+            role = str(source.get("role", ""))
+            if distribution == "user.excel.217_monster_drop_slots" and role == "drop_profile_primary":
+                # Excel source SHA provenance must be non-empty and equal to
+                # the locked workbook SHA256 (never a duplicate empty string).
+                assert str(source.get("sha256", "")).upper() == workbook_sha, source
+                excel_primary_count += 1
+            if distribution == "server.crystal.cjlaaa" and role.startswith("drop_profile_primary"):
+                crystal_primary_count += 1
+    assert excel_primary_count == 217, excel_primary_count
+    assert crystal_primary_count == 0, crystal_primary_count
 
     total = sum(int(p.get("entry_count", 0)) for p in drop_profiles.values())
     assert total == 9590, total
@@ -132,7 +152,8 @@ def main() -> None:
         "CANONICAL_MONSTER_CATALOG_HASH_PASS: "
         "lf_crlf_equivalent=1 binary_raw=1 source_metadata=1 "
         "excel_drop_authority=1 classification_placement_kind=1 "
-        "local_from_res_portable=1"
+        "local_from_res_portable=1 excel_source_sha=1 crystal_primary_zero=1 "
+        "deer1_provenance=1"
     )
 
 

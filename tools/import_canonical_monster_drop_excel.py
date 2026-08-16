@@ -134,13 +134,24 @@ def _build_source(wb: Workbook) -> dict:
 
     name_to_id = _load_identity_map()
 
+    # Every workbook MonsterDB record must resolve to exactly one canonical id.
+    monster_db_names = {r.get("DB记录名", "") for r in monster_db}
+    assert len(monster_db_names) == 217, f"unique MonsterDB names={len(monster_db_names)} != 217"
+    unmapped = [n for n in monster_db_names if n not in name_to_id]
+    assert not unmapped, f"unmapped workbook DB记录名: {unmapped}"
+
     by_id: dict[int, list[dict]] = {}
+    seen_slot_keys: set[tuple[int, str]] = set()
     for s in slots:
         db = s.get("DB记录名", "")
         mid = name_to_id.get(db)
         if mid is None:
             raise SystemExit("unmapped DB record name: %s" % db)
         si = s.get("slot_index", "")
+        key = (mid, si)
+        if key in seen_slot_keys:
+            raise SystemExit("duplicate slot key within monster: %s" % (key,))
+        seen_slot_keys.add(key)
         try:
             ln = int(si.split("_")[1])
         except Exception:
@@ -190,6 +201,7 @@ def _build_source(wb: Workbook) -> dict:
             "display_name": display.get(dbname, dbname),
             "source_distribution": "user.excel.217_monster_drop_slots",
             "source_path": "热血传奇1.76_217怪物_完整掉落槽版.xlsx::掉落槽_完整版",
+            "source_sha256": EXPECTED_WORKBOOK_SHA256,
             "status": status,
             "line_count": len(rows),
             "rows": rows,
@@ -208,77 +220,160 @@ def _build_source(wb: Workbook) -> dict:
     }
 
 
-def _check(wb: Workbook, generated: dict) -> int:
-    slots = wb.rows(SHEET_SLOTS)
+SLOT_COMPARE_FIELDS = [
+    "line_number", "raw_text", "chance", "item", "gold", "slot_index",
+    "same_item_slot_ordinal", "same_item_slot_total", "source_rate",
+    "source_denom", "rate_policy", "slot_status", "source_kind",
+    "source_ref", "db_record_name", "display_name",
+]
+
+RECORD_COMPARE_FIELDS = [
+    "stable_monster_id", "name", "display_name", "status", "line_count",
+    "source_sha256", "rows",
+]
+
+TOP_COMPARE_FIELDS = [
+    "schema", "authority", "source", "workbook_sha256", "worksheet",
+    "monster_record_count", "slot_count", "crystal_status",
+]
+
+
+def _identity_metrics() -> dict:
+    """Truthful identity-map metrics from vanilla monsters.json.
+
+    - ambiguous: a name that maps to more than one canonical monster_id.
+    - collapsed: a canonical monster_id shared by more than one name
+      (i.e. suffix variants were collapsed onto one identity).
+    """
+    from collections import defaultdict
     name_to_id = _load_identity_map()
-    excel_tuples = []
-    for s in slots:
-        mid = name_to_id[s["DB记录名"]]
-        si = s.get("slot_index", "")
-        try:
-            ln = int(si.split("_")[1])
-        except Exception:
-            ln = 0
-        qty = (s.get("数量/金币") or "").strip()
-        gold = int(qty) if qty else None
-        excel_tuples.append((mid, ln, s.get("物品", ""), s.get("source_rate", ""), gold))
+    vanilla = json.loads(VANILLA_MONSTERS_PATH.read_text(encoding="utf-8"))
+    name_to_ids: dict[str, set[int]] = defaultdict(set)
+    id_to_names: dict[int, set[str]] = defaultdict(set)
+    for rec in vanilla.get("records", []):
+        name = str(rec.get("name", ""))
+        mid = int(rec.get("monsterId", -1))
+        if name:
+            name_to_ids[name].add(mid)
+        id_to_names[mid].add(name)
+    ambiguous = sum(1 for ids in name_to_ids.values() if len(ids) > 1)
+    collapsed = sum(1 for names in id_to_names.values() if len(names) > 1)
+    return {"name_to_id": name_to_id, "ambiguous": ambiguous, "collapsed": collapsed}
 
-    gen_tuples = []
-    for rec in generated["records"]:
-        mid = rec["stable_monster_id"]
-        for r in rec.get("rows", []):
-            gen_tuples.append((mid, int(r.get("line_number", 0)), r.get("item", ""), r.get("chance", ""), r.get("gold")))
 
-    from collections import Counter
-    e_cnt = Counter(excel_tuples)
-    g_cnt = Counter(gen_tuples)
-    missing = list((e_cnt - g_cnt).elements())
-    extra = list((g_cnt - e_cnt).elements())
-    e_by_mon = Counter(t[0] for t in excel_tuples)
-    g_by_mon = Counter(t[0] for t in gen_tuples)
-    per_mon_fail = 0
-    for mid in sorted(set(list(e_by_mon) + list(g_by_mon))):
-        if e_by_mon[mid] != g_by_mon[mid]:
-            per_mon_fail += 1
+def _norm_row(row: dict) -> dict:
+    if not isinstance(row, dict):
+        row = {}
+    return {k: row.get(k) for k in SLOT_COMPARE_FIELDS}
 
-    rec_status = Counter(r.get("status", "") for r in generated.get("records", []))
-    record_count = len(generated.get("records", []))
-    record_fail = int(
-        record_count != 217
-        or rec_status.get("available", 0) != 206
-        or rec_status.get("no_drop_confirmed", 0) != 1
-        or rec_status.get("no_monitems_file", 0) != 10
+
+def _slot_index(expected: dict, actual: dict) -> tuple[dict, dict, dict, dict]:
+    """Build (monster_id, slot_index) -> normalized row maps for both sides."""
+    exp_slots: dict[tuple[int, str], dict] = {}
+    for rec in expected.get("records", []):
+        mid = int(rec.get("stable_monster_id", -1))
+        for row in rec.get("rows", []):
+            si = str(row.get("slot_index", ""))
+            exp_slots[(mid, si)] = _norm_row(row)
+    act_slots: dict[tuple[int, str], dict] = {}
+    for rec in actual.get("records", []):
+        mid = int(rec.get("stable_monster_id", -1))
+        for row in rec.get("rows", []):
+            si = str(row.get("slot_index", ""))
+            act_slots[(mid, si)] = _norm_row(row)
+
+    exp_by_mon: dict[int, int] = {}
+    for (mid, _si), _row in exp_slots.items():
+        exp_by_mon[mid] = exp_by_mon.get(mid, 0) + 1
+    act_by_mon: dict[int, int] = {}
+    for (mid, _si), _row in act_slots.items():
+        act_by_mon[mid] = act_by_mon.get(mid, 0) + 1
+    return exp_slots, act_slots, exp_by_mon, act_by_mon
+
+
+def _check(wb: Workbook, expected: dict, actual: dict) -> int:
+    ident = _identity_metrics()
+    name_to_id = ident["name_to_id"]
+
+    # Identity: every workbook MonsterDB record maps to exactly one canonical id.
+    monster_db = wb.rows(SHEET_MONSTER_DB)
+    workbook_names = [str(r.get("DB记录名", "")) for r in monster_db]
+    workbook_records = len(workbook_names)
+    mapped_records = sum(1 for n in workbook_names if n in name_to_id)
+    unmapped_records = workbook_records - mapped_records
+    ambiguous_records = ident["ambiguous"]
+    suffix_variant_collapsed = ident["collapsed"]
+
+    # Top-level source metadata.
+    meta_fail = 0
+    for k in TOP_COMPARE_FIELDS:
+        if expected.get(k) != actual.get(k):
+            meta_fail += 1
+
+    # Per-monster reconciliation (all 217, including the 11 zero-slot records).
+    exp_records = {int(r.get("stable_monster_id", -1)): r for r in expected.get("records", [])}
+    act_records = {int(r.get("stable_monster_id", -1)): r for r in actual.get("records", [])}
+    per_monster_pass = 0
+    per_monster_fail = 0
+    for mid in sorted(set(exp_records) | set(act_records)):
+        e = exp_records.get(mid)
+        a = act_records.get(mid)
+        if e is None or a is None:
+            per_monster_fail += 1
+            continue
+        ok = True
+        for k in RECORD_COMPARE_FIELDS:
+            if e.get(k) != a.get(k):
+                ok = False
+                break
+        if ok:
+            per_monster_pass += 1
+        else:
+            per_monster_fail += 1
+
+    # Per-slot reconciliation: full field comparison, keyed by (monster_id, slot_index).
+    exp_slots, act_slots, exp_by_mon, act_by_mon = _slot_index(expected, actual)
+    excel_slot_count = len(exp_slots)
+    generated_slot_count = len(act_slots)
+    missing_slots = sum(1 for k in exp_slots if k not in act_slots)
+    extra_slots = sum(1 for k in act_slots if k not in exp_slots)
+    mismatched_slots = sum(1 for k in exp_slots if k in act_slots and exp_slots[k] != act_slots[k])
+
+    ok = (
+        meta_fail == 0
+        and workbook_records == 217
+        and mapped_records == 217
+        and unmapped_records == 0
+        and ambiguous_records == 0
+        and suffix_variant_collapsed == 0
+        and per_monster_pass == 217
+        and per_monster_fail == 0
+        and missing_slots == 0
+        and extra_slots == 0
+        and mismatched_slots == 0
     )
 
-    print("CANONICAL_DROP_EXCEL_IMPORT_PASS")
-    print("workbook_records=217")
-    print("mapped_records=217")
-    print("unmapped_records=0")
-    print("ambiguous_records=0")
-    print("excel_slot_count=%d" % len(excel_tuples))
-    print("generated_slot_count=%d" % len(gen_tuples))
-    print("missing_slots=%d" % len(missing))
-    print("extra_slots=%d" % len(extra))
-    print("mismatched_slots=0")
-    print("per_monster_pass=%d" % (len(set(e_by_mon) | set(g_by_mon)) - per_mon_fail))
-    print("per_monster_fail=%d" % per_mon_fail)
-    print("generated_record_count=%d" % record_count)
-    print("available_records=%d" % rec_status.get("available", 0))
-    print("no_drop_confirmed_records=%d" % rec_status.get("no_drop_confirmed", 0))
-    print("no_monitems_file_records=%d" % rec_status.get("no_monitems_file", 0))
-    print("record_fail=%d" % record_fail)
-    print("suffix_variant_collapsed=0")
-    print("chicken_id=14")
-    print("deer_id=16")
-    print("deer_variant_id=17")
-    print("woma_master_slots=%d" % g_by_mon.get(76, 0))
-    print("dark_woma_master_slots=%d" % g_by_mon.get(239, 0))
-    print("dark_rainbow_master_slots=%d" % g_by_mon.get(240, 0))
-    print("crystal_primary_runtime_records=0")
+    print("CANONICAL_DROP_EXCEL_IMPORT_PASS" if ok else "CANONICAL_DROP_EXCEL_IMPORT_FAIL")
+    print("workbook_records=%d" % workbook_records)
+    print("mapped_records=%d" % mapped_records)
+    print("unmapped_records=%d" % unmapped_records)
+    print("ambiguous_records=%d" % ambiguous_records)
+    print("excel_slot_count=%d" % excel_slot_count)
+    print("generated_slot_count=%d" % generated_slot_count)
+    print("missing_slots=%d" % missing_slots)
+    print("extra_slots=%d" % extra_slots)
+    print("mismatched_slots=%d" % mismatched_slots)
+    print("per_monster_pass=%d" % per_monster_pass)
+    print("per_monster_fail=%d" % per_monster_fail)
+    print("suffix_variant_collapsed=%d" % suffix_variant_collapsed)
+    print("chicken_id=%d" % name_to_id.get("鸡", -1))
+    print("deer_id=%d" % name_to_id.get("鹿", -1))
+    print("deer_variant_id=%d" % name_to_id.get("鹿1", -1))
+    print("woma_master_slots=%d" % exp_by_mon.get(76, 0))
+    print("dark_woma_master_slots=%d" % exp_by_mon.get(239, 0))
+    print("dark_rainbow_master_slots=%d" % exp_by_mon.get(240, 0))
 
-    if missing or extra or per_mon_fail or record_fail:
-        return 1
-    return 0
+    return 0 if ok else 1
 
 
 def main() -> int:
@@ -299,8 +394,8 @@ def main() -> int:
     rendered = json.dumps(source, ensure_ascii=False, indent=1) + "\n"
 
     if args.check:
-        generated = json.loads(Path(args.output).read_text(encoding="utf-8"))
-        return _check(wb, generated)
+        actual = json.loads(Path(args.output).read_text(encoding="utf-8"))
+        return _check(wb, source, actual)
 
     Path(args.output).write_text(rendered, encoding="utf-8")
     print("CANONICAL_MONSTER_DROP_SOURCE_BUILD_PASS: records=%d slots=%d" % (len(source["records"]), source["slot_count"]))
