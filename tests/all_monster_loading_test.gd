@@ -15,8 +15,8 @@ func _run() -> void:
 	var entries: Array = catalog.get("entries", [])
 	var entries_by_id: Dictionary = catalog.get("entries_by_id", {})
 	var summary: Dictionary = catalog.get("summary", {})
-	assert(entries.size() == 214, "canonical catalog must retain all 214 stable identities")
-	assert(entries_by_id.size() == 214, "canonical ID index must close all stable identities")
+	assert(entries.size() == 217, "canonical catalog must retain all 217 stable identities")
+	assert(entries_by_id.size() == 217, "canonical ID index must close all stable identities")
 	assert(catalog.get("identity_key", "") == "monster_id", "canonical catalog must be ID keyed")
 	var seen_ids: Dictionary = {}
 	var runtime_count := 0
@@ -72,7 +72,7 @@ func _run() -> void:
 	assert(ordinary_enemy.agility == 15 and ordinary_enemy.anti_poison == 0, "ID 64 legacy projection fields leaked into runtime")
 	ordinary_enemy.free()
 
-	print("ALL_MONSTER_LOADING_CANONICAL_PASS: identities=214 runtime_allowed=%d id_only=1" % runtime_count)
+	print("ALL_MONSTER_LOADING_CANONICAL_PASS: identities=217 runtime_allowed=%d id_only=1" % runtime_count)
 	get_tree().quit(0)
 
 

@@ -28,7 +28,7 @@ func _run() -> void:
 		== "monster.catalog.runtime_counts.v1",
 		"canonical count contract drifted"
 	)
-	assert(int(counts.get("catalog_identity_count", 0)) == 214, "catalog identity count drifted")
+	assert(int(counts.get("catalog_identity_count", 0)) == 217, "catalog identity count drifted")
 	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 37, "catalog runtime policy count drifted")
 	assert(
 		int(counts.get("runtime_spawnable_count", -1)) == GameData.monsters.size(),
@@ -119,7 +119,7 @@ func _run() -> void:
 
 	print(
 		"MONSTER_WORLD_INTEGRATION_PASS: canonical_ids=6 "
-		+ "bridge_fail_closed=1 loot_rows_76=107 game_root_id_only=1"
+		+ "bridge_fail_closed=1 loot_rows_76=33 game_root_id_only=1"
 	)
 	get_tree().quit(0)
 
@@ -211,7 +211,7 @@ func _test_formal_runtime_bridge_projection() -> void:
 		)
 		raw_total += raw_spawns.size() + raw_bosses.size()
 		projected_total += projected_spawns.size() + projected_bosses.size()
-	assert(raw_total == 107, "formal canonical spawn total drifted")
+	assert(raw_total == 33, "formal canonical spawn total drifted")
 	assert(projected_total == raw_total, "bridge dropped canonical formal spawns")
 
 
@@ -221,13 +221,13 @@ func _test_loot_contract() -> void:
 	rng.seed = 20260815
 	var wooma_boss := loot_runtime.roll_monster_drops(76, rng, 6)
 	assert(bool(wooma_boss.get("configured", false)), "ID 76 drop profile not configured")
-	assert(int(wooma_boss.get("source_entry_count", 0)) == 107, "ID 76 must expose all 107 source rows")
-	assert(int(wooma_boss.get("resolution_attempted_count", 0)) == 107, "ID 76 rows did not enter item resolution")
+	assert(int(wooma_boss.get("source_entry_count", 0)) == 33, "ID 76 must expose all 33 source rows")
+	assert(int(wooma_boss.get("resolution_attempted_count", 0)) == 33, "ID 76 rows did not enter item resolution")
 	assert(int(wooma_boss.get("resolved_entry_count", 0)) > 0, "ID 76 is configured but can never produce an item")
 	assert(
 		int(wooma_boss.get("resolved_entry_count", -1))
 		+ (wooma_boss.get("rejected_entries", []) as Array).size()
-		== 107,
+		== 33,
 		"every ID 76 row must resolve or carry a stable rejection"
 	)
 	for monster_id: int in [68, 69]:

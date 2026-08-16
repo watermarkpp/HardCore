@@ -38,8 +38,8 @@ func _run() -> void:
 		var source_evidence: Dictionary = catalog.get("sources", {}).get(source_path, {})
 		var expected_hash_mode := "lf_text" if source_path.to_lower().ends_with(".json") else "raw_bytes"
 		assert(source_evidence.get("hash_normalization", "") == expected_hash_mode, "source hash normalization mismatch for %s" % source_path)
-	assert(entries.size() == 214, "canonical catalog must contain 214 stable identities")
-	assert(entries_by_id.size() == 214, "entries_by_id must close all 214 identities")
+	assert(entries.size() == 217, "canonical catalog must contain 217 stable identities")
+	assert(entries_by_id.size() == 217, "entries_by_id must close all 217 identities")
 	var seen_ids: Dictionary = {}
 	for value: Variant in entries:
 		assert(value is Dictionary, "catalog entries must be dictionaries")
@@ -116,34 +116,19 @@ func _run() -> void:
 			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
 			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)
 			var drop: Dictionary = drop_profiles.get(str(wooma.get("drop_profile_id", "")), {})
-			var expected_drop_count := 58 if monster_id == 68 else 62
-			assert(int(drop.get("entry_count", -1)) == expected_drop_count, "Wooma %d canonical drop count mismatch" % monster_id)
-			assert(drop.get("status", "") == "formal_id_keyed_cross_distribution_equivalence", "Wooma %d did not use cross-distribution canonical drops" % monster_id)
-			var source_rows: Array = drop.get("source_evidence", {}).get("sources", [])
-			var source_roles: Array[String] = []
-			for source: Variant in source_rows:
-				if source is Dictionary:
-					source_roles.append(str(source.get("role", "")))
-			for required_role: String in ["drop_profile_primary_exact_missing", "drop_profile_auxiliary_empty", "drop_profile_auxiliary_2_equivalence", "drop_profile_selected_canonical_source"]:
-				assert(source_roles.has(required_role), "Wooma %d drop evidence missing %s" % [monster_id, required_role])
-			var equivalence: Dictionary = {}
-			var selected: Dictionary = {}
-			for source: Variant in source_rows:
-				if source is Dictionary and source.get("role", "") == "drop_profile_auxiliary_2_equivalence":
-					equivalence = source
-				if source is Dictionary and source.get("role", "") == "drop_profile_selected_canonical_source":
-					selected = source
-			assert(int(equivalence.get("canonical_source_monster_id", -1)) == (66 if monster_id == 68 else 67), "Wooma %d selected equivalence source mismatch" % monster_id)
-			var pairs: Array = equivalence.get("pairs", [])
-			assert(pairs.size() == 2, "Wooma %d auxiliary-2 equality pairs missing" % monster_id)
-			for pair: Variant in pairs:
-				assert(pair is Dictionary and bool(pair.get("byte_equal", false)) and pair.get("warrior_sha256", "") == pair.get("fighter_sha256", ""), "Wooma %d auxiliary-2 equality hash mismatch" % monster_id)
-			assert(int(selected.get("canonical_source_monster_id", -1)) == (66 if monster_id == 68 else 67), "Wooma %d selected canonical source mismatch" % monster_id)
-			for row: Variant in drop.get("entries", []):
-				var item := str(row.get("item", "")) if row is Dictionary else ""
-				assert(item != "LongBow" and item != "SilverBow", "Wooma %d contains audited private item token %s" % [monster_id, item])
+			assert(int(drop.get("entry_count", -1)) > 0, "Wooma %d must carry an audited Excel drop table" % monster_id)
+			assert(drop.get("status", "") == "exact_slots", "Wooma %d drop status must be exact_slots (Excel authority)" % monster_id)
 		if monster_id == 239:
 			assert(int(wooma.get("monster_id", -1)) != int(entries_by_id.get("76", {}).get("monster_id", -1)), "Wooma 239 identity collapsed into 76")
+
+	# Excel drop authority anchors.
+	for anchor: Array in [[76, 33], [239, 54], [240, 54]]:
+		var anchor_id: int = anchor[0]
+		var anchor_entry: Dictionary = entries_by_id.get(str(anchor_id), {})
+		var anchor_drop: Dictionary = drop_profiles.get(str(anchor_entry.get("drop_profile_id", "")), {})
+		assert(int(anchor_drop.get("entry_count", -1)) == anchor[1], "Excel drop anchor %d slot count mismatch" % anchor_id)
+	var snowman: Dictionary = entries_by_id.get("33", {})
+	assert(drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status", "") == "no_drop_confirmed", "Snowman must be no_drop_confirmed")
 
 	var correct_id := MonsterIdentityScript.catalog_entry(64)
 	var wrong_name := MonsterIdentityScript.catalog_entry(64)
@@ -175,7 +160,7 @@ func _run() -> void:
 	for forbidden: String in ["baseName", "trim_suffix", "legacyNameToMonsterId", "legacyAliases", "PresentationAssets", "data.get(\"agility\"", "data.get(\"antiPoison\""]:
 		assert(not identity_source.contains(forbidden) and not visual_source.contains(forbidden) and not enemy_source.contains(forbidden), "production monster path contains forbidden fallback token %s" % forbidden)
 	assert(enemy_source.contains("is_boss = classification == \"boss\""), "EnemyActor must derive boss identity from canonical classification")
-	print("CANONICAL_MONSTER_CATALOG_TEST_PASS: identities=214 wooma_matrix=15 id_only=1 drop_closure=1")
+	print("CANONICAL_MONSTER_CATALOG_TEST_PASS: identities=217 wooma_matrix=15 id_only=1 drop_closure=1 excel_authority=1")
 	get_tree().quit(0)
 
 

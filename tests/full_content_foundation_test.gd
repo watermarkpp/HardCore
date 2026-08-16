@@ -48,7 +48,7 @@ func _run() -> void:
 			"Boss无法关联 canonical 运行时怪物记录"
 		)
 	var monster_counts := GameData.canonical_monster_counts()
-	assert(int(monster_counts.get("catalog_identity_count", 0)) == 214, "canonical怪物身份总数不符")
+	assert(int(monster_counts.get("catalog_identity_count", 0)) == 217, "canonical怪物身份总数不符")
 	assert(
 		int(monster_counts.get("runtime_spawnable_count", -1))
 		== monster_ids.size(),
