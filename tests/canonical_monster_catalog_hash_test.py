@@ -84,7 +84,10 @@ def main() -> None:
     lf_bytes = source_text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
     crlf_bytes = lf_bytes.replace(b"\n", b"\r\n")
 
-    with tempfile.TemporaryDirectory(dir=ROOT / "outputs", prefix="canonical_hash_") as temp:
+    temp_parent = ROOT / "outputs"
+    temp_parent.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.TemporaryDirectory(dir=temp_parent, prefix="canonical_hash_") as temp:
         temp_root = Path(temp)
         lf_copy = temp_root / "policy_lf.json"
         crlf_copy = temp_root / "policy_crlf.json"
