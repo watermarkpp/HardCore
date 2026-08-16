@@ -70,10 +70,11 @@ var semantic_detail_label: Label
 var sidebar_scroll: ScrollContainer
 var sidebar: VBoxContainer
 var monster_inspector_panel: PanelContainer
-var monster_inspector_scroll: ScrollContainer
 var monster_inspector_title: Label
 var monster_inspector_detail: RichTextLabel
 var monster_inspector_close_button: Button
+var monster_inspector_close_timer: Timer
+var monster_hover_suppressed_id := -1
 var random_region_fill_toggle: CheckBox
 var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
@@ -1729,7 +1730,47 @@ func _on_semantic_catalog_selected() -> void:
 	_activate_semantic_catalog_item(item)
 
 
+func _preview_monster_catalog_item(item: TreeItem) -> void:
+	if item == null:
+		return
+	var metadata: Variant = item.get_metadata(0)
+	if not metadata is Dictionary:
+		return
+	var kind := str(metadata.get("kind", ""))
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+		return
+	var entry: Dictionary = metadata.get("entry", {})
+	if not entry.is_empty():
+		_show_monster_inspector(entry)
+
+
+func _monster_id_for_item(item: TreeItem) -> int:
+	if item == null:
+		return -1
+	var metadata: Variant = item.get_metadata(0)
+	if not metadata is Dictionary:
+		return -1
+	var kind := str(metadata.get("kind", ""))
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+		return -1
+	return int(metadata.get("entry", {}).get("monster_id", -1))
+
+
 func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		var hover_item := semantic_catalog_tree.get_item_at_position(event.position)
+		var hover_id := _monster_id_for_item(hover_item)
+		if hover_id > 0 and hover_id == monster_hover_suppressed_id:
+			# Mouse is still parked on the row that was just clicked: keep the
+			# inspector hidden until the pointer leaves the row.
+			return
+		monster_hover_suppressed_id = -1
+		if hover_id > 0:
+			_preview_monster_catalog_item(hover_item)
+			_cancel_monster_inspector_close()
+		else:
+			_schedule_monster_inspector_close()
+		return
 	if not event is InputEventMouseButton or event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
 		return
 	var item := semantic_catalog_tree.get_item_at_position(event.position)
@@ -1744,11 +1785,12 @@ func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	var kind:=str(metadata.get("kind","")); var entry:Dictionary=metadata.get("entry",{})
 	var is_monster := kind in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]
 	if is_monster:
-		_show_monster_inspector(entry)
+		monster_hover_suppressed_id = int(entry.get("monster_id", -1))
+		_close_monster_inspector()
 	var placeable := kind == "npc" or bool(entry.get("placement_allowed", false))
 	if is_monster and not placeable:
 		semantic_content_id.text=str(entry.get("content_id",""))
-		status_label.text="已打开怪物资料：%s；当前条目不可放置。"%str(entry.get("display_name",""))
+		status_label.text="当前条目不可放置：%s"%str(entry.get("display_name",""))
 		return
 	for index in semantic_kind_option.item_count:
 		if str(semantic_kind_option.get_item_metadata(index))==kind: semantic_kind_option.select(index); _on_semantic_kind_selected(index); break
@@ -1765,8 +1807,7 @@ func _on_semantic_content_selected(index: int) -> void:
 	if entry is Dictionary:
 		semantic_content_id.text = str(entry.get("content_id", ""))
 		var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
-		if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
-			_show_monster_inspector(entry)
+		_close_monster_inspector()
 		_apply_semantic_combat_entry_defaults(kind, entry)
 		_refresh_semantic_detail(entry)
 		if preview != null:
@@ -1794,9 +1835,9 @@ func _refresh_semantic_detail(entry: Variant) -> void:
 		semantic_detail_label.text = ""
 		return
 	if entry.has("classification") or entry.has("monster_id"):
-		# Monster full details live in the floating inspector; keep the sidebar
-		# compact so 33/54/更多 drop rows never re-expand the left panel.
-		semantic_detail_label.text = "完整怪物资料已显示在浮动资料面板。\n当前：%s" % str(entry.get("display_name", ""))
+		# Monster full details appear on hover via the floating inspector; keep
+		# the sidebar compact so 33/54/更多 drop rows never re-expand the panel.
+		semantic_detail_label.text = "鼠标悬浮下方怪物资料目录中的怪物名称，可预览完整属性与掉落。\n当前选择：%s" % str(entry.get("display_name", ""))
 		return
 	semantic_detail_label.text = "名称：%s\n角色：%s" % [
 		str(entry.get("display_name", entry.get("content_id", ""))),
@@ -1899,6 +1940,13 @@ func _build_monster_inspector_panel() -> void:
 	monster_inspector_panel.visible = false
 	monster_inspector_panel.z_index = 100
 	monster_inspector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color(0.078, 0.086, 0.106, 1.0)
+	panel_style.border_color = Color(0.36, 0.42, 0.50, 1.0)
+	panel_style.set_border_width_all(1)
+	panel_style.set_corner_radius_all(4)
+	panel_style.set_content_margin_all(10)
+	monster_inspector_panel.add_theme_stylebox_override("panel", panel_style)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
 	monster_inspector_panel.add_child(box)
@@ -1913,19 +1961,25 @@ func _build_monster_inspector_panel() -> void:
 	monster_inspector_close_button.tooltip_text = "关闭怪物资料面板（Esc）"
 	monster_inspector_close_button.pressed.connect(_close_monster_inspector)
 	header.add_child(monster_inspector_close_button)
-	monster_inspector_scroll = ScrollContainer.new()
-	monster_inspector_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	monster_inspector_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	monster_inspector_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	monster_inspector_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	monster_inspector_scroll.custom_minimum_size = Vector2(0, 480)
-	box.add_child(monster_inspector_scroll)
+	# The RichTextLabel owns its vertical scrolling directly: no outer
+	# ScrollContainer wrapper, so the body always gets a real height.
 	monster_inspector_detail = RichTextLabel.new()
 	monster_inspector_detail.fit_content = false
-	monster_inspector_detail.scroll_active = false
+	monster_inspector_detail.scroll_active = true
 	monster_inspector_detail.selection_enabled = true
 	monster_inspector_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	monster_inspector_scroll.add_child(monster_inspector_detail)
+	monster_inspector_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	monster_inspector_detail.custom_minimum_size = Vector2(0, 400)
+	box.add_child(monster_inspector_detail)
+	monster_inspector_panel.mouse_entered.connect(_on_monster_inspector_mouse_entered)
+	monster_inspector_panel.mouse_exited.connect(_on_monster_inspector_mouse_exited)
+	if semantic_catalog_tree != null:
+		semantic_catalog_tree.mouse_exited.connect(_on_monster_catalog_mouse_exited)
+	monster_inspector_close_timer = Timer.new()
+	monster_inspector_close_timer.one_shot = true
+	monster_inspector_close_timer.wait_time = 0.15
+	monster_inspector_close_timer.timeout.connect(_on_monster_inspector_close_timer_timeout)
+	add_child(monster_inspector_close_timer)
 	add_child(monster_inspector_panel)
 
 
@@ -1941,6 +1995,35 @@ func _show_monster_inspector(entry: Dictionary) -> void:
 func _close_monster_inspector() -> void:
 	if monster_inspector_panel != null:
 		monster_inspector_panel.visible = false
+
+
+func _schedule_monster_inspector_close() -> void:
+	if monster_inspector_close_timer == null:
+		return
+	monster_inspector_close_timer.start()
+
+
+func _cancel_monster_inspector_close() -> void:
+	if monster_inspector_close_timer == null:
+		return
+	monster_inspector_close_timer.stop()
+
+
+func _on_monster_inspector_mouse_entered() -> void:
+	_cancel_monster_inspector_close()
+
+
+func _on_monster_inspector_mouse_exited() -> void:
+	_schedule_monster_inspector_close()
+
+
+func _on_monster_catalog_mouse_exited() -> void:
+	monster_hover_suppressed_id = -1
+	_schedule_monster_inspector_close()
+
+
+func _on_monster_inspector_close_timer_timeout() -> void:
+	_close_monster_inspector()
 
 
 func _layout_monster_inspector() -> void:
