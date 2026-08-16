@@ -58,6 +58,25 @@ def _assert_drop_equivalence_scope(catalog: dict[str, object]) -> None:
     assert current_profiles["drop.68"].get("entry_count") + current_profiles["drop.69"].get("entry_count") == 120
 
 
+def _assert_classification_placement_kind() -> None:
+    """classification_for() must read the formal snake_case field, not the
+    retired camelCase spelling, so an authored ``placement_kind`` survives."""
+    classification_ids = GENERATOR.load_json(GENERATOR.CLASSIFICATION_ID_PATH)
+    policy = GENERATOR.load_json(GENERATOR.POLICY_PATH)
+    classification_name, placement_allowed, placement_kind, _, _ = (
+        GENERATOR.classification_for(39, classification_ids, policy)
+    )
+    assert classification_name == "special", classification_name
+    assert placement_allowed is True
+    assert placement_kind == "boss_spawn", placement_kind
+
+
+def _assert_local_from_res_portable() -> None:
+    """res:// paths must resolve through pathlib, not a hardcoded ``\\``."""
+    resolved = GENERATOR.local_from_res("res://assets/art/monsters/fixture.png")
+    assert resolved == ROOT / "assets" / "art" / "monsters" / "fixture.png", resolved
+
+
 def main() -> None:
     source = ROOT / "assets" / "data" / "canonical_monster_catalog_policy_v1.json"
     source_bytes = source.read_bytes()
@@ -65,7 +84,7 @@ def main() -> None:
     lf_bytes = source_text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
     crlf_bytes = lf_bytes.replace(b"\n", b"\r\n")
 
-    with tempfile.TemporaryDirectory(dir=ROOT, prefix="canonical_hash_") as temp:
+    with tempfile.TemporaryDirectory(dir=ROOT / "outputs", prefix="canonical_hash_") as temp:
         temp_root = Path(temp)
         lf_copy = temp_root / "policy_lf.json"
         crlf_copy = temp_root / "policy_crlf.json"
@@ -103,11 +122,18 @@ def main() -> None:
         assert evidence.get("hash_normalization") == expected, (path, evidence)
 
     _assert_drop_equivalence_scope(catalog)
+    _assert_classification_placement_kind()
+    _assert_local_from_res_portable()
+    entries_by_id = catalog.get("entries_by_id", {})
+    assert entries_by_id.get("39", {}).get("editor_placement", {}).get(
+        "placement_kind"
+    ) == "boss_spawn", entries_by_id.get("39", {}).get("editor_placement", {})
 
     print(
         "CANONICAL_MONSTER_CATALOG_HASH_PASS: "
         "lf_crlf_equivalent=1 binary_raw=1 source_metadata=1 "
-        "drop_equivalence_scope=1"
+        "drop_equivalence_scope=1 classification_placement_kind=1 "
+        "local_from_res_portable=1"
     )
 
 

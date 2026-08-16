@@ -135,7 +135,7 @@ def deep_merge(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, Any]:
 
 
 def local_from_res(path_value: str) -> Path:
-    return ROOT / path_value.removeprefix("res://").replace("/", "\\")
+    return ROOT / path_value.removeprefix("res://").lstrip("/")
 
 
 def normalize_action(action: dict[str, Any]) -> dict[str, Any]:
@@ -295,12 +295,13 @@ def classification_for(
         placement_allowed = bool(policy_override["placement_allowed"])
     if classification_name in ("unresolved", "version_difference"):
         placement_allowed = False
-    placement_kind = str(
-        override.get(
-            "placementKind",
-            "monster_spawn" if classification_name in ("ordinary", "special", "non_hostile", "version_difference") else policy_table.get("placementKind", ""),
+    placement_kind = str(override.get("placement_kind", ""))
+    if placement_kind == "":
+        placement_kind = (
+            "monster_spawn"
+            if classification_name in ("ordinary", "special", "non_hostile", "version_difference")
+            else policy_table.get("placement_kind", "")
         )
-    )
     if policy_override.get("placement_semantics") == "ordinary_spawn":
         placement_kind = "monster_spawn"
     map_codes: list[str] = []

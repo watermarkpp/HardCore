@@ -69,7 +69,7 @@ func _ready() -> void:
 
 	# Special and version-difference entries remain visible with stable reasons,
 	# but cannot be placed when canonical art/runtime/drop closure rejects them.
-	_assert_entry(special, "monster.39", true)
+	_assert_entry(special, "boss.39", true)
 	_assert_entry(special, "monster.77", true)
 	_assert_entry(special, "monster.78", true)
 	var unknown_hall := Catalog.find("special_monster", "monster.77")
