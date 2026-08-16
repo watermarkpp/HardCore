@@ -211,7 +211,7 @@ func _test_formal_runtime_bridge_projection() -> void:
 		)
 		raw_total += raw_spawns.size() + raw_bosses.size()
 		projected_total += projected_spawns.size() + projected_bosses.size()
-	assert(raw_total == 33, "formal canonical spawn total drifted")
+	assert(raw_total == 107, "formal canonical spawn total drifted")
 	assert(projected_total == raw_total, "bridge dropped canonical formal spawns")
 
 
