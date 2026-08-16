@@ -23,10 +23,15 @@ static func source_parse_counts() -> Dictionary:
 	return _source_parse_counts.duplicate()
 
 
+const MONSTER_BROWSE_KINDS := [
+	"monster_spawn", "boss_spawn", "special_monster", "unresolved_monster",
+]
+
+
 static func entries(kind: String, preferred_map_id := 4) -> Array[Dictionary]:
 	if kind == "npc":
 		return _npc_entries(preferred_map_id)
-	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
+	if kind not in MONSTER_BROWSE_KINDS:
 		return []
 	var source := _canonical_source()
 	var result: Array[Dictionary] = []
@@ -51,7 +56,7 @@ static func find(kind: String, content_id: String) -> Dictionary:
 
 
 static func find_by_monster_id(kind: String, monster_id: int) -> Dictionary:
-	if kind not in ["monster_spawn", "boss_spawn", "special_monster"] or monster_id <= 0:
+	if kind not in MONSTER_BROWSE_KINDS or monster_id <= 0:
 		return {}
 	for entry: Dictionary in entries(kind, 4):
 		if int(entry.get("monster_id", -1)) == monster_id:
@@ -95,11 +100,13 @@ static func _catalog_kind_for_classification(classification: String) -> String:
 			return "monster_spawn"
 		"elite", "boss":
 			return "boss_spawn"
-		"special", "version_difference", "non_hostile", "unresolved":
-			# "unresolved" identities stay queryable in the special catalog and
-			# are marked non-placeable (fail-closed), never silently dropped.
+		"special", "version_difference", "non_hostile":
 			return "special_monster"
-	return "special_monster"
+		"unresolved":
+			return "unresolved_monster"
+	# Any future/unknown classification lands in the review-only browse group,
+	# never silently disguised as a placeable formal kind.
+	return "unresolved_monster"
 
 
 static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kind: String) -> Dictionary:

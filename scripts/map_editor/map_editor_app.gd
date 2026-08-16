@@ -69,6 +69,11 @@ var semantic_detail_scroll: ScrollContainer
 var semantic_detail_label: Label
 var sidebar_scroll: ScrollContainer
 var sidebar: VBoxContainer
+var monster_inspector_panel: PanelContainer
+var monster_inspector_scroll: ScrollContainer
+var monster_inspector_title: Label
+var monster_inspector_detail: RichTextLabel
+var monster_inspector_close_button: Button
 var random_region_fill_toggle: CheckBox
 var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
@@ -286,6 +291,7 @@ func _build_ui() -> void:
 		first_asset.select(0)
 		_activate_asset_tree_item(first_asset)
 	_activate_select_tool()
+	_build_monster_inspector_panel()
 
 
 func _field(parent: Control, label_text: String, initial: String) -> LineEdit:
@@ -1686,9 +1692,22 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 func _refresh_semantic_catalog_tree() -> void:
 	semantic_catalog_tree.clear()
 	var root := semantic_catalog_tree.create_item()
-	for group: Array in [["NPC目录", "npc"], ["怪物目录", "monster_spawn"], ["精英与Boss目录", "boss_spawn"], ["特殊地图怪物", "special_monster"]]:
-		var folder := semantic_catalog_tree.create_item(root); folder.set_text(0, group[0]); folder.set_selectable(0, false); folder.collapsed = true
-		for entry: Dictionary in MapEditorContentCatalogService.entries(group[1], 4):
+	for group: Array in [
+		["NPC目录", "npc", false],
+		["普通怪物", "monster_spawn", true],
+		["精英与Boss", "boss_spawn", true],
+		["特殊怪物", "special_monster", true],
+		["待分类 / 待核验", "unresolved_monster", true],
+	]:
+		var entries := MapEditorContentCatalogService.entries(group[1], 4)
+		var label: String = group[0]
+		if group[2]:
+			label = "%s（%d）" % [group[0], entries.size()]
+		var folder := semantic_catalog_tree.create_item(root)
+		folder.set_text(0, label)
+		folder.set_selectable(0, false)
+		folder.collapsed = true
+		for entry: Dictionary in entries:
 			var item := semantic_catalog_tree.create_item(folder)
 			item.set_text(0, _semantic_catalog_tree_label(group[1], entry))
 			item.set_metadata(0, {"kind": group[1], "entry": entry})
@@ -1697,7 +1716,7 @@ func _refresh_semantic_catalog_tree() -> void:
 func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
 	var numeric_id := int(entry.get("monster_id", -1))
 	var name := str(entry.get("display_name", entry.get("content_id", "")))
-	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
 		return name
 	var label := "[ID %d] %s" % [numeric_id, name]
 	if not bool(entry.get("placement_allowed", false)):
@@ -1723,6 +1742,14 @@ func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
 func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	var metadata:Variant=item.get_metadata(0); if not metadata is Dictionary:return
 	var kind:=str(metadata.get("kind","")); var entry:Dictionary=metadata.get("entry",{})
+	var is_monster := kind in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]
+	if is_monster:
+		_show_monster_inspector(entry)
+	var placeable := kind == "npc" or bool(entry.get("placement_allowed", false))
+	if is_monster and not placeable:
+		semantic_content_id.text=str(entry.get("content_id",""))
+		status_label.text="已打开怪物资料：%s；当前条目不可放置。"%str(entry.get("display_name",""))
+		return
 	for index in semantic_kind_option.item_count:
 		if str(semantic_kind_option.get_item_metadata(index))==kind: semantic_kind_option.select(index); _on_semantic_kind_selected(index); break
 	semantic_content_id.text=str(entry.get("content_id",""))
@@ -1738,6 +1765,8 @@ func _on_semantic_content_selected(index: int) -> void:
 	if entry is Dictionary:
 		semantic_content_id.text = str(entry.get("content_id", ""))
 		var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
+		if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
+			_show_monster_inspector(entry)
 		_apply_semantic_combat_entry_defaults(kind, entry)
 		_refresh_semantic_detail(entry)
 		if preview != null:
@@ -1764,39 +1793,79 @@ func _refresh_semantic_detail(entry: Variant) -> void:
 	if not entry is Dictionary:
 		semantic_detail_label.text = ""
 		return
+	if entry.has("classification") or entry.has("monster_id"):
+		# Monster full details live in the floating inspector; keep the sidebar
+		# compact so 33/54/更多 drop rows never re-expand the left panel.
+		semantic_detail_label.text = "完整怪物资料已显示在浮动资料面板。\n当前：%s" % str(entry.get("display_name", ""))
+		return
+	semantic_detail_label.text = "名称：%s\n角色：%s" % [
+		str(entry.get("display_name", entry.get("content_id", ""))),
+		_service_role_chinese(str(entry.get("service_role", "dialogue"))),
+	]
+
+
+func _build_monster_detail_text(entry: Dictionary) -> String:
 	var lines: Array[String] = []
-	lines.append("名称：%s（ID %d）" % [str(entry.get("display_name", "")), int(entry.get("monster_id", -1))])
-	lines.append("分类：%s   实际语义：%s" % [
-		str(entry.get("classification", "")),
-		"Boss刷新" if str(entry.get("placement_kind", "")) == "boss_spawn" else "普通刷新",
-	])
-	lines.append("允许放置：%s" % ("是" if bool(entry.get("placement_allowed", false)) else "否"))
-	var rejection := str(entry.get("placement_rejection_reason", ""))
-	if not rejection.is_empty():
-		lines.append("禁止原因：%s" % rejection)
-	if bool(entry.get("attributes_verified", false)):
-		lines.append("等级 %s  生命 %s  攻击 %s-%s  防御 %s-%s  魔防 %s-%s  经验 %s" % [
-			entry.get("level", ""), entry.get("hp", ""),
-			entry.get("attack_min", ""), entry.get("attack_max", ""),
-			entry.get("defense_min", ""), entry.get("defense_max", ""),
-			entry.get("magic_defense_min", ""), entry.get("magic_defense_max", ""),
-			entry.get("experience", ""),
-		])
-		lines.append("AI：%s" % str(entry.get("ai_code", "")))
+	lines.append("%s" % str(entry.get("display_name", "")))
+	lines.append("ID %d" % int(entry.get("monster_id", -1)))
+	lines.append("")
+	lines.append("分类：%s" % str(entry.get("classification", "")))
+	var placement_kind := str(entry.get("placement_kind", ""))
+	var placement_label := placement_kind
+	if placement_kind == "boss_spawn":
+		placement_label = "boss_spawn（Boss刷新）"
+	elif placement_kind == "monster_spawn":
+		placement_label = "monster_spawn（普通刷新）"
+	lines.append("实际放置语义：%s" % placement_label)
+	var allowed := bool(entry.get("placement_allowed", false))
+	lines.append("允许放置：%s" % ("是" if allowed else "否"))
+	if not allowed:
+		var rejection := str(entry.get("placement_rejection_reason", "")).strip_edges()
+		if rejection.is_empty():
+			rejection = "未记录具体原因"
+		lines.append("禁止原因：")
+		for reason: String in rejection.split(";"):
+			var stripped := reason.strip_edges()
+			if not stripped.is_empty():
+				lines.append("　· %s" % stripped)
+	lines.append("")
+	lines.append("—— 属性 ——")
+	var attrs_verified := bool(entry.get("attributes_verified", false))
+	lines.append("属性状态：%s" % ("已验证" if attrs_verified else "参考数据，尚未完成主源核验"))
+	var has_stats := _entry_has_combat_stats(entry)
+	if has_stats:
+		lines.append("等级：%s" % _fmt_attr(entry.get("level")))
+		lines.append("生命：%s" % _fmt_attr(entry.get("hp")))
+		lines.append("攻击：%s - %s" % [_fmt_attr(entry.get("attack_min")), _fmt_attr(entry.get("attack_max"))])
+		lines.append("防御：%s - %s" % [_fmt_attr(entry.get("defense_min")), _fmt_attr(entry.get("defense_max"))])
+		lines.append("魔防：%s - %s" % [_fmt_attr(entry.get("magic_defense_min")), _fmt_attr(entry.get("magic_defense_max"))])
+		lines.append("经验：%s" % _fmt_attr(entry.get("experience")))
+		lines.append("AI：%s" % _fmt_attr(entry.get("ai_code")))
+		if not attrs_verified:
+			lines.append("（参考值，不代表已授权运行时放置。）")
 	else:
-		lines.append("属性未验证（禁止新放置）")
-	lines.append("贴图状态：%s" % str(entry.get("appearance_status", "")))
-	lines.append("掉落：%s   来源：%s   证据：%s" % [
-		str(entry.get("drop_summary", "")),
-		str(entry.get("drop_source", "")),
-		str(entry.get("evidence_status", "")),
-	])
+		lines.append("未取得属性数据")
+	lines.append("")
+	lines.append("—— 美术与运行时 ——")
+	lines.append("运行时允许：%s" % ("是" if bool(entry.get("runtime_allowed", false)) else "否"))
+	var appearance_status := str(entry.get("appearance_status", ""))
+	lines.append("正式战斗美术：%s" % ("已闭环" if appearance_status == "formal" else ("未闭环（%s）" % appearance_status if not appearance_status.is_empty() else "未闭环")))
+	lines.append("外观档案：%s" % str(entry.get("appearance_profile_id", "")))
+	lines.append("")
+	lines.append("—— 掉落 ——")
+	lines.append("掉落槽数：%d" % int(entry.get("drop_entry_count", 0)))
+	lines.append("掉落状态：%s" % str(entry.get("drop_status", "")))
+	lines.append("掉落来源：%s" % str(entry.get("drop_source", "")))
+	lines.append("证据状态：%s" % str(entry.get("evidence_status", "")))
 	var drop_entries: Array = entry.get("drop_entries", [])
 	if not drop_entries.is_empty():
-		lines.append("── 完整掉落（%d 项）──" % drop_entries.size())
+		lines.append("")
+		lines.append("完整掉落（%d 槽）：" % drop_entries.size())
+		var index := 0
 		for row: Variant in drop_entries:
 			if not row is Dictionary:
 				continue
+			index += 1
 			var raw := str(row.get("raw_text", "")).strip_edges()
 			if raw.is_empty():
 				raw = "%s %s" % [str(row.get("chance", "")), str(row.get("item", ""))]
@@ -1805,10 +1874,85 @@ func _refresh_semantic_detail(entry: Variant) -> void:
 			var resolution := str(row.get("item_resolution_status", ""))
 			if not resolution.is_empty() and resolution != "resolved":
 				raw += "  [%s]" % resolution
-			lines.append(raw)
+			lines.append("%03d  %s" % [index, raw])
 	else:
 		lines.append("完整掉落：无")
-	semantic_detail_label.text = "\n".join(lines)
+	return "\n".join(lines)
+
+
+func _entry_has_combat_stats(entry: Dictionary) -> bool:
+	for key: String in ["level", "hp", "attack_min", "attack_max", "defense_min", "defense_max", "magic_defense_min", "magic_defense_max", "experience"]:
+		var value: Variant = entry.get(key, null)
+		if value != null and str(value) != "":
+			return true
+	return false
+
+
+func _fmt_attr(value: Variant) -> String:
+	if value == null or str(value) == "":
+		return "未取得"
+	return str(value)
+
+
+func _build_monster_inspector_panel() -> void:
+	monster_inspector_panel = PanelContainer.new()
+	monster_inspector_panel.visible = false
+	monster_inspector_panel.z_index = 100
+	monster_inspector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 8)
+	monster_inspector_panel.add_child(box)
+	var header := HBoxContainer.new()
+	box.add_child(header)
+	monster_inspector_title = Label.new()
+	monster_inspector_title.add_theme_font_size_override("font_size", 16)
+	monster_inspector_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(monster_inspector_title)
+	monster_inspector_close_button = Button.new()
+	monster_inspector_close_button.text = "×"
+	monster_inspector_close_button.tooltip_text = "关闭怪物资料面板（Esc）"
+	monster_inspector_close_button.pressed.connect(_close_monster_inspector)
+	header.add_child(monster_inspector_close_button)
+	monster_inspector_scroll = ScrollContainer.new()
+	monster_inspector_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	monster_inspector_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_inspector_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	monster_inspector_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	monster_inspector_scroll.custom_minimum_size = Vector2(0, 480)
+	box.add_child(monster_inspector_scroll)
+	monster_inspector_detail = RichTextLabel.new()
+	monster_inspector_detail.fit_content = false
+	monster_inspector_detail.scroll_active = false
+	monster_inspector_detail.selection_enabled = true
+	monster_inspector_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_inspector_scroll.add_child(monster_inspector_detail)
+	add_child(monster_inspector_panel)
+
+
+func _show_monster_inspector(entry: Dictionary) -> void:
+	if monster_inspector_panel == null:
+		return
+	monster_inspector_title.text = "%s　ID %d" % [str(entry.get("display_name", "")), int(entry.get("monster_id", -1))]
+	monster_inspector_detail.text = _build_monster_detail_text(entry)
+	monster_inspector_panel.visible = true
+	_layout_monster_inspector()
+
+
+func _close_monster_inspector() -> void:
+	if monster_inspector_panel != null:
+		monster_inspector_panel.visible = false
+
+
+func _layout_monster_inspector() -> void:
+	if monster_inspector_panel == null:
+		return
+	var viewport := get_viewport_rect().size
+	var width := 520.0
+	var height := minf(680.0, maxf(240.0, viewport.y - 80.0))
+	var x := minf(340.0, maxf(8.0, viewport.x - width - 12.0))
+	var y := minf(40.0, maxf(8.0, viewport.y - height - 12.0))
+	monster_inspector_panel.position = Vector2(x, y)
+	monster_inspector_panel.size = Vector2(width, height)
 
 
 func _service_role_chinese(role: String) -> String:
@@ -2080,6 +2224,10 @@ func _on_save_calibration_pressed() -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not (event is InputEventKey) or not event.pressed or event.echo:
+		return
+	if event.keycode == KEY_ESCAPE and monster_inspector_panel != null and monster_inspector_panel.visible:
+		_close_monster_inspector()
+		get_viewport().set_input_as_handled()
 		return
 	var shortcut_pressed: bool = event.ctrl_pressed or event.meta_pressed
 	if shortcut_pressed and event.keycode == KEY_C:
