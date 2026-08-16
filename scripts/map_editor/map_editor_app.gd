@@ -67,6 +67,8 @@ var semantic_place_toggle: CheckBox
 var semantic_catalog_tree: Tree
 var semantic_detail_scroll: ScrollContainer
 var semantic_detail_label: Label
+var sidebar_scroll: ScrollContainer
+var sidebar: VBoxContainer
 var random_region_fill_toggle: CheckBox
 var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
@@ -146,12 +148,15 @@ func _build_ui() -> void:
 	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 12)
 	layout.add_theme_constant_override("separation", 12)
 	add_child(layout)
-	var sidebar_scroll := ScrollContainer.new()
-	sidebar_scroll.custom_minimum_size.x = 310
+	sidebar_scroll = ScrollContainer.new()
+	sidebar_scroll.custom_minimum_size.x = 320
+	sidebar_scroll.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	sidebar_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sidebar_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	layout.add_child(sidebar_scroll)
-	var sidebar := VBoxContainer.new()
-	sidebar.custom_minimum_size.x = 290
+	sidebar = VBoxContainer.new()
+	sidebar.custom_minimum_size.x = 320
+	sidebar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sidebar.add_theme_constant_override("separation", 8)
 	sidebar_scroll.add_child(sidebar)
 	var title := Label.new(); title.text = "MSE-V3.5.1 场景编辑器"; title.add_theme_font_size_override("font_size", 15); sidebar.add_child(title)
@@ -225,10 +230,12 @@ func _build_ui() -> void:
 	sidebar.add_child(semantic_kind_option)
 	var content_label := Label.new(); content_label.text = "NPC / 怪物 / Boss / 特殊地图目录"; sidebar.add_child(content_label)
 	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
-	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size.y = 150; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
+	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size = Vector2(0, 150); semantic_catalog_tree.size_flags_horizontal = Control.SIZE_EXPAND_FILL; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
 	semantic_detail_scroll = ScrollContainer.new()
 	semantic_detail_scroll.custom_minimum_size = Vector2(0, 180)
 	semantic_detail_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	semantic_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	semantic_detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	semantic_detail_label = Label.new()
 	semantic_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	semantic_detail_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1643,14 +1650,14 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 	for entry: Dictionary in MapEditorContentCatalogService.entries(catalog_kind, 4):
 		var detail := ""
 		if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
-			if bool(entry.get("attributes_verified", false)):
-				detail = "  等级%s  生命%s  攻击%s-%s  防御%s-%s  魔防%s-%s  经验%s" % [entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""), entry.get("defense_min", ""), entry.get("defense_max", ""), entry.get("magic_defense_min", ""), entry.get("magic_defense_max", ""), entry.get("experience", "")]
-			else:
-				detail = "  属性未验证（禁止新放置）"
-			detail += "  %s  %s  默认%d秒" % [str(entry.get("classification", "")), str(entry.get("drop_summary", "")), int(entry.get("default_respawn_seconds", 60))]
+			var numeric_id := int(entry.get("monster_id", -1))
+			var name := str(entry.get("display_name", entry.get("content_id", "")))
+			detail = "[%d] %s" % [numeric_id, name]
+			if not bool(entry.get("placement_allowed", false)):
+				detail += "（不可放置）"
 		elif kind == "npc":
-			detail = "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
-		semantic_content_option.add_item(str(entry.get("display_name", entry.get("content_id", ""))) + detail)
+			detail = str(entry.get("display_name", entry.get("content_id", ""))) + "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
+		semantic_content_option.add_item(detail)
 		semantic_content_option.set_item_metadata(semantic_content_option.item_count - 1, entry)
 	semantic_content_option.visible = kind in ["npc", "monster_spawn", "boss_spawn", "special_monster"]
 	semantic_content_id.visible = semantic_content_option.visible
@@ -1688,22 +1695,13 @@ func _refresh_semantic_catalog_tree() -> void:
 
 
 func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
-	var label := str(entry.get("display_name", entry.get("content_id", "")))
+	var numeric_id := int(entry.get("monster_id", -1))
+	var name := str(entry.get("display_name", entry.get("content_id", "")))
 	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
-		return label
-	if bool(entry.get("attributes_verified", false)):
-		label += "｜Lv%s HP%s 攻%s-%s 防%s-%s 魔防%s-%s 经验%s" % [
-			entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""),
-			entry.get("defense_min", ""), entry.get("defense_max", ""), entry.get("magic_defense_min", ""),
-			entry.get("magic_defense_max", ""), entry.get("experience", ""),
-		]
-	else:
-		label += "｜属性未验证（禁止新放置）"
-	label += "｜%s｜%s｜默认%s秒" % [
-		str(entry.get("classification", "")), str(entry.get("drop_summary", "")), str(entry.get("default_respawn_seconds", 60)),
-	]
-	if kind == "special_monster":
-		label += "｜实际%s" % ("Boss刷新" if str(entry.get("placement_kind", "")) == "boss_spawn" else "普通刷新")
+		return name
+	var label := "[ID %d] %s" % [numeric_id, name]
+	if not bool(entry.get("placement_allowed", false)):
+		label += "（不可放置）"
 	return label
 
 

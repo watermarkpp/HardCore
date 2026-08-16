@@ -95,9 +95,11 @@ static func _catalog_kind_for_classification(classification: String) -> String:
 			return "monster_spawn"
 		"elite", "boss":
 			return "boss_spawn"
-		"special", "version_difference", "non_hostile":
+		"special", "version_difference", "non_hostile", "unresolved":
+			# "unresolved" identities stay queryable in the special catalog and
+			# are marked non-placeable (fail-closed), never silently dropped.
 			return "special_monster"
-	return ""
+	return "special_monster"
 
 
 static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kind: String) -> Dictionary:

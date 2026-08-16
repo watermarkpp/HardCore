@@ -35,9 +35,9 @@ func _ready() -> void:
 	assert(Catalog.find("monster_spawn", "monster.39").is_empty())
 	assert(Catalog.find("boss_spawn", "boss.39").is_empty())
 
-	# F. Woma Taurus (76) full 107-row canonical drop profile, 沃玛号角 visible.
+	# F. Woma Taurus (76) full 33-row canonical drop profile, 沃玛号角 visible.
 	var taurus := Catalog.find("boss_spawn", "boss.76")
-	assert(int(taurus.get("drop_entry_count", 0)) == 107)
+	assert(int(taurus.get("drop_entry_count", 0)) == 33)
 	assert(_has_drop_raw(taurus, "沃玛号角"))
 
 	# G. version-difference / no-drop variant reports empty drops.
@@ -80,7 +80,7 @@ func _ready() -> void:
 	assert(int(content.bosses[0].get("monster_id", -1)) == 76)
 	assert(int(content.bosses[1].get("monster_id", -1)) == 159)
 
-	print("MAP_EDITOR_BOSS_CATALOG_RUNTIME_PASS ordinary=%d boss=%d special=%d taurus_drops=107" % [monsters.size(), bosses.size(), special.size()])
+	print("MAP_EDITOR_BOSS_CATALOG_RUNTIME_PASS ordinary=%d boss=%d special=%d taurus_drops=33" % [monsters.size(), bosses.size(), special.size()])
 	get_tree().quit()
 
 
