@@ -76,7 +76,9 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
+      "runtime_semantics": "enemy_actor",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "24": {
       "classification": "ordinary",
@@ -211,7 +213,9 @@
       "classification": "special",
       "placement_kind": "boss_spawn",
       "placement_allowed": true,
-      "resolution": "attachment_exact_id_override"
+      "resolution": "attachment_exact_id_override",
+      "runtime_semantics": "enemy_actor",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "41": {
       "classification": "elite",
@@ -246,7 +250,8 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)；R1 correction: re-closed (drop item 蝎子尾巴 unresolved)",
+      "runtime_blocked_reason": "DROP_ITEMS_UNRESOLVED"
     },
     "46": {
       "classification": "ordinary",
@@ -673,7 +678,9 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
+      "runtime_semantics": "enemy_actor",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "110": {
       "classification": "ordinary",
@@ -771,7 +778,9 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
+      "runtime_semantics": "enemy_actor",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "122": {
       "classification": "elite",
@@ -809,9 +818,11 @@
     "126": {
       "classification": "special",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_event_entity",
-      "notes": "事件/召唤/脚本实体；special；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "事件/召唤/脚本实体；special；R1 correction: re-closed (no EnemyActor runtime handler evidence)",
+      "runtime_semantics": "event_entity",
+      "runtime_semantics_evidence": "exact_service_name aiCode=12; authority notes: event/summon/script entity"
     },
     "127": {
       "classification": "ordinary",
@@ -879,13 +890,17 @@
       "classification": "special",
       "placement_kind": "",
       "placement_allowed": true,
-      "resolution": "attachment_exact_id_override"
+      "resolution": "attachment_exact_id_override",
+      "runtime_semantics": "enemy_actor",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "137": {
       "classification": "special",
       "placement_kind": "",
       "placement_allowed": true,
-      "resolution": "attachment_exact_id_override"
+      "resolution": "attachment_exact_id_override",
+      "runtime_semantics": "enemy_actor",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "138": {
       "classification": "ordinary",
@@ -934,7 +949,9 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_special_map_variant",
-      "notes": "未知暗殿(1571)专用刷新；special 内部变体；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "未知暗殿(1571)专用刷新；special 内部变体；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
+      "runtime_semantics": "special_map_enemy",
+      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
     },
     "143": {
       "classification": "boss",

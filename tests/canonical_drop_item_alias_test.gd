@@ -37,8 +37,8 @@ func _run() -> void:
 	#    expanded by exact-ID evidence, so only a floor is asserted here.
 	var counts: Dictionary = GameData.canonical_monster_counts()
 	assert(int(counts.get("catalog_identity_count", 0)) == 217, "217 identities drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) >= 37, "catalog runtime allowed drifted")
-	assert(int(counts.get("runtime_spawnable_count", 0)) >= 37, "runtime spawnable drifted")
+	assert(int(counts.get("catalog_runtime_allowed_count", 0)) >= 120, "catalog runtime allowed drifted")
+	assert(int(counts.get("runtime_spawnable_count", 0)) >= 120, "runtime spawnable drifted")
 	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "runtime rejected count not zero")
 
 	# 4. 施毒术 remains material-free: casting with zero of the three alias

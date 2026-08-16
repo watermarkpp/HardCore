@@ -40,6 +40,7 @@ ART_PATHS = [
 ]
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
+APPROVED_COMBAT_SEMANTICS = {"enemy_actor", "special_map_enemy"}
 TEXT_HASH_SUFFIXES = {".json"}
 WOOMA_EQUIVALENCE_IDS = {68, 69}
 EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
@@ -640,6 +641,32 @@ def drop_for(
     }
 
 
+def _combat_stats_ok(stats: dict[str, Any], require_attack: bool) -> bool:
+    """Complete exact-ID combat stats with valid value domains.
+
+    Zero is a legal value for several stats (defense/magic_defense/exp), so
+    presence is judged by the required-domain rules below rather than a
+    blanket non-zero check.
+    """
+    if int(stats.get("level", 0)) <= 0:
+        return False
+    if int(stats.get("hp", 0)) <= 0:
+        return False
+    if int(stats.get("defense", 0)) < 0:
+        return False
+    if int(stats.get("magic_defense", 0)) < 0:
+        return False
+    if int(stats.get("exp", 0)) < 0:
+        return False
+    attack_min = int(stats.get("attack_min", 0))
+    attack_max = int(stats.get("attack_max", 0))
+    if attack_min > attack_max:
+        return False
+    if require_attack and attack_max <= 0:
+        return False
+    return True
+
+
 def build_catalog() -> dict[str, Any]:
     vanilla = load_json(VANILLA_PATH)
     service = load_json(SERVICE_PATH)
@@ -867,7 +894,6 @@ def build_catalog() -> dict[str, Any]:
         drop_profiles[drop_profile_id] = drop_profile
         appearance = appearance_profiles[art_profile_id]
         art_ok = appearance.get("status") == "formal"
-        classification_ok = classification_name != "unresolved" and placement_allowed
         class_id_override = classification_ids.get("exact_id_overrides", {}).get(str(monster_id), {})
         drop_exception = (
             policy_wooma.get("drop_exemption", {})
@@ -887,9 +913,52 @@ def build_catalog() -> dict[str, Any]:
         # source-evidenced drop table.  The drop profile itself remains in the
         # catalog as missing_for_hostile for later source-priority repair.
         combat_identity_ok = bool(service_exact_for_identity or auxiliary_combat_evidence)
-        placement_allowed = bool(placement_allowed and drop_ok and combat_identity_ok)
-        classification_ok = classification_name != "unresolved" and placement_allowed
-        runtime_allowed = bool(art_ok and classification_ok and drop_ok and combat_identity_ok)
+
+        # Full runtime closure: identity presence alone is not enough.  Stats
+        # must be complete with valid domains, AI must carry a formal exact-ID
+        # resolution, timing must be formal for standard combat actors, and
+        # special monsters must carry an approved runtime semantics.  The
+        # authority ``placement_allowed`` is the *requested* policy; the
+        # emitted editor_placement.allowed is the final closure result.
+        classification_placement_requested = placement_allowed
+        classification_ok = classification_name not in ("unresolved", "version_difference")
+        runtime_semantics = str(class_id_override.get("runtime_semantics", "")) if isinstance(class_id_override, dict) else ""
+        runtime_semantics_ok = (
+            True
+            if classification_name != "special"
+            else runtime_semantics in APPROVED_COMBAT_SEMANTICS
+        )
+        authority_blocked = str(class_id_override.get("runtime_blocked_reason", "")) if isinstance(class_id_override, dict) else ""
+        standard_combat = (
+            classification_name in ("ordinary", "elite", "boss")
+            or runtime_semantics in APPROVED_COMBAT_SEMANTICS
+        )
+        combat_stats_ok = _combat_stats_ok(stats, hostile_classification and standard_combat)
+        ai_ok = (
+            int(ai.get("ai_code", -1)) >= 0
+            and str(ai.get("resolution_status", "")) not in ("", "unresolved", "unresolved_project_fallback")
+        )
+        timing_ok = True
+        if standard_combat:
+            timing_ok = (
+                int(timing.get("attack_interval_ms", 0)) > 0
+                and int(timing.get("move_interval_ms", 0)) > 0
+                and bool(str(timing.get("confidence", "")).strip())
+            )
+        full_closure = (
+            classification_placement_requested
+            and classification_ok
+            and combat_identity_ok
+            and combat_stats_ok
+            and ai_ok
+            and timing_ok
+            and art_ok
+            and drop_ok
+            and runtime_semantics_ok
+            and not authority_blocked
+        )
+        placement_allowed = full_closure
+        runtime_allowed = full_closure
         service_image = ai.get("image", -1)
         art_appearance = appearance.get("atlas", {}).get("appearance", 0)
         appearance_translation = None
@@ -964,6 +1033,13 @@ def build_catalog() -> dict[str, Any]:
                     "classification_status": classification_name,
                     "identity_resolution": identity_resolution,
                     "combat_identity_ok": combat_identity_ok,
+                    "combat_stats_ok": combat_stats_ok,
+                    "ai_ok": ai_ok,
+                    "ai_resolution_status": str(ai.get("resolution_status", "")),
+                    "timing_ok": timing_ok,
+                    "runtime_semantics": runtime_semantics,
+                    "runtime_semantics_ok": runtime_semantics_ok,
+                    "runtime_blocked_reason": authority_blocked,
                     "drop_status": drop_profile.get("status", ""),
                     "drop_entry_count": int(drop_profile.get("entry_count", 0)),
                     "drop_exemption": drop_exception if has_drop_exemption else None,
