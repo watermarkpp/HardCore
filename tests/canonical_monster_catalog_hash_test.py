@@ -17,45 +17,33 @@ GENERATOR = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(GENERATOR)
 
 
-DROP_EQUIVALENCE_BASELINE_COMMIT = "f938510ce35d42845bd15bbe363e151361171a82"
+def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
+    """The user Excel (217 records / 9590 slots) is the canonical drop authority.
 
+    Old Crystal Drops must not be a primary runtime drop source.
+    """
+    entries = catalog.get("entries", [])
+    entries_by_id = catalog.get("entries_by_id", {})
+    drop_profiles = catalog.get("drop_profiles", {})
+    assert len(entries) == 217, len(entries)
 
-def _normalised_json_hash(value: object) -> str:
-    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return GENERATOR.sha256_bytes(payload.encode("utf-8"))
+    anchors = {76: 33, 239: 54, 240: 54}
+    for monster_id, expected in anchors.items():
+        entry = entries_by_id.get(str(monster_id), {})
+        profile = drop_profiles.get(str(entry.get("drop_profile_id", "")), {})
+        assert int(profile.get("entry_count", 0)) == expected, (monster_id, profile.get("entry_count"))
+        assert profile.get("status") == "exact_slots", (monster_id, profile.get("status"))
 
+    snowman = entries_by_id.get("33", {})
+    assert drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status") == "no_drop_confirmed"
 
-def _assert_drop_equivalence_scope(catalog: dict[str, object]) -> None:
-    """Only Wooma 68/69 may change drop rows in the audited equivalence fix."""
-    baseline_bytes = subprocess.check_output(
-        [
-            "git",
-            "show",
-            f"{DROP_EQUIVALENCE_BASELINE_COMMIT}:assets/data/runtime/canonical_monster_catalog.json",
-        ],
-        cwd=ROOT,
-    )
-    baseline = json.loads(baseline_bytes.decode("utf-8"))
-    current_profiles = catalog.get("drop_profiles", {})
-    baseline_profiles = baseline.get("drop_profiles", {})
-    assert isinstance(current_profiles, dict) and isinstance(baseline_profiles, dict)
-    assert set(current_profiles) == set(baseline_profiles)
+    for profile in drop_profiles.values():
+        for source in profile.get("source_evidence", {}).get("sources", []):
+            if isinstance(source, dict) and str(source.get("distribution", "")) == "server.crystal.cjlaaa":
+                assert not str(source.get("role", "")).startswith("drop_profile_primary"), source
 
-    for profile_id, profile in current_profiles.items():
-        if profile_id in {"drop.68", "drop.69"}:
-            continue
-        baseline_profile = baseline_profiles[profile_id]
-        assert profile.get("entry_count") == baseline_profile.get("entry_count"), profile_id
-        assert _normalised_json_hash(profile) == _normalised_json_hash(baseline_profile), profile_id
-
-    for profile_id, expected_count in (("drop.68", 58), ("drop.69", 62)):
-        profile = current_profiles[profile_id]
-        assert profile.get("entry_count") == expected_count
-        assert profile.get("status") == "formal_id_keyed_cross_distribution_equivalence"
-        items = {str(row.get("item", "")) for row in profile.get("entries", [])}
-        assert "LongBow" not in items and "SilverBow" not in items
-
-    assert current_profiles["drop.68"].get("entry_count") + current_profiles["drop.69"].get("entry_count") == 120
+    total = sum(int(p.get("entry_count", 0)) for p in drop_profiles.values())
+    assert total == 9590, total
 
 
 def _assert_classification_placement_kind() -> None:
@@ -124,7 +112,7 @@ def main() -> None:
         expected = "lf_text" if path.lower().endswith(".json") else "raw_bytes"
         assert evidence.get("hash_normalization") == expected, (path, evidence)
 
-    _assert_drop_equivalence_scope(catalog)
+    _assert_excel_drop_authority(catalog)
     _assert_classification_placement_kind()
     _assert_local_from_res_portable()
     entries_by_id = catalog.get("entries_by_id", {})
@@ -135,7 +123,7 @@ def main() -> None:
     print(
         "CANONICAL_MONSTER_CATALOG_HASH_PASS: "
         "lf_crlf_equivalent=1 binary_raw=1 source_metadata=1 "
-        "drop_equivalence_scope=1 classification_placement_kind=1 "
+        "excel_drop_authority=1 classification_placement_kind=1 "
         "local_from_res_portable=1"
     )
 

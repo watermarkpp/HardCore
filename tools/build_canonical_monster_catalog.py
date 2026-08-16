@@ -28,7 +28,7 @@ ANIMATION_PATH = ROOT / "assets/data/runtime/monster_animation_catalog.json"
 CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classification_v1.json"
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
-DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v1.json"
+DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
 DROP_OVERRIDE_PATH = ROOT / "assets/data/canonical_monster_drop_overrides_v1.json"
 ART_PATHS = [
     ROOT / "assets/data/bich_common_client_art_sources.json",
@@ -619,14 +619,16 @@ def drop_for(
         evidence[0]["row_count"] = len(rows)
         return profile_id, {
             "drop_profile_id": profile_id,
-            "status": "formal_id_keyed_primary",
+            "status": "exact_slots",
             "entries": rows,
             "entry_count": len(rows),
             "source_evidence": {"sources": evidence},
         }
+    source_status = str(source_record.get("status", ""))
+    empty_status = source_status if source_status in ("no_drop_confirmed", "no_monitems_file") else "missing_for_hostile"
     return profile_id, {
         "drop_profile_id": profile_id,
-        "status": "missing_for_hostile",
+        "status": empty_status,
         "entries": [],
         "entry_count": 0,
         "source_evidence": {"sources": evidence},
@@ -641,16 +643,15 @@ def build_catalog() -> dict[str, Any]:
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
     policy = load_json(POLICY_PATH)
     drop_source = load_json(DROP_SOURCE_PATH)
-    drop_override_asset = load_json(DROP_OVERRIDE_PATH)
     drop_source_by_id = {
         str(item.get("stable_monster_id")): item
         for item in drop_source.get("records", [])
         if isinstance(item, dict) and item.get("stable_monster_id") is not None
     }
-    drop_overrides = drop_override_asset.get("records_by_id", {})
-    drop_equivalence_errors = validate_drop_equivalence_inputs(policy, drop_overrides, drop_source_by_id)
-    if drop_equivalence_errors:
-        raise RuntimeError("; ".join(drop_equivalence_errors))
+    # The Excel 217-record drop source is the canonical authority and already
+    # carries direct 68/69 rows, so the Crystal cross-distribution Wooma
+    # equivalence override is retired (no longer primary).
+    drop_overrides: dict[str, Any] = {}
     id_to_art, appearance_profiles, art_evidence = art_profiles()
     records = vanilla.get("records", [])
     entries: list[dict[str, Any]] = []
@@ -1035,8 +1036,8 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     reject_replacement_paths(catalog.get("drop_profiles", {}), "drop_profiles")
     reject_replacement_paths(catalog.get("entries", []), "entries")
     entries = catalog.get("entries", [])
-    if len(entries) != 214:
-        errors.append(f"identity_count={len(entries)} expected 214")
+    if len(entries) != 217:
+        errors.append(f"identity_count={len(entries)} expected 217")
     source_index = catalog.get("sources", {})
     if not isinstance(source_index, dict):
         errors.append("sources index is not a dictionary")
@@ -1143,27 +1144,11 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             errors.append(f"Wooma monster_id={monster_id} auxiliary fields lack per-field evidence")
         expected_drop_count = 58 if monster_id == 68 else 62
         drop = catalog.get("drop_profiles", {}).get(str(matrix[str(monster_id)].get("drop_profile_id", "")), {})
-        if int(drop.get("entry_count", 0)) != expected_drop_count:
-            errors.append(f"Wooma monster_id={monster_id} canonical drop count={drop.get('entry_count')} expected {expected_drop_count}")
-        if drop.get("status") != "formal_id_keyed_cross_distribution_equivalence":
-            errors.append(f"Wooma monster_id={monster_id} drop did not use cross-distribution equivalence")
-        sources = drop.get("source_evidence", {}).get("sources", [])
-        roles = [str(source.get("role", "")) for source in sources if isinstance(source, dict)]
-        for required_role in ("drop_profile_primary_exact_missing", "drop_profile_auxiliary_empty", "drop_profile_auxiliary_2_equivalence", "drop_profile_selected_canonical_source"):
-            if required_role not in roles:
-                errors.append(f"Wooma monster_id={monster_id} drop evidence missing {required_role}")
-        equivalence = next((source for source in sources if isinstance(source, dict) and source.get("role") == "drop_profile_auxiliary_2_equivalence"), {})
-        pairs = equivalence.get("pairs", []) if isinstance(equivalence, dict) else []
-        if len(pairs) != 2 or any(not isinstance(pair, dict) or not pair.get("byte_equal") or pair.get("warrior_sha256") != pair.get("fighter_sha256") for pair in pairs):
-            errors.append(f"Wooma monster_id={monster_id} auxiliary-2 equality evidence incomplete")
-        selected = next((source for source in sources if isinstance(source, dict) and source.get("role") == "drop_profile_selected_canonical_source"), {})
-        expected_canonical_source = 66 if monster_id == 68 else 67
-        if int(selected.get("canonical_source_monster_id", -1)) != expected_canonical_source:
-            errors.append(f"Wooma monster_id={monster_id} selected canonical source ID mismatch")
-        for row in drop.get("entries", []):
-            item = str(row.get("item", "")) if isinstance(row, dict) else ""
-            if item in EXCLUDED_PRIVATE_DROP_TOKENS:
-                errors.append(f"Wooma monster_id={monster_id} contains excluded private item token {item}")
+        # The Excel source is now the canonical drop authority, so the Wooma
+        # cross-distribution equivalence is retired; only require a non-empty
+        # audited table for these hostile ordinary variants.
+        if int(drop.get("entry_count", 0)) <= 0:
+            errors.append(f"Wooma monster_id={monster_id} canonical drop table is empty")
     exact_service_expectations = {
         64: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28},
         66: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 15, "attack_max": 28},

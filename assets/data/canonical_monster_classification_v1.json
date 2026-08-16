@@ -4,6 +4,26 @@
   "source_path": "assets/data/map_editor_monster_spawn_classification_v1.json",
   "resolution_policy": "visibleName exact canonical name, unique only; no base-name, suffix trim, or alias",
   "exact_id_overrides": {
+    "1": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": ["0", "1", "2", "5"],
+      "resolution": "offline_unique_exact_name"
+    },
+    "2": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": ["0", "1", "2", "5"],
+      "resolution": "offline_unique_exact_name"
+    },
+    "3": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
     "18": {
       "classification": "ordinary",
       "placement_kind": "",
