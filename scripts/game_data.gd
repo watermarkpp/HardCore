@@ -33,6 +33,11 @@ const ITEM_ALIASES := {
 	"超级金疮药": "超级金创药",
 	"强效金创药": "超级金创药",
 	"强效魔法药": "超级魔法药",
+	# legacy monster drop exact aliases (audited; frozen canonical drop tokens
+	# must resolve to the canonical item identity without fuzzy matching)
+	"毒蜘蛛牙齿": "蜘蛛牙",
+	"食人树叶": "食人花叶",
+	"食人树的果实": "食人花果",
 }
 # 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
