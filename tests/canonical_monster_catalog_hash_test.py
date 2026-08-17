@@ -18,14 +18,17 @@ SPEC.loader.exec_module(GENERATOR)
 
 
 def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
-    """The user Excel (217 records / 9590 slots) is the canonical drop authority.
+    """The user Excel (217 source records / 9590 source slots) is the canonical
+    drop authority.  3 records (IDs 14/16/17 — 鸡/鹿/鹿1) were retired by user
+    decision, so the active runtime catalog carries 214 entries / 9561 slots.
 
     Old Crystal Drops must not be a primary runtime drop source.
     """
     entries = catalog.get("entries", [])
     entries_by_id = catalog.get("entries_by_id", {})
     drop_profiles = catalog.get("drop_profiles", {})
-    assert len(entries) == 217, len(entries)
+    # Active runtime identities: 217 source records - 3 retired = 214.
+    assert len(entries) == 214, len(entries)
 
     anchors = {76: 33, 239: 54, 240: 54}
     for monster_id, expected in anchors.items():
@@ -37,19 +40,12 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     snowman = entries_by_id.get("33", {})
     assert drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status") == "no_drop_confirmed"
 
-    # 21CQ stable Mob.aspx?ID identity: 鸡=14, 鹿=16, 鹿1=17.
-    assert entries_by_id.get("14", {}).get("canonical_name") == "鸡", entries_by_id.get("14")
-    assert entries_by_id.get("16", {}).get("canonical_name") == "鹿", entries_by_id.get("16")
-    assert entries_by_id.get("17", {}).get("canonical_name") == "鹿1", entries_by_id.get("17")
+    # Retired IDs 14 (鸡), 16 (鹿), 17 (鹿1) must NOT appear in active runtime.
+    for retired_id in ("14", "16", "17"):
+        assert retired_id not in entries_by_id, f"retired ID {retired_id} must not be in active canonical"
     # The Excel audit sequence IDs 1/2/3 are NOT canonical monster IDs.
     for forbidden in ("1", "2", "3"):
         assert forbidden not in entries_by_id, forbidden
-
-    # 鹿1 (17) is a hidden-suffix high-attribute variant from the Excel/21CQ
-    # offline audit; its classification evidence must not claim an attachment
-    # exact ID override (the attachment has no exactIdOverrides entry for 17).
-    deer1_classification = entries_by_id.get("17", {}).get("source_evidence", {}).get("classification", {})
-    assert deer1_classification.get("resolution") == "excel_offline_audit_hidden_suffix_variant", deer1_classification
 
     workbook_sha = "6902A37DB839577D2CE440B9EFDC4628430CF063BF9DF505F03B41E24A5D67EE"
     excel_primary_count = 0
@@ -67,11 +63,13 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
                 excel_primary_count += 1
             if distribution == "server.crystal.cjlaaa" and role.startswith("drop_profile_primary"):
                 crystal_primary_count += 1
-    assert excel_primary_count == 217, excel_primary_count
+    # Active runtime drop profiles: 217 source - 3 retired = 214.
+    assert excel_primary_count == 214, excel_primary_count
     assert crystal_primary_count == 0, crystal_primary_count
 
     total = sum(int(p.get("entry_count", 0)) for p in drop_profiles.values())
-    assert total == 9590, total
+    # Active runtime drop slots: 9590 source - 29 retired = 9561.
+    assert total == 9561, total
 
 
 def _assert_classification_placement_kind() -> None:
