@@ -31,11 +31,11 @@
   "summary": {
     "projectMonsterCount": 214,
     "previouslyFormalMonsterCount": 71,
-    "newFormalMonsterCount": 164,
+    "newFormalMonsterCount": 165,
     "uniqueVisualProfileCount": 86,
     "generatedAtlasCount": 430,
     "resolutionStatusCounts": {
-      "exact_monster_db_name": 155,
+      "exact_monster_db_name": 156,
       "controlled_name_compatibility": 9
     },
     "rejectedCount": 0
@@ -15249,6 +15249,98 @@
       "databaseName": "尸王2",
       "resolutionStatus": "exact_monster_db_name",
       "serviceRace": 81
+    },
+    "77": {
+      "appearance": 34,
+      "raceImg": 21,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+      "clientLibrarySha256": "6a46fc8d8fd093181bde0a8ceca8c25b8d3faf71752dbf47bbbd0a6e5fad5412",
+      "clientLibraryImageCount": 3670,
+      "blockBase": 1440,
+      "frameSize": [
+        336,
+        288
+      ],
+      "footAnchor": [
+        144,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1600,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1680,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 1700,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 77,
+      "name": "沃玛教主1",
+      "baseName": "沃玛教主",
+      "monsterIds": [
+        77
+      ],
+      "databaseName": "沃玛教主1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 92
     }
   },
   "runtimeMappings": {
@@ -30552,6 +30644,190 @@
       "databaseName": "尸王2",
       "resolutionStatus": "exact_monster_db_name",
       "serviceRace": 81
+    },
+    "沃玛教主1": {
+      "appearance": 34,
+      "raceImg": 21,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+      "clientLibrarySha256": "6a46fc8d8fd093181bde0a8ceca8c25b8d3faf71752dbf47bbbd0a6e5fad5412",
+      "clientLibraryImageCount": 3670,
+      "blockBase": 1440,
+      "frameSize": [
+        336,
+        288
+      ],
+      "footAnchor": [
+        144,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1600,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1680,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 1700,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 77,
+      "name": "沃玛教主1",
+      "baseName": "沃玛教主",
+      "monsterIds": [
+        77
+      ],
+      "databaseName": "沃玛教主1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 92
+    },
+    "沃玛教主": {
+      "appearance": 34,
+      "raceImg": 21,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+      "clientLibrarySha256": "6a46fc8d8fd093181bde0a8ceca8c25b8d3faf71752dbf47bbbd0a6e5fad5412",
+      "clientLibraryImageCount": 3670,
+      "blockBase": 1440,
+      "frameSize": [
+        336,
+        288
+      ],
+      "footAnchor": [
+        144,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1600,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1680,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 1700,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 77,
+      "name": "沃玛教主1",
+      "baseName": "沃玛教主",
+      "monsterIds": [
+        77
+      ],
+      "databaseName": "沃玛教主1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 92
     }
   },
   "rejectedMappings": []

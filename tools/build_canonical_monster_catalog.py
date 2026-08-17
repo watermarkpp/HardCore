@@ -204,6 +204,17 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
     profiles: dict[str, dict[str, Any]] = {}
     id_to_profile: dict[int, str] = {}
     id_evidence: dict[int, dict[str, Any]] = {}
+    # A shared appearance profile may legitimately be referenced by multiple
+    # canonical monster ids when exact client evidence proves the same
+    # (RaceImg, Appr, action table) resource. When any sharing id is a Wooma
+    # id with an explicit slug, that slug wins for the shared profile so the
+    # Wooma id's appearance_profile_id stays explicit (e.g. dark_wooma_taurus
+    # for 239 even when 77 沃玛教主1 shares the same atlas).
+    signature_wooma_slug: dict[str, str] = {}
+    for candidate_id, (_, candidate_mapping, _) in id_to_mapping.items():
+        if candidate_id in WOOma_SLUG_BY_ID:
+            candidate_signature = mapping_signature(candidate_mapping)
+            signature_wooma_slug.setdefault(candidate_signature, WOOma_SLUG_BY_ID[candidate_id])
     for monster_id, (manifest_name, mapping, manifest_path) in sorted(id_to_mapping.items()):
         signature = mapping_signature(mapping)
         profile_id = profile_by_signature.get(signature)
@@ -211,6 +222,8 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
             slug = str(mapping.get("name", "")).strip().lower().replace(" ", "_")
             if monster_id in WOOma_SLUG_BY_ID:
                 slug = WOOma_SLUG_BY_ID[monster_id]
+            elif signature in signature_wooma_slug:
+                slug = signature_wooma_slug[signature]
             slug = "".join(ch if ch.isalnum() or ch in "_-" else "_" for ch in slug).strip("_")
             profile_id = f"appearance.{slug or 'profile'}_{signature}"
             profile_by_signature[signature] = profile_id

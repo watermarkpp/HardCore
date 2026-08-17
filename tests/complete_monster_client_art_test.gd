@@ -44,7 +44,8 @@ func _run() -> void:
 
 	assert(allowed_count == int(catalog.get("summary", {}).get("runtime_allowed_count", -1)), "allowed appearance count must equal runtime/editor closure")
 	assert(MonsterIdentityScript.appearance_profile(68).get("appearance_profile_id", "") == MonsterIdentityScript.appearance_profile(69).get("appearance_profile_id", ""), "Wooma 68/69 must explicitly share one art profile")
-	assert(MonsterIdentityScript.appearance_profile(77).get("status", "") != "formal", "Wooma 77 art must remain unresolved")
+	assert(MonsterIdentityScript.appearance_profile(77).get("appearance_profile_id", "") == MonsterIdentityScript.appearance_profile(239).get("appearance_profile_id", ""), "Wooma 77/239 must explicitly share the exact dark_wooma_taurus art profile (R3C)")
+	assert(MonsterIdentityScript.appearance_profile(77).get("status", "") == "formal", "Wooma 77 art must be formal after R3C shared appearance authority")
 	assert(MonsterIdentityScript.appearance_profile(78).get("status", "") != "formal", "Wooma 78 art must remain unresolved")
 	assert(MonsterIdentityScript.appearance_profile(239).get("status", "") == "formal", "Wooma 239 art must retain its explicit profile")
 	assert(not MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must be runtime-enabled after R2 combat closure")

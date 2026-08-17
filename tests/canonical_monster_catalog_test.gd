@@ -111,7 +111,7 @@ func _run() -> void:
 		if monster_id == 78:
 			assert(str(wooma.get("status", "")) == "version_difference" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 78 must remain version_difference and unplaceable")
 		if monster_id == 77:
-			assert(str(wooma.get("editor_placement", {}).get("placement_kind", "")) == "monster_spawn" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 77 must keep ordinary spawn semantics but remain unresolved")
+			assert(str(wooma.get("editor_placement", {}).get("placement_kind", "")) == "monster_spawn" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 77 must keep ordinary spawn semantics but remain unplaceable (attack=0/semantics gate)")
 		if monster_id in [68, 69]:
 			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
 			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)

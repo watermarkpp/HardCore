@@ -42,9 +42,10 @@ def main() -> None:
     regressed = sorted(R3A_BASELINE_163 - ready)
     assert not regressed, f"R3A_BASELINE_163_REGRESSED ids={regressed}"
 
-    # R3A additions and the R3B ID45 must be present.
-    for mid in (14, 16, 56, 89, 45):
-        assert mid in ready, f"R3A/R3B addition {mid} not runtime_allowed"
+    # R3A additions must be present. ID45 belongs to the R3B 164 baseline and is
+    # locked by canonical_monster_r3b_baseline_164_test.py, not here.
+    for mid in (14, 16, 56, 89):
+        assert mid in ready, f"R3A addition {mid} not runtime_allowed"
 
     # Full closure contract for every ready monster.
     for mid in sorted(ready):
@@ -61,7 +62,7 @@ def main() -> None:
 
     print(
         "CANONICAL_MONSTER_R3A_BASELINE_163_PASS: baseline_163=%d runtime_allowed=%d "
-        "baseline_163_preserved=yes r3b_id45=yes" % (len(R3A_BASELINE_163), len(ready))
+        "baseline_163_preserved=yes" % (len(R3A_BASELINE_163), len(ready))
     )
 
 
