@@ -31,11 +31,11 @@
   "summary": {
     "projectMonsterCount": 214,
     "previouslyFormalMonsterCount": 71,
-    "newFormalMonsterCount": 143,
-    "uniqueVisualProfileCount": 74,
-    "generatedAtlasCount": 370,
+    "newFormalMonsterCount": 164,
+    "uniqueVisualProfileCount": 86,
+    "generatedAtlasCount": 430,
     "resolutionStatusCounts": {
-      "exact_monster_db_name": 134,
+      "exact_monster_db_name": 155,
       "controlled_name_compatibility": 9
     },
     "rejectedCount": 0
@@ -13317,6 +13317,1938 @@
       "databaseName": "飞火流星",
       "resolutionStatus": "exact_monster_db_name",
       "serviceRace": 120
+    },
+    "14": {
+      "appearance": 160,
+      "raceImg": 11,
+      "actionTable": "MA11",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon17.wil",
+      "clientLibrarySha256": "a7622886f172213ae1ec68950e28732d5d6e65444e246d8f1eecebd0f8b02846",
+      "clientLibraryImageCount": 2617,
+      "blockBase": 0,
+      "frameSize": [
+        144,
+        112
+      ],
+      "footAnchor": [
+        30,
+        54
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 14,
+      "name": "鸡",
+      "baseName": "鸡",
+      "monsterIds": [
+        14
+      ],
+      "databaseName": "鸡",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 51
+    },
+    "16": {
+      "appearance": 161,
+      "raceImg": 11,
+      "actionTable": "MA11",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon17.wil",
+      "clientLibrarySha256": "a7622886f172213ae1ec68950e28732d5d6e65444e246d8f1eecebd0f8b02846",
+      "clientLibraryImageCount": 2617,
+      "blockBase": 360,
+      "frameSize": [
+        176,
+        144
+      ],
+      "footAnchor": [
+        49,
+        72
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 16,
+      "name": "鹿",
+      "baseName": "鹿",
+      "monsterIds": [
+        16
+      ],
+      "databaseName": "鹿",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 52
+    },
+    "17": {
+      "appearance": 161,
+      "raceImg": 11,
+      "actionTable": "MA11",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon17.wil",
+      "clientLibrarySha256": "a7622886f172213ae1ec68950e28732d5d6e65444e246d8f1eecebd0f8b02846",
+      "clientLibraryImageCount": 2617,
+      "blockBase": 360,
+      "frameSize": [
+        176,
+        144
+      ],
+      "footAnchor": [
+        49,
+        72
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 17,
+      "name": "鹿1",
+      "baseName": "鹿",
+      "monsterIds": [
+        17
+      ],
+      "databaseName": "鹿1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 97
+    },
+    "47": {
+      "appearance": 20,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 0,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        95,
+        92
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 47,
+      "name": "骷髅",
+      "baseName": "骷髅",
+      "monsterIds": [
+        47
+      ],
+      "databaseName": "骷髅",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 86
+    },
+    "48": {
+      "appearance": 20,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 0,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        95,
+        92
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 48,
+      "name": "骷髅0",
+      "baseName": "骷髅",
+      "monsterIds": [
+        48
+      ],
+      "databaseName": "骷髅0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 86
+    },
+    "50": {
+      "appearance": 21,
+      "raceImg": 15,
+      "actionTable": "MA15",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 360,
+      "frameSize": [
+        208,
+        176
+      ],
+      "footAnchor": [
+        55,
+        101
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 50,
+      "name": "掷斧骷髅",
+      "baseName": "掷斧骷髅",
+      "monsterIds": [
+        50
+      ],
+      "databaseName": "掷斧骷髅",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 87
+    },
+    "51": {
+      "appearance": 21,
+      "raceImg": 15,
+      "actionTable": "MA15",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 360,
+      "frameSize": [
+        208,
+        176
+      ],
+      "footAnchor": [
+        55,
+        101
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 51,
+      "name": "掷斧骷髅0",
+      "baseName": "掷斧骷髅",
+      "monsterIds": [
+        51
+      ],
+      "databaseName": "掷斧骷髅0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 87
+    },
+    "52": {
+      "appearance": 22,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        57,
+        116
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 52,
+      "name": "骷髅战士",
+      "baseName": "骷髅战士",
+      "monsterIds": [
+        52
+      ],
+      "databaseName": "骷髅战士",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 88
+    },
+    "53": {
+      "appearance": 22,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        57,
+        116
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 53,
+      "name": "骷髅战士0",
+      "baseName": "骷髅战士",
+      "monsterIds": [
+        53
+      ],
+      "databaseName": "骷髅战士0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 88
+    },
+    "54": {
+      "appearance": 23,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 1080,
+      "frameSize": [
+        272,
+        208
+      ],
+      "footAnchor": [
+        65,
+        123
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1080,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1240,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1320,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 1340,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 54,
+      "name": "骷髅战将",
+      "baseName": "骷髅战将",
+      "monsterIds": [
+        54
+      ],
+      "databaseName": "骷髅战将",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "55": {
+      "appearance": 23,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 1080,
+      "frameSize": [
+        272,
+        208
+      ],
+      "footAnchor": [
+        65,
+        123
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1080,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1240,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1320,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 1340,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 55,
+      "name": "骷髅战将0",
+      "baseName": "骷髅战将",
+      "monsterIds": [
+        55
+      ],
+      "databaseName": "骷髅战将0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "56": {
+      "appearance": 150,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 0,
+      "frameSize": [
+        336,
+        256
+      ],
+      "footAnchor": [
+        98,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 56,
+      "name": "骷髅精灵",
+      "baseName": "骷髅精灵",
+      "monsterIds": [
+        56
+      ],
+      "databaseName": "骷髅精灵",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "57": {
+      "appearance": 150,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 0,
+      "frameSize": [
+        336,
+        256
+      ],
+      "footAnchor": [
+        98,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 57,
+      "name": "骷髅精灵1",
+      "baseName": "骷髅精灵",
+      "monsterIds": [
+        57
+      ],
+      "databaseName": "骷髅精灵1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "79": {
+      "appearance": 40,
+      "raceImg": 40,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon5.wil",
+      "clientLibrarySha256": "c7a89a9a75eb06cf2b50c4d21059f9112c80cdb09a6c31cef950e512f09b3ff4",
+      "clientLibraryImageCount": 3600,
+      "blockBase": 0,
+      "frameSize": [
+        176,
+        160
+      ],
+      "footAnchor": [
+        38,
+        88
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 79,
+      "name": "僵尸1",
+      "baseName": "僵尸",
+      "monsterIds": [
+        79
+      ],
+      "databaseName": "僵尸1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 94
+    },
+    "81": {
+      "appearance": 50,
+      "raceImg": 41,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 0,
+      "frameSize": [
+        224,
+        176
+      ],
+      "footAnchor": [
+        82,
+        74
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 81,
+      "name": "僵尸2",
+      "baseName": "僵尸",
+      "monsterIds": [
+        81
+      ],
+      "databaseName": "僵尸2",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 95
+    },
+    "83": {
+      "appearance": 51,
+      "raceImg": 42,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 430,
+      "frameSize": [
+        160,
+        144
+      ],
+      "footAnchor": [
+        46,
+        76
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 430,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 510,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 590,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 670,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 690,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 83,
+      "name": "僵尸3",
+      "baseName": "僵尸",
+      "monsterIds": [
+        83
+      ],
+      "databaseName": "僵尸3",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 96
+    },
+    "85": {
+      "appearance": 52,
+      "raceImg": 42,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 860,
+      "frameSize": [
+        160,
+        144
+      ],
+      "footAnchor": [
+        45,
+        72
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 860,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 940,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1020,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1100,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 1120,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 85,
+      "name": "僵尸4",
+      "baseName": "僵尸",
+      "monsterIds": [
+        85
+      ],
+      "databaseName": "僵尸4",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 96
+    },
+    "87": {
+      "appearance": 53,
+      "raceImg": 42,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 1290,
+      "frameSize": [
+        128,
+        112
+      ],
+      "footAnchor": [
+        35,
+        44
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1290,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1370,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1450,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1530,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 1550,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 87,
+      "name": "僵尸5",
+      "baseName": "僵尸",
+      "monsterIds": [
+        87
+      ],
+      "databaseName": "僵尸5",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 96
+    },
+    "89": {
+      "appearance": 152,
+      "raceImg": 19,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        76,
+        95
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 89,
+      "name": "尸王",
+      "baseName": "尸王",
+      "monsterIds": [
+        89
+      ],
+      "databaseName": "尸王",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 81
+    },
+    "90": {
+      "appearance": 152,
+      "raceImg": 19,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        76,
+        95
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 90,
+      "name": "尸王1",
+      "baseName": "尸王",
+      "monsterIds": [
+        90
+      ],
+      "databaseName": "尸王1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 81
+    },
+    "91": {
+      "appearance": 152,
+      "raceImg": 19,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        76,
+        95
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 91,
+      "name": "尸王2",
+      "baseName": "尸王",
+      "monsterIds": [
+        91
+      ],
+      "databaseName": "尸王2",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 81
     }
   },
   "runtimeMappings": {
@@ -26596,6 +28528,2030 @@
       "databaseName": "飞火流星",
       "resolutionStatus": "exact_monster_db_name",
       "serviceRace": 120
+    },
+    "鸡": {
+      "appearance": 160,
+      "raceImg": 11,
+      "actionTable": "MA11",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon17.wil",
+      "clientLibrarySha256": "a7622886f172213ae1ec68950e28732d5d6e65444e246d8f1eecebd0f8b02846",
+      "clientLibraryImageCount": 2617,
+      "blockBase": 0,
+      "frameSize": [
+        144,
+        112
+      ],
+      "footAnchor": [
+        30,
+        54
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_160_race_11/appearance_160_race_11_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 14,
+      "name": "鸡",
+      "baseName": "鸡",
+      "monsterIds": [
+        14
+      ],
+      "databaseName": "鸡",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 51
+    },
+    "鹿": {
+      "appearance": 161,
+      "raceImg": 11,
+      "actionTable": "MA11",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon17.wil",
+      "clientLibrarySha256": "a7622886f172213ae1ec68950e28732d5d6e65444e246d8f1eecebd0f8b02846",
+      "clientLibraryImageCount": 2617,
+      "blockBase": 360,
+      "frameSize": [
+        176,
+        144
+      ],
+      "footAnchor": [
+        49,
+        72
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 16,
+      "name": "鹿",
+      "baseName": "鹿",
+      "monsterIds": [
+        16
+      ],
+      "databaseName": "鹿",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 52
+    },
+    "鹿1": {
+      "appearance": 161,
+      "raceImg": 11,
+      "actionTable": "MA11",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon17.wil",
+      "clientLibrarySha256": "a7622886f172213ae1ec68950e28732d5d6e65444e246d8f1eecebd0f8b02846",
+      "clientLibraryImageCount": 2617,
+      "blockBase": 360,
+      "frameSize": [
+        176,
+        144
+      ],
+      "footAnchor": [
+        49,
+        72
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_161_race_11/appearance_161_race_11_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 17,
+      "name": "鹿1",
+      "baseName": "鹿",
+      "monsterIds": [
+        17
+      ],
+      "databaseName": "鹿1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 97
+    },
+    "骷髅": {
+      "appearance": 20,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 0,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        95,
+        92
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 47,
+      "name": "骷髅",
+      "baseName": "骷髅",
+      "monsterIds": [
+        47
+      ],
+      "databaseName": "骷髅",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 86
+    },
+    "骷髅0": {
+      "appearance": 20,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 0,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        95,
+        92
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_020_race_14/appearance_020_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 48,
+      "name": "骷髅0",
+      "baseName": "骷髅",
+      "monsterIds": [
+        48
+      ],
+      "databaseName": "骷髅0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 86
+    },
+    "掷斧骷髅": {
+      "appearance": 21,
+      "raceImg": 15,
+      "actionTable": "MA15",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 360,
+      "frameSize": [
+        208,
+        176
+      ],
+      "footAnchor": [
+        55,
+        101
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 50,
+      "name": "掷斧骷髅",
+      "baseName": "掷斧骷髅",
+      "monsterIds": [
+        50
+      ],
+      "databaseName": "掷斧骷髅",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 87
+    },
+    "掷斧骷髅0": {
+      "appearance": 21,
+      "raceImg": 15,
+      "actionTable": "MA15",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 360,
+      "frameSize": [
+        208,
+        176
+      ],
+      "footAnchor": [
+        55,
+        101
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 360,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 440,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 520,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 600,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_021_race_15/appearance_021_race_15_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 620,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 51,
+      "name": "掷斧骷髅0",
+      "baseName": "掷斧骷髅",
+      "monsterIds": [
+        51
+      ],
+      "databaseName": "掷斧骷髅0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 87
+    },
+    "骷髅战士": {
+      "appearance": 22,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        57,
+        116
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 52,
+      "name": "骷髅战士",
+      "baseName": "骷髅战士",
+      "monsterIds": [
+        52
+      ],
+      "databaseName": "骷髅战士",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 88
+    },
+    "骷髅战士0": {
+      "appearance": 22,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        57,
+        116
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_022_race_14/appearance_022_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 53,
+      "name": "骷髅战士0",
+      "baseName": "骷髅战士",
+      "monsterIds": [
+        53
+      ],
+      "databaseName": "骷髅战士0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 88
+    },
+    "骷髅战将": {
+      "appearance": 23,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 1080,
+      "frameSize": [
+        272,
+        208
+      ],
+      "footAnchor": [
+        65,
+        123
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1080,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1240,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1320,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 1340,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 54,
+      "name": "骷髅战将",
+      "baseName": "骷髅战将",
+      "monsterIds": [
+        54
+      ],
+      "databaseName": "骷髅战将",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "骷髅战将0": {
+      "appearance": 23,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+      "clientLibrarySha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+      "clientLibraryImageCount": 3690,
+      "blockBase": 1080,
+      "frameSize": [
+        272,
+        208
+      ],
+      "footAnchor": [
+        65,
+        123
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1080,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1240,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1320,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_023_race_14/appearance_023_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 1340,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 55,
+      "name": "骷髅战将0",
+      "baseName": "骷髅战将",
+      "monsterIds": [
+        55
+      ],
+      "databaseName": "骷髅战将0",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "骷髅精灵": {
+      "appearance": 150,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 0,
+      "frameSize": [
+        336,
+        256
+      ],
+      "footAnchor": [
+        98,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 56,
+      "name": "骷髅精灵",
+      "baseName": "骷髅精灵",
+      "monsterIds": [
+        56
+      ],
+      "databaseName": "骷髅精灵",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "骷髅精灵1": {
+      "appearance": 150,
+      "raceImg": 14,
+      "actionTable": "MA14",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 0,
+      "frameSize": [
+        336,
+        256
+      ],
+      "footAnchor": [
+        98,
+        137
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_150_race_14/appearance_150_race_14_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 120,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "RGBA"
+        }
+      },
+      "monsterId": 57,
+      "name": "骷髅精灵1",
+      "baseName": "骷髅精灵",
+      "monsterIds": [
+        57
+      ],
+      "databaseName": "骷髅精灵1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 89
+    },
+    "僵尸1": {
+      "appearance": 40,
+      "raceImg": 40,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon5.wil",
+      "clientLibrarySha256": "c7a89a9a75eb06cf2b50c4d21059f9112c80cdb09a6c31cef950e512f09b3ff4",
+      "clientLibraryImageCount": 3600,
+      "blockBase": 0,
+      "frameSize": [
+        176,
+        160
+      ],
+      "footAnchor": [
+        38,
+        88
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 79,
+      "name": "僵尸1",
+      "baseName": "僵尸",
+      "monsterIds": [
+        79
+      ],
+      "databaseName": "僵尸1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 94
+    },
+    "僵尸": {
+      "appearance": 40,
+      "raceImg": 40,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon5.wil",
+      "clientLibrarySha256": "c7a89a9a75eb06cf2b50c4d21059f9112c80cdb09a6c31cef950e512f09b3ff4",
+      "clientLibraryImageCount": 3600,
+      "blockBase": 0,
+      "frameSize": [
+        176,
+        160
+      ],
+      "footAnchor": [
+        38,
+        88
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_040_race_40/appearance_040_race_40_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 79,
+      "name": "僵尸1",
+      "baseName": "僵尸",
+      "monsterIds": [
+        79
+      ],
+      "databaseName": "僵尸1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 94
+    },
+    "僵尸2": {
+      "appearance": 50,
+      "raceImg": 41,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 0,
+      "frameSize": [
+        224,
+        176
+      ],
+      "footAnchor": [
+        82,
+        74
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 0,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 80,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 160,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 240,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 260,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 81,
+      "name": "僵尸2",
+      "baseName": "僵尸",
+      "monsterIds": [
+        81
+      ],
+      "databaseName": "僵尸2",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 95
+    },
+    "僵尸3": {
+      "appearance": 51,
+      "raceImg": 42,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 430,
+      "frameSize": [
+        160,
+        144
+      ],
+      "footAnchor": [
+        46,
+        76
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 430,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 510,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 590,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 670,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_051_race_42/appearance_051_race_42_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 690,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 83,
+      "name": "僵尸3",
+      "baseName": "僵尸",
+      "monsterIds": [
+        83
+      ],
+      "databaseName": "僵尸3",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 96
+    },
+    "僵尸4": {
+      "appearance": 52,
+      "raceImg": 42,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 860,
+      "frameSize": [
+        160,
+        144
+      ],
+      "footAnchor": [
+        45,
+        72
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 860,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 940,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1020,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1100,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_052_race_42/appearance_052_race_42_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 1120,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 85,
+      "name": "僵尸4",
+      "baseName": "僵尸",
+      "monsterIds": [
+        85
+      ],
+      "databaseName": "僵尸4",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 96
+    },
+    "僵尸5": {
+      "appearance": 53,
+      "raceImg": 42,
+      "actionTable": "MA20",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon6.wil",
+      "clientLibrarySha256": "39ec87ffae98f96d111b8a2a51f8958e64802f435db254b4ca67602d8ae2a7e6",
+      "clientLibraryImageCount": 1720,
+      "blockBase": 1290,
+      "frameSize": [
+        128,
+        112
+      ],
+      "footAnchor": [
+        35,
+        44
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 1290,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 1370,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 120,
+          "sourceAction": "ActAttack",
+          "sourceStart": 1450,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 1530,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_053_race_42/appearance_053_race_42_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 100,
+          "sourceAction": "ActDie",
+          "sourceStart": 1550,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 87,
+      "name": "僵尸5",
+      "baseName": "僵尸",
+      "monsterIds": [
+        87
+      ],
+      "databaseName": "僵尸5",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 96
+    },
+    "尸王": {
+      "appearance": 152,
+      "raceImg": 19,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        76,
+        95
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 89,
+      "name": "尸王",
+      "baseName": "尸王",
+      "monsterIds": [
+        89
+      ],
+      "databaseName": "尸王",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 81
+    },
+    "尸王1": {
+      "appearance": 152,
+      "raceImg": 19,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        76,
+        95
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 90,
+      "name": "尸王1",
+      "baseName": "尸王",
+      "monsterIds": [
+        90
+      ],
+      "databaseName": "尸王1",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 81
+    },
+    "尸王2": {
+      "appearance": 152,
+      "raceImg": 19,
+      "actionTable": "MA19",
+      "mappingConfidence": "B",
+      "pixelConfidence": "A",
+      "mappingSource": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
+      "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon16.wil",
+      "clientLibrarySha256": "79e3c918fb60e14864c4ba9f155c631adbee89485b61f8cb9859776ef8b53121",
+      "clientLibraryImageCount": 1588,
+      "blockBase": 720,
+      "frameSize": [
+        240,
+        192
+      ],
+      "footAnchor": [
+        76,
+        95
+      ],
+      "directions": 8,
+      "actions": {
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_idle.png",
+          "framesPerDirection": 4,
+          "frameMs": 200,
+          "sourceAction": "ActStand",
+          "sourceStart": 720,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 32,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_walk.png",
+          "framesPerDirection": 6,
+          "frameMs": 160,
+          "sourceAction": "ActWalk",
+          "sourceStart": 800,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_attack.png",
+          "framesPerDirection": 6,
+          "frameMs": 100,
+          "sourceAction": "ActAttack",
+          "sourceStart": 880,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 48,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_hit.png",
+          "framesPerDirection": 2,
+          "frameMs": 100,
+          "sourceAction": "ActStruck",
+          "sourceStart": 960,
+          "sourceDirectionStride": 2,
+          "validatedSourceFrameCount": 16,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_152_race_19/appearance_152_race_19_death.png",
+          "framesPerDirection": 10,
+          "frameMs": 140,
+          "sourceAction": "ActDie",
+          "sourceStart": 980,
+          "sourceDirectionStride": 10,
+          "validatedSourceFrameCount": 80,
+          "missingFrames": [],
+          "confidence": "A",
+          "pngStorageMode": "indexed_lossless"
+        }
+      },
+      "monsterId": 91,
+      "name": "尸王2",
+      "baseName": "尸王",
+      "monsterIds": [
+        91
+      ],
+      "databaseName": "尸王2",
+      "resolutionStatus": "exact_monster_db_name",
+      "serviceRace": 81
     }
   },
   "rejectedMappings": []
