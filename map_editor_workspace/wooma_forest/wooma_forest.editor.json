@@ -42,7 +42,7 @@
     "revision": 6.0,
     "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
-    "runtime_approved_revision": 6,
+    "runtime_approved_revision": 6.0,
     "template_kind": "empty_map",
     "template_status": "user_authored_official",
     "template_version_id": "wooma_forest_blank_v1",
@@ -3933,7 +3933,7 @@
         "source_map_key": "wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 4,
+        "target_map_id": 4.0,
         "target_map_key": "bich_province",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -3941,663 +3941,14 @@
           5.0
         ],
         "tile": [
-          3.0,
+          2.0,
           52.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [
-      {
-        "content_id": "monster.24",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.24",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000001",
-        "spawn_rule": "ambient",
-        "tile": [
-          10.0,
-          42.0
-        ]
-      },
-      {
-        "content_id": "monster.24",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.24",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000002",
-        "spawn_rule": "ambient",
-        "tile": [
-          41.0,
-          49.0
-        ]
-      },
-      {
-        "content_id": "monster.24",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.24",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000003",
-        "spawn_rule": "ambient",
-        "tile": [
-          4.0,
-          19.0
-        ]
-      },
-      {
-        "content_id": "monster.24",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.24",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000004",
-        "spawn_rule": "ambient",
-        "tile": [
-          21.0,
-          4.0
-        ]
-      },
-      {
-        "content_id": "monster.24",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.24",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000005",
-        "spawn_rule": "ambient",
-        "tile": [
-          49.0,
-          13.0
-        ]
-      },
-      {
-        "content_id": "monster.24",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.24",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000006",
-        "spawn_rule": "ambient",
-        "tile": [
-          44.0,
-          25.0
-        ]
-      },
-      {
-        "content_id": "monster.26",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.26",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000007",
-        "spawn_rule": "ambient",
-        "tile": [
-          16.0,
-          51.0
-        ]
-      },
-      {
-        "content_id": "monster.26",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.26",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000008",
-        "spawn_rule": "ambient",
-        "tile": [
-          13.0,
-          21.0
-        ]
-      },
-      {
-        "content_id": "monster.26",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.26",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000009",
-        "spawn_rule": "ambient",
-        "tile": [
-          14.0,
-          3.0
-        ]
-      },
-      {
-        "content_id": "monster.26",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.26",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000010",
-        "spawn_rule": "ambient",
-        "tile": [
-          33.0,
-          4.0
-        ]
-      },
-      {
-        "content_id": "monster.26",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.26",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000011",
-        "spawn_rule": "ambient",
-        "tile": [
-          47.0,
-          20.0
-        ]
-      },
-      {
-        "content_id": "monster.26",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.26",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000012",
-        "spawn_rule": "ambient",
-        "tile": [
-          44.0,
-          41.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000013",
-        "spawn_rule": "ambient",
-        "tile": [
-          18.0,
-          44.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000014",
-        "spawn_rule": "ambient",
-        "tile": [
-          7.0,
-          48.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000015",
-        "spawn_rule": "ambient",
-        "tile": [
-          1.0,
-          32.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000016",
-        "spawn_rule": "ambient",
-        "tile": [
-          5.0,
-          13.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000017",
-        "spawn_rule": "ambient",
-        "tile": [
-          41.0,
-          9.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000018",
-        "spawn_rule": "ambient",
-        "tile": [
-          45.0,
-          33.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000019",
-        "spawn_rule": "ambient",
-        "tile": [
-          32.0,
-          46.0
-        ]
-      },
-      {
-        "content_id": "monster.34",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.34",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000020",
-        "spawn_rule": "ambient",
-        "tile": [
-          23.0,
-          38.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000021",
-        "spawn_rule": "ambient",
-        "tile": [
-          13.0,
-          35.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000022",
-        "spawn_rule": "ambient",
-        "tile": [
-          15.0,
-          30.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000023",
-        "spawn_rule": "ambient",
-        "tile": [
-          36.0,
-          21.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000024",
-        "spawn_rule": "ambient",
-        "tile": [
-          18.0,
-          12.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000025",
-        "spawn_rule": "ambient",
-        "tile": [
-          36.0,
-          15.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000026",
-        "spawn_rule": "ambient",
-        "tile": [
-          31.0,
-          38.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000027",
-        "spawn_rule": "ambient",
-        "tile": [
-          52.0,
-          40.0
-        ]
-      },
-      {
-        "content_id": "monster.36",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.36",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000028",
-        "spawn_rule": "ambient",
-        "tile": [
-          26.0,
-          54.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000029",
-        "spawn_rule": "ambient",
-        "tile": [
-          20.0,
-          19.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000030",
-        "spawn_rule": "ambient",
-        "tile": [
-          28.0,
-          27.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000031",
-        "spawn_rule": "ambient",
-        "tile": [
-          28.0,
-          9.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000032",
-        "spawn_rule": "ambient",
-        "tile": [
-          51.0,
-          29.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000033",
-        "spawn_rule": "ambient",
-        "tile": [
-          4.0,
-          26.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000034",
-        "spawn_rule": "ambient",
-        "tile": [
-          10.0,
-          9.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000035",
-        "spawn_rule": "ambient",
-        "tile": [
-          20.0,
-          27.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000036",
-        "spawn_rule": "ambient",
-        "tile": [
-          28.0,
-          19.0
-        ]
-      }
-    ],
+    "monster_spawn": [],
     "npc_points": [],
     "object_base": [
       {
@@ -4908,7 +4259,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           177.0,
-          110.50000762939452
+          110.50000762939453
         ],
         "asset_id": "user.916b24806f8dfdb6",
         "collision_authority": "asset",
@@ -4954,7 +4305,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           177.0,
-          110.50000762939452
+          110.50000762939453
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5054,7 +4405,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           165.0,
-          124.00000762939452
+          124.00000762939453
         ],
         "asset_id": "user.c8910d198a7cfd2a",
         "collision_authority": "asset",
@@ -5100,7 +4451,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           165.0,
-          124.00000762939452
+          124.00000762939453
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5206,7 +4557,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           175.0,
-          119.00000762939452
+          119.00000762939453
         ],
         "asset_id": "user.5f2997d1d534e6cc",
         "collision_authority": "asset",
@@ -5252,7 +4603,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           175.0,
-          119.00000762939452
+          119.00000762939453
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -8668,6 +8019,83 @@
         "tile_anchor": [
           20.0,
           21.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          158.6666717529297,
+          255.6666717529297
+        ],
+        "asset_id": "mse.map_exit.deep_forest_set_a_corner_north_open",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          6.0,
+          5.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000139",
+        "instance_scale_level": -2.0,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          6.0,
+          5.0
+        ],
+        "offset_px": [
+          -16.0,
+          -24.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          158.6666717529297,
+          255.6666717529297
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.75,
+          0.75
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          0.0,
+          51.0
+        ],
+        "tile_anchor": [
+          0.0,
+          51.0
+        ],
+        "visual_footprint_tiles": [
+          6.0,
+          5.0
         ]
       }
     ],

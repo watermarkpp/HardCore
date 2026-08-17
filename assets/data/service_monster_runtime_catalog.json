@@ -2662,17 +2662,51 @@
       "monsterId": 68,
       "projectName": "沃玛战将",
       "projectBaseName": "沃玛战将",
-      "resolutionStatus": "unresolved_project_fallback",
+      "resolutionStatus": "exact_service_name",
+      "matchedProjectField": "name",
+      "matchedName": "沃玛战将",
+      "serviceCandidateCount": 1,
+      "sourceDistribution": "candidate.21cq_legend176",
+      "serviceRecord": {
+        "serviceName": "沃玛战将",
+        "image": 30,
+        "aiCode": 0,
+        "effect": 0,
+        "level": 30,
+        "viewRange": 7,
+        "coolEye": 0,
+        "stats": {
+          "0": 3,
+          "1": 3,
+          "2": 2,
+          "3": 2,
+          "4": 15,
+          "5": 29,
+          "10": 13,
+          "11": 15,
+          "12": 285
+        },
+        "light": 0,
+        "attackIntervalMs": 2000,
+        "moveIntervalMs": 1000,
+        "experience": 280,
+        "canPush": true,
+        "canTame": false,
+        "autoRevive": true,
+        "undead": false,
+        "dropPath": "",
+        "sourceDistribution": "candidate.21cq_legend176"
+      },
       "behaviorProfile": {
         "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
+          "attackIntervalMs": 2000,
+          "moveIntervalMs": 1000,
+          "confidence": "B",
+          "resolutionStatus": "exact_service_name"
         },
         "serviceBehavior": {
           "aiCode": 0,
-          "image": -1,
+          "image": 30,
           "effect": 0,
           "viewRange": 7,
           "coolEye": 0,
@@ -2680,9 +2714,9 @@
           "canTame": false,
           "autoRevive": true,
           "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
+          "confidence": "B",
+          "resolutionStatus": "exact_service_name",
+          "sourceDistribution": "candidate.21cq_legend176"
         }
       }
     },
@@ -2690,17 +2724,51 @@
       "monsterId": 69,
       "projectName": "沃玛战将0",
       "projectBaseName": "沃玛战将",
-      "resolutionStatus": "unresolved_project_fallback",
+      "resolutionStatus": "exact_service_name",
+      "matchedProjectField": "name",
+      "matchedName": "沃玛战将0",
+      "serviceCandidateCount": 1,
+      "sourceDistribution": "candidate.21cq_legend176",
+      "serviceRecord": {
+        "serviceName": "沃玛战将0",
+        "image": 30,
+        "aiCode": 0,
+        "effect": 0,
+        "level": 30,
+        "viewRange": 7,
+        "coolEye": 0,
+        "stats": {
+          "0": 3,
+          "1": 3,
+          "2": 2,
+          "3": 2,
+          "4": 15,
+          "5": 29,
+          "10": 13,
+          "11": 15,
+          "12": 285
+        },
+        "light": 0,
+        "attackIntervalMs": 2000,
+        "moveIntervalMs": 1000,
+        "experience": 280,
+        "canPush": true,
+        "canTame": false,
+        "autoRevive": true,
+        "undead": false,
+        "dropPath": "",
+        "sourceDistribution": "candidate.21cq_legend176"
+      },
       "behaviorProfile": {
         "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
+          "attackIntervalMs": 2000,
+          "moveIntervalMs": 1000,
+          "confidence": "B",
+          "resolutionStatus": "exact_service_name"
         },
         "serviceBehavior": {
           "aiCode": 0,
-          "image": -1,
+          "image": 30,
           "effect": 0,
           "viewRange": 7,
           "coolEye": 0,
@@ -2708,9 +2776,9 @@
           "canTame": false,
           "autoRevive": true,
           "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
+          "confidence": "B",
+          "resolutionStatus": "exact_service_name",
+          "sourceDistribution": "candidate.21cq_legend176"
         }
       }
     },

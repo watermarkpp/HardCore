@@ -2,6 +2,14 @@
   "asset_schema_version": 2.0,
   "content_layer": "personal_expansion",
   "overrides": {
+    "building.blacksmith_forge_01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "building.gothic_tent_01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
     "builtin.blank_old_grass": {
       "anchor_px": [
         32.0,
@@ -16,6 +24,65 @@
       ],
       "occlusion": false,
       "placeable": true
+    },
+    "cave_dungeon.magic_fire_orange_01": {
+      "anchor_px": [
+        88.0,
+        160.0
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "preset",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "occlusion": false,
+      "placeable": true
+    },
+    "mse.new_throne.01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "mse.new_throne.02": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "mse.new_throne.03": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "mse.new_throne.04": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "mse.new_throne.05": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "mse.new_throne.06": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "prop.campfire_stone_01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "prop.storage_chest_01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "terrain.mud_decal_01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "terrain.mud_decal_02": {
+      "content_layer": "personal_expansion",
+      "placeable": false
+    },
+    "terrain.palisade_wall_01": {
+      "content_layer": "personal_expansion",
+      "placeable": false
     },
     "user.318437414b539ad5": {
       "anchor_px": [
@@ -55,15 +122,15 @@
     },
     "user.418f2f34120721f0": {
       "anchor_px": [
-        194,
-        204
+        194.0,
+        204.0
       ],
       "calibration_status": "placeable",
       "collision_policy": "none",
       "content_layer": "personal_expansion",
       "footprint_tiles": [
-        4,
-        4
+        4.0,
+        4.0
       ],
       "occlusion": false,
       "placeable": true

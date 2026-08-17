@@ -1,5 +1,7 @@
 {
-  "dirty_chunks": [],
+  "dirty_chunks": [
+    "c_1_0"
+  ],
   "map_id": "stage7_runtime",
   "operations_by_chunk": {
     "c_1_0": [
@@ -57,6 +59,30 @@
         "tile": [
           1.0,
           1.0
+        ]
+      },
+      {
+        "asset_id": "ground.dark_grass.001",
+        "op": "paint_tile",
+        "tile": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "asset_id": "ground.dark_grass.001",
+        "op": "paint_tile",
+        "tile": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "asset_id": "ground.dark_grass.001",
+        "op": "paint_tile",
+        "tile": [
+          1,
+          1
         ]
       }
     ]

@@ -43,3 +43,49 @@ static func save_document(document: Dictionary, path := "") -> Dictionary:
 			DirAccess.rename_absolute(backup, absolute)
 		return {"ok": false, "errors": ["promote_failed:%d" % promote_error]}
 	return {"ok": true, "path": target_path, "backup": backup if FileAccess.file_exists(backup) else ""}
+
+
+static func list_workspace_maps() -> Array:
+	var result: Array = []
+	var dir := DirAccess.open(EDITOR_ROOT)
+	if dir == null:
+		return result
+	var static_ids := {}
+	for template: Dictionary in MapDesignCatalogService.blank_templates():
+		static_ids[str(template.get("map_id", ""))] = true
+	dir.list_dir_begin()
+	var entry := dir.get_next()
+	while entry != "":
+		if dir.current_is_dir() and not static_ids.has(entry):
+			var editor_path := EDITOR_ROOT + entry + "/" + entry + ".editor.json"
+			if FileAccess.file_exists(editor_path):
+				var summary := _read_document_summary(editor_path)
+				if not summary.is_empty():
+					result.append(summary)
+		entry = dir.get_next()
+	dir.list_dir_end()
+	return result
+
+
+static func _read_document_summary(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		return {}
+	var editor_meta: Variant = parsed.get("editor_meta", {})
+	if not editor_meta is Dictionary:
+		return {}
+	if str(editor_meta.get("template_kind", "")) != "custom_empty_map":
+		return {}
+	var design: Variant = parsed.get("design", {})
+	var design_size: Array = design.get("design_size", [0, 0]) if design is Dictionary else [0, 0]
+	if design_size.size() < 2:
+		design_size = [0, 0]
+	return {
+		"map_id": str(parsed.get("map_id", "")),
+		"display_name": str(parsed.get("display_name", "")),
+		"design_size": design_size,
+		"path": path,
+	}

@@ -27,16 +27,22 @@
   "display_name": "沃玛森林",
   "editor_meta": {
     "blank_template_id": "blank.wooma_forest",
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "connection_version_id": "bich_wooma_connection_v1",
     "content_policy": "user_authored_layers",
     "created_by": "human_codex_shared_tool",
-    "milestone": "WOOMA-FOREST-USER-MAP-READY",
+    "default_connection_mode": "bidirectional",
+    "milestone": "WOOMA-FOREST-TO-TEMPLE-1-V1",
     "official_runtime_map_id": 268.0,
     "official_source_authority": "user_saved_editor_document",
     "official_version_id": "wooma_forest_user_official_v1",
-    "revision": 2.0,
+    "phase1_map_production_complete": true,
+    "phase1_network_version_id": "phase1_finished_map_network_v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 6.0,
+    "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
-    "runtime_approved_revision": 2.0,
+    "runtime_approved_revision": 6.0,
     "template_kind": "empty_map",
     "template_status": "user_authored_official",
     "template_version_id": "wooma_forest_blank_v1",
@@ -70,7 +76,80 @@
     "workspace_state": "res://map_editor_workspace/wooma_forest/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "boss_id": "boss.38",
+        "content_id": "boss.38",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士（常规精英·完整掉落）",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000001",
+        "spawn_rule": "boss",
+        "tile": [
+          20.0,
+          27.0
+        ]
+      },
+      {
+        "boss_id": "boss.38",
+        "content_id": "boss.38",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士（常规精英·完整掉落）",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000002",
+        "spawn_rule": "boss",
+        "tile": [
+          21.0,
+          20.0
+        ]
+      },
+      {
+        "boss_id": "boss.38",
+        "content_id": "boss.38",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士（常规精英·完整掉落）",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000003",
+        "spawn_rule": "boss",
+        "tile": [
+          28.0,
+          19.0
+        ]
+      },
+      {
+        "boss_id": "boss.38",
+        "content_id": "boss.38",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士（常规精英·完整掉落）",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000004",
+        "spawn_rule": "boss",
+        "tile": [
+          27.0,
+          26.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -3817,43 +3896,48 @@
     "ground_overlay": [],
     "interactables": [],
     "light": [],
-    "map_entrance_points": [
-      {
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "沃玛森林入口",
-        "entrance_id": "map_entrance_000001",
-        "is_default": false,
-        "kind": "map_entrance",
-        "portal_role": "entrance",
-        "radius_tiles": 3.0,
-        "runtime_export": true,
-        "semantic_id": "map_entrance_000001",
-        "semantic_role": "map_landing_point",
-        "tile": [
-          3.0,
-          52.0
-        ]
-      }
-    ],
+    "map_entrance_points": [],
     "map_exit_points": [
       {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "进入沃玛寺庙一层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "portal_role": "exit",
-        "radius_tiles": 3.0,
+        "official_connection_id": "wooma_forest_top_to_temple_1_v2",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "wooma_temple_1",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_exit_trigger",
-        "target_configured": false,
-        "target_entrance_id": "",
-        "target_map_id": -1.0,
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 313.0,
+        "target_map_key": "wooma_temple_1",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          20.0,
+          41.0
+        ],
         "tile": [
           51.0,
           4.0
         ],
+        "travel_request_single_flight": true,
         "trigger_on_enter": true
       },
       {
@@ -3892,6 +3976,48 @@
           50.0,
           50.0
         ],
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "reverse",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "bich_wooma_forest_pair_v2",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "返回比奇省",
+        "exit_id": "map_exit_000004",
+        "kind": "map_exit",
+        "official_connection_id": "wooma_forest_to_bich_v1",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "bich_province",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000004",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 4.0,
+        "target_map_key": "bich_province",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          6.0,
+          5.0
+        ],
+        "tile": [
+          2.0,
+          52.0
+        ],
+        "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
@@ -4411,42 +4537,6 @@
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
-        "semantic_id": "monster_spawn_000029",
-        "spawn_rule": "ambient",
-        "tile": [
-          20.0,
-          19.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000030",
-        "spawn_rule": "ambient",
-        "tile": [
-          28.0,
-          27.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
         "semantic_id": "monster_spawn_000031",
         "spawn_rule": "ambient",
         "tile": [
@@ -4506,42 +4596,6 @@
         "tile": [
           10.0,
           9.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000035",
-        "spawn_rule": "ambient",
-        "tile": [
-          20.0,
-          27.0
-        ]
-      },
-      {
-        "content_id": "monster.38",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.38",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000036",
-        "spawn_rule": "ambient",
-        "tile": [
-          28.0,
-          19.0
         ]
       }
     ],
@@ -8615,6 +8669,83 @@
         "tile_anchor": [
           20.0,
           21.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          158.6666717529297,
+          255.6666717529297
+        ],
+        "asset_id": "mse.map_exit.deep_forest_set_a_corner_north_open",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          6.0,
+          5.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000139",
+        "instance_scale_level": -2.0,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          6.0,
+          5.0
+        ],
+        "offset_px": [
+          -16.0,
+          -24.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          158.6666717529297,
+          255.6666717529297
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.75,
+          0.75
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          0.0,
+          51.0
+        ],
+        "tile_anchor": [
+          0.0,
+          51.0
+        ],
+        "visual_footprint_tiles": [
+          6.0,
+          5.0
         ]
       }
     ],

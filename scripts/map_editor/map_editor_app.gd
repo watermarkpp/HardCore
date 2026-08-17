@@ -1812,7 +1812,7 @@ func _monster_status_suffix(entry: Dictionary) -> String:
 	if not bool(entry.get("authoring_allowed", false)):
 		return "（不可布置）"
 	if not bool(entry.get("runtime_ready", false)):
-		return "（可布置｜运行时未闭环）"
+		return "（可布置｜运行时待闭环）"
 	return ""
 
 
@@ -2041,7 +2041,7 @@ func _build_monster_detail_text(entry: Dictionary) -> String:
 		var rejection := str(entry.get("runtime_rejection_reason", "")).strip_edges()
 		if rejection.is_empty():
 			rejection = "未记录具体原因"
-		lines.append("运行时未闭环原因：")
+		lines.append("运行时待闭环原因：")
 		for reason: String in rejection.split(";"):
 			var stripped := reason.strip_edges()
 			if not stripped.is_empty():

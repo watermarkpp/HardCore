@@ -601,46 +601,6 @@
       "scale_rounding": "nearest_integer_half_up"
     },
     {
-      "map_id": "unknown_dark_palace",
-      "runtime_map_id": 1571,
-      "name": "未知暗殿",
-      "map_type": "dungeon_floor",
-      "pre_scale_design_size": [
-        128,
-        128
-      ],
-      "design_size": [
-        40,
-        40
-      ],
-      "strategy": "shrink_and_recompose",
-      "size_status": "template_pending_human_authoring",
-      "size_decision_source": "primary_and_local_candidate_source_mapping_unresolved_2026-08-15",
-      "source_map_path": null,
-      "source_status": "unresolved",
-      "source_size": [
-        null,
-        null
-      ],
-      "template_default_size": [
-        128,
-        128
-      ],
-      "template_max_size": [
-        180,
-        180
-      ],
-      "coordinate_systems": {
-        "source": "mir2_48x32",
-        "editor": "godot_iso_64x32"
-      },
-      "source_audit_status": "unresolved",
-      "source_size_is_design_size": false,
-      "editable_layer": "expansion",
-      "scale_factor": 0.3125,
-      "scale_rounding": "nearest_integer_half_up"
-    },
-    {
       "map_id": "corpse_king_hall",
       "runtime_map_id": 1578,
       "name": "尸王殿",
@@ -824,6 +784,182 @@
         null
       ],
       "source_audit_status": "unresolved",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "stone_tomb_1",
+      "runtime_map_id": 1198,
+      "name": "石墓一层",
+      "map_type": "dungeon_floor",
+      "pre_scale_design_size": [
+        400,
+        400
+      ],
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "shrink_and_recompose",
+      "source_map_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Maps/d711.map",
+      "source_distribution": "server.crystal.cjlaaa",
+      "source_usage": "structure_reference_only",
+      "size_status": "user_confirmed_peer_dungeon_standard",
+      "size_decision_source": "user_confirmed_50x50_against_mine_wooma_zuma_2026-08-15",
+      "template_default_size": [
+        128,
+        128
+      ],
+      "template_max_size": [
+        180,
+        180
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_size": [
+        400,
+        400
+      ],
+      "source_audit_status": "ok",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "stone_tomb_2",
+      "runtime_map_id": 1199,
+      "name": "石墓二层",
+      "map_type": "dungeon_floor",
+      "pre_scale_design_size": [
+        400,
+        400
+      ],
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "exact_clone_of_stone_tomb_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-15",
+      "clone_source_map_id": "stone_tomb_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/stone_tomb_1/stone_tomb_1.editor.json",
+      "source_distribution": "user_saved_editor_workspace",
+      "source_usage": "exact_visual_and_semantic_clone",
+      "source_status": "workspace_clone",
+      "source_size": [
+        50,
+        50
+      ],
+      "template_default_size": [
+        128,
+        128
+      ],
+      "template_max_size": [
+        180,
+        180
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "workspace_clone",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "stone_tomb_3",
+      "runtime_map_id": 1200,
+      "name": "石墓三层",
+      "map_type": "dungeon_floor",
+      "pre_scale_design_size": [
+        400,
+        400
+      ],
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "exact_clone_of_stone_tomb_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-15",
+      "clone_source_map_id": "stone_tomb_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/stone_tomb_1/stone_tomb_1.editor.json",
+      "source_distribution": "user_saved_editor_workspace",
+      "source_usage": "exact_visual_and_semantic_clone",
+      "source_status": "workspace_clone",
+      "source_size": [
+        50,
+        50
+      ],
+      "template_default_size": [
+        128,
+        128
+      ],
+      "template_max_size": [
+        180,
+        180
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "workspace_clone",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "stone_tomb_4",
+      "runtime_map_id": 1201,
+      "name": "石墓四层",
+      "map_type": "dungeon_floor",
+      "pre_scale_design_size": [
+        400,
+        400
+      ],
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "exact_clone_of_stone_tomb_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-15",
+      "clone_source_map_id": "stone_tomb_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/stone_tomb_1/stone_tomb_1.editor.json",
+      "source_distribution": "user_saved_editor_workspace",
+      "source_usage": "exact_visual_and_semantic_clone",
+      "source_status": "workspace_clone",
+      "source_size": [
+        50,
+        50
+      ],
+      "template_default_size": [
+        128,
+        128
+      ],
+      "template_max_size": [
+        180,
+        180
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "workspace_clone",
       "source_size_is_design_size": false,
       "editable_layer": "expansion",
       "scale_factor": 0.3125,

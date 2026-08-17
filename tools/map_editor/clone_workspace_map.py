@@ -75,6 +75,17 @@ def clone_workspace(
             payload["map_id"] = target_map_id
             payload["runtime_map_id"] = runtime_map_id
             payload["display_name"] = display_name
+            payload["source_reference"] = {
+                "audit_status": "derived_editor_clone",
+                "source_authority": "user_saved_editor_document",
+                "clone_source_map_id": source_map_id,
+                "clone_source_document": (
+                    f"res://map_editor_workspace/{source_map_id}/"
+                    f"{source_map_id}.editor.json"
+                ),
+                "clone_source_document_sha256": source_document_sha256,
+                "clone_policy": "full_workspace_clone_without_exit_links_v1",
+            }
             editor_meta = payload.setdefault("editor_meta", {})
             editor_meta["blank_template_id"] = f"blank.{target_map_id}"
             editor_meta["workspace"] = f"res://map_editor_workspace/{target_map_id}"
@@ -101,6 +112,8 @@ def clone_workspace(
         raise RuntimeError("cloned display_name validation failed")
     if loaded.get("layers", {}).get("map_exit_points") != []:
         raise RuntimeError("cloned map retained exit links")
+    if loaded.get("source_reference", {}).get("clone_source_map_id") != source_map_id:
+        raise RuntimeError("cloned source provenance validation failed")
     return target_document
 
 

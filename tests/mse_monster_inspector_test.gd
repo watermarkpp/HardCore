@@ -59,7 +59,7 @@ func _run() -> void:
 	assert(text_240.contains("54"), "ID240 detail missing drop count 54")
 	assert(text_240.contains("作者可布置：是"), "ID240 detail missing authoring-allowed status")
 	assert(text_240.contains("运行时闭环：否"), "ID240 detail missing runtime-not-ready status")
-	assert(text_240.contains("运行时未闭环原因"), "ID240 detail missing runtime rejection reason")
+	assert(text_240.contains("运行时待闭环原因"), "ID240 detail missing runtime rejection reason")
 
 	# Reference attributes for an unverified entry that still carries stats.
 	var ref_entry := _find_unverified_with_stats()
@@ -103,7 +103,7 @@ func _run() -> void:
 	assert(editor.monster_picker_button.visible, "monster picker button must be visible for monster_spawn")
 	var picker_index := _find_picker_index_by_monster_id(editor, 16)
 	assert(picker_index >= 0, "ID16 鹿 missing from monster picker")
-	assert(editor.monster_picker_list.get_item_text(picker_index).contains("（可布置｜运行时未闭环）"), "picker label must show 可布置｜运行时未闭环")
+	assert(editor.monster_picker_list.get_item_text(picker_index).contains("（可布置｜运行时待闭环）"), "picker label must show 可布置｜运行时待闭环")
 	editor._on_monster_picker_button_pressed()
 	await get_tree().process_frame
 	assert(editor.monster_picker_popup.visible, "picker popup did not open")

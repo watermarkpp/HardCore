@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-10T04:11:50.740194+00:00",
+  "generated_at": "2026-08-15T08:58:29.668587+00:00",
   "records": [
     {
       "map_id": "bich_province",
@@ -155,7 +155,7 @@
     {
       "map_id": "wooma_temple_3",
       "runtime_map_id": 315,
-      "name": "沃玛寺庙三层（核心）",
+      "name": "沃玛教主大厅",
       "source_map_path": "research/mir2_client_raw/Map/D024.map",
       "status": "ok",
       "width": 100,
@@ -196,6 +196,26 @@
         "old_12": 480052,
         "new_14": 560052
       }
+    },
+    {
+      "map_id": "connection_passage_1",
+      "runtime_map_id": 1544,
+      "name": "连接通道1",
+      "source_map_path": "res://map_editor_workspace/bich_mine_1/bich_mine_1.editor.json",
+      "status": "workspace_clone",
+      "width": 200,
+      "height": 200,
+      "estimated_format": "editor_workspace_json"
+    },
+    {
+      "map_id": "connection_passage_2",
+      "runtime_map_id": 1545,
+      "name": "连接通道2",
+      "source_map_path": "res://map_editor_workspace/bich_mine_2/bich_mine_2.editor.json",
+      "status": "workspace_clone",
+      "width": 200,
+      "height": 200,
+      "estimated_format": "editor_workspace_json"
     },
     {
       "map_id": "corpse_king_hall",
@@ -239,6 +259,50 @@
       "name": "祖玛教主之家",
       "source_map_path": null,
       "status": "unresolved"
+    },
+    {
+      "map_id": "stone_tomb_1",
+      "runtime_map_id": 1198,
+      "name": "石墓一层",
+      "source_map_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Maps/d711.map",
+      "status": "ok",
+      "width": 400,
+      "height": 400,
+      "file_size": 2400054,
+      "estimated_format": "wemade_2010_15",
+      "expected_file_sizes": {
+        "wemade_2010_15": 2400054
+      }
+    },
+    {
+      "map_id": "stone_tomb_2",
+      "runtime_map_id": 1199,
+      "name": "石墓二层",
+      "source_map_path": "res://map_editor_workspace/stone_tomb_1/stone_tomb_1.editor.json",
+      "status": "workspace_clone",
+      "width": 50,
+      "height": 50,
+      "estimated_format": "editor_workspace_json"
+    },
+    {
+      "map_id": "stone_tomb_3",
+      "runtime_map_id": 1200,
+      "name": "石墓三层",
+      "source_map_path": "res://map_editor_workspace/stone_tomb_1/stone_tomb_1.editor.json",
+      "status": "workspace_clone",
+      "width": 50,
+      "height": 50,
+      "estimated_format": "editor_workspace_json"
+    },
+    {
+      "map_id": "stone_tomb_4",
+      "runtime_map_id": 1201,
+      "name": "石墓四层",
+      "source_map_path": "res://map_editor_workspace/stone_tomb_1/stone_tomb_1.editor.json",
+      "status": "workspace_clone",
+      "width": 50,
+      "height": 50,
+      "estimated_format": "editor_workspace_json"
     },
     {
       "map_id": "stone_tomb_array",
