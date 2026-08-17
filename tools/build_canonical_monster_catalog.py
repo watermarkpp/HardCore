@@ -178,26 +178,18 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
     manifest is the explicit source for 64..75, then complete client art, and
     finally the classic boss manifest.  No names or suffixes participate.
 
-    Files that only carry ``runtimeMappings`` (name-keyed) without
-    ``runtimeMappingsByMonsterId`` are resolved via the vanilla monster name
-    table so that hand-authored art sources (e.g. bich_undead) are consumed
-    without requiring a redundant ID-keyed section.
+    Only ``runtimeMappingsByMonsterId`` (exact-ID authority) is consumed.
+    Name-keyed ``runtimeMappings`` entries are resolved when an ID-keyed
+    value is a string reference, but no automatic name-based fallback is
+    performed — every monster must have an explicit ID entry.
     """
-
-    vanilla_name_by_id: dict[int, str] = {}
-    vanilla = load_json(VANILLA_PATH)
-    for record in vanilla.get("records", []):
-        mid = record.get("monsterId")
-        name = record.get("name", "")
-        if mid is not None and name:
-            vanilla_name_by_id[int(mid)] = name
 
     id_to_mapping: dict[int, tuple[str, dict[str, Any], Path]] = {}
     for manifest_path in ART_PATHS:
         manifest = load_json(manifest_path)
         by_id = manifest.get("runtimeMappingsByMonsterId", {})
-        by_name = manifest.get("runtimeMappings", {})
         if isinstance(by_id, dict) and by_id:
+            by_name = manifest.get("runtimeMappings", {})
             for raw_id, value in by_id.items():
                 monster_id = int(raw_id)
                 if monster_id in id_to_mapping:
@@ -212,13 +204,6 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
                     mapping = {}
                 if mapping:
                     id_to_mapping[monster_id] = (manifest_path.name, mapping, manifest_path)
-        elif isinstance(by_name, dict) and by_name and vanilla_name_by_id:
-            for monster_id, name in vanilla_name_by_id.items():
-                if monster_id in id_to_mapping:
-                    continue
-                candidate = by_name.get(name, {})
-                if isinstance(candidate, dict) and candidate:
-                    id_to_mapping[monster_id] = (manifest_path.name, candidate, manifest_path)
 
     profile_by_signature: dict[str, str] = {}
     profiles: dict[str, dict[str, Any]] = {}
@@ -686,6 +671,8 @@ def build_catalog() -> dict[str, Any]:
     entries_by_id: dict[str, dict[str, Any]] = {}
     for record in sorted(records, key=lambda item: int(item.get("monsterId", -1))):
         monster_id = int(record.get("monsterId", -1))
+        if record.get("recordStatus") == "retired":
+            continue
         policy_wooma = policy.get("wooma_matrix", {}).get(str(monster_id), {})
         if not isinstance(policy_wooma, dict):
             policy_wooma = {}
@@ -1062,8 +1049,8 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     reject_replacement_paths(catalog.get("drop_profiles", {}), "drop_profiles")
     reject_replacement_paths(catalog.get("entries", []), "entries")
     entries = catalog.get("entries", [])
-    if len(entries) != 217:
-        errors.append(f"identity_count={len(entries)} expected 217")
+    if len(entries) != 214:
+        errors.append(f"identity_count={len(entries)} expected 214")
     source_index = catalog.get("sources", {})
     if not isinstance(source_index, dict):
         errors.append("sources index is not a dictionary")
