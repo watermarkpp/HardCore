@@ -1,79 +1,95 @@
 {
   "repo": "watermarkpp/HardCore",
   "generated_at": "2026-08-17T18:00:00+08:00",
+  "remote_state_verified_at": "2026-08-17T22:30:00+08:00",
+  "tip_semantics": "observed remote state at handoff documentation time; not self-referencing",
   "golden_apk": "outputs/hardcore/HardCore-1.18.3-runtime-fix-9d6435bc-debug.apk",
   "golden_apk_sha256": "B74F58FC1E17A28D2A0FAE7E709085E410F4C48FF6141DD6C293596DDEF341CB",
   "golden_base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
   "golden_tag": "golden/apk-1.18.3-base-9d6435bc",
   "hotfix_count": 32,
   "hotfix_monster_overrides": 0,
-  "main_tip": "066e84f6f387ae25a96a623270bcc2e6daa59e8e",
-  "integration_tip": "1e2927f7baa9de6c8360fc09c8a9b8bbf55c3f0d",
   "godot_version": "4.7 stable",
   "godot_exe": "tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+  "remote_consolidation_complete": true,
+  "main_tip": "3f5cf278",
+  "integration_tip": "ea3e086f",
   "permanent_branches": {
     "integration": {
-      "branch": "codex/integration",
-      "worktree_path": "C:\\Users\\Administrator\\Documents\\HardCore",
-      "local_tip": "1e2927f7",
-      "remote_tip": null,
-      "dirty_tracked": 12,
-      "untracked": 271,
-      "ownership": "integration",
-      "remote_push_needed": true
+      "remote_branch": "origin/codex/integration",
+      "remote_tip": "ea3e086f",
+      "remote_present": true,
+      "worktree_path": "HardCore/",
+      "ownership": "integration"
     },
     "maps": {
-      "branch": "codex/maps",
-      "worktree_path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\maps",
-      "local_tip": "668064fa",
-      "remote_tip": "668064fa",
       "remote_branch": "origin/codex/maps",
-      "dirty_tracked": 98,
-      "untracked": 84,
-      "ownership": "maps",
-      "remote_push_needed": false
+      "remote_tip": "668064fa",
+      "remote_present": true,
+      "worktree_path": "HardCore-worktrees/maps",
+      "ownership": "maps"
     },
     "monsters": {
-      "branch": "codex/monsters",
-      "worktree_path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\monsters",
-      "local_tip": "4a7d1cd3",
-      "remote_tip": null,
-      "dirty_tracked": 1,
-      "untracked": 205,
-      "ownership": "monsters",
-      "remote_push_needed": true
+      "remote_branch": "origin/codex/monsters",
+      "remote_tip": "4a7d1cd3",
+      "remote_present": true,
+      "worktree_path": "HardCore-worktrees/monsters",
+      "ownership": "monsters"
     },
     "equipment": {
-      "branch": "codex/equipment",
-      "worktree_path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\equipment",
-      "local_tip": "5da60808",
-      "remote_tip": null,
-      "dirty_tracked": 581,
-      "untracked": 193,
-      "ownership": "equipment",
-      "remote_push_needed": true
+      "remote_branch": "origin/codex/equipment",
+      "remote_tip": "5da60808",
+      "remote_present": true,
+      "worktree_path": "HardCore-worktrees/equipment",
+      "ownership": "equipment"
     },
     "professions_skills": {
-      "branch": "codex/professions-skills",
-      "worktree_path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\professions-skills",
-      "local_tip": "0e142450",
-      "remote_tip": null,
-      "dirty_tracked": 2,
-      "untracked": 198,
-      "ownership": "professions-skills",
-      "remote_push_needed": true
+      "remote_branch": "origin/codex/professions-skills",
+      "remote_tip": "0e142450",
+      "remote_present": true,
+      "worktree_path": "HardCore-worktrees/professions-skills",
+      "ownership": "professions-skills"
     },
     "ui_art": {
-      "branch": "codex/ui-art",
-      "worktree_path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\ui-art",
-      "local_tip": "ec02c08e",
-      "remote_tip": null,
-      "dirty_tracked": 616,
-      "untracked": 192,
-      "ownership": "ui-art",
-      "remote_push_needed": true
+      "remote_branch": "origin/codex/ui-art",
+      "remote_tip": "ec02c08e",
+      "remote_present": true,
+      "worktree_path": "HardCore-worktrees/ui-art",
+      "ownership": "ui-art"
     }
   },
+  "wip_snapshot_branches": [
+    { "branch": "origin/handoff/wip/maps-20260817", "tip": "b6075021", "domain": "maps", "purpose": "disaster_recovery_only" },
+    { "branch": "origin/handoff/wip/integration-20260817", "tip": "3ebfb0f5", "domain": "integration", "purpose": "disaster_recovery_only" },
+    { "branch": "origin/handoff/wip/professions-skills-20260817", "tip": "987ea3b7", "domain": "professions-skills", "purpose": "disaster_recovery_only" },
+    { "branch": "origin/handoff/wip/equipment-20260817", "tip": "fd848019", "domain": "equipment", "purpose": "disaster_recovery_only" },
+    { "branch": "origin/handoff/wip/monsters-20260817", "tip": "2cd8f056", "domain": "monsters", "purpose": "disaster_recovery_only" }
+  ],
+  "meaningful_wip": {
+    "count_unit": "logical_item",
+    "total": 120,
+    "backed_up": 118,
+    "local_only": 2,
+    "local_only_details": [
+      { "domain": "integration", "item": "assets/data/canonical_monster_combat_source_v1.json", "reason": "security_review_required", "note": "unverified provenance" },
+      { "domain": "maps", "item": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/", "reason": "raw_import_source", "note": "raw import material, not project source" }
+    ]
+  },
+  "security_excluded": {
+    "file_count": 5,
+    "files": [
+      { "path": "assets/data/agent/integration_baseline.json", "domain": "integration", "reason": "agent_infrastructure" },
+      { "path": "assets/data/agent/rule_manifest.json", "domain": "integration", "reason": "agent_infrastructure" },
+      { "path": "assets/data/agent/worktree_ownership.json", "domain": "integration", "reason": "agent_infrastructure" },
+      { "path": "assets/data/agent_leidian_files_raw.txt", "domain": "integration", "reason": "raw_device_data" },
+      { "path": "assets/data/canonical_monster_combat_source_v1.json", "domain": "integration", "reason": "unverified_provenance" }
+    ]
+  },
+  "open_priorities": [
+    { "priority": "P0", "issue": "Monster Runtime Closure — ART_MAPPING_MISSING is authority wiring", "owner": "codex/monsters" },
+    { "priority": "P1", "issue": "Legacy map monster identity migration", "owner": "codex/maps" },
+    { "priority": "P2", "issue": "UI script drift resolution (17 scripts)", "owner": "codex/ui-art" }
+  ],
   "golden_source_map": {
     "MONSTER_DATA": { "layer": "APK_BASE", "commit": "ee09aefd", "match": "EXACT_SOURCE_MATCH", "state": "MATCHES_GOLDEN" },
     "MONSTER_ART": { "layer": "APK_BASE", "commit": "1abd038b", "match": "EXACT_SOURCE_MATCH", "state": "MATCHES_GOLDEN" },
@@ -95,36 +111,10 @@
     "CG": { "layer": "HOTFIX", "commit": "0af855db", "match": "PROVENANCE_EXACT", "state": "DRIFTED_FROM_GOLDEN" },
     "GLOBAL_SERVICES": { "layer": "HOTFIX+POST", "commit": "a91bc586", "match": "PROVENANCE_EXACT", "state": "POST_GOLDEN_DEVELOPMENT" }
   },
-  "post_golden_development": [
-    "canonical_monster_catalog (217 entries, APK has none)",
-    "vanilla_176/monsters.json (+3 records)",
-    "monster_behavior_profiles (+1 archetype)",
-    "Map editor canonical monster ID migration",
-    "NPC world label optimization (4 commits)",
-    "game_root.gd / game_data.gd post-APK evolution"
-  ],
-  "open_priorities": [
-    { "priority": "P0", "issue": "Monster Runtime Closure — ART_MAPPING_MISSING is authority wiring", "owner": "codex/monsters" },
-    { "priority": "P1", "issue": "Legacy map monster identity migration", "owner": "codex/maps" },
-    { "priority": "P2", "issue": "UI script drift resolution (17 scripts)", "owner": "codex/ui-art" },
-    { "priority": "P3", "issue": "Remote branch cleanup and push", "owner": "codex/integration" }
-  ],
-  "validation_commands": {
-    "test": "tools\\run_godot_tests.ps1",
-    "map_editor": "tools\\godot-4.7\\Godot_v4.7-stable_win64.exe --path HardCore-worktrees\\maps res://tools/map_editor/map_editor_app.tscn",
-    "visual_lab": "tools\\godot-4.7\\Godot_v4.7-stable_win64.exe --path HardCore-worktrees\\monsters res://tools/visual_acceptance_lab/visual_acceptance_lab.tscn",
-    "build_canonical": "python tools\\build_canonical_monster_catalog.py"
-  },
-  "generated_data_policy": {
-    "hand_authored": ["source_priority_policy.json", "equipment_attribute_master.json", "bich_common/undead/boss client art sources"],
-    "generated": ["complete_monster_client_art_sources.json", "runtime/monster_*.json", "canonical_monster_catalog.json"],
-    "apk_permission": "verification only, NOT source authoring"
-  },
   "known_risks": [
     "17 UI scripts drifted from golden — golden versions retrievable via git show",
-    "5 permanent branches lack remote counterpart",
-    "Large .import file churn (580-618 dirty) in equipment/ui-art worktrees from Godot reimport",
-    "ART_MAPPING_MISSING in canonical catalog likely wiring issue, not missing art"
+    "ART_MAPPING_MISSING in canonical catalog likely wiring issue, not missing art",
+    "5 security-sensitive files excluded from public WIP backup"
   ],
   "summary": {
     "true_source_missing_count": 0,
@@ -132,6 +122,7 @@
     "post_golden_development_count": 5,
     "golden_source_map_lockable": true,
     "monsters_143_290_contradiction_resolved": true,
-    "all_golden_ui_source_commits_verified": true
+    "all_golden_ui_source_commits_verified": true,
+    "remote_consolidation_complete": true
   }
 }

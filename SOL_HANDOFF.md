@@ -58,7 +58,8 @@ HardCore 是一个 Godot 4.7 的 ARPG 游戏项目。多 worktree 架构，6 个
 | P0 | 怪物 Runtime Closure — ART_MAPPING_MISSING 是 authority wiring 问题 | codex/monsters |
 | P1 | 旧地图 monster identity migration | codex/maps |
 | P2 | UI 脚本 drift 逐项处理 | codex/ui-art |
-| P3 | 远端分支整理（push 永久分支） | codex/integration |
+
+> **REMOTE CONSOLIDATION = COMPLETE** — 所有永久分支已推送，WIP snapshot 已备份。
 
 详见 → [`docs/handoff/2026-08-17/06_OPEN_ISSUES_AND_PRIORITIES.md`](docs/handoff/2026-08-17/06_OPEN_ISSUES_AND_PRIORITIES.md)
 
@@ -119,24 +120,26 @@ tools\godot-4.7\Godot_v4.7-stable_win64.exe --path "HardCore-worktrees\monsters"
 ```
 REMOTE CONSOLIDATION = COMPLETE
 
-所有永久分支已推送:
-  origin/main                          → 7c471980 (含 SOL_HANDOFF.md)
-  origin/codex/integration             → b3190037
-  origin/codex/maps                    → 668064fa
-  origin/codex/monsters                → 4a7d1cd3
-  origin/codex/equipment               → 5da60808
-  origin/codex/professions-skills      → 0e142450
-  origin/codex/ui-art                  → ec02c08e
+所有永久分支已推送到 origin:
+  origin/main                          (含 SOL_HANDOFF.md)
+  origin/codex/integration             (集成主控)
+  origin/codex/maps                    (地图)
+  origin/codex/monsters                (怪物)
+  origin/codex/equipment               (装备)
+  origin/codex/professions-skills      (职业技能)
+  origin/codex/ui-art                  (UI/Art)
 
 WIP Snapshot 分支 (备份，禁止 merge):
-  origin/handoff/wip/maps-20260817                → 95 meaningful WIP
-  origin/handoff/wip/integration-20260817         → 18 meaningful WIP (3 security excluded)
-  origin/handoff/wip/professions-skills-20260817  → 4 meaningful WIP
-  origin/handoff/wip/equipment-20260817           → 2 meaningful WIP
-  origin/handoff/wip/monsters-20260817            → 1 meaningful WIP
+  origin/handoff/wip/maps-20260817
+  origin/handoff/wip/integration-20260817
+  origin/handoff/wip/professions-skills-20260817
+  origin/handoff/wip/equipment-20260817
+  origin/handoff/wip/monsters-20260817
 
 Golden Tag:
   golden/apk-1.18.3-base-9d6435bc → 9d6435bc
+
+当前各分支 tip SHA: see docs/handoff/2026-08-17/handoff_manifest.json
 ```
 
 ## 快速参考

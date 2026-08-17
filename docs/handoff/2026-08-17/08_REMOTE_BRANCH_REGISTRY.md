@@ -15,19 +15,26 @@
 
 ## 远端分支清单
 
-| 分支 | Tip SHA | 已合并? | 独有提交数 | 用途 | 本地对应 | 操作建议 |
-|------|---------|---------|-----------|------|---------|---------|
-| `origin/main` | `7c471980` | — | 0 | 主集成分支（含 SOL_HANDOFF.md） | — | **KEEP** |
-| `origin/codex/integration` | `6b91ba8b` | NO | 2 | 集成主控 | HardCore/ | **KEEP** |
-| `origin/codex/maps` | `668064fa` | NO | 49 | Maps 工作树 | maps/ | **KEEP** |
-| `origin/codex/monsters` | `4a7d1cd3` | NO | — | Monsters 工作树 | monsters/ | **KEEP** |
-| `origin/codex/equipment` | `5da60808` | NO | 11 | Equipment 工作树 | equipment/ | **KEEP** |
-| `origin/codex/professions-skills` | `0e142450` | NO | — | Professions-Skills 工作树 | professions-skills/ | **KEEP** |
-| `origin/codex/ui-art` | `ec02c08e` | NO | 38 | UI-Art 工作树 | ui-art/ | **KEEP** |
-| `origin/dsh/monster-runtime-r2r3` | `62fafc5a` | NO | 4 | Monster R2R3 | monster-classification-audit | **ARCHIVAL** |
-| `origin/dsh/monster-runtime-closure` | `066e84f6` | YES | 0 | 已合并 | — | **DELETE CANDIDATE** |
-| `origin/dsh/monster-classification-audit` | `f2ab65cf` | YES | 0 | 已合并 | — | **DELETE CANDIDATE** |
-| `origin/dsh/monsters-drop-audit` | `8808ebe3` | YES | 0 | 已合并 | — | **DELETE CANDIDATE** |
+| 分支 | 状态 | 用途 | 本地对应 | 操作建议 |
+|------|------|------|---------|---------|
+| `origin/main` | ✅ 活跃 | 主分支（含 SOL_HANDOFF.md） | — | **KEEP** |
+| `origin/codex/integration` | ✅ 活跃 | 集成主控 | HardCore/ | **KEEP** |
+| `origin/codex/maps` | ✅ 活跃 | Maps 工作树 | maps/ | **KEEP** |
+| `origin/codex/monsters` | ✅ 活跃 | Monsters 工作树 | monsters/ | **KEEP** |
+| `origin/codex/equipment` | ✅ 活跃 | Equipment 工作树 | equipment/ | **KEEP** |
+| `origin/codex/professions-skills` | ✅ 活跃 | Professions-Skills 工作树 | professions-skills/ | **KEEP** |
+| `origin/codex/ui-art` | ✅ 活跃 | UI-Art 工作树 | ui-art/ | **KEEP** |
+| `origin/handoff/wip/maps-20260817` | ✅ 备份 | Maps WIP snapshot | — | **ARCHIVE** |
+| `origin/handoff/wip/integration-20260817` | ✅ 备份 | Integration WIP snapshot | — | **ARCHIVE** |
+| `origin/handoff/wip/professions-skills-20260817` | ✅ 备份 | Prof-skills WIP snapshot | — | **ARCHIVE** |
+| `origin/handoff/wip/equipment-20260817` | ✅ 备份 | Equipment WIP snapshot | — | **ARCHIVE** |
+| `origin/handoff/wip/monsters-20260817` | ✅ 备份 | Monsters WIP snapshot | — | **ARCHIVE** |
+| `origin/dsh/monster-runtime-r2r3` | 归档 | Monster R2R3 audit | monster-classification-audit | **ARCHIVAL_AUDIT** |
+| `origin/dsh/monster-runtime-closure` | 已合并 | 已合并入 main | — | **DELETE CANDIDATE** |
+| `origin/dsh/monster-classification-audit` | 已合并 | 已合并入 main | — | **DELETE CANDIDATE** |
+| `origin/dsh/monsters-drop-audit` | 已合并 | 已合并入 main | — | **DELETE CANDIDATE** |
+
+> 各分支当前 tip SHA: see `handoff_manifest.json`
 
 ### 操作说明
 
