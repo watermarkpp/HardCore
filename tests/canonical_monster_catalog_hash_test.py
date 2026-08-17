@@ -85,6 +85,73 @@ def _assert_classification_placement_kind() -> None:
     assert placement_kind == "boss_spawn", placement_kind
 
 
+def _assert_variant_visual_pairs(catalog: dict[str, object]) -> None:
+    """17 variant monsters must share appearance_profile_id with their base,
+    while retaining their own distinct monster_id and combat data."""
+    entries_by_id = catalog.get("entries_by_id", {})
+    variant_pairs = [
+        (48, 47), (49, 50), (51, 50), (53, 52), (55, 54), (57, 56), (59, 56),
+        (77, 76), (78, 76),
+        (80, 79), (82, 81), (84, 83), (86, 85), (88, 87),
+        (90, 89), (91, 89),
+        (161, 160),
+    ]
+    for variant_id, base_id in variant_pairs:
+        v = entries_by_id.get(str(variant_id), {})
+        b = entries_by_id.get(str(base_id), {})
+        assert v, f"variant id={variant_id} missing from canonical"
+        assert b, f"base id={base_id} missing from canonical"
+        assert int(v.get("monster_id", -1)) == variant_id, f"variant {variant_id} monster_id mismatch"
+        assert int(b.get("monster_id", -1)) == base_id, f"base {base_id} monster_id mismatch"
+        assert variant_id != base_id, f"variant {variant_id} == base"
+        v_profile = v.get("appearance_profile_id", "")
+        b_profile = b.get("appearance_profile_id", "")
+        assert v_profile and v_profile == b_profile, (
+            f"variant {variant_id} profile '{v_profile}' != base {base_id} profile '{b_profile}'"
+        )
+
+
+def _assert_undead_exact_id_authority() -> None:
+    """bich_undead runtimeMappingsByMonsterId must have exactly 25 string-ref
+    entries and zero full-dict duplication."""
+    undead = GENERATOR.load_json(ROOT / "assets" / "data" / "bich_undead_client_art_sources.json")
+    by_id = undead.get("runtimeMappingsByMonsterId", {})
+    assert len(by_id) == 25, f"undead by_id count={len(by_id)} expected 25"
+    full_dict_count = sum(1 for v in by_id.values() if isinstance(v, dict))
+    string_ref_count = sum(1 for v in by_id.values() if isinstance(v, str))
+    assert full_dict_count == 0, f"undead full dict duplication={full_dict_count} expected 0"
+    assert string_ref_count == 25, f"undead string refs={string_ref_count} expected 25"
+
+
+def _assert_boss_variant_mappings() -> None:
+    """classic_boss must map 77->沃玛教主, 78->沃玛教主, 161->祖玛教主."""
+    boss = GENERATOR.load_json(ROOT / "assets" / "data" / "classic_boss_client_art_sources.json")
+    by_id = boss.get("runtimeMappingsByMonsterId", {})
+    assert by_id.get("77") == "沃玛教主", by_id.get("77")
+    assert by_id.get("78") == "沃玛教主", by_id.get("78")
+    assert by_id.get("161") == "祖玛教主", by_id.get("161")
+
+
+def _assert_retired_ids() -> None:
+    """Retired IDs 14/16/17 must be preserved in vanilla source with
+    recordStatus=retired, but absent from active canonical runtime."""
+    vanilla = GENERATOR.load_json(ROOT / "assets" / "data" / "vanilla_176" / "monsters.json")
+    records = {int(r.get("monsterId", -1)): r for r in vanilla.get("records", [])}
+    for rid, name in [(14, "鸡"), (16, "鹿"), (17, "鹿1")]:
+        r = records.get(rid)
+        assert r is not None, f"retired id={rid} ({name}) missing from vanilla source"
+        assert r.get("recordStatus") == "retired", f"id={rid} recordStatus={r.get('recordStatus')} expected retired"
+
+
+def _assert_no_generic_fallback() -> None:
+    """Generator art_profiles() must not perform name-based fallback.
+    Verify by checking that only runtimeMappingsByMonsterId is consumed."""
+    import inspect
+    source = inspect.getsource(GENERATOR.art_profiles)
+    assert "vanilla_name_by_id" not in source, "generic name fallback still present in art_profiles()"
+    assert "for monster_id, name in vanilla_name_by_id" not in source, "name->ID promotion loop present"
+
+
 def _assert_local_from_res_portable() -> None:
     """res:// paths must resolve through pathlib, not a hardcoded ``\\``."""
     resolved = GENERATOR.local_from_res("res://assets/art/monsters/fixture.png")
@@ -141,6 +208,11 @@ def main() -> None:
     _assert_excel_drop_authority(catalog)
     _assert_classification_placement_kind()
     _assert_local_from_res_portable()
+    _assert_variant_visual_pairs(catalog)
+    _assert_undead_exact_id_authority()
+    _assert_boss_variant_mappings()
+    _assert_retired_ids()
+    _assert_no_generic_fallback()
     entries_by_id = catalog.get("entries_by_id", {})
     assert entries_by_id.get("39", {}).get("editor_placement", {}).get(
         "placement_kind"
@@ -151,7 +223,9 @@ def main() -> None:
         "lf_crlf_equivalent=1 binary_raw=1 source_metadata=1 "
         "excel_drop_authority=1 classification_placement_kind=1 "
         "local_from_res_portable=1 excel_source_sha=1 crystal_primary_zero=1 "
-        "deer1_provenance=1"
+        "variant_visual_pairs=17 undead_exact_id=25 boss_variants=3 "
+        "retired_source_preserved=3 retired_active_absent=3 "
+        "no_generic_fallback=1"
     )
 
 
