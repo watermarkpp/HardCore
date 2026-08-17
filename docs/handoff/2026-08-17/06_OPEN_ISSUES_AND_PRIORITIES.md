@@ -52,16 +52,10 @@ Golden hotfix 之后，部分 UI 脚本在 codex/ui-art 分支上继续演进，
 
 ---
 
-## P3: 远端分支整理
+## ~~P3: 远端分支整理~~ — COMPLETED ✅
 
-| 字段 | 值 |
-|------|-----|
-| **STATUS** | 待执行 |
-| **OWNER** | codex/integration |
-| **BRANCH** | codex/integration |
-| **BLOCKER** | 3 个 `dsh/*` 已完全合并可删除；3 个永久分支无远端 |
-| **NEXT_ACTION** | push 永久分支，标记审计分支 |
-| **DO_NOT_DO** | ❌ 不要 force push |
-
-### 说明
-远端存在 3 个已完全合并的 `dsh/*` 分支（`dsh/monster-runtime-closure`、`dsh/monster-classification-audit`、`dsh/monsters-drop-audit`），应清理删除。同时 5 个永久工作树分支中部分缺少远端对应，需要 push 以保持一致性。操作时禁止 force push，避免覆盖远端历史。
+> **REMOTE CONSOLIDATION = COMPLETE**
+> 所有 6 个永久分支已推送到 origin。
+> 5 个 WIP snapshot 分支已创建并推送。
+> 3 个已合并 dsh/* 分支标记为 ARCHIVAL_AUDIT_BRANCH。
+> 详见 08_REMOTE_BRANCH_REGISTRY.md。
