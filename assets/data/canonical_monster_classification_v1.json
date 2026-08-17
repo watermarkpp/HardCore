@@ -250,8 +250,7 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)；R1 correction: re-closed (drop item 蝎子尾巴 unresolved)",
-      "runtime_blocked_reason": "DROP_ITEMS_UNRESOLVED"
+      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)；R1 correction: re-closed (drop item 蝎子尾巴 unresolved)；R3B: 蝎子尾巴 exact alias 证明 mylgd StdItems.Idx273 = Crystal 873 蝎尾，解除 drop blocker"
     },
     "46": {
       "classification": "ordinary",

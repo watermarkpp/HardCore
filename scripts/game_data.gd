@@ -38,6 +38,11 @@ const ITEM_ALIASES := {
 	"毒蜘蛛牙齿": "蜘蛛牙",
 	"食人树叶": "食人花叶",
 	"食人树的果实": "食人花果",
+	# R3B: mylgd 1.76 StdItems.DB Idx=273 "蝎子尾巴" (Stdmode=42 material) is the
+	# exact 1.76 server name for Crystal Server.MirDB serviceIndex=873 "蝎尾"
+	# (Type=16 material, weight=1). Same audited pattern as 毒蜘蛛牙齿->蜘蛛牙.
+	# The frozen Excel drop token spells it 蝎子的尾巴 (with 的).
+	"蝎子的尾巴": "蝎尾",
 }
 # 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
