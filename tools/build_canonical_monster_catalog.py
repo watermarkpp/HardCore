@@ -35,6 +35,7 @@ DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
 DROP_OVERRIDE_PATH = ROOT / "assets/data/canonical_monster_drop_overrides_v1.json"
 ART_PATHS = [
     ROOT / "assets/data/bich_common_client_art_sources.json",
+    ROOT / "assets/data/bich_undead_client_art_sources.json",
     ROOT / "assets/data/complete_monster_client_art_sources.json",
     ROOT / "assets/data/classic_boss_client_art_sources.json",
 ]
@@ -176,20 +177,34 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
     The first matching source is intentional: the Wooma common-client
     manifest is the explicit source for 64..75, then complete client art, and
     finally the classic boss manifest.  No names or suffixes participate.
+
+    Files that only carry ``runtimeMappings`` (name-keyed) without
+    ``runtimeMappingsByMonsterId`` are resolved via the vanilla monster name
+    table so that hand-authored art sources (e.g. bich_undead) are consumed
+    without requiring a redundant ID-keyed section.
     """
+
+    vanilla_name_by_id: dict[int, str] = {}
+    vanilla = load_json(VANILLA_PATH)
+    for record in vanilla.get("records", []):
+        mid = record.get("monsterId")
+        name = record.get("name", "")
+        if mid is not None and name:
+            vanilla_name_by_id[int(mid)] = name
 
     id_to_mapping: dict[int, tuple[str, dict[str, Any], Path]] = {}
     for manifest_path in ART_PATHS:
         manifest = load_json(manifest_path)
         by_id = manifest.get("runtimeMappingsByMonsterId", {})
-        if isinstance(by_id, dict):
+        by_name = manifest.get("runtimeMappings", {})
+        if isinstance(by_id, dict) and by_id:
             for raw_id, value in by_id.items():
                 monster_id = int(raw_id)
                 if monster_id in id_to_mapping:
                     continue
                 mapping: dict[str, Any]
                 if isinstance(value, str):
-                    candidate = manifest.get("runtimeMappings", {}).get(value, {})
+                    candidate = by_name.get(value, {})
                     mapping = candidate if isinstance(candidate, dict) else {}
                 elif isinstance(value, dict):
                     mapping = value
@@ -197,6 +212,13 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
                     mapping = {}
                 if mapping:
                     id_to_mapping[monster_id] = (manifest_path.name, mapping, manifest_path)
+        elif isinstance(by_name, dict) and by_name and vanilla_name_by_id:
+            for monster_id, name in vanilla_name_by_id.items():
+                if monster_id in id_to_mapping:
+                    continue
+                candidate = by_name.get(name, {})
+                if isinstance(candidate, dict) and candidate:
+                    id_to_mapping[monster_id] = (manifest_path.name, candidate, manifest_path)
 
     profile_by_signature: dict[str, str] = {}
     profiles: dict[str, dict[str, Any]] = {}
