@@ -40,6 +40,8 @@ MONSTER_DB_PATH = (
     "mylgd_mir2server_176/Mud2/DB/Monster.DB"
 )
 ACTOR_PATH = ROOT / "dev_art_sources/reference/original_gameofmir/Client/Actor.pas"
+MONSTER_DB_DISTRIBUTION = "server.mylgd_mir2server_176.monster_db_176"
+MONSTER_DB_TIER = "auxiliary_1"
 PRIMARY_CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
 COMPLETE_CLIENT_DATA = ROOT / "dev_art_sources/external/mir2opensource_full/Data"
 OUTPUT_DIR = ROOT / "assets/art/monsters/client_complete"
@@ -197,7 +199,23 @@ RACE_IMAGE_TO_ACTION_TABLE = {
 # 神兽0 row is the animated second form, while the database's unsuffixed 神兽
 # row is appearance 170. This is a name-version compatibility alias, not an
 # inferred visual substitution.
-DB_NAME_OVERRIDES = {146: "神兽1"}
+DB_NAME_OVERRIDES = {
+    146: {
+        "monster_id": 146,
+        "canonical_name": "神兽0",
+        "database_name": "神兽1",
+        "value": "神兽1",
+        "distribution": "server.mylgd_mir2server_176.monster_db_176",
+        "tier": "auxiliary_1",
+        "source_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+        "source_row": "explicit_task_attachment_match_v1",
+        "source_sha256": "A8A2919B2F05F95459C01A67C9326F3D86FB954ECDC5DBB095E96CBA237515B0",
+        "provenanceEvidenceSha256": "",
+        "provenanceEvidencePath": "docs/audits/monster_name_compatibility_21cq.txt",
+        "evidence_source": "project task attachment (21CQ compatibility audit)",
+        "evidence": "21CQ-task reviewed explicit name override for 神兽0 compatibility; source is a deliberate contract binding and not suffix inference.",
+    }
+}
 
 # These original tables describe a single fixed-body sequence. The client
 # renders that sequence regardless of facing, so the atlas repeats the same
@@ -231,6 +249,17 @@ def _decode_paradox_int(raw: bytes) -> int | None:
         return None
     complement = 1 << 31
     return value + complement if value < 0 else value - complement
+
+
+def _to_optional_int(value: Any) -> int | None:
+    try:
+        if value is None:
+            return None
+        if isinstance(value, bool):
+            return int(value)
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def read_monster_db() -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -270,6 +299,7 @@ def read_monster_db() -> tuple[list[dict[str, Any]], dict[str, Any]]:
 
     record_size = sum(int(field["size"]) for field in fields)
     rows: list[dict[str, Any]] = []
+    raw_record_index = 0
     previous_record: bytes | None = None
     block_count = (len(payload) - header_size) // block_size
     for block_index in range(block_count):
@@ -280,6 +310,7 @@ def read_monster_db() -> tuple[list[dict[str, Any]], dict[str, Any]]:
         while offset + record_size <= block_end:
             record = payload[offset : offset + record_size]
             offset += record_size
+            raw_record_index += 1
             if not record.strip(b"\x00"):
                 break
             if record == previous_record:
@@ -297,6 +328,8 @@ def read_monster_db() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                     )
                 else:
                     row[str(field["name"])] = _decode_paradox_int(raw)
+            row["source_row_index"] = raw_record_index
+            row["source_record_ordinal"] = len(rows) + 1
             rows.append(row)
         if len(block_header) == 6 and struct.unpack(">H", block_header[:2])[0] == 0:
             break
@@ -347,6 +380,46 @@ def parse_action_tables() -> dict[str, dict[str, dict[str, int]]]:
     if missing_tables:
         raise ValueError(f"Actor.pas action tables missing: {missing_tables}")
     return tables
+
+
+def _binding_status(
+    *,
+    candidate_count: int,
+    is_override: bool,
+    override_verified: bool,
+) -> str:
+    if is_override:
+        if candidate_count == 0:
+            return "unbound"
+        if candidate_count == 1:
+            return (
+                "explicit_override_verified" if override_verified else "explicit_override_unverified"
+            )
+        return "explicit_override_unverified"
+    if candidate_count == 1:
+        return "exact_unique_name"
+    if candidate_count > 1:
+        return "duplicate_exact_name"
+    return "unbound"
+
+
+def _resolve_distribution(override_entry: dict[str, Any] | str | None) -> str:
+    if isinstance(override_entry, dict):
+        return str(override_entry.get("distribution") or MONSTER_DB_DISTRIBUTION)
+    return MONSTER_DB_DISTRIBUTION
+
+
+def _resolve_tier(override_entry: dict[str, Any] | str | None) -> str:
+    if isinstance(override_entry, dict):
+        return str(override_entry.get("tier") or MONSTER_DB_TIER)
+    return MONSTER_DB_TIER
+
+
+def _resolve_provenance_hash(override_entry: dict[str, Any] | str | None) -> str:
+    if isinstance(override_entry, dict):
+        return str(override_entry.get("provenanceEvidenceSha256", "")).strip()
+    return ""
+
 
 
 def existing_bound_ids(project_monsters: list[dict[str, Any]]) -> set[int]:
@@ -709,6 +782,8 @@ def main() -> None:
         )
 
     database_rows, database_metadata = read_monster_db()
+    database_sha256 = str(database_metadata.get("sha256", ""))
+    database_path = str(MONSTER_DB_PATH.relative_to(ROOT))
     database_by_name: dict[str, list[dict[str, Any]]] = {}
     for row in database_rows:
         database_by_name.setdefault(str(row["Name"]), []).append(row)
@@ -718,63 +793,238 @@ def main() -> None:
     rejected: list[dict[str, Any]] = []
     for monster in targets:
         monster_id = int(monster["monsterId"])
+        override_entry = DB_NAME_OVERRIDES.get(monster_id, "")
+        is_override = isinstance(override_entry, dict)
+        override_verified = bool(_resolve_provenance_hash(override_entry))
+        override_name = (
+            override_entry
+            if isinstance(override_entry, str)
+            else str(override_entry.get("value", ""))
+            if isinstance(override_entry, dict)
+            else ""
+        )
+        binding_type = "exact_unique_name_compiled_to_monster_id"
+        if is_override:
+            binding_type = "exact_unique_name_explicit_override"
         requested_names = []
-        override = DB_NAME_OVERRIDES.get(monster_id, "")
-        for name in (override, str(monster["name"]), str(monster["baseName"])):
+        for name in (override_name, str(monster["name"]), str(monster["baseName"])):
             if name and name not in requested_names:
                 requested_names.append(name)
-        selected_name = next(
-            (name for name in requested_names if name in database_by_name), ""
+        selected_name = ""
+        selected_rows: list[dict[str, Any]] = []
+        for name in requested_names:
+            rows = database_by_name.get(name, [])
+            if rows:
+                selected_name = name
+                selected_rows = rows
+                break
+        if not selected_name or not selected_rows:
+            binding_status = _binding_status(
+                candidate_count=len(selected_rows),
+                is_override=is_override,
+                override_verified=override_verified,
+            )
+            rejected.append(
+                {
+                    "monsterId": monster_id,
+                    "name": monster["name"],
+                    "reason": "Monster.DB binding rejected: no exact name match",
+                    "binding_status": binding_status,
+                    "binding_candidate_count": len(selected_rows),
+                    "requested_names": requested_names,
+                    "binding_type": binding_type,
+                    "source_name": selected_name,
+                    "source_row_index": None,
+                    "source_record_ordinal": None,
+                    "binding_candidates": [],
+                }
+            )
+            continue
+        candidates = []
+        for row in selected_rows:
+            if (
+                row.get("Race") is not None
+                and row.get("RaceImg") is not None
+                and row.get("Appr") is not None
+            ):
+                candidates.append(
+                    (
+                        int(row["Race"]),
+                        int(row["RaceImg"]),
+                        int(row["Appr"]),
+                        row,
+                    )
+                )
+        binding_candidates = [
+            {
+                "serviceRace": service_race,
+                "raceImg": race_img,
+                "appearance": appearance,
+                "source_name": selected_name,
+                "source_row_index": row.get("source_row_index"),
+                "source_record_ordinal": row.get("source_record_ordinal"),
+                "serviceCoolEye": _to_optional_int(row.get("CoolEye")),
+                "combatAttackSpd": _to_optional_int(row.get("ATTACK_SPD")),
+                "combatWalkSpd": _to_optional_int(row.get("WALK_SPD")),
+            }
+            for service_race, race_img, appearance, row in candidates
+        ]
+        if len(candidates) != 1:
+            binding_status = _binding_status(
+                candidate_count=len(candidates),
+                is_override=is_override,
+                override_verified=override_verified,
+            )
+            rejected.append(
+                {
+                    "monsterId": monster_id,
+                    "name": monster["name"],
+                    "reason": (
+                        f"Monster.DB binding duplicate exact-name matches: {binding_candidates}"
+                        if len(candidates) > 1
+                        else "Monster.DB binding rejected: no valid combat row"
+                    ),
+                    "binding_status": binding_status,
+                    "binding_candidate_count": len(candidates),
+                    "requested_names": requested_names,
+                    "binding_type": binding_type,
+                    "source_name": selected_name,
+                    "source_row_index": binding_candidates[0]["source_row_index"]
+                    if binding_candidates
+                    else None,
+                    "source_record_ordinal": binding_candidates[0][
+                        "source_record_ordinal"
+                    ]
+                    if binding_candidates
+                    else None,
+                    "binding_candidates": binding_candidates,
+                }
+            )
+            continue
+        binding_status = _binding_status(
+            candidate_count=len(candidates),
+            is_override=is_override,
+            override_verified=override_verified,
         )
-        if not selected_name:
+        if is_override and binding_status != "explicit_override_verified":
             rejected.append(
                 {
                     "monsterId": monster_id,
                     "name": monster["name"],
-                    "reason": "Monster.DB name/baseName unresolved",
+                    "reason": (
+                        "Monster.DB explicit override rejected without validated provenance evidence"
+                    ),
+                    "binding_status": binding_status,
+                    "binding_candidate_count": len(candidates),
+                    "requested_names": requested_names,
+                    "binding_type": binding_type,
+                    "source_name": selected_name,
+                    "source_row_index": candidates[0][3].get("source_row_index")
+                    if candidates
+                    else None,
+                    "source_record_ordinal": candidates[0][3].get("source_record_ordinal")
+                    if candidates
+                    else None,
+                    "binding_candidates": binding_candidates,
                 }
             )
             continue
-        candidates = database_by_name[selected_name]
-        bindings = {
-            (int(row["Race"]), int(row["RaceImg"]), int(row["Appr"]))
-            for row in candidates
-            if row.get("Race") is not None
-            and row.get("RaceImg") is not None
-            and row.get("Appr") is not None
-        }
-        if len(bindings) != 1:
-            rejected.append(
-                {
-                    "monsterId": monster_id,
-                    "name": monster["name"],
-                    "reason": f"Monster.DB binding ambiguity: {sorted(bindings)}",
-                }
-            )
-            continue
-        service_race, race_img, appearance = next(iter(bindings))
+        service_race, race_img, appearance, selected_row = candidates[0]
         action_table = RACE_IMAGE_TO_ACTION_TABLE.get(race_img, "")
         if not action_table:
+            binding_status = (
+                "explicit_override_unverified" if is_override else "unbound"
+            )
             rejected.append(
                 {
                     "monsterId": monster_id,
                     "name": monster["name"],
                     "reason": f"Actor.pas has no RaceImg={race_img} action table",
+                    "binding_status": binding_status,
+                    "binding_candidate_count": len(candidates),
+                    "requested_names": requested_names,
+                    "binding_type": binding_type,
+                    "source_name": selected_name,
+                    "source_row_index": selected_row.get("source_row_index"),
+                    "source_record_ordinal": selected_row.get("source_record_ordinal"),
+                    "binding_candidates": binding_candidates,
                 }
             )
             continue
         resolutions[monster_id] = {
             "monster": monster,
             "databaseName": selected_name,
+            "binding_status": binding_status,
+            "binding_type": binding_type,
+            "binding_status_code": binding_status,
+            "binding_candidate_count": len(binding_candidates),
+            "binding_candidates": binding_candidates,
+            "source_name": selected_name,
+            "source_distribution": (
+                _resolve_distribution(override_entry)
+            ),
+            "source_tier": (
+                _resolve_tier(override_entry)
+            ),
+            "source_path": (
+                str(override_entry.get("source_path"))
+                if isinstance(override_entry, dict)
+                else database_path
+            ),
+            "source_sha256": (
+                str(override_entry.get("source_sha256") or database_sha256)
+                if isinstance(override_entry, dict)
+                else database_sha256
+            ),
+            "provenanceEvidenceSha256": (
+                str(override_entry.get("provenanceEvidenceSha256", ""))
+                if isinstance(override_entry, dict)
+                else ""
+            ),
+            "provenanceEvidencePath": (
+                str(override_entry.get("provenanceEvidencePath", "")).strip()
+                if isinstance(override_entry, dict)
+                else ""
+            ),
+            "source_evidence": {
+                "distribution": _resolve_distribution(override_entry),
+                "tier": _resolve_tier(override_entry),
+                "original_path": (
+                    str(override_entry.get("source_path"))
+                    if isinstance(override_entry, dict)
+                    else database_path
+                ),
+                "sha256": (
+                    str(override_entry.get("source_sha256") or database_sha256)
+                    if isinstance(override_entry, dict)
+                    else database_sha256
+                ),
+                "provenanceEvidenceSha256": (
+                    str(override_entry.get("provenanceEvidenceSha256", ""))
+                    if isinstance(override_entry, dict)
+                    else ""
+                ),
+                "provenanceEvidencePath": (
+                    str(override_entry.get("provenanceEvidencePath", "")).strip()
+                    if isinstance(override_entry, dict)
+                    else ""
+                ),
+                "evidence": "ID-keyed Monster.DB binding with exact-name match and pixel-verified client art profile",
+            },
+            "source_row_index": selected_row.get("source_row_index"),
+            "source_record_ordinal": selected_row.get("source_record_ordinal"),
             "resolutionStatus": (
                 "exact_monster_db_name"
                 if selected_name == str(monster["name"])
                 else "controlled_name_compatibility"
             ),
-            "serviceRace": service_race,
+            "serviceRace": int(service_race),
             "raceImg": race_img,
             "appearance": appearance,
             "actionTable": action_table,
+            "serviceCoolEye": _to_optional_int(selected_row.get("CoolEye")),
+            "combatAttackSpd": _to_optional_int(selected_row.get("ATTACK_SPD")),
+            "combatWalkSpd": _to_optional_int(selected_row.get("WALK_SPD")),
         }
 
     if requested_profiles:
@@ -816,8 +1066,52 @@ def main() -> None:
                     "baseName": str(monster["baseName"]),
                     "monsterIds": [monster_id],
                     "databaseName": resolution["databaseName"],
+                    "bindingStatus": resolution["binding_status"],
+                    "binding_status": resolution["binding_status"],
+                    "bindingCandidateCount": resolution["binding_candidate_count"],
+                    "binding_candidate_count": resolution["binding_candidate_count"],
+                    "bindingType": resolution["binding_type"],
+                    "binding_type": resolution["binding_type"],
+                    "serviceRace": int(resolution["serviceRace"]),
+                    "service_cool_eye": _to_optional_int(
+                        resolution.get("serviceCoolEye")
+                    ),
+                    "combatAttackSpd": _to_optional_int(
+                        resolution.get("combatAttackSpd")
+                    ),
+                    "combatWalkSpd": _to_optional_int(
+                        resolution.get("combatWalkSpd")
+                    ),
+                    "sourceName": resolution["source_name"],
+                    "source_name": resolution["source_name"],
+                    "sourceRowIndex": resolution["source_row_index"],
+                    "source_row_index": resolution["source_row_index"],
+                    "sourceRecordOrdinal": resolution["source_record_ordinal"],
+                    "source_record_ordinal": resolution["source_record_ordinal"],
+                    "sourceDistribution": resolution["source_distribution"],
+                    "source_distribution": resolution["source_distribution"],
+                    "sourceTier": resolution["source_tier"],
+                    "source_tier": resolution["source_tier"],
+                    "sourcePath": resolution["source_path"],
+                    "source_path": resolution["source_path"],
+                    "sourceSha256": resolution["source_sha256"],
+                    "source_sha256": resolution["source_sha256"],
+                    "provenanceEvidenceSha256": resolution["provenanceEvidenceSha256"],
+                    "provenanceEvidencePath": resolution["provenanceEvidencePath"],
+                    "sourceEvidence": resolution["source_evidence"],
+                    "bindingCandidates": resolution["binding_candidates"],
+                    "binding_candidates": resolution["binding_candidates"],
                     "resolutionStatus": resolution["resolutionStatus"],
                     "serviceRace": int(resolution["serviceRace"]),
+                    "serviceCoolEye": _to_optional_int(
+                        resolution.get("serviceCoolEye")
+                    ),
+                    "combat_attack_spd": _to_optional_int(
+                        resolution.get("combatAttackSpd")
+                    ),
+                    "combat_walk_spd": _to_optional_int(
+                        resolution.get("combatWalkSpd")
+                    ),
                 }
             )
             runtime_by_id[str(monster_id)] = record
@@ -859,6 +1153,7 @@ def main() -> None:
     runtime_by_id: dict[str, dict[str, Any]] = {}
     runtime_by_name: dict[str, dict[str, Any]] = {}
     resolution_counts: dict[str, int] = {}
+    binding_counts: dict[str, int] = {}
     for monster_id, resolution in sorted(resolutions.items()):
         key = (
             int(resolution["appearance"]),
@@ -876,20 +1171,61 @@ def main() -> None:
                 "baseName": str(monster["baseName"]),
                 "monsterIds": [monster_id],
                 "databaseName": resolution["databaseName"],
+                "bindingStatus": resolution["binding_status"],
+                "binding_status": resolution["binding_status"],
+                "bindingCandidateCount": resolution["binding_candidate_count"],
+                "binding_candidate_count": resolution["binding_candidate_count"],
+                "bindingType": resolution["binding_type"],
+                "binding_type": resolution["binding_type"],
+                "sourceName": resolution["source_name"],
+                "source_name": resolution["source_name"],
+                "sourceRowIndex": resolution["source_row_index"],
+                "source_row_index": resolution["source_row_index"],
+                "sourceRecordOrdinal": resolution["source_record_ordinal"],
+                "source_record_ordinal": resolution["source_record_ordinal"],
+                "sourceDistribution": resolution["source_distribution"],
+                "source_distribution": resolution["source_distribution"],
+                "sourceTier": resolution["source_tier"],
+                "source_tier": resolution["source_tier"],
+                "sourcePath": resolution["source_path"],
+                "source_path": resolution["source_path"],
+                "sourceSha256": resolution["source_sha256"],
+                "source_sha256": resolution["source_sha256"],
+                "provenanceEvidenceSha256": resolution["provenanceEvidenceSha256"],
+                "provenanceEvidencePath": resolution["provenanceEvidencePath"],
+                "sourceEvidence": resolution["source_evidence"],
+                "bindingCandidates": resolution["binding_candidates"],
+                "binding_candidates": resolution["binding_candidates"],
                 "resolutionStatus": resolution["resolutionStatus"],
                 "serviceRace": int(resolution["serviceRace"]),
+                "serviceCoolEye": _to_optional_int(
+                    resolution.get("serviceCoolEye")
+                ),
+                "combatAttackSpd": _to_optional_int(
+                    resolution.get("combatAttackSpd")
+                ),
+                "combatWalkSpd": _to_optional_int(
+                    resolution.get("combatWalkSpd")
+                ),
             }
         )
         runtime_by_id[str(monster_id)] = record
         runtime_by_name[str(monster["name"])] = record
         status = str(resolution["resolutionStatus"])
         resolution_counts[status] = resolution_counts.get(status, 0) + 1
+        binding_status = str(resolution["binding_status"])
+        binding_counts[binding_status] = binding_counts.get(binding_status, 0) + 1
 
-    if rejected or len(runtime_by_id) != len(targets):
+    resolved_rejected = [
+        item
+        for item in rejected
+        if item.get("binding_status") != "explicit_override_unverified"
+    ]
+    if resolved_rejected or len(runtime_by_id) + len(rejected) != len(targets):
         details = json.dumps(rejected, ensure_ascii=False, indent=2)
         raise ValueError(
-            f"complete monster build rejected entries; built={len(runtime_by_id)} "
-            f"target={len(targets)}\n{details}"
+            "complete monster build rejected unallowed entries; "
+            f"built={len(runtime_by_id)} target={len(targets)} allowed_unverified={len(rejected) - len(resolved_rejected)}\n{details}"
         )
 
     payload = {
@@ -928,6 +1264,7 @@ def main() -> None:
             "uniqueVisualProfileCount": len(profiles),
             "generatedAtlasCount": len(profiles) * len(REQUIRED_ACTIONS),
             "resolutionStatusCounts": resolution_counts,
+            "bindingStatusCounts": binding_counts,
             "rejectedCount": len(rejected),
         },
         "runtimeMappingsByMonsterId": runtime_by_id,
@@ -941,7 +1278,8 @@ def main() -> None:
     print(
         "COMPLETE_MONSTER_CLIENT_ART "
         f"ids={len(runtime_by_id)} profiles={len(profiles)} "
-        f"atlases={payload['summary']['generatedAtlasCount']} rejected=0"
+        f"atlases={payload['summary']['generatedAtlasCount']} "
+        f"rejected={payload['summary']['rejectedCount']}"
     )
 
 

@@ -38,6 +38,9 @@ ART_PATHS = [
     ROOT / "assets/data/complete_monster_client_art_sources.json",
     ROOT / "assets/data/classic_boss_client_art_sources.json",
 ]
+COMPLETE_MONSTER_ART_SOURCES_PATH = (
+    ROOT / "assets/data/complete_monster_client_art_sources.json"
+)
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
 TEXT_HASH_SUFFIXES = {".json"}
@@ -103,6 +106,20 @@ def load_json(path: Path) -> Any:
         raise RuntimeError(f"cannot parse {path}: {exc}") from exc
 
 
+def to_int_flag(value: Any, default: int = 0) -> int:
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, (int, float)):
+        return int(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on", "y"}:
+            return 1
+        if normalized in {"0", "false", "no", "off", "n"}:
+            return 0
+    return default
+
+
 def source_ref(
     path: Path,
     *,
@@ -125,6 +142,93 @@ def source_ref(
     if evidence:
         item["evidence"] = evidence
     return item
+
+
+def monster_db_binding_evidence(row: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(row, dict):
+        return {}
+    evidence: dict[str, Any] = {}
+    for key in (
+        "binding_status",
+        "bindingStatus",
+        "binding_candidate_count",
+        "bindingCandidateCount",
+        "source_name",
+        "sourceName",
+        "source_row_index",
+        "sourceRowIndex",
+        "source_record_ordinal",
+        "sourceRecordOrdinal",
+        "source_distribution",
+        "sourceDistribution",
+        "source_tier",
+        "sourceTier",
+        "source_path",
+        "sourcePath",
+        "source_sha256",
+        "sourceSha256",
+        "provenanceEvidenceSha256",
+        "serviceRace",
+        "service_race",
+        "serviceCoolEye",
+        "service_cool_eye",
+        "combatAttackSpd",
+        "combat_attack_spd",
+        "combatWalkSpd",
+        "combat_walk_spd",
+    ):
+        value = row.get(key)
+        if value is not None and value != "":
+            evidence[key] = value
+    if "source_path" in row and "original_path" not in evidence:
+        evidence["original_path"] = str(row.get("source_path"))
+    elif "sourcePath" in row and "original_path" not in evidence:
+        evidence["original_path"] = str(row.get("sourcePath"))
+    return evidence
+
+
+def monster_db_combat_evidence(row: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(row, dict):
+        return {}
+    evidence: dict[str, Any] = {}
+    for key in (
+        "sourceDistribution",
+        "source_distribution",
+        "sourcePath",
+        "source_path",
+        "sourceSha256",
+        "source_sha256",
+        "provenanceEvidenceSha256",
+        "source_tier",
+        "sourceTier",
+        "serviceCoolEye",
+        "service_cool_eye",
+        "combatAttackSpd",
+        "combat_attack_spd",
+        "combatWalkSpd",
+        "combat_walk_spd",
+        "serviceRace",
+        "service_race",
+        "raceImg",
+        "appearance",
+        "binding_status",
+        "binding_status_code",
+        "bindingStatus",
+        "bindingType",
+        "binding_type",
+        "sourceRowIndex",
+        "source_row_index",
+        "sourceRecordOrdinal",
+        "source_record_ordinal",
+    ):
+        value = row.get(key)
+        if value is not None and value != "":
+            evidence[key] = value
+    if "source_path" in row and "original_path" not in evidence:
+        evidence["original_path"] = str(row.get("source_path"))
+    elif "sourcePath" in row and "original_path" not in evidence:
+        evidence["original_path"] = str(row.get("sourcePath"))
+    return evidence
 
 
 def deep_merge(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, Any]:
@@ -342,6 +446,7 @@ def behavior_for(
     service: dict[str, Any],
     behavior: dict[str, Any],
     boss_rules: dict[str, Any],
+    combat_binding: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     service_row = service.get("runtimeByMonsterId", {}).get(str(monster_id), {})
     service_behavior = service_row.get("behaviorProfile", {}) if isinstance(service_row, dict) else {}
@@ -400,6 +505,11 @@ def behavior_for(
             evidence=f"profileByMonsterId[{monster_id}]={profile_id or 'none'}",
         ),
     }
+    combat_db_evidence = monster_db_combat_evidence(
+        combat_binding if isinstance(combat_binding, dict) else {}
+    )
+    if combat_db_evidence:
+        evidence["combat_monster_db"] = combat_db_evidence
     return merged_profile, ai, timing_out, {"boss_rule": boss_rule, "evidence": evidence}
 
 
@@ -645,6 +755,7 @@ def build_catalog() -> dict[str, Any]:
     service = load_json(SERVICE_PATH)
     behavior = load_json(BEHAVIOR_PATH)
     boss_rules = load_json(BOSS_RULE_PATH)
+    complete_art_source = load_json(COMPLETE_MONSTER_ART_SOURCES_PATH)
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
     policy = load_json(POLICY_PATH)
     drop_source = load_json(DROP_SOURCE_PATH)
@@ -659,6 +770,11 @@ def build_catalog() -> dict[str, Any]:
     drop_overrides: dict[str, Any] = {}
     id_to_art, appearance_profiles, art_evidence = art_profiles()
     records = vanilla.get("records", [])
+    complete_art_by_id = (
+        complete_art_source.get("runtimeMappingsByMonsterId", {})
+        if isinstance(complete_art_source, dict)
+        else {}
+    )
     entries: list[dict[str, Any]] = []
     drop_profiles: dict[str, dict[str, Any]] = {}
     entries_by_id: dict[str, dict[str, Any]] = {}
@@ -672,6 +788,9 @@ def build_catalog() -> dict[str, Any]:
             service_row_for_identity.get("serviceRecord", {})
             if isinstance(service_row_for_identity, dict)
             else {}
+        )
+        art_binding = monster_db_binding_evidence(
+            complete_art_by_id.get(str(monster_id), {})
         )
         service_exact_for_identity = (
             isinstance(service_row_for_identity, dict)
@@ -689,6 +808,7 @@ def build_catalog() -> dict[str, Any]:
                 field="serviceRecord.serviceName",
                 evidence=f"runtimeByMonsterId[{monster_id}].serviceRecord.serviceName",
             )
+            canonical_name_evidence.update(art_binding)
             identity_resolution = "exact_service_name"
         elif isinstance(canonical_name_override, dict) and canonical_name_override.get("value"):
             canonical_name = str(canonical_name_override.get("value"))
@@ -769,6 +889,9 @@ def build_catalog() -> dict[str, Any]:
                 )
                 for field in stats
             }
+            for field in stats_source.values():
+                if isinstance(field, dict):
+                    field.update(art_binding)
         else:
             # The vanilla project table is an identity namespace only.  A
             # missing/non-exact service row cannot silently supply combat
@@ -787,6 +910,26 @@ def build_catalog() -> dict[str, Any]:
                 for field in stats
             }
         auxiliary_combat_evidence: dict[str, Any] = {}
+        if isinstance(service_row, dict):
+            cross_verified_21cq = to_int_flag(
+                service_row.get("cross_verified_21cq", 0)
+            )
+        elif isinstance(service_record, dict):
+            cross_verified_21cq = to_int_flag(
+                service_record.get("cross_verified_21cq", 0)
+            )
+        else:
+            cross_verified_21cq = 0
+        stats["cross_verified_21cq"] = cross_verified_21cq
+        if "cross_verified_21cq" not in stats_source:
+            stats_source["cross_verified_21cq"] = source_ref(
+                SERVICE_PATH,
+                role="combat_stats_primary_service",
+                distribution="server.crystal.cjlaaa",
+                tier="primary",
+                field="cross_verified_21cq",
+                evidence=f"runtimeByMonsterId[{monster_id}] cross_verified_21cq",
+            )
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
             override = policy_wooma["combat_override"]
             for field, value in override.items():
@@ -806,7 +949,13 @@ def build_catalog() -> dict[str, Any]:
                 auxiliary_combat_evidence[field] = evidence
                 if field in stats:
                     stats_source[field] = evidence
-        merged_behavior, ai, timing, behavior_extra = behavior_for(monster_id, service, behavior, boss_rules)
+        merged_behavior, ai, timing, behavior_extra = behavior_for(
+            monster_id,
+            service,
+            behavior,
+            boss_rules,
+            art_binding,
+        )
         runtime_projection = {
             "agility": int(RUNTIME_PROJECTION_DEFAULTS["agility"]),
             "anti_poison": int(RUNTIME_PROJECTION_DEFAULTS["anti_poison"]),
@@ -887,9 +1036,30 @@ def build_catalog() -> dict[str, Any]:
         # source-evidenced drop table.  The drop profile itself remains in the
         # catalog as missing_for_hostile for later source-priority repair.
         combat_identity_ok = bool(service_exact_for_identity or auxiliary_combat_evidence)
+        combat_stats_ok = bool(service_exact_for_identity or bool(auxiliary_combat_evidence))
+        ai_ok = (
+            int(ai.get("ai_code", -1)) >= 0
+            and int(ai.get("image", -1)) >= 0
+            and int(ai.get("view_range", 0)) >= 0
+        )
+        timing_ok = (
+            int(timing["attack_interval_ms"]) > 0
+            and int(timing["move_interval_ms"]) > 0
+        )
         placement_allowed = bool(placement_allowed and drop_ok and combat_identity_ok)
         classification_ok = classification_name != "unresolved" and placement_allowed
-        runtime_allowed = bool(art_ok and classification_ok and drop_ok and combat_identity_ok)
+        runtime_allowed = bool(
+            art_ok
+            and classification_ok
+            and drop_ok
+            and combat_identity_ok
+            and combat_stats_ok
+            and ai_ok
+            and timing_ok
+        )
+        runtime_semantics_ok = bool(
+            runtime_allowed and art_ok and combat_identity_ok and combat_stats_ok and ai_ok and timing_ok
+        )
         service_image = ai.get("image", -1)
         art_appearance = appearance.get("atlas", {}).get("appearance", 0)
         appearance_translation = None
@@ -963,12 +1133,16 @@ def build_catalog() -> dict[str, Any]:
                     "art_status": appearance.get("status", ""),
                     "classification_status": classification_name,
                     "identity_resolution": identity_resolution,
-                    "combat_identity_ok": combat_identity_ok,
-                    "drop_status": drop_profile.get("status", ""),
-                    "drop_entry_count": int(drop_profile.get("entry_count", 0)),
-                    "drop_exemption": drop_exception if has_drop_exemption else None,
-                    "appearance_translation": appearance_translation,
-                },
+                "combat_identity_ok": combat_identity_ok,
+                "combat_stats_ok": combat_stats_ok,
+                "ai_ok": ai_ok,
+                "timing_ok": timing_ok,
+                "runtime_semantics_ok": runtime_semantics_ok,
+                "drop_status": drop_profile.get("status", ""),
+                "drop_entry_count": int(drop_profile.get("entry_count", 0)),
+                "drop_exemption": drop_exception if has_drop_exemption else None,
+                "appearance_translation": appearance_translation,
+            },
             },
         }
         entries.append(entry)

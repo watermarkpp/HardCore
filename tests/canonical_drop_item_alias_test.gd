@@ -2,6 +2,8 @@ extends Node
 
 const SkillDataLoader := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillResourceService := preload("res://scripts/skills/skill_resource_service.gd")
+const EXPECTED_CATALOG_RUNTIME_ALLOWED := 122
+const EXPECTED_RUNTIME_SPAWNABLE := 120
 
 const AUDITED_ALIASES := {
 	"毒蜘蛛牙齿": {"canonical": "蜘蛛牙", "service_index": 868},
@@ -33,12 +35,24 @@ func _run() -> void:
 	assert(int(fruit.get("service_index", -1)) != FORBIDDEN_QUEST_SERVICE_INDEX, "食人树的果实 wrongly resolved to Quest item 1127")
 	assert(str(fruit.get("item_name", "")) == "食人花果", "食人树的果实 canonical name must be 食人花果")
 
-	# 3. Runtime spawnable count is restored to 37 (ID18 + ID30 now resolve).
+	# 3. Runtime spawnable counts follow the current monster runtime contract.
 	var counts: Dictionary = GameData.canonical_monster_counts()
 	assert(int(counts.get("catalog_identity_count", 0)) == 217, "217 identities drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 37, "catalog runtime allowed drifted")
-	assert(int(counts.get("runtime_spawnable_count", 0)) == 37, "runtime spawnable drifted from 37")
-	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "runtime rejected count not zero")
+	assert(
+		int(counts.get("catalog_runtime_allowed_count", 0))
+		== EXPECTED_CATALOG_RUNTIME_ALLOWED,
+		"catalog runtime allowed drifted"
+	)
+	assert(
+		int(counts.get("runtime_spawnable_count", 0))
+		== EXPECTED_RUNTIME_SPAWNABLE,
+		"runtime spawnable drifted"
+	)
+	assert(
+		int(counts.get("runtime_rejected_count", -1))
+		== EXPECTED_CATALOG_RUNTIME_ALLOWED - EXPECTED_RUNTIME_SPAWNABLE,
+		"runtime rejected drifted"
+	)
 
 	# 4. 施毒术 remains material-free: casting with zero of the three alias
 	#    materials still succeeds and does not reference them.

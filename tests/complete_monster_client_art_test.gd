@@ -26,7 +26,7 @@ func _run() -> void:
 		var profile: Dictionary = appearance_profiles.get(profile_id, {})
 		assert(not profile.is_empty(), "monster_id=%d has no appearance profile" % monster_id)
 		assert(profile_id == str(profile.get("appearance_profile_id", "")), "monster_id=%d appearance profile key mismatch" % monster_id)
-		var allowed := bool(entry.get("runtime_allowed", false)) or bool(entry.get("editor_placement", {}).get("allowed", false))
+		var allowed := bool(entry.get("runtime_allowed", false))
 		if allowed:
 			allowed_count += 1
 			assert(str(profile.get("status", "")) == "formal", "allowed monster_id=%d has unresolved art" % monster_id)

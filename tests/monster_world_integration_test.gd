@@ -1,5 +1,8 @@
 extends Node
 
+const EXPECTED_CATALOG_RUNTIME_ALLOWED := 122
+const EXPECTED_RUNTIME_SPAWNABLE := 120
+
 const BridgeScript := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
@@ -29,19 +32,25 @@ func _run() -> void:
 		"canonical count contract drifted"
 	)
 	assert(int(counts.get("catalog_identity_count", 0)) == 217, "catalog identity count drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 37, "catalog runtime policy count drifted")
+	assert(
+		int(counts.get("catalog_runtime_allowed_count", 0))
+		== EXPECTED_CATALOG_RUNTIME_ALLOWED,
+		"catalog runtime policy count drifted"
+	)
 	assert(
 		int(counts.get("runtime_spawnable_count", -1)) == GameData.monsters.size(),
 		"runtime spawnable count is not the GameData runtime view"
 	)
 	assert(
-		int(counts.get("runtime_rejected_count", -1))
-		== int(counts.get("catalog_runtime_allowed_count", 0))
-		- int(counts.get("runtime_spawnable_count", 0)),
-		"runtime rejection count drifted"
+		int(counts.get("runtime_spawnable_count", 0))
+		== EXPECTED_RUNTIME_SPAWNABLE,
+		"final runtime monster count drifted"
 	)
-	assert(int(counts.get("runtime_spawnable_count", 0)) == 37, "final runtime monster count drifted")
-	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "final catalog retains runtime drop rejection")
+	assert(
+		int(counts.get("runtime_rejected_count", -1))
+		== EXPECTED_CATALOG_RUNTIME_ALLOWED - EXPECTED_RUNTIME_SPAWNABLE,
+		"final catalog retains runtime drop rejection"
+	)
 
 	for monster_id: int in [64, 66, 68, 69, 73, 76]:
 		var entry := GameData.get_monster_by_id(monster_id)

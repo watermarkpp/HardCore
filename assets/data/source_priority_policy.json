@@ -227,9 +227,18 @@
           "reason": "完整度高且最干净：顶层仅Maps、Envir、Configs和Server.MirDB；无.git、BMP、EXE、DLL或压缩包污染。"
         },
         {
-          "distribution": "server.angelk727_full",
+          "distribution": "server.mylgd_mir2server_176.monster_db_176",
           "tier": "auxiliary_1",
           "order": 1,
+          "weight": 85,
+          "eligible": true,
+          "rootPrefix": "reference/mir2_database_candidates/mylgd_mir2server_176",
+          "reason": "以固定签名 1.76 Monster.DB 补齐 combat 相关数据库字段，并提供 ID 级别绑定证据（例如 ATTACK_SPD/WALK_SPD/CoolEye）。"
+        },
+        {
+          "distribution": "server.angelk727_full",
+          "tier": "auxiliary_1",
+          "order": 2,
           "weight": 70,
           "eligible": true,
           "rootPrefix": "reference/mir2_database_candidates/angelk727_full",
@@ -240,7 +249,7 @@
         {
           "distribution": "server.crystal.Jev",
           "tier": "auxiliary_2",
-          "order": 2,
+          "order": 3,
           "weight": 40,
           "eligible": true,
           "rootPrefix": "reference/mir2_database_candidates/suprcode_crystal_database/Jev",
@@ -250,7 +259,7 @@
         {
           "distribution": "server.crystal.Daneo1989",
           "tier": "auxiliary_3",
-          "order": 3,
+          "order": 4,
           "weight": 20,
           "eligible": true,
           "rootPrefix": "reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989",
