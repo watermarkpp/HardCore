@@ -67,8 +67,8 @@ func _run() -> void:
 		"agility": 999,
 		"antiPoison": 999,
 	}, null, true)
-	assert(not ordinary_enemy.is_boss and ordinary_enemy.max_hp == 285, "ID 64 caller payload changed canonical identity/stats")
-	assert(ordinary_enemy.attack_min == 16 and ordinary_enemy.attack_max == 28, "ID 64 attack range was not projected from canonical stats")
+	assert(not ordinary_enemy.is_boss and ordinary_enemy.max_hp == 265, "ID 64 caller payload changed canonical identity/stats")
+	assert(ordinary_enemy.attack_min == 14 and ordinary_enemy.attack_max == 28, "ID 64 attack range was not projected from canonical stats")
 	assert(ordinary_enemy.agility == 15 and ordinary_enemy.anti_poison == 0, "ID 64 legacy projection fields leaked into runtime")
 	ordinary_enemy.free()
 
