@@ -41,6 +41,17 @@ ART_PATHS = [
 ]
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
+RUNTIME_CAPABLE_CLASSIFICATIONS = frozenset({
+    "ordinary",
+    "elite",
+    "boss",
+    "special",
+    "non_hostile",
+})
+
+INTENTIONAL_EXCLUSION_CLASSIFICATIONS = frozenset({
+    "version_difference",
+})
 TEXT_HASH_SUFFIXES = {".json"}
 WOOMA_EQUIVALENCE_IDS = {68, 69}
 EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
@@ -905,31 +916,102 @@ def build_catalog() -> dict[str, Any]:
             or service_exact_for_identity
         )
         combat_identity_ok = core_combat_identity_ok and core_combat_stats_ok
-        placement_allowed = bool(placement_allowed and drop_ok and combat_identity_ok)
-        classification_ok = classification_name != "unresolved" and placement_allowed
-        runtime_allowed = bool(art_ok and classification_ok and drop_ok and combat_identity_ok)
+
+        intentional_exclusion = (
+            classification_name in INTENTIONAL_EXCLUSION_CLASSIFICATIONS
+        )
+
+        runtime_classification_ok = (
+            classification_name in RUNTIME_CAPABLE_CLASSIFICATIONS
+        )
+
+        runtime_blockers: list[str] = []
+
+        if not runtime_classification_ok and not intentional_exclusion:
+            runtime_blockers.append("classification_not_runtime_capable")
+
+        if not art_ok:
+            runtime_blockers.append("art_not_formal")
+
+        if not drop_ok:
+            runtime_blockers.append("drop_policy_not_closed")
+
+        if not combat_identity_ok:
+            runtime_blockers.append("combat_identity_not_closed")
+
+        # IMPORTANT:
+        #
+        # runtime capability 和 editor placement policy 是两个独立概念。
+        #
+        # 一个怪物可以：
+        #   runtime_allowed=true
+        #   placement_allowed=false
+        #
+        # 例如内部变体/不希望用户摆放的正式运行实体。
+        #
+        # 禁止再次让 placement_allowed 参与 runtime_allowed 的计算。
+
+        runtime_allowed = bool(
+            runtime_classification_ok
+            and not intentional_exclusion
+            and art_ok
+            and drop_ok
+            and combat_identity_ok
+        )
+
+        # Placement policy 只能在 runtime capability 已成立后进一步收紧。
+        # 它不能反过来决定怪物本身能不能运行。
+        placement_allowed = bool(
+            placement_allowed
+            and runtime_allowed
+        )
+
+        classification_ok = runtime_classification_ok
+
         service_image = ai.get("image", -1)
         art_appearance = appearance.get("atlas", {}).get("appearance", 0)
+
         appearance_translation = None
+
         if art_appearance and service_image != art_appearance:
+            exact_id_art_evidence = art_evidence.get(monster_id, {})
+            exact_id_art_ok = bool(
+                exact_id_art_evidence
+                and art_ok
+            )
+
             appearance_translation = {
                 "required": True,
-                "provided": service_image >= 0,
+                "provided": exact_id_art_ok,
+                "service_image": service_image,
+                "client_appearance": art_appearance,
                 "reason": (
-                    "service image and client appearance differ; ID-keyed client mapping evidence is explicit"
-                    if service_image >= 0
-                    else "service image evidence is missing; client appearance cannot be translated safely"
+                    "exact monster_id client-art authority provides the "
+                    "service-to-client appearance translation; service image "
+                    "is diagnostic metadata and is not the client rendering identity"
+                    if exact_id_art_ok
+                    else
+                    "exact monster_id client-art authority is missing"
                 ),
-                "source": art_evidence[monster_id],
+                "source": exact_id_art_evidence,
             }
-        if appearance_translation is not None and not appearance_translation["provided"]:
-            placement_allowed = False
-            runtime_allowed = False
+
+            if not exact_id_art_ok:
+                if "appearance_translation_missing" not in runtime_blockers:
+                    runtime_blockers.append(
+                        "appearance_translation_missing"
+                    )
+                runtime_allowed = False
+                placement_allowed = False
+
         if not art_ok:
             placement_allowed = False
-        status = "formal" if runtime_allowed else (
-            "version_difference" if classification_name == "version_difference" else "unresolved"
-        )
+        if intentional_exclusion:
+            status = "version_difference"
+        elif runtime_allowed:
+            status = "formal"
+        else:
+            status = "unresolved"
         entry = {
             "monster_id": monster_id,
             "canonical_name": canonical_name,
@@ -942,6 +1024,15 @@ def build_catalog() -> dict[str, Any]:
                 "source_scope": "classification_and_drop_closure",
             },
             "runtime_allowed": runtime_allowed,
+            "runtime_capability": {
+                "allowed": runtime_allowed,
+                "classification_ok": runtime_classification_ok,
+                "art_ok": art_ok,
+                "drop_ok": drop_ok,
+                "combat_identity_ok": combat_identity_ok,
+                "intentional_exclusion": intentional_exclusion,
+                "blockers": runtime_blockers,
+            },
             "status": status,
             "drop_policy": {
                 "hostile_requires_non_empty": hostile_classification,
@@ -1159,8 +1250,11 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         if monster_id in WOOma_SLUG_BY_ID:
             if WOOma_SLUG_BY_ID[monster_id] not in str(entry.get("appearance_profile_id", "")):
                 errors.append(f"Wooma monster_id={monster_id} appearance profile is not explicit {WOOma_SLUG_BY_ID[monster_id]}")
-        elif entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed"):
-            errors.append(f"Wooma monster_id={monster_id} unresolved art/placement unexpectedly allowed")
+        # Runtime capability is decoupled from editor placement: these IDs may
+        # be runtime-capable, but placement stays fail-closed until an
+        # explicit appearance adjudication exists.
+        elif entry.get("editor_placement", {}).get("allowed"):
+            errors.append(f"Wooma monster_id={monster_id} placement allowed without explicit appearance adjudication")
     for monster_id in (68, 69):
         stats = matrix[str(monster_id)]["combat"]["stats"]
         if stats.get("attack_min") != 16 or stats.get("attack_max") != 28 or stats.get("exp") != 310:
