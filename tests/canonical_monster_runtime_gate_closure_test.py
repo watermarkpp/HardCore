@@ -32,7 +32,7 @@ SERVICE_PATH = (
     / "assets/data/service_monster_runtime_catalog.json"
 )
 
-EXPECTED_IDENTITY_COUNT = 214
+EXPECTED_IDENTITY_COUNT = 156
 
 FORMAL_CLASSIFICATIONS = {
     "ordinary",
@@ -221,6 +221,6 @@ print(
     f"identities={len(production_ids)} "
     f"runtime_allowed="
     f"{sum(1 for row in entries.values() if row.get('runtime_allowed'))} "
-    "placeable=214 "
+    f"placeable={sum(1 for row in entries.values() if row.get('editor_placement', {}).get('allowed'))} "
     "data_missing=0"
 )

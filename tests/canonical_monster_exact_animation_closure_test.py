@@ -22,18 +22,21 @@ POLICY_PATH = (
     ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
 )
 
-EXPECTED_ACTIVE_COUNT = 214
+EXPECTED_ACTIVE_COUNT = 156
 
 RETIRED_IDS = (14, 16, 17)
 
-ZOMBIE_IDS = (79, 80, 81, 82, 83, 84, 85)
+# P3C 后保留的真实僵尸形态与已退役复制形态。
+ZOMBIE_IDS = (79, 81, 83, 85, 87)
+ZOMBIE_DUPLICATE_RETIRED_IDS = (80, 82, 84, 86, 88)
 
 RUNTIME_SAMPLES = (
-    (45, "\u874e\u5b50"),           # 蝎子
-    (48, "\u9ab7\u9ac50"),          # 骷髅0
-    (79, "\u50f5\u5c381"),          # 僵尸1
-    (80, "\u50f5\u5c3810"),         # 僵尸10
-    (77, "\u6c83\u739b\u6559\u4e3b1"),  # 沃玛教主1
+    (45, "\u874e\u5b50"),           # 蝎子（普通无后缀）
+    (76, "\u6c83\u739b\u6559\u4e3b"),  # 沃玛教主（Boss 本体）
+    (79, "\u50f5\u5c381"),          # 僵尸1（真实形态1）
+    (81, "\u50f5\u5c382"),          # 僵尸2（真实形态2）
+    (87, "\u50f5\u5c385"),          # 僵尸5（真实形态5）
+    (77, "\u6c83\u739b\u6559\u4e3b1"),  # 沃玛教主1（Boss 强化变体）
 )
 
 COMBAT_FIELD_MAP = {
@@ -167,6 +170,11 @@ for mid in ZOMBIE_IDS:
             "foot_anchor": row.get("foot_anchor", []),
         }
     )
+
+# P3C：僵尸复制形态必须同时缺席 canonical 与 animation catalog。
+for duplicate in ZOMBIE_DUPLICATE_RETIRED_IDS:
+    assert duplicate not in active_ids
+    assert duplicate not in animation_rows
 
 # 运行时链样本：runtime monster_id 必须等于 animation authority
 # lookup 使用的 monster_id。

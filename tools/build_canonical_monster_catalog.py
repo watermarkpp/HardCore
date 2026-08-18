@@ -960,7 +960,7 @@ def build_catalog() -> dict[str, Any]:
             and combat_identity_ok
         )
 
-        # P3B: 214 个 active monster 全部允许地图编辑器布置。
+        # P3B/P3C: 全部 active monster（当前 156）都允许地图编辑器布置。
         # 不存在由 classification/variant/version_difference 引起的
         # "不可布置"。placement 不再参与 runtime 计算，也不再收紧。
         placement_allowed = True
@@ -1149,8 +1149,8 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     reject_replacement_paths(catalog.get("drop_profiles", {}), "drop_profiles")
     reject_replacement_paths(catalog.get("entries", []), "entries")
     entries = catalog.get("entries", [])
-    if len(entries) != 214:
-        errors.append(f"identity_count={len(entries)} expected 214")
+    if len(entries) != 156:
+        errors.append(f"identity_count={len(entries)} expected 156")
     source_index = catalog.get("sources", {})
     if not isinstance(source_index, dict):
         errors.append("sources index is not a dictionary")
@@ -1231,11 +1231,40 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             if field not in evidence:
                 errors.append(f"monster_id={monster_id} missing source evidence {field}")
     matrix = catalog.get("entries_by_id", {})
-    for monster_id in WOOma_IDS:
-        entry = matrix.get(str(monster_id))
-        if not isinstance(entry, dict):
-            errors.append(f"Wooma monster_id={monster_id} missing")
-            continue
+
+    # P3C: historical WOOma_IDS 保留为审计证据；生产校验只覆盖 active
+    # Wooma 成员，retired 成员（65/67/69/71）不得出现在 catalog。
+    EXPECTED_ACTIVE_WOOMA_IDS = {
+        64, 66, 68, 70, 73, 74, 75, 76, 77, 78, 239,
+    }
+    EXPECTED_RETIRED_WOOMA_IDS = {
+        65, 67, 69, 71,
+    }
+    actual_active_wooma_ids = {
+        monster_id
+        for monster_id in WOOma_IDS
+        if str(monster_id) in matrix
+    }
+    if actual_active_wooma_ids != EXPECTED_ACTIVE_WOOMA_IDS:
+        errors.append(
+            "P3C active Wooma universe mismatch: "
+            f"expected={sorted(EXPECTED_ACTIVE_WOOMA_IDS)} "
+            f"actual={sorted(actual_active_wooma_ids)}"
+        )
+    for monster_id in EXPECTED_RETIRED_WOOMA_IDS:
+        if str(monster_id) in matrix:
+            errors.append(
+                f"P3C retired Wooma monster_id={monster_id} "
+                "must not appear in canonical catalog"
+            )
+
+    active_wooma_ids = [
+        monster_id
+        for monster_id in WOOma_IDS
+        if str(monster_id) in matrix
+    ]
+    for monster_id in active_wooma_ids:
+        entry = matrix[str(monster_id)]
         expected = {
             64: "ordinary", 65: "ordinary", 66: "ordinary", 67: "ordinary", 68: "ordinary", 69: "ordinary", 70: "ordinary", 71: "ordinary", 73: "elite", 74: "elite", 75: "elite", 76: "boss", 77: "special", 78: "version_difference", 239: "boss",
         }[monster_id]
@@ -1247,15 +1276,26 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         # P3B: no placement fail-closed for any active identity. Appearance
         # exact-ID closure is enforced globally for runtime_allowed entries
         # and by tests/canonical_monster_exact_animation_closure_test.py.
-    for monster_id in (68, 69):
-        stats = matrix[str(monster_id)]["combat"]["stats"]
+    active_equivalence_ids = {
+        monster_id
+        for monster_id in WOOMA_EQUIVALENCE_IDS
+        if str(monster_id) in matrix
+    }
+    if active_equivalence_ids != {68}:
+        errors.append(
+            "P3C active Wooma equivalence universe mismatch: "
+            f"expected={{68}} actual={sorted(active_equivalence_ids)}"
+        )
+    for monster_id in sorted(active_equivalence_ids):
+        entry = matrix[str(monster_id)]
+        stats = entry["combat"]["stats"]
         if stats.get("attack_min") != 16 or stats.get("attack_max") != 28 or stats.get("exp") != 310:
             errors.append(f"Wooma monster_id={monster_id} aux1 stats override missing")
-        evidence = matrix[str(monster_id)].get("source_evidence", {}).get("combat_auxiliary", {})
+        evidence = entry.get("source_evidence", {}).get("combat_auxiliary", {})
         if not all(field in evidence for field in ("level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image")):
             errors.append(f"Wooma monster_id={monster_id} auxiliary fields lack per-field evidence")
         expected_drop_count = 58 if monster_id == 68 else 62
-        drop = catalog.get("drop_profiles", {}).get(str(matrix[str(monster_id)].get("drop_profile_id", "")), {})
+        drop = catalog.get("drop_profiles", {}).get(str(entry.get("drop_profile_id", "")), {})
         # The Excel source is now the canonical drop authority, so the Wooma
         # cross-distribution equivalence is retired; only require a non-empty
         # audited table for these hostile ordinary variants.
