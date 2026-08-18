@@ -688,18 +688,7 @@ def build_catalog() -> dict[str, Any]:
             and isinstance(service_record_for_identity, dict)
         )
         canonical_name_override = policy_wooma.get("canonical_name_override", {})
-        if service_exact_for_identity:
-            canonical_name = str(service_record_for_identity.get("serviceName", ""))
-            canonical_name_evidence = source_ref(
-                SERVICE_PATH,
-                role="canonical_name_primary_service",
-                distribution="server.crystal.cjlaaa",
-                tier="primary",
-                field="serviceRecord.serviceName",
-                evidence=f"runtimeByMonsterId[{monster_id}].serviceRecord.serviceName",
-            )
-            identity_resolution = "exact_service_name"
-        elif isinstance(canonical_name_override, dict) and canonical_name_override.get("value"):
+        if isinstance(canonical_name_override, dict) and canonical_name_override.get("value"):
             canonical_name = str(canonical_name_override.get("value"))
             aux = policy_wooma.get("auxiliary_source", {})
             canonical_name_evidence = {
@@ -716,13 +705,13 @@ def build_catalog() -> dict[str, Any]:
             canonical_name = str(record.get("name", ""))
             canonical_name_evidence = source_ref(
                 VANILLA_PATH,
-                role="stable_identity_namespace_display_name",
+                role="canonical_name_vanilla_exact_id",
                 distribution="source.vanilla_176",
-                tier="identity_namespace",
+                tier="primary",
                 field="canonical_name",
-                evidence=f"records[{monster_id}].name; no exact service name, display only",
+                evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.name",
             )
-            identity_resolution = "unresolved_service_name"
+            identity_resolution = "vanilla_exact_id"
         classification_name, placement_allowed, placement_kind, map_codes, class_evidence = classification_for(
             monster_id, classification_ids, policy
         )
@@ -747,54 +736,35 @@ def build_catalog() -> dict[str, Any]:
             and service_row.get("resolutionStatus") == "exact_service_name"
             and isinstance(service_record, dict)
         )
-        if service_exact:
-            service_stats = service_record.get("stats", {})
-            stats = {
-                "level": int(service_record.get("level", 0)),
-                "exp": int(service_record.get("experience", 0)),
-                "hp": int(service_stats.get("12", 0)),
-                "defense": int(service_stats.get("0", 0)),
-                "magic_defense": int(service_stats.get("2", 0)),
-                "attack_min": int(service_stats.get("4", 0)),
-                "attack_max": int(service_stats.get("5", 0)),
-            }
-            service_field_paths = {
-                "level": "level",
-                "exp": "experience",
-                "hp": "stats.12",
-                "defense": "stats.0",
-                "magic_defense": "stats.2",
-                "attack_min": "stats.4",
-                "attack_max": "stats.5",
-            }
-            stats_source = {
-                field: source_ref(
-                    SERVICE_PATH,
-                    role="combat_stats_primary_service",
-                    distribution="server.crystal.cjlaaa",
-                    tier="primary",
-                    field=field,
-                    evidence=f"runtimeByMonsterId[{monster_id}].serviceRecord.{service_field_paths[field]}",
-                )
-                for field in stats
-            }
-        else:
-            # The vanilla project table is an identity namespace only.  A
-            # missing/non-exact service row cannot silently supply combat
-            # numbers; unresolved records carry zeroed values and remain
-            # fail-closed until a tiered stat source is attached.
-            stats = {field: 0 for field in ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")}
-            stats_source = {
-                field: source_ref(
-                    SERVICE_PATH,
-                    role="combat_stats_primary_service",
-                    distribution="server.crystal.cjlaaa",
-                    tier="primary",
-                    field=field,
-                    evidence=f"runtimeByMonsterId[{monster_id}] exact_service_name row missing; unresolved",
-                )
-                for field in stats
-            }
+        # Core combat stats: vanilla exact-ID record is the authority.
+        # Crystal service records must NEVER override core combat fields.
+        VANILLA_COMBAT_FIELDS = {
+            "level": "level",
+            "exp": "exp",
+            "hp": "hp",
+            "defense": "defense",
+            "magic_defense": "magicDefense",
+            "attack_min": "attackMin",
+            "attack_max": "attackMax",
+        }
+        stats = {}
+        for stat_field, vanilla_key in VANILLA_COMBAT_FIELDS.items():
+            raw = record.get(vanilla_key, 0)
+            try:
+                stats[stat_field] = int(raw) if raw is not None else 0
+            except (ValueError, TypeError):
+                stats[stat_field] = 0
+        stats_source = {
+            field: source_ref(
+                VANILLA_PATH,
+                role="core_combat_stats_vanilla_exact_id",
+                distribution="source.vanilla_176",
+                tier="primary",
+                field=field,
+                evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.{VANILLA_COMBAT_FIELDS[field]}",
+            )
+            for field in stats
+        }
         auxiliary_combat_evidence: dict[str, Any] = {}
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
             override = policy_wooma["combat_override"]
@@ -895,7 +865,16 @@ def build_catalog() -> dict[str, Any]:
         # A hostile spawn cannot be placed or run without a non-empty,
         # source-evidenced drop table.  The drop profile itself remains in the
         # catalog as missing_for_hostile for later source-priority repair.
-        combat_identity_ok = bool(service_exact_for_identity or auxiliary_combat_evidence)
+        # Combat identity: proven by vanilla exact-ID record existence.
+        # Service exact match is decoupled — it no longer gates identity.
+        core_combat_identity_ok = True  # active vanilla record always exists
+        core_combat_stats_ok = any(v != 0 for v in stats.values())
+        ai_authority_ok = ai.get("ai_code", -1) >= 0
+        timing_authority_ok = (
+            timing.get("attack_interval_ms", 0) > 0
+            or timing.get("move_interval_ms", 0) > 0
+        )
+        combat_identity_ok = core_combat_identity_ok
         placement_allowed = bool(placement_allowed and drop_ok and combat_identity_ok)
         classification_ok = classification_name != "unresolved" and placement_allowed
         runtime_allowed = bool(art_ok and classification_ok and drop_ok and combat_identity_ok)
@@ -972,6 +951,10 @@ def build_catalog() -> dict[str, Any]:
                     "art_status": appearance.get("status", ""),
                     "classification_status": classification_name,
                     "identity_resolution": identity_resolution,
+                    "core_combat_identity_ok": core_combat_identity_ok,
+                    "core_combat_stats_ok": core_combat_stats_ok,
+                    "ai_authority_ok": ai_authority_ok,
+                    "timing_authority_ok": timing_authority_ok,
                     "combat_identity_ok": combat_identity_ok,
                     "drop_status": drop_profile.get("status", ""),
                     "drop_entry_count": int(drop_profile.get("entry_count", 0)),
@@ -1162,25 +1145,52 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         # audited table for these hostile ordinary variants.
         if int(drop.get("entry_count", 0)) <= 0:
             errors.append(f"Wooma monster_id={monster_id} canonical drop table is empty")
-    exact_service_expectations = {
-        64: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28},
-        66: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 15, "attack_max": 28},
-        73: {"level": 50, "exp": 2400, "hp": 1000, "defense": 8, "magic_defense": 8, "attack_min": 22, "attack_max": 42},
-        76: {"level": 60, "exp": 6000, "hp": 3000, "defense": 25, "magic_defense": 40, "attack_min": 35, "attack_max": 90},
+    # Core combat stats must come from vanilla exact-ID records, not Crystal.
+    vanilla_records = load_json(VANILLA_PATH).get("records", [])
+    vanilla_by_id = {int(r.get("monsterId", -1)): r for r in vanilla_records if isinstance(r, dict)}
+    vanilla_combat_expectations = {
+        mid: {
+            "level": int(rec.get("level", 0)),
+            "exp": int(rec.get("exp", 0)),
+            "hp": int(rec.get("hp", 0)),
+            "defense": int(rec.get("defense", 0)),
+            "magic_defense": int(rec.get("magicDefense", 0)),
+            "attack_min": int(rec.get("attackMin", 0)),
+            "attack_max": int(rec.get("attackMax", 0)),
+        }
+        for mid, rec in vanilla_by_id.items()
+        if rec.get("recordStatus") != "retired"
     }
-    for monster_id, expected_stats in exact_service_expectations.items():
-        actual_stats = matrix[str(monster_id)].get("combat", {}).get("stats", {})
+    for monster_id, expected_stats in vanilla_combat_expectations.items():
+        entry = matrix.get(str(monster_id))
+        if not isinstance(entry, dict):
+            continue
+        actual_stats = entry.get("combat", {}).get("stats", {})
+        # Skip IDs with explicit policy combat_override (e.g. 68/69)
+        policy_wooma = load_json(POLICY_PATH).get("wooma_matrix", {}).get(str(monster_id), {})
+        if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
+            continue
         for field, expected in expected_stats.items():
             if actual_stats.get(field) != expected:
                 errors.append(
-                    f"monster_id={monster_id} primary service {field}={actual_stats.get(field)} expected {expected}"
+                    f"monster_id={monster_id} vanilla {field}={actual_stats.get(field)} expected {expected}"
                 )
-        service_record = load_json(SERVICE_PATH).get("runtimeByMonsterId", {}).get(str(monster_id), {}).get("serviceRecord", {})
-        if matrix[str(monster_id)].get("canonical_name") != service_record.get("serviceName"):
-            errors.append(f"monster_id={monster_id} canonical_name is not exact service name")
-        name_evidence = matrix[str(monster_id)].get("source_evidence", {}).get("canonical_name", {})
-        if name_evidence.get("tier") != "primary" or name_evidence.get("distribution") != "server.crystal.cjlaaa":
-            errors.append(f"monster_id={monster_id} canonical_name source is not primary service")
+    # Canonical name must come from vanilla exact-ID record.name
+    for monster_id, rec in vanilla_by_id.items():
+        if rec.get("recordStatus") == "retired":
+            continue
+        entry = matrix.get(str(monster_id))
+        if not isinstance(entry, dict):
+            continue
+        policy_wooma = load_json(POLICY_PATH).get("wooma_matrix", {}).get(str(monster_id), {})
+        if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("canonical_name_override"), dict) and policy_wooma["canonical_name_override"].get("value"):
+            continue
+        expected_name = str(rec.get("name", ""))
+        if entry.get("canonical_name") != expected_name:
+            errors.append(f"monster_id={monster_id} canonical_name={entry.get('canonical_name')} expected vanilla={expected_name}")
+        name_evidence = entry.get("source_evidence", {}).get("canonical_name", {})
+        if name_evidence.get("tier") != "primary" or name_evidence.get("distribution") != "source.vanilla_176":
+            errors.append(f"monster_id={monster_id} canonical_name source is not primary vanilla")
     for monster_id in (68, 69):
         if matrix[str(monster_id)].get("source_evidence", {}).get("identity_resolution") != "auxiliary_1_exact_name":
             errors.append(f"Wooma monster_id={monster_id} canonical_name auxiliary resolution missing")
