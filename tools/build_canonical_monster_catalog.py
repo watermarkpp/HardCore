@@ -47,11 +47,12 @@ RUNTIME_CAPABLE_CLASSIFICATIONS = frozenset({
     "boss",
     "special",
     "non_hostile",
-})
-
-INTENTIONAL_EXCLUSION_CLASSIFICATIONS = frozenset({
     "version_difference",
 })
+
+# P3B: version_difference 只是 classification/metadata 提醒，不再自动
+# 排除 runtime。排除集合保持为空结构，等待未来明确的排除裁决。
+INTENTIONAL_EXCLUSION_CLASSIFICATIONS = frozenset()
 TEXT_HASH_SUFFIXES = {".json"}
 WOOMA_EQUIVALENCE_IDS = {68, 69}
 EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
@@ -959,12 +960,10 @@ def build_catalog() -> dict[str, Any]:
             and combat_identity_ok
         )
 
-        # Placement policy 只能在 runtime capability 已成立后进一步收紧。
-        # 它不能反过来决定怪物本身能不能运行。
-        placement_allowed = bool(
-            placement_allowed
-            and runtime_allowed
-        )
+        # P3B: 214 个 active monster 全部允许地图编辑器布置。
+        # 不存在由 classification/variant/version_difference 引起的
+        # "不可布置"。placement 不再参与 runtime 计算，也不再收紧。
+        placement_allowed = True
 
         classification_ok = runtime_classification_ok
 
@@ -1002,14 +1001,11 @@ def build_catalog() -> dict[str, Any]:
                         "appearance_translation_missing"
                     )
                 runtime_allowed = False
-                placement_allowed = False
 
-        if not art_ok:
-            placement_allowed = False
-        if intentional_exclusion:
-            status = "version_difference"
-        elif runtime_allowed:
+        if runtime_allowed:
             status = "formal"
+        elif classification_name == "version_difference":
+            status = "version_difference"
         else:
             status = "unresolved"
         entry = {
@@ -1205,7 +1201,7 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         profile = profiles.get(appearance_id)
         if not isinstance(profile, dict):
             errors.append(f"monster_id={monster_id} missing appearance profile {appearance_id}")
-        elif entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed"):
+        elif entry.get("runtime_allowed"):
             if profile.get("status") != "formal":
                 errors.append(f"monster_id={monster_id} allowed with non-formal appearance")
             for action in REQUIRED_ACTIONS:
@@ -1219,14 +1215,12 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         else:
             entry_count = int(drop_profile.get("entry_count", len(drop_profile.get("entries", []))))
             hostile = str(entry.get("classification", "")) in ("ordinary", "elite", "boss", "special")
-            if (entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed")) and hostile and entry_count <= 0:
+            if entry.get("runtime_allowed") and hostile and entry_count <= 0:
                 errors.append(f"monster_id={monster_id} hostile allowed without non-empty drop profile")
             sources = drop_profile.get("source_evidence", {}).get("sources", [])
             if not isinstance(sources, list) or not sources:
                 errors.append(f"monster_id={monster_id} drop profile lacks source evidence")
-            if drop_profile.get("status") == "missing_for_hostile" and hostile and (
-                entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed")
-            ):
+            if drop_profile.get("status") == "missing_for_hostile" and hostile and entry.get("runtime_allowed"):
                 errors.append(f"monster_id={monster_id} missing hostile drop marked allowed")
         if entry.get("classification") == "non_hostile":
             exemption = entry.get("drop_policy", {}).get("exemption")
@@ -1250,11 +1244,9 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         if monster_id in WOOma_SLUG_BY_ID:
             if WOOma_SLUG_BY_ID[monster_id] not in str(entry.get("appearance_profile_id", "")):
                 errors.append(f"Wooma monster_id={monster_id} appearance profile is not explicit {WOOma_SLUG_BY_ID[monster_id]}")
-        # Runtime capability is decoupled from editor placement: these IDs may
-        # be runtime-capable, but placement stays fail-closed until an
-        # explicit appearance adjudication exists.
-        elif entry.get("editor_placement", {}).get("allowed"):
-            errors.append(f"Wooma monster_id={monster_id} placement allowed without explicit appearance adjudication")
+        # P3B: no placement fail-closed for any active identity. Appearance
+        # exact-ID closure is enforced globally for runtime_allowed entries
+        # and by tests/canonical_monster_exact_animation_closure_test.py.
     for monster_id in (68, 69):
         stats = matrix[str(monster_id)]["combat"]["stats"]
         if stats.get("attack_min") != 16 or stats.get("attack_max") != 28 or stats.get("exp") != 310:

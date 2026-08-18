@@ -86,9 +86,9 @@
   },
   "summary": {
     "identity_count": 214,
-    "runtime_allowed_count": 196,
+    "runtime_allowed_count": 208,
     "unresolved_count": 6,
-    "version_difference_count": 12,
+    "version_difference_count": 0,
     "appearance_profile_count": 110,
     "drop_profile_count": 214
   },
@@ -287627,7 +287627,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -288219,7 +288219,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -288810,7 +288810,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -289406,7 +289406,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -290554,7 +290554,7 @@
       "variant_code": "",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -291145,7 +291145,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -291710,7 +291710,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -293410,7 +293410,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -294546,7 +294546,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -294826,22 +294826,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -295070,7 +295070,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -295386,7 +295386,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -295946,7 +295946,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -297190,7 +297190,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -297470,22 +297470,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -297714,7 +297714,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -298304,7 +298304,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -302442,7 +302442,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -302708,22 +302708,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -302952,7 +302952,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -303252,22 +303252,22 @@
       "variant_code": "10",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 60,
@@ -303494,7 +303494,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -303808,22 +303808,22 @@
       "variant_code": "20",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 50,
@@ -304050,7 +304050,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -304364,22 +304364,22 @@
       "variant_code": "30",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 49,
@@ -304606,7 +304606,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -304920,22 +304920,22 @@
       "variant_code": "40",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 48,
@@ -305162,7 +305162,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -305476,22 +305476,22 @@
       "variant_code": "50",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 48,
@@ -305718,7 +305718,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -306158,7 +306158,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -306438,7 +306438,7 @@
       "variant_code": "2",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -307002,7 +307002,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -307570,7 +307570,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -307854,7 +307854,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -308414,7 +308414,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -308694,7 +308694,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -309254,7 +309254,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -309534,7 +309534,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -310092,7 +310092,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -310372,7 +310372,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -310652,7 +310652,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -310932,7 +310932,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -311492,7 +311492,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -311772,7 +311772,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -312052,7 +312052,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -312612,7 +312612,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -313172,7 +313172,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -313732,7 +313732,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -314389,7 +314389,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -314673,7 +314673,7 @@
       "variant_code": "2",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -314957,22 +314957,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 112,
@@ -315205,7 +315205,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -315670,7 +315670,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -315975,7 +315975,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -316816,7 +316816,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -317096,7 +317096,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -317656,7 +317656,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -317936,7 +317936,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -319336,7 +319336,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -319616,7 +319616,7 @@
       "variant_code": "3",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -320269,7 +320269,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -321277,7 +321277,7 @@
       "variant_code": "0",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -321555,7 +321555,7 @@
       "variant_code": "0",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -321835,7 +321835,7 @@
       "variant_code": "2",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -322395,7 +322395,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -322959,7 +322959,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -323243,7 +323243,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -323808,7 +323808,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -324089,7 +324089,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -325925,22 +325925,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -326169,7 +326169,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -326919,7 +326919,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -327199,7 +327199,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -327479,7 +327479,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -327757,7 +327757,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -328318,7 +328318,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -328881,7 +328881,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -329441,7 +329441,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -329721,7 +329721,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -329999,7 +329999,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -330557,7 +330557,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -331117,7 +331117,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -332086,7 +332086,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -332366,7 +332366,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -332646,7 +332646,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -332924,7 +332924,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [
           "12",
@@ -333040,79 +333040,79 @@
           "map_code": "12",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "M001",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2051",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2053",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2052",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2071",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2072",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2073",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2075",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2076",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2078",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2079",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "R001",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         }
       ],
       "source_evidence": {
@@ -333297,7 +333297,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -333950,7 +333950,7 @@
       "variant_code": "0",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -334230,22 +334230,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 57,
@@ -334474,7 +334474,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -334883,7 +334883,7 @@
       "variant_code": "0",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -336516,7 +336516,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -337636,7 +337636,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -338196,7 +338196,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -338756,7 +338756,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -339320,7 +339320,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -340519,7 +340519,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -341077,7 +341077,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -341633,7 +341633,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -342189,7 +342189,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -342745,7 +342745,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -343305,7 +343305,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -343869,7 +343869,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -344508,7 +344508,7 @@
       "variant_code": "",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [
           "3",
@@ -344517,17 +344517,17 @@
         ],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 69,
@@ -344612,19 +344612,19 @@
           "map_code": "3",
           "classification": "version_difference",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D717",
           "classification": "version_difference",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2079",
           "classification": "version_difference",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         }
       ],
       "source_evidence": {
@@ -344773,7 +344773,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -344809,7 +344809,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -345089,7 +345089,7 @@
       "variant_code": "1",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -345369,7 +345369,7 @@
       "variant_code": "2",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -345649,7 +345649,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -345929,7 +345929,7 @@
       "variant_code": "4",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -346209,7 +346209,7 @@
       "variant_code": "5",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -346489,7 +346489,7 @@
       "variant_code": "6",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -346769,7 +346769,7 @@
       "variant_code": "7",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -347049,7 +347049,7 @@
       "variant_code": "8",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -348798,7 +348798,7 @@
       "variant_code": "",
       "classification": "boss",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -349076,7 +349076,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -350289,7 +350289,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -350881,7 +350881,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -351472,7 +351472,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -352068,7 +352068,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -353216,7 +353216,7 @@
       "variant_code": "",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -353807,7 +353807,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -354372,7 +354372,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -356072,7 +356072,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -357208,7 +357208,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -357488,22 +357488,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -357732,7 +357732,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -358048,7 +358048,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -358608,7 +358608,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -359852,7 +359852,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -360132,22 +360132,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -360376,7 +360376,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -360966,7 +360966,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -365104,7 +365104,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -365370,22 +365370,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -365614,7 +365614,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -365914,22 +365914,22 @@
       "variant_code": "10",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 60,
@@ -366156,7 +366156,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -366470,22 +366470,22 @@
       "variant_code": "20",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 50,
@@ -366712,7 +366712,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -367026,22 +367026,22 @@
       "variant_code": "30",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 49,
@@ -367268,7 +367268,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -367582,22 +367582,22 @@
       "variant_code": "40",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 48,
@@ -367824,7 +367824,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -368138,22 +368138,22 @@
       "variant_code": "50",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 48,
@@ -368380,7 +368380,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -368820,7 +368820,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -369100,7 +369100,7 @@
       "variant_code": "2",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -369664,7 +369664,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -370232,7 +370232,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -370516,7 +370516,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -371076,7 +371076,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -371356,7 +371356,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -371916,7 +371916,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -372196,7 +372196,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -372754,7 +372754,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -373034,7 +373034,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -373314,7 +373314,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -373594,7 +373594,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -374154,7 +374154,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -374434,7 +374434,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -374714,7 +374714,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -375274,7 +375274,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -375834,7 +375834,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -376394,7 +376394,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -377051,7 +377051,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -377335,7 +377335,7 @@
       "variant_code": "2",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -377619,22 +377619,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 112,
@@ -377867,7 +377867,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -378332,7 +378332,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -378637,7 +378637,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -379478,7 +379478,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -379758,7 +379758,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -380318,7 +380318,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -380598,7 +380598,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -381998,7 +381998,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -382278,7 +382278,7 @@
       "variant_code": "3",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -382931,7 +382931,7 @@
       "variant_code": "1",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -383939,7 +383939,7 @@
       "variant_code": "0",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -384217,7 +384217,7 @@
       "variant_code": "0",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -384497,7 +384497,7 @@
       "variant_code": "2",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -385057,7 +385057,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -385621,7 +385621,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -385905,7 +385905,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -386470,7 +386470,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -386751,7 +386751,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -388587,22 +388587,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 0,
@@ -388831,7 +388831,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -389581,7 +389581,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -389861,7 +389861,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -390141,7 +390141,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -390419,7 +390419,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -390980,7 +390980,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -391543,7 +391543,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -392103,7 +392103,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -392383,7 +392383,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -392661,7 +392661,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -393219,7 +393219,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -393779,7 +393779,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -394748,7 +394748,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -395028,7 +395028,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -395308,7 +395308,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -395586,7 +395586,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [
           "12",
@@ -395702,79 +395702,79 @@
           "map_code": "12",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "M001",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2051",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2053",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2052",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2071",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2072",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2073",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2075",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2076",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2078",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2079",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "R001",
           "classification": "special",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         }
       ],
       "source_evidence": {
@@ -395959,7 +395959,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -396612,7 +396612,7 @@
       "variant_code": "0",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -396892,22 +396892,22 @@
       "variant_code": "9",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 57,
@@ -397136,7 +397136,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -397545,7 +397545,7 @@
       "variant_code": "0",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -399178,7 +399178,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -400298,7 +400298,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -400858,7 +400858,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -401418,7 +401418,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -401982,7 +401982,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -403181,7 +403181,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -403739,7 +403739,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -404295,7 +404295,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -404851,7 +404851,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -405407,7 +405407,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -405967,7 +405967,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -406531,7 +406531,7 @@
       "variant_code": "0",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -407170,7 +407170,7 @@
       "variant_code": "",
       "classification": "version_difference",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [
           "3",
@@ -407179,17 +407179,17 @@
         ],
         "source_scope": "classification_and_drop_closure"
       },
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
-        "classification_ok": false,
+        "allowed": true,
+        "classification_ok": true,
         "art_ok": true,
         "drop_ok": true,
         "combat_identity_ok": true,
-        "intentional_exclusion": true,
+        "intentional_exclusion": false,
         "blockers": []
       },
-      "status": "version_difference",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": false,
         "entry_count": 69,
@@ -407274,19 +407274,19 @@
           "map_code": "3",
           "classification": "version_difference",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D717",
           "classification": "version_difference",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         },
         {
           "map_code": "D2079",
           "classification": "version_difference",
           "placement_kind": "monster_spawn",
-          "allowed": false
+          "allowed": true
         }
       ],
       "source_evidence": {
@@ -407435,7 +407435,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "version_difference",
           "identity_resolution": "vanilla_exact_id",
@@ -407471,7 +407471,7 @@
       "variant_code": "",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -407751,7 +407751,7 @@
       "variant_code": "1",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -408031,7 +408031,7 @@
       "variant_code": "2",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -408311,7 +408311,7 @@
       "variant_code": "3",
       "classification": "elite",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -408591,7 +408591,7 @@
       "variant_code": "4",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -408871,7 +408871,7 @@
       "variant_code": "5",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -409151,7 +409151,7 @@
       "variant_code": "6",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -409431,7 +409431,7 @@
       "variant_code": "7",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -409711,7 +409711,7 @@
       "variant_code": "8",
       "classification": "ordinary",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -411460,7 +411460,7 @@
       "variant_code": "",
       "classification": "boss",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"
@@ -411738,7 +411738,7 @@
       "variant_code": "",
       "classification": "special",
       "editor_placement": {
-        "allowed": false,
+        "allowed": true,
         "placement_kind": "monster_spawn",
         "map_codes": [],
         "source_scope": "classification_and_drop_closure"

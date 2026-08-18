@@ -112,38 +112,12 @@ for monster_id in sorted(production_ids):
     )
 
 
-placeable_runtime_blockers = []
-
-for monster_id in sorted(production_ids):
-    entry = entries[monster_id]
-
-    placement = entry.get(
-        "editor_placement",
-        {},
-    )
-
-    if bool(placement.get("allowed", False)):
-        if not bool(
-            entry.get("runtime_allowed", False)
-        ):
-            placeable_runtime_blockers.append(
-                (
-                    monster_id,
-                    entry.get("canonical_name"),
-                    entry.get(
-                        "runtime_capability",
-                        {},
-                    ).get(
-                        "blockers",
-                        [],
-                    ),
-                )
-            )
-
-assert not placeable_runtime_blockers, (
-    "placeable runtime blockers remain",
-    placeable_runtime_blockers,
-)
+# P3B: 全部 214 active identities 均允许地图编辑器布置。
+# placement 与 runtime 完全解耦：可布置不要求 runtime 已闭环。
+assert all(
+    bool(entries[mid]["editor_placement"].get("allowed", False))
+    for mid in sorted(production_ids)
+), "P3B contract: every active monster must be placeable"
 
 
 # exact-ID map spawn evidence must no longer be left
@@ -190,7 +164,8 @@ assert not stale_spawn_policy, (
 )
 
 
-# version_difference = intentional exclusion.
+# P3B: version_difference 只保留为 classification/metadata 提醒，
+# 既不是 placement 门禁，也不再自动禁止 runtime。
 for monster_id in sorted(production_ids):
 
     entry = entries[monster_id]
@@ -201,17 +176,21 @@ for monster_id in sorted(production_ids):
     ):
         continue
 
-    assert not bool(
-        entry.get("runtime_allowed", False)
-    )
+    assert int(
+        entry.get("monster_id", -1)
+    ) == monster_id
 
-    assert not bool(
-        entry.get(
-            "editor_placement",
-            {},
-        ).get(
-            "allowed",
-            False,
+    # runtime 允许与否由真实数据（art/drop/combat）决定，与分类无关。
+    assert (
+        entry.get("runtime_allowed")
+        == bool(
+            entry.get(
+                "runtime_capability",
+                {},
+            ).get(
+                "allowed",
+                False,
+            )
         )
     )
 
@@ -242,6 +221,6 @@ print(
     f"identities={len(production_ids)} "
     f"runtime_allowed="
     f"{sum(1 for row in entries.values() if row.get('runtime_allowed'))} "
-    "placeable_runtime_blockers=0 "
+    "placeable=214 "
     "data_missing=0"
 )
