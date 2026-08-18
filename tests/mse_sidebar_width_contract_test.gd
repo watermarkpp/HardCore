@@ -14,10 +14,10 @@ func _run() -> void:
 	var special := MapEditorContentCatalogService.entries("special_monster", 4)
 	var unresolved := MapEditorContentCatalogService.entries("unresolved_monster", 4)
 	var total := ordinary.size() + elite_boss.size() + special.size() + unresolved.size()
-	assert(total == 217, "catalog total drifted: %d" % total)
-	assert(ordinary.size() == 135, "ordinary count %d" % ordinary.size())
+	assert(total == 214, "catalog total drifted: %d" % total)
+	assert(ordinary.size() == 133, "ordinary count %d" % ordinary.size())
 	assert(elite_boss.size() == 50, "elite_boss count %d" % elite_boss.size())
-	assert(special.size() == 32, "special count %d" % special.size())
+	assert(special.size() == 31, "special count %d" % special.size())
 	assert(unresolved.size() == 0, "unresolved count %d" % unresolved.size())
 
 	var woma := MapEditorContentCatalogService.find_by_monster_id("boss_spawn", 76)
@@ -31,18 +31,13 @@ func _run() -> void:
 	assert(MapEditorContentCatalogService.find_by_monster_id("unresolved_monster", 240).is_empty(), "ID 240 must NOT be in unresolved_monster")
 	assert(str(dark_rainbow.get("classification", "")) == "boss", "ID 240 must be classification boss")
 	assert(int(dark_rainbow.get("drop_entry_count", 0)) == 54, "ID 240 drops %d" % int(dark_rainbow.get("drop_entry_count", 0)))
-	assert(bool(dark_rainbow.get("authoring_allowed", false)), "ID 240 must be authoring-allowed")
+	assert(not bool(dark_rainbow.get("authoring_allowed", false)), "ID 240 placement policy must stay closed")
 	assert(not bool(dark_rainbow.get("runtime_ready", false)), "ID 240 must not be runtime-ready")
 
-	for mid: int in [14, 16]:
-		var chicken_deer := MapEditorContentCatalogService.find_by_monster_id("monster_spawn", mid)
-		assert(not chicken_deer.is_empty(), "鸡/鹿 must be visible: %d" % mid)
-		assert(bool(chicken_deer.get("authoring_allowed", false)), "鸡/鹿 must be authoring-allowed: %d" % mid)
-		assert(not bool(chicken_deer.get("runtime_ready", false)), "鸡/鹿 must not be runtime-ready: %d" % mid)
-	var deer1 := MapEditorContentCatalogService.find_by_monster_id("special_monster", 17)
-	assert(not deer1.is_empty(), "鹿1 must be visible")
-	assert(bool(deer1.get("authoring_allowed", false)), "鹿1 must be authoring-allowed")
-	assert(not bool(deer1.get("runtime_ready", false)), "鹿1 must not be runtime-ready")
+	# Retired identities (鸡/鹿/鹿1) are excluded from the canonical catalog
+	# and must stay absent from every browse group.
+	for mid: int in [14, 16, 17]:
+		assert(MapEditorContentCatalogService.find_any_monster(mid).is_empty(), "retired identity must stay absent: %d" % mid)
 	var vd := MapEditorContentCatalogService.find_by_monster_id("special_monster", 78)
 	assert(not vd.is_empty(), "ID78 version_difference must be visible")
 	assert(not bool(vd.get("authoring_allowed", false)), "version_difference must not be authoring-allowed")

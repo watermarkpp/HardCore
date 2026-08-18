@@ -6,7 +6,7 @@ extends Node
 const CatalogService := preload("res://scripts/map_editor/map_editor_content_catalog_service.gd")
 
 # Known canonical IDs from canonical_monster_catalog.json
-const ID_CHICKEN := 14          # 鸡 (ordinary, unresolved)
+const ID_CHICKEN := 14          # 鸡 (retired identity, absent from canonical catalog)
 const ID_MULTI_HOOK_CAT := 24   # 多钩猫 (ordinary, formal)
 const ID_NAIL_RAKE_CAT := 26    # 钉耙猫 (ordinary, formal)
 const ID_MULTI_HOOK_CAT_KING := 31  # 多钩猫王 (elite, unresolved)
@@ -153,10 +153,9 @@ func test_kind_rebind_contract() -> void:
 	assert(not king_entry.is_empty(), "多钩猫王 must be found in boss_spawn")
 	assert(str(king_entry.get("display_name", "")) == "多钩猫王")
 
-	# Verify 鸡 is ordinary/monster_spawn
-	var chicken_entry := CatalogService.find_by_monster_id("monster_spawn", ID_CHICKEN)
-	assert(not chicken_entry.is_empty(), "鸡 must be found in monster_spawn")
-	assert(str(chicken_entry.get("display_name", "")) == "鸡")
+	# Verify 鸡 (ID 14) is retired: it must not resolve anywhere.
+	assert(CatalogService.find_any_monster(ID_CHICKEN).is_empty(),
+		"retired 鸡 must not resolve to any entry")
 
 
 func test_half_orc_warrior_not_multi_hook_cat_king() -> void:
@@ -179,15 +178,15 @@ func test_half_orc_warrior_not_multi_hook_cat_king() -> void:
 
 func test_scorpion_not_chicken() -> void:
 	var scorpion := CatalogService.find_by_monster_id("monster_spawn", ID_SCORPION)
-	var chicken := CatalogService.find_by_monster_id("monster_spawn", ID_CHICKEN)
 
 	assert(not scorpion.is_empty(), "蝎子 must exist in monster_spawn")
-	assert(not chicken.is_empty(), "鸡 must exist in monster_spawn")
 
-	assert(int(scorpion.get("monster_id", -1)) != int(chicken.get("monster_id", -1)),
-		"蝎子 and 鸡 must have different monster_ids")
+	assert(int(scorpion.get("monster_id", -1)) == ID_SCORPION,
+		"蝎子 entry must keep monster_id 45")
 
 	assert(str(scorpion.get("display_name", "")) == "蝎子",
 		"ID 45 must resolve to 蝎子")
-	assert(str(chicken.get("display_name", "")) == "鸡",
-		"ID 14 must resolve to 鸡")
+
+	# Retired 鸡 (ID 14) must never resurface through any lookup path.
+	assert(CatalogService.find_any_monster(ID_CHICKEN).is_empty(),
+		"retired ID 14 must not resolve anywhere")

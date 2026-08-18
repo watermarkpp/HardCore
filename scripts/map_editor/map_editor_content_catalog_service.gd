@@ -139,10 +139,20 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	var combat: Dictionary = record.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
 	var ai: Dictionary = combat.get("ai", {})
-	# Authoring (can the map editor place this monster now?) is classification
-	# based, independent of runtime closure. version_difference variants stay
-	# isolated from formal map authoring; unresolved is not authorable either.
-	var authoring_allowed := classification in ["ordinary", "elite", "boss", "special", "non_hostile"]
+	# Authoring (can the map editor place this monster now?) requires both a
+	# runtime-capable classification and the canonical editor placement policy.
+	# version_difference variants stay isolated from formal map authoring;
+	# unresolved is not authorable either.
+	var authoring_allowed := (
+		bool(placement.get("allowed", false))
+		and classification in [
+			"ordinary",
+			"elite",
+			"boss",
+			"special",
+			"non_hostile",
+		]
+	)
 	# Runtime readiness (can this monster safely enter the live game?) keeps the
 	# full closure contract, including the frozen runtime_allowed=37 gate.
 	var runtime_reasons: Array[String] = []
