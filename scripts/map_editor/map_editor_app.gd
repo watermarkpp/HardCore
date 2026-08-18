@@ -19,6 +19,9 @@ var open_template_button: Button
 var create_map_button: Button
 var create_map_dialog: ConfirmationDialog
 var create_dialog_submit_button: Button
+var delete_map_dialog: ConfirmationDialog
+var delete_map_info_label: Label
+var delete_map_button: Button
 var create_chunk_x: SpinBox
 var create_chunk_y: SpinBox
 var create_size_preview: Label
@@ -189,10 +192,12 @@ func _build_ui() -> void:
 	template_info_label = Label.new(); template_info_label.modulate = Color("9da7b3"); map_actions.add_child(template_info_label)
 	open_template_button = Button.new(); open_template_button.text = "打开地图模板"; open_template_button.pressed.connect(_on_open_template_pressed); map_actions.add_child(open_template_button)
 	create_map_button = Button.new(); create_map_button.text = "创建地图模板"; create_map_button.pressed.connect(_on_create_map_dialog_requested); map_actions.add_child(create_map_button)
+	delete_map_button = Button.new(); delete_map_button.text = "删除当前地图模板"; delete_map_button.pressed.connect(_on_delete_map_pressed); map_actions.add_child(delete_map_button)
 	var reload_button := Button.new(); reload_button.text = "重新载入当前地图"; reload_button.pressed.connect(_on_open_pressed); map_actions.add_child(reload_button)
 	size_label = Label.new(); size_label.text = "设计尺寸：-"; map_actions.add_child(size_label)
 	path_label = Label.new(); path_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; path_label.modulate = Color("8fb9c7"); map_actions.add_child(path_label)
 	_build_create_map_dialog()
+	_build_delete_map_dialog()
 	map_template_option.item_selected.connect(_on_map_template_selected)
 	if map_template_option.item_count > 0:
 		_on_map_template_selected(map_template_option.selected)
@@ -356,6 +361,32 @@ func _build_create_map_dialog() -> void:
 	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(create_map_dialog.hide); actions.add_child(cancel_button)
 	create_dialog_submit_button = Button.new(); create_dialog_submit_button.text = "创建地图模板"; create_dialog_submit_button.pressed.connect(_on_create_pressed); actions.add_child(create_dialog_submit_button)
 	_refresh_create_size_preview()
+
+
+func _build_delete_map_dialog() -> void:
+	delete_map_dialog = ConfirmationDialog.new()
+	delete_map_dialog.title = "确定删除地图模板？"
+	delete_map_dialog.dialog_text = ""
+	delete_map_dialog.get_ok_button().hide()
+	delete_map_dialog.get_cancel_button().hide()
+	add_child(delete_map_dialog)
+	var form := VBoxContainer.new()
+	form.custom_minimum_size = Vector2(480, 0)
+	delete_map_dialog.add_child(form)
+	delete_map_info_label = Label.new()
+	delete_map_info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	delete_map_info_label.modulate = Color("9da7b3")
+	form.add_child(delete_map_info_label)
+	var warning_label := Label.new()
+	warning_label.text = "删除后该地图的编辑器工作文件将被删除。此操作不能通过编辑器撤销。"
+	warning_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	warning_label.modulate = Color("e06060")
+	form.add_child(warning_label)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	form.add_child(actions)
+	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(delete_map_dialog.hide); actions.add_child(cancel_button)
+	var confirm_button := Button.new(); confirm_button.text = "确认删除"; confirm_button.modulate = Color("e06060"); confirm_button.pressed.connect(_on_delete_map_confirmed); actions.add_child(confirm_button)
 
 
 func _build_asset_delete_dialog() -> void:
@@ -535,6 +566,59 @@ func _on_create_pressed() -> void:
 		create_map_dialog.hide()
 	else:
 		status_label.text = "地图模板已创建但保存失败：%s" % saved.get("errors", [])
+
+
+func _on_delete_map_pressed() -> void:
+	if map_template_option == null or map_template_option.selected < 0:
+		status_label.text = "请先选择要删除的地图模板"
+		return
+	var meta: Variant = map_template_option.get_item_metadata(map_template_option.selected)
+	if not meta is Dictionary:
+		status_label.text = "内置地图模板不能删除，只能删除自己创建的地图模板。"
+		return
+	var kind := str(meta.get("kind", ""))
+	if kind != "workspace":
+		status_label.text = "内置地图模板不能删除，只能删除自己创建的地图模板。"
+		return
+	var map_id := str(meta.get("map_id", ""))
+	var display_name := str(meta.get("display_name", ""))
+	var design_size: Array = meta.get("design_size", [0, 0])
+	var workspace_path := "map_editor_workspace/%s/" % map_id
+	delete_map_dialog.dialog_text = ""
+	delete_map_info_label.text = "名称：%s\n地图 ID：%s\n工作目录：%s\n设计尺寸：%d×%d" % [display_name, map_id, workspace_path, int(design_size[0]), int(design_size[1])]
+	delete_map_dialog.popup_centered()
+
+
+func _on_delete_map_confirmed() -> void:
+	if map_template_option == null or map_template_option.selected < 0:
+		delete_map_dialog.hide()
+		return
+	var meta: Variant = map_template_option.get_item_metadata(map_template_option.selected)
+	if not meta is Dictionary:
+		delete_map_dialog.hide()
+		return
+	var map_id := str(meta.get("map_id", ""))
+	var display_name := str(meta.get("display_name", ""))
+	var result := MapEditorSaveService.delete_workspace_map(map_id)
+	if not result.get("ok", false):
+		status_label.text = "删除地图模板失败：%s" % result.get("errors", [])
+		delete_map_dialog.hide()
+		return
+	if str(current_document.get("map_id", "")) == map_id:
+		current_document = {}
+		current_document_path = ""
+		_reset_document_session_state()
+		if preview != null:
+			preview.set_document({})
+		var last_path_file := FileAccess.open(LAST_DOCUMENT_PATH_FILE, FileAccess.WRITE)
+		if last_path_file != null:
+			last_path_file.store_string("")
+			last_path_file.close()
+		status_label.text = "地图模板已删除：%s（%s）" % [display_name, map_id]
+	else:
+		status_label.text = "地图模板已删除：%s（%s）" % [display_name, map_id]
+	_refresh_map_template_options()
+	delete_map_dialog.hide()
 
 
 func _on_create_map_dialog_requested() -> void:
