@@ -1216,7 +1216,9 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             entry_count = int(drop_profile.get("entry_count", len(drop_profile.get("entries", []))))
             hostile = str(entry.get("classification", "")) in ("ordinary", "elite", "boss", "special")
             if entry.get("runtime_allowed") and hostile and entry_count <= 0:
-                errors.append(f"monster_id={monster_id} hostile allowed without non-empty drop profile")
+                exemption = entry.get("drop_policy", {}).get("exemption")
+                if not isinstance(exemption, dict) or not exemption.get("allowed"):
+                    errors.append(f"monster_id={monster_id} hostile allowed without non-empty drop profile")
             sources = drop_profile.get("source_evidence", {}).get("sources", [])
             if not isinstance(sources, list) or not sources:
                 errors.append(f"monster_id={monster_id} drop profile lacks source evidence")

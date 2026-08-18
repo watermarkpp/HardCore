@@ -1405,14 +1405,23 @@
         "D2079",
         "R001"
       ],
-      "resolution": "offline_unique_exact_name"
+      "resolution": "offline_unique_exact_name",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "wizard_tameable_entity_no_drop_requirement"
+      },
+      "notes": "用户裁决：鹰卫为法师诱惑之光相关可驯服战斗单位；保留独立 ID/属性/动画，空掉落不阻断 runtime；技能宠物化逻辑后续单独处理。"
     },
     "187": {
       "classification": "special",
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_event_entity",
-      "notes": "事件/召唤/脚本实体；special"
+      "notes": "事件/召唤/脚本实体；special\n用户裁决：虎卫为法师诱惑之光相关可驯服战斗单位；保留独立 ID/属性/动画，空掉落不阻断 runtime；技能宠物化逻辑后续单独处理。",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "wizard_tameable_entity_no_drop_requirement"
+      }
     },
     "188": {
       "classification": "elite",
