@@ -676,21 +676,19 @@ def read_vanilla_core_combat_exact_id(
             field_validity[stat_field] = False
             continue
         raw = record[vanilla_key]
-        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+        if isinstance(raw, bool):
             stats[stat_field] = 0
             field_validity[stat_field] = False
             continue
-        try:
-            value = int(raw)
-        except (ValueError, TypeError):
+        if not isinstance(raw, int):
             stats[stat_field] = 0
             field_validity[stat_field] = False
             continue
-        if value < 0:
+        if raw < 0:
             stats[stat_field] = 0
             field_validity[stat_field] = False
             continue
-        stats[stat_field] = value
+        stats[stat_field] = raw
         field_validity[stat_field] = True
     all_fields_valid = all(field_validity.values())
     return stats, field_validity, all_fields_valid
@@ -787,11 +785,17 @@ def build_catalog() -> dict[str, Any]:
             for field in stats
         }
         auxiliary_combat_evidence: dict[str, Any] = {}
+        override_invalid_field = False
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
             override = policy_wooma["combat_override"]
             for field, value in override.items():
-                if field in stats:
-                    stats[field] = int(value)
+                if field not in stats:
+                    continue
+                # Strict validation: must be int, not bool, not float, >= 0
+                if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                    override_invalid_field = True
+                    continue
+                stats[field] = value
             aux = policy_wooma.get("auxiliary_source", {})
             for field in aux.get("fields", []):
                 evidence = {
@@ -890,7 +894,7 @@ def build_catalog() -> dict[str, Any]:
         # Service exact match is decoupled — it no longer gates identity.
         core_combat_identity_ok = True  # active vanilla record always exists
         # core_combat_stats_ok: ALL 7 required fields must be valid.
-        core_combat_stats_ok = all_fields_valid
+        core_combat_stats_ok = all_fields_valid and not override_invalid_field
         # AI authority: by resolution provenance, not numeric value.
         ai_resolution = str(ai.get("resolution_status", ""))
         ai_authority_ok = ai_resolution in ("exact_service_name", "auxiliary_1_exact_row")

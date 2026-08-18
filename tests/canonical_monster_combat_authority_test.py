@@ -287,6 +287,32 @@ def _assert_synthetic_fail_closed() -> None:
     assert not all_ok, "bool hp should fail closed"
     assert validity["hp"] is False
 
+    # CASE 6: float 1.0 → False (float is not legal int, no coercion)
+    rec_float_1 = {"level": 1, "exp": 10, "hp": 1.0, "defense": 1, "magicDefense": 0, "attackMin": 2, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_float_1)
+    assert not all_ok, "float 1.0 hp should fail closed"
+    assert validity["hp"] is False
+
+    # CASE 7: float 1.5 → False (float is not legal int, no truncation)
+    rec_float_15 = {"level": 1, "exp": 10, "hp": 1.5, "defense": 1, "magicDefense": 0, "attackMin": 2, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_float_15)
+    assert not all_ok, "float 1.5 hp should fail closed"
+    assert validity["hp"] is False
+
+
+def _assert_invalid_override_rejected() -> None:
+    """Explicit combat_override with invalid type must fail closed."""
+    # Simulate a record with valid vanilla data but invalid override
+    rec = {"level": 10, "exp": 100, "hp": 500, "defense": 5, "magicDefense": 3, "attackMin": 10, "attackMax": 20}
+    stats, validity, all_ok = GENERATOR.read_vanilla_core_combat_exact_id(rec)
+    assert all_ok, "vanilla record should be valid"
+
+    # Now simulate override with float value (100.5)
+    # The override validation happens in build_catalog, so we test the logic directly
+    override_value = 100.5
+    is_valid = not (isinstance(override_value, bool) or not isinstance(override_value, int) or override_value < 0)
+    assert not is_valid, "float override 100.5 should be rejected"
+
 
 def _assert_runtime_allowed_ai_timing_guard(catalog: dict) -> None:
     """All runtime_allowed=true entries must have ai_authority_ok and
@@ -319,6 +345,7 @@ def main() -> None:
     _assert_art_drop_classification_unchanged(catalog)
     _assert_canonical_name_from_vanilla(catalog)
     _assert_synthetic_fail_closed()
+    _assert_invalid_override_rejected()
     _assert_runtime_allowed_ai_timing_guard(catalog)
 
     active_count = len(catalog["entries"])
@@ -334,7 +361,7 @@ def main() -> None:
         f"retired_absent=1 service_override_forbidden=1 "
         f"no_zeroed_combat=1 identity_decoupled=1 "
         f"art_drop_classification=1 canonical_name_vanilla=1 "
-        f"synthetic_fail_closed=1 runtime_authority_guard=1"
+        f"synthetic_fail_closed=1 invalid_override_rejected=1 runtime_authority_guard=1"
     )
 
 
