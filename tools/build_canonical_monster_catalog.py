@@ -647,6 +647,55 @@ def drop_for(
     }
 
 
+VANILLA_COMBAT_FIELD_MAP: dict[str, str] = {
+    "level": "level",
+    "exp": "exp",
+    "hp": "hp",
+    "defense": "defense",
+    "magic_defense": "magicDefense",
+    "attack_min": "attackMin",
+    "attack_max": "attackMax",
+}
+
+
+def read_vanilla_core_combat_exact_id(
+    record: dict[str, Any],
+) -> tuple[dict[str, int], dict[str, bool], bool]:
+    """Read core combat stats from a vanilla exact-ID record with strict validation.
+
+    Returns (stats, field_validity, all_fields_valid).
+    - stats: parsed int values (0 for invalid/missing fields)
+    - field_validity: per-field bool indicating legal value
+    - all_fields_valid: True only if every required field is present, int, non-bool, non-negative
+    """
+    stats: dict[str, int] = {}
+    field_validity: dict[str, bool] = {}
+    for stat_field, vanilla_key in VANILLA_COMBAT_FIELD_MAP.items():
+        if vanilla_key not in record:
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        raw = record[vanilla_key]
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        try:
+            value = int(raw)
+        except (ValueError, TypeError):
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        if value < 0:
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        stats[stat_field] = value
+        field_validity[stat_field] = True
+    all_fields_valid = all(field_validity.values())
+    return stats, field_validity, all_fields_valid
+
+
 def build_catalog() -> dict[str, Any]:
     vanilla = load_json(VANILLA_PATH)
     service = load_json(SERVICE_PATH)
@@ -687,31 +736,18 @@ def build_catalog() -> dict[str, Any]:
             and service_row_for_identity.get("resolutionStatus") == "exact_service_name"
             and isinstance(service_record_for_identity, dict)
         )
-        canonical_name_override = policy_wooma.get("canonical_name_override", {})
-        if isinstance(canonical_name_override, dict) and canonical_name_override.get("value"):
-            canonical_name = str(canonical_name_override.get("value"))
-            aux = policy_wooma.get("auxiliary_source", {})
-            canonical_name_evidence = {
-                "distribution": str(aux.get("distribution", "")),
-                "tier": str(aux.get("tier", "auxiliary_1")),
-                "original_path": str(aux.get("original_path", "")),
-                "sha256": str(aux.get("sha256", "")),
-                "role": "canonical_name_auxiliary_override",
-                "field": str(canonical_name_override.get("field", "MonsterName")),
-                "evidence": f"primary exact missing; explicit auxiliary name row for monster_id={monster_id}",
-            }
-            identity_resolution = "auxiliary_1_exact_name"
-        else:
-            canonical_name = str(record.get("name", ""))
-            canonical_name_evidence = source_ref(
-                VANILLA_PATH,
-                role="canonical_name_vanilla_exact_id",
-                distribution="source.vanilla_176",
-                tier="primary",
-                field="canonical_name",
-                evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.name",
-            )
-            identity_resolution = "vanilla_exact_id"
+        # canonical_name: always vanilla exact-ID record.name.
+        # policy canonical_name_override is no longer consumed for production identity.
+        canonical_name = str(record.get("name", ""))
+        canonical_name_evidence = source_ref(
+            VANILLA_PATH,
+            role="canonical_name_vanilla_exact_id",
+            distribution="source.vanilla_176",
+            tier="primary",
+            field="canonical_name",
+            evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.name",
+        )
+        identity_resolution = "vanilla_exact_id"
         classification_name, placement_allowed, placement_kind, map_codes, class_evidence = classification_for(
             monster_id, classification_ids, policy
         )
@@ -738,22 +774,7 @@ def build_catalog() -> dict[str, Any]:
         )
         # Core combat stats: vanilla exact-ID record is the authority.
         # Crystal service records must NEVER override core combat fields.
-        VANILLA_COMBAT_FIELDS = {
-            "level": "level",
-            "exp": "exp",
-            "hp": "hp",
-            "defense": "defense",
-            "magic_defense": "magicDefense",
-            "attack_min": "attackMin",
-            "attack_max": "attackMax",
-        }
-        stats = {}
-        for stat_field, vanilla_key in VANILLA_COMBAT_FIELDS.items():
-            raw = record.get(vanilla_key, 0)
-            try:
-                stats[stat_field] = int(raw) if raw is not None else 0
-            except (ValueError, TypeError):
-                stats[stat_field] = 0
+        stats, field_validity, all_fields_valid = read_vanilla_core_combat_exact_id(record)
         stats_source = {
             field: source_ref(
                 VANILLA_PATH,
@@ -761,7 +782,7 @@ def build_catalog() -> dict[str, Any]:
                 distribution="source.vanilla_176",
                 tier="primary",
                 field=field,
-                evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.{VANILLA_COMBAT_FIELDS[field]}",
+                evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.{VANILLA_COMBAT_FIELD_MAP[field]}",
             )
             for field in stats
         }
@@ -868,13 +889,18 @@ def build_catalog() -> dict[str, Any]:
         # Combat identity: proven by vanilla exact-ID record existence.
         # Service exact match is decoupled — it no longer gates identity.
         core_combat_identity_ok = True  # active vanilla record always exists
-        core_combat_stats_ok = any(v != 0 for v in stats.values())
-        ai_authority_ok = ai.get("ai_code", -1) >= 0
+        # core_combat_stats_ok: ALL 7 required fields must be valid.
+        core_combat_stats_ok = all_fields_valid
+        # AI authority: by resolution provenance, not numeric value.
+        ai_resolution = str(ai.get("resolution_status", ""))
+        ai_authority_ok = ai_resolution in ("exact_service_name", "auxiliary_1_exact_row")
+        # Timing authority: by resolution provenance.
+        timing_resolution = str(timing.get("confidence", ""))
         timing_authority_ok = (
-            timing.get("attack_interval_ms", 0) > 0
-            or timing.get("move_interval_ms", 0) > 0
+            timing_resolution == "auxiliary_1"
+            or service_exact_for_identity
         )
-        combat_identity_ok = core_combat_identity_ok
+        combat_identity_ok = core_combat_identity_ok and core_combat_stats_ok
         placement_allowed = bool(placement_allowed and drop_ok and combat_identity_ok)
         classification_ok = classification_name != "unresolved" and placement_allowed
         runtime_allowed = bool(art_ok and classification_ok and drop_ok and combat_identity_ok)
@@ -1175,15 +1201,12 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                 errors.append(
                     f"monster_id={monster_id} vanilla {field}={actual_stats.get(field)} expected {expected}"
                 )
-    # Canonical name must come from vanilla exact-ID record.name
+    # Canonical name must come from vanilla exact-ID record.name for ALL active.
     for monster_id, rec in vanilla_by_id.items():
         if rec.get("recordStatus") == "retired":
             continue
         entry = matrix.get(str(monster_id))
         if not isinstance(entry, dict):
-            continue
-        policy_wooma = load_json(POLICY_PATH).get("wooma_matrix", {}).get(str(monster_id), {})
-        if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("canonical_name_override"), dict) and policy_wooma["canonical_name_override"].get("value"):
             continue
         expected_name = str(rec.get("name", ""))
         if entry.get("canonical_name") != expected_name:
@@ -1191,9 +1214,6 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         name_evidence = entry.get("source_evidence", {}).get("canonical_name", {})
         if name_evidence.get("tier") != "primary" or name_evidence.get("distribution") != "source.vanilla_176":
             errors.append(f"monster_id={monster_id} canonical_name source is not primary vanilla")
-    for monster_id in (68, 69):
-        if matrix[str(monster_id)].get("source_evidence", {}).get("identity_resolution") != "auxiliary_1_exact_name":
-            errors.append(f"Wooma monster_id={monster_id} canonical_name auxiliary resolution missing")
     if matrix["239"].get("monster_id") == matrix["76"].get("monster_id"):
         errors.append("Wooma 239 identity collapsed into 76")
     return errors

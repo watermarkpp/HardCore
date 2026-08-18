@@ -181,13 +181,14 @@ def _assert_service_cannot_override_vanilla(catalog: dict) -> None:
         combat_override = override.get("combat_override", {}) if isinstance(override, dict) else {}
         service_rec = service_row.get("serviceRecord", {})
         service_stats = service_rec.get("stats", {})
-        # Compare a few key fields that differ between vanilla and Crystal
+        # Compare HP: if "hp" not in combat_override and vanilla != crystal,
+        # the final value must be vanilla, not Crystal.
         vanilla_hp = int(vanilla_rec.get("hp", 0))
         crystal_hp = int(service_stats.get("12", 0))
         actual_hp = entry["combat"]["stats"]["hp"]
-        if monster_id not in combat_override and vanilla_hp != crystal_hp:
+        if "hp" not in combat_override and vanilla_hp != crystal_hp:
             assert actual_hp == vanilla_hp, (
-                f"ID{monster_id} hp={actual_hp} should be vanilla={vanilla_hp} not Crystal={crystal_HP}"
+                f"ID{monster_id} hp={actual_hp} should be vanilla={vanilla_hp} not Crystal={crystal_hp}"
             )
 
 
@@ -233,25 +234,74 @@ def _assert_art_drop_classification_unchanged(catalog: dict) -> None:
 
 
 def _assert_canonical_name_from_vanilla(catalog: dict) -> None:
-    """Canonical name must come from vanilla exact-ID record.name,
-    not from Crystal serviceName."""
+    """Canonical name must come from vanilla exact-ID record.name for ALL active.
+    policy canonical_name_override is no longer consumed."""
     vanilla_by_id = _load_vanilla_by_id()
-    policy_overrides = _load_policy_overrides()
     by_id = catalog["entries_by_id"]
     errors = []
     for monster_id, vanilla_rec in sorted(vanilla_by_id.items()):
         entry = by_id.get(str(monster_id))
         if entry is None:
             continue
-        override = policy_overrides.get(str(monster_id), {})
-        name_override = override.get("canonical_name_override", {})
-        if isinstance(name_override, dict) and name_override.get("value"):
-            continue
         expected_name = str(vanilla_rec.get("name", ""))
         actual_name = entry.get("canonical_name", "")
         if actual_name != expected_name:
             errors.append(f"ID{monster_id} name={actual_name!r} expected={expected_name!r}")
     assert not errors, f"Canonical name violations:\n" + "\n".join(errors[:20])
+    assert len(vanilla_by_id) == 214, f"CANONICAL_NAME_VANILLA_EXACT_ID_COUNT={len(vanilla_by_id)} expected 214"
+
+
+def _assert_synthetic_fail_closed() -> None:
+    """Test read_vanilla_core_combat_exact_id with synthetic dictionaries."""
+    helper = GENERATOR.read_vanilla_core_combat_exact_id
+
+    # CASE 1: missing hp → all_fields_valid = False
+    rec_missing = {"level": 1, "exp": 10, "defense": 1, "magicDefense": 0, "attackMin": 2, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_missing)
+    assert not all_ok, "missing hp should fail closed"
+    assert validity["hp"] is False
+    assert stats["hp"] == 0
+
+    # CASE 2: hp = "INVALID" → False
+    rec_invalid = {"level": 1, "exp": 10, "hp": "INVALID", "defense": 1, "magicDefense": 0, "attackMin": 2, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_invalid)
+    assert not all_ok, "invalid hp string should fail closed"
+    assert validity["hp"] is False
+
+    # CASE 3: hp = -1 → False (negative)
+    rec_negative = {"level": 1, "exp": 10, "hp": -1, "defense": 1, "magicDefense": 0, "attackMin": 2, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_negative)
+    assert not all_ok, "negative hp should fail closed"
+    assert validity["hp"] is False
+
+    # CASE 4: defense=0, attackMin=0, rest valid → True (0 is legal)
+    rec_zero = {"level": 1, "exp": 10, "hp": 50, "defense": 0, "magicDefense": 0, "attackMin": 0, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_zero)
+    assert all_ok, f"legal zeros should pass: validity={validity}"
+    assert stats["defense"] == 0
+    assert stats["attack_min"] == 0
+
+    # CASE 5: bool value → False (bool is not legal int)
+    rec_bool = {"level": 1, "exp": 10, "hp": True, "defense": 1, "magicDefense": 0, "attackMin": 2, "attackMax": 5}
+    stats, validity, all_ok = helper(rec_bool)
+    assert not all_ok, "bool hp should fail closed"
+    assert validity["hp"] is False
+
+
+def _assert_runtime_allowed_ai_timing_guard(catalog: dict) -> None:
+    """All runtime_allowed=true entries must have ai_authority_ok and
+    timing_authority_ok both true."""
+    entries = catalog["entries"]
+    errors = []
+    for entry in entries:
+        if not entry.get("runtime_allowed"):
+            continue
+        status = entry.get("source_evidence", {}).get("status", {})
+        if not status.get("ai_authority_ok"):
+            errors.append(f"ID{entry['monster_id']} runtime_allowed but ai_authority_ok=False")
+        if not status.get("timing_authority_ok"):
+            errors.append(f"ID{entry['monster_id']} runtime_allowed but timing_authority_ok=False")
+    assert not errors, f"Runtime authority guard violations:\n" + "\n".join(errors[:20])
 
 
 def main() -> None:
@@ -268,17 +318,23 @@ def main() -> None:
     _assert_combat_identity_decoupled_from_service(catalog)
     _assert_art_drop_classification_unchanged(catalog)
     _assert_canonical_name_from_vanilla(catalog)
+    _assert_synthetic_fail_closed()
+    _assert_runtime_allowed_ai_timing_guard(catalog)
 
     active_count = len(catalog["entries"])
     runtime_allowed = sum(1 for e in catalog["entries"] if e["runtime_allowed"])
+    ai_resolved = sum(1 for e in catalog["entries"] if e["source_evidence"]["status"].get("ai_authority_ok"))
+    timing_resolved = sum(1 for e in catalog["entries"] if e["source_evidence"]["status"].get("timing_authority_ok"))
     print(
         f"CANONICAL_MONSTER_COMBAT_AUTHORITY_PASS: "
         f"active={active_count} runtime_allowed={runtime_allowed} "
+        f"ai_authority_resolved={ai_resolved} timing_authority_resolved={timing_resolved} "
         f"full_combat_match=1 source_not_crystal=1 "
         f"id18_combat=1 id18_ai_timing=1 variant_isolation=1 "
         f"retired_absent=1 service_override_forbidden=1 "
         f"no_zeroed_combat=1 identity_decoupled=1 "
-        f"art_drop_classification=1 canonical_name_vanilla=1"
+        f"art_drop_classification=1 canonical_name_vanilla=1 "
+        f"synthetic_fail_closed=1 runtime_authority_guard=1"
     )
 
 
