@@ -386,7 +386,7 @@ func _build_delete_map_dialog() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	form.add_child(actions)
 	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(delete_map_dialog.hide); actions.add_child(cancel_button)
-	var confirm_button := Button.new(); confirm_button.text = "确认删除"; confirm_button.modulate = Color("e06060"); confirm_button.pressed.connect(_on_delete_map_confirmed); actions.add_child(confirm_button)
+	var confirm_button := Button.new(); confirm_button.text = "彻底删除"; confirm_button.modulate = Color("e06060"); confirm_button.pressed.connect(_on_delete_map_confirmed); actions.add_child(confirm_button)
 
 
 func _build_asset_delete_dialog() -> void:
@@ -573,19 +573,37 @@ func _on_delete_map_pressed() -> void:
 		status_label.text = "请先选择要删除的地图模板"
 		return
 	var meta: Variant = map_template_option.get_item_metadata(map_template_option.selected)
-	if not meta is Dictionary:
-		status_label.text = "内置地图模板不能删除，只能删除自己创建的地图模板。"
+	var map_id := ""
+	var display_name := ""
+	var template_id := ""
+	var is_workspace := false
+	if meta is Dictionary:
+		map_id = str(meta.get("map_id", ""))
+		display_name = str(meta.get("display_name", ""))
+		template_id = str(meta.get("template_id", ""))
+		is_workspace = str(meta.get("kind", "")) == "workspace"
+	else:
+		map_id = str(meta)
+		display_name = map_template_option.get_item_text(map_template_option.selected)
+	if map_id.is_empty():
+		status_label.text = "无法删除：地图 ID 为空"
 		return
-	var kind := str(meta.get("kind", ""))
-	if kind != "workspace":
-		status_label.text = "内置地图模板不能删除，只能删除自己创建的地图模板。"
-		return
-	var map_id := str(meta.get("map_id", ""))
-	var display_name := str(meta.get("display_name", ""))
-	var design_size: Array = meta.get("design_size", [0, 0])
+	var design_size: Array = []
+	if meta is Dictionary:
+		design_size = meta.get("design_size", [0, 0])
 	var workspace_path := "map_editor_workspace/%s/" % map_id
+	var will_delete_template := not is_workspace or not template_id.is_empty()
+	var will_delete_workspace := true
 	delete_map_dialog.dialog_text = ""
-	delete_map_info_label.text = "名称：%s\n地图 ID：%s\n工作目录：%s\n设计尺寸：%d×%d" % [display_name, map_id, workspace_path, int(design_size[0]), int(design_size[1])]
+	var info_text := "名称：%s\n地图 ID：%s\n\n将删除：\n" % [display_name, map_id]
+	if will_delete_template:
+		info_text += "✓ 地图模板定义\n"
+	if will_delete_workspace:
+		info_text += "✓ 该模板的地图编辑工作区\n✓ 该地图的地面 Chunk / Preview / Editor 数据\n"
+	info_text += "\n不会删除：\n"
+	info_text += "✓ 玛法世界地图设计身份\n✓ 怪物资料\n✓ 游戏素材\n✓ 其他地图\n"
+	info_text += "\n删除以后可以重新创建同名模板。\n\n此操作不可通过编辑器撤销。"
+	delete_map_info_label.text = info_text
 	delete_map_dialog.popup_centered()
 
 
@@ -594,14 +612,39 @@ func _on_delete_map_confirmed() -> void:
 		delete_map_dialog.hide()
 		return
 	var meta: Variant = map_template_option.get_item_metadata(map_template_option.selected)
-	if not meta is Dictionary:
+	var map_id := ""
+	var display_name := ""
+	var template_id := ""
+	var is_workspace := false
+	if meta is Dictionary:
+		map_id = str(meta.get("map_id", ""))
+		display_name = str(meta.get("display_name", ""))
+		template_id = str(meta.get("template_id", ""))
+		is_workspace = str(meta.get("kind", "")) == "workspace"
+	else:
+		map_id = str(meta)
+		display_name = map_template_option.get_item_text(map_template_option.selected)
+	if map_id.is_empty():
 		delete_map_dialog.hide()
 		return
-	var map_id := str(meta.get("map_id", ""))
-	var display_name := str(meta.get("display_name", ""))
-	var result := MapEditorSaveService.delete_workspace_map(map_id)
-	if not result.get("ok", false):
-		status_label.text = "删除地图模板失败：%s" % result.get("errors", [])
+	var template_deleted := false
+	var workspace_deleted := false
+	var errors: Array[String] = []
+	if not is_workspace or not template_id.is_empty():
+		var template_result := MapDesignCatalogService.delete_blank_template(template_id, map_id)
+		if template_result.get("ok", false):
+			template_deleted = true
+		else:
+			var errs: Array = template_result.get("errors", [])
+			if str(errs[0]) != "template_not_found":
+				errors.append_array(errs)
+	var workspace_result := MapEditorSaveService.delete_workspace_map(map_id)
+	if workspace_result.get("ok", false):
+		workspace_deleted = true
+	elif workspace_result.get("errors", [""])[0] != "directory_not_found":
+		errors.append_array(workspace_result.get("errors", []))
+	if not template_deleted and not workspace_deleted and not errors.is_empty():
+		status_label.text = "删除地图模板失败：%s" % errors
 		delete_map_dialog.hide()
 		return
 	if str(current_document.get("map_id", "")) == map_id:
@@ -614,9 +657,12 @@ func _on_delete_map_confirmed() -> void:
 		if last_path_file != null:
 			last_path_file.store_string("")
 			last_path_file.close()
-		status_label.text = "地图模板已删除：%s（%s）" % [display_name, map_id]
-	else:
-		status_label.text = "地图模板已删除：%s（%s）" % [display_name, map_id]
+	var deleted_parts: Array[String] = []
+	if template_deleted:
+		deleted_parts.append("模板定义")
+	if workspace_deleted:
+		deleted_parts.append("工作区")
+	status_label.text = "地图模板已彻底删除：%s（%s）[%s]" % [display_name, map_id, "、".join(deleted_parts)]
 	_refresh_map_template_options()
 	delete_map_dialog.hide()
 

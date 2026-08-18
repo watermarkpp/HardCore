@@ -51,3 +51,62 @@ static func _read_json(path: String) -> Dictionary:
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	return parsed if parsed is Dictionary else {}
+
+
+static func delete_blank_template(template_id: String, map_id := "") -> Dictionary:
+	if template_id.is_empty() and map_id.is_empty():
+		return {"ok": false, "errors": ["both_ids_empty"]}
+	var data := _read_json(BLANK_TEMPLATE_PATH)
+	if data.is_empty():
+		return {"ok": false, "errors": ["file_not_found_or_empty"]}
+	var templates: Array = data.get("templates", [])
+	var found_index := -1
+	var found_entry := {}
+	for i in range(templates.size()):
+		var entry: Dictionary = templates[i]
+		var entry_template_id := str(entry.get("template_id", ""))
+		var entry_map_id := str(entry.get("map_id", ""))
+		var match := false
+		if not template_id.is_empty() and entry_template_id == template_id:
+			match = true
+		elif not map_id.is_empty() and entry_map_id == map_id:
+			match = true
+		if match:
+			found_index = i
+			found_entry = entry
+			break
+	if found_index < 0:
+		return {"ok": false, "errors": ["template_not_found"]}
+	templates.remove_at(found_index)
+	data["templates"] = templates
+	var absolute_path := ProjectSettings.globalize_path(BLANK_TEMPLATE_PATH)
+	var temporary := absolute_path + ".tmp"
+	var backup := absolute_path + ".bak"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return {"ok": false, "errors": ["open_temp_failed"]}
+	file.store_string(JSON.stringify(data, "  "))
+	file.flush()
+	file.close()
+	var verify_parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(temporary))
+	if not verify_parsed is Dictionary:
+		DirAccess.remove_absolute(temporary)
+		return {"ok": false, "errors": ["temp_verification_failed"]}
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	if FileAccess.file_exists(absolute_path):
+		var backup_error := DirAccess.rename_absolute(absolute_path, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(temporary)
+			return {"ok": false, "errors": ["backup_failed:%d" % backup_error]}
+	var promote_error := DirAccess.rename_absolute(temporary, absolute_path)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_path)
+		return {"ok": false, "errors": ["promote_failed:%d" % promote_error]}
+	return {
+		"ok": true,
+		"deleted_template_id": str(found_entry.get("template_id", "")),
+		"deleted_map_id": str(found_entry.get("map_id", "")),
+		"deleted_display_name": str(found_entry.get("display_name", "")),
+	}
