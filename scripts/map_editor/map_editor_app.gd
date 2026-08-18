@@ -1333,6 +1333,15 @@ func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 		if metadata is Dictionary and str(metadata.get("content_id", "")) == selectable_content_id:
 			semantic_content_option.select(index)
 			break
+	# For monster kinds, also sync the monster picker button to the saved entry
+	# so the UI reflects the correct monster instead of the first list item.
+	if kind in ["monster_spawn", "boss_spawn", "special_monster"] and not content_id.is_empty():
+		var monster_id_val := int(entry.get("monster_id", -1))
+		for idx in monster_picker_entries.size():
+			var m: Dictionary = monster_picker_entries[idx]
+			if str(m.get("content_id", "")) == content_id or int(m.get("monster_id", -1)) == monster_id_val:
+				_apply_monster_picker_selection(idx)
+				break
 	semantic_radius.value = int(entry.get("radius_tiles", semantic_radius.value))
 	semantic_count.value = int(entry.get("count", semantic_count.value))
 	semantic_respawn.value = int(entry.get("respawn_seconds", semantic_respawn.value))
@@ -1812,7 +1821,7 @@ func _monster_status_suffix(entry: Dictionary) -> String:
 	if not bool(entry.get("authoring_allowed", false)):
 		return "（不可布置）"
 	if not bool(entry.get("runtime_ready", false)):
-		return "（可布置｜运行时未闭环）"
+		return "（可布置｜运行时待闭环）"
 	return ""
 
 
@@ -2041,7 +2050,7 @@ func _build_monster_detail_text(entry: Dictionary) -> String:
 		var rejection := str(entry.get("runtime_rejection_reason", "")).strip_edges()
 		if rejection.is_empty():
 			rejection = "未记录具体原因"
-		lines.append("运行时未闭环原因：")
+		lines.append("运行时待闭环原因：")
 		for reason: String in rejection.split(";"):
 			var stripped := reason.strip_edges()
 			if not stripped.is_empty():
