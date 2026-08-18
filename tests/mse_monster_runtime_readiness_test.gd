@@ -2,19 +2,19 @@ extends Node
 
 
 func _ready() -> void:
-	# A non-runtime-ready monster (沃玛教主9, ID78, version_difference) must
+	# A non-runtime-ready monster (雪人王, ID33, drop policy not closed) must
 	# not be silently promoted into a runtime snapshot.
 	var blocked := MapEditorTypes.new_map("readiness_blocked", 990016, "Readiness Blocked", Vector2i(32, 32))
 	blocked.editor_meta.workspace = "user://readiness_blocked_%s" % str(Time.get_ticks_usec())
 	assert(MapEditorGroundService.initialize(blocked).ok)
-	var spawn := MapEditorGameplaySemanticService.add_entry(blocked, "monster_spawn", Vector2i(5, 5), {
-		"monster_id": 78, "display_name": "沃玛教主9", "count": 1, "max_alive": 1, "respawn_seconds": 60,
+	var spawn := MapEditorGameplaySemanticService.add_entry(blocked, "boss_spawn", Vector2i(5, 5), {
+		"monster_id": 33, "display_name": "雪人王", "count": 1, "max_alive": 1, "respawn_seconds": 900,
 	})
 	assert(spawn.ok, str(spawn.get("errors", [])))
 	var blocked_validation := MapEditorBuildRuntimeService.validate_for_runtime(blocked)
 	assert(not blocked_validation.ok, "non-runtime-ready monster must block runtime build")
 	assert(
-		_has_error_prefix(blocked_validation.get("errors", []), "monster_not_runtime_ready:78:"),
+		_has_error_prefix(blocked_validation.get("errors", []), "monster_not_runtime_ready:33:"),
 		str(blocked_validation.get("errors", []))
 	)
 

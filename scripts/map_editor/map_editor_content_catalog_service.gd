@@ -139,34 +139,20 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	var combat: Dictionary = record.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
 	var ai: Dictionary = combat.get("ai", {})
-	# Authoring (can the map editor place this monster now?) requires both a
-	# runtime-capable classification and the canonical editor placement policy.
-	# version_difference variants stay isolated from formal map authoring;
-	# unresolved is not authorable either.
-	var authoring_allowed := (
-		bool(placement.get("allowed", false))
-		and classification in [
-			"ordinary",
-			"elite",
-			"boss",
-			"special",
-			"non_hostile",
-		]
-	)
-	# Runtime readiness (can this monster safely enter the live game?) keeps the
-	# full closure contract, including the frozen runtime_allowed=37 gate.
+	# P3B: canonical catalog 只包含 214 个 active 记录（retired 已排除），
+	# 全部允许地图编辑器布置。authoring 不再由 classification、
+	# variantCode 或 editor_placement 限制。
+	var authoring_allowed := numeric_id > 0
+	# Runtime readiness (can this monster safely enter the live game?) only
+	# checks the real data closure: runtime gate, appearance and drop policy.
+	# placement policy / version_difference / variant suffix never block it.
 	var runtime_reasons: Array[String] = []
-	if not bool(placement.get("allowed", false)):
-		runtime_reasons.append("运行时策略禁止放置")
 	if not bool(record.get("runtime_allowed", false)):
 		runtime_reasons.append("运行时未允许")
 	if appearance_status != "formal":
 		runtime_reasons.append("正式战斗美术未闭环")
 	if bool(drop_policy.get("hostile_requires_non_empty", false)) and drop_count <= 0:
 		runtime_reasons.append("主源掉落为空")
-	var record_status := str(record.get("status", ""))
-	if record_status not in ["formal", ""]:
-		runtime_reasons.append("canonical状态：%s" % record_status)
 	var runtime_ready := runtime_reasons.is_empty()
 	var source_drop: Dictionary = _first_drop_source(drop_profile)
 	var attrs_verified := _combat_attributes_verified(record)

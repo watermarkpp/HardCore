@@ -31,8 +31,8 @@ func _run() -> void:
 	assert(MapEditorContentCatalogService.find_by_monster_id("unresolved_monster", 240).is_empty(), "ID 240 must NOT be in unresolved_monster")
 	assert(str(dark_rainbow.get("classification", "")) == "boss", "ID 240 must be classification boss")
 	assert(int(dark_rainbow.get("drop_entry_count", 0)) == 54, "ID 240 drops %d" % int(dark_rainbow.get("drop_entry_count", 0)))
-	assert(not bool(dark_rainbow.get("authoring_allowed", false)), "ID 240 placement policy must stay closed")
-	assert(not bool(dark_rainbow.get("runtime_ready", false)), "ID 240 must not be runtime-ready")
+	assert(bool(dark_rainbow.get("authoring_allowed", false)), "ID 240 must be authoring-allowed")
+	assert(bool(dark_rainbow.get("runtime_ready", false)), "ID 240 must be runtime-ready")
 
 	# Retired identities (鸡/鹿/鹿1) are excluded from the canonical catalog
 	# and must stay absent from every browse group.
@@ -40,7 +40,7 @@ func _run() -> void:
 		assert(MapEditorContentCatalogService.find_any_monster(mid).is_empty(), "retired identity must stay absent: %d" % mid)
 	var vd := MapEditorContentCatalogService.find_by_monster_id("special_monster", 78)
 	assert(not vd.is_empty(), "ID78 version_difference must be visible")
-	assert(not bool(vd.get("authoring_allowed", false)), "version_difference must not be authoring-allowed")
+	assert(bool(vd.get("authoring_allowed", false)), "version_difference must be authoring-allowed")
 
 	var editor := MapEditorAppScript.new()
 	editor.load_default_workspace_on_ready = false
