@@ -220,18 +220,13 @@ def vertical_prop_footprint(
     approved_scale: float = 1.0,
 ) -> List[int]:
     """
-    树、旗帜、雕塑、柱子等：
+    竖立物的 footprint 由底部接地区域决定。
 
-    footprint 只由底部接地区域决定，
-    绝对禁止再使用完整图片高度。
-
-    普通竖立物：
-    - 使用底部接触宽度决定基础 footprint。
-    - 默认使用方形 footprint。
-
-    横向倒木等极宽树木：
-    - 如果图片明显横向，
-      允许 footprint 变成长条。
+    规则：
+    1. 绝对禁止再用完整图片高度推导地面深度。
+    2. 细高竖立物可以保持方形 footprint。
+    3. 明显长底座素材必须允许长方形 footprint。
+    4. 本函数只决定 footprint 形状，不改碰撞系统。
     """
     scale = max(0.0001, abs(float(approved_scale)))
 
@@ -241,6 +236,11 @@ def vertical_prop_footprint(
     width_tiles = _tiles_for_pixels(
         contact_w * scale,
         TILE_W,
+    )
+
+    depth_tiles = _tiles_for_pixels(
+        contact_h * scale,
+        TILE_H,
     )
 
     max_side = int(
@@ -253,32 +253,75 @@ def vertical_prop_footprint(
         max_side,
     )
 
-    # 树木可能包含倒木。
-    # 明显横向的树木不强制变成方形。
-    if (
-        category_cn == "树木"
-        and visible_w >= visible_h * 1.45
-    ):
-        depth_tiles = _tiles_for_pixels(
-            contact_h * scale,
-            TILE_H,
-        )
+    depth_tiles = clamp_int(
+        depth_tiles,
+        1,
+        max_side,
+    )
 
-        depth_tiles = clamp_int(
-            depth_tiles,
-            1,
-            min(3, width_tiles),
-        )
+    # 这些类别通常细高，默认更偏向方形。
+    square_preferred_categories = {
+        "烛台",
+        "雕塑",
+        "立柱",
+    }
 
+    # 这些类别底座可能天然是长条或宽面。
+    rectangular_allowed_categories = {
+        "囚笼",
+        "地图出入口",
+        "王座",
+        "树木",
+        "旗帜",
+    }
+
+    # 判断底部接地是否明显横向拉长
+    elongated_by_pixels = (
+        contact_w >= max(1, int(round(contact_h * 1.6)))
+    )
+
+    elongated_by_tiles = (
+        width_tiles >= depth_tiles + 1
+        and width_tiles >= 2
+    )
+
+    strongly_rectangular = (
+        elongated_by_pixels
+        or elongated_by_tiles
+    )
+
+    # 特殊处理：明显横向树木 / 倒木
+    if category_cn == "树木" and visible_w >= visible_h * 1.45:
         return [
             width_tiles,
-            depth_tiles,
+            clamp_int(depth_tiles, 1, min(3, max_side)),
         ]
 
-    return [
-        width_tiles,
-        width_tiles,
-    ]
+    # 允许长底座类别保留长方形 footprint
+    if category_cn in rectangular_allowed_categories:
+        if strongly_rectangular:
+            return [
+                width_tiles,
+                clamp_int(depth_tiles, 1, min(4, max_side)),
+            ]
+
+    # 方形优先类别：如果不明显拉长，就保持方形
+    if category_cn in square_preferred_categories:
+        side = max(width_tiles, depth_tiles)
+        side = clamp_int(side, 1, max_side)
+        return [side, side]
+
+    # 其他类别：
+    # 如果明显长底座，就保留长方形；否则保持方形
+    if strongly_rectangular:
+        return [
+            width_tiles,
+            clamp_int(depth_tiles, 1, min(4, max_side)),
+        ]
+
+    side = max(width_tiles, depth_tiles)
+    side = clamp_int(side, 1, max_side)
+    return [side, side]
 
 
 def category_occlusion(category_cn: str) -> bool:
