@@ -63,8 +63,122 @@
   },
   "layers": {
     "boss_spawn": [],
-    "collision": [],
-    "collision_erase": [],
+    "collision": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0,
+            15,
+            32,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31,
+            0,
+            1,
+            16
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0,
+            0,
+            32,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0,
+            0,
+            1,
+            16
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0,
+            0,
+            3,
+            3
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0,
+            12,
+            3,
+            4
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2,
+          12
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1,
+          12
+        ]
+      }
+    ],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -99,8 +213,8 @@
         "target_map_id": "",
         "target_portal_id": "",
         "tile": [
-          27,
-          6
+          27.0,
+          6.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -119,8 +233,8 @@
         "collision_authority": "visual_only",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -129,8 +243,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -140,22 +254,22 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000025",
-        "instance_scale_level": -4,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
-        "material_layer_order": -1,
+        "material_layer_order": -1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "offset_px": [
-          0,
-          -64
+          0.0,
+          -64.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -174,16 +288,170 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "tile_anchor": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "visual_footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          123.0,
+          369.0
+        ],
+        "asset_id": "user.24afc879f1973553",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1,
+          1
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000027",
+        "instance_scale_level": -2,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0,
+          -32
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          123.0,
+          369.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3333333432674408,
+          0.3333333432674408
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          14
+        ],
+        "tile_anchor": [
+          3,
+          14
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          124.0,
+          371.0
+        ],
+        "asset_id": "user.cd6e2806ace29eac",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1,
+          1
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000028",
+        "instance_scale_level": -2,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0,
+          -32
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          124.0,
+          371.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3333333432674408,
+          0.3333333432674408
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          3
+        ],
+        "tile_anchor": [
+          3,
+          3
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       }
     ],
@@ -227,14 +495,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -253,12 +525,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28,
-          0
+          28.0,
+          0.0
         ],
         "tile_anchor": [
-          28,
-          0
+          28.0,
+          0.0
         ]
       },
       {
@@ -294,14 +566,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -320,12 +596,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24,
-          0
+          24.0,
+          0.0
         ],
         "tile_anchor": [
-          24,
-          0
+          24.0,
+          0.0
         ]
       },
       {
@@ -361,14 +637,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -387,12 +667,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          20,
-          0
+          20.0,
+          0.0
         ],
         "tile_anchor": [
-          20,
-          0
+          20.0,
+          0.0
         ]
       },
       {
@@ -428,14 +708,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -454,12 +738,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16,
-          0
+          16.0,
+          0.0
         ],
         "tile_anchor": [
-          16,
-          0
+          16.0,
+          0.0
         ]
       },
       {
@@ -495,14 +779,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -521,12 +809,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12,
-          0
+          12.0,
+          0.0
         ],
         "tile_anchor": [
-          12,
-          0
+          12.0,
+          0.0
         ]
       },
       {
@@ -562,14 +850,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -588,12 +880,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8,
-          0
+          8.0,
+          0.0
         ],
         "tile_anchor": [
-          8,
-          0
+          8.0,
+          0.0
         ]
       },
       {
@@ -629,14 +921,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -655,12 +951,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          4,
-          0
+          4.0,
+          0.0
         ],
         "tile_anchor": [
-          4,
-          0
+          4.0,
+          0.0
         ]
       },
       {
@@ -696,14 +992,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -722,12 +1022,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "tile_anchor": [
-          0,
-          0
+          0.0,
+          0.0
         ]
       },
       {
@@ -763,14 +1063,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -789,12 +1093,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28,
-          15
+          28.0,
+          15.0
         ],
         "tile_anchor": [
-          28,
-          15
+          28.0,
+          15.0
         ]
       },
       {
@@ -830,14 +1134,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -856,12 +1164,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24,
-          15
+          24.0,
+          15.0
         ],
         "tile_anchor": [
-          24,
-          15
+          24.0,
+          15.0
         ]
       },
       {
@@ -897,14 +1205,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -923,12 +1235,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          20,
-          15
+          20.0,
+          15.0
         ],
         "tile_anchor": [
-          20,
-          15
+          20.0,
+          15.0
         ]
       },
       {
@@ -964,14 +1276,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -990,12 +1306,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16,
-          15
+          16.0,
+          15.0
         ],
         "tile_anchor": [
-          16,
-          15
+          16.0,
+          15.0
         ]
       },
       {
@@ -1031,14 +1347,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1057,12 +1377,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12,
-          15
+          12.0,
+          15.0
         ],
         "tile_anchor": [
-          12,
-          15
+          12.0,
+          15.0
         ]
       },
       {
@@ -1098,14 +1418,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1124,12 +1448,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8,
-          15
+          8.0,
+          15.0
         ],
         "tile_anchor": [
-          8,
-          15
+          8.0,
+          15.0
         ]
       },
       {
@@ -1165,14 +1489,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1191,12 +1519,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          4,
-          15
+          4.0,
+          15.0
         ],
         "tile_anchor": [
-          4,
-          15
+          4.0,
+          15.0
         ]
       },
       {
@@ -1232,14 +1560,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1258,12 +1590,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0,
-          15
+          0.0,
+          15.0
         ],
         "tile_anchor": [
-          0,
-          15
+          0.0,
+          15.0
         ]
       },
       {
@@ -1299,14 +1631,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1325,12 +1661,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0,
-          12
+          0.0,
+          12.0
         ],
         "tile_anchor": [
-          0,
-          12
+          0.0,
+          12.0
         ]
       },
       {
@@ -1371,9 +1707,13 @@
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1433,14 +1773,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1459,12 +1803,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0,
-          4
+          0.0,
+          4.0
         ],
         "tile_anchor": [
-          0,
-          4
+          0.0,
+          4.0
         ]
       },
       {
@@ -1500,14 +1844,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1526,12 +1874,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "tile_anchor": [
-          0,
-          0
+          0.0,
+          0.0
         ]
       },
       {
@@ -1567,14 +1915,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1593,12 +1945,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31,
-          0
+          31.0,
+          0.0
         ],
         "tile_anchor": [
-          31,
-          0
+          31.0,
+          0.0
         ]
       },
       {
@@ -1634,14 +1986,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1660,12 +2016,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31,
-          4
+          31.0,
+          4.0
         ],
         "tile_anchor": [
-          31,
-          4
+          31.0,
+          4.0
         ]
       },
       {
@@ -1701,14 +2057,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1727,12 +2087,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31,
-          8
+          31.0,
+          8.0
         ],
         "tile_anchor": [
-          31,
-          8
+          31.0,
+          8.0
         ]
       },
       {
@@ -1768,14 +2128,18 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1794,12 +2158,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31,
-          12
+          31.0,
+          12.0
         ],
         "tile_anchor": [
-          31,
-          12
+          31.0,
+          12.0
         ]
       }
     ],
