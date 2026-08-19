@@ -38,6 +38,7 @@ const ITEM_ALIASES := {
 	"毒蜘蛛牙齿": "蜘蛛牙",
 	"食人树叶": "食人花叶",
 	"食人树的果实": "食人花果",
+	"蝎子的尾巴": "蝎尾",
 }
 # 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
@@ -698,29 +699,55 @@ func _build_canonical_monster_runtime_drop_closure() -> void:
 				"allowed": false,
 				"reason": "catalog_runtime_disabled",
 				"resolved_non_gold_count": 0,
+				"resolved_gold_count": 0,
+				"resolved_reward_count": 0,
+				"requires_non_empty": false,
+				"exemption_applied": false,
 			}
 			continue
-		var classification := str(entry.get("classification", ""))
-		var hostile := classification not in ["non_hostile", "script_object"]
+		# Runtime drop requirement authority is the canonical drop_policy.
+		# GameData must NOT re-derive hostile from classification.
+		var drop_policy: Dictionary = entry.get("drop_policy", {})
+		var requires_non_empty := bool(
+			drop_policy.get("hostile_requires_non_empty", false)
+		)
+		var exemption_value: Variant = drop_policy.get("exemption", null)
+		var exemption_valid := (
+			exemption_value is Dictionary
+			and bool(exemption_value.get("allowed", false))
+			and not str(exemption_value.get("reason", "")).is_empty()
+		)
 		var profile := _canonical_drop_profile_unchecked(entry)
 		var resolved_non_gold_count := 0
+		var resolved_gold_count := 0
 		for raw_drop: Variant in profile.get("entries", []):
-			if not raw_drop is Dictionary or raw_drop.has("gold"):
+			if not raw_drop is Dictionary:
 				continue
-			if bool(resolve_canonical_drop_item(raw_drop).get("ok", false)):
+			var reward := resolve_canonical_drop_reward(raw_drop)
+			if not bool(reward.get("ok", false)):
+				continue
+			if str(reward.get("kind", "")) == "gold":
+				resolved_gold_count += 1
+			else:
 				resolved_non_gold_count += 1
+		var resolved_reward_count := resolved_non_gold_count + resolved_gold_count
 		var allowed := (
-			not hostile
-			or (not profile.is_empty() and resolved_non_gold_count > 0)
+			not requires_non_empty
+			or exemption_valid
+			or (not profile.is_empty() and resolved_reward_count > 0)
 		)
 		_monster_runtime_drop_closure[monster_id] = {
 			"allowed": allowed,
 			"reason": "" if allowed else "drop_items_unresolved",
 			"resolved_non_gold_count": resolved_non_gold_count,
+			"resolved_gold_count": resolved_gold_count,
+			"resolved_reward_count": resolved_reward_count,
+			"requires_non_empty": requires_non_empty,
+			"exemption_applied": exemption_valid,
 		}
 		if allowed:
 			monsters.append(entry.duplicate(true))
-			if classification == "boss":
+			if str(entry.get("classification", "")) == "boss":
 				bosses.append(entry.duplicate(true))
 
 
@@ -1003,10 +1030,24 @@ func _canonical_drop_profile_unchecked(entry: Dictionary) -> Dictionary:
 		return {}
 	var profile: Dictionary = profile_value
 	var drop_entries: Variant = profile.get("entries", [])
-	var hostile := str(entry.get("classification", "")) not in [
-		"non_hostile", "script_object"
-	]
-	if hostile and (not drop_entries is Array or drop_entries.is_empty()):
+	# Empty drop profiles are only rejected when canonical policy actually
+	# requires non-empty drops and no valid exemption applies. GameData must not
+	# re-derive hostile from classification.
+	var drop_policy: Dictionary = entry.get("drop_policy", {})
+	var requires_non_empty := bool(
+		drop_policy.get("hostile_requires_non_empty", false)
+	)
+	var exemption_value: Variant = drop_policy.get("exemption", null)
+	var exemption_valid := (
+		exemption_value is Dictionary
+		and bool(exemption_value.get("allowed", false))
+		and not str(exemption_value.get("reason", "")).is_empty()
+	)
+	if (
+		requires_non_empty
+		and not exemption_valid
+		and (not drop_entries is Array or drop_entries.is_empty())
+	):
 		return {}
 	return profile.duplicate(true)
 
@@ -1044,6 +1085,29 @@ func resolve_canonical_drop_item(drop_entry: Dictionary) -> Dictionary:
 		"item_id": item_id,
 		"service_index": service_index,
 	}
+
+
+## Canonical unified drop reward resolver: ordinary items OR quantity gold.
+## Keeps resolve_canonical_drop_item() untouched as the item identity authority.
+func resolve_canonical_drop_reward(drop_entry: Dictionary) -> Dictionary:
+	if drop_entry.has("gold"):
+		if str(drop_entry.get("item", "")) != "金币":
+			return {"ok": false, "reason": "invalid_gold_token"}
+		var amount := int(drop_entry.get("gold", 0))
+		if amount <= 0:
+			return {"ok": false, "reason": "invalid_gold_amount"}
+		return {
+			"ok": true,
+			"reason": "",
+			"kind": "gold",
+			"item_name": "金币",
+			"gold_amount": amount,
+		}
+	var item_result := resolve_canonical_drop_item(drop_entry)
+	if not bool(item_result.get("ok", false)):
+		return item_result
+	item_result["kind"] = "item"
+	return item_result
 
 
 func get_map_by_id(map_id: int) -> Dictionary:

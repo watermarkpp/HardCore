@@ -16,7 +16,9 @@ func roll_monster_drops(
 		"source_entry_count": 0,
 		"resolution_attempted_count": 0,
 		"resolved_entry_count": 0,
+		"resolved_gold_count": 0,
 		"items": [],
+		"gold_drops": [],
 		"rejected_entries": [],
 	}
 	var resolved_id := GameData.canonical_monster_id(monster_id)
@@ -42,10 +44,42 @@ func roll_monster_drops(
 		return result
 	var profile := GameData.get_canonical_monster_drop_profile(resolved_id)
 	if profile.is_empty():
+		# A legal no-drop entity: canonical policy does not require a non-empty
+		# table, or a valid exemption applies. This is not a runtime error.
+		var drop_policy: Dictionary = monster.get("drop_policy", {})
+		var requires_non_empty := bool(
+			drop_policy.get("hostile_requires_non_empty", false)
+		)
+		var exemption_value: Variant = drop_policy.get("exemption", null)
+		var exemption_valid := (
+			exemption_value is Dictionary
+			and bool(exemption_value.get("allowed", false))
+			and not str(exemption_value.get("reason", "")).is_empty()
+		)
+		if not requires_non_empty or exemption_valid:
+			result.configured = true
+			result.reason = ""
+			result.source_entry_count = 0
+			return result
 		result.reason = "drop_profile_missing_or_empty"
 		return result
 	var entries_value: Variant = profile.get("entries", [])
 	if not entries_value is Array or entries_value.is_empty():
+		var drop_policy: Dictionary = monster.get("drop_policy", {})
+		var requires_non_empty := bool(
+			drop_policy.get("hostile_requires_non_empty", false)
+		)
+		var exemption_value: Variant = drop_policy.get("exemption", null)
+		var exemption_valid := (
+			exemption_value is Dictionary
+			and bool(exemption_value.get("allowed", false))
+			and not str(exemption_value.get("reason", "")).is_empty()
+		)
+		if not requires_non_empty or exemption_valid:
+			result.configured = true
+			result.reason = ""
+			result.source_entry_count = 0
+			return result
 		result.reason = "drop_profile_missing_or_empty"
 		return result
 	var entries: Array = entries_value
@@ -69,19 +103,25 @@ func roll_monster_drops(
 				"chance_token_invalid"
 			)
 			continue
-		var item_resolution := GameData.resolve_canonical_drop_item(entry)
-		if not bool(item_resolution.get("ok", false)):
+		var reward := GameData.resolve_canonical_drop_reward(entry)
+		if not bool(reward.get("ok", false)):
 			_append_rejection(
 				result,
 				int(entry.get("line_number", -1)),
-				str(item_resolution.get("reason", "item_authority_unresolved"))
+				str(reward.get("reason", "item_authority_unresolved"))
 			)
 			continue
 		result.resolved_entry_count += 1
-		if result.items.size() >= limit:
+		if result.items.size() + result.gold_drops.size() >= limit:
 			continue
 		if rng.randi_range(1, denominator) == 1:
-			result.items.append(str(item_resolution.get("item_name", "")))
+			if str(reward.get("kind", "")) == "gold":
+				result.resolved_gold_count += 1
+				result.gold_drops.append(
+					int(reward.get("gold_amount", 0))
+				)
+			else:
+				result.items.append(str(reward.get("item_name", "")))
 	return result
 
 
