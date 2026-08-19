@@ -19,16 +19,16 @@ SPEC.loader.exec_module(GENERATOR)
 
 def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     """The user Excel (217 source records / 9590 source slots) is the canonical
-    drop authority.  3 records (IDs 14/16/17 — 鸡/鹿/鹿1) were retired by user
-    decision, so the active runtime catalog carries 214 entries / 9561 slots.
-
-    Old Crystal Drops must not be a primary runtime drop source.
+    drop authority.  The P3C active runtime universe carries 156 entries /
+    7032 drop slots.  Old Crystal Drops must not be a primary runtime drop
+    source.  The 217 source record count is a source-table truth, not a
+    runtime count.
     """
     entries = catalog.get("entries", [])
     entries_by_id = catalog.get("entries_by_id", {})
     drop_profiles = catalog.get("drop_profiles", {})
-    # Active runtime identities: 217 source records - 3 retired = 214.
-    assert len(entries) == 214, len(entries)
+    # Active runtime identities: P3C active universe = 156.
+    assert len(entries) == 156, len(entries)
 
     anchors = {76: 33, 239: 54, 240: 54}
     for monster_id, expected in anchors.items():
@@ -63,13 +63,13 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
                 excel_primary_count += 1
             if distribution == "server.crystal.cjlaaa" and role.startswith("drop_profile_primary"):
                 crystal_primary_count += 1
-    # Active runtime drop profiles: 217 source - 3 retired = 214.
-    assert excel_primary_count == 214, excel_primary_count
+    # Active runtime drop profiles: P3C active universe = 156.
+    assert excel_primary_count == 156, excel_primary_count
     assert crystal_primary_count == 0, crystal_primary_count
 
     total = sum(int(p.get("entry_count", 0)) for p in drop_profiles.values())
-    # Active runtime drop slots: 9590 source - 29 retired = 9561.
-    assert total == 9561, total
+    # Active runtime drop slots: P3C active universe total = 7032.
+    assert total == 7032, total
 
 
 def _assert_classification_placement_kind() -> None:
@@ -86,13 +86,16 @@ def _assert_classification_placement_kind() -> None:
 
 
 def _assert_variant_visual_pairs(catalog: dict[str, object]) -> None:
-    """17 variant monsters must share appearance_profile_id with their base,
-    while retaining their own distinct monster_id and combat data."""
+    """Active variants must share appearance_profile_id with their base,
+    while retaining their own distinct monster_id and combat data.
+
+    P3C pruned the retired duplicate variants (48/49/51/53/80/82/84/86/88), so
+    only the remaining active pairs are asserted here.
+    """
     entries_by_id = catalog.get("entries_by_id", {})
     variant_pairs = [
-        (48, 47), (49, 50), (51, 50), (53, 52), (55, 54), (57, 56), (59, 56),
+        (55, 54), (57, 56), (59, 56),
         (77, 76), (78, 76),
-        (80, 79), (82, 81), (84, 83), (86, 85), (88, 87),
         (90, 89), (91, 89),
         (161, 160),
     ]
@@ -223,7 +226,7 @@ def main() -> None:
         "lf_crlf_equivalent=1 binary_raw=1 source_metadata=1 "
         "excel_drop_authority=1 classification_placement_kind=1 "
         "local_from_res_portable=1 excel_source_sha=1 crystal_primary_zero=1 "
-        "variant_visual_pairs=17 undead_exact_id=25 boss_variants=3 "
+        "variant_visual_pairs=8 undead_exact_id=25 boss_variants=3 "
         "retired_source_preserved=3 retired_active_absent=3 "
         "no_generic_fallback=1"
     )

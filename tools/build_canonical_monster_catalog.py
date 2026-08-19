@@ -29,6 +29,7 @@ CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classificatio
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
+COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
 # Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
 # is no longer read by the generator and is intentionally absent from
 # source_files/generator_input below.
@@ -53,6 +54,25 @@ RUNTIME_CAPABLE_CLASSIFICATIONS = frozenset({
 # P3B: version_difference 只是 classification/metadata 提醒，不再自动
 # 排除 runtime。排除集合保持为空结构，等待未来明确的排除裁决。
 INTENTIONAL_EXCLUSION_CLASSIFICATIONS = frozenset()
+
+# R4C: Monster.DB exact-ID core combat authority. Only these 6 IDs may be
+# overridden with the SHA-verified Monster.DB core stats. All other IDs keep
+# the P3C vanilla exact-ID read. Special/event entities and the 12 IDs without
+# a Monster.DB exact binding are explicitly excluded from override.
+MONSTER_DB_CORE_OVERRIDE_IDS = frozenset({
+    39,
+    107,
+    162,
+    163,
+    168,
+    193,
+})
+MONSTER_DB_CORE_EXCLUDED_SPECIAL_IDS = frozenset({
+    146,
+    226,
+    234,
+})
+MONSTER_DB_CORE_STATS_FIELDS = ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")
 TEXT_HASH_SUFFIXES = {".json"}
 WOOMA_EQUIVALENCE_IDS = {68, 69}
 EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
@@ -714,6 +734,8 @@ def build_catalog() -> dict[str, Any]:
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
     policy = load_json(POLICY_PATH)
     drop_source = load_json(DROP_SOURCE_PATH)
+    combat_source = load_json(COMBAT_SOURCE_PATH)
+    combat_source_by_id = combat_source.get("records_by_monster_id", {})
     drop_source_by_id = {
         str(item.get("stable_monster_id")): item
         for item in drop_source.get("records", [])
@@ -796,6 +818,44 @@ def build_catalog() -> dict[str, Any]:
             )
             for field in stats
         }
+        # R4C: Monster.DB exact-ID core combat authority for the fixed
+        # override set only. These 7 fields are replaced from the SHA-verified
+        # combat source and their evidence is rewritten to the Monster.DB
+        # primary provenance. AI/timing/other fields are never touched.
+        if monster_id in MONSTER_DB_CORE_OVERRIDE_IDS:
+            db_entry = combat_source_by_id.get(str(monster_id))
+            if not isinstance(db_entry, dict):
+                raise RuntimeError(
+                    f"monster_id={monster_id} is in MONSTER_DB_CORE_OVERRIDE_IDS "
+                    "but has no records_by_monster_id entry; fail closed"
+                )
+            missing_fields = [f for f in MONSTER_DB_CORE_STATS_FIELDS if f not in db_entry]
+            if missing_fields:
+                raise RuntimeError(
+                    f"monster_id={monster_id} Monster.DB entry missing fields {missing_fields}"
+                )
+            for field in MONSTER_DB_CORE_STATS_FIELDS:
+                value = db_entry[field]
+                if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                    raise RuntimeError(
+                        f"monster_id={monster_id} Monster.DB field {field}={value!r} invalid"
+                    )
+                stats[field] = value
+                stats_source[field] = {
+                    "distribution": str(combat_source.get("distribution", "")),
+                    "tier": str(combat_source.get("tier", "")),
+                    "original_path": str(combat_source.get("source", "")),
+                    "sha256": str(combat_source.get("source_sha256", "")),
+                    "hash_normalization": "raw_bytes",
+                    "role": "combat_stats_monster_db_exact_id",
+                    "field": field,
+                    "evidence": (
+                        f"canonical_monster_combat_source_v1.json "
+                        f"records_by_monster_id[{monster_id}].{field} "
+                        f"binding={db_entry.get('binding', '')} "
+                        f"cross_verified_21cq={db_entry.get('cross_verified_21cq', False)}"
+                    ),
+                }
         auxiliary_combat_evidence: dict[str, Any] = {}
         override_invalid_field = False
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
@@ -1092,6 +1152,7 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
         DROP_SOURCE_PATH,
+        COMBAT_SOURCE_PATH,
         *ART_PATHS,
     ]
     catalog: dict[str, Any] = {
@@ -1133,6 +1194,8 @@ def build_catalog() -> dict[str, Any]:
 
 def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    combat_source = load_json(COMBAT_SOURCE_PATH)
+    combat_source_by_id = combat_source.get("records_by_monster_id", {})
 
     def reject_replacement_paths(value: Any, context: str) -> None:
         if isinstance(value, dict):
@@ -1328,11 +1391,40 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         policy_wooma = load_json(POLICY_PATH).get("wooma_matrix", {}).get(str(monster_id), {})
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
             continue
+        # Skip the fixed R4C Monster.DB core override IDs: their stats are
+        # validated against the combat source instead of vanilla below.
+        if monster_id in MONSTER_DB_CORE_OVERRIDE_IDS:
+            continue
         for field, expected in expected_stats.items():
             if actual_stats.get(field) != expected:
                 errors.append(
                     f"monster_id={monster_id} vanilla {field}={actual_stats.get(field)} expected {expected}"
                 )
+    # R4C: the 6 fixed Monster.DB core override IDs must match the SHA-verified
+    # combat source exactly on all 7 core stats fields, with Monster.DB primary
+    # provenance on every field and no vanilla evidence.
+    for monster_id in sorted(MONSTER_DB_CORE_OVERRIDE_IDS):
+        entry = matrix.get(str(monster_id))
+        if not isinstance(entry, dict):
+            errors.append(f"monster_id={monster_id} missing in catalog for Monster.DB override")
+            continue
+        db_entry = combat_source_by_id.get(str(monster_id), {})
+        actual_stats = entry.get("combat", {}).get("stats", {})
+        for field in MONSTER_DB_CORE_STATS_FIELDS:
+            if actual_stats.get(field) != db_entry.get(field):
+                errors.append(
+                    f"monster_id={monster_id} Monster.DB {field}={actual_stats.get(field)} "
+                    f"expected {db_entry.get(field)}"
+                )
+            field_evidence = entry.get("source_evidence", {}).get("combat_stats", {}).get(field, {})
+            if field_evidence.get("role") != "combat_stats_monster_db_exact_id":
+                errors.append(f"monster_id={monster_id} {field} evidence role is not monster_db_exact_id")
+            if field_evidence.get("distribution") != "source.original_gameofmir.monster_db_176":
+                errors.append(f"monster_id={monster_id} {field} evidence distribution mismatch")
+            if field_evidence.get("tier") != "primary":
+                errors.append(f"monster_id={monster_id} {field} evidence tier mismatch")
+            if field_evidence.get("sha256") != combat_source.get("source_sha256"):
+                errors.append(f"monster_id={monster_id} {field} evidence sha256 mismatch")
     # Canonical name must come from vanilla exact-ID record.name for ALL active.
     for monster_id, rec in vanilla_by_id.items():
         if rec.get("recordStatus") == "retired":

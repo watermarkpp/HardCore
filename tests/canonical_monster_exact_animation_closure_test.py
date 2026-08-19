@@ -18,10 +18,6 @@ ANIMATION_PATH = (
     ROOT / "assets/data/runtime/monster_animation_catalog.json"
 )
 
-POLICY_PATH = (
-    ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
-)
-
 EXPECTED_ACTIVE_COUNT = 156
 
 RETIRED_IDS = (14, 16, 17)
@@ -71,12 +67,6 @@ assert len(active_ids) == EXPECTED_ACTIVE_COUNT
 for retired_id in RETIRED_IDS:
     assert retired_id not in active_ids
 
-records_by_id = {
-    int(row["monsterId"]): row
-    for row in project.get("records", [])
-    if isinstance(row, dict) and row.get("recordStatus") != "retired"
-}
-
 animation = load(ANIMATION_PATH)
 
 animation_rows = {
@@ -121,37 +111,21 @@ assert all(
     for mid in sorted(active_ids)
 )
 
-policy = load(POLICY_PATH)
-
-attribute_mismatch = []
+# Combat stats authority is owned by
+# canonical_monster_combat_authority_reconciliation_test.py. This animation
+# closure test must NOT hard-code canonical combat.stats == vanilla: the 6-ID
+# Monster.DB core override (39/107/162/163/168/193) legitimately diverges from
+# vanilla, and combat authority is not an animation concern.
 drop_mismatch = []
 
 for mid in sorted(active_ids):
     entry = entries[mid]
 
-    # 属性/掉落永远属于该 monster_id 自己。
+    # 掉落永远属于该 monster_id 自己。
     expected_drop_id = f"drop.{mid}"
     if entry.get("drop_profile_id") != expected_drop_id:
         drop_mismatch.append((mid, entry.get("drop_profile_id"), expected_drop_id))
 
-    stats = entry.get("combat", {}).get("stats", {})
-    record = records_by_id[mid]
-
-    # 68/69 使用 policy combat_override（已验收的 auxiliary 覆盖）。
-    wooma_policy = policy.get("wooma_matrix", {}).get(str(mid), {})
-    if isinstance(wooma_policy, dict) and isinstance(
-        wooma_policy.get("combat_override"), dict
-    ):
-        continue
-
-    for stat_field, vanilla_key in COMBAT_FIELD_MAP.items():
-        expected = int(record.get(vanilla_key, 0))
-        if int(stats.get(stat_field, 0)) != expected:
-            attribute_mismatch.append(
-                (mid, stat_field, stats.get(stat_field), expected)
-            )
-
-assert not attribute_mismatch, attribute_mismatch
 assert not drop_mismatch, drop_mismatch
 
 # 僵尸多形态专项：每个形态各自 exact-ID 独立解析，不要求相同。

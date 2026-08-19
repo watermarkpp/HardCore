@@ -63,6 +63,11 @@
       "hash_normalization": "lf_text",
       "role": "generator_input"
     },
+    "assets/data/canonical_monster_combat_source_v1.json": {
+      "sha256": "62E76B475A8FDA99F07FE7E21DC842EFBE84A9A547BD60CC8796CDEC222D9974",
+      "hash_normalization": "lf_text",
+      "role": "generator_input"
+    },
     "assets/data/bich_common_client_art_sources.json": {
       "sha256": "0CA4C1C037DC816E6A25F7590DACEE46B72657DF0AED5E546138E9E25F28F205",
       "hash_normalization": "lf_text",
@@ -236287,7 +236292,7 @@
       },
       "combat": {
         "stats": {
-          "level": 50,
+          "level": 46,
           "exp": 100,
           "hp": 900,
           "defense": 100,
@@ -236399,74 +236404,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -248876,7 +248881,7 @@
       },
       "combat": {
         "stats": {
-          "level": 27,
+          "level": 28,
           "exp": 200,
           "hp": 250,
           "defense": 0,
@@ -248984,74 +248989,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -261359,10 +261364,10 @@
           "level": 55,
           "exp": 4000,
           "hp": 5000,
-          "defense": 40,
+          "defense": 20,
           "magic_defense": 10,
           "attack_min": 80,
-          "attack_max": 150
+          "attack_max": 100
         },
         "ai": {
           "ai_code": 0,
@@ -261529,74 +261534,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -261717,8 +261722,8 @@
           "exp": 4000,
           "hp": 5000,
           "defense": 5,
-          "magic_defense": 50,
-          "attack_min": 100,
+          "magic_defense": 20,
+          "attack_min": 80,
           "attack_max": 100
         },
         "ai": {
@@ -261886,74 +261891,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -262616,7 +262621,7 @@
       },
       "combat": {
         "stats": {
-          "level": 52,
+          "level": 44,
           "exp": 700,
           "hp": 850,
           "defense": 12,
@@ -262727,74 +262732,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -267816,8 +267821,8 @@
           "hp": 5000,
           "defense": 25,
           "magic_defense": 30,
-          "attack_min": 70,
-          "attack_max": 120
+          "attack_min": 60,
+          "attack_max": 100
         },
         "ai": {
           "ai_code": 0,
@@ -267985,74 +267990,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -282523,7 +282528,7 @@
       },
       "combat": {
         "stats": {
-          "level": 50,
+          "level": 46,
           "exp": 100,
           "hp": 900,
           "defense": 100,
@@ -282635,74 +282640,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=39 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[39].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -295112,7 +295117,7 @@
       },
       "combat": {
         "stats": {
-          "level": 27,
+          "level": 28,
           "exp": 200,
           "hp": 250,
           "defense": 0,
@@ -295220,74 +295225,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=107 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[107].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -307595,10 +307600,10 @@
           "level": 55,
           "exp": 4000,
           "hp": 5000,
-          "defense": 40,
+          "defense": 20,
           "magic_defense": 10,
           "attack_min": 80,
-          "attack_max": 150
+          "attack_max": 100
         },
         "ai": {
           "ai_code": 0,
@@ -307765,74 +307770,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=162 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[162].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -307953,8 +307958,8 @@
           "exp": 4000,
           "hp": 5000,
           "defense": 5,
-          "magic_defense": 50,
-          "attack_min": 100,
+          "magic_defense": 20,
+          "attack_min": 80,
           "attack_max": 100
         },
         "ai": {
@@ -308122,74 +308127,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=163 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[163].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -308852,7 +308857,7 @@
       },
       "combat": {
         "stats": {
-          "level": 52,
+          "level": 44,
           "exp": 700,
           "hp": 850,
           "defense": 12,
@@ -308963,74 +308968,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=168 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[168].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
@@ -314052,8 +314057,8 @@
           "hp": 5000,
           "defense": 25,
           "magic_defense": 30,
-          "attack_min": 70,
-          "attack_max": 120
+          "attack_min": 60,
+          "attack_max": 100
         },
         "ai": {
           "ai_code": 0,
@@ -314221,74 +314226,74 @@
         },
         "combat_stats": {
           "level": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "level",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.level"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].level binding=exact_name cross_verified_21cq=False"
           },
           "exp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "exp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.exp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].exp binding=exact_name cross_verified_21cq=False"
           },
           "hp": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "hp",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.hp"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].hp binding=exact_name cross_verified_21cq=False"
           },
           "defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.defense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].defense binding=exact_name cross_verified_21cq=False"
           },
           "magic_defense": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "magic_defense",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.magicDefense"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].magic_defense binding=exact_name cross_verified_21cq=False"
           },
           "attack_min": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_min",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.attackMin"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].attack_min binding=exact_name cross_verified_21cq=False"
           },
           "attack_max": {
-            "distribution": "source.vanilla_176",
+            "distribution": "source.original_gameofmir.monster_db_176",
             "tier": "primary",
-            "original_path": "assets/data/vanilla_176/monsters.json",
-            "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-            "hash_normalization": "lf_text",
-            "role": "core_combat_stats_vanilla_exact_id",
+            "original_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "hash_normalization": "raw_bytes",
+            "role": "combat_stats_monster_db_exact_id",
             "field": "attack_max",
-            "evidence": "vanilla_176/monsters.json exact monster_id=193 record.attackMax"
+            "evidence": "canonical_monster_combat_source_v1.json records_by_monster_id[193].attack_max binding=exact_name cross_verified_21cq=False"
           }
         },
         "combat_ai_timing": {
