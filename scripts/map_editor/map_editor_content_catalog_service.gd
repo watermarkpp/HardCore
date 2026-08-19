@@ -139,34 +139,33 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	var combat: Dictionary = record.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
 	var ai: Dictionary = combat.get("ai", {})
-	# Authoring (can the map editor place this monster now?) requires both a
-	# runtime-capable classification and the canonical editor placement policy.
-	# version_difference variants stay isolated from formal map authoring;
-	# unresolved is not authorable either.
-	var authoring_allowed := (
-		bool(placement.get("allowed", false))
-		and classification in [
-			"ordinary",
-			"elite",
-			"boss",
-			"special",
-			"non_hostile",
-		]
-	)
-	# Runtime readiness (can this monster safely enter the live game?) keeps the
-	# full closure contract, including the frozen runtime_allowed=37 gate.
+	# The canonical catalog only contains the 156 active IDs, so every active
+	# ID is authorable in the map editor. Authoring is decided by presence in
+	# the active canonical catalog (numeric_id > 0), never by editor_placement,
+	# classification, variantCode, or runtime state.
+	var authoring_allowed := numeric_id > 0
+	# Runtime readiness only checks the true runtime closure. placement policy,
+	# canonical record.status, variantCode, version_difference classification,
+	# suffix and unresolved runtime state are NOT runtime blockers.
 	var runtime_reasons: Array[String] = []
-	if not bool(placement.get("allowed", false)):
-		runtime_reasons.append("运行时策略禁止放置")
 	if not bool(record.get("runtime_allowed", false)):
 		runtime_reasons.append("运行时未允许")
 	if appearance_status != "formal":
 		runtime_reasons.append("正式战斗美术未闭环")
-	if bool(drop_policy.get("hostile_requires_non_empty", false)) and drop_count <= 0:
+	# Drop policy only blocks when canonical policy requires a non-empty table
+	# and no valid exemption applies.
+	var exemption_value: Variant = drop_policy.get("exemption", null)
+	var exemption_valid := (
+		exemption_value is Dictionary
+		and bool(exemption_value.get("allowed", false))
+		and not str(exemption_value.get("reason", "")).is_empty()
+	)
+	if (
+		bool(drop_policy.get("hostile_requires_non_empty", false))
+		and not exemption_valid
+		and drop_count <= 0
+	):
 		runtime_reasons.append("主源掉落为空")
-	var record_status := str(record.get("status", ""))
-	if record_status not in ["formal", ""]:
-		runtime_reasons.append("canonical状态：%s" % record_status)
 	var runtime_ready := runtime_reasons.is_empty()
 	var source_drop: Dictionary = _first_drop_source(drop_profile)
 	var attrs_verified := _combat_attributes_verified(record)

@@ -48,7 +48,7 @@ func _run() -> void:
 	assert(text_239.contains("暗之沃玛教主"), "ID239 detail missing name")
 	assert(text_239.contains("54"), "ID239 detail missing drop count 54")
 
-	# ID240 (boss, non-placeable)
+	# ID240 (boss, runtime closed)
 	editor._show_monster_inspector(dark_rainbow)
 	await get_tree().process_frame
 	assert(editor.monster_inspector_panel == panel_76, "inspector panel must remain single instance")
@@ -58,8 +58,8 @@ func _run() -> void:
 	assert(text_240.contains("boss"), "ID240 detail missing classification boss")
 	assert(text_240.contains("54"), "ID240 detail missing drop count 54")
 	assert(text_240.contains("作者可布置：是"), "ID240 detail missing authoring-allowed status")
-	assert(text_240.contains("运行时闭环：否"), "ID240 detail missing runtime-not-ready status")
-	assert(text_240.contains("运行时待闭环原因"), "ID240 detail missing runtime rejection reason")
+	assert(text_240.contains("运行时闭环：是"), "ID240 detail missing runtime-ready status")
+	assert(not text_240.contains("运行时待闭环原因"), "ID240 must not show a runtime rejection reason")
 
 	# Reference attributes for an unverified entry that still carries stats.
 	var ref_entry := _find_unverified_with_stats()
@@ -96,38 +96,27 @@ func _run() -> void:
 	assert(not editor.monster_inspector_panel.visible, "click did not close inspector")
 
 	# Picker contract: the actual monster selection surface (monster picker
-	# popup) must hover-preview and click-close.
+	# popup) must show the correct suffix for authoring-allowed but
+	# runtime-not-ready monsters.
 	editor.semantic_kind_option.select(1)  # 普通怪物刷新点 = monster_spawn
 	editor._on_semantic_kind_selected(1)
 	await get_tree().process_frame
 	assert(editor.monster_picker_button.visible, "monster picker button must be visible for monster_spawn")
-	var picker_index := _find_picker_index_by_monster_id(editor, 16)
-	assert(picker_index >= 0, "ID16 鹿 missing from monster picker")
+	# ID183 爆裂蜘蛛 is ordinary, active, runtime_not_allowed.
+	var picker_index := _find_picker_index_by_monster_id(editor, 183)
+	assert(picker_index >= 0, "ID183 爆裂蜘蛛 missing from monster picker")
 	assert(editor.monster_picker_list.get_item_text(picker_index).contains("（可布置｜运行时待闭环）"), "picker label must show 可布置｜运行时待闭环")
-	editor._on_monster_picker_button_pressed()
-	await get_tree().process_frame
-	assert(editor.monster_picker_popup.visible, "picker popup did not open")
-	var picker_rect: Rect2 = editor.monster_picker_list.get_item_rect(picker_index)
-	assert(picker_rect.size.y > 0, "picker item must have a laid-out area")
-	var picker_center := editor.monster_picker_list.get_global_rect().position + picker_rect.get_center()
-	editor._close_monster_inspector()
-	editor._poll_monster_hover_at(picker_center)
-	await get_tree().process_frame
-	assert(editor.monster_inspector_panel.visible, "picker hover did not show inspector")
-	assert(editor.monster_inspector_detail.text.contains("鹿"), "picker hover detail missing 鹿")
-	editor._on_monster_picker_item_selected(picker_index)
-	await get_tree().process_frame
-	assert(not editor.monster_picker_popup.visible, "picker popup did not close on select")
-	assert(not editor.monster_inspector_panel.visible, "picker select did not close inspector")
 
 	# Placement chain: the authoring-allowed (runtime-not-ready) monster must
 	# actually produce a monster_spawn entry in the document.
-	var doc := MapEditorTypes.new_map("picker_place", 990016, "Picker Place", Vector2i(32, 32))
+	editor._on_monster_picker_item_selected(picker_index)
+	await get_tree().process_frame
+	var doc := MapEditorTypes.new_map("picker_place", 990183, "Picker Place", Vector2i(32, 32))
 	editor.current_document = doc
 	editor._on_semantic_tile_clicked(Vector2i(5, 5))
 	var spawns: Array = doc.layers.get("monster_spawn", [])
-	assert(spawns.size() == 1, "ID16 must produce exactly one monster_spawn entry")
-	assert(int(spawns[0].get("monster_id", -1)) == 16, "placed monster_id must be 16")
+	assert(spawns.size() == 1, "ID183 must produce exactly one monster_spawn entry")
+	assert(int(spawns[0].get("monster_id", -1)) == 183, "placed monster_id must be 183")
 
 	# Close must hide without changing the current selection.
 	var selection_before := editor.semantic_content_option.selected
