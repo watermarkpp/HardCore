@@ -18,7 +18,7 @@ func _run() -> void:
 	assert(GameData.maps.size() == 142, "地图数据数量不符")
 	var monster_counts := GameData.canonical_monster_counts()
 	assert(
-		int(monster_counts.get("catalog_identity_count", 0)) == 217,
+		int(monster_counts.get("catalog_identity_count", 0)) == 156,
 		"canonical怪物身份目录数量不符"
 	)
 	assert(

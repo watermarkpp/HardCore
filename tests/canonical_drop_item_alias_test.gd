@@ -7,6 +7,7 @@ const AUDITED_ALIASES := {
 	"毒蜘蛛牙齿": {"canonical": "蜘蛛牙", "service_index": 868},
 	"食人树叶": {"canonical": "食人花叶", "service_index": 866},
 	"食人树的果实": {"canonical": "食人花果", "service_index": 867},
+	"蝎子的尾巴": {"canonical": "蝎尾", "service_index": 873},
 }
 const FORBIDDEN_QUEST_SERVICE_INDEX := 1127
 
@@ -33,14 +34,15 @@ func _run() -> void:
 	assert(int(fruit.get("service_index", -1)) != FORBIDDEN_QUEST_SERVICE_INDEX, "食人树的果实 wrongly resolved to Quest item 1127")
 	assert(str(fruit.get("item_name", "")) == "食人花果", "食人树的果实 canonical name must be 食人花果")
 
-	# 3. Runtime spawnable count is restored to 37 (ID18 + ID30 now resolve).
+	# 3. Runtime universe is the P3C 156-active / 153-runtime-allowed closure.
 	var counts: Dictionary = GameData.canonical_monster_counts()
-	assert(int(counts.get("catalog_identity_count", 0)) == 217, "217 identities drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 37, "catalog runtime allowed drifted")
-	assert(int(counts.get("runtime_spawnable_count", 0)) == 37, "runtime spawnable drifted from 37")
+	assert(int(counts.get("catalog_identity_count", 0)) == 156, "156 identities drifted")
+	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 153, "catalog runtime allowed drifted")
+	assert(int(counts.get("runtime_spawnable_count", 0)) == int(counts.get("catalog_runtime_allowed_count", -1)), "runtime spawnable must equal catalog runtime allowed")
+	assert(int(counts.get("runtime_spawnable_count", 0)) == 153, "runtime spawnable drifted from 153")
 	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "runtime rejected count not zero")
 
-	# 4. 施毒术 remains material-free: casting with zero of the three alias
+	# 4. 施毒术 remains material-free: casting with zero of the audited alias
 	#    materials still succeeds and does not reference them.
 	assert(SkillDataLoader.reload_data().valid, "skill data failed to reload")
 	var poison := SkillDataLoader.skill("taoist.poison")
@@ -53,5 +55,5 @@ func _run() -> void:
 		var canonical: String = AUDITED_ALIASES[token]["canonical"]
 		assert(poison_material_id != token and poison_material_id != canonical, "taoist.poison must not require material %s" % token)
 
-	print("CANONICAL_DROP_ITEM_ALIAS_PASS: aliases=3 spawnable=37 quest_1127_isolated=1 poison_material_free=1")
+	print("CANONICAL_DROP_ITEM_ALIAS_PASS: aliases=4 spawnable=153 quest_1127_isolated=1 poison_material_free=1")
 	get_tree().quit(0)
