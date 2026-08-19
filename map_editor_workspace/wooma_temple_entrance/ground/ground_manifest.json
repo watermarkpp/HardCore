@@ -1,0 +1,57 @@
+{
+  "blank_chunk_policy": "transparent_until_painted",
+  "chunk_grid_size": [
+    2,
+    1
+  ],
+  "chunk_size_px": [
+    1024,
+    1024
+  ],
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "",
+      "grid": [
+        0,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        0,
+        0,
+        1024,
+        800
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "",
+      "grid": [
+        1,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        1024,
+        0,
+        576,
+        800
+      ],
+      "state": "virtual"
+    }
+  ],
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "",
+  "design_size": [
+    25,
+    25
+  ],
+  "ground_pixel_size": [
+    1600,
+    800
+  ],
+  "map_id": "wooma_temple_entrance",
+  "schema_version": 1
+}

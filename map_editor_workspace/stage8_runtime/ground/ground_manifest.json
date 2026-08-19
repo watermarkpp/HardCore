@@ -1,56 +1,57 @@
 {
-  "blank_chunk_policy": "virtual_shared_until_dirty",
+  "blank_chunk_policy": "transparent_until_painted",
   "chunk_grid_size": [
-    2,
-    1
+    2.0,
+    1.0
   ],
   "chunk_size_px": [
-    1024,
-    1024
+    1024.0,
+    1024.0
   ],
   "chunks": [
     {
       "chunk_id": "c_0_0",
-      "fill_asset_id": "ground.old_grass.001",
+      "fill_asset_id": "",
       "grid": [
-        0,
-        0
+        0.0,
+        0.0
       ],
       "materialized": false,
       "rect_px": [
-        0,
-        0,
-        1024,
-        1024
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
       ],
       "state": "virtual"
     },
     {
       "chunk_id": "c_1_0",
-      "fill_asset_id": "ground.old_grass.001",
+      "fill_asset_id": "",
       "grid": [
-        1,
-        0
+        1.0,
+        0.0
       ],
       "materialized": false,
       "rect_px": [
-        1024,
-        0,
-        1024,
-        1024
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
       ],
       "state": "virtual"
     }
   ],
-  "default_fill_asset_id": "ground.old_grass.001",
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "",
   "design_size": [
-    32,
-    32
+    32.0,
+    32.0
   ],
   "ground_pixel_size": [
-    2048,
-    1024
+    2048.0,
+    1024.0
   ],
   "map_id": "stage8_runtime",
-  "schema_version": 1
+  "schema_version": 1.0
 }
