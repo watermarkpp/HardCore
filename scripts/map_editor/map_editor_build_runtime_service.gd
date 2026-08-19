@@ -55,7 +55,7 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 				if catalog_entry.is_empty():
 					errors.append("monster_missing_from_catalog:%d" % monster_id)
 				elif not bool(catalog_entry.get("runtime_ready", false)):
-					errors.append("monster_not_runtime_ready:%d:%s" % [monster_id, str(catalog_entry.get("runtime_rejection_reason", "runtime未闭环"))])
+					errors.append("monster_not_runtime_ready:%d:%s" % [monster_id, str(catalog_entry.get("runtime_rejection_reason", "runtime待闭环"))])
 	errors.append_array(
 		ConnectionPolicyService.validate_document(document)
 	)

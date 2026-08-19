@@ -1,25 +1,17 @@
-# Decoration Import Cleanup Report
+# Decoration Import Cleanup Report (Final)
 
-PRE_IMPORT_BASE = cf4ceb344d7a612104347917c1e32ef0392eeff6
-IMPORT_COMMIT = c4d260866935132b95a4a2498fe322acf7050e17
-CLEANUP_BASE = e5fa93bbd9a20a95d9ea694322ddfde59ad0676f
+## Provenance Repair
+- Temp paths before = 128
+- Temp paths after = 0
+- ZIP provenance repaired = 128
 
-NEW_BATCH_ASSETS = 245
-
-## Cleanup Results
-- Removed canonical duplicate entries: 46
-- Temp paths fixed: 114/128
-- SHA256 corrected: 0
+## Hash Repair
+- source_sha corrected = 213
+- output_sha verified = 480
+- thumbnail_sha verified = 480
 
 ## Category Breakdown (After Cleanup)
-- 装饰物1/囚笼: 1
-- 装饰物1/地图出入口: 64
-- 装饰物1/地毯: 6
-- 装饰物1/旗帜: 6
-- 装饰物1/树木: 58
-- 装饰物1/烛台: 32
-- 装饰物1/雕塑: 32
 
 ## Remaining Issues
-- Temp paths remaining: 14
-- SHA256 unverified: 199
+- Temp paths remaining: 0
+- SHA256 unverified: 0

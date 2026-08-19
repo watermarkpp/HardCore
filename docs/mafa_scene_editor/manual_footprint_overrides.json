@@ -1,0 +1,53 @@
+{
+  "description": "Manual footprint overrides for assets without source meta. Based on visual inspection of actual base geometry.",
+  "overrides": [
+    {
+      "asset_id": "user.cage.27042c8e37f1b39a",
+      "display_name": "cage_split_01",
+      "footprint_tiles": [5, 3],
+      "reason": "visual_inspect: base ~316px wide, ~75px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.dd4e77fa4a2a462b",
+      "display_name": "cage_split_02",
+      "footprint_tiles": [6, 3],
+      "reason": "visual_inspect: base ~358px wide, ~97px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.fb80b9d665ce6fe4",
+      "display_name": "cage_split_03",
+      "footprint_tiles": [4, 3],
+      "reason": "visual_inspect: base ~263px wide, ~88px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.56d9408e6f055bf7",
+      "display_name": "cage_split_04",
+      "footprint_tiles": [6, 3],
+      "reason": "visual_inspect: base ~365px wide, ~103px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.bf5ea005c126fa40",
+      "display_name": "cage_split_05",
+      "footprint_tiles": [5, 3],
+      "reason": "visual_inspect: base ~310px wide, ~86px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.d81c1b7247cf5168",
+      "display_name": "cage_split_06",
+      "footprint_tiles": [5, 2],
+      "reason": "visual_inspect: base ~301px wide, ~63px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.24cb8e6ecb506201",
+      "display_name": "cage_split_07",
+      "footprint_tiles": [6, 3],
+      "reason": "visual_inspect: base ~368px wide, ~101px deep contact zone"
+    },
+    {
+      "asset_id": "user.cage.37040e63f98d2840",
+      "display_name": "cage_split_08",
+      "footprint_tiles": [5, 3],
+      "reason": "visual_inspect: base ~342px wide, ~81px deep contact zone"
+    }
+  ]
+}

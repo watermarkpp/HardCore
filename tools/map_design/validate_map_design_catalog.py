@@ -5,7 +5,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]; DATA=ROOT/"assets/data/map_design"
-ALLOWED={"remake_compact","shrink_and_recompose","preserve_function","preserve_route","reduce_duplicates","preserve_arena","exact_clone_of_orc_tomb_1"}
+ALLOWED={"remake_compact","shrink_and_recompose","preserve_function","preserve_route","reduce_duplicates","preserve_arena","exact_clone_of_orc_tomb_1","exact_clone_of_wooma_temple_1","exact_clone_of_stone_tomb_1"}
 def main():
     catalog=json.loads((DATA/"map_design_catalog.json").read_text(encoding="utf-8")); errors=[]; warnings=[]
     blank=json.loads((DATA/"map_blank_templates.json").read_text(encoding="utf-8"))
@@ -30,18 +30,27 @@ def main():
         if len(original)!=2: errors.append(f"{mid}: missing pre-scale size")
         else:
             scaled=[int((Decimal(int(value))*factor).quantize(Decimal("1"),rounding=ROUND_HALF_UP)) for value in original]
-            if m.get("strategy")!="exact_clone_of_orc_tomb_1" and size!=scaled: errors.append(f"{mid}: scale mismatch {size} != {scaled}")
-    expected={"bich_province":[80,80],"mengzhong_province":[88,88],"orc_tomb_2":[38,38],"orc_tomb_3":[38,38],"corpse_king_hall":[30,30],"stone_tomb_array":[18,18]}
+            size_is_user_confirmed = str(m.get("size_status", "")).startswith("user_confirmed_")
+            if not str(m.get("strategy", "")).startswith("exact_clone_of_") and not size_is_user_confirmed and size!=scaled: errors.append(f"{mid}: scale mismatch {size} != {scaled}")
+    expected={"bich_province":[80,80],"mengzhong_province":[88,88],"orc_tomb_2":[38,38],"orc_tomb_3":[38,38],"corpse_king_hall":[30,30],"stone_tomb_1":[50,50],"stone_tomb_2":[50,50],"stone_tomb_3":[50,50],"stone_tomb_4":[50,50],"stone_tomb_array":[18,18]}
     lookup={m["map_id"]:m for m in maps}
     for mid,size in expected.items():
         if lookup.get(mid,{}).get("design_size")!=size: errors.append(f"acceptance: {mid} != {size}")
     if lookup.get("corpse_king_hall",{}).get("map_type")!="boss_room": errors.append("acceptance: corpse king type")
+    if lookup.get("stone_tomb_1",{}).get("source_audit_status")!="ok": errors.append("acceptance: stone tomb 1 primary source audit")
+    if lookup.get("stone_tomb_1",{}).get("source_distribution")!="server.crystal.cjlaaa": errors.append("acceptance: stone tomb 1 source distribution")
     if lookup.get("stone_tomb_array",{}).get("strategy")!="reduce_duplicates": errors.append("acceptance: stone tomb strategy")
     for mid in ("orc_tomb_2", "orc_tomb_3"):
         clone=lookup.get(mid,{})
         if clone.get("clone_source_map_id")!="orc_tomb_1": errors.append(f"acceptance: {mid} clone source")
         if clone.get("size_status")!="user_confirmed_exact_clone": errors.append(f"acceptance: {mid} clone size status")
         if clone.get("design_size")!=lookup.get("orc_tomb_1",{}).get("design_size"): errors.append(f"acceptance: {mid} clone size differs from floor 1")
+    for mid in ("stone_tomb_2", "stone_tomb_3", "stone_tomb_4"):
+        clone=lookup.get(mid,{})
+        if clone.get("clone_source_map_id")!="stone_tomb_1": errors.append(f"acceptance: {mid} clone source")
+        if clone.get("size_status")!="user_confirmed_exact_clone": errors.append(f"acceptance: {mid} clone size status")
+        if clone.get("source_audit_status")!="workspace_clone": errors.append(f"acceptance: {mid} clone audit status")
+        if clone.get("design_size")!=lookup.get("stone_tomb_1",{}).get("design_size"): errors.append(f"acceptance: {mid} clone size differs from floor 1")
     if lookup.get("bich_province",{}).get("size_status")!="user_confirmed_final": errors.append("acceptance: bich final size status")
     if factor!=Decimal("0.3125"): errors.append("acceptance: global scale factor")
     if len(blank_templates)!=len(maps): errors.append("acceptance: template count")
