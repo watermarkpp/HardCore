@@ -40,6 +40,10 @@ var zoom_slider: HSlider
 var filter_option: OptionButton
 var search_edit: LineEdit
 
+var draft_anchor_px := Vector2.ZERO
+var delete_dialog: ConfirmationDialog
+var pending_delete_asset_id := ""
+
 
 func _ready() -> void:
 	_build_ui()
@@ -277,6 +281,19 @@ func _build_ui() -> void:
 		_on_clear_current
 	)
 	side.add_child(clear_button)
+
+	var delete_button := Button.new()
+	delete_button.text = (
+		"删除当前素材"
+	)
+	delete_button.add_theme_color_override(
+		"font_color",
+		Color(0.95, 0.35, 0.25)
+	)
+	delete_button.pressed.connect(
+		_on_delete
+	)
+	side.add_child(delete_button)
 
 	message_label = Label.new()
 	message_label.autowrap_mode = (
@@ -711,6 +728,8 @@ func _show_current() -> void:
 		asset
 	)
 
+	draft_anchor_px = anchor
+
 	width_spin.set_value_no_signal(
 		fp.x
 	)
@@ -744,8 +763,10 @@ func _show_current() -> void:
 			int(width_spin.value),
 			int(height_spin.value)
 		),
-		anchor
+		draft_anchor_px
 	)
+
+	preview.review_anchor_px = draft_anchor_px
 
 	message_label.text = (
 		"Enter：确认并下一个；"
@@ -779,8 +800,10 @@ func _on_footprint_changed(
 			int(width_spin.value),
 			int(height_spin.value)
 		),
-		_review_anchor_for(asset)
+		draft_anchor_px
 	)
+
+	preview.review_anchor_px = draft_anchor_px
 
 
 func _on_zoom_changed(
@@ -802,20 +825,20 @@ func _adjust_footprint(dx: int, dy: int) -> void:
 	preview.set_review_asset(
 		asset,
 		Vector2i(new_w, new_h),
-		_review_anchor_for(asset)
+		draft_anchor_px
 	)
+	preview.review_anchor_px = draft_anchor_px
 
 
 func _adjust_anchor(dx: int, dy: int) -> void:
 	var asset := _current_asset()
 	if asset.is_empty():
 		return
-	var current_anchor := _review_anchor_for(asset)
-	var new_anchor := Vector2(
-		current_anchor.x + dx,
-		current_anchor.y + dy
+	draft_anchor_px = Vector2(
+		draft_anchor_px.x + dx,
+		draft_anchor_px.y + dy
 	)
-	preview.review_anchor_px = new_anchor
+	preview.review_anchor_px = draft_anchor_px
 	preview.queue_redraw()
 
 
@@ -866,8 +889,8 @@ func _save_review(
 			fp.y,
 		],
 		"anchor_px": [
-			int(preview.review_anchor_px.x),
-			int(preview.review_anchor_px.y),
+			int(draft_anchor_px.x),
+			int(draft_anchor_px.y),
 		],
 		"display_name":
 			str(
@@ -1002,43 +1025,47 @@ func _on_delete() -> void:
 	if asset.is_empty():
 		return
 
-	var asset_id := str(
+	pending_delete_asset_id = str(
 		asset.get("asset_id", "")
 	)
 
-	if asset_id.is_empty():
+	if pending_delete_asset_id.is_empty():
 		return
 
-	var confirm := (
+	if delete_dialog == null:
+		delete_dialog = ConfirmationDialog.new()
+		delete_dialog.dialog_text = "确认要删除当前素材？"
+		delete_dialog.ok_button_text = "确认删除"
+		delete_dialog.cancel_button_text = "取消"
+		delete_dialog.confirmed.connect(
+			_on_delete_confirmed
+		)
+		add_child(delete_dialog)
+
+	delete_dialog.dialog_text = (
 		"确认要删除当前素材？\n\n"
-		+ "asset_id：" + asset_id + "\n"
+		+ "asset_id：" + pending_delete_asset_id + "\n"
 		+ "名称：" + str(asset.get("display_name", ""))
 	)
+	delete_dialog.popup_centered()
 
-	var dialog := AcceptDialog.new()
-	dialog.dialog_text = confirm
-	dialog.ok_button_text = "确认删除"
-	dialog.cancel_button_text = "取消"
-	dialog.canceled.connect(
-		func():
-			message_label.text = "已取消删除"
-	)
-	add_child(dialog)
-	dialog.popup_centered()
 
-	dialog.confirmed.connect(
-		func():
-			var result := MapAssetCalibrationService.delete_from_palette(
-				asset_id
-			)
-			if bool(result.get("ok", false)):
-				message_label.text = "已删除：" + asset_id
-				_load_assets()
-				_seek_first_matching()
-				_show_current()
-			else:
-				message_label.text = "删除失败：" + str(result.get("errors", []))
+func _on_delete_confirmed() -> void:
+	var aid := pending_delete_asset_id
+	if aid.is_empty():
+		return
+	pending_delete_asset_id = ""
+
+	var result := MapAssetCalibrationService.delete_from_palette(
+		aid
 	)
+	if bool(result.get("ok", false)):
+		message_label.text = "已删除：" + aid
+		_load_assets()
+		_seek_first_matching()
+		_show_current()
+	else:
+		message_label.text = "删除失败：" + str(result.get("errors", []))
 
 
 func _refresh_progress() -> void:
@@ -1137,7 +1164,17 @@ func _unhandled_key_input(
 	if not key_event.pressed:
 		return
 
-	if key_event.echo:
+	# Allow echo (key repeat) for adjustment keys only.
+	# Block echo for navigation/action keys.
+	var adjustment_keys := [
+		KEY_A, KEY_D, KEY_S, KEY_W,
+		KEY_J, KEY_L, KEY_I, KEY_K,
+	]
+
+	if key_event.keycode in adjustment_keys:
+		# Allow echo — no early return
+		pass
+	elif key_event.echo:
 		return
 
 	match key_event.keycode:
