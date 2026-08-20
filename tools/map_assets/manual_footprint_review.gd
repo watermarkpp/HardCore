@@ -595,6 +595,28 @@ func _review_footprint_for(
 	)
 
 
+func _review_anchor_for(
+	asset: Dictionary
+) -> Vector2:
+	var item := _review_item(asset)
+
+	if not item.is_empty() and item.has("anchor_px"):
+		var raw: Array = item.get("anchor_px", [0, 0])
+		return Vector2(
+			float(raw[0]),
+			float(raw[1])
+		)
+
+	var raw: Array = asset.get(
+		"anchor_px",
+		[0, 0]
+	)
+	return Vector2(
+		float(raw[0]),
+		float(raw[1])
+	)
+
+
 func _show_current() -> void:
 	var asset := _current_asset()
 
@@ -685,6 +707,10 @@ func _show_current() -> void:
 		asset
 	)
 
+	var anchor := _review_anchor_for(
+		asset
+	)
+
 	width_spin.set_value_no_signal(
 		fp.x
 	)
@@ -717,12 +743,16 @@ func _show_current() -> void:
 		Vector2i(
 			int(width_spin.value),
 			int(height_spin.value)
-		)
+		),
+		anchor
 	)
 
 	message_label.text = (
 		"Enter：确认并下一个；"
-		+ "PageUp/PageDown：上一/下一"
+		+ "PageUp/PageDown：上一/下一；"
+		+ "W/A/S/D：占位；"
+		+ "I/J/K/L：锚点；"
+		+ "Delete：删除"
 	)
 
 
@@ -748,7 +778,8 @@ func _on_footprint_changed(
 		Vector2i(
 			int(width_spin.value),
 			int(height_spin.value)
-		)
+		),
+		_review_anchor_for(asset)
 	)
 
 
@@ -756,6 +787,36 @@ func _on_zoom_changed(
 	value: float
 ) -> void:
 	preview.set_view_zoom(value)
+
+
+func _adjust_footprint(dx: int, dy: int) -> void:
+	var asset := _current_asset()
+	if asset.is_empty():
+		return
+	if str(asset.get("asset_type", "")) == "ground_brush":
+		return
+	var new_w := clampi(int(width_spin.value) + dx, 1, 24)
+	var new_h := clampi(int(height_spin.value) + dy, 1, 24)
+	width_spin.set_value_no_signal(new_w)
+	height_spin.set_value_no_signal(new_h)
+	preview.set_review_asset(
+		asset,
+		Vector2i(new_w, new_h),
+		_review_anchor_for(asset)
+	)
+
+
+func _adjust_anchor(dx: int, dy: int) -> void:
+	var asset := _current_asset()
+	if asset.is_empty():
+		return
+	var current_anchor := _review_anchor_for(asset)
+	var new_anchor := Vector2(
+		current_anchor.x + dx,
+		current_anchor.y + dy
+	)
+	preview.review_anchor_px = new_anchor
+	preview.queue_redraw()
 
 
 func _save_review(
@@ -803,6 +864,10 @@ func _save_review(
 		"footprint_tiles": [
 			fp.x,
 			fp.y,
+		],
+		"anchor_px": [
+			int(preview.review_anchor_px.x),
+			int(preview.review_anchor_px.y),
 		],
 		"display_name":
 			str(
@@ -932,6 +997,50 @@ func _on_clear_current() -> void:
 		)
 
 
+func _on_delete() -> void:
+	var asset := _current_asset()
+	if asset.is_empty():
+		return
+
+	var asset_id := str(
+		asset.get("asset_id", "")
+	)
+
+	if asset_id.is_empty():
+		return
+
+	var confirm := (
+		"确认要删除当前素材？\n\n"
+		+ "asset_id：" + asset_id + "\n"
+		+ "名称：" + str(asset.get("display_name", ""))
+	)
+
+	var dialog := AcceptDialog.new()
+	dialog.dialog_text = confirm
+	dialog.ok_button_text = "确认删除"
+	dialog.cancel_button_text = "取消"
+	dialog.canceled.connect(
+		func():
+			message_label.text = "已取消删除"
+	)
+	add_child(dialog)
+	dialog.popup_centered()
+
+	dialog.confirmed.connect(
+		func():
+			var result := MapAssetCalibrationService.delete_from_palette(
+				asset_id
+			)
+			if bool(result.get("ok", false)):
+				message_label.text = "已删除：" + asset_id
+				_load_assets()
+				_seek_first_matching()
+				_show_current()
+			else:
+				message_label.text = "删除失败：" + str(result.get("errors", []))
+	)
+
+
 func _refresh_progress() -> void:
 	if progress_label == null:
 		return
@@ -1040,4 +1149,31 @@ func _unhandled_key_input(
 			get_viewport().set_input_as_handled()
 		KEY_PAGEDOWN:
 			_step(1)
+			get_viewport().set_input_as_handled()
+		KEY_A:
+			_adjust_footprint(-1, 0)
+			get_viewport().set_input_as_handled()
+		KEY_D:
+			_adjust_footprint(1, 0)
+			get_viewport().set_input_as_handled()
+		KEY_S:
+			_adjust_footprint(0, -1)
+			get_viewport().set_input_as_handled()
+		KEY_W:
+			_adjust_footprint(0, 1)
+			get_viewport().set_input_as_handled()
+		KEY_J:
+			_adjust_anchor(-1, 0)
+			get_viewport().set_input_as_handled()
+		KEY_L:
+			_adjust_anchor(1, 0)
+			get_viewport().set_input_as_handled()
+		KEY_I:
+			_adjust_anchor(0, -1)
+			get_viewport().set_input_as_handled()
+		KEY_K:
+			_adjust_anchor(0, 1)
+			get_viewport().set_input_as_handled()
+		KEY_DELETE:
+			_on_delete()
 			get_viewport().set_input_as_handled()
