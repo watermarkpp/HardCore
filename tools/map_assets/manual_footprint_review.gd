@@ -283,23 +283,36 @@ func _build_ui() -> void:
 	side.add_child(clear_button)
 
 	var delete_button := Button.new()
+
 	delete_button.text = (
-		"删除当前素材"
+		"删除当前素材（从素材库移除）"
 	)
-	delete_button.add_theme_color_override(
-		"font_color",
-		Color(0.95, 0.35, 0.25)
-	)
+
 	delete_button.pressed.connect(
-		_on_delete
+		_request_delete_current
 	)
-	side.add_child(delete_button)
+
+	side.add_child(
+		delete_button
+	)
 
 	message_label = Label.new()
 	message_label.autowrap_mode = (
 		TextServer.AUTOWRAP_WORD_SMART
 	)
 	side.add_child(message_label)
+
+	delete_dialog = ConfirmationDialog.new()
+
+	delete_dialog.title = "删除素材"
+
+	delete_dialog.confirmed.connect(
+		_on_delete_current_confirmed
+	)
+
+	add_child(
+		delete_dialog
+	)
 
 
 func _load_review_state() -> void:
@@ -634,13 +647,35 @@ func _review_anchor_for(
 	)
 
 
+func _refresh_draft_preview() -> void:
+	var asset := _current_asset()
+
+	if asset.is_empty():
+		preview.set_review_asset(
+			{},
+			Vector2i.ONE,
+			Vector2.ZERO
+		)
+		return
+
+	preview.set_review_asset(
+		asset,
+		Vector2i(
+			maxi(1, int(width_spin.value)),
+			maxi(1, int(height_spin.value))
+		),
+		draft_anchor_px
+	)
+
+
 func _show_current() -> void:
 	var asset := _current_asset()
 
 	if asset.is_empty():
 		preview.set_review_asset(
 			{},
-			Vector2i.ONE
+			Vector2i.ONE,
+			Vector2.ZERO
 		)
 		return
 
@@ -724,11 +759,9 @@ func _show_current() -> void:
 		asset
 	)
 
-	var anchor := _review_anchor_for(
+	draft_anchor_px = _review_anchor_for(
 		asset
 	)
-
-	draft_anchor_px = anchor
 
 	width_spin.set_value_no_signal(
 		fp.x
@@ -757,16 +790,7 @@ func _show_current() -> void:
 		width_spin.set_value_no_signal(1)
 		height_spin.set_value_no_signal(1)
 
-	preview.set_review_asset(
-		asset,
-		Vector2i(
-			int(width_spin.value),
-			int(height_spin.value)
-		),
-		draft_anchor_px
-	)
-
-	preview.review_anchor_px = draft_anchor_px
+	_refresh_draft_preview()
 
 	message_label.text = (
 		"Enter：确认并下一个；"
@@ -786,24 +810,12 @@ func _on_footprint_changed(
 		return
 
 	if str(
-		asset.get(
-			"asset_type",
-			""
-		)
+		asset.get("asset_type", "")
 	) == "ground_brush":
 		width_spin.set_value_no_signal(1)
 		height_spin.set_value_no_signal(1)
 
-	preview.set_review_asset(
-		asset,
-		Vector2i(
-			int(width_spin.value),
-			int(height_spin.value)
-		),
-		draft_anchor_px
-	)
-
-	preview.review_anchor_px = draft_anchor_px
+	_refresh_draft_preview()
 
 
 func _on_zoom_changed(
@@ -812,34 +824,69 @@ func _on_zoom_changed(
 	preview.set_view_zoom(value)
 
 
-func _adjust_footprint(dx: int, dy: int) -> void:
+func _adjust_footprint(
+	dx: int,
+	dy: int
+) -> void:
 	var asset := _current_asset()
+
 	if asset.is_empty():
 		return
-	if str(asset.get("asset_type", "")) == "ground_brush":
+
+	if str(
+		asset.get("asset_type", "")
+	) == "ground_brush":
+		message_label.text = (
+			"地面素材 footprint 固定为 1×1"
+		)
 		return
-	var new_w := clampi(int(width_spin.value) + dx, 1, 24)
-	var new_h := clampi(int(height_spin.value) + dy, 1, 24)
-	width_spin.set_value_no_signal(new_w)
-	height_spin.set_value_no_signal(new_h)
-	preview.set_review_asset(
-		asset,
-		Vector2i(new_w, new_h),
-		draft_anchor_px
+
+	var new_w := clampi(
+		int(width_spin.value) + dx,
+		1,
+		24
 	)
-	preview.review_anchor_px = draft_anchor_px
+
+	var new_h := clampi(
+		int(height_spin.value) + dy,
+		1,
+		24
+	)
+
+	width_spin.set_value_no_signal(
+		new_w
+	)
+
+	height_spin.set_value_no_signal(
+		new_h
+	)
+
+	_refresh_draft_preview()
 
 
-func _adjust_anchor(dx: int, dy: int) -> void:
+func _adjust_anchor(
+	dx: int,
+	dy: int
+) -> void:
 	var asset := _current_asset()
+
 	if asset.is_empty():
 		return
-	draft_anchor_px = Vector2(
-		draft_anchor_px.x + dx,
-		draft_anchor_px.y + dy
+
+	if str(
+		asset.get("asset_type", "")
+	) == "ground_brush":
+		message_label.text = (
+			"地面素材锚点固定"
+		)
+		return
+
+	draft_anchor_px += Vector2(
+		float(dx),
+		float(dy)
 	)
-	preview.review_anchor_px = draft_anchor_px
-	preview.queue_redraw()
+
+	_refresh_draft_preview()
 
 
 func _save_review(
@@ -1020,52 +1067,122 @@ func _on_clear_current() -> void:
 		)
 
 
-func _on_delete() -> void:
+func _request_delete_current() -> void:
 	var asset := _current_asset()
+
 	if asset.is_empty():
 		return
 
 	pending_delete_asset_id = str(
-		asset.get("asset_id", "")
+		asset.get(
+			"asset_id",
+			""
+		)
 	)
 
 	if pending_delete_asset_id.is_empty():
 		return
 
-	if delete_dialog == null:
-		delete_dialog = ConfirmationDialog.new()
-		delete_dialog.dialog_text = "确认要删除当前素材？"
-		delete_dialog.ok_button_text = "确认删除"
-		delete_dialog.cancel_button_text = "取消"
-		delete_dialog.confirmed.connect(
-			_on_delete_confirmed
+	var display_name := str(
+		asset.get(
+			"display_name",
+			pending_delete_asset_id
 		)
-		add_child(delete_dialog)
+	)
 
 	delete_dialog.dialog_text = (
-		"确认要删除当前素材？\n\n"
-		+ "asset_id：" + pending_delete_asset_id + "\n"
-		+ "名称：" + str(asset.get("display_name", ""))
+		"确定从素材库移除当前素材？\n\n"
+		+ "名称："
+		+ display_name
+		+ "\nasset_id："
+		+ pending_delete_asset_id
+		+ "\n\n"
+		+ "不会删除 PNG，"
+		+ "不会删除基础 catalog 记录，"
+		+ "不会修改已经摆放的地图实例。"
 	)
-	delete_dialog.popup_centered()
+
+	delete_dialog.popup_centered(
+		Vector2i(560, 260)
+	)
 
 
-func _on_delete_confirmed() -> void:
-	var aid := pending_delete_asset_id
-	if aid.is_empty():
-		return
+func _on_delete_current_confirmed() -> void:
+	var asset_id := pending_delete_asset_id
+
 	pending_delete_asset_id = ""
 
-	var result := MapAssetCalibrationService.delete_from_palette(
-		aid
+	if asset_id.is_empty():
+		return
+
+	var result := (
+		MapAssetCalibrationService
+		.delete_from_palette(
+			asset_id
+		)
 	)
-	if bool(result.get("ok", false)):
-		message_label.text = "已删除：" + aid
-		_load_assets()
-		_seek_first_matching()
-		_show_current()
-	else:
-		message_label.text = "删除失败：" + str(result.get("errors", []))
+
+	if not bool(
+		result.get("ok", false)
+	):
+		message_label.text = (
+			"删除失败："
+			+ str(
+				result.get(
+					"errors",
+					[]
+				)
+			)
+		)
+		return
+
+	var items: Dictionary = (
+		review_state.get(
+			"items",
+			{}
+		)
+	)
+
+	items.erase(asset_id)
+
+	review_state["items"] = items
+
+	MapAssetCalibrationService._write_atomic(
+		REVIEW_PATH,
+		review_state
+	)
+
+	MapAssetCatalogService.invalidate_cache()
+
+	_load_assets()
+
+	if assets.is_empty():
+		current_index = -1
+
+		preview.set_review_asset(
+			{},
+			Vector2i.ONE,
+			Vector2.ZERO
+		)
+
+		message_label.text = (
+			"当前没有剩余可摆放素材"
+		)
+
+		return
+
+	_seek_first_matching()
+
+	if current_index < 0:
+		filter_option.select(1)
+		current_index = 0
+
+	_show_current()
+
+	message_label.text = (
+		"已从素材库移除："
+		+ asset_id
+	)
 
 
 func _refresh_progress() -> void:
@@ -1164,17 +1281,18 @@ func _unhandled_key_input(
 	if not key_event.pressed:
 		return
 
-	# Allow echo (key repeat) for adjustment keys only.
-	# Block echo for navigation/action keys.
-	var adjustment_keys := [
-		KEY_A, KEY_D, KEY_S, KEY_W,
-		KEY_J, KEY_L, KEY_I, KEY_K,
+	var repeatable := key_event.keycode in [
+		KEY_A,
+		KEY_D,
+		KEY_S,
+		KEY_W,
+		KEY_J,
+		KEY_L,
+		KEY_I,
+		KEY_K,
 	]
 
-	if key_event.keycode in adjustment_keys:
-		# Allow echo — no early return
-		pass
-	elif key_event.echo:
+	if key_event.echo and not repeatable:
 		return
 
 	match key_event.keycode:
@@ -1212,5 +1330,5 @@ func _unhandled_key_input(
 			_adjust_anchor(0, 1)
 			get_viewport().set_input_as_handled()
 		KEY_DELETE:
-			_on_delete()
+			_request_delete_current()
 			get_viewport().set_input_as_handled()

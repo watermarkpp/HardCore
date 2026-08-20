@@ -19,7 +19,7 @@ func _ready() -> void:
 func set_review_asset(
 	asset: Dictionary,
 	footprint: Vector2i,
-	anchor_px := Vector2(-1, -1)
+	anchor_px: Vector2
 ) -> void:
 	review_asset = asset.duplicate(true)
 	review_footprint = Vector2i(
@@ -27,10 +27,7 @@ func set_review_asset(
 		maxi(1, footprint.y)
 	)
 
-	if anchor_px.x >= 0 and anchor_px.y >= 0:
-		review_anchor_px = anchor_px
-	else:
-		review_anchor_px = Vector2.ZERO
+	review_anchor_px = anchor_px
 
 	review_texture = null
 
@@ -142,20 +139,7 @@ func _pending_placement_anchor() -> Vector2:
 	if review_texture == null:
 		return Vector2.ZERO
 
-	var texture_size := review_texture.get_size()
-
-	var source_raw: Array = review_asset.get(
-		"anchor_px",
-		[
-			texture_size.x * 0.5,
-			texture_size.y
-		]
-	)
-
-	var source_anchor := Vector2(
-		float(source_raw[0]),
-		float(source_raw[1])
-	)
+	var source_anchor := review_anchor_px
 
 	var approved_scale := maxf(
 		0.0001,
@@ -206,17 +190,7 @@ func _pending_placement_anchor() -> Vector2:
 			/ approved_scale
 		)
 
-	var placement_raw: Array = (
-		review_asset.get(
-			"placement_anchor_px",
-			source_raw
-		)
-	)
-
-	return Vector2(
-		float(placement_raw[0]),
-		float(placement_raw[1])
-	)
+	return source_anchor
 
 
 func _draw() -> void:
@@ -230,6 +204,9 @@ func _draw() -> void:
 
 	if review_asset.is_empty():
 		return
+
+	var anchor_screen := Vector2.ZERO
+	var anchor_screen_valid := false
 
 	var context := 2
 
@@ -293,6 +270,14 @@ func _draw() -> void:
 			false
 		)
 
+		anchor_screen = (
+			top_left
+			+ review_anchor_px
+			* visual_scale
+		)
+
+		anchor_screen_valid = true
+
 	for y in range(
 		review_footprint.y
 	):
@@ -330,17 +315,7 @@ func _draw() -> void:
 	)
 
 	# Draw pending anchor position crosshair
-	if review_anchor_px != Vector2.ZERO:
-		var approved_scale := maxf(
-			0.0001,
-			float(
-				review_asset.get(
-					"approved_scale",
-					1.0
-				)
-			)
-		)
-		var anchor_screen := _canvas_center()
+	if anchor_screen_valid:
 		var cross_color := Color(
 			0.20,
 			0.80,
