@@ -6,6 +6,7 @@ const TILE_HALF_H := 16.0
 
 var review_asset: Dictionary = {}
 var review_footprint := Vector2i.ONE
+var review_anchor_px := Vector2.ZERO
 var review_texture: Texture2D
 var view_zoom := 1.0
 
@@ -17,13 +18,20 @@ func _ready() -> void:
 
 func set_review_asset(
 	asset: Dictionary,
-	footprint: Vector2i
+	footprint: Vector2i,
+	anchor_px := Vector2(-1, -1)
 ) -> void:
 	review_asset = asset.duplicate(true)
 	review_footprint = Vector2i(
 		maxi(1, footprint.x),
 		maxi(1, footprint.y)
 	)
+
+	if anchor_px.x >= 0 and anchor_px.y >= 0:
+		review_anchor_px = anchor_px
+	else:
+		review_anchor_px = Vector2.ZERO
+
 	review_texture = null
 
 	var image_path := str(
@@ -133,6 +141,10 @@ func _draw_cell(
 func _pending_placement_anchor() -> Vector2:
 	if review_texture == null:
 		return Vector2.ZERO
+
+	# Use review anchor override when set (non-zero).
+	if review_anchor_px != Vector2.ZERO:
+		return review_anchor_px
 
 	var texture_size := review_texture.get_size()
 
@@ -320,3 +332,36 @@ func _draw() -> void:
 			1.0
 		)
 	)
+
+	# Draw pending anchor position crosshair
+	if review_anchor_px != Vector2.ZERO:
+		var approved_scale := maxf(
+			0.0001,
+			float(
+				review_asset.get(
+					"approved_scale",
+					1.0
+				)
+			)
+		)
+		var anchor_screen := _canvas_center()
+		var cross_color := Color(
+			0.20,
+			0.80,
+			1.00,
+			0.90
+		)
+		var cross_size := 12.0
+
+		draw_line(
+			anchor_screen + Vector2(-cross_size, 0),
+			anchor_screen + Vector2(cross_size, 0),
+			cross_color,
+			2.0
+		)
+		draw_line(
+			anchor_screen + Vector2(0, -cross_size),
+			anchor_screen + Vector2(0, cross_size),
+			cross_color,
+			2.0
+		)
