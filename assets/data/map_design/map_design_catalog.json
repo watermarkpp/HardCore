@@ -681,16 +681,27 @@
       "name": "祖玛寺庙二层",
       "map_type": "temple_floor",
       "pre_scale_design_size": [
-        150,
-        150
+        160,
+        160
       ],
       "design_size": [
-        47,
-        47
+        50,
+        50
       ],
-      "strategy": "shrink_and_recompose",
-      "source_map_path": null,
-      "source_status": "unresolved",
+      "strategy": "exact_clone_of_zuma_temple_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-20",
+      "clone_source_map_id": "zuma_temple_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/zuma_temple_1/zuma_temple_1.editor.json",
+      "source_distribution": "user_saved_editor_workspace",
+      "source_usage": "exact_visual_and_semantic_clone",
+      "source_status": "workspace_clone",
+      "source_size": [
+        50,
+        50
+      ],
       "template_default_size": [
         140,
         140
@@ -703,11 +714,7 @@
         "source": "mir2_48x32",
         "editor": "godot_iso_64x32"
       },
-      "source_size": [
-        null,
-        null
-      ],
-      "source_audit_status": "unresolved",
+      "source_audit_status": "workspace_clone",
       "source_size_is_design_size": false,
       "editable_layer": "expansion",
       "scale_factor": 0.3125,
@@ -719,16 +726,27 @@
       "name": "祖玛寺庙三层",
       "map_type": "temple_floor",
       "pre_scale_design_size": [
-        140,
-        140
+        160,
+        160
       ],
       "design_size": [
-        44,
-        44
+        50,
+        50
       ],
-      "strategy": "shrink_and_recompose",
-      "source_map_path": null,
-      "source_status": "unresolved",
+      "strategy": "exact_clone_of_zuma_temple_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-20",
+      "clone_source_map_id": "zuma_temple_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/zuma_temple_1/zuma_temple_1.editor.json",
+      "source_distribution": "user_saved_editor_workspace",
+      "source_usage": "exact_visual_and_semantic_clone",
+      "source_status": "workspace_clone",
+      "source_size": [
+        50,
+        50
+      ],
       "template_default_size": [
         140,
         140
@@ -741,11 +759,52 @@
         "source": "mir2_48x32",
         "editor": "godot_iso_64x32"
       },
-      "source_size": [
-        null,
-        null
+      "source_audit_status": "workspace_clone",
+      "source_size_is_design_size": false,
+      "editable_layer": "expansion",
+      "scale_factor": 0.3125,
+      "scale_rounding": "nearest_integer_half_up"
+    },
+    {
+      "map_id": "zuma_temple_4",
+      "runtime_map_id": 663,
+      "name": "祖玛寺庙四层",
+      "map_type": "temple_floor",
+      "pre_scale_design_size": [
+        160,
+        160
       ],
-      "source_audit_status": "unresolved",
+      "design_size": [
+        50,
+        50
+      ],
+      "strategy": "exact_clone_of_zuma_temple_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-20",
+      "clone_source_map_id": "zuma_temple_1",
+      "workspace_status": "ready",
+      "source_kind": "workspace_clone",
+      "source_map_path": "res://map_editor_workspace/zuma_temple_1/zuma_temple_1.editor.json",
+      "source_distribution": "user_saved_editor_workspace",
+      "source_usage": "exact_visual_and_semantic_clone",
+      "source_status": "workspace_clone",
+      "source_size": [
+        50,
+        50
+      ],
+      "template_default_size": [
+        140,
+        140
+      ],
+      "template_max_size": [
+        180,
+        180
+      ],
+      "coordinate_systems": {
+        "source": "mir2_48x32",
+        "editor": "godot_iso_64x32"
+      },
+      "source_audit_status": "workspace_clone",
       "source_size_is_design_size": false,
       "editable_layer": "expansion",
       "scale_factor": 0.3125,
