@@ -15,6 +15,11 @@ const ROLE_DEFAULTS := {
 	"interactable": {"scene_intent": "visual_detail", "gameplay_role": "interactable", "placement_rule": "inside_map", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
 	"terrain": {"scene_intent": "terrain_boundary", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "terrain_stamp_generated", "navigation_policy": "block_player_and_monster"},
 }
+const UNIFORM_VISUAL_SCALE_CONTRACT_ID := "maps.asset_visual_scale.base_relative_10pct.v1"
+const UNIFORM_VISUAL_SCALE_STEP := 0.10
+const MIN_RELATIVE_VISUAL_SCALE := 0.10
+const MIN_ABSOLUTE_VISUAL_SCALE := 0.05
+const MAX_ABSOLUTE_VISUAL_SCALE := 8.0
 
 
 static func create_instance(document: Dictionary, asset_id: String, object_role: String, tile: Vector2i, layer := "object_base") -> Dictionary:
@@ -160,65 +165,69 @@ static func resize_instance(document: Dictionary, instance_id: String, direction
 		return located
 	var instance: Dictionary = located.instance
 	var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
-	var base_fp: Array = asset.get("base_footprint_tiles", asset.get("footprint_tiles", [1, 1]))
-	var old_fp: Array = instance.get("footprint_tiles", base_fp)
-	var old_width := int(old_fp[0]); var old_height := int(old_fp[1])
-	if direction < 0 and old_width == 1 and old_height == 1:
+	# Uniform 10% visual scale contract (maps.asset_visual_scale.base_relative_10pct.v1).
+	# The visual scale is the authority; the integer footprint is a derived
+	# approximation rounded from base_footprint * (visual_scale / base_scale).
+	var base_scale := float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
+	var current_scale_arr: Array = instance.get("scale", [base_scale, base_scale])
+	var current_scale := float(current_scale_arr[0])
+	var new_visual_scale := stepped_visual_scale(current_scale, base_scale, direction)
+	if is_equal_approx(new_visual_scale, current_scale):
 		return {"ok": true, "instance": instance}
-	var new_fp: Array
-	if int(base_fp[0]) == int(base_fp[1]):
-		var side := maxi(1, old_width + (1 if direction > 0 else -1))
-		new_fp = [side, side]
-	elif int(base_fp[0]) > int(base_fp[1]):
-		var width := maxi(1, old_width + (1 if direction > 0 else -1))
-		var height := maxi(1, roundi(float(width) * float(base_fp[1]) / float(base_fp[0])))
-		new_fp = [width, height]
-	else:
-		var height := maxi(1, old_height + (1 if direction > 0 else -1))
-		var width := maxi(1, roundi(float(height) * float(base_fp[0]) / float(base_fp[1])))
-		new_fp = [width, height]
-	var actual_delta := Vector2i(int(new_fp[0]) - int(old_fp[0]), int(new_fp[1]) - int(old_fp[1]))
-	if actual_delta == Vector2i.ZERO:
-		return {"ok": true, "instance": instance}
-	var old_tile: Array = instance.get("tile", [0, 0])
-	var old_tile_v := Vector2i(int(old_tile[0]), int(old_tile[1]))
-	var new_tile := old_tile_v - Vector2i(floori(float(actual_delta.x) / 2.0), floori(float(actual_delta.y) / 2.0))
-	var map_size: Array = document.design.design_size
-	if new_tile.x < 0 or new_tile.y < 0 or new_tile.x + int(new_fp[0]) > int(map_size[0]) or new_tile.y + int(new_fp[1]) > int(map_size[1]):
-		return {"ok": false, "errors": ["缩放后超出地图边界"]}
-	# Resize relative to the instance's current visual scale. The approved asset
-	# scale is independent from its logical footprint (for example a 4×4 tree
-	# may start at 0.40). Recomputing from footprint/base_footprint would reset
-	# 0.40 to 0.75 on the first shrink and make the sprite grow instead.
-	var old_scale: Array = instance.get("scale", [float(asset.get("approved_scale", 1.0)), float(asset.get("approved_scale", 1.0))])
-	var next_scale := resized_visual_scale(Vector2(float(old_scale[0]), float(old_scale[1])), old_fp, new_fp)
-	var raw_size: Array = document.design.design_size
-	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	var old_center := MapEditorCoordinate.tile_to_ground_px(Vector2(old_tile_v) + Vector2(float(old_fp[0]),float(old_fp[1])) * 0.5, design_size)
-	var new_center := MapEditorCoordinate.tile_to_ground_px(Vector2(new_tile) + Vector2(float(new_fp[0]),float(new_fp[1])) * 0.5, design_size)
-	var old_offset: Array = instance.get("offset_px", [0,0])
-	var compensated_offset := Vector2(float(old_offset[0]),float(old_offset[1])) + old_center - new_center
-	instance["tile"] = [new_tile.x, new_tile.y]
-	instance["tile_anchor"] = [new_tile.x, new_tile.y]
+	var base_footprint: Array = instance.get("instance_base_footprint_tiles", asset.get("base_footprint_tiles", asset.get("footprint_tiles", [1, 1])))
+	var old_fp: Array = instance.get("footprint_tiles", base_footprint)
+	var new_fp: Array = footprint_for_visual_scale(base_footprint, base_scale, new_visual_scale)
+	var fp_changed := int(new_fp[0]) != int(old_fp[0]) or int(new_fp[1]) != int(old_fp[1])
+	var new_tile_v := Vector2i.ZERO
+	var compensated_offset := Vector2.ZERO
+	if fp_changed:
+		var actual_delta := Vector2i(int(new_fp[0]) - int(old_fp[0]), int(new_fp[1]) - int(old_fp[1]))
+		var old_tile: Array = instance.get("tile", [0, 0])
+		var old_tile_v := Vector2i(int(old_tile[0]), int(old_tile[1]))
+		new_tile_v = old_tile_v - Vector2i(floori(float(actual_delta.x) / 2.0), floori(float(actual_delta.y) / 2.0))
+		var map_size: Array = document.design.design_size
+		if new_tile_v.x < 0 or new_tile_v.y < 0 or new_tile_v.x + int(new_fp[0]) > int(map_size[0]) or new_tile_v.y + int(new_fp[1]) > int(map_size[1]):
+			return {"ok": false, "errors": ["缩放后超出地图边界"]}
+		var raw_size: Array = document.design.design_size
+		var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+		var old_center := MapEditorCoordinate.tile_to_ground_px(Vector2(old_tile_v) + Vector2(float(old_fp[0]), float(old_fp[1])) * 0.5, design_size)
+		var new_center := MapEditorCoordinate.tile_to_ground_px(Vector2(new_tile_v) + Vector2(float(new_fp[0]), float(new_fp[1])) * 0.5, design_size)
+		var old_offset: Array = instance.get("offset_px", [0, 0])
+		compensated_offset = Vector2(float(old_offset[0]), float(old_offset[1])) + old_center - new_center
+	# The visual scale is always written even when the integer footprint is
+	# unchanged, so a single 10% step is never swallowed by footprint rounding.
+	instance["scale"] = [new_visual_scale, new_visual_scale]
 	instance["footprint_tiles"] = new_fp
 	instance["occupancy_footprint_tiles"] = new_fp
 	instance["visual_footprint_tiles"] = new_fp
-	instance["scale"] = [next_scale.x, next_scale.y]
-	instance["offset_px"] = [roundi(compensated_offset.x),roundi(compensated_offset.y)]
-	instance["instance_scale_level"] = int(instance.get("instance_scale_level", 0)) + (1 if direction > 0 else -1)
 	instance["instance_custom_scale"] = true
 	instance["instance_base_scale"] = float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
 	instance["instance_base_footprint_tiles"] = instance.get("instance_base_footprint_tiles", old_fp).duplicate()
+	instance["instance_scale_level"] = int(instance.get("instance_scale_level", 0)) + (1 if direction > 0 else -1)
+	if fp_changed:
+		instance["tile"] = [new_tile_v.x, new_tile_v.y]
+		instance["tile_anchor"] = [new_tile_v.x, new_tile_v.y]
+		instance["offset_px"] = [roundi(compensated_offset.x), roundi(compensated_offset.y)]
+		_resize_instance_collision(instance, old_fp, new_fp)
 	PlacementAnchorPolicy.refresh_custom_instance(instance, asset)
-	_resize_instance_collision(instance, old_fp, new_fp)
 	_located_replace(document, located, instance)
 	return {"ok": true, "instance": instance}
 
 
-static func resized_visual_scale(current_scale: Vector2, old_fp: Array, new_fp: Array) -> Vector2:
-	var old_primary := maxf(1.0, maxf(float(old_fp[0]), float(old_fp[1])))
-	var new_primary := maxf(1.0, maxf(float(new_fp[0]), float(new_fp[1])))
-	return current_scale * (new_primary / old_primary)
+static func stepped_visual_scale(current_scale: float, base_scale: float, direction: int) -> float:
+	var safe_base := maxf(base_scale, 0.01)
+	var dir := 1.0 if direction > 0 else -1.0
+	var min_scale := maxf(MIN_ABSOLUTE_VISUAL_SCALE, safe_base * MIN_RELATIVE_VISUAL_SCALE)
+	var stepped := current_scale + dir * safe_base * UNIFORM_VISUAL_SCALE_STEP
+	return clampf(stepped, min_scale, MAX_ABSOLUTE_VISUAL_SCALE)
+
+
+static func footprint_for_visual_scale(base_footprint: Array, base_scale: float, visual_scale: float) -> Array:
+	var safe_base := maxf(base_scale, 0.01)
+	var relative_factor := visual_scale / safe_base
+	var width := maxi(1, roundi(float(int(base_footprint[0])) * relative_factor))
+	var height := maxi(1, roundi(float(int(base_footprint[1])) * relative_factor))
+	return [width, height]
 
 
 static func adjust_material_layer_order(

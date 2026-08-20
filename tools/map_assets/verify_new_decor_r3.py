@@ -345,11 +345,12 @@ def main() -> None:
     )
 
     required_resize_tokens = [
-        "base_footprint_tiles",
-        "resized_visual_scale",
-        "if int(base_fp[0]) == int(base_fp[1]):",
-        "elif int(base_fp[0]) > int(base_fp[1]):",
-        "var height := maxi(1, old_height + (1 if direction > 0 else -1))",
+        "UNIFORM_VISUAL_SCALE_CONTRACT_ID",
+        "UNIFORM_VISUAL_SCALE_STEP",
+        "stepped_visual_scale",
+        "footprint_for_visual_scale",
+        "instance_base_scale",
+        "instance_base_footprint_tiles",
         "PlacementAnchorPolicy.refresh_custom_instance",
     ]
 

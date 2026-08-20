@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/mse_uniform_asset_scale_10pct_test.gd" type="Script" id="1"]
+
+[node name="MseUniformAssetScale10PctTest" type="Node"]
+script = ExtResource("1")
