@@ -142,10 +142,6 @@ func _pending_placement_anchor() -> Vector2:
 	if review_texture == null:
 		return Vector2.ZERO
 
-	# Use review anchor override when set (non-zero).
-	if review_anchor_px != Vector2.ZERO:
-		return review_anchor_px
-
 	var texture_size := review_texture.get_size()
 
 	var source_raw: Array = review_asset.get(
