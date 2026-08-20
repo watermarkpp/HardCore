@@ -1196,11 +1196,19 @@ func _remember_current_document_path(path: String) -> void:
 func _open_document_path(path: String) -> bool:
 	var result := MapEditorLoadService.load_document(path)
 	if result.get("ok", false):
+		# Keep the loaded dictionary out of the active session until every
+		# migration has succeeded.  A failed legacy geometry refresh must not
+		# leave current_document partially rewritten.
+		var migration := _migrate_loaded_instances_to_class_profiles(
+			result.document
+		)
+		if not bool(migration.get("ok", false)):
+			status_label.text = "地图实例迁移失败：%s" % migration.get("errors", [])
+			return false
 		_reset_document_session_state()
-		current_document = result.document
+		current_document = migration.document
 		current_document_path = path
 		_migrate_loaded_blank_ground_policy()
-		_migrate_loaded_instances_to_class_profiles()
 		MapEditorGameplaySemanticService.repair_duplicate_ids(current_document)
 		_ensure_map_portal_semantics()
 		map_id_edit.text = str(current_document.get("map_id", "")); display_name_edit.text = str(current_document.get("display_name", "")); runtime_id_edit.value = int(current_document.get("runtime_map_id", 0))
@@ -1288,12 +1296,24 @@ func _ensure_map_portal_semantics() -> void:
 		)
 
 
-func _migrate_loaded_instances_to_class_profiles()->void:
+func _migrate_loaded_instances_to_class_profiles(
+	loaded_document: Dictionary = {}
+) -> Dictionary:
+	var source := loaded_document if not loaded_document.is_empty() else current_document
+	return migrate_loaded_instances_to_class_profiles(source)
+
+
+static func migrate_loaded_instances_to_class_profiles(
+	loaded_document: Dictionary
+) -> Dictionary:
+	if loaded_document.is_empty():
+		return {"ok": false, "errors": ["document_empty"]}
+	var candidate: Dictionary = loaded_document.duplicate(true)
 	var legacy_ground_paints:Array[Dictionary]=[]
 	var used_instance_ids := {}
 	var next_instance_number := 1
 	for layer_name:String in ["terrain_base","terrain_front","object_base","object_front"]:
-		var entries:Array=current_document.layers.get(layer_name,[])
+		var entries:Array=candidate.layers.get(layer_name,[])
 		var migrated_entries:Array=[]
 		for index in entries.size():
 			var instance:Dictionary=entries[index]
@@ -1304,22 +1324,46 @@ func _migrate_loaded_instances_to_class_profiles()->void:
 				iid = "inst_%06d" % next_instance_number
 				instance["instance_id"] = iid
 			used_instance_ids[iid] = true
-			var asset:=MapAssetCatalogService.find_asset(str(instance.asset_id)); if asset.is_empty():continue
+			var asset:=MapAssetCatalogService.find_asset(str(instance.asset_id))
+			if asset.is_empty():
+				return {
+					"ok": false,
+					"errors": ["instance:%s" % iid, "asset_not_found:%s" % str(instance.asset_id)],
+				}
 			if str(asset.get("asset_type","")) in ["ground_brush","procedural_ground"]:
 				legacy_ground_paints.append({"op":"paint_tile","tile":instance.get("tile",[0,0]),"asset_id":str(instance.asset_id)})
 				continue
-			var design_raw: Array = current_document.design.get(
+			var design_raw: Array = candidate.design.get(
 				"design_size",
 				[0, 0]
 			)
-			InstanceProfileService.refresh_from_asset(
+			var refresh := InstanceProfileService.refresh_from_asset(
 				instance,
 				asset,
 				Vector2i(int(design_raw[0]), int(design_raw[1]))
 			)
+			if not bool(refresh.get("ok", false)):
+				return {
+					"ok": false,
+					"errors": [
+						"instance:%s" % iid,
+					] + refresh.get("errors", []),
+				}
 			migrated_entries.append(instance)
-		current_document.layers[layer_name]=migrated_entries
-	if not legacy_ground_paints.is_empty():MapEditorGroundService.record_tile_paint_batch(current_document,legacy_ground_paints)
+		candidate.layers[layer_name]=migrated_entries
+	if not legacy_ground_paints.is_empty():
+		var ground_result := MapEditorGroundService.record_tile_paint_batch(
+			candidate,
+			legacy_ground_paints
+		)
+		if not bool(ground_result.get("ok", false)):
+			return ground_result
+	return {
+		"ok": true,
+		"errors": [],
+		"document": candidate,
+		"legacy_ground_paints": legacy_ground_paints,
+	}
 
 
 func _on_initialize_ground_pressed() -> void:
