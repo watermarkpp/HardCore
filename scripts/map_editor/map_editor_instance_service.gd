@@ -159,59 +159,235 @@ static func duplicate_instance_snapshot(
 	return {"ok": true, "instance": duplicate, "warnings": validation.warnings}
 
 
-static func resize_instance(document: Dictionary, instance_id: String, direction: int) -> Dictionary:
+static func resize_instance(
+	document: Dictionary,
+	instance_id: String,
+	direction: int
+) -> Dictionary:
+	if direction != -1 and direction != 1:
+		return {
+			"ok": false,
+			"errors": ["invalid_resize_direction"],
+		}
+
 	var located := _locate(document, instance_id)
 	if not located.ok:
 		return located
+
 	var instance: Dictionary = located.instance
-	var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
-	# Uniform 10% visual scale contract (maps.asset_visual_scale.base_relative_10pct.v1).
-	# The visual scale is the authority; the integer footprint is a derived
-	# approximation rounded from base_footprint * (visual_scale / base_scale).
-	var base_scale := float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
-	var current_scale_arr: Array = instance.get("scale", [base_scale, base_scale])
+	var asset := MapAssetCatalogService.find_asset(
+		str(instance.get("asset_id", ""))
+	)
+
+	# Uniform 10% visual scale contract:
+	# visual scale is authoritative;
+	# integer footprint is derived from one stable base footprint.
+	var base_scale := float(
+		instance.get(
+			"instance_base_scale",
+			asset.get("approved_scale", 1.0)
+		)
+	)
+
+	var current_scale_arr: Array = instance.get(
+		"scale",
+		[base_scale, base_scale]
+	)
 	var current_scale := float(current_scale_arr[0])
-	var new_visual_scale := stepped_visual_scale(current_scale, base_scale, direction)
+
+	var new_visual_scale := stepped_visual_scale(
+		current_scale,
+		base_scale,
+		direction
+	)
+
 	if is_equal_approx(new_visual_scale, current_scale):
-		return {"ok": true, "instance": instance}
-	var base_footprint: Array = instance.get("instance_base_footprint_tiles", asset.get("base_footprint_tiles", asset.get("footprint_tiles", [1, 1])))
-	var old_fp: Array = instance.get("footprint_tiles", base_footprint)
-	var new_fp: Array = footprint_for_visual_scale(base_footprint, base_scale, new_visual_scale)
-	var fp_changed := int(new_fp[0]) != int(old_fp[0]) or int(new_fp[1]) != int(old_fp[1])
+		return {
+			"ok": true,
+			"instance": instance,
+		}
+
+	# IMPORTANT:
+	# For a legacy instance without instance_base_footprint_tiles,
+	# resolve the same stable catalog base used for THIS calculation.
+	# Never replace that base with old_fp after the operation.
+	var base_footprint: Array = instance.get(
+		"instance_base_footprint_tiles",
+		asset.get(
+			"base_footprint_tiles",
+			asset.get("footprint_tiles", [1, 1])
+		)
+	).duplicate()
+
+	var old_fp: Array = instance.get(
+		"footprint_tiles",
+		base_footprint
+	)
+
+	var new_fp: Array = footprint_for_visual_scale(
+		base_footprint,
+		base_scale,
+		new_visual_scale
+	)
+
+	var fp_changed := (
+		int(new_fp[0]) != int(old_fp[0])
+		or int(new_fp[1]) != int(old_fp[1])
+	)
+
+	var old_offset_raw: Array = instance.get(
+		"offset_px",
+		[0, 0]
+	)
+	var old_offset := Vector2(
+		float(old_offset_raw[0]),
+		float(old_offset_raw[1])
+	)
+
 	var new_tile_v := Vector2i.ZERO
-	var compensated_offset := Vector2.ZERO
+	var new_offset := old_offset
+
 	if fp_changed:
-		var actual_delta := Vector2i(int(new_fp[0]) - int(old_fp[0]), int(new_fp[1]) - int(old_fp[1]))
-		var old_tile: Array = instance.get("tile", [0, 0])
-		var old_tile_v := Vector2i(int(old_tile[0]), int(old_tile[1]))
-		new_tile_v = old_tile_v - Vector2i(floori(float(actual_delta.x) / 2.0), floori(float(actual_delta.y) / 2.0))
+		var actual_delta := Vector2i(
+			int(new_fp[0]) - int(old_fp[0]),
+			int(new_fp[1]) - int(old_fp[1])
+		)
+
+		var old_tile_raw: Array = instance.get(
+			"tile",
+			[0, 0]
+		)
+		var old_tile_v := Vector2i(
+			int(old_tile_raw[0]),
+			int(old_tile_raw[1])
+		)
+
+		if PlacementAnchorPolicy.applies_to(asset):
+			# footprint_bottom_vertex_v1:
+			#
+			# Preserve:
+			#
+			# old_tile + old_footprint
+			# ==
+			# new_tile + new_footprint
+			#
+			# Therefore the authored visual foot does not jump when
+			# integer footprint crosses a rounding threshold.
+			new_tile_v = old_tile_v - actual_delta
+			new_offset = old_offset
+		else:
+			# Non-foot-tile assets retain the previous center-preserving
+			# behaviour. Do not change wall/non-foot anchor semantics.
+			new_tile_v = old_tile_v - Vector2i(
+				floori(float(actual_delta.x) / 2.0),
+				floori(float(actual_delta.y) / 2.0)
+			)
+
+			var raw_size: Array = document.design.design_size
+			var design_size := Vector2i(
+				int(raw_size[0]),
+				int(raw_size[1])
+			)
+
+			var old_center := MapEditorCoordinate.tile_to_ground_px(
+				Vector2(old_tile_v)
+				+ Vector2(
+					float(old_fp[0]),
+					float(old_fp[1])
+				) * 0.5,
+				design_size
+			)
+
+			var new_center := MapEditorCoordinate.tile_to_ground_px(
+				Vector2(new_tile_v)
+				+ Vector2(
+					float(new_fp[0]),
+					float(new_fp[1])
+				) * 0.5,
+				design_size
+			)
+
+			new_offset = (
+				old_offset
+				+ old_center
+				- new_center
+			)
+
 		var map_size: Array = document.design.design_size
-		if new_tile_v.x < 0 or new_tile_v.y < 0 or new_tile_v.x + int(new_fp[0]) > int(map_size[0]) or new_tile_v.y + int(new_fp[1]) > int(map_size[1]):
-			return {"ok": false, "errors": ["缩放后超出地图边界"]}
-		var raw_size: Array = document.design.design_size
-		var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-		var old_center := MapEditorCoordinate.tile_to_ground_px(Vector2(old_tile_v) + Vector2(float(old_fp[0]), float(old_fp[1])) * 0.5, design_size)
-		var new_center := MapEditorCoordinate.tile_to_ground_px(Vector2(new_tile_v) + Vector2(float(new_fp[0]), float(new_fp[1])) * 0.5, design_size)
-		var old_offset: Array = instance.get("offset_px", [0, 0])
-		compensated_offset = Vector2(float(old_offset[0]), float(old_offset[1])) + old_center - new_center
-	# The visual scale is always written even when the integer footprint is
-	# unchanged, so a single 10% step is never swallowed by footprint rounding.
-	instance["scale"] = [new_visual_scale, new_visual_scale]
+
+		if (
+			new_tile_v.x < 0
+			or new_tile_v.y < 0
+			or new_tile_v.x + int(new_fp[0]) > int(map_size[0])
+			or new_tile_v.y + int(new_fp[1]) > int(map_size[1])
+		):
+			return {
+				"ok": false,
+				"errors": ["缩放后超出地图边界"],
+			}
+
+	# The visual scale must always change by the exact 10% contract,
+	# even when integer footprint did not change.
+	instance["scale"] = [
+		new_visual_scale,
+		new_visual_scale,
+	]
+
 	instance["footprint_tiles"] = new_fp
 	instance["occupancy_footprint_tiles"] = new_fp
 	instance["visual_footprint_tiles"] = new_fp
 	instance["instance_custom_scale"] = true
-	instance["instance_base_scale"] = float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
-	instance["instance_base_footprint_tiles"] = instance.get("instance_base_footprint_tiles", old_fp).duplicate()
-	instance["instance_scale_level"] = int(instance.get("instance_scale_level", 0)) + (1 if direction > 0 else -1)
+
+	# CRITICAL LEGACY FIX:
+	#
+	# Persist exactly the basis that was used for this calculation.
+	#
+	# DO NOT use old_fp here.
+	instance["instance_base_scale"] = base_scale
+	instance["instance_base_footprint_tiles"] = (
+		base_footprint.duplicate()
+	)
+
+	instance["instance_scale_level"] = (
+		int(instance.get("instance_scale_level", 0))
+		+ direction
+	)
+
 	if fp_changed:
-		instance["tile"] = [new_tile_v.x, new_tile_v.y]
-		instance["tile_anchor"] = [new_tile_v.x, new_tile_v.y]
-		instance["offset_px"] = [roundi(compensated_offset.x), roundi(compensated_offset.y)]
-		_resize_instance_collision(instance, old_fp, new_fp)
-	PlacementAnchorPolicy.refresh_custom_instance(instance, asset)
-	_located_replace(document, located, instance)
-	return {"ok": true, "instance": instance}
+		instance["tile"] = [
+			new_tile_v.x,
+			new_tile_v.y,
+		]
+		instance["tile_anchor"] = [
+			new_tile_v.x,
+			new_tile_v.y,
+		]
+		instance["offset_px"] = [
+			new_offset.x,
+			new_offset.y,
+		]
+
+		_resize_instance_collision(
+			instance,
+			old_fp,
+			new_fp
+		)
+
+	PlacementAnchorPolicy.refresh_custom_instance(
+		instance,
+		asset
+	)
+
+	_located_replace(
+		document,
+		located,
+		instance
+	)
+
+	return {
+		"ok": true,
+		"instance": instance,
+	}
 
 
 static func stepped_visual_scale(current_scale: float, base_scale: float, direction: int) -> float:
