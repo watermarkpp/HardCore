@@ -9650,7 +9650,8 @@
       "visual_footprint_tiles": [
         5.0,
         5.0
-      ]
+      ],
+      "placeable": false
     },
     "user.10cdcc18de4809b8": {
       "base_footprint_tiles": [
@@ -12363,7 +12364,8 @@
       "visual_footprint_tiles": [
         5.0,
         5.0
-      ]
+      ],
+      "placeable": false
     },
     "user.3a22e204b6dbc32d": {
       "anchor_px": [
@@ -12982,7 +12984,8 @@
       "visual_footprint_tiles": [
         5.0,
         5.0
-      ]
+      ],
+      "placeable": false
     },
     "user.45d8d1868e09427b": {
       "base_footprint_tiles": [
@@ -16296,7 +16299,8 @@
       "visual_footprint_tiles": [
         5.0,
         5.0
-      ]
+      ],
+      "placeable": false
     },
     "user.83ef012d55284f48": {
       "anchor_px": [
@@ -24459,6 +24463,10 @@
         1.0,
         4.0
       ]
+    },
+    "user.bf1a8323ba9865d2": {
+      "content_layer": "personal_expansion",
+      "placeable": false
     }
   }
 }
