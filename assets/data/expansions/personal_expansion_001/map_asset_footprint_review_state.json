@@ -1,0 +1,45 @@
+{
+  "contract_id": "maps.manual_footprint_review_v1",
+  "items": {
+    "user.9505da16d89e5ea5": {
+      "anchor_px": [
+        116,
+        312
+      ],
+      "display_name": "52",
+      "footprint_tiles": [
+        3,
+        6
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/52.png",
+      "output_sha256": "fcbed378a347fd5d7943354052ed89f22d0bd0c4a229e267672ab6c51f89f6d4",
+      "palette_path": "装饰物1/路障",
+      "source_sha256": "93b331734eb85881a34fc56d90b64f4763426ed86d64e04a3987ef0dcb1741fb",
+      "status": "verified"
+    },
+    "user.a43243c743591699": {
+      "display_name": "mud_tile_01_r01_c01",
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "image": "assets/art/maps/_shared/terrain/mud/ground_mud_001.png",
+      "output_sha256": "174b24c7474a3eed2b373a89c9225bdaceebdff7677bdf51955a0f3bc52a2dbd",
+      "palette_path": "地面/mud_tiles_split_png_29_tiles",
+      "source_sha256": "174b24c7474a3eed2b373a89c9225bdaceebdff7677bdf51955a0f3bc52a2dbd",
+      "status": "verified"
+    },
+    "user.ec6f984abe90e08e": {
+      "display_name": "mud_tile_02_r01_c02",
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "image": "assets/art/maps/_shared/terrain/mud/ground_mud_002.png",
+      "output_sha256": "7351bcf1ffa11715b93e2e0282da4d492d7a0e68ff43ad60ce022bb9933f48da",
+      "palette_path": "地面/mud_tiles_split_png_29_tiles",
+      "source_sha256": "7351bcf1ffa11715b93e2e0282da4d492d7a0e68ff43ad60ce022bb9933f48da",
+      "status": "verified"
+    }
+  }
+}
