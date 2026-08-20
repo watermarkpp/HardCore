@@ -559,6 +559,46 @@ func _seek_first_matching() -> void:
 			return
 
 
+func _seek_nearest_matching_after_removal(
+	preferred_index: int
+) -> void:
+	current_index = -1
+
+	if assets.is_empty():
+		return
+
+	var start := clampi(
+		preferred_index,
+		0,
+		assets.size() - 1
+	)
+
+	# 删除后，同一个数组索引对应原素材的"下一个"。
+	# 先从删除位置向后寻找最近符合筛选条件的素材。
+	for index in range(
+		start,
+		assets.size()
+	):
+		if _matches_filter(
+			assets[index]
+		):
+			current_index = index
+			return
+
+	# 后面没有符合筛选条件的素材，
+	# 再向前寻找最近一个。
+	for index in range(
+		start - 1,
+		-1,
+		-1
+	):
+		if _matches_filter(
+			assets[index]
+		):
+			current_index = index
+			return
+
+
 func _step(direction: int) -> void:
 	if assets.is_empty():
 		return
@@ -1109,6 +1149,7 @@ func _request_delete_current() -> void:
 
 func _on_delete_current_confirmed() -> void:
 	var asset_id := pending_delete_asset_id
+	var removed_index := current_index
 
 	pending_delete_asset_id = ""
 
@@ -1171,11 +1212,22 @@ func _on_delete_current_confirmed() -> void:
 
 		return
 
-	_seek_first_matching()
+	_seek_nearest_matching_after_removal(
+		removed_index
+	)
 
+	# 当前筛选条件下已经没有任何剩余素材。
+	# 例如最后一个"未核定"素材刚刚被删除。
+	#
+	# 此时切回"全部素材"，但仍然保持在原删除位置附近。
 	if current_index < 0:
 		filter_option.select(1)
-		current_index = 0
+
+		current_index = clampi(
+			removed_index,
+			0,
+			assets.size() - 1
+		)
 
 	_show_current()
 
@@ -1268,6 +1320,48 @@ func _on_search() -> void:
 	)
 
 
+func _input(
+	event: InputEvent
+) -> void:
+	if not event is InputEventKey:
+		return
+
+	var key_event := (
+		event as InputEventKey
+	)
+
+	if not key_event.pressed:
+		return
+
+	if key_event.echo:
+		return
+
+	if key_event.keycode != KEY_ENTER:
+		return
+
+	# 删除确认对话框打开时，
+	# Enter 属于删除确认框。
+	# 不能同时确认当前素材审核。
+	if (
+		delete_dialog != null
+		and delete_dialog.visible
+	):
+		return
+
+	# 搜索框正在输入时，
+	# Enter 不得确认素材。
+	# 保留给搜索输入行为。
+	if (
+		search_edit != null
+		and search_edit.has_focus()
+	):
+		return
+
+	_on_verify()
+
+	get_viewport().set_input_as_handled()
+
+
 func _unhandled_key_input(
 	event: InputEvent
 ) -> void:
@@ -1296,9 +1390,6 @@ func _unhandled_key_input(
 		return
 
 	match key_event.keycode:
-		KEY_ENTER:
-			_on_verify()
-			get_viewport().set_input_as_handled()
 		KEY_PAGEUP:
 			_step(-1)
 			get_viewport().set_input_as_handled()
