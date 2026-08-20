@@ -1,0 +1,1116 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "mse_xzsc_cage_8_v1",
+  "package_version": 1,
+  "source_root": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼",
+  "source_count": 1,
+  "asset_count": 8,
+  "classification": "装饰物1/xzsc/囚笼",
+  "cutting_policy": "fixed_row_specific_4x2_alpha_trim_v1",
+  "assets": [
+    {
+      "asset_id": "user.5f5505e557ccc97d",
+      "display_name": "囚笼 01",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c1.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c1.png",
+      "canvas_size": [
+        266,
+        494
+      ],
+      "image_size": [
+        266,
+        494
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        226,
+        465
+      ],
+      "ground_contact_bounds_px": [
+        105,
+        452,
+        56,
+        33
+      ],
+      "anchor_px": [
+        133,
+        485
+      ],
+      "placement_anchor_px": [
+        133,
+        485
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "678208ffb5f00d253cd45a341ca3f44f76dc53488025c0bbacb01c0fd9ec4a9e",
+      "thumbnail_source_sha256": "678208ffb5f00d253cd45a341ca3f44f76dc53488025c0bbacb01c0fd9ec4a9e",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_cell_bounds_px": [
+          0,
+          0,
+          360,
+          520
+        ],
+        "trim_bounds_in_cell_px": [
+          57,
+          26,
+          323,
+          520
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 66108
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.0523ace68921804d",
+      "display_name": "囚笼 02",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c2.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c2.png",
+      "canvas_size": [
+        285,
+        520
+      ],
+      "image_size": [
+        285,
+        520
+      ],
+      "visible_bounds_px": [
+        20,
+        15,
+        245,
+        496
+      ],
+      "ground_contact_bounds_px": [
+        67,
+        478,
+        147,
+        33
+      ],
+      "anchor_px": [
+        142,
+        511
+      ],
+      "placement_anchor_px": [
+        142,
+        511
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "4557fd4bb6e947b5ffface587aaea05bee77f4439f8048eacfd8495527493073",
+      "thumbnail_source_sha256": "4557fd4bb6e947b5ffface587aaea05bee77f4439f8048eacfd8495527493073",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_cell_bounds_px": [
+          360,
+          0,
+          713,
+          520
+        ],
+        "trim_bounds_in_cell_px": [
+          39,
+          0,
+          324,
+          520
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 82299
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.066939e4d3322d29",
+      "display_name": "囚笼 03",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c3.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c3.png",
+      "canvas_size": [
+        276,
+        520
+      ],
+      "image_size": [
+        276,
+        520
+      ],
+      "visible_bounds_px": [
+        20,
+        19,
+        236,
+        494
+      ],
+      "ground_contact_bounds_px": [
+        58,
+        480,
+        157,
+        33
+      ],
+      "anchor_px": [
+        138,
+        513
+      ],
+      "placement_anchor_px": [
+        138,
+        513
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "bd6e963deca2af68b184d9eb806c7ccc83d706e3d39ef9eb986c8f72d7952334",
+      "thumbnail_source_sha256": "bd6e963deca2af68b184d9eb806c7ccc83d706e3d39ef9eb986c8f72d7952334",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_cell_bounds_px": [
+          713,
+          0,
+          1044,
+          520
+        ],
+        "trim_bounds_in_cell_px": [
+          30,
+          0,
+          306,
+          520
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 84959
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        1,
+        3
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.4eaa7d30efe78356",
+      "display_name": "囚笼 04",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c4.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c4.png",
+      "canvas_size": [
+        364,
+        488
+      ],
+      "image_size": [
+        364,
+        488
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        324,
+        459
+      ],
+      "ground_contact_bounds_px": [
+        66,
+        452,
+        140,
+        27
+      ],
+      "anchor_px": [
+        182,
+        479
+      ],
+      "placement_anchor_px": [
+        182,
+        479
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "1a1825692fcb1e906b0df6adb86f57d04258769cafc639c3fabda2589209f261",
+      "thumbnail_source_sha256": "1a1825692fcb1e906b0df6adb86f57d04258769cafc639c3fabda2589209f261",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 1,
+        "grid_column": 4,
+        "source_cell_bounds_px": [
+          1044,
+          0,
+          1448,
+          520
+        ],
+        "trim_bounds_in_cell_px": [
+          27,
+          32,
+          391,
+          520
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 80665
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        1,
+        4
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.72b7f9192e2b6c46",
+      "display_name": "囚笼 05",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c1.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c1.png",
+      "canvas_size": [
+        367,
+        538
+      ],
+      "image_size": [
+        367,
+        538
+      ],
+      "visible_bounds_px": [
+        7,
+        18,
+        356,
+        500
+      ],
+      "ground_contact_bounds_px": [
+        172,
+        495,
+        42,
+        23
+      ],
+      "anchor_px": [
+        185,
+        518
+      ],
+      "placement_anchor_px": [
+        185,
+        518
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "9d05b1b47adc732b6fa811efdff11b6e044cc540fe1ef723cdece3eee35591fc",
+      "thumbnail_source_sha256": "9d05b1b47adc732b6fa811efdff11b6e044cc540fe1ef723cdece3eee35591fc",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_cell_bounds_px": [
+          0,
+          520,
+          367,
+          1086
+        ],
+        "trim_bounds_in_cell_px": [
+          0,
+          0,
+          367,
+          538
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 82448
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.ab455673c8c79118",
+      "display_name": "囚笼 06",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c2.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c2.png",
+      "canvas_size": [
+        402,
+        433
+      ],
+      "image_size": [
+        402,
+        433
+      ],
+      "visible_bounds_px": [
+        6,
+        20,
+        378,
+        393
+      ],
+      "ground_contact_bounds_px": [
+        113,
+        399,
+        51,
+        14
+      ],
+      "anchor_px": [
+        195,
+        413
+      ],
+      "placement_anchor_px": [
+        195,
+        413
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "db1e5fe14dff7e5692ecf0b6d20652fb012dcde9de93092b7be37b84f91d6b74",
+      "thumbnail_source_sha256": "db1e5fe14dff7e5692ecf0b6d20652fb012dcde9de93092b7be37b84f91d6b74",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_cell_bounds_px": [
+          367,
+          520,
+          769,
+          1086
+        ],
+        "trim_bounds_in_cell_px": [
+          0,
+          97,
+          402,
+          530
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 93450
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.37be26939441459a",
+      "display_name": "囚笼 07",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c3.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c3.png",
+      "canvas_size": [
+        278,
+        565
+      ],
+      "image_size": [
+        278,
+        565
+      ],
+      "visible_bounds_px": [
+        18,
+        8,
+        240,
+        537
+      ],
+      "ground_contact_bounds_px": [
+        109,
+        512,
+        51,
+        33
+      ],
+      "anchor_px": [
+        138,
+        545
+      ],
+      "placement_anchor_px": [
+        138,
+        545
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "46ec2a551421646d8bda43c1841325d86c8814c3c1346972fc2f72b0415124d6",
+      "thumbnail_source_sha256": "46ec2a551421646d8bda43c1841325d86c8814c3c1346972fc2f72b0415124d6",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_cell_bounds_px": [
+          769,
+          520,
+          1050,
+          1086
+        ],
+        "trim_bounds_in_cell_px": [
+          0,
+          0,
+          278,
+          565
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 80314
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        2,
+        3
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.b2d7a4b4f9b9cc86",
+      "display_name": "囚笼 08",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c4.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c4.png",
+      "canvas_size": [
+        393,
+        498
+      ],
+      "image_size": [
+        393,
+        498
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        356,
+        458
+      ],
+      "ground_contact_bounds_px": [
+        141,
+        445,
+        162,
+        33
+      ],
+      "anchor_px": [
+        198,
+        478
+      ],
+      "placement_anchor_px": [
+        198,
+        478
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/囚笼",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\囚笼\\ChatGPT Image 2026年8月20日 10_20_50.png",
+      "source_sha256": "c1af77536e4bc8896768d073ded07f69bedbfd8d3c9726abfae7dd3c365dbc3e",
+      "output_sha256": "b66be64f099067e341686160102dc8830c9e6a753cc909c8cb634ed29e4d71a8",
+      "thumbnail_source_sha256": "b66be64f099067e341686160102dc8830c9e6a753cc909c8cb634ed29e4d71a8",
+      "processing": {
+        "pipeline": "fixed_row_specific_4x2_alpha_trim_v1",
+        "sheet_size": [
+          1448,
+          1086
+        ],
+        "grid": [
+          4,
+          2
+        ],
+        "grid_row": 2,
+        "grid_column": 4,
+        "source_cell_bounds_px": [
+          1050,
+          520,
+          1448,
+          1086
+        ],
+        "trim_bounds_in_cell_px": [
+          5,
+          43,
+          398,
+          541
+        ],
+        "alpha_threshold": 10,
+        "padding_px": 20,
+        "visible_pixel_count": 87205
+      },
+      "tags": [
+        "user_source",
+        "xzsc",
+        "囚笼",
+        "fixed_grid_cut"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_cage_8_v1",
+      "source_group": "囚笼",
+      "source_grid": [
+        2,
+        4
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    }
+  ]
+}
