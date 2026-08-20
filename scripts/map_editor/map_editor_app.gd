@@ -1101,25 +1101,6 @@ func _refresh_asset_tree() -> void:
 		var item := asset_tree.create_item(parent)
 		item.set_text(0, str(asset.get("display_name", asset.get("asset_id", ""))))
 		item.set_metadata(0, {"asset_id": str(asset.get("asset_id", "")), "thumbnail": image_path})
-	# Preserve empty re-importable decoration categories under 装饰物1 so the
-	# palette tree keeps their nodes even at zero assets (reimport framework).
-	var empty_decor_categories: Array[String] = ["雕塑", "烛台", "旗帜", "囚笼"]
-	var root_category := "装饰物1"
-	if not folders.has(root_category):
-		var root_folder := asset_tree.create_item(root)
-		root_folder.set_text(0, root_category)
-		root_folder.set_metadata(0, {"folder": root_category})
-		root_folder.set_selectable(0, false)
-		folders[root_category] = root_folder
-	for category: String in empty_decor_categories:
-		var category_path := "%s/%s" % [root_category, category]
-		if not folders.has(category_path):
-			var folder := asset_tree.create_item(folders[root_category])
-			folder.set_text(0, category)
-			folder.set_metadata(0, {"folder": category_path})
-			folder.set_selectable(0, false)
-			folder.collapsed = true
-			folders[category_path] = folder
 
 
 func _ensure_asset_tree_item_icon(item: TreeItem) -> void:
