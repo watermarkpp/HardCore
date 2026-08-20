@@ -1,2041 +1,24 @@
 {
   "asset_schema_version": 2,
-  "package_id": "mse_xzsc_sculpture_v1",
+  "package_id": "mse_xzsc_sculpture_v2",
   "package_version": 1,
   "source_root": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
   "source_count": 4,
-  "asset_count": 28,
+  "asset_count": 34,
   "classification": "装饰物1/xzsc/雕塑",
+  "segmentation_policy": "transparent_grid_then_major_alpha_component_recursive_v2",
+  "previous_bad_package": "mse_xzsc_sculpture_v1",
+  "previous_bad_asset_count": 28,
   "assets": [
     {
-      "asset_id": "user.9d286ac9b2d49dfd",
-      "display_name": "ChatGPTImage2026年8月20日01_44_46_part1",
+      "asset_id": "user.e463774ae8c4bfc4",
+      "display_name": "雕塑 001",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part1.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part1.png",
-      "canvas_size": [
-        679,
-        433
-      ],
-      "image_size": [
-        679,
-        433
-      ],
-      "visible_bounds_px": [
-        17,
-        30,
-        642,
-        393
-      ],
-      "ground_contact_bounds_px": [
-        98,
-        391,
-        539,
-        32
-      ],
-      "anchor_px": [
-        338,
-        423
-      ],
-      "placement_anchor_px": [
-        338,
-        423
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 01_44_46.png",
-      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
-      "output_sha256": "2bf3ebc7ad5a33b51392570a2487afa2f5e86b5d6eab77369ff725dedd600129",
-      "thumbnail_source_sha256": "2bf3ebc7ad5a33b51392570a2487afa2f5e86b5d6eab77369ff725dedd600129",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.6a594a1571bef4ab",
-      "display_name": "ChatGPTImage2026年8月20日01_44_46_part2",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part2.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part2.png",
-      "canvas_size": [
-        192,
-        433
-      ],
-      "image_size": [
-        192,
-        433
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        152,
-        403
-      ],
-      "ground_contact_bounds_px": [
-        48,
-        400,
-        95,
-        33
-      ],
-      "anchor_px": [
-        96,
-        433
-      ],
-      "placement_anchor_px": [
-        96,
-        433
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        2,
-        2
-      ],
-      "visual_footprint_tiles": [
-        2,
-        2
-      ],
-      "occupancy_footprint_tiles": [
-        2,
-        2
-      ],
-      "base_footprint_tiles": [
-        2,
-        2
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 01_44_46.png",
-      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
-      "output_sha256": "b8e3f8fe17d8271168b54ca91c8f881c9c0801ca3294ecb27bd8dc8048cc2b28",
-      "thumbnail_source_sha256": "b8e3f8fe17d8271168b54ca91c8f881c9c0801ca3294ecb27bd8dc8048cc2b28",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.c5876e32aefc426f",
-      "display_name": "ChatGPTImage2026年8月20日01_44_46_part3",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part3.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part3.png",
-      "canvas_size": [
-        267,
-        437
-      ],
-      "image_size": [
-        267,
-        437
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        227,
-        396
-      ],
-      "ground_contact_bounds_px": [
-        36,
-        393,
-        192,
-        33
-      ],
-      "anchor_px": [
-        133,
-        426
-      ],
-      "placement_anchor_px": [
-        133,
-        426
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 01_44_46.png",
-      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
-      "output_sha256": "f0f4be713061836604cfe9b6b51339296fc65c77173f6299ca2887d5dae55632",
-      "thumbnail_source_sha256": "f0f4be713061836604cfe9b6b51339296fc65c77173f6299ca2887d5dae55632",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.f7a62b37c44b50be",
-      "display_name": "ChatGPTImage2026年8月20日01_44_46_part4",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part4.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part4.png",
-      "canvas_size": [
-        658,
-        974
-      ],
-      "image_size": [
-        658,
-        974
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        618,
-        924
-      ],
-      "ground_contact_bounds_px": [
-        94,
-        921,
-        486,
-        33
-      ],
-      "anchor_px": [
-        329,
-        954
-      ],
-      "placement_anchor_px": [
-        329,
-        954
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 01_44_46.png",
-      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
-      "output_sha256": "28dd25b09b170c99627bafa13642f599c45d506ddb11fa2663be3847e2b528c9",
-      "thumbnail_source_sha256": "28dd25b09b170c99627bafa13642f599c45d506ddb11fa2663be3847e2b528c9",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.c7ba1b601ccc0df2",
-      "display_name": "ChatGPTImage2026年8月20日01_44_46_part5",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part5.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part5.png",
-      "canvas_size": [
-        362,
-        901
-      ],
-      "image_size": [
-        362,
-        901
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        322,
-        851
-      ],
-      "ground_contact_bounds_px": [
-        98,
-        848,
-        192,
-        33
-      ],
-      "anchor_px": [
-        181,
-        881
-      ],
-      "placement_anchor_px": [
-        181,
-        881
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 01_44_46.png",
-      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
-      "output_sha256": "153b89f4225c51502a5b6571ad063355ce8f2c5e2f554d236cca44be00bc999a",
-      "thumbnail_source_sha256": "153b89f4225c51502a5b6571ad063355ce8f2c5e2f554d236cca44be00bc999a",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.2493095a53badffc",
-      "display_name": "ChatGPTImage2026年8月20日01_44_46_part6",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part6.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日01_44_46_part6.png",
-      "canvas_size": [
-        346,
-        900
-      ],
-      "image_size": [
-        346,
-        900
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        322,
-        850
-      ],
-      "ground_contact_bounds_px": [
-        51,
-        847,
-        170,
-        33
-      ],
-      "anchor_px": [
-        181,
-        880
-      ],
-      "placement_anchor_px": [
-        181,
-        880
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 01_44_46.png",
-      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
-      "output_sha256": "37eb4afdc102b0e9b7aee7ac543c1012a3204fcc4959fe45c9ea852877ea38ac",
-      "thumbnail_source_sha256": "37eb4afdc102b0e9b7aee7ac543c1012a3204fcc4959fe45c9ea852877ea38ac",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.92e5d5da1ea72128",
-      "display_name": "ChatGPTImage2026年8月20日02_31_13_part1",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part1.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part1.png",
-      "canvas_size": [
-        746,
-        434
-      ],
-      "image_size": [
-        746,
-        434
-      ],
-      "visible_bounds_px": [
-        11,
-        30,
-        722,
-        404
-      ],
-      "ground_contact_bounds_px": [
-        119,
-        401,
-        503,
-        33
-      ],
-      "anchor_px": [
-        372,
-        434
-      ],
-      "placement_anchor_px": [
-        372,
-        434
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_31_13.png",
-      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
-      "output_sha256": "0d49b9092f6b792510de7b1c578b9213601f5b6e866a3b979ebac05a7bbc0d51",
-      "thumbnail_source_sha256": "0d49b9092f6b792510de7b1c578b9213601f5b6e866a3b979ebac05a7bbc0d51",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.fb9946baf76d9456",
-      "display_name": "ChatGPTImage2026年8月20日02_31_13_part2",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part2.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part2.png",
-      "canvas_size": [
-        299,
-        433
-      ],
-      "image_size": [
-        299,
-        433
-      ],
-      "visible_bounds_px": [
-        14,
-        30,
-        265,
-        395
-      ],
-      "ground_contact_bounds_px": [
-        18,
-        392,
-        218,
-        33
-      ],
-      "anchor_px": [
-        146,
-        425
-      ],
-      "placement_anchor_px": [
-        146,
-        425
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_31_13.png",
-      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
-      "output_sha256": "ea1c121addcba8c8b6942bbb827210550a017e1403803ce63654a3fd51ed342a",
-      "thumbnail_source_sha256": "ea1c121addcba8c8b6942bbb827210550a017e1403803ce63654a3fd51ed342a",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.251af83ee8976b63",
-      "display_name": "ChatGPTImage2026年8月20日02_31_13_part3",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part3.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part3.png",
-      "canvas_size": [
-        321,
-        428
-      ],
-      "image_size": [
-        321,
-        428
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        281,
-        378
-      ],
-      "ground_contact_bounds_px": [
-        26,
-        381,
-        184,
-        27
-      ],
-      "anchor_px": [
-        160,
-        408
-      ],
-      "placement_anchor_px": [
-        160,
-        408
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_31_13.png",
-      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
-      "output_sha256": "07f930180187db3012199715f861902be6590fe5d455f17f90b5800b2ccd4eb7",
-      "thumbnail_source_sha256": "07f930180187db3012199715f861902be6590fe5d455f17f90b5800b2ccd4eb7",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.0c57a8160d7ccaf9",
-      "display_name": "ChatGPTImage2026年8月20日02_31_13_part4",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part4.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part4.png",
-      "canvas_size": [
-        709,
-        431
-      ],
-      "image_size": [
-        709,
-        431
-      ],
-      "visible_bounds_px": [
-        12,
-        30,
-        677,
-        381
-      ],
-      "ground_contact_bounds_px": [
-        116,
-        381,
-        567,
-        30
-      ],
-      "anchor_px": [
-        350,
-        411
-      ],
-      "placement_anchor_px": [
-        350,
-        411
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_31_13.png",
-      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
-      "output_sha256": "bd2b018980a455d3fc22da2e4e84d9ad55456aaca7724f726ba3da37c99e9a9e",
-      "thumbnail_source_sha256": "bd2b018980a455d3fc22da2e4e84d9ad55456aaca7724f726ba3da37c99e9a9e",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.9f4d7c6afbc18725",
-      "display_name": "ChatGPTImage2026年8月20日02_31_13_part5",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part5.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part5.png",
-      "canvas_size": [
-        281,
-        441
-      ],
-      "image_size": [
-        281,
-        441
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        241,
-        391
-      ],
-      "ground_contact_bounds_px": [
-        55,
-        389,
-        206,
-        32
-      ],
-      "anchor_px": [
-        140,
-        421
-      ],
-      "placement_anchor_px": [
-        140,
-        421
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_31_13.png",
-      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
-      "output_sha256": "3064064024cf4365f351cc711b739b2b8d08e4bc00633a4f79198398817f9733",
-      "thumbnail_source_sha256": "3064064024cf4365f351cc711b739b2b8d08e4bc00633a4f79198398817f9733",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.2b6ba80215004c42",
-      "display_name": "ChatGPTImage2026年8月20日02_31_13_part6",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part6.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_31_13_part6.png",
-      "canvas_size": [
-        342,
-        446
-      ],
-      "image_size": [
-        342,
-        446
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        302,
-        396
-      ],
-      "ground_contact_bounds_px": [
-        69,
-        393,
-        217,
-        33
-      ],
-      "anchor_px": [
-        171,
-        426
-      ],
-      "placement_anchor_px": [
-        171,
-        426
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        4,
-        4
-      ],
-      "visual_footprint_tiles": [
-        4,
-        4
-      ],
-      "occupancy_footprint_tiles": [
-        4,
-        4
-      ],
-      "base_footprint_tiles": [
-        4,
-        4
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_31_13.png",
-      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
-      "output_sha256": "44e9574468b9094aa8deb11e7d8dab7645f2590ccbf29d7c01dc48c4da23dba2",
-      "thumbnail_source_sha256": "44e9574468b9094aa8deb11e7d8dab7645f2590ccbf29d7c01dc48c4da23dba2",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.eafa8d64a8fa720a",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part1",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part1.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part1.png",
-      "canvas_size": [
-        212,
-        498
-      ],
-      "image_size": [
-        212,
-        498
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        172,
-        467
-      ],
-      "ground_contact_bounds_px": [
-        20,
-        476,
-        172,
-        21
-      ],
-      "anchor_px": [
-        106,
-        497
-      ],
-      "placement_anchor_px": [
-        106,
-        497
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "0c86c74cd6796675146aaafc4ad10187e75eb011ae924892956775419b5a2e00",
-      "thumbnail_source_sha256": "0c86c74cd6796675146aaafc4ad10187e75eb011ae924892956775419b5a2e00",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.73bdb3d5e586feec",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part2",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part2.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part2.png",
-      "canvas_size": [
-        216,
-        498
-      ],
-      "image_size": [
-        216,
-        498
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        176,
-        468
-      ],
-      "ground_contact_bounds_px": [
-        27,
-        473,
-        169,
-        25
-      ],
-      "anchor_px": [
-        108,
-        498
-      ],
-      "placement_anchor_px": [
-        108,
-        498
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "01a165bee6297b7d9e9b6f2554beeb788e79881ff0ffbf80c5e9a043c0804501",
-      "thumbnail_source_sha256": "01a165bee6297b7d9e9b6f2554beeb788e79881ff0ffbf80c5e9a043c0804501",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.b9e260974dbb2c49",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part3",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part3.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part3.png",
-      "canvas_size": [
-        239,
-        494
-      ],
-      "image_size": [
-        239,
-        494
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        199,
-        460
-      ],
-      "ground_contact_bounds_px": [
-        35,
-        472,
-        184,
-        18
-      ],
-      "anchor_px": [
-        119,
-        490
-      ],
-      "placement_anchor_px": [
-        119,
-        490
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "5a5182aba5533fd7bce516752a85e6a14042288a58d5dadd1b85c20caba775a3",
-      "thumbnail_source_sha256": "5a5182aba5533fd7bce516752a85e6a14042288a58d5dadd1b85c20caba775a3",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.39d2139a1d7ab7fa",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part4",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part4.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part4.png",
-      "canvas_size": [
-        235,
-        491
-      ],
-      "image_size": [
-        235,
-        491
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        195,
-        460
-      ],
-      "ground_contact_bounds_px": [
-        21,
-        472,
-        194,
-        18
-      ],
-      "anchor_px": [
-        117,
-        490
-      ],
-      "placement_anchor_px": [
-        117,
-        490
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "4e3d1ce8ab557d629ad4d8a7d5f2495fd7bf2490e344b8a7491c41cb27d99dbd",
-      "thumbnail_source_sha256": "4e3d1ce8ab557d629ad4d8a7d5f2495fd7bf2490e344b8a7491c41cb27d99dbd",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.0fca95deae7b38cf",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part5",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part5.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part5.png",
-      "canvas_size": [
-        199,
-        512
-      ],
-      "image_size": [
-        199,
-        512
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        159,
-        462
-      ],
-      "ground_contact_bounds_px": [
-        20,
-        475,
-        159,
-        17
-      ],
-      "anchor_px": [
-        99,
-        492
-      ],
-      "placement_anchor_px": [
-        99,
-        492
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "2843e7cb3a028ab7fa5fee1468a50f9a7f5ed8561b4609c122ca118bfdea3028",
-      "thumbnail_source_sha256": "2843e7cb3a028ab7fa5fee1468a50f9a7f5ed8561b4609c122ca118bfdea3028",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.31285d04f55382b4",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part6",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part6.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part6.png",
-      "canvas_size": [
-        226,
-        513
-      ],
-      "image_size": [
-        226,
-        513
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        186,
-        463
-      ],
-      "ground_contact_bounds_px": [
-        20,
-        475,
-        174,
-        18
-      ],
-      "anchor_px": [
-        113,
-        493
-      ],
-      "placement_anchor_px": [
-        113,
-        493
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "9bfe2ced4af7bec6d769a6fad96acf20513f10f85628d04def7beada9ceae944",
-      "thumbnail_source_sha256": "9bfe2ced4af7bec6d769a6fad96acf20513f10f85628d04def7beada9ceae944",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.b7770f5871cae58c",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part7",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part7.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part7.png",
-      "canvas_size": [
-        233,
-        508
-      ],
-      "image_size": [
-        233,
-        508
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        193,
-        458
-      ],
-      "ground_contact_bounds_px": [
-        20,
-        471,
-        181,
-        17
-      ],
-      "anchor_px": [
-        116,
-        488
-      ],
-      "placement_anchor_px": [
-        116,
-        488
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "9b8c84e5f9f76012aa095f95cee74bdcb160de6c09d412f99a87a31cc5b028d6",
-      "thumbnail_source_sha256": "9b8c84e5f9f76012aa095f95cee74bdcb160de6c09d412f99a87a31cc5b028d6",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.1e21d8b9691aa223",
-      "display_name": "ChatGPTImage2026年8月20日02_47_11_part8",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part8.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日02_47_11_part8.png",
-      "canvas_size": [
-        215,
-        511
-      ],
-      "image_size": [
-        215,
-        511
-      ],
-      "visible_bounds_px": [
-        20,
-        30,
-        175,
-        461
-      ],
-      "ground_contact_bounds_px": [
-        20,
-        478,
-        168,
-        13
-      ],
-      "anchor_px": [
-        107,
-        491
-      ],
-      "placement_anchor_px": [
-        107,
-        491
-      ],
-      "anchor_tile": [
-        0,
-        0
-      ],
-      "anchor_mode": "foot_tile",
-      "footprint_tiles": [
-        3,
-        3
-      ],
-      "visual_footprint_tiles": [
-        3,
-        3
-      ],
-      "occupancy_footprint_tiles": [
-        3,
-        3
-      ],
-      "base_footprint_tiles": [
-        3,
-        3
-      ],
-      "collision_footprint_tiles": [
-        0,
-        0
-      ],
-      "tile_size": [
-        64,
-        32
-      ],
-      "grounding_policy_id": "bottom_contact_grounding_v1",
-      "grounding_calibration_method": "bottom_contact_columns",
-      "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
-      "approved_scale": 1.0,
-      "logical_scale_level": 0,
-      "scale_approved": true,
-      "anchor_approved": true,
-      "default_layer": "object_base",
-      "default_object_role": "decoration",
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "navigation_policy": "ignore",
-      "content_layer": "personal_expansion",
-      "placeable": true,
-      "calibration_status": "placeable",
-      "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 02_47_11.png",
-      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
-      "output_sha256": "af07199f61286a76c8189f40e336d86b2c05c5b9ff6ab61e64a8a66b3dae2ee5",
-      "thumbnail_source_sha256": "af07199f61286a76c8189f40e336d86b2c05c5b9ff6ab61e64a8a66b3dae2ee5",
-      "processing": "user_pre_cut_transparent_passthrough",
-      "tags": [
-        "user_source",
-        "装饰物1",
-        "xzsc",
-        "雕塑"
-      ],
-      "editable": true,
-      "allows_edge_clipping": false,
-      "semantic_role": "",
-      "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
-    },
-    {
-      "asset_id": "user.b0bf6352c4ec1832",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part1",
-      "asset_type": "large_prop",
-      "category": "decoration",
-      "object_class": "decoration",
-      "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part1.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part1.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_001.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_001.png",
       "canvas_size": [
         299,
         514
@@ -2096,7 +79,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2105,16 +88,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "e2a2ac6eb52bf83d837dbcec5479665622ae0ecdae8d775c172ab4402e46c343",
-      "thumbnail_source_sha256": "e2a2ac6eb52bf83d837dbcec5479665622ae0ecdae8d775c172ab4402e46c343",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "4393c34456b55ee99287905b6d596d2d52364ed100fd6574f700476cb2f70843",
+      "output_sha256": "4393c34456b55ee99287905b6d596d2d52364ed100fd6574f700476cb2f70843",
+      "thumbnail_source_sha256": "4393c34456b55ee99287905b6d596d2d52364ed100fd6574f700476cb2f70843",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 1
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2125,45 +116,156 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.e2bf3c55f8481f32",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part2",
+      "asset_id": "user.e2d59b2b92145421",
+      "display_name": "雕塑 002",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part2.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part2.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_002.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_002.png",
       "canvas_size": [
-        264,
-        514
+        449,
+        963
       ],
       "image_size": [
-        264,
-        514
+        449,
+        963
       ],
       "visible_bounds_px": [
+        0,
         20,
-        22,
-        224,
-        486
+        429,
+        923
       ],
       "ground_contact_bounds_px": [
-        46,
-        475,
-        108,
+        0,
+        910,
+        371,
         33
       ],
       "anchor_px": [
-        132,
-        508
+        214,
+        943
       ],
       "placement_anchor_px": [
+        214,
+        943
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "visual_footprint_tiles": [
+        4,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        4
+      ],
+      "base_footprint_tiles": [
+        4,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "d741f0becddb494e42074bc48dd46dc311198221ad74470bb337ce1268770504",
+      "output_sha256": "d741f0becddb494e42074bc48dd46dc311198221ad74470bb337ce1268770504",
+      "thumbnail_source_sha256": "d741f0becddb494e42074bc48dd46dc311198221ad74470bb337ce1268770504",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 2
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.116c0896b2b890c2",
+      "display_name": "雕塑 003",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_003.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_003.png",
+      "canvas_size": [
+        152,
+        891
+      ],
+      "image_size": [
+        152,
+        891
+      ],
+      "visible_bounds_px": [
+        0,
+        20,
         132,
-        508
+        851
+      ],
+      "ground_contact_bounds_px": [
+        9,
+        858,
+        71,
+        13
+      ],
+      "anchor_px": [
+        66,
+        871
+      ],
+      "placement_anchor_px": [
+        66,
+        871
       ],
       "anchor_tile": [
         0,
@@ -2197,7 +299,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2206,16 +308,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "b0d8eeb531d2f368454cf8aa8a477b8bfa4519d3c3be7e12fc4bccaaf24db146",
-      "thumbnail_source_sha256": "b0d8eeb531d2f368454cf8aa8a477b8bfa4519d3c3be7e12fc4bccaaf24db146",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "873cc93b3976ad683fa75b79deab9d5f3419cb004a37ee58b4d71d32066094a1",
+      "output_sha256": "873cc93b3976ad683fa75b79deab9d5f3419cb004a37ee58b4d71d32066094a1",
+      "thumbnail_source_sha256": "873cc93b3976ad683fa75b79deab9d5f3419cb004a37ee58b4d71d32066094a1",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 3
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2226,18 +336,1119 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.634ada7f72b15988",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part3",
+      "asset_id": "user.6e8d3165a7387de0",
+      "display_name": "雕塑 004",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part3.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part3.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_004.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_004.png",
+      "canvas_size": [
+        204,
+        856
+      ],
+      "image_size": [
+        204,
+        856
+      ],
+      "visible_bounds_px": [
+        0,
+        20,
+        200,
+        816
+      ],
+      "ground_contact_bounds_px": [
+        2,
+        823,
+        77,
+        13
+      ],
+      "anchor_px": [
+        100,
+        836
+      ],
+      "placement_anchor_px": [
+        100,
+        836
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "318ed989ee824cfe89b869d4fd81f79315feb45968ffb23c8f25764c4e8e900d",
+      "output_sha256": "318ed989ee824cfe89b869d4fd81f79315feb45968ffb23c8f25764c4e8e900d",
+      "thumbnail_source_sha256": "318ed989ee824cfe89b869d4fd81f79315feb45968ffb23c8f25764c4e8e900d",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 4
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.c61c18a473317bc0",
+      "display_name": "雕塑 005",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_005.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_005.png",
+      "canvas_size": [
+        300,
+        423
+      ],
+      "image_size": [
+        300,
+        423
+      ],
+      "visible_bounds_px": [
+        10,
+        20,
+        270,
+        393
+      ],
+      "ground_contact_bounds_px": [
+        81,
+        381,
+        177,
+        32
+      ],
+      "anchor_px": [
+        145,
+        413
+      ],
+      "placement_anchor_px": [
+        145,
+        413
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "890ce63aa44d7ed21437a2100bb9216d3f33bb9a51c7f6fe4170f1e8a4be2ac5",
+      "output_sha256": "890ce63aa44d7ed21437a2100bb9216d3f33bb9a51c7f6fe4170f1e8a4be2ac5",
+      "thumbnail_source_sha256": "890ce63aa44d7ed21437a2100bb9216d3f33bb9a51c7f6fe4170f1e8a4be2ac5",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 5
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.01ea7abb4a32f4f9",
+      "display_name": "雕塑 006",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_006.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_006.png",
+      "canvas_size": [
+        415,
+        424
+      ],
+      "image_size": [
+        415,
+        424
+      ],
+      "visible_bounds_px": [
+        11,
+        20,
+        390,
+        404
+      ],
+      "ground_contact_bounds_px": [
+        119,
+        398,
+        173,
+        26
+      ],
+      "anchor_px": [
+        206,
+        424
+      ],
+      "placement_anchor_px": [
+        206,
+        424
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "469a9f1af934e2526a15fef3fa659da6e113da2ddba35c646f6e47a15044f9e1",
+      "output_sha256": "469a9f1af934e2526a15fef3fa659da6e113da2ddba35c646f6e47a15044f9e1",
+      "thumbnail_source_sha256": "469a9f1af934e2526a15fef3fa659da6e113da2ddba35c646f6e47a15044f9e1",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 6
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.ff6db07bd5a7be55",
+      "display_name": "雕塑 007",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_007.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_007.png",
+      "canvas_size": [
+        391,
+        420
+      ],
+      "image_size": [
+        391,
+        420
+      ],
+      "visible_bounds_px": [
+        12,
+        20,
+        363,
+        380
+      ],
+      "ground_contact_bounds_px": [
+        116,
+        380,
+        157,
+        20
+      ],
+      "anchor_px": [
+        193,
+        400
+      ],
+      "placement_anchor_px": [
+        193,
+        400
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "1641407cbb9d705779d0230e346b9493e062834814323c8128fda797dfc1879b",
+      "output_sha256": "1641407cbb9d705779d0230e346b9493e062834814323c8128fda797dfc1879b",
+      "thumbnail_source_sha256": "1641407cbb9d705779d0230e346b9493e062834814323c8128fda797dfc1879b",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 7
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.f55b28559352d591",
+      "display_name": "雕塑 008",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_008.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_008.png",
+      "canvas_size": [
+        331,
+        424
+      ],
+      "image_size": [
+        331,
+        424
+      ],
+      "visible_bounds_px": [
+        16,
+        20,
+        302,
+        396
+      ],
+      "ground_contact_bounds_px": [
+        52,
+        383,
+        217,
+        33
+      ],
+      "anchor_px": [
+        167,
+        416
+      ],
+      "placement_anchor_px": [
+        167,
+        416
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "visual_footprint_tiles": [
+        4,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        4
+      ],
+      "base_footprint_tiles": [
+        4,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "91e55805092b31946bcedddbf6289bbb36c1e55a6086de29f87a21e7a4595b8c",
+      "output_sha256": "91e55805092b31946bcedddbf6289bbb36c1e55a6086de29f87a21e7a4595b8c",
+      "thumbnail_source_sha256": "91e55805092b31946bcedddbf6289bbb36c1e55a6086de29f87a21e7a4595b8c",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 8
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.2ad30f57c88ce766",
+      "display_name": "雕塑 009",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_009.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_009.png",
+      "canvas_size": [
+        379,
+        421
+      ],
+      "image_size": [
+        379,
+        421
+      ],
+      "visible_bounds_px": [
+        17,
+        20,
+        353,
+        388
+      ],
+      "ground_contact_bounds_px": [
+        98,
+        376,
+        189,
+        32
+      ],
+      "anchor_px": [
+        193,
+        408
+      ],
+      "placement_anchor_px": [
+        193,
+        408
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "5735f2f28665088842650aa682b00d24e98de6af5f08516fd3c06ad19acc2cfb",
+      "output_sha256": "5735f2f28665088842650aa682b00d24e98de6af5f08516fd3c06ad19acc2cfb",
+      "thumbnail_source_sha256": "5735f2f28665088842650aa682b00d24e98de6af5f08516fd3c06ad19acc2cfb",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 9
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.ec05f77158e1d83b",
+      "display_name": "雕塑 010",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_010.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_010.png",
+      "canvas_size": [
+        318,
+        418
+      ],
+      "image_size": [
+        318,
+        418
+      ],
+      "visible_bounds_px": [
+        17,
+        20,
+        281,
+        378
+      ],
+      "ground_contact_bounds_px": [
+        108,
+        371,
+        184,
+        27
+      ],
+      "anchor_px": [
+        157,
+        398
+      ],
+      "placement_anchor_px": [
+        157,
+        398
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "8550ba3510d35dee48d51c345d6586d399c8540ee3d35b9c4e1825e1f5932fd0",
+      "output_sha256": "8550ba3510d35dee48d51c345d6586d399c8540ee3d35b9c4e1825e1f5932fd0",
+      "thumbnail_source_sha256": "8550ba3510d35dee48d51c345d6586d399c8540ee3d35b9c4e1825e1f5932fd0",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 10
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.bd91298459536590",
+      "display_name": "雕塑 011",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_011.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_011.png",
+      "canvas_size": [
+        209,
+        964
+      ],
+      "image_size": [
+        209,
+        964
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        189,
+        924
+      ],
+      "ground_contact_bounds_px": [
+        94,
+        911,
+        115,
+        33
+      ],
+      "anchor_px": [
+        114,
+        944
+      ],
+      "placement_anchor_px": [
+        114,
+        944
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "ecee7f0620772a3693fb8b6bf365fab0e0ce2cc695b434671f58a20fb81350c0",
+      "output_sha256": "ecee7f0620772a3693fb8b6bf365fab0e0ce2cc695b434671f58a20fb81350c0",
+      "thumbnail_source_sha256": "ecee7f0620772a3693fb8b6bf365fab0e0ce2cc695b434671f58a20fb81350c0",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 11
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.a7aee5518c854df0",
+      "display_name": "雕塑 012",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_012.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_012.png",
+      "canvas_size": [
+        210,
+        846
+      ],
+      "image_size": [
+        210,
+        846
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        190,
+        806
+      ],
+      "ground_contact_bounds_px": [
+        98,
+        793,
+        82,
+        33
+      ],
+      "anchor_px": [
+        115,
+        826
+      ],
+      "placement_anchor_px": [
+        115,
+        826
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "bf2bb005250b661fd16661812ce5789d0817b46eeffe6a27016f8f5b3cabbdf9",
+      "output_sha256": "bf2bb005250b661fd16661812ce5789d0817b46eeffe6a27016f8f5b3cabbdf9",
+      "thumbnail_source_sha256": "bf2bb005250b661fd16661812ce5789d0817b46eeffe6a27016f8f5b3cabbdf9",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 12
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.c9388590b7b28723",
+      "display_name": "雕塑 013",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_013.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_013.png",
+      "canvas_size": [
+        142,
+        875
+      ],
+      "image_size": [
+        142,
+        875
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        122,
+        835
+      ],
+      "ground_contact_bounds_px": [
+        51,
+        822,
+        86,
+        33
+      ],
+      "anchor_px": [
+        81,
+        855
+      ],
+      "placement_anchor_px": [
+        81,
+        855
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "2ac11f8422c014bafae4f48e6b3d9b78cd9a3c7cf18210ce3812448069101969",
+      "output_sha256": "2ac11f8422c014bafae4f48e6b3d9b78cd9a3c7cf18210ce3812448069101969",
+      "thumbnail_source_sha256": "2ac11f8422c014bafae4f48e6b3d9b78cd9a3c7cf18210ce3812448069101969",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 13
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.f0412939b8d0be95",
+      "display_name": "雕塑 014",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_014.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_014.png",
       "canvas_size": [
         199,
         514
@@ -2298,7 +1509,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2307,16 +1518,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "b7e05e77ae51c6252813f40aeeaa194e4423bd4ba30b4d924cde4883ab181928",
-      "thumbnail_source_sha256": "b7e05e77ae51c6252813f40aeeaa194e4423bd4ba30b4d924cde4883ab181928",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "b7c8575dac57a038079313b733c3b844417ad6e88fcae8fb4c790f8e54c5250a",
+      "output_sha256": "b7c8575dac57a038079313b733c3b844417ad6e88fcae8fb4c790f8e54c5250a",
+      "thumbnail_source_sha256": "b7c8575dac57a038079313b733c3b844417ad6e88fcae8fb4c790f8e54c5250a",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 14
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2327,18 +1546,19 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.39cd1ecbfb12fa32",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part4",
+      "asset_id": "user.5bc692a828ac151b",
+      "display_name": "雕塑 015",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part4.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part4.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_015.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_015.png",
       "canvas_size": [
         237,
         514
@@ -2399,7 +1619,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2408,16 +1628,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "e727afcbcd054ca1b543c5b1a7584b791343c99bf126238faf019c89c05f7af5",
-      "thumbnail_source_sha256": "e727afcbcd054ca1b543c5b1a7584b791343c99bf126238faf019c89c05f7af5",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "f63fea14487aef59e587b3981f0752181a51a4ad4f8a9e4c0ba08c4a37fb50d4",
+      "output_sha256": "f63fea14487aef59e587b3981f0752181a51a4ad4f8a9e4c0ba08c4a37fb50d4",
+      "thumbnail_source_sha256": "f63fea14487aef59e587b3981f0752181a51a4ad4f8a9e4c0ba08c4a37fb50d4",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 15
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2428,45 +1656,156 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.2cd1ee06b3f35f40",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part5",
+      "asset_id": "user.a252fea4a9137b10",
+      "display_name": "雕塑 016",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part5.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part5.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_016.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_016.png",
       "canvas_size": [
-        301,
-        534
+        264,
+        512
       ],
       "image_size": [
-        301,
-        534
+        264,
+        512
       ],
       "visible_bounds_px": [
         20,
-        28,
+        20,
+        224,
+        486
+      ],
+      "ground_contact_bounds_px": [
+        46,
+        473,
+        108,
+        33
+      ],
+      "anchor_px": [
+        132,
+        506
+      ],
+      "placement_anchor_px": [
+        132,
+        506
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "8ac1e6ee2a49155e8c5ba09ca952f2aff7407eae097a8cc64e4498e4c36d0dad",
+      "output_sha256": "8ac1e6ee2a49155e8c5ba09ca952f2aff7407eae097a8cc64e4498e4c36d0dad",
+      "thumbnail_source_sha256": "8ac1e6ee2a49155e8c5ba09ca952f2aff7407eae097a8cc64e4498e4c36d0dad",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 16
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.25a916e5140e51c5",
+      "display_name": "雕塑 017",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_017.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_017.png",
+      "canvas_size": [
+        301,
+        526
+      ],
+      "image_size": [
+        301,
+        526
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
         261,
         486
       ],
       "ground_contact_bounds_px": [
         88,
-        506,
+        498,
         123,
         8
       ],
       "anchor_px": [
         150,
-        514
+        506
       ],
       "placement_anchor_px": [
         150,
-        514
+        506
       ],
       "anchor_tile": [
         0,
@@ -2500,7 +1839,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2509,16 +1848,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "a8fdebbf9e529fdb424354aa363325a81bb02f8166dfe6760e6c3fa2cef3dfba",
-      "thumbnail_source_sha256": "a8fdebbf9e529fdb424354aa363325a81bb02f8166dfe6760e6c3fa2cef3dfba",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "f6ff3a5d2dab515fe40b71b770b90adcc4462949832bd2e75252cd3c48b45a13",
+      "output_sha256": "f6ff3a5d2dab515fe40b71b770b90adcc4462949832bd2e75252cd3c48b45a13",
+      "thumbnail_source_sha256": "f6ff3a5d2dab515fe40b71b770b90adcc4462949832bd2e75252cd3c48b45a13",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 17
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2529,45 +1876,1586 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.d87d83df925745e0",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part6",
+      "asset_id": "user.b1c8a8be8155f878",
+      "display_name": "雕塑 018",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part6.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part6.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_018.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_018.png",
       "canvas_size": [
-        219,
-        540
+        299,
+        423
       ],
       "image_size": [
-        219,
-        540
+        299,
+        423
+      ],
+      "visible_bounds_px": [
+        14,
+        20,
+        265,
+        395
+      ],
+      "ground_contact_bounds_px": [
+        18,
+        382,
+        218,
+        33
+      ],
+      "anchor_px": [
+        146,
+        415
+      ],
+      "placement_anchor_px": [
+        146,
+        415
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "visual_footprint_tiles": [
+        4,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        4
+      ],
+      "base_footprint_tiles": [
+        4,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "11d5a9407c84c00bd0d4f7eacb6d3b3dfc0d5075a816340c24eab167fe7bbddd",
+      "output_sha256": "11d5a9407c84c00bd0d4f7eacb6d3b3dfc0d5075a816340c24eab167fe7bbddd",
+      "thumbnail_source_sha256": "11d5a9407c84c00bd0d4f7eacb6d3b3dfc0d5075a816340c24eab167fe7bbddd",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 18
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.489832cbc3444a1c",
+      "display_name": "雕塑 019",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_019.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_019.png",
+      "canvas_size": [
+        192,
+        423
+      ],
+      "image_size": [
+        192,
+        423
       ],
       "visible_bounds_px": [
         20,
-        30,
+        20,
+        152,
+        403
+      ],
+      "ground_contact_bounds_px": [
+        48,
+        390,
+        95,
+        33
+      ],
+      "anchor_px": [
+        96,
+        423
+      ],
+      "placement_anchor_px": [
+        96,
+        423
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "68c2b42ce76b7036e3ab05322e7bd456ef81792d7cb518f31ecb9ab446713888",
+      "output_sha256": "68c2b42ce76b7036e3ab05322e7bd456ef81792d7cb518f31ecb9ab446713888",
+      "thumbnail_source_sha256": "68c2b42ce76b7036e3ab05322e7bd456ef81792d7cb518f31ecb9ab446713888",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 19
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.e31da51d47757bd7",
+      "display_name": "雕塑 020",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_020.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_020.png",
+      "canvas_size": [
+        267,
+        427
+      ],
+      "image_size": [
+        267,
+        427
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        227,
+        396
+      ],
+      "ground_contact_bounds_px": [
+        36,
+        383,
+        192,
+        33
+      ],
+      "anchor_px": [
+        133,
+        416
+      ],
+      "placement_anchor_px": [
+        133,
+        416
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "2f6bffeb7ab004ec10754eba9e151727bb6bbe0faebdd7dccd8fba5bd4b11c9c",
+      "output_sha256": "2f6bffeb7ab004ec10754eba9e151727bb6bbe0faebdd7dccd8fba5bd4b11c9c",
+      "thumbnail_source_sha256": "2f6bffeb7ab004ec10754eba9e151727bb6bbe0faebdd7dccd8fba5bd4b11c9c",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 20
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.6a830dac9f6f3d9b",
+      "display_name": "雕塑 021",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_021.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_021.png",
+      "canvas_size": [
+        321,
+        418
+      ],
+      "image_size": [
+        321,
+        418
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        281,
+        378
+      ],
+      "ground_contact_bounds_px": [
+        26,
+        371,
+        184,
+        27
+      ],
+      "anchor_px": [
+        160,
+        398
+      ],
+      "placement_anchor_px": [
+        160,
+        398
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "f6f238733c04ec3dc2031aeaa304046e9d914ad99edbeeaa44b6f5cfb7f52c37",
+      "output_sha256": "f6f238733c04ec3dc2031aeaa304046e9d914ad99edbeeaa44b6f5cfb7f52c37",
+      "thumbnail_source_sha256": "f6f238733c04ec3dc2031aeaa304046e9d914ad99edbeeaa44b6f5cfb7f52c37",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 21
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.95cb6c790929148c",
+      "display_name": "雕塑 022",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_022.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_022.png",
+      "canvas_size": [
+        281,
+        431
+      ],
+      "image_size": [
+        281,
+        431
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        241,
+        391
+      ],
+      "ground_contact_bounds_px": [
+        55,
+        379,
+        206,
+        32
+      ],
+      "anchor_px": [
+        140,
+        411
+      ],
+      "placement_anchor_px": [
+        140,
+        411
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "visual_footprint_tiles": [
+        4,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        4
+      ],
+      "base_footprint_tiles": [
+        4,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "db188efc467a84ae0dd78bad745d94fbc5711bdc44a57b48dec85823bf726ebf",
+      "output_sha256": "db188efc467a84ae0dd78bad745d94fbc5711bdc44a57b48dec85823bf726ebf",
+      "thumbnail_source_sha256": "db188efc467a84ae0dd78bad745d94fbc5711bdc44a57b48dec85823bf726ebf",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 22
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.79c5441ddc461bb9",
+      "display_name": "雕塑 023",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_023.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_023.png",
+      "canvas_size": [
+        342,
+        436
+      ],
+      "image_size": [
+        342,
+        436
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        302,
+        396
+      ],
+      "ground_contact_bounds_px": [
+        69,
+        383,
+        217,
+        33
+      ],
+      "anchor_px": [
+        171,
+        416
+      ],
+      "placement_anchor_px": [
+        171,
+        416
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "visual_footprint_tiles": [
+        4,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        4
+      ],
+      "base_footprint_tiles": [
+        4,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "66bf9821fe24b4d93ac31673f78b93dc144e985984f17b8998abd7288b557264",
+      "output_sha256": "66bf9821fe24b4d93ac31673f78b93dc144e985984f17b8998abd7288b557264",
+      "thumbnail_source_sha256": "66bf9821fe24b4d93ac31673f78b93dc144e985984f17b8998abd7288b557264",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 23
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.96572218b71c8b76",
+      "display_name": "雕塑 024",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_024.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_024.png",
+      "canvas_size": [
+        212,
+        488
+      ],
+      "image_size": [
+        212,
+        488
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        172,
+        467
+      ],
+      "ground_contact_bounds_px": [
+        20,
+        466,
+        172,
+        21
+      ],
+      "anchor_px": [
+        106,
+        487
+      ],
+      "placement_anchor_px": [
+        106,
+        487
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "63bf63d3d359a5ace7b1c9535c5e2cd1b24cb0c4bc2f0d82ddb282d673bcadc9",
+      "output_sha256": "63bf63d3d359a5ace7b1c9535c5e2cd1b24cb0c4bc2f0d82ddb282d673bcadc9",
+      "thumbnail_source_sha256": "63bf63d3d359a5ace7b1c9535c5e2cd1b24cb0c4bc2f0d82ddb282d673bcadc9",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 24
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.4897c5c6d3bf7743",
+      "display_name": "雕塑 025",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_025.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_025.png",
+      "canvas_size": [
+        216,
+        488
+      ],
+      "image_size": [
+        216,
+        488
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        176,
+        468
+      ],
+      "ground_contact_bounds_px": [
+        27,
+        463,
+        169,
+        25
+      ],
+      "anchor_px": [
+        108,
+        488
+      ],
+      "placement_anchor_px": [
+        108,
+        488
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "d0c5cc192f6330b3d7e887a70f65735c4f219b2b566593ea7ba0356bc0723c43",
+      "output_sha256": "d0c5cc192f6330b3d7e887a70f65735c4f219b2b566593ea7ba0356bc0723c43",
+      "thumbnail_source_sha256": "d0c5cc192f6330b3d7e887a70f65735c4f219b2b566593ea7ba0356bc0723c43",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 25
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.36a3f81d94dabdff",
+      "display_name": "雕塑 026",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_026.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_026.png",
+      "canvas_size": [
+        239,
+        484
+      ],
+      "image_size": [
+        239,
+        484
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        199,
+        460
+      ],
+      "ground_contact_bounds_px": [
+        35,
+        462,
+        184,
+        18
+      ],
+      "anchor_px": [
+        119,
+        480
+      ],
+      "placement_anchor_px": [
+        119,
+        480
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "4ad2e2dd9772115bef3028570136a170a2de98630ff7360d6d265ae8f8704631",
+      "output_sha256": "4ad2e2dd9772115bef3028570136a170a2de98630ff7360d6d265ae8f8704631",
+      "thumbnail_source_sha256": "4ad2e2dd9772115bef3028570136a170a2de98630ff7360d6d265ae8f8704631",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 26
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.214e7a51b44e232b",
+      "display_name": "雕塑 027",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_027.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_027.png",
+      "canvas_size": [
+        235,
+        481
+      ],
+      "image_size": [
+        235,
+        481
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        195,
+        460
+      ],
+      "ground_contact_bounds_px": [
+        21,
+        462,
+        194,
+        18
+      ],
+      "anchor_px": [
+        117,
+        480
+      ],
+      "placement_anchor_px": [
+        117,
+        480
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "e17d795458b41d8cddf72ca03bf3d4d97eb89cc0e726c9c0351e80c58a5a2266",
+      "output_sha256": "e17d795458b41d8cddf72ca03bf3d4d97eb89cc0e726c9c0351e80c58a5a2266",
+      "thumbnail_source_sha256": "e17d795458b41d8cddf72ca03bf3d4d97eb89cc0e726c9c0351e80c58a5a2266",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 27
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.a5fae7239403e620",
+      "display_name": "雕塑 028",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_028.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_028.png",
+      "canvas_size": [
+        199,
+        502
+      ],
+      "image_size": [
+        199,
+        502
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        159,
+        462
+      ],
+      "ground_contact_bounds_px": [
+        20,
+        465,
+        159,
+        17
+      ],
+      "anchor_px": [
+        99,
+        482
+      ],
+      "placement_anchor_px": [
+        99,
+        482
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "42d440f74038e4a9ab08e560c34f8aec15e0e667ef8d93174ad7b318112bd56e",
+      "output_sha256": "42d440f74038e4a9ab08e560c34f8aec15e0e667ef8d93174ad7b318112bd56e",
+      "thumbnail_source_sha256": "42d440f74038e4a9ab08e560c34f8aec15e0e667ef8d93174ad7b318112bd56e",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 28
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.8914f16259ce8156",
+      "display_name": "雕塑 029",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_029.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_029.png",
+      "canvas_size": [
+        226,
+        503
+      ],
+      "image_size": [
+        226,
+        503
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        186,
+        463
+      ],
+      "ground_contact_bounds_px": [
+        20,
+        465,
+        174,
+        18
+      ],
+      "anchor_px": [
+        113,
+        483
+      ],
+      "placement_anchor_px": [
+        113,
+        483
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "f07671e16f31073aee0d9d4e928658eb253b48c8ee2fdf26b36708c696f4010a",
+      "output_sha256": "f07671e16f31073aee0d9d4e928658eb253b48c8ee2fdf26b36708c696f4010a",
+      "thumbnail_source_sha256": "f07671e16f31073aee0d9d4e928658eb253b48c8ee2fdf26b36708c696f4010a",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 29
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.a17aeee2d746333f",
+      "display_name": "雕塑 030",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_030.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_030.png",
+      "canvas_size": [
+        233,
+        498
+      ],
+      "image_size": [
+        233,
+        498
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        193,
+        458
+      ],
+      "ground_contact_bounds_px": [
+        20,
+        461,
+        181,
+        17
+      ],
+      "anchor_px": [
+        116,
+        478
+      ],
+      "placement_anchor_px": [
+        116,
+        478
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "6725ebbd31ce629fac489abcd8ef88b40bfff4cded2446143c24e8cec0fd1c38",
+      "output_sha256": "6725ebbd31ce629fac489abcd8ef88b40bfff4cded2446143c24e8cec0fd1c38",
+      "thumbnail_source_sha256": "6725ebbd31ce629fac489abcd8ef88b40bfff4cded2446143c24e8cec0fd1c38",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 30
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.ee00e7c9bc3c26bf",
+      "display_name": "雕塑 031",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_031.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_031.png",
+      "canvas_size": [
+        215,
+        501
+      ],
+      "image_size": [
+        215,
+        501
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
+        175,
+        461
+      ],
+      "ground_contact_bounds_px": [
+        20,
+        468,
+        168,
+        13
+      ],
+      "anchor_px": [
+        107,
+        481
+      ],
+      "placement_anchor_px": [
+        107,
+        481
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "grounding_policy_id": "bottom_contact_grounding_v1",
+      "grounding_calibration_method": "bottom_contact_columns",
+      "footprint_calibration_source": "new_decor_grounding_repair_v1",
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "2bca04548e05ad7a2d62b12c0593c626b72d53803373d920f135e931d2a2d3c3",
+      "output_sha256": "2bca04548e05ad7a2d62b12c0593c626b72d53803373d920f135e931d2a2d3c3",
+      "thumbnail_source_sha256": "2bca04548e05ad7a2d62b12c0593c626b72d53803373d920f135e931d2a2d3c3",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 31
+      },
+      "tags": [
+        "user_source",
+        "装饰物1",
+        "xzsc",
+        "雕塑"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.2651c8d1a3001800",
+      "display_name": "雕塑 032",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_032.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_032.png",
+      "canvas_size": [
+        219,
+        530
+      ],
+      "image_size": [
+        219,
+        530
+      ],
+      "visible_bounds_px": [
+        20,
+        20,
         179,
         490
       ],
       "ground_contact_bounds_px": [
         92,
-        488,
+        478,
         107,
         32
       ],
       "anchor_px": [
         109,
-        520
+        510
       ],
       "placement_anchor_px": [
         109,
-        520
+        510
       ],
       "anchor_tile": [
         0,
@@ -2601,7 +3489,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2610,16 +3498,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "3f7d47b48be4be2f6cefb30beae9e3a6d23b02f40452331b821fcca740b567c7",
-      "thumbnail_source_sha256": "3f7d47b48be4be2f6cefb30beae9e3a6d23b02f40452331b821fcca740b567c7",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "284c71c427eeb1452e95236eba7b8d6eed647b724d89c73bbd2c96a2d34b9c81",
+      "output_sha256": "284c71c427eeb1452e95236eba7b8d6eed647b724d89c73bbd2c96a2d34b9c81",
+      "thumbnail_source_sha256": "284c71c427eeb1452e95236eba7b8d6eed647b724d89c73bbd2c96a2d34b9c81",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 32
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2630,45 +3526,46 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.748c51f1246c40b7",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part7",
+      "asset_id": "user.fd9e79c76353f626",
+      "display_name": "雕塑 033",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part7.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part7.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_033.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_033.png",
       "canvas_size": [
         193,
-        541
+        531
       ],
       "image_size": [
         193,
-        541
+        531
       ],
       "visible_bounds_px": [
         20,
-        30,
+        20,
         153,
         491
       ],
       "ground_contact_bounds_px": [
         95,
-        489,
+        479,
         67,
         32
       ],
       "anchor_px": [
         96,
-        521
+        511
       ],
       "placement_anchor_px": [
         96,
-        521
+        511
       ],
       "anchor_tile": [
         0,
@@ -2702,7 +3599,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2711,16 +3608,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "fd5808d4f6e116197714ed7d25e364b4aa777e2f3751cc8ad4b22f793451d315",
-      "thumbnail_source_sha256": "fd5808d4f6e116197714ed7d25e364b4aa777e2f3751cc8ad4b22f793451d315",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "e6a4795edd99ba4007e3cf98314d18007a8e4621186ffc1411dc14cd92647bf9",
+      "output_sha256": "e6a4795edd99ba4007e3cf98314d18007a8e4621186ffc1411dc14cd92647bf9",
+      "thumbnail_source_sha256": "e6a4795edd99ba4007e3cf98314d18007a8e4621186ffc1411dc14cd92647bf9",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 33
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2731,45 +3636,46 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     },
     {
-      "asset_id": "user.5f2ed74f55415acb",
-      "display_name": "ChatGPTImage2026年8月20日03_03_12_part8",
+      "asset_id": "user.a0bd9eef3ca2b789",
+      "display_name": "雕塑 034",
       "asset_type": "large_prop",
       "category": "decoration",
       "object_class": "decoration",
       "theme": "user_palette",
-      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part8.png",
-      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/ChatGPTImage2026年8月20日03_03_12_part8.png",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_034.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_034.png",
       "canvas_size": [
         241,
-        537
+        527
       ],
       "image_size": [
         241,
-        537
+        527
       ],
       "visible_bounds_px": [
         20,
-        30,
+        20,
         201,
         487
       ],
       "ground_contact_bounds_px": [
         96,
-        485,
+        475,
         104,
         32
       ],
       "anchor_px": [
         120,
-        517
+        507
       ],
       "placement_anchor_px": [
         120,
-        517
+        507
       ],
       "anchor_tile": [
         0,
@@ -2803,7 +3709,7 @@
       "grounding_policy_id": "bottom_contact_grounding_v1",
       "grounding_calibration_method": "bottom_contact_columns",
       "footprint_calibration_source": "new_decor_grounding_repair_v1",
-      "occlusion": true,
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "approved_scale": 1.0,
       "logical_scale_level": 0,
       "scale_approved": true,
@@ -2812,16 +3718,24 @@
       "default_object_role": "decoration",
       "collision_policy": "none",
       "collision_profile_id": "none_visual",
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
       "navigation_policy": "ignore",
+      "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
       "calibration_status": "placeable",
       "palette_path": "装饰物1/xzsc/雕塑",
-      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑\\ChatGPT Image 2026年8月20日 03_03_12.png",
-      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
-      "output_sha256": "a9e3b923ffdfe7b2fb50e07d652fe5e6a14b496aa9fb943b0534baade648f33e",
-      "thumbnail_source_sha256": "a9e3b923ffdfe7b2fb50e07d652fe5e6a14b496aa9fb943b0534baade648f33e",
-      "processing": "user_pre_cut_transparent_passthrough",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\xzsc\\雕塑",
+      "source_sha256": "50e06e401db58de42981d811eb4539bec667910c41ddf05cd090114be4445bc8",
+      "output_sha256": "50e06e401db58de42981d811eb4539bec667910c41ddf05cd090114be4445bc8",
+      "thumbnail_source_sha256": "50e06e401db58de42981d811eb4539bec667910c41ddf05cd090114be4445bc8",
+      "processing": {
+        "pipeline": "transparent_grid_then_major_alpha_component_recursive_v2",
+        "order_index": 34
+      },
       "tags": [
         "user_source",
         "装饰物1",
@@ -2832,8 +3746,9 @@
       "allows_edge_clipping": false,
       "semantic_role": "",
       "trigger_on_enter": false,
-      "package_id": "mse_xzsc_sculpture_v1",
-      "source_group": "雕塑"
+      "package_id": "mse_xzsc_sculpture_v2",
+      "source_group": "雕塑",
+      "projection": "orthographic_isometric_2_to_1"
     }
   ]
 }
