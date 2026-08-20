@@ -301,9 +301,9 @@ func _build_ui() -> void:
 	preview.clipboard_paste_requested.connect(_on_clipboard_paste_requested)
 	preview.clipboard_paste_cancelled.connect(_on_clipboard_paste_cancelled)
 	region_fill_menu = PopupMenu.new(); region_fill_menu.add_item("用素材列表已选地面随机填充", 1); region_fill_menu.add_item("删除套索内地面和对象", 3); region_fill_menu.add_separator(); region_fill_menu.add_item("取消", 2); region_fill_menu.id_pressed.connect(_on_region_fill_menu_pressed); add_child(region_fill_menu)
-	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
+	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大 10%", 1); asset_size_menu.add_item("缩小 10%", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始大小", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	_build_asset_delete_dialog()
-	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
+	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材 10%", 1); instance_size_menu.add_item("缩小当前地图素材 10%", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
 	_on_semantic_kind_selected(0)
 	var first_asset := _first_asset_tree_item()
 	if first_asset != null:
@@ -1410,7 +1410,9 @@ func _on_asset_size_menu_pressed(action_id: int) -> void:
 		_refresh_asset_tree()
 		selected_asset_id = asset_size_menu_asset_id
 		preview.set_selected_brush(selected_asset_id)
-		status_label.text = "素材占位已调整为 %d×%d 格" % [new_fp[0], new_fp[1]]
+		var new_scale_val := float(draft.get("approved_scale", float(base.get("approved_scale", 1.0))))
+		var base_scale_val := float(base.get("approved_scale", 1.0))
+		status_label.text = "整体缩放：%d%%｜占地 %d×%d" % [roundi(new_scale_val / maxf(0.01, base_scale_val) * 100.0), new_fp[0], new_fp[1]]
 	else:
 		status_label.text = "素材尺寸调整失败：%s" % result.get("errors", [])
 
@@ -1455,20 +1457,19 @@ func _on_asset_delete_cancelled() -> void:
 
 
 static func build_asset_resize_draft(asset: Dictionary, base: Dictionary, action_id: int) -> Dictionary:
+	# Unified 10% visual scale contract shared with resize_instance so the
+	# asset library calibration and map instance scaling stay in lockstep.
 	var base_fp: Array = base.get("base_footprint_tiles", base.get("footprint_tiles", [1, 1]))
-	var current_fp: Array = asset.get("footprint_tiles", base_fp)
-	var inferred_level := int(current_fp[0]) - int(base_fp[0])
-	var level := int(asset.get("logical_scale_level", inferred_level))
-	if action_id == 1: level += 1
-	elif action_id == 2: level -= 1
-	else: level = 0
-	var new_fp := [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
-	# Once both dimensions have reached one tile, further shrinking is a no-op.
-	level = maxi(level, 1 - mini(int(base_fp[0]), int(base_fp[1])))
-	new_fp = [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
-	var current_scale := Vector2(float(asset.get("approved_scale", 1.0)), float(asset.get("approved_scale", 1.0)))
-	var next_scale := Vector2(float(base.get("approved_scale", 1.0)), float(base.get("approved_scale", 1.0))) if action_id == 3 \
-		else MapEditorInstanceService.resized_visual_scale(current_scale, current_fp, new_fp)
+	var base_scale := float(base.get("approved_scale", 1.0))
+	var current_scale := float(asset.get("approved_scale", base_scale))
+	var new_scale: float
+	if action_id == 3:
+		new_scale = base_scale
+	else:
+		var direction := 1 if action_id == 1 else -1
+		new_scale = MapEditorInstanceService.stepped_visual_scale(current_scale, base_scale, direction)
+	var new_fp: Array = MapEditorInstanceService.footprint_for_visual_scale(base_fp, base_scale, new_scale)
+	var level := roundi((new_scale / maxf(base_scale, 0.01) - 1.0) / MapEditorInstanceService.UNIFORM_VISUAL_SCALE_STEP)
 	var collision_probe := {
 		"collision_policy": str(asset.get("collision_policy", "none")),
 		"collision_footprint_tiles": asset.get("collision_footprint_tiles", [0, 0]).duplicate(),
@@ -1476,12 +1477,13 @@ static func build_asset_resize_draft(asset: Dictionary, base: Dictionary, action
 	if action_id == 3:
 		collision_probe["collision_footprint_tiles"] = base.get("collision_footprint_tiles", [0, 0]).duplicate()
 	else:
+		var current_fp: Array = asset.get("footprint_tiles", base_fp)
 		MapEditorInstanceService._resize_instance_collision(collision_probe, current_fp, new_fp)
 	var collision_fp: Array = collision_probe.get("collision_footprint_tiles", [0, 0])
 	return {
 		"footprint_tiles": new_fp, "visual_footprint_tiles": new_fp,
 		"occupancy_footprint_tiles": new_fp, "collision_footprint_tiles": collision_fp,
-		"approved_scale": next_scale.x, "logical_scale_level": level,
+		"approved_scale": new_scale, "logical_scale_level": level,
 	}
 
 
@@ -1753,7 +1755,11 @@ func _on_instance_size_menu_pressed(action_id:int)->void:
 		preview.set_document(current_document)
 		if preview.show_walkable_preview: preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document),true)
 		_save_current_document()
-		status_label.text="当前地图素材已%s，中心点、占地和碰撞已同步"%("放大" if action_id==1 else "缩小")
+		var r_inst: Dictionary = result.get("instance", {})
+		var r_scale: Array = r_inst.get("scale", [1.0, 1.0])
+		var r_base := float(r_inst.get("instance_base_scale", 1.0))
+		var r_fp: Array = r_inst.get("footprint_tiles", [1, 1])
+		status_label.text = "整体缩放：%d%%｜占地 %d×%d" % [roundi(float(r_scale[0]) / maxf(0.01, r_base) * 100.0), int(r_fp[0]), int(r_fp[1])]
 	else:status_label.text="缩放失败：%s"%result.get("errors",[])
 
 
