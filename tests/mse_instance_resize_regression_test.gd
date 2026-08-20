@@ -118,8 +118,41 @@ func _ready() -> void:
 		"base_footprint_tiles",
 		p0_asset.get("footprint_tiles", [1, 1])
 	)
-	p0_inst["scale"] = [p0_B * 0.50, p0_B * 0.50]
-	p0_inst["footprint_tiles"] = p0_BASE_FP.duplicate()
+	var p0_current_scale := p0_B * 0.50
+
+	var p0_CURRENT_FP: Array = (
+		MapEditorInstanceService.footprint_for_visual_scale(
+			p0_BASE_FP,
+			p0_B,
+			p0_current_scale
+		)
+	)
+
+	assert(
+		p0_CURRENT_FP != p0_BASE_FP,
+		"P0 test must simulate a legacy instance whose current footprint is already smaller than its catalog base footprint"
+	)
+
+	p0_inst["scale"] = [
+		p0_current_scale,
+		p0_current_scale,
+	]
+
+	p0_inst["footprint_tiles"] = (
+		p0_CURRENT_FP.duplicate()
+	)
+
+	p0_inst["occupancy_footprint_tiles"] = (
+		p0_CURRENT_FP.duplicate()
+	)
+
+	p0_inst["visual_footprint_tiles"] = (
+		p0_CURRENT_FP.duplicate()
+	)
+
+	p0_inst["collision_policy"] = "none"
+	p0_inst["collision_footprint_tiles"] = [0, 0]
+
 	p0_inst["instance_custom_scale"] = true
 	MapEditorInstanceService._located_replace(document, p0_located, p0_inst)
 
