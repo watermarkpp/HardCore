@@ -5043,13 +5043,13 @@
     },
     "user.0523ace68921804d": {
       "anchor_px": [
-        142,
-        511
+        142.0,
+        511.0
       ],
       "display_name": "囚笼 02",
       "footprint_tiles": [
-        6,
-        6
+        6.0,
+        6.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c2.png",
       "output_sha256": "4557fd4bb6e947b5ffface587aaea05bee77f4439f8048eacfd8495527493073",
@@ -5075,13 +5075,13 @@
     },
     "user.066939e4d3322d29": {
       "anchor_px": [
-        138,
-        513
+        138.0,
+        513.0
       ],
       "display_name": "囚笼 03",
       "footprint_tiles": [
-        5,
-        5
+        5.0,
+        5.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c3.png",
       "output_sha256": "bd6e963deca2af68b184d9eb806c7ccc83d706e3d39ef9eb986c8f72d7952334",
@@ -5313,6 +5313,22 @@
       "source_sha256": "781c79188f48dfbd6b75e0e2f5637fd85f96e087f7126ec6c26179e0f8b2168c",
       "status": "verified"
     },
+    "user.0da97f08519bd179": {
+      "anchor_px": [
+        235,
+        416
+      ],
+      "display_name": "雕塑 009",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s02_r1_c3.png",
+      "output_sha256": "03ecc59506e97509829824b7cffa7dcedfefcac74818b8bdd85ce795c7a33fb1",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
+      "status": "verified"
+    },
     "user.0daa7953d73ed16f": {
       "anchor_px": [
         32.0,
@@ -5455,6 +5471,38 @@
       "output_sha256": "af06c227ae19dbc09c1c24af93a196babbd2aa8312b923eec85ddcc36c8ee452",
       "palette_path": "地面/leaf_grass_tiles_split_png_36_tiles",
       "source_sha256": "af06c227ae19dbc09c1c24af93a196babbd2aa8312b923eec85ddcc36c8ee452",
+      "status": "verified"
+    },
+    "user.11da767885267c89": {
+      "anchor_px": [
+        116,
+        498
+      ],
+      "display_name": "雕塑 019",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r2_c3.png",
+      "output_sha256": "33948f140361e8faee41843f253c0b4d25519a34b955bb4f9806d211dda66a40",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
+      "status": "verified"
+    },
+    "user.12798528952dee3c": {
+      "anchor_px": [
+        134,
+        448
+      ],
+      "display_name": "雕塑 005",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s01_r2_c2.png",
+      "output_sha256": "de38fc0a06bcc69346b6c0f53f63da342514ae4222a185ccbbfad56ad771811c",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
       "status": "verified"
     },
     "user.1327de4efa19009a": {
@@ -6353,6 +6401,38 @@
       "source_sha256": "81a9a91c722a02acb6bfa08a2b6bd6b1322fae215f1f45ea16ba07db3bba2a15",
       "status": "verified"
     },
+    "user.2a4ca216beb37aa9": {
+      "anchor_px": [
+        181,
+        411
+      ],
+      "display_name": "雕塑 011",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s02_r2_c2.png",
+      "output_sha256": "14d2ad194ceb85270d6a4a3799dfba6bfc4ef6a06aad6ffd7a7ec2f2ec3f0628",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
+      "status": "verified"
+    },
+    "user.2a66da10acdafadf": {
+      "anchor_px": [
+        192,
+        444
+      ],
+      "display_name": "雕塑 001",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s01_r1_c1.png",
+      "output_sha256": "d04b8b44f9a13408f94177a685d37d20a240e1e1fcee962d5f2ae8abba7aa35a",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
+      "status": "verified"
+    },
     "user.2a845b44bdae721d": {
       "anchor_px": [
         32.0,
@@ -6883,13 +6963,13 @@
     },
     "user.37be26939441459a": {
       "anchor_px": [
-        138,
-        545
+        138.0,
+        545.0
       ],
       "display_name": "囚笼 07",
       "footprint_tiles": [
-        4,
-        4
+        4.0,
+        4.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c3.png",
       "output_sha256": "46ec2a551421646d8bda43c1841325d86c8814c3c1346972fc2f72b0415124d6",
@@ -7345,6 +7425,22 @@
       "source_sha256": "b940b687fa3cd5e181f1a4a4ce39b28f47132fa76507dc059e8c341bee40394d",
       "status": "verified"
     },
+    "user.45f29fbeb82d78f1": {
+      "anchor_px": [
+        135,
+        518
+      ],
+      "display_name": "雕塑 028",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r2_c4.png",
+      "output_sha256": "0ee2e8c5245bae8261ada1d328da059076f7af1b210ff71a2baa392027c0933e",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
+      "status": "verified"
+    },
     "user.46522859ff52d189": {
       "anchor_px": [
         209.0,
@@ -7667,13 +7763,13 @@
     },
     "user.4eaa7d30efe78356": {
       "anchor_px": [
-        182,
-        479
+        182.0,
+        479.0
       ],
       "display_name": "囚笼 04",
       "footprint_tiles": [
-        6,
-        6
+        6.0,
+        6.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c4.png",
       "output_sha256": "1a1825692fcb1e906b0df6adb86f57d04258769cafc639c3fabda2589209f261",
@@ -8113,6 +8209,22 @@
       "source_sha256": "01394864a92b96eedaa35318c40df88f3a6e05343f1c68f94088e885fd96b28f",
       "status": "verified"
     },
+    "user.57aeb1b2b35adda0": {
+      "anchor_px": [
+        201,
+        417
+      ],
+      "display_name": "雕塑 010",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s02_r2_c1.png",
+      "output_sha256": "93683eb4c920d8551fe5994abc6a59113158829b791a5e8ae7c8592179773074",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
+      "status": "verified"
+    },
     "user.59231f4c058cb11c": {
       "anchor_px": [
         172.0,
@@ -8191,6 +8303,22 @@
       "output_sha256": "1e4a66c6bfe87ef8a0a90877848b15a7fde5841c68932798df6d3d99e8dda6b7",
       "palette_path": "装饰物1/xzsc/烛台",
       "source_sha256": "ce000339cf951713994dc20c31f3f2ea0b6f04587f7e188a84801b844a220e88",
+      "status": "verified"
+    },
+    "user.5bc26f0181587097": {
+      "anchor_px": [
+        152,
+        430
+      ],
+      "display_name": "雕塑 008",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s02_r1_c2.png",
+      "output_sha256": "c84abc7025f9c500019bb5afddb231cf1a1ea19db800fa17a90591d76891b364",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
       "status": "verified"
     },
     "user.5c41430bb2310bdc": {
@@ -8339,13 +8467,13 @@
     },
     "user.5f5505e557ccc97d": {
       "anchor_px": [
-        133,
-        487
+        133.0,
+        487.0
       ],
       "display_name": "囚笼 01",
       "footprint_tiles": [
-        4,
-        4
+        4.0,
+        4.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r1_c1.png",
       "output_sha256": "678208ffb5f00d253cd45a341ca3f44f76dc53488025c0bbacb01c0fd9ec4a9e",
@@ -8835,13 +8963,13 @@
     },
     "user.72b7f9192e2b6c46": {
       "anchor_px": [
-        185,
-        518
+        185.0,
+        518.0
       ],
       "display_name": "囚笼 05",
       "footprint_tiles": [
-        6,
-        6
+        6.0,
+        6.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c1.png",
       "output_sha256": "9d05b1b47adc732b6fa811efdff11b6e044cc540fe1ef723cdece3eee35591fc",
@@ -8927,6 +9055,22 @@
       "output_sha256": "4b2ef76ad7b65ef6ddfba0f13e4dbe7dcc6ae65f9f3cdf6581c0c5fd32caacf9",
       "palette_path": "地面/leaf_grass_tiles_split_png_36_tiles",
       "source_sha256": "4b2ef76ad7b65ef6ddfba0f13e4dbe7dcc6ae65f9f3cdf6581c0c5fd32caacf9",
+      "status": "verified"
+    },
+    "user.769fb374093930e3": {
+      "anchor_px": [
+        150,
+        529
+      ],
+      "display_name": "雕塑 025",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r2_c1.png",
+      "output_sha256": "4389c980a8a6a85e1f00dcad15b7828ded02efc72001081782f400088479b5c6",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
       "status": "verified"
     },
     "user.7789b82bda812336": {
@@ -9281,6 +9425,22 @@
       "source_sha256": "0262211d7f27f2c86961b3b665d4e9303c8a590c1f48c27a3b9538c7c89b792c",
       "status": "verified"
     },
+    "user.86501ee91b71e22b": {
+      "anchor_px": [
+        141,
+        522
+      ],
+      "display_name": "雕塑 026",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r2_c2.png",
+      "output_sha256": "a38296cddfbd5ea4474eab79707dd34897f27217210b95e4f262965732f41fe1",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
+      "status": "verified"
+    },
     "user.8730d646e48f66f6": {
       "anchor_px": [
         32.0,
@@ -9569,6 +9729,22 @@
       "source_sha256": "f1fc9b28be334d0fe270c0cccb0b6a0eab56691683fea873041295dbe38d8727",
       "status": "verified"
     },
+    "user.8fcdb035394ff360": {
+      "anchor_px": [
+        113,
+        501
+      ],
+      "display_name": "雕塑 018",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r2_c2.png",
+      "output_sha256": "ff1a6af363ad2fb4c9a0a3b22610da3d175915d9863615cd0878e18385cba9fd",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
+      "status": "verified"
+    },
     "user.8fe8745068f6a5f4": {
       "anchor_px": [
         32.0,
@@ -9583,6 +9759,22 @@
       "output_sha256": "5a23d329454de15b63226df49971ed00316bb06fe6cd52ee0070d3afcf6a411f",
       "palette_path": "地面/leaf_grass_tiles_split_png_36_tiles",
       "source_sha256": "5a23d329454de15b63226df49971ed00316bb06fe6cd52ee0070d3afcf6a411f",
+      "status": "verified"
+    },
+    "user.90aa22e00955ff03": {
+      "anchor_px": [
+        120,
+        501
+      ],
+      "display_name": "雕塑 015",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r1_c3.png",
+      "output_sha256": "3b49b33147af41d315cb040911073648f3c80a70a94ead6c66ea7c5be0b22083",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
       "status": "verified"
     },
     "user.910897c5bb5b6f4a": {
@@ -10543,13 +10735,13 @@
     },
     "user.ab455673c8c79118": {
       "anchor_px": [
-        136,
-        414
+        136.0,
+        414.0
       ],
       "display_name": "囚笼 06",
       "footprint_tiles": [
-        5,
-        8
+        5.0,
+        8.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c2.png",
       "output_sha256": "db1e5fe14dff7e5692ecf0b6d20652fb012dcde9de93092b7be37b84f91d6b74",
@@ -10571,6 +10763,22 @@
       "output_sha256": "d1627249c3a6331156e441f8ce657bb4967c0968d2adf164545c508d9577b758",
       "palette_path": "装饰物1/房子帐篷",
       "source_sha256": "623ac2ccaa4bfce095e941d96bb95e0dd70a6e8dae64aed1356a7116b2c132d5",
+      "status": "verified"
+    },
+    "user.abf0bff8b4111ffa": {
+      "anchor_px": [
+        188,
+        440
+      ],
+      "display_name": "雕塑 002",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s01_r1_c2.png",
+      "output_sha256": "1061406fcb44987557378836a73b72edcc12338c2f93c56b5733af958c4d442f",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
       "status": "verified"
     },
     "user.ac4e64958c960813": {
@@ -10715,6 +10923,22 @@
       "output_sha256": "74295b271064bb8bc21329e01136a4eaadefbac285abab2b83f7057b6cc8593c",
       "palette_path": "地面/mud_tiles_split_png_29_tiles",
       "source_sha256": "74295b271064bb8bc21329e01136a4eaadefbac285abab2b83f7057b6cc8593c",
+      "status": "verified"
+    },
+    "user.ae5be7c8e1523337": {
+      "anchor_px": [
+        149,
+        524
+      ],
+      "display_name": "雕塑 021",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r1_c1.png",
+      "output_sha256": "c66c93d453856e6da1e033a28fb93bc9b07eab6bfa5f9be7858d8233206cd507",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
       "status": "verified"
     },
     "user.ae5cc2b47d6eef19": {
@@ -10895,13 +11119,13 @@
     },
     "user.b2d7a4b4f9b9cc86": {
       "anchor_px": [
-        198,
-        478
+        198.0,
+        478.0
       ],
       "display_name": "囚笼 08",
       "footprint_tiles": [
-        6,
-        6
+        6.0,
+        6.0
       ],
       "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_8bc3bd550b/cage_r2_c4.png",
       "output_sha256": "b66be64f099067e341686160102dc8830c9e6a753cc909c8cb634ed29e4d71a8",
@@ -11037,6 +11261,22 @@
       "source_sha256": "87cf9f6dfc1d340c40d1204db764036efbb7a9536bebd8f372e183f7ce53216e",
       "status": "verified"
     },
+    "user.b4f2482be750269b": {
+      "anchor_px": [
+        86,
+        539
+      ],
+      "display_name": "雕塑 024",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r1_c4.png",
+      "output_sha256": "b762c97ea02a0120574642012902450b3b7e28b91f7d0f4fcb147eb3c90a633e",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
+      "status": "verified"
+    },
     "user.b6208bc724b5d53b": {
       "anchor_px": [
         174.0,
@@ -11099,6 +11339,22 @@
       "output_sha256": "b027f3b5ed97b51967045944be71618f9da401b1fad921bbd83e3be95cb798e9",
       "palette_path": "地面/dark_grass_tiles_split_png_29_tiles",
       "source_sha256": "b027f3b5ed97b51967045944be71618f9da401b1fad921bbd83e3be95cb798e9",
+      "status": "verified"
+    },
+    "user.b918ef9eecbc775d": {
+      "anchor_px": [
+        114,
+        506
+      ],
+      "display_name": "雕塑 014",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r1_c2.png",
+      "output_sha256": "7dc221ab56f5f14dd898828a97291aa95baed0cf06156d66faf7abdf6ea2ce18",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
       "status": "verified"
     },
     "user.b9aaa77de1643ac5": {
@@ -11291,6 +11547,22 @@
       "output_sha256": "99497003e7c7174d410d40f68bb4253062eb9744acac57000ed8ef1555927cba",
       "palette_path": "装饰物1/xzsc/武器架",
       "source_sha256": "9f408d5ab97fc48a55b2b2855c51877a2bad549cf4f21db30d15b9acbab9e005",
+      "status": "verified"
+    },
+    "user.bf630775a8cc1c4f": {
+      "anchor_px": [
+        117,
+        495
+      ],
+      "display_name": "雕塑 016",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r1_c4.png",
+      "output_sha256": "c295e2fb53420961b496cbd99f09727c8fb64b7ecb96250ae353f8d7d6581c28",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
       "status": "verified"
     },
     "user.bfd1b0d143983d1b": {
@@ -11515,6 +11787,22 @@
       "output_sha256": "0ec3d69766645ed6e1c338a2ee70c1210b7d98a192cb81db78edaaca32dac389",
       "palette_path": "装饰物1/树木",
       "source_sha256": "0ec3d69766645ed6e1c338a2ee70c1210b7d98a192cb81db78edaaca32dac389",
+      "status": "verified"
+    },
+    "user.c791555e860b56f9": {
+      "anchor_px": [
+        124,
+        523
+      ],
+      "display_name": "雕塑 027",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r2_c3.png",
+      "output_sha256": "889dd760a9b2e95fe91db5357c1ae5b3adb1bed793b5867d55a5cbd21b8d780a",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
       "status": "verified"
     },
     "user.c7cb075e30baac37": {
@@ -11821,6 +12109,22 @@
       "source_sha256": "527cdd2e2fa6ccfa0b137e971d8df36d7a4f107b598aebca5cb14bc518bda528",
       "status": "verified"
     },
+    "user.d08a9a87bd323625": {
+      "anchor_px": [
+        127,
+        609
+      ],
+      "display_name": "雕塑 004",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s01_r2_c1.png",
+      "output_sha256": "2b84a74a8a9e679082aa765ded1622038ff82f6396fbcd464321420142bbce13",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
+      "status": "verified"
+    },
     "user.d0c3e92640f21567": {
       "anchor_px": [
         148.0,
@@ -11851,6 +12155,22 @@
       "output_sha256": "9399278aec54cfa93ca9b99a1f7619ed12d9fc7bcdf1743a16f148bd74e9c3aa",
       "palette_path": "装饰物1/地毯",
       "source_sha256": "9399278aec54cfa93ca9b99a1f7619ed12d9fc7bcdf1743a16f148bd74e9c3aa",
+      "status": "verified"
+    },
+    "user.d2ca69e761034ea9": {
+      "anchor_px": [
+        293,
+        427
+      ],
+      "display_name": "雕塑 012",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s02_r2_c3.png",
+      "output_sha256": "2d84263fc67dab7d98fe7e38571fc9c2806b396cbb4f9c6461fe40ed800e64ae",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
       "status": "verified"
     },
     "user.d3c477bcd0d11efc": {
@@ -11931,6 +12251,22 @@
       "output_sha256": "b5709b6b2054b44a525265e90fb41090edffcf23fda875dbac61ae6b72a7b556",
       "palette_path": "装饰物1/xzsc/武器架",
       "source_sha256": "647309bb3400b920dd51620974de7091ec9e26d28fa94bbf40e39cc2de3fb256",
+      "status": "verified"
+    },
+    "user.d5875187f0ff4cc7": {
+      "anchor_px": [
+        107,
+        521
+      ],
+      "display_name": "雕塑 022",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r1_c2.png",
+      "output_sha256": "0a62d2c10410d4f6138819e3a9bbcbaedb45bdb2eaa3c6b8fb0d2d0e0737bc03",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
       "status": "verified"
     },
     "user.d5e95961e109e609": {
@@ -12141,6 +12477,22 @@
       "source_sha256": "9b812016c466496fe7985237aeecebbfa6399ccf7a03372b9112d8846c41d64f",
       "status": "verified"
     },
+    "user.da9af3121c2ef08d": {
+      "anchor_px": [
+        74,
+        524
+      ],
+      "display_name": "雕塑 023",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s04_r1_c3.png",
+      "output_sha256": "792737d89973c60da8fbabee2d77589581370fa7b3c28676f4f657477af52114",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "a7782dee72122e8235d669c1a9851efe2efef672bb8021ad1290cf87340690e6",
+      "status": "verified"
+    },
     "user.db9067cb768e71e3": {
       "anchor_px": [
         99.0,
@@ -12171,6 +12523,22 @@
       "output_sha256": "77146c468c53c66bcde2c087390725f685d14a93ac5e624adc4ab81682a6a4e7",
       "palette_path": "装饰物1/尸体没有碰撞体积只是贴图",
       "source_sha256": "ea0eb32fca07f829aefe9a4f77c0fbbb3d316bcae7651d84a9d64638050e8127",
+      "status": "verified"
+    },
+    "user.dbf73c977881758a": {
+      "anchor_px": [
+        107,
+        500
+      ],
+      "display_name": "雕塑 020",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r2_c4.png",
+      "output_sha256": "1dfbbb01e309684ecbbdfcf29aec646a868597d339fef76fc3fa25f0d1b637ba",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
       "status": "verified"
     },
     "user.dc4cb95dd880dfa1": {
@@ -12429,6 +12797,22 @@
       "source_sha256": "ce000339cf951713994dc20c31f3f2ea0b6f04587f7e188a84801b844a220e88",
       "status": "verified"
     },
+    "user.e463774ae8c4bfc4": {
+      "anchor_px": [
+        149.0,
+        532.0
+      ],
+      "display_name": "雕塑 001",
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_001.png",
+      "output_sha256": "4393c34456b55ee99287905b6d596d2d52364ed100fd6574f700476cb2f70843",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "4393c34456b55ee99287905b6d596d2d52364ed100fd6574f700476cb2f70843",
+      "status": "verified"
+    },
     "user.e4babeae26803f5c": {
       "anchor_px": [
         32.0,
@@ -12459,6 +12843,22 @@
       "output_sha256": "c97bd7a7f67510d68ff6683283f7d76258c24a5c4897804ec407655798278d9c",
       "palette_path": "装饰物1/尸体没有碰撞体积只是贴图",
       "source_sha256": "c158ff128d4109b5d762c412c150f573411581da879d62e12ee6872d2785477f",
+      "status": "verified"
+    },
+    "user.e669572580d701f7": {
+      "anchor_px": [
+        248,
+        415
+      ],
+      "display_name": "雕塑 006",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s01_r2_c3.png",
+      "output_sha256": "2aa170a7928e0c479bc11c44779dab65f759b885ce99013b1feb56f8646d9942",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "2ae06b6ae090841fced1ae284199fec06ee6d1510b1a543cd576b3c399957867",
       "status": "verified"
     },
     "user.e835c2c694e404da": {
@@ -13065,6 +13465,22 @@
       "source_sha256": "1dd9ef709af72cb7142ae63c76287eb0b2d337fdc836b4bb3eb0db8923ea37e4",
       "status": "verified"
     },
+    "user.f7564d3abecf4ccf": {
+      "anchor_px": [
+        107,
+        514
+      ],
+      "display_name": "雕塑 013",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r1_c1.png",
+      "output_sha256": "bfa982f86d8a992fff8d5a01d200f06769d8de34346a8247a8fb5652d0714055",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
+      "status": "verified"
+    },
     "user.f84c8e06929aa113": {
       "anchor_px": [
         80.0,
@@ -13111,6 +13527,22 @@
       "output_sha256": "38482b0d8fb9c724d30881b9efd8ea9a90baff0f301d41d2ff4450acfd601b7f",
       "palette_path": "装饰物1/xzsc/烛台",
       "source_sha256": "ce000339cf951713994dc20c31f3f2ea0b6f04587f7e188a84801b844a220e88",
+      "status": "verified"
+    },
+    "user.f9478653d287626d": {
+      "anchor_px": [
+        99,
+        498
+      ],
+      "display_name": "雕塑 017",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s03_r2_c1.png",
+      "output_sha256": "8cf8db38f0c2f324924e2cf161a80c3ad737db9a13998d008f9c27933ff77026",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "facb1a28a87709244fd3c6a69a2cddaa999a91f52c13e4260d6920af62069319",
       "status": "verified"
     },
     "user.faa8cec85f2890c7": {
@@ -13207,6 +13639,22 @@
       "output_sha256": "5400308baac1606fbea64f05a7e5cecd539793e172b43e2e819996aaa1687af6",
       "palette_path": "地面/mud_tiles_split_png_29_tiles",
       "source_sha256": "5400308baac1606fbea64f05a7e5cecd539793e172b43e2e819996aaa1687af6",
+      "status": "verified"
+    },
+    "user.fd2ef972b3611919": {
+      "anchor_px": [
+        216,
+        446
+      ],
+      "display_name": "雕塑 007",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_5e5bb3e9c0/sculpture_s02_r1_c1.png",
+      "output_sha256": "f6cb40e953bb8261396939c5a86f6bba142862b3bae1b3210df37f3444e517a4",
+      "palette_path": "装饰物1/xzsc/雕塑",
+      "source_sha256": "39ee2104ca0aa06b4e82ffcc89548dd008a2be18e4ec389604e86ab600c3918e",
       "status": "verified"
     },
     "user.fd2f41cacf11d8ba": {
