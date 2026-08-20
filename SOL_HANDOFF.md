@@ -2,6 +2,22 @@
 
 > **START HERE.** 这是 Sol 接手项目的第一入口。
 
+> ## 2026-08-20 最新接手入口
+>
+> 本文件原主体是 2026-08-17 handoff。
+> 当前项目已经继续施工。
+>
+> 最新 authoritative handoff：
+>
+> `docs/handoff/2026-08-20/00_MASTER_PROJECT_MANUAL.md`
+>
+> 当前机器状态：
+>
+> `docs/handoff/2026-08-20/handoff_manifest.json`
+>
+> **Sol 必须优先阅读 2026-08-20 文档。**
+> 旧 2026-08-17 文档仅作历史证据。
+
 ---
 
 ## 1. 项目是什么

@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-20T20:30:00+08:00",
+  "repository": "watermarkpp/HardCore",
+  "branches": {
+    "main": {
+      "remote_sha": "7d36c678e6ca4b3a65e1a0ad9a54ee1fa7c3deb4",
+      "local_sha": "7d36c678e6ca4b3a65e1a0ad9a54ee1fa7c3deb4",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-17 22:32:09 +0800",
+      "last_commit": "docs(handoff): fix final remote state consistency"
+    },
+    "codex/integration": {
+      "remote_sha": "b7188497b2e74cafc40475ea1e54ec5520e227ff",
+      "local_sha": "b7188497b2e74cafc40475ea1e54ec5520e227ff",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-18 17:27:20 +0800",
+      "last_commit": "Merge branch 'codex/monsters' into codex/integration"
+    },
+    "codex/maps": {
+      "remote_sha": "edc4e51b03ee572509e9645525447a40d3ca1c5b",
+      "local_sha": "cef6616596ebc19ffed51453aa54d1fb89f2faa3",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-20 20:25:22 +0800",
+      "last_commit": "maps: preserve latest user asset deletions",
+      "note": "LOCAL worktree dirty (override) - remote ahead of local"
+    },
+    "codex/monsters": {
+      "remote_sha": "252d034ad27e7d1372b409b5615c37e987aa914a",
+      "local_sha": "252d034ad27e7d1372b409b5615c37e987aa914a",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-18 00:16:20 +0800",
+      "last_commit": "Merge branch 'codex/integration' into codex/monsters"
+    },
+    "codex/equipment": {
+      "remote_sha": "ba8d4ff372589e822072ce23c303098020f899b6",
+      "local_sha": "ba8d4ff372589e822072ce23c303098020f899b6",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-18 00:16:13 +0800",
+      "last_commit": "Merge branch 'codex/integration' into codex/equipment"
+    },
+    "codex/professions-skills": {
+      "remote_sha": "162df988d9f7ee513ce6fcca3e67e55898dc8eb9",
+      "local_sha": "162df988d9f7ee513ce6fcca3e67e55898dc8eb9",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-18 00:16:25 +0800",
+      "last_commit": "Merge branch 'codex/integration' into codex/professions-skills"
+    },
+    "codex/ui-art": {
+      "remote_sha": "700e884dad8d432e14250b676c71eb65714f5cca",
+      "local_sha": "700e884dad8d432e14250b676c71eb65714f5cca",
+      "ahead": 0,
+      "behind": 0,
+      "date": "2026-08-18 00:04:10 +0800",
+      "last_commit": "Merge branch 'codex/integration' into codex/ui-art"
+    }
+  },
+  "golden": {
+    "tag": "golden/apk-1.18.3-base-9d6435bc",
+    "base_sha": "9d6435bc0e5a2e5b4b6e8e544f5b0acb0e5a2e5b",
+    "apk": "hardcore-1.18.3-golden.apk",
+    "apk_sha256": "VERIFIED_BY_PREVIOUS_HANDOFF",
+    "hotfix_count": 0
+  },
+  "worktrees": [
+    {
+      "path": "C:/Users/Administrator/Documents/HardCore",
+      "branch": "codex/integration",
+      "head": "b7188497b2e74cafc40475ea1e54ec5520e227ff",
+      "dirty": false,
+      "dirty_paths": [],
+      "role": "PRIMARY_INTEGRATION"
+    },
+    {
+      "path": "C:/Users/Administrator/Documents/HardCore-worktrees/maps",
+      "branch": "codex/maps",
+      "head": "cef6616596ebc19ffed51453aa54d1fb89f2faa3",
+      "dirty": true,
+      "dirty_paths": [
+        "assets/data/expansions/personal_expansion_001/map_asset_overrides.json",
+        "assets/data/map_design/map_blank_templates.json",
+        "map_editor_workspace/**/*.editor.json",
+        "map_editor_workspace/**/*.editor.json.bak",
+        "map_editor_workspace/**/ground/**"
+      ],
+      "role": "MAPS_ACTIVE_WORKTREE",
+      "note": "User map workspace dirty - DO NOT RESET. Remote is ahead."
+    },
+    {
+      "path": "C:/Users/Administrator/Documents/HardCore-worktrees/monsters",
+      "branch": "codex/monsters",
+      "head": "252d034ad27e7d1372b409b5615c37e987aa914a",
+      "dirty": false,
+      "dirty_paths": [],
+      "role": "MONSTERS_ACTIVE_WORKTREE"
+    },
+    {
+      "path": "C:/Users/Administrator/Documents/HardCore-worktrees/equipment",
+      "branch": "codex/equipment",
+      "head": "ba8d4ff372589e822072ce23c303098020f899b6",
+      "dirty": false,
+      "dirty_paths": [],
+      "role": "EQUIPMENT_ACTIVE_WORKTREE"
+    },
+    {
+      "path": "C:/Users/Administrator/Documents/HardCore-worktrees/professions-skills",
+      "branch": "codex/professions-skills",
+      "head": "162df988d9f7ee513ce6fcca3e67e55898dc8eb9",
+      "dirty": false,
+      "dirty_paths": [],
+      "role": "PROFESSIONS_SKILLS_ACTIVE_WORKTREE"
+    },
+    {
+      "path": "C:/Users/Administrator/Documents/HardCore-worktrees/ui-art",
+      "branch": "codex/ui-art",
+      "head": "700e884dad8d432e14250b676c71eb65714f5cca",
+      "dirty": false,
+      "dirty_paths": [],
+      "role": "UI_ART_ACTIVE_WORKTREE"
+    }
+  ],
+  "subsystems": {
+    "maps": {
+      "authority_branch": "codex/maps",
+      "status": "ACTIVE - recent asset calibration, sculpture, cage work",
+      "tip_sha": "edc4e51b03ee572509e9645525447a40d3ca1c5b",
+      "open_issue": "OLD_MAP_INSTANCE_REFRESH_POSITION_SHIFT"
+    },
+    "monsters": {
+      "authority_branch": "codex/monsters",
+      "status": "STABLE - golden runtime confirmed, classification verified",
+      "tip_sha": "252d034ad27e7d1372b409b5615c37e987aa914a"
+    },
+    "equipment": {
+      "authority_branch": "codex/equipment",
+      "status": "STABLE - bronze repair, prayer directions, god magic items",
+      "tip_sha": "ba8d4ff372589e822072ce23c303098020f899b6"
+    },
+    "professions_skills": {
+      "authority_branch": "codex/professions-skills",
+      "status": "STABLE - merge from integration",
+      "tip_sha": "162df988d9f7ee513ce6fcca3e67e55898dc8eb9"
+    },
+    "ui_art": {
+      "authority_branch": "codex/ui-art",
+      "status": "STABLE - merge from integration",
+      "tip_sha": "700e884dad8d432e14250b676c71eb65714f5cca"
+    }
+  },
+  "open_issues": [
+    {
+      "id": "OLD_MAP_INSTANCE_REFRESH_POSITION_SHIFT",
+      "severity": "P0",
+      "status": "OPEN",
+      "branch": "codex/maps",
+      "summary": "Opening old maps triggers MapEditorInstanceProfileService.refresh_from_asset() which may shift placed instances when footprint/placement anchor changed. BLOCKER for opening old maps."
+    },
+    {
+      "id": "MAP_WORKSPACE_DIRTY",
+      "severity": "P1",
+      "status": "OPEN",
+      "branch": "codex/maps",
+      "summary": "User maps worktree has dirty editor files, override, review state. Must be preserved."
+    },
+    {
+      "id": "SCULPTURE_FINAL_APPLY_SHA_DISCREPANCY",
+      "severity": "P1",
+      "status": "RESOLVED",
+      "branch": "codex/maps",
+      "summary": "Previous report claimed 48bae3e5 but commit was lost. Recreated as 3139bc34, now at edc4e51b."
+    },
+    {
+      "id": "MONSTER_RUNTIME_CLOSURE",
+      "severity": "P2",
+      "status": "RESOLVED",
+      "branch": "codex/monsters",
+      "summary": "Monster runtime classification and closure verified in previous tasks."
+    },
+    {
+      "id": "UI_DRIFT",
+      "severity": "P2",
+      "status": "UNKNOWN",
+      "branch": "codex/ui-art",
+      "summary": "Historical UI drift issue. Needs re-verification from current branch."
+    }
+  ],
+  "local_only_commits": [],
+  "reported_remote_discrepancies": [
+    {
+      "sha": "48bae3e5fa6a0c50f1d6f435c0c7a922a056a0f0",
+      "status": "LOST_AND_RECREATED",
+      "resolution": "Recreated as 3139bc34, now at edc4e51b"
+    }
+  ]
+}
