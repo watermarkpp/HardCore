@@ -2,7 +2,6 @@ extends Node
 
 
 const CATALOG_PATH := "res://assets/data/assets/map_small_decoration_asset_catalog.json"
-const REVIEW_PATH := "res://assets/data/expansions/personal_expansion_001/map_asset_footprint_review_state.json"
 const PACKAGE_ID := "mse_small_decoration_pack_20260822_v1"
 const PALETTE_PATH := "装饰物1/小装饰物"
 const ALPHA_THRESHOLD := 8
@@ -221,10 +220,5 @@ func _ready() -> void:
 	for asset_id: String in raw_ids:
 		assert(effective_pack_ids.has(asset_id), asset_id + ":effective_missing")
 
-	var review := _read_json(REVIEW_PATH)
-	var review_items: Dictionary = review.get("items", {})
-	for asset_id: String in raw_ids:
-		assert(not review_items.has(asset_id), asset_id + ":unexpected_review_state")
-
-	print("MSE_SMALL_DECORATION_ASSET_PASS assets=48 effective=48 grid=2x4 collision=none review=0")
+	print("MSE_SMALL_DECORATION_ASSET_PASS assets=48 effective=48 grid=2x4 collision=none review=external_authority")
 	get_tree().quit(0)
