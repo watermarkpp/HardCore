@@ -624,6 +624,125 @@
       "content_policy": "empty_layers",
       "ground_policy": "virtual_blank_until_dirty",
       "editable_layer": "expansion"
+    },
+    {
+      "template_id": "blank.hadd_2",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "hadd_2",
+      "runtime_map_id": 990104,
+      "display_name": "黑暗地带",
+      "map_type": "quest_room",
+      "design_size": [
+        32,
+        64
+      ],
+      "pre_scale_design_size": [
+        32,
+        64
+      ],
+      "strategy": "custom_blank_layout",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_workspace_clone",
+      "size_decision_source": "user_request_2026-08-21",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.between_life_and_death",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "between_life_and_death",
+      "runtime_map_id": 1446,
+      "display_name": "生死之间",
+      "map_type": "quest_room",
+      "design_size": [
+        32,
+        64
+      ],
+      "pre_scale_design_size": [
+        32,
+        64
+      ],
+      "strategy": "exact_clone_of_hadd_2",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-21",
+      "clone_source_map_id": "hadd_2",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.terror_space",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "terror_space",
+      "runtime_map_id": 1450,
+      "display_name": "恐怖空间",
+      "map_type": "quest_room",
+      "design_size": [
+        32,
+        64
+      ],
+      "pre_scale_design_size": [
+        32,
+        64
+      ],
+      "strategy": "exact_clone_of_hadd_2",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-21",
+      "clone_source_map_id": "hadd_2",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.thin_sky_passage",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "thin_sky_passage",
+      "runtime_map_id": 1451,
+      "display_name": "一线天",
+      "map_type": "quest_room",
+      "design_size": [
+        32,
+        64
+      ],
+      "pre_scale_design_size": [
+        32,
+        64
+      ],
+      "strategy": "exact_clone_of_hadd_2",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-21",
+      "clone_source_map_id": "hadd_2",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.death_coffin",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "death_coffin",
+      "runtime_map_id": 1383,
+      "display_name": "死亡棺材",
+      "map_type": "quest_room",
+      "design_size": [
+        32,
+        64
+      ],
+      "pre_scale_design_size": [
+        32,
+        64
+      ],
+      "strategy": "exact_clone_of_hadd_2",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-21",
+      "clone_source_map_id": "hadd_2",
+      "workspace_status": "ready"
     }
   ]
 }
