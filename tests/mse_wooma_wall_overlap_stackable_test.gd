@@ -55,4 +55,3 @@ func _assert_visual_only_wall(instance: Dictionary) -> void:
 	assert(str(instance.get("placement_rule", "")) == "inside_map")
 	assert(str(instance.get("collision_policy", "")) == "none")
 	assert(instance.get("collision_footprint_tiles", []) == [0, 0])
-
