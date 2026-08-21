@@ -28,14 +28,6 @@ static func validate(
 		footprint = [1, 1]
 	var size: Array = document.get("design", {}).get("design_size", [0, 0])
 	var footprint_size := Vector2i(int(footprint[0]), int(footprint[1]))
-	var occupancy: Array = (
-		footprint_override
-		if footprint_override is Array and footprint_override.size() == 2
-		else asset.get("occupancy_footprint_tiles", footprint)
-	)
-	if occupancy.size() != 2:
-		occupancy = footprint
-	var occupancy_size := Vector2i(int(occupancy[0]), int(occupancy[1]))
 	if not _is_within_map_bounds(
 		asset,
 		anchor_tile,
@@ -51,33 +43,9 @@ static func validate(
 		warnings.append("ground_brush_recommended_on_ground_base")
 	if str(asset.get("content_layer", "")) == "vanilla":
 		warnings.append("vanilla_asset_read_only_use_expansion_clone")
-	var placement_rule := (
-		"non_overlapping"
-		if object_role in ["building", "obstacle", "terrain"]
-		else "inside_map"
-	)
-	if placement_rule == "non_overlapping":
-		for existing: Dictionary in MapEditorInstanceService.all_instances(document):
-			if str(existing.get("instance_id", "")) == ignore_instance_id:
-				continue
-			var existing_rule := str(existing.get("placement_rule", ""))
-			var existing_role := str(existing.get("object_role", "decoration"))
-			if (
-				existing_rule != "non_overlapping"
-				and not (
-					existing_rule.is_empty()
-					and existing_role in ["building", "obstacle", "terrain"]
-				)
-			):
-				continue
-			if _overlaps(
-				anchor_tile,
-				occupancy_size,
-				_tile(existing),
-				_occupancy_footprint(existing)
-			):
-				errors.append("blocked_footprint_overlap:%s" % existing.instance_id)
-				break
+	# Visual overlap is allowed for every role. Collision/navigation is an
+	# independent instance contract; only boundary and asset checks above
+	# determine whether placement is valid.
 	return {"ok": errors.is_empty(), "level": "error" if not errors.is_empty() else "warning" if not warnings.is_empty() else "ok", "errors": errors, "warnings": warnings, "asset": asset, "footprint_tiles": [footprint_size.x, footprint_size.y]}
 
 
@@ -119,25 +87,3 @@ static func _is_within_map_bounds(
 		and placement_anchor.x < float(design_size.x)
 		and placement_anchor.y < float(design_size.y)
 	)
-
-
-static func _tile(instance: Dictionary) -> Vector2i:
-	var tile: Array = instance.get("tile", [0, 0])
-	return Vector2i(int(tile[0]), int(tile[1]))
-
-
-static func _footprint(instance: Dictionary) -> Vector2i:
-	var footprint: Array = instance.get("footprint_tiles", [1, 1])
-	return Vector2i(int(footprint[0]), int(footprint[1]))
-
-
-static func _occupancy_footprint(instance: Dictionary) -> Vector2i:
-	var footprint: Array = instance.get(
-		"occupancy_footprint_tiles",
-		instance.get("footprint_tiles", [1, 1])
-	)
-	return Vector2i(int(footprint[0]), int(footprint[1]))
-
-
-static func _overlaps(a_position: Vector2i, a_size: Vector2i, b_position: Vector2i, b_size: Vector2i) -> bool:
-	return Rect2i(a_position, a_size).intersects(Rect2i(b_position, b_size))

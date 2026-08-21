@@ -39,7 +39,7 @@ func _ready() -> void:
 	assert(bool(placed.get("ok", false)), str(placed.get("errors", [])))
 	_assert_manual_only_instance(placed.instance)
 	_assert_geometry_matches_asset(placed.instance, asset)
-	assert(str(placed.instance.placement_rule) == "non_overlapping")
+	assert(str(placed.instance.placement_rule) == "inside_map")
 	assert(JSON.stringify(document.layers.collision) == manual_before)
 	assert(JSON.stringify(document.layers.collision_erase) == erase_before)
 
@@ -50,15 +50,12 @@ func _ready() -> void:
 		Vector2i(20, 20),
 		"object_base"
 	)
-	assert(not bool(overlap.get("ok", false)))
-	assert(
-		(overlap.get("errors", []) as Array).has(
-			"blocked_footprint_overlap:%s" % str(placed.instance.instance_id)
-		)
-	)
+	assert(bool(overlap.get("ok", false)), str(overlap.get("errors", [])))
+	_assert_manual_only_instance(overlap.instance)
+	assert(str(overlap.instance.placement_rule) == "inside_map")
 
-	for role: String in ["building", "interactable"]:
-		var tile := Vector2i(80, 20) if role == "building" else Vector2i(140, 20)
+	for role: String in ["building", "interactable", "terrain"]:
+		var tile := Vector2i(80, 20) if role == "building" else Vector2i(140, 20) if role == "interactable" else Vector2i(200, 20)
 		var result := MapEditorInstanceService.create_instance(
 			document,
 			str(asset.asset_id),
@@ -70,6 +67,7 @@ func _ready() -> void:
 		_assert_manual_only_instance(result.instance)
 		_assert_geometry_matches_asset(result.instance, asset)
 		assert(str(result.instance.object_role) == role)
+		assert(str(result.instance.placement_rule) == "inside_map")
 
 	var decoration_overlap := MapEditorInstanceService.create_instance(
 		document,
@@ -120,7 +118,7 @@ func _ready() -> void:
 	var duplicated := MapEditorInstanceService.duplicate_instance_snapshot(
 		document,
 		source,
-		Vector2i(190, 120)
+		Vector2i(80, 20)
 	)
 	assert(bool(duplicated.get("ok", false)), str(duplicated.get("errors", [])))
 	assert(JSON.stringify(source) == source_before)

@@ -10,10 +10,10 @@ const MATERIAL_LAYER_NAMES := [
 ]
 const ROLE_DEFAULTS := {
 	"decoration": {"scene_intent": "visual_detail", "gameplay_role": "none", "placement_rule": "inside_map", "collision_policy": "none", "navigation_policy": "ignore"},
-	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
-	"building": {"scene_intent": "landmark", "gameplay_role": "service_or_landmark", "placement_rule": "non_overlapping", "collision_policy": "solid_footprint", "navigation_policy": "block_player_and_monster"},
+	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "inside_map", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
+	"building": {"scene_intent": "landmark", "gameplay_role": "service_or_landmark", "placement_rule": "inside_map", "collision_policy": "solid_footprint", "navigation_policy": "block_player_and_monster"},
 	"interactable": {"scene_intent": "visual_detail", "gameplay_role": "interactable", "placement_rule": "inside_map", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
-	"terrain": {"scene_intent": "terrain_boundary", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "terrain_stamp_generated", "navigation_policy": "block_player_and_monster"},
+	"terrain": {"scene_intent": "terrain_boundary", "gameplay_role": "navigation_blocker", "placement_rule": "inside_map", "collision_policy": "terrain_stamp_generated", "navigation_policy": "block_player_and_monster"},
 }
 const UNIFORM_VISUAL_SCALE_CONTRACT_ID := "maps.asset_visual_scale.base_relative_10pct.v1"
 const UNIFORM_VISUAL_SCALE_STEP := 0.10
