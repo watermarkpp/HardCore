@@ -4,9 +4,9 @@ extends Node
 const CATALOG_PATH := "res://assets/data/assets/map_asset_catalog.json"
 const REVIEW_PATH := "res://assets/data/expansions/personal_expansion_001/map_asset_footprint_review_state.json"
 const PROCESSING := "tree_roadblock_explicit_grid_v1"
-const EXPECTED_TOTAL := 144
+const EXPECTED_TOTAL := 128
 const EXPECTED_TREE := 128
-const EXPECTED_ROADBLOCK := 16
+const EXPECTED_ROADBLOCK := 0
 const EXPECTED_OLD_TREE := 118
 
 
@@ -122,7 +122,7 @@ func _ready() -> void:
 
 	assert(tree_count == EXPECTED_TREE)
 	assert(roadblock_count == EXPECTED_ROADBLOCK)
-	assert(out_of_image_anchor_count == 18)
+	assert(out_of_image_anchor_count == 8)
 
 	var old_tree_ids := {}
 	for asset: Dictionary in MapAssetCatalogService.all_assets():
@@ -137,7 +137,7 @@ func _ready() -> void:
 
 	print(
 		"MSE_TREE_ROADBLOCK_VERIFIED_CALIBRATION_PASS "
-		+ "assets=144 trees=128 roadblocks=16 verified=144 "
-		+ "out_of_image_anchor_count=18 old_tree_placeable_false=118"
+		+ "assets=128 trees=128 roadblocks=0 verified=128 "
+		+ "out_of_image_anchor_count=8 old_tree_placeable_false=118"
 	)
 	get_tree().quit(0)

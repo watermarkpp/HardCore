@@ -1,7 +1,7 @@
-"""Promote the verified tree/roadblock calibration review into overrides.
+"""Promote the verified tree calibration review into overrides.
 
 This is intentionally a narrow, fail-closed promotion tool.  It only accepts
-the 144 assets produced by ``tree_roadblock_explicit_grid_v1`` in the main
+the 128 tree assets produced by ``tree_roadblock_explicit_grid_v1`` in the main
 catalog and only copies the user's already-verified anchor/footprint values.
 The manual review contract permits a foot-tile anchor below the transparent
 canvas, so an anchor is required to be a non-negative integer pair but is not
@@ -32,9 +32,9 @@ CATALOG = ROOT / "assets/data/assets/map_asset_catalog.json"
 REVIEW_STATE = ROOT / "assets/data/expansions/personal_expansion_001/map_asset_footprint_review_state.json"
 OVERRIDES = ROOT / "assets/data/expansions/personal_expansion_001/map_asset_overrides.json"
 PROCESSING = "tree_roadblock_explicit_grid_v1"
-EXPECTED_COUNT = 144
-TARGET_PREFIXES = ("新增树木20260821_", "新增路障20260821_")
-TARGET_PATH_MARKERS = ("/trees/新增/", "/barricades/新增/")
+EXPECTED_COUNT = 128
+TARGET_PREFIXES = ("新增树木20260821_",)
+TARGET_PATH_MARKERS = ("/trees/新增/",)
 REQUIRED_OVERRIDE_FIELDS = (
     "anchor_px",
     "footprint_tiles",
@@ -77,7 +77,7 @@ def target_like(review: dict[str, Any]) -> bool:
     return (
         display_name.startswith(TARGET_PREFIXES)
         or any(marker in image for marker in TARGET_PATH_MARKERS)
-        or "/新增/" in palette
+        or "/树木/新增/" in palette
     )
 
 
@@ -248,7 +248,7 @@ def main() -> int:
         else:
             print(
                 "PROMOTE_CHECK_PASS "
-                f"assets={len(selected)} verified=144 overrides={len(expected_by_id)} "
+                f"assets={len(selected)} verified=128 overrides={len(expected_by_id)} "
                 f"out_of_image_anchor_count={out_of_image_anchor_count}"
             )
         return 0

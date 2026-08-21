@@ -1,11 +1,11 @@
-"""Explicit-grid recut/import for the 2026-08-21 tree and roadblock sheets.
+"""Explicit-grid recut/import for the 2026-08-21 tree sheets.
 
 The source sheets are intentionally described in a checked-in manifest.  This
 tool never runs the generic transparent-gap detector or keeps a rectangular
 cell crop.  It keeps only the alpha-connected component selected by the
-declared nominal cell; a component shared by two nominal cells is split by
-nearest per-cell centroid seeds.  Every output is rebuilt from a masked tight
-bounds plus transparent padding.  ``--write`` is the only mutating mode;
+    declared nominal cell; a component shared by two nominal cells is split by
+    nearest per-cell centroid seeds.  Every output is rebuilt from a masked tight
+    bounds plus transparent padding.  ``--write`` is the only mutating mode;
 ``--check`` is safe to run after import or in CI.
 """
 
@@ -31,7 +31,6 @@ REVIEW_STATE = ROOT / "assets/data/expansions/personal_expansion_001/map_asset_f
 OVERRIDES = ROOT / "assets/data/expansions/personal_expansion_001/map_asset_overrides.json"
 ASSET_ROOT = ROOT / "assets/art/maps/_shared/user_palette/decorations_1"
 TREE_PREFIX = "装饰物1/树木"
-ROADBLOCK_PREFIX = "装饰物1/路障"
 GENERATED_TAG = "tree_roadblock_explicit_grid_v1"
 SEGMENTATION_TAG = "connected_components_dominant_cell_v2"
 
@@ -87,9 +86,7 @@ def _component_segments(
 
     The nominal grid is used only to identify a component, never as an output
     crop.  This is important for sheets whose objects touch or slightly cross
-    the artist's grid guides.  Roadblocks contain two labels spanning two
-    nominal cells; those labels are deterministically partitioned by the
-    centroid of their pixels inside each nominal cell.
+    the artist's grid guides.
     """
     rgba = np.asarray(sheet.convert("RGBA"), dtype=np.uint8)
     alpha = rgba[:, :, 3]
@@ -249,21 +246,22 @@ def initial_geometry(output: Image.Image, visible: tuple[int, int, int, int], bl
 
 def make_entry(sheet: dict[str, Any], source: Path, source_rel: str, source_sha: str, row: int, col: int, output: Image.Image, visible: tuple[int, int, int, int], cell_box: tuple[int, int, int, int], edge_touch: list[str], image_rel: str) -> dict[str, Any]:
     kind = str(sheet["kind"])
+    if kind != "tree":
+        raise ValueError("roadblock generation is retired; use the chain-fence pack importer")
     category = str(sheet["source_category"])
-    blocking = kind == "roadblock" or category in {"树", "倒木", "树墩"}
+    blocking = category in {"树", "倒木", "树墩"}
     ground = category in {"草", "蘑菇"}
     id_seed = f"{GENERATED_TAG}|{source_rel}|{source_sha}|r{row + 1:02d}c{col + 1:02d}"
     asset_id = "user." + sha256_text(id_seed)[:16]
-    stem = f"{('roadblock' if kind == 'roadblock' else 'tree')}_new_20260821_s{int(sheet.get('sheet_index', 0)):02d}_r{row + 1:02d}_c{col + 1:02d}"
-    palette_path = f"{ROADBLOCK_PREFIX}/新增" if kind == "roadblock" else f"{TREE_PREFIX}/新增/{category}"
+    palette_path = f"{TREE_PREFIX}/新增/{category}"
     geometry = initial_geometry(output, visible, blocking)
     output_sha = encoded_png_sha(output)
     entry: dict[str, Any] = {
         "asset_id": asset_id,
-        "display_name": f"新增{'路障' if kind == 'roadblock' else '树木'}20260821_{category}_s{int(sheet.get('sheet_index', 0)):02d}_r{row + 1:02d}_c{col + 1:02d}",
+        "display_name": f"新增树木20260821_{category}_s{int(sheet.get('sheet_index', 0)):02d}_r{row + 1:02d}_c{col + 1:02d}",
         "asset_type": "large_prop",
-        "category": "obstacle" if kind == "roadblock" else "tree",
-        "object_class": "obstacle" if kind == "roadblock" else "tree",
+        "category": "tree",
+        "object_class": "tree",
         "theme": "user_palette",
         "image": image_rel,
         "thumbnail": image_rel,
@@ -296,7 +294,7 @@ def make_entry(sheet: dict[str, Any], source: Path, source_rel: str, source_sha:
         "output_sha256": output_sha,
         "thumbnail_source_sha256": output_sha,
         "processing": GENERATED_TAG,
-        "tags": ["user_source", "装饰物1", "树木" if kind == "tree" else "路障", category, GENERATED_TAG],
+        "tags": ["user_source", "装饰物1", "树木", category, GENERATED_TAG],
         "editable": True,
         "allows_edge_clipping": False,
         "semantic_role": "",
@@ -311,6 +309,8 @@ def load_entries(manifest: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[s
     for index, raw in enumerate(manifest["sheets"], start=1):
         sheet = dict(raw)
         sheet["sheet_index"] = index
+        if str(sheet.get("kind", "")) != "tree":
+            raise ValueError("roadblock generation is retired; remove roadblock sheets from the manifest")
         source = Path(manifest["source_roots"][sheet["kind"]]) / str(sheet["relative_path"])
         if not source.exists():
             raise FileNotFoundError(source)
@@ -337,8 +337,8 @@ def load_entries(manifest: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[s
                 edge_touch = segment["grid_edge_touch"]
                 if output.mode != "RGBA" or output.getchannel("A").getbbox() is None:
                     raise ValueError(f"empty output: {source} r{row + 1} c{col + 1}")
-                output_subdir = Path("barricades/新增") if sheet["kind"] == "roadblock" else Path("trees/新增") / Path(sheet["source_category"])
-                image_rel = (Path("assets/art/maps/_shared/user_palette/decorations_1") / output_subdir / f"{('roadblock' if sheet['kind'] == 'roadblock' else 'tree')}_new_20260821_s{index:02d}_r{row + 1:02d}_c{col + 1:02d}.png").as_posix()
+                output_subdir = Path("trees/新增") / Path(sheet["source_category"])
+                image_rel = (Path("assets/art/maps/_shared/user_palette/decorations_1") / output_subdir / f"tree_new_20260821_s{index:02d}_r{row + 1:02d}_c{col + 1:02d}.png").as_posix()
                 entry = make_entry(sheet, source, str(sheet["relative_path"]), source_sha, row, col, output, visible, cell_box, edge_touch, image_rel)
                 entry.update({key: value for key, value in segment.items() if key not in {"output", "visible", "cell_box", "grid_edge_touch"}})
                 entries.append(entry)
@@ -363,11 +363,15 @@ def validate_entries(catalog: dict[str, Any], deep_forest_catalog: dict[str, Any
     if len(paths) != len(set(paths)):
         errors.append("duplicate image in main catalog")
     trees = [a for a in generated if str(a.get("palette_path", "")).startswith(TREE_PREFIX + "/新增/")]
-    roadblocks = [a for a in generated if str(a.get("palette_path", "")).startswith(ROADBLOCK_PREFIX + "/新增")]
     if len(trees) != 128:
         errors.append(f"expected 128 generated tree assets, got {len(trees)}")
-    if len(roadblocks) != 16:
-        errors.append(f"expected 16 generated roadblock assets, got {len(roadblocks)}")
+    retired_roadblocks = [
+        a for a in generated
+        if str(a.get("palette_path", "")) == "装饰物1/路障/新增"
+        and (str(a.get("processing", "")) == GENERATED_TAG or GENERATED_TAG in a.get("tags", []))
+    ]
+    if retired_roadblocks:
+        errors.append(f"retired roadblock assets remain in generated set: {len(retired_roadblocks)}")
     for asset in generated:
         image_rel = str(asset.get("image", ""))
         if image_rel not in images:
@@ -437,7 +441,7 @@ def main() -> int:
                 if str(old.get("processing", "")) != GENERATED_TAG or str(entry["asset_id"]) in protected_ids:
                     raise SystemExit(f"refusing to replace existing generated/calibrated entry: {entry['asset_id']}")
                 old_path = ROOT / str(old.get("image", ""))
-                allowed_roots = [(ASSET_ROOT / "trees" / "新增").resolve(), (ASSET_ROOT / "barricades" / "新增").resolve()]
+                allowed_roots = [(ASSET_ROOT / "trees" / "新增").resolve()]
                 if not any(old_path.resolve().is_relative_to(root) for root in allowed_roots):
                     raise SystemExit(f"refusing to remove non-generated output: {old_path}")
                 if old_path.exists():
@@ -477,7 +481,7 @@ def main() -> int:
             if path.exists():
                 existing = Image.open(path).convert("RGBA")
                 if existing.size != image.size or existing.tobytes() != image.tobytes():
-                    if str(path.resolve()).startswith(str((ASSET_ROOT / "trees" / "新增").resolve())) or str(path.resolve()).startswith(str((ASSET_ROOT / "barricades" / "新增").resolve())):
+                    if str(path.resolve()).startswith(str((ASSET_ROOT / "trees" / "新增").resolve())):
                         path.unlink()
                     else:
                         raise SystemExit(f"refusing to overwrite existing output: {path}")
@@ -509,7 +513,7 @@ def main() -> int:
         print("\n".join(errors))
         return 1
     _print_sheet_report(actual_generated)
-    print("PASS generated_tree=128 generated_roadblock=16 old_tree_placeable=0")
+    print("PASS generated_tree=128 roadblock_generation=retired old_tree_placeable=0")
     return 0
 
 

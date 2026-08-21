@@ -20,6 +20,8 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_stone_tomb_floor_asset_catalog.json",
 	"res://assets/data/assets/map_xzsc_cage_asset_catalog.json",
 	"res://assets/data/assets/map_xzsc_sculpture_asset_catalog.json",
+	"res://assets/data/assets/map_chain_roadblock_asset_catalog.json",
+	"res://assets/data/assets/map_small_decoration_asset_catalog.json",
 ]
 const ManualCollisionPolicy := preload("res://scripts/map_assets/map_asset_manual_collision_policy.gd")
 const PlacementAnchorPolicy := preload("res://scripts/map_assets/map_asset_placement_anchor_policy.gd")
