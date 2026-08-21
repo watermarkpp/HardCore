@@ -799,31 +799,31 @@
       "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_005.png",
       "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_005.png",
       "canvas_size": [
-        351,
+        379,
         395
       ],
       "image_size": [
-        351,
+        379,
         395
       ],
       "visible_bounds_px": [
         8,
         8,
-        335,
+        363,
         379
       ],
       "selection_bounds_px": [
         8,
         8,
-        335,
+        363,
         379
       ],
       "anchor_px": [
-        175,
+        189,
         386
       ],
       "placement_anchor_px": [
-        175,
+        189,
         386
       ],
       "anchor_tile": [
@@ -896,19 +896,19 @@
       "source_bounds_px": [
         27,
         612,
-        335,
+        363,
         379
       ],
       "source_alpha_bbox_px": [
         27,
         69,
-        335,
+        363,
         379
       ],
-      "output_sha256": "28b20dc801291a81931e20d8e873a63811983481d75c3035ebd2c4d4ebc31b86",
-      "thumbnail_source_sha256": "28b20dc801291a81931e20d8e873a63811983481d75c3035ebd2c4d4ebc31b86",
+      "output_sha256": "25bce32b7a83cae94fd8a74edf3eb339a2f1eef36ecf605e836e55aa3d234d13",
+      "thumbnail_source_sha256": "25bce32b7a83cae94fd8a74edf3eb339a2f1eef36ecf605e836e55aa3d234d13",
       "processing": {
-        "pipeline": "alpha_grid_tight_bbox_rgba_preserve_v1",
+        "pipeline": "alpha_component_seed_ownership_repair_v1",
         "grid": [
           2,
           4
@@ -924,25 +924,42 @@
         "cell_alpha_bbox_px": [
           27,
           69,
-          335,
+          363,
           379
         ],
         "source_bounds_px": [
           27,
           612,
-          335,
+          363,
           379
         ],
         "rgba_pixels_preserved": true,
         "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
-        "output_mask_edge_touch": []
+        "output_mask_edge_touch": [],
+        "ownership": {
+          "method": "alpha_component_seed_ownership_v1",
+          "seed_px": [
+            181,
+            814
+          ],
+          "ownership_roi_px": [
+            27,
+            612,
+            363,
+            379
+          ],
+          "component_label": 63,
+          "component_area": 66051,
+          "foreign_threshold_pixels_removed": 15,
+          "whole_component_to_seed": true
+        }
       },
       "tags": [
         "new_local_asset",
         "small_decoration",
         "visual_detail",
         "decoration",
-        "alpha_grid_tight_bbox_rgba_preserve_v1"
+        "alpha_component_seed_ownership_repair_v1"
       ],
       "editable": true,
       "allows_edge_clipping": true,
@@ -963,31 +980,31 @@
       "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_006.png",
       "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_006.png",
       "canvas_size": [
-        376,
+        321,
         257
       ],
       "image_size": [
-        376,
+        321,
         257
       ],
       "visible_bounds_px": [
         8,
         8,
-        360,
+        305,
         241
       ],
       "selection_bounds_px": [
         8,
         8,
-        360,
+        305,
         241
       ],
       "anchor_px": [
-        188,
+        160,
         248
       ],
       "placement_anchor_px": [
-        188,
+        160,
         248
       ],
       "anchor_tile": [
@@ -996,19 +1013,19 @@
       ],
       "anchor_mode": "foot_tile",
       "footprint_tiles": [
-        6,
+        5,
         4
       ],
       "visual_footprint_tiles": [
-        6,
+        5,
         4
       ],
       "occupancy_footprint_tiles": [
-        6,
+        5,
         4
       ],
       "base_footprint_tiles": [
-        6,
+        5,
         4
       ],
       "collision_footprint_tiles": [
@@ -1058,21 +1075,21 @@
         543
       ],
       "source_bounds_px": [
-        362,
+        417,
         725,
-        360,
+        305,
         241
       ],
       "source_alpha_bbox_px": [
-        0,
+        55,
         182,
-        360,
+        305,
         241
       ],
-      "output_sha256": "ff665fdeb831febf7cd3f7dfc4938ad8f545ba121e73165179d88ffb3e9b81f5",
-      "thumbnail_source_sha256": "ff665fdeb831febf7cd3f7dfc4938ad8f545ba121e73165179d88ffb3e9b81f5",
+      "output_sha256": "34292cf0150bb4d1e72fea4d29fc5373872fe4c2aa2179f7c8f13f8e86deb9b6",
+      "thumbnail_source_sha256": "34292cf0150bb4d1e72fea4d29fc5373872fe4c2aa2179f7c8f13f8e86deb9b6",
       "processing": {
-        "pipeline": "alpha_grid_tight_bbox_rgba_preserve_v1",
+        "pipeline": "alpha_component_seed_ownership_repair_v1",
         "grid": [
           2,
           4
@@ -1086,27 +1103,44 @@
         "alpha_threshold": 8,
         "padding_px": 8,
         "cell_alpha_bbox_px": [
-          0,
+          55,
           182,
-          360,
+          305,
           241
         ],
         "source_bounds_px": [
-          362,
+          417,
           725,
-          360,
+          305,
           241
         ],
         "rgba_pixels_preserved": true,
         "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
-        "output_mask_edge_touch": []
+        "output_mask_edge_touch": [],
+        "ownership": {
+          "method": "alpha_component_seed_ownership_v1",
+          "seed_px": [
+            543,
+            814
+          ],
+          "ownership_roi_px": [
+            417,
+            725,
+            305,
+            241
+          ],
+          "component_label": 71,
+          "component_area": 49545,
+          "foreign_threshold_pixels_removed": 7,
+          "whole_component_to_seed": true
+        }
       },
       "tags": [
         "new_local_asset",
         "small_decoration",
         "visual_detail",
         "decoration",
-        "alpha_grid_tight_bbox_rgba_preserve_v1"
+        "alpha_component_seed_ownership_repair_v1"
       ],
       "editable": true,
       "allows_edge_clipping": true,
@@ -1127,32 +1161,32 @@
       "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_007.png",
       "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_007.png",
       "canvas_size": [
-        271,
-        348
+        170,
+        346
       ],
       "image_size": [
-        271,
-        348
+        170,
+        346
       ],
       "visible_bounds_px": [
         8,
         8,
-        255,
-        332
+        154,
+        330
       ],
       "selection_bounds_px": [
         8,
         8,
-        255,
-        332
+        154,
+        330
       ],
       "anchor_px": [
-        135,
-        339
+        85,
+        337
       ],
       "placement_anchor_px": [
-        135,
-        339
+        85,
+        337
       ],
       "anchor_tile": [
         0,
@@ -1160,19 +1194,19 @@
       ],
       "anchor_mode": "foot_tile",
       "footprint_tiles": [
-        4,
+        3,
         6
       ],
       "visual_footprint_tiles": [
-        4,
+        3,
         6
       ],
       "occupancy_footprint_tiles": [
-        4,
+        3,
         6
       ],
       "base_footprint_tiles": [
-        4,
+        3,
         6
       ],
       "collision_footprint_tiles": [
@@ -1224,19 +1258,19 @@
       "source_bounds_px": [
         831,
         646,
-        255,
-        332
+        154,
+        330
       ],
       "source_alpha_bbox_px": [
         107,
         103,
-        255,
-        332
+        154,
+        330
       ],
-      "output_sha256": "0efc4d305eac3f7d0dadf52a92630e7e2abdcac208f035d096d4d271f374c542",
-      "thumbnail_source_sha256": "0efc4d305eac3f7d0dadf52a92630e7e2abdcac208f035d096d4d271f374c542",
+      "output_sha256": "0ca5dc6d9612cc1c08fa72a9b77917323e57bdc8d240778738205fb968ef2e45",
+      "thumbnail_source_sha256": "0ca5dc6d9612cc1c08fa72a9b77917323e57bdc8d240778738205fb968ef2e45",
       "processing": {
-        "pipeline": "alpha_grid_tight_bbox_rgba_preserve_v1",
+        "pipeline": "alpha_component_seed_ownership_repair_v1",
         "grid": [
           2,
           4
@@ -1252,25 +1286,42 @@
         "cell_alpha_bbox_px": [
           107,
           103,
-          255,
-          332
+          154,
+          330
         ],
         "source_bounds_px": [
           831,
           646,
-          255,
-          332
+          154,
+          330
         ],
         "rgba_pixels_preserved": true,
         "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
-        "output_mask_edge_touch": []
+        "output_mask_edge_touch": [],
+        "ownership": {
+          "method": "alpha_component_seed_ownership_v1",
+          "seed_px": [
+            905,
+            814
+          ],
+          "ownership_roi_px": [
+            831,
+            646,
+            154,
+            330
+          ],
+          "component_label": 65,
+          "component_area": 28643,
+          "foreign_threshold_pixels_removed": 10,
+          "whole_component_to_seed": true
+        }
       },
       "tags": [
         "new_local_asset",
         "small_decoration",
         "visual_detail",
         "decoration",
-        "alpha_grid_tight_bbox_rgba_preserve_v1"
+        "alpha_component_seed_ownership_repair_v1"
       ],
       "editable": true,
       "allows_edge_clipping": true,
@@ -1455,32 +1506,32 @@
       "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_009.png",
       "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_009.png",
       "canvas_size": [
-        251,
-        514
+        249,
+        444
       ],
       "image_size": [
-        251,
-        514
+        249,
+        444
       ],
       "visible_bounds_px": [
         8,
         8,
-        235,
-        498
+        233,
+        428
       ],
       "selection_bounds_px": [
         8,
         8,
-        235,
-        498
+        233,
+        428
       ],
       "anchor_px": [
-        125,
-        505
+        124,
+        435
       ],
       "placement_anchor_px": [
-        125,
-        505
+        124,
+        435
       ],
       "anchor_tile": [
         0,
@@ -1489,19 +1540,19 @@
       "anchor_mode": "foot_tile",
       "footprint_tiles": [
         4,
-        8
+        7
       ],
       "visual_footprint_tiles": [
         4,
-        8
+        7
       ],
       "occupancy_footprint_tiles": [
         4,
-        8
+        7
       ],
       "base_footprint_tiles": [
         4,
-        8
+        7
       ],
       "collision_footprint_tiles": [
         0,
@@ -1551,20 +1602,20 @@
       ],
       "source_bounds_px": [
         65,
-        45,
-        235,
-        498
+        53,
+        233,
+        428
       ],
       "source_alpha_bbox_px": [
         65,
-        45,
-        235,
-        498
+        53,
+        233,
+        428
       ],
-      "output_sha256": "99e201bac9a36243cc6e393b66d3fb4d039bee0ef3598b0982beec48cb9403d0",
-      "thumbnail_source_sha256": "99e201bac9a36243cc6e393b66d3fb4d039bee0ef3598b0982beec48cb9403d0",
+      "output_sha256": "0339add67eaf2b6cb941f335271dd22ba225e07fe5985ae791d2417551400f4a",
+      "thumbnail_source_sha256": "0339add67eaf2b6cb941f335271dd22ba225e07fe5985ae791d2417551400f4a",
       "processing": {
-        "pipeline": "alpha_grid_tight_bbox_rgba_preserve_v1",
+        "pipeline": "alpha_component_seed_ownership_repair_v1",
         "grid": [
           2,
           4
@@ -1579,26 +1630,43 @@
         "padding_px": 8,
         "cell_alpha_bbox_px": [
           65,
-          45,
-          235,
-          498
+          53,
+          233,
+          428
         ],
         "source_bounds_px": [
           65,
-          45,
-          235,
-          498
+          53,
+          233,
+          428
         ],
         "rgba_pixels_preserved": true,
         "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
-        "output_mask_edge_touch": []
+        "output_mask_edge_touch": [],
+        "ownership": {
+          "method": "alpha_component_seed_ownership_v1",
+          "seed_px": [
+            181,
+            271
+          ],
+          "ownership_roi_px": [
+            65,
+            53,
+            233,
+            428
+          ],
+          "component_label": 5,
+          "component_area": 47334,
+          "foreign_threshold_pixels_removed": 41,
+          "whole_component_to_seed": true
+        }
       },
       "tags": [
         "new_local_asset",
         "small_decoration",
         "visual_detail",
         "decoration",
-        "alpha_grid_tight_bbox_rgba_preserve_v1"
+        "alpha_component_seed_ownership_repair_v1"
       ],
       "editable": true,
       "allows_edge_clipping": true,
@@ -1620,31 +1688,31 @@
       "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_010.png",
       "canvas_size": [
         172,
-        536
+        465
       ],
       "image_size": [
         172,
-        536
+        465
       ],
       "visible_bounds_px": [
         8,
         8,
         156,
-        520
+        449
       ],
       "selection_bounds_px": [
         8,
         8,
         156,
-        520
+        449
       ],
       "anchor_px": [
         86,
-        527
+        456
       ],
       "placement_anchor_px": [
         86,
-        527
+        456
       ],
       "anchor_tile": [
         0,
@@ -1653,19 +1721,19 @@
       "anchor_mode": "foot_tile",
       "footprint_tiles": [
         3,
-        9
+        8
       ],
       "visual_footprint_tiles": [
         3,
-        9
+        8
       ],
       "occupancy_footprint_tiles": [
         3,
-        9
+        8
       ],
       "base_footprint_tiles": [
         3,
-        9
+        8
       ],
       "collision_footprint_tiles": [
         0,
@@ -1717,18 +1785,18 @@
         452,
         23,
         156,
-        520
+        449
       ],
       "source_alpha_bbox_px": [
         90,
         23,
         156,
-        520
+        449
       ],
-      "output_sha256": "75e2a3742f0531a43e7005d86bafa81b563f3878efc6491cf44c85d5c348c7e9",
-      "thumbnail_source_sha256": "75e2a3742f0531a43e7005d86bafa81b563f3878efc6491cf44c85d5c348c7e9",
+      "output_sha256": "3ed7be7a110779cc87ba65895ae8a73b4b4f554a54eabd4f0a19a2f74a5e443b",
+      "thumbnail_source_sha256": "3ed7be7a110779cc87ba65895ae8a73b4b4f554a54eabd4f0a19a2f74a5e443b",
       "processing": {
-        "pipeline": "alpha_grid_tight_bbox_rgba_preserve_v1",
+        "pipeline": "alpha_component_seed_ownership_repair_v1",
         "grid": [
           2,
           4
@@ -1745,24 +1813,41 @@
           90,
           23,
           156,
-          520
+          449
         ],
         "source_bounds_px": [
           452,
           23,
           156,
-          520
+          449
         ],
         "rgba_pixels_preserved": true,
         "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
-        "output_mask_edge_touch": []
+        "output_mask_edge_touch": [],
+        "ownership": {
+          "method": "alpha_component_seed_ownership_v1",
+          "seed_px": [
+            543,
+            271
+          ],
+          "ownership_roi_px": [
+            452,
+            23,
+            156,
+            449
+          ],
+          "component_label": 1,
+          "component_area": 38846,
+          "foreign_threshold_pixels_removed": 24,
+          "whole_component_to_seed": true
+        }
       },
       "tags": [
         "new_local_asset",
         "small_decoration",
         "visual_detail",
         "decoration",
-        "alpha_grid_tight_bbox_rgba_preserve_v1"
+        "alpha_component_seed_ownership_repair_v1"
       ],
       "editable": true,
       "allows_edge_clipping": true,
@@ -3095,31 +3180,31 @@
       "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_019.png",
       "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_019.png",
       "canvas_size": [
-        348,
+        293,
         300
       ],
       "image_size": [
-        348,
+        293,
         300
       ],
       "visible_bounds_px": [
         8,
         8,
-        332,
+        277,
         284
       ],
       "selection_bounds_px": [
         8,
         8,
-        332,
+        277,
         284
       ],
       "anchor_px": [
-        174,
+        146,
         291
       ],
       "placement_anchor_px": [
-        174,
+        146,
         291
       ],
       "anchor_tile": [
@@ -3128,19 +3213,19 @@
       ],
       "anchor_mode": "foot_tile",
       "footprint_tiles": [
-        6,
+        5,
         5
       ],
       "visual_footprint_tiles": [
-        6,
+        5,
         5
       ],
       "occupancy_footprint_tiles": [
-        6,
+        5,
         5
       ],
       "base_footprint_tiles": [
-        6,
+        5,
         5
       ],
       "collision_footprint_tiles": [
@@ -3192,19 +3277,19 @@
       "source_bounds_px": [
         754,
         189,
-        332,
+        277,
         284
       ],
       "source_alpha_bbox_px": [
         30,
         189,
-        332,
+        277,
         284
       ],
-      "output_sha256": "e430f9ce5114af998bc66cff5b846996ae01ddca5706fc4bc1bf07f8abe61737",
-      "thumbnail_source_sha256": "e430f9ce5114af998bc66cff5b846996ae01ddca5706fc4bc1bf07f8abe61737",
+      "output_sha256": "1bc9b10547399e56c5d7ba712c24c9dc3cb82b33a46243839221d290aaa0c6f8",
+      "thumbnail_source_sha256": "1bc9b10547399e56c5d7ba712c24c9dc3cb82b33a46243839221d290aaa0c6f8",
       "processing": {
-        "pipeline": "alpha_grid_tight_bbox_rgba_preserve_v1",
+        "pipeline": "alpha_component_seed_ownership_repair_v1",
         "grid": [
           2,
           4
@@ -3220,25 +3305,42 @@
         "cell_alpha_bbox_px": [
           30,
           189,
-          332,
+          277,
           284
         ],
         "source_bounds_px": [
           754,
           189,
-          332,
+          277,
           284
         ],
         "rgba_pixels_preserved": true,
         "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
-        "output_mask_edge_touch": []
+        "output_mask_edge_touch": [],
+        "ownership": {
+          "method": "alpha_component_seed_ownership_v1",
+          "seed_px": [
+            905,
+            271
+          ],
+          "ownership_roi_px": [
+            754,
+            189,
+            277,
+            284
+          ],
+          "component_label": 10,
+          "component_area": 58435,
+          "foreign_threshold_pixels_removed": 6,
+          "whole_component_to_seed": true
+        }
       },
       "tags": [
         "new_local_asset",
         "small_decoration",
         "visual_detail",
         "decoration",
-        "alpha_grid_tight_bbox_rgba_preserve_v1"
+        "alpha_component_seed_ownership_repair_v1"
       ],
       "editable": true,
       "allows_edge_clipping": true,

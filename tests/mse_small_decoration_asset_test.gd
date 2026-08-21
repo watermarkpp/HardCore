@@ -8,6 +8,69 @@ const PALETTE_PATH := "装饰物1/小装饰物"
 const ALPHA_THRESHOLD := 8
 const PADDING_PX := 8
 const TILE_SIZE := [64, 32]
+const REPAIR_PIPELINE := "alpha_component_seed_ownership_repair_v1"
+const REPAIR_EXPECTED := {
+	"mse.small_decor.005": {
+		"source_bounds": [27, 612, 363, 379],
+		"source_alpha_bbox": [27, 69, 363, 379],
+		"visible": [8, 8, 363, 379],
+		"canvas": [379, 395],
+		"anchor": [189, 386],
+		"footprint": [6, 6],
+		"seed": [181, 814],
+		"output_sha256": "25bce32b7a83cae94fd8a74edf3eb339a2f1eef36ecf605e836e55aa3d234d13",
+	},
+	"mse.small_decor.006": {
+		"source_bounds": [417, 725, 305, 241],
+		"source_alpha_bbox": [55, 182, 305, 241],
+		"visible": [8, 8, 305, 241],
+		"canvas": [321, 257],
+		"anchor": [160, 248],
+		"footprint": [5, 4],
+		"seed": [543, 814],
+		"output_sha256": "34292cf0150bb4d1e72fea4d29fc5373872fe4c2aa2179f7c8f13f8e86deb9b6",
+	},
+	"mse.small_decor.007": {
+		"source_bounds": [831, 646, 154, 330],
+		"source_alpha_bbox": [107, 103, 154, 330],
+		"visible": [8, 8, 154, 330],
+		"canvas": [170, 346],
+		"anchor": [85, 337],
+		"footprint": [3, 6],
+		"seed": [905, 814],
+		"output_sha256": "0ca5dc6d9612cc1c08fa72a9b77917323e57bdc8d240778738205fb968ef2e45",
+	},
+	"mse.small_decor.009": {
+		"source_bounds": [65, 53, 233, 428],
+		"source_alpha_bbox": [65, 53, 233, 428],
+		"visible": [8, 8, 233, 428],
+		"canvas": [249, 444],
+		"anchor": [124, 435],
+		"footprint": [4, 7],
+		"seed": [181, 271],
+		"output_sha256": "0339add67eaf2b6cb941f335271dd22ba225e07fe5985ae791d2417551400f4a",
+	},
+	"mse.small_decor.010": {
+		"source_bounds": [452, 23, 156, 449],
+		"source_alpha_bbox": [90, 23, 156, 449],
+		"visible": [8, 8, 156, 449],
+		"canvas": [172, 465],
+		"anchor": [86, 456],
+		"footprint": [3, 8],
+		"seed": [543, 271],
+		"output_sha256": "3ed7be7a110779cc87ba65895ae8a73b4b4f554a54eabd4f0a19a2f74a5e443b",
+	},
+	"mse.small_decor.019": {
+		"source_bounds": [754, 189, 277, 284],
+		"source_alpha_bbox": [30, 189, 277, 284],
+		"visible": [8, 8, 277, 284],
+		"canvas": [293, 300],
+		"anchor": [146, 291],
+		"footprint": [5, 5],
+		"seed": [905, 271],
+		"output_sha256": "1bc9b10547399e56c5d7ba712c24c9dc3cb82b33a46243839221d290aaa0c6f8",
+	},
+}
 
 
 func _read_json(path: String) -> Dictionary:
@@ -73,17 +136,33 @@ func _assert_raw_asset(raw: Dictionary, asset_id: String) -> void:
 	_assert_int_array(raw.get("tile_size", []), TILE_SIZE, asset_id + ":tile_size")
 	var visible: Array = raw.get("visible_bounds_px", [])
 	_assert_int_array(raw.get("selection_bounds_px", []), visible, asset_id + ":selection")
-	var expected_footprint := [
+	var repair: Dictionary = REPAIR_EXPECTED.get(asset_id, {})
+	if not repair.is_empty():
+		_assert_int_array(raw.get("source_bounds_px", []), repair["source_bounds"], asset_id + ":source_bounds")
+		_assert_int_array(raw.get("source_alpha_bbox_px", []), repair["source_alpha_bbox"], asset_id + ":source_alpha_bbox")
+		_assert_int_array(raw.get("visible_bounds_px", []), repair["visible"], asset_id + ":visible_bounds")
+		_assert_int_array(raw.get("canvas_size", []), repair["canvas"], asset_id + ":canvas")
+		_assert_int_array(raw.get("anchor_px", []), repair["anchor"], asset_id + ":anchor")
+		assert(str(raw.get("output_sha256", "")) == str(repair["output_sha256"]), asset_id + ":output_sha")
+	var expected_footprint: Array = [
 		(int(visible[2]) + 63) / 64,
 		(int(visible[3]) + 63) / 64,
 	]
+	if not repair.is_empty():
+		expected_footprint = repair["footprint"]
 	for field: String in ["footprint_tiles", "visual_footprint_tiles", "occupancy_footprint_tiles", "base_footprint_tiles"]:
 		_assert_int_array(raw.get(field, []), expected_footprint, asset_id + ":" + field)
 	var processing: Dictionary = raw.get("processing", {})
-	assert(str(processing.get("pipeline", "")) == "alpha_grid_tight_bbox_rgba_preserve_v1", asset_id + ":pipeline")
+	var expected_pipeline := REPAIR_PIPELINE if not repair.is_empty() else "alpha_grid_tight_bbox_rgba_preserve_v1"
+	assert(str(processing.get("pipeline", "")) == expected_pipeline, asset_id + ":pipeline")
 	assert(int(processing.get("alpha_threshold", 0)) == ALPHA_THRESHOLD, asset_id + ":threshold")
 	assert(int(processing.get("padding_px", 0)) == PADDING_PX, asset_id + ":padding")
 	assert(bool(processing.get("rgba_pixels_preserved", false)), asset_id + ":rgba_contract")
+	if not repair.is_empty():
+		var ownership: Dictionary = processing.get("ownership", {})
+		_assert_int_array(ownership.get("seed_px", []), repair["seed"], asset_id + ":ownership_seed")
+		assert(str(ownership.get("method", "")) == "alpha_component_seed_ownership_v1", asset_id + ":ownership_method")
+		assert(bool(ownership.get("whole_component_to_seed", false)), asset_id + ":ownership_whole_component")
 	assert(str(raw.get("source_sha256", "")).length() == 64, asset_id + ":source_sha")
 	assert(str(raw.get("output_sha256", "")).length() == 64, asset_id + ":output_sha")
 	var image_path := "res://" + str(raw.get("image", ""))

@@ -13,6 +13,7 @@ and the 48 owned PNGs, so it cannot append or replace the main asset catalog.
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import hashlib
 import json
 from io import BytesIO
@@ -37,6 +38,74 @@ CELL_SIZE = (362, 543)
 CANVAS_SIZE = (1448, 1086)
 TILE_SIZE = [64, 32]
 FOOTPRINT_UNIT_PX = 64
+REPAIR_PIPELINE = "alpha_component_seed_ownership_repair_v1"
+
+# These six cells were audited against the complete source sheets.  The
+# alpha>=8 component containing each seed is owned by that target, even when
+# the component crosses a nominal grid boundary.  The ROI is an ownership
+# assertion, not a crop rectangle: the component bbox must match it exactly.
+REPAIR_SPECS: dict[str, dict[str, Any]] = {
+    "mse.small_decor.005": {
+        "source_index": 1,
+        "grid_row": 2,
+        "grid_column": 1,
+        "seed_px": [181, 814],
+        "ownership_roi_px": [27, 612, 363, 379],
+    },
+    "mse.small_decor.006": {
+        "source_index": 1,
+        "grid_row": 2,
+        "grid_column": 2,
+        "seed_px": [543, 814],
+        "ownership_roi_px": [417, 725, 305, 241],
+    },
+    "mse.small_decor.007": {
+        "source_index": 1,
+        "grid_row": 2,
+        "grid_column": 3,
+        "seed_px": [905, 814],
+        "ownership_roi_px": [831, 646, 154, 330],
+    },
+    "mse.small_decor.009": {
+        "source_index": 2,
+        "grid_row": 1,
+        "grid_column": 1,
+        "seed_px": [181, 271],
+        "ownership_roi_px": [65, 53, 233, 428],
+    },
+    "mse.small_decor.010": {
+        "source_index": 2,
+        "grid_row": 1,
+        "grid_column": 2,
+        "seed_px": [543, 271],
+        "ownership_roi_px": [452, 23, 156, 449],
+    },
+    "mse.small_decor.019": {
+        "source_index": 3,
+        "grid_row": 1,
+        "grid_column": 3,
+        "seed_px": [905, 271],
+        "ownership_roi_px": [754, 189, 277, 284],
+    },
+}
+REPAIR_TARGET_IDS = frozenset(REPAIR_SPECS)
+REPAIR_MUTABLE_FIELDS = frozenset({
+    "canvas_size",
+    "image_size",
+    "visible_bounds_px",
+    "selection_bounds_px",
+    "anchor_px",
+    "placement_anchor_px",
+    "footprint_tiles",
+    "visual_footprint_tiles",
+    "occupancy_footprint_tiles",
+    "base_footprint_tiles",
+    "source_bounds_px",
+    "source_alpha_bbox_px",
+    "output_sha256",
+    "thumbnail_source_sha256",
+    "processing",
+})
 
 SOURCE_SPECS: tuple[dict[str, Any], ...] = (
     {
@@ -110,7 +179,109 @@ def alpha_bbox(image: Image.Image) -> tuple[int, int, int, int]:
     return x1, y1, x2, y2
 
 
-def cut_cell(source: Image.Image, row: int, column: int) -> tuple[Image.Image, dict[str, Any]]:
+def label_alpha_components(alpha: np.ndarray) -> np.ndarray:
+    """Return deterministic 8-connected labels for alpha>=8 pixels."""
+    mask = alpha >= ALPHA_THRESHOLD
+    labels = np.zeros(mask.shape, dtype=np.int32)
+    height, width = mask.shape
+    next_label = 0
+    neighbors = (
+        (-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, -1), (1, 0), (1, 1),
+    )
+    for y in range(height):
+        for x_value in np.flatnonzero(mask[y] & (labels[y] == 0)):
+            x = int(x_value)
+            if labels[y, x] != 0:
+                continue
+            next_label += 1
+            labels[y, x] = next_label
+            stack = [(y, x)]
+            while stack:
+                current_y, current_x = stack.pop()
+                for delta_y, delta_x in neighbors:
+                    neighbor_y = current_y + delta_y
+                    neighbor_x = current_x + delta_x
+                    if not (0 <= neighbor_y < height and 0 <= neighbor_x < width):
+                        continue
+                    if not mask[neighbor_y, neighbor_x] or labels[neighbor_y, neighbor_x] != 0:
+                        continue
+                    labels[neighbor_y, neighbor_x] = next_label
+                    stack.append((neighbor_y, neighbor_x))
+    return labels
+
+
+def component_bounds(labels: np.ndarray, label: int) -> list[int]:
+    ys, xs = np.where(labels == label)
+    if len(xs) == 0:
+        raise ValueError(f"empty ownership component: {label}")
+    return [
+        int(xs.min()),
+        int(ys.min()),
+        int(xs.max()) - int(xs.min()) + 1,
+        int(ys.max()) - int(ys.min()) + 1,
+    ]
+
+
+def cut_repaired_component(
+    source: Image.Image,
+    labels: np.ndarray,
+    spec: dict[str, Any],
+) -> tuple[Image.Image, dict[str, Any]]:
+    seed_x, seed_y = (int(spec["seed_px"][0]), int(spec["seed_px"][1]))
+    if not (0 <= seed_y < labels.shape[0] and 0 <= seed_x < labels.shape[1]):
+        raise ValueError(f"ownership seed outside source: {spec['seed_px']}")
+    component_label = int(labels[seed_y, seed_x])
+    if component_label <= 0:
+        raise ValueError(f"ownership seed is not alpha>=8: {spec['seed_px']}")
+    source_bounds = component_bounds(labels, component_label)
+    if source_bounds != list(spec["ownership_roi_px"]):
+        raise ValueError(
+            "ownership ROI mismatch: "
+            f"seed={spec['seed_px']} expected={spec['ownership_roi_px']} actual={source_bounds}"
+        )
+    source_rgba = np.asarray(source)
+    x1, y1, width, height = source_bounds
+    cropped_rgba = source_rgba[y1:y1 + height, x1:x1 + width].copy()
+    local_labels = labels[y1:y1 + height, x1:x1 + width]
+    foreign_threshold = (cropped_rgba[:, :, 3] >= ALPHA_THRESHOLD) & (local_labels != component_label)
+    foreign_threshold_pixels_removed = int(np.count_nonzero(foreign_threshold))
+    cropped_rgba[:, :, 3][foreign_threshold] = 0
+    cropped = Image.fromarray(cropped_rgba, mode="RGBA")
+    output = Image.new(
+        "RGBA",
+        (width + PADDING_PX * 2, height + PADDING_PX * 2),
+        (0, 0, 0, 0),
+    )
+    output.paste(cropped, (PADDING_PX, PADDING_PX))
+    visible_bounds = [PADDING_PX, PADDING_PX, width, height]
+    alpha = np.asarray(output.getchannel("A"), dtype=np.uint8)
+    visible_mask = np.zeros_like(alpha, dtype=bool)
+    vx, vy, vw, vh = visible_bounds
+    visible_mask[vy:vy + vh, vx:vx + vw] = True
+    if bool(np.any((alpha >= ALPHA_THRESHOLD) & ~visible_mask)):
+        raise ValueError(f"alpha escaped repaired crop: {spec['seed_px']}")
+    cell_x = (int(spec["grid_column"]) - 1) * CELL_SIZE[0]
+    cell_y = (int(spec["grid_row"]) - 1) * CELL_SIZE[1]
+    return output, {
+        "cell_bounds_px": [cell_x, cell_y, CELL_SIZE[0], CELL_SIZE[1]],
+        "cell_row": int(spec["grid_row"]),
+        "cell_column": int(spec["grid_column"]),
+        "cell_alpha_bbox_px": [x1 - cell_x, y1 - cell_y, width, height],
+        "source_bounds_px": source_bounds,
+        "visible_bounds_px": visible_bounds,
+        "visible_alpha_pixel_count": int(np.count_nonzero(alpha >= ALPHA_THRESHOLD)),
+        "output_size": list(output.size),
+        "component_label": component_label,
+        "component_area": int(np.count_nonzero(labels == component_label)),
+        "ownership_seed_px": [seed_x, seed_y],
+        "ownership_roi_px": list(spec["ownership_roi_px"]),
+        "foreign_threshold_pixels_removed": foreign_threshold_pixels_removed,
+    }
+
+
+def cut_cell_legacy(source: Image.Image, row: int, column: int) -> tuple[Image.Image, dict[str, Any]]:
     cell_x = column * CELL_SIZE[0]
     cell_y = row * CELL_SIZE[1]
     cell = source.crop((cell_x, cell_y, cell_x + CELL_SIZE[0], cell_y + CELL_SIZE[1]))
@@ -161,10 +332,28 @@ def build_expected() -> tuple[dict[str, Any], dict[str, bytes]]:
             "cell_size_px": list(CELL_SIZE),
             "alpha_threshold": ALPHA_THRESHOLD,
         })
+        component_labels = None
+        if any(int(spec.get("source_index", 0)) == source_index for spec in REPAIR_SPECS.values()):
+            component_labels = label_alpha_components(
+                np.asarray(source.getchannel("A"), dtype=np.uint8)
+            )
         for row in range(GRID_ROWS):
             for column in range(GRID_COLUMNS):
                 stable_index += 1
-                output, geometry = cut_cell(source, row, column)
+                asset_id = f"mse.small_decor.{stable_index:03d}"
+                repair_spec = REPAIR_SPECS.get(asset_id)
+                if repair_spec is not None:
+                    if (
+                        int(repair_spec["source_index"]) != source_index
+                        or int(repair_spec["grid_row"]) != row + 1
+                        or int(repair_spec["grid_column"]) != column + 1
+                    ):
+                        raise ValueError(f"repair ownership mapping mismatch: {asset_id}")
+                    if component_labels is None:
+                        raise ValueError(f"missing component labels for repair: {asset_id}")
+                    output, geometry = cut_repaired_component(source, component_labels, repair_spec)
+                else:
+                    output, geometry = cut_cell_legacy(source, row, column)
                 image_rel = (
                     Path("assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822")
                     / f"small_decoration_{stable_index:03d}.png"
@@ -183,7 +372,7 @@ def build_expected() -> tuple[dict[str, Any], dict[str, bytes]]:
                     int(visible[1]) + visible_height - 1,
                 ]
                 processing = {
-                    "pipeline": PIPELINE,
+                    "pipeline": REPAIR_PIPELINE if repair_spec is not None else PIPELINE,
                     "grid": [GRID_ROWS, GRID_COLUMNS],
                     "cell_size_px": list(CELL_SIZE),
                     "grid_row": row + 1,
@@ -196,8 +385,18 @@ def build_expected() -> tuple[dict[str, Any], dict[str, bytes]]:
                     "footprint_estimation": "visible_bounds_ceil_div_64_pending_manual",
                     "output_mask_edge_touch": [],
                 }
+                if repair_spec is not None:
+                    processing["ownership"] = {
+                        "method": "alpha_component_seed_ownership_v1",
+                        "seed_px": geometry["ownership_seed_px"],
+                        "ownership_roi_px": geometry["ownership_roi_px"],
+                        "component_label": geometry["component_label"],
+                        "component_area": geometry["component_area"],
+                        "foreign_threshold_pixels_removed": geometry["foreign_threshold_pixels_removed"],
+                        "whole_component_to_seed": True,
+                    }
                 assets.append({
-                    "asset_id": f"mse.small_decor.{stable_index:03d}",
+                    "asset_id": asset_id,
                     "display_name": f"小装饰物 {stable_index:03d}",
                     "asset_type": "small_prop",
                     "category": "visual_detail",
@@ -256,7 +455,7 @@ def build_expected() -> tuple[dict[str, Any], dict[str, bytes]]:
                         "small_decoration",
                         "visual_detail",
                         "decoration",
-                        PIPELINE,
+                        REPAIR_PIPELINE if repair_spec is not None else PIPELINE,
                     ],
                     "editable": True,
                     "allows_edge_clipping": True,
@@ -354,6 +553,80 @@ def validate_existing(
     return errors
 
 
+def validate_existing_for_repair(
+    catalog: dict[str, Any], expected: dict[str, Any], outputs: dict[str, bytes]
+) -> list[str]:
+    """Validate ownership before a target-only write.
+
+    Frozen non-target entries and image bytes must already match the
+    deterministic legacy contract.  Target entries may differ only in the
+    explicitly mutable geometry, processing, and output-fingerprint fields.
+    """
+    errors: list[str] = []
+    expected_assets = expected["assets"]
+    actual_assets = catalog.get("assets", [])
+    if catalog.get("package_id") != PACKAGE_ID:
+        errors.append("catalog.package_id_mismatch")
+    if catalog.get("asset_count") != 48 or len(actual_assets) != 48:
+        errors.append(f"catalog.asset_count={len(actual_assets)} expected=48")
+    actual_by_id = {
+        str(asset.get("asset_id", "")): asset
+        for asset in actual_assets
+        if isinstance(asset, dict)
+    }
+    expected_ids = {str(asset["asset_id"]) for asset in expected_assets}
+    if len(actual_by_id) != len(actual_assets) or set(actual_by_id) != expected_ids:
+        errors.append("catalog.id_set_mismatch")
+    compare_fields = (
+        "display_name", "asset_type", "category", "object_class", "image", "thumbnail",
+        "visible_bounds_px", "selection_bounds_px", "anchor_px", "footprint_tiles",
+        "visual_footprint_tiles", "occupancy_footprint_tiles", "base_footprint_tiles",
+        "collision_footprint_tiles", "collision_policy", "collision_profile_id",
+        "navigation_policy", "placeable", "calibration_status", "geometry_pending_manual",
+        "palette_path", "source_sha256", "source_bounds_px", "output_sha256", "processing",
+    )
+    for expected_asset in expected_assets:
+        asset_id = str(expected_asset["asset_id"])
+        actual = actual_by_id.get(asset_id)
+        if actual is None:
+            errors.append(f"catalog.missing:{asset_id}")
+            continue
+        fields = (
+            tuple(field for field in compare_fields if field not in REPAIR_MUTABLE_FIELDS)
+            if asset_id in REPAIR_TARGET_IDS
+            else compare_fields
+        )
+        for field in fields:
+            if actual.get(field) != expected_asset.get(field):
+                errors.append(f"catalog.frozen_field_mismatch:{asset_id}:{field}")
+        image_path = ROOT / str(expected_asset["image"])
+        if not image_path.is_file():
+            errors.append(f"image.missing:{image_path}")
+        elif asset_id not in REPAIR_TARGET_IDS and image_path.read_bytes() != outputs[str(expected_asset["image"])]:
+            errors.append(f"image.frozen_bytes_mismatch:{image_path}")
+    if OUTPUT_ROOT.is_dir():
+        expected_paths = {ROOT / relative for relative in outputs}
+        for path in OUTPUT_ROOT.glob("*.png"):
+            if path not in expected_paths:
+                errors.append(f"unexpected_output:{path}")
+    return errors
+
+
+def merge_repaired_catalog(existing: dict[str, Any], expected: dict[str, Any]) -> dict[str, Any]:
+    merged = deepcopy(existing)
+    expected_by_id = {
+        str(asset["asset_id"]): asset
+        for asset in expected["assets"]
+    }
+    merged_assets = merged.get("assets", [])
+    for index, asset in enumerate(merged_assets):
+        asset_id = str(asset.get("asset_id", ""))
+        if asset_id in REPAIR_TARGET_IDS:
+            merged_assets[index] = deepcopy(expected_by_id[asset_id])
+    merged["assets"] = merged_assets
+    return merged
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group(required=True)
@@ -381,12 +654,31 @@ def main() -> int:
     if existing is not None and existing.get("package_id") not in (None, PACKAGE_ID):
         print("SMALL_DECORATION_IMPORT_REFUSE existing_catalog_not_owned_or_deterministic")
         return 1
-    for image_rel, payload in outputs.items():
+    if existing is None:
+        catalog_to_write = expected
+        write_paths = set(outputs)
+    else:
+        errors = validate_existing_for_repair(existing, expected, outputs)
+        if errors:
+            print("SMALL_DECORATION_REPAIR_REFUSE frozen_contract_mismatch")
+            print("\n".join(errors))
+            return 1
+        catalog_to_write = merge_repaired_catalog(existing, expected)
+        write_paths = {
+            str(asset["image"])
+            for asset in expected["assets"]
+            if str(asset["asset_id"]) in REPAIR_TARGET_IDS
+        }
+    for image_rel in write_paths:
+        payload = outputs[image_rel]
         path = ROOT / image_rel
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(payload)
-    write_json(CATALOG_PATH, expected)
-    print(f"SMALL_DECORATION_WRITE_PASS assets=48 output_dir={OUTPUT_ROOT}")
+    write_json(CATALOG_PATH, catalog_to_write)
+    print(
+        "SMALL_DECORATION_WRITE_PASS "
+        f"assets={len(write_paths)} repaired_targets={len(REPAIR_TARGET_IDS)} frozen=42 output_dir={OUTPUT_ROOT}"
+    )
     return 0
 
 
