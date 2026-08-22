@@ -16,9 +16,48 @@ func _ready() -> void:
 	var animation_catalog_hash := FileAccess.get_sha256(
 		DraftScript.ANIMATION_CATALOG_PATH
 	)
+	var manual_alignment_hash := FileAccess.get_sha256(
+		DraftScript.MANUAL_ALIGNMENT_DATA_PATH
+	)
 	var rows := DraftScript.catalog_rows()
 	assert(rows.size() == 214)
 	assert(int(rows[0].get("monster_id", -1)) == 18)
+	var formal_replay_count := 0
+	for row: Dictionary in rows:
+		var replay := DraftScript.load_draft(
+			int(row.get("monster_id", -1))
+		)
+		if not replay.is_empty():
+			formal_replay_count += 1
+	assert(formal_replay_count == 212)
+	assert(DraftScript.load_draft(97).is_empty())
+	assert(DraftScript.load_draft(98).is_empty())
+	for monster_id in range(210, 226):
+		var replay := DraftScript.load_draft(monster_id)
+		assert(not replay.is_empty())
+		assert(
+			str(replay.get("replaySource", ""))
+			== "formal_manual_alignment_v1"
+		)
+	var bull_warrior_replay := DraftScript.load_draft(212)
+	var bull_warrior_selection: Dictionary = bull_warrior_replay.get(
+		"selection", {}
+	)
+	assert(str(bull_warrior_selection.get("action", "")) == "idle")
+	assert(int(bull_warrior_selection.get("direction", -1)) == 0)
+	assert(int(bull_warrior_selection.get("frame", -1)) == 3)
+	assert(
+		bull_warrior_replay.get("runtimeVisualOrigin", [])
+		== [0.0, 4.0]
+	)
+	assert(
+		bull_warrior_replay.get("visualOffset", [])
+		== [5.5, -8.0]
+	)
+	assert(
+		bull_warrior_replay.get("pickedVisualFootOffset", [])
+		== [-5.5, 4.0]
+	)
 
 	var payload := DraftScript.build_payload(
 		18,
@@ -71,6 +110,10 @@ func _ready() -> void:
 		FileAccess.get_sha256(DraftScript.ANIMATION_CATALOG_PATH)
 		== animation_catalog_hash
 	)
+	assert(
+		FileAccess.get_sha256(DraftScript.MANUAL_ALIGNMENT_DATA_PATH)
+		== manual_alignment_hash
+	)
 
 	DirAccess.remove_absolute(
 		ProjectSettings.globalize_path(
@@ -83,6 +126,7 @@ func _ready() -> void:
 	)
 	print(
 		"MONSTER_GROUND_ALIGNMENT_DRAFT_PASS "
-		+ "catalog=214 single_target=true formal_readonly=true"
+		+ "catalog=214 replay=212 bulls=16 "
+		+ "single_target=true formal_readonly=true"
 	)
 	get_tree().quit(0)

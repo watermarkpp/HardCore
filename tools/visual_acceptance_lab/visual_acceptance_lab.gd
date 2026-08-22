@@ -762,7 +762,7 @@ func _update_overlay() -> void:
 	var body_sprite: Sprite2D = visual.sprite
 	var foot_origin := _visual_foot_origin()
 	_draw_canonical_ground_overlay(
-		foot_origin, ArtSpec.PLAYER_COLLISION_RADIUS
+		foot_origin, ArtSpec.PLAYER_COLLISION_RADIUS_PX
 	)
 	if body_sprite != null:
 		var rect := Rect2(
@@ -815,7 +815,7 @@ func _update_monster_overlay() -> void:
 	var visual := _monster.visual
 	var body_sprite: Sprite2D = visual.sprite
 	_draw_canonical_ground_overlay(
-		_visual_foot_origin(), _monster.collision_radius
+		_visual_foot_origin(), _monster.collision_radius_px
 	)
 	var formal_center := (
 		visual.position + visual.ground_contact_offset()
@@ -1406,8 +1406,8 @@ func monster_alignment_draft_payload() -> Dictionary:
 		_monster_visual_alignment_offset,
 		_monster_picked_visual_foot_offset,
 		Vector2(
-			_monster.collision_radius,
-			_monster.collision_radius * 0.5,
+			_monster.collision_radius_px,
+			_monster.collision_radius_px * 0.5,
 		),
 	)
 

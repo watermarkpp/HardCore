@@ -11,6 +11,9 @@ const FORMAL_CONTACT_PATH := (
 const FORMAL_CALIBRATION_PATH := (
 	"res://assets/data/runtime/monster_ground_contact_calibrations.json"
 )
+const MANUAL_ALIGNMENT_DATA_PATH := (
+	"res://assets/data/runtime/monster_ground_alignment_manual_v1.json"
+)
 const DRAFT_ROOT := (
 	"res://outputs/visual_acceptance/monster_ground_alignment_drafts"
 )
@@ -27,10 +30,27 @@ static func catalog_rows() -> Array[Dictionary]:
 
 
 static func formal_entry(monster_id: int) -> Dictionary:
-	var value: Variant = _load_json(
-		FORMAL_CONTACT_PATH
-	).get("entriesByMonsterId", {}).get(str(monster_id), {})
-	return value.duplicate(true) if value is Dictionary else {}
+	# The validator needs one read-only view of all three formal authorities:
+	# contact geometry is the base, calibration is the reviewed runtime
+	# projection, and the manual contract contributes the saved pose/offset.
+	# Keep the contact entry as the base so preserved airborne monsters remain
+	# visible even though they intentionally have no manual draft.
+	var result := contact_entry(monster_id)
+	result.merge(calibration_entry(monster_id), true)
+	result.merge(manual_entry(monster_id), true)
+	return result
+
+
+static func contact_entry(monster_id: int) -> Dictionary:
+	return _entry_from_contract(FORMAL_CONTACT_PATH, monster_id)
+
+
+static func calibration_entry(monster_id: int) -> Dictionary:
+	return _entry_from_contract(FORMAL_CALIBRATION_PATH, monster_id)
+
+
+static func manual_entry(monster_id: int) -> Dictionary:
+	return _entry_from_contract(MANUAL_ALIGNMENT_DATA_PATH, monster_id)
 
 
 static func draft_path(monster_id: int, root_override := "") -> String:
@@ -44,8 +64,19 @@ static func load_draft(monster_id: int, root_override := "") -> Dictionary:
 		str(parsed.get("contractId", "")) != CONTRACT_ID
 		or int(parsed.get("monsterId", -1)) != monster_id
 	):
-		return {}
-	return parsed
+		parsed = {}
+	# An explicit root is used by the single-target draft test and by callers
+	# that intentionally inspect a local draft sandbox. The project root is
+	# stricter: only a draft whose immutable source hash and formal evidence
+	# still match the imported manual contract may override the formal replay.
+	if not parsed.is_empty() and (
+		(not root_override.is_empty())
+		or draft_is_formal(monster_id, parsed, root_override)
+	):
+		return parsed
+	if root_override.is_empty():
+		return _draft_from_manual_entry(monster_id)
+	return {}
 
 
 static func draft_is_formal(
@@ -58,19 +89,107 @@ static func draft_is_formal(
 		or int(draft.get("monsterId", -1)) != monster_id
 	):
 		return false
-	var evidence: Variant = formal_entry(monster_id).get(
-		"manualAlignmentEvidence", {}
-	)
-	if not evidence is Dictionary:
-		return false
-	var expected_hash := str(evidence.get("sourceDraftSha256", ""))
+	var manual := manual_entry(monster_id)
+	var expected_hash := str(manual.get("sourceDraftSha256", ""))
 	if expected_hash.is_empty():
 		return false
 	var path := draft_path(monster_id, root_override)
-	return (
+	if not (
 		FileAccess.file_exists(path)
 		and FileAccess.get_sha256(path) == expected_hash
-	)
+	):
+		return false
+	return _source_evidence_matches(draft, manual)
+
+
+static func _draft_from_manual_entry(monster_id: int) -> Dictionary:
+	var manual := manual_entry(monster_id)
+	if (
+		manual.is_empty()
+		or str(manual.get("contractId", "")) != CONTRACT_ID
+	):
+		return {}
+	var selection: Variant = manual.get("selection", {})
+	if not selection is Dictionary:
+		selection = {}
+	var source_evidence: Variant = manual.get("sourceEvidence", {})
+	if not source_evidence is Dictionary:
+		source_evidence = {}
+	var formal_snapshot: Variant = manual.get("formalSnapshot", {})
+	if not formal_snapshot is Dictionary:
+		formal_snapshot = {}
+	var visual_root := _array_copy(manual.get("visualRootOffset", []))
+	var visual_foot := _array_copy(manual.get("visualFootOffset", []))
+	var final_foot := _array_copy(manual.get("finalVisualFootPoint", []))
+	var physics := _array_copy(manual.get("physicsFootprintRadii", []))
+	return {
+		"contractId": CONTRACT_ID,
+		"savedAt": str(manual.get("savedAt", "")),
+		"scope": "single_formal_monster_visual",
+		"monsterId": monster_id,
+		"monsterName": str(manual.get("monsterName", "")),
+		"selection": selection.duplicate(true),
+		"runtimeVisualOrigin": _array_copy(
+			manual.get("runtimeVisualOrigin", [])
+		),
+		"visualOffset": visual_root,
+		"pickedVisualFootOffset": visual_foot,
+		"finalVisualFootPoint": final_foot,
+		"canonicalCenters": {
+			"actorGroundOrigin": [0.0, 0.0],
+			"physicsFootprint": [0.0, 0.0],
+			"mapDiamond": [0.0, 0.0],
+		},
+		"physicsFootprintRadii": physics,
+		"recommendedRuntime": {
+			"visualRootOffset": visual_root.duplicate(),
+			"visualFootOffset": visual_foot.duplicate(),
+			"ringCenterOffset": _array_copy(
+				manual.get("ringCenterOffset", visual_foot)
+			),
+		},
+		"formalSnapshot": formal_snapshot.duplicate(true),
+		"sourceEvidence": source_evidence.duplicate(true),
+		"formalRuntimeWritten": false,
+		"replaySource": "formal_manual_alignment_v1",
+	}
+
+
+static func _source_evidence_matches(
+	draft: Dictionary,
+	manual: Dictionary,
+) -> bool:
+	var expected: Variant = manual.get("sourceEvidence", {})
+	var actual: Variant = draft.get("sourceEvidence", {})
+	if not expected is Dictionary or not actual is Dictionary:
+		return false
+	for key in [
+		"animationCatalogPath",
+		"formalCalibrationPath",
+		"formalContactPath",
+	]:
+		var path := str(expected.get(key, ""))
+		var expected_hash := str(expected.get("%sSha256" % key.trim_suffix("Path"), ""))
+		if path.is_empty() or expected_hash.is_empty():
+			return false
+		if str(actual.get(key, "")) != path:
+			return false
+		if str(actual.get("%sSha256" % key.trim_suffix("Path"), "")) != expected_hash:
+			return false
+		if not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != expected_hash:
+			return false
+	return true
+
+
+static func _entry_from_contract(path: String, monster_id: int) -> Dictionary:
+	var value: Variant = _load_json(path).get(
+		"entriesByMonsterId", {}
+	).get(str(monster_id), {})
+	return value.duplicate(true) if value is Dictionary else {}
+
+
+static func _array_copy(value: Variant) -> Array:
+	return value.duplicate(true) if value is Array else []
 
 
 static func build_payload(
