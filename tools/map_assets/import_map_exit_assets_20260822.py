@@ -655,12 +655,28 @@ def replace_files(expected: dict[str, Any], outputs: dict[str, bytes]) -> dict[s
     override_map = state["overrides"].get("overrides", {})
     if not isinstance(override_map, dict):
         raise ValueError("overrides must be an object")
-    state["overrides"]["overrides"] = {
-        key: value for key, value in override_map.items() if str(key) not in managed_ids
-    }
     review_items = state["reviews"].get("items", {})
     if not isinstance(review_items, dict):
         raise ValueError("review items must be an object")
+    calibrated_new_ids = {
+        asset_id
+        for asset_id in new_ids
+        if asset_id in override_map
+        or (
+            isinstance(review_items.get(asset_id), dict)
+            and str(review_items[asset_id].get("status", "pending_manual_review"))
+            not in {"", "pending", "pending_manual_review"}
+        )
+    }
+    if calibrated_new_ids:
+        sample = sorted(calibrated_new_ids)[:3]
+        raise ValueError(
+            "refusing --write because manual calibration already exists for new IDs: "
+            f"{sample}"
+        )
+    state["overrides"]["overrides"] = {
+        key: value for key, value in override_map.items() if str(key) not in managed_ids
+    }
     state["reviews"]["items"] = {
         key: value for key, value in review_items.items() if str(key) not in managed_ids
     }
