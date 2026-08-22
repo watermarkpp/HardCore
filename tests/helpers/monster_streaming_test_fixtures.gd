@@ -27,7 +27,7 @@ static func catalog_ids() -> Array[int]:
 	assert(catalog is Dictionary)
 	for row: Dictionary in (catalog as Dictionary).get("monsters", []):
 		_catalog_ids.append(int(row.monster_id))
-	assert(_catalog_ids.size() == 217, "catalog must contain 217 monster ids")
+	assert(_catalog_ids.size() == 156, "catalog must contain 156 active monster ids")
 	return _catalog_ids
 
 

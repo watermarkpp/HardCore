@@ -3,6 +3,13 @@ extends Node
 const LabScript := preload(
 	"res://tools/visual_acceptance_lab/visual_acceptance_lab.gd"
 )
+const RETIRED_MONSTER_IDS := [
+	23, 25, 27, 29, 35, 37, 44, 48, 49, 51, 53, 63, 65, 67, 69, 71,
+	80, 82, 84, 86, 88, 93, 95, 98, 102, 106, 108, 111, 113, 115,
+	117, 119, 130, 139, 149, 151, 154, 165, 167, 169, 171, 173, 175,
+	177, 179, 184, 197, 201, 203, 205, 207, 211, 213, 215, 217, 219,
+	221, 223,
+]
 
 
 func _ready() -> void:
@@ -23,7 +30,40 @@ func _ready() -> void:
 	assert(lab._action_option.item_count == 6)
 	assert(lab._mode_option.item_count == 3)
 	assert(lab._mode_option.selected == 0)
-	assert(lab._monster_option.item_count == 217)
+	assert(lab.MonsterDraftScript.animation_catalog_authority_valid())
+	assert(lab._monster_option.item_count == 156)
+	assert(
+		FileAccess.get_sha256(
+			lab.MonsterDraftScript.ANIMATION_CATALOG_PATH
+		).to_upper()
+		== lab.MonsterDraftScript.FORMAL_ANIMATION_CATALOG_SHA256
+	)
+	var animation_catalog_file := FileAccess.open(
+		lab.MonsterDraftScript.ANIMATION_CATALOG_PATH, FileAccess.READ
+	)
+	var animation_catalog: Dictionary = JSON.parse_string(
+		animation_catalog_file.get_as_text()
+	)
+	var animation_summary: Dictionary = animation_catalog.get("summary", {})
+	assert(int(animation_summary.get("total", -1)) == 156)
+	assert(int(animation_summary.get("formal", -1)) == 156)
+	assert(int(animation_summary.get("missing", -1)) == 0)
+	var active_ids := {}
+	for row: Dictionary in lab._monster_rows:
+		var monster_id := int(row.get("monster_id", -1))
+		assert(monster_id > 0)
+		assert(not active_ids.has(monster_id))
+		active_ids[monster_id] = true
+		assert(not lab.MonsterDraftScript.contact_entry(monster_id).is_empty())
+		assert(not lab.MonsterDraftScript.calibration_entry(monster_id).is_empty())
+		assert(not lab.MonsterDraftScript.formal_entry(monster_id).is_empty())
+		if monster_id == 97:
+			assert(lab.MonsterDraftScript.manual_entry(monster_id).is_empty())
+		else:
+			assert(not lab.MonsterDraftScript.manual_entry(monster_id).is_empty())
+	assert(active_ids.size() == 156)
+	for retired_id: int in RETIRED_MONSTER_IDS:
+		assert(not active_ids.has(retired_id))
 	assert(lab._direction_option.item_count == 8)
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
@@ -252,13 +292,33 @@ func _ready() -> void:
 		"acceptance lab must use the same normalized visual transform as runtime",
 	)
 	assert(
-		not lab._monster.is_targeted,
-		"acceptance lab must suppress the runtime-owned target ring",
+		lab._monster.is_targeted,
+		"acceptance lab must use the runtime-owned target ring",
 	)
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
 	var ground_review := lab.monster_ground_review_snapshot()
 	assert(int(ground_review.get("monsterId", -1)) == 18)
+	assert(bool(ground_review.get("runtimeSelected", false)))
+	assert(bool(ground_review.get("runtimeRingVisible", false)))
+	assert(ground_review.get("runtimeRingOwner", "") == "monster_visual")
+	assert(
+		ground_review.get("runtimeRingMode", "")
+		== "authored_cast_with_contact_core"
+	)
+	var orange_diagnostic_color := Color(1.0, 0.62, 0.20, 0.72)
+	for overlay_child: Node in lab._overlay_root.get_children():
+		if overlay_child is Line2D:
+			assert(
+				not (overlay_child as Line2D).default_color.is_equal_approx(
+					orange_diagnostic_color
+				)
+			)
+	assert(
+		not FileAccess.get_file_as_string(
+			"res://tools/visual_acceptance_lab/visual_acceptance_lab.gd"
+		).contains("Color(1.0, 0.62, 0.20")
+	)
 	assert(
 		ground_review.get("runtimeRingCenter", Vector2.INF)
 		== lab._monster.ground_indicator_center()
@@ -412,7 +472,7 @@ func _ready() -> void:
 	assert(PlayerState.test_mode == original_test_mode)
 	print(
 		"UI_VISUAL_ACCEPTANCE_LAB_PASS player_actions=6 "
-		+ "monster_actions=5 monsters=217 warrior_skills=6 "
+		+ "monster_actions=5 monsters=156 retired_monsters=58 warrior_skills=6 "
 		+ "directions=8 frames=6 passive_layer_isolated=true "
 		+ "single_target_drafts=true runtime_composite=true"
 	)

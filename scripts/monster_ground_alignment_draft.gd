@@ -5,6 +5,12 @@ const CONTRACT_ID := "local.visual_acceptance_lab.monster_ground_alignment_draft
 const ANIMATION_CATALOG_PATH := (
 	"res://assets/data/runtime/monster_animation_catalog.json"
 )
+const FORMAL_ANIMATION_CATALOG_SHA256 := (
+	"237FF7655B17A31C5DAF1119C114AE5663960198AEFAAD3A0945A9D2C8986517"
+)
+const FORMAL_ANIMATION_CATALOG_TOTAL := 156
+const FORMAL_ANIMATION_CATALOG_FORMAL := 156
+const FORMAL_ANIMATION_CATALOG_MISSING := 0
 const FORMAL_CONTACT_PATH := (
 	"res://assets/data/runtime/monster_ground_contacts.json"
 )
@@ -21,12 +27,59 @@ const DRAFT_ROOT := (
 
 static func catalog_rows() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	for value: Variant in _load_json(
-		ANIMATION_CATALOG_PATH
-	).get("monsters", []):
+	var catalog := _validated_animation_catalog()
+	if catalog.is_empty():
+		return result
+	for value: Variant in catalog.get("monsters", []):
 		if value is Dictionary:
 			result.append(value.duplicate(true))
 	return result
+
+
+static func animation_catalog_authority_valid() -> bool:
+	return not _validated_animation_catalog().is_empty()
+
+
+static func _validated_animation_catalog() -> Dictionary:
+	# This is an authoring roster, not a best-effort scan.  The maps-owned
+	# active authority is pinned by its exact file hash and formal summary so a
+	# stale 214-row catalog or an arbitrary replacement cannot repopulate the
+	# calibration menu.  Runtime_allowed remains a separate canonical combat
+	# concern; the three unresolved drop-closure rows are intentionally retained
+	# here because they are valid calibration records.
+	if (
+		not FileAccess.file_exists(ANIMATION_CATALOG_PATH)
+		or FileAccess.get_sha256(ANIMATION_CATALOG_PATH).to_upper()
+			!= FORMAL_ANIMATION_CATALOG_SHA256
+	):
+		return {}
+	var catalog := _load_json(ANIMATION_CATALOG_PATH)
+	var summary: Variant = catalog.get("summary", {})
+	if not summary is Dictionary:
+		return {}
+	if (
+		int(summary.get("total", -1)) != FORMAL_ANIMATION_CATALOG_TOTAL
+		or int(summary.get("formal", -1)) != FORMAL_ANIMATION_CATALOG_FORMAL
+		or int(summary.get("missing", -1)) != FORMAL_ANIMATION_CATALOG_MISSING
+	):
+		return {}
+	var rows: Variant = catalog.get("monsters", [])
+	if not rows is Array or rows.size() != FORMAL_ANIMATION_CATALOG_TOTAL:
+		return {}
+	var ids := {}
+	for value: Variant in rows:
+		if not value is Dictionary:
+			return {}
+		var row: Dictionary = value
+		var monster_id := int(row.get("monster_id", -1))
+		if monster_id <= 0 or ids.has(monster_id):
+			return {}
+		if str(row.get("status", "")) != "formal":
+			return {}
+		ids[monster_id] = true
+	if ids.size() != FORMAL_ANIMATION_CATALOG_TOTAL:
+		return {}
+	return catalog
 
 
 static func formal_entry(monster_id: int) -> Dictionary:

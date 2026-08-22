@@ -71,9 +71,6 @@ const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
 const MONSTER_GROUND_REVIEW_ARG := "--monster-ground-review"
 const WARRIOR_SKILL_REVIEW_ARG := "--warrior-skill-review"
 const MONSTER_FOOT_MATCH_EPSILON := 0.01
-const MONSTER_TARGET_RING_COLOR := Color("#ffd54f")
-const MONSTER_FOOT_DELTA_COLOR := Color("#ff6b6b")
-const MONSTER_ACTOR_ORIGIN_COLOR := Color("#ff9f43")
 
 var _old_test_mode := false
 var _player: PlayerCharacter
@@ -687,12 +684,6 @@ func _rebuild_monster_actor(force := false) -> bool:
 	# and subtract it from the visual-foot vector. This preserves every frozen
 	# draft field while making the lab and the game use the same transform chain.
 	_monster.position = Vector2.ZERO
-	# The lab owns its diagnostic overlays. A runtime-selected MonsterVisual can
-	# now draw the game's yellow target ring itself, which would duplicate the
-	# saved-draft overlay and make sub-pixel differences look like changed user
-	# data. Keep the preview actor unselected so draft review remains a single,
-	# read-only coordinate presentation.
-	_monster.set_targeted(false)
 	_monster.set_process(false)
 	_monster.set_physics_process(false)
 	_monster.velocity = Vector2.ZERO
@@ -701,6 +692,10 @@ func _rebuild_monster_actor(force := false) -> bool:
 	# while the user is inspecting animation and ground alignment.
 	_monster._burrowed = false
 	_monster.dormant = false
+	# Calibration review deliberately uses the same selected state as gameplay.
+	# MonsterVisual therefore owns the yellow ring through its normal _draw path;
+	# the lab overlay below is limited to the human foot/collision/map guides.
+	_monster.set_targeted(true)
 	if _monster.visual != null:
 		_monster.visual.set_process(false)
 		_monster.visual.visible = true
@@ -817,17 +812,8 @@ func _update_monster_overlay() -> void:
 	_draw_canonical_ground_overlay(
 		_visual_foot_origin(), _monster.collision_radius_px
 	)
-	var formal_center := (
-		visual.position + visual.ground_contact_offset()
-	)
-	var formal_radii := visual.ground_indicator_radii(Vector2(22, 7))
-	_add_ellipse_line(
-		_overlay_root,
-		formal_center,
-		formal_radii,
-		Color(1.0, 0.62, 0.20, 0.72),
-		1.0,
-	)
+	# Do not draw a second diagnostic ellipse here.  The selected actor's
+	# MonsterVisual already draws the runtime yellow ring in its own CanvasItem.
 	var rect := Rect2(
 		visual.position + body_sprite.position,
 		Vector2(body_sprite.region_rect.size)
@@ -958,7 +944,7 @@ func _update_status(message := "") -> void:
 		)
 		_status.text = (
 			"%s　#%d %s　%s / %s　帧 %d/%d　倍率 %dx\n"
-			+ "橙十字=怪物物理原点　青十字=人工视觉脚点　"
+			+ "黄轴=怪物物理原点　青十字=人工视觉脚点　"
 			+ "黄圈/黄小十字=游戏实时目标光圈\n"
 			+ "来源=%s　保存姿态=%s【%s】\n"
 			+ "人工脚点=(%.1f, %.1f)　实时黄圈=(%.1f, %.1f)　"
@@ -1557,6 +1543,7 @@ func monster_ground_review_snapshot() -> Dictionary:
 	var pose_matches := (
 		current_selection == _monster_saved_selection
 	)
+	var runtime_layout := _monster.visual.ground_shadow_layout_snapshot()
 	return {
 		"monsterId": _active_monster_id,
 		"draftLoaded": _active_monster_draft_loaded,
@@ -1566,6 +1553,10 @@ func monster_ground_review_snapshot() -> Dictionary:
 		"expectedTargetCenter": expected_target,
 		"runtimeRingCenter": runtime_ring,
 		"runtimeRingRadii": _monster.ground_indicator_radii(),
+		"runtimeSelected": _monster.is_targeted,
+		"runtimeRingVisible": bool(runtime_layout.get("ring_visible", false)),
+		"runtimeRingOwner": str(runtime_layout.get("owner", "")),
+		"runtimeRingMode": str(runtime_layout.get("mode", "")),
 		"manualFootDelta": manual_delta,
 		"runtimeTargetDelta": runtime_target_delta,
 		"delta": runtime_ring - manual_foot,
@@ -2087,26 +2078,6 @@ func _add_rect_line(
 		rect.end,
 		Vector2(rect.position.x, rect.end.y),
 	]), color, width)
-
-
-func _add_ellipse_line(
-	parent: Node2D,
-	center: Vector2,
-	radii: Vector2,
-	color: Color,
-	width: float,
-) -> void:
-	var points := PackedVector2Array()
-	for index in range(49):
-		var angle := TAU * float(index) / 48.0
-		points.append(
-			center
-			+ Vector2(
-				cos(angle) * radii.x,
-				sin(angle) * radii.y,
-			)
-		)
-	_add_closed_line(parent, points, color, width)
 
 
 func _add_closed_line(

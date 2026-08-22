@@ -20,7 +20,8 @@ func _ready() -> void:
 		DraftScript.MANUAL_ALIGNMENT_DATA_PATH
 	)
 	var rows := DraftScript.catalog_rows()
-	assert(rows.size() == 214)
+	assert(DraftScript.animation_catalog_authority_valid())
+	assert(rows.size() == 156)
 	assert(int(rows[0].get("monster_id", -1)) == 18)
 	var formal_replay_count := 0
 	for row: Dictionary in rows:
@@ -29,10 +30,10 @@ func _ready() -> void:
 		)
 		if not replay.is_empty():
 			formal_replay_count += 1
-	assert(formal_replay_count == 212)
+	assert(formal_replay_count == 155)
 	assert(DraftScript.load_draft(97).is_empty())
 	assert(DraftScript.load_draft(98).is_empty())
-	for monster_id in range(210, 226):
+	for monster_id in [210, 212, 214, 216, 218, 220, 222, 224, 225]:
 		var replay := DraftScript.load_draft(monster_id)
 		assert(not replay.is_empty())
 		assert(
@@ -126,7 +127,7 @@ func _ready() -> void:
 	)
 	print(
 		"MONSTER_GROUND_ALIGNMENT_DRAFT_PASS "
-		+ "catalog=214 replay=212 bulls=16 "
+		+ "catalog=156 replay=155 high_ids=9 "
 		+ "single_target=true formal_readonly=true"
 	)
 	get_tree().quit(0)

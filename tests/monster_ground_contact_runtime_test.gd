@@ -50,7 +50,12 @@ func _run() -> void:
 	var catalog: Variant = JSON.parse_string(catalog_file.get_as_text()) if catalog_file != null else null
 	assert(catalog is Dictionary)
 	var rows: Array = catalog.get("monsters", [])
-	assert(rows.size() == 214)
+	assert(rows.size() == 156)
+	var runtime_rows: Array[Dictionary] = []
+	for row: Dictionary in rows:
+		if MonsterIdentity.is_runtime_allowed(int(row.monster_id)):
+			runtime_rows.append(row)
+	assert(runtime_rows.size() == 153)
 
 	var player := PlayerCharacter.new()
 	player.global_position = Vector2.ZERO
@@ -58,7 +63,7 @@ func _run() -> void:
 	player.set_physics_process(false)
 
 	var verified_count := 0
-	for row: Dictionary in rows:
+	for row: Dictionary in runtime_rows:
 		var monster_id := int(row.monster_id)
 		var monster_key := str(monster_id)
 		assert(entries.has(monster_key), "monsterId=%d runtime calibration missing" % monster_id)
@@ -294,7 +299,7 @@ func _run() -> void:
 		await get_tree().process_frame
 		verified_count += 1
 
-	assert(verified_count == 214)
+	assert(verified_count == 153)
 	for monster_id: int in BOSS_ROOT_OFFSET_IDS:
 		var enemy := EnemyActor.new()
 		enemy.setup(GameData.get_monster_by_id(monster_id), player, true)
@@ -327,7 +332,7 @@ func _run() -> void:
 		)
 		enemy.queue_free()
 		await get_tree().process_frame
-	print("MONSTER_GROUND_CONTACT_RUNTIME_PASS 212 manual origins replay exactly, grounded rings follow the reviewed foot, airborne rings keep authored projection, and all rings use 1.25x physics footprints")
+	print("MONSTER_GROUND_CONTACT_RUNTIME_PASS 153 runtime profiles replay manual origins exactly, grounded rings follow the reviewed foot, airborne rings keep authored projection, and all rings use 1.25x physics footprints")
 	get_tree().quit(0)
 
 

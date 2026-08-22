@@ -28,10 +28,15 @@ func _run() -> void:
 	var catalog: Variant = JSON.parse_string(catalog_file.get_as_text()) if catalog_file != null else null
 	assert(catalog is Dictionary)
 	var rows: Array = catalog.get("monsters", [])
-	assert(rows.size() == 214)
+	assert(rows.size() == 156)
+	var runtime_rows: Array[Dictionary] = []
+	for row: Dictionary in rows:
+		if MonsterIdentity.is_runtime_allowed(int(row.monster_id)):
+			runtime_rows.append(row)
+	assert(runtime_rows.size() == 153)
 	var verified_count := 0
 
-	for row: Dictionary in rows:
+	for row: Dictionary in runtime_rows:
 		var monster_id := int(row.monster_id)
 		MonsterVisual.reset_client_resource_cache()
 		MonsterVisual.set_synchronous_loading_for_tests(false)
@@ -107,6 +112,6 @@ func _run() -> void:
 		verified_count += 1
 
 	MonsterVisual.reset_client_resource_cache()
-	assert(verified_count == 214)
-	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 cold profiles preserve canonical targeting origins and footprint-sized rings")
+	assert(verified_count == 153)
+	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 153 runtime profiles preserve canonical targeting origins and footprint-sized rings")
 	get_tree().quit(0)
