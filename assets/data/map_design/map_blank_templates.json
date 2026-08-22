@@ -743,6 +743,125 @@
       "size_decision_source": "user_request_2026-08-21",
       "clone_source_map_id": "hadd_2",
       "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.gmd_1",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "gmd_1",
+      "runtime_map_id": 99011,
+      "display_name": "骨魔洞一层",
+      "map_type": "dungeon_floor",
+      "design_size": [
+        80,
+        32
+      ],
+      "pre_scale_design_size": [
+        80,
+        32
+      ],
+      "strategy": "custom_blank_layout",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_workspace_map",
+      "size_decision_source": "user_request_2026-08-22",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.gmd_2",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "gmd_2",
+      "runtime_map_id": 99012,
+      "display_name": "骨魔洞二层",
+      "map_type": "dungeon_floor",
+      "design_size": [
+        80,
+        32
+      ],
+      "pre_scale_design_size": [
+        80,
+        32
+      ],
+      "strategy": "exact_clone_of_gmd_1",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-22",
+      "clone_source_map_id": "gmd_1",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.gmd_3",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "gmd_3",
+      "runtime_map_id": 99013,
+      "display_name": "骨魔洞三层",
+      "map_type": "dungeon_floor",
+      "design_size": [
+        80,
+        32
+      ],
+      "pre_scale_design_size": [
+        80,
+        32
+      ],
+      "strategy": "exact_clone_of_gmd_1",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-22",
+      "clone_source_map_id": "gmd_1",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.gmd_4",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "gmd_4",
+      "runtime_map_id": 99014,
+      "display_name": "骨魔洞四层",
+      "map_type": "dungeon_floor",
+      "design_size": [
+        80,
+        32
+      ],
+      "pre_scale_design_size": [
+        80,
+        32
+      ],
+      "strategy": "exact_clone_of_gmd_1",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-22",
+      "clone_source_map_id": "gmd_1",
+      "workspace_status": "ready"
+    },
+    {
+      "template_id": "blank.gmd_5",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "gmd_5",
+      "runtime_map_id": 99015,
+      "display_name": "骨魔洞五层",
+      "map_type": "dungeon_floor",
+      "design_size": [
+        80,
+        32
+      ],
+      "pre_scale_design_size": [
+        80,
+        32
+      ],
+      "strategy": "exact_clone_of_gmd_1",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-08-22",
+      "clone_source_map_id": "gmd_1",
+      "workspace_status": "ready"
     }
   ]
 }
