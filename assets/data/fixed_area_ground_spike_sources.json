@@ -11,11 +11,12 @@
     "format": "PNG RGBA",
     "dimensions_px": [1536, 1024],
     "alpha_evidence": {
-      "channel_type": "TrueColorAlpha",
+      "channel_type": "srgba",
       "alpha_min": 0,
-      "alpha_max": 255,
+      "alpha_max_normalized": 0.996078,
+      "alpha_max_8bit": 254,
       "transparent_alpha_present": true,
-      "evidence_command": "ImageMagick identify -verbose: Type=TrueColorAlpha; Alpha min=0 max=255"
+      "evidence_command": "magick identify -format channels/opaque/fx:minima.a/fx:maxima.a"
     }
   },
   "frame_layout": {

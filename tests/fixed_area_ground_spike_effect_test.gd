@@ -116,6 +116,13 @@ func _run() -> void:
 	assert(effect.frame_count() == 8)
 	assert(not effect.has_method("take_damage"), "visual effect must not own damage")
 	assert(effect.source_texture_path().ends_with("fixed_area_ground_spike_rgba_v1.png"))
+	assert(
+		is_equal_approx(
+			float(effect.visual_descriptor().get("display_scale", 0.0)),
+			0.36,
+		),
+		"source-sized atlas must be scaled to a player-footpoint effect",
+	)
 	await get_tree().create_timer(0.75).timeout
 	assert(not is_instance_valid(effect), "eight-frame effect must self-release")
 
