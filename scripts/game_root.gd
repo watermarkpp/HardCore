@@ -8414,6 +8414,13 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, 6)
 	for item_name: String in drop_roll.get("items", []):
 		_spawn_loot(item_name, death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18)))
+	for raw_gold: Variant in drop_roll.get("gold_drops", []):
+		var amount := int(raw_gold)
+		if amount > 0:
+			_spawn_gold_loot(
+				amount,
+				death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18))
+			)
 	if not respawn_enabled:
 		return
 	var respawn_seconds := configured_respawn if configured_respawn > 0.0 else (DEFAULT_BOSS_RESPAWN_SECONDS if was_boss else DEFAULT_NORMAL_RESPAWN_SECONDS)
@@ -8434,6 +8441,26 @@ func _spawn_loot(item_name: String, position: Vector2) -> void:
 	loot.collected.connect(_on_loot_collected)
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
 	add_child(loot)
+
+
+func _spawn_gold_loot(amount: int, position: Vector2) -> void:
+	var loot := LootPickup.new()
+	loot.setup_gold(amount, player)
+	loot.global_position = position
+	loot.add_to_group("zone_content")
+	loot.gold_collected.connect(_on_gold_loot_collected)
+	loot.collection_rejected.connect(_on_loot_collection_rejected)
+	add_child(loot)
+
+
+func _on_gold_loot_collected(amount: int, pickup: LootPickup) -> void:
+	if amount <= 0:
+		return
+	PlayerState.add_gold(amount)
+	if hud != null:
+		hud.show_loot("金币 +%d" % amount)
+	if is_instance_valid(pickup):
+		pickup.confirm_collect()
 
 
 func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:

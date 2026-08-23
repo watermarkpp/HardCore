@@ -2,6 +2,7 @@ class_name LootPickup
 extends Node2D
 
 signal collected(item_name: String, pickup: LootPickup)
+signal gold_collected(amount: int, pickup: LootPickup)
 signal collection_rejected(item_name: String, message: String)
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
@@ -9,6 +10,7 @@ const COLLECTION_RADIUS_GU := 0.75
 const OVERWEIGHT_RETRY_COOLDOWN_SECONDS := 5.0
 
 var item_name := "金币"
+var gold_amount := 0
 var target: PlayerCharacter
 var _bob_time := 0.0
 var icon_sprite: Sprite2D
@@ -19,6 +21,13 @@ var _collection_authority_check_count := 0
 
 func setup(label_text: String, player_target: PlayerCharacter) -> void:
 	item_name = label_text
+	gold_amount = 0
+	target = player_target
+
+
+func setup_gold(amount: int, player_target: PlayerCharacter) -> void:
+	item_name = "金币"
+	gold_amount = maxi(1, amount)
 	target = player_target
 
 
@@ -41,7 +50,7 @@ func _ready() -> void:
 		icon_sprite.position = Vector2(0, -5)
 		add_child(icon_sprite)
 	var label := Label.new()
-	label.text = item_name
+	label.text = "金币 %d" % gold_amount if gold_amount > 0 else item_name
 	label.position = Vector2(-48, -36)
 	label.size = Vector2(96, 24)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -78,6 +87,11 @@ func _process(delta: float) -> void:
 	if _overweight_retry_remaining > 0.0:
 		return
 	_collection_authority_check_count += 1
+	if gold_amount > 0:
+		# Gold does not enter inventory: no weight / capacity gate.
+		_collection_pending = true
+		gold_collected.emit(gold_amount, self)
+		return
 	if not PlayerState.can_receive(item_name):
 		_arm_collection_retry_cooldown()
 		var message := str(PlayerState.last_receive_result.get("message", "超过负重，无法拾取。"))

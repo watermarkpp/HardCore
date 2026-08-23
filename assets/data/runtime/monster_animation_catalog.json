@@ -17,8 +17,8 @@
     "missing_profile_blocks_map_release": true
   },
   "summary": {
-    "total": 214,
-    "formal": 214,
+    "total": 156,
+    "formal": 156,
     "provisional": 0,
     "missing": 0
   },
@@ -105,62 +105,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 23,
-      "name": "稻草人1",
-      "base_name": "稻草人",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "A",
-      "resource_lookup": "稻草人",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        27,
-        81
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 24,
       "name": "多钩猫",
-      "base_name": "多钩猫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "A",
-      "resource_lookup": "多钩猫",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        176,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        41,
-        91
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 25,
-      "name": "多钩猫0",
       "base_name": "多钩猫",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -213,62 +159,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 27,
-      "name": "钉耙猫0",
-      "base_name": "钉耙猫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "A",
-      "resource_lookup": "钉耙猫",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        208,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        58,
-        91
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 28,
       "name": "森林雪人",
-      "base_name": "森林雪人",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "A",
-      "resource_lookup": "森林雪人",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        240,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        61,
-        112
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 4
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 29,
-      "name": "森林雪人0",
       "base_name": "森林雪人",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -429,62 +321,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 35,
-      "name": "半兽人0",
-      "base_name": "半兽人",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "半兽人",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        67,
-        94
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 36,
       "name": "半兽战士",
-      "base_name": "半兽战士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "半兽战士",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        256,
-        208
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        79,
-        108
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 37,
-      "name": "半兽战士0",
       "base_name": "半兽战士",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -645,33 +483,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 44,
-      "name": "山洞蝙蝠0",
-      "base_name": "山洞蝙蝠",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "A",
-      "resource_lookup": "山洞蝙蝠",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        192,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        41,
-        80
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 45,
       "name": "蝎子",
       "base_name": "蝎子",
@@ -753,60 +564,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 48,
-      "name": "骷髅0",
-      "base_name": "骷髅",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "骷髅",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        240,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        95,
-        92
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 49,
-      "name": "掷斧骷髅9",
-      "base_name": "掷斧骷髅",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "掷斧骷髅",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        208,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        55,
-        101
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 50,
       "name": "掷斧骷髅",
       "base_name": "掷斧骷髅",
@@ -834,62 +591,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 51,
-      "name": "掷斧骷髅0",
-      "base_name": "掷斧骷髅",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "掷斧骷髅",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        208,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        55,
-        101
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 52,
       "name": "骷髅战士",
-      "base_name": "骷髅战士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "骷髅战士",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        240,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        57,
-        116
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 53,
-      "name": "骷髅战士0",
       "base_name": "骷髅战士",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -1104,62 +807,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 63,
-      "name": "暗黑战士0",
-      "base_name": "暗黑战士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "暗黑战士",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        43,
-        76
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 64,
       "name": "沃玛战士",
-      "base_name": "沃玛战士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "沃玛战士",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        320,
-        256
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        133,
-        109
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 65,
-      "name": "沃玛战士0",
       "base_name": "沃玛战士",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -1212,33 +861,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 67,
-      "name": "沃玛勇士0",
-      "base_name": "沃玛勇士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "沃玛勇士",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        368,
-        288
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        158,
-        132
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 68,
       "name": "沃玛战将",
       "base_name": "沃玛战将",
@@ -1266,62 +888,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 69,
-      "name": "沃玛战将0",
-      "base_name": "沃玛战将",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "沃玛战将",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        384,
-        320
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        169,
-        149
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 70,
       "name": "火焰沃玛",
-      "base_name": "火焰沃玛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "火焰沃玛",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        320,
-        272
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        135,
-        133
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 71,
-      "name": "火焰沃玛0",
       "base_name": "火焰沃玛",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -1536,62 +1104,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 80,
-      "name": "僵尸10",
-      "base_name": "僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "僵尸1",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        176,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        38,
-        88
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 81,
       "name": "僵尸2",
-      "base_name": "僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "僵尸2",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        82,
-        74
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 82,
-      "name": "僵尸20",
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -1644,33 +1158,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 84,
-      "name": "僵尸30",
-      "base_name": "僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "僵尸3",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        46,
-        76
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 85,
       "name": "僵尸4",
       "base_name": "僵尸",
@@ -1698,62 +1185,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 86,
-      "name": "僵尸40",
-      "base_name": "僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "僵尸4",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        45,
-        72
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 87,
       "name": "僵尸5",
-      "base_name": "僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "僵尸5",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        128,
-        112
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        35,
-        44
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 88,
-      "name": "僵尸50",
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -1887,62 +1320,8 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 93,
-      "name": "红蛇0",
-      "base_name": "红蛇",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "红蛇",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        176,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        52,
-        70
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 94,
       "name": "虎蛇",
-      "base_name": "虎蛇",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "虎蛇",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        52,
-        63
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 95,
-      "name": "虎蛇0",
       "base_name": "虎蛇",
       "status": "formal",
       "source_type": "classic_client_wil",
@@ -2022,33 +1401,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 98,
-      "name": "猎鹰0",
-      "base_name": "猎鹰",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "猎鹰0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        304,
-        400
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        107,
-        282
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 100,
       "name": "狼",
       "base_name": "狼",
@@ -2083,33 +1435,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "盔甲虫",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        128
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        38,
-        70
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 102,
-      "name": "盔甲虫0",
-      "base_name": "盔甲虫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "盔甲虫0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -2211,33 +1536,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 106,
-      "name": "多角虫0",
-      "base_name": "多角虫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "多角虫0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        192,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        49,
-        82
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 107,
       "name": "巨型多角虫",
       "base_name": "巨型多角虫",
@@ -2245,33 +1543,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "巨型多角虫",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        54,
-        92
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 108,
-      "name": "巨型多角虫1",
-      "base_name": "巨型多角虫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "巨型多角虫1",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         224,
@@ -2319,33 +1590,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 111,
-      "name": "蜈蚣0",
-      "base_name": "蜈蚣",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "蜈蚣0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        208
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        87,
-        115
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 112,
       "name": "黑色恶蛆",
       "base_name": "黑色恶蛆",
@@ -2353,33 +1597,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "黑色恶蛆",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        160,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        44,
-        75
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 113,
-      "name": "黑色恶蛆0",
-      "base_name": "黑色恶蛆",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "黑色恶蛆0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -2427,33 +1644,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 115,
-      "name": "跳跳蜂0",
-      "base_name": "跳跳蜂",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "跳跳蜂0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        192,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        49,
-        85
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 116,
       "name": "巨型蠕虫",
       "base_name": "巨型蠕虫",
@@ -2481,33 +1671,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 117,
-      "name": "巨型蠕虫0",
-      "base_name": "巨型蠕虫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "巨型蠕虫0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        208,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        55,
-        81
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 118,
       "name": "钳虫",
       "base_name": "钳虫",
@@ -2515,33 +1678,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "钳虫",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        208,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        75,
-        85
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 119,
-      "name": "钳虫0",
-      "base_name": "钳虫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "钳虫0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         208,
@@ -2805,33 +1941,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 130,
-      "name": "红野猪0",
-      "base_name": "红野猪",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "红野猪0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        64,
-        101
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 131,
       "name": "红野猪3",
       "base_name": "红野猪",
@@ -3028,33 +2137,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "蝎蛇",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        256,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        95,
-        88
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 139,
-      "name": "蝎蛇0",
-      "base_name": "蝎蛇",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "蝎蛇0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         256,
@@ -3318,33 +2400,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 149,
-      "name": "大老鼠0",
-      "base_name": "大老鼠",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "大老鼠0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        240,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        75,
-        94
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 150,
       "name": "祖玛弓箭手",
       "base_name": "祖玛弓箭手",
@@ -3352,33 +2407,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "祖玛弓箭手",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        272,
-        240
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        85,
-        136
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 151,
-      "name": "祖玛弓箭手0",
-      "base_name": "祖玛弓箭手",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "祖玛弓箭手0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         272,
@@ -3433,33 +2461,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "祖玛雕像",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        320,
-        256
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        113,
-        134
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 154,
-      "name": "祖玛雕像0",
-      "base_name": "祖玛雕像",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "祖玛雕像0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         320,
@@ -3750,33 +2751,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 165,
-      "name": "血巨人0",
-      "base_name": "血巨人",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "血巨人0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        272,
-        288
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        100,
-        176
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 166,
       "name": "血僵尸",
       "base_name": "血僵尸",
@@ -3784,33 +2758,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "血僵尸",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        272,
-        288
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        100,
-        176
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 167,
-      "name": "血僵尸0",
-      "base_name": "血僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "血僵尸0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         272,
@@ -3858,33 +2805,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 169,
-      "name": "月魔蜘蛛0",
-      "base_name": "月魔蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "月魔蜘蛛0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        256,
-        208
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        76,
-        112
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 170,
       "name": "黑锷蜘蛛",
       "base_name": "黑锷蜘蛛",
@@ -3892,33 +2812,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "黑锷蜘蛛",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        208,
-        176
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        64,
-        92
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 171,
-      "name": "黑锷蜘蛛0",
-      "base_name": "黑锷蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "黑锷蜘蛛0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         208,
@@ -3966,33 +2859,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 173,
-      "name": "钢牙蜘蛛0",
-      "base_name": "钢牙蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "钢牙蜘蛛0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        336,
-        224
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        111,
-        135
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 174,
       "name": "暴牙蜘蛛",
       "base_name": "暴牙蜘蛛",
@@ -4000,33 +2866,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "暴牙蜘蛛",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        336,
-        224
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        111,
-        135
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 175,
-      "name": "暴牙蜘蛛0",
-      "base_name": "暴牙蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "暴牙蜘蛛0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         336,
@@ -4074,33 +2913,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 177,
-      "name": "天狼蜘蛛0",
-      "base_name": "天狼蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "天狼蜘蛛0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        528,
-        208
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        293,
-        116
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 178,
       "name": "花吻蜘蛛",
       "base_name": "花吻蜘蛛",
@@ -4108,33 +2920,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "花吻蜘蛛",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        320,
-        240
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        114,
-        113
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 179,
-      "name": "花吻蜘蛛0",
-      "base_name": "花吻蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "花吻蜘蛛0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         320,
@@ -4216,33 +3001,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "爆裂蜘蛛",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        192,
-        144
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        67,
-        57
-      ],
-      "actions": {
-        "idle": 1,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 184,
-      "name": "爆裂蜘蛛0",
-      "base_name": "爆裂蜘蛛",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "爆裂蜘蛛0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         192,
@@ -4587,33 +3345,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 197,
-      "name": "恶灵僵尸0",
-      "base_name": "恶灵僵尸",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "恶灵僵尸0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        192,
-        224
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        47,
-        147
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 198,
       "name": "恶灵尸王",
       "base_name": "恶灵尸王",
@@ -4695,33 +3426,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 201,
-      "name": "骷髅锤兵0",
-      "base_name": "骷髅锤兵",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "骷髅锤兵0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        304,
-        240
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        113,
-        116
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 202,
       "name": "骷髅长枪兵",
       "base_name": "骷髅长枪兵",
@@ -4729,33 +3433,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "骷髅长枪兵",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        304,
-        224
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        106,
-        117
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 203,
-      "name": "骷髅长枪兵0",
-      "base_name": "骷髅长枪兵",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "骷髅长枪兵0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         304,
@@ -4803,33 +3480,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 205,
-      "name": "骷髅刀斧手0",
-      "base_name": "骷髅刀斧手",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "骷髅刀斧手0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        192
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        64,
-        107
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 206,
       "name": "骷髅弓箭手",
       "base_name": "骷髅弓箭手",
@@ -4837,33 +3487,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "骷髅弓箭手",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        192,
-        160
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        48,
-        94
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 207,
-      "name": "骷髅弓箭手0",
-      "base_name": "骷髅弓箭手",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "骷髅弓箭手0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         192,
@@ -4965,33 +3588,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 211,
-      "name": "牛头魔0",
-      "base_name": "牛头魔",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛头魔0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        368,
-        272
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        151,
-        131
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 212,
       "name": "牛魔战士",
       "base_name": "牛魔战士",
@@ -4999,33 +3595,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "牛魔战士",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        240,
-        240
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        78,
-        112
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 213,
-      "name": "牛魔战士0",
-      "base_name": "牛魔战士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛魔战士0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         240,
@@ -5073,33 +3642,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 215,
-      "name": "牛魔斗士0",
-      "base_name": "牛魔斗士",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛魔斗士0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        224,
-        240
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        78,
-        109
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 216,
       "name": "牛魔侍卫",
       "base_name": "牛魔侍卫",
@@ -5107,33 +3649,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "牛魔侍卫",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        288,
-        288
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        83,
-        149
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 217,
-      "name": "牛魔侍卫0",
-      "base_name": "牛魔侍卫",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛魔侍卫0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         288,
@@ -5181,33 +3696,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 219,
-      "name": "牛魔将军0",
-      "base_name": "牛魔将军",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛魔将军0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        272,
-        272
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        84,
-        143
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 220,
       "name": "牛魔法师",
       "base_name": "牛魔法师",
@@ -5235,33 +3723,6 @@
       "runtime_allowed": true
     },
     {
-      "monster_id": 221,
-      "name": "牛魔法师0",
-      "base_name": "牛魔法师",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛魔法师0",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        272,
-        224
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        93,
-        113
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
       "monster_id": 222,
       "name": "牛魔祭司",
       "base_name": "牛魔祭司",
@@ -5269,33 +3730,6 @@
       "source_type": "classic_client_wil",
       "source_confidence": "B",
       "resource_lookup": "牛魔祭司",
-      "direction_mode": "mir2_north_first",
-      "frame_size": [
-        240,
-        208
-      ],
-      "direction_policy": "mir2_directional",
-      "foot_anchor": [
-        69,
-        116
-      ],
-      "actions": {
-        "idle": 4,
-        "walk": 6,
-        "attack": 6,
-        "hit": 2,
-        "death": 10
-      },
-      "runtime_allowed": true
-    },
-    {
-      "monster_id": 223,
-      "name": "牛魔祭司0",
-      "base_name": "牛魔祭司",
-      "status": "formal",
-      "source_type": "classic_client_wil",
-      "source_confidence": "B",
-      "resource_lookup": "牛魔祭司0",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         240,

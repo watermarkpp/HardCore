@@ -28,8 +28,8 @@ func _run() -> void:
 		== "monster.catalog.runtime_counts.v1",
 		"canonical count contract drifted"
 	)
-	assert(int(counts.get("catalog_identity_count", 0)) == 217, "catalog identity count drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 37, "catalog runtime policy count drifted")
+	assert(int(counts.get("catalog_identity_count", 0)) == 156, "catalog identity count drifted")
+	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 153, "catalog runtime policy count drifted")
 	assert(
 		int(counts.get("runtime_spawnable_count", -1)) == GameData.monsters.size(),
 		"runtime spawnable count is not the GameData runtime view"
@@ -40,16 +40,25 @@ func _run() -> void:
 		- int(counts.get("runtime_spawnable_count", 0)),
 		"runtime rejection count drifted"
 	)
-	assert(int(counts.get("runtime_spawnable_count", 0)) == 37, "final runtime monster count drifted")
+	assert(int(counts.get("runtime_spawnable_count", 0)) == 153, "final runtime monster count drifted")
 	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "final catalog retains runtime drop rejection")
 
-	for monster_id: int in [64, 66, 68, 69, 73, 76]:
+	for monster_id: int in [64, 66, 68, 70, 73, 76]:
 		var entry := GameData.get_monster_by_id(monster_id)
 		assert(not entry.is_empty(), "canonical runtime ID rejected: %d" % monster_id)
 		assert(int(entry.get("monster_id", -1)) == monster_id, "ID drifted")
 		var drops := GameData.get_canonical_monster_drop_profile(monster_id)
 		assert(not drops.is_empty(), "runtime hostile has no drop profile: %d" % monster_id)
 		assert(not (drops.get("entries", []) as Array).is_empty(), "runtime hostile has empty drops: %d" % monster_id)
+	# P3C: 78/239 are active/runtime-allowed identities (not runtime-rejected).
+	assert(not GameData.get_monster_by_id(78).is_empty(), "active ID 78 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(239).is_empty(), "active ID 239 was rejected from runtime")
+	# R4C2: no-drop/exemption/gold entities must all be runtime-accessible.
+	assert(not GameData.get_monster_by_id(59).is_empty(), "active ID 59 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(161).is_empty(), "active ID 161 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(186).is_empty(), "active ID 186 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(187).is_empty(), "active ID 187 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(226).is_empty(), "active ID 226 was rejected from runtime")
 	var entries_by_id: Dictionary = GameData.canonical_monster_catalog.get(
 		"entries_by_id", {}
 	)
@@ -62,13 +71,12 @@ func _run() -> void:
 			continue
 		var runtime_id := int(catalog_entry.get("monster_id", -1))
 		var closure := GameData.canonical_monster_runtime_drop_closure(runtime_id)
+		# Runtime drop gate is the canonical drop_policy authority: any
+		# runtime_allowed entry whose closure allows it must be spawnable.
+		assert(bool(closure.get("allowed", false)), "runtime_allowed closure rejected ID=%d" % runtime_id)
+		assert(not GameData.get_monster_by_id(runtime_id).is_empty(), "runtime_allowed missing from runtime ID=%d" % runtime_id)
 		if int(closure.get("resolved_non_gold_count", 0)) > 0:
-			assert(bool(closure.get("allowed", false)), "resolved hostile item closure rejected ID=%d" % runtime_id)
-			assert(not GameData.get_monster_by_id(runtime_id).is_empty(), "resolved hostile missing from runtime ID=%d" % runtime_id)
-		else:
-			assert(not bool(closure.get("allowed", true)), "zero-resolution hostile entered runtime ID=%d" % runtime_id)
-			assert(str(closure.get("reason", "")) == "drop_items_unresolved", "zero-resolution hostile lacks stable reason ID=%d" % runtime_id)
-			assert(GameData.get_monster_by_id(runtime_id).is_empty(), "zero-resolution hostile escaped runtime gate ID=%d" % runtime_id)
+			assert(str(closure.get("reason", "")) == "", "resolved reward closure kept a rejection reason ID=%d" % runtime_id)
 	var non_hostile_194 := GameData.get_monster_by_id(194)
 	assert(not non_hostile_194.is_empty(), "non_hostile ID 194 was treated as hostile")
 	assert(
@@ -78,9 +86,9 @@ func _run() -> void:
 
 	_test_runtime_no_drop_rejection()
 
-	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 78, 239, 999999]:
+	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 999999]:
 		var monster_id := GameData.canonical_monster_id(rejected)
-		if rejected in [78, 239, 999999]:
+		if rejected in [999999]:
 			monster_id = int(rejected)
 		assert(
 			GameData.get_monster_by_id(monster_id).is_empty(),
@@ -170,7 +178,6 @@ func _test_bridge_contract() -> void:
 		{"monster_id": 64, "boss_id": 76, "tile": [0, 0]},
 		{"monster_id": 64, "monsterId": 64, "tile": [0, 0]},
 		{"name": "沃玛战士", "tile": [0, 0]},
-		{"monster_id": 78, "tile": [0, 0]},
 		{"boss_id": "boss.239", "tile": [0, 0]},
 		{"monster_id": 64, "tile": [0, 0]},
 	]:
@@ -230,7 +237,7 @@ func _test_loot_contract() -> void:
 		== 33,
 		"every ID 76 row must resolve or carry a stable rejection"
 	)
-	for monster_id: int in [68, 69]:
+	for monster_id: int in [68]:
 		var ordinary_roll := loot_runtime.roll_monster_drops(
 			monster_id, rng, 6
 		)
@@ -242,7 +249,7 @@ func _test_loot_contract() -> void:
 			int(ordinary_roll.get("resolved_entry_count", 0)) > 0,
 			"ID %d has no resolvable drop" % monster_id
 		)
-	for rejected: Variant in [0, 78, 239, 999999]:
+	for rejected: Variant in [0, 999999]:
 		var rejected_roll := loot_runtime.roll_monster_drops(int(rejected), rng, 6)
 		assert(not bool(rejected_roll.get("configured", false)), "rejected monster rolled drops")
 		assert(not str(rejected_roll.get("reason", "")).is_empty(), "rejected roll has no reason")
@@ -276,7 +283,6 @@ func _test_region_content_contract() -> void:
 		{"monster_id": 64, "content_id": "monster.64"},
 		{"monster_id": 64, "boss_id": "boss.76"},
 		{"monster_id": 64.5},
-		{"monster_id": 78},
 	]:
 		assert(
 			RegionContent._canonical_combat_entry(rejected).is_empty(),
@@ -362,10 +368,6 @@ func _test_game_root_spawn(wrong_display_payload: Dictionary) -> void:
 		enemy.display_name
 		== str(GameData.get_monster_by_id(64).get("canonical_name", "")),
 		"GameRoot/Enemy trusted wrong display text"
-	)
-	assert(
-		game._spawn_enemy({"monster_id": 78}, Vector2.ZERO, false) == null,
-		"GameRoot spawned runtime-disabled ID"
 	)
 	assert(
 		game._spawn_enemy({"name": "沃玛战士"}, Vector2.ZERO, false) == null,

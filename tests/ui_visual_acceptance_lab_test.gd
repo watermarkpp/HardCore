@@ -36,7 +36,7 @@ func _ready() -> void:
 	assert(lab._action_option.item_count == 6)
 	assert(lab._mode_option.item_count == 3)
 	assert(lab._mode_option.selected == 0)
-	assert(lab._monster_option.item_count == 214)
+	assert(lab._monster_option.item_count == 156)
 	assert(lab._direction_option.item_count == 8)
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
@@ -508,7 +508,7 @@ func _ready() -> void:
 	assert(PlayerState.test_mode == original_test_mode)
 	print(
 		"UI_VISUAL_ACCEPTANCE_LAB_PASS player_actions=6 "
-		+ "monster_actions=5 monsters=214 auto_monster_id=180 "
+		+ "monster_actions=5 monsters=156 auto_monster_id=180 "
 		+ "warrior_skills=6 "
 		+ "directions=8 frames=6 passive_layer_isolated=true "
 		+ "single_target_drafts=true runtime_composite=true"
