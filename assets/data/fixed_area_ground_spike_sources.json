@@ -26,6 +26,7 @@
     "frame_size_px": [384, 512],
     "playback": "once",
     "fps": 12.0,
-    "anchor_policy": "per_frame_ground_contact_y"
+    "runtime_display_scale": 0.18,
+    "anchor_policy": "per_frame_ground_contact_xy; opening_and_closing_crack_centered_on_target_footpoint"
   }
 }

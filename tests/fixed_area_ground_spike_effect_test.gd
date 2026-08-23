@@ -119,9 +119,15 @@ func _run() -> void:
 	assert(
 		is_equal_approx(
 			float(effect.visual_descriptor().get("display_scale", 0.0)),
-			0.36,
+			0.18,
 		),
 		"source-sized atlas must be scaled to a player-footpoint effect",
+	)
+	assert(
+		effect.frame_anchor_offset_px(0).is_equal_approx(
+			Vector2(14.5, -146.0) * 0.18
+		),
+		"opening crack center must be aligned to the target footpoint",
 	)
 	await get_tree().create_timer(0.75).timeout
 	assert(not is_instance_valid(effect), "eight-frame effect must self-release")

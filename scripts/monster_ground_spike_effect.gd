@@ -16,14 +16,19 @@ const FRAME_SIZE := Vector2i(384, 512)
 const FRAME_FPS := 12.0
 const FRAME_ANIMATION := &"fixed_area_ground_spike"
 const ACTOR_VISIBILITY_Z_INDEX := 0
-const DISPLAY_SCALE := 0.36
+const DISPLAY_SCALE := 0.18
 
 ## The source atlas has a deliberately moving silhouette. These per-frame
 ## offsets keep the visible root/crack contact on the captured target footpoint
-## while allowing the authored frame to retain its full height.
+## while allowing the authored frame to retain its full height. Opening and
+## closing cracks use their visual center; erupted roots use their ground base.
 const FRAME_ANCHOR_Y_PX: Array[float] = [
-	-182.0, -204.0, -248.0, -249.0,
-	-214.0, -214.0, -234.0, -194.0,
+	-146.0, -204.0, -248.0, -249.0,
+	-214.0, -214.0, -234.0, -136.0,
+]
+const FRAME_ANCHOR_X_PX: Array[float] = [
+	14.5, 5.5, 2.5, 1.5,
+	-2.5, 6.5, -4.5, 10.5,
 ]
 
 signal playback_finished(effect: Node2D)
@@ -152,10 +157,15 @@ func _set_frame(frame_index: int) -> void:
 	if _sprite == null or not is_instance_valid(_sprite):
 		return
 	_sprite.frame = _current_frame
-	_sprite.position = Vector2(
-		0.0,
-		FRAME_ANCHOR_Y_PX[_current_frame] * DISPLAY_SCALE,
-	)
+	_sprite.position = frame_anchor_offset_px(_current_frame)
+
+
+func frame_anchor_offset_px(frame_index: int) -> Vector2:
+	var resolved_frame := clampi(frame_index, 0, FRAME_COUNT - 1)
+	return Vector2(
+		FRAME_ANCHOR_X_PX[resolved_frame],
+		FRAME_ANCHOR_Y_PX[resolved_frame],
+	) * DISPLAY_SCALE
 
 
 func frame_count() -> int:
@@ -185,7 +195,7 @@ func visual_descriptor() -> Dictionary:
 		"frame_size": FRAME_SIZE,
 		"frame_fps": FRAME_FPS,
 		"display_scale": DISPLAY_SCALE,
-		"anchor_policy": "per_frame_ground_contact_y",
+		"anchor_policy": "per_frame_ground_contact_xy",
 		"damage_owner": "enemy.fixed_area_ground_spike_release",
 		"release_policy": "once_then_queue_free",
 	}
