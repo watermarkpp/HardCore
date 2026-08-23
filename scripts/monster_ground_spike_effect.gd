@@ -15,7 +15,7 @@ const FRAME_COUNT := FRAME_COLUMNS * FRAME_ROWS
 const FRAME_SIZE := Vector2i(384, 512)
 const FRAME_FPS := 12.0
 const FRAME_ANIMATION := &"fixed_area_ground_spike"
-const ACTOR_VISIBILITY_Z_INDEX := -1
+const ACTOR_VISIBILITY_Z_INDEX := 0
 const DISPLAY_SCALE := 0.36
 
 ## The source atlas has a deliberately moving silhouette. These per-frame
@@ -79,8 +79,9 @@ func play_once(descriptor: Dictionary = {}) -> void:
 
 
 func _ready() -> void:
-	# Effects are world content and sit behind the actor composite while still
-	# remaining visible around the target's feet.
+	# Keep the effect on the world-content plane. A negative root z-index places
+	# it behind the map/validator background before sibling ordering can place it
+	# at the target's feet.
 	z_as_relative = true
 	z_index = ACTOR_VISIBILITY_Z_INDEX
 	add_to_group("zone_content")
