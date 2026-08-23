@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "effect_id": "monster.fixed_area_ground_spike.v1",
+  "source": {
+    "distribution": "builtin.imagegen",
+    "provider": "built-in imagegen",
+    "prompt_summary": "Eight-frame 4x2 fantasy ground-spike eruption atlas: cracked earth, glowing orange fissures, stone and roots, transparent background, readable contact silhouette, frames progressing from a small crack to a tall eruption and back to a crack.",
+    "original_path": "assets/art/monsters/effects/fixed_area_ground_spike_rgba_v1.png",
+    "sha256": "0C0EE510077262B8E551615E4681C81FF7D113102748B51038DE66477D5B11D1",
+    "hash_normalization": "raw_file",
+    "format": "PNG RGBA",
+    "dimensions_px": [1536, 1024],
+    "alpha_evidence": {
+      "channel_type": "TrueColorAlpha",
+      "alpha_min": 0,
+      "alpha_max": 255,
+      "transparent_alpha_present": true,
+      "evidence_command": "ImageMagick identify -verbose: Type=TrueColorAlpha; Alpha min=0 max=255"
+    }
+  },
+  "frame_layout": {
+    "columns": 4,
+    "rows": 2,
+    "frame_count": 8,
+    "frame_size_px": [384, 512],
+    "playback": "once",
+    "fps": 12.0,
+    "anchor_policy": "per_frame_ground_contact_y"
+  }
+}
