@@ -41,6 +41,7 @@
     "playback": "once",
     "fps": 12.0,
     "runtime_display_scale": 0.18,
-    "anchor_policy": "per_frame_ground_contact_xy; opening_and_closing_crack_centered_on_target_footpoint"
+    "runtime_anchor_south_nudge_px": 12.0,
+    "anchor_policy": "per_frame_ground_contact_xy plus one-player-calf south correction; approved player footpoint remains unchanged"
   }
 }

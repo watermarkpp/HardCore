@@ -151,9 +151,16 @@ func _run() -> void:
 	)
 	assert(
 		effect.frame_anchor_offset_px(0).is_equal_approx(
-			Vector2(14.5, -146.0) * 0.18
+			Vector2(14.5, -146.0) * 0.18 + Vector2(0.0, 12.0)
 		),
-		"opening crack center must be aligned to the target footpoint",
+		"atlas anchor must receive the approved one-calf south correction",
+	)
+	assert(
+		is_equal_approx(
+			float(effect.visual_descriptor().get("anchor_south_nudge_px", 0.0)),
+			12.0,
+		),
+		"south correction must remain explicit and independently testable",
 	)
 	await get_tree().create_timer(0.75).timeout
 	assert(not is_instance_valid(effect), "eight-frame effect must self-release")

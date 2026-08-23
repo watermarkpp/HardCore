@@ -17,6 +17,10 @@ const FRAME_FPS := 12.0
 const FRAME_ANIMATION := &"fixed_area_ground_spike"
 const ACTOR_VISIBILITY_Z_INDEX := 0
 const DISPLAY_SCALE := 0.18
+## User-approved visual correction: the atlas contact was authored at the
+## extreme bottom pixel, unlike ordinary actor sprites. Move the rendered
+## effect one player-calf south without changing the approved target point.
+const ANCHOR_SOUTH_NUDGE_PX := 12.0
 
 ## The source atlas has a deliberately moving silhouette. These per-frame
 ## offsets keep the visible root/crack contact on the captured target footpoint
@@ -165,7 +169,7 @@ func frame_anchor_offset_px(frame_index: int) -> Vector2:
 	return Vector2(
 		FRAME_ANCHOR_X_PX[resolved_frame],
 		FRAME_ANCHOR_Y_PX[resolved_frame],
-	) * DISPLAY_SCALE
+	) * DISPLAY_SCALE + Vector2(0.0, ANCHOR_SOUTH_NUDGE_PX)
 
 
 func frame_count() -> int:
@@ -195,6 +199,7 @@ func visual_descriptor() -> Dictionary:
 		"frame_size": FRAME_SIZE,
 		"frame_fps": FRAME_FPS,
 		"display_scale": DISPLAY_SCALE,
+		"anchor_south_nudge_px": ANCHOR_SOUTH_NUDGE_PX,
 		"anchor_policy": "per_frame_ground_contact_xy",
 		"damage_owner": "enemy.fixed_area_ground_spike_release",
 		"release_policy": "once_then_queue_free",
