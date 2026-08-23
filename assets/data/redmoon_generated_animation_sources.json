@@ -1,0 +1,57 @@
+{
+  "schema": "hardcore.redmoon.generated_animation_sources.v1",
+  "monsterId": 180,
+  "appearanceProfileId": "appearance.赤月恶魔_13293a7f7aa2e17b",
+  "authority": "explicit_user_replacement_request_2026-08-23",
+  "generator": "openai_builtin_imagegen",
+  "backgroundPolicy": "native_alpha_only",
+  "identityReference": {
+    "distribution": "client.classic_raw_complete",
+    "tier": "primary",
+    "originalPath": "dev_art_sources/reference/mir2_client_raw/Data/Mon14.wil",
+    "sha256": "18c277042a2d84cd4b002ebe67b1434565e68cbabd5998490153e2bc7d3aaeb2"
+  },
+  "masterSources": {
+    "idle": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_idle_native_alpha_2x2.png",
+      "sha256": "BAEB6D0B8E5AFD912154985B2058A11226AD6D4AF6F5F70BD3A1C3AA8429AC87",
+      "grid": [2, 2]
+    },
+    "attack": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_attack_native_alpha_3x2.png",
+      "sha256": "059D766801D67F92A6B33C709C4BC4001328756AA630BCADE82941AC8F2DA59F",
+      "grid": [3, 2]
+    },
+    "hit": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_hit_native_alpha_2x1.png",
+      "sha256": "CDFE15B89A9593D4537B55A1EDBA63DB0BFD6506F1CE90FCCD1AB9A94FB54F55",
+      "grid": [2, 1]
+    },
+    "death": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_death_native_alpha_5x2.png",
+      "sha256": "D2277DF42B2FE571F8322107E5B560E61A3334AE5ED8BDB48FB5E4C774D13576",
+      "grid": [5, 2],
+      "runtimeExpansion": "ten_keyframes_plus_midpoint_blends_to_twenty_frames"
+    }
+  },
+  "runtimeContract": {
+    "cellSize": [288, 208],
+    "footAnchor": [85, 142],
+    "directions": 8,
+    "directionPolicy": "fixed_body_repeated_rows",
+    "framesPerDirection": {
+      "idle": 4,
+      "walk": 4,
+      "attack": 6,
+      "hit": 2,
+      "death": 20
+    }
+  },
+  "runtimeSha256": {
+    "idle": "019BB62DC6EC171A76354911ABB3D859CD8D2F4B32868666796E4BB8F57D5D36",
+    "walk": "019BB62DC6EC171A76354911ABB3D859CD8D2F4B32868666796E4BB8F57D5D36",
+    "attack": "030FFCB32EEFFDA8DE3FF5778CBCD8E5103A1B3484CDA5A03A27436B6205A32D",
+    "hit": "4B69E00FFBFB84C932CE65A9D093845C64B5E4177FD2F57C45D98EFB50937839",
+    "death": "C3B132ECA1CCE3B2F4327DC14464A3BE153705807C158BC9FF0693EA400C1D32"
+  }
+}
