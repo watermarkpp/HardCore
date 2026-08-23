@@ -29,7 +29,18 @@
     "touch_dragon": {"largeClientBoss": true, "specialClassification": "burrowed_stationary_area_attacker", "movement": {"stationary": true}, "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 210.0, "aggroRadius": 430.0}, "onHit": {"poisonDamage": 4, "poisonSeconds": 8.0}},
 	"zuma_boss": {"largeClientBoss": true, "dormant": true, "wakeRange": 64.0},
     "moth_control": {"onHit": {"controlSeconds": 1.2}},
-    "zuma_archer": {"runtimeProjection": {"moveSpeed": 44.0, "attackRange": 205.0}},
+    "zuma_archer": {
+      "runtimeProjection": {"moveSpeed": 44.0, "attackRange": 205.0},
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
+      }
+    },
     "zuma_dormant": {"dormant": true},
     "zuma_guard_holy_word": {
       "dormant": true,
@@ -70,7 +81,18 @@
       "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 512.0, "aggroRadius": 512.0},
       "areaAttack": {"enabled": true, "targetMode": "all_combat_targets", "scope": "visible_actors", "rangeTiles": 16, "rangePixels": 512.0, "hitDelaySeconds": 0.2, "confidence": "A"}
     },
-    "skeleton_archer": {"runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0}},
+    "skeleton_archer": {
+      "runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0},
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
+      }
+    },
     "cow_mage": {"runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0}},
     "cow_priest": {"runtimeProjection": {"attackRange": 175.0}, "lifeStealRatio": 0.2}
   },

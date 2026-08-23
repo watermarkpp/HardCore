@@ -19,6 +19,9 @@ const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const MonsterRangedProjectileEffectScript := preload(
+	"res://scripts/monster_ranged_projectile_effect.gd"
+)
 const FIXED_AREA_GROUND_SPIKE_EFFECT_ID := (
 	"monster.fixed_area_ground_spike.v1"
 )
@@ -61,6 +64,7 @@ const SAFE_ZONE_RETURN_EPSILON_GU := 0.125
 const CONTACT_RETREAT_EPSILON_GU := 0.09375
 const CROWD_SEPARATION_GAP_GU := 0.375
 const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
+const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -77,11 +81,14 @@ signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
 signal summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int)
 signal relocation_requested(enemy: EnemyActor, radius_gu: float)
-## Pure presentation hook emitted once per actual fixed-area victim after the
-## authoritative damage call. The descriptor carries the same immutable
-## release snapshot for every victim of one area release; consumers must never
-## use this signal as a second damage path.
+## Pure presentation hook emitted once per frozen fixed-area victim at release.
+## The descriptor carries the same immutable snapshot for every victim of one
+## area release; consumers must never use this signal as a second damage path.
 signal fixed_area_ground_spike_requested(descriptor: Dictionary)
+## Telemetry/presentation hook emitted once for every accepted physical ranged
+## release. EnemyActor also creates the visual locally; listeners are observers
+## and must never submit a second damage transaction.
+signal ranged_projectile_requested(descriptor: Dictionary)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -140,6 +147,7 @@ var service_move_interval_ms := 0
 var stationary := false
 var area_attack_rule: Dictionary = {}
 var summon_rule: Dictionary = {}
+var attack_delivery_rule: Dictionary = {}
 
 var _attack_timer := 0.0
 var _attack_interval := 1.55
@@ -148,6 +156,7 @@ var _attack_hit_delay := 0.0
 var _pending_attack_time := -1.0
 var _pending_attack_damage := 0
 var _pending_attack_target: Node2D
+var _pending_attack_release_record: Dictionary = {}
 var _retarget_timer := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
@@ -251,6 +260,7 @@ func _apply_behavior_profile() -> void:
 	service_ai_code = int(behavior_profile.get("serviceBehavior", {}).get("aiCode", -1))
 	stationary = bool(behavior_profile.get("movement", {}).get("stationary", false))
 	area_attack_rule = behavior_profile.get("areaAttack", {}).duplicate(true)
+	attack_delivery_rule = behavior_profile.get("attackDelivery", {}).duplicate(true)
 	_area_attack_cooldown = float(area_attack_rule.get("initialCooldownSeconds", 0.0))
 	summon_rule = behavior_profile.get("summonRule", {}).duplicate(true)
 	_summon_cooldown = float(summon_rule.get("initialCooldownSeconds", 0.0))
@@ -448,6 +458,8 @@ func _physics_process(delta: float) -> void:
 	if target is PlayerCharacter and _point_inside_safe_zone(target.global_position):
 		_pending_attack_time = -1.0
 		_pending_attack_target = null
+		_pending_attack_damage = 0
+		_pending_attack_release_record = {}
 		velocity = Vector2.ZERO
 		var spawn_position:Vector2=get_meta("spawn_position",global_position)
 		var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
@@ -542,10 +554,13 @@ func _physics_process(delta: float) -> void:
 			if visual != null:
 				visual.play_attack(maxf(_attack_animation_duration,0.62))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
-			if _attack_hit_delay > 0.0:
+			if _uses_physical_projectile_delivery():
+				_launch_physical_projectile(target, dealt_damage)
+			elif _attack_hit_delay > 0.0:
 				_pending_attack_time = _attack_hit_delay
 				_pending_attack_target = target
 				_pending_attack_damage = dealt_damage
+				_pending_attack_release_record = {}
 			else:
 				_deal_melee_hit(target, dealt_damage)
 	elif distance_gu <= aggro_radius_gu:
@@ -866,9 +881,14 @@ func _update_pending_attack(delta: float) -> void:
 		return
 	var hit_target := _pending_attack_target
 	var damage := _pending_attack_damage
+	var release_record := _pending_attack_release_record
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	if str(release_record.get("kind", "")) == "physical_projectile":
+		_settle_physical_projectile_release(release_record)
+		return
 	if not is_instance_valid(hit_target):
 		return
 	if _target_is_safe_player(hit_target):
@@ -886,6 +906,182 @@ func _update_pending_attack(delta: float) -> void:
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	_deal_melee_hit(hit_target, damage, DELAYED_HIT_TOLERANCE_GU)
+
+
+func _uses_physical_projectile_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "physical_projectile"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MonsterRangedProjectileEffectScript.EFFECT_ID
+	)
+
+
+func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
+	if (
+		not _uses_physical_projectile_delivery()
+		or not is_instance_valid(hit_target)
+		or not hit_target.has_method("take_damage")
+		or _target_is_safe_player(hit_target)
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+	):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	var release_distance_gu := source_ground_gu.distance_to(target_ground_gu)
+	if release_distance_gu > attack_range_gu + GroundUnitSpace.EPSILON_GU:
+		return false
+	if not _physical_projectile_path_is_clear(source_ground_gu, target_ground_gu):
+		return false
+	var release_id := _next_spatial_release_id("physical_projectile")
+	var snapshot := SkillFootprintSnapshotScript.create_swept_capsule_path(
+		_monster_attack_id("physical_projectile"),
+		release_id,
+		source_ground_gu,
+		target_ground_gu,
+		0.0,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+		"",
+		-1,
+		_snapshot_coordinate_context(),
+	)
+	snapshot = _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_PROJECTILE_SWEEP,
+		hit_target,
+		attack_range_gu,
+	)
+	if not _snapshot_strict_ok(snapshot):
+		return false
+	var delay_rule: Dictionary = attack_delivery_rule.get("impactDelay", {})
+	var chebyshev_distance_gu := maxf(
+		absf(target_ground_gu.x - source_ground_gu.x),
+		absf(target_ground_gu.y - source_ground_gu.y),
+	)
+	var duration_seconds := maxf(
+		0.001,
+		float(delay_rule.get("baseSeconds", 0.6))
+		+ chebyshev_distance_gu
+		* float(delay_rule.get("perChebyshevGuSeconds", 0.05)),
+	)
+	var target_world_px := _target_approved_ground_footpoint_world_px(hit_target)
+	var release_record := {
+		"kind": "physical_projectile",
+		"release_id": release_id,
+		"source_instance_id": get_instance_id(),
+		"source_monster_id": monster_id,
+		"target_instance_id": hit_target.get_instance_id(),
+		"runtime_map_id": runtime_map_id,
+		"source_ground_gu": source_ground_gu,
+		"target_ground_gu": target_ground_gu,
+		"origin_world_px": global_position,
+		"target_world_px": target_world_px,
+		"duration_seconds": duration_seconds,
+		"damage": maxi(0, dealt_damage),
+		"footprint_snapshot": snapshot,
+	}
+	release_record.make_read_only()
+	_pending_attack_time = duration_seconds
+	_pending_attack_target = hit_target
+	_pending_attack_damage = maxi(0, dealt_damage)
+	_pending_attack_release_record = release_record
+	_last_attack_footprint_snapshot = snapshot
+	_emit_physical_projectile_descriptor(release_record)
+	return true
+
+
+func _physical_projectile_path_is_clear(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+) -> bool:
+	if str(attack_delivery_rule.get("obstaclePolicy", "")) != "environment_can_fly_line":
+		return false
+	if (
+		not is_instance_valid(environment_blocker)
+		or not environment_blocker.has_method("is_environment_point_blocked")
+	):
+		return true
+	var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+	var sample_count := maxi(
+		1,
+		int(ceil(distance_gu / PROJECTILE_OBSTACLE_SAMPLE_STEP_GU)),
+	)
+	for sample_index: int in range(1, sample_count):
+		var progress := float(sample_index) / float(sample_count)
+		var sample_world_px := _ground_gu_to_screen_position_px(
+			source_ground_gu.lerp(target_ground_gu, progress)
+		)
+		if sample_world_px == Vector2.INF:
+			return false
+		if bool(environment_blocker.call(
+			"is_environment_point_blocked",
+			sample_world_px,
+		)):
+			return false
+	return true
+
+
+func _settle_physical_projectile_release(release_record: Dictionary) -> void:
+	var target_instance_id := int(release_record.get("target_instance_id", 0))
+	if target_instance_id <= 0:
+		return
+	var candidate: Object = instance_from_id(target_instance_id)
+	if not (candidate is Node2D):
+		return
+	var hit_target := candidate as Node2D
+	if not _physical_projectile_release_target_is_valid(hit_target, release_record):
+		return
+	_apply_attack_damage(hit_target, int(release_record.get("damage", 0)))
+
+
+func _physical_projectile_release_target_is_valid(
+	hit_target: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(hit_target)
+		or hit_target.is_queued_for_deletion()
+		or not hit_target.has_method("take_damage")
+		or int(release_record.get("runtime_map_id", -1)) != runtime_map_id
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+		or _target_is_safe_player(hit_target)
+	):
+		return false
+	var dying_value: Variant = hit_target.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = hit_target.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = hit_target.get("current_hp")
+	return current_hp_value == null or int(current_hp_value) > 0
+
+
+func _emit_physical_projectile_descriptor(release_record: Dictionary) -> void:
+	var descriptor := {
+		"effect_id": MonsterRangedProjectileEffectScript.EFFECT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"target_instance_id": int(release_record.get("target_instance_id", 0)),
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
+		"origin_world_px": release_record.get("origin_world_px", global_position),
+		"target_world_px": release_record.get("target_world_px", global_position),
+		"duration_seconds": float(release_record.get("duration_seconds", 0.6)),
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage": maxi(0, int(release_record.get("damage", 0))),
+		"damage_owner": "enemy.physical_projectile_release",
+	}
+	descriptor.make_read_only()
+	ranged_projectile_requested.emit(descriptor)
+	var host := get_parent()
+	if not is_instance_valid(host):
+		return
+	var effect: Node2D = MonsterRangedProjectileEffectScript.create_visual(descriptor)
+	host.add_child(effect)
 
 
 func _deal_melee_hit(
@@ -1627,6 +1823,8 @@ func _begin_death() -> void:
 	velocity = Vector2.ZERO
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
+	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
 	_area_attack_warning = 0.0
 	_area_attack_footprint_snapshot = {}
 	_area_attack_release_records.clear()
@@ -1671,6 +1869,7 @@ func apply_control(seconds: float) -> void:
 		_pending_attack_time = -1.0
 		_pending_attack_target = null
 		_pending_attack_damage = 0
+		_pending_attack_release_record = {}
 		velocity = Vector2.ZERO
 	control_time = maxf(control_time, seconds)
 	queue_redraw()
