@@ -19,6 +19,16 @@
       "evidence_command": "magick identify -format channels/opaque/fx:minima.a/fx:maxima.a"
     }
   },
+  "attachment_source": {
+    "distribution": "HardCore Android debug APK",
+    "apk_file_name": "HardCore-1.18.3-runtime-fix-9d6435bc-debug.apk",
+    "apk_sha256": "B74F58FC1E17A28D2A0FAE7E709085E410F4C48FF6141DD6C293596DDEF341CB",
+    "embedded_git_head": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+    "embedded_contract_path": "assets/assets/data/player_visual_alignment.json",
+    "contract_id": "player.visual_ground_alignment.manual.v1",
+    "runtime_visual_position_px": [7.5, 12.5],
+    "policy": "presentation effect follows live rendered player shoe point; combat ground position remains the actor origin"
+  },
   "frame_layout": {
     "columns": 4,
     "rows": 2,

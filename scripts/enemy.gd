@@ -1108,7 +1108,7 @@ func _update_area_attack(delta: float) -> bool:
 				var target_ground_gu := _screen_position_px_to_ground_position_gu(
 					victim.global_position
 				)
-				var target_world_px := victim.global_position
+				var target_world_px := _target_rendered_footpoint_world_px(victim)
 				var target_instance_id := victim.get_instance_id()
 				if target_ground_gu == Vector2.INF:
 					continue
@@ -1222,6 +1222,16 @@ func _uses_fixed_area_ground_spike_effect() -> bool:
 	return monster_id in FIXED_AREA_GROUND_SPIKE_MONSTER_IDS
 
 
+func _target_rendered_footpoint_world_px(victim: Node2D) -> Vector2:
+	# Area geometry and damage remain bound to victim.global_position. Only the
+	# presentation descriptor follows a target-provided rendered footpoint.
+	if victim.has_method("rendered_footpoint_world_px"):
+		var point: Variant = victim.call("rendered_footpoint_world_px")
+		if point is Vector2 and point.is_finite():
+			return point
+	return victim.global_position
+
+
 func _emit_fixed_area_ground_spike_descriptor(
 	victim: Node2D,
 	damage: int,
@@ -1242,7 +1252,7 @@ func _emit_fixed_area_ground_spike_descriptor(
 	if target_ground_gu == Vector2.INF:
 		return
 	if target_world_px == Vector2.INF:
-		target_world_px = victim.global_position
+		target_world_px = _target_rendered_footpoint_world_px(victim)
 	if target_instance_id <= 0:
 		target_instance_id = victim.get_instance_id()
 	var source := {
@@ -1253,6 +1263,7 @@ func _emit_fixed_area_ground_spike_descriptor(
 		"instance_id": target_instance_id,
 		"ground_gu": target_ground_gu,
 		"world_px": target_world_px,
+		"actor_origin_world_px": victim.global_position,
 	}
 	var descriptor := {
 		"effect_id": FIXED_AREA_GROUND_SPIKE_EFFECT_ID,
@@ -1264,6 +1275,7 @@ func _emit_fixed_area_ground_spike_descriptor(
 		"target_instance_id": target_instance_id,
 		"target_ground_gu": target_ground_gu,
 		"target_world_px": target_world_px,
+		"target_actor_origin_world_px": victim.global_position,
 		"damage": maxi(0, int(damage)),
 		# The release snapshot is already read-only at construction. Do not
 		# duplicate or rebuild it per victim: all descriptors for one release

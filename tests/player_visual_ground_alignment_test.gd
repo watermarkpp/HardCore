@@ -32,6 +32,12 @@ func _ready() -> void:
 		"formal visual foot point must coincide with actor origin: %s"
 			% visual_foot_point
 	)
+	assert(
+		player.rendered_footpoint_local_px().is_equal_approx(
+			ArtSpec.PLAYER_VISUAL_RUNTIME_POSITION
+		),
+		"rendered shoe point must preserve the APK-authored visual offset",
+	)
 	var collision: CollisionShape2D = player.get_node("CollisionShape2D")
 	assert(collision.position.is_zero_approx())
 	assert(
