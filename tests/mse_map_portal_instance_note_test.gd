@@ -1,7 +1,7 @@
 extends Node
 
 const PORTAL_ASSET_ID := "user.boss_entrance.20260823.confusion_hall"
-const NON_PORTAL_ASSET_ID := "terrain.palisade_wall_01"
+const NON_PORTAL_ASSET_ID := "mse.small_decor.001"
 const NOTE := "N方向连接祖玛寺庙二层 S方向入口"
 const SAVE_PATH := "user://mse_map_portal_instance_note_test/editor.json"
 
@@ -72,9 +72,9 @@ func _ready() -> void:
 	var non_portal := MapEditorInstanceService.create_instance(
 		document,
 		NON_PORTAL_ASSET_ID,
-		"terrain",
+		"decoration",
 		Vector2i(50, 50),
-		"terrain_base"
+		"object_base"
 	)
 	assert(bool(non_portal.get("ok", false)), str(non_portal.get("errors", [])))
 	var rejected := MapEditorInstanceService.update_map_portal_note(
