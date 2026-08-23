@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "style_family_id": "chiyue_valley_rock_environment_u0",
+  "wall_family_reference": "chiyue_valley_rock_wall_u0",
+  "material_contract": "hard_planar_wet_cave_rock",
+  "image_generation_mode": "OpenAI built-in image_gen, one call per distinct asset source",
+  "rejected_source": "exec-e71afdaf-c419-41ac-a724-b0839b5e2b6b.png (user-rejected diamond-shaped rock)",
+  "transparent_edit_attempt": "built-in background-removal edits remained opaque and were rejected",
+  "rock_assets": [
+    {
+      "asset_id": "chiyue_valley_ground_rock_block_01",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-fe631dfa-b0ca-4f5f-ba77-1a4b848f3468.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_01_source.png",
+      "source_sha256": "52692a0fb549585405ad9c1636da915525607b75c56d99f78c19fee6f20e3281",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_01.png",
+      "output_sha256": "aea800eaab19bb3471c2ce680f598b71852e2b68a583017e2e53de0734ad8597",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        126,
+        88
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_block_02",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-d21b74d5-be77-49dc-9a9d-5bfed1e5cd80.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_02_source.png",
+      "source_sha256": "3c4cc62ac1d3e3871782a06f833c4062453f189c927aad285d946de72a071721",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_02.png",
+      "output_sha256": "6e61e774775905db4c14001678c4924e878a2b5b5018bb81bb7f694c7d4a0885",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        112,
+        112
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_block_03",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-48a22952-42c7-49b1-85a0-833a29272f30.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_03_source.png",
+      "source_sha256": "7db0edb4ca72f5b4033443d09b0f3f96e33d132371288ec78c00c91a5a77e998",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_03.png",
+      "output_sha256": "9f0e581e3c6ef6db2e7b442b10399fab1c3c629be5ddbf696b67c9faac13cc27",
+      "alpha_method": "native_alpha_preserved",
+      "visible_bounds_px": [
+        8,
+        8,
+        75,
+        184
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_block_04",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-5bc71d32-9a3c-44c9-ae78-f5fa320d80cb.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_04_source.png",
+      "source_sha256": "2bb5fcd1219816fac20a587aa025f75620cbcc440e84810c97664b6d392281cd",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_04.png",
+      "output_sha256": "247a019304c7691469052425c25b8f2d00e9625d09c4cc80e8fbf3183d6f8b43",
+      "alpha_method": "native_alpha_preserved",
+      "visible_bounds_px": [
+        8,
+        8,
+        133,
+        144
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_block_05",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-4c73911e-249e-4159-8640-511e2eb7b7ac.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_05_source.png",
+      "source_sha256": "6f7f8f33b9febb20f8b7f8bc6143e9a25c31d9ac5a3b8bf30506a392932fe707",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_05.png",
+      "output_sha256": "10888d991be78ed1cca33bb59b3001890fc127ac1bbd130cdddbf17371172306",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        145,
+        96
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_block_06",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-e874d106-888b-4769-bd92-cce9e014b548.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_06_source.png",
+      "source_sha256": "94e799d37f955bf31a461b58833c8ee19d9807edb281ec9b94b7fb8afb90867c",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_06.png",
+      "output_sha256": "42e87cce0441c5b37759e8e883b24470c7a7943e6f1d89d288f35011977a90dc",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        160,
+        108
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_pile_01",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-19ebce97-8571-4578-a7c4-a6ca35024197.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_07_source.png",
+      "source_sha256": "62029fcda877f66dc710dc9612b4de124756edc5c0b52a93074f0af8be49eed1",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_07.png",
+      "output_sha256": "c9a19da8b1db59afc85d85cd5f266d4979e426c94004bd12e7a0fba1bf2afb31",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        136,
+        114
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_pile_02",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-966c9b1c-56b9-49ca-8103-0421d9087174.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_08_source.png",
+      "source_sha256": "96463514ccb455e3eb6608652f8081f90b6fc851c5b90f59688df58fe6765560",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_08.png",
+      "output_sha256": "1688363f4a30b7f56683b9e2fb0448cc3b63125071f75dd55c8d7c05b3ac43f1",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        168,
+        117
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_pile_03",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-2228e6ed-5cdf-46d9-bd5c-1f4958421057.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_09_source.png",
+      "source_sha256": "b9c8bc8e162362159ff55d8a8ce15ebe71dd8692d0a40eedc1f1e24091e5283d",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_09.png",
+      "output_sha256": "d47e9fa3cf00fa971a2167104d8102fa6239e9a4c7bbe1dbe8d965faf4332904",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        176,
+        102
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_pile_04",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-8ddf4531-99ce-4f70-b80a-68a6b409ba06.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_10_source.png",
+      "source_sha256": "01a7eb0fb99981d0d17f98687ab95988a07e5af7f7bb26a0f3261d42acc81bf8",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_10.png",
+      "output_sha256": "7695e8e60852e0767487bdad784c7579beddfe3578e5ee91e2156068414e920e",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        176,
+        116
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_pile_05",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-2da6bd82-ad45-4484-9340-f7b7516458cd.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_11_source.png",
+      "source_sha256": "a65d039a9ad6f1b88c6402d363f648f7c9e084520aef1880a7d6b244de3e187d",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_11.png",
+      "output_sha256": "83f975fea92510eff0368af154f7f37f802c1c6656df0690d192b0a952bdb6d3",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        112,
+        131
+      ]
+    },
+    {
+      "asset_id": "chiyue_valley_ground_rock_pile_06",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-8191cdf0-61e8-408a-a569-93cd04a2411d.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_ground_rock_12_source.png",
+      "source_sha256": "58c4df4c2637b7784007d7f0d9ddcb859c538c746d6a7a1a615bbdf74c489ae3",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_12.png",
+      "output_sha256": "e60283c07784e33141945e79b13e65b1d272553f4a7bb5fc3d2f06b4210819bc",
+      "alpha_method": "border_connected_neutral_key_distance_matte_v1",
+      "visible_bounds_px": [
+        8,
+        8,
+        192,
+        89
+      ]
+    }
+  ],
+  "floor_assets": [
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.01",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-da423b96-7d0e-471d-9880-6025be424151.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_01_orthographic_source.png",
+      "source_sha256": "754831e61885db0906ca3acc3869402e3656c75c35c0b336c6e981b17888d53e",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_01.png",
+      "output_sha256": "d6607799e0f6e8ed33a8875f2acf86d7ff46b742c000583f3a9d67af603e948f",
+      "projection": "orthographic_square_to_isometric_64x32_diamond"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.02",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-ad386870-ff2c-43f3-b67d-b7f0b5e9ae22.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_02_orthographic_source.png",
+      "source_sha256": "ff77c5294c988c615c054ac1381aa612cd0392836d53b6a42acf2d21245e317c",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_02.png",
+      "output_sha256": "8913a09c97ed93c2783de88072b51f7613a5d06e85e139f661710b601dfeab22",
+      "projection": "orthographic_square_to_isometric_64x32_diamond"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.03",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-501c9569-5454-44ea-916b-ff2009aed717.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_03_orthographic_source.png",
+      "source_sha256": "362d9e4714598087a77479a00ddef21ec28e53b2bbd68d56d0322391b2d2912c",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_03.png",
+      "output_sha256": "856495edad638985e22feab861adeccda73e32f2e76174c574b778dd2f780dce",
+      "projection": "orthographic_square_to_isometric_64x32_diamond"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.04",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-b188141c-c56a-4ee0-a35d-c78bc9d7558d.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_04_orthographic_source.png",
+      "source_sha256": "4eebe443a9dd90c3ff777dcc35561f3ebb9ac2afc3dc4c61f6ee6bb213c47a96",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_04.png",
+      "output_sha256": "a292af602daa7b4913647f34aa574bf546305c698192983b4e0f21d8afd02bf0",
+      "projection": "orthographic_square_to_isometric_64x32_diamond"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.05",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-aff1b083-8430-47bc-b072-2a0124032bb4.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_05_orthographic_source.png",
+      "source_sha256": "e58711d479198536dde83667dd32ce34baaaa6438af38049789b17770d63a0d7",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_05.png",
+      "output_sha256": "dd8d7f591433e86d497ced165f76be2d034fa7a4463b8102a774f2ec68fede09",
+      "projection": "orthographic_square_to_isometric_64x32_diamond"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.06",
+      "external_source": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-0ddb366d-53d0-4a19-9243-debebe04c985.png",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_06_orthographic_source.png",
+      "source_sha256": "d10dca68bc64138fc767e77fe24f4fc44d9374a4e44f141a09decd06e17cc9cd",
+      "output_path": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_06.png",
+      "output_sha256": "70144522b6611166b17d973e69e2774ef9cdbba701d7cd8b35b68eba4eaffb59",
+      "projection": "orthographic_square_to_isometric_64x32_diamond"
+    }
+  ]
+}

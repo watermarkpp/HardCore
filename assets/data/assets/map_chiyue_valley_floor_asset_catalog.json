@@ -1,0 +1,625 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "mse_chiyue_valley_floor_6_v1",
+  "package_version": 1,
+  "asset_count": 6,
+  "classification": "洞穴与地下城/地面/赤月峡谷地面",
+  "projection": "orthographic_isometric_2_to_1",
+  "style_family_id": "chiyue_valley_rock_environment_u0",
+  "wall_family_reference": "chiyue_valley_rock_wall_u0",
+  "source_distribution": "openai_builtin_imagegen_user_approved_system",
+  "assets": [
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.01",
+      "display_name": "赤月峡谷地面 01",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "chiyue_valley",
+      "image": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_01.png",
+      "thumbnail": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_01.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "selection_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "allow_overlap": true,
+      "overlap_policy": "always_allow",
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地面/赤月峡谷地面",
+      "source_distribution": "openai_builtin_imagegen_user_approved_system",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_01_orthographic_source.png",
+      "source_sha256": "754831e61885db0906ca3acc3869402e3656c75c35c0b336c6e981b17888d53e",
+      "output_sha256": "d6607799e0f6e8ed33a8875f2acf86d7ff46b742c000583f3a9d67af603e948f",
+      "thumbnail_source_sha256": "d6607799e0f6e8ed33a8875f2acf86d7ff46b742c000583f3a9d67af603e948f",
+      "processing": "orthographic_texture_to_canonical_64x32_isometric_diamond_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "chiyue_valley_wet_karst_rock",
+      "variation_group_id": "mse.ground.chiyue_valley_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0,
+      "style_family_id": "chiyue_valley_rock_environment_u0",
+      "wall_family_reference": "chiyue_valley_rock_wall_u0",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "navigation_policy": "ignore"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.02",
+      "display_name": "赤月峡谷地面 02",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "chiyue_valley",
+      "image": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_02.png",
+      "thumbnail": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_02.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "selection_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "allow_overlap": true,
+      "overlap_policy": "always_allow",
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地面/赤月峡谷地面",
+      "source_distribution": "openai_builtin_imagegen_user_approved_system",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_02_orthographic_source.png",
+      "source_sha256": "ff77c5294c988c615c054ac1381aa612cd0392836d53b6a42acf2d21245e317c",
+      "output_sha256": "8913a09c97ed93c2783de88072b51f7613a5d06e85e139f661710b601dfeab22",
+      "thumbnail_source_sha256": "8913a09c97ed93c2783de88072b51f7613a5d06e85e139f661710b601dfeab22",
+      "processing": "orthographic_texture_to_canonical_64x32_isometric_diamond_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "chiyue_valley_wet_karst_rock",
+      "variation_group_id": "mse.ground.chiyue_valley_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0,
+      "style_family_id": "chiyue_valley_rock_environment_u0",
+      "wall_family_reference": "chiyue_valley_rock_wall_u0",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "navigation_policy": "ignore"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.03",
+      "display_name": "赤月峡谷地面 03",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "chiyue_valley",
+      "image": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_03.png",
+      "thumbnail": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_03.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "selection_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "allow_overlap": true,
+      "overlap_policy": "always_allow",
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地面/赤月峡谷地面",
+      "source_distribution": "openai_builtin_imagegen_user_approved_system",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_03_orthographic_source.png",
+      "source_sha256": "362d9e4714598087a77479a00ddef21ec28e53b2bbd68d56d0322391b2d2912c",
+      "output_sha256": "856495edad638985e22feab861adeccda73e32f2e76174c574b778dd2f780dce",
+      "thumbnail_source_sha256": "856495edad638985e22feab861adeccda73e32f2e76174c574b778dd2f780dce",
+      "processing": "orthographic_texture_to_canonical_64x32_isometric_diamond_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "chiyue_valley_wet_karst_rock",
+      "variation_group_id": "mse.ground.chiyue_valley_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0,
+      "style_family_id": "chiyue_valley_rock_environment_u0",
+      "wall_family_reference": "chiyue_valley_rock_wall_u0",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "navigation_policy": "ignore"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.04",
+      "display_name": "赤月峡谷地面 04",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "chiyue_valley",
+      "image": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_04.png",
+      "thumbnail": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_04.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "selection_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "allow_overlap": true,
+      "overlap_policy": "always_allow",
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地面/赤月峡谷地面",
+      "source_distribution": "openai_builtin_imagegen_user_approved_system",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_04_orthographic_source.png",
+      "source_sha256": "4eebe443a9dd90c3ff777dcc35561f3ebb9ac2afc3dc4c61f6ee6bb213c47a96",
+      "output_sha256": "a292af602daa7b4913647f34aa574bf546305c698192983b4e0f21d8afd02bf0",
+      "thumbnail_source_sha256": "a292af602daa7b4913647f34aa574bf546305c698192983b4e0f21d8afd02bf0",
+      "processing": "orthographic_texture_to_canonical_64x32_isometric_diamond_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "chiyue_valley_wet_karst_rock",
+      "variation_group_id": "mse.ground.chiyue_valley_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0,
+      "style_family_id": "chiyue_valley_rock_environment_u0",
+      "wall_family_reference": "chiyue_valley_rock_wall_u0",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "navigation_policy": "ignore"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.05",
+      "display_name": "赤月峡谷地面 05",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "chiyue_valley",
+      "image": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_05.png",
+      "thumbnail": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_05.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "selection_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "allow_overlap": true,
+      "overlap_policy": "always_allow",
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地面/赤月峡谷地面",
+      "source_distribution": "openai_builtin_imagegen_user_approved_system",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_05_orthographic_source.png",
+      "source_sha256": "e58711d479198536dde83667dd32ce34baaaa6438af38049789b17770d63a0d7",
+      "output_sha256": "dd8d7f591433e86d497ced165f76be2d034fa7a4463b8102a774f2ec68fede09",
+      "thumbnail_source_sha256": "dd8d7f591433e86d497ced165f76be2d034fa7a4463b8102a774f2ec68fede09",
+      "processing": "orthographic_texture_to_canonical_64x32_isometric_diamond_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "chiyue_valley_wet_karst_rock",
+      "variation_group_id": "mse.ground.chiyue_valley_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0,
+      "style_family_id": "chiyue_valley_rock_environment_u0",
+      "wall_family_reference": "chiyue_valley_rock_wall_u0",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "navigation_policy": "ignore"
+    },
+    {
+      "asset_id": "mse.ground.chiyue_valley_floor.06",
+      "display_name": "赤月峡谷地面 06",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "chiyue_valley",
+      "image": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_06.png",
+      "thumbnail": "assets/art/maps/_shared/terrain/chiyue_valley/floor/chiyue_valley_floor_06.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "selection_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "allow_overlap": true,
+      "overlap_policy": "always_allow",
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地面/赤月峡谷地面",
+      "source_distribution": "openai_builtin_imagegen_user_approved_system",
+      "source_path": "assets/art/maps/_shared/terrain/chiyue_valley/source/chiyue_valley_floor_06_orthographic_source.png",
+      "source_sha256": "d10dca68bc64138fc767e77fe24f4fc44d9374a4e44f141a09decd06e17cc9cd",
+      "output_sha256": "70144522b6611166b17d973e69e2774ef9cdbba701d7cd8b35b68eba4eaffb59",
+      "thumbnail_source_sha256": "70144522b6611166b17d973e69e2774ef9cdbba701d7cd8b35b68eba4eaffb59",
+      "processing": "orthographic_texture_to_canonical_64x32_isometric_diamond_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "chiyue_valley_wet_karst_rock",
+      "variation_group_id": "mse.ground.chiyue_valley_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0,
+      "style_family_id": "chiyue_valley_rock_environment_u0",
+      "wall_family_reference": "chiyue_valley_rock_wall_u0",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "navigation_policy": "ignore"
+    }
+  ]
+}

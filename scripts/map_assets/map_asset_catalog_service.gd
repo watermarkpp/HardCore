@@ -17,6 +17,8 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_wooma_temple_wall_asset_catalog.json",
 	"res://assets/data/assets/map_wooma_temple_warm_wall_asset_catalog.json",
 	"res://assets/data/assets/map_chiyue_valley_wall_asset_catalog.json",
+	"res://assets/data/assets/map_chiyue_valley_ground_asset_catalog.json",
+	"res://assets/data/assets/map_chiyue_valley_floor_asset_catalog.json",
 	"res://assets/data/assets/map_user_gothic_floor_asset_catalog.json",
 	"res://assets/data/assets/map_stone_tomb_floor_asset_catalog.json",
 	"res://assets/data/assets/map_xzsc_cage_asset_catalog.json",
