@@ -23,6 +23,7 @@ const MAX_ABSOLUTE_VISUAL_SCALE := 8.0
 const NEW_INSTANCE_COLLISION_POLICY_ID := (
 	"maps.new_instance_manual_collision_only_v1"
 )
+const MAP_PORTAL_NOTE_FIELD := "map_portal_note"
 const GENERATED_COLLISION_POLICIES := [
 	"terrain_stamp_generated",
 	"wall_cells_generated",
@@ -157,6 +158,9 @@ static func duplicate_instance_snapshot(
 	if not validation.ok:
 		return {"ok": false, "errors": validation.errors, "warnings": validation.warnings}
 	var duplicate := source_instance.duplicate(true)
+	# A portal note describes one concrete placed endpoint. A copied visual must
+	# be annotated independently so stale connection text is never propagated.
+	duplicate.erase(MAP_PORTAL_NOTE_FIELD)
 	duplicate["instance_id"] = _next_id(document)
 	duplicate["tile"] = [tile.x, tile.y]
 	duplicate["tile_anchor"] = [tile.x, tile.y]
@@ -178,6 +182,36 @@ static func duplicate_instance_snapshot(
 	layers[layer] = entries
 	document.layers = layers
 	return {"ok": true, "instance": duplicate, "warnings": validation.warnings}
+
+
+static func update_map_portal_note(
+	document: Dictionary,
+	instance_id: String,
+	note: String
+) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not bool(located.get("ok", false)):
+		return located
+	var instance: Dictionary = located.instance
+	var asset := MapAssetCatalogService.find_asset(
+		str(instance.get("asset_id", ""))
+	)
+	if (
+		str(asset.get("object_class", "")) != "map_entrance"
+		and str(asset.get("semantic_role", "")) != "map_portal"
+	):
+		return {"ok": false, "errors": ["instance_is_not_map_portal"]}
+	var normalized := note.strip_edges()
+	if normalized.is_empty():
+		instance.erase(MAP_PORTAL_NOTE_FIELD)
+	else:
+		instance[MAP_PORTAL_NOTE_FIELD] = normalized
+	_located_replace(document, located, instance)
+	return {
+		"ok": true,
+		"instance": instance,
+		"note": normalized,
+	}
 
 
 static func _apply_new_instance_collision_policy(
