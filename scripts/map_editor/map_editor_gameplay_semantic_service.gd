@@ -198,8 +198,8 @@ static func _defaults(kind: String, tile: Vector2i, properties: Dictionary) -> D
 	var entry := {"kind": kind, "tile": [tile.x, tile.y], "content_layer": "personal_expansion", "runtime_export": true}
 	match kind:
 		"npc": entry.merge({"npc_id": "npc.unassigned", "service_role": "dialogue", "facing": "south", "safe": true})
-		"monster_spawn": entry.merge({"monster_id": "monster.unassigned", "count": 1, "max_alive": 1, "respawn_seconds": 60, "radius_gu": 2.0, "spawn_rule": "ambient"})
-		"boss_spawn": entry.merge({"boss_id": "boss.unassigned", "count": 1, "max_alive": 1, "respawn_seconds": 1800, "radius_gu": 0.0, "spawn_rule": "boss"})
+		"monster_spawn": entry.merge({"monster_id": -1, "count": 1, "max_alive": 1, "respawn_seconds": 60, "radius_gu": 2.0, "spawn_rule": "ambient"})
+		"boss_spawn": entry.merge({"monster_id": -1, "count": 1, "max_alive": 1, "respawn_seconds": 1800, "radius_gu": 0.0, "spawn_rule": "boss"})
 		"door": entry.merge({"door_id": "door.unassigned", "target_map_id": "", "target_tile": [0, 0], "one_way": false, "semantic_role":"map_portal", "trigger_on_enter":true, "blocks_movement":false})
 		"map_entrance": entry.merge({"entrance_id": "entrance.unassigned", "portal_role": "entrance", "is_default": false, "semantic_role": "map_landing_point", "blocks_movement": false})
 		"map_exit":
@@ -223,9 +223,10 @@ static func _validate(document: Dictionary, kind: String, tile: Vector2i, proper
 		errors.append("semantic_tile_out_of_bounds")
 	if kind == "door" and str(properties.get("target_map_id", "")).strip_edges().is_empty():
 		errors.append("door_target_map_required")
-	if kind in ["npc", "monster_spawn", "boss_spawn"] and str(properties.get("content_id", "")).strip_edges().is_empty():
-		errors.append("content_id_required")
+	if kind == "npc" and str(properties.get("npc_id", "")).strip_edges().is_empty():
+		errors.append("npc_id_required")
 	if kind in ["monster_spawn", "boss_spawn"]:
+		if int(properties.get("monster_id", -1)) <= 0: errors.append("positive_monster_id_required")
 		if int(properties.get("count", 1)) <= 0: errors.append("positive_spawn_count_required")
 		if int(properties.get("max_alive", 1)) <= 0: errors.append("positive_max_alive_required")
 		if int(properties.get("respawn_seconds", 1)) <= 0: errors.append("positive_respawn_required")

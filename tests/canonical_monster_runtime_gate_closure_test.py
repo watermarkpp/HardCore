@@ -89,7 +89,8 @@ assert {
     for key in runtime_by_id.keys()
 } == production_ids
 
-# Golden deploy 中 service runtime 已经覆盖全部 214。
+# Golden deploy calibration remains 214-wide; the final active service runtime
+# universe is the post-retirement 156-ID catalog.
 # 这里绝对不要求 resolutionStatus == exact_service_name。
 assert len(runtime_by_id) == EXPECTED_IDENTITY_COUNT
 
@@ -112,7 +113,7 @@ for monster_id in sorted(production_ids):
     )
 
 
-# P3B: 全部 214 active identities 均允许地图编辑器布置。
+# P3B/P3C: all 156 final active identities remain authorable in the map editor.
 # placement 与 runtime 完全解耦：可布置不要求 runtime 已闭环。
 assert all(
     bool(entries[mid]["editor_placement"].get("allowed", False))

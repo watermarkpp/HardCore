@@ -21,7 +21,7 @@ func _ready() -> void:
 	)
 	var rows := DraftScript.catalog_rows()
 	assert(DraftScript.animation_catalog_authority_valid())
-	assert(rows.size() == 214)
+	assert(rows.size() == 156)
 	assert(int(rows[0].get("monster_id", -1)) == 18)
 	var red_moon_index := -1
 	for row_index in rows.size():
@@ -36,7 +36,7 @@ func _ready() -> void:
 		)
 		if not replay.is_empty():
 			formal_replay_count += 1
-	assert(formal_replay_count == 212)
+	assert(formal_replay_count == 155)
 	assert(DraftScript.load_draft(97).is_empty())
 	assert(DraftScript.load_draft(98).is_empty())
 	var red_moon_replay := DraftScript.load_draft(180)
@@ -123,7 +123,7 @@ func _ready() -> void:
 	)
 	print(
 		"MONSTER_GROUND_ALIGNMENT_DRAFT_PASS "
-		+ "catalog=214 replay=212 red_moon=180 "
+		+ "catalog=156 replay=155 red_moon=180 "
 		+ "single_target=true formal_readonly=true"
 	)
 	get_tree().quit(0)
