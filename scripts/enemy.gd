@@ -68,6 +68,7 @@ const CONTACT_RETREAT_EPSILON_GU := 0.09375
 const CROWD_SEPARATION_GAP_GU := 0.375
 const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
 const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
+const ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU := PROJECTILE_OBSTACLE_SAMPLE_STEP_GU
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -891,14 +892,138 @@ func _attack_engagement_ready(
 ) -> bool:
 	if _uses_target_magic_delivery():
 		return (
-			_target_magic_condition_met(offset_ground_gu)
-			or distance_gu
-			<= contact_distance_gu + GroundUnitSpace.EPSILON_GU
+			is_instance_valid(hit_target)
+			and _attack_world_path_is_clear_for_target(hit_target)
+			and (
+				_target_magic_condition_met(offset_ground_gu)
+				or distance_gu
+				<= contact_distance_gu + GroundUnitSpace.EPSILON_GU
+			)
 		)
 	return (
 		is_instance_valid(hit_target)
 		and distance_gu
 		<= default_engagement_distance_gu + GroundUnitSpace.EPSILON_GU
+		and _attack_world_path_is_clear_for_target(hit_target)
+	)
+
+
+func _attack_world_path_is_clear_for_target(hit_target: Node2D) -> bool:
+	if not is_instance_valid(hit_target):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	return _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		hit_target.global_position,
+	)
+
+
+func _world_attack_path_is_clear(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	source_world_px: Vector2 = Vector2.INF,
+	target_world_px: Vector2 = Vector2.INF,
+) -> bool:
+	if not source_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return false
+	var has_map_query := (
+		is_instance_valid(environment_blocker)
+		and environment_blocker.has_method("is_environment_point_blocked")
+	)
+	var physics_space := _world_direct_space_state()
+	# A missing map provider is only acceptable when the physics server can
+	# provide the second, authoritative WORLD-layer path check. Never turn a
+	# missing environment hookup into an open attack corridor.
+	if not has_map_query and physics_space == null:
+		return false
+	if has_map_query:
+		var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+		var sample_count := maxi(
+			1,
+			int(ceil(distance_gu / ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU)),
+		)
+		for sample_index: int in range(sample_count + 1):
+			var progress := float(sample_index) / float(sample_count)
+			var sample_world_px := _ground_gu_to_screen_position_px(
+				source_ground_gu.lerp(target_ground_gu, progress)
+			)
+			if not sample_world_px.is_finite():
+				return false
+			if bool(environment_blocker.call(
+				"is_environment_point_blocked",
+				sample_world_px,
+			)):
+				return false
+	if physics_space == null:
+		return true
+	var ray_source_px := source_world_px
+	var ray_target_px := target_world_px
+	if not ray_source_px.is_finite():
+		ray_source_px = _ground_gu_to_screen_position_px(source_ground_gu)
+	if not ray_target_px.is_finite():
+		ray_target_px = _ground_gu_to_screen_position_px(target_ground_gu)
+	if not ray_source_px.is_finite() or not ray_target_px.is_finite():
+		return false
+	var query := PhysicsRayQueryParameters2D.create(
+		ray_source_px,
+		ray_target_px,
+		WorldSpatialRulesScript.WORLD_MASK,
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	return physics_space.intersect_ray(query).is_empty()
+
+
+func _world_direct_space_state() -> PhysicsDirectSpaceState2D:
+	var world := get_world_2d()
+	if world == null:
+		return null
+	return world.direct_space_state
+
+
+func _world_attack_path_is_clear_for_release(
+	release_record: Dictionary,
+) -> bool:
+	var source_ground_value: Variant = release_record.get(
+		"source_ground_gu",
+		Vector2.INF,
+	)
+	var target_ground_value: Variant = release_record.get(
+		"target_ground_gu",
+		Vector2.INF,
+	)
+	if not source_ground_value is Vector2 or not target_ground_value is Vector2:
+		return false
+	var source_world_value: Variant = release_record.get(
+		"origin_world_px",
+		Vector2.INF,
+	)
+	var target_world_value: Variant = release_record.get(
+		"target_world_px",
+		Vector2.INF,
+	)
+	var source_world_px: Vector2 = Vector2.INF
+	if source_world_value is Vector2:
+		source_world_px = source_world_value
+	var target_world_px: Vector2 = Vector2.INF
+	if target_world_value is Vector2:
+		target_world_px = target_world_value
+	var source_ground_gu: Vector2 = source_ground_value
+	var target_ground_gu: Vector2 = target_ground_value
+	return _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		source_world_px,
+		target_world_px,
 	)
 
 
@@ -1018,7 +1143,11 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 	var release_distance_gu := source_ground_gu.distance_to(target_ground_gu)
 	if release_distance_gu > attack_range_gu + GroundUnitSpace.EPSILON_GU:
 		return false
-	if not _physical_projectile_path_is_clear(source_ground_gu, target_ground_gu):
+	if not _physical_projectile_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		hit_target.global_position,
+	):
 		return false
 	var release_id := _next_spatial_release_id("physical_projectile")
 	var snapshot := SkillFootprintSnapshotScript.create_swept_capsule_path(
@@ -1080,32 +1209,16 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 func _physical_projectile_path_is_clear(
 	source_ground_gu: Vector2,
 	target_ground_gu: Vector2,
+	target_world_px: Vector2 = Vector2.INF,
 ) -> bool:
 	if str(attack_delivery_rule.get("obstaclePolicy", "")) != "environment_can_fly_line":
 		return false
-	if (
-		not is_instance_valid(environment_blocker)
-		or not environment_blocker.has_method("is_environment_point_blocked")
-	):
-		return true
-	var distance_gu := source_ground_gu.distance_to(target_ground_gu)
-	var sample_count := maxi(
-		1,
-		int(ceil(distance_gu / PROJECTILE_OBSTACLE_SAMPLE_STEP_GU)),
+	return _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		target_world_px,
 	)
-	for sample_index: int in range(1, sample_count):
-		var progress := float(sample_index) / float(sample_count)
-		var sample_world_px := _ground_gu_to_screen_position_px(
-			source_ground_gu.lerp(target_ground_gu, progress)
-		)
-		if sample_world_px == Vector2.INF:
-			return false
-		if bool(environment_blocker.call(
-			"is_environment_point_blocked",
-			sample_world_px,
-		)):
-			return false
-	return true
 
 
 func _settle_physical_projectile_release(release_record: Dictionary) -> void:
@@ -1117,6 +1230,8 @@ func _settle_physical_projectile_release(release_record: Dictionary) -> void:
 		return
 	var hit_target := candidate as Node2D
 	if not _physical_projectile_release_target_is_valid(hit_target, release_record):
+		return
+	if not _world_attack_path_is_clear_for_release(release_record):
 		return
 	_apply_attack_damage(hit_target, int(release_record.get("damage", 0)))
 
@@ -1185,6 +1300,13 @@ func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 		return false
 	if not _target_magic_condition_met(target_ground_gu - source_ground_gu):
 		return false
+	if not _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		hit_target.global_position,
+	):
+		return false
 	var release_id := _next_spatial_release_id("target_magic")
 	var snapshot := SkillFootprintSnapshotScript.create_circle(
 		_monster_attack_id("target_magic"),
@@ -1211,6 +1333,7 @@ func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 		"runtime_map_id": runtime_map_id,
 		"source_ground_gu": source_ground_gu,
 		"target_ground_gu": target_ground_gu,
+		"origin_world_px": global_position,
 		"target_world_px": _target_approved_ground_footpoint_world_px(hit_target),
 		"duration_seconds": maxf(
 			0.001,
@@ -1242,6 +1365,8 @@ func _settle_target_magic_release(release_record: Dictionary) -> void:
 		not _physical_projectile_release_target_is_valid(hit_target, release_record)
 		or not hit_target.has_method("take_direct_spell_damage")
 	):
+		return
+	if not _world_attack_path_is_clear_for_release(release_record):
 		return
 	var raw_resolution: Variant = hit_target.call(
 		"take_direct_spell_damage",
@@ -1312,6 +1437,13 @@ func _deal_melee_hit(
 			+ maxf(0.0, center_tolerance_gu)
 			+ GroundUnitSpace.EPSILON_GU
 		)
+	):
+		return
+	if not _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		hit_target.global_position,
 	):
 		return
 	var snapshot: Dictionary
