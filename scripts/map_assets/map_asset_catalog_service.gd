@@ -9,6 +9,7 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_terrain_asset_catalog.json",
 	"res://assets/data/assets/map_cave_dungeon_asset_catalog.json",
 	"res://assets/data/assets/map_exit_asset_catalog.json",
+	"res://assets/data/assets/map_boss_entrance_asset_catalog.json",
 	"res://assets/data/assets/map_deep_forest_asset_catalog.json",
 	"res://assets/data/assets/map_ground_graffiti_asset_catalog.json",
 	"res://assets/data/assets/map_new_carpet_asset_catalog.json",
