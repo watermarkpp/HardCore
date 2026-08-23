@@ -1,8 +1,21 @@
 extends Control
 
+signal intro_animation_finished
+signal intro_first_frame_presented
+
 const SLOGAN := "刷是一种状态，刷没有目的没有终点"
 const NEXT_SCENE := "res://scenes/character_select.tscn"
 const MINIMUM_SKIP_SECONDS := 1.0
+# The first drawable frame is already an authored CG frame.  Android and the
+# Godot boot surface may remain visible until this frame is presented, so the
+# runtime intro must never begin from an empty black frame or a translucent
+# logo that reveals a different startup surface underneath it.
+const INITIAL_LOGO_ALPHA := 1.0
+const INITIAL_GLOW_ALPHA := 0.28
+# StartupLoading, rather than a fixed timer, owns the final-frame hold. The
+# authored motion completes once and remains visible exactly as long as the
+# character-selection scene still needs to become ready.
+const FINAL_PRESENTATION_SECONDS := 0.0
 
 @export var auto_advance := true
 
@@ -13,6 +26,8 @@ const MINIMUM_SKIP_SECONDS := 1.0
 
 var _elapsed := 0.0
 var _transitioning := false
+var animation_complete := false
+var first_frame_presented := false
 
 
 func _ready() -> void:
@@ -52,10 +67,12 @@ func _layout_brand() -> void:
 
 
 func _prepare_animation_state() -> void:
-	brand_logo.modulate = Color(1.0, 1.0, 1.0, 0.0)
-	brand_logo.scale = Vector2(0.90, 0.90)
-	glow_logo.modulate = Color(1.0, 0.12, 0.04, 0.0)
-	glow_logo.scale = Vector2(0.92, 0.92)
+	animation_complete = false
+	first_frame_presented = false
+	brand_logo.modulate = Color(1.0, 1.0, 1.0, INITIAL_LOGO_ALPHA)
+	brand_logo.scale = Vector2.ONE
+	glow_logo.modulate = Color(1.0, 0.12, 0.04, INITIAL_GLOW_ALPHA)
+	glow_logo.scale = Vector2.ONE
 	slogan.text = SLOGAN
 	slogan.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	slogan.visible_ratio = 0.0
@@ -63,18 +80,18 @@ func _prepare_animation_state() -> void:
 
 
 func _play_intro() -> void:
-	await get_tree().create_timer(0.12).timeout
+	# Publish the opaque authored start pose before starting any motion.  This
+	# gives StartupLoading a precise first-frame boundary and removes the old
+	# black -> translucent-logo lead-in from the animation itself.
+	await get_tree().process_frame
 	if not is_inside_tree():
 		return
-	var reveal := create_tween().set_parallel(true)
-	reveal.tween_property(brand_logo, "modulate:a", 1.0, 0.85).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	reveal.tween_property(brand_logo, "scale", Vector2.ONE, 2.20).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-	reveal.tween_property(glow_logo, "modulate:a", 0.16, 1.20).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	reveal.tween_property(glow_logo, "scale", Vector2.ONE, 2.20).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	await RenderingServer.frame_post_draw
+	if not is_inside_tree():
+		return
+	first_frame_presented = true
+	intro_first_frame_presented.emit()
 
-	await get_tree().create_timer(0.92).timeout
-	if not is_inside_tree():
-		return
 	var text_reveal := create_tween().set_parallel(true)
 	text_reveal.tween_property(slogan, "modulate:a", 1.0, 0.52).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	text_reveal.tween_property(slogan, "visible_ratio", 1.0, 1.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -83,8 +100,15 @@ func _play_intro() -> void:
 	pulse.tween_property(glow_logo, "modulate:a", 0.28, 0.48).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	pulse.tween_property(glow_logo, "modulate:a", 0.08, 0.62).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	await get_tree().create_timer(2.55).timeout
-	if auto_advance and is_inside_tree():
+	# The pulse is the longest authored tween. Waiting for it means all logo and
+	# slogan motion has reached its exact final frame without an arbitrary delay.
+	# StartupLoading keeps this node unchanged until handoff.
+	await pulse.finished
+	if not is_inside_tree():
+		return
+	animation_complete = true
+	intro_animation_finished.emit()
+	if auto_advance:
 		_finish_intro()
 
 

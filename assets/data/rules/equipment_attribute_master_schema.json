@@ -41,8 +41,8 @@
     },
     "records": {
       "type": "array",
-      "minItems": 163,
-      "maxItems": 163,
+      "minItems": 175,
+      "maxItems": 175,
       "items": {
         "$ref": "#/$defs/record"
       }
@@ -88,7 +88,8 @@
         "sourceKind": {
           "enum": [
             "explicit_user_primary_revision",
-            "explicit_user_primary_override"
+            "explicit_user_primary_override",
+            "explicit_user_task_correction"
           ]
         },
         "contractId": {

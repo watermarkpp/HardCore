@@ -720,8 +720,8 @@
       "taoist.summon_divine_beast": {
         "formula_group": "classic_summon",
         "source_anchor": "TMagicManager.MagMakeSinSuSlave",
-        "source_status": "classic_rule_with_crystal_value_candidate",
-        "confidence": "B/C",
+        "source_status": "original_database_binary_verified_plus_A_level_growth_rules",
+        "confidence": "A",
         "train_level": 3,
         "power_base": 0,
         "power_bonus": 0,
@@ -754,14 +754,14 @@
         "recall_existing_on_create_failure": true,
         "leash_range": 560,
         "teleport_range": 900,
-        "spatial_state_machine_status": "project_adapter_C_candidate",
-        "amulet_cost": 5
+        "spatial_state_machine_status": "project_canonical",
+        "amulet_cost": 0
       },
       "taoist.summon_skeleton": {
         "formula_group": "classic_summon",
         "source_anchor": "TMagicManager.MagMakeSlave",
-        "source_status": "classic_rule_with_crystal_value_candidate",
-        "confidence": "B/C",
+        "source_status": "original_database_binary_verified_plus_A_level_growth_rules",
+        "confidence": "A",
         "train_level": 3,
         "power_base": 0,
         "power_bonus": 0,
@@ -794,8 +794,8 @@
         "recall_existing_on_create_failure": false,
         "leash_range": 560,
         "teleport_range": 900,
-        "spatial_state_machine_status": "project_adapter_C_candidate",
-        "amulet_cost": 1
+        "spatial_state_machine_status": "project_canonical",
+        "amulet_cost": 0
       }
     }
   }

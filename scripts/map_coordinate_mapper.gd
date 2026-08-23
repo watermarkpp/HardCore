@@ -2,10 +2,218 @@ class_name MapCoordinateMapper
 extends RefCounted
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const MapEditorRuntimeBridgeScript := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+
+## FREEZE-P0.2: formal map projection profile policies.
+const PROJECTION_POLICY_MAP_EDITOR_RUNTIME_ABSOLUTE := (
+	&"map_editor_runtime_absolute"
+)
+const PROJECTION_POLICY_AUTHORED_SOURCE_ABSOLUTE := (
+	&"authored_source_absolute"
+)
+const PROJECTION_POLICY_AUTHORED_CENTERED_ABSOLUTE := (
+	&"authored_centered_absolute"
+)
+const PROJECTION_POLICY_MAP_NOT_IMPLEMENTED := &"map_not_implemented"
+const PROJECTION_POLICY_UNSUPPORTED := &"unsupported_map_projection"
 
 # 经典客户端地砖采用64×32菱形；每个MAP逻辑格对应一个固定等距步长。
 const CELL_HALF_WIDTH := 32.0
 const CELL_HALF_HEIGHT := 16.0
+
+
+## FREEZE-P0.2: single formal projection-profile resolver. Every playable map
+## id resolves to one explicit map-global Ground GU projection:
+##   A. MAP_EDITOR_RUNTIME_ABSOLUTE  (MapEditorRuntimeBridge runtime)
+##   B. AUTHORED_SOURCE_ABSOLUTE     (WorldContent source_size)
+##   C. AUTHORED_CENTERED_ABSOLUTE   (WorldContent centered authored map)
+##   D. UNMAPPED_TEST_IDENTITY       (runtime_map_id < 0, explicit)
+##   E. UNSUPPORTED                  (explicit failure; never guessed)
+## FREEZE-P0.2R: formal production projection resolver. Only runtime-built maps
+## (MapEditor runtime + ready marker) are formally playable; world/reference
+## data never grants a formal profile.
+static func resolve_formal_runtime_projection_profile(
+	map_id: int
+) -> Dictionary:
+	if map_id < 0:
+		return {
+			"success": true,
+			"reason": &"",
+			"runtime_map_id": map_id,
+			"policy": (
+				GroundUnitSpaceScript.PROJECTION_POLICY_UNMAPPED_TEST_IDENTITY
+			),
+			"source": "unmapped_test_identity",
+			"source_size": Vector2i.ZERO,
+			"screen_to_ground": (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu
+			),
+			"ground_to_screen": (
+				GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px
+			),
+		}
+	if MapEditorRuntimeBridgeScript.is_formal_playable(map_id):
+		var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
+		if not runtime.is_empty():
+			var raw_size: Array = runtime.get(
+				"design", {}
+			).get("design_size", [256, 256])
+			var design_size := Vector2i(
+				int(raw_size[0]),
+				int(raw_size[1])
+			)
+			return {
+				"success": true,
+				"reason": &"",
+				"runtime_map_id": map_id,
+				"policy": PROJECTION_POLICY_MAP_EDITOR_RUNTIME_ABSOLUTE,
+				"source": "MapEditorRuntimeBridge",
+				"source_size": design_size,
+				"screen_to_ground": func(screen_position_px: Vector2) -> Vector2:
+					return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+						runtime,
+						screen_position_px
+					),
+				"ground_to_screen": func(ground_position_gu: Vector2) -> Vector2:
+					return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
+						runtime,
+						ground_position_gu
+					),
+			}
+	if WorldContent != null and WorldContent.has_map(map_id):
+		return {
+			"success": false,
+			"reason": GroundUnitSpaceScript.REASON_MAP_NOT_IMPLEMENTED,
+			"runtime_map_id": map_id,
+			"policy": PROJECTION_POLICY_MAP_NOT_IMPLEMENTED,
+			"source": "reference_only_not_runtime_built",
+			"source_size": Vector2i.ZERO,
+			"screen_to_ground": Callable(),
+			"ground_to_screen": Callable(),
+		}
+	return {
+		"success": false,
+		"reason": GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION,
+		"runtime_map_id": map_id,
+		"policy": PROJECTION_POLICY_UNSUPPORTED,
+		"source": "",
+		"source_size": Vector2i.ZERO,
+		"screen_to_ground": Callable(),
+		"ground_to_screen": Callable(),
+	}
+
+
+## FREEZE-P0.2R: formal-only alias kept for existing callers. Never resolves a
+## reference-only / planned-unbuilt map.
+static func resolve_map_projection_profile(map_id: int) -> Dictionary:
+	return resolve_formal_runtime_projection_profile(map_id)
+
+
+## FREEZE-P0.2R: reference/migration resolver. Keeps the legacy authored
+## source-size / centered math for import audits, migration tools and
+## test/dev preview. NEVER used by formal GameRoot/combat paths.
+static func resolve_reference_projection_profile(map_id: int) -> Dictionary:
+	if map_id < 0:
+		return {
+			"success": true,
+			"reason": &"",
+			"runtime_map_id": map_id,
+			"policy": (
+				GroundUnitSpaceScript.PROJECTION_POLICY_UNMAPPED_TEST_IDENTITY
+			),
+			"source": "unmapped_test_identity",
+			"source_size": Vector2i.ZERO,
+			"screen_to_ground": (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu
+			),
+			"ground_to_screen": (
+				GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px
+			),
+		}
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
+		if not runtime.is_empty():
+			var raw_size: Array = runtime.get(
+				"design", {}
+			).get("design_size", [256, 256])
+			var design_size := Vector2i(
+				int(raw_size[0]),
+				int(raw_size[1])
+			)
+			return {
+				"success": true,
+				"reason": &"",
+				"runtime_map_id": map_id,
+				"policy": PROJECTION_POLICY_MAP_EDITOR_RUNTIME_ABSOLUTE,
+				"source": "MapEditorRuntimeBridge",
+				"source_size": design_size,
+				"screen_to_ground": func(screen_position_px: Vector2) -> Vector2:
+					return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+						runtime,
+						screen_position_px
+					),
+				"ground_to_screen": func(ground_position_gu: Vector2) -> Vector2:
+					return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
+						runtime,
+						ground_position_gu
+					),
+			}
+	if WorldContent != null and WorldContent.has_map(map_id):
+		var content := WorldContent.map_content(map_id)
+		var source_size: Variant = content.get(
+			"source_size",
+			Vector2i.ZERO
+		)
+		var source_size_vi := Vector2i.ZERO
+		if source_size is Vector2:
+			source_size_vi = Vector2i(source_size)
+		elif source_size is Vector2i:
+			source_size_vi = source_size
+		if source_size_vi != Vector2i.ZERO:
+			return {
+				"success": true,
+				"reason": &"",
+				"runtime_map_id": map_id,
+				"policy": PROJECTION_POLICY_AUTHORED_SOURCE_ABSOLUTE,
+				"source": "WorldContent.source_size",
+				"source_size": source_size_vi,
+				"screen_to_ground": func(screen_position_px: Vector2) -> Vector2:
+					return screen_position_px_to_ground_position_gu(
+						screen_position_px,
+						source_size_vi
+					),
+				"ground_to_screen": func(ground_position_gu: Vector2) -> Vector2:
+					return ground_position_gu_to_screen_position_px(
+						ground_position_gu,
+						source_size_vi
+					),
+			}
+		return {
+			"success": true,
+			"reason": &"",
+			"runtime_map_id": map_id,
+			"policy": PROJECTION_POLICY_AUTHORED_CENTERED_ABSOLUTE,
+			"source": "WorldContent.centered",
+			"source_size": Vector2i.ZERO,
+			"screen_to_ground": (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu
+			),
+			"ground_to_screen": (
+				GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px
+			),
+		}
+	return {
+		"success": false,
+		"reason": GroundUnitSpaceScript.REASON_UNSUPPORTED_MAP_PROJECTION,
+		"runtime_map_id": map_id,
+		"policy": PROJECTION_POLICY_UNSUPPORTED,
+		"source": "",
+		"source_size": Vector2i.ZERO,
+		"screen_to_ground": Callable(),
+		"ground_to_screen": Callable(),
+	}
 
 
 static func source_to_world(source_coordinate: Vector2, source_size: Vector2i) -> Vector2:

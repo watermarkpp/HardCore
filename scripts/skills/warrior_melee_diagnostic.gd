@@ -15,6 +15,12 @@ const DIRECTION_AUDIT_CONTRACT_ID := "diagnostic.warrior.melee_direction_loop.v1
 const ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID := (
 	"diagnostic.warrior.melee_angle_quantization.v1"
 )
+const TARGET_ALIGNED_RELEASE_CONTRACT_ID := (
+	"diagnostic.warrior.melee_target_aligned_release.v1"
+)
+const TARGET_ALIGNED_AXIS_AUDIT_CONTRACT_ID := (
+	"diagnostic.warrior.melee_target_aligned_axis_audit.v1"
+)
 
 const RESULT_OK := "OK"
 const RESULT_SAME_FOOTPOINT := "SAME_FOOTPOINT"
@@ -23,6 +29,8 @@ const RESULT_WRONG_FACING := "WRONG_FACING"
 const RESULT_OUTSIDE_ATTACK_LANE := "OUTSIDE_ATTACK_LANE"
 const RESULT_OUTSIDE_HALF_MOON_ARC := "OUTSIDE_HALF_MOON_ARC"
 const RESULT_DIRECTION_INDEX_MISMATCH := "DIRECTION_INDEX_MISMATCH"
+const RESULT_TARGET_ALIGNED_OK := "TARGET_ALIGNED_OK"
+const RESULT_TARGET_ALIGNED_INELIGIBLE := "TARGET_ALIGNED_INELIGIBLE"
 
 const SUPPORTED_MODES: Array[String] = [
 	Geometry.SKILL_NORMAL,
@@ -290,6 +298,129 @@ static func audit_ground_delta_gu(ground_delta_gu: Vector2) -> Dictionary:
 		),
 		"projected_screen_vector_px": _vector2_json(projected_screen_vector_px),
 		"projected_screen_direction_px": _vector2_json(projected_screen_direction_px),
+	}
+
+
+static func explain_target_aligned_release(
+	release_geometry: Dictionary,
+	mode: String,
+	coordinate_context: Dictionary,
+	terrain_blocked := false,
+	range_bonus_gu := 0.0
+) -> Dictionary:
+	## Read-only explanation of the target-aligned continuous release contract.
+	## Mirrors WarriorMeleeGeometry.target_aligned_melee_release_plan_ground_gu
+	## so instrumentation can prove eligibility, axis source and snapshot reuse
+	## without ever deciding damage or mutating candidates.
+	var plan := Geometry.target_aligned_melee_release_plan_ground_gu(
+		release_geometry,
+		mode,
+		coordinate_context,
+		range_bonus_gu,
+		terrain_blocked
+	)
+	var eligible := bool(plan.get("target_axis_eligible", false))
+	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot")
+	var snapshot_shape := ""
+	var snapshot_id := ""
+	if raw_snapshot is Dictionary:
+		snapshot_shape = str(
+			(raw_snapshot as Dictionary).get("shape_type", "")
+		)
+		snapshot_id = str(
+			(raw_snapshot as Dictionary).get("snapshot_id", "")
+		)
+	var continuous_axis_ground_gu := (
+		plan.get("continuous_axis_ground_gu", Vector2.ZERO) as Vector2
+	)
+	return {
+		"contract_id": TARGET_ALIGNED_RELEASE_CONTRACT_ID,
+		"geometry_contract_id": (
+			Geometry.TARGET_ALIGNED_CONTINUOUS_RELEASE_CONTRACT_ID
+		),
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"requested_mode": mode,
+		"mode": str(plan.get("mode", Geometry.SKILL_NORMAL)),
+		"target_axis_eligible": eligible,
+		"ineligible_reason": str(plan.get("ineligible_reason", "")),
+		"result_code": (
+			RESULT_TARGET_ALIGNED_OK
+			if eligible
+			else RESULT_TARGET_ALIGNED_INELIGIBLE
+		),
+		"origin_ground_gu": _vector2_json(
+			plan.get("origin_ground_gu", Vector2.ZERO)
+		),
+		"continuous_axis_ground_gu": _vector2_json(
+			continuous_axis_ground_gu
+		),
+		"locked_target_ground_gu_at_release": _vector2_json(
+			plan.get("locked_target_ground_gu_at_release", Vector2.ZERO)
+		),
+		"locked_target_instance_id": int(
+			plan.get("locked_target_instance_id", 0)
+		),
+		"visual_direction_index": int(
+			plan.get("visual_direction_index", -1)
+		),
+		"visual_direction_contract_id": str(
+			plan.get("visual_direction_contract_id", "")
+		),
+		"snapshot_built": raw_snapshot is Dictionary,
+		"snapshot_id": snapshot_id,
+		"snapshot_shape_type": snapshot_shape,
+		"terrain_blocked": bool(plan.get("terrain_blocked", false)),
+		"range_bonus_gu": float(plan.get("range_bonus_gu", range_bonus_gu)),
+	}
+
+
+static func audit_target_aligned_axis(
+	origin_ground_gu: Vector2,
+	locked_target_ground_gu: Vector2
+) -> Dictionary:
+	## Machine-checkable audit: the continuous release axis must equal the
+	## locked-target ground direction while the character visual index remains
+	## the 8-direction quantization of that same delta.
+	var delta_ground_gu := locked_target_ground_gu - origin_ground_gu
+	var has_direction := (
+		delta_ground_gu.length_squared()
+		> Geometry.EPSILON * Geometry.EPSILON
+	)
+	var continuous_axis_ground_gu := (
+		delta_ground_gu.normalized() if has_direction else Vector2.ZERO
+	)
+	var quantized_direction_index := (
+		Geometry.direction_index_for_ground_delta_gu(delta_ground_gu)
+		if has_direction
+		else -1
+	)
+	var quantized_axis_ground_gu := (
+		Geometry.canonical_ground_direction_gu(quantized_direction_index)
+		if has_direction
+		else Vector2.ZERO
+	)
+	return {
+		"contract_id": TARGET_ALIGNED_AXIS_AUDIT_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"geometry_contract_id": (
+			Geometry.TARGET_ALIGNED_CONTINUOUS_RELEASE_CONTRACT_ID
+		),
+		"direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
+		"origin_ground_gu": _vector2_json(origin_ground_gu),
+		"locked_target_ground_gu": _vector2_json(locked_target_ground_gu),
+		"ground_delta_gu": _vector2_json(delta_ground_gu),
+		"has_direction": has_direction,
+		"continuous_axis_ground_gu": _vector2_json(
+			continuous_axis_ground_gu
+		),
+		"quantized_direction_index": quantized_direction_index,
+		"quantized_axis_ground_gu": _vector2_json(quantized_axis_ground_gu),
+		"continuous_matches_quantized": (
+			has_direction
+			and continuous_axis_ground_gu.is_equal_approx(
+				quantized_axis_ground_gu
+			)
+		),
 	}
 
 

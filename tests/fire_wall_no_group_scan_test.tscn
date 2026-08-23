@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2c_no_group_scan"]
+[ext_resource type="Script" path="res://tests/fire_wall_no_group_scan_test.gd" id="1"]
+[node name="FireWallNoGroupScan" type="Node"]
+script = ExtResource("1")

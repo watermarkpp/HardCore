@@ -298,7 +298,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 				"target_is_undead": true, "caster_level": 40, "target_level": 40,
 				"force_success": false,
 			})
-			return not success.proficiency_event.is_empty() and failed.proficiency_event.is_empty()
+			return success.proficiency_event.is_empty() and failed.proficiency_event.is_empty()
 		"ice_storm_target_centered":
 			return _support.execute(skill_id, 3, {"target_tile": Vector2i(8, 8)}).geometry_cells.has(Vector2i(8, 8))
 		"ice_storm_exact_3x3":

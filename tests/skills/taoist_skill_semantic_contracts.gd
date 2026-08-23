@@ -4,6 +4,15 @@ extends RefCounted
 const Formula := preload("res://scripts/skills/formulas/mir2_skill_formula.gd")
 const Rng := preload("res://scripts/skills/skill_rng.gd")
 const Support := preload("res://tests/skills/skill_semantic_contract_support.gd")
+const VisibilityPolicy := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
+const MATERIAL_FREE_OVERRIDE_CONTRACT_ID := "skills.taoist.material_free.v1"
+
+# The package manifest keeps the original MIR2 material assertion IDs as source
+# evidence. HardCore deliberately overrides those assertions for every Taoist
+# skill. Material-named validators below must prove this explicit runtime
+# override contract; they must never silently invert the source assertion.
 
 const ASSERTIONS_BY_SKILL := {
 	"taoist.healing": [
@@ -102,7 +111,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"healing_training_only_if_hp_restored":
 			var restored := _support.execute(skill_id, 3, {"actual_hp_missing": 10})
 			var full := _support.execute(skill_id, 3, {"actual_hp_missing": 0})
-			return not restored.proficiency_event.is_empty() and full.proficiency_event.is_empty()
+			return restored.proficiency_event.is_empty() and full.proficiency_event.is_empty()
 		"spiritual_warfare_accuracy_exact":
 			return _support.rank_effect_values(skill_id, "value") == [0, 3, 5, 8]
 		"spiritual_warfare_never_casts":
@@ -112,11 +121,11 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"spiritual_warfare_physical_only":
 			return _support.execute(skill_id, 3).effects[0].affects == ["physical_melee_hit_checks"]
 		"poison_consumes_selected_powder":
-			var green := _poison(skill_id, "grey_powder", true)
-			var yellow := _poison(skill_id, "yellow_powder", true)
-			return green.resource_quote.material_id == "grey_powder" and yellow.resource_quote.material_id == "yellow_powder" and green.resource_commit and yellow.resource_commit
+			var dual := _poison(skill_id, "", true)
+			return _uses_material_free_override(dual.resource_quote) and dual.resource_commit
 		"poison_green_and_red_separate":
-			return _poison(skill_id, "grey_powder", true).effects[0].poison_type == "green_poison" and _poison(skill_id, "yellow_powder", true).effects[0].poison_type == "red_poison"
+			var dual := _poison(skill_id, "", true)
+			return dual.effects.size() == 2 and dual.effects[0].poison_type == "green_poison" and dual.effects[1].poison_type == "red_poison" and dual.effects[0].resisted == dual.effects[1].resisted
 		"poison_resist_formula":
 			var poison := _support.execute(skill_id, 3, {
 				"target_poison_resist": 7, "force_success": true,
@@ -136,12 +145,14 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			var green: Dictionary = _poison(skill_id, "grey_powder", true).effects[0]
 			return green.tick_interval_ms == 2000 and green.damage_per_tick >= 1
 		"poison_red_reduces_ac_mac":
-			var red: Dictionary = _poison(skill_id, "yellow_powder", true).effects[0]
+			var red: Dictionary = _poison(skill_id, "", true).effects[1]
 			return red.flat_ac_reduction >= 1 and red.flat_ac_reduction == red.flat_mac_reduction
 		"poison_same_type_refreshes":
-			return str(_poison(skill_id, "grey_powder", true).effects[0].stacking_policy).contains("refresh")
+			var dual := _poison(skill_id, "", true)
+			return str(dual.effects[0].stacking_policy).contains("refresh") and str(dual.effects[1].stacking_policy).contains("refresh")
 		"soul_fire_requires_one_amulet":
-			return _support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).resource_quote.material_amount == 1
+			var result := _support.execute(skill_id, 3, {}, {})
+			return _uses_material_free_override(result.resource_quote)
 		"soul_fire_requires_los":
 			return not _support.execute(skill_id, 3, {"line_of_sight": false}, {"selected_material": "amulet"}).accepted
 		"soul_fire_power_formula":
@@ -152,9 +163,9 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			var invalid := _support.execute(skill_id, 3, {"has_target": false}, {"selected_material": "amulet"})
 			return not invalid.accepted and not invalid.resource_commit
 		"summon_skeleton_consumes_one_amulet_only_on_new_spawn":
-			var spawn := _support.execute(skill_id, 3, {"has_main_pet": false}, {"selected_material": "amulet"})
-			var recall := _support.execute(skill_id, 3, {"has_main_pet": true}, {"selected_material": "amulet"})
-			return spawn.resource_quote.material_amount == 1 and spawn.resource_commit and recall.resource_quote.material_amount == 0 and not recall.resource_commit
+			var spawn := _support.execute(skill_id, 3, {"has_main_pet": false}, {})
+			var recall := _support.execute(skill_id, 3, {"has_main_pet": true}, {})
+			return _uses_material_free_override(spawn.resource_quote) and spawn.resource_commit and _uses_material_free_override(recall.resource_quote) and not recall.resource_commit
 		"summon_skeleton_recast_recalls":
 			return _support.execute(skill_id, 3, {"has_main_pet": true}, {"selected_material": "amulet"}).effects[0].type == "recall_existing_main_pet"
 		"taoist_main_pet_limit_one":
@@ -167,7 +178,8 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"summon_skeleton_no_forced_delete":
 			return not bool(_support.execute(skill_id, 3, {"has_main_pet": true}, {"selected_material": "amulet"}).effects[0].delete_existing)
 		"invisibility_consumes_amulet":
-			return _support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).resource_quote.material_amount == 1
+			var result := _support.execute(skill_id, 3, {}, {})
+			return _uses_material_free_override(result.resource_quote)
 		"invisibility_monster_aggro_only":
 			return _support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].type == "monster_aggro_stealth"
 		"invisibility_not_pvp_untargetable":
@@ -177,8 +189,16 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3, {"primary_stat_roll": 5}, {"selected_material": "amulet"}).effects[0].duration_seconds == 45
 		"invisibility_breaks_on_move":
 			return bool(_support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].break_on_tile_movement)
+		## Manifest ID kept for package-test compatibility; the user override
+		## (2026-08-09) flips the old SOT semantics: any skill or attack
+		## submission now breaks stealth uniformly.
 		"invisibility_spell_cast_does_not_break":
-			return not bool(_support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].break_on_ranged_spell_cast)
+			var invis: Dictionary = _support.execute(
+				skill_id, 3, {}, {"selected_material": "amulet"}
+			).effects[0]
+			return bool(invis.break_on_melee_attack) and bool(
+				invis.break_on_ranged_spell_cast
+			)
 		"mass_invisibility_exact_3x3":
 			return _support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).geometry_cells.size() == 9
 		"mass_invisibility_affects_friendlies":
@@ -186,9 +206,9 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"mass_invisibility_not_self_only":
 			return _support.execute(skill_id, 3, {"affected_friendly_count": 3}, {"selected_material": "amulet"}).effects[0].affected_count > 1
 		"mass_invisibility_consumes_one_amulet_on_success":
-			var success := _support.execute(skill_id, 3, {"affected_friendly_count": 1}, {"selected_material": "amulet"})
-			var empty := _support.execute(skill_id, 3, {"affected_friendly_count": 0}, {"selected_material": "amulet"})
-			return success.resource_quote.material_amount == 1 and success.resource_commit and not empty.resource_commit
+			var success := _support.execute(skill_id, 3, {"affected_friendly_count": 1}, {})
+			var empty := _support.execute(skill_id, 3, {"affected_friendly_count": 0}, {})
+			return _uses_material_free_override(success.resource_quote) and success.resource_commit and _uses_material_free_override(empty.resource_quote) and not empty.resource_commit
 		"soul_shield_modifies_mac_only":
 			return _buff(skill_id).effects[0].stat == "MAC"
 		"soul_shield_area_radius_3":
@@ -225,10 +245,31 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3, {"primary_stat_roll": 5}).effects[0].duration_ms == 40000
 		"revelation_no_damage":
 			var reveal: Dictionary = _support.execute(skill_id, 3).effects[0]
-			return reveal.damage == 0 and not reveal.target_stat_modification
+			return (
+				reveal.damage == 0
+				and not reveal.target_stat_modification
+				and not VisibilityPolicy.is_skill_visible("taoist.revelation")
+				and not VisibilityPolicy.is_skill_castable("taoist.revelation")
+				and not _support.definition("taoist.revelation").is_empty()
+			)
 		"entrapment_monsters_only":
 			var player_only := _support.execute(skill_id, 3, {"targets": [{"is_player": true}]}, {"selected_material": "amulet"})
-			return player_only.effects[0].trapped_count == 0
+			var locked := _support.execute(skill_id, 3, {
+				"target_instance_id": 777,
+				"target_is_monster": true,
+				"target_is_boss": false,
+				"target_control_immune": false,
+				"target_within_level_gate": true,
+				"targets": [{
+					"hostile_monster": true,
+					"target_instance_id": 888,
+				}],
+			}, {"selected_material": "amulet"})
+			return (
+				player_only.effects[0].trapped_count == 0
+				and locked.effects[0].trapped_count == 1
+				and locked.effects[0].target_instance_ids == [777]
+			)
 		"entrapment_boss_immune":
 			var boss := _support.execute(skill_id, 3, {"targets": [{"hostile_monster": true, "is_boss": true}]}, {"selected_material": "amulet"})
 			return boss.effects[0].trapped_count == 0
@@ -238,9 +279,9 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"entrapment_breaks_on_player_entry":
 			return bool(_support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].break_on_any_player_entry)
 		"entrapment_consumes_amulet_only_on_success":
-			var success := _support.execute(skill_id, 3, {}, {"selected_material": "amulet"})
-			var failure := _support.execute(skill_id, 3, {"targets": []}, {"selected_material": "amulet"})
-			return success.resource_commit and success.resource_quote.material_amount == 1 and not failure.resource_commit
+			var success := _support.execute(skill_id, 3, {"targets": [{"hostile_monster": true, "target_instance_id": 301}]}, {})
+			var failure := _support.execute(skill_id, 3, {"targets": []}, {})
+			return success.resource_commit and _uses_material_free_override(success.resource_quote) and _uses_material_free_override(failure.resource_quote) and not failure.resource_commit
 		"entrapment_not_generic_root":
 			return not bool(_support.execute(skill_id, 3, {}, {"selected_material": "amulet"}).effects[0].generic_root)
 		"mass_healing_exact_3x3":
@@ -256,13 +297,13 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"mass_healing_training_only_if_actual_heal":
 			var healed := _support.execute(skill_id, 3, {"friendly_missing_hp": [10]})
 			var full := _support.execute(skill_id, 3, {"friendly_missing_hp": [0]})
-			return not healed.proficiency_event.is_empty() and full.proficiency_event.is_empty()
+			return healed.proficiency_event.is_empty() and full.proficiency_event.is_empty()
 		"mass_healing_not_negative_damage":
 			return not bool(_support.execute(skill_id, 3).effects[0].negative_damage)
 		"summon_divine_beast_consumes_five_amulets_only_on_new_spawn":
-			var spawn := _support.execute(skill_id, 3, {"has_main_pet": false}, {"selected_material": "amulet"})
-			var recall := _support.execute(skill_id, 3, {"has_main_pet": true}, {"selected_material": "amulet"})
-			return spawn.resource_quote.material_amount == 5 and spawn.resource_commit and recall.resource_quote.material_amount == 0 and not recall.resource_commit
+			var spawn := _support.execute(skill_id, 3, {"has_main_pet": false}, {})
+			var recall := _support.execute(skill_id, 3, {"has_main_pet": true}, {})
+			return _uses_material_free_override(spawn.resource_quote) and spawn.resource_commit and _uses_material_free_override(recall.resource_quote) and not recall.resource_commit
 		"summon_divine_beast_recast_recalls":
 			return _support.execute(skill_id, 3, {"has_main_pet": true}, {"selected_material": "amulet"}).effects[0].type == "recall_existing_main_pet"
 		"divine_beast_skill_rank_separate_pet_level":
@@ -274,27 +315,37 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return false
 
 
-func _poison(skill_id: String, material: String, force_success: bool) -> Dictionary:
+func _poison(skill_id: String, _material: String, force_success: bool) -> Dictionary:
 	return _support.execute(
 		skill_id,
 		3,
 		{"force_success": force_success},
-		{"selected_material": material}
+		{}
 	)
 
 
 func _buff(skill_id: String) -> Dictionary:
 	return _support.execute(skill_id, 3, {
 		"friendly_targets": [{"level": 35}], "primary_stat_roll": 4,
-	}, {"selected_material": "amulet"})
+	}, {})
 
 
 func _buff_consumption(skill_id: String) -> bool:
 	var success := _buff(skill_id)
 	var empty := _support.execute(skill_id, 3, {
 		"friendly_targets": [],
-	}, {"selected_material": "amulet"})
-	return success.resource_quote.material_amount == 1 and success.resource_commit and not empty.resource_commit
+	}, {})
+	return _uses_material_free_override(success.resource_quote) and success.resource_commit and _uses_material_free_override(empty.resource_quote) and not empty.resource_commit
+
+
+func _uses_material_free_override(quote: Dictionary) -> bool:
+	return (
+		bool(quote.get("material_free", false))
+		and str(quote.get("material_policy_contract_id", ""))
+		== MATERIAL_FREE_OVERRIDE_CONTRACT_ID
+		and str(quote.get("material_id", "")).is_empty()
+		and int(quote.get("material_amount", -1)) == 0
+	)
 
 
 func _floats_equal(actual: Array, expected: Array) -> bool:

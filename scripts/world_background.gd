@@ -9,28 +9,78 @@ const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coo
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
-const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
-const GOTHIC_BICH_GROUND_ATLAS := preload("res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png")
-const BICH_PROP_ATLAS := preload("res://assets/art/maps/bich/bich_props.png")
-const ORC_TOMB_GROUND_ATLAS := preload("res://assets/art/maps/orc_tomb/orc_tomb_ground_tiles.png")
-const ORC_TOMB_PROP_ATLAS := preload("res://assets/art/maps/orc_tomb/orc_tomb_props.png")
-const ORC_TOMB_FIRE_GLOW := preload("res://assets/art/maps/orc_tomb/orc_tomb_fire_glow.png")
-const MINE_GROUND_ATLAS := preload("res://assets/art/maps/mine/mine_ground_tiles.png")
-const MINE_PROP_ATLAS := preload("res://assets/art/maps/mine/mine_props.png")
-const MINE_LAMP_GLOW := preload("res://assets/art/maps/mine/mine_lamp_glow.png")
-const WOOMA_TEMPLE_GROUND_ATLAS := preload("res://assets/art/maps/wooma_temple/wooma_temple_ground_tiles.png")
-const WOOMA_TEMPLE_PROP_ATLAS := preload("res://assets/art/maps/wooma_temple/wooma_temple_props.png")
-const WOOMA_TEMPLE_FIRE_GLOW := preload("res://assets/art/maps/wooma_temple/wooma_temple_fire_glow.png")
-const WOOMA_FOREST_GROUND_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_forest_ground_tiles.png")
-const WOOMA_FOREST_PROP_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_forest_props.png")
-const WOOMA_CAVE_GROUND_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_cave_ground_tiles.png")
-const WOOMA_CAVE_PROP_ATLAS := preload("res://assets/art/maps/wooma_region/wooma_cave_props.png")
-const WOOMA_CAVE_GLOW := preload("res://assets/art/maps/wooma_region/wooma_cave_glow.png")
-const SNAKE_VALLEY_GROUND_ATLAS := preload("res://assets/art/maps/snake_valley/snake_valley_ground_tiles.png")
-const SNAKE_VALLEY_PROP_ATLAS := preload("res://assets/art/maps/snake_valley/snake_valley_props.png")
-const SNAKE_MINE_GROUND_ATLAS := preload("res://assets/art/maps/snake_valley/snake_mine_ground_tiles.png")
-const SNAKE_MINE_PROP_ATLAS := preload("res://assets/art/maps/snake_valley/snake_mine_props.png")
-const SNAKE_MINE_GLOW := preload("res://assets/art/maps/snake_valley/snake_mine_glow.png")
+# P1-004: texture atlases are now lazy-loaded.  Only the target map's
+# atlases are loaded when a map is built.  Old const names remain as
+# compat aliases that delegate to _region_atlas().
+const _REGION_ATLAS_PATHS := {
+	"bich_ground": "res://assets/art/maps/bich/bich_ground_tiles.png",
+	"gothic_bich_ground": "res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png",
+	"bich_prop": "res://assets/art/maps/bich/bich_props.png",
+	"orc_tomb_ground": "res://assets/art/maps/orc_tomb/orc_tomb_ground_tiles.png",
+	"orc_tomb_prop": "res://assets/art/maps/orc_tomb/orc_tomb_props.png",
+	"orc_tomb_fire_glow": "res://assets/art/maps/orc_tomb/orc_tomb_fire_glow.png",
+	"mine_ground": "res://assets/art/maps/mine/mine_ground_tiles.png",
+	"mine_prop": "res://assets/art/maps/mine/mine_props.png",
+	"mine_lamp_glow": "res://assets/art/maps/mine/mine_lamp_glow.png",
+	"wooma_temple_ground": "res://assets/art/maps/wooma_temple/wooma_temple_ground_tiles.png",
+	"wooma_temple_prop": "res://assets/art/maps/wooma_temple/wooma_temple_props.png",
+	"wooma_temple_fire_glow": "res://assets/art/maps/wooma_temple/wooma_temple_fire_glow.png",
+	"wooma_forest_ground": "res://assets/art/maps/wooma_region/wooma_forest_ground_tiles.png",
+	"wooma_forest_prop": "res://assets/art/maps/wooma_region/wooma_forest_props.png",
+	"wooma_cave_ground": "res://assets/art/maps/wooma_region/wooma_cave_ground_tiles.png",
+	"wooma_cave_prop": "res://assets/art/maps/wooma_region/wooma_cave_props.png",
+	"wooma_cave_glow": "res://assets/art/maps/wooma_region/wooma_cave_glow.png",
+	"snake_valley_ground": "res://assets/art/maps/snake_valley/snake_valley_ground_tiles.png",
+	"snake_valley_prop": "res://assets/art/maps/snake_valley/snake_valley_props.png",
+	"snake_mine_glow": "res://assets/art/maps/snake_valley/snake_mine_glow.png",
+}
+
+var _atlas_cache: Dictionary = {}
+
+func _region_atlas(key: String) -> Resource:
+	if _atlas_cache.has(key):
+		return _atlas_cache[key]
+	var path: String = _REGION_ATLAS_PATHS.get(key, "")
+	if path.is_empty():
+		push_error("unknown region atlas key: %s" % key)
+		return null
+	var res: Resource = _prefetched_texture(path, _current_build_stage())
+	if res == null:
+		return null
+	_atlas_cache[key] = res
+	return res
+
+
+func _current_build_stage() -> String:
+	return _active_stage_label
+
+
+func _res_path(raw: String) -> String:
+	if raw.is_empty():
+		return ""
+	return raw if raw.begins_with("res://") else "res://" + raw
+
+
+# Unified formal resource acquisition for bootstrap build stages. When a
+# coordinator is attached the resource MUST already be in its prefetch cache;
+# a miss is recorded by the coordinator as an unexpected synchronous load and
+# returns null so the build fails instead of falling back to a sync load.
+func _prefetched_texture(path: String, stage_name: String) -> Texture2D:
+	if path.is_empty():
+		return null
+	if bootstrap_coordinator != null:
+		var res: Resource = bootstrap_coordinator.get_build_resource(path, stage_name)
+		return res as Texture2D
+	return load(path) as Texture2D
+
+# Compat aliases
+func _bich_ground_atlas() -> Resource: return _region_atlas("bich_ground")
+func _bich_prop_atlas() -> Resource: return _region_atlas("bich_prop")
+func _orc_tomb_ground_atlas() -> Resource: return _region_atlas("orc_tomb_ground")
+func _mine_ground_atlas() -> Resource: return _region_atlas("mine_ground")
+# snake_mine kept as preload (single-use)
+# snake_mine_prop kept as preload (single-use)
+# _region_atlas("snake_mine_glow"): see _REGION_ATLAS_PATHS["snake_mine_glow"]
 const BICH_TILE_SIZE := Vector2(64.0, 32.0)
 const BICH_PROP_SIZE := Vector2(96.0, 128.0)
 const ORC_TOMB_TILE_SIZE := Vector2(64.0, 32.0)
@@ -68,6 +118,35 @@ var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 var _editor_runtime_fallback_ground := false
 
+# ── HC-P1-004 staged build contract ──
+# When attached, every formal resource in the build stages is obtained through
+# the coordinator prefetch cache; a missing cache entry is recorded as an
+# unexpected synchronous load and fails the bootstrap.
+var bootstrap_coordinator: WorldBootstrapCoordinator = null
+var _staged_build_complete := false
+var _staged_build_map_id := -1
+var _staged_generation := -1
+var _active_stage_label := "BUILD_MAP"
+var _pending_map_descriptors: Array[Dictionary] = []
+var _pending_collision_descriptors: Array[Dictionary] = []
+var _pending_arrival_position := Vector2.ZERO
+var _source_mask_markers: Array[Node] = []
+var _gothic_camp_built: Dictionary = {}
+
+# Explicit whitelist of global resources that may be shared across regions.
+# Each entry documents ownership; these are the only resources allowed with
+# "shared" scope during a target-map resource collection.
+const SHARED_GLOBAL_RESOURCE_WHITELIST := {
+	"res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png": {
+		"owner": "codex/ui-art",
+		"note": "Gothic Bich full-ground shader atlas used by the service-home profile fallback.",
+	},
+	"res://assets/art/maps/orc_tomb/orc_tomb_ground_tiles.png": {
+		"owner": "codex/maps",
+		"note": "Legacy tomb-family ground tile base shared by orc-tomb/mine/wooma/snake/natural-cave profile draw fallbacks.",
+	},
+}
+
 
 func _ready() -> void:
 	z_index = -20
@@ -79,13 +158,6 @@ func _ready() -> void:
 func set_zone(value: String) -> void:
 	zone_name = value
 	zone_data = {}
-	_rebuild_environment()
-	queue_redraw()
-
-
-func set_zone_data(value: String, data: Dictionary) -> void:
-	zone_name = value
-	zone_data = data.duplicate(true)
 	_rebuild_environment()
 	queue_redraw()
 
@@ -230,55 +302,59 @@ func orc_tomb_light_count() -> int:
 
 
 func bich_ground_atlas_size() -> Vector2i:
-	return BICH_GROUND_ATLAS.get_size()
+	return _bich_ground_atlas().get_size()
 
 
 func bich_prop_atlas_size() -> Vector2i:
-	return BICH_PROP_ATLAS.get_size()
+	return _bich_prop_atlas().get_size()
 
 
 func orc_tomb_ground_atlas_size() -> Vector2i:
-	return ORC_TOMB_GROUND_ATLAS.get_size()
+	return _region_atlas("orc_tomb_ground").get_size()
 
 
 func orc_tomb_prop_atlas_size() -> Vector2i:
-	return ORC_TOMB_PROP_ATLAS.get_size()
+	return _region_atlas("orc_tomb_prop").get_size()
 
 
 func mine_ground_atlas_size() -> Vector2i:
-	return MINE_GROUND_ATLAS.get_size()
+	return _mine_ground_atlas().get_size()
 
 
 func mine_prop_atlas_size() -> Vector2i:
-	return MINE_PROP_ATLAS.get_size()
+	return _region_atlas("mine_prop").get_size()
 
 
 func wooma_temple_ground_atlas_size() -> Vector2i:
-	return WOOMA_TEMPLE_GROUND_ATLAS.get_size()
+	return _region_atlas("wooma_temple_ground").get_size()
 
 
 func wooma_temple_prop_atlas_size() -> Vector2i:
-	return WOOMA_TEMPLE_PROP_ATLAS.get_size()
+	return _region_atlas("wooma_temple_prop").get_size()
 
 
 func wooma_region_atlas_sizes() -> Dictionary:
 	return {
-		"forest_ground": WOOMA_FOREST_GROUND_ATLAS.get_size(), "forest_props": WOOMA_FOREST_PROP_ATLAS.get_size(),
-		"cave_ground": WOOMA_CAVE_GROUND_ATLAS.get_size(), "cave_props": WOOMA_CAVE_PROP_ATLAS.get_size(),
+		"forest_ground": _region_atlas("wooma_forest_ground").get_size(), "forest_props": _region_atlas("wooma_forest_prop").get_size(),
+		"cave_ground": _region_atlas("wooma_cave_ground").get_size(), "cave_props": _region_atlas("wooma_cave_prop").get_size(),
 	}
 
 
 func snake_valley_atlas_sizes() -> Dictionary:
 	return {
-		"valley_ground": SNAKE_VALLEY_GROUND_ATLAS.get_size(), "valley_props": SNAKE_VALLEY_PROP_ATLAS.get_size(),
-		"mine_ground": SNAKE_MINE_GROUND_ATLAS.get_size(), "mine_props": SNAKE_MINE_PROP_ATLAS.get_size(),
+		"valley_ground": _region_atlas("snake_valley_ground").get_size(), "valley_props": _region_atlas("snake_valley_prop").get_size(),
+		"mine_ground": _region_atlas("snake_valley_ground").get_size(), "mine_props": _region_atlas("snake_valley_prop").get_size(),
 	}
 
 
 func natural_cave_atlas_sizes() -> Dictionary:
 	var profile := environment_profile()
-	var ground := load(str(profile.get("ground_atlas_override", ""))) as Texture2D
-	var props := load(str(profile.get("prop_atlas_override", ""))) as Texture2D
+	var ground := _prefetched_texture(
+		str(profile.get("ground_atlas_override", "")), _current_build_stage()
+	)
+	var props := _prefetched_texture(
+		str(profile.get("prop_atlas_override", "")), _current_build_stage()
+	)
 	return {"ground": ground.get_size() if ground != null else Vector2i.ZERO, "props": props.get_size() if props != null else Vector2i.ZERO}
 
 
@@ -443,27 +519,27 @@ func _draw_bich_ground() -> void:
 				tile_index = bich_tile_index_for_world(center)
 				_ground_tile_cache[cache_key] = tile_index
 			var source := Rect2(Vector2(tile_index * 64, 0), BICH_TILE_SIZE)
-			draw_texture_rect_region(BICH_GROUND_ATLAS, Rect2(center - BICH_TILE_SIZE * 0.5, BICH_TILE_SIZE), source)
+			draw_texture_rect_region(_bich_ground_atlas(), Rect2(center - BICH_TILE_SIZE * 0.5, BICH_TILE_SIZE), source)
 
 
 func _draw_orc_tomb_ground() -> void:
 	var theme_tint: Color = _active_theme().get("tint", Color.WHITE)
-	var ground_texture: Texture2D = ORC_TOMB_GROUND_ATLAS
+	var ground_texture: Texture2D = _region_atlas("orc_tomb_ground")
 	var override_path := str(environment_profile().get("ground_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
-		ground_texture = load(override_path) as Texture2D
+		ground_texture = _prefetched_texture(override_path, _current_build_stage())
 	elif uses_mine_art():
-		ground_texture = MINE_GROUND_ATLAS
+		ground_texture = _mine_ground_atlas()
 	elif uses_wooma_temple_art():
-		ground_texture = WOOMA_TEMPLE_GROUND_ATLAS
+		ground_texture = _region_atlas("wooma_temple_ground")
 	elif uses_wooma_forest_art():
-		ground_texture = WOOMA_FOREST_GROUND_ATLAS
+		ground_texture = _region_atlas("wooma_forest_ground")
 	elif uses_wooma_cave_art():
-		ground_texture = WOOMA_CAVE_GROUND_ATLAS
+		ground_texture = _region_atlas("wooma_cave_ground")
 	elif uses_snake_valley_art():
-		ground_texture = SNAKE_VALLEY_GROUND_ATLAS
+		ground_texture = _region_atlas("snake_valley_ground")
 	elif uses_snake_mine_art():
-		ground_texture = SNAKE_MINE_GROUND_ATLAS
+		ground_texture = _region_atlas("snake_valley_ground")
 	var profile := environment_profile()
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	var full_size := str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size"
@@ -486,6 +562,24 @@ func _draw_orc_tomb_ground() -> void:
 
 
 func _rebuild_environment() -> void:
+	# Legacy synchronous path (no coordinator attached): drain the same
+	# descriptor pipeline in one pass. Production entry always uses
+	# prepare_map_build() through the coordinator instead.
+	bootstrap_coordinator = null
+	clear_environment()
+	if not is_inside_tree():
+		return
+	var map_id := _active_map_id()
+	var descriptors := build_map_item_descriptors({})
+	for descriptor: Dictionary in descriptors:
+		build_one_map_item(descriptor)
+	var collision_descriptors := build_collision_descriptors({})
+	for descriptor: Dictionary in collision_descriptors:
+		build_one_collision(descriptor)
+	_finish_map_build()
+
+
+func clear_environment() -> void:
 	_ground_tile_cache.clear()
 	_full_ground_ready = false
 	_gothic_camp_layout.clear()
@@ -506,84 +600,976 @@ func _rebuild_environment() -> void:
 	_source_clear_segments.clear()
 	_source_clear_cell_cache.clear()
 	_collision_focus_source = Vector2i(-99999, -99999)
-	if not is_inside_tree():
+	for node: Node in _source_mask_markers:
+		if is_instance_valid(node):
+			node.queue_free()
+	_source_mask_markers.clear()
+	_gothic_camp_built.clear()
+	_staged_build_complete = false
+
+
+func set_zone_data(value: String, data: Dictionary) -> void:
+	zone_name = value
+	zone_data = data.duplicate(true)
+	if _staged_build_complete and _staged_build_map_id == int(data.get("mapId", -1)):
+		# Environment was already staged-built by the coordinator for this map;
+		# only refresh zone state so the arrival operation can spawn content.
 		return
-	if MapEditorRuntimeBridgeScript.has_runtime_map(_active_map_id()):
-		if _build_editor_runtime_environment(_active_map_id()):
-			return
-		if _build_editor_runtime_fallback_environment(_active_map_id()):
-			return
-	var profile := environment_profile()
-	if not profile.is_empty():
-		_build_profile_environment(profile)
-		# The redesigned Bich surface does not match the legacy collision bitmap.
-		# Visible camp props and the outer boundary are its authoritative collisions.
-		if _active_map_id() != 4:
-			_load_source_collision_mask(profile)
-		if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
-			_build_full_ground(profile)
+	_rebuild_environment()
+	queue_redraw()
 
 
-func _build_editor_runtime_environment(runtime_map_id := -1) -> bool:
-	var runtime := MapEditorRuntimeBridgeScript.load_map(runtime_map_id)
+# ── HC-P1-004 staged production API ──
+
+func prepare_map_build(
+	map_id: int,
+	coordinator: WorldBootstrapCoordinator,
+	map_data := {}
+) -> Dictionary:
+	bootstrap_coordinator = coordinator
+	_staged_build_complete = false
+	_staged_build_map_id = map_id
+	_staged_generation = coordinator.generation
+	_active_stage_label = "BUILD_MAP"
+	var resolved := map_data
+	if resolved.is_empty():
+		resolved = zone_data.duplicate(true)
+		if resolved.is_empty():
+			resolved = {"mapId": map_id, "name": _default_zone_name(map_id)}
+	var zone_name_value := str(resolved.get("name", ""))
+	zone_name = zone_name_value if not zone_name_value.is_empty() else _default_zone_name(map_id)
+	zone_data = resolved.duplicate(true)
+	clear_environment()
+	if coordinator != null:
+		coordinator.collect_map_resources(resolved)
+		_collect_target_map_resources(map_id)
+	_pending_map_descriptors = build_map_item_descriptors(resolved)
+	_pending_collision_descriptors = build_collision_descriptors(resolved)
+	return {
+		"ok": true,
+		"map_id": map_id,
+		"planned_map_item_count": _pending_map_descriptors.size(),
+		"planned_collision_count": _pending_collision_descriptors.size(),
+	}
+
+
+func set_pending_arrival_position(position_px: Vector2) -> void:
+	_pending_arrival_position = position_px
+
+
+func submit_staged_build() -> void:
+	if bootstrap_coordinator == null:
+		return
+	bootstrap_coordinator.submit_map_descriptors(_pending_map_descriptors)
+	bootstrap_coordinator.submit_collision_descriptors(_pending_collision_descriptors)
+
+
+func finish_map_build() -> void:
+	_finish_map_build()
+
+
+func _finish_map_build() -> void:
+	_staged_build_complete = true
+	_staged_build_map_id = _active_map_id()
+	queue_redraw()
+
+
+func _default_zone_name(map_id: int) -> String:
+	if map_id == 4:
+		return "比奇省"
+	if _orc_tomb_map_id() in [217, 218, 221]:
+		return "兽人古墓"
+	return "未命名地图"
+
+
+func _map_id_from_data(map_data: Dictionary) -> int:
+	var map_id := int(map_data.get("mapId", -1))
+	if map_id > 0:
+		return map_id
+	return _active_map_id()
+
+
+func _generation_token() -> int:
+	if bootstrap_coordinator != null:
+		return bootstrap_coordinator.generation
+	return _staged_generation
+
+
+func _generation_is_current() -> bool:
+	if bootstrap_coordinator != null:
+		return bootstrap_coordinator.is_generation_current(_staged_generation)
+	return true
+
+
+func _append_environment_node(node: Node) -> Node:
+	if not _generation_is_current():
+		node.free()
+		return null
+	add_child(node)
+	_environment_nodes.append(node)
+	return node
+
+
+func _append_actor_sort_node(root: Node2D, sprite: Sprite2D) -> Node2D:
+	if not _generation_is_current():
+		root.free()
+		return null
+	get_parent().add_child(root)
+	root.add_child(sprite)
+	_environment_nodes.append(root)
+	return root
+
+
+# ── HC-P1-004 map descriptors ──
+
+func _descriptor(
+	kind: String,
+	source_index: int,
+	layer: String,
+	resource_path: String,
+	position_px: Vector2,
+	z_index: int,
+	payload: Dictionary,
+	generation: int
+) -> Dictionary:
+	return {
+		"kind": kind,
+		"source_index": source_index,
+		"layer": layer,
+		"resource_path": resource_path,
+		"position_px": position_px,
+		"z_index": z_index,
+		"payload": payload,
+		"generation": generation,
+	}
+
+
+func _collision_descriptor(
+	kind: String,
+	source_index: int,
+	payload: Dictionary,
+	generation: int
+) -> Dictionary:
+	return {
+		"kind": kind,
+		"source_index": source_index,
+		"collision_kind": kind,
+		"payload": payload,
+		"generation": generation,
+	}
+
+
+func _runtime_data_for(map_id: int) -> Dictionary:
+	if not MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		return {}
+	return MapEditorRuntimeBridgeScript.load_map(map_id)
+
+
+func _visual_data_for(map_id: int, runtime: Dictionary) -> Dictionary:
 	if runtime.is_empty():
-		return false
-	var visual := _load_editor_runtime_visual(runtime_map_id, runtime)
-	if visual.is_empty():
-		return false
-	_editor_runtime_visual = visual
+		return {}
+	return _load_editor_runtime_visual(map_id, runtime)
+
+
+func _ground_atlas_path_for(profile: Dictionary) -> String:
+	var override_path := str(profile.get("ground_atlas_override", ""))
+	if not override_path.is_empty() and ResourceLoader.exists(override_path):
+		return override_path
+	if _active_map_id() == 4 or str(profile.get("asset_set", "")) == "bich":
+		return _REGION_ATLAS_PATHS.get("gothic_bich_ground", "")
+	return _REGION_ATLAS_PATHS.get("orc_tomb_ground", "")
+
+
+func _prop_atlas_path_for(profile: Dictionary) -> String:
+	var override_path := str(profile.get("prop_atlas_override", ""))
+	if not override_path.is_empty() and ResourceLoader.exists(override_path):
+		return override_path
+	var asset_set := str(profile.get("asset_set", ""))
+	if asset_set == "":
+		asset_set = str(EnvironmentCatalogScript.get_theme(
+			str(profile.get("theme", ""))
+		).get("asset_set", ""))
+	match asset_set:
+		"mine":
+			return _REGION_ATLAS_PATHS.get("mine_prop", "")
+		"wooma_temple":
+			return _REGION_ATLAS_PATHS.get("wooma_temple_prop", "")
+		"wooma_forest":
+			return _REGION_ATLAS_PATHS.get("wooma_forest_prop", "")
+		"wooma_cave":
+			return _REGION_ATLAS_PATHS.get("wooma_cave_prop", "")
+		"snake_valley", "snake_mine":
+			return _REGION_ATLAS_PATHS.get("snake_valley_prop", "")
+		"bich":
+			return _REGION_ATLAS_PATHS.get("bich_prop", "")
+	return _REGION_ATLAS_PATHS.get("orc_tomb_prop", "")
+
+
+func _light_atlas_path_for(profile: Dictionary) -> String:
+	var override_path := str(profile.get("light_texture_override", ""))
+	if not override_path.is_empty() and ResourceLoader.exists(override_path):
+		return override_path
+	var asset_set := str(profile.get("asset_set", ""))
+	if asset_set == "":
+		asset_set = str(EnvironmentCatalogScript.get_theme(
+			str(profile.get("theme", ""))
+		).get("asset_set", ""))
+	match asset_set:
+		"mine":
+			return _REGION_ATLAS_PATHS.get("mine_lamp_glow", "")
+		"wooma_temple":
+			return _REGION_ATLAS_PATHS.get("wooma_temple_fire_glow", "")
+		"wooma_cave":
+			return _REGION_ATLAS_PATHS.get("wooma_cave_glow", "")
+		"snake_mine":
+			return _REGION_ATLAS_PATHS.get("snake_mine_glow", "")
+	return _REGION_ATLAS_PATHS.get("orc_tomb_fire_glow", "")
+
+
+func build_map_item_descriptors(map_data: Dictionary) -> Array:
+	var map_id := _map_id_from_data(map_data)
+	var runtime := _runtime_data_for(map_id)
+	var visual := _visual_data_for(map_id, runtime)
+	var generation := _generation_token()
+	var descriptors: Array[Dictionary] = []
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id) and not runtime.is_empty():
+		if not visual.is_empty():
+			_editor_runtime_visual = visual
+			_append_chunk_descriptors(descriptors, visual, generation)
+			descriptors.append(_descriptor(
+				"guard_band", 1, "ground", "", Vector2.ZERO, -30,
+				{"visual": visual}, generation
+			))
+			_append_instance_descriptors(descriptors, runtime, generation)
+		else:
+			var profile := environment_profile()
+			if not profile.is_empty():
+				var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+				if raw_size.size() == 2:
+					var runtime_profile := profile.duplicate(true)
+					runtime_profile["source_size"] = Vector2i(
+						int(raw_size[0]), int(raw_size[1])
+					)
+					descriptors.append(_descriptor(
+						"full_ground", 0, "ground",
+						_ground_atlas_path_for(runtime_profile), Vector2.ZERO, -20,
+						{"profile": runtime_profile}, generation
+					))
+					_append_instance_descriptors(descriptors, runtime, generation)
+	elif not environment_profile().is_empty():
+		_append_profile_map_descriptors(descriptors, map_id, generation)
+	_pending_map_descriptors = descriptors
+	return descriptors
+
+
+func _append_chunk_descriptors(
+	descriptors: Array,
+	visual: Dictionary,
+	generation: int
+) -> void:
 	var center: Array = visual.get("ground_pixel_center", [8192, 4096])
-	for chunk: Dictionary in visual.get("chunks", []):
-		var image_path := str(chunk.get("image", ""))
-		if not image_path.begins_with("res://"):
-			image_path = "res://" + image_path
+	var center_px := Vector2(float(center[0]), float(center[1]))
+	for index in visual.get("chunks", []).size():
+		var chunk: Dictionary = visual.get("chunks", [])[index]
+		var image_path := _res_path(str(chunk.get("image", "")))
 		if not ResourceLoader.exists(image_path):
 			continue
 		var rect: Array = chunk.get("rect_px", [])
 		if rect.size() != 4:
 			continue
-		var texture := load(image_path) as Texture2D
-		if texture == null:
+		descriptors.append(_descriptor(
+			"chunk_draw", index, "ground", image_path,
+			Vector2(float(rect[0]) - center_px.x, float(rect[1]) - center_px.y),
+			-20,
+			{
+				"chunk_id": str(chunk.get("chunk_id", "")),
+				"rect": Rect2(
+					float(rect[0]) - center_px.x,
+					float(rect[1]) - center_px.y,
+					float(rect[2]),
+					float(rect[3])
+				),
+			},
+			generation
+		))
+
+
+func _append_instance_descriptors(
+	descriptors: Array,
+	runtime: Dictionary,
+	generation: int
+) -> void:
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [64, 64])
+	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
+		runtime.get("instances", [])
+	)
+	for command_index in commands.size():
+		var command: Dictionary = commands[command_index]
+		var image_path := str(command.get("image_path", ""))
+		if image_path.is_empty():
 			continue
-		_editor_runtime_chunk_draws.append({
-			"chunk_id": str(chunk.get("chunk_id", "")),
-			"texture": texture,
-			"rect": Rect2(
-				float(rect[0]) - float(center[0]),
-				float(rect[1]) - float(center[1]),
-				float(rect[2]),
-				float(rect[3])
-			),
-		})
-	_build_editor_runtime_guard_band(visual)
-	_build_editor_runtime_instances(runtime)
-	_build_editor_runtime_collisions(runtime)
-	_full_ground_ready = false
-	return true
+		var resource_path := _res_path(image_path)
+		if not ResourceLoader.exists(resource_path):
+			continue
+		var render_domain := str(command.get(
+			"render_domain",
+			RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
+		))
+		descriptors.append(_descriptor(
+			"instance_sprite", command_index, "object",
+			resource_path, Vector2.ZERO, -5,
+			{
+				"command": command,
+				"design_size": size,
+				"render_domain": render_domain,
+			},
+			generation
+		))
 
 
-func _build_editor_runtime_fallback_environment(runtime_map_id: int) -> bool:
-	var runtime := MapEditorRuntimeBridgeScript.load_map(runtime_map_id)
+func _append_profile_map_descriptors(
+	descriptors: Array,
+	map_id: int,
+	generation: int
+) -> void:
 	var profile := environment_profile()
-	if runtime.is_empty() or profile.is_empty():
-		return false
-	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
-	if raw_size.size() != 2:
-		return false
-	var runtime_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	if runtime_size.x <= 0 or runtime_size.y <= 0:
-		return false
-	# Some approved editor maps predate packaged ground chunk manifests. Keep
-	# their authored instances and collision grid authoritative, while drawing
-	# the matching legacy atlas across the editor-sized diamond. This avoids
-	# mixing the 38x38 editor route with a 400x400 legacy collision bitmap.
-	var runtime_profile := profile.duplicate(true)
-	runtime_profile["source_size"] = runtime_size
-	_build_full_ground(runtime_profile)
-	_build_editor_runtime_instances(runtime)
-	_build_editor_runtime_collisions(runtime)
-	_editor_runtime_fallback_ground = _full_ground_ready
-	return _editor_runtime_fallback_ground
+	if profile.is_empty():
+		return
+	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+		descriptors.append(_descriptor(
+			"gothic_camp", 0, "ground", "", Vector2.ZERO, -20,
+			{
+				"profile": profile,
+				"home": profile.get("runtime_home_position", Vector2.ZERO),
+			},
+			generation
+		))
+		if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
+			descriptors.append(_descriptor(
+				"full_ground", 1, "ground",
+				_ground_atlas_path_for(profile), Vector2.ZERO, -20,
+				{"profile": profile},
+				generation
+			))
+		return
+	if _active_asset_set() == "bich":
+		for index in profile.get("props", []).size():
+			var prop_data: Dictionary = profile.get("props", [])[index]
+			var position: Vector2 = prop_data.get("position", Vector2.ZERO)
+			descriptors.append(_descriptor(
+				"prop_sprite", index, "prop",
+				_prop_atlas_path_for(profile), position, -5,
+				{
+					"kind": int(prop_data.get("kind", 0)),
+					"canopy": bool(prop_data.get("canopy", false)),
+					"prop": prop_data,
+					"tomb": false,
+				},
+				generation
+			))
+		if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
+			descriptors.append(_descriptor(
+				"full_ground", 2000, "ground",
+				_ground_atlas_path_for(profile), Vector2.ZERO, -20,
+				{"profile": profile},
+				generation
+			))
+		return
+	for index in profile.get("props", []).size():
+		var prop_data: Dictionary = profile.get("props", [])[index]
+		var kind := int(prop_data.get("kind", 0))
+		var position: Vector2 = prop_data.get("position", Vector2.ZERO)
+		var canopy := bool(prop_data.get("canopy", kind in [0, 1, 5]))
+		descriptors.append(_descriptor(
+			"prop_sprite", index, "prop",
+			_prop_atlas_path_for(profile), position, -5,
+			{
+				"kind": kind,
+				"canopy": canopy,
+				"prop": prop_data,
+				"tomb": true,
+			},
+			generation
+		))
+	for index in profile.get("braziers", []).size():
+		var brazier_position: Vector2 = profile.get("braziers", [])[index]
+		descriptors.append(_descriptor(
+			"prop_sprite", 1000 + index, "prop",
+			_prop_atlas_path_for(profile), brazier_position, -5,
+			{
+				"kind": 2,
+				"canopy": true,
+				"prop": {"position": brazier_position, "occlusion": true},
+				"tomb": true,
+			},
+			generation
+		))
+		descriptors.append(_descriptor(
+			"light_glow", 2000 + index, "light",
+			_light_atlas_path_for(profile), brazier_position + Vector2(0, -54), -4,
+			{"position": brazier_position + Vector2(0, -54)},
+			generation
+		))
+	if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
+		descriptors.append(_descriptor(
+			"full_ground", 3000, "ground",
+			_ground_atlas_path_for(profile), Vector2.ZERO, -20,
+			{"profile": profile},
+			generation
+		))
+
+
+# ── HC-P1-004 target-map resource collection ──
+
+func _region_id_for_map(map_id: int, profile: Dictionary) -> String:
+	if map_id == 4:
+		return "bich"
+	var asset_set := str(profile.get("asset_set", ""))
+	if asset_set == "":
+		asset_set = str(EnvironmentCatalogScript.get_theme(
+			str(profile.get("theme", ""))
+		).get("asset_set", ""))
+	if asset_set != "":
+		return asset_set
+	if _orc_tomb_map_id() in [217, 218, 221]:
+		return "orc_tomb"
+	return "unknown"
+
+
+func _collect_target_map_resources(map_id: int) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var profile := environment_profile()
+	var region := _region_id_for_map(map_id, profile)
+	coord.set_target_region(region)
+	var runtime := _runtime_data_for(map_id)
+	var visual := _visual_data_for(map_id, runtime)
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id) and not runtime.is_empty():
+		if not visual.is_empty():
+			for chunk: Dictionary in visual.get("chunks", []):
+				var image_path := _res_path(str(chunk.get("image", "")))
+				if not image_path.is_empty() and ResourceLoader.exists(image_path):
+					coord.register_resource(
+						image_path, "texture", true, "editor_chunk", "target", region
+					)
+		_register_command_resources(runtime, region)
+		_register_profile_ground_resources(map_id, profile, region)
+		# Editor runtime maps still resolve prop/light atlases through the
+		# profile (legacy draw fallbacks and diagnostics), so they must be
+		# prefetched as target-map resources.
+		_register_profile_prop_resources(profile, region)
+		_register_profile_light_resources(profile, region)
+		return
+	_register_profile_ground_resources(map_id, profile, region)
+	_register_profile_prop_resources(profile, region)
+	_register_profile_light_resources(profile, region)
+	var mask_path := str(profile.get("collision_mask_path", ""))
+	if map_id != 4 and not mask_path.is_empty() and ResourceLoader.exists(mask_path):
+		coord.register_resource(
+			mask_path, "collision_mask", true, "collision_mask", "target", region
+		)
+	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+		_register_gothic_camp_resources(region)
+
+
+func _register_command_resources(runtime: Dictionary, region: String) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
+		runtime.get("instances", [])
+	)
+	for command: Dictionary in commands:
+		var image_path := _res_path(str(command.get("image_path", "")))
+		if not image_path.is_empty() and ResourceLoader.exists(image_path):
+			coord.register_resource(
+				image_path, "texture", true, "editor_instance", "target", region
+			)
+
+
+func _register_profile_ground_resources(
+	map_id: int,
+	profile: Dictionary,
+	region: String
+) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var ground_path := _ground_atlas_path_for(profile)
+	if not ground_path.is_empty() and ResourceLoader.exists(ground_path):
+		var is_shared := SHARED_GLOBAL_RESOURCE_WHITELIST.has(ground_path)
+		coord.register_resource(
+			ground_path, "texture", true, "ground_atlas",
+			"shared" if is_shared else "target",
+			"global" if is_shared else region
+		)
+	if _uses_tomb_atlas() and not MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		# The legacy tomb-family draw fallback only runs for non-editor
+		# profiles; editor runtime maps render authored chunks instead.
+		var base_path: String = str(
+			_REGION_ATLAS_PATHS.get("orc_tomb_ground", "")
+		)
+		if (
+			not base_path.is_empty()
+			and ResourceLoader.exists(base_path)
+			and base_path != ground_path
+		):
+			coord.register_resource(
+				base_path, "texture", true, "tomb_ground_draw",
+				"shared", "global"
+			)
+	if map_id == 4:
+		var bich_ground: String = str(_REGION_ATLAS_PATHS.get("bich_ground", ""))
+		if not bich_ground.is_empty() and ResourceLoader.exists(bich_ground):
+			coord.register_resource(
+				bich_ground, "texture", true, "bich_ground_draw", "target", region
+			)
+
+
+func _register_profile_prop_resources(profile: Dictionary, region: String) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var prop_path := _prop_atlas_path_for(profile)
+	if not prop_path.is_empty() and ResourceLoader.exists(prop_path):
+		coord.register_resource(
+			prop_path, "texture", true, "prop_atlas", "target", region
+		)
+
+
+func _register_profile_light_resources(profile: Dictionary, region: String) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var has_lights: bool = profile.get("braziers", []).size() > 0
+	var has_override: bool = not str(
+		profile.get("light_texture_override", "")
+	).is_empty()
+	if not has_lights and not has_override:
+		return
+	var light_path := _light_atlas_path_for(profile)
+	if not light_path.is_empty() and ResourceLoader.exists(light_path):
+		coord.register_resource(
+			light_path, "texture", true, "light_atlas", "target", region
+		)
+
+
+func _register_gothic_camp_resources(region: String) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var ground_path := "res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png"
+	coord.register_resource(
+		ground_path, "texture", true, "gothic_camp_ground", "shared", "global"
+	)
+	var layout := GothicBichCampBuilderScript.load_layout()
+	for record: Variant in layout.get("props", []):
+		if not record is Dictionary:
+			continue
+		var asset_id := str(record.get("asset", ""))
+		if asset_id.is_empty():
+			continue
+		var path := "res://assets/presentation/skins/gothic_bich_camp/sprites/%s.png" % asset_id
+		if ResourceLoader.exists(path):
+			coord.register_resource(
+				path, "texture", true, "gothic_camp_prop", "target", region
+			)
+	for record: Variant in layout.get("lights", []):
+		if not record is Dictionary:
+			continue
+		var texture_id := str(record.get("texture", ""))
+		if texture_id.is_empty():
+			continue
+		var path := "res://assets/presentation/skins/gothic_bich_camp/sprites/%s.png" % texture_id
+		if ResourceLoader.exists(path):
+			coord.register_resource(
+				path, "texture", true, "gothic_camp_light", "target", region
+			)
+
+
+func _build_gothic_camp_node(payload: Dictionary) -> Node:
+	if not _generation_is_current():
+		return null
+	var home: Vector2 = payload.get("home", Vector2.ZERO)
+	var built := GothicBichCampBuilderScript.build(self, home)
+	_gothic_camp_built = built
+	_gothic_camp_layout = built.get("layout", {})
+	_environment_nodes.append_array(built.get("nodes", []))
+	var nodes: Array = built.get("nodes", [])
+	return nodes.front() as Node if not nodes.is_empty() else null
+
+
+func build_one_map_item(descriptor: Dictionary) -> Node:
+	if not _generation_is_current():
+		return null
+	_active_stage_label = "BUILD_MAP"
+	var kind := str(descriptor.get("kind", ""))
+	var resource_path := str(descriptor.get("resource_path", ""))
+	var payload: Dictionary = descriptor.get("payload", {})
+	match kind:
+		"chunk_draw":
+			var texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if texture == null:
+				return null
+			_editor_runtime_chunk_draws.append({
+				"chunk_id": str(payload.get("chunk_id", "")),
+				"texture": texture,
+				"rect": payload.get("rect", Rect2()),
+			})
+			var marker := Node2D.new()
+			marker.name = "WorldChunk_%s" % str(payload.get("chunk_id", "x"))
+			marker.set_meta("editor_runtime_chunk_marker", true)
+			marker.set_meta(
+				"editor_runtime_chunk_id", str(payload.get("chunk_id", ""))
+			)
+			marker.z_index = int(descriptor.get("z_index", -20))
+			return _append_environment_node(marker)
+		"guard_band":
+			return _build_guard_band_node(payload)
+		"full_ground":
+			var ground_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if ground_texture == null:
+				return null
+			return _build_full_ground_node(payload, ground_texture)
+		"instance_sprite":
+			var instance_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if instance_texture == null:
+				return null
+			return _build_one_editor_runtime_instance(
+				payload.get("command", {}),
+				int(descriptor.get("source_index", 0)),
+				payload.get("design_size", Vector2i.ZERO),
+				instance_texture
+			)
+		"prop_sprite":
+			var prop_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if prop_texture == null:
+				return null
+			return _build_prop_sprite_node(payload, prop_texture)
+		"light_glow":
+			var light_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if light_texture == null:
+				return null
+			return _build_light_glow_node(payload, light_texture)
+		"gothic_camp":
+			return _build_gothic_camp_node(payload)
+	return null
+
+
+# ── HC-P1-004 collision descriptors ──
+
+func build_collision_descriptors(map_data: Dictionary) -> Array:
+	var map_id := _map_id_from_data(map_data)
+	var runtime := _runtime_data_for(map_id)
+	var generation := _generation_token()
+	var descriptors: Array[Dictionary] = []
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id) and not runtime.is_empty():
+		_append_editor_runtime_collision_descriptors(descriptors, runtime, generation)
+	elif not environment_profile().is_empty():
+		_append_profile_collision_descriptors(descriptors, map_id, generation)
+	_pending_collision_descriptors = descriptors
+	return descriptors
+
+
+func _append_editor_runtime_collision_descriptors(
+	descriptors: Array,
+	runtime: Dictionary,
+	generation: int
+) -> void:
+	var raw_size: Array = runtime.design.get("design_size", [256, 256])
+	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	_editor_runtime_size = size
+	_editor_runtime_blocked_tiles = RuntimeCollisionGeometryScript.blocked_cell_set(
+		runtime.collision
+	)
+	var inner := RuntimeCollisionGeometryScript.map_actor_boundary_world(size)
+	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_world(size)
+	for side in range(inner.size()):
+		var next := (side + 1) % 4
+		descriptors.append(_collision_descriptor(
+			"boundary_side", side,
+			{
+				"outer": outer[side],
+				"outer_next": outer[next],
+				"inner": inner[side],
+				"inner_next": inner[next],
+				"side": side,
+				"size": size,
+			},
+			generation
+		))
+	for rect: Rect2i in RuntimeCollisionGeometryScript.blocked_cell_runs(
+		runtime.collision
+	):
+		descriptors.append(_collision_descriptor(
+			"blocked_rect_run", descriptors.size(),
+			{"rect": rect, "size": size},
+			generation
+		))
+
+
+func _append_profile_collision_descriptors(
+	descriptors: Array,
+	map_id: int,
+	generation: int
+) -> void:
+	var profile := environment_profile()
+	if profile.is_empty():
+		return
+	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+		descriptors.append(_collision_descriptor(
+			"gothic_camp_collisions", 0, {}, generation
+		))
+		var corners: PackedVector2Array = profile.get(
+			"world_corners", PackedVector2Array()
+		)
+		if corners.size() == 4:
+			for side in range(4):
+				descriptors.append(_collision_descriptor(
+					"boundary_segment", 10 + side,
+					{
+						"start": corners[side],
+						"finish": corners[(side + 1) % 4],
+						"owner": "bich",
+					},
+					generation
+				))
+		return
+	if _active_asset_set() == "bich":
+		for index in profile.get("props", []).size():
+			var prop_data: Dictionary = profile.get("props", [])[index]
+			_append_obstacle_descriptor(
+				descriptors, prop_data, index, "bich", generation
+			)
+		var corners: PackedVector2Array = profile.get(
+			"world_corners", PackedVector2Array()
+		)
+		if corners.size() == 4:
+			for side in range(4):
+				descriptors.append(_collision_descriptor(
+					"boundary_segment", 100 + side,
+					{
+						"start": corners[side],
+						"finish": corners[(side + 1) % 4],
+						"owner": "bich",
+					},
+					generation
+				))
+		return
+	for index in profile.get("props", []).size():
+		var prop_data: Dictionary = profile.get("props", [])[index]
+		_append_obstacle_descriptor(
+			descriptors, prop_data, index, "tomb", generation
+		)
+	if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
+		var corners: PackedVector2Array = profile.get(
+			"world_corners", PackedVector2Array()
+		)
+		if corners.size() == 4:
+			for side in range(4):
+				descriptors.append(_collision_descriptor(
+					"boundary_segment", 200 + side,
+					{
+						"start": corners[side],
+						"finish": corners[(side + 1) % 4],
+						"owner": "tomb",
+					},
+					generation
+				))
+	var mask_path := str(profile.get("collision_mask_path", ""))
+	if map_id != 4 and not mask_path.is_empty() and ResourceLoader.exists(mask_path):
+		descriptors.append(_collision_descriptor(
+			"source_mask_load", 1000,
+			{"profile": profile},
+			generation
+		))
+
+
+func _append_obstacle_descriptor(
+	descriptors: Array,
+	prop_data: Dictionary,
+	index: int,
+	owner: String,
+	generation: int
+) -> void:
+	var position: Vector2 = prop_data.get("position", Vector2.ZERO)
+	var offset: Vector2 = prop_data.get("collision_offset", Vector2.ZERO)
+	if owner == "tomb" and prop_data.get("collision_offset", null) == null:
+		offset = Vector2(0, -8)
+	var shape := str(prop_data.get("shape", ""))
+	if shape == "circle":
+		descriptors.append(_collision_descriptor(
+			"obstacle_circle", index,
+			{
+				"position": position + offset,
+				"radius": float(prop_data.get("radius", 22.0)),
+				"owner": owner,
+			},
+			generation
+		))
+	elif shape == "rect":
+		descriptors.append(_collision_descriptor(
+			"obstacle_rect", index,
+			{
+				"position": position + offset,
+				"size": prop_data.get("size", Vector2(88, 34)),
+				"owner": owner,
+			},
+			generation
+		))
+
+
+func build_one_collision(descriptor: Dictionary) -> CollisionObject2D:
+	if not _generation_is_current():
+		return null
+	_active_stage_label = "BUILD_COLLISION"
+	var kind := str(descriptor.get("kind", ""))
+	var payload: Dictionary = descriptor.get("payload", {})
+	match kind:
+		"boundary_side":
+			return _build_editor_boundary_side(payload)
+		"blocked_rect_run":
+			return _build_blocked_rect_run(payload)
+		"obstacle_circle":
+			return _build_obstacle_body(payload, "circle")
+		"obstacle_rect":
+			return _build_obstacle_body(payload, "rect")
+		"boundary_segment":
+			return _build_boundary_segment(payload)
+		"source_mask_load":
+			return _build_source_mask_load(payload)
+		"gothic_camp_collisions":
+			return _build_gothic_camp_collisions(payload)
+	return null
+
+
+func _build_editor_boundary_side(payload: Dictionary) -> CollisionObject2D:
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	var shape := ConvexPolygonShape2D.new()
+	shape.points = PackedVector2Array([
+		payload.get("outer", Vector2.ZERO),
+		payload.get("outer_next", Vector2.ZERO),
+		payload.get("inner_next", Vector2.ZERO),
+		payload.get("inner", Vector2.ZERO),
+	])
+	var collision := CollisionShape2D.new()
+	collision.name = "MapBoundary%d" % int(payload.get("side", 0))
+	collision.shape = shape
+	body.add_child(collision)
+	body.set_meta("editor_runtime_boundary", true)
+	_source_collision_shape_count += 1
+	return _append_environment_node(body) as CollisionObject2D
+
+
+func _build_blocked_rect_run(payload: Dictionary) -> CollisionObject2D:
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	body.set_meta("editor_runtime_blocked_run", true)
+	var rect: Rect2i = payload.get("rect", Rect2i())
+	var size: Vector2i = payload.get("size", Vector2i.ZERO)
+	var shape := ConvexPolygonShape2D.new()
+	shape.points = RuntimeCollisionGeometryScript.rect_polygon_world(
+		[float(rect.position.x), float(rect.position.y), float(rect.size.x), float(rect.size.y)],
+		size
+	)
+	var collision := CollisionShape2D.new()
+	collision.shape = shape
+	body.add_child(collision)
+	_source_collision_shape_count += 1
+	return _append_environment_node(body) as CollisionObject2D
+
+
+func _build_obstacle_body(payload: Dictionary, shape_kind: String) -> CollisionObject2D:
+	var owner := str(payload.get("owner", "tomb"))
+	var position: Vector2 = payload.get("position", Vector2.ZERO)
+	var body := StaticBody2D.new()
+	body.position = position
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	var collision := CollisionShape2D.new()
+	if shape_kind == "circle":
+		var shape := CircleShape2D.new()
+		shape.radius = float(payload.get("radius", 22.0))
+		collision.shape = shape
+		if owner == "bich":
+			_bich_collision_shapes.append({
+				"kind": "circle",
+				"position": position,
+				"radius": float(payload.get("radius", 22.0)),
+			})
+		else:
+			_tomb_collision_shapes.append({
+				"kind": "circle",
+				"position": position,
+				"radius": float(payload.get("radius", 22.0)),
+			})
+	else:
+		var shape := RectangleShape2D.new()
+		shape.size = payload.get("size", Vector2(88, 34))
+		collision.shape = shape
+		if owner == "bich":
+			_bich_collision_shapes.append({
+				"kind": "rect",
+				"position": position,
+				"size": shape.size,
+			})
+		else:
+			_tomb_collision_shapes.append({
+				"kind": "rect",
+				"position": position,
+				"size": shape.size,
+			})
+	body.add_child(collision)
+	return _append_environment_node(body) as CollisionObject2D
+
+
+func _build_boundary_segment(payload: Dictionary) -> CollisionObject2D:
+	var owner := str(payload.get("owner", "tomb"))
+	var start: Vector2 = payload.get("start", Vector2.ZERO)
+	var finish: Vector2 = payload.get("finish", Vector2.ZERO)
+	var shape := SegmentShape2D.new()
+	shape.a = start
+	shape.b = finish
+	var body := _add_static_body_node(Vector2.ZERO, shape)
+	if owner == "bich":
+		_bich_collision_shapes.append({
+			"kind": "segment", "start": start, "finish": finish,
+		})
+	else:
+		_tomb_collision_shapes.append({
+			"kind": "segment", "start": start, "finish": finish,
+		})
+	return body
+
+
+func _build_source_mask_load(payload: Dictionary) -> CollisionObject2D:
+	var profile: Dictionary = payload.get("profile", {})
+	_load_source_collision_mask(profile)
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	body.set_meta("source_mask_loaded", true)
+	if not _generation_is_current():
+		body.free()
+		return null
+	add_child(body)
+	_source_mask_markers.append(body)
+	return body
+
+
+func _build_gothic_camp_collisions(payload: Dictionary) -> CollisionObject2D:
+	for node: Node in _gothic_camp_built.get("nodes", []):
+		if node is StaticBody2D and bool(node.get_meta("gothic_bich_camp", false)):
+			return node as CollisionObject2D
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	return _append_environment_node(body) as CollisionObject2D
 
 
 func _load_editor_runtime_visual(
@@ -616,7 +1602,8 @@ func _read_editor_json(path: String) -> Dictionary:
 	return parsed if parsed is Dictionary else {}
 
 
-func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
+func _build_guard_band_node(payload: Dictionary) -> Node:
+	var visual: Dictionary = payload.get("visual", {})
 	var raw_size: Array = visual.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var corners := editor_runtime_ground_boundary_world(size)
@@ -693,8 +1680,7 @@ void fragment() {
 		"fade_tiles", EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES
 	)
 	guard.material = material
-	add_child(guard)
-	_environment_nodes.append(guard)
+	return _append_environment_node(guard)
 
 
 func editor_runtime_chunk_texture_count() -> int:
@@ -717,92 +1703,73 @@ func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	)
 	for command_index in commands.size():
 		var command: Dictionary = commands[command_index]
-		var image_path := str(command.get("image_path", ""))
-		if image_path.is_empty():
-			continue
-		var resource_path := (
-			image_path if image_path.begins_with("res://") else "res://" + image_path
-		)
+		_build_one_editor_runtime_instance(command, command_index, size)
+
+
+func _build_one_editor_runtime_instance(
+	command: Dictionary,
+	command_index: int,
+	size: Vector2i,
+	texture: Texture2D = null
+) -> Node:
+	var image_path := str(command.get("image_path", ""))
+	if image_path.is_empty():
+		return null
+	var resource_path := _res_path(image_path)
+	if texture == null:
 		if not ResourceLoader.exists(resource_path):
-			continue
-		var texture := load(resource_path) as Texture2D
-		if texture == null:
-			continue
-		var geometry := RuntimeVisualGeometryScript.runtime_command_geometry(
-			command, size, texture.get_size()
-		)
-		var sprite := Sprite2D.new()
-		sprite.name = "EditorRuntimeInstance_%d" % command_index
-		sprite.set_meta("editor_runtime_instance", true)
-		sprite.set_meta(
-			"editor_runtime_instance_id",
-			str(command.get("instance", {}).get("instance_id", ""))
-		)
-		sprite.set_meta("editor_runtime_image_path", image_path)
-		sprite.set_meta("editor_runtime_command_index", command_index)
-		sprite.texture = texture
-		sprite.centered = false
-		# Keep the node at the authored foot/part center and move only the drawn
-		# pixels.  Using top_left as position would rotate wall parts around the
-		# wrong pivot and recreate the editor/runtime offset.
-		var render_domain := str(command.get(
-			"render_domain",
-			RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
-		))
-		var actor_sort_root: Node2D = null
-		var parent_world_origin := Vector2.ZERO
-		if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
-			actor_sort_root = Node2D.new()
-			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
-			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
-				command, size
-			)
-			parent_world_origin = actor_sort_root.position
-			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
-			actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
-			actor_sort_root.set_meta("editor_runtime_instance_id", str(
-				command.get("instance", {}).get("instance_id", "")
-			))
-		RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
-			sprite, command, geometry, parent_world_origin
-		)
-		sprite.set_meta("editor_runtime_render_domain", render_domain)
-		if actor_sort_root != null:
-			# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
-			# Keep the sprite in that same z domain so Y order, not a fixed z,
-			# determines whether the wall front is before or behind an actor.
-			sprite.z_index = 0
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		if actor_sort_root != null and get_parent() != null:
-			get_parent().add_child(actor_sort_root)
-			actor_sort_root.add_child(sprite)
-			_environment_nodes.append(actor_sort_root)
-		else:
-			add_child(sprite)
-			_environment_nodes.append(sprite)
-
-
-func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
-	var body := StaticBody2D.new(); body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER; body.collision_mask = 0; add_child(body); _environment_nodes.append(body)
-	var raw_size: Array = runtime.design.get("design_size", [256,256]); var size := Vector2i(int(raw_size[0]),int(raw_size[1]))
-	_editor_runtime_size = size
-	# Runtime ground chunks only cover the authored diamond.  Internal blocked
-	# tiles do not stop an actor from crossing that diamond and walking into the
-	# black area outside it, so build a permanent four-sided collision ring.
-	# The ring lives just outside the last logical tile and applies equally to
-	# the player and monsters through environment collision layer 1.
-	_add_editor_map_boundary(body, size)
-	# blocked_tiles is the compiled, final collision authority. It already
-	# contains instance and manual sources after every single-cell erasure.
-	# Building manual_shapes again would duplicate geometry and, worse, restore
-	# cells the author explicitly erased (Bich currently has 191 such cells).
-	_editor_runtime_blocked_tiles = RuntimeCollisionGeometryScript.blocked_cell_set(
-		runtime.collision
+			return null
+		texture = _prefetched_texture(resource_path, "BUILD_MAP")
+	if texture == null:
+		return null
+	var geometry := RuntimeVisualGeometryScript.runtime_command_geometry(
+		command, size, texture.get_size()
 	)
-	for rect: Rect2i in RuntimeCollisionGeometryScript.blocked_cell_runs(
-		runtime.collision
-	):
-		_add_editor_collision_tile_rect(body, rect, size)
+	var sprite := Sprite2D.new()
+	sprite.name = "EditorRuntimeInstance_%d" % command_index
+	sprite.set_meta("editor_runtime_instance", true)
+	sprite.set_meta(
+		"editor_runtime_instance_id",
+		str(command.get("instance", {}).get("instance_id", ""))
+	)
+	sprite.set_meta("editor_runtime_image_path", image_path)
+	sprite.set_meta("editor_runtime_command_index", command_index)
+	sprite.texture = texture
+	sprite.centered = false
+	# Keep the node at the authored foot/part center and move only the drawn
+	# pixels.  Using top_left as position would rotate wall parts around the
+	# wrong pivot and recreate the editor/runtime offset.
+	var render_domain := str(command.get(
+		"render_domain",
+		RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
+	))
+	var actor_sort_root: Node2D = null
+	var parent_world_origin := Vector2.ZERO
+	if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
+		actor_sort_root = Node2D.new()
+		actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
+		actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
+			command, size
+		)
+		parent_world_origin = actor_sort_root.position
+		actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+		actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
+		actor_sort_root.set_meta("editor_runtime_instance_id", str(
+			command.get("instance", {}).get("instance_id", "")
+		))
+	RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
+		sprite, command, geometry, parent_world_origin
+	)
+	sprite.set_meta("editor_runtime_render_domain", render_domain)
+	if actor_sort_root != null:
+		# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
+		# Keep the sprite in that same z domain so Y order, not a fixed z,
+		# determines whether the wall front is before or behind an actor.
+		sprite.z_index = 0
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if actor_sort_root != null and get_parent() != null:
+		return _append_actor_sort_node(actor_sort_root, sprite)
+	return _append_environment_node(sprite)
 
 
 func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
@@ -815,101 +1782,19 @@ func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 	)
 
 
-func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
-	var inner := RuntimeCollisionGeometryScript.map_actor_boundary_world(
-		size
-	)
-	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_world(
-		size
-	)
-	for side in range(inner.size()):
-		var next := (side + 1) % 4
-		var shape := ConvexPolygonShape2D.new()
-		shape.points = PackedVector2Array([
-			outer[side],
-			outer[next],
-			inner[next],
-			inner[side],
-		])
-		var collision := CollisionShape2D.new()
-		collision.name = "MapBoundary%d" % side
-		collision.shape = shape
-		body.add_child(collision)
-		_source_collision_shape_count += 1
-
-
-func _add_editor_collision_tile_rect(body:StaticBody2D,rect:Rect2i,size:Vector2i)->void:
-	var x:=float(rect.position.x);var y:=float(rect.position.y);var w:=float(rect.size.x);var h:=float(rect.size.y)
-	var shape:=ConvexPolygonShape2D.new()
-	shape.points=RuntimeCollisionGeometryScript.rect_polygon_world([x,y,w,h],size)
-	var node:=CollisionShape2D.new();node.shape=shape;body.add_child(node);_source_collision_shape_count+=1
-
-
-func _build_profile_environment(profile: Dictionary) -> void:
-	if _active_map_id() == 4 and bool(profile.get("gothic_camp_enabled", true)):
-		var built := GothicBichCampBuilderScript.build(self, profile.get("runtime_home_position", Vector2.ZERO))
-		_gothic_camp_layout = built.get("layout", {})
-		_environment_nodes.append_array(built.get("nodes", []))
-		for collision: Dictionary in built.get("collisions", []):
-			var definition: Dictionary = collision.get("definition", {})
-			if str(definition.get("type", "")) == "circle":
-				_bich_collision_shapes.append({"kind": "circle", "position": collision.position, "radius": float(definition.get("radius", 16.0))})
-			else:
-				_bich_collision_shapes.append({"kind": "rect", "position": collision.position, "size": GothicBichCampBuilderScript._vector(definition.get("size", [32, 20]))})
-		_add_bich_map_boundaries(profile)
-		return
-	if _active_asset_set() == "bich":
-		for prop_data: Dictionary in profile.get("props", []):
-			var position: Vector2 = prop_data.get("position", Vector2.ZERO)
-			_add_prop(
-				int(prop_data.get("kind", 0)),
-				position,
-				bool(prop_data.get("canopy", false)),
-				prop_data
-			)
-			match str(prop_data.get("shape", "")):
-				"circle": _add_circle_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), float(prop_data.get("radius", 22.0)))
-				"rect": _add_rect_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), prop_data.get("size", Vector2(88, 34)))
-		_add_bich_map_boundaries(profile)
-		return
-	_build_dungeon_profile(profile)
-
-
-func _build_dungeon_profile(profile: Dictionary) -> void:
-	for prop_data: Dictionary in profile.get("props", []):
-		var kind := int(prop_data.get("kind", 0))
-		var position: Vector2 = prop_data.get("position", Vector2.ZERO)
-		var canopy := bool(prop_data.get("canopy", kind in [0, 1, 5]))
-		_add_tomb_prop(kind, position, canopy, prop_data)
-		match str(prop_data.get("shape", "")):
-			"circle": _add_tomb_circle_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), float(prop_data.get("radius", 22.0)))
-			"rect": _add_tomb_rect_obstacle(position + prop_data.get("collision_offset", Vector2(0, -8)), prop_data.get("size", Vector2(88, 34)))
-	for brazier_position: Vector2 in profile.get("braziers", []):
-		_add_tomb_prop(2, brazier_position, true, {
-			"position": brazier_position,
-			"occlusion": true,
-		})
-		_add_tomb_light(brazier_position + Vector2(0, -54))
-	if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
-		_add_dungeon_map_boundaries(profile)
-
-
-func _build_orc_tomb_environment() -> void:
-	_build_dungeon_profile(environment_profile())
-
-
 func _add_prop(
 	kind: int,
 	foot_position: Vector2,
 	_canopy: bool,
 	prop: Dictionary = {}
 ) -> void:
-	var sprite := Sprite2D.new()
-	sprite.texture = BICH_PROP_ATLAS
-	sprite.region_enabled = true
-	sprite.region_rect = Rect2(Vector2(kind * 96, 0), BICH_PROP_SIZE)
-	sprite.centered = false
-	_add_legacy_profile_prop_sprite(sprite, foot_position, prop)
+	_build_prop_sprite_node({
+		"kind": kind,
+		"canopy": _canopy,
+		"prop": prop,
+		"tomb": false,
+		"position": foot_position,
+	}, _bich_prop_atlas() as Texture2D)
 
 
 func _add_tomb_prop(
@@ -918,35 +1803,53 @@ func _add_tomb_prop(
 	_canopy: bool,
 	prop: Dictionary = {}
 ) -> void:
-	var prop_texture: Texture2D = ORC_TOMB_PROP_ATLAS
+	var prop_texture: Texture2D = _region_atlas("orc_tomb_prop")
 	var override_path := str(environment_profile().get("prop_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
-		prop_texture = load(override_path) as Texture2D
+		prop_texture = _prefetched_texture(override_path, _current_build_stage())
 	elif uses_mine_art():
-		prop_texture = MINE_PROP_ATLAS
+		prop_texture = _region_atlas("mine_prop")
 	elif uses_wooma_temple_art():
-		prop_texture = WOOMA_TEMPLE_PROP_ATLAS
+		prop_texture = _region_atlas("wooma_temple_prop")
 	elif uses_wooma_forest_art():
-		prop_texture = WOOMA_FOREST_PROP_ATLAS
+		prop_texture = _region_atlas("wooma_forest_prop")
 	elif uses_wooma_cave_art():
-		prop_texture = WOOMA_CAVE_PROP_ATLAS
+		prop_texture = _region_atlas("wooma_cave_prop")
 	elif uses_snake_valley_art():
-		prop_texture = SNAKE_VALLEY_PROP_ATLAS
+		prop_texture = _region_atlas("snake_valley_prop")
 	elif uses_snake_mine_art():
-		prop_texture = SNAKE_MINE_PROP_ATLAS
+		prop_texture = _region_atlas("snake_valley_prop")
+	_build_prop_sprite_node({
+		"kind": kind,
+		"canopy": _canopy,
+		"prop": prop,
+		"tomb": true,
+		"position": foot_position,
+	}, prop_texture)
+
+
+func _build_prop_sprite_node(payload: Dictionary, texture: Texture2D) -> Node:
+	if texture == null:
+		return null
+	var kind := int(payload.get("kind", 0))
+	var foot_position: Vector2 = payload.get("position", Vector2.ZERO)
+	var prop: Dictionary = payload.get("prop", {})
 	var sprite := Sprite2D.new()
-	sprite.texture = prop_texture
+	sprite.texture = texture
 	sprite.region_enabled = true
-	sprite.region_rect = Rect2(Vector2(kind * 96, 0), ORC_TOMB_PROP_SIZE)
+	sprite.region_rect = Rect2(
+		Vector2(kind * 96, 0),
+		BICH_PROP_SIZE if not bool(payload.get("tomb", false)) else ORC_TOMB_PROP_SIZE
+	)
 	sprite.centered = false
-	_add_legacy_profile_prop_sprite(sprite, foot_position, prop)
+	return _add_legacy_profile_prop_sprite(sprite, foot_position, prop)
 
 
 func _add_legacy_profile_prop_sprite(
 	sprite: Sprite2D,
 	foot_position: Vector2,
 	prop: Dictionary
-) -> void:
+) -> Node:
 	var effective_prop := prop.duplicate(true)
 	effective_prop["position"] = foot_position
 	var render_domain := RuntimeVisualGeometryScript.legacy_profile_prop_render_domain(
@@ -972,31 +1875,34 @@ func _add_legacy_profile_prop_sprite(
 		sprite.position = foot_position - Vector2(48, 118) - actor_sort_root.position
 		sprite.z_as_relative = true
 		sprite.z_index = 0
-		get_parent().add_child(actor_sort_root)
-		actor_sort_root.add_child(sprite)
-		_environment_nodes.append(actor_sort_root)
-		return
+		return _append_actor_sort_node(actor_sort_root, sprite)
 	sprite.position = foot_position - Vector2(48, 118)
 	sprite.z_as_relative = false
 	sprite.z_index = -5
 	sprite.set_meta("legacy_profile_render_domain", render_domain)
-	add_child(sprite)
-	_environment_nodes.append(sprite)
+	return _append_environment_node(sprite)
 
 
 func _add_tomb_light(position: Vector2) -> void:
-	var light_texture: Texture2D = ORC_TOMB_FIRE_GLOW
+	var light_texture: Texture2D = _region_atlas("orc_tomb_fire_glow")
 	var override_path := str(environment_profile().get("light_texture_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
-		light_texture = load(override_path) as Texture2D
+		light_texture = _prefetched_texture(override_path, _current_build_stage())
 	elif uses_mine_art():
-		light_texture = MINE_LAMP_GLOW
+		light_texture = _region_atlas("mine_lamp_glow")
 	elif uses_wooma_temple_art():
-		light_texture = WOOMA_TEMPLE_FIRE_GLOW
+		light_texture = _region_atlas("wooma_temple_fire_glow")
 	elif uses_wooma_cave_art():
-		light_texture = WOOMA_CAVE_GLOW
+		light_texture = _region_atlas("wooma_cave_glow")
 	elif uses_snake_mine_art():
-		light_texture = SNAKE_MINE_GLOW
+		light_texture = _region_atlas("snake_mine_glow")
+	_build_light_glow_node({"position": position}, light_texture)
+
+
+func _build_light_glow_node(payload: Dictionary, light_texture: Texture2D) -> Node:
+	if light_texture == null:
+		return null
+	var position: Vector2 = payload.get("position", Vector2.ZERO)
 	var glow := Sprite2D.new()
 	glow.texture = light_texture
 	glow.position = position
@@ -1007,8 +1913,7 @@ func _add_tomb_light(position: Vector2) -> void:
 	var material := CanvasItemMaterial.new()
 	material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	glow.material = material
-	add_child(glow)
-	_environment_nodes.append(glow)
+	_append_environment_node(glow)
 	var light := PointLight2D.new()
 	light.texture = light_texture
 	light.position = position
@@ -1017,57 +1922,15 @@ func _add_tomb_light(position: Vector2) -> void:
 	light.color = Color(1.0, 0.52, 0.22)
 	light.z_as_relative = false
 	light.z_index = -3
-	add_child(light)
-	_environment_nodes.append(light)
-
-
-func _add_circle_obstacle(position: Vector2, radius: float) -> void:
-	var shape := CircleShape2D.new()
-	shape.radius = radius
-	_add_static_body(position, shape)
-	_bich_collision_shapes.append({"kind": "circle", "position": position, "radius": radius})
-
-
-func _add_rect_obstacle(position: Vector2, size: Vector2) -> void:
-	var shape := RectangleShape2D.new()
-	shape.size = size
-	_add_static_body(position, shape)
-	_bich_collision_shapes.append({"kind": "rect", "position": position, "size": size})
-
-
-func _add_bich_map_boundaries(profile: Dictionary) -> void:
-	var corners: PackedVector2Array = profile.get("world_corners", PackedVector2Array())
-	if corners.size() != 4:
-		return
-	for index in range(4):
-		var start := corners[index]
-		var finish := corners[(index + 1) % 4]
-		var shape := SegmentShape2D.new()
-		shape.a = start
-		shape.b = finish
-		_add_static_body(Vector2.ZERO, shape)
-		_bich_collision_shapes.append({"kind": "segment", "start": start, "finish": finish})
-
-
-func _add_dungeon_map_boundaries(profile: Dictionary) -> void:
-	var corners: PackedVector2Array = profile.get("world_corners", PackedVector2Array())
-	if corners.size() != 4:
-		return
-	for index in range(4):
-		var start := corners[index]
-		var finish := corners[(index + 1) % 4]
-		var shape := SegmentShape2D.new()
-		shape.a = start
-		shape.b = finish
-		_add_static_body(Vector2.ZERO, shape)
-		_tomb_collision_shapes.append({"kind": "segment", "start": start, "finish": finish})
+	_append_environment_node(light)
+	return glow
 
 
 func _load_source_collision_mask(profile: Dictionary) -> void:
 	_source_mask_path = str(profile.get("collision_mask_path", ""))
 	if _source_mask_path.is_empty() or not ResourceLoader.exists(_source_mask_path):
 		return
-	var texture := load(_source_mask_path) as Texture2D
+	var texture := _prefetched_texture(_source_mask_path, "BUILD_COLLISION")
 	if texture == null:
 		return
 	var image := texture.get_image()
@@ -1119,13 +1982,20 @@ func _rebuild_source_collision_chunk(profile: Dictionary, focus_source: Vector2i
 
 
 func _build_full_ground(profile: Dictionary) -> void:
-	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
-	if source_size == Vector2i.ZERO:
-		return
-	var atlas: Texture2D = GOTHIC_BICH_GROUND_ATLAS if uses_bich_art() else ORC_TOMB_GROUND_ATLAS
+	var atlas: Texture2D = _region_atlas("gothic_bich_ground") if uses_bich_art() else _region_atlas("orc_tomb_ground")
 	var override_path := str(profile.get("ground_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
-		atlas = load(override_path) as Texture2D
+		atlas = _prefetched_texture(override_path, _current_build_stage())
+	_build_full_ground_node({"profile": profile}, atlas)
+
+
+func _build_full_ground_node(payload: Dictionary, atlas: Texture2D) -> Node:
+	var profile: Dictionary = payload.get("profile", {})
+	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
+	if source_size == Vector2i.ZERO:
+		return null
+	if atlas == null:
+		return null
 	var bounds := MapCoordinateMapperScript.world_bounds(source_size).grow(32.0)
 	var ground := Polygon2D.new()
 	ground.polygon = PackedVector2Array([bounds.position, Vector2(bounds.end.x, bounds.position.y), bounds.end, Vector2(bounds.position.x, bounds.end.y)])
@@ -1175,9 +2045,9 @@ void fragment() {
 	material.set_shader_parameter("atlas_tex", atlas)
 	material.set_shader_parameter("source_size", Vector2(source_size))
 	ground.material = material
-	add_child(ground)
-	_environment_nodes.append(ground)
+	_append_environment_node(ground)
 	_full_ground_ready = true
+	return ground
 
 
 func _rebuild_full_source_collision(profile: Dictionary) -> void:
@@ -1343,21 +2213,11 @@ func _closest_point_on_segment(point: Vector2, start: Vector2, finish: Vector2) 
 	return start + segment * ratio
 
 
-func _add_tomb_circle_obstacle(position: Vector2, radius: float) -> void:
-	var shape := CircleShape2D.new()
-	shape.radius = radius
-	_add_static_body(position, shape)
-	_tomb_collision_shapes.append({"kind": "circle", "position": position, "radius": radius})
+func _add_static_body(position: Vector2, shape: Shape2D) -> CollisionObject2D:
+	return _add_static_body_node(position, shape)
 
 
-func _add_tomb_rect_obstacle(position: Vector2, size: Vector2) -> void:
-	var shape := RectangleShape2D.new()
-	shape.size = size
-	_add_static_body(position, shape)
-	_tomb_collision_shapes.append({"kind": "rect", "position": position, "size": size})
-
-
-func _add_static_body(position: Vector2, shape: Shape2D) -> void:
+func _add_static_body_node(position: Vector2, shape: Shape2D) -> CollisionObject2D:
 	var body := StaticBody2D.new()
 	body.position = position
 	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
@@ -1365,8 +2225,7 @@ func _add_static_body(position: Vector2, shape: Shape2D) -> void:
 	var collision := CollisionShape2D.new()
 	collision.shape = shape
 	body.add_child(collision)
-	add_child(body)
-	_environment_nodes.append(body)
+	return _append_environment_node(body) as CollisionObject2D
 
 
 func _orc_tomb_map_id() -> int:

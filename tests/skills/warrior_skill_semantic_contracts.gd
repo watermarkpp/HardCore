@@ -82,7 +82,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"slaying_training_only_on_proc":
 			var success := _support.execute(skill_id, 3, {"force_proc": true})
 			var failure := _support.execute(skill_id, 3, {"force_proc": false, "force_no_proc": true})
-			return not success.proficiency_event.is_empty() and failure.proficiency_event.is_empty()
+			return success.proficiency_event.is_empty() and failure.proficiency_event.is_empty()
 		"thrusting_two_cell_line":
 			var thrust := _support.execute(skill_id, 3)
 			return thrust.geometry_cells == [Vector2i(1, 0), Vector2i(2, 0)]
@@ -95,7 +95,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return bool(_support.execute(skill_id, 0).effects[1].ignore_ac)
 		"thrusting_one_training_event_per_swing":
 			var thrust := _support.execute(skill_id, 3, {"eligible_target_count": 2})
-			return not thrust.proficiency_event.is_empty() and thrust.effects.size() == 2
+			return thrust.proficiency_event.is_empty() and thrust.effects.size() == 2
 		"half_moon_primary_full_damage":
 			return _support.execute(skill_id, 3).effects[0].primary_multiplier == 1.0
 		"half_moon_side_multiplier":
@@ -161,7 +161,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"wild_rush_training_only_on_displacement":
 			var moved := _support.execute(skill_id, 3, {"resolved_push_distance_gu": 1.0})
 			var failed := _support.execute(skill_id, 3, {"resolved_push_distance_gu": 0.0})
-			return not moved.proficiency_event.is_empty() and failed.proficiency_event.is_empty()
+			return moved.proficiency_event.is_empty() and failed.proficiency_event.is_empty()
 		"fire_sword_never_auto_casts":
 			return not bool(_support.execute(skill_id, 3).effects[0].auto_cast)
 		"fire_sword_multiplier_exact":
@@ -174,7 +174,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return charge.effects[0].charge_lifetime_ms == 10000 and charge.proficiency_event.is_empty()
 		"fire_sword_consumed_once":
 			var consumed := _support.execute(skill_id, 3, {"charge_consumed": true})
-			return consumed.effects[0].stack_count_max == 1 and not consumed.proficiency_event.is_empty()
+			return consumed.effects[0].stack_count_max == 1 and consumed.proficiency_event.is_empty()
 		"fire_sword_cooldown_independent_from_charge_lifetime":
 			var charge := _support.execute(skill_id, 3)
 			return charge.timing.cooldown_ms == 8000 and charge.effects[0].charge_lifetime_ms == 10000

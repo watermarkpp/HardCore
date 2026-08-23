@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q0b1_servicehome"]
+[ext_resource type="Script" path="res://tests/service_home_no_current_position_fallback_test.gd" id="1"]
+[node name="ServiceHomeNoCurrentPositionFallback" type="Node"]
+script = ExtResource("1")

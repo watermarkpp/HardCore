@@ -34,7 +34,10 @@ func _ready() -> void:
 	var divine_beast := TaoistCombatMath.summon_profile("taoist.summon_divine_beast", 3, 35, 30)
 	assert(skeleton.attack_type == "physical" and divine_beast.attack_type == "fire")
 	assert(skeleton.summon_level == 3 and skeleton.summon_exp_level == 3 and skeleton.summon_count == 1)
-	assert(skeleton.amulet_cost == 1 and divine_beast.amulet_cost == 5)
+	assert(skeleton.amulet_cost == 0 and divine_beast.amulet_cost == 0)
+	assert(skeleton.max_hp == 392 and skeleton.attack_min == 12 and skeleton.attack_max == 28)
+	assert(divine_beast.max_hp == 840 and divine_beast.attack_min == 20 and divine_beast.attack_max == 35)
+	assert(skeleton.max_pet_level == 7 and divine_beast.max_pet_level == 7)
 	assert(
 		divine_beast.max_hp > skeleton.max_hp
 		and divine_beast.attack_range_gu > skeleton.attack_range_gu
@@ -49,5 +52,5 @@ func _ready() -> void:
 		elif skill_id.begins_with("taoist."):
 			var profile := TaoistCombatMath.profile_overrides(skill_id, 3)
 			assert(not profile.is_empty() and profile.formula_id.ends_with("classic_magic_pas.v2"))
-	print("CASTER_COMBAT_MATH_PASS: 27 caster skills use Magic.pas formula contracts")
+	print("CASTER_COMBAT_MATH_PASS: caster formulas and verified Taoist summon baselines")
 	get_tree().quit(0)

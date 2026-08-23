@@ -1,182 +1,87 @@
 extends Node
 
-const TEST_DIRECTORY := "user://character_select_gothic_profiles"
-const TEST_INDEX := "user://character_select_gothic_index.json"
-const CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/character_launch_contract_v1.json"
-
-var _old_directory := ""
-var _old_index := ""
-var _old_test_mode := false
-
+const AdaptiveButtonStyleBoxScript := preload("res://scripts/adaptive_button_style_box.gd")
 
 func _ready() -> void:
 	_run.call_deferred()
 
 
 func _run() -> void:
-	_prepare_profiles()
-	var contract: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTRACT_PATH))
-	assert(contract is Dictionary, "人物启动契约无法解析")
-	assert(contract.get("contractId", "") == "ui.character.launch.v1", "人物启动契约 ID 不稳定")
-	assert(contract.get("professionIds", []) == ["warrior", "wizard", "taoist"], "人物创建职业稳定 ID 不完整")
+	var old_test_mode := PlayerState.test_mode
+	PlayerState.test_mode = true
 	var launcher: Control = load("res://scenes/character_select.tscn").instantiate()
 	launcher.suppress_scene_change_for_test = true
 	add_child(launcher)
 	await get_tree().process_frame
 
-	assert(launcher.theme != null, "正式人物大厅没有使用公共哥特 Theme")
-	assert(launcher.build_fingerprint_label != null and launcher.build_fingerprint_label.visible, "人物大厅缺少玩家可见构建指纹")
-	assert(
-		launcher.build_fingerprint_label.text == launcher._build_fingerprint_text()
-		and launcher.build_fingerprint_label.text.begins_with("HardCore · v"),
-		"构建指纹没有读取 HardCore 版本与修订：%s" % launcher.build_fingerprint_label.text
-	)
-	assert(launcher.content_root.anchor_left == 0.5 and launcher.content_root.anchor_top == 0.5, "人物大厅没有使用宽屏居中内容画布")
-	assert(launcher.get_node("CenteredContent/RosterPanel").theme_type_variation == "GothicInsetFrame", "人物列表没有使用公共内框")
-	assert(launcher.get_node("CenteredContent/CharacterPreviewPanel").theme_type_variation == "GothicInsetFrame", "人物预览没有使用公共内框")
-	assert(launcher.get_node("CenteredContent/CreationPanel").theme_type_variation == "GothicInsetFrame", "创建人物没有使用公共内框")
-	assert(launcher.list_box != null and launcher.name_input != null, "旧版人物选择兼容入口丢失")
-	assert(launcher.profile_cards.size() == 3, "人物列表没有显示三个独立档案")
-	assert(not launcher.profile_cards["wizard_01"].panel is Panel, "人物信息卡不应继续叠加被裁掉的分页装饰框")
-	assert(launcher.profile_cards["wizard_01"].main_button.theme_type_variation == "GothicComponentButton", "未选中人物缺少完整信息背景框")
-	assert(launcher.profile_cards["wizard_01"].main_button.position == Vector2(0, 7), "人物信息背景框没有与角色卡对齐")
-	assert(
-		launcher.profile_cards["wizard_01"].main_button.size == Vector2(184, 81),
-		"人物信息背景框尺寸不完整：%s" % launcher.profile_cards["wizard_01"].main_button.size
-	)
-	assert(launcher.profession_buttons.size() == 3, "创建人物没有显示三职业")
-	assert(not launcher.profession_buttons["战士"].disabled, "战士创建按钮被错误禁用")
-	assert(not launcher.profession_buttons["法师"].disabled, "法师创建按钮仍处于旧版锁定状态")
-	assert(not launcher.profession_buttons["道士"].disabled, "道士创建按钮仍处于旧版锁定状态")
-	assert(launcher.profession_buttons["法师"].get_meta("profession_id", "") == "wizard", "法师职业稳定 ID 错误")
-	assert(not launcher.get_node("CenteredContent/CreationPanel").has_node("MaleGender"), "创建人物不应继续显示男性选择按钮")
-	assert(not launcher.get_node("CenteredContent/CreationPanel").has_node("FemaleGender"), "创建人物不应继续显示女性选择按钮")
-	assert(not launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage") is Panel, "人物纸娃娃外层不应继续使用第一道装饰图框")
-
-	launcher._select_main_profile("wizard_01")
-	assert(launcher.selected_main_profile_id == "wizard_01", "任意角色没有成功切换为主角色")
-	assert(PlayerState.active_profile_id == "wizard_01" and PlayerState.profession == "法师", "选择主角色没有读取对应档案")
-	await get_tree().process_frame
-	var wizard_paper_doll: Control = launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
-	assert(wizard_paper_doll.profession_name == "法师" and wizard_paper_doll.has_renderable_assets(), "法师人物选择预览仍在使用职业占位符")
+	assert(launcher.ai_teammate_toggle.disabled, "AI teammate toggle must remain disabled")
+	assert(not launcher.ai_teammate_toggle.button_pressed, "AI teammate toggle must remain false")
 	launcher._set_ai_teammate_enabled(true)
-	launcher._select_ai_profile("taoist_01")
-	assert(launcher.selected_ai_profile_id == "taoist_01", "第二角色没有成功选择为 AI 队友")
-	assert(launcher.profile_cards["wizard_01"].ai_button.disabled, "主角色不应允许同时设为自己的 AI 队友")
-	var request: Dictionary = launcher.build_launch_request()
-	assert(request.contract_id == "ui.character.launch.v1", "启动请求契约 ID 错误")
-	assert(request.main_profile_id == "wizard_01", "启动请求主角色错误")
-	assert(request.ai_teammate_enabled and request.ai_teammate_profile_id == "taoist_01", "启动请求 AI 队友错误")
-	assert(request.ai_control_mode == "companion_ai", "AI 队友控制模式错误")
+	launcher._select_ai_profile("any_profile")
+	assert(not launcher.ai_teammate_enabled and launcher.selected_ai_profile_id.is_empty(), "direct AI calls must remain disabled")
+	var selected_profile_count := 0
+	for profile_id: String in launcher.profile_cards:
+		var profile_button: Button = launcher.profile_cards[profile_id].main_button
+		assert(launcher.profile_cards[profile_id].ai_button.disabled, "AI teammate card buttons must remain disabled")
+		assert(launcher.profile_cards[profile_id].ai_button.theme_type_variation == &"GothicCharacterAIStatusButton", "AI 队友状态没有使用配套近方形框")
+		assert(launcher.profile_cards[profile_id].main_button.theme_type_variation in [&"GothicCharacterProfileButton", &"GothicCharacterSelectedProfileButton"], "人物主卡没有使用配套横向框")
+		if profile_button.theme_type_variation == &"GothicCharacterSelectedProfileButton":
+			selected_profile_count += 1
+			var selected_style := profile_button.get_theme_stylebox("normal") as AdaptiveButtonStyleBoxScript
+			assert(selected_style != null and selected_style.feedback_layered, "selected character card must use its source-derived interior layer")
+			assert(selected_style.feedback_background_styles.size() > 0 and selected_style.feedback_frame_styles.size() > 0, "selected character card must cache both feedback layers")
+	assert(selected_profile_count <= 1, "character cards must be a single-select group")
+	assert(launcher.teammate_status_label.text == "AI队友功能暂未开放", "AI disabled status text mismatch")
+	for profession_name: String in launcher.profession_buttons:
+		var profession_button: Button = launcher.profession_buttons[profession_name]
+		assert(profession_button.toggle_mode and profession_button.button_group == launcher.profession_button_group, "profession cards must share one persistent single-select ButtonGroup")
+		assert(profession_button.theme_type_variation in [&"GothicCharacterProfessionButton", &"GothicCharacterSelectedProfessionButton"], "职业选择没有使用专用协调框")
+		var text_minimum := profession_button.get_minimum_size()
+		assert(profession_button.size.x + 0.5 >= text_minimum.x and profession_button.size.y + 0.5 >= text_minimum.y, "职业选择框没有完整包住三行文字：button=%s minimum=%s" % [profession_button.size, text_minimum])
+	launcher._select_creation_profession("法师")
+	var selected_profession_count := 0
+	for profession_name: String in launcher.profession_buttons:
+		var profession_button: Button = launcher.profession_buttons[profession_name]
+		if profession_button.theme_type_variation == &"GothicCharacterSelectedProfessionButton":
+			selected_profession_count += 1
+			assert(profession_button.button_pressed, "selected profession card must retain its pressed state")
+			var selected_style := profession_button.get_theme_stylebox("normal") as AdaptiveButtonStyleBoxScript
+			assert(selected_style != null and selected_style.feedback_layered, "selected profession card must use its source-derived interior layer")
+			assert(selected_style.feedback_background_styles.size() > 0 and selected_style.feedback_frame_styles.size() > 0, "selected profession card must cache both feedback layers")
+	assert(selected_profession_count == 1, "profession cards must be a single-select group")
+	assert(launcher.create_button.text == "创建角色", "create action must keep its own label")
+	assert(launcher.create_button.theme_type_variation == &"GothicCharacterLaunchButton", "create action must reuse the layered launch frame")
+	if not launcher.profile_cards.is_empty():
+		var main_profile_id := str(launcher.profile_cards.keys()[0])
+		launcher._select_main_profile(main_profile_id)
+		await get_tree().process_frame
+		var paper_doll := launcher.get_node_or_null("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll") as Control
+		assert(paper_doll != null and not paper_doll.center_on_opaque_bounds, "main character paper doll preview regressed")
+		assert(paper_doll.position == Vector2.ZERO and paper_doll.size == launcher.preview_visual_root.size, "paper doll must fill preview root")
+		assert(launcher.create_button.text == "创建角色", "selecting a character must not change create action text")
+		assert(launcher.message_label.text.contains("已选择主角色"), "selection status text must remain owned by the status label")
+		if launcher.profile_cards.size() > 1:
+			var alternate_profile_id := str(launcher.profile_cards.keys()[1])
+			launcher._select_main_profile(alternate_profile_id)
+			assert(launcher.profile_cards[alternate_profile_id].main_button.theme_type_variation == &"GothicCharacterSelectedProfileButton", "character selection did not persist on the newly selected card")
+			assert(launcher.profile_cards[main_profile_id].main_button.theme_type_variation == &"GothicCharacterProfileButton", "character selection left more than one profile card selected")
 
-	launcher._set_ai_teammate_enabled(false)
-	request = launcher.build_launch_request()
-	assert(not request.ai_teammate_enabled and request.ai_teammate_profile_id.is_empty(), "关闭 AI 队友后启动请求仍携带第二角色")
-	launcher._set_ai_teammate_enabled(true)
-	launcher._select_main_profile("taoist_01")
-	assert(launcher.selected_main_profile_id == "taoist_01", "原 AI 队友不能切换为主角色")
-	assert(launcher.selected_ai_profile_id.is_empty(), "AI 队友切换为主角色后没有解除重复选择")
-	launcher._select_ai_profile("warrior_01")
-	launcher._enter_selected_character()
-	assert(launcher.last_launch_request.main_profile_id == "taoist_01", "进入游戏没有使用当前主角色")
-	assert(launcher.last_launch_request.ai_teammate_profile_id == "warrior_01", "进入游戏没有使用当前 AI 队友")
-	assert(
-		get_tree().root.get_meta(launcher.LAUNCH_CONTEXT_META, {}).get("contract_id", "") == "ui.character.launch.v1",
-		"人物启动请求没有写入临时场景上下文"
-	)
+	launcher.selected_main_profile_id = "main_profile"
+	var launch_request: Dictionary = launcher.build_launch_request()
+	assert(launch_request.main_profile_id == "main_profile", "main profile must remain in launch request")
+	assert(not launch_request.ai_teammate_enabled, "launch request must disable AI teammate")
+	assert(launch_request.ai_teammate_profile_id.is_empty(), "launch request must clear AI teammate id")
+	assert(launch_request.ai_control_mode == "disabled", "launch request AI mode mismatch")
 
 	launcher.name_input.text = "星火"
 	launcher._select_creation_profession("法师")
 	var creation_request: Dictionary = launcher.build_creation_request()
-	assert(creation_request.contract_id == "ui.character.creation.v1", "人物创建请求契约 ID 错误")
-	assert(creation_request.profession_id == "wizard" and creation_request.gender == "男", "人物创建请求没有固定为男性角色")
-	assert(creation_request.character_name == "星火", "人物创建请求没有保留角色名")
-	launcher._select_main_profile("warrior_01")
-	await get_tree().process_frame
-	var paper_doll: Control = launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
-	assert(not paper_doll.center_on_opaque_bounds, "背包战士偏左修正错误影响了人物选择页坐标")
-	assert(paper_doll.position == Vector2.ZERO, "人物选择页纸娃娃没有从预览容器原点开始适配")
-	assert(paper_doll.size == launcher.preview_visual_root.size, "人物选择页纸娃娃没有按容器等比适配")
-	assert(paper_doll.mouse_filter == Control.MOUSE_FILTER_IGNORE, "人物选择页纸娃娃错误拦截触摸")
-	assert(launcher.profile_cards["warrior_01"].main_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "角色名称、等级和职业没有在信息框中居中")
+	assert(creation_request.character_name == "星火", "creation request must preserve character name")
+	assert(creation_request.profession_id == "wizard", "creation request must preserve profession")
+	assert(creation_request.gender == "男", "creation request must preserve fixed gender")
+	assert(not creation_request.ai_teammate_enabled and creation_request.ai_teammate_profile_id.is_empty(), "creation request must clear AI teammate")
 
 	launcher.queue_free()
-	_restore_profiles()
-	print("CHARACTER_SELECT_GOTHIC_UI_PASS：哥特大厅、任意主角色、可选 AI 队友和三职业创建请求均正常")
+	PlayerState.test_mode = old_test_mode
+	print("CHARACTER_SELECT_GOTHIC_UI_PASS: AI teammate temporarily disabled; main selection and creation contracts remain valid")
 	get_tree().quit(0)
-
-
-func _prepare_profiles() -> void:
-	_cleanup()
-	_old_directory = PlayerState.profile_directory
-	_old_index = PlayerState.profile_index_path
-	_old_test_mode = PlayerState.test_mode
-	PlayerState.profile_directory = TEST_DIRECTORY
-	PlayerState.profile_index_path = TEST_INDEX
-	PlayerState.test_mode = false
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEST_DIRECTORY))
-	var profiles := [
-		{"id": "warrior_01", "name": "北辰", "profession": "战士", "gender": "男", "level": 26, "updated_at": 300},
-		{"id": "wizard_01", "name": "星火", "profession": "法师", "gender": "男", "level": 22, "updated_at": 200},
-		{"id": "taoist_01", "name": "青灯", "profession": "道士", "gender": "男", "level": 18, "updated_at": 100},
-	]
-	for profile: Dictionary in profiles:
-		_write_json(TEST_DIRECTORY + "/" + str(profile.id) + ".json", _profile_payload(profile))
-	_write_json(TEST_INDEX, {"version": 1, "profiles": profiles})
-	PlayerState.active_profile_id = "warrior_01"
-	assert(PlayerState.select_character("warrior_01"), "无法载入人物大厅主角色夹具")
-
-
-func _profile_payload(profile: Dictionary) -> Dictionary:
-	return {
-		"save_version": PlayerState.SAVE_VERSION,
-		"profile_id": profile.id,
-		"character_name": profile.name,
-		"updated_at": profile.updated_at,
-		"level": profile.level,
-		"profession": profile.profession,
-		"gender": profile.gender,
-		"later_content_enabled": false,
-		"game_mode_id": "classic_176",
-		"experience": 0,
-		"gold": 1000,
-		"inventory": [],
-		"warehouse_inventory": [],
-		"equipment": {},
-		"learned_skills": {},
-		"quick_slots": ["", "", "", ""],
-		"quest_states": {},
-		"content_packages": [],
-		"content_schema_version": 1,
-		"map_id": 4,
-		"position": [0.0, 0.0],
-	}
-
-
-func _write_json(path: String, value: Dictionary) -> void:
-	var file := FileAccess.open(path, FileAccess.WRITE)
-	assert(file != null, "无法写入人物大厅测试夹具")
-	file.store_string(JSON.stringify(value, "\t"))
-	file.close()
-
-
-func _restore_profiles() -> void:
-	PlayerState.profile_directory = _old_directory
-	PlayerState.profile_index_path = _old_index
-	PlayerState.test_mode = _old_test_mode
-	PlayerState.active_profile_id = ""
-	_cleanup()
-
-
-func _cleanup() -> void:
-	for suffix: String in ["", ".tmp", ".bak"]:
-		var index_path := TEST_INDEX + suffix
-		if FileAccess.file_exists(index_path):
-			DirAccess.remove_absolute(ProjectSettings.globalize_path(index_path))
-	var absolute_directory := ProjectSettings.globalize_path(TEST_DIRECTORY)
-	if DirAccess.dir_exists_absolute(absolute_directory):
-		var directory := DirAccess.open(TEST_DIRECTORY)
-		if directory != null:
-			for file_name: String in directory.get_files():
-				DirAccess.remove_absolute(absolute_directory.path_join(file_name))
-		DirAccess.remove_absolute(absolute_directory)

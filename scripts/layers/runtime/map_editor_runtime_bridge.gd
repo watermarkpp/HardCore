@@ -1,6 +1,7 @@
 class_name MapEditorRuntimeBridge
 extends RefCounted
 
+const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
 const BICH_MAP_ID := 4
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
@@ -9,101 +10,335 @@ const BOSS_RESPAWN_OVERRIDES := {
 	221: 3600.0,
 	1578: 1800.0,
 }
-const MAP_CONFIG := {
-	4: {
-		"map_key": "bich_province",
-		"display_name": "比奇省",
-		"marker": "res://assets/data/runtime/map_editor/bich_province.manual_ready.json",
-	},
-	268: {
-		"map_key": "wooma_forest",
-		"display_name": "沃玛森林",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	313: {
-		"map_key": "wooma_temple_1",
-		"display_name": "沃玛寺庙一层",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	314: {
-		"map_key": "wooma_temple_2",
-		"display_name": "沃玛寺庙二层",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	315: {
-		"map_key": "wooma_temple_3",
-		"display_name": "沃玛教主大厅",
-		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
-	},
-	217: {
-		"map_key": "orc_tomb_1",
-		"display_name": "兽人古墓一层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	218: {
-		"map_key": "orc_tomb_2",
-		"display_name": "兽人古墓二层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	221: {
-		"map_key": "orc_tomb_3",
-		"display_name": "兽人古墓三层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	406: {
-		"map_key": "bich_mine_1",
-		"display_name": "矿区一层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	408: {
-		"map_key": "bich_mine_2",
-		"display_name": "矿区二层",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-	1578: {
-		"map_key": "corpse_king_hall",
-		"display_name": "尸王殿",
-		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
-	},
-}
+## FREEZE-P0.2R: formal map implementation states. Only maps with a MapEditor
+## runtime build + ready marker are implemented_playable; world/reference data
+## alone never grants gameplay readiness.
+const IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE := &"implemented_playable"
+const IMPLEMENTATION_STATE_PLANNED_UNBUILT := &"planned_unbuilt"
+const IMPLEMENTATION_STATE_REFERENCE_ONLY := &"reference_only"
+const IMPLEMENTATION_STATE_UNSUPPORTED := &"unsupported"
+const RELEASE_REGISTRY_PATH := (
+	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
+)
+const RELEASE_STATE_IMPLEMENTED_PLAYABLE := &"implemented_playable"
+const RELEASE_STATE_IMPLEMENTED_STAGING := &"implemented_staging"
+const IMPLEMENTATION_STATE_IMPLEMENTED_STAGING := &"implemented_staging"
+## FREEZE-P0.3: build-bound release rejection reasons.
+const REASON_RUNTIME_RELEASE_NOT_REGISTERED := &"runtime_release_not_registered"
+const REASON_RUNTIME_RELEASE_NOT_READY := &"runtime_release_not_ready"
+const REASON_RUNTIME_FILE_MISSING := &"runtime_file_missing"
+const REASON_RUNTIME_INVALID := &"runtime_invalid"
+const REASON_RUNTIME_BUILD_NOT_APPROVED := &"runtime_build_not_approved"
+const REASON_RUNTIME_MAP_KEY_MISMATCH := &"runtime_map_key_mismatch"
+const REASON_RUNTIME_RELEASE_REGISTRY_MISSING := (
+	&"runtime_release_registry_missing"
+)
+const REASON_RUNTIME_RELEASE_REGISTRY_INVALID := (
+	&"runtime_release_registry_invalid"
+)
 
 static var _runtime_cache := {}
+static var _registry_cache: Dictionary = {}
+static var _registry_loaded := false
+static var _registry_load_valid := false
+static var _registry_load_reason := &""
+static var _registry_load_errors: Array[String] = []
+static var _registry_override_path := ""
+static var _readiness_result: Dictionary = {}
 
 
-static func has_runtime_map(runtime_map_id: int) -> bool:
-	if not MAP_CONFIG.has(runtime_map_id):
-		return false
-	var config: Dictionary = MAP_CONFIG[runtime_map_id]
+static func _registry_path() -> String:
 	return (
-		FileAccess.file_exists(str(config.marker))
-		and FileAccess.file_exists(runtime_path(runtime_map_id))
+		_registry_override_path
+		if not _registry_override_path.is_empty()
+		else RELEASE_REGISTRY_PATH
 	)
+
+
+static func _load_release_registry() -> void:
+	if _registry_loaded:
+		return
+	_registry_cache.clear()
+	_registry_load_valid = false
+	_registry_load_reason = &""
+	_registry_load_errors = []
+	var path := _registry_path()
+	if not FileAccess.file_exists(path):
+		## FREEZE-P0.3R: missing registry -> whole formal release fail-closed.
+		_registry_load_reason = REASON_RUNTIME_RELEASE_REGISTRY_MISSING
+		_registry_loaded = true
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	var parsed: Variant = (
+		JSON.parse_string(file.get_as_text())
+		if file != null
+		else null
+	)
+	if file != null:
+		file.close()
+	if not parsed is Dictionary:
+		## FREEZE-P0.3R: unparseable registry -> fail-closed.
+		_registry_load_reason = REASON_RUNTIME_RELEASE_REGISTRY_INVALID
+		_registry_load_errors = ["runtime_json_invalid"]
+		_registry_loaded = true
+		return
+	## FREEZE-P0.3R: production load must run the SAME schema validator used by
+	## publish/tests. Invalid schema -> fail-closed, no partial entry load.
+	var schema_errors := validate_release_registry(parsed)
+	if not schema_errors.is_empty():
+		_registry_load_reason = REASON_RUNTIME_RELEASE_REGISTRY_INVALID
+		_registry_load_errors = schema_errors
+		_registry_loaded = true
+		return
+	for raw_entry: Variant in parsed.get("maps", []):
+		if raw_entry is Dictionary:
+			var mid := int(raw_entry.get("runtime_map_id", -1))
+			if mid > 0:
+				_registry_cache[mid] = raw_entry
+	_registry_load_valid = true
+	_registry_loaded = true
+
+
+static func _release_entry(runtime_map_id: int) -> Dictionary:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return {}
+	return _registry_cache.get(runtime_map_id, {})
+
+
+## FREEZE-P0.3: test/dev seam only - point the registry loader at an alternate
+## registry file and drop all caches. Production never calls this.
+static func test_override_release_registry_path(path: String) -> void:
+	_registry_override_path = path
+	invalidate_release_registry()
+
+
+static func reset_release_registry_override() -> void:
+	_registry_override_path = ""
+	invalidate_release_registry()
+
+
+static func invalidate_release_registry() -> void:
+	_registry_loaded = false
+	_registry_cache.clear()
+	_registry_load_valid = false
+	_registry_load_reason = &""
+	_registry_load_errors = []
+	_runtime_cache.clear()
+	_readiness_result.clear()
+
+
+static func released_map_ids() -> Array[int]:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return []
+	var ids: Array[int] = []
+	for raw_id: Variant in _registry_cache.keys():
+		ids.append(int(raw_id))
+	ids.sort()
+	return ids
+
+
+## FREEZE-P0.3: schema contract for the Release Registry. Used by tests and by
+## the publish tool before writing.
+static func validate_release_registry(registry: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	if int(registry.get("schema_version", 0)) != 1:
+		errors.append("unsupported_schema_version")
+	if (
+		str(registry.get("registry_contract_id", ""))
+		!= "mse.map.runtime.release.v1"
+	):
+		errors.append("invalid_registry_contract_id")
+	var maps: Array = registry.get("maps", [])
+	var ids: Dictionary = {}
+	var keys: Dictionary = {}
+	for raw_entry: Variant in maps:
+		if not raw_entry is Dictionary:
+			errors.append("invalid_entry")
+			continue
+		var entry: Dictionary = raw_entry
+		var mid := int(entry.get("runtime_map_id", -1))
+		var map_key := str(entry.get("map_key", ""))
+		var runtime_file_path := str(entry.get("runtime_path", ""))
+		var release_state := str(entry.get("release_state", ""))
+		var approved := str(entry.get("approved_build_sha256", ""))
+		if mid <= 0:
+			errors.append("invalid_runtime_map_id")
+		if ids.has(mid):
+			errors.append("duplicate_runtime_map_id")
+		ids[mid] = true
+		if map_key.is_empty():
+			errors.append("missing_map_key")
+		if keys.has(map_key):
+			errors.append("duplicate_map_key")
+		keys[map_key] = true
+		if runtime_file_path.is_empty():
+			errors.append("missing_runtime_path")
+		if approved.is_empty():
+			errors.append("missing_approved_hash")
+		if (
+			release_state != str(RELEASE_STATE_IMPLEMENTED_PLAYABLE)
+			and release_state != str(RELEASE_STATE_IMPLEMENTED_STAGING)
+		):
+			errors.append("unknown_release_state")
+	return errors
+
+
+static func _compute_readiness(runtime_map_id: int) -> Dictionary:
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
+		return {
+			"playable": false,
+			"reason": REASON_RUNTIME_RELEASE_NOT_REGISTERED,
+		}
+	if (
+		str(entry.get("release_state", ""))
+		!= str(RELEASE_STATE_IMPLEMENTED_PLAYABLE)
+	):
+		return {
+			"playable": false,
+			"reason": REASON_RUNTIME_RELEASE_NOT_READY,
+		}
+	var runtime_file_path := str(entry.get("runtime_path", ""))
+	if (
+		runtime_file_path.is_empty()
+		or not FileAccess.file_exists(runtime_file_path)
+	):
+		return {"playable": false, "reason": REASON_RUNTIME_FILE_MISSING}
+	var loaded := MapEditorRuntimeMapService.load_runtime(runtime_file_path)
+	if not loaded.ok:
+		return {"playable": false, "reason": REASON_RUNTIME_INVALID}
+	var runtime: Dictionary = loaded.runtime
+	var approved := str(entry.get("approved_build_sha256", ""))
+	var current := str(runtime.get("build_sha256", ""))
+	if approved != current:
+		return {"playable": false, "reason": REASON_RUNTIME_BUILD_NOT_APPROVED}
+	var map_key := str(entry.get("map_key", ""))
+	var source_map_id := str(runtime.get("source", {}).get("map_id", ""))
+	if source_map_id != map_key:
+		return {"playable": false, "reason": REASON_RUNTIME_MAP_KEY_MISMATCH}
+	return {"playable": true, "reason": &""}
+
+
+static func _readiness(runtime_map_id: int) -> Dictionary:
+	if not _readiness_result.has(runtime_map_id):
+		_readiness_result[runtime_map_id] = _compute_readiness(runtime_map_id)
+	return _readiness_result[runtime_map_id]
+
+
+## FREEZE-P0.3: NOT "file exists". This answers "is the current release valid
+## and approved" - registry entry + implemented_playable + runtime file +
+## load ok + approved build hash match + map key match.
+static func has_runtime_map(runtime_map_id: int) -> bool:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return false
+	return bool(_readiness(runtime_map_id).get("playable", false))
+
+
+static func release_rejection_reason(runtime_map_id: int) -> StringName:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return _registry_load_reason
+	return str(_readiness(runtime_map_id).get("reason", &"")) as StringName
+
+
+## FREEZE-P0.3R: global registry load state (valid / reason / errors). Read-only
+## diagnostic for tests, evidence and MSE status display.
+static func registry_load_state() -> Dictionary:
+	_load_release_registry()
+	return {
+		"valid": _registry_load_valid,
+		"reason": str(_registry_load_reason),
+		"errors": _registry_load_errors.duplicate(),
+	}
+
+
+## Pure artifact existence: the registry entry exists AND its runtime file
+## exists. Does NOT grant readiness.
+static func runtime_artifact_exists(runtime_map_id: int) -> bool:
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
+		return false
+	var runtime_file_path := str(entry.get("runtime_path", ""))
+	return (
+		not runtime_file_path.is_empty()
+		and FileAccess.file_exists(runtime_file_path)
+	)
+
+
+static func is_runtime_built(runtime_map_id: int) -> bool:
+	return has_runtime_map(runtime_map_id)
+
+
+static func is_formal_playable(runtime_map_id: int) -> bool:
+	return has_runtime_map(runtime_map_id)
+
+
+static func implementation_state(runtime_map_id: int) -> Dictionary:
+	_load_release_registry()
+	if not _registry_load_valid:
+		## FREEZE-P0.3R: invalid/missing registry -> every formal map
+		## fail-closed; no entry may be treated as playable.
+		return {
+			"state": IMPLEMENTATION_STATE_UNSUPPORTED,
+			"runtime_map_id": runtime_map_id,
+			"formal_playable": false,
+		}
+	var entry := _release_entry(runtime_map_id)
+	if not entry.is_empty():
+		if has_runtime_map(runtime_map_id):
+			return {
+				"state": IMPLEMENTATION_STATE_IMPLEMENTED_PLAYABLE,
+				"runtime_map_id": runtime_map_id,
+				"formal_playable": true,
+			}
+		return {
+			"state": IMPLEMENTATION_STATE_IMPLEMENTED_STAGING,
+			"runtime_map_id": runtime_map_id,
+			"formal_playable": false,
+		}
+	# The retired WorldContent monster table is not an implementation-state
+	# authority.  A known map may still be reported as planned from GameData's
+	# map identity catalog, but its legacy actor rows never affect this state.
+	if not GameData.get_map_by_id(runtime_map_id).is_empty():
+		return {
+			"state": IMPLEMENTATION_STATE_PLANNED_UNBUILT,
+			"runtime_map_id": runtime_map_id,
+			"formal_playable": false,
+		}
+	return {
+		"state": IMPLEMENTATION_STATE_UNSUPPORTED,
+		"runtime_map_id": runtime_map_id,
+		"formal_playable": false,
+	}
 
 
 static func runtime_path(runtime_map_id: int) -> String:
-	if not MAP_CONFIG.has(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
 		return ""
-	return (
-		"res://assets/data/runtime/map_editor/%s.runtime.json"
-		% str(MAP_CONFIG[runtime_map_id].map_key)
-	)
+	return str(entry.get("runtime_path", ""))
 
 
 static func ground_manifest_path(runtime_map_id: int) -> String:
-	if not MAP_CONFIG.has(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
 		return ""
 	return (
 		"res://map_editor_workspace/%s/ground/ground_manifest.json"
-		% str(MAP_CONFIG[runtime_map_id].map_key)
+		% str(entry.get("map_key", ""))
 	)
 
 
 static func visual_path(runtime_map_id: int) -> String:
-	if not MAP_CONFIG.has(runtime_map_id):
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
 		return ""
 	return (
 		"res://assets/data/runtime/map_editor/%s.visual.json"
-		% str(MAP_CONFIG[runtime_map_id].map_key)
+		% str(entry.get("map_key", ""))
 	)
 
 
@@ -288,11 +523,11 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	var map_center_screen_position_px := ground_position_gu_to_screen_position_px(
 		runtime, map_center_ground_gu
 	)
-	var config: Dictionary = MAP_CONFIG.get(runtime_map_id, {})
+	var release_entry := _release_entry(runtime_map_id)
 	var result := {
-		"name": str(config.get("display_name", "地图")),
+		"name": str(release_entry.get("display_name", "地图")),
 		"runtime_map_id": runtime_map_id,
-		"runtime_map_key": str(config.get("map_key", "")),
+		"runtime_map_key": str(release_entry.get("map_key", "")),
 		"runtime_output_contract_id": RUNTIME_OUTPUT_CONTRACT_ID,
 		"runtime_home_screen_position_px": home_screen_position_px() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
 		"runtime_home_position_ground_gu": home_position_ground_gu() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
@@ -307,30 +542,41 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	}
 	var semantics: Dictionary = runtime.get("semantics", {})
 	for entry: Dictionary in semantics.get("monster_spawn", []):
-		result.spawns.append(_combat_spawn(runtime, entry))
+		var spawn := _combat_spawn(runtime, entry, "monster_spawn")
+		if not spawn.is_empty():
+			result.spawns.append(spawn)
 	for entry: Dictionary in semantics.get("boss_spawn", []):
-		result.bosses.append(_combat_spawn(
+		var spawn := _combat_spawn(
 			runtime,
 			entry,
+			"boss_spawn",
 			float(BOSS_RESPAWN_OVERRIDES.get(runtime_map_id, -1.0))
-		))
+		)
+		if not spawn.is_empty():
+			result.bosses.append(spawn)
 	for entry: Dictionary in semantics.get("npc_points", []):
 		var npc_id := str(entry.get("npc_id", ""))
 		var stock_key := str({
 			"npc.4.001": "general",
 			"npc.4.002": "starter_gear",
 			"npc.4.003": "books",
+			"npc.expansion.bich_pharmacist": "medicine",
 		}.get(npc_id, ""))
+		var service_role := str(entry.get("service_role", "dialogue"))
+		var service_identity := NPCServiceIdentityScript.resolve(
+			str(entry.get("display_name", "NPC")), service_role, stock_key
+		)
 		result.npcs.append({
-			"name": entry.get("display_name", "NPC"),
+			"name": service_identity.get("display_name", "NPC"),
 			"screen_position_px": grid_cell_to_screen_position_px(
 				runtime, entry.get("tile", [0, 0])
 			),
 			"position_ground_gu": cell_to_ground_position_gu(
 				entry.get("tile", [0, 0])
 			),
-			"kind": entry.get("service_role", "dialogue"),
+			"kind": service_role,
 			"npc_id": npc_id,
+			"service_identity_id": service_identity.get("id", ""),
 			"stock": stock_key,
 			"appearance": int(entry.get("appearance", -1)),
 		})
@@ -375,15 +621,42 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 static func _combat_spawn(
 	runtime: Dictionary,
 	entry: Dictionary,
+	placement_kind: String,
 	respawn_override := -1.0
 ) -> Dictionary:
-	var monster_key := str(entry.get("monster_id", "monster.-1"))
+	var numeric_id := _strict_spawn_monster_id(entry)
+	if numeric_id <= 0:
+		return {}
+	# The editor bridge is a production spawn boundary.  Both catalog/editor
+	# eligibility and GameData's resolved-drop runtime closure must succeed.
+	var canonical := GameData.get_canonical_monster_entry(
+		numeric_id, "runtime"
+	)
+	if canonical.is_empty() or GameData.get_canonical_monster_entry(
+		numeric_id, "editor"
+	).is_empty():
+		return {}
+	var classification := str(canonical.get("classification", ""))
+	var canonical_placement := str(
+		canonical.get("editor_placement", {}).get("placement_kind", "")
+	)
+	if placement_kind not in ["monster_spawn", "boss_spawn"]:
+		return {}
+	if not canonical_placement.is_empty() and canonical_placement != placement_kind:
+		return {}
+	if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
+		return {}
+	if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
+		return {}
 	var respawn_seconds := float(entry.get("respawn_seconds", 60.0))
 	if respawn_override > 0.0:
 		respawn_seconds = respawn_override
 	return {
-		"name": entry.get("display_name", ""),
-		"monster_id": int(monster_key.trim_prefix("monster.")),
+		"name": str(canonical.get("canonical_name", "")),
+		"monster_id": numeric_id,
+		"classification": classification,
+		"placement_kind": placement_kind,
+		"is_boss": classification == "boss",
 		"screen_position_px": grid_cell_to_screen_position_px(
 			runtime, entry.get("tile", [0, 0])
 		),
@@ -396,6 +669,36 @@ static func _combat_spawn(
 		"radius_gu": float(entry.get("radius_gu", 0.0)),
 		"spawn_group": entry.duplicate(true),
 	}
+
+
+static func _strict_spawn_monster_id(entry: Dictionary) -> int:
+	# Published runtime semantics use one stable integer field.  Legacy editor
+	# transport IDs and prefixed strings are deliberately not compatibility
+	# inputs for the new APK monster runtime.
+	var retired_camel_key := "monster" + "Id"
+	if (
+		not entry.has("monster_id")
+		or entry.has(retired_camel_key)
+		or entry.has("boss_id")
+		or entry.has("content_id")
+	):
+		return -1
+	var value: Variant = entry.get("monster_id")
+	if value is int:
+		return int(value) if int(value) > 0 else -1
+	# Godot's JSON parser represents JSON numbers as floats, including integer
+	# tokens written by the map compiler.  Accept only an exactly integral,
+	# finite, positive value; strings and every lossy numeric token stay closed.
+	if value is float:
+		var numeric_value := float(value)
+		if (
+			is_finite(numeric_value)
+			and numeric_value > 0.0
+			and numeric_value == floorf(numeric_value)
+			and numeric_value <= 9007199254740991.0
+		):
+			return int(numeric_value)
+	return -1
 
 
 static func _portal_record(

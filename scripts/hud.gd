@@ -9,6 +9,8 @@ const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog
 const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
 const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
@@ -18,9 +20,30 @@ const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joyst
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
 const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
+const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
+const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
+const HUD_CHASSIS_CENTER_PEAK_SOURCE := Vector2(505, 115)
+const HUD_CHASSIS_STATE_LABEL_GAP := 8.0
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
+const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
+const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
+const TAOIST_BUFF_STRIP_ITEM_BAR_GAP := 6.0
+const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
+const HUD_EXPERIENCE_SEGMENT_COUNT := 10
+const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
+const HUD_EXPERIENCE_BAR_SIZE := Vector2(180, 10)
+const HUD_EXPERIENCE_BOTTOM_GAP := 7.0
+const ITEM_QUICK_SLOT_COUNT := 4
+const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
+const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
+const ITEM_QUICK_SLOT_PICKER_GAP := 8.0
+const ITEM_QUICK_SLOT_PICKER_CARD_SIZE := Vector2(56, 64)
+const ITEM_QUICK_SLOT_PICKER_PADDING := 8.0
+const ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT := 320.0
+const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v1"
+const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
 const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
 const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
 const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
@@ -80,10 +103,18 @@ signal skill_input_cancelled(
 )
 signal skill_quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
+signal item_quick_slot_assignment_requested(slot_index: int, item_name: String)
+signal item_quick_slot_use_requested(slot_index: int, item_name: String)
 signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
 signal revival_requested(request: Dictionary)
+signal shop_buy_quotes_requested(stock: Array)
+signal shop_buy_requested(request: Dictionary)
+signal shop_sell_quotes_requested(items: Array)
+signal shop_sell_requested(request: Dictionary)
+signal quest_abandon_requested(quest_id: String)
+signal warehouse_sort_requested
 signal loading_transition_covered(request: Dictionary)
 signal loading_transition_finished(request: Dictionary)
 signal target_switch_pressed
@@ -105,7 +136,6 @@ var inventory_panel: InventoryPanel
 var shop_panel: ShopPanel
 var skill_panel: SkillPanel
 var quest_panel: QuestPanel
-var profession_panel: ProfessionPanel
 var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
 var death_revival_panel
@@ -114,7 +144,30 @@ var loading_transition_overlay
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
+var taoist_buff_hint_label: Label
+var taoist_buff_icon_strip: Control
+var taoist_ac_buff_icon: TextureRect
+var taoist_ac_buff_seconds: Label
+var taoist_mac_buff_icon: TextureRect
+var taoist_mac_buff_seconds: Label
 var hud_item_buttons: Array[Button] = []
+var item_quick_slots: Array[String] = ["", "", "", ""]
+var item_quick_slot_icons: Array[TextureRect] = []
+var item_quick_slot_count_labels: Array[Label] = []
+var experience_bar: Control
+var experience_segments: Array[ColorRect] = []
+var item_quick_slot_menu: PopupPanel
+var item_quick_slot_candidate_buttons: Array[Button] = []
+var _item_quick_slot_menu_slot := -1
+var _item_quick_slot_menu_candidates: Dictionary = {}
+var _item_quick_slot_menu_scroll: ScrollContainer
+var _item_quick_slot_menu_list: Control
+var _item_slot_press_index := -1
+var _item_slot_press_origin := Vector2.ZERO
+var _item_slot_press_touch_index := -1
+var _item_slot_long_press_opened := false
+var _item_slot_press_cancelled := false
+var _item_slot_long_press_timer: Timer
 var quick_slot_labels: Array[Label] = []
 var quick_slot_icons: Array[TextureRect] = []
 var attack_ring_skill_icons: Array[TextureRect] = []
@@ -135,6 +188,9 @@ var _special_action_index := 0
 var _last_target_text := ""
 var _skill_button_assignments: Dictionary = {}
 var _skill_button_modes: Dictionary = {}
+var _panel_prewarm_in_progress := false
+var _all_panels_prewarmed := false
+var _panel_prewarm_diagnostic: Dictionary = {}
 
 
 func _ready() -> void:
@@ -157,18 +213,23 @@ func _build_approved_hud() -> void:
 	_build_right_utility_stack(root)
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
-	_build_modal_panels(root)
-	TouchScrollSupportScript.attach_tree(root)
+	_build_item_quick_slot_menu()
+	# P1-C: panels are now lazy-loaded on first open
+	TouchScrollSupportScript.attach_tree(self)
 	_build_loading_transition()
 
 	PlayerState.profile_changed.connect(update_profile)
+	PlayerState.profile_changed.connect(update_experience_bar)
 	PlayerState.quests_changed.connect(update_quest_tracker)
 	PlayerState.profile_changed.connect(update_special_actions)
 	PlayerState.skills_changed.connect(update_quick_slots)
+	PlayerState.inventory_changed.connect(update_item_quick_slots)
 	update_profile()
+	update_experience_bar()
 	update_quest_tracker()
 	update_special_actions()
 	update_quick_slots()
+	update_item_quick_slots()
 	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
 
 
@@ -334,6 +395,52 @@ func _build_bottom_chassis(root: Control) -> void:
 	health_orb.liquid_color = Color("a51422")
 	chassis_root.add_child(health_orb)
 
+	taoist_buff_icon_strip = Control.new()
+	taoist_buff_icon_strip.name = "TaoistDefenseBuffStrip"
+	taoist_buff_icon_strip.anchor_left = 0.5
+	taoist_buff_icon_strip.anchor_top = 1.0
+	taoist_buff_icon_strip.anchor_right = 0.5
+	taoist_buff_icon_strip.anchor_bottom = 1.0
+	taoist_buff_icon_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	taoist_buff_icon_strip.set_meta("stable_id", TAOIST_BUFF_STRIP_STABLE_ID)
+	taoist_buff_icon_strip.set_meta("layout_policy", "safe_root_above_item_quick_slots.v2")
+	root.add_child(taoist_buff_icon_strip)
+
+	taoist_ac_buff_icon = _build_taoist_defence_buff_icon(
+		taoist_buff_icon_strip,
+		"TaoistACBuffIcon",
+		"hud.taoist_buff.ac",
+		TaoistDefenseBuffTexture,
+		Vector2.ZERO
+	)
+	taoist_ac_buff_seconds = taoist_ac_buff_icon.get_node("Seconds") as Label
+	taoist_mac_buff_icon = _build_taoist_defence_buff_icon(
+		taoist_buff_icon_strip,
+		"TaoistMACBuffIcon",
+		"hud.taoist_buff.mac",
+		TaoistMagicDefenseBuffTexture,
+		Vector2(TAOIST_BUFF_ICON_SIZE.x + 6.0, 0.0)
+	)
+	taoist_mac_buff_seconds = taoist_mac_buff_icon.get_node("Seconds") as Label
+
+	taoist_buff_hint_label = Label.new()
+	taoist_buff_hint_label.name = "TaoistBuffHint"
+	taoist_buff_hint_label.position = (
+		health_orb.position
+		+ Vector2(10, HUD_RESOURCE_ORB_SIZE.y - 30)
+	)
+	taoist_buff_hint_label.size = Vector2(96, 28)
+	taoist_buff_hint_label.add_theme_font_size_override("font_size", 11)
+	taoist_buff_hint_label.add_theme_color_override(
+		"font_color",
+		Color(0.95, 0.88, 0.55)
+	)
+	taoist_buff_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	taoist_buff_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	taoist_buff_hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	taoist_buff_hint_label.visible = false
+	chassis_root.add_child(taoist_buff_hint_label)
+
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
 	mana_orb.position = _chassis_source_to_local(HUD_MANA_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
@@ -382,8 +489,543 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_button.set_meta("stable_id", "hud.item_slot.%d" % (index + 1))
 		item_button.set_meta("metal_masked", true)
 		item_button.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
+		# ItemSlot buttons never use the Button.pressed signal; activation is
+		# emitted only from the gui_input release handler after long-press and
+		# drag guards, so Button internal pressed can never double-fire use.
+		item_button.gui_input.connect(_item_slot_input.bind(index))
 		chassis_root.add_child(item_button)
 		hud_item_buttons.append(item_button)
+		var quick_icon := TextureRect.new()
+		quick_icon.name = "ItemQuickSlotIcon"
+		quick_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		quick_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		quick_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		quick_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quick_icon.visible = false
+		item_button.add_child(quick_icon)
+		item_quick_slot_icons.append(quick_icon)
+		var quick_count := Label.new()
+		quick_count.name = "ItemQuickSlotCount"
+		quick_count.position = Vector2(item_button.size.x - 34, item_button.size.y - 20)
+		quick_count.size = Vector2(30, 16)
+		quick_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		quick_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quick_count.add_theme_font_size_override("font_size", 13)
+		quick_count.add_theme_color_override("font_color", Color("f2c783"))
+		quick_count.add_theme_color_override("font_shadow_color", Color.BLACK)
+		quick_count.add_theme_constant_override("shadow_offset_x", 1)
+		quick_count.add_theme_constant_override("shadow_offset_y", 1)
+		quick_count.visible = false
+		item_button.add_child(quick_count)
+		item_quick_slot_count_labels.append(quick_count)
+	_build_experience_bar(chassis_root)
+	_anchor_taoist_buff_strip_above_item_quick_slots(root)
+
+
+func _build_experience_bar(chassis_root: Control) -> void:
+	experience_bar = Control.new()
+	experience_bar.name = "ExperienceBar"
+	experience_bar.size = HUD_EXPERIENCE_BAR_SIZE
+	experience_bar.position = Vector2(
+		(HUD_CHASSIS_SIZE.x - experience_bar.size.x) * 0.5,
+		HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_bar.size.y,
+	)
+	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
+	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
+	experience_bar.set_meta("data_source", "PlayerState.experience / experience_to_next_level()")
+	chassis_root.add_child(experience_bar)
+	experience_segments.clear()
+	var gap := 3.0
+	var segment_width := (HUD_EXPERIENCE_BAR_SIZE.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
+	for index in range(HUD_EXPERIENCE_SEGMENT_COUNT):
+		var segment := ColorRect.new()
+		segment.name = "Segment%02d" % (index + 1)
+		segment.position = Vector2(index * (segment_width + gap), 0)
+		segment.size = Vector2(segment_width, HUD_EXPERIENCE_BAR_SIZE.y)
+		segment.color = Color("241a16")
+		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		var fill := ColorRect.new()
+		fill.name = "Fill"
+		fill.position = Vector2.ZERO
+		fill.size = Vector2.ZERO
+		fill.color = Color("b77a31")
+		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		fill.set_meta("stable_id", "%s.fill.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		segment.add_child(fill)
+		experience_bar.add_child(segment)
+		experience_segments.append(segment)
+
+
+func update_experience_bar() -> void:
+	if experience_segments.is_empty():
+		return
+	var required := maxi(1, int(PlayerState.experience_to_next_level()))
+	var progress := clampf(float(PlayerState.experience) / float(required), 0.0, 1.0)
+	for index in range(experience_segments.size()):
+		var segment_progress := clampf(progress * HUD_EXPERIENCE_SEGMENT_COUNT - index, 0.0, 1.0)
+		var segment := experience_segments[index]
+		segment.color = Color("241a16")
+		var fill := segment.get_node("Fill") as ColorRect
+		fill.size = Vector2(segment.size.x * segment_progress, segment.size.y)
+		segment.set_meta("fill_ratio", segment_progress)
+
+
+func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
+	if taoist_buff_icon_strip == null or hud_item_buttons.is_empty():
+		return
+	# ItemSlot controls are the actual interactive/front-frame rectangles seen
+	# on device. Resolve their global union once, then express the status strip
+	# as bottom/center offsets inside MobileSafeRoot. Both the item chassis and
+	# this strip therefore retain the same relationship on safe-area or aspect
+	# changes without using the much taller transparent chassis bounds.
+	var item_bar_global_rect := hud_item_buttons[0].get_global_rect()
+	for index in range(1, hud_item_buttons.size()):
+		item_bar_global_rect = item_bar_global_rect.merge(
+			hud_item_buttons[index].get_global_rect()
+		)
+	var safe_root_global_rect := root.get_global_rect()
+	var center_offset_x := (
+		item_bar_global_rect.get_center().x
+		- safe_root_global_rect.get_center().x
+	)
+	var item_bar_top_offset_from_safe_bottom := (
+		item_bar_global_rect.position.y
+		- safe_root_global_rect.end.y
+	)
+	taoist_buff_icon_strip.offset_left = (
+		center_offset_x - TAOIST_BUFF_STRIP_SIZE.x * 0.5
+	)
+	taoist_buff_icon_strip.offset_right = (
+		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
+	)
+	taoist_buff_icon_strip.offset_bottom = (
+		item_bar_top_offset_from_safe_bottom
+		- TAOIST_BUFF_STRIP_ITEM_BAR_GAP
+	)
+	taoist_buff_icon_strip.offset_top = (
+		taoist_buff_icon_strip.offset_bottom - TAOIST_BUFF_STRIP_SIZE.y
+	)
+
+
+func _anchor_warrior_state_label(root: Control) -> void:
+	var chassis_root := root.get_node_or_null("IntegratedHUDChassis") as Control
+	if warrior_state_label == null or chassis_root == null:
+		return
+	var root_inverse := root.get_global_transform().affine_inverse()
+	var chassis_global := chassis_root.get_global_rect()
+	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
+	var label_width := minf(500.0, chassis_global.size.x)
+	warrior_state_label.position.x = (root_inverse * chassis_global.get_center()).x
+	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
+	warrior_state_label.size.x = label_width
+	warrior_state_label.size.y = 28.0
+	var peak_local := root_inverse * Vector2(chassis_global.position.x, peak_global_y)
+	warrior_state_label.position.y = peak_local.y - warrior_state_label.size.y - HUD_CHASSIS_STATE_LABEL_GAP
+	warrior_state_label.set_meta("layout_anchor", "chassis_source_center_peak.v1")
+	warrior_state_label.set_meta("layout_gap", HUD_CHASSIS_STATE_LABEL_GAP)
+
+
+func _build_taoist_defence_buff_icon(
+	parent: Control,
+	node_name: String,
+	stable_id: String,
+	texture: Texture2D,
+	icon_position: Vector2
+) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.name = node_name
+	icon.position = icon_position
+	icon.size = TAOIST_BUFF_ICON_SIZE
+	icon.texture = texture
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.visible = false
+	icon.set_meta("stable_id", stable_id)
+	parent.add_child(icon)
+	var seconds := Label.new()
+	seconds.name = "Seconds"
+	seconds.position = Vector2(8, 13)
+	seconds.size = Vector2(22, 14)
+	seconds.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	seconds.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	seconds.add_theme_font_size_override("font_size", 10)
+	seconds.add_theme_color_override("font_color", Color.WHITE)
+	seconds.add_theme_color_override("font_shadow_color", Color.BLACK)
+	seconds.add_theme_constant_override("shadow_offset_x", 1)
+	seconds.add_theme_constant_override("shadow_offset_y", 1)
+	seconds.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.add_child(seconds)
+	return icon
+
+
+func _build_item_quick_slot_menu() -> void:
+	item_quick_slot_menu = PopupPanel.new()
+	item_quick_slot_menu.name = "ItemQuickSlotMenu"
+	var picker_style := StyleBoxFlat.new()
+	picker_style.bg_color = Color("241b16")
+	picker_style.border_color = Color("8f6a38")
+	picker_style.border_width_left = 1
+	picker_style.border_width_top = 1
+	picker_style.border_width_right = 1
+	picker_style.border_width_bottom = 1
+	# Keep the pale cast shadow geometrically centered on the dark panel.
+	picker_style.shadow_color = Color(0.78, 0.72, 0.62, 0.34)
+	picker_style.shadow_size = 4
+	picker_style.shadow_offset = Vector2.ZERO
+	item_quick_slot_menu.add_theme_stylebox_override("panel", picker_style)
+	add_child(item_quick_slot_menu)
+	_item_quick_slot_menu_scroll = ScrollContainer.new()
+	_item_quick_slot_menu_scroll.name = "ItemQuickSlotScroll"
+	_item_quick_slot_menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_item_quick_slot_menu_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	item_quick_slot_menu.add_child(_item_quick_slot_menu_scroll)
+	_item_quick_slot_menu_list = Control.new()
+	_item_quick_slot_menu_list.name = "ItemQuickSlotCandidates"
+	_item_quick_slot_menu_scroll.add_child(_item_quick_slot_menu_list)
+	_item_slot_long_press_timer = Timer.new()
+	_item_slot_long_press_timer.name = "ItemQuickSlotLongPressTimer"
+	_item_slot_long_press_timer.one_shot = true
+	_item_slot_long_press_timer.wait_time = ITEM_QUICK_SLOT_LONG_PRESS_SECONDS
+	_item_slot_long_press_timer.timeout.connect(_open_item_quick_slot_menu)
+	add_child(_item_slot_long_press_timer)
+
+
+func set_item_quick_slots(assignments: Array) -> void:
+	item_quick_slots.clear()
+	for index in range(ITEM_QUICK_SLOT_COUNT):
+		var value: Variant = assignments[index] if index < assignments.size() else ""
+		item_quick_slots.append(_item_slot_assignment_name(value))
+	update_item_quick_slots()
+
+
+func _item_slot_assignment_name(value: Variant) -> String:
+	if value is Dictionary:
+		return str(
+			value.get(
+				"item_name",
+				value.get("name", value.get("display_name", value.get("displayName", "")))
+			)
+		)
+	return str(value)
+
+
+func update_item_quick_slots() -> void:
+	for index in range(ITEM_QUICK_SLOT_COUNT):
+		var item_name := item_quick_slots[index] if index < item_quick_slots.size() else ""
+		var count := PlayerState.item_count(item_name) if not item_name.is_empty() else 0
+		var button: Button = hud_item_buttons[index] if index < hud_item_buttons.size() else null
+		var icon: TextureRect = item_quick_slot_icons[index] if index < item_quick_slot_icons.size() else null
+		var count_label: Label = item_quick_slot_count_labels[index] if index < item_quick_slot_count_labels.size() else null
+		if button == null:
+			continue
+		button.set_meta("item_quick_slot_name", item_name)
+		button.set_meta("item_quick_slot_count", count)
+		button.set_meta("item_quick_slot_available", count > 0)
+		if item_name.is_empty():
+			button.text = str(index + 1)
+			if icon != null:
+				icon.texture = null
+				icon.visible = false
+				icon.modulate = Color.WHITE
+			if count_label != null:
+				count_label.text = ""
+				count_label.visible = false
+			button.tooltip_text = "快捷物品 %d：长按从背包选择" % (index + 1)
+			continue
+		var record := GameData.get_item_record(item_name)
+		var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+		button.text = ""
+		if icon != null:
+			icon.texture = texture
+			icon.visible = texture != null
+			icon.modulate = Color(1, 1, 1, 0.45) if count <= 0 else Color.WHITE
+			_layout_native_item_icon(icon, texture, button.size)
+		if count_label != null:
+			count_label.text = str(count)
+			count_label.visible = true
+		button.tooltip_text = "%s × %d" % [item_name, count] if count > 0 else "%s（暂无库存，补货后恢复）" % item_name
+
+
+func _item_slot_input(event: InputEvent, slot_index: int) -> void:
+	if event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		if touch.pressed:
+			_begin_item_slot_press(slot_index, touch.position, touch.index)
+		elif touch.index == _item_slot_press_touch_index:
+			_finish_item_slot_press(slot_index, touch.position, touch.index)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_begin_item_slot_press(slot_index, event.position, -1)
+		elif _item_slot_press_touch_index == -1:
+			_finish_item_slot_press(slot_index, event.position, -1)
+	elif event is InputEventScreenDrag and event.index == _item_slot_press_touch_index:
+		if event.position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
+			_cancel_item_slot_press()
+	elif event is InputEventMouseMotion and _item_slot_press_touch_index == -1 and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		if event.position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
+			_cancel_item_slot_press()
+
+
+func _begin_item_slot_press(slot_index: int, origin: Vector2, touch_index: int) -> void:
+	_item_slot_press_index = slot_index
+	_item_slot_press_origin = origin
+	_item_slot_press_touch_index = touch_index
+	_item_slot_long_press_opened = false
+	_item_slot_press_cancelled = false
+	_item_slot_long_press_timer.start()
+
+
+func _cancel_item_slot_press() -> void:
+	_item_slot_long_press_timer.stop()
+	_item_slot_press_cancelled = true
+	_item_slot_press_touch_index = -1
+
+
+func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_index := -1) -> void:
+	_item_slot_long_press_timer.stop()
+	if _item_slot_press_index != slot_index:
+		return
+	if _item_slot_press_touch_index != touch_index:
+		return
+	var long_press_opened := _item_slot_long_press_opened
+	var cancelled := _item_slot_press_cancelled
+	var moved_away := release_position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE
+	_item_slot_press_index = -1
+	_item_slot_press_touch_index = -1
+	if long_press_opened or cancelled or moved_away:
+		return
+	var item_name := _item_slot_bound_name(slot_index)
+	if item_name.is_empty():
+		show_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
+		return
+	item_quick_slot_use_requested.emit(slot_index, item_name)
+
+
+func _item_slot_bound_name(slot_index: int) -> String:
+	if slot_index >= 0 and slot_index < item_quick_slots.size():
+		return item_quick_slots[slot_index]
+	return ""
+
+
+func _open_item_quick_slot_menu() -> void:
+	var slot_index := _item_slot_press_index
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT:
+		return
+	_item_slot_long_press_opened = true
+	_item_quick_slot_menu_slot = slot_index
+	_clear_item_quick_slot_picker()
+	_item_quick_slot_menu_candidates.clear()
+	var candidates := _item_quick_slot_candidates()
+	for index in range(candidates.size()):
+		var candidate: Dictionary = candidates[index]
+		var id := index + 1
+		_item_quick_slot_menu_candidates[id] = str(candidate.get("item_name", ""))
+		_add_item_quick_slot_candidate(candidate, id, candidates.size() - 1 - index)
+	var content_size := _item_quick_slot_picker_content_size(candidates.size())
+	if candidates.is_empty():
+		_add_item_quick_slot_empty_state()
+		content_size = Vector2(180, 56)
+	_item_quick_slot_menu_list.custom_minimum_size = content_size
+	_item_quick_slot_menu_list.size = content_size
+	var button: Button = hud_item_buttons[slot_index] if slot_index < hud_item_buttons.size() else null
+	if button != null:
+		_popup_item_quick_slot_picker(button, content_size)
+
+
+func _item_quick_slot_candidates() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for stack: Variant in PlayerState.inventory:
+		if not stack is Dictionary:
+			continue
+		var item_name := str(stack.get("name", ""))
+		if item_name.is_empty() or seen.has(item_name):
+			continue
+		var record := GameData.get_item_record(item_name)
+		if not _is_quick_slot_candidate(record):
+			continue
+		seen[item_name] = true
+		result.append({"item_name": item_name, "count": PlayerState.item_count(item_name)})
+	return result
+
+
+func _is_quick_slot_candidate(record: Dictionary) -> bool:
+	if record.is_empty():
+		return false
+	var kind := str(record.get("kind", ""))
+	if kind not in ["skill_book", "consumable", "scroll"]:
+		return false
+	return bool(record.get("usable", true))
+
+
+func _on_item_quick_slot_menu_pressed(id: int) -> void:
+	var item_name := str(_item_quick_slot_menu_candidates.get(id, ""))
+	if item_name.is_empty():
+		return
+	item_quick_slot_menu.hide()
+	_assign_item_quick_slot(_item_quick_slot_menu_slot, item_name)
+
+
+func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2) -> void:
+	if texture == null:
+		icon.position = bounds * 0.5
+		icon.size = Vector2.ZERO
+		return
+	icon.size = texture.get_size()
+	icon.position = (bounds - icon.size) * 0.5
+
+
+func _clear_item_quick_slot_picker() -> void:
+	item_quick_slot_candidate_buttons.clear()
+	for child: Node in _item_quick_slot_menu_list.get_children():
+		_item_quick_slot_menu_list.remove_child(child)
+		child.queue_free()
+
+
+func _item_quick_slot_picker_content_size(candidate_count: int) -> Vector2:
+	if candidate_count <= 0:
+		return Vector2.ZERO
+	return Vector2(
+		ITEM_QUICK_SLOT_PICKER_CARD_SIZE.x,
+		ITEM_QUICK_SLOT_PICKER_CARD_SIZE.y * candidate_count
+			+ ITEM_QUICK_SLOT_PICKER_GAP * maxi(0, candidate_count - 1),
+	)
+
+
+func _add_item_quick_slot_candidate(candidate: Dictionary, id: int, visual_row: int) -> void:
+	var item_name := str(candidate.get("item_name", ""))
+	var count := int(candidate.get("count", 0))
+	var card := Button.new()
+	card.name = "ItemQuickSlotCandidate%d" % id
+	card.position = Vector2(0, visual_row * (ITEM_QUICK_SLOT_PICKER_CARD_SIZE.y + ITEM_QUICK_SLOT_PICKER_GAP))
+	card.size = ITEM_QUICK_SLOT_PICKER_CARD_SIZE
+	card.custom_minimum_size = ITEM_QUICK_SLOT_PICKER_CARD_SIZE
+	card.text = ""
+	card.tooltip_text = "%s × %d" % [item_name, count]
+	card.accessibility_name = "%s，数量 %d" % [item_name, count]
+	card.set_meta("accessibility_text", card.tooltip_text)
+	card.set_meta("candidate_id", id)
+	card.set_meta("item_name", item_name)
+	card.set_meta("count", count)
+	card.pressed.connect(_on_item_quick_slot_menu_pressed.bind(id))
+	_item_quick_slot_menu_list.add_child(card)
+	item_quick_slot_candidate_buttons.append(card)
+	var record := GameData.get_item_record(item_name)
+	var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+	var icon := TextureRect.new()
+	icon.name = "InventoryIcon"
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = texture
+	icon.visible = texture != null
+	_layout_native_item_icon(icon, texture, card.size)
+	card.add_child(icon)
+	var count_label := Label.new()
+	count_label.name = "Count"
+	count_label.position = Vector2(card.size.x - 28, card.size.y - 20)
+	count_label.size = Vector2(24, 16)
+	count_label.text = str(count)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.add_theme_font_size_override("font_size", 13)
+	count_label.add_theme_color_override("font_color", Color("f2c783"))
+	count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	count_label.add_theme_constant_override("shadow_offset_x", 1)
+	count_label.add_theme_constant_override("shadow_offset_y", 1)
+	card.add_child(count_label)
+
+
+func _add_item_quick_slot_empty_state() -> void:
+	var label := Label.new()
+	label.name = "EmptyState"
+	label.size = Vector2(180, 56)
+	label.text = "暂无可快捷物品"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_item_quick_slot_menu_list.add_child(label)
+
+
+func _popup_item_quick_slot_picker(button: Button, content_size: Vector2) -> void:
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root == null:
+		return
+	var safe_rect := Rect2(safe_root.get_screen_position(), safe_root.size)
+	var slot_rect := Rect2(button.get_screen_position(), button.size)
+	var available_height := maxf(0.0, slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - safe_rect.position.y)
+	var popup_size := Vector2(
+		content_size.x + ITEM_QUICK_SLOT_PICKER_PADDING * 2.0,
+		minf(content_size.y + ITEM_QUICK_SLOT_PICKER_PADDING * 2.0, minf(ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT, available_height)),
+	)
+	if popup_size.y <= 0.0:
+		return
+	var popup_position := Vector2(
+		slot_rect.get_center().x - popup_size.x * 0.5,
+		slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - popup_size.y,
+	)
+	popup_position.x = clampf(popup_position.x, safe_rect.position.x, safe_rect.end.x - popup_size.x)
+	popup_position.y = maxf(popup_position.y, safe_rect.position.y)
+	_item_quick_slot_menu_scroll.position = Vector2(ITEM_QUICK_SLOT_PICKER_PADDING, ITEM_QUICK_SLOT_PICKER_PADDING)
+	_item_quick_slot_menu_scroll.size = popup_size - Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING * 2.0
+	# PopupPanel derives its initial window size from child minimum sizes and may
+	# collapse a manually positioned ScrollContainer to the panel border. Apply
+	# the computed safe-area window size after popup so it remains authoritative.
+	item_quick_slot_menu.popup(Rect2i(Vector2i(popup_position.round()), Vector2i(popup_size.round())))
+	item_quick_slot_menu.position = Vector2i(popup_position.round())
+	item_quick_slot_menu.size = Vector2i(popup_size.round())
+	# PopupPanel may reconcile its minimum size after popup() once the themed
+	# panel margins are applied. Re-anchor from the final control rect so the
+	# visible frame remains centered on the held slot and the scroll margins stay
+	# symmetric even when that reconciliation changes width or height.
+	_recenter_item_quick_slot_picker.call_deferred(button)
+	_scroll_item_quick_slot_menu_to_bottom.call_deferred()
+
+
+func _recenter_item_quick_slot_picker(button: Button) -> void:
+	if item_quick_slot_menu == null or not item_quick_slot_menu.visible or button == null:
+		return
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root == null:
+		return
+	var safe_rect := Rect2(safe_root.get_screen_position(), safe_root.size)
+	var slot_rect := Rect2(button.get_screen_position(), button.size)
+	var final_size := Vector2(item_quick_slot_menu.size)
+	if final_size.x <= 0.0 or final_size.y <= 0.0:
+		return
+	var final_position := Vector2(
+		slot_rect.get_center().x - final_size.x * 0.5,
+		slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - final_size.y,
+	)
+	final_position.x = clampf(final_position.x, safe_rect.position.x, safe_rect.end.x - final_size.x)
+	final_position.y = maxf(final_position.y, safe_rect.position.y)
+	item_quick_slot_menu.position = Vector2i(final_position.round())
+	_item_quick_slot_menu_scroll.position = Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING
+	_item_quick_slot_menu_scroll.size = final_size - Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING * 2.0
+
+
+func _scroll_item_quick_slot_menu_to_bottom() -> void:
+	if _item_quick_slot_menu_scroll == null:
+		return
+	_item_quick_slot_menu_scroll.scroll_vertical = int(maxf(
+		0.0,
+		_item_quick_slot_menu_list.size.y - _item_quick_slot_menu_scroll.size.y,
+	))
+
+
+func _assign_item_quick_slot(slot_index: int, item_name: String) -> void:
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT or item_name.is_empty():
+		return
+	item_quick_slots[slot_index] = item_name
+	update_item_quick_slots()
+	item_quick_slot_assignment_requested.emit(slot_index, item_name)
 
 
 func _build_combat_controls(root: Control) -> void:
@@ -410,7 +1052,7 @@ func _build_combat_controls(root: Control) -> void:
 
 	warrior_state_label = Label.new()
 	warrior_state_label.name = "WarriorStateLabel"
-	warrior_state_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	warrior_state_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	warrior_state_label.offset_left = 350
 	warrior_state_label.offset_top = -250
 	warrior_state_label.offset_right = -350
@@ -419,6 +1061,7 @@ func _build_combat_controls(root: Control) -> void:
 	warrior_state_label.add_theme_font_size_override("font_size", 15)
 	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
 	root.add_child(warrior_state_label)
+	_anchor_warrior_state_label(root)
 
 	_add_bottom_right_fill(root, "InteractFill", Rect2(-241, -403, 52, 52), "GothicArtCircleFill")
 	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-111, -403, 52, 52), "GothicArtCircleFill")
@@ -696,13 +1339,40 @@ func _on_skill_input_cancelled(
 	)
 
 
-func _build_modal_panels(root: Control) -> void:
+# P1-C: Lazy-loaded modal panels. Each _ensure_*_panel() creates the
+# panel on first access so HUD startup time and memory peak are reduced.
+
+func _ensure_inventory_panel() -> void:
+	if is_instance_valid(inventory_panel):
+		return
 	inventory_panel = InventoryPanel.new()
 	inventory_panel.hide()
-	root.add_child(inventory_panel)
+	add_child(inventory_panel)
+
+
+func _ensure_shop_panel() -> void:
+	if is_instance_valid(shop_panel):
+		return
 	shop_panel = ShopPanel.new()
 	shop_panel.hide()
-	root.add_child(shop_panel)
+	shop_panel.buy_quotes_requested.connect(
+		func(stock: Array) -> void: shop_buy_quotes_requested.emit(stock)
+	)
+	shop_panel.buy_requested.connect(
+		func(request: Dictionary) -> void: shop_buy_requested.emit(request)
+	)
+	shop_panel.sell_quotes_requested.connect(
+		func(items: Array) -> void: shop_sell_quotes_requested.emit(items)
+	)
+	shop_panel.sell_requested.connect(
+		func(request: Dictionary) -> void: shop_sell_requested.emit(request)
+	)
+	add_child(shop_panel)
+
+
+func _ensure_skill_panel() -> void:
+	if is_instance_valid(skill_panel):
+		return
 	skill_panel = SkillPanel.new()
 	skill_panel.hide()
 	skill_panel.quick_slot_assignment_requested.connect(
@@ -711,13 +1381,143 @@ func _build_modal_panels(root: Control) -> void:
 	skill_panel.skill_button_assignment_requested.connect(
 		func(request: Dictionary) -> void: skill_button_assignment_requested.emit(request)
 	)
-	root.add_child(skill_panel)
+	add_child(skill_panel)
+
+
+func prewarm_all_panels(system_menu_panel: Control = null) -> void:
+	if _all_panels_prewarmed:
+		return
+	if _panel_prewarm_in_progress:
+		while _panel_prewarm_in_progress and is_inside_tree():
+			await get_tree().process_frame
+		return
+	_panel_prewarm_in_progress = true
+	var prewarm_started_usec := Time.get_ticks_usec()
+	_panel_prewarm_diagnostic = {
+		"started_at_usec": prewarm_started_usec,
+		"completed": false,
+	}
+	_ensure_inventory_panel()
+	_ensure_shop_panel()
+	_ensure_skill_panel()
+	_ensure_quest_panel()
+	_ensure_map_panel()
+	_ensure_warehouse_panel()
+	_ensure_death_revival_panel()
+	# SkillPanel intentionally refreshes only when opened. Run the same public
+	# refresh once while hidden so its dynamic cards, icons and saved profile are
+	# part of the Loading-phase warm-up as well.
+	skill_panel.refresh()
+	_panel_prewarm_diagnostic["construction_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	var panels: Array[Control] = [
+		inventory_panel,
+		shop_panel,
+		skill_panel,
+		quest_panel,
+		map_panel,
+		warehouse_panel,
+		death_revival_panel,
+	]
+	if is_instance_valid(system_menu_panel):
+		panels.append(system_menu_panel)
+	for panel: Control in panels:
+		panel.hide()
+	# Each layout profile runs multiple frame-separated passes. Keep every
+	# reusable panel hidden until its initial contract has reached the final
+	# geometry pass, so first-open can only expose the finished frame.
+	var initial_profiles: Array = [
+		[inventory_panel, "inventory"],
+		[shop_panel, "shop_buy"],
+		[skill_panel, "skill"],
+		[quest_panel, "quest"],
+		[map_panel, "map"],
+		[warehouse_panel, "warehouse"],
+		[death_revival_panel, "death_revival"],
+	]
+	if is_instance_valid(system_menu_panel):
+		initial_profiles.append([system_menu_panel, "system_menu"])
+	var initial_wait_frames := await _wait_for_layout_profiles(initial_profiles)
+	_panel_prewarm_diagnostic["initial_profiles_wait_frames"] = initial_wait_frames
+	_panel_prewarm_diagnostic["initial_profiles_elapsed_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	# The shop owns two independent saved layouts. Warm the sell layout without
+	# requesting quotes or changing its business state, then restore buy.
+	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_sell")
+	var shop_sell_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_buy")
+	var shop_buy_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
+	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
+	_panel_prewarm_diagnostic["shop_profiles_elapsed_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	# Shop and quest already own the reusable public confirmation dialog.
+	var confirmation_profiles: Array = []
+	if is_instance_valid(shop_panel.sell_confirmation):
+		confirmation_profiles.append([shop_panel.sell_confirmation, "confirmation_dialog"])
+	if is_instance_valid(quest_panel.abandon_confirmation):
+		confirmation_profiles.append([quest_panel.abandon_confirmation, "confirmation_dialog"])
+	var confirmation_wait_frames := await _wait_for_layout_profiles(confirmation_profiles)
+	_panel_prewarm_diagnostic["confirmation_wait_frames"] = confirmation_wait_frames
+	# Flush deferred grid/list stabilizers once more while hidden.
+	await get_tree().process_frame
+	for panel: Control in panels:
+		panel.hide()
+	_all_panels_prewarmed = _profiles_are_ready(
+		initial_profiles
+		+ [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
+		+ confirmation_profiles
+	)
+	_panel_prewarm_diagnostic["completed"] = _all_panels_prewarmed
+	_panel_prewarm_diagnostic["total_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	_panel_prewarm_in_progress = false
+
+
+func _wait_for_layout_profiles(profiles: Array) -> int:
+	var waited_frames := 0
+	for _frame in 30:
+		if _profiles_are_ready(profiles):
+			break
+		await get_tree().process_frame
+		waited_frames += 1
+	return waited_frames
+
+
+func _profiles_are_ready(profiles: Array) -> bool:
+	for raw_item: Variant in profiles:
+		var item := raw_item as Array
+		if not UIRuntimeLayoutOverridesScript.profile_is_ready(item[0] as Control, str(item[1])):
+			return false
+	return true
+
+
+func all_panels_are_prewarmed() -> bool:
+	return _all_panels_prewarmed
+
+
+func panel_prewarm_diagnostic() -> Dictionary:
+	return _panel_prewarm_diagnostic.duplicate(true)
+
+
+func _ensure_quest_panel() -> void:
+	if is_instance_valid(quest_panel):
+		return
 	quest_panel = QuestPanel.new()
 	quest_panel.hide()
-	root.add_child(quest_panel)
-	profession_panel = ProfessionPanel.new()
-	profession_panel.hide()
-	root.add_child(profession_panel)
+	quest_panel.abandon_requested.connect(
+		func(quest_id: String) -> void: quest_abandon_requested.emit(quest_id)
+	)
+	add_child(quest_panel)
+
+
+func _ensure_map_panel() -> void:
+	if is_instance_valid(map_panel):
+		return
 	map_panel = MapPanel.new()
 	map_panel.hide()
 	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
@@ -725,16 +1525,29 @@ func _build_modal_panels(root: Control) -> void:
 	map_panel.teleport_availability_requested.connect(
 		func(map_ids: Array) -> void: map_teleport_availability_requested.emit(map_ids)
 	)
-	root.add_child(map_panel)
+	add_child(map_panel)
+
+
+func _ensure_warehouse_panel() -> void:
+	if is_instance_valid(warehouse_panel):
+		return
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
-	root.add_child(warehouse_panel)
+	warehouse_panel.warehouse_sort_requested.connect(
+		func() -> void: warehouse_sort_requested.emit()
+	)
+	add_child(warehouse_panel)
+
+
+func _ensure_death_revival_panel() -> void:
+	if is_instance_valid(death_revival_panel):
+		return
 	death_revival_panel = DeathRevivalPanelScript.new()
 	death_revival_panel.hide()
 	death_revival_panel.revival_requested.connect(
 		func(request: Dictionary) -> void: revival_requested.emit(request)
 	)
-	root.add_child(death_revival_panel)
+	add_child(death_revival_panel)
 
 
 func _chassis_source_to_local(source_point: Vector2) -> Vector2:
@@ -854,6 +1667,7 @@ func _request_system_menu() -> void:
 
 
 func _toggle_skill_book() -> void:
+	_ensure_skill_panel()
 	if skill_panel.visible:
 		skill_panel.hide()
 	else:
@@ -884,6 +1698,42 @@ func update_resources(current_hp: int, max_hp: int, current_mp: int, max_mp: int
 		health_orb.call("set_values", current_hp, max_hp)
 	if mana_orb != null:
 		mana_orb.call("set_values", current_mp, max_mp)
+
+
+func update_taoist_buff_hints(entries: Array, defence_snapshot := {}) -> void:
+	if taoist_buff_hint_label == null:
+		return
+	taoist_buff_hint_label.visible = not entries.is_empty()
+	taoist_buff_hint_label.text = "｜".join(entries)
+	var snapshot: Dictionary = (
+		defence_snapshot as Dictionary
+		if defence_snapshot is Dictionary
+		else {}
+	)
+	_update_taoist_defence_buff_icon(
+		taoist_ac_buff_icon,
+		taoist_ac_buff_seconds,
+		int(snapshot.get("ac_bonus", 0)),
+		float(snapshot.get("ac_remaining_seconds", 0.0))
+	)
+	_update_taoist_defence_buff_icon(
+		taoist_mac_buff_icon,
+		taoist_mac_buff_seconds,
+		int(snapshot.get("mac_bonus", 0)),
+		float(snapshot.get("mac_remaining_seconds", 0.0))
+	)
+
+
+func _update_taoist_defence_buff_icon(
+	icon: TextureRect,
+	seconds_label: Label,
+	bonus: int,
+	remaining_seconds: float
+) -> void:
+	if icon == null or seconds_label == null:
+		return
+	icon.visible = bonus > 0 and remaining_seconds > 0.0
+	seconds_label.text = str(maxi(0, int(ceil(remaining_seconds))))
 
 
 func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true) -> void:
@@ -983,6 +1833,7 @@ func _on_special_action_button() -> void:
 
 
 func _toggle_inventory() -> void:
+	_ensure_inventory_panel()
 	if inventory_panel.visible:
 		inventory_panel.hide()
 	else:
@@ -991,16 +1842,8 @@ func _toggle_inventory() -> void:
 		inventory_panel.show()
 
 
-func _toggle_profession() -> void:
-	if profession_panel.visible:
-		profession_panel.hide()
-	else:
-		_close_modal_panels()
-		profession_panel.refresh()
-		profession_panel.show()
-
-
 func _toggle_map_panel() -> void:
+	_ensure_map_panel()
 	if map_panel.visible:
 		map_panel.hide()
 	else:
@@ -1024,13 +1867,35 @@ func set_zone_name(zone_name: String) -> void:
 			zone_label.text = current_zone_name
 
 
-func open_shop(display_name: String, stock: Array) -> void:
+func open_shop(display_name: String, stock: Array, merchant_context: Dictionary = {}) -> void:
 	_close_modal_panels()
-	shop_panel.open_for(display_name, stock)
+	_ensure_shop_panel()
+	shop_panel.open_for(display_name, stock, merchant_context)
+
+
+func set_shop_sell_quotes(quotes: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.set_sell_quotes(quotes)
+
+
+func set_shop_buy_quotes(quotes: Array) -> void:
+	_ensure_shop_panel()
+	shop_panel.set_buy_quotes(quotes)
+
+
+func apply_shop_buy_result(result: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.apply_buy_result(result)
+
+
+func apply_shop_sell_result(result: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.apply_sell_result(result)
 
 
 func open_skill_trainer(display_name: String) -> void:
 	_close_modal_panels()
+	_ensure_skill_panel()
 	skill_panel.open_for(display_name)
 
 
@@ -1043,39 +1908,56 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 
 
 func show_death_screen(context := {}) -> void:
+	_ensure_death_revival_panel()
 	_close_modal_panels()
 	if death_revival_panel != null:
 		death_revival_panel.open_death_screen(context)
 
 
 func set_revival_options(options: Array) -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.set_revival_options(options)
 
 
 func update_revival_option(option_slot: String, state: Dictionary) -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.update_revival_option(option_slot, state)
 
 
 func apply_revival_result(result: Dictionary) -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.apply_revival_result(result)
 
 
 func close_death_screen() -> void:
+	_ensure_death_revival_panel()
 	if death_revival_panel != null:
 		death_revival_panel.close_death_screen()
 
 
 func open_quest(display_name: String) -> void:
 	_close_modal_panels()
+	_ensure_quest_panel()
 	quest_panel.open_for(display_name)
+
+
+func apply_quest_abandon_result(result: Dictionary) -> void:
+	_ensure_quest_panel()
+	quest_panel.apply_abandon_result(result)
 
 
 func open_warehouse() -> void:
 	_close_modal_panels()
+	_ensure_warehouse_panel()
 	warehouse_panel.open_panel()
+
+
+func apply_warehouse_sort_result(result: Dictionary) -> void:
+	_ensure_warehouse_panel()
+	warehouse_panel.apply_sort_result(result)
 
 
 func show_message(message: String, seconds := 2.0) -> void:
@@ -1264,6 +2146,8 @@ func _on_skill_button(index: int) -> void:
 
 
 func _close_modal_panels() -> void:
+	if item_quick_slot_menu != null:
+		item_quick_slot_menu.hide()
 	if inventory_panel != null:
 		inventory_panel.hide()
 	if shop_panel != null:
@@ -1272,8 +2156,6 @@ func _close_modal_panels() -> void:
 		skill_panel.hide()
 	if quest_panel != null:
 		quest_panel.hide()
-	if profession_panel != null:
-		profession_panel.hide()
 	if map_panel != null:
 		map_panel.hide()
 	if warehouse_panel != null:

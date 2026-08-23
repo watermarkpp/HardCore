@@ -12,7 +12,9 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	assert(int(ProjectSettings.get_setting("display/window/handheld/orientation", -1)) == 4, "Android方向不是Sensor Landscape")
 	assert(str(ProjectSettings.get_setting("display/window/stretch/mode", "")) == "canvas_items", "Android未使用CanvasItems缩放")
-	assert(str(ProjectSettings.get_setting("display/window/stretch/aspect", "")) == "expand", "20:9屏幕未启用扩展视野")
+	assert(str(ProjectSettings.get_setting("display/window/stretch/aspect", "")) == "keep", "Android未固定1598×720比例并使用黑边补齐")
+	assert(int(ProjectSettings.get_setting("display/window/size/viewport_width", 0)) == 1598, "Android逻辑画布宽度不是1598")
+	assert(int(ProjectSettings.get_setting("display/window/size/viewport_height", 0)) == 720, "Android逻辑画布高度不是720")
 	_assert_resolution_matrix()
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()

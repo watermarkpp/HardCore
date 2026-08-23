@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2a_no_false_negative"]
+[ext_resource type="Script" path="res://tests/projectile_broadphase_no_false_negative_test.gd" id="1"]
+[node name="ProjectileBroadphaseNoFalseNegative" type="Node"]
+script = ExtResource("1")

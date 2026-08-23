@@ -21,16 +21,48 @@ func _run() -> void:
 	var panel := QuestPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	panel.open_for("比奇老兵")
+	panel.open_for("老兵")
 	await get_tree().process_frame
+	assert(panel.npc_display_name == "老兵", "任务NPC仍带地区前缀")
+	for quest: Dictionary in GameData.get_bich_quests():
+		assert(str(quest.get("npc", "")) == "老兵", "任务委托人没有合并为老兵")
 	assert(panel.size == Vector2(1020, 636), "任务面板没有使用既定横屏底板尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "任务面板没有复用公共哥特外框")
 	assert(panel.get_node("QuestListPanel").theme_type_variation == "GothicInsetFrame", "任务列表没有复用公共内框")
 	assert(panel.get_node("QuestDetailPanel").theme_type_variation == "GothicInsetFrame", "任务详情没有复用公共内框")
-	assert(panel.get_node("QuestDetailPanel/RewardsPanel").theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
+	var list_scroll := panel.get_node("QuestListPanel/QuestListScroll") as ScrollContainer
+	assert(list_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "任务人物列表外仍有多余细框")
+	var divider := panel.get_node("QuestDetailPanel/StoryDivider") as HSeparator
+	var detail_panel := panel.get_node("QuestDetailPanel") as Control
+	assert(divider.position.x == 20.0 and is_equal_approx(divider.size.x, detail_panel.size.x - 40.0), "任务详情横线没有在二级框内左右各留20像素")
+	assert(divider.get_meta("calibration_layer", "") == "quest_story_divider", "任务详情横线仍无法独立选中")
+	var rewards_panel := panel.get_node("QuestDetailPanel/RewardsPanel") as Panel
+	assert(rewards_panel.theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
+	assert(rewards_panel.get_meta("calibration_layer", "") == "quest_rewards_panel", "任务奖励外框没有暴露为可校准层")
 	var rewards_title := panel.get_node("QuestDetailPanel/RewardsPanel/RewardsTitle") as Label
 	assert(rewards_title.text == "任务奖励：" and rewards_title.position.y < panel.reward_label.position.y, "任务奖励标题没有上移、补冒号或与奖励内容对齐")
 	assert(panel.quest_buttons.size() == GameData.bich_quest_count(), "任务列表没有完整显示六段比奇任务")
+	for index in range(panel.quest_buttons.size()):
+		var card := panel.quest_buttons[index]
+		assert(card.position.x == 0.0 and card.position.y == index * (QuestPanel.QUEST_CARD_SIZE.y + QuestPanel.QUEST_CARD_SEPARATION), "任务卡没有按六段主线顺序完整排列")
+	var stable_quest_paths: Array[String] = []
+	for quest_button: Button in panel.quest_buttons:
+		var quest_id := str(quest_button.get_meta("quest_id", ""))
+		assert(quest_button.name == "QuestCard_%s" % quest_id, "任务卡没有使用稳定节点名: %s" % quest_button.name)
+		stable_quest_paths.append(str(panel.get_path_to(quest_button)))
+	panel.refresh()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(UIRuntimeLayoutOverrides.profile_is_ready(panel, "quest"), "任务面板没有完成最新人工存档布局加载")
+	var saved_contract := JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/manual_layout_overrides.json")) as Dictionary
+	var saved_action: Array = saved_contract.get("profiles", {}).get("quest", {}).get("nodes", {}).get("QuestDetailPanel/ActionButton", {}).get("logicalRect", [])
+	assert(saved_action.size() == 4, "任务面板人工存档缺少操作按钮布局")
+	assert(panel.action_button.position.is_equal_approx(Vector2(float(saved_action[0]), float(saved_action[1]))) and panel.action_button.size.is_equal_approx(Vector2(float(saved_action[2]), float(saved_action[3]))), "任务状态刷新覆盖了人工存档的操作按钮布局")
+	var rebuilt_quest_paths: Array[String] = []
+	for quest_button: Button in panel.quest_buttons:
+		rebuilt_quest_paths.append(str(panel.get_path_to(quest_button)))
+	assert(rebuilt_quest_paths == stable_quest_paths, "任务卡刷新后节点路径发生漂移")
 	var first_number := panel.quest_buttons[0].get_node("QuestNumber") as Label
 	assert(first_number.vertical_alignment == VERTICAL_ALIGNMENT_CENTER and first_number.size.y == QuestPanel.QUEST_CARD_SIZE.y, "任务编号没有在卡片内垂直居中")
 	assert(panel.current_quest_id == "bich_field_hunt", "任务面板没有默认选中当前任务")
@@ -61,12 +93,14 @@ func _run() -> void:
 	panel.refresh()
 	assert(not panel.action_button.disabled and panel.action_button.text == "领取奖励", "完成目标后没有启用领取奖励按钮")
 	PlayerState.reset_progress()
-	panel.open_for("比奇老兵")
+	panel.open_for("老兵")
 	assert(panel.current_quest_id == "bich_beginner_gear", "未接任务没有默认选中当前可接任务")
 	assert(not panel.action_button.disabled and panel.action_button.text == "接受任务", "点击未接受任务没有切换为接受任务按钮")
 	assert(panel.status_label.text.is_empty(), "可接任务不应在接受按钮左侧重复显示尚未接受")
 	assert(not panel.abandon_button.visible, "未接受任务不应显示放弃任务按钮")
 	panel._act()
+	assert(panel.action_button.theme_type_variation == "GothicComponentButton", "任务操作不应伪装为持久任务选择")
+	assert(panel.action_button.get_meta("gothic_feedback_state", "") == "success", "接取任务成功没有进入一秒成功反馈")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(str(PlayerState.quest_states.get("bich_beginner_gear", {}).get("status", "")) == "active", "接受任务按钮没有调用现有任务接取接口")

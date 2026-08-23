@@ -3,6 +3,9 @@ extends Node
 const RUNTIME_MAP_IDS := [4, 217, 218, 221, 268, 313, 314, 315, 406, 408, 1578]
 const EPSILON := 0.0001
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const MapEditorBuildRuntimeService := preload(
+	"res://scripts/map_editor/map_editor_build_runtime_service.gd"
+)
 const UnitLegacyAdapter := preload(
 	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
 )
@@ -13,7 +16,7 @@ func _ready() -> void:
 	_test_editor_v4_unit_adapter()
 	_test_legacy_unit_names_are_confined_to_adapter()
 	_test_formal_map_coordinate_apis()
-	_test_all_runtime_maps_use_read_only_v1_adapter()
+	_test_all_runtime_maps_use_formal_v2_contract()
 	_test_runtime_bridge_gu_fields()
 	_test_portal_gu_distance_contract()
 	_test_path_step_cost_gu()
@@ -204,20 +207,24 @@ func _test_32_direction_projection_roundtrip() -> void:
 		assert(restored_position_gu.distance_to(ground_position_gu) <= EPSILON)
 
 
-func _test_all_runtime_maps_use_read_only_v1_adapter() -> void:
+func _test_all_runtime_maps_use_formal_v2_contract() -> void:
 	for runtime_map_id: int in RUNTIME_MAP_IDS:
 		var path := MapEditorRuntimeBridge.runtime_path(runtime_map_id)
 		var raw_before := _read_text(path)
 		assert(not raw_before.is_empty(), path)
 		var raw_runtime: Variant = JSON.parse_string(raw_before)
 		assert(raw_runtime is Dictionary)
-		assert(int(raw_runtime.get("runtime_schema_version", -1)) == 1)
+		assert(int(raw_runtime.get("runtime_schema_version", -1)) == MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION)
+		assert(str(raw_runtime.get("unit_contract_id", "")) == GroundUnitSpaceScript.CONTRACT_ID)
+		assert(str(raw_runtime.get("projection_contract_id", "")) == GroundUnitSpaceScript.PROJECTION_CONTRACT_ID)
+		assert(not raw_runtime.has("source_runtime_schema_version"))
+		assert(not raw_runtime.has("unit_legacy_adapter_id"))
 		var loaded := MapEditorRuntimeMapService.load_runtime(path)
 		assert(loaded.ok, "%s:%s" % [path, loaded.errors])
 		var runtime: Dictionary = loaded.runtime
 		assert(runtime.runtime_schema_version == MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION)
-		assert(runtime.source_runtime_schema_version == 1)
-		assert(runtime.unit_legacy_adapter_id == UnitLegacyAdapter.CONTRACT_ID)
+		assert(not runtime.has("source_runtime_schema_version"))
+		assert(not runtime.has("unit_legacy_adapter_id"))
 		assert(runtime.unit_contract_id == GroundUnitSpaceScript.CONTRACT_ID)
 		assert(runtime.projection_contract_id == GroundUnitSpaceScript.PROJECTION_CONTRACT_ID)
 		var raw_size: Array = runtime.design.design_size

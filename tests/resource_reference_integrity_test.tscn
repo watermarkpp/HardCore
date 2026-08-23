@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://ri_test"]
+[ext_resource type="Script" path="res://tests/resource_reference_integrity_test.gd" id="1"]
+[node name="RITest" type="Node"]
+script = ExtResource("1")

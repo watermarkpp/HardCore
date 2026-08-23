@@ -2,7 +2,6 @@ extends Node
 
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
-const WarriorMeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 
 func _ready() -> void:
@@ -32,160 +31,108 @@ func _run() -> void:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
 
 	var origin: Vector2 = game.player.global_position
-	var south_gu := Vector2(1.0, 1.0).normalized()
-	var locked_far := _make_enemy(
-		game, "超距锁定", origin + _screen_offset_gu(south_gu * 4.0)
-	)
-	var near_a := _make_enemy(
-		game, "近距A", origin + _screen_offset_gu(south_gu * 1.0)
-	)
-	var near_b := _make_enemy(
-		game, "近距B", origin + _screen_offset_gu(south_gu * 1.0)
-	)
-	var thrust_far_a := _make_enemy(
-		game, "刺杀远段A", origin + _screen_offset_gu(south_gu * 2.25)
-	)
-	var thrust_far_b := _make_enemy(
-		game, "刺杀远段B", origin + _screen_offset_gu(south_gu * 2.25)
-	)
-	var half_side_a := _make_enemy(
-		game, "半月侧面A", origin + _screen_offset_gu(Vector2(1.0, 0.0))
-	)
-	var half_side_b := _make_enemy(
-		game, "半月侧面B", origin + _screen_offset_gu(Vector2(0.0, 1.0))
-	)
-	var half_side_c := _make_enemy(
+	var axis_gu := Vector2(1.0, 0.35).normalized()
+	var player_position_before: Vector2 = game.player.global_position
+	var locked := _make_enemy(game, "固定锁定", origin + _screen_offset_gu(axis_gu * 4.0))
+	var near := _make_enemy(game, "禁止回退", origin + _screen_offset_gu(axis_gu))
+	var lateral := _make_enemy(
 		game,
-		"半月侧面C",
-		origin + _screen_offset_gu(Vector2(-1.0, 1.0).normalized())
+		"轴外目标",
+		origin + _screen_offset_gu(axis_gu.rotated(PI / 2.0))
 	)
-	game.locked_target = locked_far
+	game.locked_target = locked
 
-	var release_geometry: Dictionary = ReleaseGeometry.resolve(
-		origin,
-		Vector2.DOWN,
-		locked_far.get_instance_id(),
-		locked_far.global_position,
-		true,
-		true
-	)
-
-	# Normal and fire remain single-target, but a far lock may no longer block
-	# the nearest monster actually covered by the blade.
-	_set_attack_context(game, "normal", "attack", release_geometry)
+	# An out-of-range locked target fails closed. Normal and fire may not scan a
+	# nearer monster or move the player to manufacture a hit.
+	var far_release := _release(origin, locked, Vector2.DOWN)
+	_set_attack_context(game, "normal", "attack", far_release)
 	game._on_player_attack(origin, Vector2.DOWN, 20)
-	assert(locked_far.current_hp == locked_far.max_hp, "普通攻击错误命中超距锁定目标")
-	assert(near_a.current_hp == near_a.max_hp - 20, "普通攻击没有回退到范围内最近目标")
-	assert(near_b.current_hp == near_b.max_hp, "普通攻击错误变成多目标")
+	assert(locked.current_hp == locked.max_hp, "普通攻击错误命中超距锁定目标")
+	assert(near.current_hp == near.max_hp, "普通攻击错误回退到范围内目标")
+	assert(game.player.global_position.is_equal_approx(player_position_before), "攻击为追锁自动移动了角色")
 
-	_reset_hp([near_a, near_b])
 	game.player.current_mp = 999
 	game.player.fire_sword_enabled = true
-	_set_attack_context(game, "fire", "烈火剑法", release_geometry, true)
+	_set_attack_context(game, "fire", "烈火剑法", far_release, true)
 	game._on_player_attack(origin, Vector2.DOWN, 20)
-	assert(locked_far.current_hp == locked_far.max_hp, "烈火错误命中超距锁定目标")
-	assert(near_a.current_hp < near_a.max_hp, "烈火没有回退到范围内最近目标")
-	assert(near_b.current_hp == near_b.max_hp, "烈火错误变成多目标")
+	assert(locked.current_hp == locked.max_hp and near.current_hp == near.max_hp, "烈火对无效锁定发生回退命中")
 
-	# Thrust has no target-count cap: every monster in either legal line segment
-	# independently enters the hit/damage pipeline.
-	_reset_hp([near_a, near_b, thrust_far_a, thrust_far_b])
+	# A valid in-range lock owns the continuous axis and single-target priority.
+	locked.global_position = origin + _screen_offset_gu(axis_gu)
+	near.global_position = locked.global_position
+	game.locked_target = locked
 	game.player.fire_sword_enabled = false
+	_reset_hp([locked, near, lateral])
+	var near_release := _release(origin, locked, Vector2.DOWN)
+	_set_attack_context(game, "normal", "attack", near_release)
+	game._on_player_attack(origin, Vector2.DOWN, 20)
+	assert(locked.current_hp < locked.max_hp, "普通攻击未命中合法锁定目标")
+	assert(near.current_hp == near.max_hp, "普通攻击错误命中同位置未锁定目标")
+
+	# Thrust uses the same continuous axis for its near and far slots.
+	locked.global_position = origin + _screen_offset_gu(axis_gu * 2.25)
+	near.global_position = origin + _screen_offset_gu(axis_gu)
+	lateral.global_position = origin + _screen_offset_gu(axis_gu.rotated(PI / 2.0))
+	game.locked_target = locked
+	_reset_hp([locked, near, lateral])
 	game.player.thrusting_enabled = true
 	game.player.half_moon_enabled = false
-	_set_attack_context(game, "thrust", "刺杀剑术", release_geometry)
+	var thrust_release := _release(origin, locked, Vector2.DOWN)
+	_set_attack_context(game, "thrust", "刺杀剑术", thrust_release)
 	game._on_player_attack(origin, Vector2.DOWN, 20)
-	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b]:
-		assert(target.current_hp < target.max_hp, "刺杀遗漏范围内目标：%s" % target.monster_data.get("name", ""))
+	assert(near.current_hp < near.max_hp, "刺杀连续轴近段未命中")
+	assert(locked.current_hp < locked.max_hp, "刺杀连续轴远段未命中锁定目标")
+	assert(lateral.current_hp == lateral.max_hp, "刺杀错误命中连续轴外目标")
 
-	# A locked monster near the edge of one 45-degree visual sector must use the
-	# exact release-frame footpoint axis. At short range the old canonical axis
-	# happened to fit inside the 1-GU strip; at the 2.4-GU far segment its lateral
-	# error exceeds the strip and produced the device-only-looking "visual hit,
-	# no damage" regression. Keep the body on the S row, but share one continuous
-	# damage axis between the locked target and every other monster in the strip.
-	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b]:
-		target.global_position = origin + Vector2(3000, 3000)
-	var off_axis_direction_gu := south_gu.rotated(deg_to_rad(22.0))
-	var off_axis_locked := _make_enemy(
+	# Half moon rotates its side sectors around the same locked-target axis.
+	locked.global_position = origin + _screen_offset_gu(axis_gu)
+	near.global_position = origin + _screen_offset_gu(axis_gu.rotated(-PI / 4.0))
+	lateral.global_position = origin + _screen_offset_gu(axis_gu.rotated(PI / 4.0))
+	var behind := _make_enemy(
 		game,
-		"刺杀远端偏轴锁定",
-		origin + _screen_offset_gu(off_axis_direction_gu * 2.4)
+		"半月背后",
+		origin + _screen_offset_gu(axis_gu.rotated(PI))
 	)
-	var off_axis_near := _make_enemy(
-		game,
-		"刺杀同轴近端",
-		origin + _screen_offset_gu(off_axis_direction_gu * 1.0)
-	)
-	var off_axis_release: Dictionary = ReleaseGeometry.resolve(
+	game.locked_target = locked
+	_reset_hp([locked, near, lateral, behind])
+	game.player.thrusting_enabled = false
+	game.player.half_moon_enabled = true
+	var half_release := _release(origin, locked, Vector2.DOWN)
+	_set_attack_context(game, "half_moon", "半月弯刀", half_release)
+	game._on_player_attack(origin, Vector2.DOWN, 20)
+	assert(locked.current_hp < locked.max_hp, "半月主扇区未命中锁定目标")
+	assert(near.current_hp < near.max_hp and lateral.current_hp < lateral.max_hp, "半月连续轴侧扇区遗漏目标")
+	assert(behind.current_hp == behind.max_hp, "半月错误命中角色背后目标")
+
+	# Actor and target footpoints are sampled together at release.
+	game.player.thrusting_enabled = false
+	game.player.half_moon_enabled = false
+	var moved_origin := origin + Vector2(18, -11)
+	game.player.global_position = moved_origin
+	locked.global_position = moved_origin + _screen_offset_gu(axis_gu * 1.25)
+	locked.current_hp = locked.max_hp
+	game.locked_target = locked
+	var moving_release := _release(moved_origin, locked, Vector2.RIGHT)
+	_set_attack_context(game, "normal", "attack", moving_release)
+	game._on_player_attack(moved_origin, Vector2.RIGHT, 20)
+	assert(locked.current_hp < locked.max_hp, "人物与锁定目标同时移动后整刀判空")
+
+	game.queue_free()
+	await get_tree().process_frame
+	print("MELEE_LOCK_FALLBACK_PASS: invalid locks fail closed; valid locks own continuous normal/thrust/half-moon axes")
+	get_tree().quit(0)
+
+
+func _release(origin: Vector2, target: EnemyActor, body_direction: Vector2) -> Dictionary:
+	return ReleaseGeometry.resolve(
 		origin,
-		Vector2.DOWN,
-		off_axis_locked.get_instance_id(),
-		off_axis_locked.global_position,
+		body_direction,
+		target.get_instance_id(),
+		target.global_position,
 		true,
 		true,
 		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
-	assert(int(off_axis_release.visual_direction_index) == 0)
-	assert(int(off_axis_release.live_locked_target_direction_index) == 0)
-	var old_far_slot := WarriorMeleeGeometry.thrust_footprint_slot_gu(
-		Vector2.ZERO,
-		off_axis_direction_gu * 2.4,
-		off_axis_locked.combat_radius_gu,
-		0
-	)
-	assert(old_far_slot == 0, "测试样本没有复现旧八方向中心线的远端漏判")
-	_set_attack_context(game, "thrust", "刺杀剑术", off_axis_release)
-	game._on_player_attack(origin, Vector2.DOWN, 20)
-	assert(off_axis_locked.current_hp < off_axis_locked.max_hp, "连续刺杀轴没有命中2.4 GU偏轴锁定目标")
-	assert(off_axis_near.current_hp < off_axis_near.max_hp, "同一次刺杀的近端候选没有复用连续伤害轴")
-
-	# Half moon likewise has no target-count cap inside its approved arc.
-	near_a.global_position = origin + _screen_offset_gu(south_gu * 1.0)
-	near_b.global_position = origin + _screen_offset_gu(south_gu * 1.0)
-	off_axis_locked.global_position = origin + Vector2(3000, 3000)
-	off_axis_near.global_position = origin + Vector2(3000, 3000)
-	_reset_hp([near_a, near_b, half_side_a, half_side_b, half_side_c])
-	game.player.thrusting_enabled = false
-	game.player.half_moon_enabled = true
-	game.player.current_mp = 999
-	_set_attack_context(game, "half_moon", "半月弯刀", release_geometry)
-	game._on_player_attack(origin, Vector2.DOWN, 20)
-	for target: EnemyActor in [near_a, near_b, half_side_a, half_side_b, half_side_c]:
-		assert(target.current_hp < target.max_hp, "半月遗漏范围内目标：%s" % target.monster_data.get("name", ""))
-
-	# Both actor and locked monster may move during windup. The shared release
-	# resolver and melee handler must use the same live pair of footpoints.
-	for target: EnemyActor in [near_a, near_b, thrust_far_a, thrust_far_b, half_side_a, half_side_b, half_side_c]:
-		target.global_position = origin + Vector2(3000, 3000)
-	game.player.thrusting_enabled = false
-	game.player.half_moon_enabled = false
-	game.player.fire_sword_enabled = false
-	var moved_origin := origin + Vector2(18, -11)
-	game.player.global_position = moved_origin
-	locked_far.global_position = moved_origin + (
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-			Vector2(1.0, 1.0).normalized() * 1.25
-		)
-	)
-	locked_far.current_hp = locked_far.max_hp
-	game.locked_target = locked_far
-	var moving_release_geometry: Dictionary = ReleaseGeometry.resolve(
-		game.player.global_position,
-		Vector2.DOWN,
-		locked_far.get_instance_id(),
-		locked_far.global_position,
-		true,
-		true
-	)
-	_set_attack_context(game, "normal", "attack", moving_release_geometry)
-	game._on_player_attack(origin, Vector2.RIGHT, 20)
-	assert(locked_far.current_hp < locked_far.max_hp, "人物与锁定怪物同时移动后整刀判空")
-
-	game.queue_free()
-	await get_tree().process_frame
-	print("MELEE_LOCK_FALLBACK_PASS：锁定仅控制朝向；普通/烈火单体回退；刺杀/半月范围内无数量上限")
-	get_tree().quit(0)
 
 
 func _set_attack_context(

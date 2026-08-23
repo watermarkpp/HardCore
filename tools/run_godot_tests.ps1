@@ -1,6 +1,7 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
     [string]$Suite = 'critical',
+    [ValidateRange(1, 60)]
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
 )
@@ -18,6 +19,42 @@ $GodotDirectory = Split-Path -Parent $Godot
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
 $RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
 
+$EffectiveSuite = $Suite
+if ($TestPaths.Count -gt 0) {
+    if ($PSBoundParameters.ContainsKey('Suite')) {
+        throw 'TestPaths is adhoc-only and cannot be combined with an explicit formal Suite.'
+    }
+    $EffectiveSuite = 'adhoc'
+    $testsRoot = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'tests'))
+    $testsRootPrefix = $testsRoot.TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
+    $validatedTestPaths = @()
+    foreach ($candidatePath in $TestPaths) {
+        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
+            throw 'TestPaths entries cannot be empty.'
+        }
+        $normalizedPath = $candidatePath.Replace('\', '/')
+        if ([IO.Path]::IsPathRooted($candidatePath) -or ($normalizedPath -split '/') -contains '..') {
+            throw "TestPaths entry must remain inside tests/: $candidatePath"
+        }
+        if ($normalizedPath -notmatch '^tests/(?:[^/]+/)*[^/]+\.tscn$') {
+            throw "TestPaths entry must match tests/**/*.tscn: $candidatePath"
+        }
+        $fullPath = [IO.Path]::GetFullPath((Join-Path $ProjectRoot ($normalizedPath.Replace('/', [IO.Path]::DirectorySeparatorChar))))
+        if (-not $fullPath.StartsWith($testsRootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+            throw "TestPaths entry resolves outside tests/: $candidatePath"
+        }
+        if (-not (Test-Path -LiteralPath $fullPath -PathType Leaf)) {
+            throw "TestPaths entry does not exist: $candidatePath"
+        }
+        $trackedPaths = @(& git -C $ProjectRoot ls-files -- $normalizedPath 2>$null)
+        if ($trackedPaths -cnotcontains $normalizedPath) {
+            throw "TestPaths entry must be Git tracked with exact path casing: $candidatePath"
+        }
+        $validatedTestPaths += $normalizedPath
+    }
+    $TestPaths = $validatedTestPaths
+}
+
 # Codex desktop may sandbox the normal roaming AppData directory. Godot 4.7
 # crashes in its Windows file logger after a denied user://logs write, even
 # when the test itself has already passed. Keep all test-only user data inside
@@ -28,6 +65,7 @@ New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 
 $Suites = @{
     monster = @(
+		'tests/canonical_monster_catalog_test.tscn',
 		'tests/monster_id_contract_test.tscn',
 		'tests/all_monster_loading_test.tscn',
 		'tests/monster_world_integration_test.tscn',
@@ -67,6 +105,9 @@ $Suites = @{
 		'tests/combat_release_geometry_test.tscn',
 		'tests/live_attack_resolution_test.tscn',
 		'tests/melee_lock_fallback_test.tscn',
+		'tests/skills/warrior_target_aligned_release_geometry_test.tscn',
+		'tests/skills/warrior_target_aligned_visual_effect_test.tscn',
+		'tests/game_root_warrior_target_aligned_integration_test.tscn',
         'tests/warrior_visual_test.tscn',
         'tests/class_combat_test.tscn',
         'tests/mobile_targeting_test.tscn',
@@ -108,10 +149,15 @@ $Suites = @{
         'tests/progression_test.tscn',
         'tests/vertical_slice_loop_test.tscn'
     )
-    equipment = @(
+	equipment = @(
+		'tests/pricing_authority_test.tscn',
+		'tests/inventory_weight_authority_test.tscn',
+		'tests/loot_pickup_ground_unit_test.tscn',
+		'tests/hud_authority_integration_test.tscn',
 		'tests/complete_item_system_test.tscn',
 		'tests/inventory_equipment_ui_test.tscn',
 		'tests/multi_character_save_test.tscn',
+		'tests/new_character_starter_loadout_test.tscn',
 		'tests/system_menu_test.tscn',
 		'tests/equipment_client_art_test.tscn',
         'tests/equipment_future_modifiers_test.tscn',
@@ -120,6 +166,7 @@ $Suites = @{
         'tests/equipment_special_effects_test.tscn',
         'tests/equipment_luck_test.tscn',
         'tests/equipment_durability_policy_test.tscn',
+        'tests/equipment_precise_durability_test.tscn',
         'tests/equipment_service_rules_test.tscn',
         'tests/equipment_attribute_master_test.tscn',
         'tests/equipment_slot_migration_test.tscn',
@@ -128,12 +175,348 @@ $Suites = @{
         'tests/android_layout_test.tscn'
     )
 }
+
+$Suites.caster_visual_critical = @(
+    'tests/caster_skill_visual_factory_entry_test.tscn',
+    'tests/laser_direction_visual_extent_test.tscn',
+    'tests/caster_skill_animation_routing_test.tscn',
+    'tests/wizard_geometry_visual_alignment_test.tscn',
+    'tests/sky_strike_visual_contract_test.tscn',
+    'tests/lightning_runtime_map_visual_test.tscn',
+    'tests/hell_lightning_self_area_visual_test.tscn',
+    'tests/beam_visual_contract_test.tscn',
+    'tests/beam_runtime_empty_space_test.tscn',
+    'tests/beam_runtime_terrain_cutoff_test.tscn',
+    'tests/beam_single_active_test.tscn',
+    'tests/visual_profile_merge_contract_test.tscn',
+    'tests/fire_wall_runtime_absolute_ground_test.tscn',
+    'tests/fire_wall_single_controller_test.tscn',
+    'tests/player_initial_resource_sync_test.tscn',
+    "tests/gameplay_input_gate_test.tscn",
+    "tests/input_release_cleanup_test.tscn",
+    "tests/initial_world_input_lock_test.tscn",
+    "tests/map_transition_input_lock_test.tscn"
+)
+
+$Suites.taoist_critical = @(
+	'tests/canonical_summon_integration_test.tscn',
+    'tests/skills/taoist_summon_projectile_async_visual_test.tscn',
+	'tests/skills/taoist_soul_fire_launch_timing_test.tscn',
+    'tests/skills/taoist_summon_projectile_origin_anchor_test.tscn',
+    'tests/skills/taoist_summon_projectile_stealth_buff_visual_test.tscn',
+    'tests/skills/taoist_support_policy_test.tscn',
+    'tests/skills/taoist_support_runtime_test.tscn',
+    'tests/skills/taoist_canonical_runtime_test.tscn',
+    'tests/skills/taoist_entrapment_boundary_production_test.tscn',
+    'tests/skills/taoist_dual_defense_contract_test.tscn',
+    'tests/skills/spell_target_lock_and_footprint_test.tscn',
+    'tests/skills/skill_semantic_contracts_test.tscn',
+    'tests/taoist_support_production_integration_test.tscn',
+    'tests/canonical_skill_production_entry_test.tscn',
+    'tests/skill_button_assignments_v2_test.tscn',
+    'tests/class_combat_test.tscn',
+    'tests/game_root_spell_lock_input_integration_test.tscn'
+)
+
+$Suites.snapshot_coordinate_critical = @(
+    'tests/skill_footprint_snapshot_coordinate_contract_test.tscn',
+    'tests/skill_footprint_snapshot_map_identity_test.tscn',
+    'tests/skill_footprint_snapshot_projection_origin_test.tscn',
+    'tests/skill_footprint_snapshot_legacy_upgrade_test.tscn',
+    'tests/canonical_snapshot_propagation_test.tscn',
+    'tests/snapshot_strict_consumer_rejection_test.tscn',
+    'tests/snapshot_v2_no_legacy_fallback_test.tscn',
+    'tests/snapshot_absolute_converter_failure_test.tscn',
+    'tests/snapshot_non_finite_coordinate_test.tscn',
+    'tests/snapshot_legacy_explicit_policy_test.tscn',
+    'tests/snapshot_consumer_runtime_map_guard_test.tscn',
+    'tests/warrior_snapshot_v2_production_test.tscn',
+    'tests/enemy_snapshot_v2_production_test.tscn',
+    'tests/summon_snapshot_v2_production_test.tscn',
+    'tests/projectile_snapshot_v2_production_test.tscn',
+    'tests/ground_effect_snapshot_v2_production_test.tscn',
+    'tests/fire_wall_snapshot_v2_production_test.tscn',
+    'tests/production_snapshot_no_legacy_test.tscn',
+    'tests/canonical_snapshot_identity_production_test.tscn'
+)
+
+$Suites.snapshot_production_critical = @(
+    'tests/warrior_snapshot_v2_production_test.tscn',
+    'tests/enemy_snapshot_v2_production_test.tscn',
+    'tests/summon_snapshot_v2_production_test.tscn',
+    'tests/projectile_snapshot_v2_production_test.tscn',
+    'tests/ground_effect_snapshot_v2_production_test.tscn',
+    'tests/fire_wall_snapshot_v2_production_test.tscn',
+    'tests/production_snapshot_no_legacy_test.tscn',
+    'tests/canonical_snapshot_identity_production_test.tscn',
+    'tests/taoist_profession_package_test.tscn'
+)
+
+$Suites.projectile_spatial_critical = @(
+    'tests/projectile_broadphase_hit_parity_test.tscn',
+    'tests/projectile_broadphase_no_false_negative_test.tscn',
+    'tests/projectile_broadphase_candidate_reduction_test.tscn',
+    'tests/projectile_broadphase_stable_order_test.tscn',
+    'tests/projectile_broadphase_terrain_cutoff_test.tscn',
+    'tests/projectile_broadphase_runtime_map_isolation_test.tscn',
+    'tests/projectile_spatial_index_lifecycle_test.tscn',
+    'tests/projectile_snapshot_single_build_per_step_test.tscn',
+    'tests/projectile_spatial_index_same_frame_teleport_test.tscn',
+    'tests/projectile_spatial_index_same_frame_knockback_test.tscn',
+    'tests/projectile_spatial_index_query_before_enemy_tick_test.tscn',
+    'tests/projectile_spatial_index_ready_contract_test.tscn'
+)
+
+$Suites.safe_logout_critical = @(
+	'tests/safe_logout_atomic_recovery_test.tscn',
+    'tests/safe_logout_home_resolution_failure_test.tscn',
+    'tests/safe_logout_character_select_guard_test.tscn',
+    'tests/safe_logout_exit_guard_test.tscn',
+    'tests/safe_logout_save_failure_test.tscn',
+    'tests/safe_logout_existing_state_preservation_test.tscn',
+    'tests/home_resolution_side_effect_guard_test.tscn',
+    'tests/service_home_no_current_position_fallback_test.tscn',
+    'tests/death_revival_home_failure_test.tscn',
+    'tests/death_revival_touch_input_test.tscn',
+    'tests/character_select_launch_loading_test.tscn',
+    'tests/map_transition_missing_arrival_test.tscn',
+    'tests/portal_home_lookup_failure_test.tscn'
+)
+
+$Suites.persistent_ground_effect_critical = @(
+    'tests/persistent_ground_effect_hit_parity_test.tscn',
+    'tests/persistent_ground_effect_no_false_negative_test.tscn',
+    'tests/persistent_ground_effect_tick_cadence_test.tscn',
+    'tests/persistent_ground_effect_stacking_claim_test.tscn',
+    'tests/persistent_ground_effect_stable_order_test.tscn',
+    'tests/persistent_ground_effect_runtime_map_isolation_test.tscn',
+    'tests/persistent_ground_effect_lifecycle_test.tscn',
+    'tests/persistent_ground_effect_candidate_reduction_test.tscn',
+    'tests/persistent_ground_effect_no_group_scan_test.tscn',
+    'tests/persistent_ground_effect_spatial_service_reuse_test.tscn'
+)
+
+$Suites.fire_wall_controller_critical = @(
+    'tests/fire_wall_single_query_per_tick_test.tscn',
+    'tests/fire_wall_single_exact_test_per_candidate_test.tscn',
+    'tests/fire_wall_visual_cells_pure_test.tscn',
+    'tests/fire_wall_hit_parity_test.tscn',
+    'tests/fire_wall_tick_claim_parity_test.tscn',
+    'tests/fire_wall_boundary_target_test.tscn',
+    'tests/fire_wall_stacking_parity_test.tscn',
+    'tests/fire_wall_runtime_map_isolation_test.tscn',
+    'tests/fire_wall_visual_cell_lifecycle_test.tscn',
+    'tests/fire_wall_candidate_reduction_test.tscn',
+    'tests/fire_wall_no_group_scan_test.tscn',
+    'tests/fire_wall_canonical_snapshot_identity_test.tscn'
+)
+
+$Suites.monster_streaming_critical = @(
+    'tests/monster_streaming_single_poll_per_frame_test.tscn',
+    'tests/monster_streaming_request_dedup_test.tscn',
+    'tests/monster_streaming_visual_parity_test.tscn',
+    'tests/monster_streaming_animation_continuity_test.tscn',
+    'tests/monster_streaming_registration_lifecycle_test.tscn',
+    'tests/monster_streaming_generation_guard_test.tscn',
+    'tests/monster_streaming_failure_contract_test.tscn',
+    'tests/monster_streaming_no_visual_queue_test.tscn',
+    'tests/monster_streaming_no_sync_load_test.tscn',
+    'tests/monster_streaming_spatial_index_non_regression_test.tscn',
+    'tests/monster_streaming_scaling_test.tscn'
+)
+
+$Suites.skill_execution_plan_critical = @(
+    'tests/skill_plan_contract_test.tscn',
+    'tests/skill_plan_golden_parity_test.tscn',
+    'tests/skill_plan_no_side_effect_shadow_test.tscn',
+    'tests/skill_plan_single_resource_commit_test.tscn',
+    'tests/skill_plan_single_cooldown_commit_test.tscn',
+    'tests/skill_plan_single_snapshot_build_test.tscn',
+    'tests/skill_plan_immutable_consumer_test.tscn',
+    'tests/skill_plan_rejection_reason_parity_test.tscn',
+    'tests/caster_runtime_canonical_plan_adapter_test.tscn',
+    'tests/skill_plan_profession_matrix_test.tscn'
+)
+
+$Suites.skill_production_migration_critical = @(
+    'tests/skill_production_canonical_entry_test.tscn',
+    'tests/skill_production_no_visual_plan_test.tscn',
+    'tests/skill_production_no_legacy_planner_test.tscn',
+    'tests/skill_production_single_release_id_test.tscn',
+    'tests/skill_production_single_snapshot_test.tscn',
+    'tests/skill_production_single_commit_test.tscn',
+    'tests/skill_execution_result_contract_test.tscn',
+    'tests/skill_production_plan_immutable_test.tscn',
+    'tests/skill_production_profession_matrix_test.tscn',
+    'tests/skill_production_rejection_flow_test.tscn',
+    'tests/skill_production_descriptor_failure_parity_test.tscn'
+)
+
+$Suites.skill_runtime_cleanup_critical = @(
+    'tests/skill_runtime_no_legacy_api_test.tscn',
+    'tests/skill_runtime_single_public_entry_test.tscn',
+    'tests/skill_plan_golden_contract_test.tscn',
+    'tests/skill_runtime_no_visual_plan_test.tscn',
+    'tests/skill_runtime_single_result_contract_test.tscn',
+    'tests/skill_runtime_mapped_world_strict_snapshot_test.tscn'
+)
+
+$Suites.wizard_line_geometry_critical = @(
+    'tests/wizard_line_footprint_core_test.tscn',
+    'tests/wizard_line_visual_stability_test.tscn',
+    'tests/wizard_line_presentation_alignment_test.tscn'
+)
+
+$Suites.combat_absolute_ground_critical = @(
+    'tests/combat_absolute_ground_roundtrip_test.tscn',
+    'tests/enemy_spatial_index_absolute_coordinate_test.tscn',
+    'tests/projectile_absolute_release_snapshot_test.tscn',
+    'tests/summon_absolute_snapshot_test.tscn',
+    'tests/persistent_ground_effect_absolute_broadphase_test.tscn',
+    'tests/fire_wall_absolute_broadphase_test.tscn',
+    'tests/shared_spatial_index_absolute_contract_test.tscn',
+    'tests/combat_absolute_ground_integration_test.tscn',
+    'tests/combat_absolute_ground_parity_test.tscn'
+)
+
+$Suites.combat_projection_fail_closed_critical = @(
+    'tests/mapped_enemy_missing_projection_rejected_test.tscn',
+    'tests/mapped_projectile_missing_projection_rejected_test.tscn',
+    'tests/mapped_summon_missing_projection_rejected_test.tscn',
+    'tests/mapped_fire_wall_missing_projection_rejected_test.tscn',
+    'tests/mapped_skill_plan_missing_projection_rejected_test.tscn',
+    'tests/mapped_game_root_projection_failure_test.tscn'
+)
+
+$Suites.formal_map_projection_critical = @(
+    'tests/implemented_map_runtime_projection_test.tscn',
+    'tests/phase1_network_runtime_coverage_test.tscn',
+    'tests/unbuilt_planned_map_not_playable_test.tscn',
+    'tests/reference_map_not_playable_test.tscn',
+    'tests/legacy_reference_projection_isolation_test.tscn',
+    'tests/formal_map_projection_coverage_test.tscn',
+    'tests/world_ready_gating_test.tscn',
+    'tests/safe_logout_world_location_inf_guard_test.tscn'
+)
+
+$Suites.map_runtime_release_critical = @(
+    'tests/map_runtime_release_registry_contract_test.tscn',
+    'tests/release_registry_current_maps_test.tscn',
+    'tests/map_runtime_release_gate_test.tscn'
+)
+
+$Suites.map_runtime_release_transaction_critical = @(
+    'tests/build_candidate_does_not_mutate_release_test.tscn',
+    'tests/publish_promotes_candidate_test.tscn',
+    'tests/publish_failure_rollback_test.tscn',
+    'tests/release_registry_consumer_validation_test.tscn',
+    'tests/future_map_build_publish_no_code_edit_test.tscn',
+    'tests/mse_publish_entry_wired_test.tscn'
+)
+
+$Suites.player_visual_contract_critical = @(
+    'tests/passive_proc_actor_plane_contract_test.tscn'
+)
+
+$Suites.skill_panel_layout_critical = @(
+    'tests/skill_panel_assignment_hint_layout_contract_test.tscn'
+)
+
+$Suites.device_lab_critical = @(
+    'tests/device_lab_runtime_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
+    $Suites.caster_visual_critical +
+    $Suites.taoist_critical +
+    $Suites.snapshot_coordinate_critical +
+    $Suites.snapshot_production_critical +
+    $Suites.projectile_spatial_critical +
+    $Suites.safe_logout_critical +
+    $Suites.persistent_ground_effect_critical +
+    $Suites.fire_wall_controller_critical +
+    # Monster Streaming is intentionally excluded from default critical while
+    # PROJECT_CURRENT_STATUS marks it HOLD. Its direct suite remains callable.
+    $Suites.skill_execution_plan_critical +
+    $Suites.skill_production_migration_critical +
+    $Suites.skill_runtime_cleanup_critical +
+    $Suites.wizard_line_geometry_critical +
+    $Suites.combat_absolute_ground_critical +
+    $Suites.combat_projection_fail_closed_critical +
+    $Suites.formal_map_projection_critical +
+    $Suites.map_runtime_release_critical +
+    $Suites.map_runtime_release_transaction_critical +
+    $Suites.player_visual_contract_critical +
+    $Suites.skill_panel_layout_critical +
+    $Suites.device_lab_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
+
+# ── Q0-A: final judgement contract ──
+# PASS is granted only when every gate below is satisfied. A PASS marker never
+# exempts timeout, non-zero exit, or engine-log failures.
+$FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'
+$PassMarkerPattern = '[A-Z0-9_]+_PASS'
+
+# Minimal, cause-specific allowlist for known non-fatal `ERROR:` lines produced
+# by the current suite. Any other `ERROR:` line fails the test.
+$EngineErrorAllowlist = @(
+    @{
+        pattern = '^ERROR: String formatting error: not all arguments converted during string formatting\.'
+        reason = 'benign Godot String.format warning emitted by monster_melee_contact_geometry_test debug output; test still completes and passes'
+    },
+    @{
+        pattern = '^ERROR: \d+ resources still in use at exit'
+        reason = 'Godot headless emits this at normal engine exit when queue_freed nodes finish releasing after quit; observed across ~42/105 suite tests with varying counts, exit code and PASS marker unaffected'
+    },
+    @{
+        pattern = '^ERROR: \d+ RID allocations? of type ''PN\d+RendererDummy\d+TextureStorage\d+DummyTextureE'' were leaked at exit\.'
+        reason = 'Godot dummy renderer reports leaked RID textures at engine exit in headless visual tests; non-fatal, exit code and PASS marker unaffected'
+    },
+    @{
+        pattern = '^ERROR: Parameter "t" is null\.'
+        reason = 'Godot dummy renderer logs a null texture parameter when a threaded texture lands after scene teardown in headless runs; non-fatal, exit code and PASS marker unaffected (observed in player_movement_respawn / phase1 / android_layout)'
+    }
+)
+
+function Get-FailureLineCount([string]$Text, [string]$Pattern) {
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return 0
+    }
+    return @($Text -split "`r?`n" | Where-Object { $_ -match $Pattern }).Count
+}
+$Suites.pricing_authority = @(
+	'tests/pricing_authority_test.tscn',
+	'tests/hud_authority_integration_test.tscn',
+	'tests/shop_gothic_ui_test.tscn'
+)
+
+function Get-UnallowlistedErrorLineCount([string]$Text) {
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return 0
+    }
+    $count = 0
+    foreach ($line in ($Text -split "`r?`n")) {
+        if ($line -notmatch '^ERROR:') {
+            continue
+        }
+        $allowed = $false
+        foreach ($entry in $EngineErrorAllowlist) {
+            if ($line -match $entry.pattern) {
+                $allowed = $true
+                break
+            }
+        }
+        if (-not $allowed) {
+            $count += 1
+        }
+    }
+    return $count
+}
 
 function Stop-TestProcessTree([int]$ProcessId) {
     $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)
@@ -198,8 +581,7 @@ function Get-NewGodotProcesses {
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
-$failed = @()
-$passed = @()
+$StructuredResults = @()
 foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
     $stdout = Join-Path $LogRoot "$testName.stdout.log"
@@ -207,26 +589,31 @@ foreach ($testPath in $SelectedTests) {
     $engineLog = Join-Path $LogRoot "$testName.godot.log"
     $engineLogArgument = "outputs/test_logs/$testName.godot.log"
     Remove-Item -LiteralPath $stdout, $stderr, $engineLog -Force -ErrorAction SilentlyContinue
-    $process = Start-Process -FilePath $Godot `
-        -ArgumentList @('--headless', '--log-file', $engineLogArgument, '--path', '.', $testPath) `
-        -WorkingDirectory $ProjectRoot -WindowStyle Hidden `
-        -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru
+    # Q0-A 3.2: run through cmd.exe so the final process object exposes the
+    # effective exit code (the Godot console wrapper forwards the engine code,
+    # but Start-Process with -Redirect* loses ExitCode on this host). Output is
+    # redirected inside the command string; polling reads the same files.
+    $launchCommand = '""' + $Godot + '" --headless --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
+    $process = Start-Process -FilePath 'cmd.exe' `
+        -ArgumentList @('/c', $launchCommand) `
+        -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
     $wrapperExitWithoutChildSince = $null
     $earlyFailure = $false
     $hasPassMarker = $false
+    $naturalExit = $false
     while ([DateTime]::UtcNow -lt $deadline) {
         Start-Sleep -Milliseconds 150
         $currentOutput = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
         $currentError = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
-        if ($currentError -match 'SCRIPT ERROR:|Parse Error:|Assertion failed:') {
+        if ($currentError -match $FailurePattern) {
             $earlyFailure = $true
             Stop-TestProcessTree -ProcessId $process.Id
             break
         }
-        if ($currentOutput -match '[A-Z0-9_]+_PASS') {
+        if ($currentOutput -match $PassMarkerPattern) {
             $hasPassMarker = $true
-            break
+            # Do NOT break - wait for natural exit to capture post-PASS failures (HC-P0-006)
         }
         # On Windows the console executable can exit after spawning the real
         # Godot process. Keep waiting while that child is still running instead
@@ -237,13 +624,15 @@ foreach ($testPath in $SelectedTests) {
             } elseif (
                 ([DateTime]::UtcNow - $wrapperExitWithoutChildSince).TotalMilliseconds -ge 1000
             ) {
+                $naturalExit = $true
                 break
             }
         } else {
             $wrapperExitWithoutChildSince = $null
         }
     }
-    $timedOut = -not $earlyFailure -and -not $hasPassMarker -and [DateTime]::UtcNow -ge $deadline
+    # Q0-A 3.1: reaching the deadline is a timeout regardless of the PASS marker.
+    $timedOut = -not $earlyFailure -and -not $naturalExit -and [DateTime]::UtcNow -ge $deadline
     if ($timedOut) {
         Stop-TestProcessTree -ProcessId $process.Id
     }
@@ -255,24 +644,103 @@ foreach ($testPath in $SelectedTests) {
     Stop-NewGodotProcesses -GraceMilliseconds $graceMilliseconds
     $outText = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
     $errText = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
-    $hasPassMarker = $outText -match '[A-Z0-9_]+_PASS'
-    $hasFailure = $earlyFailure -or $timedOut -or $errText -match 'SCRIPT ERROR:|Parse Error:|Assertion failed:' -or -not $hasPassMarker
-    if ($hasFailure) {
-        $reason = if ($timedOut) { "超时${TimeoutSeconds}s" } elseif ($earlyFailure) { '断言/脚本错误' } elseif (-not $hasPassMarker) { '缺少PASS标记' } else { '脚本错误' }
-        $failed += "$testName ($reason)"
+    $engineText = if (Test-Path -LiteralPath $engineLog) { Get-Content -LiteralPath $engineLog -Raw -ErrorAction SilentlyContinue } else { '' }
+    $hasPassMarker = $outText -match $PassMarkerPattern
+
+    # Q0-A 3.2: effective exit code. The console wrapper forwards the engine's
+    # exit code; without a natural wrapper/child exit the code is unavailable
+    # and the result must not be a strict PASS.
+    $wrapperExitCode = $null
+    if ($process.HasExited) {
+        $process.Refresh()
+        if ($process.HasExited) {
+            $wrapperExitCode = $process.ExitCode
+        }
+    }
+    $childProcessesAlive = @(Get-NewGodotProcesses).Count
+    $childProcessExitState = 'not_observed'
+    if ($earlyFailure -or $timedOut) {
+        $childProcessExitState = 'forced_termination'
+    } elseif ($naturalExit) {
+        $childProcessExitState = 'exited'
+    } elseif ($childProcessesAlive -gt 0) {
+        $childProcessExitState = 'alive'
+    }
+    $finalEffectiveExitCode = $wrapperExitCode
+    if ($null -eq $finalEffectiveExitCode) {
+        $finalEffectiveExitCode = -1
+    }
+    $processExited = $naturalExit
+
+    # Q0-A 3.3: scan stdout, stderr and the engine log.
+    $stdoutFailureCount = (Get-FailureLineCount $outText $FailurePattern) + (Get-UnallowlistedErrorLineCount $outText)
+    $stderrFailureCount = (Get-FailureLineCount $errText $FailurePattern) + (Get-UnallowlistedErrorLineCount $errText)
+    $engineLogFailureCount = (Get-FailureLineCount $engineText $FailurePattern) + (Get-UnallowlistedErrorLineCount $engineText)
+
+    $reasons = @()
+    if (-not $hasPassMarker) { $reasons += 'missing_pass_marker' }
+    if (-not $processExited) { $reasons += 'process_did_not_exit' }
+    if ($timedOut) { $reasons += "timeout_${TimeoutSeconds}s" }
+    if ($earlyFailure) { $reasons += 'early_script_error' }
+    if ($finalEffectiveExitCode -ne 0) {
+        if ($null -eq $wrapperExitCode) { $reasons += 'missing_effective_exit_code' } else { $reasons += "non_zero_exit_code_$finalEffectiveExitCode" }
+    }
+    if ($stdoutFailureCount -gt 0) { $reasons += "stdout_failures_$stdoutFailureCount" }
+    if ($stderrFailureCount -gt 0) { $reasons += "stderr_failures_$stderrFailureCount" }
+    if ($engineLogFailureCount -gt 0) { $reasons += "engine_log_failures_$engineLogFailureCount" }
+
+    $result = 'PASS'
+    if ($reasons.Count -gt 0) {
+        $result = 'FAIL'
+    }
+    $StructuredResults += [ordered]@{
+        test_name = $testName
+        test_path = $testPath
+        pass_marker_found = $hasPassMarker
+        process_exited = $processExited
+        wrapper_exit_code = $wrapperExitCode
+        child_process_exit_state = $childProcessExitState
+        effective_exit_code = $finalEffectiveExitCode
+        timeout = $timedOut
+        stdout_failure_count = $stdoutFailureCount
+        stderr_failure_count = $stderrFailureCount
+        engine_log_failure_count = $engineLogFailureCount
+        result = $result
+        reason = ($reasons -join ';')
+    }
+    if ($result -eq 'FAIL') {
+        $reason = if ($reasons.Count -gt 0) { $reasons -join ';' } else { 'unknown' }
         Write-Host "[FAIL] $testName - $reason" -ForegroundColor Red
         if ($outText) { Write-Host $outText.Trim() }
         if ($errText) { Write-Host $errText.Trim() }
     } else {
-        $passed += $testName
         Write-Host "[PASS] $testName" -ForegroundColor Green
     }
 }
 
-Write-Host "TEST_SUMMARY suite=$Suite passed=$($passed.Count) failed=$($failed.Count)"
+$passedCount = @($StructuredResults | Where-Object { $_.result -eq 'PASS' }).Count
+$failedCount = @($StructuredResults | Where-Object { $_.result -eq 'FAIL' }).Count
+$engineLogErrorTotal = 0
+foreach ($resultEntry in $StructuredResults) {
+    $engineLogErrorTotal += [int]$resultEntry.engine_log_failure_count
+}
+$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss'))
+@{
+    suite = $EffectiveSuite
+    generated_at = (Get-Date -Format o)
+    git_head = (git rev-parse HEAD 2>$null | Out-String).Trim()
+    total = $StructuredResults.Count
+    passed = $passedCount
+    failed = $failedCount
+    engine_log_errors = $engineLogErrorTotal
+    results = $StructuredResults
+} | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $resultsFilePath -Encoding UTF8
+Write-Host "RUNNER_RESULTS_JSON=$resultsFilePath"
+Write-Host "TEST_SUMMARY suite=$EffectiveSuite passed=$passedCount failed=$failedCount engine_log_errors=$engineLogErrorTotal"
 Stop-NewGodotProcesses
-if ($failed.Count -gt 0) {
-    Write-Host ("FAILED_TESTS=" + ($failed -join '; ')) -ForegroundColor Red
+if ($failedCount -gt 0) {
+    $failedNames = @($StructuredResults | Where-Object { $_.result -eq 'FAIL' } | ForEach-Object { "$($_.test_name) ($($_.reason))" }) -join '; '
+    Write-Host ("FAILED_TESTS=" + $failedNames) -ForegroundColor Red
     exit 1
 }
 exit 0

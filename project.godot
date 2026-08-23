@@ -11,22 +11,24 @@ config_version=5
 [application]
 
 config/name="HardCore"
-config/version="1.17.17-melee-diagnostic-a"
+config/version="1.18.3-startup-cg-hold"
 config/build_revision="release.boundary-fix.v39"
-run/main_scene="res://scenes/brand_intro.tscn"
+run/main_scene="res://scenes/startup_loading.tscn"
 config/auto_accept_quit=false
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/branding/game_icon.png"
-boot_splash/image="res://assets/branding/boot_splash.png"
+boot_splash/image="res://assets/branding/hardcore_demonic_startup_1598x720_v1.png"
+; Hold the authored HardCore title plate while Godot prepares the first CG frame.
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=true
-boot_splash/fullsize=true
-boot_splash/use_filter=true
-boot_splash/minimum_display_time=500
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+boot_splash/minimum_display_time=0
 
 [autoload]
 
+DeviceLabPatch="*res://scripts/device_lab_patch_bootstrap.gd"
 ContentLayers="*res://scripts/layers/runtime/content_layer_registry.gd"
 WorldContent="*res://scripts/layers/runtime/world_content_service.gd"
 PresentationAssets="*res://scripts/layers/presentation/presentation_registry.gd"
@@ -43,12 +45,12 @@ ArtSpec="*res://scripts/art_spec.gd"
 
 [display]
 
-window/size/viewport_width=1280
+window/size/viewport_width=1598
 window/size/viewport_height=720
-window/size/window_width_override=1280
+window/size/window_width_override=1598
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep"
 window/handheld/orientation=4
 
 [layer_names]

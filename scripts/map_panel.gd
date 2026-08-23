@@ -2,6 +2,10 @@ class_name MapPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 
 signal map_selected(map_id: int)
 signal teleport_availability_requested(map_ids: Array)
@@ -9,29 +13,15 @@ signal teleport_requested(request: Dictionary)
 signal closed
 
 const PANEL_SIZE := Vector2(1160, 650)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
+const SECTION_VERTICAL_SHIFT := 24.0
 const MAP_CARD_SIZE := Vector2(226, 58)
-const WORLD_NODE_SIZE := Vector2(430, 50)
-const WORLD_TREE_BLUEPRINT := [
-	{"node_id": "mafa_world", "label": "HardCore 世界", "depth": 0},
-	{"node_id": "bich_province", "label": "比奇省", "depth": 1, "regions": ["比奇地区"]},
-	{"node_id": "orc_tomb", "label": "兽人古墓／骷髅洞", "depth": 2, "map_groups": ["兽人古墓"]},
-	{"node_id": "natural_cave", "label": "天然洞穴", "depth": 2, "map_groups": ["天然洞穴"]},
-	{"node_id": "bich_mine", "label": "比奇矿区／僵尸洞", "depth": 2, "map_groups": ["比奇矿区"]},
-	{"node_id": "wooma_forest", "label": "沃玛森林", "depth": 1, "regions": ["沃玛地区"]},
-	{"node_id": "wooma_temple", "label": "沃玛寺庙", "depth": 2, "map_groups": ["沃玛寺庙"]},
-	{"node_id": "white_sun_red_moon", "label": "白日门／赤月峡谷", "depth": 2, "regions": ["白日门区"]},
-	{"node_id": "fengmo_valley", "label": "封魔谷", "depth": 2, "regions": ["封魔谷区"]},
-	{"node_id": "viper_valley", "label": "毒蛇山谷", "depth": 1, "regions": ["毒蛇地区"]},
-	{"node_id": "mengzhong_province", "label": "盟重省", "depth": 1, "regions": ["盟重地区"]},
-	{"node_id": "xiangshi_tomb", "label": "沙巴克密道／香石古墓", "depth": 2, "name_terms": ["沙巴克密道", "香石"]},
-	{"node_id": "stone_tomb", "label": "石墓／猪洞", "depth": 2, "map_groups": ["石墓"]},
-	{"node_id": "zuma_temple", "label": "祖玛寺庙", "depth": 2, "map_groups": ["祖玛寺庙"]},
-	{"node_id": "centipede_cave", "label": "蜈蚣洞／死亡山谷", "depth": 2, "map_groups": ["蜈蚣洞"]},
-	{"node_id": "cangyue_island", "label": "苍月岛", "depth": 1, "regions": ["苍月地区"]},
-	{"node_id": "corpse_cave", "label": "尸魔洞", "depth": 2, "map_groups": ["尸魔洞"]},
-	{"node_id": "bone_cave", "label": "骨魔洞", "depth": 2, "map_groups": ["骨魔洞"]},
-	{"node_id": "cow_temple", "label": "牛魔寺庙", "depth": 2, "map_groups": ["牛魔寺庙"]},
-]
+const DEVICE_TO_LOGICAL_SCALE := 1598.0 / 2664.0
+const WORLD_TREE_DEVICE_WIDTH := 650.0
+const WORLD_TREE_SCROLL_WIDTH := WORLD_TREE_DEVICE_WIDTH * DEVICE_TO_LOGICAL_SCALE
+const WORLD_TREE_SIDE_GUTTER := 12.0
+const WORLD_TREE_CONTAINER_WIDTH := WORLD_TREE_SCROLL_WIDTH - 24.0
+const WORLD_NODE_SIZE := Vector2(WORLD_TREE_CONTAINER_WIDTH - WORLD_TREE_SIDE_GUTTER * 2.0, 50)
 
 var search_box: LineEdit
 var later_toggle: CheckButton
@@ -43,14 +33,15 @@ var map_name_label: Label
 var teleport_button: Button
 var world_tree_scroll: ScrollContainer
 var world_tree_container: VBoxContainer
-var world_tree_nodes: Array = WORLD_TREE_BLUEPRINT.duplicate(true)
+var world_tree_nodes: Array = []
 var world_node_buttons: Dictionary = {}
 var map_entries: Array = []
 var map_buttons: Array[Button] = []
 var teleport_rules: Dictionary = {}
 var _selected_map_id := -1
-var _selected_world_node_id := "mafa_world"
+var _selected_world_node_id := "bich_province"
 var _detail_base_text := ""
+var _teleport_request_locked := false
 
 
 func _ready() -> void:
@@ -69,24 +60,21 @@ func _ready() -> void:
 	_build_world_tree_section()
 	_build_map_detail_section()
 	_build_compatibility_list()
+	GothicFrameFactoryScript.seal_modal_rings(self)
+	world_tree_nodes = _build_runtime_catalog()
+	_selected_world_node_id = _first_filterable_node_id(world_tree_nodes)
 	_rebuild_world_tree()
 	refresh()
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(1124, 604)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(350, 4)
+	title_frame.position = Vector2(350, 10)
 	title_frame.size = Vector2(460, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -115,27 +103,12 @@ func _build_header() -> void:
 
 func _build_map_list_section() -> void:
 	var panel := _framed_section("MapListPanel", Rect2(20, 76, 270, 548))
-	panel.add_child(_section_title("区域地图", 270))
-	search_box = LineEdit.new()
-	search_box.name = "SearchBox"
-	search_box.placeholder_text = "在当前区域搜索"
-	search_box.position = Vector2(18, 54)
-	search_box.size = Vector2(234, 50)
-	search_box.theme_type_variation = "GothicSearchField"
-	search_box.text_changed.connect(func(_value: String) -> void: refresh())
-	panel.add_child(search_box)
-	later_toggle = CheckButton.new()
-	later_toggle.name = "LaterContentToggle"
-	later_toggle.text = "显示1.76后期地图"
-	later_toggle.position = Vector2(18, 112)
-	later_toggle.size = Vector2(234, 44)
-	later_toggle.theme_type_variation = "GothicContentToggle"
-	later_toggle.toggled.connect(_on_later_toggled)
-	panel.add_child(later_toggle)
+	panel.add_child(_section_title("MapListTitle", "区域地图", 270))
 	var scroll := ScrollContainer.new()
 	scroll.name = "MapListScroll"
-	scroll.position = Vector2(18, 164)
-	scroll.size = Vector2(234, 326)
+	scroll.position = Vector2(18, 54)
+	scroll.size = Vector2(234, 470)
+	scroll.set_meta("calibration_layout_dependencies", ["MapListPanel/SearchBox", "MapListPanel/LaterContentToggle", "MapListPanel/CountLabel"])
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
@@ -145,48 +118,76 @@ func _build_map_list_section() -> void:
 	map_list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	map_list_container.add_theme_constant_override("separation", 7)
 	scroll.add_child(map_list_container)
-	count_label = Label.new()
-	count_label.name = "CountLabel"
-	count_label.position = Vector2(18, 500)
-	count_label.size = Vector2(234, 24)
-	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	count_label.theme_type_variation = "GothicMutedLabel"
-	panel.add_child(count_label)
 
 
 func _build_world_tree_section() -> void:
 	var panel := _framed_section("MapPreviewPanel", Rect2(302, 76, 520, 548))
-	panel.add_child(_section_title("HardCore 世界地图树", 520))
+	var tree_frame_width := WORLD_TREE_SCROLL_WIDTH + 32.0
+	var tree_frame := GothicFrameFactoryScript.add_filled_section(panel, "MapListV3Frame", Rect2(8, 40, tree_frame_width, 486))
+	tree_frame.set_meta("calibration_layer", "map_world_tree_decoration")
+	tree_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.move_child(tree_frame, 0)
+	panel.add_child(_section_title("WorldTreeTitle", "HardCore 世界地图树", 520))
 	var hint := Label.new()
 	hint.name = "WorldTreeHint"
 	hint.text = "选择大地图节点，在左侧展开其包含的全部地图"
-	hint.position = Vector2(24, 54)
-	hint.size = Vector2(472, 28)
+	hint.position = Vector2(24, 46)
+	hint.size = Vector2(WORLD_TREE_SCROLL_WIDTH, 18)
+	hint.set_meta("calibration_layout_revision", 2)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hint.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(hint)
 	world_tree_scroll = ScrollContainer.new()
 	world_tree_scroll.name = "WorldTreeScroll"
-	world_tree_scroll.position = Vector2(24, 88)
-	world_tree_scroll.size = Vector2(472, 420)
+	world_tree_scroll.position = Vector2(24, 68)
+	world_tree_scroll.size = Vector2(WORLD_TREE_SCROLL_WIDTH, 440)
+	world_tree_scroll.set_meta("calibration_layout_dependencies", ["MapPreviewPanel/WorldTreeHint"])
+	world_tree_scroll.set_meta("calibration_layout_revision", 2)
 	world_tree_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	world_tree_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(world_tree_scroll)
 	world_tree_container = VBoxContainer.new()
 	world_tree_container.name = "WorldTree"
-	world_tree_container.custom_minimum_size = Vector2(454, 0)
+	world_tree_container.custom_minimum_size = Vector2(WORLD_TREE_CONTAINER_WIDTH, 0)
 	world_tree_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	world_tree_container.add_theme_constant_override("separation", 7)
 	world_tree_scroll.add_child(world_tree_container)
 
 
+func _build_runtime_catalog() -> Array:
+	var result: Array = []
+	var region_nodes: Dictionary = {}
+	for map_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+		if not map_value is Dictionary:
+			continue
+		var map_data: Dictionary = map_value
+		var region := str(map_data.get("region", "")).strip_edges()
+		if region.is_empty():
+			continue
+		if not region_nodes.has(region):
+			var region_id := _stable_catalog_id(region, "region")
+			region_nodes[region] = {"node_id": region_id, "label": region.trim_suffix("地区").trim_suffix("区"), "depth": 0, "regions": [region]}
+			result.append(region_nodes[region])
+	return result
+
+
+func _stable_catalog_id(value: String, suffix: String) -> String:
+	var legacy := {"比奇地区": "bich_province", "沃玛地区": "wooma_forest", "盟重地区": "mengzhong_province", "苍月地区": "cangyue_island", "毒蛇地区": "viper_valley", "封魔谷区": "fengmo_valley", "白日门区": "white_sun_red_moon"}
+	if legacy.has(value):
+		return str(legacy[value])
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(value.to_utf8_buffer())
+	return "%s_%s" % [suffix, context.finish().hex_encode().substr(0, 12)]
+
+
 func _build_map_detail_section() -> void:
 	var panel := _framed_section("MapDetailPanel", Rect2(834, 76, 306, 548))
-	panel.add_child(_section_title("区域信息", 306))
+	panel.add_child(_section_title("MapDetailTitle", "区域信息", 306))
 	map_name_label = Label.new()
 	map_name_label.name = "MapName"
+	map_name_label.set_meta("calibration_runtime_text", true)
 	map_name_label.position = Vector2(24, 58)
 	map_name_label.size = Vector2(258, 36)
 	map_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -196,6 +197,7 @@ func _build_map_detail_section() -> void:
 	panel.add_child(map_name_label)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "MapDetail"
+	detail_label.set_meta("calibration_runtime_text", true)
 	detail_label.position = Vector2(24, 104)
 	detail_label.size = Vector2(258, 330)
 	detail_label.bbcode_enabled = true
@@ -210,7 +212,8 @@ func _build_map_detail_section() -> void:
 	teleport_button.text = "传送未开放"
 	teleport_button.position = Vector2(20, 452)
 	teleport_button.size = Vector2(266, 54)
-	teleport_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Teleport is a transition action; map/world cards own persistent selection.
+	teleport_button.theme_type_variation = "GothicComponentButton"
 	teleport_button.add_theme_font_size_override("font_size", 18)
 	teleport_button.disabled = true
 	teleport_button.pressed.connect(_teleport_selected)
@@ -221,13 +224,21 @@ func _build_compatibility_list() -> void:
 	map_list = ItemList.new()
 	map_list.name = "CompatibilityMapList"
 	map_list.visible = false
-	map_list.item_selected.connect(_show_selected)
+	map_list.item_selected.connect(_on_map_list_item_selected)
 	map_list.item_activated.connect(func(_index: int) -> void: _teleport_selected())
 	add_child(map_list)
 
 
 func open_panel() -> void:
-	later_toggle.set_pressed_no_signal(PlayerState.later_content_enabled)
+	_teleport_request_locked = false
+	GothicUIThemeScript.clear_button_feedback(teleport_button)
+	var previous := _selected_world_node_id
+	world_tree_nodes = _build_runtime_catalog()
+	if not _world_node(previous).is_empty():
+		_selected_world_node_id = previous
+	else:
+		_selected_world_node_id = _first_filterable_node_id(world_tree_nodes)
+	_rebuild_world_tree()
 	refresh()
 	show()
 
@@ -236,7 +247,7 @@ func set_world_tree(new_nodes: Array) -> void:
 	if new_nodes.is_empty():
 		return
 	world_tree_nodes = new_nodes.duplicate(true)
-	_selected_world_node_id = str(world_tree_nodes[0].get("node_id", "mafa_world"))
+	_selected_world_node_id = _first_filterable_node_id(world_tree_nodes)
 	_rebuild_world_tree()
 	refresh()
 
@@ -252,45 +263,47 @@ func refresh() -> void:
 	map_entries.clear()
 	map_list.clear()
 	var node := _world_node(_selected_world_node_id)
-	var query := search_box.text.strip_edges().to_lower()
 	for map_data: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
 		if not map_data is Dictionary or not _node_matches_map(node, map_data):
 			continue
-		var searchable := "%s %s %s" % [map_data.get("name", ""), map_data.get("region", ""), map_data.get("mapGroup", "")]
-		if not query.is_empty() and query not in searchable.to_lower():
-			continue
 		map_entries.append(map_data)
 		var later_marker := "［后期］" if str(map_data.get("versionTag", "")).begins_with("1.76后期") else ""
-		map_list.add_item("%s%s　%s" % [later_marker, map_data.get("name", "未命名"), map_data.get("mapGroup", "")])
+		map_list.add_item("%s%s" % [later_marker, map_data.get("name", "未命名")])
 	_rebuild_map_cards()
 	var node_label := str(node.get("label", "HardCore 世界"))
-	count_label.text = "%s · %d 张" % [node_label, map_entries.size()]
 	var selected_index := _index_for_map_id(_selected_map_id)
 	if selected_index >= 0:
 		map_list.select(selected_index)
 		_show_selected(selected_index)
+	elif not map_entries.is_empty():
+		map_list.select(0)
+		_show_selected(0)
 	else:
 		_clear_map_selection()
 	teleport_availability_requested.emit(_visible_map_ids())
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "map")
 
 
 func _rebuild_world_tree() -> void:
 	for child: Node in world_tree_container.get_children():
-		child.queue_free()
+		world_tree_container.remove_child(child)
+		child.free()
 	world_node_buttons.clear()
 	for value: Variant in world_tree_nodes:
 		if not value is Dictionary:
 			continue
 		var node: Dictionary = value
 		var node_id := str(node.get("node_id", ""))
+		if not _node_has_filter_contract(node):
+			continue
 		var depth := maxi(0, int(node.get("depth", 0)))
 		var holder := Control.new()
 		holder.name = "WorldNodeHolder_%s" % node_id
-		holder.custom_minimum_size = Vector2(454, WORLD_NODE_SIZE.y)
+		holder.custom_minimum_size = Vector2(WORLD_TREE_CONTAINER_WIDTH, WORLD_NODE_SIZE.y)
 		world_tree_container.add_child(holder)
 		var button := Button.new()
 		button.name = "WorldNode_%s" % node_id
-		button.position = Vector2(12, 0)
+		button.position = Vector2(WORLD_TREE_SIDE_GUTTER, 0)
 		button.size = WORLD_NODE_SIZE
 		button.toggle_mode = true
 		button.text = str(node.get("label", "地图节点"))
@@ -307,7 +320,8 @@ func _rebuild_world_tree() -> void:
 
 func _rebuild_map_cards() -> void:
 	for child: Node in map_list_container.get_children():
-		child.queue_free()
+		map_list_container.remove_child(child)
+		child.free()
 	map_buttons.clear()
 	for index in range(map_entries.size()):
 		var map_data: Dictionary = map_entries[index]
@@ -323,6 +337,7 @@ func _rebuild_map_cards() -> void:
 		button.set_meta("map_id", int(map_data.get("mapId", -1)))
 		var name_label := Label.new()
 		name_label.name = "MapName"
+		name_label.set_meta("calibration_runtime_text", true)
 		name_label.text = str(map_data.get("name", "未命名"))
 		name_label.position = Vector2(10, 7)
 		name_label.size = Vector2(206, 20)
@@ -334,7 +349,8 @@ func _rebuild_map_cards() -> void:
 		button.add_child(name_label)
 		var sub_label := Label.new()
 		sub_label.name = "MapSubtitle"
-		sub_label.text = "%s · ID %s" % [map_data.get("region", "未分类"), _source_id_label(map_data.get("sourceMapId", map_data.get("mapId", -1)))]
+		sub_label.set_meta("calibration_runtime_text", true)
+		sub_label.text = _map_card_summary(map_data)
 		sub_label.position = Vector2(10, 28)
 		sub_label.size = Vector2(206, 17)
 		sub_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -349,11 +365,12 @@ func _rebuild_map_cards() -> void:
 
 
 func _select_world_node(node_id: String) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if _world_node(node_id).is_empty():
 		return
 	_selected_world_node_id = node_id
 	_selected_map_id = -1
-	search_box.text = ""
 	for key: Variant in world_node_buttons.keys():
 		var button := world_node_buttons[key] as Button
 		var selected := str(key) == node_id
@@ -365,9 +382,17 @@ func _select_world_node(node_id: String) -> void:
 
 
 func _select_map(index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if index < 0 or index >= map_entries.size():
 		return
 	map_list.select(index)
+	_show_selected(index)
+
+
+func _on_map_list_item_selected(index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	_show_selected(index)
 
 
@@ -381,31 +406,89 @@ func _show_selected(index: int) -> void:
 		var selected := button_index == index
 		button.set_pressed_no_signal(selected)
 		button.theme_type_variation = "GothicComponentSelectedButton" if selected else "GothicComponentButton"
-	var content := RegionContent.get_map_content(_selected_map_id)
-	var bosses := GameData.get_bosses_for_map(map_data)
+	var content := _player_map_content(_selected_map_id)
 	var boss_names: Array[String] = []
-	for boss: Variant in bosses:
-		var boss_name := str(boss.get("name", "Boss"))
-		if not boss_names.has(boss_name):
-			boss_names.append(boss_name)
 	for boss: Variant in content.get("bosses", []):
 		if boss is Dictionary and not boss_names.has(str(boss.get("name", "Boss"))):
 			boss_names.append(str(boss.get("name", "Boss")))
 	map_name_label.text = str(map_data.get("name", "未命名地图"))
-	_detail_base_text = "[color=#d8c8ae]所属大地图：%s\n地区：%s\n地图组：%s\n\n资料ID：%s\n运行时ID：%d\n版本：%s\n资料状态：%s\n可信度：%s\n\n门点：%d　怪物点：%d\n关联Boss：%s[/color]" % [
-		_world_node(_selected_world_node_id).get("label", "HardCore 世界"),
-		map_data.get("region", "未分类"),
-		map_data.get("mapGroup", "未分类"),
-		_source_id_label(map_data.get("sourceMapId", map_data.get("mapId", -1))),
-		_selected_map_id,
-		map_data.get("versionTag", "未标注"),
-		map_data.get("recordStatus", content.get("status", "未标注")),
-		map_data.get("confidence", "?"),
-		content.get("portals", []).size(),
-		content.get("spawns", []).size(),
-		"、".join(boss_names) if not boss_names.is_empty() else "暂无可靠关联",
-	]
+	_detail_base_text = _player_map_detail(map_data, content, boss_names)
 	_refresh_teleport_button()
+
+
+func _player_map_content(map_id: int) -> Dictionary:
+	var runtime_content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+	return runtime_content if not runtime_content.is_empty() else RegionContent.get_map_content(map_id)
+
+
+func _map_card_summary(map_data: Dictionary) -> String:
+	var content := _player_map_content(int(map_data.get("mapId", -1)))
+	var bosses: Array[String] = []
+	for boss: Variant in content.get("bosses", []):
+		if boss is Dictionary:
+			var boss_name := str(boss.get("name", "")).strip_edges()
+			if not boss_name.is_empty() and not bosses.has(boss_name):
+				bosses.append(boss_name)
+	return "有首领" if not bosses.is_empty() else "探索区域"
+
+
+func _player_map_detail(map_data: Dictionary, content: Dictionary, boss_names: Array[String]) -> String:
+	var map_name := str(map_data.get("name", "这片区域"))
+	var map_id := int(map_data.get("mapId", -1))
+	var safe_areas: Array = content.get("safe_areas", [])
+	var npcs: Array = content.get("npcs", [])
+	var has_camp := not safe_areas.is_empty()
+	if not has_camp:
+		for npc: Variant in npcs:
+			if npc is Dictionary and str(npc.get("kind", "")) in ["shop", "trainer", "quest", "guide"]:
+				has_camp = true
+				break
+	var monster_names: Array[String] = []
+	for spawn: Variant in content.get("spawns", []):
+		if not spawn is Dictionary:
+			continue
+		var monster_name := str(spawn.get("display_name", spawn.get("name", ""))).strip_edges()
+		if not monster_name.is_empty() and not monster_names.has(monster_name):
+			monster_names.append(monster_name)
+	var portal_lines: Array[String] = []
+	for portal: Variant in content.get("portals", []):
+		if not portal is Dictionary:
+			continue
+		var target_id := int(portal.get("target_map_id", -1))
+		var target_map := GameData.get_map_by_id(target_id)
+		var target_name := str(target_map.get("name", "未知区域")).strip_edges()
+		var portal_label := str(portal.get("label", "")).strip_edges()
+		if portal_label.is_empty():
+			portal_label = "通往%s" % target_name
+		var line := "%s（目的地：%s）" % [portal_label, target_name]
+		if not portal_lines.has(line):
+			portal_lines.append(line)
+	var description := "%s位于%s，是一处可供玩家探索的区域。" % [map_name, _world_node(_selected_world_node_id).get("label", "HardCore 世界")]
+	var camp_text := "有安全营地，可在此休整。" if has_camp else "未发现可供休整的安全营地。"
+	var monster_text := "、".join(monster_names) if not monster_names.is_empty() else "暂未发现常驻怪物"
+	var boss_text := "会刷新：%s" % "、".join(boss_names) if not boss_names.is_empty() else "未发现首领刷新"
+	var entrance_sources := _incoming_route_names(map_id)
+	var entrance_text := "可从%s进入。" % "、".join(entrance_sources) if not entrance_sources.is_empty() else "入口线索暂无记录，需要继续探索。"
+	var exit_text := "；".join(portal_lines) if not portal_lines.is_empty() else "未发现通往其他区域的出口。"
+	return "[color=#d8c8ae]地图说明：%s\n\n营地：%s\n\n常见怪物：%s\n\n首领：%s\n\n入口：%s\n\n出口：%s[/color]" % [description, camp_text, monster_text, boss_text, entrance_text, exit_text]
+
+
+func _incoming_route_names(destination_map_id: int) -> Array[String]:
+	var sources: Array[String] = []
+	for source_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+		if not source_value is Dictionary:
+			continue
+		var source_map: Dictionary = source_value
+		var source_map_id := int(source_map.get("mapId", -1))
+		if source_map_id == destination_map_id:
+			continue
+		for portal: Variant in _player_map_content(source_map_id).get("portals", []):
+			if portal is Dictionary and int(portal.get("target_map_id", -1)) == destination_map_id:
+				var source_name := str(source_map.get("name", "相邻区域")).strip_edges()
+				if not source_name.is_empty() and not sources.has(source_name):
+					sources.append(source_name)
+				break
+	return sources
 
 
 func _clear_map_selection() -> void:
@@ -423,7 +506,7 @@ func _refresh_teleport_button() -> void:
 		return
 	var rule := _teleport_rule(_selected_map_id)
 	var enabled := bool(rule.get("enabled", false))
-	teleport_button.disabled = not enabled
+	teleport_button.disabled = _teleport_request_locked or not enabled
 	teleport_button.text = "传送" if enabled else "传送未开放"
 	var destination_label := str(rule.get("destination_label", ""))
 	var reason := str(rule.get("reason", "该地图尚未开放传送"))
@@ -433,11 +516,21 @@ func _refresh_teleport_button() -> void:
 
 
 func _teleport_selected() -> void:
+	if _teleport_request_locked:
+		return
 	if _selected_map_id <= 0:
 		return
 	var rule := _teleport_rule(_selected_map_id)
 	if not bool(rule.get("enabled", false)):
 		return
+	_teleport_request_locked = true
+	GothicUIThemeScript.clear_button_feedback(teleport_button)
+	GothicUIThemeScript.set_button_feedback(
+		teleport_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+		"map.teleport",
+	)
+	_refresh_teleport_button()
 	var destination_map_id := int(rule.get("destination_map_id", _selected_map_id))
 	var request := {
 		"contract_id": "ui.map.teleport.v1",
@@ -455,11 +548,6 @@ func _travel_selected() -> void:
 	_teleport_selected()
 
 
-func _on_later_toggled(enabled: bool) -> void:
-	PlayerState.set_later_content_enabled(enabled)
-	refresh()
-
-
 func _world_node(node_id: String) -> Dictionary:
 	for value: Variant in world_tree_nodes:
 		if value is Dictionary and str(value.get("node_id", "")) == node_id:
@@ -468,15 +556,22 @@ func _world_node(node_id: String) -> Dictionary:
 
 
 func _node_matches_map(node: Dictionary, map_data: Dictionary) -> bool:
+	if node.is_empty():
+		return false
+	var matched := false
 	var explicit_ids: Array = node.get("map_ids", [])
 	if not explicit_ids.is_empty():
 		return int(map_data.get("mapId", -1)) in explicit_ids
 	var groups: Array = node.get("map_groups", [])
 	if not groups.is_empty() and str(map_data.get("mapGroup", "")) not in groups:
 		return false
+	if not groups.is_empty():
+		matched = true
 	var regions: Array = node.get("regions", [])
 	if not regions.is_empty() and str(map_data.get("region", "")) not in regions:
 		return false
+	if not regions.is_empty():
+		matched = true
 	var terms: Array = node.get("name_terms", [])
 	if not terms.is_empty():
 		var searchable := "%s %s" % [map_data.get("name", ""), map_data.get("mapGroup", "")]
@@ -484,7 +579,23 @@ func _node_matches_map(node: Dictionary, map_data: Dictionary) -> bool:
 			if str(term) in searchable:
 				return true
 		return false
-	return true
+	return matched
+
+
+func _first_filterable_node_id(nodes: Array) -> String:
+	for value: Variant in nodes:
+		if value is Dictionary and str(value.get("node_id", "")) == "bich_province":
+			return "bich_province"
+	for value: Variant in nodes:
+		if value is Dictionary:
+			var candidate: Dictionary = value
+			if _node_has_filter_contract(candidate):
+				return str(candidate.get("node_id", ""))
+	return ""
+
+
+func _node_has_filter_contract(node: Dictionary) -> bool:
+	return not node.get("map_ids", []).is_empty() or not node.get("map_groups", []).is_empty() or not node.get("regions", []).is_empty() or not node.get("name_terms", []).is_empty()
 
 
 func _teleport_rule(map_id: int) -> Dictionary:
@@ -517,25 +628,14 @@ func _source_id_label(value: Variant) -> String:
 	return str(value)
 
 
-func _framed_section(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var frame := Panel.new()
-	frame.name = node_name
-	frame.position = rect.position
-	frame.size = rect.size
-	frame.theme_type_variation = "GothicInsetFrame"
-	add_child(frame)
-	return frame
+func _framed_section(node_name: String, rect: Rect2) -> Control:
+	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
+	return GothicFrameFactoryScript.add_filled_section(self, node_name, adjusted_rect)
 
 
-func _section_title(text_value: String, section_width: float) -> Label:
+func _section_title(node_name: String, text_value: String, section_width: float) -> Label:
 	var label := Label.new()
+	label.name = node_name
 	label.text = text_value
 	label.position = Vector2(24, 18)
 	label.size = Vector2(section_width - 48.0, 28)
@@ -546,5 +646,7 @@ func _section_title(text_value: String, section_width: float) -> Label:
 
 
 func _close() -> void:
+	_teleport_request_locked = false
+	GothicUIThemeScript.clear_button_feedback(teleport_button)
 	hide()
 	closed.emit()

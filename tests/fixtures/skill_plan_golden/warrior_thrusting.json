@@ -1,0 +1,91 @@
+{
+  "accepted": true,
+  "cooldown": {
+    "body_action": null,
+    "body_cast_ms": 0.0,
+    "cooldown_policy": "none",
+    "recovery_ms": 0.0,
+    "release_frame_index": null,
+    "status": "historical_verified",
+    "total_action_lock_ms": 0.0
+  },
+  "direction": [
+    0,
+    1
+  ],
+  "fixture_contract": "skill_plan_golden.v1",
+  "gameplay_actions": [
+    {
+      "cell": 1,
+      "ignore_ac": false,
+      "maximum_targets": -1,
+      "multiplier": 1.0,
+      "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
+      "type": "melee_hit"
+    },
+    {
+      "cell": 2,
+      "ignore_ac": true,
+      "maximum_targets": -1,
+      "multiplier": 1.0,
+      "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
+      "type": "melee_hit"
+    }
+  ],
+  "ground_effect_descriptors": [],
+  "input_context": {
+    "caster_level": 50,
+    "facing": [
+      0,
+      1
+    ],
+    "origin_tile": [
+      0,
+      0
+    ],
+    "rank": 3,
+    "release_id": "q3c:golden:warrior.thrusting",
+    "resource_context": {
+      "mana": 500,
+      "materials": {}
+    },
+    "runtime_map_id": 1,
+    "target_tile": [
+      1,
+      0
+    ]
+  },
+  "non_spatial_reason": "",
+  "presentation_actions": [],
+  "projectile_descriptors": [],
+  "rejection_reason": "accepted",
+  "resource_cost": {
+    "consume_timing": "",
+    "material_amount": 0,
+    "material_id": "",
+    "mp_cost": 0,
+    "reason": "",
+    "valid": true
+  },
+  "runtime_map_id": 1,
+  "skill_id": "warrior.thrusting",
+  "snapshot_contract": {
+    "contract_id": "skills.footprint_snapshot.ground_gu_projection.v1",
+    "coordinate_space": "runtime_map_absolute_ground_gu",
+    "runtime_map_id": 1,
+    "shape_contract_id": "skills.footprint_snapshot.circle.v1",
+    "shape_type": "circle",
+    "skill_id": "warrior.thrusting",
+    "snapshot_id": "warrior.thrusting:q3c:golden:warrior.thrusting"
+  },
+  "snapshot_hash": "2067249087",
+  "snapshot_required": true,
+  "source_baseline_head": "c1bc7a15550e54ec10bce60df7ac7565c45596b3",
+  "source_hash": "q3a_shadow_parity_passed_at_q3b_head",
+  "source_test": "skill_plan_profession_matrix_test",
+  "summon_descriptors": [],
+  "target_semantics": {
+    "mode": "line_melee_targets",
+    "relation": "hostile"
+  }
+}

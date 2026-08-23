@@ -18,5 +18,4 @@ func _ready() -> void:
 	game.change_zone("比奇城")
 	await get_tree().process_frame
 	await get_tree().process_frame
-	game.hud.open_quest("比奇老兵")
-
+	game.hud.open_quest("老兵")

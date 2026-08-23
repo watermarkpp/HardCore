@@ -92,7 +92,6 @@ func _run() -> void:
 	)
 
 	var player: PlayerCharacter = game.player
-	game.current_map_id = -1
 	player.set_physics_process(false)
 	player.global_position = Vector2.ZERO
 	player.velocity = Vector2.ZERO
@@ -102,16 +101,42 @@ func _run() -> void:
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = player.global_position + Vector2(2000, 2000)
-	var target := _make_enemy(game, player, player.global_position + Vector2(80, 0))
-	game._set_locked_target(target, true)
 	player.facing = Vector2.RIGHT
+	var input_deadline_ms := Time.get_ticks_msec() + 5000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec() < input_deadline_ms:
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "世界启动未在战士攻击测试时限内开放输入")
+	# This case verifies the warrior release/resource pipeline, not Bich safe-zone
+	# projection. Keep the formal mapped projection, but isolate the fixture from
+	# the independent safe-zone relocation policy during the attack wind-up.
+	game._active_safe_zones.clear()
+	# World bootstrap may finish while this test waits for the input gate. Reset
+	# both frozen footpoints after that transition so the release samples the
+	# intended in-range lock instead of a pre-transition fixture coordinate.
+	player.global_position = Vector2.ZERO
+	var target := _make_enemy(game, player, player.global_position + Vector2(16, 0))
+	# A dynamically added CharacterBody may finish its ready-time overlap
+	# correction on the next frame. Pin the fixture after that lifecycle step.
+	await get_tree().process_frame
+	target.process_mode = Node.PROCESS_MODE_DISABLED
+	target.global_position = player.global_position + Vector2(16, 0)
+	target.velocity = Vector2.ZERO
+	target.apply_control(60.0)
+	game._set_locked_target(target, true)
 
 	assert(player.request_skill("烈火剑法"), "烈火开关无法开启")
 	assert(player.fire_sword_enabled, "烈火开关状态没有保留")
 	assert(player.current_mp == 40, "开启烈火开关不应立即扣MP")
-	assert(player.request_attack_toward(Vector2.RIGHT, true), "烈火开关后攻击输入未被接受")
+	assert(player.request_attack_toward(Vector2.RIGHT, true, target.get_instance_id()), "烈火开关后攻击输入未被接受")
 	await get_tree().create_timer(player.attack_hit_windup + 0.08).timeout
-	assert(player.current_mp == 33, "烈火必须在同一次攻击唯一扣除7点MP")
+	assert(
+		player.current_mp == 33,
+		"烈火必须在同一次攻击唯一扣除7点MP（actual=%d target=%s hp=%d）" % [
+			player.current_mp,
+			target.global_position,
+			target.current_hp,
+		]
+	)
 	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") > 0, "烈火独立冷却未建立")
 	assert(game._canonical_fire_charge_expires_ms == 0, "烈火直释错误建立旧式二段充能")
 	assert(player.fire_sword_enabled, "烈火释放后不应自动关闭开关")
@@ -119,14 +144,14 @@ func _run() -> void:
 
 	player._physics_process(player._attack_timer + 0.01)
 	var mana_before_fallback := player.current_mp
-	assert(player.request_attack_toward(Vector2.RIGHT, true), "烈火冷却时必须接受低优先级攻击")
+	assert(player.request_attack_toward(Vector2.RIGHT, true, target.get_instance_id()), "烈火冷却时必须接受低优先级攻击")
 	await get_tree().create_timer(player.attack_hit_windup + 0.08).timeout
 	assert(player.current_mp == mana_before_fallback, "烈火冷却降级攻击不得再次扣除烈火MP")
 
 	player._physics_process(
 		float(player.skill_cooldown_remaining_ms("warrior.fire_sword")) / 1000.0 + 0.01
 	)
-	assert(player.request_attack_toward(Vector2.RIGHT, true), "烈火冷却结束后攻击输入未恢复")
+	assert(player.request_attack_toward(Vector2.RIGHT, true, target.get_instance_id()), "烈火冷却结束后攻击输入未恢复")
 	await get_tree().create_timer(player.attack_hit_windup + 0.08).timeout
 	assert(player.current_mp == mana_before_fallback - 7, "烈火冷却结束后没有恢复最高优先级")
 
@@ -146,6 +171,10 @@ func _make_enemy(game: Node, player: PlayerCharacter, position: Vector2) -> Enem
 		player,
 		false
 	)
+	# This fixture validates player release/resource semantics, not monster
+	# spawn separation. Prevent the enemy ready hook from relocating it away
+	# from the exact melee footpoint before the wind-up resolves.
+	enemy.primary_target = null
 	enemy.global_position = position
 	game.add_child(enemy)
 	# EnemyActor._ready() initializes its runtime control state. Freeze the
@@ -154,5 +183,5 @@ func _make_enemy(game: Node, player: PlayerCharacter, position: Vector2) -> Enem
 	enemy.process_mode = Node.PROCESS_MODE_DISABLED
 	enemy.global_position = position
 	enemy.velocity = Vector2.ZERO
-	enemy.control_time = 60.0
+	enemy.apply_control(60.0)
 	return enemy

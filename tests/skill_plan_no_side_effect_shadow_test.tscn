@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q3a_no_side_effect"]
+[ext_resource type="Script" path="res://tests/skill_plan_no_side_effect_shadow_test.gd" id="1"]
+[node name="SkillPlanNoSideEffectShadow" type="Node"]
+script = ExtResource("1")

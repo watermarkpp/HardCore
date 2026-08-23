@@ -1,7 +1,7 @@
 extends Node
 
-const MANIFEST_PATH := "res://assets/data/complete_monster_client_art_sources.json"
-const CATALOG_PATH := "res://assets/data/runtime/monster_animation_catalog.json"
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
 const REQUIRED_ACTIONS := ["idle", "walk", "attack", "hit", "death"]
 
 
@@ -10,80 +10,52 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	PlayerState.test_mode = true
-	PlayerState.reset_progress()
-	var manifest := _load_json(MANIFEST_PATH)
+	MonsterIdentityScript.reset_caches_for_test()
 	var catalog := _load_json(CATALOG_PATH)
-	var mappings: Dictionary = manifest.get("runtimeMappingsByMonsterId", {})
-	var summary: Dictionary = manifest.get("summary", {})
+	var entries: Array = catalog.get("entries", [])
+	var appearance_profiles: Dictionary = catalog.get("appearance_profiles", {})
+	assert(entries.size() == 217, "canonical appearance check must cover all 217 IDs")
+	assert(appearance_profiles.size() == int(catalog.get("summary", {}).get("appearance_profile_count", -1)), "appearance profile summary drifted")
+	var formal_profile_ids: Dictionary = {}
+	var allowed_count := 0
+	for value: Variant in entries:
+		assert(value is Dictionary, "canonical entry is not a dictionary")
+		var entry: Dictionary = value
+		var monster_id := int(entry.get("monster_id", -1))
+		var profile_id := str(entry.get("appearance_profile_id", ""))
+		var profile: Dictionary = appearance_profiles.get(profile_id, {})
+		assert(not profile.is_empty(), "monster_id=%d has no appearance profile" % monster_id)
+		assert(profile_id == str(profile.get("appearance_profile_id", "")), "monster_id=%d appearance profile key mismatch" % monster_id)
+		var allowed := bool(entry.get("runtime_allowed", false)) or bool(entry.get("editor_placement", {}).get("allowed", false))
+		if allowed:
+			allowed_count += 1
+			assert(str(profile.get("status", "")) == "formal", "allowed monster_id=%d has unresolved art" % monster_id)
+			assert(not MonsterIdentityScript.require_catalog_entry(monster_id, "appearance").is_empty(), "allowed monster_id=%d has no appearance API closure" % monster_id)
+			formal_profile_ids[profile_id] = true
+			var actions: Dictionary = profile.get("actions", {})
+			for action_name: String in REQUIRED_ACTIONS:
+				var action: Dictionary = actions.get(action_name, {})
+				var path := str(action.get("path", ""))
+				assert(not path.is_empty() and not str(action.get("path_sha256", "")).is_empty(), "monster_id=%d action=%s lacks explicit path/hash" % [monster_id, action_name])
+				assert(bool(action.get("source_path_exists", false)) and FileAccess.file_exists(path), "monster_id=%d action=%s source art is missing" % [monster_id, action_name])
+		else:
+			if str(profile.get("status", "")) != "formal":
+				assert(MonsterIdentityScript.require_catalog_entry(monster_id, "appearance").is_empty(), "unresolved monster_id=%d must fail closed for appearance" % monster_id)
 
-	assert(manifest.get("identityKey", "") == "monsterId", "完整怪物动画清单未使用稳定 monsterId")
-	assert(int(summary.get("newFormalMonsterCount", -1)) == 143, "新增正式五动作绑定数量不是143")
-	assert(int(summary.get("rejectedCount", -1)) == 0, "完整客户端动画仍有被拒绝映射")
-	assert(mappings.size() == 143, "完整客户端动画 stable ID 映射数量错误")
-
-	for monster_key: String in mappings:
-		var profile: Dictionary = mappings[monster_key]
-		assert(int(profile.get("directions", 0)) == 8, "monsterId=%s 不是八方向" % monster_key)
-		assert(int(profile.get("serviceRace", -1)) >= 0, "monsterId=%s 缺少服务 Race 证据" % monster_key)
-		var frame_size_values: Array = profile.get("frameSize", [])
-		assert(frame_size_values.size() == 2, "monsterId=%s 缺少帧尺寸" % monster_key)
-		var frame_size := Vector2i(int(frame_size_values[0]), int(frame_size_values[1]))
-		for action_name: String in REQUIRED_ACTIONS:
-			var action: Dictionary = profile.get("actions", {}).get(action_name, {})
-			var frame_count := int(action.get("framesPerDirection", 0))
-			var path := str(action.get("path", ""))
-			assert(frame_count > 0, "monsterId=%s %s 没有正式帧" % [monster_key, action_name])
-			assert(action.get("missingFrames", []).is_empty(), "monsterId=%s %s 仍有缺帧" % [monster_key, action_name])
-			assert(FileAccess.file_exists(path), "monsterId=%s %s 图集不存在" % [monster_key, action_name])
-			var image := Image.load_from_file(ProjectSettings.globalize_path(path))
-			assert(
-				image != null and not image.is_empty()
-				and image.get_size() == Vector2i(frame_size.x * frame_count, frame_size.y * 8),
-				"monsterId=%s %s 图集尺寸不符合五动作八方向清单" % [monster_key, action_name]
-			)
-
-	var catalog_summary: Dictionary = catalog.get("summary", {})
-	assert(int(catalog_summary.get("total", -1)) == 214, "动画总目录未覆盖214个怪物")
-	assert(int(catalog_summary.get("formal", -1)) == 214, "正式五动作绑定未达到214")
-	assert(int(catalog_summary.get("missing", -1)) == 0, "动画总目录仍登记缺失")
-	for row: Variant in catalog.get("monsters", []):
-		assert(row is Dictionary and not str(row.get("direction_policy", "")).is_empty(), "正式怪物目录缺少视觉方向策略")
-		if int(row.get("monster_id", -1)) == 30:
-			assert(row.get("direction_policy", "") == "fixed_source_direction", "食人花目录未登记固定源方向")
-
-	var player := PlayerCharacter.new()
-	player.global_position = Vector2(900, 0)
-	add_child(player)
-	player.set_physics_process(false)
-	for monster_id: int in [180, 195, 241]:
-		var data: Dictionary = GameData.get_monster_by_id(monster_id).duplicate(true)
-		data["name"] = "稳定ID运行时改名"
-		var enemy := EnemyActor.new()
-		enemy.setup(data, player, monster_id in [180, 195])
-		add_child(enemy)
-		enemy.set_physics_process(false)
-		await get_tree().process_frame
-		assert(enemy.visual.uses_final_art(), "monsterId=%d 未在运行时启用完整客户端动画" % monster_id)
-		assert(enemy.visual.active_resources.get("animation_source", "") == "classic_client_wil", "monsterId=%d 动画来源错误" % monster_id)
-		assert(enemy.visual.actor_ground_offset == Vector2i(32, 28), "monsterId=%d 未采用经典客户端角色原点迁移量" % monster_id)
-		var sprite: Sprite2D = enemy.visual.get_node("BodySprite")
-		assert(
-			sprite.position == -Vector2(enemy.visual.foot_anchor + enemy.visual.actor_ground_offset),
-			"monsterId=%d 图像绘制原点未迁移到统一地面原点" % monster_id
-		)
-		enemy.set_targeted(true)
-		assert(enemy.ground_indicator_center().is_zero_approx(), "monsterId=%d 地面锁定光圈未固定在怪物物理原点" % monster_id)
-		enemy.queue_free()
-
-	player.queue_free()
-	print("COMPLETE_MONSTER_CLIENT_ART_PASS：143个缺失绑定均有正式五动作八方向图集，214个怪物目录无缺失")
+	assert(allowed_count == int(catalog.get("summary", {}).get("runtime_allowed_count", -1)), "allowed appearance count must equal runtime/editor closure")
+	assert(MonsterIdentityScript.appearance_profile(68).get("appearance_profile_id", "") == MonsterIdentityScript.appearance_profile(69).get("appearance_profile_id", ""), "Wooma 68/69 must explicitly share one art profile")
+	assert(MonsterIdentityScript.appearance_profile(77).get("status", "") != "formal", "Wooma 77 art must remain unresolved")
+	assert(MonsterIdentityScript.appearance_profile(78).get("status", "") != "formal", "Wooma 78 art must remain unresolved")
+	assert(MonsterIdentityScript.appearance_profile(239).get("status", "") == "formal", "Wooma 239 art must retain its explicit profile")
+	assert(MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must remain runtime-disabled despite explicit art")
+	assert(formal_profile_ids.size() > 0, "canonical catalog must expose formal client art")
+	print("COMPLETE_MONSTER_CLIENT_ART_CANONICAL_PASS: identities=217 allowed=%d formal_profiles=%d actions=5" % [allowed_count, formal_profile_ids.size()])
 	get_tree().quit(0)
 
 
 func _load_json(path: String) -> Dictionary:
-	assert(FileAccess.file_exists(path), "缺少测试数据文件: %s" % path)
+	assert(FileAccess.file_exists(path), "missing JSON: %s" % path)
 	var file := FileAccess.open(path, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-	assert(parsed is Dictionary, "JSON解析失败: %s" % path)
+	assert(parsed is Dictionary, "invalid JSON: %s" % path)
 	return parsed

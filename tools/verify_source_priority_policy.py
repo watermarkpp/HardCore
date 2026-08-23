@@ -23,6 +23,7 @@ def main() -> None:
     checks: dict[str, bool] = {}
 
     checks["requiredLanesPresent"] = set(policy["lanes"]) == {
+        "combat_units",
         "skills",
         "equipment_attributes",
         "client_assets",
@@ -88,7 +89,7 @@ def main() -> None:
         skill_primary.get("packageEvidenceSha256")
         == "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
         skill_primary.get("contractEvidenceSha256")
-        == "1FDF28D3C575D18D2E7E0F875B008EB4F6F719752E4974CBCA399C66C62C7C2C",
+        == "6C4A4B447787EB6AD9F9F44C6C24CF6CA23C952673797226C66541008B25C516",
         len(str(skill_primary.get("packageEvidenceSha256", ""))) == 64,
         len(str(skill_primary.get("contractEvidenceSha256", ""))) == 64,
     ])

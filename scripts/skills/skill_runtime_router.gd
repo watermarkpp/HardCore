@@ -3,34 +3,63 @@ extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
-const SkillCastResultScript := preload("res://scripts/skills/skill_cast_result.gd")
 const SkillTargetServiceScript := preload("res://scripts/skills/skill_target_service.gd")
 const SkillResourceServiceScript := preload("res://scripts/skills/skill_resource_service.gd")
 const SkillGeometryServiceScript := preload("res://scripts/skills/skill_geometry_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 const WarriorRuntimeScript := preload("res://scripts/skills/runtimes/warrior_skill_runtime.gd")
 const WizardRuntimeScript := preload("res://scripts/skills/runtimes/wizard_skill_runtime.gd")
 const TaoistRuntimeScript := preload("res://scripts/skills/runtimes/taoist_skill_runtime.gd")
+const SkillExecutionPlanContractScript := preload(
+	"res://scripts/skills/skill_execution_plan_contract.gd"
+)
 
 const RUNTIME_CONTRACT_ID := "skills.runtime_router.cn_mir2_176.v1"
 const CANONICAL_PRODUCTION_DEFAULT := true
 const WARRIOR_MELEE_MODIFIER_CONTRACT_ID := "gameplay.warrior.melee_modifiers.v2"
 
 
-static func execute(request: Variant) -> Dictionary:
+static func _plan(request: Variant) -> Dictionary:
+	## Q3-C: the SINGLE planner baseline used by the canonical formal entry
+	## build_canonical_plan(). Pure: no resource commits, no cooldown commits,
+	## no node creation, no release snapshot building.
 	var request_validation := SkillCastRequestScript.validate(request)
 	if not bool(request_validation.get("valid", false)):
-		return SkillCastResultScript.failure("", str(request_validation.get("reason", "invalid_request")))
+		return {
+			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
+			"reason": str(
+				request_validation.get("reason", "invalid_request")
+			),
+		}
 	var skill_id := SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
 	var definition := SkillDataLoaderScript.skill(skill_id)
 	if definition.is_empty():
-		return SkillCastResultScript.failure(skill_id, "unknown_skill")
+		return {
+			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
+			"skill_id": skill_id,
+			"reason": "unknown_skill",
+		}
 	var target_validation := SkillTargetServiceScript.validate(
 		definition,
 		request.get("target_context", {})
 	)
 	if not bool(target_validation.get("valid", false)):
-		return SkillCastResultScript.failure(skill_id, str(target_validation.get("reason", "invalid_target")))
+		return {
+			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
+			"skill_id": skill_id,
+			"reason": str(
+				target_validation.get("reason", "invalid_target")
+			),
+		}
 	var resource_quote := SkillResourceServiceScript.quote(
 		definition,
 		int(request.get("rank", 0)),
@@ -38,7 +67,15 @@ static func execute(request: Variant) -> Dictionary:
 		request.get("target_context", {})
 	)
 	if not bool(resource_quote.get("valid", false)):
-		return SkillCastResultScript.failure(skill_id, str(resource_quote.get("reason", "insufficient_resource")))
+		return {
+			"accepted": false,
+			"effect_success": false,
+			"resource_commit": false,
+			"skill_id": skill_id,
+			"reason": str(
+				resource_quote.get("reason", "insufficient_resource")
+			),
+		}
 	var rng := SkillRngScript.new(int(request.get("seed", 0)))
 	var plan: Dictionary
 	match str(definition.get("class", "")):
@@ -49,9 +86,19 @@ static func execute(request: Variant) -> Dictionary:
 		"taoist":
 			plan = TaoistRuntimeScript.execute(definition, request, rng)
 		_:
-			return SkillCastResultScript.failure(skill_id, "unknown_profession")
+			return {
+				"accepted": false,
+				"effect_success": false,
+				"resource_commit": false,
+				"skill_id": skill_id,
+				"reason": "unknown_profession",
+			}
+	plan["skill_id"] = skill_id
 	if not bool(plan.get("accepted", true)):
-		return SkillCastResultScript.failure(skill_id, str(plan.get("reason", "runtime_rejected")))
+		plan["effect_success"] = false
+		plan["resource_commit"] = false
+		plan["reason"] = str(plan.get("reason", "runtime_rejected"))
+		return plan
 	plan["timing"] = definition.get("timing", {}).duplicate(true)
 	plan["geometry"] = definition.get("geometry", {}).duplicate(true)
 	plan["target"] = definition.get("target", {}).duplicate(true)
@@ -63,16 +110,106 @@ static func execute(request: Variant) -> Dictionary:
 		request.get("facing", Vector2i.DOWN),
 		request.get("target_context", {}).get("target_tile", Vector2i.ZERO)
 	)
-	var result := SkillCastResultScript.success(skill_id, plan)
-	result["runtime_contract"] = RUNTIME_CONTRACT_ID
-	result["source_ruleset_id"] = SkillDataLoaderScript.RULESET_ID
-	result["resource_quote"] = resource_quote
-	result["geometry_cells"] = plan.geometry_cells
-	result["ignored_client_claims"] = {
-		"damage": request.get("client_claimed_damage"),
-		"success": request.get("client_claimed_success"),
+	plan["resource_quote"] = resource_quote
+	## The release freezes the effective rank used to build every effect.
+	plan["effective_rank"] = SkillRankResolverScript.safe_effective_rank(
+		int(request.get("rank", 0))
+	)
+	return plan
+
+
+## Q3-B: the SINGLE formal planner entry. GameRoot calls ONLY this function to
+## obtain the canonical plan; the legacy execute() above is no longer called by
+## the formal production chain (kept for compatibility/shadow).
+static func build_canonical_plan(
+	request: Variant,
+	context: Dictionary = {}
+) -> Dictionary:
+	var request_validation := SkillCastRequestScript.validate(request)
+	if not bool(request_validation.get("valid", false)):
+		return _canonical_rejection_plan(
+			"",
+			str(request_validation.get("reason", "invalid_request")),
+			request,
+			context
+		)
+	var skill_id := SkillDataLoaderScript.stable_skill_id(
+		str(request.get("skill_id", ""))
+	)
+	var definition := SkillDataLoaderScript.skill(skill_id)
+	if definition.is_empty():
+		return _canonical_rejection_plan(
+			skill_id,
+			"unknown_skill",
+			request,
+			context
+		)
+	var legacy_result := _plan(request)
+	return SkillExecutionPlanContractScript.build_canonical_plan(
+		legacy_result,
+		request,
+		context
+	)
+
+
+static func _canonical_rejection_plan(
+	skill_id: String,
+	reason: String,
+	request: Variant,
+	context: Dictionary
+) -> Dictionary:
+	var normalized := SkillExecutionPlanContractScript.normalize_reason(reason)
+	var release_id := str(
+		context.get(
+			"release_id",
+			request.get("target_context", {}).get("release_id", "")
+		)
+	)
+	if release_id.is_empty():
+		release_id = "canonical:%s:%d" % [
+			skill_id,
+			int(request.get("seed", 0)),
+		]
+	return {
+		"contract": SkillExecutionPlanContractScript.CONTRACT_ID,
+		"plan_version": 1,
+		"plan_id": "",
+		"release_id": release_id,
+		"skill_id": skill_id,
+		"skill_definition_revision": "",
+		"caster_runtime_id": int(context.get("caster_runtime_id", 0)),
+		"target_runtime_id": int(context.get("target_runtime_id", 0)),
+		"runtime_map_id": int(context.get("runtime_map_id", -1)),
+		"input_mode": str(context.get("input_mode", "canonical")),
+		"effective_rank": SkillRankResolverScript.safe_effective_rank(
+			int(request.get("rank", 0))
+		),
+		"requested_direction": request.get("facing", Vector2i.DOWN),
+		"resolved_direction": request.get("facing", Vector2i.DOWN),
+		"lock_on_context": {},
+		"resource_cost": {},
+		"cooldown_contract": {},
+		"canonical_snapshot": {},
+		"snapshot_id": "",
+		"snapshot_required": not SkillExecutionPlanContractScript.NON_SPATIAL_SKILLS.has(
+			skill_id
+		),
+		"non_spatial_reason": str(
+			SkillExecutionPlanContractScript.NON_SPATIAL_SKILLS.get(
+				skill_id,
+				""
+			)
+		),
+		"geometry_cells": [],
+		"gameplay_actions": [],
+		"presentation_actions": [],
+		"projectile_descriptors": [],
+		"ground_effect_descriptors": [],
+		"summon_descriptors": [],
+		"rejection": {"accepted": false, "reason": normalized},
+		"created_by": SkillExecutionPlanContractScript.CANONICAL_PLANNER_ID,
+		"legacy_planner": SkillExecutionPlanContractScript.LEGACY_PLANNER_ID,
 	}
-	return result
 
 
 static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
@@ -82,12 +219,18 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 		body_mode = "normal"
 	var basic_learned := bool(request.get("basic_sword_learned", false))
 	var slaying_learned := bool(request.get("slaying_learned", false))
-	var basic_rank := clampi(int(request.get("basic_sword_rank", 0)), 0, 3)
-	var slaying_rank := clampi(int(request.get("slaying_rank", 0)), 0, 3)
+	var basic_rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("basic_sword_rank", 0))
+	)
+	var slaying_rank := SkillRankResolverScript.safe_effective_rank(
+		int(request.get("slaying_rank", 0))
+	)
 	var rng := SkillRngScript.new(int(request.get("seed", 0)))
 	var flat_dc_bonus := 0
 	var flat_damage_bonus_after_body_formula := 0
 	var flat_accuracy_bonus := 0
+	## Proficiency is disabled in HardCore v2: the compatibility array always
+	## stays empty and never grows/upgrades/persists anything.
 	var proficiency_events: Array[Dictionary] = []
 	var effects: Array[Dictionary] = []
 	var slaying_proc := false
@@ -111,20 +254,19 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 				effects.append(effect.duplicate(true))
 				if str(effect.get("type", "")) == "passive_stat_modifier":
 					flat_accuracy_bonus += int(effect.get("value", 0))
-		var basic_event := str(basic_plan.get("proficiency_event", ""))
-		if not basic_event.is_empty():
-			proficiency_events.append({
-				"skill_id": "warrior.basic_swordsmanship",
-				"event": basic_event,
-			})
-
 	if slaying_learned:
 		var slaying_definition := SkillDataLoaderScript.skill("warrior.slaying_swordsmanship")
 		var mechanics: Dictionary = slaying_definition.get("mechanics", {})
 		var accuracy_values: Array = mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])
 		var denominator_values: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
-		flat_accuracy_bonus += int(accuracy_values[slaying_rank])
-		slaying_proc_denominator = int(denominator_values[slaying_rank])
+		flat_accuracy_bonus += SkillRankResolverScript.linear_int(
+			accuracy_values,
+			slaying_rank
+		)
+		slaying_proc_denominator = SkillRankResolverScript.denominator(
+			denominator_values,
+			slaying_rank
+		)
 		if valid_melee_swing:
 			slaying_proc_roll_count = 1
 			var slaying_context := {
@@ -154,13 +296,6 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 					flat_damage_bonus_after_body_formula = int(
 						effect.get("flat_damage_bonus", 0)
 					)
-			var slaying_event := str(slaying_plan.get("proficiency_event", ""))
-			if not slaying_event.is_empty():
-				proficiency_events.append({
-					"skill_id": "warrior.slaying_swordsmanship",
-					"event": slaying_event,
-				})
-
 	return {
 		"contract_id": WARRIOR_MELEE_MODIFIER_CONTRACT_ID,
 		"source_ruleset_id": SkillDataLoaderScript.RULESET_ID,
@@ -195,9 +330,9 @@ static func integration_descriptor() -> Dictionary:
 		"warrior_melee_modifier_contract": WARRIOR_MELEE_MODIFIER_CONTRACT_ID,
 		"warrior_melee_modifier_entrypoint": "SkillRuntimeRouter.resolve_warrior_melee_modifiers",
 		"production_default": CANONICAL_PRODUCTION_DEFAULT,
-		"entrypoint": "SkillRuntimeRouter.execute",
+		"entrypoint": "SkillRuntimeRouter.build_canonical_plan",
 		"request_contract": SkillCastRequestScript.CONTRACT_ID,
-		"result_contract": SkillCastResultScript.CONTRACT_ID,
+		"result_contract": "skill_execution_result.v1",
 		"requires_integration_adapters": [
 			"combat_resolution",
 			"inventory_resources",

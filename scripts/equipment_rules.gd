@@ -9,6 +9,14 @@ const SUPPORTED_NEEDS: Array[int] = [NEED_LEVEL, NEED_ATTACK, NEED_MAGIC, NEED_T
 const ATTRIBUTE_MASTER_CONTRACT_ID := "equipment.attribute.master.v2"
 const ATTRIBUTE_MASTER_DISTRIBUTION := "project.hardcore.equipment_attribute_master.v2"
 const LEGACY_ROLL_POLICY := "legacy_clamp_negative_span"
+const SKILL_LEVEL_AFFIX_CONTRACT_ID := "equipment.skill_level_affix.v1"
+const SKILL_LEVEL_AFFIX_STAT := "skill_level"
+const SKILL_LEVEL_SCOPE_ALL := "all"
+const SKILL_LEVEL_SCOPE_PREFIX_PROFESSION := "profession:"
+const SKILL_LEVEL_SCOPE_PREFIX_SKILL := "skill:"
+const SKILL_LEVEL_PROFESSIONS: Array[String] = ["warrior", "wizard", "taoist"]
+const SKILL_LEVEL_INT64_MAX := 9223372036854775807
+const SKILL_LEVEL_STABLE_ID_MAX_LENGTH := 128
 const REQUIREMENT_TYPE_CODES := {
 	"level": NEED_LEVEL,
 	"max_dc": NEED_ATTACK,
@@ -133,6 +141,21 @@ static func max_hand_weight(profession: String, level: int) -> int:
 		_: return 12 + int(round((safe_level / 13.0) * safe_level))
 
 
+## Canonical inventory/bag carrying capacity. This is separate from the
+## classic hand/wear equipment requirements: bag capacity is consumed by every
+## non-currency inventory record. Keep this formula in one authority so callers
+## cannot drift on division or profession-name mapping.
+static func max_bag_weight(profession: String, level: int) -> int:
+	var safe_level := maxi(1, level)
+	var profession_id := ProfessionRules.profession_id(profession)
+	var divisor := 3.0
+	match profession_id:
+		"wizard": divisor = 5.0
+		"taoist": divisor = 4.0
+		_: divisor = 3.0
+	return 50 + roundi(float(safe_level) / divisor * float(safe_level))
+
+
 static func attribute_source_distribution(item: Dictionary) -> String:
 	var source: Variant = item.get("source", ATTRIBUTE_MASTER_DISTRIBUTION)
 	if source is Dictionary:
@@ -208,22 +231,22 @@ static func requirement_label(item: Dictionary) -> String:
 
 
 static func reference_price(item: Dictionary) -> int:
-	if int(item.get("servicePrice", 0)) > 0:
-		return int(item.get("servicePrice", 0))
-	if int(item.get("price", 0)) > 0:
-		return int(item.get("price", 0))
-	var requirement := requirement_for(item)
-	var required := maxi(1, int(requirement.get("value", 1)))
-	return maxi(50, required * required * 3)
+	return GameData.get_item_shop_price(str(item.get("name", "")))
 
 
 static func repair_cost(item: Dictionary, durability: int, max_durability: int) -> int:
-	var maximum := maxi(1, max_durability)
-	var missing := maximum - clampi(durability, 0, maximum)
-	if missing <= 0:
-		return 0
-	# ObjNpc.pas: Round(nPrice div 3 / DuraMax * missing). 本项目持久已换算为显示单位。
-	return maxi(0, int(round(float(reference_price(item) / 3) / maximum * missing)))
+	var equipment_catalog := item.duplicate(true)
+	equipment_catalog["kind"] = "equipment"
+	var quote := preload("res://scripts/pricing_service.gd").quote_repair(
+		GameData.get_item_price_record(str(item.get("name", ""))),
+		equipment_catalog,
+		{
+			"name": str(item.get("name", "")),
+			"durability": durability,
+			"max_durability": max_durability,
+		}
+	)
+	return int(quote.get("total_price", 0)) if bool(quote.get("valid", false)) else 0
 
 
 static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max: int, unlucky_roll: int, success_roll: int) -> Dictionary:
@@ -428,8 +451,320 @@ static func enrich_catalog_record(item: Dictionary) -> Dictionary:
 	result["fieldSemanticsSource"] = "M2Server/Common/Grobal2.pas:TStdItem + M2Server/ObjBase.pas:CanUseItem"
 	result["concreteStdItemsStatus"] = "项目装备属性主表已接入" if result.has("requirementType") else ("已接入" if result.has("serviceNeed") else "数据库缺失·保留候选值")
 	result["referencePrice"] = reference_price(result)
-	result["referencePriceSource"] = "服务端StdItems.Price" if result.has("servicePrice") else "项目价格候选·待StdItems.Price替换"
+	result["referencePriceSource"] = "server.crystal.cjlaaa:Server.MirDB:StdItem.Price" if int(result.get("referencePrice", 0)) > 0 else "missing_primary_price"
 	var special := special_effect_for(result)
 	if not special.is_empty():
 		result["specialEffect"] = special
 	return result
+
+
+# ── equipment.skill_level_affix.v1 ──────────────────────────────────────────
+# Canonical affix formats (all values are finite non-negative integers):
+#   {stat:"skill_level", scope:"all", value:N}
+#   {stat:"skill_level", scope:"profession:taoist", value:N}
+#   {stat:"skill_level", scope:"skill:taoist.healing", value:N}
+# Legacy formats remain readable and are converted explicitly:
+#   {stat:"skill_level", op:"add", value:N, skill:"烈火剑法"}
+#   {stat:"skill_level", op:"add", value:N, target:"烈火剑法"}
+#   modifiers.skillLevels = {"all":1, "烈火剑法":2}
+# The equipment layer never copies the skill catalog. Display-name scopes are
+# returned under `legacy` so integration can convert them through the unique
+# SkillDataLoader. The API only produces non-negative contributions; it does
+# not grant unlearned skills (that decision belongs to PlayerState/skills).
+
+
+static func skill_level_affix_contributions(record: Dictionary) -> Dictionary:
+	var result := _empty_skill_level_affix_result()
+	var modifiers: Variant = record.get("modifiers", null)
+	if modifiers == null:
+		return result
+	if modifiers is Array:
+		for index in range(modifiers.size()):
+			var entry: Variant = modifiers[index]
+			if not entry is Dictionary:
+				_append_rejected(result, index, "array", "malformed_record", "技能等级词条必须是对象", entry)
+				continue
+			_absorb_parse_result(
+				result,
+				_parse_array_skill_level_affix(entry),
+				index,
+				"array",
+				entry
+			)
+		return result
+	if modifiers is Dictionary:
+		var skill_levels: Variant = modifiers.get("skillLevels", null)
+		if skill_levels == null:
+			return result
+		if not skill_levels is Dictionary:
+			_append_rejected(result, -1, "skillLevels", "malformed_skill_levels", "skillLevels必须是对象", skill_levels)
+			return result
+		for raw_key: Variant in skill_levels:
+			var key := str(raw_key)
+			var value: Variant = skill_levels[raw_key]
+			_absorb_parse_result(
+				result,
+				_parse_skill_level_pair(key, value),
+				-1,
+				"skillLevels",
+				{"key": key, "value": value}
+			)
+		return result
+	_append_rejected(result, -1, "modifiers", "unsupported_modifiers_container", "modifiers必须是数组或对象", modifiers)
+	return result
+
+
+static func aggregate_skill_level_affix_records(records: Array) -> Dictionary:
+	var result := _empty_skill_level_affix_result()
+	for record_index in range(records.size()):
+		var record: Variant = records[record_index]
+		if not record is Dictionary:
+			result["rejected"] = int(result.get("rejected", 0)) + 1
+			result["diagnostics"].append({
+				"index": record_index,
+				"source": "records",
+				"code": "malformed_record",
+				"message": "装备记录必须是对象",
+				"record": record,
+			})
+			continue
+		_merge_skill_level_affix_result(
+			result,
+			skill_level_affix_contributions(record),
+			record_index
+		)
+	return result
+
+
+static func parse_skill_level_affix_entry(entry: Dictionary) -> Dictionary:
+	return _parse_array_skill_level_affix(entry)
+
+
+static func _empty_skill_level_affix_result() -> Dictionary:
+	return {
+		"contractId": SKILL_LEVEL_AFFIX_CONTRACT_ID,
+		"contributions": {},
+		"legacy": {},
+		"diagnostics": [],
+		"accepted": 0,
+		"rejected": 0,
+	}
+
+
+static func _parse_array_skill_level_affix(entry: Dictionary) -> Dictionary:
+	if not entry.has("stat") or entry.get("stat") == null:
+		return {"status": "rejected", "code": "missing_stat", "message": "技能等级词条缺少stat字段"}
+	if str(entry.get("stat", "")) != SKILL_LEVEL_AFFIX_STAT:
+		return {"status": "skipped", "code": "not_skill_level_affix"}
+	if entry.has("op") and str(entry.get("op", "")) != "add":
+		return {"status": "rejected", "code": "unsupported_op", "message": "技能等级词条只支持add或省略op"}
+	var scope_result := _resolve_skill_level_scope(entry)
+	if str(scope_result.get("status", "")) != "ok":
+		return scope_result
+	var value_result := _validate_skill_level_value(entry.get("value"))
+	if not bool(value_result.get("ok", false)):
+		return value_result
+	var parsed := {
+		"status": "accepted",
+		"canonical_scope": str(scope_result.get("canonical_scope", "")),
+		"value": int(value_result.get("value", 0)),
+	}
+	if scope_result.has("legacy_name"):
+		parsed["status"] = "legacy"
+		parsed["legacy_name"] = str(scope_result.get("legacy_name", ""))
+		parsed.erase("canonical_scope")
+	return parsed
+
+
+static func _parse_skill_level_pair(key: String, value: Variant) -> Dictionary:
+	var scope_result := _canonical_scope_from_pair_key(key)
+	if str(scope_result.get("status", "")) != "ok":
+		return scope_result
+	var value_result := _validate_skill_level_value(value)
+	if not bool(value_result.get("ok", false)):
+		return value_result
+	var parsed := {"status": "accepted", "value": int(value_result.get("value", 0))}
+	if scope_result.has("canonical_scope"):
+		parsed["canonical_scope"] = str(scope_result.get("canonical_scope", ""))
+	else:
+		parsed["status"] = "legacy"
+		parsed["legacy_name"] = str(scope_result.get("legacy_name", ""))
+	return parsed
+
+
+static func _resolve_skill_level_scope(entry: Dictionary) -> Dictionary:
+	var has_scope := entry.has("scope")
+	var has_skill := entry.has("skill")
+	var has_target := entry.has("target")
+	if has_scope and (has_skill or has_target):
+		return {"status": "rejected", "code": "conflicting_scope_fields", "message": "scope与skill/target不能同时出现"}
+	if not has_scope:
+		if has_skill or has_target:
+			var raw: Variant = entry.get("skill", entry.get("target", null))
+			if raw == null or not raw is String:
+				return {"status": "rejected", "code": "invalid_legacy_scope", "message": "legacy技能名必须是字符串"}
+			return _canonical_scope_from_pair_key(str(raw))
+		return {"status": "ok", "canonical_scope": SKILL_LEVEL_SCOPE_ALL}
+	var raw_scope: Variant = entry.get("scope")
+	if not raw_scope is String:
+		return {"status": "rejected", "code": "invalid_scope", "message": "scope必须是字符串"}
+	var scope := str(raw_scope)
+	if scope == SKILL_LEVEL_SCOPE_ALL:
+		return {"status": "ok", "canonical_scope": SKILL_LEVEL_SCOPE_ALL}
+	if scope.begins_with(SKILL_LEVEL_SCOPE_PREFIX_PROFESSION):
+		var profession := scope.substr(SKILL_LEVEL_SCOPE_PREFIX_PROFESSION.length())
+		if profession not in SKILL_LEVEL_PROFESSIONS:
+			return {"status": "rejected", "code": "invalid_profession_scope", "message": "profession只允许warrior/wizard/taoist"}
+		return {"status": "ok", "canonical_scope": scope}
+	if scope.begins_with(SKILL_LEVEL_SCOPE_PREFIX_SKILL):
+		var skill_id := scope.substr(SKILL_LEVEL_SCOPE_PREFIX_SKILL.length())
+		if not _looks_like_stable_skill_id(skill_id):
+			return {"status": "rejected", "code": "invalid_skill_scope", "message": "skill后必须是稳定技能ID"}
+		return {"status": "ok", "canonical_scope": scope}
+	return {"status": "rejected", "code": "invalid_scope", "message": "scope格式不支持"}
+
+
+static func _canonical_scope_from_pair_key(key: String) -> Dictionary:
+	if key.is_empty():
+		return {"status": "rejected", "code": "invalid_legacy_scope", "message": "legacy技能名不能为空"}
+	if key == SKILL_LEVEL_SCOPE_ALL:
+		return {"status": "ok", "canonical_scope": SKILL_LEVEL_SCOPE_ALL}
+	if _looks_like_stable_skill_id(key):
+		return {"status": "ok", "canonical_scope": SKILL_LEVEL_SCOPE_PREFIX_SKILL + key}
+	return {"status": "ok", "legacy_name": key}
+
+
+static func _validate_skill_level_value(value: Variant) -> Dictionary:
+	if value == null:
+		return {"status": "rejected", "code": "missing_value", "message": "技能等级词条缺少value"}
+	if value is int:
+		var integer := int(value)
+		if integer <= 0:
+			return {"status": "rejected", "code": "non_positive_value", "message": "技能等级词条必须是正数"}
+		return {"ok": true, "value": integer}
+	if value is float:
+		var number := float(value)
+		if not is_finite(number):
+			return {"status": "rejected", "code": "non_finite_value", "message": "技能等级value必须是有限数值"}
+		if floorf(number) != number:
+			return {"status": "rejected", "code": "non_integer_value", "message": "技能等级value必须是整数语义"}
+		if number <= 0.0:
+			return {"status": "rejected", "code": "non_positive_value", "message": "技能等级词条必须是正数"}
+		return {"ok": true, "value": int(number)}
+	return {"status": "rejected", "code": "invalid_value_type", "message": "技能等级value必须是整数或整数语义浮点"}
+
+
+static func _absorb_parse_result(result: Dictionary, parsed: Dictionary, index: int, source: String, raw_record: Variant) -> void:
+	var status := str(parsed.get("status", "rejected"))
+	if status == "accepted":
+		_accumulate_skill_level_value(
+			result,
+			"contributions",
+			str(parsed.get("canonical_scope", "")),
+			int(parsed.get("value", 0)),
+			index,
+			source
+		)
+		result["accepted"] = int(result.get("accepted", 0)) + 1
+		return
+	if status == "legacy":
+		_accumulate_skill_level_value(
+			result,
+			"legacy",
+			str(parsed.get("legacy_name", "")),
+			int(parsed.get("value", 0)),
+			index,
+			source
+		)
+		result["accepted"] = int(result.get("accepted", 0)) + 1
+		result["diagnostics"].append({
+			"index": index,
+			"source": source,
+			"code": "legacy_display_name_scope",
+			"message": "legacy技能名由integration经SkillDataLoader转换为稳定ID后接入玩家状态",
+		})
+		return
+	if status == "skipped":
+		return
+	_append_rejected(
+		result,
+		index,
+		source,
+		str(parsed.get("code", "invalid_record")),
+		str(parsed.get("message", "无效技能等级词条")),
+		raw_record
+	)
+
+
+static func _accumulate_skill_level_value(result: Dictionary, bucket: String, key: String, value: int, index: int, source: String) -> void:
+	var container: Dictionary = result.get(bucket, {})
+	var current := int(container.get(key, 0))
+	var next := current
+	if value > 0 and current > SKILL_LEVEL_INT64_MAX - value:
+		next = SKILL_LEVEL_INT64_MAX
+		result["diagnostics"].append({
+			"index": index,
+			"source": source,
+			"code": "overflow_guard_clamped",
+			"message": "技能等级贡献累加超过int64技术上限，已钳制到最大值（非玩法上限）",
+		})
+	else:
+		next = current + value
+	container[key] = next
+	result[bucket] = container
+
+
+static func _merge_skill_level_affix_result(result: Dictionary, partial: Dictionary, record_index: int) -> void:
+	for scope_key: Variant in partial.get("contributions", {}):
+		_accumulate_skill_level_value(
+			result,
+			"contributions",
+			str(scope_key),
+			int(partial["contributions"][scope_key]),
+			record_index,
+			"aggregate"
+		)
+	for legacy_key: Variant in partial.get("legacy", {}):
+		_accumulate_skill_level_value(
+			result,
+			"legacy",
+			str(legacy_key),
+			int(partial["legacy"][legacy_key]),
+			record_index,
+			"aggregate"
+		)
+	result["accepted"] = int(result.get("accepted", 0)) + int(partial.get("accepted", 0))
+	result["rejected"] = int(result.get("rejected", 0)) + int(partial.get("rejected", 0))
+	for diagnostic: Variant in partial.get("diagnostics", []):
+		if not diagnostic is Dictionary:
+			continue
+		var merged: Dictionary = diagnostic.duplicate(true)
+		merged["recordIndex"] = record_index
+		result["diagnostics"].append(merged)
+
+
+static func _append_rejected(result: Dictionary, index: int, source: String, code: String, message: String, raw_record: Variant) -> void:
+	result["diagnostics"].append({
+		"index": index,
+		"source": source,
+		"code": code,
+		"message": message,
+		"record": raw_record.duplicate(true) if raw_record is Dictionary else raw_record,
+	})
+	result["rejected"] = int(result.get("rejected", 0)) + 1
+
+
+static func _looks_like_stable_skill_id(value: String) -> bool:
+	if value.is_empty() or value.length() > SKILL_LEVEL_STABLE_ID_MAX_LENGTH:
+		return false
+	if not _is_stable_id_ascii_alnum(value.unicode_at(0)):
+		return false
+	for index in range(1, value.length()):
+		var code := value.unicode_at(index)
+		if not (_is_stable_id_ascii_alnum(code) or code == 46 or code == 95 or code == 45):
+			return false
+	return true
+
+
+static func _is_stable_id_ascii_alnum(code: int) -> bool:
+	return (code >= 48 and code <= 57) or (code >= 97 and code <= 122)

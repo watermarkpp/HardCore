@@ -48,7 +48,7 @@
     "portal_contract_id": "unified_map_portal_endpoint_v1",
     "revision": 5.0,
     "runtime_approved": true,
-    "runtime_approved_revision": 5,
+    "runtime_approved_revision": 5.0,
     "size_migration": "bich_64_to_80_centered",
     "workspace": "res://map_editor_workspace/bich_province"
   },
@@ -3044,7 +3044,7 @@
         "source_map_key": "bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000004",
-        "target_map_id": 268,
+        "target_map_id": 268.0,
         "target_map_key": "wooma_forest",
         "target_portal_id": "map_exit_000004",
         "target_tile": [
@@ -3086,7 +3086,7 @@
         "source_map_key": "bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 217,
+        "target_map_id": 217.0,
         "target_map_key": "orc_tomb_1",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -3140,7 +3140,7 @@
         "source_map_key": "bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 406,
+        "target_map_id": 406.0,
         "target_map_key": "bich_mine_1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -3157,13 +3157,12 @@
     ],
     "monster_spawn": [
       {
-        "content_id": "monster.21",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "稻草人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.21",
+        "monster_id": 21,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3175,13 +3174,12 @@
         ]
       },
       {
-        "content_id": "monster.21",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "稻草人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.21",
+        "monster_id": 21,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3193,13 +3191,12 @@
         ]
       },
       {
-        "content_id": "monster.21",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "稻草人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.21",
+        "monster_id": 21,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3211,13 +3208,12 @@
         ]
       },
       {
-        "content_id": "monster.21",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "稻草人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.21",
+        "monster_id": 21,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3229,13 +3225,12 @@
         ]
       },
       {
-        "content_id": "monster.21",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "稻草人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.21",
+        "monster_id": 21,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3247,13 +3242,12 @@
         ]
       },
       {
-        "content_id": "monster.24",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "多钩猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.24",
+        "monster_id": 24,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3265,13 +3259,12 @@
         ]
       },
       {
-        "content_id": "monster.24",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "多钩猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.24",
+        "monster_id": 24,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3283,13 +3276,12 @@
         ]
       },
       {
-        "content_id": "monster.24",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "多钩猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.24",
+        "monster_id": 24,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3301,13 +3293,12 @@
         ]
       },
       {
-        "content_id": "monster.24",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "多钩猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.24",
+        "monster_id": 24,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3319,13 +3310,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3337,13 +3327,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3355,13 +3344,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3373,13 +3361,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3391,13 +3378,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3409,13 +3395,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3427,13 +3412,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3445,13 +3429,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3463,13 +3446,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3481,13 +3463,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3499,13 +3480,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3517,13 +3497,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3535,13 +3514,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3553,13 +3531,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3571,13 +3548,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3589,31 +3565,12 @@
         ]
       },
       {
-        "content_id": "monster.29",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "森林雪人0",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.29",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000029",
-        "spawn_rule": "ambient",
-        "tile": [
-          52.0,
-          8.0
-        ]
-      },
-      {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3625,13 +3582,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3643,13 +3599,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3661,13 +3616,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3679,13 +3633,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3697,13 +3650,12 @@
         ]
       },
       {
-        "content_id": "monster.24",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "多钩猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.24",
+        "monster_id": 24,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3715,13 +3667,12 @@
         ]
       },
       {
-        "content_id": "monster.24",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "多钩猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.24",
+        "monster_id": 24,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3733,13 +3684,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3751,13 +3701,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3769,13 +3718,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3787,13 +3735,12 @@
         ]
       },
       {
-        "content_id": "monster.26",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "钉耙猫",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.26",
+        "monster_id": 26,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3805,13 +3752,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3823,13 +3769,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3841,13 +3786,12 @@
         ]
       },
       {
-        "content_id": "monster.28",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.28",
+        "monster_id": 28,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3859,13 +3803,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3877,13 +3820,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3895,13 +3837,12 @@
         ]
       },
       {
-        "content_id": "monster.19",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "蛤蟆",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.19",
+        "monster_id": 19,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3913,13 +3854,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3931,13 +3871,12 @@
         ]
       },
       {
-        "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
         "display_name": "毒蜘蛛",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": "monster.18",
+        "monster_id": 18,
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,

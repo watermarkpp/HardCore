@@ -2,6 +2,7 @@ class_name NPCActor
 extends Node2D
 
 const NPCVisualScript := preload("res://scripts/npc_visual.gd")
+const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
 const FACING_DIRECTIONS: Array[Vector2] = [
 	Vector2.DOWN, Vector2(-0.70710678, 0.70710678), Vector2.LEFT, Vector2(-0.70710678, -0.70710678),
 	Vector2.UP, Vector2(0.70710678, -0.70710678), Vector2.RIGHT, Vector2(0.70710678, 0.70710678),
@@ -11,18 +12,22 @@ var npc_name := "NPC"
 var npc_kind := "shop"
 var shop_stock: Array = []
 var stock_key := ""
+var service_identity_id := ""
 var appearance := -1
 var facing := Vector2.DOWN
 var default_facing := Vector2.DOWN
 var map_center := Vector2.ZERO
 var visual: NPCVisual
+var name_label: Label
 
 
 func setup(display_name: String, kind: String, stock: Array = [], dynamic_stock_key := "", npc_appearance := -1, center := Vector2.ZERO) -> void:
-	npc_name = display_name
 	npc_kind = kind
 	shop_stock = stock
 	stock_key = dynamic_stock_key
+	var service_identity := NPCServiceIdentityScript.resolve(display_name, kind, dynamic_stock_key)
+	service_identity_id = str(service_identity.get("id", ""))
+	npc_name = str(service_identity.get("display_name", display_name))
 	appearance = npc_appearance if npc_appearance >= 0 else _fallback_appearance(display_name, kind, dynamic_stock_key)
 	map_center = center
 
@@ -35,14 +40,15 @@ func _ready() -> void:
 	visual.name = "NPCVisual"
 	visual.setup(self)
 	add_child(visual)
-	var label := Label.new()
-	label.text = npc_name
-	label.position = Vector2(-75, -76)
-	label.size = Vector2(150, 25)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 18)
-	label.add_theme_color_override("font_color", Color(0.98, 0.78, 0.42))
-	add_child(label)
+	name_label = Label.new()
+	name_label.text = npc_name
+	name_label.position = Vector2(-75.0, -76.0)
+	name_label.size = Vector2(150, 25)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_color_override("font_color", Color(0.98, 0.78, 0.42))
+	add_child(name_label)
+	_refresh_name_label_anchor()
 	queue_redraw()
 
 
@@ -53,10 +59,19 @@ func face_toward(target_position: Vector2, as_default := false) -> void:
 	facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction)]
 	if as_default:
 		default_facing = facing
+	_refresh_name_label_anchor()
 
 
 func reset_to_default_facing() -> void:
 	facing = default_facing
+	_refresh_name_label_anchor()
+
+
+func _refresh_name_label_anchor() -> void:
+	if name_label == null or visual == null:
+		return
+	var visual_center_offset := visual.stable_frame_center_offset()
+	name_label.position.x = -75.0 + visual_center_offset.x
 
 
 func interact(game: Node) -> void:
@@ -66,7 +81,10 @@ func interact(game: Node) -> void:
 		var active_stock := shop_stock
 		if stock_key == "books":
 			active_stock = game._build_skill_book_stock(PlayerState.profession)
-		game.hud.open_shop(npc_name, active_stock)
+		# Keep the merchant identity explicit even when the stock is empty or
+		# filtered. ShopPanel must not infer authority from stock[0].
+		var merchant_context := GameData.merchant_context(stock_key)
+		game.hud.open_shop(npc_name, active_stock, merchant_context)
 	elif npc_kind == "trainer":
 		game.hud.open_skill_trainer(npc_name)
 	elif npc_kind == "quest":

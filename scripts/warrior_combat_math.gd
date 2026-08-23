@@ -2,10 +2,15 @@ class_name WarriorCombatMath
 extends RefCounted
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
 
 # 来源：M2Server/M2Share.pas DEFHIT/DEFSPEED 与 ObjBase.pas 战士近战实现。
 const BASE_HIT := 5
 const BASE_AGILITY := 15
+## Base data max rank (skills_source_of_truth_v1.json); effective cast rank
+## extends above it via skills.rank_extension.v1.
 const MAX_SKILL_LEVEL := 3
 const MAGIC_TRAIN_LEVEL := 3
 const SWORD_LONG_POWER_RATE := 100
@@ -20,7 +25,7 @@ const PHYSICAL_ATTACK_SPEED_POLICY_ID := CombatResolutionRules.PHYSICAL_ATTACK_S
 
 
 static func clamp_skill_level(level_value: int) -> int:
-	return clampi(level_value, 0, MAX_SKILL_LEVEL)
+	return SkillRankResolverScript.safe_effective_rank(level_value)
 
 
 static func basic_sword_accuracy_bonus(level_value: int) -> int:
@@ -92,7 +97,8 @@ static func roll_attack_power(attack_min: int, attack_max: int, total_luck: int,
 
 static func slaying_proc_cycle(level_value: int) -> int:
 	# 用户定稿表：内部0/1/2/3级分别为1/7、1/6、1/5、1/4。
-	return 7 - clamp_skill_level(level_value)
+	# Effective ranks above 3 stop improving the proc at 1/2 (policy floor).
+	return maxi(2, 7 - clamp_skill_level(level_value))
 
 
 static func slaying_flat_damage_bonus(level_value: int) -> int:

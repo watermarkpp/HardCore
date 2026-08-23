@@ -2,6 +2,25 @@ extends Node
 
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
+const FireWallFieldController := preload(
+	"res://scripts/fire_wall_field_controller.gd"
+)
+const GroundSkillVisualCell := preload(
+	"res://scripts/ground_skill_visual_cell.gd"
+)
+const SkillFootprintSnapshot := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
+const SkillFootprintDiagnosticLog := preload(
+	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
+)
+const CasterSkillRuntime := preload("res://scripts/caster_skill_runtime.gd")
+const CasterSkillVisualRegistry := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
+const CasterSkillVisualEffect := preload(
+	"res://scripts/caster_skill_visual_effect.gd"
+)
 
 
 func _ready() -> void:
@@ -9,6 +28,8 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	ProjectSettings.set_setting(&"hardcore/debug/diagnostics/enabled", false)
+	SkillFootprintDiagnosticLog.clear_recent_events()
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
 	PlayerState.profession = "法师"
@@ -19,6 +40,14 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	var generated_release_a: String = game._next_skill_footprint_release_id(
+		"wizard.laser"
+	)
+	var generated_release_b: String = game._next_skill_footprint_release_id(
+		"wizard.laser"
+	)
+	assert(not generated_release_a.is_empty())
+	assert(generated_release_a != generated_release_b)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(4000, 4000)
@@ -72,18 +101,29 @@ func _run() -> void:
 		"effect_width_gu": 1.0,
 		"pierces_units": false,
 		"stops_on_terrain": false,
+		"maximum_targets": 0,
+		"target_limit_policy": "all_intersecting_effect_cells",
+		"target_selection_contract": "skills.wizard.hellfire.all_intersecting_5x1.v1",
 	}
 	var hellfire_strip: Dictionary = game._canonical_continuous_line_strip_ground_gu(
 		"wizard.hellfire",
 		hellfire_effect,
 		game.player.global_position,
-		free_aim_screen_px
+		free_aim_screen_px,
+		"test:hellfire:release:1"
 	)
 	assert((hellfire_strip.direction_ground_gu as Vector2).is_equal_approx(
 		free_aim_direction_ground_gu
 	))
 	assert(is_equal_approx(float(hellfire_strip.effect_length_gu), 5.0))
 	assert(is_equal_approx(float(hellfire_strip.effect_width_gu), 1.0))
+	var hellfire_snapshot: Dictionary = hellfire_strip.get(
+		"skill_footprint_snapshot", {}
+	)
+	assert(game._snapshot_strict_ok(hellfire_snapshot))
+	assert(hellfire_snapshot.is_read_only())
+	assert(hellfire_snapshot.skill_id == "wizard.hellfire")
+	assert(hellfire_snapshot.release_id == "test:hellfire:release:1")
 	var first_line_target := _make_enemy_at_fractional_tile(
 		game, game.player, origin_ground_gu + free_aim_direction_ground_gu, "地狱火首个目标"
 	)
@@ -118,6 +158,27 @@ func _run() -> void:
 	assert(hellfire_hit and first_line_target.current_hp < first_hp, "地狱火未命中连续五格直线内首个目标")
 	assert(rear_line_target.current_hp < rear_hp, "地狱火未命中连续五格直线内后方目标")
 	assert(off_line_target.current_hp == off_line_hp, "宽一格地狱火错误命中正式条带外单位")
+	var hellfire_diagnostics := SkillFootprintDiagnosticLog.recent_events()
+	assert(hellfire_diagnostics.size() == 1)
+	assert(hellfire_diagnostics[0].release_id == "test:hellfire:release:1")
+	assert(int(hellfire_diagnostics[0].eligible_target_count) == 2)
+	assert(bool(hellfire_diagnostics[0].damage_applied))
+	assert(is_zero_approx(float(
+		hellfire_diagnostics[0].maximum_corner_error_px
+	)))
+	var explicitly_disabled_targets: Array[EnemyActor] = (
+		game._canonical_spell_geometry_targets(
+			"wizard.hellfire",
+			[],
+			{"maximum_targets": 0},
+			hellfire_strip,
+			hellfire_snapshot
+		)
+	)
+	assert(
+		explicitly_disabled_targets.is_empty(),
+		"没有 all_intersecting_effect_cells 策略时 maximum_targets=0 必须继续禁用目标"
+	)
 
 	first_line_target.queue_free()
 	rear_line_target.queue_free()
@@ -183,36 +244,110 @@ func _run() -> void:
 		"wizard.laser",
 		laser_effect,
 		game.player.global_position,
-		laser_aim_screen_px
+		laser_aim_screen_px,
+		"test:laser:release:1"
 	)
 	assert((laser_strip.direction_ground_gu as Vector2).is_equal_approx(
 		laser_aim_direction_ground_gu
 	))
 	assert(is_equal_approx(float(laser_strip.effect_length_gu), 8.0))
-	var visual_children_before := game.get_child_count()
-	game._spawn_canonical_cast_visual(
-		"wizard.laser",
-		game.player.global_position,
-		laser_aim_screen_px,
-		null,
-		game.player.global_position + laser_aim_screen_px,
-		[],
-		laser_strip
+	var laser_snapshot: Dictionary = laser_strip.get(
+		"skill_footprint_snapshot", {}
 	)
-	assert(game.get_child_count() == visual_children_before + 1)
-	var shared_geometry_visual := game.get_child(game.get_child_count() - 1)
-	assert(shared_geometry_visual is CasterSkillVisualEffect)
+	assert(game._snapshot_strict_ok(laser_snapshot))
+	assert(laser_snapshot.is_read_only())
+	assert(laser_snapshot.skill_id == "wizard.laser")
+	assert(laser_snapshot.release_id == "test:laser:release:1")
+	var visual_children_before := game.get_child_count()
+	# Q3-C: the legacy visual spawner was removed; the shared line-strip visual
+	# is created through the canonical node adapter from a frozen
+	# canonical-shaped presentation plan.
 	var expected_laser_screen_points: Array[Vector2] = (
 		SpellGeometry.continuous_line_screen_points_px(
 			laser_strip,
 			Callable(game, "_canonical_ground_gu_to_screen_px")
 		)
 	)
+	var presentation_plan := {
+		"contract": "skill_execution_plan.v1",
+		"release_id": "test:laser:release:1",
+		"skill_id": "wizard.laser",
+		"canonical_snapshot": laser_snapshot,
+		"success": true,
+		"operation": "canonical_visual_only",
+		"visual": CasterSkillVisualRegistry.profile("wizard.laser"),
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+		"canonical_geometry_contract": (
+			SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID
+		),
+		"geometry_origin_screen_px": game.player.global_position,
+		"geometry_grid_cells": [],
+		"geometry_screen_points_px": expected_laser_screen_points,
+		"skill_footprint_snapshot": laser_snapshot,
+		"presentation_actions": [{
+			"type": "visual",
+			"skill_id": "wizard.laser",
+			"role": CasterSkillVisualRegistry.ROLE_LINE_EFFECT,
+			"phase": "",
+			"visual_radius_px": 72.0,
+			"visual_duration": 0.8,
+			"canonical_geometry_contract": (
+				SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID
+			),
+			"geometry_origin_screen_px": game.player.global_position,
+			"target_position_screen_px": (
+				game.player.global_position + laser_aim_screen_px
+			),
+			"geometry_grid_cells": [],
+			"geometry_screen_points_px": expected_laser_screen_points,
+			"ground_gu_to_screen_position_px": (
+				Callable(game, "_canonical_ground_gu_to_screen_px")
+			),
+			"snapshot_validation_context": (
+				game._canonical_snapshot_validation_context(
+					game._canonical_screen_px_to_ground_gu(
+						game.player.global_position
+					)
+				)
+			),
+		}],
+		"gameplay_actions": [],
+		"projectile_descriptors": [],
+		"ground_effect_descriptors": [],
+		"summon_descriptors": [],
+	}
+	var shared_geometry_visuals := (
+		CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
+			presentation_plan,
+			game.player.global_position,
+			laser_aim_screen_px,
+			Color.WHITE,
+			null,
+			game.player
+		)
+	)
+	assert(shared_geometry_visuals.size() == 1)
+	for raw_node: Node2D in shared_geometry_visuals:
+		game.add_child(raw_node)
+	assert(game.get_child_count() == visual_children_before + 1)
+	var shared_geometry_visual := game.get_child(game.get_child_count() - 1)
+	assert(shared_geometry_visual is CasterSkillVisualEffect)
 	assert(not expected_laser_screen_points.is_empty())
 	assert(not shared_geometry_visual._geometry_screen_offsets_px.is_empty())
 	assert(shared_geometry_visual._geometry_screen_offsets_px.back().is_equal_approx(
 		expected_laser_screen_points.back() - game.player.global_position
 	))
+	assert(
+		shared_geometry_visual.formal_core_polygon_screen_offset_px()
+		== SkillFootprintSnapshot.projected_polygon_screen_offset_px(
+			laser_snapshot
+		)
+	)
+	assert(
+		str(shared_geometry_visual.get_meta("formal_line_snapshot_id", ""))
+		== str(laser_snapshot.snapshot_id)
+	)
 	shared_geometry_visual.free()
 	var near_laser_target := _make_enemy_at_fractional_tile(
 		game,
@@ -269,6 +404,15 @@ func _run() -> void:
 			stacked_laser_targets[stacked_index].current_hp < stacked_laser_hp[stacked_index],
 			"疾光电影错误保留八目标上限：第%d个附加目标未受伤" % stacked_index
 		)
+	var line_diagnostics := SkillFootprintDiagnosticLog.recent_events()
+	assert(line_diagnostics.size() == 2)
+	assert(line_diagnostics[1].release_id == "test:laser:release:1")
+	assert(int(line_diagnostics[1].eligible_target_count) == 9)
+	assert(bool(line_diagnostics[1].damage_applied))
+	assert(
+		line_diagnostics[1].expected_projected_polygon_px
+		== line_diagnostics[1].actual_visual_core_polygon_px
+	)
 
 	near_laser_target.queue_free()
 	far_laser_target.queue_free()
@@ -365,13 +509,22 @@ func _run() -> void:
 		}
 	)
 	var formal_cell_fields := 0
+	var shared_snapshot_ids: Dictionary = {}
 	for child: Node in game.get_children():
-		if child is GroundSkillEffect and child.skill_id == "wizard.fire_wall":
-			if child.runtime_target_filter.is_valid():
-				formal_cell_fields += 1
+		if not child is FireWallFieldController:
+			continue
+		var field_controller := child as FireWallFieldController
+		for cell: GroundSkillVisualCell in field_controller.visual_cells:
+			assert(
+				cell.visual_only
+				and cell.damage_owner == GroundSkillVisualCell.DAMAGE_OWNER,
+				"Q2-C: fire-wall cells must be pure visual presentation nodes"
+			)
+			formal_cell_fields += 1
+			shared_snapshot_ids[cell.canonical_snapshot_id] = true
 	assert(
-		formal_cell_fields >= 4,
-		"火墙没有让四个正式格分别承担占位接触判定"
+		formal_cell_fields == 4 and shared_snapshot_ids.size() == 1,
+		"Q2-C: the formal fire wall must keep exactly 4 cells sharing one canonical snapshot id"
 	)
 
 	game.queue_free()

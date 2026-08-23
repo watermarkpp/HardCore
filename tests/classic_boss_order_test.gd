@@ -3,6 +3,11 @@ extends Node
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -59,7 +64,9 @@ func _run() -> void:
 	dragon._boss_skill_cooldown = 0.0
 	dragon._update_boss_skill(0.01, 100.0)
 	assert(
-		SkillFootprintSnapshotScript.is_valid(dragon._boss_skill_footprint_snapshot),
+		SkillFootprintSnapshotScript.has_legacy_base_contract(
+			dragon._boss_skill_footprint_snapshot
+		),
 		"boss warning did not freeze the release-time GU footprint",
 	)
 	var warned_release_id := str(dragon._boss_skill_footprint_snapshot.release_id)
@@ -123,6 +130,10 @@ func _boss(monster_id: int, renamed: String, player: PlayerCharacter) -> EnemyAc
 	data["name"] = renamed
 	var boss := EnemyActor.new()
 	boss.setup(data, player, true)
+	boss.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
 	boss.global_position = Vector2.ZERO
 	add_child(boss)
 	boss.set_physics_process(false)

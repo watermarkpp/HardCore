@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1a_non_finite"]
+[ext_resource type="Script" path="res://tests/snapshot_non_finite_coordinate_test.gd" id="1"]
+[node name="SnapshotNonFiniteCoordinate" type="Node"]
+script = ExtResource("1")

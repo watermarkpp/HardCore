@@ -1,6 +1,13 @@
 extends Node
 
 
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -28,6 +35,10 @@ func _run() -> void:
 
 	var enemy := EnemyActor.new()
 	enemy.setup(GameData.get_monster("骷髅精灵"), player, true)
+	enemy.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	, GroundUnitSpace.screen_delta_px_to_ground_delta_gu)
 	add_child(enemy)
 	enemy.set_physics_process(false)
 	enemy.attack_min = threshold

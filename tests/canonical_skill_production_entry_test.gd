@@ -31,11 +31,46 @@ func _run() -> void:
 		Vector2.RIGHT,
 		999999
 	)
-	assert(lightning.get("runtime_contract", "") == "skills.runtime_router.cn_mir2_176.v1", "真实入口未经过SkillRuntimeRouter.execute")
+	assert(lightning.get("runtime_contract", "") == "skills.runtime_router.cn_mir2_176.v1", "真实入口必须经过SkillRuntimeRouter.build_canonical_plan")
 	assert(lightning.get("adapter_contract", "") == "skills.production_adaptation.hardcore.v1", "真实入口缺少六类生产适配合同")
 	assert(caster.current_mp == mana_before - 15, "雷电术未按canonical rank3唯一提交15MP")
 	assert(target.current_hp < hp_before and hp_before - target.current_hp < 999999, "GameRoot仍采信客户端伤害或未应用canonical伤害")
 	assert(_has_formal_visual(game, "wizard.lightning"), "雷电术canonical真实入口未创建稳定source_skill_id正式视觉")
+
+	PlayerState.learned_skills = {
+		SkillDataLoader.display_name("wizard.holy_word"): 3,
+	}
+	caster.current_mp = 100
+	var zuma_guard_data := GameData.get_monster_by_id(156).duplicate(true)
+	var zuma_guard := EnemyActor.new()
+	zuma_guard.setup(zuma_guard_data, caster, false)
+	zuma_guard.global_position = caster.global_position + Vector2(80, 0)
+	game.add_child(zuma_guard)
+	game._set_magic_locked_target(zuma_guard, true)
+	game._skill_cast_target = zuma_guard
+	var holy_word: Dictionary = game._execute_canonical_skill(
+		"wizard.holy_word",
+		caster.global_position,
+		Vector2.RIGHT,
+		0,
+		{"force_success": true}
+	)
+	assert(bool(holy_word.get("accepted", false)), "祖玛卫士未进入圣言术正式资格判定")
+	assert(bool(holy_word.get("effect_success", false)), "强制成功的祖玛卫士圣言术没有生效")
+	assert(zuma_guard.current_hp == 0, "圣言术成功后没有将祖玛卫士生命归零")
+
+	game._set_magic_locked_target(target, true)
+	game._skill_cast_target = target
+	var living_hp_before := target.current_hp
+	var rejected_holy_word: Dictionary = game._execute_canonical_skill(
+		"wizard.holy_word",
+		caster.global_position,
+		Vector2.RIGHT,
+		0,
+		{"force_success": true}
+	)
+	assert(not bool(rejected_holy_word.get("accepted", true)), "普通活物被错误加入圣言术资格")
+	assert(target.current_hp == living_hp_before, "圣言术资格失败后仍对普通活物造成伤害")
 
 	PlayerState.learned_skills = {"瞬息移动": 3, "火墙": 3}
 	caster.current_mp = 100
@@ -76,9 +111,14 @@ func _run() -> void:
 	assert(bool(fire_wall.get("accepted", false)), "火墙canonical真实入口被拒绝")
 	var fire_wall_visual_count := 0
 	for child: Node in game.get_children():
-		if child is GroundSkillEffect and child.skill_id == "wizard.fire_wall":
+		if not child is FireWallFieldController:
+			continue
+		for cell: GroundSkillVisualCell in (child as FireWallFieldController).visual_cells:
 			fire_wall_visual_count += 1
-			assert(child._sprite != null and child._sprite.frame_count() == 6, "火墙未加载主库1630..1635六帧动画")
+			assert(
+				cell._sprite != null and cell._sprite.frame_count() == 6,
+				"火墙未加载主库1630..1635六帧动画"
+			)
 	assert(fire_wall_visual_count == 4, "火墙canonical真实入口未按主合同创建2×2四格动画")
 
 	PlayerState.learned_skills = {
@@ -116,7 +156,7 @@ func _run() -> void:
 
 	PlayerState.profession = "道士"
 	PlayerState.learned_skills = {"召唤神兽": 3}
-	PlayerState.inventory = [{"name": "护身符", "count": 5}]
+	PlayerState.inventory = []
 	PlayerState.recalculate_stats()
 	caster.current_mp = 100
 	var summon_result: Dictionary = game._execute_canonical_skill(
@@ -126,7 +166,19 @@ func _run() -> void:
 		0
 	)
 	assert(bool(summon_result.get("accepted", false)), "召唤神兽canonical真实入口被拒绝")
-	assert(PlayerState.item_count("护身符") == 0, "道士材料适配器未按rank3消耗5张护身符")
+	var summon_resource_cost: Dictionary = summon_result.get(
+		"canonical_plan", {}
+	).get("resource_cost", {})
+	assert(PlayerState.inventory.is_empty(), "召唤神兽不得消耗施法材料")
+	assert(
+		int(summon_resource_cost.get("material_amount", -1)) == 0
+		and str(summon_resource_cost.get("material_id", "invalid")).is_empty(),
+		"召唤神兽canonical计划必须保持道士零材料合同"
+	)
+	assert(
+		str(summon_resource_cost.get("material_policy_contract_id", ""))
+		== "skills.taoist.material_free.v1"
+	)
 	var main_pet: SummonActor = game._canonical_main_pet()
 	assert(main_pet != null and main_pet.skill_id == "taoist.summon_divine_beast", "道士唯一主宠未携带稳定source_skill_id")
 	assert(main_pet._sprite != null, "召唤神兽canonical主宠未加载正式动画")

@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q3a_rejection"]
+[ext_resource type="Script" path="res://tests/skill_plan_rejection_reason_parity_test.gd" id="1"]
+[node name="SkillPlanRejectionReasonParity" type="Node"]
+script = ExtResource("1")

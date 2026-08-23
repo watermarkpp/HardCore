@@ -27,17 +27,19 @@ func _direct_spell_context(skill_id: String, anti_magic_roll: int, anti_magic_po
 
 
 func _assert_direct_spell_anti_magic(skill_id: String) -> void:
-	var evaded := CasterSkillRuntime.resolve(skill_id, _direct_spell_context(skill_id, 0))
-	assert(evaded.success and evaded.anti_magic_eligible and evaded.anti_magic_checked, "%s未调用AntiMagic" % skill_id)
-	assert(evaded.magic_evaded and evaded.damage == 0, "%s躲避成功后没有整次归零" % skill_id)
+	# Q3-C: legacy the legacy resolver was removed; the anti-magic
+	# contract is asserted through the production CombatResolutionRules API.
+	var evaded := CombatResolutionRules.resolve_magic_damage(skill_id, 12, 1, 0)
+	assert(evaded.anti_magic_eligible and evaded.anti_magic_checked, "%s未调用AntiMagic" % skill_id)
+	assert(evaded.magic_evaded and evaded.damage_after_evasion == 0, "%s躲避成功后没有整次归零" % skill_id)
 	assert(not evaded.enters_magic_defense_stage, "%s躲避成功后错误进入MAC阶段" % skill_id)
 
-	var connected := CasterSkillRuntime.resolve(skill_id, _direct_spell_context(skill_id, 1))
-	assert(not connected.magic_evaded and connected.damage > 0, "%s未命中AntiMagic边界" % skill_id)
+	var connected := CombatResolutionRules.resolve_magic_damage(skill_id, 12, 1, 1)
+	assert(not connected.magic_evaded and connected.damage_after_evasion > 0, "%s未命中AntiMagic边界" % skill_id)
 	assert(connected.enters_magic_defense_stage, "%s未躲避伤害没有进入MAC阶段契约" % skill_id)
 
-	var zero_points := CasterSkillRuntime.resolve(skill_id, _direct_spell_context(skill_id, 0, 0))
-	assert(not zero_points.magic_evaded and zero_points.damage > 0, "%s的0点AntiMagic不应躲避" % skill_id)
+	var zero_points := CombatResolutionRules.resolve_magic_damage(skill_id, 12, 0, 0)
+	assert(not zero_points.magic_evaded and zero_points.damage_after_evasion > 0, "%s的0点AntiMagic不应躲避" % skill_id)
 
 
 func _snapshot_item_combat_fields(item: Dictionary) -> Dictionary:
@@ -192,43 +194,43 @@ func _run() -> void:
 	low_agility_magic["target_agility"] = 1
 	var high_agility_magic := low_agility_magic.duplicate(true)
 	high_agility_magic["target_agility"] = 999
-	var low_agility_plan := CasterSkillRuntime.resolve("wizard.fireball", low_agility_magic)
-	var high_agility_plan := CasterSkillRuntime.resolve("wizard.fireball", high_agility_magic)
 	assert(
-		low_agility_plan.magic_evaded == high_agility_plan.magic_evaded
-		and low_agility_plan.damage == high_agility_plan.damage,
+		CombatResolutionRules.anti_magic_points_from_context(low_agility_magic)
+			== CombatResolutionRules.anti_magic_points_from_context(
+				high_agility_magic
+			),
 		"敏捷错误影响法术闪避"
 	)
 
 	for skill_id in ["taoist.healing", "taoist.mass_healing"]:
-		var healing := CasterSkillRuntime.resolve(skill_id, {
-			"skill_level": 3,
-			"spiritual_stat_roll": 12,
-			"magic_power_roll": 0,
-			"def_power_roll": 0,
-			"anti_magic_roll": 0,
-			"target_anti_magic_points": 10,
-		})
-		assert(healing.healing > 0 and not healing.anti_magic_eligible and not healing.anti_magic_checked, "%s误用AntiMagic" % skill_id)
+		assert(
+			TaoistCombatMath.healing(skill_id, 12, 3) > 0
+			and not CombatResolutionRules.anti_magic_eligible(skill_id),
+			"%s误用AntiMagic" % skill_id
+		)
 
-	var poison_success := CasterSkillRuntime.resolve("taoist.poison", {
+	var poison_success := CasterSkillBehavior.resolve("taoist.poison", {
 		"skill_level": 3,
 		"spiritual_stat_roll": 12,
 		"poison_type": "green",
 		"anti_poison_random": 6,
-		"anti_magic_roll": 0,
-		"target_anti_magic_points": 10,
+		"target_anti_poison": 5,
 	})
-	var poison_resisted := CasterSkillRuntime.resolve("taoist.poison", {
+	var poison_resisted := CasterSkillBehavior.resolve("taoist.poison", {
 		"skill_level": 3,
 		"spiritual_stat_roll": 12,
 		"poison_type": "green",
 		"anti_poison_random": 7,
-		"anti_magic_roll": 9,
-		"target_anti_magic_points": 0,
+		"target_anti_poison": 5,
 	})
 	assert(poison_success.success and not poison_resisted.success, "施毒没有使用独立AntiPoison门")
-	assert(poison_success.evasion_channel == "anti_poison" and not poison_success.anti_magic_checked, "施毒误用AntiMagic")
+	assert(
+		str(poison_success.get("operation", "")) == "poison_health"
+		and int(poison_success.get("anti_poison_random_bound", -1))
+			== TaoistCombatMath.anti_poison_random_bound(5)
+		and not poison_success.has("anti_magic_checked"),
+		"施毒误用AntiMagic"
+	)
 
 	for skill_id in [
 		"taoist.invisibility",
@@ -236,14 +238,19 @@ func _run() -> void:
 		"taoist.summon_skeleton",
 		"taoist.summon_divine_beast",
 	]:
-		var plan := CasterSkillRuntime.resolve(skill_id, {
+		var plan := CasterSkillBehavior.resolve(skill_id, {
 			"skill_level": 3,
 			"spiritual_stat_roll": 12,
 			"owner_level": 35,
 			"anti_magic_roll": 0,
 			"target_anti_magic_points": 10,
 		})
-		assert(plan.success and not plan.anti_magic_eligible and not plan.anti_magic_checked, "%s误用AntiMagic" % skill_id)
+		assert(
+			plan.success
+			and not bool(plan.get("anti_magic_eligible", false))
+			and not bool(plan.get("anti_magic_checked", false)),
+			"%s误用AntiMagic" % skill_id
+		)
 
 	assert(WarriorCombatMath.PHYSICAL_ATTACK_SPEED_POLICY_ID == "physical.attack_speed.interval_tier.v1")
 	assert(WarriorCombatMath.physical_attack_interval_ms(-1) == 960, "负攻速档公式错误")

@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q0b1_sideguard"]
+[ext_resource type="Script" path="res://tests/home_resolution_side_effect_guard_test.gd" id="1"]
+[node name="HomeResolutionSideEffectGuard" type="Node"]
+script = ExtResource("1")

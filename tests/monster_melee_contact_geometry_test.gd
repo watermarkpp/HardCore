@@ -8,6 +8,17 @@ const START_DISTANCE_GU := 3.0
 const SETTLED_POSITION_EPSILON_GU := 0.002
 
 
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _configure_enemy_map(enemy: EnemyActor) -> void:
+	enemy.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen")
+	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -37,6 +48,7 @@ func _run() -> void:
 		Vector2(4.0, 0.0)
 	)
 	var ranged_hp_before := player.current_hp
+	_configure_enemy_map(ranged_probe)
 	ranged_probe._deal_melee_hit(player, 5)
 	assert(player.current_hp < ranged_hp_before, "ranged release sweep did not deal damage")
 	assert(
@@ -95,6 +107,7 @@ func _run() -> void:
 			if settled_frame_counts[direction_index] >= 5:
 				continue
 			var enemy := enemies[direction_index]
+			_configure_enemy_map(enemy)
 			var delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 				player.global_position - enemy.global_position
 			)
@@ -123,7 +136,9 @@ func _run() -> void:
 		enemy._deal_melee_hit(player, 5)
 		assert(player.current_hp < hp_before, "direction %d footprint contact did not deal damage" % direction_index)
 		assert(
-			SkillFootprintSnapshotScript.is_valid(enemy._last_attack_footprint_snapshot),
+			SkillFootprintSnapshotScript.has_legacy_base_contract(
+				enemy._last_attack_footprint_snapshot
+			),
 			"direction %d attack did not publish a GU footprint snapshot" % direction_index,
 		)
 		assert(

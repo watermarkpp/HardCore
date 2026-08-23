@@ -3,8 +3,6 @@ extends Node2D
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
-const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
-const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
 const MANUAL_ALIGNMENT_DATA_PATH := (
@@ -39,28 +37,25 @@ const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v5"
 const MANUAL_ALIGNMENT_REPLAY_CONTRACT := (
 	"monster.ground_alignment.manual_replay.v1"
 )
+const GROUND_SHADOW_MODE_AUTHORED_CAST_WITH_CONTACT_CORE := (
+	"authored_cast_with_contact_core"
+)
+const GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK := "procedural_fallback"
+const GROUND_SHADOW_MODE_HIDDEN_PENDING_ART := "hidden_pending_art"
+const CONTACT_CORE_RADIUS_SCALE := 0.42
+const CONTACT_CORE_ALPHA_GROUNDED := 0.24
+const CONTACT_CORE_ALPHA_AIRBORNE := 0.18
 
-static var _boss_art: Dictionary = {}
-static var _complete_art: Dictionary = {}
 static var _overhead_anchor_data: Dictionary = {}
 static var _ground_contact_data: Dictionary = {}
 static var _manual_alignment_data: Dictionary = {}
-static var _client_resource_profiles: Dictionary = {}
-static var _client_resource_profile_lru: Array[String] = []
-static var _client_resource_profile_bytes: Dictionary = {}
-static var _client_resource_cache_bytes := 0
 static var _client_texture_load_request_count := 0
-static var _threaded_profile_requests: Dictionary = {}
-static var _threaded_profile_queue: Array[String] = []
-static var _threaded_texture_request_count := 0
-static var _threaded_texture_get_count := 0
-static var _map_prefetch_keys: Array[String] = []
-static var _map_pinned_profile_keys: Dictionary = {}
-static var _map_prefetch_completed_keys: Dictionary = {}
-static var _map_pinned_bytes := 0
-static var _map_prefetch_generation := 0
-static var _last_streaming_poll_frame := -1
 static var _synchronous_loading_for_tests := true
+## Q2-D: single streaming coordinator owned by GameRoot. The static pointer is
+## the access path only - there is exactly one coordinator instance and no
+## second cache truth. MonsterVisual instances register needs and keep their
+## own animation; the coordinator owns the global poll.
+static var _streaming_coordinator
 
 var actor: EnemyActor
 var sprite: Sprite2D
@@ -126,20 +121,66 @@ func _ready() -> void:
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 	if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
 		_activate_resources()
+	_register_with_streaming_coordinator()
+
+
+func _exit_tree() -> void:
+	var coordinator = _streaming_coordinator
+	if coordinator != null and is_instance_valid(coordinator):
+		coordinator.unregister_visual(get_instance_id())
+
+
+func _register_with_streaming_coordinator() -> void:
+	var coordinator = _streaming_coordinator
+	if coordinator == null or not is_instance_valid(coordinator):
+		return
+	var mapping := _client_mapping_for(actor.monster_data)
+	if mapping.is_empty():
+		return
+	coordinator.register_visual(
+		self,
+		actor.monster_id,
+		actor.runtime_map_id,
+		coordinator.current_world_generation(),
+		_client_resource_cache_key(mapping),
+		_client_resource_paths(mapping),
+		int(actor.get_meta("spawn_serial", actor.get_instance_id()))
+	)
+
+
+static func set_streaming_coordinator(
+	coordinator
+) -> void:
+	_streaming_coordinator = coordinator
+
+
+static func streaming_coordinator():
+	return _streaming_coordinator
+
+
+func _client_resource_paths(client_mapping: Dictionary) -> Dictionary:
+	var actions: Variant = client_mapping.get("actions", {})
+	var paths := {}
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Dictionary = (
+			actions.get(action_name, {})
+			if actions is Dictionary
+			else {}
+		)
+		paths[action_name] = str(action.get("path", ""))
+	return paths
 
 
 func _draw() -> void:
-	# Keep the saved foot point and its target ring in one CanvasItem transform
-	# chain so Android cannot round the actor and visual positions separately.
-	if (
-		not is_instance_valid(actor)
-		or actor._dying
-		or not actor.is_targeted
-		or not uses_final_art()
-	):
+	# Final WIL art owns the cast shadow. Keep its contact core and the optional
+	# target ring in this same CanvasItem and derive both from one reviewed foot.
+	if not is_instance_valid(actor) or not uses_final_art() or actor._burrowed:
 		return
 	var center := target_ring_local_position()
 	var radii := ground_indicator_radii(Vector2.ZERO)
+	_draw_contact_core(center, radii)
+	if actor._dying or not actor.is_targeted:
+		return
 	var points := PackedVector2Array()
 	for index in range(49):
 		var angle := TAU * float(index) / 48.0
@@ -150,10 +191,54 @@ func _draw() -> void:
 	draw_polyline(points, Color(1.0, 0.78, 0.18, 0.78), 2.0, true)
 
 
+func _draw_contact_core(center: Vector2, radii: Vector2) -> void:
+	var scale := CONTACT_CORE_RADIUS_SCALE
+	var points := PackedVector2Array()
+	for index in range(25):
+		var angle := TAU * float(index) / 24.0
+		points.append(
+			center
+			+ Vector2(cos(angle) * radii.x * scale, sin(angle) * radii.y * scale)
+		)
+	var alpha := (
+		CONTACT_CORE_ALPHA_AIRBORNE
+		if ground_projection_strategy() in ["flying", "hover"]
+		else CONTACT_CORE_ALPHA_GROUNDED
+	)
+	draw_colored_polygon(points, Color(0.05, 0.04, 0.03, alpha))
+
+
+func ground_shadow_layout_snapshot() -> Dictionary:
+	var final_art := uses_final_art()
+	var pending_art := _has_authored_client_art and active_resources.is_empty()
+	var mode := GROUND_SHADOW_MODE_HIDDEN_PENDING_ART
+	var owner := "none"
+	var draw_contact_core := false
+	if final_art:
+		mode = GROUND_SHADOW_MODE_AUTHORED_CAST_WITH_CONTACT_CORE
+		owner = "monster_visual"
+		draw_contact_core = not actor._burrowed
+	elif not _has_authored_client_art:
+		mode = GROUND_SHADOW_MODE_PROCEDURAL_FALLBACK
+		owner = "enemy"
+	return {
+		"contract_id": "monster.ground_shadow.contact_core.v1",
+		"mode": mode,
+		"owner": owner,
+		"contact_center_local": actor.ground_indicator_center(),
+		"actor_local_center": actor.ground_indicator_center(),
+		"ring_center_local": actor.ground_indicator_center(),
+		"visual_center_local": target_ring_local_position(),
+		"radii": ground_indicator_radii(Vector2.ZERO),
+		"draw_contact_core": draw_contact_core,
+		"pending_authored_art": pending_art,
+		"ring_visible": final_art and not actor._dying and actor.is_targeted,
+	}
+
+
 func _process(delta: float) -> void:
 	if not is_instance_valid(actor):
 		return
-	poll_streaming()
 	_attack_remaining = maxf(0.0, _attack_remaining - delta)
 	_hit_remaining = maxf(0.0, _hit_remaining - delta)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
@@ -251,73 +336,34 @@ func _release_resources() -> void:
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:
 	var client_mapping := _client_mapping_for(monster_data)
-	if not client_mapping.is_empty():
-		return _client_resources(client_mapping)
-	var monster_name := str(monster_data.get("name", actor.display_name if is_instance_valid(actor) else ""))
-	var stable_lookup := MonsterIdentityScript.animation_lookup_name(monster_data)
-	var lookup_names := [stable_lookup] if not stable_lookup.is_empty() else []
-	if not monster_name.is_empty() and not lookup_names.has(monster_name):
-		lookup_names.append(monster_name)
-	if monster_name.ends_with("0"):
-		lookup_names.append(monster_name.trim_suffix("0"))
-	for lookup_name:String in lookup_names:
-		var resources:=PresentationAssets.monster_resources(lookup_name)
-		if not resources.is_empty():return resources
-	return {}
+	return _client_resources(client_mapping) if not client_mapping.is_empty() else {}
 
 
 func _client_mapping_for(monster_data: Dictionary) -> Dictionary:
-	var monster_name := str(monster_data.get("name", actor.display_name if is_instance_valid(actor) else ""))
-	var stable_lookup := MonsterIdentityScript.animation_lookup_name(monster_data)
-	var lookup_names := [stable_lookup] if not stable_lookup.is_empty() else []
-	if not monster_name.is_empty() and not lookup_names.has(monster_name):
-		lookup_names.append(monster_name)
-	if monster_name.ends_with("0"):
-		lookup_names.append(monster_name.trim_suffix("0"))
-	var monster_key := MonsterIdentityScript.stable_key(monster_data)
-	var complete_manifest := _complete_art_manifest()
-	if not monster_key.is_empty():
-		var complete_mapping: Variant = complete_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
-		if complete_mapping is Dictionary and not complete_mapping.is_empty():
-			return complete_mapping
-	var boss_manifest := _boss_art_manifest()
-	if not monster_key.is_empty():
-		var boss_mapping: Variant = boss_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
-		if boss_mapping is Dictionary and not boss_mapping.is_empty():
-			return boss_mapping
-	for lookup_name: String in lookup_names:
-		var legacy_boss_mapping: Variant = boss_manifest.get("runtimeMappings", {}).get(lookup_name, {})
-		if legacy_boss_mapping is Dictionary and not legacy_boss_mapping.is_empty():
-			return legacy_boss_mapping
-	for manifest: Dictionary in [GameData.bich_common_art, GameData.bich_undead_art]:
-		if not monster_key.is_empty():
-			var id_mapping: Variant = manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
-			if id_mapping is String:
-				id_mapping = manifest.get("runtimeMappings", {}).get(id_mapping, {})
-			if id_mapping is Dictionary and not id_mapping.is_empty():
-				return id_mapping
-		for lookup_name:String in lookup_names:
-			var canonical_name := str(manifest.get("legacyAliases", {}).get(lookup_name, lookup_name))
-			var mapping: Variant = manifest.get("runtimeMappings", {}).get(canonical_name, {})
-			if mapping is Dictionary and not mapping.is_empty():
-				return mapping
-	return {}
-
-
-func _boss_art_manifest() -> Dictionary:
-	if _boss_art.is_empty() and FileAccess.file_exists(BOSS_ART_PATH):
-		var file := FileAccess.open(BOSS_ART_PATH, FileAccess.READ)
-		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-		_boss_art = parsed if parsed is Dictionary else {}
-	return _boss_art
-
-
-func _complete_art_manifest() -> Dictionary:
-	if _complete_art.is_empty() and FileAccess.file_exists(COMPLETE_ART_PATH):
-		var file := FileAccess.open(COMPLETE_ART_PATH, FileAccess.READ)
-		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-		_complete_art = parsed if parsed is Dictionary else {}
-	return _complete_art
+	var monster_id := MonsterIdentityScript.monster_id(monster_data)
+	var profile := MonsterIdentityScript.appearance_profile(monster_id)
+	if profile.is_empty() or str(profile.get("status", "")) != "formal":
+		return {}
+	var atlas: Dictionary = profile.get("atlas", {}) if profile.get("atlas", {}) is Dictionary else {}
+	var frame_size: Array = atlas.get("frame_size", [160, 160])
+	var foot_anchor: Array = atlas.get("foot_anchor", [80, 138])
+	if frame_size.size() < 2 or foot_anchor.size() < 2:
+		return {}
+	var actions: Variant = profile.get("actions", {})
+	if not actions is Dictionary:
+		return {}
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Variant = actions.get(action_name, {})
+		if not action is Dictionary or str(action.get("path", "")).is_empty() or str(action.get("path_sha256", "")).is_empty():
+			return {}
+	return {
+		"appearance_profile_id": str(profile.get("appearance_profile_id", "")),
+		"frameSize": frame_size,
+		"footAnchor": foot_anchor,
+		"healthBarTopByDirection": [],
+		"directionPolicy": "mir2_directional",
+		"actions": actions,
+	}
 
 
 func ground_contact_offset() -> Vector2:
@@ -440,16 +486,6 @@ func ground_projection_strategy() -> String:
 func _ground_contact_profile_for_actor() -> Dictionary:
 	var manifest := _ground_contact_manifest()
 	var monster_key := str(actor.monster_id) if is_instance_valid(actor) else ""
-	if is_instance_valid(actor) and not manifest.get("entriesByMonsterId", {}).has(monster_key):
-		var legacy_ids: Dictionary = manifest.get("legacyNameToMonsterId", {})
-		for legacy_name: String in [
-			str(actor.monster_data.get("name", "")),
-			str(actor.monster_data.get("baseName", "")),
-			actor.display_name,
-		]:
-			if legacy_ids.has(legacy_name):
-				monster_key = str(int(legacy_ids[legacy_name]))
-				break
 	var profile: Variant = manifest.get("entriesByMonsterId", {}).get(monster_key, {})
 	return profile if profile is Dictionary else {}
 
@@ -564,15 +600,23 @@ func _direction_row(direction: Vector2) -> int:
 
 func _client_resources(client_mapping: Dictionary) -> Dictionary:
 	var cache_key := _client_resource_cache_key(client_mapping)
-	var cached: Variant = _client_resource_profiles.get(cache_key, {})
-	if cached is Dictionary and not cached.is_empty():
-		_touch_client_resource_profile(cache_key)
-		return cached
-	# Unit/asset tests retain their deterministic immediate-load fixture. Runtime
-	# activation never enters this branch: it queues the five atlases on the
-	# threaded loader and keeps the cheap procedural fallback until ready.
-	if not PlayerState.test_mode or not _synchronous_loading_for_tests:
-		_request_client_profile(client_mapping, actor.monster_id if is_instance_valid(actor) else -1)
+	var coordinator = _streaming_coordinator
+	if coordinator != null and is_instance_valid(coordinator):
+		var cached = coordinator.client_resources(cache_key)
+		if cached is Dictionary and not cached.is_empty():
+			coordinator.notify_visual_applied(cache_key)
+			return cached
+		# Unit/asset tests retain their deterministic immediate-load fixture.
+		# Runtime activation never enters the sync branch: it queues the five
+		# atlases on the threaded loader via the coordinator and keeps the cheap
+		# procedural fallback until ready.
+		if not PlayerState.test_mode or not _synchronous_loading_for_tests:
+			coordinator.request_client_profile(
+				client_mapping,
+				actor.monster_id if is_instance_valid(actor) else -1
+			)
+			return {}
+	elif not PlayerState.test_mode or not _synchronous_loading_for_tests:
 		return {}
 	return _load_client_profile_synchronously(client_mapping)
 
@@ -589,6 +633,25 @@ func _client_profile_shell(client_mapping: Dictionary) -> Dictionary:
 		"direction_policy": str(client_mapping.get("directionPolicy", "mir2_directional")),
 		"animation_source": "classic_client_wil",
 	}
+
+
+func _client_resource_cache_key(client_mapping: Dictionary) -> String:
+	var frame_values: Array = client_mapping.get("frameSize", [160, 160])
+	var foot_values: Array = client_mapping.get("footAnchor", [80, 138])
+	var parts := PackedStringArray([
+		"%sx%s" % [int(frame_values[0]), int(frame_values[1])],
+		"%s,%s" % [int(foot_values[0]), int(foot_values[1])],
+		str(client_mapping.get("directionPolicy", "mir2_directional")),
+		str(client_mapping.get("healthBarTopByDirection", [])),
+	])
+	var actions: Dictionary = client_mapping.get("actions", {})
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Dictionary = actions.get(action_name, {})
+		parts.append(
+			"%s:%d"
+			% [str(action.get("path", "")), int(action.get("framesPerDirection", 0))]
+		)
+	return "|".join(parts)
 
 
 func _load_client_profile_synchronously(client_mapping: Dictionary) -> Dictionary:
@@ -612,157 +675,10 @@ func _load_client_profile_synchronously(client_mapping: Dictionary) -> Dictionar
 	# resource cache may release an atlas after the last actor leaves; this LRU
 	# prevents an immediate return from decoding/uploading all five actions again
 	# without eventually retaining the entire 214-monster catalog on mobile.
-	_retain_client_resource_profile(cache_key, result)
+	var coordinator = _streaming_coordinator
+	if coordinator != null and is_instance_valid(coordinator):
+		coordinator.retain_client_resource_profile(cache_key, result)
 	return result
-
-
-func _request_client_profile(client_mapping: Dictionary, monster_id := -1, map_generation := -1) -> void:
-	var cache_key := _client_resource_cache_key(client_mapping)
-	if _client_resource_profiles.has(cache_key):
-		return
-	if _threaded_profile_requests.has(cache_key):
-		var existing: Dictionary = _threaded_profile_requests[cache_key]
-		if map_generation >= 0:
-			existing["map_generation"] = map_generation
-			existing["monster_id"] = monster_id
-			_threaded_profile_requests[cache_key] = existing
-		return
-	var paths := {}
-	var expected_sizes := {}
-	var frame_size_values: Array = client_mapping.get("frameSize", [160, 160])
-	var frame_size := Vector2i(int(frame_size_values[0]), int(frame_size_values[1]))
-	var actions: Dictionary = client_mapping.get("actions", {})
-	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
-		var action: Dictionary = actions.get(action_name, {})
-		var path := str(action.get("path", ""))
-		if path.is_empty() or not ResourceLoader.exists(path):
-			_threaded_profile_requests[cache_key] = {
-				"state": "failed", "mapping": client_mapping,
-				"monster_id": monster_id, "map_generation": map_generation,
-				"failed_path": path,
-			}
-			return
-		paths[action_name] = path
-		expected_sizes[action_name] = frame_size * Vector2i(int(action.get("framesPerDirection", 1)), 8)
-	_threaded_profile_requests[cache_key] = {
-		"state": "queued",
-		"mapping": client_mapping.duplicate(true),
-		"paths": paths,
-		"expected_sizes": expected_sizes,
-		"monster_id": monster_id,
-		"map_generation": map_generation,
-	}
-	_threaded_profile_queue.append(cache_key)
-	_pump_threaded_profile_queue()
-
-
-func _pump_threaded_profile_queue() -> void:
-	var active_count := 0
-	for job: Dictionary in _threaded_profile_requests.values():
-		if str(job.get("state", "")) in ["loading", "loaded"]:
-			active_count += 1
-	while active_count < MAX_CONCURRENT_PROFILE_LOADS and not _threaded_profile_queue.is_empty():
-		var cache_key: String = _threaded_profile_queue.pop_front()
-		if not _threaded_profile_requests.has(cache_key):
-			continue
-		var job: Dictionary = _threaded_profile_requests[cache_key]
-		if str(job.get("state", "")) != "queued":
-			continue
-		var paths: Dictionary = job.get("paths", {})
-		var failed_path := ""
-		for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
-			var path := str(paths.get(action_name, ""))
-			var request_error := ResourceLoader.load_threaded_request(path, "Texture2D", true)
-			if request_error != OK:
-				failed_path = path
-				break
-			_threaded_texture_request_count += 1
-		if not failed_path.is_empty():
-			job["state"] = "failed"
-			job["failed_path"] = failed_path
-		else:
-			job["state"] = "loading"
-			active_count += 1
-		_threaded_profile_requests[cache_key] = job
-
-
-func _retain_client_resource_profile(cache_key: String, resources: Dictionary) -> void:
-	if _client_resource_profiles.has(cache_key):
-		_client_resource_cache_bytes -= int(_client_resource_profile_bytes.get(cache_key, 0))
-	_client_resource_profiles[cache_key] = resources
-	var estimated_bytes := _estimated_client_profile_bytes(resources)
-	_client_resource_profile_bytes[cache_key] = estimated_bytes
-	_client_resource_cache_bytes += estimated_bytes
-	_touch_client_resource_profile(cache_key)
-	_evict_client_resource_profiles()
-
-
-func _evict_client_resource_profiles() -> void:
-	while (
-		_client_resource_profile_lru.size() > CLIENT_RESOURCE_CACHE_CAPACITY
-		or _client_resource_cache_bytes > CLIENT_RESOURCE_CACHE_BUDGET_BYTES
-	):
-		var expired_index := -1
-		for index in range(_client_resource_profile_lru.size()):
-			if not _map_pinned_profile_keys.has(_client_resource_profile_lru[index]):
-				expired_index = index
-				break
-		if expired_index < 0:
-			# Pin admission is budgeted before retention. Reaching this branch means
-			# the pinned set alone owns the hard budget, so no unpinned profile may
-			# be retained beyond it.
-			return
-		var expired_key: String = _client_resource_profile_lru.pop_at(expired_index)
-		_client_resource_cache_bytes -= int(_client_resource_profile_bytes.get(expired_key, 0))
-		_client_resource_profile_bytes.erase(expired_key)
-		_client_resource_profiles.erase(expired_key)
-	assert(_client_resource_profile_lru.size() <= CLIENT_RESOURCE_CACHE_CAPACITY)
-	assert(_client_resource_cache_bytes <= CLIENT_RESOURCE_CACHE_BUDGET_BYTES)
-
-
-func _try_pin_map_profile(cache_key: String, estimated_bytes: int) -> bool:
-	if _map_pinned_profile_keys.has(cache_key):
-		return true
-	if _map_pinned_profile_keys.size() >= CLIENT_RESOURCE_CACHE_CAPACITY:
-		return false
-	if estimated_bytes <= 0 or _map_pinned_bytes + estimated_bytes > CLIENT_RESOURCE_CACHE_BUDGET_BYTES:
-		return false
-	_map_pinned_profile_keys[cache_key] = true
-	_map_pinned_bytes += estimated_bytes
-	return true
-
-
-func _estimated_client_profile_bytes(resources: Dictionary) -> int:
-	# Android imports these atlases as ETC2 RGBA8 (8 bits per pixel). This is a
-	# conservative GPU-residency estimate and deliberately excludes mipmaps.
-	var total := 0
-	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
-		var texture := resources.get(action_name) as Texture2D
-		if texture != null:
-			var size := texture.get_size()
-			total += int(size.x) * int(size.y)
-	return total
-
-
-func _client_resource_cache_key(client_mapping: Dictionary) -> String:
-	var frame_values: Array = client_mapping.get("frameSize", [160, 160])
-	var foot_values: Array = client_mapping.get("footAnchor", [80, 138])
-	var parts := PackedStringArray([
-		"%sx%s" % [int(frame_values[0]), int(frame_values[1])],
-		"%s,%s" % [int(foot_values[0]), int(foot_values[1])],
-		str(client_mapping.get("directionPolicy", "mir2_directional")),
-		str(client_mapping.get("healthBarTopByDirection", [])),
-	])
-	var actions: Dictionary = client_mapping.get("actions", {})
-	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
-		var action: Dictionary = actions.get(action_name, {})
-		parts.append("%s:%d" % [str(action.get("path", "")), int(action.get("framesPerDirection", 0))])
-	return "|".join(parts)
-
-
-func _touch_client_resource_profile(cache_key: String) -> void:
-	_client_resource_profile_lru.erase(cache_key)
-	_client_resource_profile_lru.append(cache_key)
 
 
 func _apply_render_state(texture: Texture2D, region: Rect2) -> void:
@@ -782,214 +698,17 @@ func render_state_update_count() -> int:
 	return _render_state_update_count
 
 
-static func cached_client_profile_count() -> int:
-	return _client_resource_profiles.size()
-
-
-static func cached_client_profile_estimated_bytes() -> int:
-	return _client_resource_cache_bytes
-
-
-static func begin_map_prefetch(monster_ids: Array) -> Dictionary:
-	release_map_pins()
-	_map_prefetch_generation += 1
-	var helper := MonsterVisual.new()
-	var seen_ids := {}
-	for value: Variant in monster_ids:
-		var monster_id := int(value)
-		if seen_ids.has(monster_id):
-			continue
-		seen_ids[monster_id] = true
-		var data := GameData.get_monster_by_id(monster_id)
-		if data.is_empty():
-			continue
-		var mapping := helper._client_mapping_for(data)
-		if mapping.is_empty():
-			continue
-		var cache_key := helper._client_resource_cache_key(mapping)
-		_map_prefetch_keys.append(cache_key)
-		if _client_resource_profiles.has(cache_key):
-			_map_prefetch_completed_keys[cache_key] = true
-			helper._try_pin_map_profile(cache_key, int(_client_resource_profile_bytes.get(cache_key, 0)))
-		else:
-			helper._request_client_profile(mapping, monster_id, _map_prefetch_generation)
-	helper.free()
-	return map_prefetch_status()
-
-
-static func poll_streaming() -> Dictionary:
-	var process_frame := Engine.get_process_frames()
-	if process_frame == _last_streaming_poll_frame:
-		return map_prefetch_status()
-	_last_streaming_poll_frame = process_frame
-	var helper := MonsterVisual.new()
-	for cache_key: String in _threaded_profile_requests.keys():
-		var job: Dictionary = _threaded_profile_requests[cache_key]
-		if str(job.get("state", "")) != "loading":
-			continue
-		var ready := true
-		var failed := false
-		var paths: Dictionary = job.get("paths", {})
-		for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
-			var status := ResourceLoader.load_threaded_get_status(str(paths.get(action_name, "")))
-			if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-				failed = true
-				break
-			if status != ResourceLoader.THREAD_LOAD_LOADED:
-				ready = false
-		if failed:
-			job["state"] = "failed"
-			_threaded_profile_requests[cache_key] = job
-			continue
-		if not ready:
-			continue
-		var mapping: Dictionary = job.get("mapping", {})
-		var result := helper._client_profile_shell(mapping)
-		var expected_sizes: Dictionary = job.get("expected_sizes", {})
-		for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
-			var texture := ResourceLoader.load_threaded_get(str(paths[action_name])) as Texture2D
-			_threaded_texture_get_count += 1
-			if texture == null or Vector2i(texture.get_size()) != Vector2i(expected_sizes[action_name]):
-				failed = true
-				break
-			result[action_name] = texture
-			result["frame_counts"][action_name] = int(mapping.get("actions", {}).get(action_name, {}).get("framesPerDirection", 1))
-		if failed or not MonsterAnimationPolicy.validate(result).is_empty():
-			job["state"] = "failed"
-			_threaded_profile_requests[cache_key] = job
-			continue
-		job["state"] = "loaded"
-		job["resources"] = result
-		_threaded_profile_requests[cache_key] = job
-	helper._commit_loaded_profiles()
-	helper._pump_threaded_profile_queue()
-	helper.free()
-	return map_prefetch_status()
-
-
-func _commit_loaded_profiles() -> void:
-	# Current-map profiles commit strictly in caller order, so pin priority is
-	# deterministic even when the second threaded job finishes first.
-	for cache_key: String in _map_prefetch_keys:
-		if _map_prefetch_completed_keys.has(cache_key):
-			continue
-		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
-		var state := str(job.get("state", ""))
-		if state == "failed":
-			continue
-		if state != "loaded":
-			break
-		var resources: Dictionary = job.get("resources", {})
-		var estimated_bytes := _estimated_client_profile_bytes(resources)
-		_try_pin_map_profile(cache_key, estimated_bytes)
-		_retain_client_resource_profile(cache_key, resources)
-		_map_prefetch_completed_keys[cache_key] = true
-		_threaded_profile_requests.erase(cache_key)
-	# Requests from a released map or proximity activation are regular async LRU.
-	for cache_key: String in _threaded_profile_requests.keys():
-		var job: Dictionary = _threaded_profile_requests[cache_key]
-		if str(job.get("state", "")) != "loaded":
-			continue
-		if int(job.get("map_generation", -1)) == _map_prefetch_generation and _map_prefetch_keys.has(cache_key):
-			continue
-		_retain_client_resource_profile(cache_key, job.get("resources", {}))
-		_threaded_profile_requests.erase(cache_key)
-
-
-static func map_prefetch_status() -> Dictionary:
-	var ready := 0
-	var failed := 0
-	var streamed := 0
-	var pending_details := []
-	var failed_details := []
-	for cache_key: String in _map_prefetch_keys:
-		if _map_prefetch_completed_keys.has(cache_key):
-			if _client_resource_profiles.has(cache_key):
-				ready += 1
-			else:
-				streamed += 1
-			continue
-		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
-		if str(job.get("state", "")) == "failed":
-			failed += 1
-			failed_details.append({
-				"monsterId": int(job.get("monster_id", -1)),
-				"path": str(job.get("failed_path", "")),
-				"state": "failed",
-			})
-			continue
-		var path_states := []
-		for path: Variant in job.get("paths", {}).values():
-			var threaded_status := ResourceLoader.load_threaded_get_status(str(path)) if str(job.get("state", "")) == "loading" else -1
-			if threaded_status != ResourceLoader.THREAD_LOAD_LOADED:
-				path_states.append({"path": str(path), "status": threaded_status})
-		pending_details.append({
-			"monsterId": int(job.get("monster_id", -1)),
-			"state": str(job.get("state", "missing")),
-			"paths": path_states,
-		})
-	var completed := ready + streamed
-	return {
-		"requested": _map_prefetch_keys.size(),
-		"ready": ready,
-		"streamed": streamed,
-		"pinned": _map_pinned_profile_keys.size(),
-		"pinned_bytes": _map_pinned_bytes,
-		"failed": failed,
-		"pending": _map_prefetch_keys.size() - completed - failed,
-		"pending_details": pending_details,
-		"failed_details": failed_details,
-		"complete": completed + failed == _map_prefetch_keys.size(),
-	}
-
-
-static func release_map_pins() -> void:
-	_map_prefetch_keys.clear()
-	_map_pinned_profile_keys.clear()
-	_map_prefetch_completed_keys.clear()
-	_map_pinned_bytes = 0
-	# Do not start queued work from the map being left. Already-loading profiles
-	# cannot be cancelled safely and will fall back into the bounded async LRU.
-	for cache_key: String in _threaded_profile_queue.duplicate():
-		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
-		if int(job.get("map_generation", -1)) >= 0 and str(job.get("state", "")) == "queued":
-			_threaded_profile_queue.erase(cache_key)
-			_threaded_profile_requests.erase(cache_key)
-	var helper := MonsterVisual.new()
-	helper._evict_client_resource_profiles()
-	helper.free()
-
-
-static func threaded_texture_request_count() -> int:
-	return _threaded_texture_request_count
-
-
-static func threaded_texture_get_count() -> int:
-	return _threaded_texture_get_count
-
-
 static func set_synchronous_loading_for_tests(enabled: bool) -> void:
 	_synchronous_loading_for_tests = enabled
 
 
 static func reset_client_resource_cache() -> void:
-	_client_resource_profiles.clear()
-	_client_resource_profile_lru.clear()
-	_client_resource_profile_bytes.clear()
-	_client_resource_cache_bytes = 0
 	_client_texture_load_request_count = 0
-	_threaded_profile_requests.clear()
-	_threaded_profile_queue.clear()
-	_threaded_texture_request_count = 0
-	_threaded_texture_get_count = 0
-	_map_prefetch_keys.clear()
-	_map_pinned_profile_keys.clear()
-	_map_prefetch_completed_keys.clear()
-	_map_pinned_bytes = 0
-	_map_prefetch_generation = 0
-	_last_streaming_poll_frame = -1
 	_synchronous_loading_for_tests = true
 	_ground_contact_data = {}
+	var coordinator = _streaming_coordinator
+	if coordinator != null and is_instance_valid(coordinator):
+		coordinator.reset_for_tests()
 
 
 static func client_texture_load_request_count() -> int:
@@ -998,6 +717,11 @@ static func client_texture_load_request_count() -> int:
 
 func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
 	_client_texture_load_request_count += 1
+	var coordinator = _streaming_coordinator
+	if coordinator != null and is_instance_valid(coordinator):
+		# Q2-D: the sync fallback only exists in the deterministic test path;
+		# record it so the formal streaming path can prove zero sync loads.
+		coordinator.record_sync_load(path)
 	if ResourceLoader.exists(path):
 		var imported := load(path) as Texture2D
 		if imported != null and Vector2i(imported.get_size()) == expected_size:

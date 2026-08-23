@@ -2,13 +2,18 @@ class_name QuestPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 
 signal closed
 signal abandon_requested(quest_id: String)
 
 const PANEL_SIZE := Vector2(1020, 636)
 const QUEST_CARD_SIZE := Vector2(286, 62)
+const QUEST_CARD_SEPARATION := 7
+const QUEST_LIST_LAYOUT_REVISION := 1
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -22,10 +27,13 @@ var objective_label: RichTextLabel
 var reward_label: RichTextLabel
 var abandon_button: Button
 var abandon_confirmation: Control
+var story_divider: HSeparator
 var current_quest_id := ""
-var npc_display_name := "比奇老兵"
+var npc_display_name := "老兵"
 var _selected_quest_id := ""
 var _pending_abandon_quest_id := ""
+var _action_request_locked := false
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
@@ -42,24 +50,19 @@ func _ready() -> void:
 	_build_header()
 	_build_quest_list()
 	_build_quest_detail()
+	GothicFrameFactoryScript.seal_modal_rings(self)
 	PlayerState.quests_changed.connect(refresh)
 	refresh()
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(984, 590)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(282, 4)
+	title_frame.position = Vector2(282, 10)
 	title_frame.size = Vector2(456, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -88,7 +91,7 @@ func _build_header() -> void:
 
 func _build_quest_list() -> void:
 	var panel := _framed_section("QuestListPanel", Rect2(24, 76, 326, 528))
-	panel.add_child(_section_title("任务列表", 326))
+	panel.add_child(_section_title("QuestListTitle", "任务列表", 326))
 	var chain_label := Label.new()
 	chain_label.name = "QuestChainLabel"
 	chain_label.text = "比奇主线 · 六段任务"
@@ -102,20 +105,23 @@ func _build_quest_list() -> void:
 	scroll.name = "QuestListScroll"
 	scroll.position = Vector2(18, 84)
 	scroll.size = Vector2(290, 418)
+	# The approved secondary frame owns the list boundary.  The scroll viewport
+	# must not draw an extra one-pixel outline around the task cards.
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
 	quest_list = VBoxContainer.new()
 	quest_list.name = "QuestList"
 	quest_list.custom_minimum_size = Vector2(286, 0)
-	quest_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	quest_list.add_theme_constant_override("separation", 7)
+	quest_list.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	quest_list.add_theme_constant_override("separation", QUEST_CARD_SEPARATION)
 	scroll.add_child(quest_list)
 
 
 func _build_quest_detail() -> void:
 	var panel := _framed_section("QuestDetailPanel", Rect2(364, 76, 632, 528))
-	panel.add_child(_section_title("任务详情", 632))
+	panel.add_child(_section_title("QuestDetailTitle", "任务详情", 632))
 	quest_name_label = Label.new()
 	quest_name_label.name = "QuestName"
 	quest_name_label.position = Vector2(28, 58)
@@ -131,11 +137,19 @@ func _build_quest_detail() -> void:
 	quest_meta_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quest_meta_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(quest_meta_label)
-	var divider := HSeparator.new()
-	divider.name = "StoryDivider"
-	divider.position = Vector2(28, 122)
-	divider.size = Vector2(576, 8)
-	panel.add_child(divider)
+	story_divider = HSeparator.new()
+	story_divider.name = "StoryDivider"
+	story_divider.anchor_left = 0.0
+	story_divider.anchor_right = 1.0
+	story_divider.anchor_top = 0.0
+	story_divider.anchor_bottom = 0.0
+	story_divider.offset_left = 20.0
+	story_divider.offset_right = -20.0
+	story_divider.offset_top = 122.0
+	story_divider.offset_bottom = 130.0
+	story_divider.set_meta("calibration_layer", "quest_story_divider")
+	story_divider.set_meta("calibration_layout_revision", QUEST_LIST_LAYOUT_REVISION)
+	panel.add_child(story_divider)
 	description_label = RichTextLabel.new()
 	description_label.name = "DescriptionLabel"
 	description_label.position = Vector2(28, 138)
@@ -171,6 +185,7 @@ func _build_quest_detail() -> void:
 	rewards_panel.position = Vector2(28, 356)
 	rewards_panel.size = Vector2(576, 72)
 	rewards_panel.theme_type_variation = "GothicInfoPanel"
+	rewards_panel.set_meta("calibration_layer", "quest_rewards_panel")
 	panel.add_child(rewards_panel)
 	var rewards_title := Label.new()
 	rewards_title.name = "RewardsTitle"
@@ -215,7 +230,9 @@ func _build_quest_detail() -> void:
 	action_button.name = "ActionButton"
 	action_button.position = Vector2(204, 436)
 	action_button.size = Vector2(400, 52)
-	action_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Accept/claim is a transaction action.  Quest cards keep the persistent
+	# selection state; this button receives only an explicit operation cue.
+	action_button.theme_type_variation = "GothicComponentButton"
 	action_button.add_theme_font_size_override("font_size", 18)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
@@ -227,6 +244,8 @@ func _build_quest_detail() -> void:
 
 
 func open_for(display_name: String) -> void:
+	_action_request_locked = false
+	_clear_action_feedback()
 	npc_display_name = display_name
 	_selected_quest_id = PlayerState.current_bich_quest_id()
 	refresh()
@@ -246,10 +265,44 @@ func refresh() -> void:
 	current_quest_id = _selected_quest_id
 	_rebuild_quest_cards(active_quest_id)
 	_refresh_selected_quest(active_quest_id)
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
+
+
+func _on_runtime_layout_profile_applied(profile_id: String) -> void:
+	if profile_id == "quest" and abandon_button != null:
+		_stabilize_quest_list_layout()
+		_stabilize_story_divider()
+		_set_abandon_available(abandon_button.visible)
+
+
+func _stabilize_quest_list_layout() -> void:
+	if quest_list == null:
+		return
+	quest_list.position = Vector2.ZERO
+	quest_list.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	quest_list.custom_minimum_size = Vector2(QUEST_CARD_SIZE.x, maxf(0.0, quest_buttons.size() * QUEST_CARD_SIZE.y + maxi(0, quest_buttons.size() - 1) * QUEST_CARD_SEPARATION))
+	quest_list.add_theme_constant_override("separation", QUEST_CARD_SEPARATION)
+	for button: Button in quest_buttons:
+		button.custom_minimum_size = QUEST_CARD_SIZE
+		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	quest_list.queue_sort()
+
+
+func _stabilize_story_divider() -> void:
+	if story_divider == null or not is_instance_valid(story_divider):
+		return
+	var detail_panel := story_divider.get_parent() as Control
+	if detail_panel == null:
+		return
+	story_divider.anchor_left = 0.0
+	story_divider.anchor_right = 1.0
+	story_divider.offset_left = 20.0
+	story_divider.offset_right = -20.0
 
 
 func _rebuild_quest_cards(active_quest_id: String) -> void:
 	for child: Node in quest_list.get_children():
+		quest_list.remove_child(child)
 		child.queue_free()
 	quest_buttons.clear()
 	var quests := GameData.get_bich_quests()
@@ -263,7 +316,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		var button := Button.new()
 		button.name = "QuestCard_%s" % quest_id
 		button.custom_minimum_size = QUEST_CARD_SIZE
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		button.toggle_mode = true
 		button.text = ""
 		button.set_pressed_no_signal(quest_id == _selected_quest_id)
@@ -303,6 +356,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		button.add_child(state_label)
 		quest_list.add_child(button)
 		quest_buttons.append(button)
+	_stabilize_quest_list_layout()
 
 
 func _refresh_selected_quest(active_quest_id: String) -> void:
@@ -363,6 +417,8 @@ func _refresh_selected_quest(active_quest_id: String) -> void:
 
 
 func _select_quest(quest_id: String) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	_selected_quest_id = quest_id
 	current_quest_id = quest_id
 	refresh()
@@ -381,13 +437,26 @@ func _quest_state_text(quest_id: String, active_quest_id: String) -> String:
 
 
 func _act() -> void:
-	action_button.disabled = false
+	if _action_request_locked:
+		return
 	if current_quest_id.is_empty():
 		return
+	_clear_action_feedback()
+	_action_request_locked = true
+	action_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		action_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"quest.action",
+	)
+	var before_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
 	if not PlayerState.quest_states.has(current_quest_id):
 		status_label.text = PlayerState.accept_quest(current_quest_id)
 	else:
 		status_label.text = PlayerState.claim_quest(current_quest_id)
+	var after_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
+	_action_request_locked = false
+	_show_action_result_feedback(after_state != before_state and not after_state.is_empty())
 	_selected_quest_id = PlayerState.current_bich_quest_id()
 	refresh.call_deferred()
 
@@ -395,6 +464,12 @@ func _act() -> void:
 func _set_abandon_available(enabled: bool) -> void:
 	abandon_button.visible = enabled
 	abandon_button.disabled = not enabled
+	# The authored quest profile owns the action button rectangle. Refreshes
+	# and state transitions still toggle the abandon control, but must not
+	# replace the user's saved action-button geometry with procedural presets
+	# after the profile has been applied.
+	if UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest"):
+		return
 	if enabled:
 		action_button.position = Vector2(344, 436)
 		action_button.size = Vector2(260, 52)
@@ -438,7 +513,13 @@ func _confirm_abandon() -> void:
 		return
 	var quest_id := _pending_abandon_quest_id
 	_pending_abandon_quest_id = ""
+	_clear_action_feedback()
 	abandon_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		abandon_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"quest.abandon",
+	)
 	status_label.text = "等待放弃结果"
 	abandon_requested.emit(quest_id)
 
@@ -447,6 +528,7 @@ func apply_abandon_result(result: Dictionary) -> void:
 	var quest_id := str(result.get("quest_id", ""))
 	if not quest_id.is_empty() and quest_id != current_quest_id:
 		return
+	_show_abandon_result_feedback(bool(result.get("success", false)))
 	status_label.text = str(result.get("message", "放弃任务请求已处理"))
 	if bool(result.get("success", false)):
 		_selected_quest_id = PlayerState.current_bich_quest_id()
@@ -455,25 +537,53 @@ func apply_abandon_result(result: Dictionary) -> void:
 		abandon_button.disabled = false
 
 
-func _framed_section(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var frame := Panel.new()
-	frame.name = node_name
-	frame.position = rect.position
-	frame.size = rect.size
-	frame.theme_type_variation = "GothicInsetFrame"
-	add_child(frame)
-	return frame
+func _clear_action_feedback() -> void:
+	_action_feedback_serial += 1
+	GothicUIThemeScript.clear_button_feedback(action_button)
+	GothicUIThemeScript.clear_button_feedback(abandon_button)
 
 
-func _section_title(text_value: String, section_width: float) -> Label:
+func _show_action_result_feedback(success: bool) -> void:
+	_clear_action_feedback()
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		action_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"quest.action",
+	)
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(action_button) and action_button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(action_button)
+	)
+
+
+func _show_abandon_result_feedback(success: bool) -> void:
+	_clear_action_feedback()
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		abandon_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"quest.abandon",
+	)
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(abandon_button) and abandon_button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(abandon_button)
+	)
+
+
+func _framed_section(node_name: String, rect: Rect2) -> Control:
+	return GothicFrameFactoryScript.add_filled_section(self, node_name, rect)
+
+
+func _section_title(node_name: String, text_value: String, section_width: float) -> Label:
 	var label := Label.new()
+	label.name = node_name
 	label.text = text_value
 	label.position = Vector2(24, 18)
 	label.size = Vector2(section_width - 48.0, 28)

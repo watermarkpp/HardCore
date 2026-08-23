@@ -1,0 +1,57 @@
+{
+  "schema": "map_editor_monster_spawn_classification_v1",
+  "version": 1,
+  "source": {
+    "sourceKind": "user_authoritative_attachment",
+    "attachmentName": "pasted-text.txt",
+    "attachmentSha256": "82b3ec564ee1645e2d39aa9b506c8c40e53f66d99ca5ddc0c12ef2fd4c3ddeeb",
+    "lineCount": 488,
+    "capturedOn": "2026-08-15",
+    "notes": "用户提供的全部怪物刷新位置清单；原文只作证据，不作为运行时文件依赖。"
+  },
+  "classificationPolicy": {
+    "ordinary": { "placementKind": "monster_spawn", "defaultRespawnSeconds": 60 },
+    "elite": { "placementKind": "boss_spawn", "defaultRespawnSeconds": 900 },
+    "boss": { "placementKind": "boss_spawn", "defaultRespawnSeconds": 1800 },
+    "special": { "placementKind": "monster_spawn", "defaultRespawnSeconds": 60 },
+    "non_hostile": { "placementKind": "monster_spawn", "defaultRespawnSeconds": 0 },
+    "version_difference": { "placementKind": "monster_spawn", "defaultRespawnSeconds": 0 }
+  },
+  "exactIdOverrides": {
+    "38": { "visibleName": "半兽勇士", "classification": "elite", "notes": "沃玛森林精英刷新；保留主记录。" },
+    "39": { "visibleName": "半兽勇士1", "classification": "special", "placementKind": "boss_spawn", "notes": "未知暗殿真假混刷变体；属性与掉落不能当作普通地图版本。" },
+    "41": { "visibleName": "半兽勇士9", "classification": "version_difference", "placementAllowed": false, "notes": "未验证版本变体，目录隔离但已保存地图 exact ID 仍可运行。" },
+    "64": { "visibleName": "沃玛战士", "classification": "ordinary", "notes": "D022/D023/D024 普通刷新。" },
+    "65": { "visibleName": "沃玛战士0", "classification": "ordinary", "notes": "独立普通变体，可标稀有高掉落，但不提升为精英。" },
+    "66": { "visibleName": "沃玛勇士", "classification": "ordinary", "notes": "D022/D023/D024 普通刷新。" },
+    "67": { "visibleName": "沃玛勇士0", "classification": "ordinary", "notes": "独立普通变体。" },
+    "68": { "visibleName": "沃玛战将", "classification": "ordinary", "notes": "独立普通怪；主源 exact 名称缺失，属性来源需标 auxiliary，不得映射为沃玛勇士。" },
+    "69": { "visibleName": "沃玛战将0", "classification": "ordinary", "notes": "独立稀有高掉落普通变体；主源 exact 名称缺失。" },
+    "70": { "visibleName": "火焰沃玛", "classification": "ordinary", "notes": "D022/D023/D024 普通刷新。" },
+    "71": { "visibleName": "火焰沃玛0", "classification": "ordinary", "notes": "独立普通变体。" },
+    "73": { "visibleName": "沃玛卫士", "classification": "elite", "notes": "D023/D024 精英刷新。" },
+    "74": { "visibleName": "沃玛卫士1", "classification": "elite", "notes": "沃玛卫士精英属性变体。" },
+    "75": { "visibleName": "沃玛卫士2", "classification": "elite", "notes": "沃玛卫士精英属性变体。" },
+    "76": { "visibleName": "沃玛教主", "classification": "boss", "notes": "D024 Boss 刷新。" },
+    "77": { "visibleName": "沃玛教主1", "classification": "special", "notes": "未知暗殿弱化/真假混刷变体；使用普通刷新语义。" },
+    "78": { "visibleName": "沃玛教主9", "classification": "version_difference", "placementAllowed": false, "notes": "无刷新且主源掉落为空；保留 exact ID 兼容已保存地图。" },
+    "135": { "visibleName": "白野猪", "classification": "elite", "notes": "石墓四至五层精英刷新。" },
+    "136": { "visibleName": "白野猪0", "classification": "special", "notes": "石墓七层密集/基础掉落变体。" },
+    "137": { "visibleName": "白野猪1", "classification": "special", "notes": "未知暗殿弱化/神秘装备变体。" },
+    "156": { "visibleName": "祖玛卫士", "classification": "ordinary", "notes": "祖玛寺庙普通基准变体。" },
+    "157": { "visibleName": "祖玛卫士0", "classification": "elite", "notes": "祖玛三系极品/高掉落变体。" },
+    "158": { "visibleName": "祖玛卫士3", "classification": "elite", "notes": "祖玛三系战斗强化变体。" },
+    "159": { "visibleName": "祖玛卫士00", "classification": "elite", "notes": "祖玛三系稀有精英变体；不是基准普通怪。" }
+  },
+  "nameRules": [
+    { "classification": "ordinary", "visibleNames": ["鸡", "鹿", "稻草人", "半兽人", "多钩猫", "钉耙猫", "食人花", "毒蜘蛛", "森林雪人", "蛤蟆"], "mapCodes": ["0", "1", "2", "5"], "notes": "大陆与城外普通刷新。" },
+    { "classification": "ordinary", "visibleNames": ["沃玛战士", "沃玛勇士", "沃玛战将", "火焰沃玛"], "mapCodes": ["D022", "D023", "D024"], "notes": "用户明确裁决为普通；后缀变体不改基础分类。" },
+    { "classification": "elite", "visibleNames": ["半兽勇士", "尸王", "骷髅精灵", "白野猪", "邪恶钳虫", "邪恶毒蛇", "虹魔猪卫", "虹魔蝎卫", "沃玛卫士"], "mapCodes": ["D003", "D413", "D2006", "D2007", "D2012", "D022", "D023", "D024", "D714", "D715", "D717", "D612", "D606"], "notes": "清单中的精英刷新；变体以 exact ID 规则优先。" },
+    { "classification": "elite", "visibleNames": ["祖玛三系极品变体"], "mapCodes": ["D2012", "D2013"], "notes": "祖玛弓箭手、祖玛雕像、祖玛卫士存在普通与极品属性变体；名称可相同，数据按 exact ID 区分。" },
+    { "classification": "boss", "visibleNames": ["尸王", "双头金刚", "双头血魔", "赤月恶魔", "千年树妖", "虹魔教主", "石墓尸王", "暗之双头血魔", "祖玛教主", "触龙神", "黄泉教主", "牛魔王"], "mapCodes": ["Q004", "D10061", "D10062", "4", "D2013", "D717", "T140", "D515", "D606", "D2067", "D2079"], "notes": "清单中的 Boss 刷新；同名普通/精英/未知暗殿版本按 exact ID 与 special 规则分离。" },
+    { "classification": "special", "visibleNames": ["鹰卫", "真假混刷", "宝箱怪", "蜜蜂", "变异骷髅", "神兽"], "mapCodes": ["12", "M001", "D2051", "D2053", "D2052", "D2071", "D2072", "D2073", "D2075", "D2076", "D2078", "D2079", "R001"], "notes": "特殊/脚本/周期或条件刷新；放置时仍选择实际 monster_spawn 或 boss_spawn。" },
+    { "classification": "non_hostile", "visibleNames": ["弓箭护卫", "恶魔弓箭手"], "mapCodes": ["0", "1", "2", "4", "5", "D601"], "notes": "非敌对守卫，不应作为可攻击 Boss。" },
+    { "classification": "version_difference", "visibleNames": ["神鹰", "邪恶蜈蚣", "暗之牛魔王"], "mapCodes": ["3", "D717", "D2079"], "notes": "版本差异或后期扩展，严格 Vanilla 基线默认关闭。" },
+    { "classification": "special", "visibleNames": ["未知暗殿"], "mapCodes": ["M001"], "notes": "真假同名怪属性、掉落与普通地图版本不同；不得把未知暗殿变体当作普通主源记录。" }
+  ]
+}

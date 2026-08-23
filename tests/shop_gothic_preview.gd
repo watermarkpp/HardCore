@@ -54,6 +54,9 @@ func _ready() -> void:
 		}
 	panel.set_sell_quotes(quotes)
 	panel._select_sell_item(PlayerState.inventory.size() - 1)
+	if PlayerState.inventory.size() > 1:
+		panel._select_sell_item(0)
+		panel._change_sell_quantity(1)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_capture(SELL_OUTPUT_PATH)

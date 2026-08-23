@@ -36,11 +36,24 @@ func _run() -> void:
 	var monster_ids := {}
 	for monster: Variant in GameData.monsters:
 		assert(monster is Dictionary, "怪物记录格式错误")
-		var monster_id := int(monster.get("monsterId", -1))
+		var monster_id := int(monster.get("monster_id", -1))
+		assert(monster_id > 0, "运行时怪物缺少 canonical monster_id")
 		assert(not monster_ids.has(monster_id), "怪物ID重复：%d" % monster_id)
 		monster_ids[monster_id] = true
 	for boss: Variant in GameData.bosses:
-		assert(boss is Dictionary and monster_ids.has(int(boss.get("monsterId", -1))), "Boss无法关联怪物记录")
+		assert(
+			boss is Dictionary
+			and str(boss.get("classification", "")) == "boss"
+			and monster_ids.has(int(boss.get("monster_id", -1))),
+			"Boss无法关联 canonical 运行时怪物记录"
+		)
+	var monster_counts := GameData.canonical_monster_counts()
+	assert(int(monster_counts.get("catalog_identity_count", 0)) == 217, "canonical怪物身份总数不符")
+	assert(
+		int(monster_counts.get("runtime_spawnable_count", -1))
+		== monster_ids.size(),
+		"catalog身份数与运行时可生成数未正确分离"
+	)
 
 	print("FULL_CONTENT_FOUNDATION_PASS：三职业、33技能登记与内容引用完整性正常")
 	get_tree().quit(0)

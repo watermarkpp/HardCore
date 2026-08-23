@@ -1,0 +1,47 @@
+{
+  "contract_id": "skills.rank_extension.v1",
+  "version": 1,
+  "scope": "project.hardcore.professions_skills.skill_growth",
+  "base_rank": {
+    "min": 0,
+    "max": 3,
+    "source": "skills_source_of_truth_v1.json ranks[0..3]"
+  },
+  "technical_effective_rank_cap": 1000000,
+  "technical_cap_purpose": "anti_abuse_input_sanity_only_not_gameplay_level_cap; far above any achievable equipment bonus so no normal effective rank is ever truncated",
+  "semantics": {
+    "linear_extrapolation_last_delta": {
+      "fields": [
+        "damage",
+        "heal",
+        "fixed_value",
+        "mp_cost",
+        "duration",
+        "item_amount",
+        "push_distance",
+        "pet_loyalty",
+        "tame_pet_cap"
+      ],
+      "policy": "value = last_rank_value + (effective_rank - base_rank_max) * (last_rank_value - previous_rank_value)"
+    },
+    "probability_cap": {
+      "max": 1.0,
+      "roll_policy": "roll_bound = min(raw_bound, roll_space); probability = min(raw_probability, max)"
+    },
+    "damage_reduction_cap": {
+      "max": 0.75,
+      "policy": "damage_reduction = min(last_delta_linear_extension, max)"
+    },
+    "denominator_floor": {
+      "min": 2,
+      "policy": "proc_denominator = max(last_delta_linear_extension, min); stops decreasing at 2"
+    },
+    "summon_pet_level_cap": {
+      "max": 7,
+      "policy": "existing summon combat level cap preserved; initial pet level = min(effective_rank, max)"
+    },
+    "timing_constant": {
+      "policy": "cooldown/cast timing and pet timing stay at base_rank_max values; effective level never changes release timing"
+    }
+  }
+}

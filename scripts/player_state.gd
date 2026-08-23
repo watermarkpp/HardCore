@@ -8,6 +8,7 @@ const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
+const PricingServiceScript := preload("res://scripts/pricing_service.gd")
 
 signal profile_changed
 signal inventory_changed
@@ -15,13 +16,14 @@ signal equipment_changed
 signal skills_changed
 signal skill_progression_changed(snapshot: Dictionary)
 signal quick_slots_changed(change: Dictionary)
+signal quick_item_slots_changed(change: Dictionary)
 signal warrior_runtime_state_changed(snapshot: Dictionary)
 signal consumable_requested(item_name: String)
 signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 7
+const SAVE_VERSION := 10
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
@@ -29,9 +31,20 @@ const PROFILE_DIRECTORY := "user://characters"
 const TEST_ROSTER_RESET_MARKER_PATH := "user://test_roster_v2_reset.json"
 const AUTOSAVE_INTERVAL := 30.0
 const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
+const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
+	"skills.summon.persistence.runtime_state.v1"
+)
+const TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID := (
+	"skills.summon.persistence.runtime_states.v1"
+)
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
+const CANONICAL_MATERIAL_ITEMS := {
+	"grey_powder": "灰色药粉",
+	"yellow_powder": "黄色药粉",
+	"amulet": "护身符",
+}
 const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
 const WORLD_POSITION_CONTRACT_ID := (
 	"save.world_position.screen_px_with_ground_gu.v1"
@@ -42,7 +55,38 @@ const SKILL_SLOT_GROUP_ATTACK_RING := "attack_ring"
 const CENTER_SKILL_SLOT_COUNT := 4
 const ATTACK_SKILL_SLOT_COUNT := 1
 const ATTACK_RING_SKILL_SLOT_COUNT := 6
-const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
+const QUICK_ITEM_SLOTS_CONTRACT_ID := "gameplay.item.quick_slots.v1"
+const QUICK_ITEM_SLOT_COUNT := 4
+const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
+const DEVICE_LAB_SAVE_CONTRACT_ID := "device_lab.player_save.v1"
+const DEATH_EXPERIENCE_PENALTY_CONTRACT_ID := "player_state.death_experience_penalty.v1"
+const PRICING_CONTRACT_ID := PricingServiceScript.CONTRACT_ID
+const DURABILITY_CONTRACT_ID := "equipment.durability.raw_authority.v1"
+const DURABILITY_EVENT_WEAPON_PHYSICAL_HIT := (
+	"equipment.durability.weapon_physical_hit.v1"
+)
+const DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK := (
+	"equipment.durability.incoming_physical_struck.v1"
+)
+const DURABILITY_RAW_UNITS_PER_DISPLAY := 1000
+const DURABILITY_INCOMING_EXTENSION_POLICY := (
+	"project_slots_relic_badge_use_same_one_in_eight_physical_wear.v1"
+)
+const SHOP_SELL_CONTRACT_ID := PRICING_CONTRACT_ID
+const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
+const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
+const WAREHOUSE_CAPACITY := 500
+const INVENTORY_CAPACITY := 100
+const INVENTORY_WEIGHT_CONTRACT_ID := "gameplay.inventory.weight_authority.v1"
+const INVENTORY_WEIGHT_REJECTION := "超过负重，无法拾取。"
+const INVENTORY_SLOT_REJECTION := "背包空间不足。"
+const WAREHOUSE_TRANSFER_CONTRACT_ID := "gameplay.warehouse.transfer_authority.v1"
+const MAX_SAFE_WEIGHT := 9223372036854775807
+const SHOP_SELL_HIGH_VALUE_PRICE := 10000
+const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
+const STARTER_LOADOUT_CONTRACT_ID := "gameplay.character.starter_loadout.v1"
+const STARTER_WEAPON_ITEM_NAME := "木剑"
+const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
 	10: 6000, 11: 8000, 12: 10000, 13: 15000, 14: 30000, 15: 40000, 16: 50000,
@@ -60,14 +104,20 @@ var inventory: Array = []
 var warehouse_inventory: Array = []
 var equipment: Dictionary = {
 	"武器": {}, "衣服": {}, "头盔": {}, "项链": {},
-	"左手镯": {}, "右手镯": {}, "左戒指": {}, "右戒指": {},
+	"左手镯": {}, "右手镯": {}, "左戒指": {}, "右戒指": {}, "圣物": {}, "徽章": {},
 }
 var learned_skills: Dictionary = {}
 var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
 var quick_slots: Array[String] = ["", "", "", ""]
+var quick_item_slots: Array[String] = ["", "", "", ""]
+var equip_cycle_cursor: Dictionary = {"戒指": "左戒指", "手镯": "左手镯"}
 var attack_skill_slots: Array[String] = [""]
 var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
+var taoist_main_pet_runtime_states: Dictionary = {
+	"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+	"slots": {},
+}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
@@ -76,12 +126,36 @@ var saved_ground_position_gu_valid := false
 var computed_stats: Dictionary = {}
 var computed_special_effects: Dictionary = {}
 var test_mode := false
+var durability_event_commit_count := 0
+var _durability_rng := RandomNumberGenerator.new()
 var active_profile_id := ""
 var character_name := ""
 var _autosave_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
 var profile_directory := PROFILE_DIRECTORY
 var test_roster_reset_marker_path := TEST_ROSTER_RESET_MARKER_PATH
+var last_save_result: Dictionary = {
+	"contract_id": SAVE_RESULT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var last_load_result: Dictionary = {
+	"contract_id": SAVE_RESULT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _consumed_shop_buy_quote_ids: Dictionary = {}
+var _shop_buy_quote_serial := 0
+var _shop_pricing_session_nonce := ""
+var last_receive_result: Dictionary = {
+	"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var _taoist_main_pets_persistence_provider := Callable()
+# Test-only failure injection. Production ignores it unless test_mode is true.
+var _test_force_atomic_write_failure := false
 
 
 func _notification(what: int) -> void:
@@ -99,10 +173,12 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
 	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
-		prepare_qa_test_roster_v2()
+		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
+			prepare_qa_test_roster_v2()
 	reset_progress(false)
 	recalculate_stats()
 
@@ -121,10 +197,19 @@ func reset_progress(emit_updates := true) -> void:
 	learned_skills = {}
 	_skill_progression.load_snapshot({})
 	quick_slots = ["", "", "", ""]
+	quick_item_slots = ["", "", "", ""]
+	equip_cycle_cursor = _default_equip_cycle_cursor()
 	attack_skill_slots = [""]
 	attack_ring_slots = ["", "", "", "", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
+	taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 	quest_states = {}
+	_consumed_shop_sell_quote_ids.clear()
+	_consumed_shop_buy_quote_ids.clear()
+	_shop_buy_quote_serial = 0
+	durability_event_commit_count = 0
+	if _shop_pricing_session_nonce.is_empty():
+		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	saved_map_id = 4
 	saved_position = Vector2.ZERO
 	saved_ground_position_gu = Vector2.ZERO
@@ -136,6 +221,11 @@ func reset_progress(emit_updates := true) -> void:
 		equipment_changed.emit()
 		skills_changed.emit()
 		skill_progression_changed.emit(_skill_progression.snapshot())
+		quick_item_slots_changed.emit({
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"reset": true,
+			"slots": quick_item_slots.duplicate(),
+		})
 		quests_changed.emit()
 		profile_changed.emit()
 
@@ -145,6 +235,49 @@ func select_profession(value: String) -> String:
 		return "无效职业：%s" % value
 	if profession == value:
 		return "当前职业已经是%s" % value
+	# Profession changes can invalidate equipped items. Preflight all returned
+	# instances against the *final* equipment effect set and bag cap before
+	# mutating the character, so a full/overweight bag cannot partially switch
+	# profession or silently delete an item.
+	var incompatible_slots: Array[String] = []
+	var incompatible_records: Array[Dictionary] = []
+	for slot: String in equipment.keys():
+		var equipped_record: Variant = equipment[slot]
+		var equipped_name := str(equipped_record.get("name", "")) if equipped_record is Dictionary else str(equipped_record)
+		if equipped_name.is_empty():
+			continue
+		var item := GameData.get_item(equipped_name)
+		var item_profession := EquipmentRulesScript.effective_profession(item)
+		if item_profession not in ["", "通用", value]:
+			incompatible_slots.append(slot)
+			incompatible_records.append(
+				equipped_record.duplicate(true)
+				if equipped_record is Dictionary
+				else _make_item_instance(equipped_name, GameData.get_item_record(equipped_name))
+			)
+	var profession_before := profession
+	var equipment_before := equipment.duplicate(true)
+	var stats_before := computed_stats.duplicate(true)
+	var effects_before := computed_special_effects.duplicate(true)
+	var planned_inventory := inventory.duplicate(true)
+	if not incompatible_records.is_empty():
+		profession = value
+		for slot: String in incompatible_slots:
+			equipment[slot] = {}
+		recalculate_stats()
+		for returned_record: Dictionary in incompatible_records:
+			var preview := _build_receive_result_for_record(returned_record, planned_inventory)
+			if not bool(preview.get("success", false)):
+				profession = profession_before
+				equipment = equipment_before
+				computed_stats = stats_before
+				computed_special_effects = effects_before
+				return str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+			planned_inventory = (preview.get("inventory", planned_inventory) as Array).duplicate(true)
+		profession = profession_before
+		equipment = equipment_before
+		computed_stats = stats_before
+		computed_special_effects = effects_before
 	profession = value
 	for skill_name: Variant in learned_skills.keys():
 		var profile := ProfessionRules.skill_profile(str(skill_name))
@@ -163,22 +296,16 @@ func select_profession(value: String) -> String:
 	_sync_legacy_quick_slots_from_ring()
 	if profession != "战士":
 		warrior_runtime_state = _default_warrior_runtime_state()
-	var returned_items: Array[String] = []
 	for slot: String in equipment.keys():
 		var equipped_record: Variant = equipment[slot]
 		var equipped_name := str(equipped_record.get("name", "")) if equipped_record is Dictionary else str(equipped_record)
 		if equipped_name.is_empty():
 			continue
 		var item := GameData.get_item(equipped_name)
-		var item_profession := str(item.get("profession", "通用"))
+		var item_profession := EquipmentRulesScript.effective_profession(item)
 		if item_profession not in ["", "通用", profession]:
-			if equipped_record is Dictionary:
-				inventory.append(equipped_record.duplicate(true))
-			else:
-				returned_items.append(equipped_name)
 			equipment[slot] = {}
-	for returned_name: String in returned_items:
-		add_item(returned_name)
+	inventory = planned_inventory
 	recalculate_stats()
 	profession_changed.emit(profession)
 	inventory_changed.emit()
@@ -196,27 +323,240 @@ func set_later_content_enabled(enabled: bool) -> void:
 	_commit_save()
 
 
-func add_item(item_name: String, amount := 1) -> void:
+## Public inventory entry point. All gameplay paths (loot, shops, quests and
+## warehouse withdrawal) must use this atomic authority instead of appending
+## records directly.
+func add_item(item_name: String, amount := 1) -> Dictionary:
+	return receive(item_name, amount)
+
+
+## A cheap, side-effect-free preflight. The detailed rejection is retained in
+## `last_receive_result` for UI/diagnostics while the boolean keeps old callers
+## source-compatible.
+func can_receive(item_name: String, amount := 1) -> bool:
+	last_receive_result = _build_receive_result(item_name, amount, inventory)
+	return bool(last_receive_result.get("success", false))
+
+
+func can_receive_record(record: Dictionary) -> bool:
+	last_receive_result = _build_receive_result_for_record(record, inventory)
+	return bool(last_receive_result.get("success", false))
+
+
+func receive(item_name: String, amount := 1, commit := true) -> Dictionary:
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_result(item_name, amount, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "物品和金币均未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	if int(result.get("gold_delta", 0)) != 0:
+		profile_changed.emit()
+	return result
+
+
+## Internal variant used by buy/quest/warehouse transactions. It shares the
+## same preflight and plan builder but defers the enclosing transaction's save.
+func _add_item_without_commit(item_name: String, amount: int) -> bool:
+	var result := receive(item_name, amount, false)
+	return bool(result.get("success", false))
+
+
+func receive_record(record: Dictionary, commit := true) -> Dictionary:
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_result_for_record(record, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "物品未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	return result
+
+
+func _build_receive_result(item_name: String, amount: int, base_inventory: Array) -> Dictionary:
 	var catalog_item := GameData.get_item_record(item_name)
+	if catalog_item.is_empty():
+		return _receive_failure("unknown_item", "物品无效。")
+	if amount <= 0:
+		return _receive_failure("invalid_amount", "数量无效。")
 	var kind := str(catalog_item.get("kind", "unknown"))
 	if kind == "currency":
-		add_gold(int(catalog_item.get("currencyAmount", 10)) * amount)
-		return
-	if kind == "equipment" or not bool(catalog_item.get("stackable", true)):
-		for count in range(maxi(1, amount)):
-			inventory.append(_make_item_instance(item_name, catalog_item))
+		return {
+			"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+			"success": true,
+			"reason": "",
+			"inventory": base_inventory.duplicate(true),
+			"inventory_changed": false,
+			"gold_delta": int(catalog_item.get("currencyAmount", 1)) * amount,
+			"weight_before": inventory_weight(base_inventory),
+			"weight_after": inventory_weight(base_inventory),
+		}
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, {})
+
+
+func _build_receive_result_for_record(record: Dictionary, base_inventory: Array) -> Dictionary:
+	var item_name := str(record.get("name", ""))
+	var amount := maxi(1, int(record.get("count", 1)))
+	var catalog_item := GameData.get_item_record(item_name)
+	if catalog_item.is_empty() or item_name.is_empty():
+		return _receive_failure("unknown_item", "物品无效。")
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, record)
+
+
+func _build_receive_result_for_template(
+	item_name: String,
+	amount: int,
+	catalog_item: Dictionary,
+	base_inventory: Array,
+	template: Dictionary
+) -> Dictionary:
+	if amount <= 0:
+		return _receive_failure("invalid_amount", "数量无效。")
+	var next_inventory: Array = base_inventory.duplicate(true)
+	var is_stackable := bool(catalog_item.get("stackable", false)) and str(catalog_item.get("kind", "")) != "equipment"
+	var max_stack := _max_stack_for_item(catalog_item) if is_stackable else 1
+	var remaining := amount
+	if is_stackable:
+		for index in range(next_inventory.size()):
+			var existing: Variant = next_inventory[index]
+			if not existing is Dictionary or str(existing.get("name", "")) != item_name or not _inventory_records_mergeable(existing, template if not template.is_empty() else {"name": item_name, "count": 1}):
+				continue
+			var available := maxi(0, max_stack - int(existing.get("count", 0)))
+			if available <= 0:
+				continue
+			var moved := mini(available, remaining)
+			existing["count"] = int(existing.get("count", 0)) + moved
+			remaining -= moved
+			if remaining <= 0:
+				break
+	while remaining > 0:
+		if next_inventory.size() >= INVENTORY_CAPACITY:
+			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
+		var moved := mini(remaining, max_stack) if is_stackable else 1
+		var new_record: Dictionary
+		if not template.is_empty() and not is_stackable:
+			new_record = template.duplicate(true)
+			new_record["count"] = 1
+		elif str(catalog_item.get("kind", "")) == "equipment":
+			new_record = _make_item_instance(item_name, catalog_item)
+		else:
+			new_record = {"name": item_name, "count": moved}
+		next_inventory.append(new_record)
+		remaining -= moved
+	var weight_before := inventory_weight(base_inventory)
+	var weight_after := inventory_weight(next_inventory)
+	var max_weight := max_inventory_weight()
+	# Compatibility rule: an old save may already exceed the new cap, but no
+	# operation may increase that burden. This also lets a swap/unequip preserve
+	# an existing overweight state when the resulting weight is not higher.
+	if weight_after > max_weight and weight_after > weight_before:
+		return _receive_failure("overweight", INVENTORY_WEIGHT_REJECTION, weight_before, weight_after, max_weight)
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"inventory": next_inventory,
+		"inventory_changed": next_inventory != base_inventory,
+		"gold_delta": 0,
+		"weight_before": weight_before,
+		"weight_after": weight_after,
+		"max_weight": max_weight,
+	}
+
+
+func _receive_failure(reason: String, message: String, before := -1, after := -1, maximum := -1) -> Dictionary:
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": false,
+		"reason": reason,
+		"message": message,
+		"inventory_changed": false,
+		"gold_delta": 0,
+		"weight_before": before if before >= 0 else inventory_weight(inventory),
+		"weight_after": after if after >= 0 else inventory_weight(inventory),
+		"max_weight": maximum if maximum >= 0 else max_inventory_weight(),
+	}
+
+
+func _apply_receive_result(result: Dictionary) -> void:
+	if result.get("inventory", null) is Array:
+		inventory = (result.get("inventory") as Array).duplicate(true)
+	gold = maxi(0, gold + int(result.get("gold_delta", 0)))
+
+
+func _max_stack_for_item(catalog_item: Dictionary) -> int:
+	return maxi(1, int(catalog_item.get("maxStack", catalog_item.get("max_stack", 1))))
+
+
+func can_receive_batch(rewards: Array) -> bool:
+	var simulation := _build_receive_batch_result(rewards, inventory)
+	last_receive_result = simulation
+	return bool(simulation.get("success", false))
+
+
+func receive_batch(rewards: Array, commit := true) -> Dictionary:
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_batch_result(rewards, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "奖励和金币均未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
 		inventory_changed.emit()
-		_commit_save()
-		return
-	for stack: Variant in inventory:
-		if stack is Dictionary and stack.get("name", "") == item_name:
-			stack["count"] = int(stack.get("count", 0)) + amount
-			inventory_changed.emit()
-			_commit_save()
-			return
-	inventory.append({"name": item_name, "count": amount})
-	inventory_changed.emit()
-	_commit_save()
+	if int(result.get("gold_delta", 0)) != 0:
+		profile_changed.emit()
+	return result
+
+
+func _build_receive_batch_result(rewards: Array, base_inventory: Array) -> Dictionary:
+	var next_inventory := base_inventory.duplicate(true)
+	var gold_delta := 0
+	for raw_reward: Variant in rewards:
+		if not raw_reward is Dictionary:
+			continue
+		var reward: Dictionary = raw_reward
+		var item_name := str(reward.get("name", ""))
+		var amount := maxi(1, int(reward.get("count", reward.get("amount", 1))))
+		var result := _build_receive_result(item_name, amount, next_inventory)
+		if not bool(result.get("success", false)):
+			return result
+		next_inventory = (result.get("inventory", next_inventory) as Array).duplicate(true)
+		gold_delta += int(result.get("gold_delta", 0))
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"inventory": next_inventory,
+		"inventory_changed": next_inventory != base_inventory,
+		"gold_delta": gold_delta,
+		"weight_before": inventory_weight(base_inventory),
+		"weight_after": inventory_weight(next_inventory),
+		"max_weight": max_inventory_weight(),
+	}
 
 
 func add_gold(amount: int) -> void:
@@ -268,6 +608,387 @@ func remove_item(item_name: String, amount := 1) -> bool:
 	return true
 
 
+func destroy_inventory_indices(indices: Array) -> Dictionary:
+	var targets: Array[int] = []
+	for raw_index: Variant in indices:
+		var index := int(raw_index)
+		if index < 0 or index >= inventory.size() or index in targets:
+			return {"success": false, "destroyed": 0, "reason": "invalid_inventory_index"}
+		targets.append(index)
+	if targets.is_empty():
+		return {"success": true, "destroyed": 0, "reason": "empty_selection"}
+	targets.sort()
+	for offset in range(targets.size() - 1, -1, -1):
+		inventory.remove_at(targets[offset])
+	inventory_changed.emit()
+	profile_changed.emit()
+	_commit_save()
+	return {"success": true, "destroyed": targets.size(), "reason": ""}
+
+
+func sort_inventory_deterministic() -> Dictionary:
+	var decorated: Array = []
+	for index in range(inventory.size()):
+		var record: Variant = inventory[index]
+		if record is Dictionary:
+			var item := GameData.get_item_record(str(record.get("name", "")))
+			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
+		else:
+			decorated.append({"record": record, "index": index, "key": "!opaque|%08d" % index})
+	decorated.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["key"]) < str(b["key"]))
+	var sorted_inventory: Array = []
+	for entry: Dictionary in decorated:
+		var record: Variant = entry["record"]
+		if record is Dictionary and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary and _inventory_records_mergeable(sorted_inventory.back(), record) and sorted_inventory.back().get("name", "") == record.get("name", ""):
+			sorted_inventory.back()["count"] = int(sorted_inventory.back().get("count", 1)) + int(record.get("count", 1))
+		else:
+			sorted_inventory.append(record)
+	var changed := sorted_inventory != inventory
+	if changed:
+		inventory = sorted_inventory
+		inventory_changed.emit()
+		profile_changed.emit()
+		_commit_save()
+	return {"success": true, "changed": changed, "count": inventory.size()}
+
+
+func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
+	for key: Variant in a.keys():
+		if str(key) not in ["name", "count"]:
+			return false
+	for key: Variant in b.keys():
+		if str(key) not in ["name", "count"]:
+			return false
+	var item := GameData.get_item_record(str(a.get("name", "")))
+	if str(a.get("name", "")) != str(b.get("name", "")) or not bool(item.get("stackable", false)) or str(item.get("kind", "")) == "equipment":
+		return false
+	for key: String in ["instance_id", "durability", "max_durability", "durability_raw", "max_durability_raw", "modifiers", "random_stats", "bind", "bound"]:
+		if a.has(key) or b.has(key):
+			return false
+	return true
+
+
+func shop_sell_quotes(items: Array) -> Dictionary:
+	var quotes: Dictionary = {}
+	for raw_item: Variant in items:
+		if not raw_item is Dictionary:
+			continue
+		var request: Dictionary = raw_item
+		var quote := _shop_sell_quote(request)
+		var quote_key := str(request.get("quote_key", ""))
+		if quote_key.is_empty():
+			quote_key = str(quote.get("quote_key", ""))
+		if not quote_key.is_empty():
+			quotes[quote_key] = quote
+	return quotes
+
+
+func shop_buy_quotes(stock: Array, context := {}) -> Array:
+	_shop_buy_quote_serial += 1
+	return _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
+
+
+func _build_shop_buy_quotes(stock: Array, context: Dictionary, quote_serial: int) -> Array:
+	var quotes: Array = []
+	for stock_index in range(stock.size()):
+		var raw_entry: Variant = stock[stock_index]
+		if not raw_entry is Dictionary:
+			continue
+		var entry: Dictionary = raw_entry
+		var item_name := str(entry.get("name", ""))
+		var entry_context: Dictionary = context.duplicate(true)
+		entry_context.merge(entry.get("merchant_context", {}), true)
+		var pack_count := maxi(1, int(entry.get("pack_count", 1)))
+		var pricing_quote := PricingServiceScript.quote_buy(
+			GameData.get_item_price_record(item_name), pack_count, entry_context
+		)
+		var quote_id := ""
+		if bool(pricing_quote.get("valid", false)):
+			quote_id = "%s:%s" % [PRICING_CONTRACT_ID, JSON.stringify([
+				_shop_pricing_session_nonce, active_profile_id, quote_serial, stock_index, item_name, pricing_quote,
+			]).sha256_text().substr(0, 24)]
+		var result: Dictionary = pricing_quote.duplicate(true)
+		result.merge({
+			"stock_index": stock_index,
+			"stock_key": str(entry.get("offer_id", "stock:%d:%s" % [stock_index, item_name])),
+			"quote_id": quote_id,
+			"description": str(entry.get("description", "")),
+			"merchant_id": str(entry.get("merchant_id", entry_context.get("merchant_id", ""))),
+			"pack_count": pack_count,
+		}, true)
+		quotes.append(result)
+	return quotes
+
+
+func buy_shop_item(request: Dictionary, stock: Array, context := {}) -> Dictionary:
+	var stock_index := int(request.get("stock_index", -1))
+	if stock_index < 0 or stock_index >= stock.size():
+		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
+	var current_quotes := _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
+	var quote: Dictionary = {}
+	for candidate: Variant in current_quotes:
+		if candidate is Dictionary and int(candidate.get("stock_index", -1)) == stock_index:
+			quote = candidate
+			break
+	var quote_id := str(request.get("quote_id", ""))
+	if not bool(quote.get("valid", false)) or quote_id.is_empty() or quote_id != str(quote.get("quote_id", "")):
+		return _shop_buy_result(false, "购买报价已失效，请重新选择商品。", stock, context)
+	if (
+		str(request.get("item_name", quote.get("item_name", ""))) != str(quote.get("item_name", ""))
+		or str(request.get("stock_key", quote.get("stock_key", ""))) != str(quote.get("stock_key", ""))
+		or str(request.get("merchant_id", quote.get("merchant_id", ""))) != str(quote.get("merchant_id", ""))
+	):
+		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
+	if _consumed_shop_buy_quote_ids.has(quote_id):
+		return _shop_buy_result(false, "该购买报价已经处理，不能重复提交。", stock, context)
+	var quantity := int(request.get("quantity", 1))
+	if quantity != int(quote.get("pack_count", 1)):
+		return _shop_buy_result(false, "购买数量无效。", stock, context)
+	var total_price := int(quote.get("total_price", 0))
+	if total_price <= 0 or gold < total_price:
+		return _shop_buy_result(false, "金币不足。", stock, context)
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	gold -= total_price
+	if not _add_item_without_commit(str(quote.get("item_name", "")), quantity):
+		gold = gold_before
+		inventory = inventory_before
+		return _shop_buy_result(false, "背包空间不足或商品无效。", stock, context)
+	inventory_changed.emit()
+	profile_changed.emit()
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		inventory_changed.emit()
+		profile_changed.emit()
+		return _shop_buy_result(false, "购买存档失败，物品和金币均未改变。", stock, context)
+	_consumed_shop_buy_quote_ids[quote_id] = true
+	return _shop_buy_result(true, "购买成功：%s" % str(quote.get("item_name", "物品")), stock, context)
+
+
+func _shop_buy_result(success: bool, message: String, stock: Array, context: Dictionary) -> Dictionary:
+	return {
+		"contract_id": PRICING_CONTRACT_ID,
+		"success": success,
+		"message": message,
+		"quotes": shop_buy_quotes(stock, context),
+	}
+
+
+func sell_inventory_item(request: Dictionary) -> Dictionary:
+	var merchant_id := str(request.get("merchant_id", ""))
+	var quote := _shop_sell_quote(request)
+	var quote_id := str(request.get("quote_id", ""))
+	if (
+		not bool(quote.get("sellable", false))
+		or quote_id.is_empty()
+		or quote_id != str(quote.get("quote_id", ""))
+	):
+		return _shop_sell_result(false, "出售报价已失效，请重新选择物品。", merchant_id)
+	if _consumed_shop_sell_quote_ids.has(quote_id):
+		return _shop_sell_result(false, "该出售报价已经处理，不能重复提交。", merchant_id)
+	var inventory_index := int(request.get("inventory_index", -1))
+	var amount := int(request.get("amount", 0))
+	if (
+		inventory_index < 0
+		or inventory_index >= inventory.size()
+		or amount <= 0
+		or amount > int(quote.get("max_quantity", 0))
+	):
+		return _shop_sell_result(false, "出售数量或背包位置无效。", merchant_id)
+	var record: Variant = inventory[inventory_index]
+	if not record is Dictionary:
+		return _shop_sell_result(false, "物品状态已变化，出售已取消。", merchant_id)
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var current_count := maxi(1, int((record as Dictionary).get("count", 1)))
+	if amount > current_count:
+		return _shop_sell_result(false, "出售数量超过当前背包库存。", merchant_id)
+	if amount >= current_count:
+		inventory.remove_at(inventory_index)
+	else:
+		(record as Dictionary)["count"] = current_count - amount
+	gold = maxi(0, gold + int(quote.get("unit_price", 0)) * amount)
+	inventory_changed.emit()
+	profile_changed.emit()
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		inventory_changed.emit()
+		profile_changed.emit()
+		return _shop_sell_result(false, "出售存档失败，物品和金币均未改变。", merchant_id)
+	_consumed_shop_sell_quote_ids[quote_id] = true
+	return _shop_sell_result(
+		true,
+		"已出售%s ×%d，获得%d金币。" % [
+			str(quote.get("item_name", "物品")),
+			amount,
+			int(quote.get("unit_price", 0)) * amount,
+		],
+		merchant_id
+	)
+
+
+func _shop_sell_quote(request: Dictionary) -> Dictionary:
+	var inventory_index := int(request.get("inventory_index", -1))
+	var requested_key := str(request.get("quote_key", ""))
+	var rejection := {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"quote_key": requested_key,
+		"quote_id": "",
+		"sellable": false,
+		"unit_price": 0,
+		"max_quantity": 0,
+		"reason": "物品状态已变化。",
+		"requires_confirmation": false,
+		"risk_flags": [],
+		"warning": "",
+	}
+	if inventory_index < 0 or inventory_index >= inventory.size():
+		return rejection
+	var raw_record: Variant = inventory[inventory_index]
+	if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+		return rejection
+	var record: Dictionary = raw_record
+	var merchant_id := str(request.get("merchant_id", ""))
+	var merchant_stock_key := str(request.get("merchant_stock_key", ""))
+	var merchant_context := GameData.merchant_context(merchant_stock_key) if not merchant_stock_key.is_empty() else {}
+	if merchant_context.is_empty():
+		merchant_context = GameData.merchant_context_by_id(merchant_id)
+	var authoritative_merchant_id := str(merchant_context.get("merchant_id", ""))
+	if (
+		merchant_id.is_empty()
+		or merchant_context.is_empty()
+		or authoritative_merchant_id.is_empty()
+		or authoritative_merchant_id != merchant_id
+	):
+		rejection["reason"] = "商人状态已变化。"
+		return rejection
+	var item_name := str(record.get("name", ""))
+	var instance_id := str(record.get("instance_id", ""))
+	var expected_key := (
+		"instance:%s" % instance_id
+		if not instance_id.is_empty()
+		else "inventory:%d" % inventory_index
+	)
+	if (
+		requested_key != expected_key
+		or str(request.get("item_name", item_name)) != item_name
+		or str(request.get("instance_id", instance_id)) != instance_id
+	):
+		return rejection
+	var catalog := GameData.get_item_record(item_name)
+	var base_price := _shop_sell_base_price(item_name, catalog)
+	var count := maxi(1, int(record.get("count", 1)))
+	var pricing_quote := PricingServiceScript.quote_sell(
+		GameData.get_item_price_record(item_name), catalog, record, 1, merchant_context
+	)
+	if not bool(pricing_quote.get("valid", false)):
+		rejection["reason"] = str(pricing_quote.get("reason", "该物品不能出售。"))
+		return rejection
+	var unit_price := int(pricing_quote.get("unit_price", 0))
+	var risk_flags := _shop_sell_risk_flags(record, catalog, base_price)
+	var quote_seed := JSON.stringify([
+		_shop_pricing_session_nonce,
+		active_profile_id,
+		expected_key,
+		inventory_index,
+		instance_id,
+		item_name,
+		count,
+		unit_price,
+		pricing_quote,
+		merchant_context,
+		record,
+	])
+	var quote_id := "%s:%s" % [
+		SHOP_SELL_CONTRACT_ID,
+		quote_seed.sha256_text().substr(0, 24),
+	]
+	return {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"quote_key": expected_key,
+		"quote_id": quote_id,
+		"item_name": item_name,
+		"merchant_id": authoritative_merchant_id,
+		"merchant_stock_key": str(merchant_context.get("stock_key", merchant_stock_key)),
+		"sellable": true,
+		"unit_price": unit_price,
+		"policy_version": str(pricing_quote.get("policy_version", "")),
+		"formula_snapshot": (pricing_quote.get("formula_snapshot", {}) as Dictionary).duplicate(true),
+		"price_source": (pricing_quote.get("source", {}) as Dictionary).duplicate(true),
+		"max_quantity": count,
+		"reason": "",
+		"requires_confirmation": not risk_flags.is_empty(),
+		"risk_flags": risk_flags,
+		"warning": (
+			"该物品具有高价值或特殊实例属性，出售后无法恢复。"
+			if not risk_flags.is_empty()
+			else ""
+		),
+	}
+
+
+func _shop_sell_base_price(item_name: String, _catalog: Dictionary) -> int:
+	return GameData.get_item_shop_price(item_name)
+
+
+func _shop_sell_risk_flags(
+	record: Dictionary,
+	catalog: Dictionary,
+	base_price: int
+) -> Array[String]:
+	var flags: Array[String] = []
+	if base_price >= SHOP_SELL_HIGH_VALUE_PRICE:
+		flags.append("high_value")
+	if (
+		int(record.get("enhancement_level", record.get("upgrade_level", 0))) > 0
+		or int(record.get("refine_level", 0)) > 0
+	):
+		flags.append("enhanced")
+	if int(record.get("weapon_luck", 0)) != 0 or int(record.get("weapon_curse", 0)) != 0:
+		flags.append("lucky")
+	if (
+		bool(record.get("special", false))
+		or not str(catalog.get("specialRule", "")).is_empty()
+	):
+		flags.append("special")
+	return flags
+
+
+func _shop_sell_result(success: bool, message: String, merchant_id := "") -> Dictionary:
+	return {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"success": success,
+		"message": message,
+		"quotes": shop_sell_quotes(_current_shop_sell_quote_items(merchant_id)),
+	}
+
+
+func _current_shop_sell_quote_items(merchant_id := "") -> Array:
+	var items: Array = []
+	for inventory_index in range(inventory.size()):
+		var raw_record: Variant = inventory[inventory_index]
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		var instance_id := str(record.get("instance_id", ""))
+		items.append({
+			"quote_key": (
+				"instance:%s" % instance_id
+				if not instance_id.is_empty()
+				else "inventory:%d" % inventory_index
+			),
+			"inventory_index": inventory_index,
+			"instance_id": instance_id,
+			"item_name": str(record.get("name", "")),
+			"count": int(record.get("count", 1)),
+			"merchant_id": merchant_id,
+			"merchant_stock_key": str(GameData.merchant_context_by_id(merchant_id).get("stock_key", "")),
+		})
+	return items
+
+
 func use_inventory_index(index: int) -> String:
 	if index < 0 or index >= inventory.size():
 		return "请先选择物品"
@@ -284,8 +1005,8 @@ func use_inventory_index(index: int) -> String:
 			var weapon_value: Variant = equipment.get("武器", {})
 			if not weapon_value is Dictionary or weapon_value.is_empty():
 				return "需要先装备武器"
-			if effect in ["repair_oil", "war_god_oil"] and int(weapon_value.get("durability", 0)) >= int(weapon_value.get("max_durability", 1)):
-				return "武器无需修复"
+			if effect in ["repair_oil", "war_god_oil"]:
+				return _use_weapon_repair_oil_item(index, effect == "war_god_oil")
 		if remove_item(item_name):
 			scroll_requested.emit(item_name)
 			return "使用：%s" % item_name
@@ -302,30 +1023,73 @@ func use_inventory_index(index: int) -> String:
 	return "物品数量不足"
 
 
+func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
+	if index < 0 or index >= inventory.size():
+		return "物品数量不足"
+	var weapon_value: Variant = equipment.get("武器", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return "需要先装备武器"
+	_ensure_raw_durability_fields(weapon_value)
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
+	if current >= maximum:
+		return "武器无需修复"
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var record: Dictionary = inventory[index]
+	var count := maxi(1, int(record.get("count", 1)))
+	if count <= 1:
+		inventory.remove_at(index)
+	else:
+		record["count"] = count - 1
+	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats(false)
+		return "修复油存档失败，物品和装备均未改变"
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	return "武器已完全修复" if full_repair else "武器已部分修复"
+
+
 func apply_weapon_repair_oil(full_repair: bool) -> String:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
 		return "需要先装备武器"
-	var current := int(weapon_value.get("durability", 0))
-	var maximum := maxi(1, int(weapon_value.get("max_durability", 1)))
+	_ensure_raw_durability_fields(weapon_value)
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
 	if current >= maximum:
 		return "武器无需修复"
-	if full_repair:
-		weapon_value["durability"] = maximum
-	else:
-		# Crystal RepairOil repairs a bounded portion and slightly reduces the
-		# maximum durability.  Runtime durability is stored in whole display
-		# points, so the 5000/30 service-unit loss rounds to at least one point.
-		var repaired := mini(maximum, current + 5)
-		var maximum_loss := maxi(1, int(ceil(float(repaired - current) / 30.0)))
-		maximum = maxi(repaired, maximum - maximum_loss)
-		weapon_value["max_durability"] = maximum
-		weapon_value["durability"] = mini(repaired, maximum)
-	recalculate_stats()
+	var equipment_before := equipment.duplicate(true)
+	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
+	if not _commit_save():
+		equipment = equipment_before
+		recalculate_stats(false)
+		return "武器修复存档失败"
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
 	return "武器已完全修复" if full_repair else "武器已部分修复"
+
+
+func _apply_weapon_repair_oil_without_commit(
+	weapon_value: Dictionary, full_repair: bool
+) -> void:
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
+	if full_repair:
+		weapon_value["durability_raw"] = maximum
+	else:
+		# ObjBase uses raw durability units: ordinary repair oil restores at most
+		# 5000 while reducing the maximum by missing durability / 30.
+		var maximum_loss := maxi(0, int((maximum - current) / 30))
+		maximum = maxi(1, maximum - maximum_loss)
+		weapon_value["max_durability_raw"] = maximum
+		weapon_value["durability_raw"] = mini(maximum, current + 5000)
+	_sync_durability_compatibility_fields(weapon_value)
+	recalculate_stats(false)
 
 
 func _make_item_instance(item_name: String, catalog_item: Dictionary) -> Dictionary:
@@ -334,6 +1098,9 @@ func _make_item_instance(item_name: String, catalog_item: Dictionary) -> Diction
 		var maximum := maxi(1, int(catalog_item.get("maxDurability", 1)))
 		instance["durability"] = maximum
 		instance["max_durability"] = maximum
+		instance["durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["max_durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
 		instance["instance_id"] = "%d_%d" % [Time.get_ticks_usec(), inventory.size()]
 		if str(catalog_item.get("category", "")) == "武器":
 			instance["weapon_luck"] = 0
@@ -397,6 +1164,22 @@ func add_experience(amount: int) -> void:
 	_commit_save()
 
 
+## Applies the formal-death experience penalty exactly as a level-local
+## experience mutation.  Experience is the current level's progress (see
+## add_experience), so no level or threshold is changed here.  floor() gives
+## deterministic integer behaviour for 0/1/9/10/101 and the clamp prevents
+## negative values.  The caller must invoke this once per formal death.
+func apply_death_experience_penalty() -> int:
+	var current_experience := maxi(0, int(experience))
+	var lost := mini(current_experience, int(floor(float(current_experience) * 0.10)))
+	if lost <= 0:
+		return 0
+	experience = current_experience - lost
+	profile_changed.emit()
+	_commit_save()
+	return lost
+
+
 func experience_to_next_level() -> int:
 	if GameData != null and not GameData.service_reference.is_empty():
 		return GameData.service_exp_to_next_level(level)
@@ -415,6 +1198,10 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	if item.is_empty():
 		return "%s不是可穿戴装备" % item_name
 	var category := str(item.get("category", ""))
+	var explicit_slot := (
+		not preferred_slot.is_empty()
+		and preferred_slot in _slots_for_category(category)
+	)
 	var slot := _choose_equipment_slot(category, preferred_slot)
 	if slot.is_empty():
 		return "当前版本尚未开放该装备槽"
@@ -438,18 +1225,37 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		if prospective_wear > max_wear:
 			return "穿戴重量不足：需要%d，上限%d" % [prospective_wear, max_wear]
 	var previous: Variant = equipment.get(slot, {})
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var inventory_after := inventory.duplicate(true)
+	inventory_after.remove_at(index)
 	if previous is Dictionary and not previous.is_empty():
-		inventory[index] = previous.duplicate(true)
+		var return_preview := _build_receive_result_for_record(previous, inventory_after)
+		if not bool(return_preview.get("success", false)):
+			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+		# Preserve the selected slot during a replacement. Besides keeping the
+		# inventory deterministic, this prevents the old item from jumping to the
+		# tail and breaking the two-slot equip-cycle contract.
+		inventory_after.insert(index, previous.duplicate(true))
 	elif not previous is Dictionary and not str(previous).is_empty():
-		inventory[index] = _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
-	else:
-		inventory.remove_at(index)
+		var legacy_previous := _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
+		var return_preview := _build_receive_result_for_record(legacy_previous, inventory_after)
+		if not bool(return_preview.get("success", false)):
+			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+		inventory_after.insert(index, legacy_previous)
+	inventory = inventory_after
 	equipment[slot] = inventory_record.duplicate(true)
 	recalculate_stats()
+	if not explicit_slot:
+		_advance_equip_cycle_cursor(category, slot)
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats()
+		return "装备存档失败，装备和背包均未改变"
 	return "已装备：%s" % item_name
 
 
@@ -459,13 +1265,22 @@ func unequip_slot(slot: String) -> String:
 	var equipped_value: Variant = equipment.get(slot, {})
 	if not equipped_value is Dictionary or equipped_value.is_empty():
 		return "%s为空" % slot
-	inventory.append(equipped_value.duplicate(true))
+	var return_preview := _build_receive_result_for_record(equipped_value, inventory)
+	if not bool(return_preview.get("success", false)):
+		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	inventory = (return_preview.get("inventory", inventory) as Array).duplicate(true)
 	equipment[slot] = {}
 	recalculate_stats()
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats()
+		return "卸装存档失败，装备和背包均未改变"
 	return "已卸下：%s" % str(equipped_value.get("name", ""))
 
 
@@ -473,25 +1288,28 @@ func learn_skill(skill_name: String) -> String:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if stable_skill_id.is_empty():
 		return "技能数据不存在"
-	if learned_skills.has(skill_name) or _skill_progression.is_learned(stable_skill_id):
-		return "已经学会%s" % skill_name
 	var skill := GameData.get_skill(skill_name, 0)
 	if skill.is_empty():
 		return "技能数据不存在"
 	var skill_profession := str(skill.get("profession", ""))
 	if not skill_profession.is_empty() and skill_profession != profession:
 		return "%s只能由%s学习" % [skill_name, skill_profession]
-	var required_level := int(skill.get("requiredCharacterLevel", 1))
-	if level < required_level:
-		return "需要人物等级%d" % required_level
 	if not has_item(skill_name):
 		return "背包中缺少《%s》技能书" % skill_name
 	var learn_result: Dictionary = _skill_progression.learn(stable_skill_id, level)
 	if not bool(learn_result.get("accepted", false)):
-		return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
+		match str(learn_result.get("outcome", "")):
+			"max":
+				return "%s已达到最高等级" % skill_name
+			"level_requirement":
+				return "需要人物等级%d" % int(learn_result.get("required_level", 1))
+			_:
+				return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
 	remove_item(skill_name)
-	learned_skills[skill_name] = 0
-	if SkillLoadoutRulesScript.assignment_candidate(stable_skill_id).get(
+	var base_rank := int(learn_result.get("base_rank", 0))
+	learned_skills[skill_name] = base_rank
+	var outcome := str(learn_result.get("outcome", ""))
+	if outcome == "learned" and SkillLoadoutRulesScript.assignment_candidate(stable_skill_id).get(
 		"bindable_to_skill_slot",
 		false
 	):
@@ -505,7 +1323,11 @@ func learn_skill(skill_name: String) -> String:
 	skill_progression_changed.emit(_skill_progression.snapshot())
 	profile_changed.emit()
 	_commit_save()
-	return "已学会：%s" % skill_name
+	match outcome:
+		"upgraded":
+			return "技能提升：%s（当前%d级）" % [skill_name, base_rank]
+		_:
+			return "已学会：%s" % skill_name
 
 
 func is_skill_learned(skill_name: String) -> bool:
@@ -532,6 +1354,66 @@ func accept_quest(quest_id: String) -> String:
 	quests_changed.emit()
 	_commit_save()
 	return "已接受任务：%s" % quest.get("name", quest_id)
+
+
+func abandon_quest(quest_id: String) -> Dictionary:
+	var result := {
+		"contract_id": QUEST_ABANDON_CONTRACT_ID,
+		"quest_id": quest_id,
+		"success": false,
+		"message": "当前任务不能放弃。",
+	}
+	if not quest_states.has(quest_id):
+		return result
+	var state: Variant = quest_states.get(quest_id, {})
+	if not state is Dictionary or str((state as Dictionary).get("status", "")) not in ["active", "ready"]:
+		return result
+	var states_before := quest_states.duplicate(true)
+	quest_states.erase(quest_id)
+	quests_changed.emit()
+	if not _commit_save():
+		quest_states = states_before
+		quests_changed.emit()
+		result["message"] = "任务存档失败，放弃操作已取消。"
+		return result
+	result["success"] = true
+	result["message"] = "已放弃任务，当前进度已清除。"
+	return result
+
+
+func sort_warehouse() -> Dictionary:
+	var result := {
+		"contract_id": WAREHOUSE_SORT_CONTRACT_ID,
+		"success": false,
+		"message": "仓库整理失败。",
+	}
+	if warehouse_inventory.size() > WAREHOUSE_CAPACITY:
+		result["message"] = "仓库数据超过容量，已拒绝整理以避免丢失物品。"
+		return result
+	var records: Array[Dictionary] = []
+	for raw_record: Variant in warehouse_inventory:
+		if raw_record is Dictionary and not (raw_record as Dictionary).is_empty():
+			records.append((raw_record as Dictionary).duplicate(true))
+	records.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_name := str(a.get("name", ""))
+		var b_name := str(b.get("name", ""))
+		if a_name == b_name:
+			return str(a.get("instance_id", "")) < str(b.get("instance_id", ""))
+		return a_name < b_name
+	)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	warehouse_inventory = []
+	for record: Dictionary in records:
+		warehouse_inventory.append(record)
+	inventory_changed.emit()
+	if not _commit_save():
+		warehouse_inventory = warehouse_before
+		inventory_changed.emit()
+		result["message"] = "仓库存档失败，原有顺序已恢复。"
+		return result
+	result["success"] = true
+	result["message"] = "仓库已整理，共%d件物品。" % records.size()
+	return result
 
 
 func record_kill(monster_name: String) -> void:
@@ -568,17 +1450,29 @@ func claim_quest(quest_id: String) -> String:
 	var quest := GameData.get_bich_quest(quest_id)
 	if quest.is_empty() or not _quest_objectives_complete(quest, state):
 		return "任务尚未完成"
-	state["status"] = "claimed"
-	state["claimed_at_unix"] = int(Time.get_unix_time_from_system())
 	var rewards: Dictionary = quest.get("rewards", {})
-	gold = maxi(0, gold + int(rewards.get("gold", 0)))
+	var reward_items: Array = []
 	for reward: Variant in rewards.get("items", []):
 		if reward is Dictionary:
-			_grant_quest_item_without_commit(str(reward.get("name", "")), maxi(1, int(reward.get("count", 1))))
+			reward_items.append(reward)
+	var reward_preview := _build_receive_batch_result(reward_items, inventory)
+	if not bool(reward_preview.get("success", false)):
+		return str(reward_preview.get("message", "超过负重，无法领取任务奖励。"))
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var state_before := quest_states.duplicate(true)
+	_apply_receive_result(reward_preview)
+	state["status"] = "claimed"
+	state["claimed_at_unix"] = int(Time.get_unix_time_from_system())
+	gold = maxi(0, gold + int(rewards.get("gold", 0)))
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		quest_states = state_before
+		return "任务奖励存档失败，奖励未发放。"
 	inventory_changed.emit()
 	profile_changed.emit()
 	quests_changed.emit()
-	_commit_save()
 	return "已领取：%s" % quest_reward_label(quest_id)
 
 
@@ -678,7 +1572,7 @@ func _migrate_quest_states() -> void:
 			state["status"] = "ready"
 
 
-func recalculate_stats() -> void:
+func recalculate_stats(emit_profile_change := true) -> void:
 	var base := ProfessionRules.stats_for_level(profession, level)
 	computed_special_effects = {}
 	var set_powers := {"magic_blood": 0, "rainbow_demon": 0}
@@ -701,6 +1595,8 @@ func recalculate_stats() -> void:
 		"luck": 0,
 		"max_wear_weight": EquipmentRulesScript.max_wear_weight(profession, level),
 		"max_hand_weight": EquipmentRulesScript.max_hand_weight(profession, level),
+		"max_bag_weight": EquipmentRulesScript.max_bag_weight(profession, level),
+		"bag_weight": inventory_weight(inventory),
 		"wear_weight": current_wear_weight(),
 		"critical_chance": 0.0,
 		"critical_damage_multiplier": 1.5,
@@ -710,17 +1606,36 @@ func recalculate_stats() -> void:
 		"attack_speed_percent": 0.0,
 		"cast_speed_percent": 0.0,
 		"skill_level_bonuses": {},
+		"skill_level_affix": {},
 	}
+	var skill_level_affix_records: Array = []
 	for slot: String in equipment.keys():
 		var equipped_value: Variant = equipment[slot]
 		var item_name := str(equipped_value.get("name", "")) if equipped_value is Dictionary else str(equipped_value)
 		if item_name.is_empty():
 			continue
-		if equipped_value is Dictionary and int(equipped_value.get("durability", 1)) <= 0:
+		if equipped_value is Dictionary and not _has_positive_raw_durability(equipped_value):
 			continue
 		var item := GameData.get_item(item_name)
 		if item.is_empty():
 			continue
+		## Affix input is an immutable snapshot of the catalog record with the
+		## equipped instance's own modifiers merged in. When the instance
+		## carries a `modifiers` container it is authoritative (full override of
+		## the catalog set), so one item can never contribute the same affixes
+		## twice. Without instance modifiers the catalog set is used unchanged.
+		var affix_input := item.duplicate(true)
+		var instance_modifiers: Variant = (
+			equipped_value.get("modifiers")
+			if equipped_value is Dictionary
+			else null
+		)
+		if instance_modifiers != null:
+			if instance_modifiers is Dictionary or instance_modifiers is Array:
+				affix_input["modifiers"] = instance_modifiers.duplicate(true)
+			else:
+				affix_input["modifiers"] = instance_modifiers
+		skill_level_affix_records.append(affix_input)
 		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
 		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
 		_add_nullable_stat(result, "magic_min", item.get("magicMin", null))
@@ -750,18 +1665,11 @@ func recalculate_stats() -> void:
 				CombatResolutionRules.anti_magic_points_from_display_percent(int(item.magicEvasionPercent))
 			)
 		_add_nullable_stat(result, "attack_speed_tier", item.get("attackSpeedTier", null))
-		var modifiers: Variant = item.get("modifiers", {})
+		var modifiers: Variant = affix_input.get("modifiers", null)
 		if modifiers is Array:
 			result = ModifierEffectRuntime.apply_modifiers(result, modifiers, {
 				"profession": profession, "level": level, "slot": slot,
 			})
-			for modifier: Variant in modifiers:
-				if not modifier is Dictionary or str(modifier.get("stat", "")) != "skill_level":
-					continue
-				var skill_name := str(modifier.get("skill", modifier.get("target", "all")))
-				var skill_levels: Dictionary = result.get("skill_level_bonuses", {})
-				skill_levels[skill_name] = int(skill_levels.get(skill_name, 0)) + int(modifier.get("value", 0))
-				result["skill_level_bonuses"] = skill_levels
 		if modifiers is Dictionary:
 			result["critical_chance"] = float(result.get("critical_chance", 0.0)) + float(modifiers.get("criticalChance", 0.0))
 			result["critical_damage_multiplier"] = float(result.get("critical_damage_multiplier", 1.5)) + float(modifiers.get("criticalDamageBonus", 0.0))
@@ -770,10 +1678,6 @@ func recalculate_stats() -> void:
 			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + int(modifiers.get("attackSpeedTier", 0))
 			result["attack_speed_percent"] = float(result.get("attack_speed_percent", 0.0)) + float(modifiers.get("attackSpeedPercent", 0.0))
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
-			var skill_levels: Variant = modifiers.get("skillLevels", {})
-			if skill_levels is Dictionary:
-				for skill_name: String in skill_levels.keys():
-					result["skill_level_bonuses"][skill_name] = int(result["skill_level_bonuses"].get(skill_name, 0)) + int(skill_levels[skill_name])
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
@@ -783,9 +1687,13 @@ func recalculate_stats() -> void:
 			var set_id := str(set_piece.get("set", ""))
 			set_powers[set_id] = int(set_powers.get(set_id, 0)) + int(set_piece.get("power", 0))
 			set_pieces[set_id][str(set_piece.get("piece", ""))] = true
+	result["skill_level_affix"] = EquipmentRulesScript.aggregate_skill_level_affix_records(
+		skill_level_affix_records
+	)
 	if computed_special_effects.has("double_weight"):
 		result["max_wear_weight"] = int(result.get("max_wear_weight", 0)) * 2
 		result["max_hand_weight"] = int(result.get("max_hand_weight", 0)) * 2
+		result["max_bag_weight"] = int(result.get("max_bag_weight", 0)) * 2
 	var magic_blood_power := int(set_powers.get("magic_blood", 0))
 	if set_pieces["magic_blood"].size() == 3:
 		magic_blood_power += 50
@@ -804,7 +1712,8 @@ func recalculate_stats() -> void:
 	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
 	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
 	computed_stats = result
-	profile_changed.emit()
+	if emit_profile_change:
+		profile_changed.emit()
 
 
 func has_special_effect(effect_id: String) -> bool:
@@ -814,14 +1723,28 @@ func has_special_effect(effect_id: String) -> bool:
 func effective_skill_level(skill_name: String) -> int:
 	_ensure_skill_progression_matches_legacy()
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	var progression_state: Dictionary = _skill_progression.state(stable_skill_id)
-	var learned := (
-		int(progression_state.get("rank", 0))
-		if not progression_state.is_empty()
-		else int(learned_skills.get(skill_name, 0))
+	if not _skill_progression.is_learned(stable_skill_id):
+		## Equipment can never enable an unlearned skill.
+		return 0
+	return _skill_progression.effective_rank(
+		stable_skill_id,
+		_equipment_skill_level_bonus(stable_skill_id)
 	)
-	var bonuses: Dictionary = computed_stats.get("skill_level_bonuses", {})
-	return maxi(0, learned + int(bonuses.get("all", 0)) + int(bonuses.get(skill_name, 0)))
+
+
+func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
+	var affix: Dictionary = computed_stats.get("skill_level_affix", {})
+	var contributions: Dictionary = affix.get("contributions", {})
+	var bonus := 0
+	bonus += maxi(0, int(contributions.get("all", 0)))
+	var profession_scope := "profession:%s" % ProfessionRules.profession_id(profession)
+	bonus += maxi(0, int(contributions.get(profession_scope, 0)))
+	var skill_scope := "skill:%s" % stable_skill_id
+	bonus += maxi(0, int(contributions.get(skill_scope, 0)))
+	for raw_name: Variant in affix.get("legacy", {}):
+		if SkillDataLoaderScript.stable_skill_id(str(raw_name)) == stable_skill_id:
+			bonus += maxi(0, int(affix["legacy"][raw_name]))
+	return bonus
 
 
 func skill_progression_snapshot() -> Dictionary:
@@ -830,20 +1753,67 @@ func skill_progression_snapshot() -> Dictionary:
 
 
 func apply_skill_proficiency_event(skill_name_or_id: String, event_id: String, seed_value: int) -> Dictionary:
-	_ensure_skill_progression_matches_legacy()
-	var result: Dictionary = _skill_progression.apply_proficiency_event(
-		skill_name_or_id,
+	## HardCore v2: proficiency is disabled. This compatibility entry point is a
+	## pure no-op: it never mutates progression, emits growth signals or writes
+	## the save.
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	return _skill_progression.apply_proficiency_event(
+		stable_skill_id,
 		event_id,
 		level,
 		SkillRngScript.new(seed_value)
 	)
-	if bool(result.get("accepted", false)) and int(result.get("gain", 0)) > 0:
-		_sync_legacy_learned_skills_from_progression()
-		skills_changed.emit()
-		skill_progression_changed.emit(_skill_progression.snapshot())
-		profile_changed.emit()
-		_commit_save()
+
+
+func canonical_skill_resource_context(stable_skill_id: String, current_mana: int) -> Dictionary:
+	var materials := {}
+	for material_id: String in CANONICAL_MATERIAL_ITEMS:
+		materials[material_id] = item_count(str(CANONICAL_MATERIAL_ITEMS[material_id]))
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var selected_material := str(definition.get("resource", {}).get("item", ""))
+	if stable_skill_id == "taoist.poison":
+		selected_material = (
+			"grey_powder"
+			if int(materials.get("grey_powder", 0)) > 0
+			else "yellow_powder"
+		)
+	var result := {
+		"mana": maxi(0, int(current_mana)),
+		"materials": materials,
+		"selected_material": selected_material,
+	}
+	var requested_main_pet_summon_id := ""
+	match stable_skill_id:
+		"taoist.summon_skeleton":
+			requested_main_pet_summon_id = "skeleton"
+		"taoist.summon_divine_beast":
+			requested_main_pet_summon_id = "divine_beast"
+	if not requested_main_pet_summon_id.is_empty():
+		result["requested_main_pet_summon_id"] = requested_main_pet_summon_id
+		result["active_main_pet_summon_ids"] = (
+			_taoist_main_pet_runtime_state_slots().keys()
+		)
+	## Dual defence: when both taoist.defense and taoist.magic_defense are
+	## learned (base rank 0 counts as learned in HardCore v2), any
+	## preflight/release quote must price the combination in one transaction
+	## with each skill's currently-effective rank (0 or equipment-extended).
+	## Equipment can never enable an unlearned partner.
+	if stable_skill_id in ["taoist.defense", "taoist.magic_defense"]:
+		var partner_skill_id := (
+			"taoist.magic_defense"
+			if stable_skill_id == "taoist.defense"
+			else "taoist.defense"
+		)
+		if is_skill_learned(partner_skill_id):
+			result["dual_defense_context"] = {
+				"partner_skill_id": partner_skill_id,
+				"partner_rank": effective_skill_level(partner_skill_id),
+			}
 	return result
+
+
+func canonical_material_item_name(material_id: String) -> String:
+	return str(CANONICAL_MATERIAL_ITEMS.get(material_id, ""))
 
 
 func _ensure_skill_progression_matches_legacy() -> void:
@@ -910,6 +1880,47 @@ func current_wear_weight(excluded_slot := "") -> int:
 	return total
 
 
+## Weight is derived from the primary item catalog on every query. Currency
+## records intentionally contribute zero so picking up gold never gets blocked
+## by a full or legacy-overweight bag.
+func inventory_weight(records: Array = inventory) -> int:
+	var total := 0
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		var item := GameData.get_item_record(str(record.get("name", "")))
+		if item.is_empty() or str(item.get("kind", "")) == "currency":
+			continue
+		var unit_weight := maxi(0, int(item.get("weight", 0)))
+		var count := maxi(1, int(record.get("count", 1)))
+		if unit_weight > 0 and count > MAX_SAFE_WEIGHT / unit_weight:
+			return MAX_SAFE_WEIGHT
+		var contribution := unit_weight * count
+		if total > MAX_SAFE_WEIGHT - contribution:
+			return MAX_SAFE_WEIGHT
+		total += contribution
+	return total
+
+
+func max_inventory_weight() -> int:
+	var maximum := EquipmentRulesScript.max_bag_weight(profession, level)
+	if _active_double_weight_effect():
+		maximum *= 2
+	return maximum
+
+
+func _active_double_weight_effect() -> bool:
+	for value: Variant in equipment.values():
+		if not value is Dictionary or value.is_empty() or not _has_positive_raw_durability(value):
+			continue
+		var item := GameData.get_item_record(value)
+		var special := EquipmentRulesScript.special_effect_for(item)
+		if str(special.get("id", "")) == "double_weight" and bool(special.get("runtime", false)):
+			return true
+	return false
+
+
 func _slots_for_category(category: String) -> Array[String]:
 	match category:
 		"武器": return ["武器"]
@@ -918,6 +1929,8 @@ func _slots_for_category(category: String) -> Array[String]:
 		"项链": return ["项链"]
 		"手镯": return ["左手镯", "右手镯"]
 		"戒指": return ["左戒指", "右戒指"]
+		"圣物": return ["圣物"]
+		"徽章": return ["徽章"]
 		_: return []
 
 
@@ -929,7 +1942,34 @@ func _choose_equipment_slot(category: String, preferred_slot := "") -> String:
 		var value: Variant = equipment.get(slot, {})
 		if value is Dictionary and value.is_empty():
 			return slot
-	return slots[0] if not slots.is_empty() else ""
+	if slots.is_empty():
+		return ""
+	var cursor_slot := str(equip_cycle_cursor.get(category, slots[0]))
+	return cursor_slot if cursor_slot in slots else slots[0]
+
+
+func _default_equip_cycle_cursor() -> Dictionary:
+	return {"戒指": "左戒指", "手镯": "左手镯"}
+
+
+func _normalized_equip_cycle_cursor(saved_value: Variant) -> Dictionary:
+	var result := _default_equip_cycle_cursor()
+	if saved_value is Dictionary:
+		for category: String in result.keys():
+			var saved_slot := str(saved_value.get(category, ""))
+			if saved_slot in _slots_for_category(category):
+				result[category] = saved_slot
+	return result
+
+
+func _advance_equip_cycle_cursor(category: String, equipped_slot: String) -> void:
+	var slots := _slots_for_category(category)
+	if slots.size() < 2:
+		return
+	var equipped_index := slots.find(equipped_slot)
+	if equipped_index < 0:
+		return
+	equip_cycle_cursor[category] = slots[(equipped_index + 1) % slots.size()]
 
 
 func _empty_equipment() -> Dictionary:
@@ -941,10 +1981,105 @@ func _empty_equipment() -> Dictionary:
 
 func _equipment_instance_from_saved(saved_value: Variant) -> Dictionary:
 	if saved_value is Dictionary:
-		return saved_value.duplicate(true)
+		var restored: Dictionary = saved_value.duplicate(true)
+		_ensure_raw_durability_fields(restored)
+		return restored
 	if not str(saved_value).is_empty():
 		return _make_item_instance(str(saved_value), GameData.get_item_record(str(saved_value)))
 	return {}
+
+
+func _ensure_raw_durability_fields(instance: Dictionary) -> bool:
+	if instance.is_empty():
+		return false
+	var catalog := GameData.get_item_record(instance)
+	var catalog_maximum := maxi(1, int(catalog.get("maxDurability", 1)))
+	var migrated := false
+	if not instance.has("max_durability_raw"):
+		instance["max_durability_raw"] = (
+			maxi(1, int(instance.get("max_durability", catalog_maximum)))
+			* DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+		migrated = true
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	instance["max_durability_raw"] = maximum_raw
+	if not instance.has("durability_raw"):
+		instance["durability_raw"] = (
+			clampi(
+				int(instance.get("durability", instance.get("max_durability", catalog_maximum))),
+				0,
+				maxi(1, int(instance.get("max_durability", catalog_maximum)))
+			)
+			* DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+		migrated = true
+	instance["durability_raw"] = clampi(
+		int(instance.get("durability_raw", 0)), 0, maximum_raw
+	)
+	instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
+	_sync_durability_compatibility_fields(instance)
+	return migrated
+
+
+func _adopt_legacy_durability_compatibility_override(instance: Dictionary) -> void:
+	if not instance.has("durability_raw") or not instance.has("max_durability_raw"):
+		return
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	var current_raw := clampi(int(instance.get("durability_raw", 0)), 0, maximum_raw)
+	var expected_maximum := maxi(
+		1,
+		int(ceil(float(maximum_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	var expected_current := (
+		0
+		if current_raw <= 0
+		else int(ceil(float(current_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	var display_maximum := maxi(1, int(instance.get("max_durability", expected_maximum)))
+	var display_current := clampi(
+		int(instance.get("durability", expected_current)), 0, display_maximum
+	)
+	if display_maximum != expected_maximum:
+		maximum_raw = display_maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["max_durability_raw"] = maximum_raw
+	if display_current != expected_current:
+		instance["durability_raw"] = mini(
+			maximum_raw, display_current * DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+
+
+func _sync_durability_compatibility_fields(instance: Dictionary) -> void:
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	var current_raw := clampi(int(instance.get("durability_raw", 0)), 0, maximum_raw)
+	instance["max_durability_raw"] = maximum_raw
+	instance["durability_raw"] = current_raw
+	# Existing UI and pricing contracts remain whole display points. Ceiling is
+	# intentional: a positive raw remainder is usable and must not look broken.
+	instance["max_durability"] = maxi(
+		1,
+		int(ceil(float(maximum_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	instance["durability"] = (
+		0
+		if current_raw <= 0
+		else int(ceil(float(current_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+
+
+func _has_positive_raw_durability(instance: Dictionary) -> bool:
+	_adopt_legacy_durability_compatibility_override(instance)
+	_ensure_raw_durability_fields(instance)
+	return int(instance.get("durability_raw", 0)) > 0
+
+
+func _migrate_item_collection_durability(records: Array) -> bool:
+	var migrated := false
+	for value: Variant in records:
+		if value is Dictionary and not value.is_empty():
+			var catalog := GameData.get_item_record(value)
+			if str(catalog.get("kind", "")) == "equipment":
+				migrated = _ensure_raw_durability_fields(value) or migrated
+	return migrated
 
 
 func migrate_equipment_slots(saved_equipment: Dictionary) -> Dictionary:
@@ -960,86 +2095,488 @@ func migrate_equipment_slots(saved_equipment: Dictionary) -> Dictionary:
 
 
 func damage_equipment_durability(slot: String, amount := 1) -> void:
+	_damage_equipment_durability_raw(
+		slot,
+		maxi(0, amount) * DURABILITY_RAW_UNITS_PER_DISPLAY,
+		true
+	)
+
+
+func _damage_equipment_durability_raw(
+	slot: String,
+	amount_raw: int,
+	commit_individually := false
+) -> bool:
 	var equipped: Variant = equipment.get(slot, {})
 	if not equipped is Dictionary or equipped.is_empty():
-		return
-	var old_value := int(equipped.get("durability", 0))
-	var new_value := maxi(0, old_value - maxi(0, amount))
+		return false
+	_ensure_raw_durability_fields(equipped)
+	var old_value := int(equipped.get("durability_raw", 0))
+	var new_value := maxi(0, old_value - maxi(0, amount_raw))
 	if new_value == old_value:
-		return
-	equipped["durability"] = new_value
-	if new_value == 0:
-		recalculate_stats()
+		return false
+	equipped["durability_raw"] = new_value
+	_sync_durability_compatibility_fields(equipped)
+	if commit_individually:
+		if new_value == 0:
+			recalculate_stats(false)
+		equipment_changed.emit()
+		profile_changed.emit()
+		_commit_save()
+	return true
+
+
+func apply_durability_event(event_id: String, context := {}) -> Dictionary:
+	var result := {
+		"contract_id": DURABILITY_CONTRACT_ID,
+		"event_id": event_id,
+		"applied": false,
+		"changed_slots": {},
+		"raw_loss": 0,
+		"signal_batches": 0,
+		"save_commits": 0,
+		"extension_policy": DURABILITY_INCOMING_EXTENSION_POLICY,
+	}
+	if not context is Dictionary:
+		result["reason"] = "invalid_context"
+		return result
+	var event_context: Dictionary = context
+	if str(event_context.get("damage_type", "physical")) != "physical":
+		result["reason"] = "non_physical"
+		return result
+	if int(event_context.get("damage", 1)) <= 0:
+		result["reason"] = "non_positive_damage"
+		return result
+	var equipment_before := equipment.duplicate(true)
+	var crossed_zero := false
+	match event_id:
+		DURABILITY_EVENT_WEAPON_PHYSICAL_HIT:
+			if not bool(event_context.get("confirmed_hit", false)):
+				result["reason"] = "unconfirmed_hit"
+				return result
+			var weapon: Variant = equipment.get("武器", {})
+			if not weapon is Dictionary or weapon.is_empty():
+				result["reason"] = "weapon_missing"
+				return result
+			_ensure_raw_durability_fields(weapon)
+			var weapon_roll := _durability_roll(event_context, "weapon_roll", 0, 4)
+			var weapon_strong := _weapon_strong(weapon, event_context)
+			var weapon_loss := maxi(0, weapon_roll + 2 - weapon_strong)
+			result["raw_loss"] = weapon_loss
+			result["weapon_roll"] = weapon_roll
+			result["weapon_strong"] = weapon_strong
+			if weapon_loss > 0:
+				var old_weapon_raw := int(weapon.get("durability_raw", 0))
+				if _damage_equipment_durability_raw("武器", weapon_loss):
+					(result["changed_slots"] as Dictionary)["武器"] = weapon_loss
+					crossed_zero = old_weapon_raw > 0 and int(weapon.get("durability_raw", 0)) == 0
+		DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK:
+			if not bool(event_context.get("causes_struck", true)):
+				result["reason"] = "not_struck_damage"
+				return result
+			var incoming_roll := _durability_roll(event_context, "armor_roll", 0, 9)
+			var incoming_loss := incoming_roll + 5
+			if bool(event_context.get("red_poison", false)):
+				incoming_loss = maxi(1, roundi(float(incoming_loss) * 1.2))
+			result["raw_loss"] = incoming_loss
+			result["armor_roll"] = incoming_roll
+			var armor: Variant = equipment.get("衣服", {})
+			if armor is Dictionary and not armor.is_empty():
+				_ensure_raw_durability_fields(armor)
+				var old_armor_raw := int(armor.get("durability_raw", 0))
+				if _damage_equipment_durability_raw("衣服", incoming_loss):
+					(result["changed_slots"] as Dictionary)["衣服"] = incoming_loss
+					crossed_zero = crossed_zero or (
+						old_armor_raw > 0 and int(armor.get("durability_raw", 0)) == 0
+					)
+			var slot_rolls: Dictionary = event_context.get("slot_rolls", {})
+			for slot: String in EQUIPMENT_SLOTS:
+				var slot_roll := (
+					clampi(int(slot_rolls.get(slot, 0)), 0, 7)
+					if slot_rolls.has(slot)
+					else _durability_roll(event_context, "", 0, 7)
+				)
+				if slot_roll != 0:
+					continue
+				var equipped: Variant = equipment.get(slot, {})
+				if not equipped is Dictionary or equipped.is_empty():
+					continue
+				_ensure_raw_durability_fields(equipped)
+				var old_slot_raw := int(equipped.get("durability_raw", 0))
+				if _damage_equipment_durability_raw(slot, incoming_loss):
+					var previous_loss := int((result["changed_slots"] as Dictionary).get(slot, 0))
+					(result["changed_slots"] as Dictionary)[slot] = previous_loss + incoming_loss
+					crossed_zero = crossed_zero or (
+						old_slot_raw > 0 and int(equipped.get("durability_raw", 0)) == 0
+					)
+		_:
+			result["reason"] = "unknown_event"
+			return result
+	if (result["changed_slots"] as Dictionary).is_empty():
+		result["reason"] = "no_durability_change"
+		return result
+	result["save_commits"] = 1
+	if crossed_zero:
+		recalculate_stats(false)
+	result["save_committed"] = _commit_save()
+	if not bool(result["save_committed"]):
+		equipment = equipment_before
+		recalculate_stats(false)
+		result["changed_slots"] = {}
+		result["raw_loss"] = 0
+		result["rolled_back"] = true
+		result["reason"] = "save_failed"
+		return result
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
+	result["signal_batches"] = 1
+	durability_event_commit_count += 1
+	result["applied"] = true
+	result["reason"] = ""
+	return result
 
 
-func repair_cost() -> int:
+func _durability_roll(context: Dictionary, key: String, minimum: int, maximum: int) -> int:
+	if not key.is_empty() and context.has(key):
+		return clampi(int(context.get(key, minimum)), minimum, maximum)
+	var rng_value: Variant = context.get("rng", null)
+	if rng_value is RandomNumberGenerator:
+		return (rng_value as RandomNumberGenerator).randi_range(minimum, maximum)
+	return _durability_rng.randi_range(minimum, maximum)
+
+
+func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
+	if context.has("weapon_strong"):
+		return maxi(0, int(context.get("weapon_strong", 0)))
+	for key: String in ["weapon_strong", "WeaponStrong", "strong", "Strong"]:
+		if weapon.has(key):
+			return maxi(0, int(weapon.get(key, 0)))
+	var catalog := GameData.get_item_record(weapon)
+	for key: String in ["weaponStrong", "WeaponStrong", "strong", "Strong"]:
+		if catalog.has(key):
+			return maxi(0, int(catalog.get(key, 0)))
+	return 0
+
+
+func repair_cost(context := {}) -> int:
+	var authoritative_context := _authoritative_merchant_context(context)
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(authoritative_context):
+		return 0
+	return int(_repair_plan(authoritative_context).get("total_price", 0))
+
+
+func _repair_plan(context := {}) -> Dictionary:
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
+		return {"valid": false, "total_price": 0, "slots": [], "entries": []}
+	var priority_slots := PricingServiceScript.repair_batch_slot_order()
+	if priority_slots != EQUIPMENT_SLOTS:
+		return {"valid": false, "total_price": 0, "slots": [], "entries": []}
 	var total := 0
-	for equipped: Variant in equipment.values():
+	var slots: Array[String] = []
+	var entries: Array[Dictionary] = []
+	for slot: String in priority_slots:
+		var equipped: Variant = equipment.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
-		var item := GameData.get_item(str(equipped.get("name", "")))
-		total += EquipmentRulesScript.repair_cost(item, int(equipped.get("durability", 0)), int(equipped.get("max_durability", 1)))
-	return total
+		# Planning must never mutate live equipment. Raw durability is authoritative;
+		# display compatibility fields are not allowed to overwrite it here.
+		var quote_instance: Dictionary = (equipped as Dictionary).duplicate(true)
+		_ensure_raw_durability_fields(quote_instance)
+		var quote := PricingServiceScript.quote_repair(
+			GameData.get_item_price_record(quote_instance),
+			GameData.get_item_record(quote_instance),
+			quote_instance,
+			context
+		)
+		var quoted_cost := int(quote.get("total_price", 0))
+		if not bool(quote.get("valid", false)) or quoted_cost <= 0:
+			continue
+		total += quoted_cost
+		slots.append(slot)
+		entries.append({"slot": slot, "quote": quote})
+	return {
+		"valid": true,
+		"contract_id": "gameplay.repair.batch_all_equipment.v1",
+		"total_price": total,
+		"slots": slots,
+		"entries": entries,
+	}
 
 
-func repair_all_equipment() -> String:
-	var cost := repair_cost()
-	if cost <= 0:
+func repair_all_equipment(context := {}) -> String:
+	context = _authoritative_merchant_context(context)
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
+		return "该商人不提供维修服务"
+	var plan := _repair_plan(context)
+	if not bool(plan.get("valid", false)):
+		return "维修规则无效，未改变装备和金币"
+	var full_cost := int(plan.get("total_price", 0))
+	if full_cost <= 0:
 		return "装备无需维修"
-	if not spend_gold(cost):
-		return "维修需要%d金币" % cost
-	for equipped: Variant in equipment.values():
-		if equipped is Dictionary and not equipped.is_empty():
-			equipped["durability"] = int(equipped.get("max_durability", 1))
+	var equipment_before := equipment.duplicate(true)
+	var gold_before := gold
+	var remaining_gold := gold
+	var spent := 0
+	var repaired_slots := 0
+	for raw_entry: Variant in plan.get("entries", []):
+		if not raw_entry is Dictionary:
+			continue
+		var entry: Dictionary = raw_entry
+		var slot := str(entry.get("slot", ""))
+		var equipped: Variant = equipment.get(slot, {})
+		if not equipped is Dictionary or equipped.is_empty():
+			continue
+		_ensure_raw_durability_fields(equipped)
+		var price_record := GameData.get_item_price_record(equipped)
+		var catalog := GameData.get_item_record(equipped)
+		var current_raw := int(equipped.get("durability_raw", 0))
+		var maximum_raw := maxi(1, int(equipped.get("max_durability_raw", 1)))
+		var missing_raw := maximum_raw - clampi(current_raw, 0, maximum_raw)
+		if missing_raw <= 0 or remaining_gold <= 0:
+			continue
+		var planned_quote: Dictionary = entry.get("quote", {})
+		var chosen_quote: Dictionary = planned_quote.duplicate(true)
+		if not bool(chosen_quote.get("valid", false)):
+			continue
+		if int(chosen_quote.get("total_price", 0)) > remaining_gold:
+			chosen_quote = _maximum_affordable_repair_raw_quote(
+				price_record, catalog, equipped, missing_raw, remaining_gold, context
+			)
+		if not bool(chosen_quote.get("valid", false)):
+			continue
+		var slot_cost := int(chosen_quote.get("total_price", 0))
+		var target_raw := int(chosen_quote.get("formula_snapshot", {}).get("target_durability_raw", current_raw))
+		if slot_cost <= 0 or slot_cost > remaining_gold or target_raw <= current_raw:
+			continue
+		equipped["durability_raw"] = mini(maximum_raw, target_raw)
+		_sync_durability_compatibility_fields(equipped)
+		remaining_gold -= slot_cost
+		spent += slot_cost
+		repaired_slots += 1
+	if repaired_slots <= 0:
+		return "金币不足，未能维修任何装备"
+	gold = remaining_gold
 	recalculate_stats()
+	if not _commit_save():
+		equipment = equipment_before
+		gold = gold_before
+		recalculate_stats()
+		return "维修存档失败，装备和金币均未改变"
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
-	return "全部装备维修完成，花费%d金币" % cost
+	if spent >= full_cost:
+		return "全部装备维修完成，花费%d金币" % spent
+	return "金币不足，已优先维修%d件装备，花费%d金币" % [repaired_slots, spent]
+
+
+func _authoritative_merchant_context(context: Variant) -> Dictionary:
+	if not context is Dictionary:
+		return {}
+	var merchant_id := str((context as Dictionary).get("merchant_id", ""))
+	if merchant_id.is_empty():
+		return (context as Dictionary).duplicate(true)
+	var authoritative := GameData.merchant_context_by_id(merchant_id)
+	if not authoritative.is_empty():
+		return authoritative
+	# An unknown merchant id must never fall back to PricingService's legacy
+	# context defaults, otherwise a forged request could regain repair access.
+	return {
+		"merchant_id": merchant_id,
+		"types": [],
+		"supports_repair": false,
+	}
+
+
+func _maximum_affordable_repair_raw_quote(
+	price_record: Dictionary,
+	catalog: Dictionary,
+	instance: Dictionary,
+	maximum_amount_raw: int,
+	budget: int,
+	context: Dictionary
+) -> Dictionary:
+	var low := 1
+	var high := maxi(0, maximum_amount_raw)
+	var best: Dictionary = {}
+	while low <= high:
+		var amount := int((low + high) / 2)
+		var quote := PricingServiceScript.quote_repair_raw_delta(
+			price_record, catalog, instance, amount, context
+		)
+		if bool(quote.get("valid", false)) and int(quote.get("total_price", 0)) <= budget:
+			best = quote
+			low = amount + 1
+		else:
+			high = amount - 1
+	return best
 
 
 func _profile_path(profile_id: String) -> String:
 	return "%s/%s.json" % [profile_directory, profile_id]
 
 
-func _read_json(path: String) -> Dictionary:
+func _read_json_document(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
-		return {}
+		return {"exists": false, "valid": false, "data": {}}
 	var file := FileAccess.open(path, FileAccess.READ)
-	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
-	return parsed if parsed is Dictionary else {}
+	if file == null:
+		return {"exists": true, "valid": false, "data": {}}
+	var serialized := file.get_as_text()
+	file.close()
+	var parser := JSON.new()
+	var parse_error := parser.parse(serialized)
+	var parsed: Variant = parser.data if parse_error == OK else null
+	return {
+		"exists": true,
+		"valid": parsed is Dictionary,
+		"data": parsed if parsed is Dictionary else {},
+	}
+
+
+func _restore_json_backup(path: String) -> Dictionary:
+	var backup := path + ".bak"
+	var backup_document := _read_json_document(backup)
+	if not bool(backup_document.get("valid", false)):
+		return {
+			"success": false,
+			"reason": "backup_missing_or_invalid",
+			"data": {},
+		}
+	var temporary := path + ".tmp"
+	var corrupt := path + ".corrupt.tmp"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return {"success": false, "reason": "backup_restore_temp_open_failed", "data": {}}
+	file.store_string(JSON.stringify(backup_document.get("data", {}), "\t"))
+	file.flush()
+	file.close()
+	if not bool(_read_json_document(temporary).get("valid", false)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return {"success": false, "reason": "backup_restore_temp_invalid", "data": {}}
+	var absolute_path := ProjectSettings.globalize_path(path)
+	var absolute_temp := ProjectSettings.globalize_path(temporary)
+	var absolute_corrupt := ProjectSettings.globalize_path(corrupt)
+	if FileAccess.file_exists(corrupt):
+		if DirAccess.remove_absolute(absolute_corrupt) != OK:
+			DirAccess.remove_absolute(absolute_temp)
+			return {"success": false, "reason": "backup_restore_cleanup_failed", "data": {}}
+	var moved_corrupt := false
+	if FileAccess.file_exists(path):
+		if DirAccess.rename_absolute(absolute_path, absolute_corrupt) != OK:
+			DirAccess.remove_absolute(absolute_temp)
+			return {"success": false, "reason": "backup_restore_main_move_failed", "data": {}}
+		moved_corrupt = true
+	if DirAccess.rename_absolute(absolute_temp, absolute_path) != OK:
+		if moved_corrupt:
+			DirAccess.rename_absolute(absolute_corrupt, absolute_path)
+		return {"success": false, "reason": "backup_restore_promote_failed", "data": {}}
+	if moved_corrupt and FileAccess.file_exists(corrupt):
+		DirAccess.remove_absolute(absolute_corrupt)
+	return {
+		"success": true,
+		"reason": "recovered_from_backup",
+		"data": backup_document.get("data", {}).duplicate(true),
+	}
+
+
+func _read_json_with_status(path: String) -> Dictionary:
+	var primary := _read_json_document(path)
+	if bool(primary.get("valid", false)):
+		return {
+			"success": true,
+			"reason": "primary",
+			"data": primary.get("data", {}).duplicate(true),
+		}
+	var recovered := _restore_json_backup(path)
+	if bool(recovered.get("success", false)):
+		return recovered
+	return {
+		"success": false,
+		"reason": (
+			"primary_missing"
+			if not bool(primary.get("exists", false))
+			else "primary_invalid"
+		),
+		"data": {},
+	}
+
+
+func _read_json(path: String) -> Dictionary:
+	return _read_json_with_status(path).get("data", {})
 
 
 func _write_json_atomic(path: String, data: Dictionary) -> bool:
+	if test_mode and _test_force_atomic_write_failure:
+		return false
 	var temporary := path + ".tmp"
 	var backup := path + ".bak"
+	var corrupt := path + ".corrupt.tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return false
 	file.store_string(JSON.stringify(data, "\t"))
 	file.flush()
 	file.close()
+	# Never move the current profile until the complete temporary document has
+	# been reparsed successfully. This keeps a failed/partial write fail-closed.
+	if not bool(_read_json_document(temporary).get("valid", false)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return false
 	var absolute_path := ProjectSettings.globalize_path(path)
 	var absolute_temp := ProjectSettings.globalize_path(temporary)
 	var absolute_backup := ProjectSettings.globalize_path(backup)
-	if FileAccess.file_exists(path):
-		if FileAccess.file_exists(backup):
-			DirAccess.remove_absolute(absolute_backup)
-		DirAccess.rename_absolute(absolute_path, absolute_backup)
-	var result := DirAccess.rename_absolute(absolute_temp, absolute_path)
-	if result != OK and FileAccess.file_exists(backup):
-		DirAccess.rename_absolute(absolute_backup, absolute_path)
-	return result == OK
+	var absolute_corrupt := ProjectSettings.globalize_path(corrupt)
+	var current_document := _read_json_document(path)
+	var moved_valid_main := false
+	var moved_corrupt_main := false
+	if bool(current_document.get("exists", false)):
+		if bool(current_document.get("valid", false)):
+			if (
+				FileAccess.file_exists(backup)
+				and DirAccess.remove_absolute(absolute_backup) != OK
+			):
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			if DirAccess.rename_absolute(absolute_path, absolute_backup) != OK:
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			moved_valid_main = true
+		else:
+			# A corrupt main must never replace a valid .bak.
+			if (
+				FileAccess.file_exists(corrupt)
+				and DirAccess.remove_absolute(absolute_corrupt) != OK
+			):
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			if DirAccess.rename_absolute(absolute_path, absolute_corrupt) != OK:
+				DirAccess.remove_absolute(absolute_temp)
+				return false
+			moved_corrupt_main = true
+	var promote_result := DirAccess.rename_absolute(absolute_temp, absolute_path)
+	if promote_result != OK:
+		if moved_valid_main:
+			DirAccess.rename_absolute(absolute_backup, absolute_path)
+		elif moved_corrupt_main:
+			DirAccess.rename_absolute(absolute_corrupt, absolute_path)
+		return false
+	if moved_corrupt_main and FileAccess.file_exists(corrupt):
+		DirAccess.remove_absolute(absolute_corrupt)
+	return bool(_read_json_document(path).get("valid", false))
 
 
-func save_game() -> void:
+func save_game() -> bool:
 	if active_profile_id.is_empty():
-		return
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "active_profile_missing",
+		}
+		return false
+	_refresh_taoist_main_pet_runtime_states_for_save()
 	_ensure_skill_progression_matches_legacy()
-	if not _write_json_atomic(_profile_path(active_profile_id), {
+	var profile_path := _profile_path(active_profile_id)
+	var payload := {
 		"save_version": SAVE_VERSION,
 		"profile_id": active_profile_id,
 		"character_name": character_name,
@@ -1057,6 +2594,8 @@ func save_game() -> void:
 		"learned_skills": learned_skills,
 		"skill_progression": _skill_progression.snapshot(),
 		"quick_slots": quick_slots,
+		"quick_item_slots": quick_item_slots,
+		"equip_cycle_cursor": equip_cycle_cursor,
 		"skill_button_assignments": skill_button_assignments_snapshot(),
 		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
@@ -1071,26 +2610,197 @@ func save_game() -> void:
 			if saved_ground_position_gu_valid
 			else []
 		),
-	}):
-		push_warning("无法安全写入角色存档：%s" % active_profile_id)
-	_update_profile_index()
+	}
+	if not _taoist_main_pet_runtime_state_slots().is_empty():
+		payload["taoist_main_pet_runtime_states"] = (
+			taoist_main_pet_runtime_states.duplicate(true)
+		)
+	if not _write_json_atomic(profile_path, payload):
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "atomic_profile_write_failed",
+			"path": profile_path,
+		}
+		return false
+	var index_updated := _update_profile_index()
+	last_save_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"path": profile_path,
+		"profile_index_updated": index_updated,
+	}
+	if not index_updated:
+		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
+	return true
+
+
+## Debug-lab export of the complete active character document.  This uses the
+## same schema and normalization path as production saves so a device snapshot
+## can be edited on the host and applied back without a parallel save format.
+func device_lab_active_save_document() -> Dictionary:
+	if not OS.is_debug_build() and not test_mode:
+		return {}
+	if active_profile_id.is_empty():
+		return {}
+	# Persist volatile runtime fields before exporting the experiment state.
+	if not save_game():
+		return {}
+	return _read_json(_profile_path(active_profile_id)).duplicate(true)
+
+
+## Atomically replaces the active experimental character and immediately
+## reloads every normalized runtime field.  A failed write/load restores the
+## complete previous document before returning.
+func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
+	var result := {
+		"ok": false,
+		"contractId": DEVICE_LAB_SAVE_CONTRACT_ID,
+		"profileId": active_profile_id,
+		"rolledBack": false,
+		"error": "",
+	}
+	if not OS.is_debug_build() and not test_mode:
+		result["error"] = "debug_only"
+		return result
+	var validation := _validate_device_lab_save_document(document)
+	if not bool(validation.get("ok", false)):
+		result["error"] = str(validation.get("error", "invalid_document"))
+		return result
+	var path := _profile_path(active_profile_id)
+	var previous := _read_json(path).duplicate(true)
+	if previous.is_empty():
+		result["error"] = "previous_save_missing"
+		return result
+	if not _write_json_atomic(path, document.duplicate(true)):
+		result["error"] = "atomic_write_failed"
+		return result
+	load_save()
+	if not bool(last_load_result.get("success", false)):
+		result["rolledBack"] = _write_json_atomic(path, previous)
+		if bool(result["rolledBack"]):
+			load_save()
+		result["error"] = "reload_failed"
+		return result
+	_emit_device_lab_state_changed()
+	result["ok"] = true
+	result["saveVersion"] = SAVE_VERSION
+	result["inventoryCount"] = inventory.size()
+	result["warehouseCount"] = warehouse_inventory.size()
+	return result
+
+
+func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictionary:
+	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	if inventory_index < 0 or inventory_index >= inventory.size() or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
+		result["message"] = "存入位置无效。"
+		return result
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	while warehouse_inventory.size() <= warehouse_slot:
+		warehouse_inventory.append({})
+	var target: Variant = warehouse_inventory[warehouse_slot]
+	if target is Dictionary and not target.is_empty():
+		result["message"] = "仓库位置已被占用。"
+		return result
+	warehouse_inventory[warehouse_slot] = inventory[inventory_index].duplicate(true) if inventory[inventory_index] is Dictionary else inventory[inventory_index]
+	inventory.remove_at(inventory_index)
+	if not _commit_save():
+		inventory = inventory_before
+		warehouse_inventory = warehouse_before
+		result["message"] = "仓库存档失败，物品未改变。"
+		return result
+	inventory_changed.emit()
+	result["success"] = true
+	result["message"] = "已存入仓库。"
+	return result
+
+
+func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
+	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	if warehouse_slot < 0 or warehouse_slot >= warehouse_inventory.size() or not warehouse_inventory[warehouse_slot] is Dictionary or (warehouse_inventory[warehouse_slot] as Dictionary).is_empty():
+		result["message"] = "仓库位置无效。"
+		return result
+	var record: Dictionary = warehouse_inventory[warehouse_slot]
+	var preview := _build_receive_result_for_record(record, inventory)
+	if not bool(preview.get("success", false)):
+		result["message"] = str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+		result["reason"] = str(preview.get("reason", "rejected"))
+		return result
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
+	warehouse_inventory[warehouse_slot] = {}
+	_trim_warehouse_empty_tail()
+	if not _commit_save():
+		inventory = inventory_before
+		warehouse_inventory = warehouse_before
+		result["message"] = "仓库存档失败，物品未改变。"
+		return result
+	inventory_changed.emit()
+	result["success"] = true
+	result["message"] = "已取出仓库物品。"
+	return result
+
+
+func _trim_warehouse_empty_tail() -> void:
+	while not warehouse_inventory.is_empty():
+		var tail: Variant = warehouse_inventory.back()
+		if tail is Dictionary and not tail.is_empty():
+			break
+		warehouse_inventory.pop_back()
+
+
+func _validate_device_lab_save_document(document: Dictionary) -> Dictionary:
+	if document.is_empty():
+		return {"ok": false, "error": "empty_document"}
+	if active_profile_id.is_empty() or str(document.get("profile_id", "")) != active_profile_id:
+		return {"ok": false, "error": "profile_id"}
+	if int(document.get("save_version", 0)) != SAVE_VERSION:
+		return {"ok": false, "error": "save_version"}
+	if not document.get("inventory", null) is Array or (document.get("inventory") as Array).size() > 100:
+		return {"ok": false, "error": "inventory"}
+	if not document.get("warehouse_inventory", null) is Array or (document.get("warehouse_inventory") as Array).size() > WAREHOUSE_CAPACITY:
+		return {"ok": false, "error": "warehouse_inventory"}
+	if not document.get("equipment", null) is Dictionary:
+		return {"ok": false, "error": "equipment"}
+	if int(document.get("level", 0)) < 1 or int(document.get("level", 0)) > 255:
+		return {"ok": false, "error": "level"}
+	if not ProfessionRules.is_valid_profession(str(document.get("profession", ""))):
+		return {"ok": false, "error": "profession"}
+	if str(document.get("gender", "")) not in ["男", "女"]:
+		return {"ok": false, "error": "gender"}
+	for required_object: String in ["learned_skills", "quest_states"]:
+		if not document.get(required_object, null) is Dictionary:
+			return {"ok": false, "error": required_object}
+	return {"ok": true}
+
+
+func _emit_device_lab_state_changed() -> void:
+	profile_changed.emit()
+	profession_changed.emit(profession)
+	inventory_changed.emit()
+	equipment_changed.emit()
+	skills_changed.emit()
+	quests_changed.emit()
+	quick_slots_changed.emit({"source": "device_lab"})
+	quick_item_slots_changed.emit({"source": "device_lab"})
 
 
 func load_save() -> void:
 	var load_path := _profile_path(active_profile_id) if not active_profile_id.is_empty() else SAVE_PATH
-	if not FileAccess.file_exists(load_path):
+	var load_result := _read_json_with_status(load_path)
+	last_load_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": bool(load_result.get("success", false)),
+		"reason": str(load_result.get("reason", "")),
+		"path": load_path,
+	}
+	if not bool(load_result.get("success", false)):
 		reset_progress(false)
 		return
-	var file := FileAccess.open(load_path, FileAccess.READ)
-	var serialized := file.get_as_text() if file != null else ""
-	if file != null:
-		# Windows keeps the source file locked while FileAccess is alive. Close it
-		# before a version migration atomically renames the same profile to .bak.
-		file.close()
-	var parsed: Variant = JSON.parse_string(serialized)
-	if not parsed is Dictionary:
-		reset_progress(false)
-		return
+	var parsed: Dictionary = load_result.get("data", {})
 	level = maxi(1, int(parsed.get("level", 1)))
 	profession = str(parsed.get("profession", "战士"))
 	if not ProfessionRules.is_valid_profession(profession):
@@ -1110,6 +2820,8 @@ func load_save() -> void:
 	warehouse_inventory = parsed.get("warehouse_inventory", [])
 	var saved_equipment: Dictionary = parsed.get("equipment", {})
 	equipment = migrate_equipment_slots(saved_equipment)
+	_migrate_item_collection_durability(inventory)
+	_migrate_item_collection_durability(warehouse_inventory)
 	learned_skills = parsed.get("learned_skills", {})
 	var progression_load: Dictionary = _skill_progression.load_snapshot(
 		parsed.get("skill_progression", learned_skills)
@@ -1118,7 +2830,33 @@ func load_save() -> void:
 		_sync_legacy_learned_skills_from_progression()
 	var saved_slots: Array = parsed.get("quick_slots", ["", "", "", ""])
 	_restore_skill_button_assignments(parsed.get("skill_button_assignments", {}), saved_slots)
+	quick_item_slots = _normalized_quick_item_slots(parsed.get("quick_item_slots", null))
+	equip_cycle_cursor = _normalized_equip_cycle_cursor(parsed.get("equip_cycle_cursor", {}))
 	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
+	if parsed.has("taoist_main_pet_runtime_states"):
+		var loaded_main_pet_states := _normalized_taoist_main_pet_runtime_states(
+			parsed.get("taoist_main_pet_runtime_states", {})
+		)
+		taoist_main_pet_runtime_states = (
+			loaded_main_pet_states
+			if not loaded_main_pet_states.is_empty()
+			else _empty_taoist_main_pet_runtime_states()
+		)
+	else:
+		# Compatibility for the short-lived singular save emitted by the faulty
+		# device build. Migrate its typed snapshot into the matching plural slot;
+		# every subsequent save writes only the plural field.
+		var legacy_main_pet := _normalized_taoist_main_pet_runtime_state(
+			parsed.get("taoist_main_pet_runtime_state", {})
+		)
+		taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
+		if not legacy_main_pet.is_empty():
+			var migrated_slots := (
+				taoist_main_pet_runtime_states["slots"] as Dictionary
+			)
+			migrated_slots[str(legacy_main_pet.get("summon_id", ""))] = (
+				legacy_main_pet
+			)
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
 	var position_data: Variant = parsed.get(
@@ -1297,6 +3035,154 @@ func _sync_legacy_quick_slots_from_ring() -> void:
 		quick_slots[index] = attack_ring_slots[index]
 
 
+func is_quick_item_candidate(item_name: String) -> bool:
+	if item_name.is_empty():
+		return false
+	var item := GameData.get_item_record(item_name)
+	if item.is_empty():
+		return false
+	if str(item.get("kind", "")) not in ["skill_book", "consumable", "scroll"]:
+		return false
+	return item.get("usable", true) != false
+
+
+func quick_item_slots_snapshot() -> Array:
+	return quick_item_slots.duplicate()
+
+
+func quick_item_slot_name(slot_index: int) -> String:
+	if slot_index < 0 or slot_index >= quick_item_slots.size():
+		return ""
+	return quick_item_slots[slot_index]
+
+
+func assign_quick_item_slot(index: int, item_name: String) -> Dictionary:
+	if index < 0 or index >= QUICK_ITEM_SLOT_COUNT:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "slot_index_out_of_range",
+			"message": "快捷物品槽位无效",
+		}
+	if not item_name.is_empty() and not is_quick_item_candidate(item_name):
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "not_quick_item_candidate",
+			"message": "%s不能绑定到快捷物品槽" % item_name,
+		}
+	if not item_name.is_empty() and not has_item(item_name):
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "no_inventory",
+			"message": "背包中没有%s" % item_name,
+		}
+	var previous := quick_item_slots[index]
+	quick_item_slots[index] = item_name
+	var change := {
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": item_name,
+		"previous_item_name": previous,
+		"slots": quick_item_slots.duplicate(),
+	}
+	quick_item_slots_changed.emit(change.duplicate(true))
+	profile_changed.emit()
+	_commit_save()
+	var message := "快捷物品槽%d已清空" % (index + 1) if item_name.is_empty() else (
+		"已将%s绑定到快捷物品槽%d" % [item_name, index + 1]
+	)
+	return {
+		"ok": true,
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": item_name,
+		"change": change,
+		"message": message,
+	}
+
+
+func use_quick_item_slot(index: int, expected_item_name := "") -> Dictionary:
+	if index < 0 or index >= QUICK_ITEM_SLOT_COUNT:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": "",
+			"reason": "slot_index_out_of_range",
+			"message": "快捷物品槽位无效",
+		}
+	var bound_name := quick_item_slots[index]
+	if bound_name.is_empty():
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": "",
+			"reason": "slot_empty",
+			"message": "快捷物品槽%d为空" % (index + 1),
+		}
+	if not expected_item_name.is_empty() and expected_item_name != bound_name:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": bound_name,
+			"expected_item_name": expected_item_name,
+			"reason": "expected_name_mismatch",
+			"message": "快捷物品槽已变更，请重试",
+		}
+	# Always re-scan by the bound name; never cache or reuse an old inventory index.
+	var inventory_index := _inventory_index_by_item_name(bound_name)
+	if inventory_index < 0:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": bound_name,
+			"reason": "no_inventory",
+			"message": "背包中没有%s" % bound_name,
+		}
+	var before_count := item_count(bound_name)
+	var use_result := use_inventory_index(inventory_index)
+	var ok := item_count(bound_name) < before_count
+	var item := GameData.get_item_record(bound_name)
+	var kind := str(item.get("kind", ""))
+	return {
+		"ok": ok,
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": bound_name,
+		"kind": kind,
+		"message": use_result,
+		"reason": "use_failed" if not ok else "used",
+	}
+
+
+func _normalized_quick_item_slots(value: Variant) -> Array[String]:
+	var result: Array[String] = []
+	var source: Array = value if value is Array else []
+	for index in range(QUICK_ITEM_SLOT_COUNT):
+		var slot_value: Variant = source[index] if index < source.size() else null
+		var item_name := str(slot_value) if slot_value is String else ""
+		result.append(item_name if is_quick_item_candidate(item_name) else "")
+	return result
+
+
+func _inventory_index_by_item_name(item_name: String) -> int:
+	for index in range(inventory.size()):
+		if str(inventory[index].get("name", "")) == item_name:
+			return index
+	return -1
+
+
 func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
 	var normalized := _normalized_warrior_runtime_state(snapshot)
 	if normalized.is_empty():
@@ -1311,6 +3197,160 @@ func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool
 
 func warrior_runtime_state_for_restore() -> Dictionary:
 	return warrior_runtime_state.duplicate(true)
+
+
+func configure_taoist_main_pets_persistence_provider(provider: Callable) -> void:
+	_taoist_main_pets_persistence_provider = provider
+
+
+func clear_taoist_main_pets_persistence_provider() -> void:
+	_taoist_main_pets_persistence_provider = Callable()
+
+
+func apply_taoist_main_pet_runtime_states(states: Dictionary) -> bool:
+	var normalized := _normalized_taoist_main_pet_runtime_states(states)
+	if (
+		normalized.is_empty()
+		or str(normalized.get("contract_id", ""))
+		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
+	):
+		return false
+	taoist_main_pet_runtime_states = normalized
+	return true
+
+
+func clear_taoist_main_pet_runtime_state(summon_id: String) -> void:
+	if summon_id not in ["skeleton", "divine_beast"]:
+		return
+	var slots := _taoist_main_pet_runtime_state_slots()
+	slots.erase(summon_id)
+	taoist_main_pet_runtime_states = {
+		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+		"slots": slots,
+	}
+
+
+func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
+	return taoist_main_pet_runtime_states.duplicate(true)
+
+
+func taoist_main_pet_runtime_state_for_restore(summon_id: String) -> Dictionary:
+	var slots := _taoist_main_pet_runtime_state_slots()
+	var snapshot: Variant = slots.get(summon_id, {})
+	return (snapshot as Dictionary).duplicate(true) if snapshot is Dictionary else {}
+
+
+func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
+	if not _taoist_main_pets_persistence_provider.is_valid():
+		return
+	var captured: Variant = _taoist_main_pets_persistence_provider.call()
+	if not captured is Dictionary:
+		return
+	# The live provider is authoritative. Invalid/corrupt captured state fails
+	# closed to an empty two-slot document rather than retaining stale pets.
+	var normalized := _normalized_taoist_main_pet_runtime_states(
+		captured
+	)
+	taoist_main_pet_runtime_states = (
+		normalized
+		if not normalized.is_empty()
+		else _empty_taoist_main_pet_runtime_states()
+	)
+
+
+func _empty_taoist_main_pet_runtime_states() -> Dictionary:
+	return {
+		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+		"slots": {},
+	}
+
+
+func _taoist_main_pet_runtime_state_slots() -> Dictionary:
+	var slots: Variant = taoist_main_pet_runtime_states.get("slots", {})
+	return (slots as Dictionary).duplicate(true) if slots is Dictionary else {}
+
+
+func _normalized_taoist_main_pet_runtime_states(states: Variant) -> Dictionary:
+	if not states is Dictionary:
+		return {}
+	var source := states as Dictionary
+	if (
+		str(source.get("contract_id", ""))
+		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
+	):
+		return {}
+	var raw_slots: Variant = source.get("slots", {})
+	if not raw_slots is Dictionary:
+		return {}
+	var result := _empty_taoist_main_pet_runtime_states()
+	var slots := result["slots"] as Dictionary
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var normalized := _normalized_taoist_main_pet_runtime_state(
+			(raw_slots as Dictionary).get(summon_id, {})
+		)
+		if (
+			not normalized.is_empty()
+			and str(normalized.get("summon_id", "")) == summon_id
+		):
+			slots[summon_id] = normalized
+	return result
+
+
+func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
+	if not snapshot is Dictionary:
+		return {}
+	var source := snapshot as Dictionary
+	if (
+		str(source.get("contract_id", ""))
+		!= TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID
+		or not bool(source.get("alive", false))
+	):
+		return {}
+	var summon_id := str(source.get("summon_id", ""))
+	var skill_id := str(source.get("skill_id", ""))
+	if (
+		(summon_id == "skeleton" and skill_id != "taoist.summon_skeleton")
+		or (
+			summon_id == "divine_beast"
+			and skill_id != "taoist.summon_divine_beast"
+		)
+		or summon_id not in ["skeleton", "divine_beast"]
+	):
+		return {}
+	var runtime_state := str(source.get("runtime_state", ""))
+	if runtime_state not in [
+		"FOLLOW_OWNER",
+		"ACQUIRE_TARGET",
+		"CHASE_TARGET",
+		"ATTACK_TARGET",
+		"RETURN_TO_OWNER",
+	]:
+		return {}
+	var skill_rank := int(source.get("skill_rank", -1))
+	var owner_level := int(source.get("owner_level", 0))
+	var current_hp := int(source.get("current_hp", 0))
+	var max_hp := int(source.get("max_hp", 0))
+	var remaining_lifetime := float(source.get("remaining_lifetime", 0.0))
+	var summon_exp_level := int(source.get("summon_exp_level", -1))
+	var maximum_pet_level := int(source.get("maximum_pet_level", -1))
+	var pet_growth_exp := int(source.get("pet_growth_exp", -1))
+	if (
+		skill_rank < 0
+		or skill_rank > 7
+		or owner_level <= 0
+		or current_hp <= 0
+		or max_hp <= 0
+		or current_hp > max_hp
+		or not is_finite(remaining_lifetime)
+		or remaining_lifetime <= 0.0
+		or summon_exp_level < 0
+		or summon_exp_level > 7
+		or maximum_pet_level < summon_exp_level
+		or maximum_pet_level > 7
+		or pet_growth_exp < 0
+	):
+		return {}
+	return source.duplicate(true)
 
 
 func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:
@@ -1368,6 +3408,10 @@ func save_safe_logout(
 ) -> bool:
 	if active_profile_id.is_empty():
 		return false
+	var previous_map_id := saved_map_id
+	var previous_position := saved_position
+	var previous_ground_position_gu := saved_ground_position_gu
+	var previous_ground_position_gu_valid := saved_ground_position_gu_valid
 	saved_map_id = home_map_id
 	saved_position = home_screen_position_px
 	if home_ground_position_gu is Vector2:
@@ -1376,8 +3420,16 @@ func save_safe_logout(
 	else:
 		saved_ground_position_gu = Vector2.ZERO
 		saved_ground_position_gu_valid = false
-	save_game()
-	return FileAccess.file_exists(_profile_path(active_profile_id))
+	if save_game():
+		return true
+	# The safe-location record is one transaction in memory and on disk. A
+	# failed write must not leave a fake successful Home location in memory.
+	saved_map_id = previous_map_id
+	saved_position = previous_position
+	saved_ground_position_gu = previous_ground_position_gu
+	saved_ground_position_gu_valid = previous_ground_position_gu_valid
+	last_save_result["memory_rolled_back"] = true
+	return false
 
 
 func list_characters() -> Array[Dictionary]:
@@ -1564,6 +3616,8 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		"equipment": equipment_data,
 		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
 		"quick_slots": legacy_slots,
+		"quick_item_slots": ["", "", "", ""],
+		"equip_cycle_cursor": _default_equip_cycle_cursor(),
 		"skill_button_assignments": assignments.duplicate(true),
 		"warrior_runtime_state": warrior_state,
 		"test_runtime_defaults": runtime_defaults.duplicate(true),
@@ -1597,7 +3651,7 @@ func ensure_developer_test_character()->void:
 		if skill is Dictionary:all_skills[str(skill.get("skillName",""))]=3
 	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
 	var now:=int(Time.get_unix_time_from_system())
-	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
+	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
 	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id),payload):return
 	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
@@ -1610,7 +3664,7 @@ func ensure_developer_test_character()->void:
 
 func _developer_item(item_name:String,instance_id:String)->Dictionary:
 	var item:=GameData.get_item_record(item_name);var maximum:=maxi(1,int(item.get("maxDurability",1)))
-	var result:={"name":item_name,"count":1,"durability":maximum,"max_durability":maximum,"instance_id":instance_id}
+	var result:={"name":item_name,"count":1,"durability":maximum,"max_durability":maximum,"durability_raw":maximum*DURABILITY_RAW_UNITS_PER_DISPLAY,"max_durability_raw":maximum*DURABILITY_RAW_UNITS_PER_DISPLAY,"durability_contract_id":DURABILITY_CONTRACT_ID,"instance_id":instance_id}
 	if str(item.get("category",""))=="武器":result.merge({"weapon_luck":0,"weapon_curse":0})
 	return result
 
@@ -1639,7 +3693,9 @@ func ensure_zuma_test_character() -> void:
 		"later_content_enabled": false, "game_mode_id": "classic_176", "experience": 0,
 		"gold": 100000, "inventory": [{"name": "太阳水", "count": 10}], "warehouse_inventory": [],
 		"equipment": equipment_data, "learned_skills": all_skills,
-		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"], "quest_states": {},
+		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
+		"quick_item_slots": ["", "", "", ""],
+		"equip_cycle_cursor": _default_equip_cycle_cursor(), "quest_states": {},
 		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": 4, "position": [0.0, 0.0],
 	}
@@ -1673,30 +3729,246 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	var clean_name := new_name.strip_edges().substr(0, 12)
 	if clean_name.is_empty():
 		return "角色名不能为空"
-	if new_profession != "战士":
-		return "当前版本仅开放战士"
+	if not ProfessionRules.is_valid_profession(new_profession):
+		return "职业无效"
 	if new_gender not in ["男", "女"]:
 		return "性别无效"
-	active_profile_id = "%d_%d" % [int(Time.get_unix_time_from_system()), randi_range(1000, 9999)]
+	if _character_name_exists(clean_name):
+		return "角色名已存在"
+
+	# Character creation is one transaction.  Build and validate the starter
+	# loadout before exposing the new profile or writing anything to disk.  This
+	# keeps a missing primary item record from producing a half-created profile.
+	var new_profile_id := _new_profile_id()
+	if new_profile_id.is_empty():
+		return "角色存档ID生成失败"
+	var previous_runtime := _creation_runtime_snapshot()
+	active_profile_id = new_profile_id
 	character_name = clean_name
 	reset_progress(false)
 	profession = new_profession
 	gender = new_gender
-	recalculate_stats()
-	save_game()
+	recalculate_stats(false)
+	var starter_result := _build_starter_loadout(new_profession, new_gender, new_profile_id)
+	if not bool(starter_result.get("ok", false)):
+		_restore_creation_runtime(previous_runtime)
+		return str(starter_result.get("error", "初始装备数据缺失，角色创建失败"))
+	equipment = (starter_result.get("equipment", {}) as Dictionary).duplicate(true)
+	# Keep圣物/徽章 empty for the future new-player rewards.  The helper already
+	# returns the complete canonical slot map; this assertion also makes a future
+	# loadout edit fail closed instead of silently filling those reserved slots.
+	if not equipment.has("圣物") or not equipment.has("徽章"):
+		_restore_creation_runtime(previous_runtime)
+		return "初始装备槽位数据不完整，角色创建失败"
+	recalculate_stats(false)
+	if not save_game() or not bool(last_save_result.get("profile_index_updated", false)):
+		_remove_new_profile_files(new_profile_id)
+		_restore_creation_runtime(previous_runtime)
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "atomic_character_creation_failed",
+		}
+		return "角色存档失败，角色未创建"
 	return ""
 
 
+func _character_name_exists(candidate: String) -> bool:
+	for entry: Dictionary in list_characters():
+		if str(entry.get("name", "")) == candidate:
+			return true
+	# A stale index must not allow a duplicate name.  Read only canonical profile
+	# JSON files; backups and temporary files are deliberately excluded.
+	var directory := DirAccess.open(profile_directory)
+	if directory == null:
+		return false
+	for file_name: String in directory.get_files():
+		if not file_name.ends_with(".json") or file_name.ends_with(".bak"):
+			continue
+		var document := _read_json(profile_directory.path_join(file_name))
+		if str(document.get("character_name", "")) == candidate:
+			return true
+	return false
+
+
+func _new_profile_id() -> String:
+	for _attempt in range(16):
+		var candidate := "%d_%d" % [int(Time.get_unix_time_from_system()), randi_range(1000, 9999)]
+		if (
+			not FileAccess.file_exists(_profile_path(candidate))
+			and not FileAccess.file_exists(_profile_path(candidate) + ".bak")
+		):
+			return candidate
+	# A hostile fixture may occupy every generated id.  Never overwrite a
+	# profile in that case; creation fails closed instead.
+	return ""
+
+
+func _build_starter_loadout(starter_profession: String, starter_gender: String, profile_id: String) -> Dictionary:
+	var result := {
+		"contract_id": STARTER_LOADOUT_CONTRACT_ID,
+		"ok": false,
+		"equipment": _empty_equipment(),
+		"error": "初始装备数据缺失，角色创建失败",
+	}
+	var starter_items := {
+		"武器": STARTER_WEAPON_ITEM_NAME,
+		"衣服": str(STARTER_ARMOR_BY_GENDER.get(starter_gender, "")),
+	}
+	for slot: String in starter_items.keys():
+		var item_name := str(starter_items.get(slot, ""))
+		var runtime_item := GameData.get_item(item_name)
+		var catalog_item := GameData.get_item_record(item_name)
+		if runtime_item.is_empty() or catalog_item.is_empty():
+			return result
+		if str(runtime_item.get("itemId", "")) != str(catalog_item.get("itemId", "")):
+			result["error"] = "初始装备主数据不一致，角色创建失败"
+			return result
+		if str(catalog_item.get("kind", "")) != "equipment":
+			result["error"] = "初始装备不是合法装备，角色创建失败"
+			return result
+		var category := str(runtime_item.get("category", ""))
+		if slot not in _slots_for_category(category):
+			result["error"] = "初始装备槽位不匹配，角色创建失败"
+			return result
+		var item_profession := EquipmentRulesScript.effective_profession(runtime_item)
+		if item_profession not in ["", "通用", starter_profession]:
+			result["error"] = "%s不适合当前职业，角色创建失败" % item_name
+			return result
+		var required_gender := EquipmentRulesScript.required_gender(runtime_item)
+		if not required_gender.is_empty() and required_gender != starter_gender:
+			result["error"] = "%s不适合当前性别，角色创建失败" % item_name
+			return result
+		var requirement_error := EquipmentRulesScript.requirement_error(runtime_item, 1, computed_stats)
+		if not requirement_error.is_empty():
+			result["error"] = "%s，角色创建失败" % requirement_error
+			return result
+		var item_weight := maxi(0, int(runtime_item.get("weight", 0)))
+		if category == "武器":
+			if item_weight > EquipmentRulesScript.max_hand_weight(starter_profession, 1):
+				result["error"] = "%s超出初始手持负重，角色创建失败" % item_name
+				return result
+		elif item_weight > EquipmentRulesScript.max_wear_weight(starter_profession, 1):
+			result["error"] = "%s超出初始穿戴负重，角色创建失败" % item_name
+			return result
+		var instance := _make_item_instance(item_name, catalog_item)
+		if instance.is_empty() or str(instance.get("instance_id", "")).is_empty():
+			result["error"] = "初始装备实例化失败，角色创建失败"
+			return result
+		# Slot and profile are part of the instance identity, so the two starter
+		# pieces can never collapse into one another even on the same microsecond.
+		instance["instance_id"] = "%s:starter:%s:%s" % [profile_id, slot, str(runtime_item.get("itemId", item_name))]
+		(result["equipment"] as Dictionary)[slot] = instance
+	result["ok"] = true
+	return result
+
+
+func _remove_new_profile_files(profile_id: String) -> void:
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+		var path := _profile_path(profile_id) + suffix
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+
+
+func _creation_runtime_snapshot() -> Dictionary:
+	return {
+		"level": level,
+		"profession": profession,
+		"gender": gender,
+		"later_content_enabled": later_content_enabled,
+		"game_mode_id": game_mode_id,
+		"experience": experience,
+		"gold": gold,
+		"inventory": inventory.duplicate(true),
+		"warehouse_inventory": warehouse_inventory.duplicate(true),
+		"equipment": equipment.duplicate(true),
+		"learned_skills": learned_skills.duplicate(true),
+		"skill_progression": _skill_progression.snapshot(),
+		"quick_slots": quick_slots.duplicate(),
+		"quick_item_slots": quick_item_slots.duplicate(),
+		"equip_cycle_cursor": equip_cycle_cursor.duplicate(true),
+		"attack_skill_slots": attack_skill_slots.duplicate(),
+		"attack_ring_slots": attack_ring_slots.duplicate(),
+		"warrior_runtime_state": warrior_runtime_state.duplicate(true),
+		"taoist_main_pet_runtime_states": taoist_main_pet_runtime_states.duplicate(true),
+		"quest_states": quest_states.duplicate(true),
+		"saved_map_id": saved_map_id,
+		"saved_position": saved_position,
+		"saved_ground_position_gu": saved_ground_position_gu,
+		"saved_ground_position_gu_valid": saved_ground_position_gu_valid,
+		"computed_stats": computed_stats.duplicate(true),
+		"computed_special_effects": computed_special_effects.duplicate(true),
+		"durability_event_commit_count": durability_event_commit_count,
+		"active_profile_id": active_profile_id,
+		"character_name": character_name,
+		"autosave_elapsed": _autosave_elapsed,
+		"consumed_shop_sell_quote_ids": _consumed_shop_sell_quote_ids.duplicate(true),
+		"consumed_shop_buy_quote_ids": _consumed_shop_buy_quote_ids.duplicate(true),
+		"shop_buy_quote_serial": _shop_buy_quote_serial,
+		"shop_pricing_session_nonce": _shop_pricing_session_nonce,
+		"last_receive_result": last_receive_result.duplicate(true),
+		"last_save_result": last_save_result.duplicate(true),
+		"last_load_result": last_load_result.duplicate(true),
+	}
+
+
+func _restore_creation_runtime(snapshot: Dictionary) -> void:
+	level = int(snapshot.get("level", 1))
+	profession = str(snapshot.get("profession", "战士"))
+	gender = str(snapshot.get("gender", "男"))
+	later_content_enabled = bool(snapshot.get("later_content_enabled", false))
+	game_mode_id = str(snapshot.get("game_mode_id", "classic_176"))
+	experience = int(snapshot.get("experience", 0))
+	gold = int(snapshot.get("gold", 0))
+	inventory = (snapshot.get("inventory", []) as Array).duplicate(true)
+	warehouse_inventory = (snapshot.get("warehouse_inventory", []) as Array).duplicate(true)
+	equipment = (snapshot.get("equipment", {}) as Dictionary).duplicate(true)
+	learned_skills = (snapshot.get("learned_skills", {}) as Dictionary).duplicate(true)
+	_skill_progression.load_snapshot(snapshot.get("skill_progression", {}))
+	quick_slots = (snapshot.get("quick_slots", []) as Array).duplicate()
+	quick_item_slots = (snapshot.get("quick_item_slots", []) as Array).duplicate()
+	equip_cycle_cursor = (snapshot.get("equip_cycle_cursor", {}) as Dictionary).duplicate(true)
+	attack_skill_slots = (snapshot.get("attack_skill_slots", []) as Array).duplicate()
+	attack_ring_slots = (snapshot.get("attack_ring_slots", []) as Array).duplicate()
+	warrior_runtime_state = (snapshot.get("warrior_runtime_state", {}) as Dictionary).duplicate(true)
+	taoist_main_pet_runtime_states = (snapshot.get("taoist_main_pet_runtime_states", {}) as Dictionary).duplicate(true)
+	quest_states = (snapshot.get("quest_states", {}) as Dictionary).duplicate(true)
+	saved_map_id = int(snapshot.get("saved_map_id", 4))
+	saved_position = snapshot.get("saved_position", Vector2.ZERO)
+	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
+	saved_ground_position_gu_valid = bool(snapshot.get("saved_ground_position_gu_valid", false))
+	computed_stats = (snapshot.get("computed_stats", {}) as Dictionary).duplicate(true)
+	computed_special_effects = (snapshot.get("computed_special_effects", {}) as Dictionary).duplicate(true)
+	durability_event_commit_count = int(snapshot.get("durability_event_commit_count", 0))
+	active_profile_id = str(snapshot.get("active_profile_id", ""))
+	character_name = str(snapshot.get("character_name", ""))
+	_autosave_elapsed = float(snapshot.get("autosave_elapsed", 0.0))
+	_consumed_shop_sell_quote_ids = (snapshot.get("consumed_shop_sell_quote_ids", {}) as Dictionary).duplicate(true)
+	_consumed_shop_buy_quote_ids = (snapshot.get("consumed_shop_buy_quote_ids", {}) as Dictionary).duplicate(true)
+	_shop_buy_quote_serial = int(snapshot.get("shop_buy_quote_serial", 0))
+	_shop_pricing_session_nonce = str(snapshot.get("shop_pricing_session_nonce", ""))
+	last_receive_result = (snapshot.get("last_receive_result", {}) as Dictionary).duplicate(true)
+	last_save_result = (snapshot.get("last_save_result", {}) as Dictionary).duplicate(true)
+	last_load_result = (snapshot.get("last_load_result", {}) as Dictionary).duplicate(true)
+
+
 func select_character(profile_id: String) -> bool:
-	if not FileAccess.file_exists(_profile_path(profile_id)):
+	var profile_path := _profile_path(profile_id)
+	if (
+		not FileAccess.file_exists(profile_path)
+		and not FileAccess.file_exists(profile_path + ".bak")
+	):
 		return false
 	active_profile_id = profile_id
 	load_save()
+	if not bool(last_load_result.get("success", false)):
+		active_profile_id = ""
+		return false
 	_autosave_elapsed = 0.0
 	return true
 
 
-func _update_profile_index() -> void:
+func _update_profile_index() -> bool:
 	var profiles := list_characters()
 	var found := false
 	for entry: Dictionary in profiles:
@@ -1705,7 +3977,7 @@ func _update_profile_index() -> void:
 			found = true
 	if not found:
 		profiles.append({"id": active_profile_id, "name": character_name, "profession": profession, "gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())})
-	_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	return _write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
 
 
 func _migrate_single_save_to_profile() -> void:
@@ -1728,6 +4000,7 @@ func _migrate_single_save_to_profile() -> void:
 	character_name = ""
 
 
-func _commit_save() -> void:
+func _commit_save() -> bool:
 	if not test_mode:
-		save_game()
+		return save_game()
+	return not _test_force_atomic_write_failure

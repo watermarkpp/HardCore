@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "contractId": "gameplay.official_book_shop.v1",
+  "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+  "status": "project_canonical_fail_closed",
+  "scope": "Classify every BookStore-0104 [Trade] line without treating a private-server trade list as official shop authority.",
+  "sourcePriorityLane": "server_data",
+  "sourcePriorityPolicy": {
+    "path": "assets/data/source_priority_policy.json",
+    "sha256": "935fcbf2e14a4aa8eb8ca1698129e8ca37a067bbcb5b4991bfb5e7197f19147d"
+  },
+  "formalVanillaSkillMaster": {
+    "distribution": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+    "path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+    "sha256": "6c4a4b447787eb6ad9f9f44c6c24cf6ca23c952673797226c66541008b25c516",
+    "contractId": "skills.mir2_176.vanilla_33.v1.0.1"
+  },
+  "primaryCandidateTrade": {
+    "distribution": "server.crystal.cjlaaa",
+    "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/BookStore-0104.txt",
+    "sha256": "83ec666fcdf04d0fbc43df73b3b55c2a74f925bdff2e6ea9209fd55d63443ae9",
+    "tradeLineCount": 50,
+    "authorityBoundary": "candidate_lines_require_per_item_classification"
+  },
+  "originalGameofmirMerchantDataAudit": {
+    "searchRoot": "dev_art_sources/reference/original_gameofmir",
+    "searchedPatterns": [
+      "**/Merchant.txt",
+      "**/Market_Def/**/*.txt",
+      "**/Envir/NPCs/**/*.txt"
+    ],
+    "result": "missing",
+    "note": "The primary original_gameofmir checkout contains merchant loading code but no deployable Merchant/Market_Def/NPC shop data, so it cannot prove a retail book list.",
+    "engineReferences": [
+      {
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ConfigMerchant.pas",
+        "sha256": "94b80fea846b75f496614ffd05580554856db66e323bf6e401291a7fc6304c00"
+      },
+      {
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/LocalDB.pas",
+        "sha256": "09210446ab8e2d55d98968015846a34f6786eaf42826b54fb30c4c8426f100ae"
+      }
+    ]
+  },
+  "conservativeShopEvidence": [
+    {
+      "distribution": "server.crystal.cjlaaa",
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+      "sha256": "62e133faf5be7f66b5d8c3517674d63e039b634785d8cf89c1038af1e01a0e05"
+    },
+    {
+      "distribution": "server.crystal.cjlaaa",
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt",
+      "sha256": "51dc467da96cb8d090d7e2a1330b52c21b24a80c44bc1843bd43199883ccb4a4"
+    }
+  ],
+  "classificationRules": {
+    "official_shop_live": "Present in the formal 33-skill master and in both conservative primary-distribution shop scripts.",
+    "official_advanced_drop_only": "Present in the formal 33-skill master, absent from both conservative shop scripts, and backed by a primary-distribution drop route. Drop rates are evidence of acquisition route only, not official-rate authority.",
+    "private_extension_excluded": "Absent from the formal 33-skill master; a Crystal [Trade] line cannot promote it into the official runtime shop.",
+    "unresolved_fail_closed": "Any candidate not satisfying a complete rule is excluded. The audited 50-line input currently has no unresolved entries.",
+    "noLevelHeuristic": true
+  },
+  "officialShopLive": [
+    "基本剑术",
+    "攻杀剑术",
+    "火球术",
+    "抗拒火环",
+    "诱惑之光",
+    "大火球",
+    "地狱火",
+    "雷电术",
+    "瞬息移动",
+    "治愈术",
+    "精神力战法",
+    "施毒术",
+    "灵魂火符",
+    "召唤骷髅"
+  ],
+  "officialAdvancedDropOnly": [
+    {
+      "name": "刺杀剑术",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 97, "rawLine": "1/500 刺杀剑术"}
+    },
+    {
+      "name": "半月弯刀",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt", "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0", "sourceLine": 138, "rawLine": "1/100 半月弯刀"}
+    },
+    {
+      "name": "野蛮冲撞",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt", "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0", "sourceLine": 139, "rawLine": "1/100 野蛮冲撞"}
+    },
+    {
+      "name": "烈火剑法",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/CaveWitch.txt", "sha256": "f78aebe4c423bf06e4737594d41f85c89d8c84586120ce0eb6e5268f3bae1a5d", "sourceLine": 118, "rawLine": "1/25 烈火剑法"}
+    },
+    {
+      "name": "爆裂火焰",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 93, "rawLine": "1/250 爆裂火焰"}
+    },
+    {
+      "name": "火墙",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 94, "rawLine": "1/250 火墙"}
+    },
+    {
+      "name": "疾光电影",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 98, "rawLine": "1/500 疾光电影"}
+    },
+    {
+      "name": "地狱雷光",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt", "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0", "sourceLine": 144, "rawLine": "1/100 地狱雷光"}
+    },
+    {
+      "name": "魔法盾",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/HellBolt.txt", "sha256": "bda89d614cbcad333f1154c4d8ab3289a323de7c4b4977d18958f423d8940e38", "sourceLine": 90, "rawLine": "1/1000 魔法盾"}
+    },
+    {
+      "name": "圣言术",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt", "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0", "sourceLine": 146, "rawLine": "1/200 圣言术"}
+    },
+    {
+      "name": "冰咆哮",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/CaveWitch.txt", "sha256": "f78aebe4c423bf06e4737594d41f85c89d8c84586120ce0eb6e5268f3bae1a5d", "sourceLine": 116, "rawLine": "1/25 冰咆哮"}
+    },
+    {
+      "name": "隐身术",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 91, "rawLine": "1/250 隐身术"}
+    },
+    {
+      "name": "集体隐身术",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 92, "rawLine": "1/250 集体隐身术"}
+    },
+    {
+      "name": "幽灵盾",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 95, "rawLine": "1/250 幽灵盾"}
+    },
+    {
+      "name": "心灵启示",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 99, "rawLine": "1/500 心灵启示"}
+    },
+    {
+      "name": "神圣战甲术",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt", "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d", "sourceLine": 100, "rawLine": "1/500 神圣战甲术"}
+    },
+    {
+      "name": "困魔咒",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt", "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0", "sourceLine": 151, "rawLine": "1/100 困魔咒"}
+    },
+    {
+      "name": "群体治疗术",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt", "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0", "sourceLine": 153, "rawLine": "1/150 群体治疗术"}
+    },
+    {
+      "name": "召唤神兽",
+      "dropEvidence": {"path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/CaveWitch.txt", "sha256": "f78aebe4c423bf06e4737594d41f85c89d8c84586120ce0eb6e5268f3bae1a5d", "sourceLine": 117, "rawLine": "1/25 召唤神兽"}
+    }
+  ],
+  "privateExtensionExcluded": [
+    "双龙斩",
+    "捕绳剑",
+    "寒冰掌",
+    "嗜血术",
+    "气功波",
+    "净化术",
+    "迷魂术",
+    "无极真气",
+    "绝命剑法",
+    "双刀术",
+    "体迅风",
+    "拔刀术",
+    "风身术",
+    "迁移剑",
+    "烈风击",
+    "捕缚术",
+    "猛毒剑气"
+  ],
+  "unresolvedFailClosed": []
+}

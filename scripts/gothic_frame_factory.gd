@@ -1,0 +1,152 @@
+class_name GothicFrameFactory
+extends RefCounted
+
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
+
+const MODAL_INNER_POSITION := Vector2(41, 59)
+const MODAL_INNER_END_INSET := Vector2(41, 64)
+const MODAL_INNER_RADIUS := 42.0
+const INSET_FRAME_VARIATION := &"GothicInsetFrame"
+const COMPONENT_INSET_FRAME_V3 := preload("res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png")
+const INSET_FRAME_V3_PATCH := Vector4(64, 58, 64, 58)
+## Measured safe opening for inset_frame_v3.png.  The texture's inner alpha
+## edge is approximately x=31/573 and y=26/300 at 604x327; keeping the code
+## fill within this inset remains safe when the nine-slice is resized.
+const INSET_FRAME_V3_INNER_INSETS := Vector4(31, 26, 31, 26)
+const INSET_FRAME_V3_INNER_RADIUS := 18.0
+
+static func configure_inset_fill(fill: Control) -> Control:
+	fill.shape_mode = GothicFrameFillScript.ShapeMode.V3_INNER
+	fill.content_insets = INSET_FRAME_V3_INNER_INSETS
+	fill.corner_radius = INSET_FRAME_V3_INNER_RADIUS
+	return fill
+## Reserved local planes for sealed modal chrome.  Close controls deliberately
+## sit above the safety overlay without lifting their sibling content.
+const MODAL_OVERLAY_Z_INDEX := 100
+const MODAL_CLOSE_CONTROL_Z_INDEX := 200
+
+
+## Adds the code-drawn background for a level-1 double-ring modal frame. The
+## measured opening is shared by every modal because the frame uses fixed
+## nine-slice corner margins. The fill is rendered behind the parent frame, so
+## it cannot cover either ring or the central ornaments.
+static func add_modal_fill(parent: Control, panel_size: Vector2, node_name := "ModalSurface") -> Control:
+	var fill := GothicFrameFillScript.new()
+	fill.name = node_name
+	fill.position = MODAL_INNER_POSITION
+	fill.size = panel_size - MODAL_INNER_POSITION - MODAL_INNER_END_INSET
+	fill.shape_mode = GothicFrameFillScript.ShapeMode.ROUNDED_INNER
+	fill.corner_radius = MODAL_INNER_RADIUS
+	fill.show_behind_parent = true
+	fill.set_meta("calibration_internal_visual", true)
+	parent.add_child(fill)
+	return fill
+
+
+## Repeats only the transparent modal-frame artwork above all content. This is
+## the final safety layer: even while a section is being manually calibrated,
+## neither its background nor its content can visually cover the two outer
+## rings. Call this after the modal's root-level children have been built.
+static func seal_modal_rings(parent: Control) -> Panel:
+	var overlay := Panel.new()
+	overlay.name = "ModalFrameSafetyOverlay"
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.z_index = MODAL_OVERLAY_Z_INDEX
+	overlay.theme_type_variation = "GothicModalFrameOverlay"
+	overlay.set_meta("calibration_internal_visual", true)
+	parent.add_child(overlay)
+	_raise_close_controls(parent)
+	return overlay
+
+
+## Raise only close controls in this modal tree.  Setting the control's own
+## local z-index (rather than reordering or lifting an ancestor) keeps section
+## content below the overlay and leaves unrelated popups untouched.
+static func _raise_close_controls(root: Control) -> void:
+	for child in root.get_children():
+		_raise_close_controls_recursive(child)
+
+
+static func _raise_close_controls_recursive(node: Node) -> void:
+	if node is Control:
+		var control := node as Control
+		if control.name == &"CloseButton" or control.theme_type_variation == &"GothicComponentCloseButton":
+			control.z_index = maxi(control.z_index, MODAL_CLOSE_CONTROL_Z_INDEX)
+	for child in node.get_children():
+		_raise_close_controls_recursive(child)
+
+
+## Builds a level-2 section as three independent logical layers: a neutral
+## content root, a selectable decoration root, and its internal fill/frame.
+## The chamfered fill follows the frame at every size instead of inserting a
+## separate rounded rectangle behind it.
+static func add_filled_section(
+	parent: Control,
+	node_name: String,
+	rect: Rect2,
+	frame_variation: StringName = INSET_FRAME_VARIATION,
+) -> Control:
+	var section := Control.new()
+	section.name = node_name
+	section.position = rect.position
+	section.size = rect.size
+	section.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Preserve the semantic theme contract used by existing UI tests/tools even
+	# though the visible style is owned by the decoration child.
+	section.theme_type_variation = frame_variation
+	parent.add_child(section)
+
+	var decoration := Control.new()
+	decoration.name = "%sDecoration" % node_name
+	decoration.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	decoration.set_meta("calibration_layer", "filled_single_ring_decoration")
+	section.add_child(decoration)
+
+	var fill := GothicFrameFillScript.new()
+	fill.name = "%sFill" % node_name
+	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	configure_inset_fill(fill)
+	fill.set_meta("calibration_internal_visual", true)
+	decoration.add_child(fill)
+
+	var frame := Panel.new()
+	frame.name = "%sFrame" % node_name
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.theme_type_variation = frame_variation
+	frame.set_meta("calibration_internal_visual", true)
+	decoration.add_child(frame)
+	return section
+
+
+## Fills an existing level-2 Panel without changing its public type/path. This
+## is used by compact reusable dialogs whose Panel reference is a stable API.
+static func add_inset_fill(frame: Panel, node_name := "InnerFill") -> Control:
+	var fill := GothicFrameFillScript.new()
+	fill.name = node_name
+	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	configure_inset_fill(fill)
+	fill.show_behind_parent = true
+	fill.set_meta("calibration_internal_visual", true)
+	frame.add_child(fill)
+	return fill
+
+
+## Creates the approved v3 one-ring level-2 frame. Corners remain fixed while
+## all four edges stretch; the center is intentionally transparent so the
+## companion GothicFrameFill owns containment and fill.
+static func create_inset_frame_style_v3() -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = COMPONENT_INSET_FRAME_V3
+	style.set_texture_margin(SIDE_LEFT, INSET_FRAME_V3_PATCH.x)
+	style.set_texture_margin(SIDE_TOP, INSET_FRAME_V3_PATCH.y)
+	style.set_texture_margin(SIDE_RIGHT, INSET_FRAME_V3_PATCH.z)
+	style.set_texture_margin(SIDE_BOTTOM, INSET_FRAME_V3_PATCH.w)
+	style.draw_center = false
+	style.content_margin_left = INSET_FRAME_V3_PATCH.x
+	style.content_margin_top = INSET_FRAME_V3_PATCH.y
+	style.content_margin_right = INSET_FRAME_V3_PATCH.z
+	style.content_margin_bottom = INSET_FRAME_V3_PATCH.w
+	return style

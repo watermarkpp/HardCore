@@ -1,6 +1,10 @@
 class_name Mir2SkillFormula
 extends RefCounted
 
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+
 
 static func mpow(rng: RefCounted, power: int, max_power: int) -> int:
 	return power + int(rng.call("pascal_random_exclusive", max_power - power))
@@ -13,7 +17,10 @@ static func get_power(
 	def_power := 0,
 	def_max_power := 0
 ) -> int:
-	var scaled := roundi(float(base_input) / 4.0 * float(clampi(rank, 0, 3) + 1))
+	## Base ranks 0..3 are exact; above 3 the formula's per-rank slope IS the
+	## last-delta linear extension (skills.rank_extension.v1).
+	var safe_rank := SkillRankResolverScript.safe_effective_rank(rank)
+	var scaled := roundi(float(base_input) / 4.0 * float(safe_rank + 1))
 	return scaled + def_power + int(rng.call("pascal_random_exclusive", def_max_power - def_power))
 
 
@@ -25,7 +32,10 @@ static func get_power13(
 	def_max_power := 0,
 	train_rank_max := 3
 ) -> int:
-	var safe_rank := clampi(rank, 0, train_rank_max)
+	## train_rank_max keeps the historical divisor; the rank itself is not
+	## clamped to it because effective ranks above base max extend linearly
+	## with the same last-delta slope.
+	var safe_rank := SkillRankResolverScript.safe_effective_rank(rank)
 	var fixed_third := float(base_input) / 3.0
 	var scalable_two_thirds := float(base_input) - fixed_third
 	return roundi(

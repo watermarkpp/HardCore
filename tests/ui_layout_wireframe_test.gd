@@ -6,7 +6,7 @@ const SAFE_RECT := Rect2(24, 16, 1232, 688)
 
 
 func _ready() -> void:
-	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/brand_intro.tscn", "布局样板不得改变正式入口")
+	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/startup_loading.tscn", "布局样板不得改变正式入口")
 	var source := FileAccess.get_file_as_string("res://tests/ui_layout_wireframe.gd")
 	assert(not "assets/ui/gothic_preview" in source, "第1步布局样板不得提前依赖哥特贴图")
 	for mode in MODES:

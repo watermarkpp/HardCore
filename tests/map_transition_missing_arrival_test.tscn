@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q0b1_arrival"]
+[ext_resource type="Script" path="res://tests/map_transition_missing_arrival_test.gd" id="1"]
+[node name="MapTransitionMissingArrival" type="Node"]
+script = ExtResource("1")

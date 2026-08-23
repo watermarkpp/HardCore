@@ -1,0 +1,112 @@
+{
+  "contractId": "gameplay.pricing.equipment_missing_server_price_candidates.v1",
+  "policyPath": "assets/data/source_priority_policy.json",
+  "policySha256": "935FCBF2E14A4AA8EB8CA1698129E8CA37A067BBCB5B4991BFB5E7197F19147D",
+  "status": "project_candidate_after_configured_server_data_exhausted",
+  "records": [
+    {
+      "name": "天魔神甲",
+      "price": 50000,
+      "kind": "equipment",
+      "category": "盔甲",
+      "source": {
+        "tier": "project_candidate",
+        "distribution": "reference.21cq.classic_176",
+        "originalPath": "https://www.21cq.com/mir/View.aspx?id=140",
+        "evidenceSha256": "C578BFA47EAB9127306C73DD71120FF29015AE1A47E348AFD8921FBFE5473B60",
+        "field": "出售价格",
+        "reviewDate": "2026-08-15"
+      }
+    },
+    {
+      "name": "圣战头盔",
+      "price": 35000,
+      "kind": "equipment",
+      "category": "头盔",
+      "source": {
+        "tier": "project_candidate",
+        "distribution": "reference.21cq.classic_176",
+        "originalPath": "https://www.21cq.com/mir/View.aspx?id=232",
+        "evidenceSha256": "E619C1538433B1B45CD7DD5FB9159A656E429FE0FEFD01D262F64112BD5EA499",
+        "field": "出售价格",
+        "reviewDate": "2026-08-15"
+      }
+    },
+    {
+      "name": "圣战项链",
+      "price": 35000,
+      "kind": "equipment",
+      "category": "项链",
+      "source": {
+        "tier": "project_candidate",
+        "distribution": "reference.21cq.classic_176",
+        "originalPath": "https://www.21cq.com/mir/View.aspx?id=233",
+        "evidenceSha256": "8FC026EA09B9B53E2E115651FDDCEB26555B44094F9C22FDD7374CD65CD7CDDC",
+        "field": "出售价格",
+        "reviewDate": "2026-08-15"
+      }
+    },
+    {
+      "name": "圣战手镯",
+      "price": 35000,
+      "kind": "equipment",
+      "category": "手镯",
+      "source": {
+        "tier": "project_candidate",
+        "distribution": "reference.21cq.classic_176",
+        "originalPath": "https://www.21cq.com/mir/View.aspx?id=234",
+        "evidenceSha256": "3F9892C0C0C7ED8413AFD6DF9052561389C6B41CCD8CD3B5E46C40C59FDC1C7C",
+        "field": "出售价格",
+        "reviewDate": "2026-08-15"
+      }
+    },
+    {
+      "name": "圣战戒指",
+      "price": 35000,
+      "kind": "equipment",
+      "category": "戒指",
+      "source": {
+        "tier": "project_candidate",
+        "distribution": "reference.21cq.classic_176",
+        "originalPath": "https://www.21cq.com/mir/View.aspx?id=235",
+        "evidenceSha256": "528BBC2A419B6F080F813F5DE3AA687EA8ED6E6466077A054696242FA37CFD9E",
+        "field": "出售价格",
+        "reviewDate": "2026-08-15"
+      }
+    }
+  ],
+  "configuredServerDataFallbackEvidence": [
+    {
+      "distribution": "server.crystal.cjlaaa",
+      "tier": "primary",
+      "originalPath": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+      "sha256": "ACE4FA6A70E18DB7F8454350326D611CE6C56826B9F9A4F214797A3F8A5F69D0",
+      "query": "exact serviceName for each candidate record",
+      "status": "missing"
+    },
+    {
+      "distribution": "server.angelk727_full",
+      "tier": "auxiliary_1",
+      "originalPath": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Exports/2_物品数据.csv",
+      "sha256": "2F5746FEB7276B726B9482E742DA30539B9DD7B10E40E90813367D5FBA42CD8A",
+      "query": "exact ItemName for each candidate record",
+      "status": "missing"
+    },
+    {
+      "distribution": "server.crystal.Jev",
+      "tier": "auxiliary_2",
+      "originalPath": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Server.MirDB",
+      "sha256": "37358B0D95EAFE458B060C1DB2EBC0524757FE524FB93125CCB98D9B4A8EF78B",
+      "query": "exact serviceName for each candidate record",
+      "status": "missing"
+    },
+    {
+      "distribution": "server.crystal.Daneo1989",
+      "tier": "auxiliary_3",
+      "originalPath": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Server.MirDB",
+      "sha256": "6781323B7AE5FDBBE0B48DB21B35420F732A6C30CC663AB75F7CA5A6D056EAD5",
+      "query": "exact serviceName for each candidate record",
+      "status": "missing"
+    }
+  ]
+}

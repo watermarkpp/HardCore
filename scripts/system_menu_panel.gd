@@ -2,6 +2,8 @@ class_name SystemMenuPanel
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 signal continue_requested
 signal return_to_character_select_requested
@@ -29,6 +31,7 @@ var settings_back_button: Button
 var current_page := "main"
 var music_enabled := true
 var sfx_enabled := true
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
@@ -39,6 +42,7 @@ func _ready() -> void:
 	_build_background()
 	_build_modal()
 	show_main_page()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
 
 
 func _build_background() -> void:
@@ -57,14 +61,6 @@ func _build_background() -> void:
 
 
 func _build_modal() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.set_anchors_preset(Control.PRESET_CENTER)
-	surface.position = -PANEL_RECT.size * 0.5 + Vector2(18, 24)
-	surface.size = PANEL_RECT.size - Vector2(36, 48)
-	surface.theme_type_variation = "GothicModalSurface"
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(surface)
 	modal = Panel.new()
 	modal.name = "SystemMenuModal"
 	modal.set_anchors_preset(Control.PRESET_CENTER)
@@ -72,8 +68,10 @@ func _build_modal() -> void:
 	modal.size = PANEL_RECT.size
 	modal.theme_type_variation = "GothicModalFrame"
 	add_child(modal)
+	GothicFrameFactoryScript.add_modal_fill(modal, PANEL_RECT.size)
 	_build_main_page()
 	_build_settings_page()
+	GothicFrameFactoryScript.seal_modal_rings(modal)
 
 
 func _build_main_page() -> void:
@@ -97,7 +95,7 @@ func _build_main_page() -> void:
 	status_label.add_theme_color_override("font_color", Color("b9c9a8"))
 	status.add_child(status_label)
 	continue_button = _menu_button(main_page, "ContinueButton", "继续游戏", 198, "system_menu.continue")
-	continue_button.theme_type_variation = "GothicComponentSelectedButton"
+	continue_button.theme_type_variation = "GothicComponentButton"
 	continue_button.pressed.connect(_request_continue)
 	settings_button = _menu_button(main_page, "SettingsButton", "游戏设置", 270, "system_menu.settings")
 	settings_button.pressed.connect(show_settings_page)
@@ -139,7 +137,7 @@ func _build_settings_page() -> void:
 	note.theme_type_variation = "GothicMutedLabel"
 	settings_page.add_child(note)
 	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 430, "system_menu.settings.back")
-	settings_back_button.theme_type_variation = "GothicComponentSelectedButton"
+	settings_back_button.theme_type_variation = "GothicComponentButton"
 	settings_back_button.pressed.connect(show_main_page)
 	var footer := Label.new()
 	footer.name = "SettingsFooter"
@@ -197,14 +195,35 @@ func _menu_button(parent: Control, node_name: String, text_value: String, y: flo
 
 
 func _audio_toggle(parent: Control, node_name: String, label_text: String, y: float, setting_id: String) -> CheckButton:
+	var frame := Button.new()
+	frame.name = node_name.trim_suffix("Toggle") + "Frame"
+	frame.position = Vector2(72, y)
+	frame.size = Vector2(356, 68)
+	frame.theme_type_variation = "GothicComponentButton"
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.focus_mode = Control.FOCUS_NONE
+	frame.set_meta("calibration_layout_revision", 3)
+	parent.add_child(frame)
+	var title := Label.new()
+	title.name = node_name.trim_suffix("Toggle") + "Title"
+	title.text = label_text
+	title.position = Vector2(104, y + 18)
+	title.size = Vector2(118, 32)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", Color("f2d29b"))
+	title.set_meta("calibration_layout_revision", 3)
+	parent.add_child(title)
 	var toggle := CheckButton.new()
 	toggle.name = node_name
-	toggle.text = label_text
-	toggle.position = Vector2(72, y)
-	toggle.size = Vector2(356, 68)
-	toggle.theme_type_variation = "GothicContentToggle"
-	toggle.add_theme_font_size_override("font_size", 18)
+	toggle.text = ""
+	toggle.position = Vector2(332, y + 16)
+	toggle.size = Vector2(52, 36)
+	toggle.theme_type_variation = "GothicSettingsSwitch"
 	toggle.set_meta("setting_id", setting_id)
+	toggle.set_meta("calibration_layout_revision", 3)
 	parent.add_child(toggle)
 	return toggle
 
@@ -212,21 +231,24 @@ func _audio_toggle(parent: Control, node_name: String, label_text: String, y: fl
 func _toggle_status(parent: Control, node_name: String, y: float) -> Label:
 	var status := Label.new()
 	status.name = node_name
-	status.position = Vector2(276, y + 18)
-	status.size = Vector2(116, 32)
+	status.position = Vector2(230, y + 18)
+	status.size = Vector2(88, 32)
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status.set_meta("calibration_layout_revision", 3)
 	parent.add_child(status)
 	return status
 
 
 func open_menu() -> void:
+	_clear_action_feedback()
 	show()
 	show_main_page()
 
 
 func close_menu() -> void:
+	_clear_action_feedback()
 	hide()
 
 
@@ -236,9 +258,12 @@ func show_main_page() -> void:
 		main_page.show()
 	if settings_page != null:
 		settings_page.hide()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
 
 
 func show_settings_page() -> void:
+	_clear_action_feedback()
+	_show_menu_action_result(settings_button, true, "system_menu.settings")
 	current_page = "settings"
 	main_page.hide()
 	settings_page.show()
@@ -280,12 +305,38 @@ func _emit_audio_setting(setting_id: String, enabled: bool) -> void:
 
 
 func _request_continue() -> void:
+	_clear_action_feedback()
+	GothicUIThemeScript.set_button_feedback(continue_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.continue")
 	continue_requested.emit()
 
 
 func _request_character_select() -> void:
+	_clear_action_feedback()
+	GothicUIThemeScript.set_button_feedback(character_select_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.character_select")
 	return_to_character_select_requested.emit()
 
 
 func _request_save_exit() -> void:
+	_clear_action_feedback()
+	GothicUIThemeScript.set_button_feedback(save_exit_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.save_exit")
 	save_and_exit_requested.emit()
+
+
+func _show_menu_action_result(button: Button, success: bool, group: String) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		group,
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_action_feedback() -> void:
+	_action_feedback_serial += 1
+	for button in [continue_button, settings_button, character_select_button, save_exit_button, settings_back_button]:
+		GothicUIThemeScript.clear_button_feedback(button)

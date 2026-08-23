@@ -17,8 +17,10 @@ func _inventory_index(item_name: String) -> int:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
-	var wood_sword: Dictionary = GameData.get_item("木剑")
-	wood_sword["modifiers"] = {
+	PlayerState.learned_skills = {"烈火剑法": 0}
+	PlayerState.add_item("木剑")
+	var weapon_index := _inventory_index("木剑")
+	PlayerState.inventory[weapon_index]["modifiers"] = {
 		"criticalChance": 0.25,
 		"criticalDamageBonus": 0.75,
 		"attackSpeedTier": 2,
@@ -26,15 +28,13 @@ func _run() -> void:
 		"castSpeedPercent": 0.25,
 		"skillLevels": {"all": 1, "烈火剑法": 2},
 	}
-	PlayerState.learned_skills = {"烈火剑法": 0}
-	PlayerState.add_item("木剑")
-	assert(PlayerState.equip_inventory_index(_inventory_index("木剑")).begins_with("已装备"), "扩展词条测试武器穿戴失败")
+	assert(PlayerState.equip_inventory_index(weapon_index).begins_with("已装备"), "扩展词条测试武器穿戴失败")
 	assert(is_equal_approx(float(PlayerState.computed_stats.get("critical_chance", 0.0)), 0.25), "暴击率词条没有聚合")
 	assert(is_equal_approx(float(PlayerState.computed_stats.get("critical_damage_multiplier", 0.0)), 2.25), "暴击倍率词条没有聚合")
 	assert(int(PlayerState.computed_stats.get("attack_speed_tier", 0)) == 2, "物理攻速档位没有聚合")
 	assert(is_equal_approx(float(PlayerState.computed_stats.get("attack_speed_percent", 0.0)), 0.20), "旧百分比攻速兼容字段没有聚合")
 	assert(is_equal_approx(float(PlayerState.computed_stats.get("cast_speed_percent", 0.0)), 0.25), "施法速度词条没有聚合")
-	assert(PlayerState.effective_skill_level("烈火剑法") == 3 and PlayerState.effective_skill_level("攻杀剑术") == 1, "指定/全技能等级词条没有叠加")
+	assert(PlayerState.effective_skill_level("烈火剑法") == 3 and PlayerState.effective_skill_level("攻杀剑术") == 0, "指定/全技能等级词条叠加或未学技能加成错误")
 	assert(EquipmentRulesScript.critical_succeeds(0.25, 0.249) and not EquipmentRulesScript.critical_succeeds(0.25, 0.25), "暴击边界判断错误")
 	assert(EquipmentRulesScript.critical_damage(100, 2.25) == 225, "暴击伤害计算错误")
 
@@ -56,6 +56,7 @@ func _run() -> void:
 	assert(is_equal_approx(float(PlayerState.computed_stats.get("attack_speed_percent", -1.0)), 0.0), "零耐久后旧百分比攻速字段没有撤销")
 	assert(int(player.get("_attack_speed_tier")) == 0 and is_equal_approx(player.attack_cooldown, 0.9), "零耐久后物理攻击间隔没有恢复到900ms")
 	assert(is_equal_approx(player._cast_speed_multiplier, 1.0), "零耐久后施法速度词条没有撤销")
+	assert(PlayerState.effective_skill_level("烈火剑法") == 0, "零耐久装备仍提供技能等级加成")
 
 	print("EQUIPMENT_FUTURE_MODIFIERS_PASS：物理攻速档位、旧百分比隔离、施法速度独立和零耐久撤销均通过")
 	get_tree().quit(0)

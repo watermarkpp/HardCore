@@ -1,6 +1,7 @@
 extends Node
 
 const PreviewScript := preload("res://scripts/equipment_character_preview.gd")
+const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 
 
 func _ready() -> void:
@@ -20,22 +21,98 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	assert(panel._kind_label("skill_book") == "技能书", "技能书类型标签错误")
+	assert(panel._kind_label("scroll") == "卷轴", "卷轴被错误显示为技能书")
+	assert(panel._kind_label("quest_item") == "任务物品", "任务物品类型标签错误")
 	assert(panel.size == Vector2(1220, 660), "人物物品栏没有使用横屏手机安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "人物与背包没有使用公共哥特外框")
 	assert(panel.get_node("AttributePanel").theme_type_variation == "GothicInsetFrame", "人物属性栏没有复用公共哥特内框")
 	assert(panel.get_node("EquipmentPanel").theme_type_variation == "GothicInsetFrame", "人物装备栏没有复用公共哥特内框")
 	assert(panel.get_node("BagPanel").theme_type_variation == "GothicInsetFrame", "综合背包没有复用公共哥特内框")
+	for stable_title_path: String in [
+		"AttributePanel/AttributeTitle",
+		"AttributePanel/ItemDetailTitle",
+		"EquipmentPanel/EquipmentTitle",
+		"BagPanel/BagTitle",
+	]:
+		assert(panel.get_node_or_null(stable_title_path) is Label, "inventory section title must have a stable saved path: %s" % stable_title_path)
 	assert(panel.theme.get_stylebox("normal", "GothicComponentSlotButton") is StyleBoxFlat, "人物与背包插槽没有使用简洁原生方格")
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
 	assert(panel.bag_summary_label.position.y >= 18.0 and panel.bag_summary_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "背包金币与占用格数仍然贴近装饰框上沿")
-	assert(panel.equipment_buttons.size() == 8, "人物装备栏必须显示八个直接装备槽")
-	assert(panel.item_grid.columns == 8 and panel.item_grid.get_child_count() == 100, "综合背包必须使用8列并提供固定100格")
+	assert(panel.equipment_buttons.size() == 10, "人物装备栏必须显示十个直接装备槽")
+	assert((panel.equipment_buttons["圣物"] as Button).get_parent().position == Vector2(10, 44), "圣物槽默认位置必须在左上")
+	assert((panel.equipment_buttons["徽章"] as Button).get_parent().position == Vector2(10, 444), "徽章槽默认位置必须在左戒指下方")
+	assert(not (panel.get_node("BagPanel/InventoryActions") is Container), "背包操作栏必须允许校准器独立调整")
+	var sort_rect := Rect2(panel.auto_sort_button.position, panel.auto_sort_button.size)
+	var discard_rect := Rect2(panel.discard_button.position, panel.discard_button.size)
+	assert(sort_rect.has_area() and discard_rect.has_area(), "整理和丢弃按钮必须保持有效点击区域")
+	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "综合背包必须使用正式列数减2的6列并提供固定100格")
+	assert(panel.get_node_or_null("BagPanel/InventoryGridFrame") == null, "源码额外添加的背包大二级框必须删除")
+	var retired_paths: Array = panel.get_meta("calibration_retired_paths", [])
+	assert("BagPanel/InventoryGridFrame" in retired_paths and "BagPanel/InventoryGridFrame/InventoryGridFrameDecoration" in retired_paths, "旧校准路径必须退休，不能复活重复大框")
+	var first_grid_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(panel.item_grid.get_child_count() == 100 and panel.item_grid.columns == 6, "首次稳定帧必须保留100格与6列")
+	var first_stable_rect := Rect2(panel.item_grid.position, panel.item_grid.size)
+	assert(first_stable_rect.size.y >= first_grid_rect.size.y, "首次打开时物品网格不能出现残缺高度")
+	_assert_six_column_geometry(panel, "首次打开")
+	_assert_dynamic_inventory_geometry(panel, "initial_open")
+	var static_rects_before_use := _inventory_static_rects(panel)
+	var first_grid_paths: Array[String] = []
+	for cell_index in range(100):
+		var cell := panel.item_grid.get_child(cell_index) as Control
+		assert(cell.name == "InventoryCell_%03d" % cell_index, "背包格必须使用基于序号的稳定节点名")
+		first_grid_paths.append(str(cell.get_path()))
+		if cell.has_node("ItemButton"):
+			assert(cell.get_node("ItemButton").name == "ItemButton", "物品按钮语义节点名不稳定")
+		elif cell.has_node("EmptySlotBackground"):
+			assert(cell.get_node("EmptySlotBackground").name == "EmptySlotBackground", "空格背景语义节点名不稳定")
+	panel.refresh()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(panel.item_grid.columns == 6 and panel.item_grid.get_child_count() == 100, "刷新后列数与容量必须保持")
+	assert(Rect2(panel.item_grid.position, panel.item_grid.size).is_equal_approx(first_stable_rect), "首次稳定帧与刷新后网格几何必须一致")
+	_assert_six_column_geometry(panel, "刷新后")
+	for cell_index in range(100):
+		assert(str(panel.item_grid.get_child(cell_index).get_path()) == first_grid_paths[cell_index], "背包重建后格路径必须保持稳定")
+	panel._select_inventory_item(0)
+	var selected_detail_before_durability := panel.detail_label.text
+	PlayerState.equipment_changed.emit()
+	assert(
+		panel.selected_inventory_index == 0
+		and panel.selected_inventory_indices.has(0)
+		and panel.detail_label.text == selected_detail_before_durability,
+		"装备耐久刷新不得清空背包选择或把属性详情恢复成默认提示"
+	)
+	PlayerState.inventory_changed.emit()
+	assert(
+		panel.selected_inventory_index == -1
+		and panel.selected_inventory_indices.is_empty(),
+		"没有索引重映射合同的背包结构变化仍必须清空旧选择"
+	)
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
+	assert(bag_scroll.has_theme_stylebox_override("panel"), "背包物品阵列外框必须由局部样式覆盖移除")
+	var bag_viewport_style := bag_scroll.get_theme_stylebox("panel") as StyleBoxEmpty
+	assert(bag_viewport_style != null, "背包物品阵列外框不得继承全局ScrollContainer细边线")
+	assert(
+		is_equal_approx(bag_viewport_style.content_margin_left, InventoryPanel.BAG_VIEWPORT_CONTENT_INSET.x)
+		and is_equal_approx(bag_viewport_style.content_margin_top, InventoryPanel.BAG_VIEWPORT_CONTENT_INSET.y),
+		"背包阵列整体留白必须由单一viewport内容边距承担"
+	)
+	var first_cell_button := panel.item_grid.get_child(0).get_node("ItemButton") as Button
+	var first_cell_style := first_cell_button.get_theme_stylebox("normal") as StyleBoxFlat
+	assert(first_cell_style != null and first_cell_style.border_width_left > 0, "移除阵列外框不得删除单格物品边框")
+	await get_tree().process_frame
 	var fortieth_cell := panel.item_grid.get_child(39) as Control
 	var forty_first_cell := panel.item_grid.get_child(40) as Control
-	assert(fortieth_cell.position.y + fortieth_cell.size.y <= bag_scroll.size.y, "背包首屏没有完整显示前40格")
-	assert(forty_first_cell.position.y >= bag_scroll.size.y, "第41格错误进入背包首屏")
+	var layout_contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(UI_LAYOUT_CONTRACT))
+	var saved_scroll: Array = layout_contract["profiles"]["inventory"]["nodes"]["BagPanel/InventoryScroll"]["logicalRect"]
+	assert(bag_scroll.position.is_equal_approx(Vector2(float(saved_scroll[0]), float(saved_scroll[1]))) and bag_scroll.size.is_equal_approx(Vector2(float(saved_scroll[2]), float(saved_scroll[3]))), "背包滚动区必须与正式校准合同一致")
+	assert(fortieth_cell.position.y >= bag_scroll.size.y, "六列布局下第40格应位于可滚动首屏之后")
+	assert(panel.get_node("BagPanel/BagPagingHint").text.contains("1–30") and panel.get_node("BagPanel/BagPagingHint").text.contains("31–100"), "六列布局说明文字必须准确反映首屏30格")
+	assert(not Rect2(fortieth_cell.position, fortieth_cell.size).intersects(Rect2(forty_first_cell.position, forty_first_cell.size)), "背包格子不应重叠")
 	assert(bag_scroll.get_v_scroll_bar().visible, "背包后60格没有提供右侧滚动查看")
 	assert(panel.item_grid.get_child(3).has_node("StackCount") and panel.item_grid.get_child(3).get_node("StackCount").text == "2", "可堆叠物品没有在同一格显示数量")
 	assert(panel.character_preview != null, "装备面板缺少人物穿戴预览")
@@ -48,7 +125,32 @@ func _run() -> void:
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")
 	assert(panel.equipment_stats_label is RichTextLabel and panel.equipment_stats_label.scroll_active, "人物属性超长时没有右侧滑块")
 	assert(panel.detail_label.scroll_active, "物品属性超长时没有右侧滑块")
-	assert(panel.equipment_stats_label.size == panel.detail_label.size, "人物属性与物品属性占位尺寸不一致")
+	assert(
+		panel.detail_label.position.is_equal_approx(Vector2(16, 312))
+		and panel.detail_label.size.is_equal_approx(Vector2(218, 204))
+		and int(panel.detail_label.get_meta("calibration_layout_revision", 0)) == InventoryPanel.ITEM_DETAIL_LAYOUT_REVISION,
+		"物品属性文字区必须上收并拒绝旧存档把它压回下方"
+	)
+	var attribute_decoration := panel.get_node("AttributePanel/AttributePanelDecoration") as Control
+	assert(
+		panel.detail_label.position.y + panel.detail_label.size.y
+		<= attribute_decoration.position.y + attribute_decoration.size.y,
+		"物品属性文字区超出了人物属性二级装饰框下边缘"
+	)
+	for saved_path: String in [
+		"AttributePanel/AttributeTitle",
+		"AttributePanel/CharacterStats",
+		"AttributePanel/ItemDetailTitle",
+		"EquipmentPanel/EquipmentTitle",
+		"BagPanel/BagTitle",
+	]:
+		var saved_rect: Array = layout_contract["profiles"]["inventory"]["nodes"][saved_path]["logicalRect"]
+		var saved_control := panel.get_node(saved_path) as Control
+		assert(
+			saved_control.position.is_equal_approx(Vector2(float(saved_rect[0]), float(saved_rect[1])))
+			and saved_control.size.is_equal_approx(Vector2(float(saved_rect[2]), float(saved_rect[3]))),
+			"人物属性与物品详情必须分别服从正式校准合同"
+		)
 	var equipment_panel := panel.get_node("EquipmentPanel") as Control
 	var necklace_button := panel.equipment_buttons["项链"] as Button
 	var armor_button := panel.equipment_buttons["衣服"] as Button
@@ -59,6 +161,13 @@ func _run() -> void:
 	assert((panel.equipment_buttons["武器"] as Button).size.x == (panel.equipment_buttons["武器"] as Button).size.y, "装备格不是严格正方形")
 	var weapon_caption := panel.equipment_buttons["武器"].get_parent().get_node("SlotCaptionPlate") as Control
 	var weapon_button := panel.equipment_buttons["武器"] as Button
+	for slot_name in panel.equipment_slot_labels:
+		var label := panel.equipment_slot_labels[slot_name] as Label
+		var plate := label.get_parent() as Control
+		assert(label.position == Vector2.ZERO and label.size == plate.size, "slot caption must use the exact plate rect")
+		assert(label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "slot caption alignment mismatch")
+		assert(int(label.get_meta("calibration_layout_revision", 0)) == InventoryPanel.EQUIPMENT_SLOT_LAYOUT_REVISION, "stale saved caption geometry must be retired")
+	assert(weapon_button.size == Vector2(68, 68) and weapon_button.get_parent().size == Vector2(72, 84), "equipment slot geometry mismatch")
 	assert(weapon_caption.position.y < weapon_button.position.y + weapon_button.size.y and weapon_caption.position.y + weapon_caption.size.y > weapon_button.position.y + weapon_button.size.y, "装备名称铭牌没有压住对应装备格底边")
 	var future_row := equipment_panel.get_node("FutureEquipmentRow") as Control
 	var current_slots_bottom := 0.0
@@ -75,6 +184,10 @@ func _run() -> void:
 	var attack_before := int(PlayerState.computed_stats.get("attack_max", 0))
 	panel._select_inventory_item(0)
 	assert("匕首" in panel.detail_label.text, "点击背包物品没有显示物品属性")
+	assert("穿戴要求：" in panel.detail_label.text, "装备详情缺少玩家可读的穿戴要求")
+	assert("（" not in panel.detail_label.text and "对比武器" not in panel.detail_label.text, "装备详情仍显示来源括号或无意义的武器对比")
+	for forbidden_source_word: String in ["equipment.attribute", "confidence", "source", "StdItems"]:
+		assert(forbidden_source_word not in panel.detail_label.text, "装备详情泄露程序来源字段：%s" % forbidden_source_word)
 	panel.context_menu.clear()
 	panel._context_actions.clear()
 	panel._add_inventory_context_actions(0)
@@ -115,5 +228,219 @@ func _run() -> void:
 	panel._on_context_action(1)
 	assert(PlayerState.equipment["武器"].is_empty(), "界面卸下武器失败")
 
-	print("INVENTORY_EQUIPMENT_UI_PASS：图标网格、八槽穿戴、属性刷新、人物外观和卸下闭环正常")
+	# --- Direct activation contract: single click selects, double click uses ---
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("太阳水", 2)
+	PlayerState.add_item("匕首")
+	panel.refresh()
+	await get_tree().process_frame
+	var dagger_direct := _inventory_index_of("匕首")
+	panel._select_inventory_item(dagger_direct)
+	var wrong_equipment := PlayerState.equipment.duplicate(true)
+	var wrong_inventory := PlayerState.inventory.duplicate(true)
+	panel._select_equipment_slot("衣服")
+	assert(PlayerState.equipment == wrong_equipment and PlayerState.inventory == wrong_inventory and panel.selected_inventory_index == dagger_direct, "wrong equipment slot must reject without mutation")
+	panel._select_equipment_slot("武器")
+	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首" and not PlayerState.has_item("匕首"), "correct slot click must equip")
+	await get_tree().process_frame
+	_assert_six_column_geometry(panel, "点击匹配装备槽后")
+	PlayerState.unequip_slot("武器")
+	assert(PlayerState.equipment.get("武器", {}).is_empty() and PlayerState.has_item("匕首"), "double-click fixture must restore dagger to inventory")
+	panel.refresh()
+	await get_tree().process_frame
+
+	var sun_index := _inventory_index_of("太阳水")
+	var dagger_index := _inventory_index_of("匕首")
+	assert(sun_index >= 0 and dagger_index >= 0, "双击测试物品缺失")
+	panel._select_inventory_item(sun_index)
+	assert(PlayerState.item_count("太阳水") == 2, "单击不应使用物品")
+	assert(panel.selected_inventory_index == sun_index, "单击应只选择并显示详情")
+	assert("太阳水" in panel.detail_label.text, "单击未显示物品详情")
+	panel._select_inventory_item(dagger_index)
+	assert(PlayerState.equipment.get("武器", {}).is_empty(), "单击装备不应直接装备")
+	await get_tree().process_frame
+
+	var sun_button := panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	assert(sun_button.gui_input.is_connected(Callable(panel, "_inventory_input").bind(sun_index)), "物品按钮未连接背包输入处理器")
+	var double_click := InputEventMouseButton.new()
+	double_click.button_index = MOUSE_BUTTON_LEFT
+	double_click.pressed = true
+	double_click.double_click = true
+	double_click.position = sun_button.size * 0.5
+	panel._inventory_input(double_click, sun_index, sun_button)
+	panel._select_inventory_item(sun_index) # Button.pressed follows gui_input.
+	await get_tree().process_frame
+	assert(PlayerState.item_count("太阳水") == 1, "双击消耗品应使用一次")
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "双击使用后的pressed不得再次切换选择")
+	assert("使用：太阳水" in panel.detail_label.text, "双击使用结果未显示")
+	_assert_six_column_geometry(panel, "使用后")
+
+	sun_index = _inventory_index_of("太阳水")
+	dagger_index = _inventory_index_of("匕首")
+	_assert_dynamic_inventory_geometry(panel, "after_use")
+	_assert_static_rects_equal(panel, static_rects_before_use, "after_use")
+	var dagger_button := panel.item_grid.get_child(dagger_index).get_node("ItemButton") as Button
+	# preferred_slot intentionally stays empty: PlayerState is the authoritative
+	# equipment-slot resolver, so the UI does not hardcode a side slot here.
+	var equip_click := InputEventMouseButton.new()
+	equip_click.button_index = MOUSE_BUTTON_LEFT
+	equip_click.pressed = true
+	equip_click.double_click = true
+	equip_click.position = dagger_button.size * 0.5
+	panel._inventory_input(equip_click, dagger_index, dagger_button)
+	await get_tree().process_frame
+	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) != "匕首", "double-click equipment must not equip")
+	assert(PlayerState.has_item("匕首"), "double-click equipment remains in inventory")
+	_assert_six_column_geometry(panel, "装备双击后")
+
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("太阳水", 2)
+	panel.refresh()
+	await get_tree().process_frame
+	sun_index = _inventory_index_of("太阳水")
+	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	# Godot 4.7 dispatches this emulated mouse double-click before the native
+	# ScreenTouch double_tap for one mobile gesture. Only the native event owns
+	# activation, so the pair must still consume exactly one item.
+	var emulated_double_click := InputEventMouseButton.new()
+	emulated_double_click.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_double_click.button_index = MOUSE_BUTTON_LEFT
+	emulated_double_click.pressed = true
+	emulated_double_click.double_click = true
+	emulated_double_click.position = sun_button.size * 0.5
+	panel._inventory_input(emulated_double_click, sun_index, sun_button)
+	assert(PlayerState.item_count("太阳水") == 2, "触摸模拟鼠标双击不应进入背包激活入口")
+	assert(panel._press_timer.is_stopped(), "触摸模拟鼠标按下不应启动鼠标长按")
+	var touch_tap := InputEventScreenTouch.new()
+	touch_tap.index = 5
+	touch_tap.pressed = true
+	touch_tap.double_tap = true
+	touch_tap.position = sun_button.size * 0.5
+	panel._inventory_input(touch_tap, sun_index, sun_button)
+	await get_tree().process_frame
+	assert(PlayerState.item_count("太阳水") == 1, "模拟鼠标加原生触摸双击应只使用一次")
+	_assert_six_column_geometry(panel, "触摸双击后")
+
+	# --- Production long-press suppressed, menu builder retained ---
+	sun_button = panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
+	panel.context_menu.clear()
+	panel.context_menu.hide()
+	panel._context_actions.clear()
+	panel._press_context = {"source": "inventory", "index": sun_index}
+	panel._press_button = sun_button
+	panel.call("_on_long_press_timer_timeout")
+	assert(not panel.context_menu.visible, "生产长按不应弹出上下文菜单")
+	assert(panel.context_menu.item_count == 0, "生产长按不应构建菜单")
+	panel._add_inventory_context_actions(sun_index)
+	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("action", "") == "use", "长按菜单动作构建逻辑应保留")
+
+	# --- Drag beyond threshold cancels long-press and activation ---
+	var press_down := InputEventScreenTouch.new()
+	press_down.index = 6
+	press_down.pressed = true
+	press_down.position = sun_button.size * 0.5
+	panel._inventory_input(press_down, sun_index, sun_button)
+	var drag_event := InputEventScreenDrag.new()
+	drag_event.index = 6
+	drag_event.position = press_down.position + Vector2(0, 16)
+	panel._inventory_input(drag_event, sun_index, sun_button)
+	assert(panel._press_timer.is_stopped(), "拖动越过阈值应取消长按")
+	var press_up := InputEventScreenTouch.new()
+	press_up.index = 6
+	press_up.pressed = false
+	press_up.position = drag_event.position
+	panel._inventory_input(press_up, sun_index, sun_button)
+	var selected_before_drag_release := panel.selected_inventory_indices.duplicate()
+	panel._select_inventory_item(sun_index) # Button.pressed after dragged release.
+	await get_tree().process_frame
+	assert(PlayerState.item_count("太阳水") == 1, "拖动释放不应使用或装备物品")
+	assert(panel.selected_inventory_indices == selected_before_drag_release, "拖动释放后的pressed不得选择或取消物品")
+	assert(not panel.context_menu.visible, "拖动后不应弹出菜单")
+	_assert_six_column_geometry(panel, "拖动后")
+	print("INVENTORY_EQUIPMENT_UI_PASS：双击激活、单击选择、长按策略与拖动取消均通过")
+	# Mutation fail-closed contract: equip/sort/discard must clear numeric
+	# selections before a rebuilt grid can reuse those indices.
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("匕首")
+	PlayerState.add_item("布衣(男)")
+	panel.refresh()
+	await get_tree().process_frame
+	var selected_for_sort := 0
+	panel.selected_inventory_indices = {selected_for_sort: true}
+	panel.selected_inventory_index = selected_for_sort
+	assert(panel.selected_inventory_index == selected_for_sort, "整理前未建立选择")
+	panel._on_auto_sort_pressed()
+	await get_tree().process_frame
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "整理后保留了陈旧选择")
+	panel.selected_inventory_indices = {0: true, 1: true}
+	panel.selected_inventory_index = 1
+	assert(not panel.selected_inventory_indices.is_empty(), "丢弃前未建立多选")
+	panel._on_discard_pressed()
+	await get_tree().process_frame
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "丢弃后保留了陈旧选择")
+	assert(panel.selected_inventory_index < PlayerState.inventory.size(), "丢弃后选择索引越界")
 	get_tree().quit(0)
+
+
+func _inventory_index_of(item_name: String) -> int:
+	for index in range(PlayerState.inventory.size()):
+		if str(PlayerState.inventory[index].get("name", "")) == item_name:
+			return index
+	return -1
+
+
+func _assert_dynamic_inventory_geometry(panel: InventoryPanel, phase: String) -> void:
+	var grid := panel.item_grid
+	assert(grid.columns == InventoryPanel.BAG_COLUMNS and grid.get_child_count() == InventoryPanel.BAG_CAPACITY, "%s: dynamic inventory capacity/columns changed" % phase)
+	for index in range(InventoryPanel.BAG_VISIBLE_CAPACITY):
+		var cell := grid.get_child(index) as Control
+		assert(cell.name == "InventoryCell_%03d" % index, "%s: dynamic cell name changed index=%d" % [phase, index])
+		var item_button := cell.get_node_or_null("ItemButton") as Button
+		var empty_button := cell.get_node_or_null("EmptySlotBackground") as Button
+		var button := item_button if item_button != null else empty_button
+		assert(button != null, "%s: dynamic cell missing semantic button index=%d" % [phase, index])
+		assert(button.position.is_zero_approx() and button.size.is_equal_approx(InventoryPanel.BAG_CELL_SIZE), "%s: dynamic button received stale profile geometry index=%d rect=%s" % [phase, index, Rect2(button.position, button.size)])
+
+
+func _inventory_static_rects(panel: InventoryPanel) -> Dictionary:
+	var result := {}
+	for path in [
+		"AttributePanel", "AttributePanel/CharacterStats", "AttributePanel/ItemDetail",
+		"EquipmentPanel", "BagPanel", "BagPanel/InventoryScroll", "BagPanel/BagPagingHint",
+		"BagPanel/InventoryActions", "BagPanel/InventoryActions/AutoSortButton",
+		"BagPanel/InventoryActions/DiscardButton",
+	]:
+		var control := panel.get_node(path) as Control
+		result[path] = Rect2(control.position, control.size)
+	return result
+
+
+func _assert_static_rects_equal(panel: InventoryPanel, expected: Dictionary, phase: String) -> void:
+	for path: String in expected.keys():
+		var control := panel.get_node(path) as Control
+		assert(Rect2(control.position, control.size).is_equal_approx(expected[path]), "%s: static rect changed at %s" % [phase, path])
+
+
+func _assert_six_column_geometry(panel: InventoryPanel, phase: String) -> void:
+	var grid := panel.item_grid
+	var scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
+	assert(grid.columns == 6 and grid.get_child_count() == 100, "%s：容量或列数改变" % phase)
+	assert(grid.position.is_equal_approx(InventoryPanel.BAG_VIEWPORT_CONTENT_INSET), "%s：六列阵列整体位置未服从viewport内容边距" % phase)
+	var first := grid.get_child(0) as Control
+	var sixth := grid.get_child(5) as Control
+	var seventh := grid.get_child(6) as Control
+	for index in range(6):
+		assert(is_equal_approx((grid.get_child(index) as Control).position.y, first.position.y), "%s：首行第1至6格必须同y" % phase)
+	assert(seventh.position.x == first.position.x and seventh.position.y > first.position.y, "%s：第7格必须回到首列并换行" % phase)
+	assert(sixth.position.x + sixth.size.x <= grid.size.x + 0.01, "%s：第6列被裁切" % phase)
+	var vertical_bar_width := scroll.get_v_scroll_bar().size.x if scroll.get_v_scroll_bar().visible else 0.0
+	assert(
+		grid.position.x + grid.size.x + vertical_bar_width <= scroll.size.x + 0.01,
+		"%s：六列内容与原生滚动条没有完整落入滚动视口" % phase
+	)

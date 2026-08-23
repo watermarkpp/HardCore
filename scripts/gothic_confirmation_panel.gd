@@ -7,9 +7,11 @@ signal cancelled(request: Dictionary)
 const CONTRACT_ID := "ui.confirmation.dialog.v1"
 const STABLE_ID := "ui.confirmation.dialog"
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 var modal_frame: Panel
-var inner_fill: Panel
+var inner_fill: Control
 var title_label: Label
 var message_label: Label
 var cancel_button: Button
@@ -25,6 +27,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	theme = GothicUIThemeScript.build()
 	_build_interface()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "confirmation_dialog")
 	hide()
 
 
@@ -46,13 +49,7 @@ func _build_interface() -> void:
 	modal_frame.clip_contents = true
 	add_child(modal_frame)
 
-	inner_fill = Panel.new()
-	inner_fill.name = "InnerFill"
-	inner_fill.position = Vector2(20, 20)
-	inner_fill.size = Vector2(520, 264)
-	inner_fill.theme_type_variation = "GothicModalSurface"
-	inner_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	modal_frame.add_child(inner_fill)
+	inner_fill = GothicFrameFactoryScript.add_inset_fill(modal_frame)
 
 	var title_bar := Panel.new()
 	title_bar.name = "TitleBar"
@@ -99,7 +96,9 @@ func _build_interface() -> void:
 	confirm_button.name = "Confirm"
 	confirm_button.position = Vector2(300, 207)
 	confirm_button.size = Vector2(202, 58)
-	confirm_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Confirmation is an action, not a persistent selection.  The owner drives
+	# the transaction/transition feedback explicitly after this dialog emits.
+	confirm_button.theme_type_variation = "GothicComponentButton"
 	confirm_button.add_theme_font_size_override("font_size", 17)
 	confirm_button.set_meta("stable_id", "confirmation.confirm")
 	confirm_button.pressed.connect(_confirm)
@@ -107,6 +106,7 @@ func _build_interface() -> void:
 
 
 func open_confirmation(config: Dictionary) -> void:
+	GothicUIThemeScript.clear_button_feedback(confirm_button)
 	var tone := str(config.get("tone", "normal"))
 	if tone != "danger":
 		tone = "normal"
@@ -148,6 +148,11 @@ func _apply_tone(tone: String) -> void:
 func _confirm() -> void:
 	if not visible:
 		return
+	GothicUIThemeScript.set_button_feedback(
+		confirm_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
+		"confirmation",
+	)
 	var request := current_request.duplicate(true)
 	close_confirmation()
 	confirmed.emit(request)
@@ -156,6 +161,7 @@ func _confirm() -> void:
 func _cancel() -> void:
 	if not visible:
 		return
+	GothicUIThemeScript.clear_button_feedback(confirm_button)
 	var request := current_request.duplicate(true)
 	close_confirmation()
 	cancelled.emit(request)

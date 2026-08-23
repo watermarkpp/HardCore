@@ -12,6 +12,10 @@ func _ready() -> void:
 	assert(manifest.contract_id == SummonVisualRegistryScript.DIVINE_BEAST_CONTRACT_ID)
 	assert(manifest.appearance == 171 and manifest.race == 55 and manifest.actionTable == "MA29")
 	assert(manifest.directionMode == "mir2_north_first" and manifest.blockBase == 350)
+	assert(manifest.attackReleaseFrameIndex == 5 and manifest.attackReleaseMs == 500)
+	assert(manifest.fire.framesPerDirection == 5 and manifest.fire.frameMs == 100)
+	assert(manifest.fire.validatedSourceFrameCount == 40 and manifest.fire.missingFrames.is_empty())
+	assert(FileAccess.file_exists(manifest.fire.path), "神兽喷火图集不存在")
 	var expected_counts := {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 10}
 	for action_name: String in ACTIONS:
 		var action: Dictionary = manifest.actions[action_name]
@@ -26,10 +30,24 @@ func _ready() -> void:
 	assert(cold_profile.direction_mode == "mir2_north_first")
 	for action_name: String in ACTIONS:
 		assert(cold_profile[action_name] is Texture2D, "%s没有正式动作纹理" % action_name)
+	assert(cold_profile.fire is Texture2D and cold_profile.fire_frame_count == 5)
 
 	var owner := PlayerCharacter.new()
 	owner.current_hp = 100
 	owner.facing = Vector2.DOWN
+	var skeleton_profile: Dictionary = SummonVisualRegistryScript.profile("skeleton")
+	assert(skeleton_profile.contract_id == "summon.visual.mutant_skeleton.directional.v1")
+	assert(skeleton_profile.direction_mode == "mir2_north_first")
+	for action_name: String in ACTIONS:
+		assert(skeleton_profile[action_name] is Texture2D, "变异骷髅%s动作资源缺失" % action_name)
+	var skeleton := SummonActor.new()
+	skeleton.setup(owner, "变异骷髅", 30, 3, "taoist.summon_skeleton", 26)
+	add_child(skeleton)
+	await get_tree().process_frame
+	assert(skeleton._sprite != null and skeleton._sprite.name == "MutantSkeletonAnimatedBody")
+	assert(skeleton._animation_resources.contract_id == "summon.visual.mutant_skeleton.directional.v1")
+	assert(skeleton._sprite.scale == Vector2.ONE, "变异骷髅错误缩放了完整怪物图集")
+	assert(skeleton._health_bar_y < -35.0, "变异骷髅血条仍使用错误的固定脚底位置")
 	var beast := SummonActor.new()
 	beast.setup(owner, "神兽", 30, 3, "taoist.summon_divine_beast", 40)
 	add_child(beast)
@@ -38,6 +56,8 @@ func _ready() -> void:
 	assert(beast._animation_resources.contract_id == SummonVisualRegistryScript.DIVINE_BEAST_CONTRACT_ID)
 	assert(beast._sprite.scale == Vector2.ONE, "神兽错误使用单帧缩放贴图")
 	assert(beast._sprite.texture == cold_profile.idle, "神兽初始动作不是正式idle图集")
+	assert(beast._fire_sprite != null and not beast._fire_sprite.visible, "喷火层初始状态错误")
+	assert(beast._health_bar_y < -35.0, "神兽血条仍使用错误的固定脚底位置")
 
 	var frame_size: Vector2i = cold_profile.frame_size
 	for direction_vector: Vector2 in [
@@ -76,6 +96,11 @@ func _ready() -> void:
 	beast._attack_visual_remaining = beast._visual_action_duration("attack")
 	beast._process(0.01)
 	assert(beast._visual_state == "attack", "攻击没有进入attack单次动作")
+	beast._pending_attack_direction = Vector2.RIGHT
+	beast._start_fire_visual()
+	assert(beast._fire_sprite.visible and beast._fire_sprite.texture is Texture2D)
+	beast._process(0.11)
+	assert(beast._fire_sprite.region_rect.position.x == cold_profile.fire_frame_size.x)
 	beast._attack_visual_remaining = 0.0
 	beast.take_damage(1)
 	beast._process(0.01)
@@ -86,5 +111,5 @@ func _ready() -> void:
 	assert(not beast.is_queued_for_deletion(), "死亡首帧尚未播放就被移除")
 
 	owner.free()
-	print("DIVINE_BEAST_ANIMATION_PASS: MA29 idle/walk/attack/hit/death, 8 directions, foot anchor and cold activation")
+	print("DIVINE_BEAST_ANIMATION_PASS: mutant skeleton body plus divine beast body/fire, 8 directions and anchored health bars")
 	get_tree().quit(0)

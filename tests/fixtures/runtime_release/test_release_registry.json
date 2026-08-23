@@ -1,0 +1,76 @@
+{
+  "maps": [
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "e31e8135353befa5509abf4687110da68e800dd0b6db857d8c90641de00366ba",
+      "display_name": "future_test_map",
+      "map_key": "future_test_map",
+      "release_state": "implemented_playable",
+      "runtime_map_id": 990123,
+      "runtime_path": "res://tests/fixtures/runtime_release/future_test_map.runtime.json"
+    },
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "e31e8135353befa5509abf4687110da68e800dd0b6db857d8c90641de00366ba",
+      "display_name": "future_test_map",
+      "map_key": "future_test_map_stale",
+      "release_state": "implemented_playable",
+      "runtime_map_id": 990124,
+      "runtime_path": "res://tests/fixtures/runtime_release/future_test_map_v2.runtime.json"
+    },
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "e31e8135353befa5509abf4687110da68e800dd0b6db857d8c90641de00366ba",
+      "display_name": "invalid_checksum",
+      "map_key": "invalid_checksum",
+      "release_state": "implemented_playable",
+      "runtime_map_id": 990125,
+      "runtime_path": "res://tests/fixtures/runtime_release/invalid_checksum.runtime.json"
+    },
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "35726856edaf95d45c212b32b0f14844139a9b2523c6e41e77726db378ee1f5f",
+      "display_name": "expected_key",
+      "map_key": "expected_key",
+      "release_state": "implemented_playable",
+      "runtime_map_id": 990126,
+      "runtime_path": "res://tests/fixtures/runtime_release/wrong_key.runtime.json"
+    },
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "e31e8135353befa5509abf4687110da68e800dd0b6db857d8c90641de00366ba",
+      "display_name": "missing_file",
+      "map_key": "missing_file",
+      "release_state": "implemented_playable",
+      "runtime_map_id": 990127,
+      "runtime_path": "res://tests/fixtures/runtime_release/does_not_exist.runtime.json"
+    },
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "e31e8135353befa5509abf4687110da68e800dd0b6db857d8c90641de00366ba",
+      "display_name": "future_test_map",
+      "map_key": "future_test_map_staging",
+      "release_state": "implemented_staging",
+      "runtime_map_id": 990128,
+      "runtime_path": "res://tests/fixtures/runtime_release/future_test_map.runtime.json"
+    },
+    {
+      "approval_revision": 1,
+      "approval_source": "test_fixture",
+      "approved_build_sha256": "deadbeef",
+      "display_name": "bich_province",
+      "map_key": "bich_province",
+      "release_state": "implemented_playable",
+      "runtime_map_id": 4,
+      "runtime_path": "res://assets/data/runtime/map_editor/bich_province.runtime.json"
+    }
+  ],
+  "registry_contract_id": "mse.map.runtime.release.v1",
+  "schema_version": 1
+}

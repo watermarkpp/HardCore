@@ -24,6 +24,9 @@ const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
 const FORMAL_LINE_VISUAL_CORE_CONTRACT_ID := (
 	"skills.caster.line_visual.projected_footprint_core.v1"
 )
+const FORMAL_SNAPSHOT_VISUAL_CORE_CONTRACT_ID := (
+	"skills.caster.snapshot_visual.projected_core.v1"
+)
 const DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID := (
 	"skills.visual_geometry.debug_overlay.opt_in.v1"
 )
@@ -39,6 +42,7 @@ var direction := Vector2.DOWN
 var target_node: Node2D
 var visual_loaded := false
 var rejection_reason := ""
+var _skip_legacy_laser_single_active := false
 var _elapsed := 0.0
 var _completion_elapsed := 0.0
 var _sprites: Array[Sprite2D] = []
@@ -62,9 +66,21 @@ var _desired_sprite_cross_axis_extent_px := 0.0
 var _visual_axis_screen_px := Vector2.ZERO
 var _skill_footprint_snapshot: Dictionary = {}
 var _formal_core_polygon_screen_offset_px := PackedVector2Array()
+var _formal_core_polygons_screen_offset_px: Array[PackedVector2Array] = []
 var _formal_core_axis_screen_offset_px := Vector2.ZERO
 var _formal_core_polygon: Polygon2D
+var _formal_core_polygons: Array[Polygon2D] = []
 var _formal_core_glow_layers: Array[Polygon2D] = []
+var _snapshot_shape_type := ""
+var _snapshot_anchor_policy := ""
+var _snapshot_anchor_screen_px := Vector2.ZERO
+var _snapshot_visual_core_policy := ""
+var _snapshot_visual_projection_contract_id := ""
+var _decoration_sprite_transform_policy := ""
+var _snapshot_validation_context: Dictionary = {}
+var _snapshot_validation_policy: StringName = (
+	SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+)
 var debug_skill_visual_geometry := false
 var _debug_geometry_overlay: Node2D
 var _debug_geometry_lines: Array[Line2D] = []
@@ -111,15 +127,90 @@ func setup(
 	var raw_snapshot: Variant = visual_geometry_context.get(
 		"skill_footprint_snapshot", {}
 	)
-	if raw_snapshot is Dictionary and SkillFootprintSnapshotScript.is_valid(
-		raw_snapshot
-	):
+	_snapshot_validation_context = (
+		visual_geometry_context.get("snapshot_validation_context", {})
+		if visual_geometry_context.get(
+			"snapshot_validation_context", {}
+		) is Dictionary
+		else {}
+	)
+	var raw_policy: Variant = visual_geometry_context.get(
+		"snapshot_validation_policy",
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	)
+	_snapshot_validation_policy = (
+		raw_policy
+		if raw_policy is StringName
+		else SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	)
+	if raw_snapshot is Dictionary and _snapshot_ok(raw_snapshot):
 		_skill_footprint_snapshot = raw_snapshot
+	_snapshot_shape_type = str(visual_geometry_context.get(
+		"snapshot_shape_type", ""
+	))
+	_snapshot_anchor_policy = str(visual_geometry_context.get(
+		"snapshot_anchor_policy", ""
+	))
+	_snapshot_anchor_screen_px = visual_geometry_context.get(
+		"snapshot_anchor_screen_px", global_position
+	)
+	_snapshot_visual_core_policy = str(visual_geometry_context.get(
+		"snapshot_visual_core_policy", ""
+	))
+	_snapshot_visual_projection_contract_id = str(
+		visual_geometry_context.get(
+			"snapshot_visual_projection_contract_id", ""
+		)
+	)
+	_decoration_sprite_transform_policy = str(visual_geometry_context.get(
+		"decoration_sprite_transform_policy", ""
+	))
+	var centered_snapshot_anchor := _snapshot_shape_type in [
+		SkillFootprintSnapshotScript.SHAPE_TARGET_FOOTPRINT,
+		SkillFootprintSnapshotScript.SHAPE_CIRCLE,
+		SkillFootprintSnapshotScript.SHAPE_SECTOR_ARC,
+	]
+	var snapshot_polygon_field := (
+		"snapshot_projected_polygons_screen_offset_px"
+		if centered_snapshot_anchor
+		else "snapshot_projected_polygons_local_to_effect_px"
+	)
+	var raw_snapshot_polygons: Variant = visual_geometry_context.get(
+		snapshot_polygon_field, []
+	)
+	if raw_snapshot_polygons is Array:
+		for raw_snapshot_polygon: Variant in raw_snapshot_polygons:
+			if raw_snapshot_polygon is PackedVector2Array:
+				_formal_core_polygons_screen_offset_px.append(
+					(raw_snapshot_polygon as PackedVector2Array).duplicate()
+				)
+	if (
+		centered_snapshot_anchor
+		and not _snapshot_visual_projection_contract_id.is_empty()
+	):
+		# Target/self-centered effects consume the snapshot's exact ground anchor.
+		# Decoration pixels keep their source transform and are never used to infer
+		# this position or the damage extent.
+		global_position = _snapshot_anchor_screen_px
 	var raw_core_polygon: Variant = visual_geometry_context.get(
 		"formal_core_polygon_screen_offset_px", PackedVector2Array()
 	)
 	if raw_core_polygon is PackedVector2Array:
 		_formal_core_polygon_screen_offset_px = raw_core_polygon.duplicate()
+		if (
+			not _formal_core_polygon_screen_offset_px.is_empty()
+			and _formal_core_polygons_screen_offset_px.is_empty()
+		):
+			_formal_core_polygons_screen_offset_px.append(
+				_formal_core_polygon_screen_offset_px.duplicate()
+			)
+	if (
+		_formal_core_polygon_screen_offset_px.is_empty()
+		and not _formal_core_polygons_screen_offset_px.is_empty()
+	):
+		_formal_core_polygon_screen_offset_px = (
+			_formal_core_polygons_screen_offset_px[0].duplicate()
+		)
 	_formal_core_axis_screen_offset_px = visual_geometry_context.get(
 		"formal_core_axis_screen_offset_px", Vector2.ZERO
 	)
@@ -133,7 +224,7 @@ func setup(
 
 func _ready() -> void:
 	add_to_group("zone_content")
-	if skill_id == "wizard.laser" and is_instance_valid(target_node):
+	if skill_id == "wizard.laser" and is_instance_valid(target_node) and not _skip_legacy_laser_single_active:
 		_replace_existing_laser_visual()
 		add_to_group(SINGLE_ACTIVE_LASER_VISUAL_GROUP)
 		set_meta(
@@ -185,7 +276,7 @@ func _ready() -> void:
 		# _process() left one rounded frame that could briefly cover the actor.
 		_sync_actor_attachment_position()
 	_playback_strategy = str(render.get("playback_strategy", "frame_sequence"))
-	_install_formal_line_visual_core()
+	_install_formal_snapshot_visual_core()
 	_install_debug_skill_visual_geometry_overlay()
 	lifetime = maxf(
 		lifetime,
@@ -346,7 +437,8 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 			_desired_sprite_footprint_px,
 			_desired_sprite_axis_extent_px,
 			_visual_axis_screen_px,
-			_desired_sprite_cross_axis_extent_px
+			_desired_sprite_cross_axis_extent_px,
+			{"anchor_policy": "center_sequence_bounds_on_geometry_origin"}
 		):
 			sprite.queue_free()
 			continue
@@ -419,20 +511,123 @@ func formal_core_polygon_screen_offset_px() -> PackedVector2Array:
 	return _formal_core_polygon_screen_offset_px.duplicate()
 
 
+func formal_core_polygons_screen_offset_px() -> Array[PackedVector2Array]:
+	var result: Array[PackedVector2Array] = []
+	for polygon: PackedVector2Array in _formal_core_polygons_screen_offset_px:
+		result.append(polygon.duplicate())
+	return result
+
+
 func formal_core_axis_screen_offset_px() -> Vector2:
 	return _formal_core_axis_screen_offset_px
+
+
+func snapshot_visual_projection_metadata() -> Dictionary:
+	return {
+		"contract_id": _snapshot_visual_projection_contract_id,
+		"snapshot_id": str(_skill_footprint_snapshot.get("snapshot_id", "")),
+		"snapshot_schema_version": int(
+			_skill_footprint_snapshot.get("schema_version", 1)
+		),
+		"snapshot_coordinate_space": str(
+			_skill_footprint_snapshot.get("coordinate_space", "")
+		),
+		"snapshot_runtime_map_id": str(
+			_skill_footprint_snapshot.get("runtime_map_id", "")
+		),
+		"snapshot_projection_origin_ground_gu": (
+			_skill_footprint_snapshot.get(
+				"projection_origin_ground_gu", Vector2.ZERO
+			) as Vector2
+		),
+		"shape_type": _snapshot_shape_type,
+		"anchor_policy": _snapshot_anchor_policy,
+		"anchor_screen_px": _snapshot_anchor_screen_px,
+		"visual_core_policy": _snapshot_visual_core_policy,
+		"projected_polygon_count": (
+			_formal_core_polygons_screen_offset_px.size()
+		),
+		"decoration_sprite_transform_policy": (
+			_decoration_sprite_transform_policy
+		),
+	}
+
+
+func _snapshot_ok(snapshot: Dictionary) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_snapshot_validation_context,
+		_snapshot_validation_policy
+	).get("valid", false))
 
 
 func skill_visual_geometry_debug_metadata() -> Dictionary:
 	return _debug_geometry_metadata.duplicate(true)
 
 
+func _install_formal_snapshot_visual_core() -> void:
+	if not _snapshot_ok(_skill_footprint_snapshot):
+		return
+	set_meta(
+		"snapshot_visual_projection_contract",
+		_snapshot_visual_projection_contract_id
+	)
+	set_meta("snapshot_shape_type", _snapshot_shape_type)
+	set_meta("snapshot_anchor_policy", _snapshot_anchor_policy)
+	set_meta("snapshot_visual_core_policy", _snapshot_visual_core_policy)
+	set_meta(
+		"decoration_sprite_transform_policy",
+		_decoration_sprite_transform_policy
+	)
+	if _snapshot_shape_type == SkillFootprintSnapshotScript.SHAPE_SWEPT_CAPSULE_PATH:
+		# Projectile children consume their capsule snapshots in collision and
+		# diagnostics. A generic world effect must not force a visible capsule.
+		return
+	if skill_id == "wizard.hell_lightning":
+		# Hell Lightning's primary animation already presents the self-area impact.
+		# Keep the exact cell-union snapshot for gameplay and diagnostics without
+		# manufacturing a translucent ground-range polygon in production.
+		return
+	if skill_id in ["wizard.hellfire", "wizard.laser"]:
+		_install_formal_line_visual_core()
+		return
+	if _snapshot_shape_type not in [
+		SkillFootprintSnapshotScript.SHAPE_CELL_UNION,
+		SkillFootprintSnapshotScript.SHAPE_CIRCLE,
+		SkillFootprintSnapshotScript.SHAPE_SECTOR_ARC,
+	]:
+		# Target-footprint effects consume the exact anchor and selected instance;
+		# they do not manufacture a visible area around that target.
+		return
+	var core_color := (
+		Color(0.18, 0.72, 1.0, 0.10)
+		if skill_id.begins_with("wizard.")
+		else Color(0.32, 1.0, 0.52, 0.10)
+	)
+	for polygon_screen_offset_px: PackedVector2Array in (
+		_formal_core_polygons_screen_offset_px
+	):
+		if polygon_screen_offset_px.size() < 3:
+			continue
+		var core_polygon := Polygon2D.new()
+		core_polygon.polygon = polygon_screen_offset_px
+		core_polygon.color = core_color
+		core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		add_child(core_polygon)
+		_formal_core_polygons.append(core_polygon)
+	if not _formal_core_polygons.is_empty():
+		_formal_core_polygon = _formal_core_polygons[0]
+		set_meta(
+			"formal_snapshot_visual_core_contract",
+			FORMAL_SNAPSHOT_VISUAL_CORE_CONTRACT_ID
+		)
+		set_meta("formal_snapshot_polygon_count", _formal_core_polygons.size())
+
+
 func _install_formal_line_visual_core() -> void:
 	if (
 		skill_id not in ["wizard.hellfire", "wizard.laser"]
-		or not SkillFootprintSnapshotScript.is_valid(
-			_skill_footprint_snapshot
-		)
+		or not _snapshot_ok(_skill_footprint_snapshot)
 		or _formal_core_polygon_screen_offset_px.size() != 4
 		or _formal_core_axis_screen_offset_px.length_squared() <= 0.000001
 	):
@@ -443,6 +638,7 @@ func _install_formal_line_visual_core() -> void:
 	_formal_core_polygon.color = palette.outer_fill
 	_formal_core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	add_child(_formal_core_polygon)
+	_formal_core_polygons.append(_formal_core_polygon)
 	# Presentation uses nested fills wholly contained by the authoritative quad.
 	# No edge outline, cross or axis is drawn in the production effect; debug
 	# overlays remain a separate integration concern.
@@ -495,9 +691,7 @@ func _apply_line_decoration_policy(sprite: Sprite2D) -> void:
 func _install_debug_skill_visual_geometry_overlay() -> void:
 	if (
 		not debug_skill_visual_geometry
-		or not SkillFootprintSnapshotScript.is_valid(
-			_skill_footprint_snapshot
-		)
+		or not _snapshot_ok(_skill_footprint_snapshot)
 		or _formal_core_polygon == null
 	):
 		return

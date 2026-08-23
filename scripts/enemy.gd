@@ -12,6 +12,12 @@ const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const EntrapmentBoundaryControllerScript := preload(
+	"res://scripts/entrapment_boundary_controller.gd"
+)
+const RuntimeCombatSpatialIndexScript := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE_GU := 3.0
 const CROWD_GRID_REFRESH_FRAMES := 3
@@ -24,7 +30,9 @@ const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
 const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
-const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
+const POISON_INDICATOR_STYLE := "overhead_green_red_dot_row"
+const POISON_INDICATOR_DOT_RADIUS := 3.0
+const POISON_INDICATOR_DOT_CENTER_OFFSET_X := 5.0
 const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
 const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
@@ -82,8 +90,18 @@ var attack_range_gu := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(38
 var target: Node2D
 var primary_target: PlayerCharacter
 var is_boss := false
+var runtime_map_id: int = -1
+var runtime_ground_gu_to_screen_position_px := Callable()
+var runtime_screen_to_ground_position_px := Callable()
+var combat_spatial_index: RuntimeCombatSpatialIndexScript
+var spatial_actor_runtime_id: int = -1
+## FREEZE-P0.1: fail-closed projection diagnostics.
+var missing_projection_rejection_count := 0
+var projection_rejection_reason := &""
 var poison_time := 0.0
 var poison_damage := 0
+var poison_tick_interval_seconds := 1.0
+var poison_tick_elapsed_seconds := 0.0
 var control_time := 0.0:
 	set(value):
 		if value > 0.0 and control_time <= 0.0:
@@ -143,6 +161,8 @@ var _threat_table := {}
 var _threat_decay_per_second := 4.0
 var _leash_multiplier := 1.5
 var _control_anchor_ground_gu := Vector2.INF
+var _entrapment_controller: EntrapmentBoundaryControllerScript
+var _entrapment_last_end_reason := ""
 var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _area_attack_footprint_snapshot: Dictionary = {}
@@ -155,29 +175,49 @@ var _last_environment_safe_position_px := Vector2.INF
 var actual_ground_motion_gu := Vector2.ZERO
 
 
-func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
-	monster_data = data
-	monster_id = MonsterIdentityScript.monster_id(data)
+func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	var requested_id := MonsterIdentityScript.monster_id(data)
+	var canonical_entry := MonsterIdentityScript.require_catalog_entry(requested_id, "runtime")
+	if canonical_entry.is_empty():
+		monster_data = {"monster_id": requested_id}
+		monster_id = -1
+		set_meta("canonical_rejected", true)
+		return
+	var classification := str(canonical_entry.get("classification", ""))
+	# Keep only canonical fields on the actor payload.  Legacy caller fields
+	# (including combat stats, control flags, names, and aliases) must not leak
+	# into later combat/death consumers.
+	monster_data = {
+		"monster_id": requested_id,
+		"monsterId": requested_id,
+		"canonical_name": str(canonical_entry.get("canonical_name", "")),
+		"classification": classification,
+		"appearance_profile_id": str(canonical_entry.get("appearance_profile_id", "")),
+		"drop_profile_id": str(canonical_entry.get("drop_profile_id", "")),
+	}
+	monster_id = requested_id
 	target = player_target
 	primary_target = player_target
-	is_boss = boss
-	display_name = str(data.get("name", "怪物"))
-	max_hp = maxi(1, int(data.get("hp", 20)))
+	is_boss = classification == "boss"
+	set_meta("caller_boss_ignored", bool(caller_boss) != is_boss)
+	display_name = str(canonical_entry.get("canonical_name", ""))
+	var combat: Dictionary = canonical_entry.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	var runtime_projection: Dictionary = combat.get("runtime_projection", {})
+	max_hp = maxi(1, int(stats.get("hp", 0)))
 	current_hp = max_hp
-	attack_min = maxi(1, int(data.get("attackMin", 1)))
-	attack_max = maxi(attack_min, int(data.get("attackMax", attack_min + 1)))
-	agility = maxi(1, int(data.get("agility", data.get("speedPoint", WarriorCombatMath.BASE_AGILITY))))
-	anti_poison = maxi(0, int(data.get("antiPoison", 0)))
-	level = maxi(1, int(data.get("level", 1)))
+	attack_min = maxi(1, int(stats.get("attack_min", 0)))
+	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
+	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
+	anti_poison = maxi(0, int(runtime_projection.get("anti_poison", 0)))
+	level = maxi(1, int(stats.get("level", 0)))
 	move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(
 		40.0 if is_boss else 58.0
 	)
-	if not is_boss and int(data.get("attackIntervalMs", 0)) > 0:
-		_attack_interval = float(data.get("attackIntervalMs")) / 1000.0
-	behavior_profile = MonsterIdentityScript.behavior_profile(data)
+	behavior_profile = MonsterIdentityScript.behavior_profile(monster_data)
 	_apply_behavior_profile()
 	if is_boss:
-		boss_rule = MonsterIdentityScript.boss_rule(data, GameData.boss_service_rules)
+		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:
@@ -243,6 +283,9 @@ func _apply_boss_rule() -> void:
 
 
 func _ready() -> void:
+	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
+		queue_free()
+		return
 	MonsterVisualScript.configure_actor_y_sort_item(self, "actor_root")
 	add_to_group("enemies")
 	input_pickable = true
@@ -324,8 +367,12 @@ func _resolve_invalid_spawn_overlap() -> void:
 	if offset_ground_gu.length_squared() < GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		var angle := float(posmod(get_instance_id(), 32)) / 32.0 * TAU
 		offset_ground_gu = Vector2.from_angle(angle)
-	global_position = primary_target.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-		offset_ground_gu.normalized() * minimum_distance_gu
+	set_combat_position(
+		primary_target.global_position
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			offset_ground_gu.normalized() * minimum_distance_gu
+		),
+		&"resolve_spawn_overlap"
 	)
 
 
@@ -346,8 +393,10 @@ func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
+	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
+	_update_entrapment_state(delta)
 	_update_pending_attack(delta)
 	if _can_use_background_ai():
 		_background_ai_timer -= delta
@@ -375,8 +424,9 @@ func _physics_process(delta: float) -> void:
 		if _control_anchor_ground_gu == Vector2.INF:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		else:
-			global_position = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-				_control_anchor_ground_gu
+			set_combat_position(
+				_ground_gu_to_screen_position_px(_control_anchor_ground_gu),
+				&"control_anchor"
 			)
 		velocity = Vector2.ZERO
 		queue_redraw()
@@ -537,8 +587,98 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 
-static func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
-	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(screen_position_px)
+func _spatial_index_update() -> void:
+	if (
+		combat_spatial_index == null
+		or not is_instance_valid(combat_spatial_index)
+		or spatial_actor_runtime_id <= 0
+	):
+		return
+	combat_spatial_index.update_actor(
+		spatial_actor_runtime_id,
+		_screen_position_px_to_ground_position_gu(global_position)
+	)
+
+
+func spatial_index_position() -> Vector2:
+	return _screen_position_px_to_ground_position_gu(global_position)
+
+
+## Q2-A.1: the only sanctioned way to force an enemy's world position. The
+## position write and the spatial-index bucket update happen in the same
+## transaction, so a projectile querying later in the same physics frame can
+## never observe a stale bucket for a forced relocation.
+func set_combat_position(
+	position_px: Vector2,
+	reason: StringName = &""
+) -> void:
+	global_position = position_px
+	_spatial_index_update()
+
+
+func try_screen_position_px_to_ground_position_gu(
+	screen_position_px: Vector2
+) -> Dictionary:
+	## FREEZE-P0.1: explicit fail-closed result for the formal position
+	## conversion. Mapped world without a screen_to_ground projection never
+	## falls back to identity.
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return GroundUnitSpace.projection_result(
+				true,
+				&"",
+				ground_position_gu
+			)
+	if runtime_map_id < 0:
+		return GroundUnitSpace.projection_result(
+			true,
+			&"",
+			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+				screen_position_px
+			)
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+	)
+	return GroundUnitSpace.projection_result(
+		false,
+		GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+	)
+
+
+func projection_ready() -> bool:
+	if runtime_map_id < 0:
+		return true
+	return runtime_screen_to_ground_position_px.is_valid()
+
+
+func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	var result := try_screen_position_px_to_ground_position_gu(screen_position_px)
+	if bool(result.get("success", false)):
+		return result.get("value", Vector2.ZERO)
+	return Vector2.INF
+
+
+func _ground_gu_to_screen_position_px(ground_position_gu: Vector2) -> Vector2:
+	if runtime_ground_gu_to_screen_position_px.is_valid():
+		var screen_position_px: Variant = (
+			runtime_ground_gu_to_screen_position_px.call(ground_position_gu)
+		)
+		if screen_position_px is Vector2:
+			return screen_position_px
+	if runtime_map_id < 0:
+		return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			ground_position_gu
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpace.REASON_MISSING_GROUND_TO_SCREEN_PROJECTION
+	)
+	return Vector2.INF
 
 
 static func _ground_delta_gu_between_screen_positions(
@@ -638,9 +778,29 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		global_position,
 	)
 	_physics_move_count += 1
+	if entrapment_active():
+		var before_ground_gu := _screen_position_px_to_ground_position_gu(
+			position_before_move
+		)
+		var candidate_ground_gu := _screen_position_px_to_ground_position_gu(
+			global_position
+		)
+		if (
+			before_ground_gu == Vector2.INF
+			or candidate_ground_gu == Vector2.INF
+			or _entrapment_controller.movement_candidate_blocked(
+				before_ground_gu,
+				candidate_ground_gu,
+				combat_radius_gu
+			)
+		):
+			set_combat_position(position_before_move, &"entrapment_boundary_revert")
+			actual_ground_motion_gu = Vector2.ZERO
+			velocity = Vector2.ZERO
+			return
 	var entered_safe_zone := not _point_inside_safe_zone(position_before_move) and _point_inside_safe_zone(global_position)
 	if entered_safe_zone:
-		global_position = position_before_move
+		set_combat_position(position_before_move, &"safe_zone_revert")
 		actual_ground_motion_gu = Vector2.ZERO
 		velocity = Vector2.ZERO
 		return
@@ -668,7 +828,10 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		global_position,
 		collision_radius_px,
 	):
-		global_position = _last_environment_safe_position_px
+		set_combat_position(
+			_last_environment_safe_position_px,
+			&"environment_revert"
+		)
 		actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
 			position_before_move,
 			global_position,
@@ -752,6 +915,10 @@ func _deal_melee_hit(
 			source_ground_gu,
 			target_ground_gu,
 			0.0,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+			"",
+			-1,
+			_snapshot_coordinate_context(),
 		)
 		snapshot = _decorate_attack_footprint_snapshot(
 			snapshot,
@@ -775,6 +942,8 @@ func _deal_melee_hit(
 			_next_spatial_release_id("release_contact"),
 			source_ground_gu,
 			contact_projection_radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+			_snapshot_coordinate_context(),
 		)
 		snapshot = _decorate_attack_footprint_snapshot(
 			snapshot,
@@ -800,10 +969,69 @@ func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
 
 
+func configure_runtime_map_projection(
+	map_id: int,
+	ground_gu_to_screen_position_px: Callable,
+	screen_position_px_to_ground_gu: Callable = Callable()
+) -> void:
+	runtime_map_id = int(map_id)
+	runtime_ground_gu_to_screen_position_px = (
+		ground_gu_to_screen_position_px
+		if ground_gu_to_screen_position_px is Callable
+		else Callable()
+	)
+	runtime_screen_to_ground_position_px = (
+		screen_position_px_to_ground_gu
+		if screen_position_px_to_ground_gu is Callable
+		else Callable()
+	)
+
+
+func configure_spatial_index(
+	index: RuntimeCombatSpatialIndexScript,
+	actor_runtime_id: int
+) -> void:
+	combat_spatial_index = index
+	spatial_actor_runtime_id = actor_runtime_id
+
+
+func _exit_tree() -> void:
+	clear_entrapment("exit_tree")
+	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
+		combat_spatial_index.unregister(spatial_actor_runtime_id)
+	combat_spatial_index = null
+
+
+func _snapshot_coordinate_context() -> Dictionary:
+	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = (
+			GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+		)
+		return {}
+	var origin_ground_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
+	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
+		runtime_map_id,
+		origin_ground_gu,
+		origin_ground_gu,
+		runtime_ground_gu_to_screen_position_px
+	)
+
+
+func _snapshot_strict_ok(snapshot: Dictionary) -> bool:
+	return bool(SkillFootprintSnapshotScript.validate_for_consumer(
+		snapshot,
+		_snapshot_coordinate_context(),
+		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+	).get("valid", false))
+
+
 func _snapshot_intersects_target(snapshot: Dictionary, hit_target: Node2D) -> bool:
 	return (
 		is_instance_valid(hit_target)
-		and SkillFootprintSnapshotScript.is_valid(snapshot)
+		and _snapshot_strict_ok(snapshot)
 		and SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 			snapshot,
 			_screen_position_px_to_ground_position_gu(hit_target.global_position),
@@ -889,6 +1117,8 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 		_next_spatial_release_id("area_circle"),
 		_screen_position_px_to_ground_position_gu(global_position),
 		range_gu,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		_snapshot_coordinate_context(),
 	)
 	return _decorate_attack_footprint_snapshot(
 		snapshot,
@@ -901,7 +1131,7 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not SkillFootprintSnapshotScript.is_valid(resolved_snapshot):
+	if not _snapshot_strict_ok(resolved_snapshot):
 		resolved_snapshot = _create_area_attack_footprint_snapshot()
 	var candidates: Array[Node] = []
 	if is_instance_valid(primary_target):
@@ -1128,6 +1358,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 
 
 func _begin_death() -> void:
+	clear_entrapment("death")
 	_dying = true
 	velocity = Vector2.ZERO
 	_pending_attack_time = -1.0
@@ -1154,9 +1385,14 @@ func _finish_death_after_animation() -> void:
 		queue_free()
 
 
-func apply_poison(tick_damage: int, seconds: float) -> void:
+func apply_poison(
+	tick_damage: int,
+	seconds: float,
+	interval_seconds := 1.0
+) -> void:
 	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
 	poison_time = maxf(poison_time, seconds)
+	poison_tick_interval_seconds = maxf(0.01, float(interval_seconds))
 	queue_redraw()
 
 
@@ -1173,14 +1409,171 @@ func apply_control(seconds: float) -> void:
 	queue_redraw()
 
 
+func apply_entrapment(
+	effect: Dictionary,
+	boundary_snapshot: Dictionary,
+	caster_actor: Node2D
+) -> Dictionary:
+	var immunity := control_immunity_snapshot()
+	if bool(immunity.get("immune", false)):
+		_entrapment_last_end_reason = "target_control_immune"
+		return {
+			"valid": false,
+			"reason": "target_control_immune",
+			"control_immunity_snapshot": immunity,
+		}
+	var raw_target_ids: Variant = effect.get("target_instance_ids", [])
+	if (
+		not raw_target_ids is Array
+		or not (raw_target_ids as Array).has(get_instance_id())
+	):
+		_entrapment_last_end_reason = "target_instance_not_declared"
+		return {"valid": false, "reason": "target_instance_not_declared"}
+	var next_controller := EntrapmentBoundaryControllerScript.new()
+	var result := next_controller.configure(
+		effect,
+		boundary_snapshot,
+		runtime_map_id,
+		caster_actor,
+		runtime_ground_gu_to_screen_position_px
+	)
+	if not bool(result.get("valid", false)):
+		_entrapment_last_end_reason = str(
+			result.get("reason", "entrapment_controller_rejected")
+		)
+		return result
+	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if (
+		current_ground_gu == Vector2.INF
+		or next_controller.movement_candidate_blocked(
+			current_ground_gu,
+			current_ground_gu,
+			combat_radius_gu
+		)
+	):
+		next_controller.reset("target_not_inside_open_center")
+		_entrapment_last_end_reason = "target_not_inside_open_center"
+		return {"valid": false, "reason": "target_not_inside_open_center"}
+	clear_entrapment("replaced")
+	_entrapment_controller = next_controller
+	_entrapment_last_end_reason = ""
+	return result
+
+
+func clear_entrapment(reason := "cleared") -> void:
+	if _entrapment_controller != null:
+		_entrapment_controller.reset(reason)
+	_entrapment_controller = null
+	_entrapment_last_end_reason = reason
+
+
+func entrapment_active() -> bool:
+	return (
+		_entrapment_controller != null
+		and _entrapment_controller.is_active()
+	)
+
+
+func entrapment_state_snapshot() -> Dictionary:
+	if _entrapment_controller != null:
+		return _entrapment_controller.state_snapshot()
+	return {
+		"contract_id": EntrapmentBoundaryControllerScript.CONTRACT_ID,
+		"active": false,
+		"runtime_map_id": -1,
+		"caster_instance_id": 0,
+		"remaining_seconds": 0.0,
+		"boundary_cell_count": 0,
+		"last_end_reason": _entrapment_last_end_reason,
+	}
+
+
+func accepts_external_attack_from(source_actor: Node) -> bool:
+	return not (
+		entrapment_active()
+		and is_instance_valid(source_actor)
+		and source_actor is SummonActor
+	)
+
+
+func control_immunity_snapshot() -> Dictionary:
+	var reasons: Array[String] = []
+	if is_boss:
+		reasons.append("boss")
+	if _explicit_control_immunity(monster_data):
+		reasons.append("monster_data_explicit")
+	if _explicit_control_immunity(behavior_profile):
+		reasons.append("behavior_profile_explicit")
+	for metadata_key: StringName in [
+		&"control_immune", &"controlImmune", &"immune_to_control", &"immuneToControl"
+	]:
+		if has_meta(metadata_key) and bool(get_meta(metadata_key)):
+			reasons.append("metadata_explicit")
+			break
+	return {
+		"contract_id": "monster.control_immunity.explicit_snapshot.v1",
+		"immune": not reasons.is_empty(),
+		"reasons": reasons,
+		"boss": is_boss,
+		"monster_id": monster_id,
+		"instance_id": get_instance_id(),
+	}
+
+
+static func _explicit_control_immunity(source: Dictionary) -> bool:
+	for key: String in [
+		"control_immune", "controlImmune", "immune_to_control", "immuneToControl"
+	]:
+		if source.has(key) and bool(source.get(key, false)):
+			return true
+	for value: Variant in source.values():
+		if value is Dictionary and _explicit_control_immunity(value):
+			return true
+	return false
+
+
+func _update_entrapment_state(delta: float) -> void:
+	if not entrapment_active():
+		return
+	var caster := _entrapment_controller.caster_actor()
+	var caster_center_ground_gu := Vector2.INF
+	var caster_radius_gu := 0.0
+	if is_instance_valid(caster):
+		caster_center_ground_gu = _screen_position_px_to_ground_position_gu(
+			caster.global_position
+		)
+		caster_radius_gu = _target_combat_radius_gu(caster)
+	var end_reason := _entrapment_controller.advance(
+		delta,
+		runtime_map_id,
+		caster_center_ground_gu,
+		caster_radius_gu
+	)
+	if not end_reason.is_empty():
+		clear_entrapment(end_reason)
+
+
 func apply_charm(seconds: float) -> void:
 	charm_time = maxf(charm_time, seconds)
 	queue_redraw()
 
 
+func canonical_red_poison_active() -> bool:
+	if not has_meta("canonical_red_poison"):
+		return false
+	var poison_data: Variant = get_meta("canonical_red_poison")
+	if not poison_data is Dictionary:
+		return false
+	return Time.get_ticks_msec() < int(
+		(poison_data as Dictionary).get("expires_at_ms", 0)
+	)
+
+
 func _update_status_effects(delta: float) -> void:
 	var had_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
-	var previous_poison_second := int(ceil(poison_time))
+	var poison_active_delta := minf(maxf(0.0, delta), poison_time)
+	if poison_active_delta > 0.0:
+		poison_tick_elapsed_seconds += poison_active_delta
 	poison_time = maxf(0.0, poison_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	charm_time = maxf(0.0, charm_time - delta)
@@ -1189,10 +1582,21 @@ func _update_status_effects(delta: float) -> void:
 		if _boss_rage_time <= 0.0:
 			move_speed_gu_per_sec = _boss_base_move_speed_gu_per_sec
 			_attack_interval = _boss_base_attack_interval
-	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
+	while poison_tick_elapsed_seconds + 0.000001 >= poison_tick_interval_seconds:
+		poison_tick_elapsed_seconds = maxf(
+			0.0,
+			poison_tick_elapsed_seconds - poison_tick_interval_seconds
+		)
 		take_damage(poison_damage)
+	if poison_time <= 0.0:
+		poison_damage = 0
+		poison_tick_interval_seconds = 1.0
+		poison_tick_elapsed_seconds = 0.0
 	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	if had_visible_status != has_visible_status:
+		queue_redraw()
+	if has_meta("canonical_red_poison") and not canonical_red_poison_active():
+		remove_meta("canonical_red_poison")
 		queue_redraw()
 
 
@@ -1360,15 +1764,22 @@ func _draw() -> void:
 	if is_boss and _boss_phase_two:
 		draw_circle(Vector2(0, -5), radius_px + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
 	if poison_time > 0.0:
-		# Poison is an overhead three-diamond badge. It stays readable without
-		# creating a green ground ring that can be mistaken for a portal marker.
-		var poison_anchor := Vector2(-8.0, poison_indicator_anchor_y())
-		for index in range(3):
-			var center := poison_anchor + Vector2(float(index) * 8.0, 0.0 if index == 1 else 2.0)
-			draw_colored_polygon(PackedVector2Array([
-				center + Vector2(0, -3), center + Vector2(3, 0),
-				center + Vector2(0, 3), center + Vector2(-3, 0),
-			]), Color(0.36, 0.92, 0.28, 0.90))
+		# One compact green dot denotes the damage-over-time poison. Keeping it
+		# below the HP bar avoids both the former three-diamond cluster and any
+		# ground-ring/portal ambiguity.
+		draw_circle(
+			poison_indicator_center(),
+			POISON_INDICATOR_DOT_RADIUS,
+			Color(0.36, 0.92, 0.28, 0.90)
+		)
+	if canonical_red_poison_active():
+		# Red poison shares the same row and uses one dot of its own. The fixed
+		# center gap keeps both states distinct without forming a badge stack.
+		draw_circle(
+			red_poison_indicator_center(),
+			POISON_INDICATOR_DOT_RADIUS,
+			Color(0.92, 0.16, 0.12, 0.95)
+		)
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:
@@ -1405,7 +1816,7 @@ func _draw_boss_warning_ground_projection() -> void:
 
 func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
 	var snapshot := _boss_skill_footprint_snapshot
-	if not SkillFootprintSnapshotScript.is_valid(snapshot):
+	if not _snapshot_strict_ok(snapshot):
 		snapshot = _create_boss_skill_footprint_snapshot(
 			special,
 			"monster:%d:preview" % monster_id,
@@ -1436,6 +1847,7 @@ func _create_boss_skill_footprint_snapshot(
 			radius_gu,
 			float(special.get("coneHalfAngleRadians", 0.68)),
 			24,
+			_snapshot_coordinate_context(),
 		)
 		return _decorate_attack_footprint_snapshot(
 			snapshot,
@@ -1449,6 +1861,7 @@ func _create_boss_skill_footprint_snapshot(
 		_screen_position_px_to_ground_position_gu(global_position),
 		radius_gu,
 		48,
+		_snapshot_coordinate_context(),
 	)
 	return _decorate_attack_footprint_snapshot(
 		snapshot,
@@ -1479,7 +1892,35 @@ func _refresh_overhead_health() -> void:
 
 
 func poison_indicator_anchor_y() -> float:
-	return health_bar_anchor_y() - 8.0
+	return health_bar_anchor_y() + MonsterOverheadScript.HEALTH_BAR_HEIGHT + 5.0
+
+
+func red_poison_indicator_anchor_y() -> float:
+	return poison_indicator_anchor_y()
+
+
+func poison_indicator_center() -> Vector2:
+	return Vector2(-POISON_INDICATOR_DOT_CENTER_OFFSET_X, poison_indicator_anchor_y())
+
+
+func red_poison_indicator_center() -> Vector2:
+	return Vector2(POISON_INDICATOR_DOT_CENTER_OFFSET_X, red_poison_indicator_anchor_y())
+
+
+func poison_indicator_rect() -> Rect2:
+	var center := poison_indicator_center()
+	return Rect2(
+		center - Vector2.ONE * POISON_INDICATOR_DOT_RADIUS,
+		Vector2.ONE * POISON_INDICATOR_DOT_RADIUS * 2.0
+	)
+
+
+func red_poison_indicator_rect() -> Rect2:
+	var center := red_poison_indicator_center()
+	return Rect2(
+		center - Vector2.ONE * POISON_INDICATOR_DOT_RADIUS,
+		Vector2.ONE * POISON_INDICATOR_DOT_RADIUS * 2.0
+	)
 
 
 func ground_indicator_center() -> Vector2:
@@ -1546,7 +1987,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false
 			var release_snapshot := _boss_skill_footprint_snapshot
-			if not SkillFootprintSnapshotScript.is_valid(release_snapshot):
+			if not _snapshot_strict_ok(release_snapshot):
 				release_snapshot = _create_boss_skill_footprint_snapshot(
 					special,
 					_next_spatial_release_id("boss_fallback"),
@@ -1605,12 +2046,14 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not SkillFootprintSnapshotScript.is_valid(resolved_snapshot):
+	if not _snapshot_strict_ok(resolved_snapshot):
 		resolved_snapshot = SkillFootprintSnapshotScript.create_circle(
 			_monster_attack_id("boss_circle"),
 			"monster:%d:boss_target_query" % monster_id,
 			_screen_position_px_to_ground_position_gu(global_position),
 			radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+			_snapshot_coordinate_context(),
 		)
 		resolved_snapshot = _decorate_attack_footprint_snapshot(
 			resolved_snapshot,

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "skill_profiles": {
+    "wizard.lightning": {
+      "visual_type": "sky_strike",
+      "visual_profile": {
+        "animation": {
+          "resource": "lightning",
+          "scale_mode": "fixed_source",
+          "width_scale": 0.62,
+          "height_scale": 1.0
+        },
+        "anchor": {
+          "type": "world_target_footpoint",
+          "offset": [0, 0]
+        },
+        "ground_projection": {
+          "enabled": false
+        },
+        "lifecycle": {
+          "warning": 0,
+          "impact": 0,
+          "duration": 0.3
+        }
+      }
+    },
+    "wizard.hell_lightning": {
+      "visual_type": "impact_area",
+      "visual_profile": {
+        "animation": {
+          "scale_mode": "source_pixels",
+          "width_scale": 1.0,
+          "height_scale": 1.0
+        },
+        "anchor": {
+          "type": "origin",
+          "offset": [0, 0]
+        },
+        "ground_projection": {
+          "enabled": false
+        },
+        "lifecycle": {
+          "warning": 0,
+          "impact": 0.3,
+          "duration": 0.3
+        }
+      }
+    },
+    "wizard.laser": {
+      "visual_type": "beam",
+      "enable_beam_visual": true,
+      "decoration_alpha": 1.0,
+      "visual_profile": {
+        "runtime_switch": {
+          "enabled": true,
+          "fallback": "legacy_laser",
+          "legacy_fallback": true
+        },
+        "single_active": {
+          "enabled": false,
+          "scope": "caster_skill",
+          "group": "beam"
+        },
+        "animation": {
+          "scale_mode": "axis_scaled",
+          "width_scale": 1.0,
+          "height_scale": 1.0
+        },
+        "geometry_binding": {
+          "length": "actual_length",
+          "direction": "snapshot_axis",
+          "width": "profile"
+        },
+        "anchor": {
+          "type": "caster_forward"
+        },
+        "lifecycle": {
+          "mode": "continuous"
+        }
+      }
+    },
+    "wizard.hellfire": {
+      "visual_type": "impact_area",
+      "visual_profile": {
+        "anchor": {
+          "type": "origin",
+          "offset": [0, 0]
+        },
+        "ground_projection": {
+          "enabled": true
+        },
+        "lifecycle": {
+          "warning": 0,
+          "impact": 0.5,
+          "duration": 0.6
+        }
+      }
+    }
+  }
+}

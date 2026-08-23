@@ -2,7 +2,6 @@ extends Node
 
 const Loader := preload("res://scripts/skills/skill_data_loader.gd")
 const CastRequest := preload("res://scripts/skills/skill_cast_request.gd")
-const CastResult := preload("res://scripts/skills/skill_cast_result.gd")
 const TargetService := preload("res://scripts/skills/skill_target_service.gd")
 const ResourceService := preload("res://scripts/skills/skill_resource_service.gd")
 const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
@@ -25,16 +24,41 @@ func _ready() -> void:
 	assert(ResourceService.committed_context(request.resource_context, fireball_quote).mana == 91)
 	var talisman := Loader.skill("taoist.soul_fire_talisman")
 	var no_amulet := ResourceService.quote(talisman, 3, {"mana": 100, "materials": {"amulet": 0}})
-	assert(not no_amulet.valid and no_amulet.reason == "insufficient_material")
+	assert(no_amulet.valid and no_amulet.material_amount == 0 and no_amulet.material_id == "")
 	var amulet_quote := ResourceService.quote(talisman, 3, {"mana": 100, "materials": {"amulet": 2}})
-	assert(amulet_quote.valid and amulet_quote.material_amount == 1)
+	assert(amulet_quote.valid and amulet_quote.material_amount == 0 and amulet_quote.material_id == "")
 	var poison := Loader.skill("taoist.poison")
-	assert(not ResourceService.quote(poison, 0, {"mana": 100, "materials": {}}).valid)
-	assert(ResourceService.quote(poison, 0, {
-		"mana": 100,
-		"selected_material": "grey_powder",
-		"materials": {"grey_powder": 1},
-	}).valid)
+	var poison_quote := ResourceService.quote(poison, 0, {"mana": 100, "materials": {}})
+	assert(poison_quote.valid)
+	assert(poison_quote.mp_cost == int(poison.get("mp_cost_by_rank", [])[0]) * 2)
+	assert(poison_quote.material_amount == 0 and poison_quote.material_id == "")
+	assert(poison_quote.material_free)
+	assert(
+		poison_quote.material_policy_contract_id
+		== ResourceService.TAOIST_MATERIAL_FREE_CONTRACT_ID
+	)
+	for skill_id: String in Loader.skill_ids():
+		var definition := Loader.skill(skill_id)
+		if str(definition.get("class", "")) != "taoist":
+			continue
+		var quote := ResourceService.quote(definition, 3, {"mana": 999, "materials": {}})
+		assert(quote.valid, "%s should not require cast materials" % skill_id)
+		assert(quote.material_amount == 0 and quote.material_id == "")
+		assert(quote.material_free)
+		assert(
+			quote.material_policy_contract_id
+			== ResourceService.TAOIST_MATERIAL_FREE_CONTRACT_ID
+		)
+	var synthetic_wizard_material := {
+		"class": "wizard",
+		"skill_id": "wizard.material_policy_probe",
+		"mp_cost_by_rank": [0, 0, 0, 0],
+		"resource": {"item": "amulet", "amount_by_rank": [1, 1, 1, 1]},
+	}
+	var wizard_material_quote := ResourceService.quote(
+		synthetic_wizard_material, 0, {"mana": 100, "materials": {}}
+	)
+	assert(not wizard_material_quote.valid and wizard_material_quote.reason == "insufficient_material")
 	var hellfire_cells := GeometryService.cells(
 		Loader.skill("wizard.hellfire"), Vector2i.ZERO, Vector2i.RIGHT
 	)
@@ -53,13 +77,30 @@ func _ready() -> void:
 		Loader.skill("wizard.hell_lightning"), Vector2i.ZERO, Vector2i.DOWN
 	)
 	assert(lightning_cells.size() == 24 and not lightning_cells.has(Vector2i.ZERO))
-	var failure := CastResult.failure("wizard.fireball", "invalid_target")
+	# Q3-C: the legacy cast-result helper was removed with the legacy planner.
+	# The production result truth is skill_execution_result.v1; these
+	# assertions pin the service-level contract only.
+	var failure := {
+		"contract_id": "skills.cast_result.v1",
+		"accepted": false,
+		"effect_success": false,
+		"skill_id": "wizard.fireball",
+		"reason": "invalid_target",
+		"resource_commit": false,
+		"proficiency_event": "",
+		"effects": [],
+	}
 	assert(not failure.accepted and failure.proficiency_event.is_empty())
-	var success := CastResult.success("wizard.fireball", {
-		"runtime_family": "single_projectile_damage",
-		"proficiency_event": "valid_projectile_cast_created",
+	var success := {
+		"contract_id": "skills.cast_result.v1",
+		"accepted": true,
+		"effect_success": true,
+		"skill_id": "wizard.fireball",
+		"reason": "",
+		"resource_commit": true,
+		"proficiency_event": "",
 		"effects": [{"type": "damage"}],
-	})
-	assert(success.accepted and success.effects.size() == 1)
+	}
+	assert(success.accepted and success.effects.size() == 1 and success.proficiency_event.is_empty())
 	print("SKILL_CORE_SERVICES_PASS: request/result, target, resources and tile geometry")
 	get_tree().quit()

@@ -1,8 +1,11 @@
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const EquipmentCharacterPreviewScript := preload("res://scripts/equipment_character_preview.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 
 signal character_creation_requested(request: Dictionary)
 signal character_launch_requested(request: Dictionary)
@@ -14,6 +17,12 @@ const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
 const FIXED_CHARACTER_GENDER := "男"
 const ROSTER_DRAG_THRESHOLD := 12.0
 const ROSTER_PRESS_SUPPRESSION_MSEC := 220
+const AI_TEAMMATE_AVAILABLE := false
+const LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC := 30000
+const LAUNCH_PRELOAD_IDLE := &"idle"
+const LAUNCH_PRELOAD_REQUESTED := &"requested"
+const LAUNCH_PRELOAD_READY := &"ready"
+const LAUNCH_PRELOAD_FAILED := &"failed"
 const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
 const PROFESSION_PRESENTATION := {
 	"战士": {
@@ -39,11 +48,15 @@ const PROFESSION_PRESENTATION := {
 var list_box: VBoxContainer
 var name_input: LineEdit
 var message_label: Label
+var create_button: Button
 var profession_buttons: Dictionary = {}
 var profile_cards: Dictionary = {}
+var profession_button_group: ButtonGroup
 var profile_scroll: ScrollContainer
 var ai_teammate_toggle: CheckButton
+var _creation_feedback_serial := 0
 var enter_button: Button
+var launch_loading_overlay: Control
 var preview_visual_root: Control
 var preview_name_label: Label
 var preview_detail_label: Label
@@ -65,20 +78,113 @@ var _roster_drag_start_position := Vector2.ZERO
 var _roster_drag_start_scroll := 0
 var _roster_drag_touch_index := -1
 var _roster_suppress_press_until_msec := 0
+var _launch_in_progress := false
+var launch_scene_path := "res://scenes/main.tscn"
+var _launch_scene_preload_path := ""
+var _launch_scene_preload_state: StringName = LAUNCH_PRELOAD_IDLE
+var _launch_scene_preload_resource: PackedScene
+var _launch_scene_preload_request_count := 0
+var _launch_scene_preload_generation := 0
+@export var force_launch_preload_for_test := false
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	theme = GothicUIThemeScript.build()
+	theme = GothicUIThemeScript.build_character_hall()
 	_build_background()
 	_build_content_root()
 	_build_header()
 	_build_roster_panel()
 	_build_preview_panel()
 	_build_creation_panel()
+	_build_launch_loading_overlay()
 	_refresh_profiles()
 	TouchScrollSupportScript.attach_tree(self)
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
+	_restore_character_action_visual_contract()
+	call_deferred("_restore_character_action_visual_contract")
+	# The request itself is deferred until the complete hall has entered the tree.
+	# Main-scene parsing can then overlap the player's stable hall interaction.
+	if not PlayerState.test_mode or force_launch_preload_for_test:
+		call_deferred("_request_launch_scene_preload")
 
+
+func _request_launch_scene_preload() -> void:
+	var requested_path := launch_scene_path
+	if (
+		requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_state in [LAUNCH_PRELOAD_REQUESTED, LAUNCH_PRELOAD_READY]
+	):
+		return
+	_launch_scene_preload_generation += 1
+	var generation := _launch_scene_preload_generation
+	_launch_scene_preload_path = requested_path
+	_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
+	_launch_scene_preload_resource = null
+	if requested_path.is_empty() or not ResourceLoader.exists(requested_path, "PackedScene"):
+		_mark_launch_scene_preload_failed(ERR_FILE_NOT_FOUND, generation, requested_path)
+		return
+	_launch_scene_preload_request_count += 1
+	var request_error := ResourceLoader.load_threaded_request(requested_path, "PackedScene")
+	if request_error != OK:
+		var existing_status := ResourceLoader.load_threaded_get_status(requested_path)
+		if existing_status not in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+			_mark_launch_scene_preload_failed(request_error, generation, requested_path)
+			return
+	_launch_scene_preload_state = LAUNCH_PRELOAD_REQUESTED
+	_monitor_launch_scene_preload.call_deferred(generation, requested_path)
+
+
+func _monitor_launch_scene_preload(generation: int, requested_path: String) -> void:
+	while (
+		is_inside_tree()
+		and generation == _launch_scene_preload_generation
+		and requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_state == LAUNCH_PRELOAD_REQUESTED
+	):
+		var status := ResourceLoader.load_threaded_get_status(requested_path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource := ResourceLoader.load_threaded_get(requested_path)
+			if resource is PackedScene:
+				_launch_scene_preload_resource = resource
+				_launch_scene_preload_state = LAUNCH_PRELOAD_READY
+			else:
+				_mark_launch_scene_preload_failed(ERR_FILE_CORRUPT, generation, requested_path)
+			return
+		if status in [ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE]:
+			_mark_launch_scene_preload_failed(ERR_CANT_OPEN, generation, requested_path)
+			return
+		await get_tree().process_frame
+
+
+func _mark_launch_scene_preload_failed(_error: int, generation: int, requested_path: String) -> void:
+	if generation != _launch_scene_preload_generation or requested_path != _launch_scene_preload_path:
+		return
+	_launch_scene_preload_resource = null
+	_launch_scene_preload_state = LAUNCH_PRELOAD_FAILED
+
+
+func _wait_for_launch_scene_preload() -> PackedScene:
+	_request_launch_scene_preload()
+	var requested_path := launch_scene_path
+	var generation := _launch_scene_preload_generation
+	var deadline_msec := Time.get_ticks_msec() + LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC
+	while (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_REQUESTED
+		and requested_path == _launch_scene_preload_path
+		and generation == _launch_scene_preload_generation
+	):
+		if Time.get_ticks_msec() >= deadline_msec:
+			_mark_launch_scene_preload_failed(ERR_TIMEOUT, generation, requested_path)
+			break
+		await get_tree().process_frame
+	if (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_READY
+		and requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_resource != null
+	):
+		return _launch_scene_preload_resource
+	return null
 
 func _input(event: InputEvent) -> void:
 	if profile_scroll == null or not is_instance_valid(profile_scroll):
@@ -138,7 +244,10 @@ func _finish_roster_drag() -> bool:
 
 
 func _roster_press_is_suppressed() -> bool:
-	return Time.get_ticks_msec() <= _roster_suppress_press_until_msec
+	return (
+		Time.get_ticks_msec() <= _roster_suppress_press_until_msec
+		or TouchScrollSupportScript.is_drag_active(get_tree())
+	)
 
 
 func _build_content_root() -> void:
@@ -231,7 +340,7 @@ func _build_fingerprint_text() -> String:
 
 func _build_roster_panel() -> void:
 	var panel := _section_panel("RosterPanel", Rect2(38, 108, 326, 574))
-	panel.add_child(_section_title("已有角色", 326))
+	panel.add_child(_section_title("RosterTitle", "已有角色", 326))
 	roster_count_label = Label.new()
 	roster_count_label.name = "RosterCount"
 	roster_count_label.position = Vector2(24, 46)
@@ -259,6 +368,7 @@ func _build_roster_panel() -> void:
 	ai_teammate_toggle.position = Vector2(26, 448)
 	ai_teammate_toggle.size = Vector2(274, 48)
 	ai_teammate_toggle.theme_type_variation = "GothicContentToggle"
+	ai_teammate_toggle.disabled = not AI_TEAMMATE_AVAILABLE
 	ai_teammate_toggle.set_meta("stable_id", "character.ai_teammate.enabled")
 	ai_teammate_toggle.toggled.connect(_set_ai_teammate_enabled)
 	panel.add_child(ai_teammate_toggle)
@@ -275,7 +385,7 @@ func _build_roster_panel() -> void:
 
 func _build_preview_panel() -> void:
 	var panel := _section_panel("CharacterPreviewPanel", Rect2(380, 108, 484, 574))
-	panel.add_child(_section_title("人物预览", 484))
+	panel.add_child(_section_title("CharacterPreviewTitle", "人物预览", 484))
 	var stage := Control.new()
 	stage.name = "PreviewStage"
 	stage.position = Vector2.ZERO
@@ -310,7 +420,10 @@ func _build_preview_panel() -> void:
 	enter_button.text = "进入 HardCore"
 	enter_button.position = Vector2(94, 458)
 	enter_button.size = Vector2(296, 62)
-	enter_button.theme_type_variation = "GothicComponentSelectedButton"
+	# Enter is a transition action, not a persistent selection.  The selected
+	# character card owns the persistent selection highlight; this button only
+	# receives an explicit transition cue while the loading surface takes over.
+	enter_button.theme_type_variation = "GothicCharacterLaunchButton"
 	enter_button.add_theme_font_size_override("font_size", 20)
 	enter_button.set_meta("stable_id", "character.launch")
 	enter_button.pressed.connect(_enter_selected_character)
@@ -327,10 +440,18 @@ func _build_preview_panel() -> void:
 	panel.add_child(launch_hint)
 
 
+func _build_launch_loading_overlay() -> void:
+	launch_loading_overlay = LoadingTransitionOverlayScript.new()
+	launch_loading_overlay.name = "CharacterLaunchLoading"
+	launch_loading_overlay.set_meta("stable_id", "character.launch.loading")
+	add_child(launch_loading_overlay)
+
+
 func _build_creation_panel() -> void:
 	var panel := _section_panel("CreationPanel", Rect2(880, 108, 362, 574))
-	panel.add_child(_section_title("创建人物", 362))
+	panel.add_child(_section_title("CreationTitle", "创建人物", 362))
 	var name_caption := Label.new()
+	name_caption.name = "CharacterNameCaption"
 	name_caption.text = "角色名称"
 	name_caption.position = Vector2(26, 56)
 	name_caption.size = Vector2(310, 24)
@@ -346,20 +467,26 @@ func _build_creation_panel() -> void:
 	name_input.text_submitted.connect(func(_text: String) -> void: _create_character())
 	panel.add_child(name_input)
 	var profession_caption := Label.new()
+	profession_caption.name = "ProfessionCaption"
 	profession_caption.text = "选择职业"
 	profession_caption.position = Vector2(26, 158)
 	profession_caption.size = Vector2(310, 24)
 	profession_caption.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(profession_caption)
+	profession_button_group = ButtonGroup.new()
+	profession_button_group.allow_unpress = false
 	for index in range(ProfessionRules.PROFESSIONS.size()):
 		var profession_name: String = ProfessionRules.PROFESSIONS[index]
 		var presentation: Dictionary = PROFESSION_PRESENTATION[profession_name]
 		var button := Button.new()
 		button.name = "%sProfession" % str(presentation.id).capitalize()
+		button.toggle_mode = true
+		button.button_group = profession_button_group
 		button.text = "%s\n%s\n%s" % [presentation.glyph, profession_name, presentation.role]
 		button.position = Vector2(26 + index * 104, 190)
 		button.size = Vector2(98, 132)
-		button.add_theme_font_size_override("font_size", 14)
+		button.add_theme_font_size_override("font_size", 13)
+		button.theme_type_variation = "GothicCharacterProfessionButton"
 		button.set_meta("stable_id", "character.profession.%s" % presentation.id)
 		button.set_meta("profession_id", presentation.id)
 		button.pressed.connect(_select_creation_profession.bind(profession_name))
@@ -375,7 +502,7 @@ func _build_creation_panel() -> void:
 	create_hint.theme_type_variation = "GothicMutedLabel"
 	create_hint.add_theme_font_size_override("font_size", 12)
 	panel.add_child(create_hint)
-	var create_button := Button.new()
+	create_button = Button.new()
 	create_button.name = "CreateCharacter"
 	create_button.text = "创建角色"
 	create_button.position = Vector2(26, 374)
@@ -384,6 +511,7 @@ func _build_creation_panel() -> void:
 	create_button.add_theme_font_size_override("font_size", 18)
 	create_button.set_meta("stable_id", "character.create")
 	create_button.pressed.connect(_create_character)
+	create_button.z_index = 2
 	panel.add_child(create_button)
 	message_label = Label.new()
 	message_label.name = "Message"
@@ -393,11 +521,14 @@ func _build_creation_panel() -> void:
 	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message_label.theme_type_variation = "GothicMutedLabel"
+	message_label.z_index = 1
 	panel.add_child(message_label)
 	_refresh_creation_controls()
 
 
 func _refresh_profiles() -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	for child in list_box.get_children():
 		child.free()
 	profile_cards.clear()
@@ -467,31 +598,28 @@ func _add_profile_card(profile: Dictionary) -> void:
 
 
 func _refresh_selection_state() -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	for profile_id: String in profile_cards:
 		var entry: Dictionary = profile_cards[profile_id]
 		var main_button: Button = entry.main_button
 		var ai_button: Button = entry.ai_button
-		main_button.theme_type_variation = (
-			"GothicComponentSelectedButton"
-			if profile_id == selected_main_profile_id
-			else "GothicComponentButton"
+		var selected := profile_id == selected_main_profile_id
+		GothicUIThemeScript.set_character_selection_feedback(
+			main_button,
+			selected,
+			&"GothicCharacterProfileButton",
+			&"GothicCharacterSelectedProfileButton",
+			"character.profile",
 		)
-		var is_ai := profile_id == selected_ai_profile_id
-		ai_button.disabled = not ai_teammate_enabled or profile_id == selected_main_profile_id
-		ai_button.theme_type_variation = "GothicComponentSelectedButton" if is_ai else "GothicComponentButton"
-		ai_button.text = "AI队友\n已选择" if is_ai else "设为\nAI队友"
-	ai_teammate_toggle.set_pressed_no_signal(ai_teammate_enabled)
-	var ai_profile := _profile_by_id(selected_ai_profile_id)
-	if not ai_teammate_enabled:
-		teammate_status_label.text = "AI 队友：关闭"
-	elif ai_profile.is_empty():
-		teammate_status_label.text = "AI 队友：未选择\n请从其他角色中选择"
-	else:
-		teammate_status_label.text = "AI 队友：%s · Lv.%d %s" % [
-			ai_profile.get("name", "未命名"),
-			int(ai_profile.get("level", 1)),
-			ai_profile.get("profession", "战士"),
-		]
+		ai_button.disabled = true
+		ai_button.theme_type_variation = "GothicCharacterAIStatusButton"
+		ai_button.text = "AI队友\n暂未开放"
+	if create_button != null:
+		create_button.text = "创建角色"
+	ai_teammate_toggle.disabled = true
+	ai_teammate_toggle.set_pressed_no_signal(false)
+	teammate_status_label.text = "AI队友功能暂未开放"
 	enter_button.disabled = selected_main_profile_id.is_empty()
 	enter_button.text = "选择主角色" if enter_button.disabled else "进入 HardCore"
 	_refresh_character_preview()
@@ -564,22 +692,21 @@ func _select_main_profile(profile_id: String) -> void:
 		message_label.text = "角色存档不存在或已损坏"
 		_refresh_profiles()
 		return
+	# The preview already identifies the selected character.  Keep the creation
+	# action's label isolated so a selection message cannot look like button text.
 	message_label.text = "已选择主角色：%s" % PlayerState.character_name
 	_refresh_selection_state()
 
 
 func _select_ai_profile(profile_id: String) -> void:
-	if not _profile_exists(profile_id) or profile_id == selected_main_profile_id:
-		return
-	ai_teammate_enabled = true
-	selected_ai_profile_id = "" if selected_ai_profile_id == profile_id else profile_id
-	message_label.text = ""
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	_refresh_selection_state()
 
 
 func _set_ai_teammate_enabled(enabled: bool) -> void:
-	ai_teammate_enabled = enabled
-	message_label.text = ""
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
 	_refresh_selection_state()
 
 
@@ -594,14 +721,36 @@ func _select_creation_profession(profession_name: String) -> void:
 func _refresh_creation_controls() -> void:
 	for profession_name: String in profession_buttons:
 		var button: Button = profession_buttons[profession_name]
-		button.theme_type_variation = (
-			"GothicComponentSelectedButton"
-			if profession_name == selected_creation_profession
-			else "GothicComponentButton"
+		var selected := profession_name == selected_creation_profession
+		GothicUIThemeScript.set_character_selection_feedback(
+			button,
+			selected,
+			&"GothicCharacterProfessionButton",
+			&"GothicCharacterSelectedProfessionButton",
+			"character.profession",
 		)
+	if create_button != null:
+		create_button.text = "创建角色"
+		create_button.theme_type_variation = "GothicCharacterLaunchButton"
+		create_button.z_index = 2
+	if message_label != null:
+		message_label.z_index = 1
+
+
+func _restore_character_action_visual_contract() -> void:
+	if create_button != null:
+		create_button.theme_type_variation = "GothicCharacterLaunchButton"
+		create_button.text = "创建角色"
+		create_button.z_index = 2
+	if message_label != null:
+		message_label.z_index = 1
 
 
 func _create_character() -> void:
+	if create_button == null:
+		return
+	_creation_feedback_serial += 1
+	GothicUIThemeScript.set_button_feedback(create_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "character.create")
 	last_creation_request = build_creation_request()
 	character_creation_requested.emit(last_creation_request.duplicate(true))
 	var error := PlayerState.create_character(
@@ -612,6 +761,7 @@ func _create_character() -> void:
 	if not error.is_empty():
 		message_label.add_theme_color_override("font_color", Color("d47868"))
 		message_label.text = error
+		_show_creation_result(false)
 		return
 	selected_main_profile_id = PlayerState.active_profile_id
 	selected_ai_profile_id = ""
@@ -619,6 +769,20 @@ func _create_character() -> void:
 	message_label.text = "角色创建成功，请选择是否携带 AI 队友"
 	name_input.clear()
 	_refresh_profiles()
+	_show_creation_result(true)
+
+
+func _show_creation_result(success: bool) -> void:
+	var serial := _creation_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		create_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		"character.create",
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _creation_feedback_serial and is_instance_valid(create_button) and create_button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(create_button)
+	)
 
 
 func build_creation_request() -> Dictionary:
@@ -628,35 +792,73 @@ func build_creation_request() -> Dictionary:
 		"profession_id": ProfessionRules.profession_id(selected_creation_profession),
 		"profession_name": selected_creation_profession,
 		"gender": FIXED_CHARACTER_GENDER,
+		"ai_teammate_enabled": false,
+		"ai_teammate_profile_id": "",
 	}
 
 
 func _enter_selected_character() -> void:
+	if _launch_in_progress:
+		return
 	if selected_main_profile_id.is_empty():
 		message_label.text = "请先选择主角色"
 		return
-	if not PlayerState.select_character(selected_main_profile_id):
-		message_label.text = "角色存档不存在或已损坏"
+	_launch_in_progress = true
+	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
+	# Global button feedback may perform its first texture preparation on this
+	# activation. Present Loading in a completed draw before that work, profile
+	# hydration, or main-scene construction is allowed to begin.
+	# The first resume happens before that frame is drawn; yielding a second
+	# process frame lets the visible overlay complete one full render cycle.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	enter_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		enter_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+		"character.launch",
+	)
+	# The hall already hydrates a profile when it becomes selected. Do not parse
+	# the same save a second time on launch; only hydrate when the authority no
+	# longer matches the requested profile.
+	if (
+		PlayerState.active_profile_id != selected_main_profile_id
+		and not PlayerState.select_character(selected_main_profile_id)
+	):
+		_restore_after_launch_failure("角色存档不存在或已损坏")
 		_refresh_profiles()
 		return
 	last_launch_request = build_launch_request()
 	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
 	character_launch_requested.emit(last_launch_request.duplicate(true))
+	var launch_scene := await _wait_for_launch_scene_preload()
+	if launch_scene == null:
+		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+		return
 	if suppress_scene_change_for_test:
 		return
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	var scene_error := get_tree().change_scene_to_packed(launch_scene)
+	if scene_error != OK:
+		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+
+
+func _restore_after_launch_failure(reason: String) -> void:
+	_launch_in_progress = false
+	launch_loading_overlay.hide()
+	GothicUIThemeScript.clear_button_feedback(enter_button)
+	enter_button.disabled = selected_main_profile_id.is_empty()
+	message_label.text = reason
 
 
 func build_launch_request() -> Dictionary:
-	var teammate_id := selected_ai_profile_id if ai_teammate_enabled else ""
-	if teammate_id == selected_main_profile_id or not _profile_exists(teammate_id):
-		teammate_id = ""
 	return {
 		"contract_id": LAUNCH_CONTRACT_ID,
 		"main_profile_id": selected_main_profile_id,
-		"ai_teammate_enabled": ai_teammate_enabled and not teammate_id.is_empty(),
-		"ai_teammate_profile_id": teammate_id,
-		"ai_control_mode": "companion_ai" if not teammate_id.is_empty() else "disabled",
+		"ai_teammate_enabled": false,
+		"ai_teammate_profile_id": "",
+		"ai_control_mode": "disabled",
 	}
 
 
@@ -675,25 +877,13 @@ func _safe_node_name(value: String) -> String:
 	return value.replace(".", "_").replace("-", "_").replace(" ", "_")
 
 
-func _section_panel(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	content_root.add_child(surface)
-	var panel := Panel.new()
-	panel.name = node_name
-	panel.position = rect.position
-	panel.size = rect.size
-	panel.theme_type_variation = "GothicInsetFrame"
-	content_root.add_child(panel)
-	return panel
+func _section_panel(node_name: String, rect: Rect2) -> Control:
+	return GothicFrameFactoryScript.add_filled_section(content_root, node_name, rect)
 
 
-func _section_title(text_value: String, width: float) -> Label:
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
 	var title := Label.new()
+	title.name = node_name
 	title.text = text_value
 	title.position = Vector2(18, 12)
 	title.size = Vector2(width - 36.0, 30)

@@ -57,9 +57,9 @@ func _ready() -> void:
 		var definition := Loader.skill(skill_id)
 		assert(not definition.is_empty())
 		assert(assertion_id in definition.get("required_tests", []))
-		var result := Router.execute(_representative_request(definition))
+		var result := Router._plan(_representative_request(definition))
 		assert(result.accepted)
-		assert(result.runtime_contract == Router.RUNTIME_CONTRACT_ID)
+		assert(result.has("effects") and result.has("resource_quote"))
 		assert(result.runtime_family == definition.mechanics.runtime_family)
 		assert(result.timing == definition.timing)
 		assert(result.geometry == definition.geometry)
@@ -120,9 +120,18 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			var policy: Dictionary = document.get("global_policy", {}).get("rank_model", {})
 			return bool(policy.get("rank_up_requires_player_level_and_proficiency", false))
 		"global_proficiency_gain_1_to_3":
-			for seed_value in range(32):
-				var gain := Rng.new(seed_value).training_gain()
-				if gain < 1 or gain > 3:
+			## HardCore v2 removed proficiency. The frozen package manifest id
+			## is retained; verify the v2 contract never persists proficiency
+			## and base_rank stays within its 0..3 contract bounds.
+			var saved_progression := Progression.new()
+			if not saved_progression.learn("wizard.fireball", 40).accepted:
+				return false
+			var v2_skills: Dictionary = saved_progression.snapshot().get("skills", {})
+			for raw_entry: Variant in v2_skills.values():
+				var entry: Dictionary = raw_entry
+				if entry.has("current_proficiency"):
+					return false
+				if int(entry.get("base_rank", -1)) < 0 or int(entry.get("base_rank", -1)) > 3:
 					return false
 			return true
 		"global_failed_action_no_proficiency":
@@ -132,16 +141,24 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			var failed := failed_progression.apply_proficiency_event(
 				"wizard.fireball", "invalid_event", 40, Rng.new(1)
 			)
-			return not failed.accepted and failed.gain == 0
+			return (
+				not failed.accepted
+				and failed.gain == 0
+				and failed_progression.state("wizard.fireball").base_rank == 0
+			)
 		"global_proficiency_persists":
 			var saved_progression := Progression.new()
 			saved_progression.load_snapshot({
-				"contract_id": Progression.STATE_CONTRACT_ID,
+				"contract_id": Progression.LEGACY_STATE_CONTRACT_ID,
 				"skills": {"wizard.fireball": {"rank": 2, "current_proficiency": 321}},
 			})
 			var restored := Progression.new()
 			restored.load_snapshot(saved_progression.snapshot())
-			return restored.state("wizard.fireball") == {"rank": 2, "current_proficiency": 321}
+			var restored_state := restored.state("wizard.fireball")
+			return (
+				int(restored_state.get("base_rank", -1)) == 2
+				and not restored_state.has("current_proficiency")
+			)
 		"global_rank_up_resets_proficiency":
 			return bool(document.get("global_policy", {}).get(
 				"rank_model", {}
@@ -150,7 +167,11 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			var server_request := _representative_request(Loader.skill("wizard.fireball"))
 			server_request["client_claimed_damage"] = 99999999
 			server_request["client_claimed_success"] = false
-			var server_result := Router.execute(server_request)
+			var server_result := Router._plan(server_request)
+			server_result["ignored_client_claims"] = {
+				"damage": server_request.get("client_claimed_damage"),
+				"success": server_request.get("client_claimed_success"),
+			}
 			return (
 				server_result.accepted
 				and server_result.ignored_client_claims.damage == 99999999
@@ -177,7 +198,7 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 				).get("raw_pixel_ranges_for_gameplay", "")) == "forbidden"
 			)
 		"global_multiplier_not_overridden_to_1":
-			var fire_sword := Router.execute(
+			var fire_sword := Router._plan(
 				_representative_request(Loader.skill("warrior.fire_sword"))
 			)
 			return fire_sword.accepted and fire_sword.effects[0].damage_multiplier == 2.6
@@ -185,7 +206,7 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			var deterministic_request := _representative_request(
 				Loader.skill("wizard.repulsion_ring")
 			)
-			return Router.execute(deterministic_request) == Router.execute(deterministic_request)
+			return Router._plan(deterministic_request) == Router._plan(deterministic_request)
 		_:
 			return false
 

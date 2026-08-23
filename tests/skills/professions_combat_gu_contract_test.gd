@@ -9,6 +9,8 @@ const Projectile := preload("res://scripts/skill_projectile.gd")
 const GroundEffect := preload("res://scripts/ground_effect.gd")
 const LegacyAdapter := preload("res://scripts/skills/combat_unit_legacy_adapter.gd")
 const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")
+const Request := preload("res://scripts/skills/skill_cast_request.gd")
 
 
 func _ready() -> void:
@@ -269,30 +271,44 @@ func _test_k_formal_runtime_spatial_fields() -> void:
 	for skill_id: String in ProfessionRules.SKILL_CATALOG:
 		if not skill_id.begins_with("wizard.") and not skill_id.begins_with("taoist."):
 			continue
-		var plan := CasterSkillRuntime.resolve(skill_id, {
-			"skill_level": 3,
-			"caster_level": 40,
-			"owner_level": 40,
-			"target_level": 1,
-			"target_max_hp": 1,
-			"target_is_undead": true,
-			"magic_stat_roll": 1,
-			"spiritual_stat_roll": 1,
-			"outer_random": 0,
-			"coin_random": 0,
-			"level_random": 0,
-			"hp_random": 0,
-			"random_0_to_19": 0,
-			"random_0_or_1": 0,
-			"random_0_to_10": 0,
-			"random_0_to_99": 0,
-			"random_0_to_5": 0,
-			"anti_poison_random": 0,
-			"owner_slave_count": 0,
-		})
-		assert(plan.runtime_contract == CasterSkillRuntime.RUNTIME_CONTRACT_ID)
-		for forbidden_field: String in FORBIDDEN_FIELDS:
-			assert(not plan.has(forbidden_field), "%s runtime exposes %s" % [skill_id, forbidden_field])
+		# Q3-C: legacy the legacy resolver was removed; the runtime plan
+		# is produced by the canonical planner baseline.
+		var plan := Router._plan(Request.create(
+			skill_id,
+			3,
+			40,
+			Vector2i.ZERO,
+			Vector2i.RIGHT,
+			{
+				"skill_level": 3,
+				"caster_level": 40,
+				"owner_level": 40,
+				"target_level": 1,
+				"target_max_hp": 1,
+				"target_is_undead": true,
+				"magic_stat_roll": 1,
+				"spiritual_stat_roll": 1,
+				"random_0_to_10": 0,
+				"has_target": true,
+				"target_tile": Vector2i(1, 0),
+			},
+			{"mana": 9999, "materials": {}},
+			1
+		))
+		assert(
+			plan.has("effects") or not bool(plan.get("accepted", false)),
+			"%s accepted plan must carry effects" % skill_id
+		)
+		if bool(plan.get("accepted", false)):
+			assert(
+				plan.has("geometry_cells"),
+				"%s accepted plan must carry geometry cells" % skill_id
+			)
+			for forbidden_field: String in FORBIDDEN_FIELDS:
+				assert(
+					not plan.has(forbidden_field),
+					"%s runtime exposes %s" % [skill_id, forbidden_field]
+				)
 	var player_source := FileAccess.get_file_as_string("res://scripts/player.gd")
 	assert(not player_source.contains("@export var move_speed :="))
 	assert(not player_source.contains("var move_speed :="))

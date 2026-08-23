@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q3a_adapter"]
+[ext_resource type="Script" path="res://tests/caster_runtime_canonical_plan_adapter_test.gd" id="1"]
+[node name="CasterRuntimeCanonicalPlanAdapter" type="Node"]
+script = ExtResource("1")

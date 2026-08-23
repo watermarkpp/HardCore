@@ -143,7 +143,11 @@ func _ready() -> void:
 	passive_proc_effect_sprite.centered = false
 	passive_proc_effect_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	passive_proc_effect_sprite.visible = false
-	passive_proc_effect_sprite.z_index = 1
+	## FREEZE-G0.2-A (FREEZE-B030): keep the passive proc effect on the formal
+	## actor composite plane (z=0). Wall fronts and actors only Y-sort when
+	## their final z_index matches; any child with z > 0 escapes wall/roof
+	## occlusion (equipment_actor_visual_sort_unit_v3).
+	passive_proc_effect_sprite.z_index = 0
 	add_child(passive_proc_effect_sprite)
 	weapon_audio = AudioStreamPlayer2D.new()
 	weapon_audio.name = "WeaponAudio"

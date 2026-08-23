@@ -1,0 +1,4 @@
+﻿[gd_scene load_steps=2 format=3 uid="uid://q0a_case6"]
+[ext_resource type="Script" path="res://tests/runner_fixtures/case6_engine_log_fatal.gd" id="1"]
+[node name="Case6EngineLogFatal" type="Node"]
+script = ExtResource("1")

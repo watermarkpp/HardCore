@@ -38,6 +38,7 @@ func _run() -> void:
 	hud.finish_loading_transition()
 	await get_tree().create_timer(0.45).timeout
 	assert(finished_requests.size() == 1 and finished_requests[0].transition_id == "hud:test:001", "HUD 没有转发Loading结束信号")
+	hud._ensure_death_revival_panel()
 	var death_panel: Control = hud.get("death_revival_panel") as Control
 	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 
@@ -47,7 +48,82 @@ func _run() -> void:
 	var health_orb := chassis.get_node("HealthOrb") as Control
 	var mana_orb := chassis.get_node("ManaOrb") as Control
 	assert(health_orb != null and mana_orb != null)
+	var experience_bar := chassis.get_node("ExperienceBar") as Control
+	assert(experience_bar != null and experience_bar.get_meta("stable_id") == "ui.hud.experience_bar.10_segments.v1")
+	assert(experience_bar.get_meta("segment_count") == 10)
+	assert(experience_bar.size == Vector2(180, 10))
+	assert(absf(experience_bar.get_global_rect().get_center().x - chassis.get_global_rect().get_center().x) <= 0.5)
+	assert(is_equal_approx(chassis.size.y - experience_bar.position.y - experience_bar.size.y, GameHUD.HUD_EXPERIENCE_BOTTOM_GAP))
+	for index in range(1, 5):
+		assert(not experience_bar.get_global_rect().intersects((chassis.get_node("ItemSlot%d" % index) as Control).get_global_rect()))
+	var required_exp := maxi(1, int(PlayerState.experience_to_next_level()))
+	for sample in [0.0, 0.05, 0.10, 0.55, 1.0]:
+		PlayerState.experience = int(round(required_exp * sample))
+		hud.update_experience_bar()
+		var actual_progress := clampf(float(PlayerState.experience) / float(required_exp), 0.0, 1.0)
+		for index in range(10):
+			var segment := experience_bar.get_node("Segment%02d" % (index + 1)) as ColorRect
+			var fill := segment.get_node("Fill") as ColorRect
+			var expected_ratio := clampf(actual_progress * 10.0 - index, 0.0, 1.0)
+			assert(is_equal_approx(float(segment.get_meta("fill_ratio")), expected_ratio))
+			assert(is_equal_approx(fill.size.x, segment.size.x * expected_ratio))
 	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
+	var buff_strip := root.get_node("TaoistDefenseBuffStrip") as Control
+	assert(buff_strip != null)
+	assert(buff_strip.get_meta("stable_id") == GameHUD.TAOIST_BUFF_STRIP_STABLE_ID)
+	assert(buff_strip.get_meta("layout_policy") == "safe_root_above_item_quick_slots.v2")
+	assert(buff_strip.size == GameHUD.TAOIST_BUFF_STRIP_SIZE)
+	var item_bar_global_rect := (chassis.get_node("ItemSlot1") as Control).get_global_rect()
+	for index in range(2, 5):
+		item_bar_global_rect = item_bar_global_rect.merge(
+			(chassis.get_node("ItemSlot%d" % index) as Control).get_global_rect()
+		)
+	assert(is_equal_approx(
+		buff_strip.get_global_rect().end.y,
+		item_bar_global_rect.position.y - GameHUD.TAOIST_BUFF_STRIP_ITEM_BAR_GAP
+	))
+	assert(is_equal_approx(
+		buff_strip.get_global_rect().get_center().x,
+		item_bar_global_rect.get_center().x
+	))
+	assert(buff_strip.get_index() > chassis.get_index())
+	var ac_buff_icon := buff_strip.get_node("TaoistACBuffIcon") as TextureRect
+	var mac_buff_icon := buff_strip.get_node("TaoistMACBuffIcon") as TextureRect
+	assert(ac_buff_icon != null and mac_buff_icon != null)
+	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
+	assert(ac_buff_icon.size == Vector2(26, 26) and mac_buff_icon.size == Vector2(26, 26))
+	assert(ac_buff_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
+	assert(mac_buff_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
+	assert(ac_buff_icon.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
+	assert(mac_buff_icon.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
+	assert(ac_buff_icon.get_meta("stable_id") == "hud.taoist_buff.ac")
+	assert(mac_buff_icon.get_meta("stable_id") == "hud.taoist_buff.mac")
+	assert(ac_buff_icon.texture.resource_path.ends_with("/defense.png"))
+	assert(mac_buff_icon.texture.resource_path.ends_with("/magic_defense.png"))
+	assert(not ac_buff_icon.get_rect().intersects(mac_buff_icon.get_rect()))
+	assert(not buff_strip.get_global_rect().intersects(item_bar_global_rect))
+	hud.update_taoist_buff_hints([], {
+		"ac_bonus": 5,
+		"ac_remaining_seconds": 7.2,
+		"mac_bonus": 4,
+		"mac_remaining_seconds": 3.1,
+	})
+	assert(ac_buff_icon.visible and mac_buff_icon.visible)
+	assert((ac_buff_icon.get_node("Seconds") as Label).text == "8")
+	assert((mac_buff_icon.get_node("Seconds") as Label).text == "4")
+	assert(not hud.taoist_buff_hint_label.visible, "AC/MAC must not remain in the text hint")
+	hud.update_taoist_buff_hints([], {
+		"ac_bonus": 5,
+		"ac_remaining_seconds": 0.0,
+		"mac_bonus": 4,
+		"mac_remaining_seconds": 2.0,
+	})
+	assert(not ac_buff_icon.visible and mac_buff_icon.visible)
+	hud.update_taoist_buff_hints([], {})
+	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
+	hud.update_taoist_buff_hints(["隐身 2s"])
+	assert(hud.taoist_buff_hint_label.visible)
+	assert(not ac_buff_icon.visible and not mac_buff_icon.visible)
 	assert(health_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2" and mana_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2")
 	assert(is_equal_approx(float(health_orb.get_meta("liquid_radius_ratio")), 0.49), "血球没有扩大到金属内孔")
 	assert(is_equal_approx(float(mana_orb.get_meta("liquid_radius_ratio")), 0.49), "蓝球没有扩大到金属内孔")
@@ -179,7 +255,7 @@ func _run() -> void:
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
 	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 58.0), "摇杆触控区和缩小后的可视半径不匹配")
 	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有向安全区内部移动")
-	assert(hud.warrior_state_label.offset_top == -250 and hud.warrior_state_label.offset_bottom == -222, "战士状态行没有下移到清理后的底盘上方")
+	assert(hud.warrior_state_label.get_meta("layout_anchor", "") == "chassis_source_center_peak.v1", "战士状态行没有使用底盘中央尖顶锚点")
 	assert((root.get_node("InventoryButton") as Control).position.y > (root.get_node("MapButton") as Control).position.y)
 	assert((root.get_node("SkillBookButton") as Control).position.y > (root.get_node("MenuButton") as Control).position.y)
 	assert((root.get_node("SwitchTargetButton") as Control).position.x > (root.get_node("InteractButton") as Control).position.x)
@@ -252,6 +328,230 @@ func _run() -> void:
 	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")
+	# --- Item quick slots: mirror, signals, candidates and interactions ---
+	assert(hud.has_signal("item_quick_slot_assignment_requested"), "HUD 缺少快捷物品 assignment 信号")
+	assert(hud.has_signal("item_quick_slot_use_requested"), "HUD 缺少快捷物品 use 信号")
+	assert(hud.has_method("set_item_quick_slots"), "HUD 缺少快捷物品镜像注入口")
+	assert(hud.item_quick_slots.size() == 4 and hud.item_quick_slots == ["", "", "", ""], "快捷物品镜像应初始化为四项空字符串")
+	assert(hud.item_quick_slot_icons.size() == 4 and hud.item_quick_slot_count_labels.size() == 4, "四槽图标与数量层应存在")
+	for slot_index in range(4):
+		var item_slot_button := hud.hud_item_buttons[slot_index] as Button
+		assert(item_slot_button.size == Vector2(72, 72), "快捷物品槽几何被改动")
+		assert(item_slot_button.get_node_or_null("ItemQuickSlotIcon") != null, "快捷物品槽缺少图标层")
+		assert(item_slot_button.get_node_or_null("ItemQuickSlotCount") != null, "快捷物品槽缺少数量层")
+		assert(item_slot_button.get_meta("stable_id") == "hud.item_slot.%d" % (slot_index + 1), "快捷物品槽 stable id 被改动")
+
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("太阳水", 2)
+	PlayerState.add_item("强效太阳水", 1)
+	PlayerState.add_item("修复油", 1)
+	PlayerState.add_item("基本剑术", 1)
+	PlayerState.add_item("匕首", 1)
+	PlayerState.add_item("布衣(女)", 1)
+	await get_tree().process_frame
+	var candidates: Array = hud.call("_item_quick_slot_candidates")
+	assert(candidates.size() == 4, "快捷候选应过滤装备并稳定去重，实际 %d" % candidates.size())
+	var candidate_names: Array[String] = []
+	for candidate: Variant in candidates:
+		candidate_names.append(str(candidate.get("item_name", "")))
+	assert("太阳水" in candidate_names and "强效太阳水" in candidate_names and "修复油" in candidate_names and "基本剑术" in candidate_names, "可用候选缺失")
+	assert(not ("匕首" in candidate_names) and not ("布衣(女)" in candidate_names), "装备不应进入快捷候选")
+	assert(int(candidates[0].get("count", 0)) == 2, "同名物品数量应汇总")
+	assert(not hud.call("_is_quick_slot_candidate", {"kind": "quest", "usable": true}), "任务材料不应作为快捷候选")
+	assert(not hud.call("_is_quick_slot_candidate", {"kind": "material", "usable": true}), "材料不应作为快捷候选")
+	assert(not hud.call("_is_quick_slot_candidate", {"kind": "consumable", "usable": false}), "usable=false 不应作为快捷候选")
+	assert(hud.call("_is_quick_slot_candidate", {"kind": "scroll", "usable": true}), "scroll 应作为快捷候选")
+
+	var assignment_signals: Array = []
+	var use_signals: Array = []
+	hud.item_quick_slot_assignment_requested.connect(func(slot_index: int, item_name: String) -> void: assignment_signals.append([slot_index, item_name]))
+	hud.item_quick_slot_use_requested.connect(func(slot_index: int, item_name: String) -> void: use_signals.append([slot_index, item_name]))
+
+	hud._assign_item_quick_slot(0, "太阳水")
+	assert(hud.item_quick_slots[0] == "太阳水", "选择后本地镜像未更新")
+	assert(assignment_signals == [[0, "太阳水"]], "assignment 信号参数应为 slot_index/item_name")
+	var bound_button := hud.hud_item_buttons[0] as Button
+	var bound_icon := hud.item_quick_slot_icons[0] as TextureRect
+	var bound_count := hud.item_quick_slot_count_labels[0] as Label
+	assert(bound_button.text.is_empty(), "绑定快捷物品后槽号文字应清空")
+	assert(bound_icon.texture != null and bound_icon.size == bound_icon.texture.get_size(), "主槽图标应保持 inventoryIcon 原生尺寸")
+	assert(bound_icon.size == Vector2(20, 27), "太阳水主槽图标应保持 20x27 原生像素")
+	assert(bound_icon.position + bound_icon.size * 0.5 == bound_button.size * 0.5, "主槽图标未在 72x72 框内居中")
+	assert(not Rect2(bound_icon.position, bound_icon.size).intersects(Rect2(bound_count.position, bound_count.size)), "主槽数量角标与太阳水图标相交")
+	hud.set_item_quick_slots(["", "", "", ""])
+	assert(bound_button.text == "1", "清空绑定后应恢复空槽号")
+	hud.set_item_quick_slots(["太阳水", "", "", ""])
+	assert(bound_button.text.is_empty(), "恢复绑定后槽号文字应再次清空")
+
+	var slot_center := hud.hud_item_buttons[0].size * 0.5
+	hud._begin_item_slot_press(0, slot_center, -1)
+	hud._finish_item_slot_press(0, slot_center)
+	assert(use_signals == [[0, "太阳水"]], "单击已绑定槽应发出 use 请求")
+	assert(hud.item_quick_slots[0] == "太阳水", "use 不应清除绑定")
+
+	hud._begin_item_slot_press(1, slot_center, -1)
+	hud._finish_item_slot_press(1, slot_center)
+	assert(use_signals.size() == 1, "空槽单击不应发出 use")
+	assert("快捷物品 2 为空" in hud.loot_label.text, "空槽单击应给出既有风格提示")
+
+	var before_menu_use_count := use_signals.size()
+	hud._begin_item_slot_press(2, slot_center, 7)
+	await get_tree().create_timer(0.55).timeout
+	await get_tree().process_frame
+	assert(hud.item_quick_slot_menu.visible, "长按应弹出快捷物品选择菜单")
+	assert(hud.item_quick_slot_candidate_buttons.size() == 4, "可视选择器应列出全部四个候选")
+	var candidate_screen_ys: Array[float] = []
+	for candidate_index in range(hud.item_quick_slot_candidate_buttons.size()):
+		var candidate_button := hud.item_quick_slot_candidate_buttons[candidate_index] as Button
+		var candidate_icon := candidate_button.get_node("InventoryIcon") as TextureRect
+		var candidate_count := candidate_button.get_node("Count") as Label
+		assert(candidate_button.size == Vector2(56, 64), "候选卡应为 56x64")
+		assert(candidate_icon.visible and candidate_icon.texture != null, "候选卡缺少 inventoryIcon")
+		assert(candidate_icon.size == candidate_icon.texture.get_size(), "候选卡图标未保持原生尺寸")
+		assert(int(candidate_count.text) >= 1, "候选卡数量应包含 1")
+		assert(str(candidate_button.get_meta("item_name")) in candidate_button.tooltip_text and "×" in candidate_button.tooltip_text, "候选 tooltip 应带物品名和数量")
+		assert(str(candidate_button.get_meta("item_name")) in candidate_button.accessibility_name and "数量" in candidate_button.accessibility_name, "候选可访问文本应带物品名和数量")
+		candidate_screen_ys.append(candidate_button.get_screen_position().y)
+	assert(candidate_screen_ys[0] == candidate_screen_ys.max(), "原候选数组第 1 项应最靠近槽位")
+	var sorted_candidate_ys := candidate_screen_ys.duplicate()
+	sorted_candidate_ys.sort()
+	for candidate_index in range(1, sorted_candidate_ys.size()):
+		assert(is_equal_approx(sorted_candidate_ys[candidate_index] - sorted_candidate_ys[candidate_index - 1], 72.0), "候选卡间隔应一致为 8px")
+	var held_button := hud.hud_item_buttons[2] as Button
+	var popup_rect := Rect2(Vector2(hud.item_quick_slot_menu.position), Vector2(hud.item_quick_slot_menu.size))
+	var held_rect := Rect2(held_button.get_screen_position(), held_button.size)
+	var safe_rect := Rect2(root.get_screen_position(), root.size)
+	assert(
+		absf(popup_rect.end.y - (held_rect.position.y - 8.0)) <= 1.0,
+		"选择器底边应在按住槽顶上方 8px：popup=%s held=%s" % [popup_rect, held_rect],
+	)
+	assert(absf(popup_rect.get_center().x - held_rect.get_center().x) <= 1.0, "选择器应与按住槽水平居中")
+	assert(safe_rect.encloses(popup_rect), "选择器必须完整位于 MobileSafeRoot 安全区")
+	var picker_style := hud.item_quick_slot_menu.get_theme_stylebox("panel") as StyleBoxFlat
+	assert(picker_style != null, "快捷选择器必须使用显式面板样式")
+	assert(
+		picker_style.border_width_left == 1 and picker_style.border_width_top == 1
+		and picker_style.border_width_right == 1 and picker_style.border_width_bottom == 1,
+		"快捷选择器必须在四边使用精确 1px 边框",
+	)
+	assert(picker_style.border_color == Color("8f6a38"), "快捷选择器边框应为克制暗金色")
+	assert(picker_style.shadow_offset == Vector2.ZERO, "快捷选择器阴影必须以面板几何中心为基准")
+	var scroll_rect := Rect2(hud._item_quick_slot_menu_scroll.get_screen_position(), hud._item_quick_slot_menu_scroll.size)
+	var left_margin := scroll_rect.position.x - popup_rect.position.x
+	var right_margin := popup_rect.end.x - scroll_rect.end.x
+	assert(absf(left_margin - right_margin) <= 1.0, "快捷选择器内容左右内边距必须对称")
+	var first_card := hud.item_quick_slot_candidate_buttons[0] as Button
+	assert(absf(first_card.get_screen_position().x - scroll_rect.position.x) <= 1.0, "候选卡必须水平居中于选择器内容区")
+	hud._finish_item_slot_press(2, slot_center, 7)
+	assert(use_signals.size() == before_menu_use_count, "长按后释放不应触发 use")
+	var repair_id := -1
+	for id_value: Variant in hud._item_quick_slot_menu_candidates.keys():
+		if str(hud._item_quick_slot_menu_candidates[id_value]) == "修复油":
+			repair_id = int(id_value)
+	assert(repair_id > 0, "菜单候选缺少修复油")
+	var repair_button := hud.item_quick_slot_candidate_buttons[repair_id - 1] as Button
+	repair_button.pressed.emit()
+	assert(hud.item_quick_slots[2] == "修复油", "菜单选择后本地镜像未更新")
+	assert(assignment_signals.size() == 2 and assignment_signals[1] == [2, "修复油"], "菜单选择应发出 assignment 信号")
+
+	hud._begin_item_slot_press(3, slot_center, 8)
+	await get_tree().create_timer(0.55).timeout
+	assert(hud.item_quick_slot_menu.visible, "触摸长按应弹出快捷物品选择菜单")
+	hud._finish_item_slot_press(3, slot_center, 8)
+	assert(use_signals.size() == before_menu_use_count, "触摸长按释放不应触发 use")
+	hud.item_quick_slot_menu.hide()
+
+	# A native touch release is followed by emulated mouse press/release when
+	# emulate_mouse_from_touch is enabled. The pair must emit one use request.
+	var emulation_use_before := use_signals.size()
+	var quick_touch_down := InputEventScreenTouch.new()
+	quick_touch_down.index = 11
+	quick_touch_down.pressed = true
+	quick_touch_down.position = slot_center
+	hud.call("_item_slot_input", quick_touch_down, 2)
+	var quick_touch_up := InputEventScreenTouch.new()
+	quick_touch_up.index = 11
+	quick_touch_up.pressed = false
+	quick_touch_up.position = slot_center
+	hud.call("_item_slot_input", quick_touch_up, 2)
+	var emulated_mouse_down := InputEventMouseButton.new()
+	emulated_mouse_down.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_mouse_down.button_index = MOUSE_BUTTON_LEFT
+	emulated_mouse_down.pressed = true
+	emulated_mouse_down.position = slot_center
+	hud.call("_item_slot_input", emulated_mouse_down, 2)
+	var emulated_mouse_up := InputEventMouseButton.new()
+	emulated_mouse_up.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_mouse_up.button_index = MOUSE_BUTTON_LEFT
+	emulated_mouse_up.pressed = false
+	emulated_mouse_up.position = slot_center
+	hud.call("_item_slot_input", emulated_mouse_up, 2)
+	assert(use_signals.size() == emulation_use_before + 1, "原生触摸加模拟鼠标只能发出一次快捷物品 use")
+
+	hud.set_item_quick_slots(["太阳水", "修复油", {"item_name": "强效太阳水"}, "基本剑术"])
+	assert(hud.item_quick_slots.size() == 4, "set_item_quick_slots 应规范化为四项")
+	assert(hud.item_quick_slots == ["太阳水", "修复油", "强效太阳水", "基本剑术"], "set_item_quick_slots 镜像顺序错误")
+	assert(int(hud.hud_item_buttons[0].get_meta("item_quick_slot_count", 0)) == 2, "图标数量层未刷新")
+
+	PlayerState.remove_item("太阳水", 2)
+	await get_tree().process_frame
+	assert(hud.item_quick_slots[0] == "太阳水", "库存耗尽不应清除绑定")
+	assert(int(hud.hud_item_buttons[0].get_meta("item_quick_slot_count", -1)) == 0, "耗尽后数量应显示 0")
+	assert(not bool(hud.hud_item_buttons[0].get_meta("item_quick_slot_available", true)), "耗尽后应标记不可用")
+	assert((hud.item_quick_slot_icons[0] as TextureRect).visible, "耗尽后仍应保留绑定图标显示")
+	assert((hud.item_quick_slot_count_labels[0] as Label).text == "0", "耗尽后数量层应显示 0")
+	var depleted_use_count := use_signals.size()
+	hud._begin_item_slot_press(0, slot_center, -1)
+	hud._finish_item_slot_press(0, slot_center)
+	assert(use_signals.size() == depleted_use_count + 1, "已绑定耗尽槽单击仍应发出 use 请求")
+
+	# --- Touch identity: only the active finger may cancel or release a slot ---
+	var identity_use_before := use_signals.size()
+	var other_finger_drag := InputEventScreenDrag.new()
+	other_finger_drag.index = 8
+	other_finger_drag.position = slot_center + Vector2(0, 60)
+	hud.call("_item_slot_input", other_finger_drag, 2)
+	assert(not bool(hud.get("_item_slot_press_cancelled")), "其他手指拖动不应取消当前槽")
+	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "空闲时 touch index 应为 -1")
+	var other_finger_up := InputEventScreenTouch.new()
+	other_finger_up.index = 8
+	other_finger_up.pressed = false
+	other_finger_up.position = slot_center
+	hud.call("_item_slot_input", other_finger_up, 2)
+	assert(use_signals.size() == identity_use_before, "空闲时其他手指释放不应触发 use")
+
+	hud._begin_item_slot_press(2, slot_center, 7)
+	var same_finger_drag := InputEventScreenDrag.new()
+	same_finger_drag.index = 7
+	same_finger_drag.position = slot_center + Vector2(0, 60)
+	hud.call("_item_slot_input", same_finger_drag, 2)
+	assert(bool(hud.get("_item_slot_press_cancelled")), "活动手指拖动应取消当前槽")
+	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "取消后应清除 touch index")
+	var cancelled_up := InputEventScreenTouch.new()
+	cancelled_up.index = 7
+	cancelled_up.pressed = false
+	cancelled_up.position = slot_center
+	hud.call("_item_slot_input", cancelled_up, 2)
+	assert(use_signals.size() == identity_use_before, "已取消按压的释放不应触发 use")
+
+	hud._begin_item_slot_press(2, slot_center, 7)
+	var other_up := InputEventScreenTouch.new()
+	other_up.index = 8
+	other_up.pressed = false
+	other_up.position = slot_center
+	hud.call("_item_slot_input", other_up, 2)
+	assert(int(hud.get("_item_slot_press_touch_index")) == 7, "其他手指释放不应结束当前按压")
+	assert(use_signals.size() == identity_use_before, "其他手指释放不应触发 use")
+	var active_up := InputEventScreenTouch.new()
+	active_up.index = 7
+	active_up.pressed = false
+	active_up.position = slot_center
+	hud.call("_item_slot_input", active_up, 2)
+	assert(use_signals.size() == identity_use_before + 1, "活动手指释放应正常触发 use")
+	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "释放后应清除 touch index")
+
 	await _assert_2664x1200_landscape_layout(root, chassis, health_orb, mana_orb)
 	print("HUD_GOTHIC_RUNTIME_PASS：统一V2透明框体、动态血蓝球、4物品槽、攻击主键、6环绕技能与触控尺寸均通过")
 	get_tree().quit(0)

@@ -1,5 +1,7 @@
 extends Node
 
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+
 const TEST_DIRECTORY := "user://character_select_touch_profiles"
 const TEST_INDEX := "user://character_select_touch_index.json"
 
@@ -34,58 +36,80 @@ func _run() -> void:
 
 	launcher._select_main_profile("touch_01")
 	var initial_main: String = launcher.selected_main_profile_id
-	var touch_start: Vector2 = launcher.profile_scroll.get_global_rect().get_center()
-	var touch_press := InputEventScreenTouch.new()
-	touch_press.index = 7
-	touch_press.position = touch_start
-	touch_press.pressed = true
-	launcher._input(touch_press)
-	var touch_drag := InputEventScreenDrag.new()
-	touch_drag.index = 7
-	touch_drag.position = touch_start - Vector2(0, 190)
-	launcher._input(touch_drag)
-	var touch_release := InputEventScreenTouch.new()
-	touch_release.index = 7
-	touch_release.position = touch_drag.position
-	touch_release.pressed = false
-	launcher._input(touch_release)
-	assert(not launcher._roster_drag_candidate, "触摸松手后仍残留拖动候选状态")
-	assert(launcher.profile_scroll.scroll_vertical > 0, "手指向上拖动没有让角色列表向下滚动")
-	(launcher.profile_cards["touch_00"].main_button as Button).pressed.emit()
-	assert(launcher.selected_main_profile_id == initial_main, "拖动松手误触发了主角色选择")
-
-	launcher._set_ai_teammate_enabled(true)
-	launcher._select_ai_profile("touch_02")
-	var initial_ai: String = launcher.selected_ai_profile_id
-	launcher._begin_roster_drag(Vector2(600, 600), 8)
-	launcher._update_roster_drag(Vector2(600, 430))
-	launcher._finish_roster_drag()
-	(launcher.profile_cards["touch_03"].ai_button as Button).pressed.emit()
-	assert(launcher.selected_ai_profile_id == initial_ai, "拖动松手误触发了AI伙伴按钮")
-
-	await get_tree().create_timer(0.5).timeout
-	launcher._begin_roster_drag(Vector2(600, 600), 9)
-	launcher._update_roster_drag(Vector2(600, 594))
-	assert(not launcher._finish_roster_drag(), "阈值内轻微移动被错误识别为拖动")
-	(launcher.profile_cards["touch_00"].main_button as Button).pressed.emit()
-	assert(launcher.selected_main_profile_id == "touch_00", "正常点击因触摸拖动逻辑而失效")
-	(launcher.profile_cards["touch_03"].ai_button as Button).pressed.emit()
-	assert(launcher.selected_ai_profile_id == "touch_03", "正常AI伙伴按钮点击因拖动互斥逻辑而失效")
-
-	launcher._begin_roster_drag(Vector2(600, 300), 10)
-	launcher._update_roster_drag(Vector2(600, 3000))
-	launcher._finish_roster_drag()
-	assert(launcher.profile_scroll.scroll_vertical == 0, "角色列表向上边界产生越界滚动")
-	await get_tree().create_timer(0.5).timeout
-	launcher._begin_roster_drag(Vector2(600, 900), 11)
-	launcher._update_roster_drag(Vector2(600, -5000))
-	launcher._finish_roster_drag()
-	var maximum_scroll := int(round(scroll_bar.max_value - scroll_bar.page))
 	assert(
-		abs(launcher.profile_scroll.scroll_vertical - maximum_scroll) <= 1,
-		"角色列表向下边界没有被ScrollContainer正确约束"
+		launcher.profile_scroll.get_meta("touch_scroll_policy", "") == TouchScrollSupportScript.STABLE_ID,
+		"角色列表未接入共享触摸滚动策略"
+	)
+	var support := get_tree().root.get_node_or_null("TouchScrollSupport")
+	assert(support != null, "共享 TouchScrollSupport 未由角色选择 attach_tree 创建")
+
+	# 共享服务内部路径：向上拖内容应滚动，松手后服务状态复位。
+	var touch_start: Vector2 = launcher.profile_scroll.get_global_rect().get_center()
+	support.call("_begin_drag_candidate", touch_start, 7)
+	var drag_position := touch_start - Vector2(0, 190)
+	support.call("_continue_drag", drag_position, Vector2(0, -190))
+	assert(launcher.profile_scroll.scroll_vertical > 0, "手指向上拖动没有让角色列表向下滚动")
+	assert(bool(support.get("_dragging")), "共享服务应处于拖动状态")
+	support.call("_end_drag")
+	assert(
+		int(support.get("_active_touch_index")) == -1 and not bool(support.get("_dragging")),
+		"触摸松手后共享服务仍残留拖动状态"
 	)
 
+	# 真实 GUI 触摸路径：拖动期间角色卡 pressed 不得触发，选择不得被误改。
+	launcher.profile_scroll.scroll_vertical = 0
+	await get_tree().process_frame
+	var main_card_button: Button = launcher.profile_cards["touch_00"].main_button as Button
+	var card_presses: Array[int] = [0]
+	main_card_button.pressed.connect(func() -> void: card_presses[0] += 1)
+	var window_scale: Vector2 = Vector2(get_window().size) / get_viewport().get_visible_rect().size
+	var card_center := main_card_button.get_global_rect().get_center()
+	var gui_down := InputEventScreenTouch.new()
+	gui_down.index = 8
+	gui_down.pressed = true
+	gui_down.position = card_center * window_scale
+	get_viewport().push_input(gui_down)
+	assert(main_card_button.button_pressed, "触摸按下未到达角色卡按钮")
+	var gui_drag := InputEventScreenDrag.new()
+	gui_drag.index = 8
+	gui_drag.position = (card_center + Vector2(0, 16)) * window_scale
+	gui_drag.relative = Vector2(0, 16) * window_scale.y
+	get_viewport().push_input(gui_drag)
+	support.call("_input", gui_drag)
+	var gui_up := InputEventScreenTouch.new()
+	gui_up.index = 8
+	gui_up.pressed = false
+	gui_up.position = gui_drag.position
+	get_viewport().push_input(gui_up)
+	support.call("_input", gui_up)
+	assert(card_presses[0] == 0, "拖动松手误触发了角色卡点击")
+	assert(launcher.selected_main_profile_id == initial_main, "拖动后主角色选择被误改")
+	# 拖动后的短抑制窗口结束后，正常点击仍然可用。
+	await get_tree().create_timer(0.25).timeout
+	main_card_button.pressed.emit()
+	assert(launcher.selected_main_profile_id == "touch_00", "正常点击角色卡未能选择")
+	launcher._set_ai_teammate_enabled(true)
+	(launcher.profile_cards["touch_01"].ai_button as Button).pressed.emit()
+	assert(launcher.selected_ai_profile_id.is_empty(), "未开放的AI队友按钮不应产生选择")
+
+	# 边界与阈值：大拖向下停在底部，大拖向上回到顶部，阈值内不滚动。
+	var maximum_scroll := int(round(scroll_bar.max_value - scroll_bar.page))
+	support.call("_begin_drag_candidate", touch_start, 9)
+	support.call("_continue_drag", touch_start - Vector2(0, 5000), Vector2(0, -5000))
+	assert(
+		absf(float(launcher.profile_scroll.scroll_vertical) - float(maximum_scroll)) <= 1.0,
+		"角色列表向下滚动未到达底部边界"
+	)
+	support.call("_end_drag")
+	support.call("_begin_drag_candidate", touch_start, 10)
+	support.call("_continue_drag", touch_start + Vector2(0, 5000), Vector2(0, 5000))
+	assert(launcher.profile_scroll.scroll_vertical == 0, "角色列表向上滚动越过顶部边界未被正确约束")
+	support.call("_end_drag")
+	var threshold_start: int = launcher.profile_scroll.scroll_vertical
+	support.call("_begin_drag_candidate", touch_start, 11)
+	support.call("_continue_drag", touch_start + Vector2(0, 4), Vector2(0, 4))
+	assert(launcher.profile_scroll.scroll_vertical == threshold_start, "阈值内轻微移动被错误识别为滚动")
+	support.call("_end_drag")
 	launcher.queue_free()
 	get_tree().root.size = _old_viewport_size
 	_restore_profiles()

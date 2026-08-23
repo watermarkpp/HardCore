@@ -3,6 +3,7 @@ extends Node
 const DiagnosticLog := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
 const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
 const MeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
+const DiagnosticGate := preload("res://scripts/runtime_diagnostics.gd")
 
 
 func _ready() -> void:
@@ -11,13 +12,23 @@ func _ready() -> void:
 
 func _run() -> void:
 	var previous_test_mode := PlayerState.test_mode
-	var previous_log_enabled := DiagnosticLog.enabled
+	var previous_log_enabled: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_ENABLED, false
+	))
+	var previous_combat_enabled: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_COMBAT, false
+	))
+	var previous_file_output_enabled: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_FILE_OUTPUT, false
+	))
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	PlayerState.profession = "战士"
 	PlayerState.level = 50
 	PlayerState.recalculate_stats()
-	DiagnosticLog.enabled = false
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, true)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_COMBAT, true)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_FILE_OUTPUT, false)
 	DiagnosticLog.clear_recent_events()
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
@@ -159,12 +170,36 @@ func _run() -> void:
 	assert(not bool(footprint_decision.get("point_accepted", true)))
 	assert(bool(footprint_decision.get("footprint_accepted", false)))
 	assert(int(footprint_decision.get("footprint_thrust_slot", 0)) == 2)
+	var release_geometry_payload: Dictionary = release_event.get(
+		"release_geometry", {}
+	)
+	assert(is_equal_approx(
+		float(release_geometry_payload.get(
+			"locked_target_combat_radius_gu_at_release", -1.0
+		)),
+		enemy.combat_radius_gu
+	), "release geometry did not freeze the target combat footprint radius")
+	var snapshot_payload: Dictionary = release_geometry_payload.get(
+		"skill_footprint_snapshot", {}
+	)
+	var footprint_snapshot_id := str(snapshot_payload.get("snapshot_id", ""))
+	assert(not footprint_snapshot_id.is_empty())
+	assert(
+		_has_target_aligned_visual(footprint_snapshot_id),
+		"footprint edge hit committed damage but did not present the same-snapshot thrust band"
+	)
 	game.player.set_touch_vector(Vector2.ZERO)
 
 	game.queue_free()
 	await get_tree().process_frame
 	DiagnosticLog.clear_recent_events()
-	DiagnosticLog.enabled = previous_log_enabled
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, previous_log_enabled)
+	ProjectSettings.set_setting(
+		DiagnosticGate.SETTING_COMBAT, previous_combat_enabled
+	)
+	ProjectSettings.set_setting(
+		DiagnosticGate.SETTING_FILE_OUTPUT, previous_file_output_enabled
+	)
 	PlayerState.test_mode = previous_test_mode
 	print("MELEE_RUNTIME_DIAGNOSTIC_PIPELINE_PASS: accuracy, angle, and footprint-area evidence are observable")
 	get_tree().quit(0)
@@ -184,6 +219,13 @@ func _candidate_for_target(candidates: Array, target_id: int) -> Dictionary:
 		if int(candidate.get("target_id", 0)) == target_id:
 			return candidate
 	return {}
+
+
+func _has_target_aligned_visual(snapshot_id: String) -> bool:
+	for node: Node in get_tree().get_nodes_in_group("zone_content"):
+		if str(node.get_meta("snapshot_id", "")) == snapshot_id:
+			return true
+	return false
 
 
 func _make_enemy(game: Node, position: Vector2) -> EnemyActor:

@@ -1,0 +1,564 @@
+{
+ "apk": {
+  "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hardcore\\HardCore-1.18.3-runtime-fix-9d6435bc-debug.apk",
+  "filename": "HardCore-1.18.3-runtime-fix-9d6435bc-debug.apk",
+  "sha256": "B74F58FC1E17A28D2A0FAE7E709085E410F4C48FF6141DD6C293596DDEF341CB",
+  "build_time": "2026-08-15T11:57:00+08:00",
+  "size_bytes": 273784115,
+  "extracted_base_pck": "outputs/device_lab_patches/base_full_9d6435bc_from_apk.pck (SHA256 F34F09A5CED11865F4A5BE2C9CD64B5029AB1A7D57480DD3AE2F4CDF932677C5)",
+  "apk_assets_extract": "outputs/device_lab_patches/apk_assets_9d6435bc/"
+ },
+ "base_source": {
+  "commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+  "subject": "test(startup): isolate background scene preload",
+  "branch": "codex/integration (now merged into origin/main)",
+  "worktree": "main worktree C:\\Users\\Administrator\\Documents\\HardCore (at commit time)",
+  "pushed_to_remote": true,
+  "note": "APK built 12 min after this commit; all 27 prior hotfix commits already merged into integration/origin-main"
+ },
+ "hotfixes": [
+  {
+   "type": "pck_hotfix",
+   "description": "perf(ui): prewarm reusable panels during loading",
+   "source_path": "outputs/device_lab_patches/all_ui_loading_prewarm_cumulative_v2.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "ea5fd5212d8fd4a9e328895013383e1488e93f20",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 5,
+   "ui_resources": 4,
+   "evidence": [
+    "patch JSON: all_ui_loading_prewarm_cumulative_v2.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "perf(ui): prewarm reusable panels during loading",
+   "source_path": "outputs/device_lab_patches/all_ui_loading_prewarm_v1.pck",
+   "worktree": "integration branch",
+   "base_commit": "0fceaf66c03627e29bc37a7bc5f1cf16e5d25a0a",
+   "patch_commit": "ea5fd5212d8fd4a9e328895013383e1488e93f20",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 2,
+   "evidence": [
+    "patch JSON: all_ui_loading_prewarm_v1.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "perf(ui): precompute button feedback layers",
+   "source_path": "outputs/device_lab_patches/cold_entry_overlap_local.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "a9a98b3b73d33d951af111d1aca842bceee05c33",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 1,
+   "evidence": [
+    "patch JSON: cold_entry_overlap_local.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "test(startup): isolate background scene preload",
+   "source_path": "outputs/device_lab_patches/cold_entry_preload_repair_9d6435bc.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 78,
+   "ui_resources": 30,
+   "evidence": [
+    "patch JSON: cold_entry_preload_repair_9d6435bc.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(runtime): overlap cold prewarm and repair by stable item id",
+   "source_path": "outputs/device_lab_patches/cold_entry_repair_stable_1e5228c8.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "1e5228c851c41728df4bc04762b8fc622eb5a2be",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 78,
+   "ui_resources": 30,
+   "evidence": [
+    "patch JSON: cold_entry_repair_stable_1e5228c8.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "perf(ui): precompute button feedback layers",
+   "source_path": "outputs/device_lab_patches/cold_profile_instrument_local.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "a9a98b3b73d33d951af111d1aca842bceee05c33",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 1,
+   "evidence": [
+    "patch JSON: cold_profile_instrument_local.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(repair): batch all equipped items atomically",
+   "source_path": "outputs/device_lab_patches/hotfix_startup_hud_repair_5b7efca9.pck",
+   "worktree": "android-staging\\5bd099da-basepack-20260814-2150 (KEEP_WIP, hotfix basepack)",
+   "base_commit": "5bd099da2cb6deb8a415f345171dd451a06c60c5",
+   "patch_commit": "5b7efca95c543f13ecb51f46b953782c7201b12f",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 314,
+   "ui_resources": 4,
+   "evidence": [
+    "patch JSON: hotfix_startup_hud_repair_5b7efca9.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(hud): restore original fills without red overlay",
+   "source_path": "outputs/device_lab_patches/hud_original_fills_no_red_f17b0be6.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "f17b0be65cad72136f2c9f224bc02178f066d5b4",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 57,
+   "ui_resources": 14,
+   "evidence": [
+    "patch JSON: hud_original_fills_no_red_f17b0be6.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(hud): remove synthetic button fills",
+   "source_path": "outputs/device_lab_patches/hud_transparent_controls_95373da9.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "95373da9e0fbf1ac897c877ea907293c9fdebba4",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 57,
+   "ui_resources": 14,
+   "evidence": [
+    "patch JSON: hud_transparent_controls_95373da9.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(inventory): keep details stable and repair all gear",
+   "source_path": "outputs/device_lab_patches/inventory_detail_repair_4f03902d.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "4f03902d0235f4906ddc1dde16632c5594b1052a",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 60,
+   "ui_resources": 16,
+   "evidence": [
+    "patch JSON: inventory_detail_repair_4f03902d.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(ui): promote final adjusted map layout",
+   "source_path": "outputs/device_lab_patches/map_final_adjustment_cumulative_v4.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "09ed417aed99fbc56375e9e9091336fac16b64d3",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 5,
+   "ui_resources": 4,
+   "evidence": [
+    "patch JSON: map_final_adjustment_cumulative_v4.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(ui): promote latest calibrated map layout",
+   "source_path": "outputs/device_lab_patches/map_latest_calibration_cumulative_v3.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "a3aa267d6595c6ac48096d6e26df04eec64b460a",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 5,
+   "ui_resources": 4,
+   "evidence": [
+    "patch JSON: map_latest_calibration_cumulative_v3.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "refactor(npc): merge regional service identities",
+   "source_path": "outputs/device_lab_patches/npc_service_merge_c9f3618e.pck",
+   "worktree": "integration branch @ APK build (no separate worktree needed)",
+   "base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "patch_commit": "c9f3618eea014e8cab9c779b94ef24c70e239ecd",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 7,
+   "ui_resources": 4,
+   "evidence": [
+    "patch JSON: npc_service_merge_c9f3618e.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "feat(device-lab): expose repair diagnostics",
+   "source_path": "outputs/device_lab_patches/repair_diagnostics_6a2e0b33.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "6a2e0b33ab951c4f757ebe92e2991bc603669056",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 61,
+   "ui_resources": 16,
+   "evidence": [
+    "patch JSON: repair_diagnostics_6a2e0b33.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "perf(ui): precompute button feedback layers",
+   "source_path": "outputs/device_lab_patches/repair_theme_coldfix_a9a98b3b.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "a9a98b3b73d33d951af111d1aca842bceee05c33",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 74,
+   "ui_resources": 29,
+   "evidence": [
+    "patch JSON: repair_theme_coldfix_a9a98b3b.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(shop): align trade cards and sell equipment",
+   "source_path": "outputs/device_lab_patches/shop_inventory_cards_equipment_sell_cumulative_v7.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "b8d1a2ea5db590cf501ae1eb40998c6946426149",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 12,
+   "ui_resources": 10,
+   "evidence": [
+    "patch JSON: shop_inventory_cards_equipment_sell_cumulative_v7.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(shop): unify resale and restore merchant offers",
+   "source_path": "outputs/device_lab_patches/shop_merchant_resale_visual_cumulative_v9.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "3b219b836c4f7c5bcd5f45cd5dbef3f90ebefe22",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 22,
+   "ui_resources": 13,
+   "evidence": [
+    "patch JSON: shop_merchant_resale_visual_cumulative_v9.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(shop): complete merchant inventory context",
+   "source_path": "outputs/device_lab_patches/shop_npc_runtime_cumulative_v10.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "37756dc89a9aa8d96fd07b6748a4c5153189c11d",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 23,
+   "ui_resources": 14,
+   "evidence": [
+    "patch JSON: shop_npc_runtime_cumulative_v10.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(shop): enforce official goods and repeat buying",
+   "source_path": "outputs/device_lab_patches/shop_official_goods_sell_details_cumulative_v11.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "612c05a5526ad6037142d868f15bd0305b8bbd38",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 23,
+   "ui_resources": 14,
+   "evidence": [
+    "patch JSON: shop_official_goods_sell_details_cumulative_v11.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(ui): suppress selection after scroll and quote equipment",
+   "source_path": "outputs/device_lab_patches/shop_sell_touch_guard_cumulative_v8.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "66cbbb494ea512c9a7cd493f3e7eabb011df58aa",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 14,
+   "ui_resources": 11,
+   "evidence": [
+    "patch JSON: shop_sell_touch_guard_cumulative_v8.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(debug): invoke Godot patch export correctly",
+   "source_path": "outputs/device_lab_patches/skill_deleted_flash_fix_v1.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "545902737dfcf7845f1de3e5bf018e7c0bba83d9",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 1,
+   "ui_resources": 1,
+   "evidence": [
+    "patch JSON: skill_deleted_flash_fix_v1.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(ui): stabilize calibrated skill text paths",
+   "source_path": "outputs/device_lab_patches/skill_layout_stable_text_v2.pck",
+   "worktree": "integration branch",
+   "base_commit": "2024eaa93b0b31ef69dbc77b55f301f23e7317d2",
+   "patch_commit": "0fceaf66c03627e29bc37a7bc5f1cf16e5d25a0a",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 3,
+   "evidence": [
+    "patch JSON: skill_layout_stable_text_v2.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(ui): stabilize calibrated text layer identities",
+   "source_path": "outputs/device_lab_patches/stable_text_paths_cumulative_v5.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "f6fa0b5fb40fe181256049254eb29c7d7f505efa",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 10,
+   "ui_resources": 9,
+   "evidence": [
+    "patch JSON: stable_text_paths_cumulative_v5.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(maps): align mine floor two name and size",
+   "source_path": "outputs/device_lab_patches/startup_cg_hall_perf_fad30fbc.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "fad30fbcc0855672b8da88e5b1bc8292d8de22f3",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 19,
+   "ui_resources": 13,
+   "evidence": [
+    "patch JSON: startup_cg_hall_perf_fad30fbc.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(startup): brighten the first authored frame",
+   "source_path": "outputs/device_lab_patches/startup_direct_bright_cg_bd7b6efc.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "bd7b6efc806e80bb519d2c7a2ac36483c1253765",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 19,
+   "ui_resources": 13,
+   "evidence": [
+    "patch JSON: startup_direct_bright_cg_bd7b6efc.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(startup): skip dim logo lead-in",
+   "source_path": "outputs/device_lab_patches/startup_direct_cg_0af855db.pck",
+   "worktree": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+   "base_commit": "c0a7679736fb9ee9ad8cbd709a6fb915d6040139",
+   "patch_commit": "0af855db84438917985bf16bf84e5e5cfb337cb0",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 19,
+   "ui_resources": 13,
+   "evidence": [
+    "patch JSON: startup_direct_cg_0af855db.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(ui): remove warehouse section frames",
+   "source_path": "outputs/device_lab_patches/warehouse_plain_sections_cumulative_v6.pck",
+   "worktree": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+   "base_commit": "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a",
+   "patch_commit": "7c08edcda13b31109f67227cae3d6f6d447385d1",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 10,
+   "ui_resources": 9,
+   "evidence": [
+    "patch JSON: warehouse_plain_sections_cumulative_v6.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(world-ui): align player level and npc names",
+   "source_path": "outputs/device_lab_patches/world_label_alignment_dd17716e.pck",
+   "worktree": "integration branch @ APK build (no separate worktree needed)",
+   "base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "patch_commit": "dd17716e6b8660b8b4cec244b622cbe1f2c94db1",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 2,
+   "evidence": [
+    "patch JSON: world_label_alignment_dd17716e.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(world-ui): align player level and npc names",
+   "source_path": "outputs/device_lab_patches/world_label_alignment_dd17716e_min.pck",
+   "worktree": "integration branch @ APK build (no separate worktree needed)",
+   "base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "patch_commit": "dd17716e6b8660b8b4cec244b622cbe1f2c94db1",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 2,
+   "evidence": [
+    "patch JSON: world_label_alignment_dd17716e_min.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(world-ui): exclude npc shadows from name anchors",
+   "source_path": "outputs/device_lab_patches/world_label_body_anchor_59724524.pck",
+   "worktree": "integration branch @ APK build (no separate worktree needed)",
+   "base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "patch_commit": "59724524eab2ca06ffaecd8b36ca6a3736df1d68",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 2,
+   "evidence": [
+    "patch JSON: world_label_body_anchor_59724524.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(world-ui): track npc facing anchors",
+   "source_path": "outputs/device_lab_patches/world_label_direction_anchor_d148e2a1.pck",
+   "worktree": "integration branch @ APK build (no separate worktree needed)",
+   "base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "patch_commit": "d148e2a1ee7f9991fbe364b29ce0e85621ed5f26",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 2,
+   "evidence": [
+    "patch JSON: world_label_direction_anchor_d148e2a1.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  },
+  {
+   "type": "pck_hotfix",
+   "description": "fix(world-ui): anchor labels to visible pixels",
+   "source_path": "outputs/device_lab_patches/world_label_visible_anchor_c1a60bcb.pck",
+   "worktree": "integration branch @ APK build (no separate worktree needed)",
+   "base_commit": "9d6435bced2c27294cdabd362ceadc8cc322f89b",
+   "patch_commit": "c1a60bcba39a1282acae01efbc954ec4cddf0b1d",
+   "tracked": true,
+   "included_in_final_apk": true,
+   "resources": 3,
+   "ui_resources": 2,
+   "evidence": [
+    "patch JSON: world_label_visible_anchor_c1a60bcb.json",
+    "resources list captured in outputs/device_lab_patches"
+   ]
+  }
+ ],
+ "hotfix_worktrees_observed": {
+  "e0cb6f6e4f9f5f8b8e66d3482fecfc1c9e30532a": "android-staging\\e0cb6f6e4f9f-20260813-152109-c63add65 (REMOVED, HEAD reachable from origin/main)",
+  "3ac89f56a2154060c8d021d1aa703daea3aa82c4": "android-staging\\3ac89f56a215-20260813-130202-ba9679ac (KEEP_WIP, dirty=616 import churn)",
+  "7a8a8460e5586d6bac270667d2dd3c7879f61169": "android-staging\\7a8a8460e558-20260813-113725-01b3ad08 (KEEP_WIP)",
+  "5bd099da2cb6deb8a415f345171dd451a06c60c5": "android-staging\\5bd099da-basepack-20260814-2150 (KEEP_WIP, hotfix basepack)",
+  "c0a7679736fb9ee9ad8cbd709a6fb915d6040139": "android-staging\\c0a7679736? (hotfix base for 8/14-15 UI/cold chain)",
+  "9d6435bced2c27294cdabd362ceadc8cc322f89b": "integration branch @ APK build (no separate worktree needed)"
+ },
+ "summary": {
+  "hotfix_count": 32,
+  "ui_hotfix_count": 32,
+  "ui_scripts_in_apk": [
+   "scripts/hud.gd",
+   "scripts/game_root.gd",
+   "scripts/game_data.gd",
+   "scripts/inventory_panel.gd",
+   "scripts/gothic_ui_theme.gd",
+   "scripts/character_select.gd",
+   "scripts/brand_intro.gd",
+   "scripts/adaptive_button_style_box.gd",
+   "scripts/player_state.gd",
+   "scripts/world_bootstrap_coordinator.gd",
+   "scripts/startup_loading.gd",
+   "scripts/pricing_service.gd",
+   "scripts/device_lab_runtime.gd"
+  ],
+  "post_apk_monster_changes": [
+   "game_root.gd (a91bc586)",
+   "game_data.gd (a91bc586/5c1e6697/7bbb4bbc)"
+  ]
+ }
+}

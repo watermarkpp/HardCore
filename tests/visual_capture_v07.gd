@@ -10,8 +10,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	game.hud._toggle_map_panel()
-	game.hud.map_panel.search_box.text = "沃玛寺庙"
-	game.hud.map_panel.refresh()
+	game.hud.map_panel._select_world_node("wooma_temple")
 	for index in range(game.hud.map_panel.map_entries.size()):
 		if int(game.hud.map_panel.map_entries[index].get("mapId", -1)) == 315:
 			game.hud.map_panel.map_list.select(index)

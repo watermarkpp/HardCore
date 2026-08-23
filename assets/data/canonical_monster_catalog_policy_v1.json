@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "policy_id": "canonical_monster_catalog.policy.v1",
+  "authority": {
+    "source_kind": "user_authoritative_decision",
+    "captured_on": "2026-08-15",
+    "source_distribution": "user.request.monster_canonical_phase1",
+    "attachment_name": "pasted-text.txt",
+    "attachment_sha256": "82B3EC564EE1645E2D39AA9B506C8C40E53F66D99CA5DDC0C12EF2FD4C3DDEEB",
+    "scope": "canonical monster identity, Wooma matrix, and classification-only placement decisions"
+  },
+  "wooma_matrix": {
+    "64": {"classification": "ordinary", "appearance_key": "wooma_soldier", "map_codes": ["D022", "D023", "D024"]},
+    "65": {"classification": "ordinary", "appearance_key": "wooma_soldier", "map_codes": ["D022", "D023", "D024"]},
+    "66": {"classification": "ordinary", "appearance_key": "wooma_fighter", "map_codes": ["D022", "D023", "D024"]},
+    "67": {"classification": "ordinary", "appearance_key": "wooma_fighter", "map_codes": ["D022", "D023", "D024"]},
+    "68": {
+      "classification": "ordinary",
+      "appearance_key": "wooma_warrior",
+      "map_codes": ["D022", "D023", "D024"],
+      "combat_override": {"level": 30, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28, "exp": 310, "ai_code": 0, "attack_interval_ms": 2000, "move_interval_ms": 1000, "view_range": 7, "image": 31},
+      "primary_exact_status": "missing",
+      "canonical_name_override": {"value": "沃玛战将", "field": "MonsterName"},
+      "auxiliary_source": {
+        "tier": "auxiliary_1",
+        "distribution": "source.angelk727.mir2_server_databases",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Exports/3_怪物数据.csv",
+        "sha256": "7850EA794B7E34CE27D1B03407AE64D5144379941E5C33E2122445B78BBF7284",
+        "fields": ["level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"],
+        "missing_primary_fields": ["canonical_name", "level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"]
+      },
+      "drop_equivalence_override": {
+        "strategy": "cross_distribution_equivalence",
+        "canonical_source_monster_id": 66,
+        "canonical_source_distribution": "server.crystal.cjlaaa",
+        "equivalence_status": "byte_exact_cross_distribution",
+        "auxiliary_2_pairs": [
+          {
+            "distribution": "server.crystal.Jev",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaFighter.txt",
+            "warrior_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "fighter_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "byte_equal": true
+          },
+          {
+            "distribution": "server.crystal.Daneo1989",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaWarrior.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaFighter.txt",
+            "warrior_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "fighter_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "byte_equal": true
+          }
+        ]
+      }
+    },
+    "69": {
+      "classification": "ordinary",
+      "appearance_key": "wooma_warrior",
+      "map_codes": ["D022", "D023", "D024"],
+      "combat_override": {"level": 30, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28, "exp": 310, "ai_code": 0, "attack_interval_ms": 2000, "move_interval_ms": 1000, "view_range": 7, "image": 31},
+      "primary_exact_status": "missing",
+      "canonical_name_override": {"value": "沃玛战将0", "field": "MonsterName"},
+      "auxiliary_source": {
+        "tier": "auxiliary_1",
+        "distribution": "source.angelk727.mir2_server_databases",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Exports/3_怪物数据.csv",
+        "sha256": "7850EA794B7E34CE27D1B03407AE64D5144379941E5C33E2122445B78BBF7284",
+        "fields": ["level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"],
+        "missing_primary_fields": ["canonical_name", "level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image"]
+      },
+      "drop_equivalence_override": {
+        "strategy": "cross_distribution_equivalence",
+        "canonical_source_monster_id": 67,
+        "canonical_source_distribution": "server.crystal.cjlaaa",
+        "equivalence_status": "byte_exact_cross_distribution",
+        "auxiliary_2_pairs": [
+          {
+            "distribution": "server.crystal.Jev",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior0.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaFighter0.txt",
+            "warrior_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "fighter_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "byte_equal": true
+          },
+          {
+            "distribution": "server.crystal.Daneo1989",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaWarrior0.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaFighter0.txt",
+            "warrior_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "fighter_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "byte_equal": true
+          }
+        ]
+      }
+    },
+    "70": {"classification": "ordinary", "appearance_key": "flaming_wooma", "map_codes": ["D022", "D023", "D024"]},
+    "71": {"classification": "ordinary", "appearance_key": "flaming_wooma", "map_codes": ["D022", "D023", "D024"]},
+    "73": {"classification": "elite", "appearance_key": "wooma_guardian", "map_codes": ["D022", "D023", "D024"]},
+    "74": {"classification": "elite", "appearance_key": "wooma_guardian", "map_codes": ["D022", "D023", "D024"]},
+    "75": {"classification": "elite", "appearance_key": "wooma_guardian", "map_codes": ["D022", "D023", "D024"]},
+    "76": {"classification": "boss", "appearance_key": "wooma_taurus", "map_codes": ["D024"]},
+    "77": {"classification": "special", "appearance_key": null, "placement_semantics": "ordinary_spawn", "placement_allowed": false},
+    "78": {"classification": "version_difference", "appearance_key": null, "placement_allowed": false},
+    "239": {"classification": "boss", "appearance_key": "dark_wooma_taurus", "independent_identity": true}
+  },
+  "runtime_policy": {
+    "identity_key": "monster_id",
+    "name_lookup": "forbidden",
+    "unknown_id": "reject",
+    "unresolved_art": "reject",
+    "unresolved_classification": "reject",
+    "service_client_appearance_difference": "requires_translation_evidence"
+  }
+}

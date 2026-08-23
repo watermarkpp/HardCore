@@ -2,19 +2,41 @@ class_name WarehousePanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 
 signal closed
 signal warehouse_sort_requested
 
 const PANEL_SIZE := Vector2(1164, 660)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
+const SECTION_VERTICAL_SHIFT := 24.0
 const BAG_CAPACITY := 100
 const WAREHOUSE_PAGE_CAPACITY := 100
 const WAREHOUSE_PAGE_COUNT := 5
 const WAREHOUSE_DISPLAY_CAPACITY := WAREHOUSE_PAGE_CAPACITY * WAREHOUSE_PAGE_COUNT
-const GRID_COLUMNS := 8
-const GRID_VISIBLE_SLOTS := 40
+const GRID_COLUMNS := 6
+const GRID_VISIBLE_SLOTS := 30
 const ITEM_CELL_SIZE := Vector2(56, 64)
+const GRID_HORIZONTAL_SEPARATION := 1.0
+const GRID_VERTICAL_SEPARATION := 4.0
+const GRID_ROWS := int(ceil(float(WAREHOUSE_PAGE_CAPACITY) / float(GRID_COLUMNS)))
+const GRID_MINIMUM_SIZE := Vector2(
+	ITEM_CELL_SIZE.x * GRID_COLUMNS + GRID_HORIZONTAL_SEPARATION * (GRID_COLUMNS - 1),
+	ITEM_CELL_SIZE.y * GRID_ROWS + GRID_VERTICAL_SEPARATION * (GRID_ROWS - 1)
+)
+const GRID_FRAME_RECT := Rect2(6, 40, 480, 392)
+const GRID_CONTENT_WIDTH := GRID_MINIMUM_SIZE.x
+## The viewport is the exact six-column content width plus the visible vertical
+## scrollbar.  Keeping this mathematical contract prevents saved 477px
+## calibration rectangles from exposing a seventh/partial column.
+const GRID_SCROLLBAR_WIDTH := 16.0
+const GRID_SCROLL_WIDTH := GRID_CONTENT_WIDTH + GRID_SCROLLBAR_WIDTH
+const GRID_SCROLL_RECT := Rect2((492.0 - GRID_SCROLL_WIDTH) * 0.5, 66, GRID_SCROLL_WIDTH, 340)
+const THIN_BUTTON_HEIGHT := 48.0
+const LAYOUT_REVISION := 3
 
 var bag_list: ItemList
 var stash_list: ItemList
@@ -28,14 +50,27 @@ var previous_page_button: Button
 var next_page_button: Button
 var deposit_button: Button
 var withdraw_button: Button
+var sort_button: Button
 var selected_bag_index := -1
 var selected_stash_index := -1
 var warehouse_page := 0
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _action_feedback_serial := 0
 
 
 func _ready() -> void:
+	set_meta("calibration_retired_paths", [
+		"StashSection/StashSectionDecoration",
+		"StashSection/StashSectionDecoration/StashSectionFill",
+		"StashSection/StashSectionDecoration/StashSectionFrame",
+		"TransferSection/TransferSectionDecoration",
+		"TransferSection/TransferSectionDecoration/TransferSectionFill",
+		"TransferSection/TransferSectionDecoration/TransferSectionFrame",
+		"BagSection/BagSectionDecoration",
+		"BagSection/BagSectionDecoration/BagSectionFill",
+		"BagSection/BagSectionDecoration/BagSectionFrame",
+	])
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -49,25 +84,21 @@ func _ready() -> void:
 	_build_header()
 	_build_storage_sections()
 	_build_compatibility_lists()
+	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	refresh()
+	_stabilize_grid_layout.call_deferred()
 
 
 func _build_modal_surface() -> void:
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(1128, 616)
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	GothicFrameFactoryScript.add_modal_fill(self, PANEL_SIZE)
 
 
 func _build_header() -> void:
 	var title_frame := Panel.new()
 	title_frame.name = "TitleFrame"
-	title_frame.position = Vector2(352, 4)
+	title_frame.position = Vector2(352, 10)
 	title_frame.size = Vector2(460, 64)
 	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_frame.theme_type_variation = "GothicTitleBar"
@@ -96,15 +127,18 @@ func _build_header() -> void:
 
 func _build_storage_sections() -> void:
 	var stash_panel := _section_panel("StashSection", Rect2(20, 72, 492, 566))
-	stash_panel.add_child(_section_title("个人仓库", 492))
+	var stash_frame := GothicFrameFactoryScript.add_filled_section(stash_panel, "StashGridV3Frame", GRID_FRAME_RECT)
+	stash_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stash_frame.set_meta("calibration_layer", "warehouse_stash_grid_decoration")
+	stash_panel.add_child(_section_title("StashTitle", "个人仓库", 492))
 	stash_grid = _build_item_grid(stash_panel, "StashScroll", "StashGrid")
-	stash_panel.add_child(_paging_hint("StashPagingHint", "每页 100 格　·　下拉查看本页后 60 格"))
+	stash_panel.add_child(_paging_hint("StashPagingHint", "每页 100 格　·　下拉查看本页后 70 格"))
 	_build_page_controls(stash_panel)
 	stash_summary_label = _summary_label("StashSummary")
 	stash_panel.add_child(stash_summary_label)
 
 	var transfer_panel := _section_panel("TransferSection", Rect2(520, 72, 124, 566))
-	transfer_panel.add_child(_section_title("转移", 124))
+	transfer_panel.add_child(_section_title("TransferTitle", "转移", 124))
 	transfer_detail_label = Label.new()
 	transfer_detail_label.name = "TransferDetail"
 	transfer_detail_label.text = "选择两侧物品"
@@ -125,34 +159,41 @@ func _build_storage_sections() -> void:
 	divider.position = Vector2(16, 346)
 	divider.size = Vector2(92, 8)
 	transfer_panel.add_child(divider)
-	var sort_button := _transfer_button("SortStashButton", "整理", Vector2(14, 382))
+	sort_button = _transfer_button("SortStashButton", "整理", Vector2(14, 382))
 	sort_button.tooltip_text = "请求玩法层按既定规则整理仓库"
-	sort_button.pressed.connect(func() -> void: warehouse_sort_requested.emit())
+	sort_button.pressed.connect(_sort_requested)
 	transfer_panel.add_child(sort_button)
 
 	var bag_panel := _section_panel("BagSection", Rect2(652, 72, 492, 566))
-	bag_panel.add_child(_section_title("人物背包", 492))
+	var bag_frame := GothicFrameFactoryScript.add_filled_section(bag_panel, "BagGridV3Frame", GRID_FRAME_RECT)
+	bag_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bag_frame.set_meta("calibration_layer", "warehouse_bag_grid_decoration")
+	bag_panel.add_child(_section_title("BagTitle", "人物背包", 492))
 	bag_grid = _build_item_grid(bag_panel, "BagScroll", "BagGrid")
-	bag_panel.add_child(_paging_hint("BagPagingHint", "首屏 40 格　·　下拉查看 41–100 格"))
+	bag_panel.add_child(_paging_hint("BagPagingHint", "首屏 30 格　·　下拉查看 31–100 格"))
 	bag_summary_label = _summary_label("BagSummary")
 	bag_panel.add_child(bag_summary_label)
 
 
-func _build_item_grid(parent: Panel, scroll_name: String, grid_name: String) -> GridContainer:
+func _build_item_grid(parent: Control, scroll_name: String, grid_name: String) -> GridContainer:
 	var scroll := ScrollContainer.new()
 	scroll.name = scroll_name
-	scroll.position = Vector2(10, 50)
-	scroll.size = Vector2(472, 340)
+	scroll.position = GRID_SCROLL_RECT.position
+	scroll.size = GRID_SCROLL_RECT.size
+	scroll.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.clip_contents = true
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	parent.add_child(scroll)
 	var grid := GridContainer.new()
 	grid.name = grid_name
+	grid.position = Vector2.ZERO
 	grid.columns = GRID_COLUMNS
-	grid.custom_minimum_size = Vector2(455, 0)
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.add_theme_constant_override("h_separation", 1)
-	grid.add_theme_constant_override("v_separation", 4)
+	grid.custom_minimum_size = GRID_MINIMUM_SIZE
+	grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	grid.add_theme_constant_override("h_separation", int(GRID_HORIZONTAL_SEPARATION))
+	grid.add_theme_constant_override("v_separation", int(GRID_VERTICAL_SEPARATION))
 	scroll.add_child(grid)
 	return grid
 
@@ -161,28 +202,33 @@ func _paging_hint(node_name: String, text_value: String) -> Label:
 	var label := Label.new()
 	label.name = node_name
 	label.text = text_value
-	label.position = Vector2(18, 402)
-	label.size = Vector2(456, 28)
+	label.set_meta("calibration_text_revision", LAYOUT_REVISION)
+	label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
+	label.position = Vector2(18, 408)
+	label.size = Vector2(456, 20)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.theme_type_variation = "GothicMutedLabel"
 	return label
 
 
-func _build_page_controls(parent: Panel) -> void:
+func _build_page_controls(parent: Control) -> void:
 	previous_page_button = Button.new()
 	previous_page_button.name = "PreviousPageButton"
 	previous_page_button.text = "‹"
 	previous_page_button.position = Vector2(70, 430)
-	previous_page_button.size = Vector2(96, 70)
-	previous_page_button.theme_type_variation = "GothicComponentButton"
+	previous_page_button.size = Vector2(96, THIN_BUTTON_HEIGHT)
+	previous_page_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	previous_page_button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
+	previous_page_button.theme_type_variation = "GothicWarehouseThinButton"
 	previous_page_button.add_theme_font_size_override("font_size", 24)
 	previous_page_button.pressed.connect(_change_warehouse_page.bind(-1))
 	parent.add_child(previous_page_button)
 	warehouse_page_label = Label.new()
 	warehouse_page_label.name = "WarehousePageLabel"
 	warehouse_page_label.position = Vector2(176, 430)
-	warehouse_page_label.size = Vector2(140, 70)
+	warehouse_page_label.size = Vector2(140, THIN_BUTTON_HEIGHT)
+	warehouse_page_label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	warehouse_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	warehouse_page_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	warehouse_page_label.theme_type_variation = "GothicSectionTitle"
@@ -191,8 +237,10 @@ func _build_page_controls(parent: Panel) -> void:
 	next_page_button.name = "NextPageButton"
 	next_page_button.text = "›"
 	next_page_button.position = Vector2(326, 430)
-	next_page_button.size = Vector2(96, 70)
-	next_page_button.theme_type_variation = "GothicComponentButton"
+	next_page_button.size = Vector2(96, THIN_BUTTON_HEIGHT)
+	next_page_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	next_page_button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
+	next_page_button.theme_type_variation = "GothicWarehouseThinButton"
 	next_page_button.add_theme_font_size_override("font_size", 24)
 	next_page_button.pressed.connect(_change_warehouse_page.bind(1))
 	parent.add_child(next_page_button)
@@ -214,8 +262,10 @@ func _transfer_button(node_name: String, label_text: String, position_value: Vec
 	button.name = node_name
 	button.text = label_text
 	button.position = position_value
-	button.size = Vector2(96, 70)
-	button.theme_type_variation = "GothicComponentButton"
+	button.size = Vector2(96, THIN_BUTTON_HEIGHT)
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
+	button.theme_type_variation = "GothicWarehouseThinButton"
 	button.add_theme_font_size_override("font_size", 17)
 	return button
 
@@ -275,8 +325,27 @@ func refresh() -> void:
 	previous_page_button.disabled = warehouse_page <= 0
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
 	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = selected_stash_index < 0
+	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory.size() >= BAG_CAPACITY
 	_refresh_transfer_detail()
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "warehouse")
+	_stabilize_grid_layout.call_deferred()
+
+
+func _stabilize_grid_layout() -> void:
+	for scroll_path in ["StashSection/StashScroll", "BagSection/BagScroll"]:
+		var scroll := get_node_or_null(scroll_path) as ScrollContainer
+		if scroll != null:
+			scroll.size = GRID_SCROLL_RECT.size
+			scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+			scroll.clip_contents = true
+	for grid in [stash_grid, bag_grid]:
+		if grid == null:
+			continue
+		grid.columns = GRID_COLUMNS
+		grid.position = Vector2.ZERO
+		grid.custom_minimum_size = GRID_MINIMUM_SIZE
+		grid.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		grid.queue_sort()
 
 
 func _fill_grid(
@@ -293,6 +362,7 @@ func _fill_grid(
 		var data_index := start_index + display_index
 		var record: Dictionary = records[data_index] if data_index < records.size() and records[data_index] is Dictionary else {}
 		grid.add_child(_create_item_cell(side, data_index, display_index, record, data_index == selected_index))
+	grid.queue_sort()
 
 
 func _create_item_cell(
@@ -322,6 +392,7 @@ func _create_item_cell(
 	if not record.is_empty() and count > 1:
 		var count_label := Label.new()
 		count_label.name = "StackCount"
+		count_label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 		count_label.text = str(count)
 		count_label.position = Vector2(30, 41)
 		count_label.size = Vector2(22, 19)
@@ -337,6 +408,8 @@ func _create_item_cell(
 
 
 func _select_item(side: String, index: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	if side == "bag":
 		selected_bag_index = index
 		selected_stash_index = -1
@@ -355,6 +428,8 @@ func _change_warehouse_page(delta: int) -> void:
 func _refresh_transfer_detail() -> void:
 	if selected_bag_index >= 0:
 		transfer_detail_label.text = str(PlayerState.inventory[selected_bag_index].get("name", "未知物品"))
+	elif selected_stash_index >= 0 and PlayerState.inventory.size() >= BAG_CAPACITY:
+		transfer_detail_label.text = "背包已满，无法取出"
 	elif selected_stash_index >= 0:
 		transfer_detail_label.text = str(_warehouse_record(selected_stash_index).get("name", "未知物品"))
 	elif _first_free_slot_on_current_page() < 0:
@@ -375,24 +450,65 @@ func _deposit() -> void:
 	var target_slot := _first_free_slot_on_current_page()
 	if selected_bag_index < 0 or selected_bag_index >= PlayerState.inventory.size() or target_slot < 0:
 		return
-	_ensure_warehouse_slot(target_slot)
-	PlayerState.warehouse_inventory[target_slot] = PlayerState.inventory.pop_at(selected_bag_index)
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
+	var result: Dictionary = PlayerState.deposit_to_warehouse(selected_bag_index, target_slot)
 	selected_bag_index = -1
-	PlayerState.inventory_changed.emit()
-	PlayerState.save_game()
 	refresh()
+	transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
+	_show_transfer_result(deposit_button, bool(result.get("success", false)), "warehouse.deposit")
 
 
 func _withdraw() -> void:
 	if not _warehouse_slot_has_item(selected_stash_index):
 		return
-	PlayerState.inventory.append(PlayerState.warehouse_inventory[selected_stash_index])
-	PlayerState.warehouse_inventory[selected_stash_index] = {}
-	_trim_empty_warehouse_tail()
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
+	var result: Dictionary = PlayerState.withdraw_from_warehouse(selected_stash_index)
+	if not bool(result.get("success", false)):
+		withdraw_button.disabled = true if str(result.get("reason", "")) == "inventory_full" else withdraw_button.disabled
+		transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
+		_show_transfer_result(withdraw_button, false, "warehouse.withdraw")
+		return
 	selected_stash_index = -1
-	PlayerState.inventory_changed.emit()
-	PlayerState.save_game()
 	refresh()
+	transfer_detail_label.text = str(result.get("message", "已取出仓库物品。"))
+	_show_transfer_result(withdraw_button, true, "warehouse.withdraw")
+
+
+func _sort_requested() -> void:
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(sort_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.sort")
+	warehouse_sort_requested.emit()
+
+
+func _show_transfer_result(button: Button, success: bool, group: String) -> void:
+	# A late authority result (for example sort completing after deposit) must
+	# invalidate and clear every transfer action before showing its own result.
+	_clear_transfer_feedback()
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	GothicUIThemeScript.set_button_feedback(
+		button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
+		group,
+	)
+	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_transfer_feedback() -> void:
+	_action_feedback_serial += 1
+	for button in [deposit_button, withdraw_button, sort_button]:
+		GothicUIThemeScript.clear_button_feedback(button)
+
+
+func apply_sort_result(result: Dictionary) -> void:
+	refresh()
+	transfer_detail_label.text = str(result.get("message", "仓库整理请求已处理"))
+	_show_transfer_result(sort_button, bool(result.get("success", false)), "warehouse.sort")
 
 
 func _warehouse_record(slot_index: int) -> Dictionary:
@@ -466,26 +582,26 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	button.add_child(icon_rect)
 
 
-func _section_panel(node_name: String, rect: Rect2) -> Panel:
-	var surface := Panel.new()
-	surface.name = "%sSurface" % node_name
-	surface.position = rect.position
-	surface.size = rect.size
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
-	var panel := Panel.new()
-	panel.name = node_name
-	panel.position = rect.position
-	panel.size = rect.size
-	panel.theme_type_variation = "GothicInsetFrame"
-	add_child(panel)
-	return panel
+func _section_panel(node_name: String, rect: Rect2) -> Control:
+	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
+	# Section roots own content and calibrated geometry only.  Their former
+	# add_filled_section() decorations created three extra, unselectable frames
+	# around the left, transfer, and right columns.  Keep the stable roots while
+	# leaving their visual treatment to the explicit grid frames below.
+	var section := Control.new()
+	section.name = node_name
+	section.position = adjusted_rect.position
+	section.size = adjusted_rect.size
+	section.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(section)
+	return section
 
 
-func _section_title(text_value: String, width: float) -> Label:
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
 	var title := Label.new()
+	title.name = node_name
 	title.text = text_value
+	title.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	title.position = Vector2(18, 16)
 	title.size = Vector2(width - 36.0, 28)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -495,5 +611,8 @@ func _section_title(text_value: String, width: float) -> Label:
 
 
 func _close() -> void:
+	_clear_transfer_feedback()
+	GothicUIThemeScript.clear_button_feedback(previous_page_button)
+	GothicUIThemeScript.clear_button_feedback(next_page_button)
 	hide()
 	closed.emit()

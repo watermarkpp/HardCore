@@ -1,0 +1,3231 @@
+{
+  "schemaVersion": 1,
+  "contractId": "gameplay.merchant_catalog.v1",
+  "sourceDistribution": "server.crystal.cjlaaa",
+  "tradeSemantics": {
+    "trailingInteger": "pack_count",
+    "duplicateLines": "preserve_as_distinct_offers",
+    "supply": "unlimited_static_trade",
+    "projectOverrides": "excludedOffers_preserve_primary_evidence"
+  },
+  "merchants": {
+    "general": {
+      "stockKey": "general",
+      "npcId": "npc.4.001",
+      "merchantId": "merchant.server.crystal.cjlaaa.33",
+      "source": {
+        "distribution": "server.crystal.cjlaaa",
+        "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Grocery-0.txt",
+        "sha256": "73ab01c8a3afbeb64bfc36e1a4d5d01c61da84b53a38d169b5d848b79cb0646b",
+        "sections": [
+          "Types",
+          "Trade"
+        ]
+      },
+      "types": [
+        8,
+        12
+      ],
+      "merchantRateBps": 10000,
+      "stockMarkupBps": 11000,
+      "pricingEvidence": {
+        "merchantRate": {
+          "valueBps": 10000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:m_nPriceRate_default_100",
+          "npcOverride": "absent_in_source_script"
+        },
+        "stockMarkup": {
+          "valueBps": 11000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:CheckItemPrice_first_trade_offer"
+        },
+        "types": "source_script_[Types]",
+        "repairCapability": "source_script_@Repair_route"
+      },
+      "supportsRepair": false,
+      "offers": [
+        {
+          "offerIndex": 2,
+          "offerId": "offer:2:717:1",
+          "tradeLine": "随机传送卷 1",
+          "itemName": "随机传送卷",
+          "itemKey": "service:717",
+          "serviceIndex": 717,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 3,
+          "offerId": "offer:3:717:20",
+          "tradeLine": "随机传送卷 20",
+          "itemName": "随机传送卷",
+          "itemKey": "service:717",
+          "serviceIndex": 717,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 4,
+          "offerId": "offer:4:719:1",
+          "tradeLine": "回城卷 1",
+          "itemName": "回城卷",
+          "itemKey": "service:719",
+          "serviceIndex": 719,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 5,
+          "offerId": "offer:5:719:20",
+          "tradeLine": "回城卷 20",
+          "itemName": "回城卷",
+          "itemKey": "service:719",
+          "serviceIndex": 719,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 6,
+          "offerId": "offer:6:718:1",
+          "tradeLine": "地牢逃脱卷",
+          "itemName": "地牢逃脱卷",
+          "itemKey": "service:718",
+          "serviceIndex": 718,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 9,
+          "offerId": "offer:9:706:1",
+          "tradeLine": "修复油",
+          "itemName": "修复油",
+          "itemKey": "service:706",
+          "serviceIndex": 706,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        }
+      ],
+      "excludedOffers": [
+        {
+          "offerIndex": 0,
+          "offerId": "offer:0:722:1",
+          "tradeLine": "蜡烛",
+          "itemName": "蜡烛",
+          "itemKey": "service:722",
+          "serviceIndex": 722,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unrelated_general_goods"
+        },
+        {
+          "offerIndex": 1,
+          "offerId": "offer:1:723:1",
+          "tradeLine": "火把",
+          "itemName": "火把",
+          "itemKey": "service:723",
+          "serviceIndex": 723,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unrelated_general_goods"
+        },
+        {
+          "offerIndex": 7,
+          "offerId": "offer:7:712:500",
+          "tradeLine": "护身符 500",
+          "itemName": "护身符",
+          "itemKey": "service:712",
+          "serviceIndex": 712,
+          "packCount": 500,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unrelated_general_goods"
+        },
+        {
+          "offerIndex": 8,
+          "offerId": "offer:8:712:5000",
+          "tradeLine": "护身符 5000",
+          "itemName": "护身符",
+          "itemKey": "service:712",
+          "serviceIndex": 712,
+          "packCount": 5000,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unrelated_general_goods"
+        }
+      ],
+      "projectOverrides": {
+        "excludedItemNames": [
+          "护身符",
+          "火把",
+          "蜡烛"
+        ],
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1
+        ],
+        "officialEquipmentEvidence": {}
+      },
+      "unresolvedTradeLines": []
+    },
+    "starter_gear": {
+      "stockKey": "starter_gear",
+      "npcId": "npc.4.002",
+      "merchantId": "merchant.server.crystal.cjlaaa.46",
+      "source": {
+        "distribution": "server.crystal.cjlaaa",
+        "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Blacksmith-0103.txt",
+        "sha256": "389a6aa96afb7799d2675d43f7caf7dc6d4d35b9689a0d25733a474887da1d9d",
+        "sections": [
+          "Types",
+          "Trade"
+        ]
+      },
+      "types": [
+        1,
+        14
+      ],
+      "merchantRateBps": 10000,
+      "stockMarkupBps": 11000,
+      "pricingEvidence": {
+        "merchantRate": {
+          "valueBps": 10000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:m_nPriceRate_default_100",
+          "npcOverride": "absent_in_source_script"
+        },
+        "stockMarkup": {
+          "valueBps": 11000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:CheckItemPrice_first_trade_offer"
+        },
+        "types": "source_script_[Types]",
+        "repairCapability": "source_script_@Repair_route"
+      },
+      "supportsRepair": true,
+      "offers": [
+        {
+          "offerIndex": 0,
+          "offerId": "offer:0:221:1",
+          "tradeLine": "木剑",
+          "itemName": "木剑",
+          "itemKey": "service:221",
+          "serviceIndex": 221,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 3,
+          "offerId": "offer:3:222:1",
+          "tradeLine": "匕首",
+          "itemName": "匕首",
+          "itemKey": "service:222",
+          "serviceIndex": 222,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 4,
+          "offerId": "offer:4:223:1",
+          "tradeLine": "乌木剑",
+          "itemName": "乌木剑",
+          "itemKey": "service:223",
+          "serviceIndex": 223,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 6,
+          "offerId": "offer:6:224:1",
+          "tradeLine": "青铜剑",
+          "itemName": "青铜剑",
+          "itemKey": "service:224",
+          "serviceIndex": 224,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 8,
+          "offerId": "offer:8:225:1",
+          "tradeLine": "短剑",
+          "itemName": "短剑",
+          "itemKey": "service:225",
+          "serviceIndex": 225,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 10,
+          "offerId": "offer:10:226:1",
+          "tradeLine": "铁剑",
+          "itemName": "铁剑",
+          "itemKey": "service:226",
+          "serviceIndex": 226,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 12,
+          "offerId": "offer:12:227:1",
+          "tradeLine": "青铜斧",
+          "itemName": "青铜斧",
+          "itemKey": "service:227",
+          "serviceIndex": 227,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 13,
+          "offerId": "offer:13:238:1",
+          "tradeLine": "八荒",
+          "itemName": "八荒",
+          "itemKey": "service:238",
+          "serviceIndex": 238,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 14,
+          "offerId": "offer:14:254:1",
+          "tradeLine": "海魂",
+          "itemName": "海魂",
+          "itemKey": "service:254",
+          "serviceIndex": 254,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 15,
+          "offerId": "offer:15:268:1",
+          "tradeLine": "半月",
+          "itemName": "半月",
+          "itemKey": "service:268",
+          "serviceIndex": 268,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 18,
+          "offerId": "offer:18:836:1",
+          "tradeLine": "鹤嘴锄",
+          "itemName": "鹤嘴锄",
+          "itemKey": "service:836",
+          "serviceIndex": 836,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        }
+      ],
+      "excludedOffers": [
+        {
+          "offerIndex": 1,
+          "offerId": "offer:1:298:1",
+          "tradeLine": "WoodenBow",
+          "itemName": "WoodenBow",
+          "itemKey": "service:298",
+          "serviceIndex": 298,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 2,
+          "offerId": "offer:2:281:1",
+          "tradeLine": "虎牙刀",
+          "itemName": "虎牙刀",
+          "itemKey": "service:281",
+          "serviceIndex": 281,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
+        },
+        {
+          "offerIndex": 5,
+          "offerId": "offer:5:299:1",
+          "tradeLine": "EbonyBow",
+          "itemName": "EbonyBow",
+          "itemKey": "service:299",
+          "serviceIndex": 299,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 7,
+          "offerId": "offer:7:283:1",
+          "tradeLine": "暴虎刀",
+          "itemName": "暴虎刀",
+          "itemKey": "service:283",
+          "serviceIndex": 283,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
+        },
+        {
+          "offerIndex": 9,
+          "offerId": "offer:9:300:1",
+          "tradeLine": "ShortBow",
+          "itemName": "ShortBow",
+          "itemKey": "service:300",
+          "serviceIndex": 300,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 11,
+          "offerId": "offer:11:301:1",
+          "tradeLine": "BoneBow",
+          "itemName": "BoneBow",
+          "itemKey": "service:301",
+          "serviceIndex": 301,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        },
+        {
+          "offerIndex": 16,
+          "offerId": "offer:16:284:1",
+          "tradeLine": "音速刀",
+          "itemName": "音速刀",
+          "itemKey": "service:284",
+          "serviceIndex": 284,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_noncanonical_equipment_missing_equipment_attribute_master"
+        },
+        {
+          "offerIndex": 17,
+          "offerId": "offer:17:302:1",
+          "tradeLine": "CompoundBow",
+          "itemName": "CompoundBow",
+          "itemKey": "service:302",
+          "serviceIndex": 302,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_unsupported_legacy_bow_offer"
+        }
+      ],
+      "projectOverrides": {
+        "excludedItemNames": [
+          "BoneBow",
+          "CompoundBow",
+          "EbonyBow",
+          "ShortBow",
+          "WoodenBow",
+          "暴虎刀",
+          "虎牙刀",
+          "音速刀"
+        ],
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1
+        ],
+        "officialEquipmentEvidence": {
+          "path": "assets/data/equipment_attribute_master.json",
+          "recordCount": 175,
+          "matchingPolicy": "starter_gear_equipment_name_must_exist_in_equipment_attribute_master"
+        }
+      },
+      "unresolvedTradeLines": []
+    },
+    "books": {
+      "stockKey": "books",
+      "npcId": "npc.4.003",
+      "merchantId": "merchant.server.crystal.cjlaaa.45",
+      "source": {
+        "distribution": "server.crystal.cjlaaa",
+        "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/BookStore-0104.txt",
+        "sha256": "83ec666fcdf04d0fbc43df73b3b55c2a74f925bdff2e6ea9209fd55d63443ae9",
+        "sections": [
+          "Types",
+          "Trade"
+        ]
+      },
+      "types": [
+        20
+      ],
+      "merchantRateBps": 10000,
+      "stockMarkupBps": 11000,
+      "pricingEvidence": {
+        "merchantRate": {
+          "valueBps": 10000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:m_nPriceRate_default_100",
+          "npcOverride": "absent_in_source_script"
+        },
+        "stockMarkup": {
+          "valueBps": 11000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:CheckItemPrice_first_trade_offer"
+        },
+        "types": "source_script_[Types]",
+        "repairCapability": "source_script_@Repair_route"
+      },
+      "supportsRepair": false,
+      "offers": [
+        {
+          "offerIndex": 0,
+          "offerId": "offer:0:973:1",
+          "tradeLine": "基本剑术",
+          "itemName": "基本剑术",
+          "itemKey": "service:973",
+          "serviceIndex": 973,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 1,
+          "sourceLine": 202,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "warrior.basic_swordsmanship",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 1,
+          "offerId": "offer:1:974:1",
+          "tradeLine": "攻杀剑术",
+          "itemName": "攻杀剑术",
+          "itemKey": "service:974",
+          "serviceIndex": 974,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 2,
+          "sourceLine": 203,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "warrior.slaying_swordsmanship",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 8,
+          "offerId": "offer:8:990:1",
+          "tradeLine": "火球术",
+          "itemName": "火球术",
+          "itemKey": "service:990",
+          "serviceIndex": 990,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 9,
+          "sourceLine": 210,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.fireball",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 9,
+          "offerId": "offer:9:991:1",
+          "tradeLine": "抗拒火环",
+          "itemName": "抗拒火环",
+          "itemKey": "service:991",
+          "serviceIndex": 991,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 10,
+          "sourceLine": 211,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.repulsion_ring",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 10,
+          "offerId": "offer:10:992:1",
+          "tradeLine": "诱惑之光",
+          "itemName": "诱惑之光",
+          "itemKey": "service:992",
+          "serviceIndex": 992,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 11,
+          "sourceLine": 212,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.temptation_light",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 11,
+          "offerId": "offer:11:993:1",
+          "tradeLine": "大火球",
+          "itemName": "大火球",
+          "itemKey": "service:993",
+          "serviceIndex": 993,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 12,
+          "sourceLine": 213,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.great_fireball",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 12,
+          "offerId": "offer:12:994:1",
+          "tradeLine": "地狱火",
+          "itemName": "地狱火",
+          "itemKey": "service:994",
+          "serviceIndex": 994,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 13,
+          "sourceLine": 214,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.hellfire",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 13,
+          "offerId": "offer:13:995:1",
+          "tradeLine": "雷电术",
+          "itemName": "雷电术",
+          "itemKey": "service:995",
+          "serviceIndex": 995,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 14,
+          "sourceLine": 215,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.lightning",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 14,
+          "offerId": "offer:14:996:1",
+          "tradeLine": "瞬息移动",
+          "itemName": "瞬息移动",
+          "itemKey": "service:996",
+          "serviceIndex": 996,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 15,
+          "sourceLine": 216,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.teleport",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 24,
+          "offerId": "offer:24:1016:1",
+          "tradeLine": "治愈术",
+          "itemName": "治愈术",
+          "itemKey": "service:1016",
+          "serviceIndex": 1016,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 25,
+          "sourceLine": 226,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.healing",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 25,
+          "offerId": "offer:25:1017:1",
+          "tradeLine": "精神力战法",
+          "itemName": "精神力战法",
+          "itemKey": "service:1017",
+          "serviceIndex": 1017,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 26,
+          "sourceLine": 227,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.spiritual_warfare",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 26,
+          "offerId": "offer:26:1018:1",
+          "tradeLine": "施毒术",
+          "itemName": "施毒术",
+          "itemKey": "service:1018",
+          "serviceIndex": 1018,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 27,
+          "sourceLine": 228,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.poison",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 27,
+          "offerId": "offer:27:1019:1",
+          "tradeLine": "灵魂火符",
+          "itemName": "灵魂火符",
+          "itemKey": "service:1019",
+          "serviceIndex": 1019,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 28,
+          "sourceLine": 229,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.soul_fire_talisman",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        },
+        {
+          "offerIndex": 28,
+          "offerId": "offer:28:1020:1",
+          "tradeLine": "召唤骷髅",
+          "itemName": "召唤骷髅",
+          "itemKey": "service:1020",
+          "serviceIndex": 1020,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 29,
+          "sourceLine": 230,
+          "catalogClassification": "official_shop_live",
+          "classificationEvidence": {
+            "classification": "official_shop_live",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.summon_skeleton",
+            "membershipStatus": "historical_verified",
+            "conservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ]
+          }
+        }
+      ],
+      "excludedOffers": [
+        {
+          "offerIndex": 2,
+          "offerId": "offer:2:975:1",
+          "tradeLine": "刺杀剑术",
+          "itemName": "刺杀剑术",
+          "itemKey": "service:975",
+          "serviceIndex": 975,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 3,
+          "sourceLine": 204,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "warrior.thrusting",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 97,
+              "rawLine": "1/500 刺杀剑术"
+            }
+          }
+        },
+        {
+          "offerIndex": 3,
+          "offerId": "offer:3:976:1",
+          "tradeLine": "半月弯刀",
+          "itemName": "半月弯刀",
+          "itemKey": "service:976",
+          "serviceIndex": 976,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 4,
+          "sourceLine": 205,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "warrior.half_moon",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt",
+              "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0",
+              "sourceLine": 138,
+              "rawLine": "1/100 半月弯刀"
+            }
+          }
+        },
+        {
+          "offerIndex": 4,
+          "offerId": "offer:4:977:1",
+          "tradeLine": "野蛮冲撞",
+          "itemName": "野蛮冲撞",
+          "itemKey": "service:977",
+          "serviceIndex": 977,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 5,
+          "sourceLine": 206,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "warrior.wild_rush",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt",
+              "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0",
+              "sourceLine": 139,
+              "rawLine": "1/100 野蛮冲撞"
+            }
+          }
+        },
+        {
+          "offerIndex": 5,
+          "offerId": "offer:5:978:1",
+          "tradeLine": "双龙斩",
+          "itemName": "双龙斩",
+          "itemKey": "service:978",
+          "serviceIndex": 978,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 6,
+          "sourceLine": 207,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 6,
+          "offerId": "offer:6:979:1",
+          "tradeLine": "捕绳剑",
+          "itemName": "捕绳剑",
+          "itemKey": "service:979",
+          "serviceIndex": 979,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 7,
+          "sourceLine": 208,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 7,
+          "offerId": "offer:7:980:1",
+          "tradeLine": "烈火剑法",
+          "itemName": "烈火剑法",
+          "itemKey": "service:980",
+          "serviceIndex": 980,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 8,
+          "sourceLine": 209,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "warrior.fire_sword",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/CaveWitch.txt",
+              "sha256": "f78aebe4c423bf06e4737594d41f85c89d8c84586120ce0eb6e5268f3bae1a5d",
+              "sourceLine": 118,
+              "rawLine": "1/25 烈火剑法"
+            }
+          }
+        },
+        {
+          "offerIndex": 15,
+          "offerId": "offer:15:997:1",
+          "tradeLine": "爆裂火焰",
+          "itemName": "爆裂火焰",
+          "itemKey": "service:997",
+          "serviceIndex": 997,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 16,
+          "sourceLine": 217,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.exploding_flame",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 93,
+              "rawLine": "1/250 爆裂火焰"
+            }
+          }
+        },
+        {
+          "offerIndex": 16,
+          "offerId": "offer:16:998:1",
+          "tradeLine": "火墙",
+          "itemName": "火墙",
+          "itemKey": "service:998",
+          "serviceIndex": 998,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 17,
+          "sourceLine": 218,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.fire_wall",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 94,
+              "rawLine": "1/250 火墙"
+            }
+          }
+        },
+        {
+          "offerIndex": 17,
+          "offerId": "offer:17:999:1",
+          "tradeLine": "疾光电影",
+          "itemName": "疾光电影",
+          "itemKey": "service:999",
+          "serviceIndex": 999,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 18,
+          "sourceLine": 219,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.laser",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 98,
+              "rawLine": "1/500 疾光电影"
+            }
+          }
+        },
+        {
+          "offerIndex": 18,
+          "offerId": "offer:18:1000:1",
+          "tradeLine": "寒冰掌",
+          "itemName": "寒冰掌",
+          "itemKey": "service:1000",
+          "serviceIndex": 1000,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 19,
+          "sourceLine": 220,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 19,
+          "offerId": "offer:19:1001:1",
+          "tradeLine": "地狱雷光",
+          "itemName": "地狱雷光",
+          "itemKey": "service:1001",
+          "serviceIndex": 1001,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 20,
+          "sourceLine": 221,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.hell_lightning",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt",
+              "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0",
+              "sourceLine": 144,
+              "rawLine": "1/100 地狱雷光"
+            }
+          }
+        },
+        {
+          "offerIndex": 20,
+          "offerId": "offer:20:1002:1",
+          "tradeLine": "魔法盾",
+          "itemName": "魔法盾",
+          "itemKey": "service:1002",
+          "serviceIndex": 1002,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 21,
+          "sourceLine": 222,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.magic_shield",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/HellBolt.txt",
+              "sha256": "bda89d614cbcad333f1154c4d8ab3289a323de7c4b4977d18958f423d8940e38",
+              "sourceLine": 90,
+              "rawLine": "1/1000 魔法盾"
+            }
+          }
+        },
+        {
+          "offerIndex": 21,
+          "offerId": "offer:21:1003:1",
+          "tradeLine": "圣言术",
+          "itemName": "圣言术",
+          "itemKey": "service:1003",
+          "serviceIndex": 1003,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 22,
+          "sourceLine": 223,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.holy_word",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt",
+              "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0",
+              "sourceLine": 146,
+              "rawLine": "1/200 圣言术"
+            }
+          }
+        },
+        {
+          "offerIndex": 22,
+          "offerId": "offer:22:1004:1",
+          "tradeLine": "嗜血术",
+          "itemName": "嗜血术",
+          "itemKey": "service:1004",
+          "serviceIndex": 1004,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 23,
+          "sourceLine": 224,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 23,
+          "offerId": "offer:23:1005:1",
+          "tradeLine": "冰咆哮",
+          "itemName": "冰咆哮",
+          "itemKey": "service:1005",
+          "serviceIndex": 1005,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 24,
+          "sourceLine": 225,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "wizard.ice_storm",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/CaveWitch.txt",
+              "sha256": "f78aebe4c423bf06e4737594d41f85c89d8c84586120ce0eb6e5268f3bae1a5d",
+              "sourceLine": 116,
+              "rawLine": "1/25 冰咆哮"
+            }
+          }
+        },
+        {
+          "offerIndex": 29,
+          "offerId": "offer:29:1021:1",
+          "tradeLine": "隐身术",
+          "itemName": "隐身术",
+          "itemKey": "service:1021",
+          "serviceIndex": 1021,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 30,
+          "sourceLine": 231,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.invisibility",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 91,
+              "rawLine": "1/250 隐身术"
+            }
+          }
+        },
+        {
+          "offerIndex": 30,
+          "offerId": "offer:30:1022:1",
+          "tradeLine": "集体隐身术",
+          "itemName": "集体隐身术",
+          "itemKey": "service:1022",
+          "serviceIndex": 1022,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 31,
+          "sourceLine": 232,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.mass_invisibility",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 92,
+              "rawLine": "1/250 集体隐身术"
+            }
+          }
+        },
+        {
+          "offerIndex": 31,
+          "offerId": "offer:31:1023:1",
+          "tradeLine": "幽灵盾",
+          "itemName": "幽灵盾",
+          "itemKey": "service:1023",
+          "serviceIndex": 1023,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 32,
+          "sourceLine": 233,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.magic_defense",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 95,
+              "rawLine": "1/250 幽灵盾"
+            }
+          }
+        },
+        {
+          "offerIndex": 32,
+          "offerId": "offer:32:1024:1",
+          "tradeLine": "心灵启示",
+          "itemName": "心灵启示",
+          "itemKey": "service:1024",
+          "serviceIndex": 1024,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 33,
+          "sourceLine": 234,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.revelation",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 99,
+              "rawLine": "1/500 心灵启示"
+            }
+          }
+        },
+        {
+          "offerIndex": 33,
+          "offerId": "offer:33:1025:1",
+          "tradeLine": "神圣战甲术",
+          "itemName": "神圣战甲术",
+          "itemKey": "service:1025",
+          "serviceIndex": 1025,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 34,
+          "sourceLine": 235,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.defense",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/僵尸1.txt",
+              "sha256": "ddede9999a8e74acd2469a7c15a4d88bd9a5de11bf9c5f806687db22dee3362d",
+              "sourceLine": 100,
+              "rawLine": "1/500 神圣战甲术"
+            }
+          }
+        },
+        {
+          "offerIndex": 34,
+          "offerId": "offer:34:1026:1",
+          "tradeLine": "气功波",
+          "itemName": "气功波",
+          "itemKey": "service:1026",
+          "serviceIndex": 1026,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 35,
+          "sourceLine": 236,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 35,
+          "offerId": "offer:35:1027:1",
+          "tradeLine": "困魔咒",
+          "itemName": "困魔咒",
+          "itemKey": "service:1027",
+          "serviceIndex": 1027,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 36,
+          "sourceLine": 237,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.entrapment",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt",
+              "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0",
+              "sourceLine": 151,
+              "rawLine": "1/100 困魔咒"
+            }
+          }
+        },
+        {
+          "offerIndex": 36,
+          "offerId": "offer:36:1028:1",
+          "tradeLine": "净化术",
+          "itemName": "净化术",
+          "itemKey": "service:1028",
+          "serviceIndex": 1028,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 37,
+          "sourceLine": 238,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 37,
+          "offerId": "offer:37:1029:1",
+          "tradeLine": "群体治疗术",
+          "itemName": "群体治疗术",
+          "itemKey": "service:1029",
+          "serviceIndex": 1029,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 38,
+          "sourceLine": 239,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.mass_healing",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/尸王.txt",
+              "sha256": "5cfe80c5ce870a10fa7832dec6892c31236c947f071521857236c9065ad0b0d0",
+              "sourceLine": 153,
+              "rawLine": "1/150 群体治疗术"
+            }
+          }
+        },
+        {
+          "offerIndex": 38,
+          "offerId": "offer:38:1030:1",
+          "tradeLine": "迷魂术",
+          "itemName": "迷魂术",
+          "itemKey": "service:1030",
+          "serviceIndex": 1030,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 39,
+          "sourceLine": 240,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 39,
+          "offerId": "offer:39:1031:1",
+          "tradeLine": "无极真气",
+          "itemName": "无极真气",
+          "itemKey": "service:1031",
+          "serviceIndex": 1031,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 40,
+          "sourceLine": 241,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 40,
+          "offerId": "offer:40:1032:1",
+          "tradeLine": "召唤神兽",
+          "itemName": "召唤神兽",
+          "itemKey": "service:1032",
+          "serviceIndex": 1032,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 41,
+          "sourceLine": 242,
+          "catalogClassification": "official_advanced_drop_only",
+          "exclusionReason": "official_advanced_drop_only",
+          "exclusionEvidence": {
+            "classification": "official_advanced_drop_only",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillId": "taoist.summon_divine_beast",
+            "membershipStatus": "historical_verified",
+            "absentFromConservativeShopPaths": [
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+              "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt"
+            ],
+            "dropEvidence": {
+              "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/CaveWitch.txt",
+              "sha256": "f78aebe4c423bf06e4737594d41f85c89d8c84586120ce0eb6e5268f3bae1a5d",
+              "sourceLine": 117,
+              "rawLine": "1/25 召唤神兽"
+            }
+          }
+        },
+        {
+          "offerIndex": 41,
+          "offerId": "offer:41:1041:1",
+          "tradeLine": "绝命剑法",
+          "itemName": "绝命剑法",
+          "itemKey": "service:1041",
+          "serviceIndex": 1041,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 42,
+          "sourceLine": 243,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 42,
+          "offerId": "offer:42:1042:1",
+          "tradeLine": "双刀术",
+          "itemName": "双刀术",
+          "itemKey": "service:1042",
+          "serviceIndex": 1042,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 43,
+          "sourceLine": 244,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 43,
+          "offerId": "offer:43:1043:1",
+          "tradeLine": "体迅风",
+          "itemName": "体迅风",
+          "itemKey": "service:1043",
+          "serviceIndex": 1043,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 44,
+          "sourceLine": 245,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 44,
+          "offerId": "offer:44:1044:1",
+          "tradeLine": "拔刀术",
+          "itemName": "拔刀术",
+          "itemKey": "service:1044",
+          "serviceIndex": 1044,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 45,
+          "sourceLine": 246,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 45,
+          "offerId": "offer:45:1045:1",
+          "tradeLine": "风身术",
+          "itemName": "风身术",
+          "itemKey": "service:1045",
+          "serviceIndex": 1045,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 46,
+          "sourceLine": 247,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 46,
+          "offerId": "offer:46:1046:1",
+          "tradeLine": "迁移剑",
+          "itemName": "迁移剑",
+          "itemKey": "service:1046",
+          "serviceIndex": 1046,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 47,
+          "sourceLine": 248,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 47,
+          "offerId": "offer:47:1047:1",
+          "tradeLine": "烈风击",
+          "itemName": "烈风击",
+          "itemKey": "service:1047",
+          "serviceIndex": 1047,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 48,
+          "sourceLine": 249,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 48,
+          "offerId": "offer:48:1048:1",
+          "tradeLine": "捕缚术",
+          "itemName": "捕缚术",
+          "itemKey": "service:1048",
+          "serviceIndex": 1048,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 49,
+          "sourceLine": 250,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        },
+        {
+          "offerIndex": 49,
+          "offerId": "offer:49:1049:1",
+          "tradeLine": "猛毒剑气",
+          "itemName": "猛毒剑气",
+          "itemKey": "service:1049",
+          "serviceIndex": 1049,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "sourceOrdinal": 50,
+          "sourceLine": 251,
+          "catalogClassification": "private_extension_excluded",
+          "exclusionReason": "private_extension_excluded",
+          "exclusionEvidence": {
+            "classification": "private_extension_excluded",
+            "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+            "formalSkillMasterPath": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "formalSkillMasterMembership": "missing"
+          }
+        }
+      ],
+      "projectOverrides": {
+        "excludedItemNames": [
+          "体迅风",
+          "冰咆哮",
+          "净化术",
+          "刺杀剑术",
+          "半月弯刀",
+          "双刀术",
+          "双龙斩",
+          "召唤神兽",
+          "嗜血术",
+          "困魔咒",
+          "圣言术",
+          "地狱雷光",
+          "寒冰掌",
+          "幽灵盾",
+          "心灵启示",
+          "拔刀术",
+          "捕绳剑",
+          "捕缚术",
+          "无极真气",
+          "气功波",
+          "火墙",
+          "烈火剑法",
+          "烈风击",
+          "爆裂火焰",
+          "猛毒剑气",
+          "疾光电影",
+          "神圣战甲术",
+          "绝命剑法",
+          "群体治疗术",
+          "迁移剑",
+          "迷魂术",
+          "野蛮冲撞",
+          "隐身术",
+          "集体隐身术",
+          "风身术",
+          "魔法盾"
+        ],
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1
+        ],
+        "officialEquipmentEvidence": {},
+        "officialBookShopPolicy": {
+          "contractId": "gameplay.official_book_shop.v1",
+          "policyId": "BOOK-SHOP-OFFICIAL-176-1",
+          "path": "assets/data/official_book_shop_policy_v1.json",
+          "classificationCounts": {
+            "official_shop_live": 14,
+            "official_advanced_drop_only": 19,
+            "private_extension_excluded": 17,
+            "unresolved_fail_closed": 0
+          }
+        }
+      },
+      "unresolvedTradeLines": []
+    },
+    "medicine": {
+      "stockKey": "medicine",
+      "npcId": "npc.expansion.bich_pharmacist",
+      "merchantId": "merchant.server.crystal.cjlaaa.29",
+      "source": {
+        "distribution": "server.crystal.cjlaaa",
+        "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Potion-0108.txt",
+        "sha256": "1f5756dbadf3890481737b5288da43f86bc5b6f1d6bde76c570e513c8ad4022d",
+        "sections": [
+          "Types",
+          "Trade"
+        ]
+      },
+      "types": [
+        13
+      ],
+      "merchantRateBps": 10000,
+      "stockMarkupBps": 11000,
+      "pricingEvidence": {
+        "merchantRate": {
+          "valueBps": 10000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:m_nPriceRate_default_100",
+          "npcOverride": "absent_in_source_script"
+        },
+        "stockMarkup": {
+          "valueBps": 11000,
+          "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:CheckItemPrice_first_trade_offer"
+        },
+        "types": "source_script_[Types]",
+        "repairCapability": "source_script_@Repair_route"
+      },
+      "supportsRepair": false,
+      "offers": [
+        {
+          "offerIndex": 0,
+          "offerId": "offer:0:658:1",
+          "tradeLine": "金疮药(小量) 1",
+          "itemName": "金疮药(小量)",
+          "itemKey": "service:658",
+          "serviceIndex": 658,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 1,
+          "offerId": "offer:1:658:20",
+          "tradeLine": "金疮药(小量) 20",
+          "itemName": "金疮药(小量)",
+          "itemKey": "service:658",
+          "serviceIndex": 658,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 2,
+          "offerId": "offer:2:659:1",
+          "tradeLine": "魔法药(小量) 1",
+          "itemName": "魔法药(小量)",
+          "itemKey": "service:659",
+          "serviceIndex": 659,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 3,
+          "offerId": "offer:3:659:20",
+          "tradeLine": "魔法药(小量) 20",
+          "itemName": "魔法药(小量)",
+          "itemKey": "service:659",
+          "serviceIndex": 659,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 4,
+          "offerId": "offer:4:660:1",
+          "tradeLine": "金疮药(中量) 1",
+          "itemName": "金疮药(中量)",
+          "itemKey": "service:660",
+          "serviceIndex": 660,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 5,
+          "offerId": "offer:5:660:20",
+          "tradeLine": "金疮药(中量) 20",
+          "itemName": "金疮药(中量)",
+          "itemKey": "service:660",
+          "serviceIndex": 660,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 6,
+          "offerId": "offer:6:661:1",
+          "tradeLine": "魔法药(中量) 1",
+          "itemName": "魔法药(中量)",
+          "itemKey": "service:661",
+          "serviceIndex": 661,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 7,
+          "offerId": "offer:7:661:20",
+          "tradeLine": "魔法药(中量) 20",
+          "itemName": "魔法药(中量)",
+          "itemKey": "service:661",
+          "serviceIndex": 661,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 8,
+          "offerId": "offer:8:662:1",
+          "tradeLine": "金疮药(大量) 1",
+          "itemName": "金疮药(大量)",
+          "itemKey": "service:662",
+          "serviceIndex": 662,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 9,
+          "offerId": "offer:9:662:20",
+          "tradeLine": "金疮药(大量) 20",
+          "itemName": "金疮药(大量)",
+          "itemKey": "service:662",
+          "serviceIndex": 662,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 10,
+          "offerId": "offer:10:663:1",
+          "tradeLine": "魔法药(大量) 1",
+          "itemName": "魔法药(大量)",
+          "itemKey": "service:663",
+          "serviceIndex": 663,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        },
+        {
+          "offerIndex": 11,
+          "offerId": "offer:11:663:20",
+          "tradeLine": "魔法药(大量) 20",
+          "itemName": "魔法药(大量)",
+          "itemKey": "service:663",
+          "serviceIndex": 663,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true
+        }
+      ],
+      "excludedOffers": [
+        {
+          "offerIndex": 12,
+          "offerId": "offer:12:664:1",
+          "tradeLine": "金疮药(特大) 1",
+          "itemName": "金疮药(特大)",
+          "itemKey": "service:664",
+          "serviceIndex": 664,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 13,
+          "offerId": "offer:13:664:20",
+          "tradeLine": "金疮药(特大) 20",
+          "itemName": "金疮药(特大)",
+          "itemKey": "service:664",
+          "serviceIndex": 664,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 14,
+          "offerId": "offer:14:665:1",
+          "tradeLine": "魔法药(特大) 1",
+          "itemName": "魔法药(特大)",
+          "itemKey": "service:665",
+          "serviceIndex": 665,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 15,
+          "offerId": "offer:15:665:20",
+          "tradeLine": "魔法药(特大) 20",
+          "itemName": "魔法药(特大)",
+          "itemKey": "service:665",
+          "serviceIndex": 665,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 16,
+          "offerId": "offer:16:666:1",
+          "tradeLine": "超级金疮药",
+          "itemName": "超级金疮药",
+          "itemKey": "service:666",
+          "serviceIndex": 666,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 17,
+          "offerId": "offer:17:666:20",
+          "tradeLine": "超级金疮药 20",
+          "itemName": "超级金疮药",
+          "itemKey": "service:666",
+          "serviceIndex": 666,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 18,
+          "offerId": "offer:18:667:1",
+          "tradeLine": "超级魔法药",
+          "itemName": "超级魔法药",
+          "itemKey": "service:667",
+          "serviceIndex": 667,
+          "packCount": 1,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        },
+        {
+          "offerIndex": 19,
+          "offerId": "offer:19:666:20",
+          "tradeLine": "超级金疮药 20",
+          "itemName": "超级金疮药",
+          "itemKey": "service:666",
+          "serviceIndex": 666,
+          "packCount": 20,
+          "supply": "unlimited_static_trade",
+          "resolved": true,
+          "exclusionReason": "project_owner_removed_private_server_potion_tier"
+        }
+      ],
+      "projectOverrides": {
+        "excludedItemNames": [
+          "超级金疮药",
+          "超级魔法药",
+          "金疮药(特大)",
+          "魔法药(特大)"
+        ],
+        "singleUnitOffersOnly": false,
+        "allowedPackCounts": [
+          1,
+          20
+        ],
+        "officialEquipmentEvidence": {}
+      },
+      "unresolvedTradeLines": []
+    }
+  },
+  "discoveredStandardMerchants": [
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Blacksmith-0103.txt",
+      "sha256": "389a6aa96afb7799d2675d43f7caf7dc6d4d35b9689a0d25733a474887da1d9d",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/BookStore-0104.txt",
+      "sha256": "83ec666fcdf04d0fbc43df73b3b55c2a74f925bdff2e6ea9209fd55d63443ae9",
+      "types": [
+        20
+      ],
+      "tradeLineCount": 50
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/BPotion-0109.txt",
+      "sha256": "dfbc5236c4f9e26704434551847c6488246d45c4c6eb5ac17a1ce01074be6b38",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Bracelet-0105.txt",
+      "sha256": "dfce3e058be232a44b1be5cc353cf67ada78b6dce7f016c168c57f629ad22326",
+      "types": [
+        6
+      ],
+      "tradeLineCount": 9
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Butcher-0102.txt",
+      "sha256": "60c589d76b4649c6fca3b841641cba1818c9d77ccdbf991a50a85c6da43d7b52",
+      "types": [
+        15
+      ],
+      "tradeLineCount": 2
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Clothing-0106.txt",
+      "sha256": "b2960fa22249bb6553ed47978b7355971884c09ff195a54212f32cb289c5826e",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Examiner-0.txt",
+      "sha256": "3c33a9309a617b0fde3883994413062510a72e111a64101c042c938dc02014cc",
+      "types": [],
+      "tradeLineCount": 1
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Grocery-0.txt",
+      "sha256": "73ab01c8a3afbeb64bfc36e1a4d5d01c61da84b53a38d169b5d848b79cb0646b",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 10
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Lottery-0.txt",
+      "sha256": "d229cfc47d7d02f4f6e3aca5fcc55abd7ae4124381b16d57c94510f8be6bc211",
+      "types": [],
+      "tradeLineCount": 1
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Necklace-0105.txt",
+      "sha256": "9d8ae05e462217c26a5acb6a1cd2d5dceca44d150bf1033d40aea13f109a5acc",
+      "types": [
+        5
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/PearlStore-0.txt",
+      "sha256": "cbe71e341360cff9c1cea32f2b3f59756a4d55111e4cea88722b867bd5fed40b",
+      "types": [
+        36
+      ],
+      "tradeLineCount": 3
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/PetStore-0.txt",
+      "sha256": "ba80da23b8762e5a5d8ac125b6020228a289fe9eae294c675efa4d8f4978d27f",
+      "types": [
+        36
+      ],
+      "tradeLineCount": 2
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Potion-0.txt",
+      "sha256": "0c1399a2c2ed14194de6bd04bfcbe7396412a0a28839f85525665f36c9a82c95",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 20
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Potion-0108.txt",
+      "sha256": "1f5756dbadf3890481737b5288da43f86bc5b6f1d6bde76c570e513c8ad4022d",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 20
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Ring-0105.txt",
+      "sha256": "68256d4dadbbdde2a39c80774ecab248d88fded8c53a8be0c96c9b855fec2893",
+      "types": [
+        7
+      ],
+      "tradeLineCount": 11
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/StableGirl-0.txt",
+      "sha256": "27a4b02bfe9841e669953342546e3a887159200cdb1c52985fa21ffe205db828",
+      "types": [],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Warehouse-0125.txt",
+      "sha256": "17f031ee937a75f240476290c72b724090611bda9cc91fddddf940c5860ef04f",
+      "types": [
+        1
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/WiseFisher-0.txt",
+      "sha256": "f6a798f3f7feb1310b57da18c0dd192cfe7cbd54f031df632aab46b4ed3bcc83",
+      "types": [],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Blacksmith-0.txt",
+      "sha256": "86e52478002728e6c6848166f87440a008af8d13753f86c66bf98acec4b40ca1",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/BookStore-0132.txt",
+      "sha256": "62e133faf5be7f66b5d8c3517674d63e039b634785d8cf89c1038af1e01a0e05",
+      "types": [
+        20
+      ],
+      "tradeLineCount": 21
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Bracelet-0141.txt",
+      "sha256": "b988d99b65c0850c0e99317d6f5bde10cf074ca4444871dc5d8ae094408bf7d7",
+      "types": [
+        6
+      ],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Drapery-0.txt",
+      "sha256": "05c53b8f3ee7a03d4a2cd226a0c000cc468870647c0deac51d615d4c0a40f03e",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Grocery-0.txt",
+      "sha256": "5d9cd823bfc687be198e9c33390ccfb422a13ae0586842ee68988108097d4d3d",
+      "types": [
+        8,
+        12,
+        13
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Necklace-0141.txt",
+      "sha256": "a23c578a2d559edf15f06823f347ca726290be1f80d526fc8133c4527d5a0279",
+      "types": [
+        5
+      ],
+      "tradeLineCount": 5
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Ring-0141.txt",
+      "sha256": "4bbf9368beaf9af79e8e0aa85c930b7c223bc06cbd4a14597ceffac2023b158b",
+      "types": [
+        7
+      ],
+      "tradeLineCount": 7
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BorderVillage/Warehouse-0140.txt",
+      "sha256": "0fd4a283a7949481505bca3da5eaf69f36b475f3a50fd80a3b6e5b3cb0fa386b",
+      "types": [
+        1
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/WickedTrader-DM001.txt",
+      "sha256": "afb9595670829eb412d97907828e8ac166c36de9e6225b06e793502a61fcc7f5",
+      "types": [
+        1,
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 36
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/WickedTrader-DM011.txt",
+      "sha256": "6beae09463f694b3f8a63d6c719dc58b0efe875152086b1d52903b224b9c5ab7",
+      "types": [
+        1,
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 37
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Armour.txt",
+      "sha256": "3c56846a86f8da2203ba7038d6b719b867fd196c1e957369e55a865e0933e801",
+      "types": [
+        2
+      ],
+      "tradeLineCount": 70
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Awakening.txt",
+      "sha256": "bd1bf4280f51ee77c4e0289eaf1aa60dcef583fa335ebeb41efe23521ff81b01",
+      "types": [
+        35
+      ],
+      "tradeLineCount": 28
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Belt.txt",
+      "sha256": "089adecb2591872dc367cf47b73cfa56742043ee2cb1d666a130c80f9245bcd0",
+      "types": [
+        9
+      ],
+      "tradeLineCount": 27
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Book.txt",
+      "sha256": "706c6894d68f1ac8634d153fac5e2cbd5e8b5ce12ae50371abd1445a030a56e1",
+      "types": [
+        20
+      ],
+      "tradeLineCount": 102
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Boot.txt",
+      "sha256": "6de1293e9c3a7d1598c0b46f1d0aa2350d2d01355a03ef9e03fc13f99669b42c",
+      "types": [
+        10
+      ],
+      "tradeLineCount": 34
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Bracelet.txt",
+      "sha256": "ba38bcefdbe2434e1b8cde0345d64e9d07fe4d0c579a5441ad071c0a8ae9de19",
+      "types": [
+        6
+      ],
+      "tradeLineCount": 71
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-CraftingMaterial.txt",
+      "sha256": "853848f28addaee0f8f9acc4b02e4a236d095a319bba44e9ddf9a97d85ba0107",
+      "types": [
+        16
+      ],
+      "tradeLineCount": 54
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Fishing.txt",
+      "sha256": "599a3f855da07496d7ffe83165d6aecdcc75180012b6f800deeda57c46347598",
+      "types": [
+        1,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "tradeLineCount": 15
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Gem.txt",
+      "sha256": "6c0f2536bb179c78ec5cdb46f6b706a69929ced738b44ae0e9526076230db0a8",
+      "types": [
+        18
+      ],
+      "tradeLineCount": 28
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Grocery.txt",
+      "sha256": "db5d4a99eb865d1296f3766c970d70104b4a5b1e1fa94d7a444f79b43ece88c8",
+      "types": [
+        8,
+        12,
+        17
+      ],
+      "tradeLineCount": 18
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Helmet.txt",
+      "sha256": "90575906eeefe4f8000dad13dcca98f85978930af0727b7551ec6cf57318156c",
+      "types": [
+        4
+      ],
+      "tradeLineCount": 31
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Meat.txt",
+      "sha256": "1476d7a05a684c59ba0bad94aa3e66ad3da8a68378111be3aca9cab6412c5600",
+      "types": [
+        15
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Mount.txt",
+      "sha256": "5c3685c47d7b7b34eb835e274b66e8e88ef057c6a4a087ddb14e1df72418dd0e",
+      "types": [
+        19,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "tradeLineCount": 29
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Necklace.txt",
+      "sha256": "5aeb7378cdb471ff2b441745ed14e6bbe8756df7fa6f35ec86c1c2aeac91525d",
+      "types": [
+        5
+      ],
+      "tradeLineCount": 81
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Nothing.txt",
+      "sha256": "ed13f3e005b72d92b50263cceba59fc5d4975c10168a3e3297ed57ffd6442ff2",
+      "types": [
+        0
+      ],
+      "tradeLineCount": 11
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Ore.txt",
+      "sha256": "53f2217236481a3709db922700739e2ad1f09de0d628059893a8099cf54e30b6",
+      "types": [
+        14
+      ],
+      "tradeLineCount": 12
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Potion.txt",
+      "sha256": "f6b116c7cf86976d381d932fc374755ade992780445c2d87b6525c74a3f53648",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 26
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Quest.txt",
+      "sha256": "580146dd1645805719bd99c3c2a90d167620fea9008c4ec321c18e891db6e728",
+      "types": [
+        34
+      ],
+      "tradeLineCount": 71
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Ring.txt",
+      "sha256": "632aa0d31f9f26f7b03697352f4245f31f2e97cfea8eb2657472ca4a1da3ba8c",
+      "types": [
+        7
+      ],
+      "tradeLineCount": 93
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Script.txt",
+      "sha256": "7eef9bbf3f6dc62aab9b46026128581704f687f6f175f017f226025faec10820",
+      "types": [
+        21
+      ],
+      "tradeLineCount": 29
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Stone.txt",
+      "sha256": "1077b0f3c9e9108d72427b9613bb8e1e5caa08c80b943661226b0967348e410e",
+      "types": [
+        11
+      ],
+      "tradeLineCount": 31
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/GM/GM-Weapon.txt",
+      "sha256": "62b15f10b3aee951bcbab114a75a4a0b6a3b63ddf60662a8057949ced484a5ab",
+      "types": [
+        1
+      ],
+      "tradeLineCount": 147
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/9Mlo-3.txt",
+      "sha256": "d0bf9de06864be92496c6a708e2dac29d025195de395b2b89e499c6d7664d000",
+      "types": [],
+      "tradeLineCount": 1
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Blacksmith-0159.txt",
+      "sha256": "8c1e4fbeed09944fb296237acd0c8a126da155507a1fa1632125d0ddd847e70d",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 24
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Clothes-0149.txt",
+      "sha256": "5138829bc625fee3cfaaf678409eef032bfc2a44b9531832e7e9b2ebf39370b5",
+      "types": [
+        2,
+        4,
+        10
+      ],
+      "tradeLineCount": 18
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Grocery-3.txt",
+      "sha256": "7a4ec216ac949dea51df3de7bc7e8a1ab842861c18c2c4606d78ed8a9613e045",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Grocery1-3.txt",
+      "sha256": "6907581066c3cf75a17bf62d34e49dd14e403278a2ca9879bd4039513be86e24",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Helmets-0149.txt",
+      "sha256": "33f0aa5bad0f8e80d5a8bfd1e42f78efd1dd5f21912bc8a2884542a95f0323ba",
+      "types": [
+        9
+      ],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/JewelersBracelet-0149.txt",
+      "sha256": "b988d99b65c0850c0e99317d6f5bde10cf074ca4444871dc5d8ae094408bf7d7",
+      "types": [
+        6
+      ],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/JewelersBracelet-0158.txt",
+      "sha256": "b988d99b65c0850c0e99317d6f5bde10cf074ca4444871dc5d8ae094408bf7d7",
+      "types": [
+        6
+      ],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/JewelersNecklace-0158.txt",
+      "sha256": "2884a53b9ac0361c3a4eb3189eaa4b724da40e17b75b1ccbe0677b4e47a84eb0",
+      "types": [
+        5
+      ],
+      "tradeLineCount": 5
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/JewelersRing-0158.txt",
+      "sha256": "e9433b2485330048d5399f457bce22476bfd66f1197416272a972d6b4302f235",
+      "types": [
+        7
+      ],
+      "tradeLineCount": 7
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Potion-0160.txt",
+      "sha256": "8e96daf9830f7f6ec09723c7a904e294a35390e1540c0e5b8ff3767721899365",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Potion-3.txt",
+      "sha256": "0875cc76619b79ace74c6831304c76503287e666903020273ea92bead9475e9d",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/MudWall/Warehouse-0145.txt",
+      "sha256": "5834eca2ef43b481ee8f99cd85a01d4064dfa5b25e9303633de0f6e60679a30f",
+      "types": [
+        1
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/2Awe-0151.txt",
+      "sha256": "90fa122606412fafb91aa6abd588061a2b44f24d4a92a4b7e3882c08280b1f2e",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/3Adr-0155.txt",
+      "sha256": "94dd534820e22476cd8cc06db58197f5853db3168140eb083b61dad3f18c3693",
+      "types": [
+        2,
+        4,
+        10
+      ],
+      "tradeLineCount": 18
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/3Ahe-0155.txt",
+      "sha256": "b02c8e7b60f0b3cb5ad62c26450cee1eeb19cddbfaa1c395812c99b208b4ce68",
+      "types": [
+        9
+      ],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/4Adm-0153.txt",
+      "sha256": "cc88ea83b4885c2f2113a5063cecf0c91d608858525594959192c18377de8fe2",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/4Adu-0153.txt",
+      "sha256": "3376ac10ff5a04c18b53a5417350d9fc3dc090af48ee323f7b34e92777f3d493",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/6Awh-0152.txt",
+      "sha256": "fbe8cf7d1c6825a61012d97ab985a6283dd337e56427fb3c62d028612f4bc9a2",
+      "types": [
+        1
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/7Ast-3.txt",
+      "sha256": "f8991289108159fc87f337c13bb4fe16f4956d914c5455227c343bc270ff606d",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 9
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/8Abr-0154.txt",
+      "sha256": "44f4fa53e938bd485b64d1831de3497c69d7e07c3a6d12bd27f1d87fcd56062a",
+      "types": [
+        6
+      ],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/8Ane-0154.txt",
+      "sha256": "13033f3a4cc091f9a750ffadbefc72fcbc5964afda3770967a4d7c2cc7a486d3",
+      "types": [
+        5
+      ],
+      "tradeLineCount": 5
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/MongchonProvince/SabukWall/8Ari-0154.txt",
+      "sha256": "def96a204d366bd49f4e452a0b7d01b7bb310e063324a0bb4cf52f2ccc8fc019",
+      "types": [
+        7
+      ],
+      "tradeLineCount": 7
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PastBichon/2Pbwe.txt",
+      "sha256": "3bb17ed9637fb8fcce0bb84df12cdfba7367cccd7c753a6b162cc1c4b229e2b5",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 24
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PastBichon/3Pbdr.txt",
+      "sha256": "0e7d1754186263d7b56c0eae9df0540cf65fe8926f380186176ff22fe02113c5",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 31
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PastBichon/4Pbdu.txt",
+      "sha256": "30fd353788b701eedc079e979982efc8d94050bf5715452fb0c91cf97e15e53d",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PastBichon/7Pbst.txt",
+      "sha256": "a88de73003534169700fbda9b637e56de8121dc9f39a00c327396f826166bec5",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 12
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PastBichon/8Pbac.txt",
+      "sha256": "8577a33a6b666bad283bceb521984c09e2f5c15379cd0f6f6cdefe8c21edad07",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PrajnaIsland/2Piwe.txt",
+      "sha256": "87a2bb0f1a18d62873f00f004c473e703253e1ed41a140c73716e0bd75286028",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PrajnaIsland/3Pidr.txt",
+      "sha256": "79388e91316f55d2ffec8d196113bd81aeead50e01400e396a44fd7ccac1237f",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 21
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PrajnaIsland/4Pidm.txt",
+      "sha256": "dfbc5236c4f9e26704434551847c6488246d45c4c6eb5ac17a1ce01074be6b38",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PrajnaIsland/4Pidu.txt",
+      "sha256": "324ccaff3d69582944d5e0ffa8819370f6b42248deccabed19945ad2613373ab",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PrajnaIsland/7Pist.txt",
+      "sha256": "d4077e042e80f8466d4c35e0ceba6399884f9a053845b6ed580228f3342d705a",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/PrajnaIsland/8Piac.txt",
+      "sha256": "55671de3c4fde24e72b8c0684b2ffb96d059dd402ca5592693e3671c49f62b5e",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/SerpentValley/Village/Blacksmith-2.txt",
+      "sha256": "21153bbd7f11051e4b8a3d2b46884460ee3d2832974fe67f8de4cd6e3f63ef6d",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/SerpentValley/Village/Clothes-2.txt",
+      "sha256": "46829ccbb3786cbfb5c039b0a038371d956a9ce0473cc6640c8d0c16c88dfc29",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/SerpentValley/Village/Grocery-2.txt",
+      "sha256": "56ead0e5bef0144151710449a363b7a3e6addab33f010c2e02e346ec25798188",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/SerpentValley/Village/Potion-2.txt",
+      "sha256": "1c173550ae66dccb52bc921e937e7f8c0bc8d0c9d78fe462a08a3339ee32fa98",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/2Hvwe-HELL00.txt",
+      "sha256": "e223666e2fb315a5dd582b41f7fd9d7230fec8debb1d73b9ce46a1056ff701db",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/3Hvdr-HELL00.txt",
+      "sha256": "b77d05513abba320960eef14a78167df36c14e37d6e8b50d4040a81c02bd739b",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 15
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/4Hvdu-HELL00.txt",
+      "sha256": "58f9fa30abfdcbc6e7c6c2a43863d5d5133ca60bc44625ef649c63b4dce6f09c",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/8hvac-HELL00.txt",
+      "sha256": "0631c4ccc9c17f4dadc282286369bbccc965d883780cf4a0965f2cec18d0f708",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/ABdu-NAMMAN.txt",
+      "sha256": "ff53c37e741d2d5ceca74285bc3c24d858256df346a7af812fc2517b45e886cd",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/ABst-NAMMAN.txt",
+      "sha256": "776d0324441754b92eca7affa7ab4e5adc1d222ae64e98b628aa9cf393453e4a",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 12
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/Grocery-HELL00.txt",
+      "sha256": "3261243c39d26f6d55e4196a25147e403c806c0910db8301a0242341db90f342",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/南蛮杂货商-NAMMAN2.txt",
+      "sha256": "8a4e352adbb813a8aa476e8f0eb59ae8cfc51cdda86e7ea9dba0e1bef9e6599a",
+      "types": [
+        8,
+        12,
+        13
+      ],
+      "tradeLineCount": 13
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/南蛮武器商-NAMMAN2.txt",
+      "sha256": "06de3e58bb71374902528af8393373d95e941762ee0eff6afad9edf6bc3d30c3",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 14
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/南蛮药商-NAMMAN2.txt",
+      "sha256": "15b806c8694148380b0c4f119779d3112fb0cf1afe8200aad3f3b2844bcbe064",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/南蛮衣甲商-NAMMAN2.txt",
+      "sha256": "3c44c7a50c01e2a94549728b5ed346abd6e01efa96d312cf764baef182120ea2",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WasteLand/南蛮首饰店-NAMMAN2.txt",
+      "sha256": "ef4970a3f77aeb5e00bd6b018ce4c26f2743e3b34a3455cf3164dec0f34ad7dd",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Accessory.txt",
+      "sha256": "afba952cbf41f9699fadd304abd116e50c468f1ffac0e9496794f435c7acd5f7",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Blacksmith.txt",
+      "sha256": "374e9f506d29905a6eb4538cf3554f313f6f179465fe242e3ee3e7f8b2d4a7ba",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 26
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Book.txt",
+      "sha256": "51dc467da96cb8d090d7e2a1330b52c21b24a80c44bc1843bd43199883ccb4a4",
+      "types": [
+        20
+      ],
+      "tradeLineCount": 21
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Drapery.txt",
+      "sha256": "7d91ba038cefed1cb030db78f04befa2e35cbfde7d00b79fcd5f714a276b32c4",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/Fisheries.txt",
+      "sha256": "4fbadac5de302013765d9bd7dcf8c428199a7a70720599a8c30849054150ef6c",
+      "types": [],
+      "tradeLineCount": 6
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WhiteValley/Encampment/General.txt",
+      "sha256": "f752d00dd9112ce15e8d60e4b2029343d106eac2d97f0812aa1495190151f790",
+      "types": [
+        8,
+        12,
+        13
+      ],
+      "tradeLineCount": 27
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/1Gime.txt",
+      "sha256": "f0a2e0db6fdf9c30a924e396ad643ab59e1be2acc94366f95fed93c46e131651",
+      "types": [
+        15
+      ],
+      "tradeLineCount": 2
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/2Giwe.txt",
+      "sha256": "2dfa2e31add20cfedb0370d7c7386d76715eb74bbfd0ed73a6696a616c2e5a76",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/3Gidr.txt",
+      "sha256": "1eb2870a498dc6a55d804aca783024dac29d0c6462a132db3598dce0c8e36453",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/4Gidm.txt",
+      "sha256": "dfbc5236c4f9e26704434551847c6488246d45c4c6eb5ac17a1ce01074be6b38",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/4Gidu.txt",
+      "sha256": "58f9fa30abfdcbc6e7c6c2a43863d5d5133ca60bc44625ef649c63b4dce6f09c",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/6Giwh.txt",
+      "sha256": "e8597821f2965c6540688176249c77882d0191fd5753efe8bd95c434eb9f899d",
+      "types": [
+        1
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/7Gist.txt",
+      "sha256": "5099b523772a62e9dbde800040c91bb1ab766894b7d5bb30663d5cd97185b98a",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Castle-GI/8Giac.txt",
+      "sha256": "55671de3c4fde24e72b8c0684b2ffb96d059dd402ca5592693e3671c49f62b5e",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Fortress/2Wwe-1.txt",
+      "sha256": "5dc4da0f961c92654a5586e6c8ed1415c3248a8a35d3fc443d8853c9dbcb51de",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 26
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Fortress/4Wdu-1.txt",
+      "sha256": "1c8191a49168af5ec09773a0d5dd1450cab540dfd0909ce3d421db86f07ffcae",
+      "types": [
+        8,
+        12,
+        13
+      ],
+      "tradeLineCount": 23
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/Fortress/WWDr-1.txt",
+      "sha256": "1eb2870a498dc6a55d804aca783024dac29d0c6462a132db3598dce0c8e36453",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 17
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/SeokchoValley/Grocery.txt",
+      "sha256": "225c1a1f4ad4d027b06122d8077dd494a4950f7c08396589907bb7b4a696ce10",
+      "types": [
+        8,
+        12,
+        13
+      ],
+      "tradeLineCount": 27
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/SeokchoValley/Merchant.txt",
+      "sha256": "df3d16dc8e5844574aa30e10515e500855ac157bee5b4624f55c2cea426b019c",
+      "types": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        14
+      ],
+      "tradeLineCount": 71
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/2Wwe.txt",
+      "sha256": "682240503e6367e98760c2c8a70204c13f1b3f3ab07069838f6a9a25edd02755",
+      "types": [
+        1,
+        14
+      ],
+      "tradeLineCount": 19
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/3Wdr.txt",
+      "sha256": "23f907519472001ece659aeb56d059288be6c998ee6010c458c88ac376b22000",
+      "types": [
+        2,
+        4,
+        9,
+        10
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/4Wdm.txt",
+      "sha256": "dfbc5236c4f9e26704434551847c6488246d45c4c6eb5ac17a1ce01074be6b38",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 4
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/4Wdu.txt",
+      "sha256": "54549caebd6cdca721b663695a8cd4fde3cbd7bda0be358066b200be7825068c",
+      "types": [
+        13
+      ],
+      "tradeLineCount": 16
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/5Wbo.txt",
+      "sha256": "840c1bd4c2e141424d1c375536b42b309a1f4068dd29722ff9a61afeaba86d19",
+      "types": [
+        20
+      ],
+      "tradeLineCount": 21
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/7Wst.txt",
+      "sha256": "f82dbe47c54b9dece1e3f860959290e71453a08fc2cf51bc4c868fcabeee3c01",
+      "types": [
+        8,
+        12
+      ],
+      "tradeLineCount": 8
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/WoomyonWoods/TaoistVillage/8Wac.txt",
+      "sha256": "55671de3c4fde24e72b8c0684b2ffb96d059dd402ca5592693e3671c49f62b5e",
+      "types": [
+        5,
+        6,
+        7
+      ],
+      "tradeLineCount": 17
+    }
+  ],
+  "knownPrimaryAnomalies": [
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/NPCs/BichonProvince/BichonWall/Potion-0108.txt",
+      "rule": "preserve_duplicate_trade_lines_verbatim",
+      "note": "Primary repeats 超级金疮药 20 where a different item may have been intended; no correction is inferred."
+    }
+  ]
+}

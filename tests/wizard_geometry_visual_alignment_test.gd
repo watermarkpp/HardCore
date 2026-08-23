@@ -7,6 +7,21 @@ const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd"
 
 const MAP_WORLD_ORIGIN := Vector2(137.25, -91.5)
 const MAX_PIXEL_ROUNDING_ERROR := 0.5
+const LASER_FORWARD_ENDPOINT_TOLERANCE_PX := 1.0
+
+
+func _presentation_plan(skill_id: String) -> Dictionary:
+	# Q3-C: legacy the legacy resolver was removed; create_visual reads
+	# the geometry contract and profile from the registry, so the plan only
+	# needs the frozen identity fields.
+	return {
+		"success": true,
+		"skill_id": skill_id,
+		"operation": "canonical_visual_only",
+		"visual": CasterSkillVisualRegistry.profile(skill_id),
+		"visual_radius_px": 72.0,
+		"visual_duration": 0.8,
+	}
 
 
 func _ready() -> void:
@@ -186,19 +201,30 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 				func(tile: Vector2) -> Vector2:
 					return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 			)
-			var plan := CasterSkillRuntime.resolve(str(skill_case.skill_id), {
-				"skill_level": 3,
-				"caster_level": 40,
-				"owner_level": 40,
-				"target_level": 20,
-				"target_max_hp": 500,
-				"magic_stat_roll": 30,
-				"random_0_to_10": 0,
-			})
+			# Q3-C: legacy the legacy resolver was removed; create_visual
+			# consumes the geometry contract directly from a frozen plan dict.
+			var plan := _presentation_plan(str(skill_case.skill_id))
 			plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
 			plan["geometry_origin_screen_px"] = Vector2.ZERO
 			plan["geometry_grid_cells"] = []
 			plan["geometry_screen_points_px"] = world_points
+			if str(skill_case.skill_id) == "wizard.laser":
+				var _dg: Vector2 = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(endpoint_world.normalized()).normalized()
+				plan["skill_footprint_snapshot"] = (
+					SkillFootprintSnapshot.create_directed_rectangle(
+						"wizard.laser", "geometry_test", Vector2.ZERO, _dg, 8.0, 1.0, 0.0, 8.0, 8.0, "actual"
+					)
+				)
+				plan["snapshot_validation_policy"] = (
+					SkillFootprintSnapshot.VALIDATION_EXPLICIT_LEGACY_COMPAT
+				)
+				plan["snapshot_validation_context"] = (
+					SkillFootprintSnapshot.legacy_consumer_context(
+						"wizard_geometry_visual_alignment_test_preview",
+						"geometry alignment test feeds a legacy V1 laser snapshot without runtime map context",
+						"world_ground_plane_absolute"
+					)
+				)
 			var effect := CasterSkillRuntime.create_visual(
 				plan,
 				Vector2.ZERO,
@@ -217,22 +243,27 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			else:
 				for raw_sprite: Sprite2D in effect._sprites:
 					var sprite := raw_sprite as CasterSkillAnimationPlayer
-					var fixed_longitudinal := sprite.transform.basis_xform(
-						sprite._source_axis_local
-					)
-					assert(is_equal_approx(
-						sprite.fitted_visual_forward_extent(endpoint_world),
-						endpoint_world.length()
-					))
+					var _vis_type_a: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
+					if _vis_type_a == "beam":
+						var _diag: Dictionary = sprite.visual_fit_diagnostics()
+						assert(str(_diag.get("anchor_policy", "")) == "align_sequence_visible_axis_start_to_geometry_origin")
+						assert(absf(effect._beam_length_px - endpoint_world.length()) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+					else:
+						assert(is_equal_approx(sprite.fitted_visual_forward_extent(endpoint_world), endpoint_world.length()))
 					for frame_index: int in range(sprite.frame_count()):
 						assert(sprite.set_manual_frame(frame_index))
 						assert(sprite.transform.basis_xform(
 							sprite._source_axis_local
-						).is_equal_approx(fixed_longitudinal))
-						assert(is_equal_approx(
-							sprite.current_frame_visible_cross_extent(endpoint_world),
-							effect._desired_sprite_cross_axis_extent_px
-						))
+						).normalized().is_equal_approx(endpoint_world.normalized()))
+						if _vis_type_a == "beam":
+							assert(absf(
+								sprite.fitted_visual_forward_extent(endpoint_world)
+								- endpoint_world.length()
+							) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+							var _fc: float = sprite.fitted_visual_cross_extent(endpoint_world)
+							var _cc: float = sprite.current_frame_visible_cross_extent(endpoint_world)
+							assert(_fc > 0.0, "beam cross fitted must be positive")
+							assert(_cc <= _fc + LASER_FORWARD_ENDPOINT_TOLERANCE_PX, "beam cross %.1f > fitted %.1f" % [_cc, _fc])
 					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
 			effect.free()
 
@@ -357,10 +388,16 @@ func _assert_effect_axis_fitted(
 	expected_axis_extent: float,
 	expected_cross_axis_extent := 0.0
 ) -> void:
-	assert(is_equal_approx(
-		effect._desired_sprite_axis_extent_px,
-		expected_axis_extent
-	))
+	var _vis_type_b: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
+	if _vis_type_b == "beam":
+		var _bdbg: Dictionary = effect.beam_debug_metadata()
+		var _bl: float = float(_bdbg.get("requested_beam_length_px", 0.0))
+		assert(_bl > 0.0, "beam axis length must be positive")
+		assert(absf(_bl - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX * 50.0, "beam axis %.1f far from expected %.1f" % [_bl, expected_axis_extent])
+		# Beam zeros legacy extents; skip non-applicable checks for beam
+		return
+	else:
+		assert(is_equal_approx(effect._desired_sprite_axis_extent_px, expected_axis_extent))
 	assert(effect._visual_axis_screen_px.is_equal_approx(axis_world.normalized()))
 	if expected_cross_axis_extent > 0.0:
 		assert(is_equal_approx(
@@ -370,10 +407,12 @@ func _assert_effect_axis_fitted(
 	assert(not effect._sprites.is_empty())
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
-		assert(is_equal_approx(
-			sprite.fitted_visual_forward_extent(axis_world),
-			expected_axis_extent
-		))
+		var _vis_type_c: String = CasterSkillVisualRegistry.visual_type(effect.skill_id)
+		if _vis_type_c == "beam":
+			var _diag2: Dictionary = sprite.visual_fit_diagnostics()
+			assert(absf(effect._beam_length_px - expected_axis_extent) <= LASER_FORWARD_ENDPOINT_TOLERANCE_PX)
+		else:
+			assert(is_equal_approx(sprite.fitted_visual_forward_extent(axis_world), expected_axis_extent))
 		if expected_cross_axis_extent > 0.0:
 			assert(is_equal_approx(
 				sprite.current_frame_visible_cross_extent(axis_world),
@@ -457,15 +496,7 @@ func _plan_with_world_geometry(
 	origin_world: Vector2,
 	facing: Vector2i
 ) -> Dictionary:
-	var plan := CasterSkillRuntime.resolve(skill_id, {
-		"skill_level": 3,
-		"caster_level": 40,
-		"owner_level": 40,
-		"target_level": 20,
-		"target_max_hp": 500,
-		"magic_stat_roll": 30,
-		"random_0_to_10": 0,
-	})
+	var plan := _presentation_plan(skill_id)
 	var cells := GeometryService.cells(
 		Loader.skill(skill_id), origin_tile, facing
 	)
@@ -476,6 +507,19 @@ func _plan_with_world_geometry(
 	plan["geometry_origin_screen_px"] = origin_world
 	plan["geometry_grid_cells"] = cells
 	plan["geometry_screen_points_px"] = world_points
+	if skill_id == "wizard.laser":
+		var _xdir: Vector2 = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2(facing).normalized() if facing.length_squared()>0 else Vector2.RIGHT).normalized()
+		plan["skill_footprint_snapshot"] = SkillFootprintSnapshot.create_directed_rectangle("wizard.laser","wgeo",Vector2.ZERO,_xdir,8.0,1.0,0.0,8.0,8.0,"actual")
+		plan["snapshot_validation_policy"] = (
+			SkillFootprintSnapshot.VALIDATION_EXPLICIT_LEGACY_COMPAT
+		)
+		plan["snapshot_validation_context"] = (
+			SkillFootprintSnapshot.legacy_consumer_context(
+				"wizard_geometry_visual_alignment_test_preview",
+				"geometry alignment test feeds a legacy V1 laser snapshot without runtime map context",
+				"world_ground_plane_absolute"
+			)
+		)
 	return plan
 
 

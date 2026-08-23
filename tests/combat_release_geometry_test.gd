@@ -17,10 +17,86 @@ func _run() -> void:
 	await _verify_wild_rush_preserves_original_selected_target()
 	await _verify_target_centered_spatial_cast_policies()
 	await _verify_continuous_line_releases_use_live_target_axis()
+	_verify_friendly_identity_release_tracking()
 	_verify_attack_and_skill_release_ids_are_unique_and_stable()
 	_verify_locked_melee_facing_contract()
-	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, target-centred casts retain only live targets")
+	print(
+		"COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, "
+		+ "target-centred casts retain only live targets, Taoist friendly "
+		+ "identity tracking without lock-on/auto-turn"
+	)
 	get_tree().quit(0)
+
+
+func _verify_friendly_identity_release_tracking() -> void:
+	assert(ReleaseGeometry.tracks_selected_friendly_identity("taoist.healing"))
+	assert(ReleaseGeometry.tracks_selected_friendly_identity("taoist.mass_healing"))
+	for non_friendly_skill: String in [
+		"taoist.invisibility",
+		"taoist.mass_invisibility",
+		"taoist.defense",
+		"taoist.magic_defense",
+		"wizard.fire_wall",
+		"warrior.wild_rush",
+	]:
+		assert(
+			not ReleaseGeometry.tracks_selected_friendly_identity(
+				non_friendly_skill
+			),
+			"%s must not enter friendly identity tracking" % non_friendly_skill
+		)
+	assert(not ReleaseGeometry.tracks_locked_target_for_skill(
+		"taoist.mass_invisibility",
+		"ground_point_friendly_area"
+	))
+	assert(not ReleaseGeometry.tracks_locked_target_for_skill(
+		"taoist.defense",
+		"ground_point_friendly_area"
+	))
+	var valid := ReleaseGeometry.friendly_identity_release_tracking(
+		"taoist.mass_healing",
+		77,
+		Vector2(120.0, 130.0),
+		Vector2(70.0, 210.0),
+		true
+	)
+	assert(
+		valid.contract_id
+		== ReleaseGeometry.FRIENDLY_IDENTITY_RELEASE_CONTRACT_ID
+	)
+	assert(valid.policy_id == ReleaseGeometry.FRIENDLY_IDENTITY_RELEASE_POLICY_ID)
+	assert(valid.selected_friendly_instance_id == 77)
+	assert(valid.selected_friendly_valid_at_release)
+	assert(not valid.lock_on and not valid.auto_turn)
+	assert(valid.allow_release_time_reselect)
+	var expected_footpoint := (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			Vector2(120.0, 130.0)
+		)
+		+ GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			Vector2(-50.0, 80.0)
+		)
+	)
+	assert(
+		valid.selected_friendly_footpoint_ground_gu_at_release.is_equal_approx(
+			expected_footpoint
+		),
+		"friendly footpoint must be sampled live at release"
+	)
+	var invalid := ReleaseGeometry.friendly_identity_release_tracking(
+		"taoist.healing",
+		77,
+		Vector2(120.0, 130.0),
+		Vector2.ZERO,
+		false
+	)
+	assert(invalid.selected_friendly_instance_id == 77)
+	assert(not invalid.selected_friendly_valid_at_release)
+	assert(
+		invalid.selected_friendly_footpoint_ground_gu_at_release
+		== Vector2.ZERO
+	)
+	assert(invalid.allow_release_time_reselect)
 
 
 func _prepare_warrior() -> void:
@@ -176,6 +252,14 @@ func _verify_target_centered_spatial_cast_policies() -> void:
 			ReleaseGeometry.target_centered_spatial_policy_id(stable_skill_id)
 			== ReleaseGeometry.TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
 		)
+	assert(ReleaseGeometry.tracks_locked_target_for_skill(
+		"taoist.entrapment",
+		"ground_point_hostile_monster_area"
+	))
+	assert(
+		ReleaseGeometry.target_centered_spatial_policy_id("taoist.entrapment")
+		== ReleaseGeometry.TAOIST_ENTRAPMENT_RELEASE_TARGET_POLICY_ID
+	)
 
 	# A valid target identity survives the windup, while its position is sampled
 	# live at release. The old input direction must not become a ground fallback.

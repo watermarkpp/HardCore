@@ -1,0 +1,1806 @@
+{
+  "schema_version": 1,
+  "source_attachment_sha256": "82B3EC564EE1645E2D39AA9B506C8C40E53F66D99CA5DDC0C12EF2FD4C3DDEEB",
+  "source_path": "assets/data/map_editor_monster_spawn_classification_v1.json",
+  "resolution_policy": "visibleName exact canonical name, unique only; no base-name, suffix trim, or alias",
+  "exact_id_overrides": {
+    "14": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "16": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "17": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "excel_offline_audit_hidden_suffix_variant",
+      "notes": "Excel/21CQ 1.76 离线审计判定为隐藏后缀/内部高属性变体（等级50/HP1200/AC35/MAC35/DC0-100），非普通地图野怪；独立保留 25 掉落槽。"
+    },
+    "18": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "19": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "21": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "23": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "24": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "25": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "26": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "27": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "28": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "29": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "30": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "31": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "32": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "33": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "34": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "5"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "35": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "36": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "37": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "38": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "39": {
+      "classification": "special",
+      "placement_kind": "boss_spawn",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "41": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "原 version_difference 判定被 exact-ID 白日门/封魔谷/苍月岛刷新证据推翻；属性与半兽勇士基准记录一致，分类纠正为 elite；本任务不开放 runtime placement。"
+    },
+    "42": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "43": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "44": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "45": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "46": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "47": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "48": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "49": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "50": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "51": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "52": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "53": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "54": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "55": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "56": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "57": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "59": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "60": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "62": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "63": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "64": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "65": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "66": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "67": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "68": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "69": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "70": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "71": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "73": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "74": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "75": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "76": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "77": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "78": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "attachment_exact_id_override"
+    },
+    "79": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "80": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "81": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "82": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "83": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "84": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "85": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "86": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "87": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "88": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "89": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "90": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "91": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "92": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "93": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "94": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "95": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "96": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "97": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "98": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "100": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "101": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "102": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "103": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "104": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "105": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "106": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "107": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "108": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "110": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "111": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "112": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "113": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "114": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "115": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "116": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "117": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "118": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "119": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "120": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "121": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "122": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "123": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "124": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "126": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_event_entity",
+      "notes": "事件/召唤/脚本实体；special"
+    },
+    "127": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "128": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "129": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "130": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "131": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "132": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "133": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "134": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "135": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "136": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "137": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "138": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "139": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "140": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "141": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "142": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_special_map_variant",
+      "notes": "未知暗殿(1571)专用刷新；special 内部变体"
+    },
+    "143": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "144": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "12",
+        "M001",
+        "D2051",
+        "D2053",
+        "D2052",
+        "D2071",
+        "D2072",
+        "D2073",
+        "D2075",
+        "D2076",
+        "D2078",
+        "D2079",
+        "R001"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "145": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_event_entity",
+      "notes": "事件/召唤/脚本实体；special"
+    },
+    "146": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_event_entity",
+      "notes": "事件/召唤/脚本实体；special"
+    },
+    "147": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_event_entity",
+      "notes": "事件/召唤/脚本实体；special"
+    },
+    "148": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "149": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "150": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "151": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "152": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "153": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "154": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "155": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "156": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "157": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "158": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "159": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "resolution": "attachment_exact_id_override"
+    },
+    "160": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "161": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "162": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "163": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "164": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "165": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "166": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "167": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "168": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "169": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "170": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "171": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "172": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "173": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "174": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "175": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "176": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "177": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "178": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "179": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "180": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "182": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "183": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "184": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "185": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "186": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "12",
+        "M001",
+        "D2051",
+        "D2053",
+        "D2052",
+        "D2071",
+        "D2072",
+        "D2073",
+        "D2075",
+        "D2076",
+        "D2078",
+        "D2079",
+        "R001"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "187": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_event_entity",
+      "notes": "事件/召唤/脚本实体；special"
+    },
+    "188": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "189": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "190": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_internal_variant_no_spawn",
+      "notes": "内部编号变体；无地图刷新，version_difference"
+    },
+    "191": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "D003",
+        "D413",
+        "D2006",
+        "D2007",
+        "D2012",
+        "D022",
+        "D023",
+        "D024",
+        "D714",
+        "D715",
+        "D717",
+        "D612",
+        "D606"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "192": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "193": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "194": {
+      "classification": "non_hostile",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "0",
+        "1",
+        "2",
+        "4",
+        "5",
+        "D601"
+      ],
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "non_hostile_guard_or_script_object"
+      },
+      "resolution": "offline_unique_exact_name"
+    },
+    "195": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "196": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "197": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "198": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "199": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "200": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "201": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "202": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "203": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "204": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "205": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "206": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "207": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "208": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "209": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "210": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "211": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "212": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "213": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "214": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "215": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "216": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "217": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "218": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "219": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "220": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "221": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "222": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "223": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "224": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "225": {
+      "classification": "version_difference",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "3",
+        "D717",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "226": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "227": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "228": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "229": {
+      "classification": "elite",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "230": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "231": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "232": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "233": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "234": {
+      "classification": "ordinary",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_stats_crosscheck",
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+    },
+    "235": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": true,
+      "map_codes": [
+        "Q004",
+        "D10061",
+        "D10062",
+        "4",
+        "D2013",
+        "D717",
+        "T140",
+        "D515",
+        "D606",
+        "D2067",
+        "D2079"
+      ],
+      "resolution": "offline_unique_exact_name"
+    },
+    "236": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "237": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "238": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_map_spawn_audit",
+      "notes": "exact-ID 地图刷新证据；正常生态分类"
+    },
+    "240": {
+      "classification": "boss",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    },
+    "241": {
+      "classification": "special",
+      "placement_kind": "",
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决"
+    }
+  }
+}

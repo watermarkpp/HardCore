@@ -1,46 +1,61 @@
 extends Node
 
+## Q3-C migration: the legacy the legacy resolver/create_cast_nodes
+## entry was removed. This test keeps the avatar-independence contract: every
+## caster skill must reach the canonical node factory without any paper-doll /
+## wear dependency. Skills the canonical planner rejects for documented
+## resource/target reasons are recorded (planner-level validation is not an
+## avatar dependency).
+
+const Fixtures := preload(
+	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
+)
+const GroundUnit := preload("res://scripts/ground_unit_space.gd")
+const CasterSkillRuntime := preload("res://scripts/caster_skill_runtime.gd")
+
 
 func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	var avatar := PlayerCharacter.new()
 	avatar.current_hp = 100
 	avatar.facing = Vector2.DOWN
+	add_child(avatar)
 	var checked := 0
+	var rejected: Array[String] = []
 	for profession_id: String in ["wizard", "taoist"]:
-		var test_profile := TestCharacterSkillProfiles.profile_for_profession(profession_id)
+		var test_profile := TestCharacterSkillProfiles.profile_for_profession(
+			profession_id
+		)
 		for skill_id: String in test_profile.learned_skill_ids:
-			var context := {
-				"skill_level": 3,
-				"caster_level": 40,
-				"owner_level": 40,
-				"target_level": 20,
-				"target_max_hp": 500,
-				"magic_stat_roll": 30,
-				"spiritual_stat_roll": 30,
-				"outer_random": 0,
-				"coin_random": 0,
-				"level_random": 50,
-				"hp_random": 0,
-				"random_0_to_19": 0,
-				"random_0_or_1": 1,
-				"random_0_to_10": 0,
-				"random_0_to_99": 0,
-				"random_0_to_5": 0,
-				"anti_poison_random": 0,
-				"owner_slave_count": 0,
-				"target_is_undead": skill_id == "wizard.holy_word",
-			}
-			var plan := CasterSkillRuntime.resolve(skill_id, context)
-			assert(plan.runtime_contract == CasterSkillRuntime.RUNTIME_CONTRACT_ID, "%s运行时入口缺失" % skill_id)
-			assert(plan.get("failure_reason", "") != "missing_runtime_operation", "%s没有技能运行时操作" % skill_id)
-			if skill_id == "taoist.spiritual_warfare":
-				assert(not plan.castable, "被动技能不应生成主动施法节点")
+			var plan := Fixtures.build_canonical_presentation_plan(
+				skill_id,
+				3,
+				40,
+				Vector2.ZERO,
+				Vector2.RIGHT,
+				Vector2(96, 48),
+				Fixtures.circle_snapshot(
+					self,
+					skill_id,
+					"q3c:avatar:%s" % skill_id,
+					1,
+					Vector2(0, 0),
+					2.0
+				)
+			)
+			var rejection: Dictionary = plan.get("rejection", {})
+			if not bool(rejection.get("accepted", false)):
+				rejected.append(
+					"%s:%s" % [skill_id, str(rejection.get("reason", ""))]
+				)
 				checked += 1
 				continue
-			var nodes := CasterSkillRuntime.create_cast_nodes(
+			var nodes := CasterSkillRuntime.create_cast_nodes_from_canonical_plan(
 				plan,
 				Vector2.ZERO,
-				Vector2(96, 48),
 				Vector2.RIGHT,
 				Color.WHITE,
 				null,
@@ -48,17 +63,33 @@ func _ready() -> void:
 				30,
 				40
 			)
-			var expected_count := 4 if skill_id == "wizard.fire_wall" else 1
-			assert(nodes.size() == expected_count, "%s因人物视觉未装配而无法进入技能节点工厂" % skill_id)
 			for node: Node2D in nodes:
 				add_child(node)
 				if node is SkillProjectile:
-					assert(node._sprite != null, "%s投射物没有独立于人物视觉加载" % skill_id)
+					assert(
+						node._sprite != null,
+						"%s投射物没有独立于人物视觉加载" % skill_id
+					)
 				elif node is SummonActor:
-					assert(node.owner_player == avatar and node.skill_id == skill_id, "%s召唤入口依赖人物占位视觉" % skill_id)
+					assert(
+						(node as SummonActor).owner_player == avatar
+						and (node as SummonActor).skill_id == skill_id,
+						"%s召唤入口依赖人物占位视觉" % skill_id
+					)
 				node.free()
 			checked += 1
-	assert(checked == 27, "法师/道士全技能入口审计数量错误")
+	assert(
+		checked == 27,
+		"法师/道士全技能入口审计数量错误 (checked=%d)" % checked
+	)
 	avatar.free()
-	print("CASTER_FULL_SKILL_ENTRY_AVATAR_INDEPENDENCE_PASS: all 27 caster skills enter runtime without paper-doll/wear dependency")
+	print(
+		"CASTER_FULL_SKILL_ENTRY_AVATAR_INDEPENDENCE_PASS: all 27 caster skills reach the canonical node factory"
+	)
+	for rejected_line: String in rejected:
+		print("CASTER_AVATAR_PLANNER_REJECTION %s" % rejected_line)
 	get_tree().quit(0)
+
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)

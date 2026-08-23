@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "source_policy": "explicit monster_id overrides only; upstream empty evidence is retained; duplicate rows preserved; item tokens require integration item_id resolution",
+  "records_by_id": {
+    "68": {
+      "primary_exact_evidence": {
+        "tier": "primary",
+        "distribution": "server.crystal.cjlaaa",
+        "original_path": "reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/\u6c83\u739b\u6218\u5c06.txt",
+        "sha256": "",
+        "row_count": 0,
+        "resolution": "exact service name missing primary drop file"
+      },
+      "primary_empty_evidence": {
+        "tier": "auxiliary_1",
+        "distribution": "source.angelk727.mir2_server_databases",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Envir/Drops/\u6c83\u739b\u6218\u5c06.txt",
+        "sha256": "36243086F8BB22D126F3607D66E302961B1B8C78F6F03AE6F684F2A7CA07E4A4",
+        "row_count": 0,
+        "resolution": "exact ID candidate file exists but has no valid rows"
+      },
+      "auxiliary_2_equivalence": {
+        "strategy": "cross_distribution_equivalence",
+        "status": "byte_exact_cross_distribution",
+        "canonical_source_monster_id": 66,
+        "pairs": [
+          {
+            "distribution": "server.crystal.Jev",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaFighter.txt",
+            "warrior_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "fighter_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "byte_equal": true
+          },
+          {
+            "distribution": "server.crystal.Daneo1989",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaWarrior.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaFighter.txt",
+            "warrior_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "fighter_sha256": "7E7BB2F4C79E525810C1F5FA2ABFAD244E49F6B0F6303C793878E6EF319410B6",
+            "byte_equal": true
+          }
+        ]
+      },
+      "selected_source": {
+        "tier": "primary",
+        "distribution": "server.crystal.cjlaaa",
+        "original_path": "reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/\u6c83\u739b\u52c7\u58eb.txt",
+        "sha256": "22287E90418BFC708EBA321C67EEA78616E6755226D75894B0D29F70CFDA0C12",
+        "row_count": 58,
+        "canonical_source_monster_id": 66,
+        "resolution": "cross_distribution_equivalence_to_stable_id_66"
+      }
+    },
+    "69": {
+      "primary_exact_evidence": {
+        "tier": "primary",
+        "distribution": "server.crystal.cjlaaa",
+        "original_path": "reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/\u6c83\u739b\u6218\u5c06\u0030.txt",
+        "sha256": "",
+        "row_count": 0,
+        "resolution": "exact service name missing primary drop file"
+      },
+      "primary_empty_evidence": {
+        "tier": "auxiliary_1",
+        "distribution": "source.angelk727.mir2_server_databases",
+        "original_path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Envir/Drops/\u6c83\u739b\u6218\u5c06\u0030.txt",
+        "sha256": "36243086F8BB22D126F3607D66E302961B1B8C78F6F03AE6F684F2A7CA07E4A4",
+        "row_count": 0,
+        "resolution": "exact ID candidate file exists but has no valid rows"
+      },
+      "auxiliary_2_equivalence": {
+        "strategy": "cross_distribution_equivalence",
+        "status": "byte_exact_cross_distribution",
+        "canonical_source_monster_id": 67,
+        "pairs": [
+          {
+            "distribution": "server.crystal.Jev",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaWarrior0.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Jev/Envir/Drops/WoomyonWoods/WoomaTemple/WoomaFighter0.txt",
+            "warrior_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "fighter_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "byte_equal": true
+          },
+          {
+            "distribution": "server.crystal.Daneo1989",
+            "warrior_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaWarrior0.txt",
+            "fighter_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989/Envir/Drops/WoomaFighter0.txt",
+            "warrior_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "fighter_sha256": "F04398F9DE7A6AAD20F230067A5BB21FC0C05BE73FA41D567F085A53B1154D23",
+            "byte_equal": true
+          }
+        ]
+      },
+      "selected_source": {
+        "tier": "primary",
+        "distribution": "server.crystal.cjlaaa",
+        "original_path": "reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Envir/Drops/\u6c83\u739b\u52c7\u58eb\u0030.txt",
+        "sha256": "456F7522917BD2F2E7D514694DF200F73E95B768983CCE77F062D6C772F949B0",
+        "row_count": 62,
+        "canonical_source_monster_id": 67,
+        "resolution": "cross_distribution_equivalence_to_stable_id_67"
+      }
+    }
+  }
+}

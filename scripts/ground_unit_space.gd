@@ -13,6 +13,47 @@ const AXIS_NEIGHBOR_COST_GU := 1.0
 const DIAGONAL_NEIGHBOR_COST_GU := sqrt(2.0)
 const EPSILON_GU := 0.0001
 
+## FREEZE-P0.1: fail-closed projection policy and unified reason strings.
+## Mapped formal worlds (runtime_map_id >= 0) require a valid map-aware
+## projection; identity/raw-delta conversion is ONLY allowed for explicitly
+## unmapped contexts (runtime_map_id < 0, unit tests / dev preview).
+const PROJECTION_POLICY_MAPPED_FORMAL := &"mapped_formal"
+const PROJECTION_POLICY_UNMAPPED_TEST_IDENTITY := &"unmapped_test_identity"
+
+const REASON_MISSING_RUNTIME_PROJECTION := &"missing_runtime_projection"
+const REASON_MISSING_SCREEN_TO_GROUND_PROJECTION := (
+	&"missing_screen_to_ground_projection"
+)
+const REASON_MISSING_GROUND_TO_SCREEN_PROJECTION := (
+	&"missing_ground_to_screen_projection"
+)
+const REASON_INVALID_RUNTIME_PROJECTION := &"invalid_runtime_projection"
+## FREEZE-P0.2: a map id that has no formal projection source at all.
+const REASON_UNSUPPORTED_MAP_PROJECTION := &"unsupported_map_projection"
+## FREEZE-P0.2R: reference/planned maps that exist in world data but have no
+## MapEditor runtime build and are therefore NOT formally playable.
+const REASON_MAP_NOT_IMPLEMENTED := &"map_not_implemented"
+
+
+static func projection_policy_for(runtime_map_id: int) -> StringName:
+	return (
+		PROJECTION_POLICY_MAPPED_FORMAL
+		if runtime_map_id >= 0
+		else PROJECTION_POLICY_UNMAPPED_TEST_IDENTITY
+	)
+
+
+static func projection_result(
+	success: bool,
+	reason: StringName,
+	value := Vector2.ZERO
+) -> Dictionary:
+	return {
+		"success": success,
+		"reason": reason,
+		"value": value,
+	}
+
 
 static func ground_delta_gu_to_screen_delta_px(ground_delta_gu: Vector2) -> Vector2:
 	return Vector2(

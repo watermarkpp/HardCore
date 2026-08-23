@@ -5,6 +5,12 @@ const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
 )
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillResourceServiceScript := preload(
+	"res://scripts/skills/skill_resource_service.gd"
+)
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
@@ -23,10 +29,20 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
+const SOUL_FIRE_TALISMAN_LAUNCH_TIMING_CONTRACT_ID := (
+	"skills.taoist.soul_fire_talisman.body_release_frame_launch.v1"
+)
 const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
 	"skills.wizard.magic_shield.absorption_capacity.v1"
 )
 const MAGIC_SHIELD_AUTO_REFRESH_RATIO := 0.20
+const WARRIOR_STATE_SKILL_NAMES := [
+	"基本剑术",
+	"攻杀剑术",
+	"刺杀剑术",
+	"半月弯刀",
+	"烈火剑法",
+]
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -65,8 +81,14 @@ var shield_initial_duration := 0.0
 var shield_capacity := 0.0
 var shield_capacity_max := 0.0
 var stealth_time := 0.0
+## Runtime stealth break latch. Equipment-derived stealth remains registered in
+## PlayerState, but an attack/skill submission suppresses its visibility until
+## a new runtime stealth application explicitly refreshes the state.
+var _stealth_break_override := false
 var defense_buff := 0
 var defense_buff_time := 0.0
+var mac_buff := 0
+var mac_buff_time := 0.0
 var control_time := 0.0
 var poison_time := 0.0
 var poison_damage := 0
@@ -187,6 +209,7 @@ func _physics_process(delta: float) -> void:
 	shield_time = maxf(0.0, shield_time - delta)
 	stealth_time = maxf(0.0, stealth_time - delta)
 	defense_buff_time = maxf(0.0, defense_buff_time - delta)
+	mac_buff_time = maxf(0.0, mac_buff_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
 	var previous_poison_second := int(ceil(poison_time))
@@ -201,6 +224,8 @@ func _physics_process(delta: float) -> void:
 		shield_initial_duration = 0.0
 	if defense_buff_time == 0.0:
 		defense_buff = 0
+	if mac_buff_time == 0.0:
+		mac_buff = 0
 	var keyboard := _keyboard_movement_vector()
 	var direction := touch_vector if touch_vector.length() > keyboard.length() else keyboard
 	var movement_locked := (
@@ -278,10 +303,15 @@ func set_combat_facing(direction: Vector2) -> void:
 
 
 func can_start_attack() -> bool:
-	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
+	return not _dead and _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
 
 
 func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
+	if _dead:
+		return false
+	## Any attack submission breaks stealth uniformly (user override
+	## 2026-08-09).
+	break_stealth()
 	if not can_start_attack():
 		return false
 	var context := _build_warrior_attack_context(has_combat_target)
@@ -306,8 +336,6 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 		facing.normalized(),
 		locked_target_instance_id
 	)
-	if _rng.randi_range(1, 25) == 1:
-		PlayerState.damage_equipment_durability("武器")
 	return true
 
 
@@ -322,31 +350,70 @@ func request_attack_toward(
 	return request_attack(has_combat_target, locked_target_instance_id)
 
 
-func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+# Pure preflight for callers that must not select targets or change facing
+# unless the request can commit immediately.
+func can_request_skill(skill_name: String) -> bool:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
+	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
+		return true
+	if _attack_timer > 0.0:
+		return false
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
+		return false
+	if skill_cooldown_remaining_ms(stable_skill_id) > 0:
+		return false
+	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
+	if canonical_definition.is_empty():
+		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
-	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
+	var resource_context := PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		current_mp
+	)
+	var dual_defense_context: Dictionary = resource_context.get(
+		"dual_defense_context",
+		{}
+	)
+	if not dual_defense_context.is_empty():
+		var partner_skill_id := str(dual_defense_context.get(
+			"partner_skill_id",
+			""
+		))
+		if (
+			not partner_skill_id.is_empty()
+			and skill_cooldown_remaining_ms(partner_skill_id) > 0
+		):
+			return false
+	var quote := SkillResourceServiceScript.quote(
+		canonical_definition,
+		learned_level,
+		resource_context,
+		resource_context
+	)
+	return current_mp >= maxi(0, int(quote.get("mp_cost", 0)))
+
+
+func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+	## Any skill submission breaks stealth uniformly (user override
+	## 2026-08-09); the break happens at submission so a broken state can
+	## never linger into the next combat action.
+	break_stealth()
+	if not can_request_skill(skill_name):
+		return false
+	var learned_level := PlayerState.effective_skill_level(skill_name)
+	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
 		return _request_warrior_state_skill(skill_name, learned_level)
 	return _request_active_skill(skill_name, locked_target_instance_id)
 
 
 func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
-	if _attack_timer > 0.0:
-		return false
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	if skill_cooldown_remaining_ms(stable_skill_id) > 0:
-		return false
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
-	if canonical_definition.is_empty():
-		return false
-	var mp_costs: Array = canonical_definition.get("mp_cost_by_rank", [])
-	var mana_cost := int(mp_costs[clampi(learned_level, 0, 3)]) if not mp_costs.is_empty() else 0
-	if current_mp < mana_cost:
-		return false
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
 	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target_for_skill(
@@ -365,10 +432,45 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		"cooldown_ms",
 		total_action_lock_ms
 	))
+	var resource_context := PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		current_mp
+	)
+	var dual_defense_context: Dictionary = resource_context.get(
+		"dual_defense_context",
+		{}
+	)
+	var partner_skill_id := str(dual_defense_context.get(
+		"partner_skill_id",
+		""
+	))
+	if not partner_skill_id.is_empty():
+		var partner_definition := SkillDataLoaderScript.skill(partner_skill_id)
+		cooldown_ms = maxi(
+			cooldown_ms,
+			int(partner_definition.get("timing", {}).get(
+				"cooldown_ms",
+				cooldown_ms
+			))
+		)
 	var release_ms := int(canonical_timing.get(
 		"effect_resolve_ms_from_cast_start",
 		body_cast_ms
 	))
+	## An explicit projectile-launch field is independent from effect resolve.
+	## Soul Fire Talisman has a narrower project override: its travelling paper
+	## leaves on the body release frame while its audited 1200 ms effect timing
+	## stays source semantics. Other projectile skills retain their existing
+	## effect-resolve schedule unless they explicitly declare launch timing.
+	var canonical_geometry: Dictionary = canonical_definition.get("geometry", {})
+	if str(canonical_geometry.get("shape", "")) == "projectile":
+		if canonical_timing.has("projectile_launch_ms_from_cast_start"):
+			release_ms = int(canonical_timing.get(
+				"projectile_launch_ms_from_cast_start",
+				release_ms
+			))
+		elif stable_skill_id == "taoist.soul_fire_talisman":
+			release_ms = body_cast_ms
 	var action_lock_seconds := maxf(
 		0.0,
 		float(total_action_lock_ms) / 1000.0
@@ -380,6 +482,10 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	_attack_timer = action_lock_seconds
 	if cooldown_seconds > 0.0:
 		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
+		if not partner_skill_id.is_empty():
+			## Shared dual-defence cooldown: both skill ids enter the same
+			## cooldown from one action so neither button can bypass the gate.
+			_skill_cooldown_remaining[partner_skill_id] = cooldown_seconds
 	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
 	_attack_action_timer = action_duration
 	var primary_visual_duration := (
@@ -424,14 +530,33 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		locked_target_instance_id,
 		track_locked_target
 	)
-	if _rng.randi_range(1, 30) == 1:
-		PlayerState.damage_equipment_durability("武器")
 	return true
 
 
-func take_damage(amount: int, causes_struck: bool = true) -> void:
+func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dictionary:
+	var event_context: Dictionary = (
+		context.duplicate(true) if context is Dictionary else {}
+	)
+	event_context["confirmed_hit"] = true
+	event_context["damage_type"] = "physical"
+	event_context["damage"] = damage
+	if not event_context.has("rng"):
+		event_context["rng"] = _rng
+	return PlayerState.apply_durability_event(
+		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
+		event_context
+	)
+
+
+func take_damage(amount: int, causes_struck: bool = true, durability_context := {}) -> void:
+	if _dead:
+		return
+	if amount <= 0:
+		return
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
-	_apply_resolved_damage(maxi(1, amount - absorbed), causes_struck)
+	_apply_resolved_damage(
+		maxi(1, amount - absorbed), causes_struck, "physical", durability_context
+	)
 
 
 func take_direct_spell_damage(
@@ -443,6 +568,31 @@ func take_direct_spell_damage(
 ) -> Dictionary:
 	var stable_skill_id := ProfessionRules.skill_id(skill_id)
 	var target_stats: Dictionary = PlayerState.computed_stats
+	## MAC buff joins the magic-defence roll range without touching
+	## PlayerState.computed_stats. AC is deliberately excluded here.
+	var adapted_stats := target_stats.duplicate(true)
+	var active_mac_buff := (
+		mac_buff
+		if mac_buff_time > 0.0
+		else 0
+	)
+	## Freeze the base MAC range first, then add the buff exactly once to each
+	## bound. Never compare an already-buffed min against the base max.
+	var base_magic_defense_min := maxi(
+		0,
+		int(target_stats.get("magic_defense_min", 0))
+	)
+	var base_magic_defense_max := maxi(
+		base_magic_defense_min,
+		int(target_stats.get("magic_defense_max", base_magic_defense_min))
+	)
+	if active_mac_buff > 0:
+		adapted_stats["magic_defense_min"] = (
+			base_magic_defense_min + active_mac_buff
+		)
+		adapted_stats["magic_defense_max"] = (
+			base_magic_defense_max + active_mac_buff
+		)
 	var checked_anti_magic_roll := anti_magic_roll
 	if checked_anti_magic_roll < 0:
 		checked_anti_magic_roll = _rng.randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
@@ -454,21 +604,25 @@ func take_direct_spell_damage(
 	var resolution := CombatResolutionRules.resolve_direct_spell_damage(
 		stable_skill_id,
 		raw_damage,
-		target_stats,
+		adapted_stats,
 		checked_anti_magic_roll,
 		magic_defense_adapter
 	)
 	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
-	resolution["magic_defense_min"] = maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	resolution["mac_buff_applied"] = active_mac_buff
+	resolution["magic_defense_min"] = maxi(
+		0,
+		int(adapted_stats.get("magic_defense_min", 0))
+	)
 	resolution["magic_defense_max"] = maxi(
 		int(resolution.magic_defense_min),
-		int(target_stats.get("magic_defense_max", resolution.magic_defense_min))
+		int(adapted_stats.get("magic_defense_max", resolution.magic_defense_min))
 	)
 	resolution["magic_defense_roll"] = int(magic_defense_state.get("roll", -1))
 	resolution["physical_defense_bypassed"] = true
 	var hp_before := current_hp
 	if int(resolution.final_damage) > 0:
-		_apply_resolved_damage(int(resolution.final_damage), causes_struck)
+		_apply_resolved_damage(int(resolution.final_damage), causes_struck, "magic")
 	resolution["player_pipeline_input"] = int(resolution.final_damage)
 	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
 	return resolution
@@ -488,7 +642,17 @@ func _resolve_direct_spell_magic_defense(
 	return maxi(0, incoming_damage - roll)
 
 
-func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
+func _apply_resolved_damage(
+	amount: int,
+	causes_struck: bool,
+	damage_type := "physical",
+	durability_context := {}
+) -> void:
+	# Death is a single lifecycle transition.  Damage arriving while the death
+	# animation/UI selection/respawn transition is active must not repeat
+	# durability, gold loss, signals or schedule another death coroutine.
+	if _dead:
+		return
 	var incoming_damage := maxi(1, amount)
 	var final_damage := incoming_damage
 	if (
@@ -524,6 +688,22 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
 	current_hp = maxi(0, current_hp - final_damage)
+	if causes_struck and damage_type == "physical" and final_damage > 0:
+		var event_context: Dictionary = (
+			durability_context.duplicate(true)
+			if durability_context is Dictionary
+			else {}
+		)
+		event_context["damage_type"] = "physical"
+		event_context["damage"] = final_damage
+		event_context["causes_struck"] = true
+		event_context["red_poison"] = _incoming_red_poison_active(event_context)
+		if not event_context.has("rng"):
+			event_context["rng"] = _rng
+		PlayerState.apply_durability_event(
+			PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
+			event_context
+		)
 	if causes_struck and ProfessionRules.should_player_stagger(final_damage, max_hp) and current_hp > 0:
 		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
 		velocity = Vector2.ZERO
@@ -535,8 +715,6 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 			_queued_struck_reaction = true
 		else:
 			_start_struck_reaction()
-	if _rng.randi_range(1, 30) == 1:
-		PlayerState.damage_equipment_durability("衣服")
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
@@ -552,17 +730,47 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 		_dead = true
 		velocity = Vector2.ZERO
 		touch_vector = Vector2.ZERO
+		_pending_combat_action_active = false
+		_pending_combat_action_committed = false
+		_pending_combat_action_kind = ""
+		_pending_attack_context.clear()
+		_pending_skill_context.clear()
+		_queued_struck_reaction = false
 		visual.play_death()
 		PlayerState.lose_gold_percent(0.05)
 		await get_tree().create_timer(0.8).timeout
 		if not is_inside_tree():
 			return
-		current_hp = max_hp
-		current_mp = max_mp
-		_dead = false
 		death_requested.emit()
-		stats_changed.emit(current_hp, max_hp)
-		resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+
+
+func complete_death_revival() -> void:
+	## The gameplay authority calls this only after a selected revival method
+	## has completed its destination transition.  Formal death stays at 0 HP
+	## and rejects movement/combat until this explicit completion boundary.
+	if not _dead:
+		return
+	current_hp = max_hp
+	current_mp = max_mp
+	_dead = false
+	velocity = Vector2.ZERO
+	touch_vector = Vector2.ZERO
+	if visual != null:
+		visual.play_action("idle", 0.0)
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+
+
+func _incoming_red_poison_active(context: Dictionary) -> bool:
+	if context.has("red_poison"):
+		return bool(context.get("red_poison", false))
+	if not has_meta("canonical_red_poison"):
+		return false
+	var poison_data: Variant = get_meta("canonical_red_poison")
+	if not poison_data is Dictionary:
+		return false
+	return Time.get_ticks_msec() < int(poison_data.get("expires_at_ms", 0))
 
 
 func _emit_attack_after_windup(
@@ -620,6 +828,35 @@ func _emit_skill_after_windup(
 			get_instance_id(),
 			action_id,
 		]
+		var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+		if (
+			CombatReleaseGeometryScript.tracks_selected_friendly_identity(
+				stable_skill_id
+			)
+		):
+			## Friendly-target skills remember the selected identity and sample
+			## its live footpoint at release. This is a tracking contract only:
+			## it never enters the hostile live-axis/auto-turn path.
+			var friendly_target_position := Vector2.ZERO
+			var friendly_target_valid := false
+			if locked_target_instance_id > 0:
+				var friendly_node := instance_from_id(locked_target_instance_id)
+				if (
+					friendly_node is Node2D
+					and is_instance_valid(friendly_node)
+					and friendly_node.is_inside_tree()
+				):
+					friendly_target_position = friendly_node.global_position
+					friendly_target_valid = true
+			release_geometry["friendly_identity_release"] = (
+				CombatReleaseGeometryScript.friendly_identity_release_tracking(
+					stable_skill_id,
+					locked_target_instance_id,
+					global_position,
+					friendly_target_position,
+					friendly_target_valid
+				)
+			)
 		_pending_skill_context = {"release_geometry": release_geometry}
 		var release_signal_payload := combat_release_signal_payload(
 			release_geometry
@@ -656,11 +893,17 @@ func _resolve_combat_release_geometry(
 ) -> Dictionary:
 	var target_position := Vector2.ZERO
 	var target_valid := false
+	var target_combat_radius_gu := 0.0
 	if track_locked_target and locked_target_instance_id > 0:
 		var candidate := instance_from_id(locked_target_instance_id)
 		if candidate is Node2D and is_instance_valid(candidate) and candidate.is_inside_tree():
 			target_position = candidate.global_position
 			target_valid = true
+			if candidate is EnemyActor:
+				target_combat_radius_gu = maxf(
+					0.0,
+					(candidate as EnemyActor).combat_radius_gu
+				)
 	return CombatReleaseGeometryScript.resolve(
 		global_position,
 		input_direction,
@@ -668,7 +911,8 @@ func _resolve_combat_release_geometry(
 		target_position,
 		target_valid,
 		track_locked_target,
-		release_facing_policy
+		release_facing_policy,
+		target_combat_radius_gu
 	)
 
 
@@ -682,7 +926,11 @@ func _begin_combat_action(action_kind: String) -> int:
 
 
 func _commit_combat_action(action_id: int) -> bool:
-	if not _pending_combat_action_active or action_id != _pending_combat_action_id:
+	if (
+		_dead
+		or not _pending_combat_action_active
+		or action_id != _pending_combat_action_id
+	):
 		return false
 	_pending_combat_action_committed = true
 	return true
@@ -897,10 +1145,14 @@ func _process_potion_restore(delta: float) -> void:
 	_potion_tick_remaining -= delta
 	if _potion_tick_remaining > 0.0:
 		return
-	# Original M2Server ObjBase.pas: interval = 600-min(400, level*10) ms;
-	# each tick restores level div 10 + 5 from the queued potion pools.
-	_potion_tick_remaining = float(600 - mini(400, PlayerState.level * 10)) / 1000.0
-	var per_tick: int = 5 + int(PlayerState.level / 10)
+	var restore_profile := GameData.potion_recovery_profile(
+		PlayerState.level,
+		1,
+		0,
+		"delayed_restore",
+	)
+	_potion_tick_remaining = float(restore_profile.get("tick_interval_seconds", 0.6))
+	var per_tick := int(restore_profile.get("tick_amount", 5))
 	if _pending_potion_health > 0:
 		var hp_tick := mini(per_tick, _pending_potion_health)
 		_pending_potion_health -= hp_tick
@@ -972,14 +1224,54 @@ func magic_shield_requires_refresh(
 
 
 func apply_stealth(seconds: float) -> void:
+	_stealth_break_override = false
 	stealth_time = maxf(stealth_time, seconds)
 	queue_redraw()
 
 
-func apply_defense_buff(seconds: float, amount: int) -> void:
-	defense_buff_time = maxf(defense_buff_time, seconds)
-	defense_buff = maxi(defense_buff, amount)
+func break_stealth() -> void:
+	## Do not remove or damage equipment effects: this only suppresses the
+	## actor's runtime stealth view after an explicit combat submission.
+	_stealth_break_override = true
+	stealth_time = 0.0
 	queue_redraw()
+
+
+func apply_defense_buff(seconds: float, amount: int) -> void:
+	## Physical AC compatibility alias; AC and MAC stay separate.
+	apply_ac_buff(seconds, amount)
+
+
+func apply_ac_buff(seconds: float, amount: int) -> void:
+	## Reliable refresh: a weaker or shorter refresh never downgrades an
+	## active physical AC buff.
+	if seconds <= 0.0:
+		return
+	var safe_amount := maxi(0, amount)
+	if defense_buff_time <= 0.0:
+		defense_buff = safe_amount
+	else:
+		defense_buff = maxi(defense_buff, safe_amount)
+	defense_buff_time = maxf(defense_buff_time, seconds)
+	queue_redraw()
+
+
+func apply_mac_buff(seconds: float, amount: int) -> void:
+	if seconds <= 0.0:
+		return
+	mac_buff_time = maxf(mac_buff_time, seconds)
+	mac_buff = maxi(mac_buff, maxi(0, amount))
+	queue_redraw()
+
+
+func defence_buff_snapshot() -> Dictionary:
+	return {
+		"contract_id": "gameplay.player.defence_buff_state.v1",
+		"ac_bonus": defense_buff if defense_buff_time > 0.0 else 0,
+		"ac_remaining_seconds": defense_buff_time,
+		"mac_bonus": mac_buff if mac_buff_time > 0.0 else 0,
+		"mac_remaining_seconds": mac_buff_time,
+	}
 
 
 func apply_control(seconds: float) -> void:
@@ -994,7 +1286,10 @@ func apply_poison(tick_damage: int, seconds: float) -> void:
 
 
 func is_stealthed() -> bool:
-	return stealth_time > 0.0 or PlayerState.has_special_effect("stealth")
+	return stealth_time > 0.0 or (
+		PlayerState.has_special_effect("stealth")
+		and not _stealth_break_override
+	)
 
 
 func _draw() -> void:
@@ -1010,8 +1305,6 @@ func _draw() -> void:
 		var profession_color: Color = {"战士": Color(0.24, 0.34, 0.48), "法师": Color(0.20, 0.28, 0.56), "道士": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession, Color(0.24, 0.34, 0.48))
 		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
-	if stealth_time > 0.0:
-		draw_circle(Vector2(0, -4), 34.0, Color(0.55, 0.9, 0.7, 0.16), false, 3.0)
 	if control_time > 0.0:
 		draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)
 	if poison_time > 0.0:
@@ -1031,7 +1324,14 @@ func _apply_profile_stats() -> void:
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
 	defense_min = int(stats.get("defense_min", 0))
 	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))
-	current_hp = clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
+	# Gold loss and equipment durability can emit profile_changed during the
+	# death transition.  Recalculation must not resurrect HP behind the death
+	# state machine; only the respawn completion owns that transition.
+	current_hp = (
+		0
+		if _dead
+		else clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
+	)
 	current_mp = clampi(current_mp, 0, max_mp)
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)

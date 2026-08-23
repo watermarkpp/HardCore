@@ -20,6 +20,7 @@ var embers: Array[ColorRect] = []
 var transition_id := ""
 var _fade_tween: Tween
 var _pulse_time := 0.0
+var _holding_final := false
 
 
 func _ready() -> void:
@@ -58,6 +59,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if not visible:
+		return
+	if _holding_final:
 		return
 	_pulse_time += delta
 	var breathing := sin(_pulse_time * 2.2)
@@ -201,6 +204,7 @@ void fragment() {
 
 func begin_loading(next_transition_id := "") -> void:
 	_stop_fade()
+	_holding_final = false
 	transition_id = str(next_transition_id)
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT
@@ -214,11 +218,25 @@ func begin_loading(next_transition_id := "") -> void:
 
 func show_loading_immediately(next_transition_id := "") -> void:
 	_stop_fade()
+	_holding_final = false
 	transition_id = str(next_transition_id)
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT
 	modulate.a = 1.0
 	show()
+
+
+## Startup and other finite loading phases may hold the completed visual while
+## an asynchronous resource finishes. Existing map transitions never call
+## this API and retain their breathing/ember animation unchanged.
+func freeze_final_visual() -> void:
+	_stop_fade()
+	_holding_final = true
+	loading_label.modulate.a = 1.0
+	var watermark_material := game_icon_watermark.material as ShaderMaterial
+	watermark_material.set_shader_parameter("opacity", 0.55)
+	var glow_material := red_glow.material as ShaderMaterial
+	glow_material.set_shader_parameter("strength", 0.14)
 
 
 func finish_loading() -> void:

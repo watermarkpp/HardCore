@@ -1,5 +1,28 @@
 # Codex 精简上下文快照
 
+## 2026-08-10：全项目基石审计关闭与 Android 测试包
+
+- 审计与运行时代码固定于 `58db719671c15a126fde67733745e1a84ccee3a9`。UI/数据、地图发布、职业战斗、核心世界/存档均由 Sol high/xhigh 在独立所有权范围完成审计、专项测试和逐项集成；Monster Streaming 保持既有 `HOLD`，未修改冻结实现。
+- 核心关闭项包括：安全退出写失败 fail-closed、临时文件验证与 `.bak` 恢复；canonical `resource_commit_required`、召唤 operation/等级/snapshot、radius 2 最近合法落点；玩家/召唤物死亡幂等；投射物 canonical release snapshot；地图发布 candidate binding、registry 事务与显示名保留；HUD 出售/任务/仓库权威链；12 个女性盔甲主表与运行时性别门禁；Android 固定提交/build-info/dirty/编译脚本核验。
+- 全量 `critical` 最终 `250/250 PASS`、`failed=0`、`engine_log_errors=0`。来源优先级验证通过；4,889 个唯一资源引用中 blocker `4/4`、required `4,654/4,654`；183 个 Python 文件 AST、19 个 PowerShell 文件解析与正式套件注册均通过。
+- 隔离构建成品：`outputs/hardcore/HardCore-20260810-foundation-audit-debug.apk`；桌面同字节副本：`C:/Users/Administrator/Desktop/HardCore-20260810-foundation-audit-debug.apk`；大小 `245,014,120` 字节；SHA-256 `E673181750303DD189F7ABFF32679B882EE46DDD0321159BDC3809F1EE978AA1`。
+- 包信息：`versionCode=64`、`versionName=1.18.1-spatial-projection`、应用名 `HardCore`、包名 `com.personal.mafaoffline`、`arm64-v8a`、minSdk 24、targetSdk 36。APK v2/v3 签名、12 个编译脚本、586 帧技能导入、运行时资源探针与 build-info commit 均通过；等待用户实机验收。
+
+## 2026-08-08：FREEZE-G0.3 关闭与状态同步
+
+- `FREEZE-G0.3 = CLOSED`；`confirmed_production_blockers = 0`；`new_must_fix = 0`。
+- B004 = `CONFIRMED_TEST_INFRA`：生产触摸滚动有效；旧测试调用了被 `STABLE_ID` 策略禁用的 `launcher._input` 路径。
+- B037 = `CONFIRMED_TEST_INFRA`：`InventoryScroll` 存在于真实 HUD 树且触摸有效；旧测试只扫描 `MobileSafeRoot`，漏掉 HUD 根子节点。
+- Monster Streaming = `HOLD`：保留 20-run 17 PASS / 3 FAIL 的历史证据；不是 next gate 或 active must-fix，不授权自动 20-run 或生产修改。
+
+## 2026-08-03：全攻击/技能地面投影统一与 Android v64
+
+- 固定构建提交为 `551b21d8b19c1e62ac24b28d4dd8dc1ed6f780e0`；隔离构建 APK 为 `outputs/hardcore/HardCore-v64-spatial-projection-debug.apk`，桌面同字节副本为 `C:/Users/Administrator/Desktop/HardCore-v64-spatial-projection-debug.apk`，大小 `244,568,111` 字节，SHA-256 `D4CB03DA88EAA2FD41F41E31FB575DE9EE8A9BCEB7F6BF134C0CA8F077D351E5`。包信息：`versionCode=64`、`versionName=1.18.1-spatial-projection`、`HardCore`、`com.personal.mafaoffline`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名和运行时资源探针通过。构建完成时 ADB 没有枚举到设备，因此未覆盖安装。
+- 33 个正式职业技能由机器合同 `skills.spatial_projection.relationship_matrix.v1` 唯一分类。正式空间执行由 `caster_skill_execution.spatial_snapshot_gate.v1` 门禁：缺少同一技能/释放 ID 的只读投影快照时禁止进入生产结算。玩家普通/烈火/半月/刺杀、野蛮冲撞、精确地面技能、单体技能、传送目的地、召唤出生与后续召唤物攻击均已接入。
+- 投射物没有遗漏：小火球、大火球、灵魂火符在释放帧生成完整 GU 飞行走廊母快照；每个物理帧生成带 `parent_snapshot_id` 和递增 `segment_index` 的实际扫掠子快照。命中使用弹体半径与目标战斗脚印的连续相交，防止高速穿透，视觉装饰不参与伤害。
+- 怪物普通近战、远程、固定区域、Boss 扇形/圆形和延迟预警攻击使用各自释放帧脚点与同一冻结快照；骷髅/神兽使用自身脚点，不复用玩家脚点。道士群体效果使用稳定目标实例 ID，不依赖数组顺序。
+- 验证：职业技能目录 `27/27`、怪物 `18/18`、Warrior/法师集成 `25/25`、最终关键套件 `87/87` 全通过。冻结的 236/240 头盔草稿与三份怪物脚点合同 SHA-256 逐项保持原值。
+
 ## 2026-08-03：远端直线技能命中合同与人物遮挡修复（Android 实机测试包）
 
 - 当前 Android 实机测试包由提交 `151c27a331d2dd3eca78e8a214d21de8f3f188ba` 隔离构建：`outputs/hardcore/HardCore-v63-caster-thrust-alignment-debug.apk`，大小 `244,489,650` 字节，SHA-256 `56F952EC1AB519C3A087438383B599E01809995EAA587A52CC75215C542016F0`。签名、包名、版本、横屏配置与运行时资源探针通过；已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留数据覆盖安装并冷启动，回读 `versionCode=63`、`versionName=1.18.0-combat-unit-gu`、前台 `GodotAppLauncher` 与进程正常，启动日志无脚本错误、解析错误、Android 崩溃或 ANR。
@@ -516,3 +539,10 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 - 验证：法师定向集成 9/9、战士完整回归 25/25、`tests/skills` 13/13、坐标影响回归 6/6 均通过；正式法师视觉源审计为 26 项技能资产、586 帧、0 fallback。
 - 冻结数据未变：`item_236.json=21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`；`item_240.json=81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；怪物人工脚点 `monster_ground_alignment_manual_v1.json=DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`。
 - 正式测试 APK：`outputs/hardcore/HardCore-v59-wizard-targeting-shield-debug.apk`，大小 `244410869` 字节（233.09 MiB），SHA-256 `CF0BA0D715D9B56E0A93A81675F6F96C08DC0A59A771B98FB136B2B03E17D158`；独立 Android 验证通过并已复制到桌面同名文件，源文件与副本哈希一致。
+
+## 2026-08-08 Runner Allowlist Gate 关闭里程碑
+
+- `RUNNER ALLOWLIST GATE = CLOSED`
+- commit：`9a174d14015268e570bf687ddf3e14aad440f314`
+- `confirmed_runner_blockers = 0`
+- `NEXT_GATE = WORLD_ACTOR_SPAWN_PERFORMANCE`

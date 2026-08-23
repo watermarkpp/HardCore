@@ -26,6 +26,14 @@ static func profile(skill_name_or_id: String) -> Dictionary:
 		return {}
 	var coverage: Dictionary = _manifest().get("skillCoverage", {}).get(skill_id, {})
 	if coverage.is_empty():
+		# Skill not in runtime manifest — fall back to presentation profile
+		# for visual_type routing (sky_strike, beam, impact_area).
+		var fallback := _cached_visual_profile_entry(skill_id)
+		if not fallback.is_empty():
+			var result := fallback.duplicate(true)
+			result["skill_id"] = skill_id
+			result["render"] = _default_render_policy(result)
+			return result
 		return {}
 	var result := coverage.duplicate(true)
 	result["skill_id"] = skill_id
@@ -39,6 +47,14 @@ static func profile(skill_name_or_id: String) -> Dictionary:
 	if declared_render is Dictionary:
 		render.merge(declared_render, true)
 	result["render"] = render
+	# Enrich with presentation-layer fields (visual_type, enable_beam_visual)
+	# so downstream consumers always have a single source of truth.
+	var presentation := _cached_visual_profile_entry(skill_id)
+	if not presentation.is_empty():
+		for key: String in ["visual_type", "enable_beam_visual", "decoration_alpha"]:
+			var value: Variant = presentation.get(key)
+			if value != null and not result.has(key):
+				result[key] = value
 	return result
 
 
@@ -291,3 +307,48 @@ static func _manifest() -> Dictionary:
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	_manifest_cache = parsed if parsed is Dictionary else {}
 	return _manifest_cache
+
+const VISUAL_PROFILE_PATH := "res://assets/data/skill_visual_profiles.json"
+static var _visual_profile_cache: Dictionary = {}
+
+
+static func visual_type(skill_name_or_id: String) -> String:
+	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
+	if skill_id.is_empty():
+		return ""
+	return str(_cached_visual_profile_entry(skill_id).get("visual_type", ""))
+
+
+static func visual_profile(skill_name_or_id: String) -> Dictionary:
+	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
+	if skill_id.is_empty():
+		return {}
+	var nested: Variant = _cached_visual_profile_entry(skill_id).get("visual_profile", {})
+	if nested is Dictionary and not nested.is_empty():
+		return (nested as Dictionary).duplicate(true)
+	return {}
+
+
+static func _cached_visual_profile_entry(skill_id: String) -> Dictionary:
+	if _visual_profile_cache.has(skill_id):
+		return _visual_profile_cache[skill_id]
+	if not FileAccess.file_exists(VISUAL_PROFILE_PATH):
+		return {}
+	var file := FileAccess.open(VISUAL_PROFILE_PATH, FileAccess.READ)
+	if file == null:
+		return {}
+	var raw_text := file.get_as_text()
+	file.close()
+	var json_parser := JSON.new()
+	if json_parser.parse(raw_text) != OK:
+		return {}
+	var data: Variant = json_parser.get_data()
+	if not data is Dictionary:
+		return {}
+	var profiles: Variant = (data as Dictionary).get("skill_profiles", {})
+	if not profiles is Dictionary:
+		return {}
+	var entry: Variant = (profiles as Dictionary).get(skill_id, {})
+	if entry is Dictionary:
+		_visual_profile_cache[skill_id] = (entry as Dictionary).duplicate(true)
+	return _visual_profile_cache.get(skill_id, {})
