@@ -1,0 +1,4834 @@
+{
+  "asset_schema_version": 2,
+  "catalog_id": "chiyue_valley_wall_pack",
+  "display_name": "赤月峡谷天然洞穴岩壁直墙素材包",
+  "source_policy": "four_identical_style_fronts_four_cap_quadrant_crops_native_2to1_projection",
+  "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+  "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+  "corner_join_mode": "straight_overlap",
+  "wall_family_ids": [
+    "chiyue_valley_rock_wall_u0"
+  ],
+  "collision_authority": "manual_by_user",
+  "palette_role": "natural_chiyue_cave_rock_wall",
+  "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+  "preview_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_pack_contact_sheet.png",
+  "assets": [
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+      "display_name": "赤月洞穴岩壁 X向 1格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 1,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "canvas_size": [
+        96,
+        224
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        1,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        64,
+        200
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "single_part",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l1_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 1,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l1",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 1
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        63,
+        191
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        63,
+        191
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l1_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l1_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        96,
+        224
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "a357cd5c1ca26c3f4ac845df1a74d31278329a307fae8b48494ed30f9167c5f0",
+      "source_front_sha256": "52f2ad1327f914a32bda0b85c2a5490e91eda4f711f3b71412d7220c8c568c46",
+      "source_cap_sha256": "e5ae9a7f1d742875f5af3ae30c4cf44dc37f1edf7045bde8bcfd692e616f74f3",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "2d1ce00dd5697d53c6ffc76c55663c9daf879fb8cf02947943c4e5fb7cb1ce56",
+      "thumbnail_source_sha256": "2d1ce00dd5697d53c6ffc76c55663c9daf879fb8cf02947943c4e5fb7cb1ce56",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l2_v01",
+      "display_name": "赤月洞穴岩壁 X向 2格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 2,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "canvas_size": [
+        128,
+        240
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        2,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        96,
+        216
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l2_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 2,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l2_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 3,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l2",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 4
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        95,
+        207
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        95,
+        207
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l2_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l2_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        128,
+        240
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        2,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        1
+      ],
+      "base_footprint_tiles": [
+        2,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "787b7690fc64dfb62e72bdbfed34255912f369d30313a6307df72829955bd748",
+      "source_front_sha256": "15a1c999b403797e2ac7c5b089ba868d0de8352f0a6e951ecceb09919df65e5c",
+      "source_cap_sha256": "05009f09fc35309bfdf5d95845739ab7e47a81f8cbbc439cb172029ccf987a6b",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "724d9dd12de2333ae6fe383629382f2a07a8263fb76e4439f7092a1f63e9042a",
+      "thumbnail_source_sha256": "724d9dd12de2333ae6fe383629382f2a07a8263fb76e4439f7092a1f63e9042a",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l3_v01",
+      "display_name": "赤月洞穴岩壁 X向 3格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        3,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        128,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 1,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 2,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 3,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l3",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 4
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "8f32c4b81ab1070cea424855c6ba08eb258aef43e925a26e10c11579fd5dd5e5",
+      "source_front_sha256": "e97324d88bc6e53631b95c4d49e3103b4bdc424017d1503bde7369b3679bd81d",
+      "source_cap_sha256": "1177efda7ca01d699cde621fd16638ff4400b30a3ed480a20a16f9e36c877438",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "ffff575177ce12dda2df0d50ac330fd7ebe293530ea819184b1ae54df1cfc47f",
+      "thumbnail_source_sha256": "ffff575177ce12dda2df0d50ac330fd7ebe293530ea819184b1ae54df1cfc47f",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l3_v02",
+      "display_name": "赤月洞穴岩壁 X向 3格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        3,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        128,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 4,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 3,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 2,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l3",
+      "variant": 2,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 4
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "fe273cabcf07abe24f5d4646cec900781fe6b0d9eeb2bb6b67d2d8e8f5be7160",
+      "source_front_sha256": "a6b1fc479ec2977add6c0c89e762f750ce2fc04b2a0efc8964981f5f62586e0e",
+      "source_cap_sha256": "1d6b676aa768bdff73cff9a4e64fab5f05dfe1dab4215995873be9741cc048c6",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "fb3a5a69831bf01f5e5cd4a62c371f09c55887ad71a33a83cdf7aa16814d2dab",
+      "thumbnail_source_sha256": "fb3a5a69831bf01f5e5cd4a62c371f09c55887ad71a33a83cdf7aa16814d2dab",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l3_v03",
+      "display_name": "赤月洞穴岩壁 X向 3格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        3,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        128,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 3,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 1,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 4,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l3",
+      "variant": 3,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 3
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l3_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "0fa63fb211bdfdac2f0d751b8a8f053d8c9da1440e73aea6122ac86c4e33c48d",
+      "source_front_sha256": "f8183ebcb235e0cf39a3ffc9ab1e42d234bb37647f3054991fadf1de6c2d11e3",
+      "source_cap_sha256": "6785eac8449191d90bc7ffb8e0dc3b922611fb5ec78f28bbb75cd80f281060c7",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "2745530c8aa54b9b574cd3fbafaad3fec786c0c249612015882aa1f44065cd30",
+      "thumbnail_source_sha256": "2745530c8aa54b9b574cd3fbafaad3fec786c0c249612015882aa1f44065cd30",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "display_name": "赤月洞穴岩壁 X向 4格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        4,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        160,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 1,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 2,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 3,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            3,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            3,
+            0
+          ],
+          "draw_order_index": 3,
+          "front_source_variant": 4,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l4",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 1
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "0ad71aadb09f41a3b6a7f31d75894466e914d4d8d1e13de07e9c39ad843a3c63",
+      "source_front_sha256": "aa8c0a084b89b42f2014b955f01be2c1df2a9742f7898babfe813105b6d92d67",
+      "source_cap_sha256": "b957d8190c10aa885af8037359f91e6691c5125c1b0c3bfa526dc00db57df477",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "50be4dd6a43a28bd535e9b143b0d3224b4a457d655ed1719f3b85b70700ba0e1",
+      "thumbnail_source_sha256": "50be4dd6a43a28bd535e9b143b0d3224b4a457d655ed1719f3b85b70700ba0e1",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "display_name": "赤月洞穴岩壁 X向 4格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        4,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        160,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 2,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 4,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 1,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            3,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            3,
+            0
+          ],
+          "draw_order_index": 3,
+          "front_source_variant": 3,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l4",
+      "variant": 2,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 2
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "a71b97488f7f9dd321164a1ba9974897d98536833180932f24a8b478cd34b19d",
+      "source_front_sha256": "490fe6718e2695268dd86bfe776b260080021db916ccec6f9dfe30559d984c32",
+      "source_cap_sha256": "360d07d5f627a82880d7607aa09c4d4b3901f1d5a572a6d57ecf2ab163db4320",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "d3e04b905927a0698d5601f28e475a3cca3684e2a3c126f3ee9f279e482f1a73",
+      "thumbnail_source_sha256": "d3e04b905927a0698d5601f28e475a3cca3684e2a3c126f3ee9f279e482f1a73",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "display_name": "赤月洞穴岩壁 X向 4格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        4,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        160,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 3,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 1,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 4,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            3,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            3,
+            0
+          ],
+          "draw_order_index": 3,
+          "front_source_variant": 2,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_x_l4",
+      "variant": 3,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 3
+        }
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_x",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "7778b0456b6d84e42d140756dca4de2e9a4cc0d1ba2dd0a322770693f8dd0fea",
+      "source_front_sha256": "581e0679e341d748df4dc85e823646c54c1738b893f08d099bc0daaf3c47be30",
+      "source_cap_sha256": "01bbffffc03ff52cb8253e389725dbdac832f21833f4d8a0a27b15a771241db3",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "8a02b46b1c03b387faf26fc594ee854fc4651141aa5aeb289b1bb0b7f78472e7",
+      "thumbnail_source_sha256": "8a02b46b1c03b387faf26fc594ee854fc4651141aa5aeb289b1bb0b7f78472e7",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+      "display_name": "赤月洞穴岩壁 Y向 1格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 1,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "canvas_size": [
+        96,
+        224
+      ],
+      "anchor": [
+        32,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        1
+      ],
+      "start_seam_px": [
+        64,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        200
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "single_part",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l1_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            32,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 4,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l1",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 4
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        63,
+        191
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        63,
+        191
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l1_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l1_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        96,
+        224
+      ],
+      "anchor_px": [
+        32,
+        184
+      ],
+      "placement_anchor_px": [
+        32,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "47c5d78f6fdb620dd15ad8749bfeccbcd5cad68da2b5948b0c8dd415961114dc",
+      "source_front_sha256": "b9afd77cf03497bbd5d83671eb900f2fb5362f5b2ddb3dff8a6abc42e8d15214",
+      "source_cap_sha256": "538dade8f3a84f0c26eec8d5982dd4b1aeb11cf59b80bb0accfba31b00dc69df",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "781b6e2cfa336521e5631bac5e8b992302ab99698ac67dc64f4d0575157bf6f9",
+      "thumbnail_source_sha256": "781b6e2cfa336521e5631bac5e8b992302ab99698ac67dc64f4d0575157bf6f9",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l2_v01",
+      "display_name": "赤月洞穴岩壁 Y向 2格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 2,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        2
+      ],
+      "canvas_size": [
+        128,
+        240
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        2
+      ],
+      "start_seam_px": [
+        96,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        216
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l2_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 4,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l2_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 1,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l2",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 3
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        95,
+        207
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        95,
+        207
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l2_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l2_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        128,
+        240
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        2
+      ],
+      "base_footprint_tiles": [
+        1,
+        2
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "a9fa95e7ff149655a7b3230b8939a3d9930d1653d58a70764f907acdc5362df5",
+      "source_front_sha256": "d511397f3cd1802f260ed9e5c20fa164fbf5a0deffb2bcae5aa4decae080c600",
+      "source_cap_sha256": "ee3edd3551b1f930518e151da79f647114b25a952e4818993df822364d3ac35b",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "e99eeb9d405566631ea3668c9d5c5479c21e405b869223cd4899871400308bd1",
+      "thumbnail_source_sha256": "e99eeb9d405566631ea3668c9d5c5479c21e405b869223cd4899871400308bd1",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l3_v01",
+      "display_name": "赤月洞穴岩壁 Y向 3格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        3
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        96,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        3
+      ],
+      "start_seam_px": [
+        128,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 1,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 4,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 2,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l3",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 1
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "anchor_px": [
+        96,
+        184
+      ],
+      "placement_anchor_px": [
+        96,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        3
+      ],
+      "base_footprint_tiles": [
+        1,
+        3
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "fe5eea3362a3d58583fbf9b1b76238ab47c320c47ab30fd9ab8997eb9529e84b",
+      "source_front_sha256": "20667ec837edce549b291390367e3249ab519eb7ad0835fb090ff14ea4c654c5",
+      "source_cap_sha256": "f03ae43a802f7c646e0628250f6000b23514a51485508448414f2a7b9d856f1e",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "1b562b52d5aba15174ba3654075814fb6b9d4ddfac1a73152bd55742c9dacc90",
+      "thumbnail_source_sha256": "1b562b52d5aba15174ba3654075814fb6b9d4ddfac1a73152bd55742c9dacc90",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l3_v02",
+      "display_name": "赤月洞穴岩壁 Y向 3格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        3
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        96,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        3
+      ],
+      "start_seam_px": [
+        128,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 4,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 2,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 3,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l3",
+      "variant": 2,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 2
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "anchor_px": [
+        96,
+        184
+      ],
+      "placement_anchor_px": [
+        96,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        3
+      ],
+      "base_footprint_tiles": [
+        1,
+        3
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "dce6096ae8f07284d461ced08dee0d56f521f5399fc257c3c26116e276d9903d",
+      "source_front_sha256": "7fa1f09ab79467a1bb225522e89b534a723defc2f7e9b5fdc416ae932c63dc8f",
+      "source_cap_sha256": "01fdd47cb935100ac9d74d907b893acc43357d86efca3f9cc2ca6df58f3419fd",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "990d008cd0ac8ad03dd674e5b958b37c6e3960bdbedaf3150fa19dc82c17e112",
+      "thumbnail_source_sha256": "990d008cd0ac8ad03dd674e5b958b37c6e3960bdbedaf3150fa19dc82c17e112",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l3_v03",
+      "display_name": "赤月洞穴岩壁 Y向 3格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        3
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        96,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        3
+      ],
+      "start_seam_px": [
+        128,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 2,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 3,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 1,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l3",
+      "variant": 3,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 4
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l3_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "anchor_px": [
+        96,
+        184
+      ],
+      "placement_anchor_px": [
+        96,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        3
+      ],
+      "base_footprint_tiles": [
+        1,
+        3
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "5ff17b2d92808a541127f6ca711898f1754acaab4fff1c338b248d91a21b3e64",
+      "source_front_sha256": "6e32b6dcd7883f8d2dc170cb44f6baa68cd6731a53d475a976c74e5afcfbefa3",
+      "source_cap_sha256": "3f3bbc7af810365497862ad9170145fde274b764a5858246b44faf6b0b328098",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "f7a801afd5b5a4f92921dcbc7e75dd5551dde2726b17e2f41164075eed6100e7",
+      "thumbnail_source_sha256": "f7a801afd5b5a4f92921dcbc7e75dd5551dde2726b17e2f41164075eed6100e7",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "display_name": "赤月洞穴岩壁 Y向 4格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        128,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        4
+      ],
+      "start_seam_px": [
+        160,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 2,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 1,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 3,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            0,
+            3
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            3
+          ],
+          "draw_order_index": 3,
+          "front_source_variant": 4,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l4",
+      "variant": 1,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 3
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "anchor_px": [
+        128,
+        184
+      ],
+      "placement_anchor_px": [
+        128,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "c842d7ce6065935f578f183f2350f0c389a7e4eee18f838b3ecc2488d732d4e9",
+      "source_front_sha256": "165418f25a0d18ef21f4263a6d3ff053f297262c371b7d90423da91b585f2a75",
+      "source_cap_sha256": "57d48196c3f88d8a60198e2ce01487633de799ae1f63c8f2d9664c36e9378a25",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "65bb9d5503f4eeb4d66cafc860a5f53c86d953244f01d0373083e7f58f6084df",
+      "thumbnail_source_sha256": "65bb9d5503f4eeb4d66cafc860a5f53c86d953244f01d0373083e7f58f6084df",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "display_name": "赤月洞穴岩壁 Y向 4格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        128,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        4
+      ],
+      "start_seam_px": [
+        160,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 4,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 2,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 3,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            0,
+            3
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            3
+          ],
+          "draw_order_index": 3,
+          "front_source_variant": 1,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l4",
+      "variant": 2,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 3
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 2
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "anchor_px": [
+        128,
+        184
+      ],
+      "placement_anchor_px": [
+        128,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "7ddd0f5ba87c2d0e1bc42a5774fa9c908c66ab9f3bbf1dd7c6cfde805d4f850d",
+      "source_front_sha256": "d8d901e44fb61a4b28a17b9c0c6d0945214cb8811f5eff1d9dcb6b7376980a4d",
+      "source_cap_sha256": "2ae39dc04de5fba42e2d625fc1886b8c682f30d97d277b96f29d34a856557982",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "91e938a4326175d18b4d84ba6b3bb3b130745726180a0015ed2fc2b69d774e74",
+      "thumbnail_source_sha256": "91e938a4326175d18b4d84ba6b3bb3b130745726180a0015ed2fc2b69d774e74",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "display_name": "赤月洞穴岩壁 Y向 4格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "chiyue_valley",
+      "wall_family_id": "chiyue_valley_rock_wall_u0",
+      "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        128,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        4
+      ],
+      "start_seam_px": [
+        160,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "chiyue_valley_rock_wall_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0,
+          "front_source_variant": 3,
+          "cap_source_variant": 1,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png"
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1,
+          "front_source_variant": 4,
+          "cap_source_variant": 2,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png"
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2,
+          "front_source_variant": 1,
+          "cap_source_variant": 4,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png"
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            0,
+            3
+          ],
+          "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            3
+          ],
+          "draw_order_index": 3,
+          "front_source_variant": 2,
+          "cap_source_variant": 3,
+          "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+          "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png"
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "chiyue_valley_wall_straight_iso_y_l4",
+      "variant": 3,
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "chiyue_valley_native_2to1_rock_wall_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "source_variant_layout": [
+        {
+          "front_source_variant": 3,
+          "cap_source_variant": 1
+        },
+        {
+          "front_source_variant": 4,
+          "cap_source_variant": 2
+        },
+        {
+          "front_source_variant": 1,
+          "cap_source_variant": 4
+        },
+        {
+          "front_source_variant": 2,
+          "cap_source_variant": 3
+        }
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "anchor_px": [
+        128,
+        184
+      ],
+      "placement_anchor_px": [
+        128,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/赤月峡谷墙体/直墙/iso_y",
+      "source_external_path": "assets/art/maps/_shared/walls/chiyue_valley/source",
+      "source_provenance_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_source_provenance.json",
+      "source_sha256": "29afbd853dec7f996dd1d25ddc3e3625064fdeb898eaa39aadb0a6f051f34715",
+      "source_front_sha256": "c0a886cebb2b13cb2478125ecd005bb0fc3293192ceea8deeeccbefc1540e753",
+      "source_cap_sha256": "3d64f13e1632f8dc40f24823dbf37902779a695d3b728ee4fad71cceeeab140f",
+      "source_clipboard_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe",
+      "output_sha256": "abbcff3fcbfe70984df3da9eacbc58032d31aba0db1b2e688291aa5993156a0f",
+      "thumbnail_source_sha256": "abbcff3fcbfe70984df3da9eacbc58032d31aba0db1b2e688291aa5993156a0f",
+      "processing": "dominant_alpha_bbox_then_native_flat_texture_to_exact_64x32_isometric_planes",
+      "generation_source_ids": [
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+        "imagegen:01a01ede-3674-7e13-9da2-95fcf6ab1745/exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png"
+      ],
+      "generation_source_info": {
+        "tool": "image_gen.imagegen",
+        "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+        "front_output_ids": [
+          "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+        ],
+        "front_crop_boxes": [
+          [
+            60,
+            120,
+            210,
+            870
+          ],
+          [
+            250,
+            260,
+            400,
+            1010
+          ],
+          [
+            470,
+            520,
+            620,
+            1270
+          ],
+          [
+            660,
+            760,
+            810,
+            1510
+          ]
+        ],
+        "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+        "cap_derivation": "dominant_alpha_bbox_then_four_quadrant_windows"
+      },
+      "tags": [
+        "cave_dungeon",
+        "chiyue_valley",
+        "natural_cave",
+        "wet_karst",
+        "rock_wall",
+        "moss",
+        "mineral_vein",
+        "chiyue_valley_rock_wall_u0",
+        "straight",
+        "straight_overlap",
+        "manual_collision"
+      ],
+      "editable": true
+    }
+  ]
+}
