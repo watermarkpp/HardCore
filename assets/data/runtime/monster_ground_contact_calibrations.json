@@ -3,7 +3,7 @@
   "contract": "monster.ground_contact.calibration.v5",
   "identityKey": "monsterId",
   "manualAlignmentContract": "monster.ground_alignment.manual.v1",
-  "manualAlignmentAggregateSha256": "0993dd6600091b584f247cda02b0afeabb164e73952feb87c57a886aad515e7a",
+  "manualAlignmentAggregateSha256": "d572ff185baa4b60ac9d7821e582e5e70b4096a9079e76aa6ed1c32f66902fd9",
   "policy": "Each grounded/hover monster uses the exact user-saved visual root and body-foot offsets. The two airborne falcons retain the prior reviewed separation between flying body and ground projection.",
   "entriesByMonsterId": {
     "18": {
@@ -6049,12 +6049,12 @@
     "180": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -38.0,
-        5.5
+        31.5,
+        -2.0
       ],
       "ringCenterOffset": [
-        -38.0,
-        5.5
+        31.5,
+        -2.0
       ],
       "ringEllipseRadii": [
         46,
@@ -6066,23 +6066,23 @@
         "status": "approved",
         "archetype": "rooted_or_stationary",
         "poses": [
-          "idle:direction0:frame0"
+          "hit:direction0:frame1"
         ],
         "decision": "monsterId=180 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        38.0,
-        -11.5
+        -31.5,
+        -4.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_180.json",
-        "sourceDraftSha256": "65ad94c618b42b7b449a657246f65462a463e3294261dfebabfd95db7c2a6a7d",
-        "savedAt": "2026-07-30T18:29:26",
+        "sourceDraftSha256": "02ae96c9f857ed2ce1173ddfa2ae8857f7d442d6edd6a6ff86e9385626fdfd21",
+        "savedAt": "2026-08-23T18:52:59",
         "selection": {
-          "action": "idle",
+          "action": "hit",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },

@@ -4,7 +4,7 @@
   "sourceContract": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
   "identityKey": "monsterId",
   "sourceDraftRootRole": "User-owned local calibration output; imported as immutable evidence.",
-  "sourceAggregateSha256": "0993dd6600091b584f247cda02b0afeabb164e73952feb87c57a886aad515e7a",
+  "sourceAggregateSha256": "d572ff185baa4b60ac9d7821e582e5e70b4096a9079e76aa6ed1c32f66902fd9",
   "summary": {
     "catalogMonsterCount": 214,
     "userDraftCount": 212,
@@ -9084,28 +9084,28 @@
       "monsterName": "赤月恶魔",
       "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
       "sourceDraftFile": "monster_180.json",
-      "sourceDraftSha256": "65ad94c618b42b7b449a657246f65462a463e3294261dfebabfd95db7c2a6a7d",
-      "savedAt": "2026-07-30T18:29:26",
+      "sourceDraftSha256": "02ae96c9f857ed2ce1173ddfa2ae8857f7d442d6edd6a6ff86e9385626fdfd21",
+      "savedAt": "2026-08-23T18:52:59",
       "selection": {
-        "action": "idle",
+        "action": "hit",
         "direction": 0,
-        "frame": 0
+        "frame": 1
       },
       "runtimeVisualOrigin": [
         0.0,
         6.0
       ],
       "visualRootOffset": [
-        38.0,
-        -11.5
+        -31.5,
+        -4.0
       ],
       "visualFootOffset": [
-        -38.0,
-        5.5
+        31.5,
+        -2.0
       ],
       "ringCenterOffset": [
-        -38.0,
-        5.5
+        31.5,
+        -2.0
       ],
       "finalVisualFootPoint": [
         0.0,
@@ -9118,25 +9118,25 @@
       "formalSnapshot": {
         "projectionStrategy": "grounded",
         "ringCenterOffset": [
-          -32.0,
-          0.0
+          -38.0,
+          5.5
         ],
         "ringEllipseRadii": [
           46.0,
           14.0
         ],
         "visualFootOffset": [
-          -32.0,
-          0.0
+          -38.0,
+          5.5
         ]
       },
       "sourceEvidence": {
         "animationCatalogPath": "res://assets/data/runtime/monster_animation_catalog.json",
         "animationCatalogSha256": "e237518efa86faa2a0372b0820df809ff339a85512cd05aec41a0ea4f28a839d",
         "formalCalibrationPath": "res://assets/data/runtime/monster_ground_contact_calibrations.json",
-        "formalCalibrationSha256": "64cc94cb63f6f8dd3ff6a257bb2a79375a8e1294ca3b6ec889599265d53d835c",
+        "formalCalibrationSha256": "36955bab6ff77aaee6b32656eec933410c9d09fb81f227304f21aadec3d3dc75",
         "formalContactPath": "res://assets/data/runtime/monster_ground_contacts.json",
-        "formalContactSha256": "fdbb233ed951c969cb35c950e8d682ab69c97be2466262a0be257a2bd6a89152"
+        "formalContactSha256": "ac70a9d821f64d0eb1d8388415d0f469e97f7f417f616b127448c40a438ca597"
       }
     },
     "182": {
