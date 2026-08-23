@@ -82,8 +82,13 @@ func _run() -> void:
 		)
 		assert(
 			str(enemy._last_attack_footprint_snapshot.shape_type)
-			== SkillFootprintSnapshotScript.SHAPE_CIRCLE,
-			"monsterId=%d fixed area attack is not resolved by its projected circle" % monster_id,
+			== SkillFootprintSnapshotScript.SHAPE_DIRECTED_RECTANGLE,
+			"monsterId=%d fixed area attack is not resolved by its projected square" % monster_id,
+		)
+		assert(
+			str(enemy._last_attack_footprint_snapshot.get("range_shape", ""))
+			== "chebyshev_axis_aligned_square",
+			"monsterId=%d fixed area attack lost the original Chebyshev range" % monster_id,
 		)
 		assert(
 			str(enemy._last_attack_footprint_snapshot.projection_relationship_id)

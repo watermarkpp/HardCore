@@ -175,6 +175,7 @@ var _entrapment_last_end_reason := ""
 var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _area_attack_footprint_snapshot: Dictionary = {}
+var _area_attack_release_records: Array[Dictionary] = []
 var _last_attack_footprint_snapshot: Dictionary = {}
 var _spatial_release_serial := 0
 var _summon_cooldown := 0.0
@@ -1097,39 +1098,28 @@ func _update_area_attack(delta: float) -> bool:
 	if _area_attack_warning > 0.0:
 		_area_attack_warning -= delta
 		if _area_attack_warning <= 0.0:
-			var release_snapshot := _area_attack_footprint_snapshot
-			for victim: Node2D in _area_attack_targets(release_snapshot):
-				var damage := _rng.randi_range(attack_min, attack_max)
-				# Re-check immediately before the authoritative damage call. A
-				# target can die or be queued during the warning window; such a
-				# target must receive neither damage nor a visual descriptor.
-				if not _area_attack_victim_is_valid(victim, release_snapshot):
-					continue
-				var target_ground_gu := _screen_position_px_to_ground_position_gu(
-					victim.global_position
-				)
-				var target_world_px := _target_approved_ground_footpoint_world_px(victim)
-				var target_instance_id := victim.get_instance_id()
-				if target_ground_gu == Vector2.INF:
-					continue
-				_apply_attack_damage(victim, damage)
-				_emit_fixed_area_ground_spike_descriptor(
-					victim,
-					damage,
-					release_snapshot,
-					target_ground_gu,
-					target_world_px,
-					target_instance_id,
-				)
+			_area_attack_warning = 0.0
+			_settle_area_attack_release_records()
 			_last_attack_footprint_snapshot = _area_attack_footprint_snapshot
 			_area_attack_footprint_snapshot = {}
+			_area_attack_release_records.clear()
 			_area_attack_cooldown = _attack_interval
 	elif _area_attack_cooldown > 0.0:
 		_area_attack_cooldown = maxf(0.0, _area_attack_cooldown - delta)
 	else:
 		var candidate_snapshot := _create_area_attack_footprint_snapshot()
-		if not _area_attack_targets(candidate_snapshot).is_empty():
+		var candidate_targets := _area_attack_targets(candidate_snapshot)
+		if not candidate_targets.is_empty():
 			_area_attack_footprint_snapshot = candidate_snapshot
+			_area_attack_release_records = _freeze_area_attack_release_records(
+				candidate_targets,
+				candidate_snapshot,
+			)
+			for release_record: Dictionary in _area_attack_release_records:
+				_emit_fixed_area_ground_spike_descriptor(
+					release_record,
+					candidate_snapshot,
+				)
 			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
 			if visual != null:
 				visual.play_attack(maxf(_attack_animation_duration, _area_attack_warning))
@@ -1143,20 +1133,36 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 		"rangePixels",
 		attack_range_gu,
 	)
-	var snapshot := SkillFootprintSnapshotScript.create_circle(
-		_monster_attack_id("area_circle"),
-		_next_spatial_release_id("area_circle"),
-		_screen_position_px_to_ground_position_gu(global_position),
-		range_gu,
-		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
+	# TBigHeartMonster compares X and Y independently. The resulting footprint
+	# is the Chebyshev square [source-range, source+range], not a radial circle.
+	var snapshot := SkillFootprintSnapshotScript.create_directed_rectangle(
+		_monster_attack_id("area_square"),
+		_next_spatial_release_id("area_square"),
+		source_ground_gu - Vector2(range_gu, 0.0),
+		Vector2.RIGHT,
+		range_gu * 2.0,
+		range_gu * 2.0,
+		0.0,
+		0.0,
+		0.0,
+		"",
 		_snapshot_coordinate_context(),
 	)
-	return _decorate_attack_footprint_snapshot(
+	var decorated := _decorate_attack_footprint_snapshot(
 		snapshot,
 		PROJECTION_RELATIONSHIP_GROUND_EXACT,
 		null,
 		range_gu,
 	)
+	var square_snapshot := decorated.duplicate(true)
+	square_snapshot["range_shape"] = "chebyshev_axis_aligned_square"
+	square_snapshot["range_gu"] = range_gu
+	square_snapshot["attack_source_ground_gu"] = source_ground_gu
+	square_snapshot.make_read_only()
+	return square_snapshot
 
 
 func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
@@ -1169,25 +1175,38 @@ func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
 		# invalid/non-projectable release with a guessed footprint, otherwise a
 		# fixed-area attack could damage without a valid visual geometry source.
 		return result
+	var target_mode := str(area_attack_rule.get("targetMode", ""))
+	var scope := str(area_attack_rule.get("scope", ""))
+	if scope not in ["visible_actors", "current_map"]:
+		return result
 	var candidates: Array[Node] = []
 	var seen_instance_ids: Dictionary = {}
-	if is_instance_valid(primary_target):
-		candidates.append(primary_target)
-		seen_instance_ids[primary_target.get_instance_id()] = true
-	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
-		if not is_instance_valid(node):
-			continue
-		var instance_id := node.get_instance_id()
-		if seen_instance_ids.has(instance_id):
-			continue
-		seen_instance_ids[instance_id] = true
-		candidates.append(node)
+	if target_mode == "all_combat_targets":
+		if is_instance_valid(primary_target):
+			candidates.append(primary_target)
+			seen_instance_ids[primary_target.get_instance_id()] = true
+		for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+			if not is_instance_valid(node):
+				continue
+			var instance_id := node.get_instance_id()
+			if seen_instance_ids.has(instance_id):
+				continue
+			seen_instance_ids[instance_id] = true
+			candidates.append(node)
+	elif target_mode == "current_target":
+		if is_instance_valid(target):
+			candidates.append(target)
+	else:
+		return result
 	for node: Node in candidates:
 		if (
 			node is Node2D
 			and _area_attack_victim_is_valid(node, resolved_snapshot)
 		):
 			result.append(node)
+	result.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
 	return result
 
 
@@ -1215,7 +1234,107 @@ func _area_attack_victim_is_valid(
 		return false
 	if _point_inside_safe_zone(victim.global_position):
 		return false
-	return _snapshot_intersects_target(snapshot, victim)
+	if _runtime_map_id_for_area_target(victim) != runtime_map_id:
+		return false
+	var source_ground_gu: Vector2 = snapshot.get(
+		"attack_source_ground_gu",
+		_screen_position_px_to_ground_position_gu(global_position),
+	)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		victim.global_position
+	)
+	if target_ground_gu == Vector2.INF:
+		return false
+	var range_gu := maxf(0.0, float(snapshot.get("range_gu", 0.0)))
+	var delta_ground_gu := target_ground_gu - source_ground_gu
+	return (
+		absf(delta_ground_gu.x) <= range_gu + GroundUnitSpace.EPSILON_GU
+		and absf(delta_ground_gu.y) <= range_gu + GroundUnitSpace.EPSILON_GU
+	)
+
+
+func _freeze_area_attack_release_records(
+	victims: Array[Node2D],
+	footprint_snapshot: Dictionary,
+) -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	var release_id := str(footprint_snapshot.get("release_id", ""))
+	for victim: Node2D in victims:
+		if not _area_attack_victim_is_valid(victim, footprint_snapshot):
+			continue
+		var target_ground_gu := _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+		if target_ground_gu == Vector2.INF:
+			continue
+		var target_instance_id := victim.get_instance_id()
+		var record := {
+			"release_id": release_id,
+			"release_target_id": "%s:target:%d" % [
+				release_id,
+				target_instance_id,
+			],
+			"target_instance_id": target_instance_id,
+			"runtime_map_id": _runtime_map_id_for_area_target(victim),
+			"target_ground_gu": target_ground_gu,
+			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
+			"target_actor_origin_world_px": victim.global_position,
+			"damage": _rng.randi_range(attack_min, attack_max),
+		}
+		record.make_read_only()
+		records.append(record)
+	return records
+
+
+func _settle_area_attack_release_records() -> void:
+	for release_record: Dictionary in _area_attack_release_records:
+		var target_instance_id := int(release_record.get("target_instance_id", 0))
+		if target_instance_id <= 0:
+			continue
+		var candidate: Object = instance_from_id(target_instance_id)
+		if not (candidate is Node2D):
+			continue
+		var victim := candidate as Node2D
+		if not _area_attack_release_target_is_valid(victim, release_record):
+			continue
+		_apply_attack_damage(victim, int(release_record.get("damage", 0)))
+
+
+func _area_attack_release_target_is_valid(
+	victim: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_damage")
+	):
+		return false
+	if runtime_map_id != int(release_record.get("runtime_map_id", -1)):
+		return false
+	if _runtime_map_id_for_area_target(victim) != runtime_map_id:
+		return false
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	if current_hp_value != null and int(current_hp_value) <= 0:
+		return false
+	return not _point_inside_safe_zone(victim.global_position)
+
+
+func _runtime_map_id_for_area_target(victim: Node2D) -> int:
+	if victim.has_meta("runtime_map_id"):
+		return int(victim.get_meta("runtime_map_id", runtime_map_id))
+	for property: Dictionary in victim.get_property_list():
+		if str(property.get("name", "")) != "runtime_map_id":
+			continue
+		var target_map_id := int(victim.get("runtime_map_id"))
+		return target_map_id if target_map_id >= 0 else runtime_map_id
+	return runtime_map_id
 
 
 func _uses_fixed_area_ground_spike_effect() -> bool:
@@ -1233,28 +1352,26 @@ func _target_approved_ground_footpoint_world_px(victim: Node2D) -> Vector2:
 
 
 func _emit_fixed_area_ground_spike_descriptor(
-	victim: Node2D,
-	damage: int,
+	release_record: Dictionary,
 	footprint_snapshot: Dictionary,
-	target_ground_gu := Vector2.INF,
-	target_world_px := Vector2.INF,
-	target_instance_id := 0,
 ) -> void:
 	if not _uses_fixed_area_ground_spike_effect():
 		return
-	# The caller has already performed the final pre-damage validity check.
-	# Do not re-check current_hp here: a legitimate hit may have reduced a
-	# victim to zero HP, and that victim still needs exactly one visual event.
-	if target_ground_gu == Vector2.INF:
-		target_ground_gu = _screen_position_px_to_ground_position_gu(
-			victim.global_position
-		)
+	var target_ground_gu: Vector2 = release_record.get(
+		"target_ground_gu",
+		Vector2.INF,
+	)
 	if target_ground_gu == Vector2.INF:
 		return
+	var target_world_px: Vector2 = release_record.get(
+		"target_world_px",
+		Vector2.INF,
+	)
 	if target_world_px == Vector2.INF:
-		target_world_px = _target_approved_ground_footpoint_world_px(victim)
+		return
+	var target_instance_id := int(release_record.get("target_instance_id", 0))
 	if target_instance_id <= 0:
-		target_instance_id = victim.get_instance_id()
+		return
 	var source := {
 		"monster_id": monster_id,
 		"instance_id": get_instance_id(),
@@ -1263,20 +1380,29 @@ func _emit_fixed_area_ground_spike_descriptor(
 		"instance_id": target_instance_id,
 		"ground_gu": target_ground_gu,
 		"world_px": target_world_px,
-		"actor_origin_world_px": victim.global_position,
+		"actor_origin_world_px": release_record.get(
+			"target_actor_origin_world_px",
+			target_world_px,
+		),
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
 	}
 	var descriptor := {
 		"effect_id": FIXED_AREA_GROUND_SPIKE_EFFECT_ID,
 		"release_id": str(footprint_snapshot.get("release_id", "")),
+		"release_target_id": str(release_record.get("release_target_id", "")),
 		"source": source,
 		"source_monster_id": monster_id,
 		"source_instance_id": get_instance_id(),
 		"target": target,
 		"target_instance_id": target_instance_id,
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
 		"target_ground_gu": target_ground_gu,
 		"target_world_px": target_world_px,
-		"target_actor_origin_world_px": victim.global_position,
-		"damage": maxi(0, int(damage)),
+		"target_actor_origin_world_px": release_record.get(
+			"target_actor_origin_world_px",
+			target_world_px,
+		),
+		"damage": maxi(0, int(release_record.get("damage", 0))),
 		# The release snapshot is already read-only at construction. Do not
 		# duplicate or rebuild it per victim: all descriptors for one release
 		# must point at the same immutable geometry object.
@@ -1501,6 +1627,9 @@ func _begin_death() -> void:
 	velocity = Vector2.ZERO
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
+	_area_attack_warning = 0.0
+	_area_attack_footprint_snapshot = {}
+	_area_attack_release_records.clear()
 	input_pickable = false
 	collision_layer = 0
 	collision_mask = 0

@@ -2,16 +2,7 @@ extends Node2D
 
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
-const RUNTIME_TEST_MONSTER := {
-	"monsterId": -9100,
-	"name": "GU runtime probe",
-	"hp": 100,
-	"runtimeProjection": {
-		"move_speed_gu_per_sec": 1.0,
-		"attack_range_gu": 1.5,
-		"aggro_radius_gu": 12.0,
-	},
-}
+const RUNTIME_TEST_MONSTER_ID := 21
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -38,7 +29,12 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var enemy := EnemyActor.new()
-	enemy.setup(RUNTIME_TEST_MONSTER, null, false)
+	enemy.setup(GameData.get_monster_by_id(RUNTIME_TEST_MONSTER_ID), null, false)
+	# Runtime production rejects caller-authored combat payloads. Geometry tests
+	# use a real canonical identity and then configure their isolated probe state.
+	enemy.move_speed_gu_per_sec = 1.0
+	enemy.attack_range_gu = 1.5
+	enemy.aggro_radius_gu = 12.0
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
@@ -85,18 +81,24 @@ func _verify_aggro_and_leash_in_32_ground_directions(enemy: EnemyActor) -> void:
 
 
 func _verify_fixed_area_range_in_32_ground_directions(enemy: EnemyActor) -> void:
-	enemy.area_attack_rule = {"enabled": true, "range_gu": 4.0}
+	enemy.area_attack_rule = {
+		"enabled": true,
+		"range_gu": 4.0,
+		"scope": "visible_actors",
+		"targetMode": "all_combat_targets",
+	}
 	for direction_index in range(32):
 		var direction_ground := Vector2.from_angle(TAU * float(direction_index) / 32.0)
 		var probe := CombatTarget.new()
 		add_child(probe)
-		var target_radius_gu := enemy._target_combat_radius_gu(probe)
+		var chebyshev_axis := maxf(absf(direction_ground.x), absf(direction_ground.y))
+		var square_boundary_distance_gu := 4.0 / chebyshev_axis
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			direction_ground * (4.0 + target_radius_gu - 0.001)
+			direction_ground * (square_boundary_distance_gu - 0.001)
 		)
 		assert(enemy._area_attack_targets().has(probe), "fixed-area rejected inside GU boundary at direction %d" % direction_index)
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			direction_ground * (4.0 + target_radius_gu + 0.001)
+			direction_ground * (square_boundary_distance_gu + 0.001)
 		)
 		assert(not enemy._area_attack_targets().has(probe), "fixed-area accepted outside GU boundary at direction %d" % direction_index)
 		probe.free()

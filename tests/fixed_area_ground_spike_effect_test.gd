@@ -1,9 +1,9 @@
 extends Node
 
-## Fixed-area monster release contract: gameplay settles once per valid target,
-## then emits one presentation descriptor carrying the shared immutable
-## snapshot. The visual consumes no damage API and expires after its eight
-## authored frames.
+## Fixed-area monster release contract: the attacker freezes one record and
+## emits one spike immediately per valid target, then settles only that frozen
+## batch after the configured delay. The visual consumes no damage API and
+## expires after its eight user-approved authored frames.
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const MonsterGroundSpikeEffectScript := preload(
@@ -43,8 +43,8 @@ func _run() -> void:
 		_capture_descriptor
 	)
 	add_child(_attacker)
-	await get_tree().process_frame
 	_attacker.set_physics_process(false)
+	await get_tree().process_frame
 	_attacker.attack_min = 7
 	_attacker.attack_max = 7
 	_attacker._attack_animation_duration = 0.62
@@ -76,14 +76,35 @@ func _run() -> void:
 	var primary_hp_before := primary.current_hp
 	var second_hp_before := second.current_hp
 	_attacker._physics_process(0.05)
-	assert(_descriptors.is_empty(), "fixed area warning must not emit a spike early")
+	assert(_descriptors.size() == 2, "N frozen victims must produce N immediate spike descriptors")
 	assert(primary.current_hp == primary_hp_before)
 	_attacker._physics_process(0.14)
-	assert(_descriptors.is_empty(), "fixed area warning must remain visual-free before settlement")
+	assert(_descriptors.size() == 2, "the frozen batch must not emit duplicate spikes")
+	assert(primary.current_hp == primary_hp_before)
+	var primary_record: Dictionary = {}
+	for release_record: Dictionary in _attacker._area_attack_release_records:
+		if int(release_record.get("target_instance_id", 0)) == primary.get_instance_id():
+			primary_record = release_record
+			break
+	assert(not primary_record.is_empty())
+	assert(
+		_attacker._area_attack_release_target_is_valid(primary, primary_record),
+		"frozen primary invalid before settlement: attacker_map=%d target_map=%d dead=%s safe=%s"
+		% [
+			_attacker.runtime_map_id,
+			_attacker._runtime_map_id_for_area_target(primary),
+			str(primary._dead),
+			str(_attacker._point_inside_safe_zone(primary.global_position)),
+		],
+	)
 	_attacker._physics_process(0.07)
 
-	assert(_descriptors.size() == 2, "N valid victims must produce N spike descriptors")
-	assert(primary.current_hp < primary_hp_before)
+	assert(_descriptors.size() == 2, "settlement must not create a second visual path")
+	assert(
+		primary.current_hp < primary_hp_before,
+		"frozen primary did not settle: hp=%d before=%d records=%s"
+		% [primary.current_hp, primary_hp_before, str(_attacker._area_attack_release_records)],
+	)
 	assert(second.current_hp < second_hp_before)
 	assert(out_of_range.current_hp == out_of_range.max_hp)
 	assert(dead.current_hp == 0)
@@ -99,6 +120,13 @@ func _run() -> void:
 			"effect id must be stable",
 		)
 		assert(str(descriptor.get("release_id", "")) == expected_release_id)
+		assert(
+			str(descriptor.get("release_target_id", ""))
+			== "%s:target:%d" % [
+				expected_release_id,
+				int(descriptor.get("target_instance_id", 0)),
+			]
+		)
 		assert(int(descriptor.get("source_monster_id", -1)) == 180)
 		assert(int(descriptor.get("source_instance_id", 0)) == _attacker.get_instance_id())
 		var target_instance_id := int(descriptor.get("target_instance_id", 0))
