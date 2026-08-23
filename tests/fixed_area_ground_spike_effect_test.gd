@@ -118,8 +118,8 @@ func _run() -> void:
 	assert(first_target != null)
 	assert(
 		first_descriptor.get("target_world_px", Vector2.INF)
-		.is_equal_approx(first_target.rendered_footpoint_world_px()),
-		"spike presentation must use the APK-derived rendered shoe point",
+		.is_equal_approx(first_target.approved_ground_footpoint_world_px()),
+		"spike presentation must use the original user-approved ground point",
 	)
 	assert(
 		first_descriptor.get("target_actor_origin_world_px", Vector2.INF)
@@ -132,10 +132,8 @@ func _run() -> void:
 		"damage footprint must remain on the authoritative actor origin",
 	)
 	assert(
-		first_target.rendered_footpoint_local_px().is_equal_approx(
-			ArtSpec.PLAYER_VISUAL_RUNTIME_POSITION
-		),
-		"APK-derived visible footpoint offset must be (7.5, 12.5)",
+		first_target.approved_ground_footpoint_local_px().is_zero_approx(),
+		"original approved player footpoint must resolve to (0, 0)",
 	)
 	var effect := MonsterGroundSpikeEffectScript.new()
 	effect.setup(first_descriptor)

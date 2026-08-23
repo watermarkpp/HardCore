@@ -1108,7 +1108,7 @@ func _update_area_attack(delta: float) -> bool:
 				var target_ground_gu := _screen_position_px_to_ground_position_gu(
 					victim.global_position
 				)
-				var target_world_px := _target_rendered_footpoint_world_px(victim)
+				var target_world_px := _target_approved_ground_footpoint_world_px(victim)
 				var target_instance_id := victim.get_instance_id()
 				if target_ground_gu == Vector2.INF:
 					continue
@@ -1222,11 +1222,11 @@ func _uses_fixed_area_ground_spike_effect() -> bool:
 	return monster_id in FIXED_AREA_GROUND_SPIKE_MONSTER_IDS
 
 
-func _target_rendered_footpoint_world_px(victim: Node2D) -> Vector2:
+func _target_approved_ground_footpoint_world_px(victim: Node2D) -> Vector2:
 	# Area geometry and damage remain bound to victim.global_position. Only the
-	# presentation descriptor follows a target-provided rendered footpoint.
-	if victim.has_method("rendered_footpoint_world_px"):
-		var point: Variant = victim.call("rendered_footpoint_world_px")
+	# presentation descriptor follows the original user-approved ground point.
+	if victim.has_method("approved_ground_footpoint_world_px"):
+		var point: Variant = victim.call("approved_ground_footpoint_world_px")
 		if point is Vector2 and point.is_finite():
 			return point
 	return victim.global_position
@@ -1252,7 +1252,7 @@ func _emit_fixed_area_ground_spike_descriptor(
 	if target_ground_gu == Vector2.INF:
 		return
 	if target_world_px == Vector2.INF:
-		target_world_px = _target_rendered_footpoint_world_px(victim)
+		target_world_px = _target_approved_ground_footpoint_world_px(victim)
 	if target_instance_id <= 0:
 		target_instance_id = victim.get_instance_id()
 	var source := {

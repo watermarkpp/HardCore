@@ -27,7 +27,11 @@
     "embedded_contract_path": "assets/assets/data/player_visual_alignment.json",
     "contract_id": "player.visual_ground_alignment.manual.v1",
     "runtime_visual_position_px": [7.5, 12.5],
-    "policy": "presentation effect follows live rendered player shoe point; combat ground position remains the actor origin"
+    "visual_foot_anchor_adjustment_px": [-7.5, -12.5],
+    "approved_visual_footpoint_px": [0.0, 0.0],
+    "original_draft_path": "outputs/visual_acceptance/player_visual_alignment_draft.json",
+    "original_draft_sha256": "5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4",
+    "policy": "presentation effect follows the original user-approved visualFootPoint (0,0); combat ground position remains the same actor origin"
   },
   "frame_layout": {
     "columns": 4,

@@ -80,16 +80,12 @@ func setup(owner_actor: PlayerCharacter) -> void:
 	actor = owner_actor
 
 
-func rendered_footpoint_in_actor_px() -> Vector2:
-	# The APK-authored body atlas is normalized around WARRIOR_FOOT_ANCHOR,
-	# then the whole visual composite receives PLAYER_VISUAL_RUNTIME_POSITION.
-	# Return the actually rendered contact point before the canonical/physics
-	# adjustment is applied; presentation effects need the visible shoe point.
-	if sprite == null or not is_instance_valid(sprite):
-		return position
-	return transform * (
-		sprite.transform * Vector2(ArtSpec.WARRIOR_FOOT_ANCHOR)
-	)
+func approved_ground_footpoint_in_actor_px() -> Vector2:
+	# This is the exact user-approved result from the original 2026-07-30
+	# alignment draft. The visual composite was moved to (7.5, 12.5), then the
+	# manually picked shoe point received (-7.5, -12.5), resolving to (0, 0).
+	# Use the stable formal values instead of a transient sprite frame transform.
+	return position + ArtSpec.PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT
 
 
 func _ready() -> void:
