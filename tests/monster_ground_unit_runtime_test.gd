@@ -172,6 +172,7 @@ func _verify_boss_warning_projection_uses_gu(enemy: EnemyActor) -> void:
 	assert(enemy.BOSS_WARNING_PROJECTION_CONTRACT_ID == "monster.boss.warning.ground_projection.v1")
 	for shape in ["circle", "cone"]:
 		var special := {
+			"enabled": true,
 			"shape": shape,
 			"radius_gu": RADIUS_GU,
 			"coneHalfAngleRadians": 0.4,

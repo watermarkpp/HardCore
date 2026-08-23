@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "effect_id": "monster.physical_arrow.v1",
+  "compatibility_aliases": [
+    "monster.physical_arrow.v1"
+  ],
+  "source_priority": {
+    "client_assets": "primary",
+    "client_assets_root": "dev_art_sources/reference/mir2_client_raw",
+    "client_rules": "primary",
+    "client_rules_root": "dev_art_sources/reference/original_gameofmir/MirClient",
+    "runtime_asset_policy": "decoded source pixels only; no procedural fallback"
+  },
+  "source_library": {
+    "wil": "dev_art_sources/reference/mir2_client_raw/Data/Effect.wil",
+    "wix": "dev_art_sources/reference/mir2_client_raw/Data/Effect.WIX",
+    "wil_sha256": "2d94f51ff7a7046daa65591e35c08cea0b23912f7aeeaae2aab0c7f24e37af90",
+    "wix_sha256": "fe41b45a656df79ae9fd9e1fafc659fe0463c1fabaa08a86de0b9efce8c008d8",
+    "library_image_count": 326
+  },
+  "source_rule": {
+    "class": "TFlyingArrow",
+    "magic_type": "mtFlyArrow",
+    "base_constant": "ARCHERBASE2",
+    "base_index": 272,
+    "direction_count": 16,
+    "frame_count_per_direction": 1,
+    "index_expression": "ARCHERBASE2 + Dir16 + curframe",
+    "curframe_values": [0],
+    "frame_time_ms": 30,
+    "image_library_expression": "FrmMain.WEffectImg",
+    "draw_hotspot_expression": "FlyX + px - UNITX div 2; FlyY + py - UNITY div 2 - 46",
+    "raw_sprite_sha256_basis": "SHA256 of the WIL record at wil_offset: 8-byte width/height/x/y header plus width*height palette-index bytes",
+    "direction_rule": "MirClient/ClFunc.pas GetFlyDirection16, preserved in MonsterRangedProjectileEffect._direction16_for_line"
+  },
+  "code_evidence": [
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+      "lines": "734-744",
+      "rule": "TArcherMon creates TFlyingArrow with mtFlyArrow, binds WEffectImg and ARCHERBASE2, and uses 30 ms frames"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+      "lines": "24,241-244,562-565,690,959-983",
+      "rule": "ARCHERBASE2 is 272; TFlyingArrow has one visible mtFlyArrow frame; direction selects WEffectImg[272 + Dir16] and preserves px/py plus -46 draw offset"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+      "lines": "1791-1802",
+      "rule": "mtFlyArrow factory constructs TFlyingArrow"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/ClFunc.pas",
+      "lines": "546-596",
+      "rule": "GetFlyDirection16 direction quantization"
+    }
+  ],
+  "monster_bindings": {
+    "150": {
+      "canonical_name": "祖玛弓箭手",
+      "behavior_profile": "zuma_archer",
+      "delivery_kind": "physical_projectile",
+      "visual_type": "TFlyingArrow",
+      "source_asset_shared_with": [
+        152,
+        206
+      ]
+    },
+    "151": {
+      "canonical_name": "祖玛弓箭手0",
+      "behavior_profile": "zuma_archer",
+      "delivery_kind": "physical_projectile",
+      "visual_type": "TFlyingArrow",
+      "runtime_status": "source_only_not_runtime_catalog"
+    },
+    "152": {
+      "canonical_name": "祖玛弓箭手3",
+      "behavior_profile": "zuma_archer",
+      "delivery_kind": "physical_projectile",
+      "visual_type": "TFlyingArrow",
+      "source_asset_shared_with": [
+        150,
+        206
+      ]
+    },
+    "206": {
+      "canonical_name": "骷髅弓箭手",
+      "behavior_profile": "skeleton_archer",
+      "delivery_kind": "physical_projectile",
+      "visual_type": "TFlyingArrow",
+      "source_asset_shared_with": [
+        150,
+        152
+      ]
+    },
+    "207": {
+      "canonical_name": "骷髅弓箭手0",
+      "behavior_profile": "skeleton_archer",
+      "delivery_kind": "physical_projectile",
+      "visual_type": "TFlyingArrow",
+      "runtime_status": "source_only_not_runtime_catalog"
+    }
+  },
+  "frames": [
+    {
+      "direction16": 0,
+      "library_index": 272,
+      "wil_offset": 1454944,
+      "width": 4,
+      "height": 35,
+      "hotspot_x": 22,
+      "hotspot_y": -5,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00272.png",
+      "raw_sprite_sha256": "f9f68d600b3b6bdb33302c819308e1abefbd37047822373d920bbd6861366ab4",
+      "asset_sha256": "9dfa53382e9fffbb6bc6b320ab0ac902203adb3a4f54b05d9cc13e741574758f"
+    },
+    {
+      "direction16": 1,
+      "library_index": 273,
+      "wil_offset": 1455092,
+      "width": 24,
+      "height": 33,
+      "hotspot_x": 15,
+      "hotspot_y": -4,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00273.png",
+      "raw_sprite_sha256": "dd91a3fbd455c614afae7b2bc65011c31e278069bc0fc6344a144c6577944bce",
+      "asset_sha256": "c4798dbd61c23793f5e3a2f4e77ea063dbb8e4b467884f6d3f301893ff4979b9"
+    },
+    {
+      "direction16": 2,
+      "library_index": 274,
+      "wil_offset": 1455892,
+      "width": 40,
+      "height": 26,
+      "hotspot_x": 9,
+      "hotspot_y": 1,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00274.png",
+      "raw_sprite_sha256": "7d0f0a6e7b2c03a18806cba1d19080d972fe1a7315b6b381d1bcd1f1a9e93599",
+      "asset_sha256": "32fbd12fb588ac7112867a09073389217528c7f6a68801568373f27a671d7c73"
+    },
+    {
+      "direction16": 3,
+      "library_index": 275,
+      "wil_offset": 1456940,
+      "width": 48,
+      "height": 15,
+      "hotspot_x": 3,
+      "hotspot_y": 8,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00275.png",
+      "raw_sprite_sha256": "160e99f7266f7d98e7705177e94506d09b742a5d0b4cc6a5787b5cba5a2b0baf",
+      "asset_sha256": "c74d87920ec4f23c485f4a625fde9e75547f9cf27b5d369d0faaf0fd2042aafd"
+    },
+    {
+      "direction16": 4,
+      "library_index": 276,
+      "wil_offset": 1457668,
+      "width": 52,
+      "height": 3,
+      "hotspot_x": 2,
+      "hotspot_y": 15,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00276.png",
+      "raw_sprite_sha256": "b62a90d8fe342f9b6b9f1076ce2c1714fbe24867ea52dae96384a6ba7ad2fa73",
+      "asset_sha256": "fc72ba1e33fd3d125e2ff77f61a98973119fbf84d855a3d3829bc63ff82b1e09"
+    },
+    {
+      "direction16": 5,
+      "library_index": 277,
+      "wil_offset": 1457832,
+      "width": 52,
+      "height": 15,
+      "hotspot_x": 1,
+      "hotspot_y": 8,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00277.png",
+      "raw_sprite_sha256": "22d1dec05fa7b53e32f4975a5fe1f2981391677f300acf2d666b428aba64218d",
+      "asset_sha256": "2a30e414a860142a53a7adf34488fab9414c00b90aed8fd8099bcf8c4d942647"
+    },
+    {
+      "direction16": 6,
+      "library_index": 278,
+      "wil_offset": 1458620,
+      "width": 40,
+      "height": 26,
+      "hotspot_x": 7,
+      "hotspot_y": 5,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00278.png",
+      "raw_sprite_sha256": "07a6842c46b9a9c2331339400409a36fc68f34a78d3aad1352b106d8fe75d693",
+      "asset_sha256": "4873624a936caabfb243fc5f7ac21ebe0805988e96dbefee7de8964c6e875f95"
+    },
+    {
+      "direction16": 7,
+      "library_index": 279,
+      "wil_offset": 1459668,
+      "width": 24,
+      "height": 33,
+      "hotspot_x": 14,
+      "hotspot_y": 2,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00279.png",
+      "raw_sprite_sha256": "e56ca7f8f60835744b2cd3fcb830ab35198c1205b4ce758268cdcbc449420451",
+      "asset_sha256": "a5aaccd9c5943fee644d908be856efac8b0c6799f4e108b07cc5384c8ffb7360"
+    },
+    {
+      "direction16": 8,
+      "library_index": 280,
+      "wil_offset": 1460468,
+      "width": 4,
+      "height": 35,
+      "hotspot_x": 21,
+      "hotspot_y": 3,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00280.png",
+      "raw_sprite_sha256": "fcaa80b2c5763b34529b0a16652c173858e428b0fe9125366d0fda98f593cbd4",
+      "asset_sha256": "b2ada5bce24320b00c9fa742d96ecc511105f700c5c54b5553fb2a235ee5c2b8"
+    },
+    {
+      "direction16": 9,
+      "library_index": 281,
+      "wil_offset": 1460616,
+      "width": 24,
+      "height": 34,
+      "hotspot_x": 12,
+      "hotspot_y": 1,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00281.png",
+      "raw_sprite_sha256": "9e65f9dad5912614663381c5307da5f2934225bd342d8167a52c462d2e3441f9",
+      "asset_sha256": "4f48282d916ca5166f7d60c1a341dab045874e11e1d9aa4f071c5505c0c01ee2"
+    },
+    {
+      "direction16": 10,
+      "library_index": 282,
+      "wil_offset": 1461440,
+      "width": 40,
+      "height": 26,
+      "hotspot_x": 4,
+      "hotspot_y": 4,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00282.png",
+      "raw_sprite_sha256": "bd8566da3c05da83abf6c3ba8dde55ca5ca06aec1930765bb3219e6a4f10e060",
+      "asset_sha256": "c7a83a2eedec658f32b48496e1520e05e02191b0f03c989caab264907f4a1203"
+    },
+    {
+      "direction16": 11,
+      "library_index": 283,
+      "wil_offset": 1462488,
+      "width": 48,
+      "height": 16,
+      "hotspot_x": -2,
+      "hotspot_y": 8,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00283.png",
+      "raw_sprite_sha256": "adcb9d86c07b616bc25f43fe67585f118211a44fd9d9a5c4b99f5748e4168631",
+      "asset_sha256": "6c8e3702e81924fd9dce9386f296b6eb63b2d42e8685cdeacc178bf10d89a4a2"
+    },
+    {
+      "direction16": 12,
+      "library_index": 284,
+      "wil_offset": 1463264,
+      "width": 52,
+      "height": 4,
+      "hotspot_x": -7,
+      "hotspot_y": 15,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00284.png",
+      "raw_sprite_sha256": "55ff1f757fc6da5c93d51f7e409c5e57b4af175eca61872f1ed65d3079ddadc0",
+      "asset_sha256": "3b01fedea62d61a1c594f04bd183890e9e4d23d76ce7b65023b28ec6ef304913"
+    },
+    {
+      "direction16": 13,
+      "library_index": 285,
+      "wil_offset": 1463480,
+      "width": 52,
+      "height": 14,
+      "hotspot_x": -4,
+      "hotspot_y": 9,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00285.png",
+      "raw_sprite_sha256": "3ff61ad9e16357f02568de66e7ef7b3483961cdf383d38321f5332f82ae9e700",
+      "asset_sha256": "521dfd94e13dde0eda9c053ed76b5a3bd6f57dc983efca24c746d6bcf23e7cb5"
+    },
+    {
+      "direction16": 14,
+      "library_index": 286,
+      "wil_offset": 1464216,
+      "width": 40,
+      "height": 25,
+      "hotspot_x": 1,
+      "hotspot_y": 2,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00286.png",
+      "raw_sprite_sha256": "58ba9133bd318fb6a8ab7a6d41daf3cd5c899aa47d2549c28fd38101eb2529a2",
+      "asset_sha256": "60a6d140d5132a7fa555c175f9cee1b3ac44e058ab64d874f1c4c67b86e11ba9"
+    },
+    {
+      "direction16": 15,
+      "library_index": 287,
+      "wil_offset": 1465224,
+      "width": 24,
+      "height": 32,
+      "hotspot_x": 12,
+      "hotspot_y": -2,
+      "asset": "assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00287.png",
+      "raw_sprite_sha256": "5702c6bfe6d4a35354b18d6bdfb613d24beecaaf9d424f124a78487a4f59d9c8",
+      "asset_sha256": "1c41faf5be85a56589cfa86ae36ccabd44bc83971ca53737b3a4d208f42cfe0c"
+    }
+  ]
+}

@@ -25,6 +25,9 @@ const MonsterRangedProjectileEffectScript := preload(
 const MonsterTargetMagicEffectScript := preload(
 	"res://scripts/monster_target_magic_effect.gd"
 )
+const MONSTER_MAGIC_MELEE_EFFECT_ID := "monster.flame_wooma.magic_melee.v1"
+const MONSTER_AREA_MAGIC_EFFECT_ID := "monster.touch_dragon.area_magic.v1"
+const RETIRED_SOURCE_ONLY_MONSTER_IDS := [71]
 const FIXED_AREA_GROUND_SPIKE_EFFECT_ID := (
 	"monster.fixed_area_ground_spike.v1"
 )
@@ -191,6 +194,9 @@ var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _area_attack_footprint_snapshot: Dictionary = {}
 var _area_attack_release_records: Array[Dictionary] = []
+var _area_magic_warning := 0.0
+var _area_magic_footprint_snapshot: Dictionary = {}
+var _area_magic_release_records: Array[Dictionary] = []
 var _last_attack_footprint_snapshot: Dictionary = {}
 var _spatial_release_serial := 0
 var _summon_cooldown := 0.0
@@ -202,6 +208,12 @@ var actual_ground_motion_gu := Vector2.ZERO
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
 	var requested_id := MonsterIdentityScript.monster_id(data)
+	if requested_id in RETIRED_SOURCE_ONLY_MONSTER_IDS:
+		monster_data = {"monster_id": requested_id}
+		monster_id = -1
+		set_meta("retired_source_only", true)
+		set_meta("canonical_rejected", true)
+		return
 	var canonical_entry := MonsterIdentityScript.require_catalog_entry(requested_id, "runtime")
 	if canonical_entry.is_empty():
 		monster_data = {"monster_id": requested_id}
@@ -241,8 +253,21 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	)
 	behavior_profile = MonsterIdentityScript.behavior_profile(monster_data)
 	_apply_behavior_profile()
+	_apply_source_locked_special_delivery_override()
 	if is_boss:
 		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
+		# The generated canonical catalog is rebuilt by integration. Until that
+		# rebuild lands, the exact ID-keyed service rule remains the authoritative
+		# runtime override for this newly split special delivery.
+		if monster_id == 124:
+			var configured_rules: Variant = GameData.boss_service_rules.get(
+				"runtimeRulesByMonsterId",
+				{},
+			)
+			if configured_rules is Dictionary:
+				var configured_rule: Variant = (configured_rules as Dictionary).get("124", {})
+				if configured_rule is Dictionary and not (configured_rule as Dictionary).is_empty():
+					boss_rule = (configured_rule as Dictionary).duplicate(true)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:
@@ -278,6 +303,26 @@ func _apply_behavior_profile() -> void:
 	control_on_hit_seconds = float(on_hit.get("controlSeconds", control_on_hit_seconds))
 
 
+func _apply_source_locked_special_delivery_override() -> void:
+	# Keep the exact ID contract live even while integration is rebuilding the
+	# generated canonical catalog from the edited source profiles.
+	if monster_id != 70:
+		return
+	attack_range_gu = 1.0
+	attack_delivery_rule = {
+		"kind": "special_melee",
+		"effectId": MONSTER_MAGIC_MELEE_EFFECT_ID,
+		"damageChannel": "magic_defense",
+		"bodyOnly": true,
+		"rangeShape": "chebyshev_square",
+		"rangeTiles": 1,
+		"range_gu": 1.0,
+		"hitDelaySeconds": 0.0,
+		"presentationDelaySeconds": 0.3,
+		"obstaclePolicy": "environment_adjacent_only",
+	}
+
+
 func _apply_boss_rule() -> void:
 	var timing: Dictionary = boss_rule.get("timing", {})
 	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
@@ -292,6 +337,9 @@ func _apply_boss_rule() -> void:
 	_attack_interval = float(timing.get("attackIntervalMs", 1550)) / 1000.0
 	_attack_animation_duration = float(timing.get("attackAnimationMs", 460)) / 1000.0
 	_attack_hit_delay = float(timing.get("hitDelayMs", 0)) / 1000.0
+	var configured_delivery: Variant = boss_rule.get("attackDelivery", {})
+	if configured_delivery is Dictionary and not (configured_delivery as Dictionary).is_empty():
+		attack_delivery_rule = (configured_delivery as Dictionary).duplicate(true)
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	_boss_skill_enabled = bool(special.get("enabled", false))
 	_boss_skill_cooldown = float(special.get("initialCooldownSeconds", _boss_skill_cooldown))
@@ -546,6 +594,12 @@ func _physics_process(delta: float) -> void:
 	):
 		velocity = Vector2.ZERO
 		return
+	if _uses_area_magic_delivery():
+		_update_area_magic_delivery(delta)
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
+		queue_redraw()
+		return
 	if is_boss and _boss_skill_enabled:
 		_update_boss_skill(delta, distance_gu)
 	if (
@@ -566,7 +620,9 @@ func _physics_process(delta: float) -> void:
 			if visual != null:
 				visual.play_attack(maxf(_attack_animation_duration,0.62))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
-			if _uses_physical_projectile_delivery():
+			if _uses_special_magic_melee_delivery():
+				_deal_special_magic_melee_hit(target, dealt_damage)
+			elif _uses_physical_projectile_delivery():
 				_launch_physical_projectile(target, dealt_damage)
 			elif (
 				_uses_target_magic_delivery()
@@ -890,6 +946,16 @@ func _attack_engagement_ready(
 	contact_distance_gu: float,
 	default_engagement_distance_gu: float,
 ) -> bool:
+	if _uses_special_magic_melee_delivery():
+		return (
+			is_instance_valid(hit_target)
+			and _special_magic_melee_condition_met(offset_ground_gu)
+			and _attack_world_path_is_clear_for_target(hit_target)
+		)
+	if _uses_area_magic_delivery():
+		# The area delivery owns its target snapshot and release cycle. It must
+		# never fall through to the ordinary single-target attack branch.
+		return false
 	if _uses_target_magic_delivery():
 		return (
 			is_instance_valid(hit_target)
@@ -1034,6 +1100,45 @@ func _uses_target_magic_delivery() -> bool:
 		== MonsterTargetMagicEffectScript.EFFECT_ID
 		and str(attack_delivery_rule.get("damageChannel", ""))
 		== "magic_defense"
+	)
+
+
+func _uses_special_magic_melee_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "special_melee"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MONSTER_MAGIC_MELEE_EFFECT_ID
+		and str(attack_delivery_rule.get("damageChannel", ""))
+		== "magic_defense"
+		and bool(attack_delivery_rule.get("bodyOnly", false))
+	)
+
+
+func _uses_area_magic_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "area_magic"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MONSTER_AREA_MAGIC_EFFECT_ID
+		and str(attack_delivery_rule.get("damageChannel", ""))
+		== "magic_defense"
+		and bool(attack_delivery_rule.get("bodyOnly", false))
+	)
+
+
+func _special_magic_melee_condition_met(offset_ground_gu: Vector2) -> bool:
+	if not _uses_special_magic_melee_delivery():
+		return false
+	if str(attack_delivery_rule.get("rangeShape", "")) != "chebyshev_square":
+		return false
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		attack_delivery_rule,
+		"range_gu",
+		"rangePixels",
+		1.0,
+	)
+	return (
+		absf(offset_ground_gu.x) <= range_gu + GroundUnitSpace.EPSILON_GU
+		and absf(offset_ground_gu.y) <= range_gu + GroundUnitSpace.EPSILON_GU
 	)
 
 
@@ -1414,6 +1519,66 @@ func _emit_target_magic_descriptor(release_record: Dictionary) -> void:
 	host.add_child(effect)
 
 
+func _deal_special_magic_melee_hit(
+	hit_target: Node2D,
+	dealt_damage: int,
+) -> void:
+	# TMagCowMonster applies its magic-defense damage immediately. The source
+	# RM_STRUCK message is a 300ms body presentation notification, not a delayed
+	# damage transaction and not an independent projectile/effect.
+	if (
+		not _uses_special_magic_melee_delivery()
+		or not is_instance_valid(hit_target)
+		or not hit_target.has_method("take_direct_spell_damage")
+		or _target_is_safe_player(hit_target)
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+	):
+		return
+	var offset_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		hit_target.global_position,
+	)
+	if not _special_magic_melee_condition_met(offset_ground_gu):
+		return
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if (
+		source_ground_gu == Vector2.INF
+		or target_ground_gu == Vector2.INF
+		or not _world_attack_path_is_clear(
+			source_ground_gu,
+			target_ground_gu,
+			global_position,
+			hit_target.global_position,
+		)
+	):
+		return
+	var raw_resolution: Variant = hit_target.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, dealt_damage),
+	)
+	if not raw_resolution is Dictionary:
+		last_magic_attack_resolution = {
+			"success": false,
+			"failure_reason": "invalid_magic_damage_resolution",
+			"source_monster_id": monster_id,
+			"damage_channel": "magic_defense",
+		}
+		return
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["delivery_kind"] = "special_melee"
+	last_magic_attack_resolution["presentation_delay_seconds"] = float(
+		attack_delivery_rule.get("presentationDelaySeconds", 0.3)
+	)
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+
+
 func _deal_melee_hit(
 	hit_target: Node2D,
 	dealt_damage: int,
@@ -1623,6 +1788,251 @@ func _uses_ranged_projectile_sweep_contract() -> bool:
 
 func _target_is_safe_player(hit_target: Node2D) -> bool:
 	return hit_target is PlayerCharacter and _point_inside_safe_zone(hit_target.global_position)
+
+
+func _update_area_magic_delivery(delta: float) -> void:
+	if not _uses_area_magic_delivery():
+		return
+	if _area_magic_warning > 0.0:
+		_area_magic_warning = maxf(0.0, _area_magic_warning - delta)
+		if _area_magic_warning <= 0.0:
+			_settle_area_magic_release_records()
+			_last_attack_footprint_snapshot = _area_magic_footprint_snapshot
+			_area_magic_footprint_snapshot = {}
+			_area_magic_release_records.clear()
+		return
+	if _attack_timer > 0.0:
+		return
+	var candidate_snapshot := _create_area_magic_footprint_snapshot()
+	var candidate_targets := _area_magic_targets(candidate_snapshot)
+	if candidate_targets.is_empty():
+		return
+	_area_magic_footprint_snapshot = candidate_snapshot
+	_area_magic_release_records = _freeze_area_magic_release_records(
+		candidate_targets,
+		candidate_snapshot,
+	)
+	if _area_magic_release_records.is_empty():
+		_area_magic_footprint_snapshot = {}
+		return
+	# The Monster.DB ATTACK_SPD is the complete cycle interval. Freeze the
+	# target set at release and do not enter the normal single-target branch.
+	_attack_timer = _current_attack_interval()
+	_area_magic_warning = maxf(
+		0.001,
+		float(attack_delivery_rule.get("hitDelaySeconds", 0.6)),
+	)
+	if visual != null:
+		# Only the authored monster body attack is presented. There is no
+		# unproven client warning circle or independent projectile/effect.
+		visual.play_attack(maxf(_attack_animation_duration, _area_magic_warning))
+
+
+func _create_area_magic_footprint_snapshot() -> Dictionary:
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		attack_delivery_rule,
+		"range_gu",
+		"rangePixels",
+		6.0,
+	)
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if source_ground_gu == Vector2.INF or range_gu <= 0.0:
+		return {}
+	var snapshot := SkillFootprintSnapshotScript.create_directed_rectangle(
+		_monster_attack_id("area_magic"),
+		_next_spatial_release_id("area_magic"),
+		source_ground_gu - Vector2(range_gu, 0.0),
+		Vector2.RIGHT,
+		range_gu * 2.0,
+		range_gu * 2.0,
+		0.0,
+		0.0,
+		0.0,
+		"",
+		_snapshot_coordinate_context(),
+	)
+	var decorated := _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		null,
+		range_gu,
+	)
+	var square_snapshot := decorated.duplicate(true)
+	square_snapshot["range_shape"] = "chebyshev_axis_aligned_square_exclusive"
+	square_snapshot["range_gu"] = range_gu
+	square_snapshot["attack_source_ground_gu"] = source_ground_gu
+	square_snapshot["obstacle_policy"] = "none_no_los"
+	square_snapshot.make_read_only()
+	return square_snapshot
+
+
+func _area_magic_targets(snapshot: Dictionary) -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	if snapshot.is_empty() or not _snapshot_strict_ok(snapshot):
+		return result
+	var candidates: Array[Node] = []
+	var seen_instance_ids: Dictionary = {}
+	if is_instance_valid(primary_target):
+		candidates.append(primary_target)
+		seen_instance_ids[primary_target.get_instance_id()] = true
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if not is_instance_valid(node):
+			continue
+		var instance_id := node.get_instance_id()
+		if seen_instance_ids.has(instance_id):
+			continue
+		seen_instance_ids[instance_id] = true
+		candidates.append(node)
+	for node: Node in candidates:
+		if node is Node2D and _area_magic_victim_is_valid(node, snapshot):
+			result.append(node)
+	result.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
+	return result
+
+
+func _area_magic_victim_is_valid(victim: Node2D, snapshot: Dictionary) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_direct_spell_damage")
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+	):
+		return false
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	if current_hp_value != null and int(current_hp_value) <= 0:
+		return false
+	var source_ground_gu: Vector2 = snapshot.get(
+		"attack_source_ground_gu",
+		_screen_position_px_to_ground_position_gu(global_position),
+	)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		victim.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	var range_gu := maxf(0.0, float(snapshot.get("range_gu", 0.0)))
+	var delta_ground_gu := target_ground_gu - source_ground_gu
+	# ObjMon2's strict source comparison is abs(x) < 6 && abs(y) < 6;
+	# equality on either edge is outside the frozen target set.
+	return absf(delta_ground_gu.x) < range_gu and absf(delta_ground_gu.y) < range_gu
+
+
+func _freeze_area_magic_release_records(
+	victims: Array[Node2D],
+	footprint_snapshot: Dictionary,
+) -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	var release_id := str(footprint_snapshot.get("release_id", ""))
+	for victim: Node2D in victims:
+		if not _area_magic_victim_is_valid(victim, footprint_snapshot):
+			continue
+		var target_ground_gu := _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+		if target_ground_gu == Vector2.INF:
+			continue
+		var record := {
+			"release_id": release_id,
+			"release_target_id": "%s:target:%d" % [
+				release_id,
+				victim.get_instance_id(),
+			],
+			"target_instance_id": victim.get_instance_id(),
+			"runtime_map_id": _runtime_map_id_for_area_target(victim),
+			"target_ground_gu": target_ground_gu,
+			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
+			"damage": _rng.randi_range(attack_min, attack_max),
+			"damage_channel": "magic_defense",
+		}
+		record.make_read_only()
+		records.append(record)
+	return records
+
+
+func _settle_area_magic_release_records() -> void:
+	for release_record: Dictionary in _area_magic_release_records:
+		var target_instance_id := int(release_record.get("target_instance_id", 0))
+		if target_instance_id <= 0:
+			continue
+		var candidate: Object = instance_from_id(target_instance_id)
+		if not (candidate is Node2D):
+			continue
+		var victim := candidate as Node2D
+		if not _area_magic_release_target_is_valid(victim, release_record):
+			continue
+		_deal_area_magic_damage(victim, int(release_record.get("damage", 0)))
+
+
+func _area_magic_release_target_is_valid(
+	victim: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_direct_spell_damage")
+		or runtime_map_id != int(release_record.get("runtime_map_id", -1))
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+	):
+		return false
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	return current_hp_value == null or int(current_hp_value) > 0
+
+
+func _deal_area_magic_damage(victim: Node2D, dealt_damage: int) -> void:
+	var raw_resolution: Variant = victim.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, dealt_damage),
+	)
+	if not raw_resolution is Dictionary:
+		return
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["delivery_kind"] = "area_magic"
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+	_apply_area_magic_status(victim)
+
+
+func _apply_area_magic_status(victim: Node2D) -> void:
+	var status_value: Variant = attack_delivery_rule.get("status", {})
+	if not status_value is Dictionary:
+		return
+	var status := status_value as Dictionary
+	if _rng.randf() >= float(status.get("statusChance", 0.25)):
+		return
+	var poison_weight := maxi(0, int(status.get("poisonWeight", 2)))
+	var control_weight := maxi(0, int(status.get("controlWeight", 1)))
+	if poison_weight + control_weight <= 0:
+		return
+	if _rng.randi_range(1, poison_weight + control_weight) <= poison_weight:
+		if victim.has_method("apply_poison"):
+			victim.apply_poison(
+				int(status.get("poisonDamage", 4)),
+				float(status.get("poisonSeconds", 8.0)),
+			)
+	elif victim.has_method("apply_control"):
+		victim.apply_control(float(status.get("controlSeconds", 1.2)))
 
 
 func _update_area_attack(delta: float) -> bool:
@@ -2165,6 +2575,9 @@ func _begin_death() -> void:
 	_area_attack_warning = 0.0
 	_area_attack_footprint_snapshot = {}
 	_area_attack_release_records.clear()
+	_area_magic_warning = 0.0
+	_area_magic_footprint_snapshot = {}
+	_area_magic_release_records.clear()
 	input_pickable = false
 	collision_layer = 0
 	collision_mask = 0
@@ -2618,6 +3031,8 @@ func _draw_boss_warning_ground_projection() -> void:
 
 
 func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
+	if not bool(special.get("enabled", false)):
+		return PackedVector2Array()
 	var snapshot := _boss_skill_footprint_snapshot
 	if not _snapshot_strict_ok(snapshot):
 		snapshot = _create_boss_skill_footprint_snapshot(

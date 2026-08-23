@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "contractId": "monster.special_delivery_sources.v1",
+  "sourcePriority": "primary_first",
+  "records": [
+    {
+      "monsterId": 70,
+      "canonicalName": "火焰沃玛",
+      "runtimeStatus": "active",
+      "primaryIdentity": {
+        "path": "assets/data/canonical_monster_combat_source_v1.json",
+        "lines": "1120-1140",
+        "race": 91,
+        "raceImg": 20,
+        "appearance": 31,
+        "attackIntervalMs": 1700,
+        "moveIntervalMs": 800
+      },
+      "monsterDb": {
+        "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+        "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+        "fields": "Race=91 RaceImg=20 Appr=31 ATTACK_SPD=1700 WALK_SPD=800"
+      },
+      "serviceProtocol": {
+        "class": "TMagCowMonster",
+        "factoryPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "factoryLines": "1879-1881",
+        "attackPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "attackLines": "963-1017",
+        "damage": "immediate magic-defense damage; RM_STRUCK 300ms is presentation only"
+      },
+      "attackDelivery": {
+        "kind": "special_melee",
+        "effectId": "monster.flame_wooma.magic_melee.v1",
+        "damageChannel": "magic_defense",
+        "bodyOnly": true,
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 1,
+        "hitDelaySeconds": 0.0,
+        "presentationDelaySeconds": 0.3,
+        "obstaclePolicy": "environment_adjacent_only"
+      },
+      "clientEvidence": {
+        "mappingPath": "assets/data/bich_common_client_art_sources.json",
+        "mappingLines": "37466-37489",
+        "wilPath": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+        "appearanceBlockBase": 360,
+        "attackFrameIndicesDir0": [520, 521, 522, 523, 524, 525],
+        "attackFrameMs": 100,
+        "raceImgConflict": "primary Monster.DB=20; common art mapping candidate=19; revalidation required"
+      }
+    },
+    {
+      "monsterId": 71,
+      "canonicalName": "火焰沃玛0",
+      "runtimeStatus": "retired_source_only",
+      "runtimeProfile": null,
+      "legacyNameMapping": null,
+      "primaryIdentity": {
+        "path": "assets/data/canonical_monster_combat_source_v1.json",
+        "lines": "1142-1162",
+        "race": 91,
+        "raceImg": 20,
+        "appearance": 31,
+        "attackIntervalMs": 1700,
+        "moveIntervalMs": 800
+      },
+      "serviceProtocol": {
+        "class": "TMagCowMonster",
+        "factoryPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "factoryLines": "1879-1881",
+        "attackPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "attackLines": "963-1017",
+        "note": "retained for primary-source correspondence only; not runtime activated"
+      },
+      "clientEvidence": {
+        "sharedWithMonsterId": 70,
+        "mappingPath": "assets/data/bich_common_client_art_sources.json",
+        "mappingLines": "37466-37489",
+        "wilPath": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+        "appearanceBlockBase": 360
+      }
+    },
+    {
+      "monsterId": 124,
+      "canonicalName": "触龙神",
+      "runtimeStatus": "active",
+      "primaryIdentity": {
+        "path": "assets/data/canonical_monster_combat_source_v1.json",
+        "lines": "2198-2218",
+        "race": 107,
+        "raceImg": 33,
+        "appearance": 140,
+        "attackIntervalMs": 2000,
+        "moveIntervalMs": 1000
+      },
+      "monsterDb": {
+        "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+        "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+        "fields": "Race=107 RaceImg=33 Appr=140 ATTACK_SPD=2000 WALK_SPD=1000"
+      },
+      "serviceProtocol": {
+        "class": "TCentipedeKingMonster",
+        "factoryPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "factoryLines": "1908-1912",
+        "attackPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas",
+        "attackLines": "457-521",
+        "delayPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "delayLines": "4565-4582",
+        "targetRule": "freeze all valid same-map targets where abs(x)<6 and abs(y)<6; RM_DELAYMAGIC 600ms"
+      },
+      "attackDelivery": {
+        "kind": "area_magic",
+        "effectId": "monster.touch_dragon.area_magic.v1",
+        "damageChannel": "magic_defense",
+        "bodyOnly": true,
+        "rangeShape": "chebyshev_axis_aligned_square",
+        "rangeTiles": 6,
+        "boundary": "exclusive",
+        "hitDelaySeconds": 0.6,
+        "obstaclePolicy": "none_no_los",
+        "targetMode": "all_combat_targets",
+        "scope": "same_map_visible_actors",
+        "status": {"statusChance": 0.25, "poisonWeight": 2, "controlWeight": 1, "poisonDamage": 4, "poisonSeconds": 8.0, "controlSeconds": 1.2},
+        "visualRule": "body-only; no independently proven WIL effect or warning circle"
+      },
+      "clientEvidence": {
+        "mappingPath": "assets/data/classic_boss_client_art_sources.json",
+        "mappingLines": "1209-1232",
+        "wilPath": "dev_art_sources/reference/mir2_client_raw/Data/Mon15.wil",
+        "appearanceBlockBase": 0,
+        "attackFrameIndices": [10, 11, 12, 13, 14, 15],
+        "attackFrameMs": 150,
+        "effectEvidence": "none; do not synthesize an independent effect"
+      }
+    }
+  ]
+}
