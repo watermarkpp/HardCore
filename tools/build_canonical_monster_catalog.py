@@ -73,6 +73,11 @@ MONSTER_DB_CORE_EXCLUDED_SPECIAL_IDS = frozenset({
     234,
 })
 MONSTER_DB_CORE_STATS_FIELDS = ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")
+# Race 200 is the primary-source identity bridge for the active cow mage and
+# priest. Their Crystal service rows are explicitly unresolved fallbacks, while
+# the SHA-pinned Monster.DB rows bind exact IDs 220/222 to ai_code=200 and the
+# original server maps Race 200 to TElectronicScolpionMon.
+MONSTER_DB_RACE_200_RUNTIME_IDS = frozenset({220, 222})
 TEXT_HASH_SUFFIXES = {".json"}
 WOOMA_EQUIVALENCE_IDS = {68, 69}
 EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
@@ -883,6 +888,51 @@ def build_catalog() -> dict[str, Any]:
                 if field in stats:
                     stats_source[field] = evidence
         merged_behavior, ai, timing, behavior_extra = behavior_for(monster_id, service, behavior, boss_rules)
+        if monster_id in MONSTER_DB_RACE_200_RUNTIME_IDS:
+            db_entry = combat_source_by_id.get(str(monster_id))
+            if not isinstance(db_entry, dict) or int(db_entry.get("ai_code", -1)) != 200:
+                raise RuntimeError(
+                    f"monster_id={monster_id} Race 200 primary binding missing or invalid"
+                )
+            ai = {
+                "ai_code": 200,
+                "view_range": int(db_entry.get("view_range", 0)),
+                "image": int(db_entry.get("image", -1)),
+                "resolution_status": "primary_monster_db_exact_id",
+                "source_distribution": str(combat_source.get("distribution", "")),
+            }
+            timing = {
+                "attack_interval_ms": int(db_entry.get("attack_interval_ms", 0)),
+                "move_interval_ms": int(db_entry.get("move_interval_ms", 0)),
+                "confidence": "A",
+                "resolution_status": "primary_monster_db_exact_id",
+            }
+            merged_behavior["serviceBehavior"] = {
+                "aiCode": 200,
+                "image": ai["image"],
+                "viewRange": ai["view_range"],
+                "confidence": "A",
+                "resolutionStatus": "primary_monster_db_exact_id",
+                "sourceDistribution": ai["source_distribution"],
+            }
+            merged_behavior["timing"] = {
+                "attackIntervalMs": timing["attack_interval_ms"],
+                "moveIntervalMs": timing["move_interval_ms"],
+                "confidence": "A",
+                "resolutionStatus": "primary_monster_db_exact_id",
+            }
+            behavior_extra["evidence"]["service"] = {
+                "distribution": str(combat_source.get("distribution", "")),
+                "tier": str(combat_source.get("tier", "primary")),
+                "original_path": str(combat_source.get("source", "")),
+                "sha256": str(combat_source.get("source_sha256", "")),
+                "hash_normalization": "raw_bytes",
+                "role": "race_200_ai_timing_monster_db_exact_id",
+                "evidence": (
+                    f"records_by_monster_id[{monster_id}] exact binding "
+                    "ai_code=200; original UsrEngn.pas Race 200 class mapping"
+                ),
+            }
         runtime_projection = {
             "agility": int(RUNTIME_PROJECTION_DEFAULTS["agility"]),
             "anti_poison": int(RUNTIME_PROJECTION_DEFAULTS["anti_poison"]),
@@ -1425,6 +1475,31 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                 errors.append(f"monster_id={monster_id} {field} evidence tier mismatch")
             if field_evidence.get("sha256") != combat_source.get("source_sha256"):
                 errors.append(f"monster_id={monster_id} {field} evidence sha256 mismatch")
+    for monster_id in sorted(MONSTER_DB_RACE_200_RUNTIME_IDS):
+        entry = matrix.get(str(monster_id), {})
+        combat = entry.get("combat", {}) if isinstance(entry, dict) else {}
+        ai = combat.get("ai", {}) if isinstance(combat, dict) else {}
+        timing = combat.get("timing", {}) if isinstance(combat, dict) else {}
+        behavior = combat.get("behavior_profile", {}) if isinstance(combat, dict) else {}
+        evidence = (
+            entry.get("source_evidence", {})
+            .get("combat_ai_timing", {})
+            .get("service", {})
+            if isinstance(entry, dict)
+            else {}
+        )
+        if int(ai.get("ai_code", -1)) != 200:
+            errors.append(f"monster_id={monster_id} lost primary Race 200 ai_code")
+        if str(ai.get("resolution_status", "")) != "primary_monster_db_exact_id":
+            errors.append(f"monster_id={monster_id} Race 200 AI is not primary exact-ID")
+        if int(timing.get("attack_interval_ms", 0)) != 2000 or int(timing.get("move_interval_ms", 0)) != 1200:
+            errors.append(f"monster_id={monster_id} Race 200 timing mismatch")
+        if int(behavior.get("serviceClass", {}).get("race", -1)) != 200:
+            errors.append(f"monster_id={monster_id} behavior profile lost Race 200 class")
+        if evidence.get("role") != "race_200_ai_timing_monster_db_exact_id":
+            errors.append(f"monster_id={monster_id} Race 200 evidence role mismatch")
+        if evidence.get("sha256") != combat_source.get("source_sha256"):
+            errors.append(f"monster_id={monster_id} Race 200 evidence sha256 mismatch")
     # Canonical name must come from vanilla exact-ID record.name for ALL active.
     for monster_id, rec in vanilla_by_id.items():
         if rec.get("recordStatus") == "retired":

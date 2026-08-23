@@ -93,8 +93,49 @@
         "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
       }
     },
-    "cow_mage": {"runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0}},
-    "cow_priest": {"runtimeProjection": {"attackRange": 175.0}, "lifeStealRatio": 0.2}
+    "cow_mage": {
+      "runtimeProjection": {"moveSpeed": 43.0, "attackRange": 64.0},
+      "serviceClass": {
+        "race": 200,
+        "name": "TElectronicScolpionMon",
+        "confidence": "A",
+        "source": "canonical_monster_combat_source_v1 exact monster_id=220 ai_code=200 + original_gameofmir/M2Server/UsrEngn.pas and ObjMon.pas"
+      },
+      "attackDelivery": {
+        "kind": "target_magic",
+        "effectId": "monster.target_lightning.v1",
+        "damageChannel": "magic_defense",
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 2,
+        "rangePixels": 64.0,
+        "hitDelaySeconds": 0.2,
+        "activation": {"hpBelowRatio": 0.5, "orAxisBoundaryTiles": 2.0},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
+      }
+    },
+    "cow_priest": {
+      "runtimeProjection": {"attackRange": 64.0},
+      "lifeStealRatio": 0.2,
+      "serviceClass": {
+        "race": 200,
+        "name": "TElectronicScolpionMon",
+        "confidence": "A",
+        "source": "canonical_monster_combat_source_v1 exact monster_id=222 ai_code=200 + original_gameofmir/M2Server/UsrEngn.pas and ObjMon.pas"
+      },
+      "attackDelivery": {
+        "kind": "target_magic",
+        "effectId": "monster.target_lightning.v1",
+        "damageChannel": "magic_defense",
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 2,
+        "rangePixels": 64.0,
+        "hitDelaySeconds": 0.2,
+        "activation": {"hpBelowRatio": 0.5, "orAxisBoundaryTiles": 2.0},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
+      }
+    }
   },
   "profileByMonsterId": {
     "21": "strawman", "23": "strawman",

@@ -22,6 +22,9 @@ const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const MonsterRangedProjectileEffectScript := preload(
 	"res://scripts/monster_ranged_projectile_effect.gd"
 )
+const MonsterTargetMagicEffectScript := preload(
+	"res://scripts/monster_target_magic_effect.gd"
+)
 const FIXED_AREA_GROUND_SPIKE_EFFECT_ID := (
 	"monster.fixed_area_ground_spike.v1"
 )
@@ -89,6 +92,7 @@ signal fixed_area_ground_spike_requested(descriptor: Dictionary)
 ## release. EnemyActor also creates the visual locally; listeners are observers
 ## and must never submit a second damage transaction.
 signal ranged_projectile_requested(descriptor: Dictionary)
+signal target_magic_requested(descriptor: Dictionary)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -157,6 +161,7 @@ var _pending_attack_time := -1.0
 var _pending_attack_damage := 0
 var _pending_attack_target: Node2D
 var _pending_attack_release_record: Dictionary = {}
+var last_magic_attack_resolution: Dictionary = {}
 var _retarget_timer := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
@@ -500,7 +505,13 @@ func _physics_process(delta: float) -> void:
 			return
 	var contact_distance_gu := _contact_distance_gu_to_target(target)
 	var engagement_distance_gu := maxf(attack_range_gu, contact_distance_gu)
-	var engagement_ready := distance_gu <= engagement_distance_gu + GroundUnitSpace.EPSILON_GU
+	var engagement_ready := _attack_engagement_ready(
+		target,
+		offset_ground_gu,
+		distance_gu,
+		contact_distance_gu,
+		engagement_distance_gu,
+	)
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
@@ -556,6 +567,11 @@ func _physics_process(delta: float) -> void:
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
 			if _uses_physical_projectile_delivery():
 				_launch_physical_projectile(target, dealt_damage)
+			elif (
+				_uses_target_magic_delivery()
+				and _target_magic_condition_met(offset_ground_gu)
+			):
+				_launch_target_magic(target, dealt_damage)
 			elif _attack_hit_delay > 0.0:
 				_pending_attack_time = _attack_hit_delay
 				_pending_attack_target = target
@@ -866,6 +882,71 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		_last_environment_safe_position_px = global_position
 
 
+func _attack_engagement_ready(
+	hit_target: Node2D,
+	offset_ground_gu: Vector2,
+	distance_gu: float,
+	contact_distance_gu: float,
+	default_engagement_distance_gu: float,
+) -> bool:
+	if _uses_target_magic_delivery():
+		return (
+			_target_magic_condition_met(offset_ground_gu)
+			or distance_gu
+			<= contact_distance_gu + GroundUnitSpace.EPSILON_GU
+		)
+	return (
+		is_instance_valid(hit_target)
+		and distance_gu
+		<= default_engagement_distance_gu + GroundUnitSpace.EPSILON_GU
+	)
+
+
+func _uses_target_magic_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "target_magic"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MonsterTargetMagicEffectScript.EFFECT_ID
+		and str(attack_delivery_rule.get("damageChannel", ""))
+		== "magic_defense"
+	)
+
+
+func _target_magic_condition_met(offset_ground_gu: Vector2) -> bool:
+	if not _uses_target_magic_delivery():
+		return false
+	if str(attack_delivery_rule.get("rangeShape", "")) != "chebyshev_square":
+		return false
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		attack_delivery_rule,
+		"range_gu",
+		"rangePixels",
+		0.0,
+	)
+	var abs_x := absf(offset_ground_gu.x)
+	var abs_y := absf(offset_ground_gu.y)
+	if (
+		abs_x > range_gu + GroundUnitSpace.EPSILON_GU
+		or abs_y > range_gu + GroundUnitSpace.EPSILON_GU
+	):
+		return false
+	var activation: Dictionary = attack_delivery_rule.get("activation", {})
+	var low_health := (
+		max_hp > 0
+		and float(current_hp) / float(max_hp)
+		< float(activation.get("hpBelowRatio", 0.5))
+	)
+	var boundary_gu := maxf(
+		0.0,
+		float(activation.get("orAxisBoundaryTiles", range_gu)),
+	)
+	var on_axis_boundary := (
+		abs_x >= boundary_gu - GroundUnitSpace.EPSILON_GU
+		or abs_y >= boundary_gu - GroundUnitSpace.EPSILON_GU
+	)
+	return low_health or on_axis_boundary
+
+
 func _current_attack_interval() -> float:
 	if not boss_rule.is_empty():
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
@@ -888,6 +969,9 @@ func _update_pending_attack(delta: float) -> void:
 	_pending_attack_release_record = {}
 	if str(release_record.get("kind", "")) == "physical_projectile":
 		_settle_physical_projectile_release(release_record)
+		return
+	if str(release_record.get("kind", "")) == "target_magic":
+		_settle_target_magic_release(release_record)
 		return
 	if not is_instance_valid(hit_target):
 		return
@@ -1081,6 +1165,127 @@ func _emit_physical_projectile_descriptor(release_record: Dictionary) -> void:
 	if not is_instance_valid(host):
 		return
 	var effect: Node2D = MonsterRangedProjectileEffectScript.create_visual(descriptor)
+	host.add_child(effect)
+
+
+func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
+	if (
+		not _uses_target_magic_delivery()
+		or not is_instance_valid(hit_target)
+		or not hit_target.has_method("take_direct_spell_damage")
+		or _target_is_safe_player(hit_target)
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+	):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	if not _target_magic_condition_met(target_ground_gu - source_ground_gu):
+		return false
+	var release_id := _next_spatial_release_id("target_magic")
+	var snapshot := SkillFootprintSnapshotScript.create_circle(
+		_monster_attack_id("target_magic"),
+		release_id,
+		target_ground_gu,
+		0.0,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		_snapshot_coordinate_context(),
+	)
+	snapshot = _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		hit_target,
+		0.0,
+	)
+	if not _snapshot_strict_ok(snapshot):
+		return false
+	var release_record := {
+		"kind": "target_magic",
+		"release_id": release_id,
+		"source_instance_id": get_instance_id(),
+		"source_monster_id": monster_id,
+		"target_instance_id": hit_target.get_instance_id(),
+		"runtime_map_id": runtime_map_id,
+		"source_ground_gu": source_ground_gu,
+		"target_ground_gu": target_ground_gu,
+		"target_world_px": _target_approved_ground_footpoint_world_px(hit_target),
+		"duration_seconds": maxf(
+			0.001,
+			float(attack_delivery_rule.get("hitDelaySeconds", 0.2)),
+		),
+		"damage": maxi(0, raw_damage),
+		"damage_channel": "magic_defense",
+		"footprint_snapshot": snapshot,
+	}
+	release_record.make_read_only()
+	_pending_attack_time = float(release_record.get("duration_seconds", 0.2))
+	_pending_attack_target = hit_target
+	_pending_attack_damage = maxi(0, raw_damage)
+	_pending_attack_release_record = release_record
+	_last_attack_footprint_snapshot = snapshot
+	_emit_target_magic_descriptor(release_record)
+	return true
+
+
+func _settle_target_magic_release(release_record: Dictionary) -> void:
+	var target_instance_id := int(release_record.get("target_instance_id", 0))
+	if target_instance_id <= 0:
+		return
+	var candidate: Object = instance_from_id(target_instance_id)
+	if not (candidate is Node2D):
+		return
+	var hit_target := candidate as Node2D
+	if (
+		not _physical_projectile_release_target_is_valid(hit_target, release_record)
+		or not hit_target.has_method("take_direct_spell_damage")
+	):
+		return
+	var raw_resolution: Variant = hit_target.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, int(release_record.get("damage", 0))),
+	)
+	if not raw_resolution is Dictionary:
+		last_magic_attack_resolution = {
+			"success": false,
+			"failure_reason": "invalid_magic_damage_resolution",
+		}
+		return
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["release_id"] = str(
+		release_record.get("release_id", "")
+	)
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+
+
+func _emit_target_magic_descriptor(release_record: Dictionary) -> void:
+	var descriptor := {
+		"effect_id": MonsterTargetMagicEffectScript.EFFECT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"target_instance_id": int(release_record.get("target_instance_id", 0)),
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
+		"target_ground_gu": release_record.get("target_ground_gu", Vector2.INF),
+		"target_world_px": release_record.get("target_world_px", Vector2.INF),
+		"duration_seconds": float(release_record.get("duration_seconds", 0.2)),
+		"damage": maxi(0, int(release_record.get("damage", 0))),
+		"damage_channel": "magic_defense",
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage_owner": "enemy.target_magic_release",
+	}
+	descriptor.make_read_only()
+	target_magic_requested.emit(descriptor)
+	var host := get_parent()
+	if not is_instance_valid(host):
+		return
+	var effect: Node2D = MonsterTargetMagicEffectScript.create_visual(descriptor)
 	host.add_child(effect)
 
 
