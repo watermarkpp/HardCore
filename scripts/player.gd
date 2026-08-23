@@ -137,6 +137,18 @@ const FACING_DIRECTIONS: Array[Vector2] = [
 ]
 
 
+func approved_ground_footpoint_local_px() -> Vector2:
+	if visual != null and visual.has_method("approved_ground_footpoint_in_actor_px"):
+		var point: Variant = visual.call("approved_ground_footpoint_in_actor_px")
+		if point is Vector2 and point.is_finite():
+			return point
+	return Vector2.ZERO
+
+
+func approved_ground_footpoint_world_px() -> Vector2:
+	return to_global(approved_ground_footpoint_local_px())
+
+
 func _ready() -> void:
 	add_to_group("player")
 	add_to_group("combat_targets")

@@ -1,6 +1,9 @@
 param(
     [switch]$MonsterGroundReview,
-    [switch]$WarriorSkillReview
+    [switch]$FixedAreaGroundSpikeReview,
+    [switch]$WarriorSkillReview,
+    [ValidateRange(1, 2147483647)]
+    [int]$MonsterId
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,13 +19,27 @@ New-Item -ItemType Directory -Force -Path $AppDataRoot | Out-Null
 $env:APPDATA = $AppDataRoot
 $env:LOCALAPPDATA = $AppDataRoot
 
-if ($MonsterGroundReview) {
-    & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene -- --monster-ground-review
+$GodotArgs = @(
+    '--path', $ProjectRoot,
+    '--log-file', (Join-Path $LogRoot 'visual_acceptance_lab.log'),
+    $Scene
+)
+$UserArgs = @()
+if ($FixedAreaGroundSpikeReview) {
+    $UserArgs += '--fixed-area-ground-spike-review'
+}
+elseif ($MonsterGroundReview) {
+    $UserArgs += '--monster-ground-review'
 }
 elseif ($WarriorSkillReview) {
-    & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene -- --warrior-skill-review
+    $UserArgs += '--warrior-skill-review'
 }
-else {
-    & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene
+if ($PSBoundParameters.ContainsKey('MonsterId')) {
+    $UserArgs += "--monster-id=$MonsterId"
 }
+if ($UserArgs.Count -gt 0) {
+    $GodotArgs += '--'
+    $GodotArgs += $UserArgs
+}
+& $Godot @GodotArgs
 exit $LASTEXITCODE

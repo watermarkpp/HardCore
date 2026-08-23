@@ -5,6 +5,16 @@ const LabScript := preload(
 )
 
 
+func _runtime_target_ring_overlays(lab) -> Array:
+	var result: Array = []
+	if lab._overlay_root == null:
+		return result
+	for child: Node in lab._overlay_root.get_children():
+		if child.name == LabScript.RUNTIME_TARGET_RING_OVERLAY_NAME:
+			result.append(child)
+	return result
+
+
 func _ready() -> void:
 	var original_test_mode := PlayerState.test_mode
 	var lab := LabScript.new()
@@ -17,13 +27,16 @@ func _ready() -> void:
 			and lab._viewport.size.y > 0
 	)
 	assert(lab._player != null and lab._player.visual != null)
+	assert(LabScript.monster_id_from_args(["--monster-id=180"]) == 180)
+	assert(LabScript.monster_id_from_args(["--monster-id", "180"]) == 180)
+	assert(LabScript.monster_id_from_args(["--monster-id=0"]) == -1)
 	assert(not lab._player.is_processing())
 	assert(not lab._player.is_physics_processing())
 	assert(not lab._player.visual.is_processing())
 	assert(lab._action_option.item_count == 6)
 	assert(lab._mode_option.item_count == 3)
 	assert(lab._mode_option.selected == 0)
-	assert(lab._monster_option.item_count == 217)
+	assert(lab._monster_option.item_count == 214)
 	assert(lab._direction_option.item_count == 8)
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
@@ -252,13 +265,20 @@ func _ready() -> void:
 		"acceptance lab must use the same normalized visual transform as runtime",
 	)
 	assert(
-		not lab._monster.is_targeted,
-		"acceptance lab must suppress the runtime-owned target ring",
+		lab._monster.is_targeted,
+		"acceptance lab must use the runtime-owned target ring",
 	)
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
 	var ground_review := lab.monster_ground_review_snapshot()
 	assert(int(ground_review.get("monsterId", -1)) == 18)
+	assert(bool(ground_review.get("runtimeSelected", false)))
+	assert(bool(ground_review.get("runtimeRingVisible", false)))
+	assert(ground_review.get("runtimeRingOwner", "") == "monster_visual")
+	assert(
+		ground_review.get("runtimeRingMode", "")
+		== "authored_cast_with_contact_core"
+	)
 	assert(
 		ground_review.get("runtimeRingCenter", Vector2.INF)
 		== lab._monster.ground_indicator_center()
@@ -385,6 +405,82 @@ func _ready() -> void:
 			lab._monster.visual.current_state
 			== lab.MONSTER_ACTIONS[action_index]
 		)
+	assert(lab._select_monster_id(180))
+	assert(lab._active_monster_id == 180)
+	assert(lab._monster_picked_visual_foot_offset == Vector2(31.5, -2.0))
+	var red_moon_review := lab.monster_ground_review_snapshot()
+	assert(int(red_moon_review.get("monsterId", -1)) == 180)
+	assert(bool(red_moon_review.get("draftLoaded", false)))
+	assert(bool(red_moon_review.get("runtimeSelected", false)))
+	assert(bool(red_moon_review.get("runtimeRingVisible", false)))
+	assert(
+		red_moon_review.get("runtimeRingOwner", "") == "monster_visual"
+	)
+	assert(
+		red_moon_review.get("runtimeRingMode", "")
+		== "authored_cast_with_contact_core"
+	)
+	assert(
+		red_moon_review.get("runtimeRingCenter", Vector2.INF)
+		.is_zero_approx()
+	)
+	assert(red_moon_review.get("matches", false))
+	lab._update_overlay()
+	var red_moon_ring_nodes := _runtime_target_ring_overlays(lab)
+	assert(red_moon_ring_nodes.size() == 1)
+	var red_moon_ring: Line2D = red_moon_ring_nodes[0]
+	assert(
+		red_moon_ring.get_meta("center", Vector2.INF)
+		.is_equal_approx(lab._visual_foot_origin())
+	)
+	assert(
+		red_moon_ring.get_meta("radii", Vector2.INF)
+		.is_equal_approx(lab._monster.ground_indicator_radii())
+	)
+	assert(
+		red_moon_ring.default_color.is_equal_approx(
+			LabScript.RUNTIME_TARGET_RING_COLOR
+		)
+	)
+	assert(is_equal_approx(red_moon_ring.width, LabScript.RUNTIME_TARGET_RING_WIDTH))
+	var original_red_moon_visual_position := lab._monster.visual.position
+	var original_red_moon_foot_offset := (
+		lab._monster_picked_visual_foot_offset
+	)
+	var original_red_moon_ring_center: Vector2 = red_moon_ring.get_meta(
+		"center", Vector2.INF
+	)
+	lab._monster.visual.position += Vector2(8.0, -5.0)
+	lab._monster_picked_visual_foot_offset += Vector2(1.5, 2.5)
+	lab._update_overlay()
+	var moved_red_moon_ring_nodes := _runtime_target_ring_overlays(lab)
+	assert(moved_red_moon_ring_nodes.size() == 1)
+	var moved_red_moon_ring: Line2D = moved_red_moon_ring_nodes[0]
+	assert(
+		moved_red_moon_ring.get_meta("center", Vector2.INF)
+		.is_equal_approx(lab._visual_foot_origin())
+	)
+	assert(
+		not moved_red_moon_ring.get_meta("center", Vector2.INF)
+		.is_equal_approx(original_red_moon_ring_center)
+	)
+	assert(
+		moved_red_moon_ring.get_meta("radii", Vector2.INF)
+		.is_equal_approx(lab._monster.ground_indicator_radii())
+	)
+	lab._monster.visual.position = original_red_moon_visual_position
+	lab._monster_picked_visual_foot_offset = original_red_moon_foot_offset
+	lab._update_overlay()
+	assert(_runtime_target_ring_overlays(lab).size() == 1)
+	var default_monster_index := -1
+	for row_index in lab._monster_rows.size():
+		if int(lab._monster_rows[row_index].get("monster_id", -1)) == 18:
+			default_monster_index = row_index
+			break
+	assert(default_monster_index >= 0)
+	lab._monster_option.select(default_monster_index)
+	lab._on_monster_changed(default_monster_index)
+	assert(lab._active_monster_id == 18)
 	var touch_dragon_index := -1
 	for row_index in lab._monster_rows.size():
 		if int(lab._monster_rows[row_index].get("monster_id", -1)) == 124:
@@ -412,7 +508,8 @@ func _ready() -> void:
 	assert(PlayerState.test_mode == original_test_mode)
 	print(
 		"UI_VISUAL_ACCEPTANCE_LAB_PASS player_actions=6 "
-		+ "monster_actions=5 monsters=217 warrior_skills=6 "
+		+ "monster_actions=5 monsters=214 auto_monster_id=180 "
+		+ "warrior_skills=6 "
 		+ "directions=8 frames=6 passive_layer_isolated=true "
 		+ "single_target_drafts=true runtime_composite=true"
 	)

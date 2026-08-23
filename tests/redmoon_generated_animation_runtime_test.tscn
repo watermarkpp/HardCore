@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/redmoon_generated_animation_runtime_test.gd" id="1"]
+
+[node name="RedmoonGeneratedAnimationRuntimeTest" type="Node"]
+script = ExtResource("1")

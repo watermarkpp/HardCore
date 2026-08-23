@@ -47,11 +47,25 @@
       "death": 20
     }
   },
+  "anchorAlignment": {
+    "algorithm": "largest alpha-connected body; lower 12% occupied-row median support anchor; median cross-frame reference; integer correction before common resize and two post-palette corrections",
+    "alphaThreshold": 12,
+    "supportBandFraction": 0.12,
+    "maxAbsDeviationPx": {
+      "idle": [0.0, 0.0],
+      "walk": [0.0, 0.0],
+      "attack": [0.5, 0.5],
+      "hit": [0.25, 0.0],
+      "death": [0.5, 0.5]
+    },
+    "maxBackgroundAlphaOutsideBody": 0,
+    "cornerAlpha": [0, 0, 0, 0]
+  },
   "runtimeSha256": {
-    "idle": "019BB62DC6EC171A76354911ABB3D859CD8D2F4B32868666796E4BB8F57D5D36",
-    "walk": "019BB62DC6EC171A76354911ABB3D859CD8D2F4B32868666796E4BB8F57D5D36",
-    "attack": "030FFCB32EEFFDA8DE3FF5778CBCD8E5103A1B3484CDA5A03A27436B6205A32D",
-    "hit": "4B69E00FFBFB84C932CE65A9D093845C64B5E4177FD2F57C45D98EFB50937839",
-    "death": "C3B132ECA1CCE3B2F4327DC14464A3BE153705807C158BC9FF0693EA400C1D32"
+    "idle": "91325E3BDA7BDAB91E09A8456ECFC2CAD7906551CBD78104E19247382975D6AD",
+    "walk": "91325E3BDA7BDAB91E09A8456ECFC2CAD7906551CBD78104E19247382975D6AD",
+    "attack": "69148830BAAF850177E0D993755DFCFFDE37D9A916F0556CEF0E453C8E859C16",
+    "hit": "CB86385ED0096FF0D07BD3503D8C5A46B930A5506210B86FB4938F35355DC268",
+    "death": "CF488BEE2BD4A35A760E6DEEEA70850864986CA0E5E4960630DD5EEA48983901"
   }
 }

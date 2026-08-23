@@ -12,6 +12,9 @@ const MapRuntimeCollisionGeometryScript := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const MonsterGroundSpikeEffectScript := preload(
+	"res://scripts/monster_ground_spike_effect.gd"
+)
 const MonsterVisualStreamingCoordinatorScript := preload(
 	"res://scripts/monster_visual_streaming_coordinator.gd"
 )
@@ -2083,6 +2086,9 @@ func _spawn_enemy(
 	enemy.target_requested.connect(_on_enemy_target_requested)
 	enemy.summon_requested.connect(_on_boss_summon_requested)
 	enemy.relocation_requested.connect(_on_boss_relocation_requested)
+	enemy.fixed_area_ground_spike_requested.connect(
+		_on_enemy_fixed_area_ground_spike_requested.bind(enemy)
+	)
 	add_child(enemy)
 	return enemy
 
@@ -2954,6 +2960,29 @@ func _on_boss_relocation_requested(enemy: EnemyActor, radius_gu: float) -> void:
 		return
 	enemy.set_combat_position(destination, &"boss_relocation")
 	enemy.velocity = Vector2.ZERO
+
+
+func _on_enemy_fixed_area_ground_spike_requested(
+	descriptor: Dictionary,
+	enemy: EnemyActor,
+) -> void:
+	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+		return
+	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+		return
+	if str(descriptor.get("effect_id", "")) != MonsterGroundSpikeEffectScript.EFFECT_ID:
+		return
+	if str(descriptor.get("release_id", "")).is_empty():
+		return
+	if int(descriptor.get("source_instance_id", 0)) != enemy.get_instance_id():
+		return
+	if int(descriptor.get("source_monster_id", -1)) != enemy.monster_id:
+		return
+	var target_world_px: Variant = descriptor.get("target_world_px", null)
+	if not target_world_px is Vector2 or not (target_world_px as Vector2).is_finite():
+		return
+	var effect: Node2D = MonsterGroundSpikeEffectScript.create_visual(descriptor)
+	add_child(effect)
 
 
 func _find_valid_enemy_landing(

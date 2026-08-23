@@ -80,6 +80,14 @@ func setup(owner_actor: PlayerCharacter) -> void:
 	actor = owner_actor
 
 
+func approved_ground_footpoint_in_actor_px() -> Vector2:
+	# This is the exact user-approved result from the original 2026-07-30
+	# alignment draft. The visual composite was moved to (7.5, 12.5), then the
+	# manually picked shoe point received (-7.5, -12.5), resolving to (0, 0).
+	# Use the stable formal values instead of a transient sprite frame transform.
+	return position + ArtSpec.PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT
+
+
 func _ready() -> void:
 	z_index = 0
 	z_as_relative = true

@@ -19,6 +19,10 @@ const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const FIXED_AREA_GROUND_SPIKE_EFFECT_ID := (
+	"monster.fixed_area_ground_spike.v1"
+)
+const FIXED_AREA_GROUND_SPIKE_MONSTER_IDS := [180, 195]
 const CROWD_GRID_CELL_SIZE_GU := 3.0
 const CROWD_GRID_REFRESH_FRAMES := 3
 const CROWD_STEERING_INTERVAL_SECONDS := 0.10
@@ -73,6 +77,11 @@ signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
 signal summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int)
 signal relocation_requested(enemy: EnemyActor, radius_gu: float)
+## Pure presentation hook emitted once per actual fixed-area victim after the
+## authoritative damage call. The descriptor carries the same immutable
+## release snapshot for every victim of one area release; consumers must never
+## use this signal as a second damage path.
+signal fixed_area_ground_spike_requested(descriptor: Dictionary)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -1088,8 +1097,30 @@ func _update_area_attack(delta: float) -> bool:
 	if _area_attack_warning > 0.0:
 		_area_attack_warning -= delta
 		if _area_attack_warning <= 0.0:
-			for victim: Node2D in _area_attack_targets(_area_attack_footprint_snapshot):
-				_apply_attack_damage(victim, _rng.randi_range(attack_min, attack_max))
+			var release_snapshot := _area_attack_footprint_snapshot
+			for victim: Node2D in _area_attack_targets(release_snapshot):
+				var damage := _rng.randi_range(attack_min, attack_max)
+				# Re-check immediately before the authoritative damage call. A
+				# target can die or be queued during the warning window; such a
+				# target must receive neither damage nor a visual descriptor.
+				if not _area_attack_victim_is_valid(victim, release_snapshot):
+					continue
+				var target_ground_gu := _screen_position_px_to_ground_position_gu(
+					victim.global_position
+				)
+				var target_world_px := _target_approved_ground_footpoint_world_px(victim)
+				var target_instance_id := victim.get_instance_id()
+				if target_ground_gu == Vector2.INF:
+					continue
+				_apply_attack_damage(victim, damage)
+				_emit_fixed_area_ground_spike_descriptor(
+					victim,
+					damage,
+					release_snapshot,
+					target_ground_gu,
+					target_world_px,
+					target_instance_id,
+				)
 			_last_attack_footprint_snapshot = _area_attack_footprint_snapshot
 			_area_attack_footprint_snapshot = {}
 			_area_attack_cooldown = _attack_interval
@@ -1131,23 +1162,130 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not _snapshot_strict_ok(resolved_snapshot):
+	if resolved_snapshot.is_empty():
 		resolved_snapshot = _create_area_attack_footprint_snapshot()
+	if not _snapshot_strict_ok(resolved_snapshot):
+		# A supplied release snapshot is authoritative. Never replace an
+		# invalid/non-projectable release with a guessed footprint, otherwise a
+		# fixed-area attack could damage without a valid visual geometry source.
+		return result
 	var candidates: Array[Node] = []
+	var seen_instance_ids: Dictionary = {}
 	if is_instance_valid(primary_target):
 		candidates.append(primary_target)
+		seen_instance_ids[primary_target.get_instance_id()] = true
 	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
-		if not candidates.has(node):
-			candidates.append(node)
+		if not is_instance_valid(node):
+			continue
+		var instance_id := node.get_instance_id()
+		if seen_instance_ids.has(instance_id):
+			continue
+		seen_instance_ids[instance_id] = true
+		candidates.append(node)
 	for node: Node in candidates:
 		if (
 			node is Node2D
-			and node.has_method("take_damage")
-			and not _point_inside_safe_zone(node.global_position)
-			and _snapshot_intersects_target(resolved_snapshot, node)
+			and _area_attack_victim_is_valid(node, resolved_snapshot)
 		):
 			result.append(node)
 	return result
+
+
+func _area_attack_victim_is_valid(
+	victim: Node2D,
+	snapshot: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_damage")
+	):
+		return false
+	# Enemy death is guarded by _dying; PlayerCharacter uses _dead. The HP
+	# check also covers SummonActor and test fixtures without relying on a
+	# class-specific branch.
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	if current_hp_value != null and int(current_hp_value) <= 0:
+		return false
+	if _point_inside_safe_zone(victim.global_position):
+		return false
+	return _snapshot_intersects_target(snapshot, victim)
+
+
+func _uses_fixed_area_ground_spike_effect() -> bool:
+	return monster_id in FIXED_AREA_GROUND_SPIKE_MONSTER_IDS
+
+
+func _target_approved_ground_footpoint_world_px(victim: Node2D) -> Vector2:
+	# Area geometry and damage remain bound to victim.global_position. Only the
+	# presentation descriptor follows the original user-approved ground point.
+	if victim.has_method("approved_ground_footpoint_world_px"):
+		var point: Variant = victim.call("approved_ground_footpoint_world_px")
+		if point is Vector2 and point.is_finite():
+			return point
+	return victim.global_position
+
+
+func _emit_fixed_area_ground_spike_descriptor(
+	victim: Node2D,
+	damage: int,
+	footprint_snapshot: Dictionary,
+	target_ground_gu := Vector2.INF,
+	target_world_px := Vector2.INF,
+	target_instance_id := 0,
+) -> void:
+	if not _uses_fixed_area_ground_spike_effect():
+		return
+	# The caller has already performed the final pre-damage validity check.
+	# Do not re-check current_hp here: a legitimate hit may have reduced a
+	# victim to zero HP, and that victim still needs exactly one visual event.
+	if target_ground_gu == Vector2.INF:
+		target_ground_gu = _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+	if target_ground_gu == Vector2.INF:
+		return
+	if target_world_px == Vector2.INF:
+		target_world_px = _target_approved_ground_footpoint_world_px(victim)
+	if target_instance_id <= 0:
+		target_instance_id = victim.get_instance_id()
+	var source := {
+		"monster_id": monster_id,
+		"instance_id": get_instance_id(),
+	}
+	var target := {
+		"instance_id": target_instance_id,
+		"ground_gu": target_ground_gu,
+		"world_px": target_world_px,
+		"actor_origin_world_px": victim.global_position,
+	}
+	var descriptor := {
+		"effect_id": FIXED_AREA_GROUND_SPIKE_EFFECT_ID,
+		"release_id": str(footprint_snapshot.get("release_id", "")),
+		"source": source,
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"target": target,
+		"target_instance_id": target_instance_id,
+		"target_ground_gu": target_ground_gu,
+		"target_world_px": target_world_px,
+		"target_actor_origin_world_px": victim.global_position,
+		"damage": maxi(0, int(damage)),
+		# The release snapshot is already read-only at construction. Do not
+		# duplicate or rebuild it per victim: all descriptors for one release
+		# must point at the same immutable geometry object.
+		"footprint_snapshot": footprint_snapshot,
+	}
+	source.make_read_only()
+	target.make_read_only()
+	descriptor.make_read_only()
+	fixed_area_ground_spike_requested.emit(descriptor)
 
 
 func _update_behavior_summon(delta: float) -> bool:

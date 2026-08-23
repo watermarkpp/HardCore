@@ -16,9 +16,45 @@ func _ready() -> void:
 	var animation_catalog_hash := FileAccess.get_sha256(
 		DraftScript.ANIMATION_CATALOG_PATH
 	)
+	var manual_alignment_hash := FileAccess.get_sha256(
+		DraftScript.MANUAL_ALIGNMENT_DATA_PATH
+	)
 	var rows := DraftScript.catalog_rows()
+	assert(DraftScript.animation_catalog_authority_valid())
 	assert(rows.size() == 214)
 	assert(int(rows[0].get("monster_id", -1)) == 18)
+	var red_moon_index := -1
+	for row_index in rows.size():
+		if int(rows[row_index].get("monster_id", -1)) == 180:
+			red_moon_index = row_index
+			break
+	assert(red_moon_index >= 0)
+	var formal_replay_count := 0
+	for row: Dictionary in rows:
+		var replay := DraftScript.load_draft(
+			int(row.get("monster_id", -1))
+		)
+		if not replay.is_empty():
+			formal_replay_count += 1
+	assert(formal_replay_count == 212)
+	assert(DraftScript.load_draft(97).is_empty())
+	assert(DraftScript.load_draft(98).is_empty())
+	var red_moon_replay := DraftScript.load_draft(180)
+	assert(str(red_moon_replay.get("monsterName", "")) == "赤月恶魔")
+	assert(red_moon_replay.get("selection", {}).get("action", "") == "hit")
+	assert(int(red_moon_replay.get("selection", {}).get("direction", -1)) == 0)
+	assert(int(red_moon_replay.get("selection", {}).get("frame", -1)) == 1)
+	assert(red_moon_replay.get("runtimeVisualOrigin", []) == [0.0, 6.0])
+	assert(red_moon_replay.get("visualOffset", []) == [-31.5, -4.0])
+	assert(red_moon_replay.get("pickedVisualFootOffset", []) == [31.5, -2.0])
+	assert(red_moon_replay.get("finalVisualFootPoint", []) == [0.0, 0.0])
+	var red_moon_formal := DraftScript.formal_entry(180)
+	assert(
+		red_moon_formal.get("projectionStrategy", "") == "grounded"
+	)
+	assert(red_moon_formal.get("visualRootOffset", []) == [-31.5, -4.0])
+	assert(red_moon_formal.get("visualFootOffset", []) == [31.5, -2.0])
+	assert(red_moon_formal.get("ringCenterOffset", []) == [31.5, -2.0])
 
 	var payload := DraftScript.build_payload(
 		18,
@@ -71,6 +107,10 @@ func _ready() -> void:
 		FileAccess.get_sha256(DraftScript.ANIMATION_CATALOG_PATH)
 		== animation_catalog_hash
 	)
+	assert(
+		FileAccess.get_sha256(DraftScript.MANUAL_ALIGNMENT_DATA_PATH)
+		== manual_alignment_hash
+	)
 
 	DirAccess.remove_absolute(
 		ProjectSettings.globalize_path(
@@ -83,6 +123,7 @@ func _ready() -> void:
 	)
 	print(
 		"MONSTER_GROUND_ALIGNMENT_DRAFT_PASS "
-		+ "catalog=214 single_target=true formal_readonly=true"
+		+ "catalog=214 replay=212 red_moon=180 "
+		+ "single_target=true formal_readonly=true"
 	)
 	get_tree().quit(0)
