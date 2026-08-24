@@ -20,16 +20,72 @@
     "wooma_fighter": {"timing": {"attackIntervalMs": 2000, "moveIntervalMs": 1000, "confidence": "B"}, "serviceBehavior": {"aiCode": 0, "viewRange": 7, "confidence": "B/C"}, "runtimeProjection": {"moveSpeed": 48.0}, "collisionRadius": 20.0},
     "wooma_warrior": {"timing": {"attackIntervalMs": 2000, "moveIntervalMs": 1000, "confidence": "C"}, "serviceBehavior": {"aiCode": 0, "viewRange": 7, "confidence": "C"}, "runtimeProjection": {"moveSpeed": 48.0}, "collisionRadius": 21.0},
     "large_client_boss": {"largeClientBoss": true},
-    "flame_wooma": {"timing": {"attackIntervalMs": 1700, "moveIntervalMs": 800, "confidence": "B"}, "serviceBehavior": {"aiCode": 10, "viewRange": 7, "confidence": "B/C"}, "runtimeProjection": {"moveSpeed": 46.0, "attackRange": 155.0, "aggroRadius": 360.0}},
+    "flame_wooma": {
+      "timing": {"attackIntervalMs": 1700, "moveIntervalMs": 800, "confidence": "A", "source": "Monster.DB ATTACK_SPD/WALK_SPD exact Race=91"},
+      "serviceBehavior": {"aiCode": 91, "viewRange": 0, "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas AddBaseObject"},
+      "runtimeProjection": {"move_speed_gu_per_sec": 46.0, "attack_range_gu": 1.0, "aggroRadius": 360.0},
+      "serviceClass": {"race": 91, "name": "TMagCowMonster", "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas + ObjMon.pas"},
+      "attackDelivery": {
+        "kind": "special_melee",
+        "effectId": "monster.flame_wooma.magic_melee.v1",
+        "damageChannel": "magic_defense",
+        "bodyOnly": true,
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 1,
+        "range_gu": 1.0,
+        "hitDelaySeconds": 0.0,
+        "presentationDelaySeconds": 0.3,
+        "obstaclePolicy": "environment_adjacent_only",
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon.pas TMagCowMonster.sub_4A9F6C"
+      }
+    },
     "wooma_guardian": {"timing": {"attackIntervalMs": 1500, "moveIntervalMs": 800, "confidence": "B"}, "serviceBehavior": {"aiCode": 0, "viewRange": 7, "confidence": "B/C"}, "runtimeProjection": {"moveSpeed": 46.0}, "collisionRadius": 24.0},
     "red_snake": {"timing": {"attackIntervalMs": 2500, "moveIntervalMs": 1200, "confidence": "B"}, "serviceBehavior": {"aiCode": 0, "viewRange": 7, "confidence": "B/C"}, "runtimeProjection": {"moveSpeed": 44.0}, "collisionRadius": 16.0},
     "tiger_snake": {"timing": {"attackIntervalMs": 2500, "moveIntervalMs": 1200, "confidence": "B"}, "serviceBehavior": {"aiCode": 0, "viewRange": 7, "confidence": "B/C"}, "runtimeProjection": {"moveSpeed": 44.0}, "collisionRadius": 16.0},
     "evil_centipede": {"onHit": {"poisonDamage": 2, "poisonSeconds": 6.0}},
     "wooma_boss": {"largeClientBoss": true},
-    "touch_dragon": {"largeClientBoss": true, "specialClassification": "burrowed_stationary_area_attacker", "movement": {"stationary": true}, "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 210.0, "aggroRadius": 430.0}, "onHit": {"poisonDamage": 4, "poisonSeconds": 8.0}},
+    "touch_dragon": {
+      "largeClientBoss": true,
+      "specialClassification": "burrowed_stationary_area_attacker",
+      "movement": {"stationary": true},
+      "timing": {"attackIntervalMs": 2000, "moveIntervalMs": 1000, "confidence": "A", "source": "Monster.DB ATTACK_SPD/WALK_SPD exact Race=107"},
+      "serviceBehavior": {"aiCode": 107, "viewRange": 1, "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas AddBaseObject"},
+      "runtimeProjection": {"moveSpeed": 0.0, "move_speed_gu_per_sec": 0.0, "attack_range_gu": 6.0, "aggro_radius_gu": 8.5},
+      "serviceClass": {"race": 107, "name": "TCentipedeKingMonster", "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas + ObjMon2.pas"},
+      "attackDelivery": {
+        "kind": "area_magic",
+        "effectId": "monster.touch_dragon.area_magic.v1",
+        "damageChannel": "magic_defense",
+        "bodyOnly": true,
+        "rangeShape": "chebyshev_axis_aligned_square",
+        "rangeTiles": 6,
+        "range_gu": 6.0,
+        "boundary": "exclusive",
+        "hitDelaySeconds": 0.6,
+        "obstaclePolicy": "none_no_los",
+        "targetMode": "all_combat_targets",
+        "scope": "same_map_visible_actors",
+        "status": {"statusChance": 0.25, "poisonWeight": 2, "controlWeight": 1, "poisonDamage": 4, "poisonSeconds": 8.0, "controlSeconds": 1.2},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon2.pas TCentipedeKingMonster.AttackTarget + ObjBase.pas RM_DELAYMAGIC"
+      },
+      "onHit": {"poisonDamage": 4, "poisonSeconds": 8.0}
+    },
 	"zuma_boss": {"largeClientBoss": true, "dormant": true, "wakeRange": 64.0},
     "moth_control": {"onHit": {"controlSeconds": 1.2}},
-    "zuma_archer": {"runtimeProjection": {"moveSpeed": 44.0, "attackRange": 205.0}},
+    "zuma_archer": {
+      "runtimeProjection": {"moveSpeed": 44.0, "attackRange": 205.0},
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
+      }
+    },
     "zuma_dormant": {"dormant": true},
     "zuma_guard_holy_word": {
       "dormant": true,
@@ -70,9 +126,65 @@
       "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 512.0, "aggroRadius": 512.0},
       "areaAttack": {"enabled": true, "targetMode": "all_combat_targets", "scope": "visible_actors", "rangeTiles": 16, "rangePixels": 512.0, "hitDelaySeconds": 0.2, "confidence": "A"}
     },
-    "skeleton_archer": {"runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0}},
-    "cow_mage": {"runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0}},
-    "cow_priest": {"runtimeProjection": {"attackRange": 175.0}, "lifeStealRatio": 0.2}
+    "skeleton_archer": {
+      "runtimeProjection": {"moveSpeed": 43.0, "attackRange": 205.0},
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
+      }
+    },
+    "cow_mage": {
+      "runtimeProjection": {"moveSpeed": 43.0, "attackRange": 64.0},
+      "serviceClass": {
+        "race": 200,
+        "name": "TElectronicScolpionMon",
+        "confidence": "A",
+        "source": "canonical_monster_combat_source_v1 exact monster_id=220 ai_code=200 + original_gameofmir/M2Server/UsrEngn.pas and ObjMon.pas"
+      },
+      "attackDelivery": {
+        "kind": "target_magic",
+        "effectId": "monster.target_lightning.v1",
+        "presentationEffectId": "monster.cow_mage.thunder.primary.v1",
+        "visualSourceManifest": "res://assets/data/monster_target_magic_sources_v1.json",
+        "damageChannel": "magic_defense",
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 2,
+        "rangePixels": 64.0,
+        "hitDelaySeconds": 0.2,
+        "activation": {"hpBelowRatio": 0.5, "orAxisBoundaryTiles": 2.0},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
+      }
+    },
+    "cow_priest": {
+      "runtimeProjection": {"attackRange": 64.0},
+      "lifeStealRatio": 0.2,
+      "serviceClass": {
+        "race": 200,
+        "name": "TElectronicScolpionMon",
+        "confidence": "A",
+        "source": "canonical_monster_combat_source_v1 exact monster_id=222 ai_code=200 + original_gameofmir/M2Server/UsrEngn.pas and ObjMon.pas"
+      },
+      "attackDelivery": {
+        "kind": "target_magic",
+        "effectId": "monster.target_lightning.v1",
+        "presentationEffectId": "monster.cow_priest.fly.primary.v1",
+        "visualSourceManifest": "res://assets/data/monster_target_magic_sources_v1.json",
+        "damageChannel": "magic_defense",
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 2,
+        "rangePixels": 64.0,
+        "hitDelaySeconds": 0.2,
+        "activation": {"hpBelowRatio": 0.5, "orAxisBoundaryTiles": 2.0},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
+      }
+    }
   },
   "profileByMonsterId": {
     "21": "strawman", "23": "strawman",
@@ -89,7 +201,7 @@
     "66": "wooma_fighter", "67": "wooma_fighter",
     "68": "wooma_warrior", "69": "wooma_warrior",
     "56": "large_client_boss", "89": "large_client_boss",
-    "70": "flame_wooma", "71": "flame_wooma",
+    "70": "flame_wooma",
     "73": "wooma_guardian", "74": "wooma_guardian", "75": "wooma_guardian",
     "92": "red_snake", "93": "red_snake", "94": "tiger_snake", "95": "tiger_snake",
     "120": "evil_centipede", "121": "evil_centipede", "122": "evil_centipede", "123": "evil_centipede",
@@ -104,8 +216,8 @@
     "180": "stationary_demon", "182": "stationary_spider",
     "193": "rainbow_demon", "195": "millennium_tree",
     "206": "skeleton_archer", "207": "skeleton_archer",
-    "220": "cow_mage", "221": "cow_mage",
-    "222": "cow_priest", "223": "cow_priest"
+    "220": "cow_mage",
+    "222": "cow_priest"
   },
   "legacyNameToProfile": {
     "稻草人": "strawman", "稻草人1": "strawman",
@@ -122,7 +234,7 @@
     "沃玛勇士": "wooma_fighter", "沃玛勇士0": "wooma_fighter",
     "沃玛战将": "wooma_warrior", "沃玛战将0": "wooma_warrior",
     "骷髅精灵": "large_client_boss", "尸王": "large_client_boss",
-    "火焰沃玛": "flame_wooma", "火焰沃玛0": "flame_wooma",
+    "火焰沃玛": "flame_wooma",
     "沃玛卫士": "wooma_guardian", "沃玛卫士1": "wooma_guardian", "沃玛卫士2": "wooma_guardian", "沃玛护卫": "wooma_guardian",
     "红蛇": "red_snake", "红蛇0": "red_snake", "虎蛇": "tiger_snake", "虎蛇0": "tiger_snake",
     "邪恶钳虫": "evil_centipede", "邪恶钳虫1": "evil_centipede", "邪恶钳虫2": "evil_centipede", "邪恶钳虫9": "evil_centipede",
@@ -137,7 +249,7 @@
     "赤月恶魔": "stationary_demon", "幻影蜘蛛": "stationary_spider",
     "虹魔教主": "rainbow_demon", "千年树妖": "millennium_tree",
     "骷髅弓箭手": "skeleton_archer", "骷髅弓箭手0": "skeleton_archer",
-    "牛魔法师": "cow_mage", "牛魔法师0": "cow_mage",
-    "牛魔祭司": "cow_priest", "牛魔祭司0": "cow_priest"
+    "牛魔法师": "cow_mage",
+    "牛魔祭司": "cow_priest"
   }
 }

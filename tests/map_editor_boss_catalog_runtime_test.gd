@@ -36,7 +36,8 @@ func _ready() -> void:
 	var soldier := Catalog.find("monster_spawn", "monster.64")
 	assert(str(soldier.get("classification", "")) == "ordinary")
 	assert(str(soldier.get("placement_kind", "")) == "monster_spawn")
-	assert(bool(soldier.get("placement_allowed", false)))
+	assert(bool(soldier.get("authoring_allowed", false)))
+	assert(bool(soldier.get("runtime_ready", false)))
 	assert(int(soldier.get("default_respawn_seconds", 0)) == 60)
 	assert(bool(soldier.get("appearance_verified", false)))
 
@@ -45,21 +46,24 @@ func _ready() -> void:
 	assert(int(warrior.get("hp", 0)) == 285)
 	assert(int(warrior.get("attack_min", 0)) == 16 and int(warrior.get("attack_max", 0)) == 28)
 	assert(int(warrior.get("experience", 0)) == 310)
-	assert(bool(warrior.get("placement_allowed", false)))
+	assert(bool(warrior.get("authoring_allowed", false)))
+	assert(bool(warrior.get("runtime_ready", false)))
 	assert(str(warrior.get("source_status", "")) == "formal")
 
 	var guardian := Catalog.find("boss_spawn", "boss.73")
 	assert(str(guardian.get("classification", "")) == "elite")
 	assert(str(guardian.get("placement_kind", "")) == "boss_spawn")
 	assert(int(guardian.get("default_respawn_seconds", 0)) == 900)
-	assert(bool(guardian.get("placement_allowed", false)))
+	assert(bool(guardian.get("authoring_allowed", false)))
+	assert(bool(guardian.get("runtime_ready", false)))
 
 	var taurus := Catalog.find("boss_spawn", "boss.76")
 	assert(str(taurus.get("classification", "")) == "boss")
 	assert(str(taurus.get("placement_kind", "")) == "boss_spawn")
 	assert(int(taurus.get("default_respawn_seconds", 0)) == 1800)
-	assert(int(taurus.get("drop_entry_count", 0)) == 107)
-	assert(bool(taurus.get("placement_allowed", false)))
+	assert(int(taurus.get("drop_entry_count", 0)) == 33)
+	assert(bool(taurus.get("authoring_allowed", false)))
+	assert(bool(taurus.get("runtime_ready", false)))
 	var has_horn := false
 	for drop: Dictionary in taurus.get("drop_entries", []):
 		if str(drop.get("raw_text", "")).contains("沃玛号角"):
@@ -67,24 +71,27 @@ func _ready() -> void:
 			break
 	assert(has_horn, "canonical Woma Taurus drop rows lost 沃玛号角")
 
-	# Special and version-difference entries remain visible with stable reasons,
-	# but cannot be placed when canonical art/runtime/drop closure rejects them.
+	# Every final active identity remains authorable. Runtime readiness is a
+	# separate publish-time gate and these three active variants are ready.
 	_assert_entry(special, "boss.39", true)
 	_assert_entry(special, "monster.77", true)
 	_assert_entry(special, "monster.78", true)
 	var unknown_hall := Catalog.find("special_monster", "monster.77")
 	assert(str(unknown_hall.get("classification", "")) == "special")
-	assert(not bool(unknown_hall.get("placement_allowed", true)))
-	assert(str(unknown_hall.get("placement_rejection_reason", "")).contains("贴图"))
+	assert(bool(unknown_hall.get("authoring_allowed", false)))
+	assert(bool(unknown_hall.get("runtime_ready", false)))
 	var no_drop_variant := Catalog.find("special_monster", "monster.78")
 	assert(str(no_drop_variant.get("classification", "")) == "version_difference")
 	assert(int(no_drop_variant.get("drop_entry_count", -1)) == 0)
-	assert(not bool(no_drop_variant.get("placement_allowed", true)))
-	assert(str(no_drop_variant.get("placement_rejection_reason", "")).contains("canonical状态"))
+	assert(bool(no_drop_variant.get("authoring_allowed", false)))
+	assert(bool(no_drop_variant.get("runtime_ready", false)))
 	var unresolved_boss := Catalog.find("boss_spawn", "boss.239")
 	assert(not unresolved_boss.is_empty())
-	assert(int(unresolved_boss.get("drop_entry_count", -1)) == 0)
-	assert(not bool(unresolved_boss.get("placement_allowed", true)))
+	assert(bool(unresolved_boss.get("authoring_allowed", false)))
+	assert(bool(unresolved_boss.get("runtime_ready", false)))
+	var blocked_boss := Catalog.find("boss_spawn", "boss.33")
+	assert(bool(blocked_boss.get("authoring_allowed", false)))
+	assert(not bool(blocked_boss.get("runtime_ready", true)))
 
 	# The production runtime bridge still receives the exact stable ID and
 	# preserves count/max_alive/radius/respawn/spawn-group semantics.
@@ -118,11 +125,11 @@ func _ready() -> void:
 	_select_catalog_content(editor, "boss.76")
 	assert(int(editor.semantic_respawn.value) == 1800)
 	assert(editor.semantic_detail_label.text.contains("沃玛号角"))
-	_select_catalog_content(editor, "boss.239")
-	assert(editor.semantic_detail_label.text.contains("掉落为空"))
+	_select_catalog_content(editor, "boss.33")
+	assert(editor.semantic_detail_label.text.contains("运行时待闭环"))
 
 	# End-to-end editor contract: select canonical ordinary/elite/Boss entries,
-	# reject a disallowed special variant, save, reload, build and publish in a
+	# place an active special variant, save, reload, build and publish in a
 	# user:// scratch registry. Stable monster_id values must survive every
 	# boundary; no tracked formal release artifact is touched by this test.
 	var ordinary_kind := _option_index(editor.semantic_kind_option, "monster_spawn")
@@ -141,17 +148,17 @@ func _ready() -> void:
 	editor.semantic_kind_option.select(special_kind)
 	editor._on_semantic_kind_selected(special_kind, false)
 	_select_catalog_content(editor, "monster.77")
-	var before_rejected := (editor.current_document.layers.monster_spawn as Array).size()
+	var before_special := (editor.current_document.layers.monster_spawn as Array).size()
 	editor._on_semantic_tile_clicked(Vector2i(16, 16))
-	assert((editor.current_document.layers.monster_spawn as Array).size() == before_rejected)
+	assert((editor.current_document.layers.monster_spawn as Array).size() == before_special + 1)
 
 	var scratch_path := "user://mse_catalog_chain/boss_catalog_runtime.editor.json"
 	editor.current_document_path = scratch_path
 	var saved := editor._save_current_document()
 	assert(bool(saved.get("ok", false)), str(saved))
-	_assert_json_integer_monster_ids(scratch_path, [64, 73, 76])
+	_assert_json_integer_monster_ids(scratch_path, [64, 73, 76, 77])
 	assert(editor._open_document_path(scratch_path), str(editor.status_label.text))
-	_assert_saved_monster_ids(editor.current_document.layers.monster_spawn, [64])
+	_assert_saved_monster_ids(editor.current_document.layers.monster_spawn, [64, 77])
 	_assert_saved_monster_ids(editor.current_document.layers.boss_spawn, [73, 76])
 
 	BuildService.test_formal_runtime_root_override = "user://mse_catalog_chain/formal/"
@@ -172,7 +179,7 @@ func _ready() -> void:
 	assert(bool(published.get("formal_playable", false)))
 	var published_runtime: Dictionary = RuntimeBridge.load_map(int(editor.current_document.get("runtime_map_id", -1)))
 	var published_semantics: Dictionary = published_runtime.get("semantics", {})
-	_assert_runtime_layer_ids(published_semantics.get("monster_spawn", []), [64])
+	_assert_runtime_layer_ids(published_semantics.get("monster_spawn", []), [64, 77])
 	_assert_runtime_layer_ids(published_semantics.get("boss_spawn", []), [73, 76])
 	Fixtures.reset_seams()
 	editor.queue_free()

@@ -1682,8 +1682,8 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 			else:
 				detail = "  属性未通过 canonical 核验"
 			detail += "  %s  %s  默认%d秒" % [str(entry.get("classification", "")), str(entry.get("drop_summary", "")), int(entry.get("default_respawn_seconds", 60))]
-			if not bool(entry.get("placement_allowed", false)):
-				detail += "  禁止放置：%s" % str(entry.get("placement_rejection_reason", "canonical策略拒绝"))
+			if not bool(entry.get("runtime_ready", false)):
+				detail += "  可布置｜运行时待闭环：%s" % str(entry.get("runtime_rejection_reason", "待闭环"))
 		elif kind == "npc":
 			detail = "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
 		semantic_content_option.add_item(str(entry.get("display_name", entry.get("content_id", ""))) + detail)
@@ -1715,7 +1715,7 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 func _refresh_semantic_catalog_tree() -> void:
 	semantic_catalog_tree.clear()
 	var root := semantic_catalog_tree.create_item()
-	for group: Array in [["NPC目录", "npc"], ["普通怪物目录", "monster_spawn"], ["精英与Boss目录", "boss_spawn"], ["特殊地图怪物", "special_monster"]]:
+	for group: Array in [["NPC目录", "npc"], ["普通怪物目录", "monster_spawn"], ["精英与Boss目录", "boss_spawn"], ["特殊地图怪物", "special_monster"], ["待分类 / 待核验", "unresolved_monster"]]:
 		var folder := semantic_catalog_tree.create_item(root); folder.set_text(0, group[0]); folder.set_text_alignment(0, HORIZONTAL_ALIGNMENT_LEFT); folder.set_selectable(0, false); folder.collapsed = true
 		for entry: Dictionary in MapEditorContentCatalogService.entries(group[1], 4):
 			var item := semantic_catalog_tree.create_item(folder)
@@ -1725,7 +1725,7 @@ func _refresh_semantic_catalog_tree() -> void:
 
 func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
 	var label := str(entry.get("display_name", entry.get("content_id", "")))
-	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
 		return label
 	if bool(entry.get("attributes_verified", false)):
 		label += "｜Lv%s HP%s 攻%s-%s 防%s-%s 魔防%s-%s 经验%s" % [
@@ -1738,8 +1738,8 @@ func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
 	label += "｜%s｜%s｜默认%s秒" % [
 		str(entry.get("classification", "")), str(entry.get("drop_summary", "")), str(entry.get("default_respawn_seconds", 60)),
 	]
-	if not bool(entry.get("placement_allowed", false)):
-		label += "｜禁止：%s" % str(entry.get("placement_rejection_reason", "canonical策略拒绝"))
+	if not bool(entry.get("runtime_ready", false)):
+		label += "｜可布置｜运行时待闭环：%s" % str(entry.get("runtime_rejection_reason", "待闭环"))
 	if kind == "special_monster":
 		label += "｜实际%s" % ("Boss刷新" if str(entry.get("placement_kind", "")) == "boss_spawn" else "普通刷新")
 	return label
@@ -1804,10 +1804,10 @@ func _show_semantic_entry_details(entry: Dictionary) -> void:
 	var lines: Array[String] = []
 	lines.append("内容：%s  |  稳定 ID：%s" % [str(entry.get("display_name", "")), str(entry.get("monster_id", entry.get("numeric_id", "")))])
 	lines.append("分类：%s  |  实际语义：%s  |  默认刷新：%s 秒" % [str(entry.get("classification", "")), str(entry.get("placement_kind", "")), str(entry.get("default_respawn_seconds", 0))])
-	if bool(entry.get("placement_allowed", false)):
-		lines.append("放置：允许")
-	else:
-		lines.append("放置：禁止（%s）" % str(entry.get("placement_rejection_reason", "canonical策略拒绝")))
+	lines.append("作者可布置：%s" % ("是" if bool(entry.get("authoring_allowed", false)) else "否"))
+	lines.append("运行时闭环：%s" % ("是" if bool(entry.get("runtime_ready", false)) else "否"))
+	if not bool(entry.get("runtime_ready", false)):
+		lines.append("运行时待闭环原因：%s" % str(entry.get("runtime_rejection_reason", "待闭环")))
 	if bool(entry.get("attributes_verified", false)):
 		lines.append("属性：Lv%s  HP%s  攻%s-%s  防%s  魔防%s  经验%s" % [entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""), entry.get("defense_min", ""), entry.get("magic_defense_min", ""), entry.get("experience", "")])
 	else:
@@ -1846,8 +1846,8 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		if combat_entry.is_empty():
 			status_label.text = "放置拒绝：目录中未找到内容 %s" % content_id
 			return
-		if not bool(combat_entry.get("placement_allowed", false)):
-			status_label.text = "放置拒绝：该条目的属性尚未通过主源核验，不能新建刷新点"
+		if not bool(combat_entry.get("authoring_allowed", false)):
+			status_label.text = "放置拒绝：该 monster_id 不在正式 active 目录"
 			return
 		if kind == "special_monster":
 			actual_kind = str(combat_entry.get("placement_kind", ""))

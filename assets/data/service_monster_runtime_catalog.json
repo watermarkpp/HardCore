@@ -41,12 +41,12 @@
     }
   },
   "summary": {
-    "projectMonsterCount": 214,
-    "runtimeEntryCount": 214,
+    "projectMonsterCount": 156,
+    "runtimeEntryCount": 156,
     "serviceMonsterCount": 544,
-    "exactServiceName": 142,
-    "baseNameFallback": 15,
-    "unresolvedProjectFallback": 57
+    "exactServiceName": 100,
+    "baseNameFallback": 14,
+    "unresolvedProjectFallback": 42
   },
   "runtimeByMonsterId": {
     "18": {
@@ -231,68 +231,6 @@
         }
       }
     },
-    "23": {
-      "monsterId": 23,
-      "projectName": "稻草人1",
-      "projectBaseName": "稻草人",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "稻草人1",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 41,
-        "serviceName": "稻草人1",
-        "image": 5,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 50,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 30,
-          "1": 30,
-          "2": 30,
-          "3": 30,
-          "5": 90,
-          "10": 20,
-          "11": 17,
-          "12": 1000
-        },
-        "light": 0,
-        "attackIntervalMs": 1500,
-        "moveIntervalMs": 600,
-        "experience": 115,
-        "canPush": false,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1500,
-          "moveIntervalMs": 600,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 5,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": false,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "24": {
       "monsterId": 24,
       "projectName": "多钩猫",
@@ -314,65 +252,6 @@
           "4": 2,
           "5": 4,
           "10": 5,
-          "11": 7,
-          "12": 30
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 23,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 6,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "25": {
-      "monsterId": 25,
-      "projectName": "多钩猫0",
-      "projectBaseName": "多钩猫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "多钩猫0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 43,
-        "serviceName": "多钩猫0",
-        "image": 6,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 13,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 2,
-          "5": 5,
-          "10": 6,
           "11": 7,
           "12": 30
         },
@@ -470,65 +349,6 @@
         }
       }
     },
-    "27": {
-      "monsterId": 27,
-      "projectName": "钉耙猫0",
-      "projectBaseName": "钉耙猫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "钉耙猫0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 45,
-        "serviceName": "钉耙猫0",
-        "image": 7,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 13,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 4,
-          "5": 4,
-          "10": 5,
-          "11": 8,
-          "12": 32
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1800,
-        "experience": 27,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 7,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "28": {
       "monsterId": 28,
       "projectName": "森林雪人",
@@ -552,67 +372,6 @@
           "4": 7,
           "5": 10,
           "10": 7,
-          "11": 12,
-          "12": 36
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 38,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 11,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "29": {
-      "monsterId": 29,
-      "projectName": "森林雪人0",
-      "projectBaseName": "森林雪人",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "森林雪人0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 56,
-        "serviceName": "森林雪人0",
-        "image": 11,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 16,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 2,
-          "1": 2,
-          "4": 9,
-          "5": 10,
-          "10": 9,
           "11": 12,
           "12": 36
         },
@@ -857,67 +616,6 @@
         }
       }
     },
-    "35": {
-      "monsterId": 35,
-      "projectName": "半兽人0",
-      "projectBaseName": "半兽人",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "半兽人0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 49,
-        "serviceName": "半兽人0",
-        "image": 9,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 15,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 1,
-          "1": 1,
-          "4": 4,
-          "5": 9,
-          "10": 8,
-          "11": 15,
-          "12": 30
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 34,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 9,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "36": {
       "monsterId": 36,
       "projectName": "半兽战士",
@@ -941,69 +639,6 @@
           "2": 1,
           "3": 1,
           "4": 5,
-          "5": 12,
-          "10": 10,
-          "11": 15,
-          "12": 100
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1500,
-        "experience": 130,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 17,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "37": {
-      "monsterId": 37,
-      "projectName": "半兽战士0",
-      "projectBaseName": "半兽战士",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "半兽战士0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 51,
-        "serviceName": "半兽战士0",
-        "image": 17,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 22,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 3,
-          "2": 1,
-          "3": 1,
-          "4": 7,
           "5": 12,
           "10": 10,
           "11": 15,
@@ -1311,67 +946,6 @@
         }
       }
     },
-    "44": {
-      "monsterId": 44,
-      "projectName": "山洞蝙蝠0",
-      "projectBaseName": "山洞蝙蝠",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "山洞蝙蝠0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 82,
-        "serviceName": "山洞蝙蝠0",
-        "image": 19,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 20,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 2,
-          "1": 2,
-          "4": 4,
-          "5": 6,
-          "10": 11,
-          "11": 25,
-          "12": 25
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1200,
-        "experience": 34,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 19,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "45": {
       "monsterId": 45,
       "projectName": "蝎子",
@@ -1551,124 +1125,6 @@
         }
       }
     },
-    "48": {
-      "monsterId": 48,
-      "projectName": "骷髅0",
-      "projectBaseName": "骷髅",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "骷髅0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 86,
-        "serviceName": "骷髅0",
-        "image": 22,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 18,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 7,
-          "5": 10,
-          "10": 11,
-          "11": 13,
-          "12": 90
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 140,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 22,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "49": {
-      "monsterId": 49,
-      "projectName": "掷斧骷髅9",
-      "projectBaseName": "掷斧骷髅",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "掷斧骷髅9",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 89,
-        "serviceName": "掷斧骷髅9",
-        "image": 24,
-        "aiCode": 8,
-        "effect": 0,
-        "level": 18,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 4,
-          "5": 9,
-          "10": 15,
-          "11": 12,
-          "12": 100
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 140,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 8,
-          "image": 24,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "50": {
       "monsterId": 50,
       "projectName": "掷斧骷髅",
@@ -1728,65 +1184,6 @@
         }
       }
     },
-    "51": {
-      "monsterId": 51,
-      "projectName": "掷斧骷髅0",
-      "projectBaseName": "掷斧骷髅",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "掷斧骷髅0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 88,
-        "serviceName": "掷斧骷髅0",
-        "image": 24,
-        "aiCode": 8,
-        "effect": 0,
-        "level": 18,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 4,
-          "5": 9,
-          "10": 15,
-          "11": 12,
-          "12": 100
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 140,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 8,
-          "image": 24,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "52": {
       "monsterId": 52,
       "projectName": "骷髅战士",
@@ -1798,65 +1195,6 @@
       "serviceRecord": {
         "serviceIndex": 90,
         "serviceName": "骷髅战士",
-        "image": 23,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 19,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 2,
-          "5": 15,
-          "10": 11,
-          "11": 13,
-          "12": 105
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1800,
-        "experience": 150,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 23,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "53": {
-      "monsterId": 53,
-      "projectName": "骷髅战士0",
-      "projectBaseName": "骷髅战士",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "骷髅战士0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 91,
-        "serviceName": "骷髅战士0",
         "image": 23,
         "aiCode": 0,
         "effect": 0,
@@ -2343,69 +1681,6 @@
         }
       }
     },
-    "63": {
-      "monsterId": 63,
-      "projectName": "暗黑战士0",
-      "projectBaseName": "暗黑战士",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "暗黑战士0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 241,
-        "serviceName": "暗黑战士0",
-        "image": 28,
-        "aiCode": 8,
-        "effect": 0,
-        "level": 26,
-        "viewRange": 8,
-        "coolEye": 100,
-        "stats": {
-          "0": 3,
-          "1": 3,
-          "2": 2,
-          "3": 2,
-          "4": 9,
-          "5": 16,
-          "10": 15,
-          "11": 15,
-          "12": 165
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 900,
-        "experience": 240,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 900,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 8,
-          "image": 28,
-          "effect": 0,
-          "viewRange": 8,
-          "coolEye": 100,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "64": {
       "monsterId": 64,
       "projectName": "沃玛战士",
@@ -2417,69 +1692,6 @@
       "serviceRecord": {
         "serviceIndex": 246,
         "serviceName": "沃玛战士",
-        "image": 30,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 30,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 3,
-          "2": 2,
-          "3": 2,
-          "4": 16,
-          "5": 28,
-          "10": 13,
-          "11": 15,
-          "12": 285
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1000,
-        "experience": 340,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1000,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 30,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "65": {
-      "monsterId": 65,
-      "projectName": "沃玛战士0",
-      "projectBaseName": "沃玛战士",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "沃玛战士0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 247,
-        "serviceName": "沃玛战士0",
         "image": 30,
         "aiCode": 0,
         "effect": 0,
@@ -2595,100 +1807,9 @@
         }
       }
     },
-    "67": {
-      "monsterId": 67,
-      "projectName": "沃玛勇士0",
-      "projectBaseName": "沃玛勇士",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "沃玛勇士0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 249,
-        "serviceName": "沃玛勇士0",
-        "image": 31,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 30,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 3,
-          "2": 2,
-          "3": 2,
-          "4": 15,
-          "5": 28,
-          "10": 13,
-          "11": 15,
-          "12": 285
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1000,
-        "experience": 340,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1000,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 31,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "68": {
       "monsterId": 68,
       "projectName": "沃玛战将",
-      "projectBaseName": "沃玛战将",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "69": {
-      "monsterId": 69,
-      "projectName": "沃玛战将0",
       "projectBaseName": "沃玛战将",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -2725,65 +1846,6 @@
       "serviceRecord": {
         "serviceIndex": 250,
         "serviceName": "火焰沃玛",
-        "image": 32,
-        "aiCode": 10,
-        "effect": 0,
-        "level": 31,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 14,
-          "5": 26,
-          "10": 20,
-          "11": 20,
-          "12": 240
-        },
-        "light": 0,
-        "attackIntervalMs": 1700,
-        "moveIntervalMs": 800,
-        "experience": 350,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1700,
-          "moveIntervalMs": 800,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 10,
-          "image": 32,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "71": {
-      "monsterId": 71,
-      "projectName": "火焰沃玛0",
-      "projectBaseName": "火焰沃玛",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "火焰沃玛0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 251,
-        "serviceName": "火焰沃玛0",
         "image": 32,
         "aiCode": 10,
         "effect": 0,
@@ -3232,65 +2294,9 @@
         }
       }
     },
-    "80": {
-      "monsterId": 80,
-      "projectName": "僵尸10",
-      "projectBaseName": "僵尸",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
     "81": {
       "monsterId": 81,
       "projectName": "僵尸2",
-      "projectBaseName": "僵尸",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "82": {
-      "monsterId": 82,
-      "projectName": "僵尸20",
       "projectBaseName": "僵尸",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -3344,34 +2350,6 @@
         }
       }
     },
-    "84": {
-      "monsterId": 84,
-      "projectName": "僵尸30",
-      "projectBaseName": "僵尸",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
     "85": {
       "monsterId": 85,
       "projectName": "僵尸4",
@@ -3400,65 +2378,9 @@
         }
       }
     },
-    "86": {
-      "monsterId": 86,
-      "projectName": "僵尸40",
-      "projectBaseName": "僵尸",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
     "87": {
       "monsterId": 87,
       "projectName": "僵尸5",
-      "projectBaseName": "僵尸",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "88": {
-      "monsterId": 88,
-      "projectName": "僵尸50",
       "projectBaseName": "僵尸",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -3731,69 +2653,6 @@
         }
       }
     },
-    "93": {
-      "monsterId": 93,
-      "projectName": "红蛇0",
-      "projectBaseName": "红蛇",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "红蛇0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 65,
-        "serviceName": "红蛇0",
-        "image": 111,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 17,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 1,
-          "1": 2,
-          "2": 2,
-          "3": 2,
-          "4": 7,
-          "5": 12,
-          "10": 11,
-          "11": 15,
-          "12": 60
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1200,
-        "experience": 70,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 111,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "94": {
       "monsterId": 94,
       "projectName": "虎蛇",
@@ -3812,69 +2671,6 @@
         "viewRange": 7,
         "coolEye": 0,
         "stats": {
-          "2": 2,
-          "3": 3,
-          "4": 10,
-          "5": 11,
-          "10": 12,
-          "11": 15,
-          "12": 60
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1200,
-        "experience": 98,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 112,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "95": {
-      "monsterId": 95,
-      "projectName": "虎蛇0",
-      "projectBaseName": "虎蛇",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "虎蛇0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 68,
-        "serviceName": "虎蛇0",
-        "image": 112,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 18,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 1,
-          "1": 2,
           "2": 2,
           "3": 3,
           "4": 10,
@@ -4036,65 +2832,6 @@
         }
       }
     },
-    "98": {
-      "monsterId": 98,
-      "projectName": "猎鹰0",
-      "projectBaseName": "猎鹰",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "猎鹰0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 75,
-        "serviceName": "猎鹰0",
-        "image": 108,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 16,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 7,
-          "5": 10,
-          "10": 20,
-          "11": 40,
-          "12": 38
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1200,
-        "experience": 55,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 108,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "100": {
       "monsterId": 100,
       "projectName": "狼",
@@ -4175,65 +2912,6 @@
           "4": 4,
           "5": 10,
           "10": 7,
-          "11": 12,
-          "12": 50
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1200,
-        "experience": 52,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 105,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "102": {
-      "monsterId": 102,
-      "projectName": "盔甲虫0",
-      "projectBaseName": "盔甲虫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "盔甲虫0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 73,
-        "serviceName": "盔甲虫0",
-        "image": 105,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 16,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 4,
-          "5": 10,
-          "10": 9,
           "11": 12,
           "12": 50
         },
@@ -4418,65 +3096,6 @@
         }
       }
     },
-    "106": {
-      "monsterId": 106,
-      "projectName": "多角虫0",
-      "projectBaseName": "多角虫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "多角虫0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 71,
-        "serviceName": "多角虫0",
-        "image": 106,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 16,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "4": 2,
-          "5": 4,
-          "10": 10,
-          "11": 13,
-          "12": 52
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1300,
-        "experience": 42,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1300,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 106,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "107": {
       "monsterId": 107,
       "projectName": "巨型多角虫",
@@ -4536,66 +3155,6 @@
         }
       }
     },
-    "108": {
-      "monsterId": 108,
-      "projectName": "巨型多角虫1",
-      "projectBaseName": "巨型多角虫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "巨型多角虫1",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 79,
-        "serviceName": "巨型多角虫1",
-        "image": 107,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 50,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "2": 100,
-          "3": 100,
-          "5": 80,
-          "10": 17,
-          "11": 20,
-          "12": 900
-        },
-        "light": 5,
-        "attackIntervalMs": 1800,
-        "moveIntervalMs": 600,
-        "experience": 480,
-        "canPush": false,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1800,
-          "moveIntervalMs": 600,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 107,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": false,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "110": {
       "monsterId": 110,
       "projectName": "蜈蚣",
@@ -4607,67 +3166,6 @@
       "serviceRecord": {
         "serviceIndex": 152,
         "serviceName": "蜈蚣",
-        "image": 37,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 26,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "2": 5,
-          "3": 5,
-          "4": 12,
-          "5": 18,
-          "10": 13,
-          "11": 15,
-          "12": 210
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1500,
-        "experience": 310,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 37,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "111": {
-      "monsterId": 111,
-      "projectName": "蜈蚣0",
-      "projectBaseName": "蜈蚣",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "蜈蚣0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 153,
-        "serviceName": "蜈蚣0",
         "image": 37,
         "aiCode": 0,
         "effect": 0,
@@ -4779,67 +3277,6 @@
         }
       }
     },
-    "113": {
-      "monsterId": 113,
-      "projectName": "黑色恶蛆0",
-      "projectBaseName": "黑色恶蛆",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "黑色恶蛆0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 151,
-        "serviceName": "黑色恶蛆0",
-        "image": 38,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 28,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 5,
-          "1": 5,
-          "4": 10,
-          "5": 15,
-          "10": 13,
-          "11": 15,
-          "12": 200
-        },
-        "light": 0,
-        "attackIntervalMs": 1500,
-        "moveIntervalMs": 500,
-        "experience": 250,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1500,
-          "moveIntervalMs": 500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 38,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "114": {
       "monsterId": 114,
       "projectName": "跳跳蜂",
@@ -4851,69 +3288,6 @@
       "serviceRecord": {
         "serviceIndex": 156,
         "serviceName": "跳跳蜂",
-        "image": 35,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 26,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 3,
-          "2": 3,
-          "3": 3,
-          "4": 12,
-          "5": 18,
-          "10": 13,
-          "11": 15,
-          "12": 180
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1500,
-        "experience": 275,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 35,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "115": {
-      "monsterId": 115,
-      "projectName": "跳跳蜂0",
-      "projectBaseName": "跳跳蜂",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "跳跳蜂0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 157,
-        "serviceName": "跳跳蜂0",
         "image": 35,
         "aiCode": 0,
         "effect": 0,
@@ -5029,69 +3403,6 @@
         }
       }
     },
-    "117": {
-      "monsterId": 117,
-      "projectName": "巨型蠕虫0",
-      "projectBaseName": "巨型蠕虫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "巨型蠕虫0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 155,
-        "serviceName": "巨型蠕虫0",
-        "image": 36,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 26,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 3,
-          "2": 3,
-          "3": 3,
-          "4": 15,
-          "5": 18,
-          "10": 13,
-          "11": 15,
-          "12": 180
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1200,
-        "experience": 310,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 36,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "118": {
       "monsterId": 118,
       "projectName": "钳虫",
@@ -5103,69 +3414,6 @@
       "serviceRecord": {
         "serviceIndex": 158,
         "serviceName": "钳虫",
-        "image": 39,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 31,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 5,
-          "1": 5,
-          "2": 7,
-          "3": 7,
-          "4": 15,
-          "5": 25,
-          "10": 13,
-          "11": 15,
-          "12": 240
-        },
-        "light": 0,
-        "attackIntervalMs": 1800,
-        "moveIntervalMs": 1500,
-        "experience": 340,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1800,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 39,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "119": {
-      "monsterId": 119,
-      "projectName": "钳虫0",
-      "projectBaseName": "钳虫",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "钳虫0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 159,
-        "serviceName": "钳虫0",
         "image": 39,
         "aiCode": 0,
         "effect": 0,
@@ -5747,67 +3995,6 @@
         }
       }
     },
-    "130": {
-      "monsterId": 130,
-      "projectName": "红野猪0",
-      "projectBaseName": "红野猪",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "红野猪0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 169,
-        "serviceName": "红野猪0",
-        "image": 45,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 32,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "2": 8,
-          "3": 8,
-          "4": 18,
-          "5": 25,
-          "10": 13,
-          "11": 15,
-          "12": 300
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1200,
-        "experience": 600,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 45,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "131": {
       "monsterId": 131,
       "projectName": "红野猪3",
@@ -6251,69 +4438,6 @@
       "serviceRecord": {
         "serviceIndex": 177,
         "serviceName": "蝎蛇",
-        "image": 47,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 35,
-        "viewRange": 9,
-        "coolEye": 0,
-        "stats": {
-          "0": 1,
-          "1": 5,
-          "2": 2,
-          "3": 3,
-          "4": 22,
-          "5": 28,
-          "10": 13,
-          "11": 15,
-          "12": 300
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 600,
-        "experience": 550,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 600,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 47,
-          "effect": 0,
-          "viewRange": 9,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "139": {
-      "monsterId": 139,
-      "projectName": "蝎蛇0",
-      "projectBaseName": "蝎蛇",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "蝎蛇0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 178,
-        "serviceName": "蝎蛇0",
         "image": 47,
         "aiCode": 0,
         "effect": 0,
@@ -6817,67 +4941,6 @@
         }
       }
     },
-    "149": {
-      "monsterId": 149,
-      "projectName": "大老鼠0",
-      "projectBaseName": "大老鼠",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "大老鼠0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 193,
-        "serviceName": "大老鼠0",
-        "image": 63,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 34,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 6,
-          "4": 15,
-          "5": 32,
-          "10": 15,
-          "11": 15,
-          "12": 1000
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1200,
-        "experience": 1800,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 63,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "150": {
       "monsterId": 150,
       "projectName": "祖玛弓箭手",
@@ -6889,69 +4952,6 @@
       "serviceRecord": {
         "serviceIndex": 194,
         "serviceName": "祖玛弓箭手",
-        "image": 64,
-        "aiCode": 8,
-        "effect": 0,
-        "level": 39,
-        "viewRange": 10,
-        "coolEye": 0,
-        "stats": {
-          "0": 3,
-          "1": 6,
-          "2": 3,
-          "3": 6,
-          "4": 14,
-          "5": 30,
-          "10": 17,
-          "11": 15,
-          "12": 900
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1000,
-        "experience": 1900,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1000,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 8,
-          "image": 64,
-          "effect": 0,
-          "viewRange": 10,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "151": {
-      "monsterId": 151,
-      "projectName": "祖玛弓箭手0",
-      "projectBaseName": "祖玛弓箭手",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "祖玛弓箭手0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 195,
-        "serviceName": "祖玛弓箭手0",
         "image": 64,
         "aiCode": 8,
         "effect": 0,
@@ -7078,69 +5078,6 @@
       "serviceRecord": {
         "serviceIndex": 197,
         "serviceName": "祖玛雕像",
-        "image": 65,
-        "aiCode": 15,
-        "effect": 0,
-        "level": 50,
-        "viewRange": 9,
-        "coolEye": 0,
-        "stats": {
-          "0": 9,
-          "1": 13,
-          "2": 13,
-          "3": 16,
-          "4": 22,
-          "5": 38,
-          "10": 17,
-          "11": 17,
-          "12": 1000
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 900,
-        "experience": 2200,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 900,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 15,
-          "image": 65,
-          "effect": 0,
-          "viewRange": 9,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "154": {
-      "monsterId": 154,
-      "projectName": "祖玛雕像0",
-      "projectBaseName": "祖玛雕像",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "祖玛雕像0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 198,
-        "serviceName": "祖玛雕像0",
         "image": 65,
         "aiCode": 15,
         "effect": 0,
@@ -7753,100 +5690,9 @@
         }
       }
     },
-    "165": {
-      "monsterId": 165,
-      "projectName": "血巨人0",
-      "projectBaseName": "血巨人",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "血巨人0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 317,
-        "serviceName": "血巨人0",
-        "image": 57,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 52,
-        "viewRange": 14,
-        "coolEye": 0,
-        "stats": {
-          "0": 4,
-          "1": 7,
-          "2": 5,
-          "3": 12,
-          "4": 12,
-          "5": 30,
-          "10": 17,
-          "11": 15,
-          "12": 800
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1000,
-        "experience": 960,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1000,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 57,
-          "effect": 0,
-          "viewRange": 14,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "166": {
       "monsterId": 166,
       "projectName": "血僵尸",
-      "projectBaseName": "血僵尸",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "167": {
-      "monsterId": 167,
-      "projectName": "血僵尸0",
       "projectBaseName": "血僵尸",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -7937,71 +5783,6 @@
         }
       }
     },
-    "169": {
-      "monsterId": 169,
-      "projectName": "月魔蜘蛛0",
-      "projectBaseName": "月魔蜘蛛",
-      "resolutionStatus": "base_name_fallback",
-      "matchedProjectField": "baseName",
-      "matchedName": "月魔蜘蛛",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 303,
-        "serviceName": "月魔蜘蛛",
-        "image": 52,
-        "aiCode": 7,
-        "effect": 0,
-        "level": 52,
-        "viewRange": 7,
-        "coolEye": 100,
-        "stats": {
-          "0": 1,
-          "1": 3,
-          "2": 2,
-          "3": 9,
-          "4": 10,
-          "5": 17,
-          "6": 10,
-          "7": 17,
-          "10": 15,
-          "11": 16,
-          "12": 300
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 500,
-        "experience": 540,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 500,
-          "confidence": "B/C",
-          "resolutionStatus": "base_name_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 7,
-          "image": 52,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 100,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B/C",
-          "resolutionStatus": "base_name_fallback",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "170": {
       "monsterId": 170,
       "projectName": "黑锷蜘蛛",
@@ -8013,69 +5794,6 @@
       "serviceRecord": {
         "serviceIndex": 310,
         "serviceName": "黑锷蜘蛛",
-        "image": 55,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 45,
-        "viewRange": 14,
-        "coolEye": 0,
-        "stats": {
-          "0": 2,
-          "1": 7,
-          "2": 5,
-          "3": 10,
-          "4": 12,
-          "5": 27,
-          "10": 16,
-          "11": 15,
-          "12": 400
-        },
-        "light": 0,
-        "attackIntervalMs": 1500,
-        "moveIntervalMs": 1100,
-        "experience": 600,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1500,
-          "moveIntervalMs": 1100,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 55,
-          "effect": 0,
-          "viewRange": 14,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "171": {
-      "monsterId": 171,
-      "projectName": "黑锷蜘蛛0",
-      "projectBaseName": "黑锷蜘蛛",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "黑锷蜘蛛0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 311,
-        "serviceName": "黑锷蜘蛛0",
         "image": 55,
         "aiCode": 0,
         "effect": 0,
@@ -8191,100 +5909,9 @@
         }
       }
     },
-    "173": {
-      "monsterId": 173,
-      "projectName": "钢牙蜘蛛0",
-      "projectBaseName": "钢牙蜘蛛",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "钢牙蜘蛛0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 308,
-        "serviceName": "钢牙蜘蛛0",
-        "image": 54,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 45,
-        "viewRange": 14,
-        "coolEye": 0,
-        "stats": {
-          "0": 2,
-          "1": 7,
-          "2": 5,
-          "3": 10,
-          "4": 12,
-          "5": 22,
-          "10": 16,
-          "11": 15,
-          "12": 300
-        },
-        "light": 0,
-        "attackIntervalMs": 1500,
-        "moveIntervalMs": 1100,
-        "experience": 570,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1500,
-          "moveIntervalMs": 1100,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 54,
-          "effect": 0,
-          "viewRange": 14,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "174": {
       "monsterId": 174,
       "projectName": "暴牙蜘蛛",
-      "projectBaseName": "暴牙蜘蛛",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "175": {
-      "monsterId": 175,
-      "projectName": "暴牙蜘蛛0",
       "projectBaseName": "暴牙蜘蛛",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -8373,69 +6000,6 @@
         }
       }
     },
-    "177": {
-      "monsterId": 177,
-      "projectName": "天狼蜘蛛0",
-      "projectBaseName": "天狼蜘蛛",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "天狼蜘蛛0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 305,
-        "serviceName": "天狼蜘蛛0",
-        "image": 53,
-        "aiCode": 4,
-        "effect": 0,
-        "level": 50,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 4,
-          "1": 6,
-          "2": 4,
-          "3": 9,
-          "4": 10,
-          "5": 22,
-          "10": 17,
-          "11": 16,
-          "12": 300
-        },
-        "light": 0,
-        "attackIntervalMs": 1800,
-        "moveIntervalMs": 1200,
-        "experience": 520,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1800,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 4,
-          "image": 53,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "178": {
       "monsterId": 178,
       "projectName": "花吻蜘蛛",
@@ -8462,71 +6026,6 @@
           "5": 27,
           "6": 15,
           "7": 27,
-          "10": 18,
-          "11": 15,
-          "12": 300
-        },
-        "light": 0,
-        "attackIntervalMs": 1800,
-        "moveIntervalMs": 800,
-        "experience": 640,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1800,
-          "moveIntervalMs": 800,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 4,
-          "image": 56,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "179": {
-      "monsterId": 179,
-      "projectName": "花吻蜘蛛0",
-      "projectBaseName": "花吻蜘蛛",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "花吻蜘蛛0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 314,
-        "serviceName": "花吻蜘蛛0",
-        "image": 56,
-        "aiCode": 4,
-        "effect": 0,
-        "level": 64,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 8,
-          "1": 8,
-          "2": 11,
-          "3": 13,
-          "4": 15,
-          "5": 40,
-          "6": 15,
-          "7": 40,
           "10": 18,
           "11": 15,
           "12": 300
@@ -8693,34 +6192,6 @@
     "183": {
       "monsterId": 183,
       "projectName": "爆裂蜘蛛",
-      "projectBaseName": "爆裂蜘蛛",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "184": {
-      "monsterId": 184,
-      "projectName": "爆裂蜘蛛0",
       "projectBaseName": "爆裂蜘蛛",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -9327,69 +6798,6 @@
         }
       }
     },
-    "197": {
-      "monsterId": 197,
-      "projectName": "恶灵僵尸0",
-      "projectBaseName": "恶灵僵尸",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "恶灵僵尸0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 344,
-        "serviceName": "恶灵僵尸0",
-        "image": 87,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 35,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 6,
-          "1": 6,
-          "2": 15,
-          "3": 15,
-          "4": 14,
-          "5": 30,
-          "10": 13,
-          "11": 15,
-          "12": 430
-        },
-        "light": 0,
-        "attackIntervalMs": 1800,
-        "moveIntervalMs": 1000,
-        "experience": 1020,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1800,
-          "moveIntervalMs": 1000,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 87,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "198": {
       "monsterId": 198,
       "projectName": "恶灵尸王",
@@ -9579,69 +6987,6 @@
         }
       }
     },
-    "201": {
-      "monsterId": 201,
-      "projectName": "骷髅锤兵0",
-      "projectBaseName": "骷髅锤兵",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "骷髅锤兵0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 352,
-        "serviceName": "骷髅锤兵0",
-        "image": 89,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 49,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 9,
-          "1": 9,
-          "2": 15,
-          "3": 15,
-          "4": 19,
-          "5": 35,
-          "10": 15,
-          "11": 15,
-          "12": 620
-        },
-        "light": 0,
-        "attackIntervalMs": 1800,
-        "moveIntervalMs": 800,
-        "experience": 1350,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 1800,
-          "moveIntervalMs": 800,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 89,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "202": {
       "monsterId": 202,
       "projectName": "骷髅长枪兵",
@@ -9653,69 +6998,6 @@
       "serviceRecord": {
         "serviceIndex": 349,
         "serviceName": "骷髅长枪兵",
-        "image": 90,
-        "aiCode": 29,
-        "effect": 0,
-        "level": 42,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 7,
-          "1": 7,
-          "2": 15,
-          "3": 15,
-          "4": 17,
-          "5": 30,
-          "10": 13,
-          "11": 15,
-          "12": 520
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1200,
-        "experience": 1150,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 29,
-          "image": 90,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "203": {
-      "monsterId": 203,
-      "projectName": "骷髅长枪兵0",
-      "projectBaseName": "骷髅长枪兵",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "骷髅长枪兵0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 350,
-        "serviceName": "骷髅长枪兵0",
         "image": 90,
         "aiCode": 29,
         "effect": 0,
@@ -9831,69 +7113,6 @@
         }
       }
     },
-    "205": {
-      "monsterId": 205,
-      "projectName": "骷髅刀斧手0",
-      "projectBaseName": "骷髅刀斧手",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "骷髅刀斧手0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 348,
-        "serviceName": "骷髅刀斧手0",
-        "image": 91,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 45,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 7,
-          "1": 7,
-          "2": 15,
-          "3": 15,
-          "4": 19,
-          "5": 30,
-          "10": 13,
-          "11": 15,
-          "12": 540
-        },
-        "light": 0,
-        "attackIntervalMs": 2500,
-        "moveIntervalMs": 1500,
-        "experience": 1280,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1500,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 91,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "206": {
       "monsterId": 206,
       "projectName": "骷髅弓箭手",
@@ -9905,69 +7124,6 @@
       "serviceRecord": {
         "serviceIndex": 345,
         "serviceName": "骷髅弓箭手",
-        "image": 92,
-        "aiCode": 8,
-        "effect": 0,
-        "level": 38,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 7,
-          "1": 7,
-          "2": 15,
-          "3": 15,
-          "4": 9,
-          "5": 24,
-          "10": 5,
-          "11": 8,
-          "12": 450
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1200,
-        "experience": 1020,
-        "canPush": true,
-        "canTame": false,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1200,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 8,
-          "image": 92,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
-    "207": {
-      "monsterId": 207,
-      "projectName": "骷髅弓箭手0",
-      "projectBaseName": "骷髅弓箭手",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "骷髅弓箭手0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 346,
-        "serviceName": "骷髅弓箭手0",
         "image": 92,
         "aiCode": 8,
         "effect": 0,
@@ -10139,100 +7295,9 @@
         }
       }
     },
-    "211": {
-      "monsterId": 211,
-      "projectName": "牛头魔0",
-      "projectBaseName": "牛头魔",
-      "resolutionStatus": "exact_service_name",
-      "matchedProjectField": "name",
-      "matchedName": "牛头魔0",
-      "serviceCandidateCount": 1,
-      "serviceRecord": {
-        "serviceIndex": 362,
-        "serviceName": "牛头魔0",
-        "image": 94,
-        "aiCode": 0,
-        "effect": 0,
-        "level": 42,
-        "viewRange": 7,
-        "coolEye": 0,
-        "stats": {
-          "0": 8,
-          "1": 8,
-          "2": 15,
-          "3": 15,
-          "4": 20,
-          "5": 33,
-          "10": 14,
-          "11": 14,
-          "12": 500
-        },
-        "light": 0,
-        "attackIntervalMs": 2000,
-        "moveIntervalMs": 1100,
-        "experience": 1380,
-        "canPush": true,
-        "canTame": true,
-        "autoRevive": true,
-        "undead": false,
-        "dropPath": ""
-      },
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2000,
-          "moveIntervalMs": 1100,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": 94,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": true,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "B",
-          "resolutionStatus": "exact_service_name",
-          "sourceDistribution": "server.crystal.cjlaaa",
-          "primaryRuleDistribution": "source.original_gameofmir.server_suite",
-          "databaseFormatReferenceDistribution": "source.suprcode_crystal.server"
-        }
-      }
-    },
     "212": {
       "monsterId": 212,
       "projectName": "牛魔战士",
-      "projectBaseName": "牛魔战士",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "213": {
-      "monsterId": 213,
-      "projectName": "牛魔战士0",
       "projectBaseName": "牛魔战士",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -10286,65 +7351,9 @@
         }
       }
     },
-    "215": {
-      "monsterId": 215,
-      "projectName": "牛魔斗士0",
-      "projectBaseName": "牛魔斗士",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
     "216": {
       "monsterId": 216,
       "projectName": "牛魔侍卫",
-      "projectBaseName": "牛魔侍卫",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "217": {
-      "monsterId": 217,
-      "projectName": "牛魔侍卫0",
       "projectBaseName": "牛魔侍卫",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -10398,34 +7407,6 @@
         }
       }
     },
-    "219": {
-      "monsterId": 219,
-      "projectName": "牛魔将军0",
-      "projectBaseName": "牛魔将军",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
     "220": {
       "monsterId": 220,
       "projectName": "牛魔法师",
@@ -10454,65 +7435,9 @@
         }
       }
     },
-    "221": {
-      "monsterId": 221,
-      "projectName": "牛魔法师0",
-      "projectBaseName": "牛魔法师",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
     "222": {
       "monsterId": 222,
       "projectName": "牛魔祭司",
-      "projectBaseName": "牛魔祭司",
-      "resolutionStatus": "unresolved_project_fallback",
-      "behaviorProfile": {
-        "timing": {
-          "attackIntervalMs": 2500,
-          "moveIntervalMs": 1800,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback"
-        },
-        "serviceBehavior": {
-          "aiCode": 0,
-          "image": -1,
-          "effect": 0,
-          "viewRange": 7,
-          "coolEye": 0,
-          "canPush": true,
-          "canTame": false,
-          "autoRevive": true,
-          "undead": false,
-          "confidence": "C",
-          "resolutionStatus": "unresolved_project_fallback",
-          "sourceDistribution": "project.single_player_fallback"
-        }
-      }
-    },
-    "223": {
-      "monsterId": 223,
-      "projectName": "牛魔祭司0",
       "projectBaseName": "牛魔祭司",
       "resolutionStatus": "unresolved_project_fallback",
       "behaviorProfile": {
@@ -11326,36 +8251,25 @@
     "毒蜘蛛": 18,
     "蛤蟆": 19,
     "稻草人": 21,
-    "稻草人1": 23,
     "多钩猫": 24,
-    "多钩猫0": 25,
     "钉耙猫": 26,
-    "钉耙猫0": 27,
     "森林雪人": 28,
-    "森林雪人0": 29,
     "食人花": 30,
     "多钩猫王": 31,
     "钉耙猫王": 32,
     "雪人王": 33,
     "半兽人": 34,
-    "半兽人0": 35,
     "半兽战士": 36,
-    "半兽战士0": 37,
     "半兽勇士": 38,
     "半兽勇士1": 39,
     "半兽勇士9": 41,
     "半兽统领": 42,
     "山洞蝙蝠": 43,
-    "山洞蝙蝠0": 44,
     "蝎子": 45,
     "洞蛆": 46,
     "骷髅": 47,
-    "骷髅0": 48,
-    "掷斧骷髅9": 49,
-    "掷斧骷髅": 49,
-    "掷斧骷髅0": 51,
+    "掷斧骷髅": 50,
     "骷髅战士": 52,
-    "骷髅战士0": 53,
     "骷髅战将": 54,
     "骷髅战将0": 55,
     "骷髅精灵": 56,
@@ -11363,15 +8277,10 @@
     "骷髅精灵9": 59,
     "粪虫": 60,
     "暗黑战士": 62,
-    "暗黑战士0": 63,
     "沃玛战士": 64,
-    "沃玛战士0": 65,
     "沃玛勇士": 66,
-    "沃玛勇士0": 67,
     "沃玛战将": 68,
-    "沃玛战将0": 69,
     "火焰沃玛": 70,
-    "火焰沃玛0": 71,
     "沃玛卫士": 73,
     "沃玛卫士1": 74,
     "沃玛卫士2": 75,
@@ -11380,44 +8289,28 @@
     "沃玛教主9": 78,
     "僵尸1": 79,
     "僵尸": 79,
-    "僵尸10": 80,
     "僵尸2": 81,
-    "僵尸20": 82,
     "僵尸3": 83,
-    "僵尸30": 84,
     "僵尸4": 85,
-    "僵尸40": 86,
     "僵尸5": 87,
-    "僵尸50": 88,
     "尸王": 89,
     "尸王1": 90,
     "尸王2": 91,
     "红蛇": 92,
-    "红蛇0": 93,
     "虎蛇": 94,
-    "虎蛇0": 95,
     "羊": 96,
     "猎鹰": 97,
-    "猎鹰0": 98,
     "狼": 100,
     "盔甲虫": 101,
-    "盔甲虫0": 102,
     "威思而小虫": 103,
     "沙虫": 104,
     "多角虫": 105,
-    "多角虫0": 106,
     "巨型多角虫": 107,
-    "巨型多角虫1": 108,
     "蜈蚣": 110,
-    "蜈蚣0": 111,
     "黑色恶蛆": 112,
-    "黑色恶蛆0": 113,
     "跳跳蜂": 114,
-    "跳跳蜂0": 115,
     "巨型蠕虫": 116,
-    "巨型蠕虫0": 117,
     "钳虫": 118,
-    "钳虫0": 119,
     "邪恶钳虫": 120,
     "邪恶钳虫1": 121,
     "邪恶钳虫2": 122,
@@ -11427,7 +8320,6 @@
     "蝙蝠": 127,
     "楔蛾": 128,
     "红野猪": 129,
-    "红野猪0": 130,
     "红野猪3": 131,
     "黑野猪": 132,
     "黑野猪0": 133,
@@ -11436,7 +8328,6 @@
     "白野猪0": 136,
     "白野猪1": 137,
     "蝎蛇": 138,
-    "蝎蛇0": 139,
     "蝎蛇3": 140,
     "邪恶毒蛇": 141,
     "邪恶毒蛇1": 142,
@@ -11448,12 +8339,9 @@
     "神兽": 146,
     "神兽2": 147,
     "大老鼠": 148,
-    "大老鼠0": 149,
     "祖玛弓箭手": 150,
-    "祖玛弓箭手0": 151,
     "祖玛弓箭手3": 152,
     "祖玛雕像": 153,
-    "祖玛雕像0": 154,
     "祖玛雕像3": 155,
     "祖玛卫士": 156,
     "祖玛卫士0": 157,
@@ -11464,25 +8352,16 @@
     "双头血魔": 162,
     "双头金刚": 163,
     "血巨人": 164,
-    "血巨人0": 165,
     "血僵尸": 166,
-    "血僵尸0": 167,
     "月魔蜘蛛": 168,
-    "月魔蜘蛛0": 169,
     "黑锷蜘蛛": 170,
-    "黑锷蜘蛛0": 171,
     "钢牙蜘蛛": 172,
-    "钢牙蜘蛛0": 173,
     "暴牙蜘蛛": 174,
-    "暴牙蜘蛛0": 175,
     "天狼蜘蛛": 176,
-    "天狼蜘蛛0": 177,
     "花吻蜘蛛": 178,
-    "花吻蜘蛛0": 179,
     "赤月恶魔": 180,
     "幻影蜘蛛": 182,
     "爆裂蜘蛛": 183,
-    "爆裂蜘蛛0": 184,
     "剧毒蜘蛛": 185,
     "鹰卫": 186,
     "虎卫": 187,
@@ -11495,33 +8374,21 @@
     "恶魔弓箭手": 194,
     "千年树妖": 195,
     "恶灵僵尸": 196,
-    "恶灵僵尸0": 197,
     "恶灵尸王": 198,
     "恶灵尸王0": 199,
     "骷髅锤兵": 200,
-    "骷髅锤兵0": 201,
     "骷髅长枪兵": 202,
-    "骷髅长枪兵0": 203,
     "骷髅刀斧手": 204,
-    "骷髅刀斧手0": 205,
     "骷髅弓箭手": 206,
-    "骷髅弓箭手0": 207,
     "黄泉教主": 208,
     "黄泉教主0": 209,
     "牛头魔": 210,
-    "牛头魔0": 211,
     "牛魔战士": 212,
-    "牛魔战士0": 213,
     "牛魔斗士": 214,
-    "牛魔斗士0": 215,
     "牛魔侍卫": 216,
-    "牛魔侍卫0": 217,
     "牛魔将军": 218,
-    "牛魔将军0": 219,
     "牛魔法师": 220,
-    "牛魔法师0": 221,
     "牛魔祭司": 222,
-    "牛魔祭司0": 223,
     "牛魔王": 224,
     "暗之牛魔王": 225,
     "宝箱": 226,

@@ -38,8 +38,11 @@ func _run() -> void:
 	player.set_touch_vector(Vector2.ZERO)
 
 	var ranged_probe := EnemyActor.new()
-	ranged_probe.setup(GameData.get_monster("火焰沃玛"), player, false)
-	assert(is_equal_approx(ranged_probe.attack_range_gu, 155.0 / 32.0), "远程旧PX范围未在adapter边界转换为GU")
+	# The old test used flame wooma as a generic ranged stand-in. Its exact
+	# Race=91 contract is now adjacent magic melee, so exercise the same swept
+	# projectile geometry with the authoritative archer profile instead.
+	ranged_probe.setup(GameData.get_monster_by_id(150), player, false)
+	assert(is_equal_approx(ranged_probe.attack_range_gu, 205.0 / 32.0), "弓箭手旧PX范围未在adapter边界转换为GU")
 	assert(not ranged_probe._uses_player_melee_contact_contract(player))
 	ranged_probe.global_position = Vector2.ZERO
 	ranged_probe.set_physics_process(false)
@@ -88,7 +91,10 @@ func _run() -> void:
 		var direction_ground := Vector2.from_angle(angle)
 		var enemy := EnemyActor.new()
 		enemy.name = "ContactProbe_%d" % direction_index
-		enemy.setup({"monsterId": -9001, "name": "接敌测试怪"}, player, false)
+		# Runtime setup is fail-closed for unknown monster IDs. Use the canonical
+		# ordinary-melee 沃玛战士 fixture so the eight-direction collision probe
+		# exercises the production actor instead of a rejected placeholder.
+		enemy.setup(GameData.get_monster_by_id(64), player, false)
 		enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			direction_ground * START_DISTANCE_GU
 		)

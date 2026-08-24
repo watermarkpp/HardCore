@@ -61,42 +61,42 @@ func _run() -> void:
 	dragon._physics_process(0.01)
 	assert(not dragon._burrowed and dragon.visual.visible and dragon.current_hp == dragon.max_hp, "触龙神近身钻出/满血机制失效")
 	var hp_before := player.current_hp
-	dragon._boss_skill_cooldown = 0.0
-	dragon._update_boss_skill(0.01, 100.0)
+	assert(not dragon._boss_skill_enabled, "触龙神不应保留无来源的独立警示圈技能")
+	dragon._attack_timer = 0.0
+	dragon._update_area_magic_delivery(0.01)
 	assert(
 		SkillFootprintSnapshotScript.has_legacy_base_contract(
-			dragon._boss_skill_footprint_snapshot
+			dragon._area_magic_footprint_snapshot
 		),
-		"boss warning did not freeze the release-time GU footprint",
+		"触龙神没有冻结释放时的GU方形范围",
 	)
-	var warned_release_id := str(dragon._boss_skill_footprint_snapshot.release_id)
 	assert(
-		dragon.boss_warning_polygon_px(dragon.boss_rule.get("specialSkill", {}))
-		== SkillFootprintSnapshotScript.project_ground_polygon_to_screen_offsets_px(
-			SkillFootprintSnapshotScript.ground_polygon_gu(
-				dragon._boss_skill_footprint_snapshot
-			),
-			dragon._screen_position_px_to_ground_position_gu(dragon.global_position)
-		),
-		"boss warning and damage do not read the same footprint snapshot",
+		str(dragon._area_magic_footprint_snapshot.get("range_shape", ""))
+		== "chebyshev_axis_aligned_square_exclusive",
+		"触龙神范围不是原版严格切比雪夫方形",
 	)
-	dragon._update_boss_skill(0.61, 100.0)
+	var warned_release_id := str(dragon._area_magic_footprint_snapshot.release_id)
 	assert(
-		str(dragon._last_attack_footprint_snapshot.shape_type)
-		== SkillFootprintSnapshotScript.SHAPE_CIRCLE,
-		"boss circle damage did not consume the warned projection snapshot",
+		dragon.boss_warning_polygon_px(dragon.boss_rule.get("specialSkill", {})).is_empty(),
+		"触龙神仍生成了没有客户端来源的警示圈",
+	)
+	dragon._update_area_magic_delivery(0.61)
+	assert(
+		str(dragon._last_attack_footprint_snapshot.get("range_shape", ""))
+		== "chebyshev_axis_aligned_square_exclusive",
+		"触龙神结算没有消费冻结的方形范围",
 	)
 	assert(
 		str(dragon._last_attack_footprint_snapshot.release_id) == warned_release_id,
-		"boss warning and delayed damage did not retain one immutable release_id",
+		"触龙神释放与600ms延迟伤害没有保留同一release_id",
 	)
 	assert(
 		str(dragon._last_attack_footprint_snapshot.projection_relationship_id)
 		== EnemyActor.PROJECTION_RELATIONSHIP_GROUND_EXACT,
-		"boss circle warning/damage snapshot does not declare ground_exact",
+		"触龙神方形范围没有声明ground_exact",
 	)
-	assert(dragon._last_boss_skill_hit, "触龙神范围攻击没有命中战斗目标")
 	assert(player.current_hp < hp_before, "触龙神范围攻击没有结算主目标伤害")
+	assert(str(dragon.last_magic_attack_resolution.get("delivery_kind", "")) == "area_magic")
 
 	player.global_position = Vector2(400, 0)
 	var zuma := _boss(160, "本地化祖玛首领", player)

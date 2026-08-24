@@ -471,6 +471,22 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 			errors.append("door_target_map_required:%s" % semantic_id)
 		if str(entry.get("kind", "")) == "map_exit" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("map_exit_target_map_required:%s" % semantic_id)
+		var entry_kind := str(entry.get("kind", ""))
+		if entry_kind in ["monster_spawn", "boss_spawn"]:
+			var monster_id := int(entry.get("monster_id", -1))
+			if monster_id <= 0:
+				errors.append("monster_id_missing_or_invalid:%s" % semantic_id)
+			else:
+				var catalog_entry := MapEditorContentCatalogService.find_any_monster(monster_id)
+				if catalog_entry.is_empty():
+					errors.append("monster_missing_from_catalog:%d" % monster_id)
+				elif not bool(catalog_entry.get("runtime_ready", false)):
+					errors.append(
+					"monster_not_runtime_ready:%d:%s" % [
+						monster_id,
+						str(catalog_entry.get("runtime_rejection_reason", "runtime待闭环")),
+					]
+				)
 	errors.append_array(
 		ConnectionPolicyService.validate_document(document)
 	)

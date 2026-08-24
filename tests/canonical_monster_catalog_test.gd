@@ -6,13 +6,9 @@ const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
 
 const WOOma_EXPECTED := {
 	64: "ordinary",
-	65: "ordinary",
 	66: "ordinary",
-	67: "ordinary",
 	68: "ordinary",
-	69: "ordinary",
 	70: "ordinary",
-	71: "ordinary",
 	73: "elite",
 	74: "elite",
 	75: "elite",
@@ -21,6 +17,8 @@ const WOOma_EXPECTED := {
 	78: "version_difference",
 	239: "boss",
 }
+# Retired Wooma variants must not appear in the P3C active canonical catalog.
+const WOOma_RETIRED := [65, 67, 69, 71]
 
 
 func _ready() -> void:
@@ -38,14 +36,8 @@ func _run() -> void:
 		var source_evidence: Dictionary = catalog.get("sources", {}).get(source_path, {})
 		var expected_hash_mode := "lf_text" if source_path.to_lower().ends_with(".json") else "raw_bytes"
 		assert(source_evidence.get("hash_normalization", "") == expected_hash_mode, "source hash normalization mismatch for %s" % source_path)
-	assert(
-		entries.size() == 214,
-		"canonical catalog must contain 214 active identities (217 source - 3 retired)",
-	)
-	assert(
-		entries_by_id.size() == 214,
-		"entries_by_id must close all 214 active identities",
-	)
+	assert(entries.size() == 156, "canonical catalog must contain 156 stable identities")
+	assert(entries_by_id.size() == 156, "entries_by_id must close all 156 identities")
 	var seen_ids: Dictionary = {}
 	for value: Variant in entries:
 		assert(value is Dictionary, "catalog entries must be dictionaries")
@@ -86,12 +78,27 @@ func _run() -> void:
 		var drop_id := str(entry.get("drop_profile_id", ""))
 		var drop: Dictionary = drop_profiles.get(drop_id, {})
 		assert(not drop.is_empty(), "monster_id=%d missing drop profile closure" % monster_id)
-		var drop_count := int(drop.get("entry_count", drop.get("entries", []).size()))
-		var hostile := str(entry.get("classification", "")) in ["ordinary", "elite", "boss", "special"]
-		if hostile and bool(entry.get("runtime_allowed", false)):
-			assert(drop_count > 0, "hostile runtime monster_id=%d has no drop rows" % monster_id)
-		if hostile and bool(entry.get("editor_placement", {}).get("allowed", false)):
-			assert(drop_count > 0, "hostile editor placement monster_id=%d has no drop rows" % monster_id)
+		# Runtime drop requirement uses canonical drop_policy, not a guessed
+		# hostile classification. If the policy requires a non-empty table and
+		# no exemption applies, a runtime_allowed entry must have a resolved
+		# reward closure (item or gold).
+		var drop_policy: Dictionary = entry.get("drop_policy", {})
+		var requires_non_empty := bool(drop_policy.get("hostile_requires_non_empty", false))
+		var exemption_value: Variant = drop_policy.get("exemption", null)
+		var exemption_valid := (
+			exemption_value is Dictionary
+			and bool(exemption_value.get("allowed", false))
+			and not str(exemption_value.get("reason", "")).is_empty()
+		)
+		if (
+			requires_non_empty
+			and not exemption_valid
+			and bool(entry.get("runtime_allowed", false))
+		):
+			var closure := GameData.canonical_monster_runtime_drop_closure(monster_id)
+			assert(int(closure.get("resolved_reward_count", -1)) > 0, "monster_id=%d requires resolved reward closure (item or gold)" % monster_id)
+		# P3C: editor placement is decoupled from drop closure (all active are
+		# placeable); drop rows are only required by runtime drop_policy.
 		var profile_id := str(entry.get("appearance_profile_id", ""))
 		var appearance: Dictionary = appearance_profiles.get(profile_id, {})
 		assert(not appearance.is_empty(), "monster_id=%d missing appearance profile closure" % monster_id)
@@ -105,20 +112,23 @@ func _run() -> void:
 	for drop_profile_id: String in drop_profiles:
 		var profile: Dictionary = drop_profiles.get(drop_profile_id, {})
 		var drop_monster_id := int(drop_profile_id.trim_prefix("drop."))
-		if drop_monster_id not in [68, 69]:
+		if drop_monster_id != 68:
 			continue
 		for row: Variant in profile.get("entries", []):
 			var item := str(row.get("item", "")) if row is Dictionary else ""
 			assert(item != "LongBow" and item != "SilverBow", "runtime drop profile %s contains audited private item token %s" % [drop_profile_id, item])
 
+	for monster_id: int in WOOma_RETIRED:
+		assert(not entries_by_id.has(str(monster_id)), "retired Wooma %d must not appear in canonical active catalog" % monster_id)
 	for monster_id: int in WOOma_EXPECTED:
 		var wooma: Dictionary = entries_by_id.get(str(monster_id), {})
 		assert(str(wooma.get("classification", "")) == WOOma_EXPECTED[monster_id], "Wooma matrix classification mismatch for %d" % monster_id)
-		if monster_id == 78:
-			assert(str(wooma.get("status", "")) == "version_difference" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 78 must remain version_difference and unplaceable")
-		if monster_id == 77:
-			assert(str(wooma.get("editor_placement", {}).get("placement_kind", "")) == "monster_spawn" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 77 must keep ordinary spawn semantics but remain unresolved")
-		if monster_id in [68, 69]:
+		if monster_id in [77, 78, 239]:
+			# P3C: all 156 active animations are formal and these are runtime-allowed.
+			assert(bool(wooma.get("runtime_allowed", false)), "Wooma %d must be runtime allowed" % monster_id)
+			var wooma_appearance: Dictionary = appearance_profiles.get(str(wooma.get("appearance_profile_id", "")), {})
+			assert(str(wooma_appearance.get("status", "")) == "formal", "Wooma %d appearance must be formal" % monster_id)
+		if monster_id == 68:
 			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
 			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)
 			var drop: Dictionary = drop_profiles.get(str(wooma.get("drop_profile_id", "")), {})
@@ -166,7 +176,7 @@ func _run() -> void:
 	for forbidden: String in ["baseName", "trim_suffix", "legacyNameToMonsterId", "legacyAliases", "PresentationAssets", "data.get(\"agility\"", "data.get(\"antiPoison\""]:
 		assert(not identity_source.contains(forbidden) and not visual_source.contains(forbidden) and not enemy_source.contains(forbidden), "production monster path contains forbidden fallback token %s" % forbidden)
 	assert(enemy_source.contains("is_boss = classification == \"boss\""), "EnemyActor must derive boss identity from canonical classification")
-	print("CANONICAL_MONSTER_CATALOG_TEST_PASS: identities=217 wooma_matrix=15 id_only=1 drop_closure=1 excel_authority=1")
+	print("CANONICAL_MONSTER_CATALOG_TEST_PASS: identities=156 wooma_matrix=11 id_only=1 drop_closure=1 excel_authority=1")
 	get_tree().quit(0)
 
 
