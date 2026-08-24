@@ -1,6 +1,7 @@
 extends Node
 
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
+const FIXTURE_MONSTER_ID := 18
 
 
 func _ready() -> void:
@@ -126,11 +127,19 @@ func _assert_identity(snapshot: Dictionary, label: String) -> void:
 
 func _make_enemy(game: Node, screen_position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "t", "hp": 999, "attackMin": 1, "attackMax": 1, "level": 1},
-		game.player,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"canonical snapshot fixture canonical monster ID=%d must resolve"
+		% FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, game.player, false)
+	# Keep the identity chain independent of authored combat stats while
+	# retaining the production target's durable test HP.
+	enemy.max_hp = 999
+	enemy.current_hp = enemy.max_hp
+	enemy.attack_min = 1
+	enemy.attack_max = 1
 	enemy.global_position = screen_position
 	enemy.combat_radius_gu = 0.2
 	game.add_child(enemy)
