@@ -4,6 +4,7 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const SpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const FIXTURE_MONSTER_ID := 18
 
 const MAP_ID := 217
 
@@ -76,11 +77,19 @@ func _run() -> void:
 
 func _make_enemy(index: SpatialIndexScript) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "p01_target", "hp": 99999, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"mapped projectile fixture canonical monster ID=%d must resolve"
+		% FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, null, false)
+	# This rejection test needs a durable target and must remain independent of
+	# authored combat stats while retaining canonical identity resolution.
+	enemy.max_hp = 99999
+	enemy.current_hp = enemy.max_hp
+	enemy.attack_min = 1
+	enemy.attack_max = 1
 	enemy.configure_runtime_map_projection(
 		MAP_ID,
 		GroundUnit.ground_delta_gu_to_screen_delta_px,
