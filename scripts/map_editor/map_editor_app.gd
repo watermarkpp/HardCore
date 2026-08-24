@@ -286,6 +286,7 @@ func _build_ui() -> void:
 	sidebar.add_child(semantic_kind_option)
 	var content_label := Label.new(); content_label.text = "NPC / 怪物 / Boss / 特殊地图目录"; sidebar.add_child(content_label)
 	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.alignment = HORIZONTAL_ALIGNMENT_LEFT; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
+	_build_monster_picker()
 	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size.y = 150; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
 	semantic_detail_scroll = ScrollContainer.new()
 	semantic_detail_scroll.custom_minimum_size = Vector2(0, 180)
@@ -338,13 +339,13 @@ func _build_ui() -> void:
 	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大 10%", 1); asset_size_menu.add_item("缩小 10%", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始大小", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	_build_asset_delete_dialog()
 	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材 10%", 1); instance_size_menu.add_item("缩小当前地图素材 10%", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
-	_on_semantic_kind_selected(0)
 	var first_asset := _first_asset_tree_item()
 	if first_asset != null:
 		first_asset.select(0)
 		_activate_asset_tree_item(first_asset)
-	_activate_select_tool()
 	_build_monster_inspector_panel()
+	_on_semantic_kind_selected(0, false)
+	_activate_select_tool()
 
 
 func _field(parent: Control, label_text: String, initial: String) -> LineEdit:
@@ -2559,6 +2560,193 @@ func _show_semantic_entry_details(entry: Dictionary) -> void:
 			var raw_text := str(drop.get("raw_text", ""))
 			lines.append("  %d. %s" % [line_number, raw_text])
 	semantic_detail_label.text = "\n".join(lines)
+
+
+func _refresh_semantic_detail(entry: Variant) -> void:
+	if semantic_detail_label == null:
+		return
+	if not entry is Dictionary:
+		semantic_detail_label.text = ""
+		return
+	if entry.has("classification") or entry.has("monster_id"):
+		# Monster full details appear on hover via the floating inspector; keep
+		# the sidebar compact so 33/54/更多 drop rows never re-expand the panel.
+		semantic_detail_label.text = "鼠标悬浮下方怪物资料目录中的怪物名称，可预览完整属性与掉落。\n当前选择：%s" % str(entry.get("display_name", ""))
+		return
+	semantic_detail_label.text = "名称：%s\n角色：%s" % [
+		str(entry.get("display_name", entry.get("content_id", ""))),
+		_service_role_chinese(str(entry.get("service_role", "dialogue"))),
+	]
+
+func _build_monster_detail_text(entry: Dictionary) -> String:
+	var lines: Array[String] = []
+	lines.append("%s" % str(entry.get("display_name", "")))
+	lines.append("ID %d" % int(entry.get("monster_id", -1)))
+	lines.append("")
+	lines.append("分类：%s" % str(entry.get("classification", "")))
+	var placement_kind := str(entry.get("placement_kind", ""))
+	var placement_label := placement_kind
+	if placement_kind == "boss_spawn":
+		placement_label = "boss_spawn（Boss刷新）"
+	elif placement_kind == "monster_spawn":
+		placement_label = "monster_spawn（普通刷新）"
+	lines.append("实际放置语义：%s" % placement_label)
+	var authoring := bool(entry.get("authoring_allowed", false))
+	var ready := bool(entry.get("runtime_ready", false))
+	lines.append("作者可布置：%s" % ("是" if authoring else "否"))
+	lines.append("运行时闭环：%s" % ("是" if ready else "否"))
+	if not ready:
+		var rejection := str(entry.get("runtime_rejection_reason", "")).strip_edges()
+		if rejection.is_empty():
+			rejection = "未记录具体原因"
+		lines.append("运行时待闭环原因：")
+		for reason: String in rejection.split(";"):
+			var stripped := reason.strip_edges()
+			if not stripped.is_empty():
+				lines.append("　· %s" % stripped)
+	lines.append("")
+	lines.append("—— 属性 ——")
+	var attrs_verified := bool(entry.get("attributes_verified", false))
+	lines.append("属性状态：%s" % ("已验证" if attrs_verified else "参考数据，尚未完成主源核验"))
+	var has_stats := _entry_has_combat_stats(entry)
+	if has_stats:
+		lines.append("等级：%s" % _fmt_attr(entry.get("level")))
+		lines.append("生命：%s" % _fmt_attr(entry.get("hp")))
+		lines.append("攻击：%s - %s" % [_fmt_attr(entry.get("attack_min")), _fmt_attr(entry.get("attack_max"))])
+		lines.append("防御：%s - %s" % [_fmt_attr(entry.get("defense_min")), _fmt_attr(entry.get("defense_max"))])
+		lines.append("魔防：%s - %s" % [_fmt_attr(entry.get("magic_defense_min")), _fmt_attr(entry.get("magic_defense_max"))])
+		lines.append("经验：%s" % _fmt_attr(entry.get("experience")))
+		lines.append("AI：%s" % _fmt_attr(entry.get("ai_code")))
+		if not attrs_verified:
+			lines.append("（参考值，不代表已授权运行时放置。）")
+	else:
+		lines.append("未取得属性数据")
+	lines.append("")
+	lines.append("—— 美术与运行时 ——")
+	lines.append("运行时允许：%s" % ("是" if bool(entry.get("runtime_allowed", false)) else "否"))
+	var appearance_status := str(entry.get("appearance_status", ""))
+	lines.append("正式战斗美术：%s" % ("已闭环" if appearance_status == "formal" else ("未闭环（%s）" % appearance_status if not appearance_status.is_empty() else "未闭环")))
+	lines.append("外观档案：%s" % str(entry.get("appearance_profile_id", "")))
+	lines.append("")
+	lines.append("—— 掉落 ——")
+	lines.append("掉落槽数：%d" % int(entry.get("drop_entry_count", 0)))
+	lines.append("掉落状态：%s" % str(entry.get("drop_status", "")))
+	lines.append("掉落来源：%s" % str(entry.get("drop_source", "")))
+	lines.append("证据状态：%s" % str(entry.get("evidence_status", "")))
+	var drop_entries: Array = entry.get("drop_entries", [])
+	if not drop_entries.is_empty():
+		lines.append("")
+		lines.append("完整掉落（%d 槽）：" % drop_entries.size())
+		var index := 0
+		for row: Variant in drop_entries:
+			if not row is Dictionary:
+				continue
+			index += 1
+			var raw := str(row.get("raw_text", "")).strip_edges()
+			if raw.is_empty():
+				raw = "%s %s" % [str(row.get("chance", "")), str(row.get("item", ""))]
+				if row.has("gold"):
+					raw += " %d" % int(row.get("gold", 0))
+			var resolution := str(row.get("item_resolution_status", ""))
+			if not resolution.is_empty() and resolution != "resolved":
+				raw += "  [%s]" % resolution
+			lines.append("%03d  %s" % [index, raw])
+	else:
+		lines.append("完整掉落：无")
+	return "\n".join(lines)
+
+func _entry_has_combat_stats(entry: Dictionary) -> bool:
+	for key: String in ["level", "hp", "attack_min", "attack_max", "defense_min", "defense_max", "magic_defense_min", "magic_defense_max", "experience"]:
+		var value: Variant = entry.get(key, null)
+		if value != null and str(value) != "":
+			return true
+	return false
+
+func _fmt_attr(value: Variant) -> String:
+	if value == null or str(value) == "":
+		return "未取得"
+	return str(value)
+
+func _build_monster_inspector_panel() -> void:
+	monster_inspector_panel = PanelContainer.new()
+	monster_inspector_panel.visible = false
+	monster_inspector_panel.top_level = true
+	monster_inspector_panel.z_index = 100
+	monster_inspector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color(0.078, 0.086, 0.106, 1.0)
+	panel_style.border_color = Color(0.36, 0.42, 0.50, 1.0)
+	panel_style.set_border_width_all(1)
+	panel_style.set_corner_radius_all(4)
+	panel_style.set_content_margin_all(10)
+	monster_inspector_panel.add_theme_stylebox_override("panel", panel_style)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 8)
+	monster_inspector_panel.add_child(box)
+	var header := HBoxContainer.new()
+	box.add_child(header)
+	monster_inspector_title = Label.new()
+	monster_inspector_title.add_theme_font_size_override("font_size", 16)
+	monster_inspector_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(monster_inspector_title)
+	monster_inspector_close_button = Button.new()
+	monster_inspector_close_button.text = "×"
+	monster_inspector_close_button.tooltip_text = "关闭怪物资料面板（Esc）"
+	monster_inspector_close_button.pressed.connect(_close_monster_inspector)
+	header.add_child(monster_inspector_close_button)
+	# The RichTextLabel owns its vertical scrolling directly: no outer
+	# ScrollContainer wrapper, so the body always gets a real height.
+	monster_inspector_detail = RichTextLabel.new()
+	monster_inspector_detail.fit_content = false
+	monster_inspector_detail.scroll_active = true
+	monster_inspector_detail.selection_enabled = true
+	monster_inspector_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_inspector_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	monster_inspector_detail.custom_minimum_size = Vector2(0, 400)
+	box.add_child(monster_inspector_detail)
+	monster_inspector_close_timer = Timer.new()
+	monster_inspector_close_timer.one_shot = true
+	monster_inspector_close_timer.wait_time = 0.15
+	monster_inspector_close_timer.timeout.connect(_on_monster_inspector_close_timer_timeout)
+	add_child(monster_inspector_close_timer)
+	add_child(monster_inspector_panel)
+
+func _show_monster_inspector(entry: Dictionary) -> void:
+	if monster_inspector_panel == null:
+		return
+	monster_inspector_title.text = "%s　ID %d" % [str(entry.get("display_name", "")), int(entry.get("monster_id", -1))]
+	monster_inspector_detail.text = _build_monster_detail_text(entry)
+	monster_inspector_panel.visible = true
+	_layout_monster_inspector()
+	_cancel_monster_inspector_close()
+
+func _close_monster_inspector() -> void:
+	if monster_inspector_panel != null:
+		monster_inspector_panel.visible = false
+
+func _schedule_monster_inspector_close() -> void:
+	if monster_inspector_close_timer == null or not monster_inspector_close_timer.is_stopped():
+		return
+	monster_inspector_close_timer.start()
+
+func _cancel_monster_inspector_close() -> void:
+	if monster_inspector_close_timer == null:
+		return
+	monster_inspector_close_timer.stop()
+
+func _on_monster_inspector_close_timer_timeout() -> void:
+	_close_monster_inspector()
+
+func _layout_monster_inspector() -> void:
+	if monster_inspector_panel == null:
+		return
+	var viewport := get_viewport_rect().size
+	var width := 520.0
+	var height := minf(680.0, maxf(240.0, viewport.y - 80.0))
+	var x := minf(340.0, maxf(8.0, viewport.x - width - 12.0))
+	var y := minf(40.0, maxf(8.0, viewport.y - height - 12.0))
+	monster_inspector_panel.position = Vector2(x, y)
+	monster_inspector_panel.size = Vector2(width, height)
 
 
 func _service_role_chinese(role: String) -> String:

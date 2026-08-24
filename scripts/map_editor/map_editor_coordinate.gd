@@ -143,6 +143,19 @@ static func screen_position_px_to_grid_cell(
 	)
 
 
+static func world_to_tile(
+	world: Vector2,
+	design_size: Vector2i
+) -> Vector2:
+	# Legacy map-editor compatibility boundary.
+	# The historic `world` value is screen-space px;
+	# Ground GU remains the authoritative coordinate.
+	return screen_position_px_to_ground_position_gu(
+		world,
+		design_size
+	)
+
+
 static func world_to_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
 	var tile := world_to_tile(world, design_size)
 	return Vector2i(floori(tile.x), floori(tile.y))
