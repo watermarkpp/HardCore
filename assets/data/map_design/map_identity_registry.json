@@ -1,0 +1,548 @@
+{
+  "canonical_runtime_range": [
+    910001,
+    918006
+  ],
+  "contract_id": "hardcore.formal_map_identity.v1",
+  "formal_map_count": 67,
+  "maps": [
+    {
+      "display_name": "比奇省（单机重制）",
+      "legacy_map_id": "bich_province",
+      "legacy_runtime_map_id": 4,
+      "map_id": "world_bich_province",
+      "runtime_map_id": 910001,
+      "series": "world"
+    },
+    {
+      "display_name": "毒蛇山谷",
+      "legacy_map_id": "snake_valley",
+      "legacy_runtime_map_id": 338,
+      "map_id": "world_snake_valley",
+      "runtime_map_id": 910002,
+      "series": "world"
+    },
+    {
+      "display_name": "盟重省",
+      "legacy_map_id": "mengzhong_province",
+      "legacy_runtime_map_id": 478,
+      "map_id": "world_mengzhong_province",
+      "runtime_map_id": 910003,
+      "series": "world"
+    },
+    {
+      "display_name": "沃玛森林",
+      "legacy_map_id": "wooma_forest",
+      "legacy_runtime_map_id": 268,
+      "map_id": "world_wooma_forest",
+      "runtime_map_id": 910004,
+      "series": "world"
+    },
+    {
+      "display_name": "封魔谷",
+      "legacy_map_id": "fmg_1",
+      "legacy_runtime_map_id": 930100,
+      "map_id": "world_fengmo_valley",
+      "runtime_map_id": 910005,
+      "series": "world"
+    },
+    {
+      "display_name": "白日门",
+      "legacy_map_id": "brm_2",
+      "legacy_runtime_map_id": 97789,
+      "map_id": "world_white_day_gate",
+      "runtime_map_id": 910006,
+      "series": "world"
+    },
+    {
+      "display_name": "苍月岛",
+      "legacy_map_id": "cyd_1",
+      "legacy_runtime_map_id": 2000,
+      "map_id": "world_cangyue_island",
+      "runtime_map_id": 910007,
+      "series": "world"
+    },
+    {
+      "display_name": "兽人古墓一层",
+      "legacy_map_id": "orc_tomb_1",
+      "legacy_runtime_map_id": 217,
+      "map_id": "bich_orc_tomb_f1",
+      "runtime_map_id": 911001,
+      "series": "bich_orc_tomb"
+    },
+    {
+      "display_name": "兽人古墓二层",
+      "legacy_map_id": "orc_tomb_2",
+      "legacy_runtime_map_id": 218,
+      "map_id": "bich_orc_tomb_f2",
+      "runtime_map_id": 911002,
+      "series": "bich_orc_tomb"
+    },
+    {
+      "display_name": "兽人古墓三层",
+      "legacy_map_id": "orc_tomb_3",
+      "legacy_runtime_map_id": 221,
+      "map_id": "bich_orc_tomb_f3",
+      "runtime_map_id": 911003,
+      "series": "bich_orc_tomb"
+    },
+    {
+      "display_name": "矿区一层",
+      "legacy_map_id": "bich_mine_1",
+      "legacy_runtime_map_id": 406,
+      "map_id": "bich_mine_f1",
+      "runtime_map_id": 911101,
+      "series": "bich_mine"
+    },
+    {
+      "display_name": "矿区二层",
+      "legacy_map_id": "bich_mine_2",
+      "legacy_runtime_map_id": 408,
+      "map_id": "bich_mine_f2",
+      "runtime_map_id": 911102,
+      "series": "bich_mine"
+    },
+    {
+      "display_name": "尸王殿",
+      "legacy_map_id": "corpse_king_hall",
+      "legacy_runtime_map_id": 1578,
+      "map_id": "bich_corpse_king_hall",
+      "runtime_map_id": 911103,
+      "series": "bich_mine"
+    },
+    {
+      "display_name": "连接通道1",
+      "legacy_map_id": "connection_passage_1",
+      "legacy_runtime_map_id": 1544,
+      "map_id": "snake_mine_passage_1",
+      "runtime_map_id": 912001,
+      "series": "snake_mine"
+    },
+    {
+      "display_name": "连接通道2",
+      "legacy_map_id": "connection_passage_2",
+      "legacy_runtime_map_id": 1545,
+      "map_id": "snake_mine_passage_2",
+      "runtime_map_id": 912002,
+      "series": "snake_mine"
+    },
+    {
+      "display_name": "未知暗殿",
+      "legacy_map_id": "quest_1",
+      "legacy_runtime_map_id": 990100,
+      "map_id": "snake_unknown_dark_palace",
+      "runtime_map_id": 912003,
+      "series": "snake_mine"
+    },
+    {
+      "display_name": "石墓一层",
+      "legacy_map_id": "stone_tomb_1",
+      "legacy_runtime_map_id": 1198,
+      "map_id": "mengzhong_stone_tomb_f1",
+      "runtime_map_id": 913001,
+      "series": "mengzhong_stone_tomb"
+    },
+    {
+      "display_name": "石墓二层",
+      "legacy_map_id": "stone_tomb_2",
+      "legacy_runtime_map_id": 1199,
+      "map_id": "mengzhong_stone_tomb_f2",
+      "runtime_map_id": 913002,
+      "series": "mengzhong_stone_tomb"
+    },
+    {
+      "display_name": "石墓三层",
+      "legacy_map_id": "stone_tomb_3",
+      "legacy_runtime_map_id": 1200,
+      "map_id": "mengzhong_stone_tomb_f3",
+      "runtime_map_id": 913003,
+      "series": "mengzhong_stone_tomb"
+    },
+    {
+      "display_name": "石墓四层",
+      "legacy_map_id": "stone_tomb_4",
+      "legacy_runtime_map_id": 1201,
+      "map_id": "mengzhong_stone_tomb_f4",
+      "runtime_map_id": 913004,
+      "series": "mengzhong_stone_tomb"
+    },
+    {
+      "display_name": "祖玛寺庙一层",
+      "legacy_map_id": "zuma_temple_1",
+      "legacy_runtime_map_id": 660,
+      "map_id": "mengzhong_zuma_temple_f1",
+      "runtime_map_id": 913101,
+      "series": "mengzhong_zuma"
+    },
+    {
+      "display_name": "祖玛寺庙二层",
+      "legacy_map_id": "zuma_temple_2",
+      "legacy_runtime_map_id": 661,
+      "map_id": "mengzhong_zuma_temple_f2",
+      "runtime_map_id": 913102,
+      "series": "mengzhong_zuma"
+    },
+    {
+      "display_name": "祖玛寺庙三层",
+      "legacy_map_id": "zuma_temple_3",
+      "legacy_runtime_map_id": 662,
+      "map_id": "mengzhong_zuma_temple_f3",
+      "runtime_map_id": 913103,
+      "series": "mengzhong_zuma"
+    },
+    {
+      "display_name": "祖玛寺庙四层",
+      "legacy_map_id": "zuma_temple_4",
+      "legacy_runtime_map_id": 663,
+      "map_id": "mengzhong_zuma_temple_f4",
+      "runtime_map_id": 913104,
+      "series": "mengzhong_zuma"
+    },
+    {
+      "display_name": "祖玛阁",
+      "legacy_map_id": "zumage_1",
+      "legacy_runtime_map_id": 990100,
+      "map_id": "mengzhong_zuma_pavilion",
+      "runtime_map_id": 913105,
+      "series": "mengzhong_zuma"
+    },
+    {
+      "display_name": "祖玛教主之家",
+      "legacy_map_id": "zmjzzj_2",
+      "legacy_runtime_map_id": 990100,
+      "map_id": "mengzhong_zuma_leader_home",
+      "runtime_map_id": 913106,
+      "series": "mengzhong_zuma"
+    },
+    {
+      "display_name": "死亡山谷地牢",
+      "legacy_map_id": "swsg_2",
+      "legacy_runtime_map_id": 990106,
+      "map_id": "mengzhong_death_valley_dungeon",
+      "runtime_map_id": 913201,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "石棺材屋",
+      "legacy_map_id": "sgcw_2",
+      "legacy_runtime_map_id": 990100,
+      "map_id": "mengzhong_stone_coffin_room",
+      "runtime_map_id": 913202,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "黑暗地带",
+      "legacy_map_id": "hadd_2",
+      "legacy_runtime_map_id": 990104,
+      "map_id": "mengzhong_dark_area",
+      "runtime_map_id": 913203,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "生死之间",
+      "legacy_map_id": "between_life_and_death",
+      "legacy_runtime_map_id": 1446,
+      "map_id": "mengzhong_between_life_and_death",
+      "runtime_map_id": 913204,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "恐怖空间",
+      "legacy_map_id": "terror_space",
+      "legacy_runtime_map_id": 1450,
+      "map_id": "mengzhong_terror_space",
+      "runtime_map_id": 913205,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "一线天",
+      "legacy_map_id": "thin_sky_passage",
+      "legacy_runtime_map_id": 1451,
+      "map_id": "mengzhong_thin_sky_passage",
+      "runtime_map_id": 913206,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "死亡棺材",
+      "legacy_map_id": "death_coffin",
+      "legacy_runtime_map_id": 1383,
+      "map_id": "mengzhong_death_coffin",
+      "runtime_map_id": 913207,
+      "series": "mengzhong_death_valley"
+    },
+    {
+      "display_name": "崎路",
+      "legacy_map_id": "ql_1",
+      "legacy_runtime_map_id": 90100,
+      "map_id": "fengmo_forked_path",
+      "runtime_map_id": 914001,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "光芒回廊",
+      "legacy_map_id": "gmhl_1",
+      "legacy_runtime_map_id": 99450,
+      "map_id": "fengmo_light_corridor",
+      "runtime_map_id": 914002,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "雷霆之路",
+      "legacy_map_id": "gmhl_thunder_road",
+      "legacy_runtime_map_id": 99451,
+      "map_id": "fengmo_thunder_road",
+      "runtime_map_id": 914003,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "霸者大厅",
+      "legacy_map_id": "gmhl_bazhe_hall",
+      "legacy_runtime_map_id": 99452,
+      "map_id": "fengmo_bazhe_hall",
+      "runtime_map_id": 914004,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "纵横道",
+      "legacy_map_id": "gmhl_zonghengdao",
+      "legacy_runtime_map_id": 99453,
+      "map_id": "fengmo_zonghengdao",
+      "runtime_map_id": 914005,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "魔魂殿",
+      "legacy_map_id": "gmhl_mohun_dian",
+      "legacy_runtime_map_id": 99454,
+      "map_id": "fengmo_mohun_hall",
+      "runtime_map_id": 914006,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "炼狱回廊",
+      "legacy_map_id": "gmhl_purgatory_corridor",
+      "legacy_runtime_map_id": 99455,
+      "map_id": "fengmo_purgatory_corridor",
+      "runtime_map_id": 914007,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "封魔殿",
+      "legacy_map_id": "gmhl_fengmo_dian",
+      "legacy_runtime_map_id": 99456,
+      "map_id": "fengmo_final_hall",
+      "runtime_map_id": 914008,
+      "series": "fengmo_route"
+    },
+    {
+      "display_name": "沃玛寺庙一层",
+      "legacy_map_id": "wooma_temple_1",
+      "legacy_runtime_map_id": 313,
+      "map_id": "wooma_temple_f1",
+      "runtime_map_id": 915001,
+      "series": "wooma_temple"
+    },
+    {
+      "display_name": "沃玛寺庙二层",
+      "legacy_map_id": "wooma_temple_2",
+      "legacy_runtime_map_id": 314,
+      "map_id": "wooma_temple_f2",
+      "runtime_map_id": 915002,
+      "series": "wooma_temple"
+    },
+    {
+      "display_name": "沃玛教主大厅",
+      "legacy_map_id": "wooma_temple_3",
+      "legacy_runtime_map_id": 315,
+      "map_id": "wooma_temple_boss_hall",
+      "runtime_map_id": 915003,
+      "series": "wooma_temple"
+    },
+    {
+      "display_name": "赤月峡谷",
+      "legacy_map_id": "cyxg_2",
+      "legacy_runtime_map_id": 990330,
+      "map_id": "chiyue_valley",
+      "runtime_map_id": 916001,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "赤月峡谷广场",
+      "legacy_map_id": "cyxggc_2",
+      "legacy_runtime_map_id": 990280,
+      "map_id": "chiyue_valley_square",
+      "runtime_map_id": 916002,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "抉择之地",
+      "legacy_map_id": "chiyue_choice_land",
+      "legacy_runtime_map_id": 990280,
+      "map_id": "chiyue_choice_land",
+      "runtime_map_id": 916003,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "山谷密道A",
+      "legacy_map_id": "chiyue_valley_secret_passage_a",
+      "legacy_runtime_map_id": 990330,
+      "map_id": "chiyue_valley_secret_passage_a",
+      "runtime_map_id": 916004,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "山谷密道B",
+      "legacy_map_id": "chiyue_valley_secret_passage_b",
+      "legacy_runtime_map_id": 990330,
+      "map_id": "chiyue_valley_secret_passage_b",
+      "runtime_map_id": 916005,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "恶魔祭坛",
+      "legacy_map_id": "emjt_2",
+      "legacy_runtime_map_id": 945600,
+      "map_id": "chiyue_demon_altar",
+      "runtime_map_id": 916006,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "赤月魔穴",
+      "legacy_map_id": "cymx_2",
+      "legacy_runtime_map_id": 956780,
+      "map_id": "chiyue_red_moon_lair",
+      "runtime_map_id": 916007,
+      "series": "chiyue"
+    },
+    {
+      "display_name": "骨魔洞一层",
+      "legacy_map_id": "gmd_1",
+      "legacy_runtime_map_id": 99011,
+      "map_id": "cangyue_bone_cave_f1",
+      "runtime_map_id": 917001,
+      "series": "cangyue_bone_cave"
+    },
+    {
+      "display_name": "骨魔洞二层",
+      "legacy_map_id": "gmd_2",
+      "legacy_runtime_map_id": 99012,
+      "map_id": "cangyue_bone_cave_f2",
+      "runtime_map_id": 917002,
+      "series": "cangyue_bone_cave"
+    },
+    {
+      "display_name": "骨魔洞三层",
+      "legacy_map_id": "gmd_3",
+      "legacy_runtime_map_id": 99013,
+      "map_id": "cangyue_bone_cave_f3",
+      "runtime_map_id": 917003,
+      "series": "cangyue_bone_cave"
+    },
+    {
+      "display_name": "骨魔洞四层",
+      "legacy_map_id": "gmd_4",
+      "legacy_runtime_map_id": 99014,
+      "map_id": "cangyue_bone_cave_f4",
+      "runtime_map_id": 917004,
+      "series": "cangyue_bone_cave"
+    },
+    {
+      "display_name": "骨魔洞五层",
+      "legacy_map_id": "gmd_5",
+      "legacy_runtime_map_id": 99015,
+      "map_id": "cangyue_bone_cave_f5",
+      "runtime_map_id": 917005,
+      "series": "cangyue_bone_cave"
+    },
+    {
+      "display_name": "牛魔寺庙一层",
+      "legacy_map_id": "nmsm_1",
+      "legacy_runtime_map_id": 990177,
+      "map_id": "cangyue_bull_temple_f1",
+      "runtime_map_id": 917101,
+      "series": "cangyue_bull_temple"
+    },
+    {
+      "display_name": "牛魔寺庙二层",
+      "legacy_map_id": "nmsm_2",
+      "legacy_runtime_map_id": 990185,
+      "map_id": "cangyue_bull_temple_f2",
+      "runtime_map_id": 917102,
+      "series": "cangyue_bull_temple"
+    },
+    {
+      "display_name": "牛魔寺庙三层",
+      "legacy_map_id": "nmsm_3",
+      "legacy_runtime_map_id": 990186,
+      "map_id": "cangyue_bull_temple_f3",
+      "runtime_map_id": 917103,
+      "series": "cangyue_bull_temple"
+    },
+    {
+      "display_name": "牛魔寺庙四层",
+      "legacy_map_id": "nmsm_4",
+      "legacy_runtime_map_id": 990187,
+      "map_id": "cangyue_bull_temple_f4",
+      "runtime_map_id": 917104,
+      "series": "cangyue_bull_temple"
+    },
+    {
+      "display_name": "牛魔寺庙大厅",
+      "legacy_map_id": "nmsm_hall",
+      "legacy_runtime_map_id": 990188,
+      "map_id": "cangyue_bull_temple_hall",
+      "runtime_map_id": 917105,
+      "series": "cangyue_bull_temple"
+    },
+    {
+      "display_name": "困惑殿堂",
+      "legacy_map_id": "boss_2",
+      "legacy_runtime_map_id": 990100,
+      "map_id": "hidden_confusion_hall",
+      "runtime_map_id": 918001,
+      "series": "hidden_boss"
+    },
+    {
+      "display_name": "地狱烈焰",
+      "legacy_map_id": "dyly_2",
+      "legacy_runtime_map_id": 995566,
+      "map_id": "hidden_hellfire",
+      "runtime_map_id": 918002,
+      "series": "hidden_boss"
+    },
+    {
+      "display_name": "堕落坟场",
+      "legacy_map_id": "dlfc_2",
+      "legacy_runtime_map_id": 990220,
+      "map_id": "hidden_fallen_graveyard",
+      "runtime_map_id": 918003,
+      "series": "hidden_boss"
+    },
+    {
+      "display_name": "死亡神殿",
+      "legacy_map_id": "swsd_2",
+      "legacy_runtime_map_id": 992220,
+      "map_id": "hidden_death_temple",
+      "runtime_map_id": 918004,
+      "series": "hidden_boss"
+    },
+    {
+      "display_name": "深渊魔域",
+      "legacy_map_id": "symy_2",
+      "legacy_runtime_map_id": 991111,
+      "map_id": "hidden_abyss_domain",
+      "runtime_map_id": 918005,
+      "series": "hidden_boss"
+    },
+    {
+      "display_name": "钳虫巢穴",
+      "legacy_map_id": "qccx_2",
+      "legacy_runtime_map_id": 920100,
+      "map_id": "hidden_pincer_nest",
+      "runtime_map_id": 918006,
+      "series": "hidden_boss"
+    }
+  ],
+  "sandbox_excluded": "sandbox_64",
+  "schema_version": 1
+}

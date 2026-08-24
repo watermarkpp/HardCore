@@ -1,0 +1,330 @@
+{
+  "blank_chunk_policy": "virtual_shared_until_dirty",
+  "chunk_grid_size": [
+    5.0,
+    3.0
+  ],
+  "chunk_size_px": [
+    1024.0,
+    1024.0
+  ],
+  "chunks": [
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 164.0,
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        0.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_0.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 1888.0,
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        1.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 4269,
+      "chunk_id": "c_2_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        2.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_0.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 2171.0,
+      "chunk_id": "c_3_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        3.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_3_0.png",
+      "rect_px": [
+        3072.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_3_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 248.0,
+      "chunk_id": "c_4_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        4.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_4_0.png",
+      "rect_px": [
+        4096.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_4_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 1815.0,
+      "chunk_id": "c_0_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        0.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_1.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_1.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 5459.0,
+      "chunk_id": "c_1_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        1.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_1.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_1.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 6139.0,
+      "chunk_id": "c_2_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        2.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_1.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_1.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 4493.0,
+      "chunk_id": "c_3_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        3.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_3_1.png",
+      "rect_px": [
+        3072.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_3_1.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 2048.0,
+      "chunk_id": "c_4_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        4.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_4_1.png",
+      "rect_px": [
+        4096.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_4_1.json"
+    },
+    {
+      "chunk_id": "c_0_2",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        0.0,
+        2.0
+      ],
+      "materialized": false,
+      "rect_px": [
+        0.0,
+        2048.0,
+        1024.0,
+        512.0
+      ],
+      "state": "virtual"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 217.0,
+      "chunk_id": "c_1_2",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        1.0,
+        2.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_2.png",
+      "rect_px": [
+        1024.0,
+        2048.0,
+        1024.0,
+        512.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_2.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 1284.0,
+      "chunk_id": "c_2_2",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        2.0,
+        2.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_2.png",
+      "rect_px": [
+        2048.0,
+        2048.0,
+        1024.0,
+        512.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_2.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "ground.old_grass.001",
+      "baked_operation_count": 225.0,
+      "chunk_id": "c_3_2",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        3.0,
+        2.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_3_2.png",
+      "rect_px": [
+        3072.0,
+        2048.0,
+        1024.0,
+        512.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_3_2.json"
+    },
+    {
+      "chunk_id": "c_4_2",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        4.0,
+        2.0
+      ],
+      "materialized": false,
+      "rect_px": [
+        4096.0,
+        2048.0,
+        1024.0,
+        512.0
+      ],
+      "state": "virtual"
+    }
+  ],
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "ground.old_grass.001",
+  "design_size": [
+    80.0,
+    80.0
+  ],
+  "ground_pixel_size": [
+    5120.0,
+    2560.0
+  ],
+  "map_id": "world_bich_province",
+  "schema_version": 1.0
+}
