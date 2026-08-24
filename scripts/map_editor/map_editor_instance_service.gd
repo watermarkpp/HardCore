@@ -10,16 +10,24 @@ const MATERIAL_LAYER_NAMES := [
 ]
 const ROLE_DEFAULTS := {
 	"decoration": {"scene_intent": "visual_detail", "gameplay_role": "none", "placement_rule": "inside_map", "collision_policy": "none", "navigation_policy": "ignore"},
-	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
-	"building": {"scene_intent": "landmark", "gameplay_role": "service_or_landmark", "placement_rule": "non_overlapping", "collision_policy": "solid_footprint", "navigation_policy": "block_player_and_monster"},
+	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "inside_map", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
+	"building": {"scene_intent": "landmark", "gameplay_role": "service_or_landmark", "placement_rule": "inside_map", "collision_policy": "solid_footprint", "navigation_policy": "block_player_and_monster"},
 	"interactable": {"scene_intent": "visual_detail", "gameplay_role": "interactable", "placement_rule": "inside_map", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
-	"terrain": {"scene_intent": "terrain_boundary", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "terrain_stamp_generated", "navigation_policy": "block_player_and_monster"},
+	"terrain": {"scene_intent": "terrain_boundary", "gameplay_role": "navigation_blocker", "placement_rule": "inside_map", "collision_policy": "terrain_stamp_generated", "navigation_policy": "block_player_and_monster"},
 }
 const UNIFORM_VISUAL_SCALE_CONTRACT_ID := "maps.asset_visual_scale.base_relative_10pct.v1"
 const UNIFORM_VISUAL_SCALE_STEP := 0.10
 const MIN_RELATIVE_VISUAL_SCALE := 0.10
 const MIN_ABSOLUTE_VISUAL_SCALE := 0.05
 const MAX_ABSOLUTE_VISUAL_SCALE := 8.0
+const NEW_INSTANCE_COLLISION_POLICY_ID := (
+	"maps.new_instance_manual_collision_only_v1"
+)
+const MAP_PORTAL_NOTE_FIELD := "map_portal_note"
+const GENERATED_COLLISION_POLICIES := [
+	"terrain_stamp_generated",
+	"wall_cells_generated",
+]
 
 
 static func create_instance(document: Dictionary, asset_id: String, object_role: String, tile: Vector2i, layer := "object_base") -> Dictionary:
@@ -41,6 +49,18 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 		"anchor_px": [placement.placement_anchor_px.x,placement.placement_anchor_px.y], "placement_anchor_px":[placement.placement_anchor_px.x,placement.placement_anchor_px.y], "anchor_mode": asset.get("anchor_mode", "foot_tile"),
 		"placement_anchor_policy_id": str(asset.get("placement_anchor_policy_id", "")),
 		"footprint_tiles": asset.get("footprint_tiles", [1, 1]),
+		"visual_footprint_tiles": asset.get(
+			"visual_footprint_tiles",
+			asset.get("footprint_tiles", [1, 1])
+		),
+		"occupancy_footprint_tiles": asset.get(
+			"occupancy_footprint_tiles",
+			asset.get("footprint_tiles", [1, 1])
+		),
+		"base_footprint_tiles": asset.get(
+			"base_footprint_tiles",
+			asset.get("footprint_tiles", [1, 1])
+		),
 		"collision_policy": collision_policy,
 		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":collision_footprint,
 		"collision_cells": asset.get("collision_cells", []).duplicate(true),
@@ -63,6 +83,7 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 		Vector2i(int(design_raw[0]), int(design_raw[1])),
 		true
 	)
+	_apply_new_instance_collision_policy(instance, asset)
 	var layers: Dictionary = document.layers
 	var entries: Array = layers.get(layer, [])
 	entries.append(instance)
@@ -137,6 +158,9 @@ static func duplicate_instance_snapshot(
 	if not validation.ok:
 		return {"ok": false, "errors": validation.errors, "warnings": validation.warnings}
 	var duplicate := source_instance.duplicate(true)
+	# A portal note describes one concrete placed endpoint. A copied visual must
+	# be annotated independently so stale connection text is never propagated.
+	duplicate.erase(MAP_PORTAL_NOTE_FIELD)
 	duplicate["instance_id"] = _next_id(document)
 	duplicate["tile"] = [tile.x, tile.y]
 	duplicate["tile_anchor"] = [tile.x, tile.y]
@@ -148,6 +172,7 @@ static func duplicate_instance_snapshot(
 		asset,
 		Vector2i(int(design_raw[0]), int(design_raw[1]))
 	)
+	_apply_new_instance_collision_policy(duplicate, asset)
 	# A manual copy is independent from generated dungeon structure metadata.
 	for generated_key: String in ["generated_by", "structure_id", "structure_role"]:
 		duplicate.erase(generated_key)
@@ -157,6 +182,67 @@ static func duplicate_instance_snapshot(
 	layers[layer] = entries
 	document.layers = layers
 	return {"ok": true, "instance": duplicate, "warnings": validation.warnings}
+
+
+static func update_map_portal_note(
+	document: Dictionary,
+	instance_id: String,
+	note: String
+) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not bool(located.get("ok", false)):
+		return located
+	var instance: Dictionary = located.instance
+	var asset := MapAssetCatalogService.find_asset(
+		str(instance.get("asset_id", ""))
+	)
+	if (
+		str(asset.get("object_class", "")) != "map_entrance"
+		and str(asset.get("semantic_role", "")) != "map_portal"
+	):
+		return {"ok": false, "errors": ["instance_is_not_map_portal"]}
+	var normalized := note.strip_edges()
+	if normalized.is_empty():
+		instance.erase(MAP_PORTAL_NOTE_FIELD)
+	else:
+		instance[MAP_PORTAL_NOTE_FIELD] = normalized
+	_located_replace(document, located, instance)
+	return {
+		"ok": true,
+		"instance": instance,
+		"note": normalized,
+	}
+
+
+static func _apply_new_instance_collision_policy(
+	instance: Dictionary,
+	asset: Dictionary
+) -> bool:
+	var authored_policy := str(asset.get("collision_policy", "none"))
+	if authored_policy in GENERATED_COLLISION_POLICIES:
+		return false
+	var changed: bool = (
+		str(instance.get("collision_policy", "none")) != "none"
+		or str(instance.get("collision_profile_id", "none_visual")) != "none_visual"
+		or instance.get("collision_footprint_tiles", [0, 0]) != [0, 0]
+		or not (instance.get("collision_cells", []) as Array).is_empty()
+		or str(instance.get("navigation_policy", "ignore")) != "ignore"
+		or not bool(instance.get("manual_collision_expected", false))
+		or str(instance.get("map_collision_override", "default")) != "disabled"
+		or str(instance.get("collision_authority", "asset")) != "manual_by_user"
+		or str(instance.get("collision_policy_id", "")) \
+			!= NEW_INSTANCE_COLLISION_POLICY_ID
+	)
+	instance["collision_policy"] = "none"
+	instance["collision_profile_id"] = "none_visual"
+	instance["collision_footprint_tiles"] = [0, 0]
+	instance["collision_cells"] = []
+	instance["navigation_policy"] = "ignore"
+	instance["manual_collision_expected"] = true
+	instance["map_collision_override"] = "disabled"
+	instance["collision_authority"] = "manual_by_user"
+	instance["collision_policy_id"] = NEW_INSTANCE_COLLISION_POLICY_ID
+	return changed
 
 
 static func resize_instance(

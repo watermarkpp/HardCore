@@ -43,16 +43,9 @@ static func validate(
 		warnings.append("ground_brush_recommended_on_ground_base")
 	if str(asset.get("content_layer", "")) == "vanilla":
 		warnings.append("vanilla_asset_read_only_use_expansion_clone")
-	var collision_policy := str(asset.get("collision_policy", "none"))
-	if object_role == "building": collision_policy = "solid_footprint"
-	elif object_role == "obstacle": collision_policy = "preset"
-	if collision_policy != "none":
-		for existing: Dictionary in MapEditorInstanceService.all_instances(document):
-			if str(existing.get("instance_id", "")) == ignore_instance_id or str(existing.get("collision_policy", "none")) == "none":
-				continue
-			if _overlaps(anchor_tile, footprint_size, _tile(existing), _footprint(existing)):
-				errors.append("blocked_footprint_overlap:%s" % existing.instance_id)
-				break
+	# Visual overlap is allowed for every role. Collision/navigation is an
+	# independent instance contract; only boundary and asset checks above
+	# determine whether placement is valid.
 	return {"ok": errors.is_empty(), "level": "error" if not errors.is_empty() else "warning" if not warnings.is_empty() else "ok", "errors": errors, "warnings": warnings, "asset": asset, "footprint_tiles": [footprint_size.x, footprint_size.y]}
 
 
@@ -94,17 +87,3 @@ static func _is_within_map_bounds(
 		and placement_anchor.x < float(design_size.x)
 		and placement_anchor.y < float(design_size.y)
 	)
-
-
-static func _tile(instance: Dictionary) -> Vector2i:
-	var tile: Array = instance.get("tile", [0, 0])
-	return Vector2i(int(tile[0]), int(tile[1]))
-
-
-static func _footprint(instance: Dictionary) -> Vector2i:
-	var footprint: Array = instance.get("footprint_tiles", [1, 1])
-	return Vector2i(int(footprint[0]), int(footprint[1]))
-
-
-static func _overlaps(a_position: Vector2i, a_size: Vector2i, b_position: Vector2i, b_size: Vector2i) -> bool:
-	return Rect2i(a_position, a_size).intersects(Rect2i(b_position, b_size))

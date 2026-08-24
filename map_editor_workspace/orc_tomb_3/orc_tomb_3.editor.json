@@ -127,26 +127,7 @@
     "workspace_state": "res://map_editor_workspace/orc_tomb_3/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [
-      {
-        "boss_id": "boss.56",
-        "content_id": "boss.56",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "骷髅精灵",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000003",
-        "spawn_rule": "boss",
-        "tile": [
-          32.0,
-          3.0
-        ]
-      }
-    ],
+    "boss_spawn": [],
     "collision": [
       {
         "blocks_monster": true,
@@ -595,6 +576,54 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            2.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            2.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -634,54 +663,6 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          31.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          32.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          33.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          34.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          35.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          36.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
           27.0,
           13.0
         ]
@@ -708,14 +689,6 @@
         "tile": [
           2.0,
           23.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          24.0
         ]
       },
       {
@@ -771,7 +744,39 @@
         "source": "single_cell_erase",
         "tile": [
           2.0,
-          15.0
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          3.0
         ]
       }
     ],
@@ -908,8 +913,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5082,8 +5087,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5153,8 +5158,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5224,8 +5229,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5295,8 +5300,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5366,8 +5371,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5437,8 +5442,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5508,8 +5513,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5579,8 +5584,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5650,8 +5655,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5721,8 +5726,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",

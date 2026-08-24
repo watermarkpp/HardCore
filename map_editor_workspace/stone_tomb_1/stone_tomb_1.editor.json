@@ -577,6 +577,102 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            49.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7.0,
+            49.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            17.0,
+            24.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000037",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000038",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [],
@@ -596,6 +692,7 @@
         "connection_pair_id": "",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "盟重",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
         "one_way": false,
@@ -628,6 +725,7 @@
         "connection_pair_id": "",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "石墓二层",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
         "one_way": false,
@@ -656,219 +754,6 @@
     "monster_spawn": [],
     "npc_points": [],
     "object_base": [
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          50.0,
-          157.3333282470703
-        ],
-        "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 0.505263,
-        "instance_id": "inst_000103",
-        "layer": "object_base",
-        "manual_collision_expected": false,
-        "map_collision_override": "default",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "obstacle",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          50.0,
-          157.3333282470703
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.505263,
-          0.505263
-        ],
-        "scene_intent": "block_path",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          1.0,
-          49.0
-        ],
-        "tile_anchor": [
-          1.0,
-          49.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          50.0,
-          157.3333282470703
-        ],
-        "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 0.505263,
-        "instance_id": "inst_000104",
-        "layer": "object_base",
-        "manual_collision_expected": false,
-        "map_collision_override": "default",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "obstacle",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          50.0,
-          157.3333282470703
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.505263,
-          0.505263
-        ],
-        "scene_intent": "block_path",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          7.0,
-          49.0
-        ],
-        "tile_anchor": [
-          7.0,
-          49.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          50.0,
-          157.3333282470703
-        ],
-        "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 0.505263,
-        "instance_id": "inst_000105",
-        "layer": "object_base",
-        "manual_collision_expected": false,
-        "map_collision_override": "default",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "obstacle",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          50.0,
-          157.3333282470703
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.505263,
-          0.505263
-        ],
-        "scene_intent": "block_path",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          17.0,
-          24.0
-        ],
-        "tile_anchor": [
-          17.0,
-          24.0
-        ]
-      },
       {
         "anchor_mode": "tile_center",
         "anchor_px": [
@@ -1801,8 +1686,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          88.80001068115234,
-          88.5000228881836
+          111.0,
+          77.4000244140625
         ],
         "asset_id": "cave_dungeon.pottery_cluster_02",
         "collision_authority": "asset",
@@ -1819,7 +1704,7 @@
         "flip_y": false,
         "footprint_tiles": [
           3.0,
-          2.0
+          3.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -1838,7 +1723,7 @@
         "occlusion": false,
         "occupancy_footprint_tiles": [
           3.0,
-          2.0
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -1846,8 +1731,8 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          88.80001068115234,
-          88.5000228881836
+          111.0,
+          77.4000244140625
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1939,6 +1824,237 @@
           37.0,
           2.0
         ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          83.0,
+          361.6666564941406
+        ],
+        "asset_id": "user.ad858c6e7cd94cf1",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000121",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          83.0,
+          361.6666564941406
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.30000000000000016,
+          0.30000000000000016
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1.0,
+          49.0
+        ],
+        "tile_anchor": [
+          1.0,
+          49.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          83.0,
+          361.6666564941406
+        ],
+        "asset_id": "user.ad858c6e7cd94cf1",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000122",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          83.0,
+          361.6666564941406
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.30000000000000016,
+          0.30000000000000016
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          7.0,
+          49.0
+        ],
+        "tile_anchor": [
+          7.0,
+          49.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          83.0,
+          361.6666564941406
+        ],
+        "asset_id": "user.ad858c6e7cd94cf1",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000123",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          83.0,
+          361.6666564941406
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.30000000000000016,
+          0.30000000000000016
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          17.0,
+          24.0
+        ],
+        "tile_anchor": [
+          17.0,
+          24.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
       }
     ],
     "object_front": [],
@@ -1958,8 +2074,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2029,8 +2145,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2100,8 +2216,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2171,8 +2287,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2242,8 +2358,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2313,8 +2429,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2384,8 +2500,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2455,8 +2571,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2526,8 +2642,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2597,8 +2713,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2668,8 +2784,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2739,8 +2855,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2810,8 +2926,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2881,8 +2997,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2952,8 +3068,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3023,8 +3139,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3094,8 +3210,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3165,8 +3281,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3236,8 +3352,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3307,8 +3423,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3378,8 +3494,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3449,8 +3565,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3520,8 +3636,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3591,8 +3707,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3662,8 +3778,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3733,8 +3849,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3804,8 +3920,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3875,8 +3991,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3946,8 +4062,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4017,8 +4133,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4088,8 +4204,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4159,8 +4275,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4230,8 +4346,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4301,8 +4417,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4372,8 +4488,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4443,8 +4559,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4514,8 +4630,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4585,8 +4701,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4656,8 +4772,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4727,8 +4843,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4798,8 +4914,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4869,8 +4985,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -4940,8 +5056,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5011,8 +5127,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5082,8 +5198,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5153,8 +5269,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5224,8 +5340,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5295,8 +5411,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5366,8 +5482,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5437,8 +5553,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5508,8 +5624,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5579,8 +5695,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5650,8 +5766,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5721,8 +5837,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5792,8 +5908,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5863,8 +5979,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -5934,8 +6050,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6005,8 +6121,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6076,8 +6192,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6147,8 +6263,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6218,8 +6334,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6289,8 +6405,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6360,8 +6476,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6431,8 +6547,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6502,8 +6618,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6573,8 +6689,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6644,8 +6760,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6715,8 +6831,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6786,8 +6902,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6857,8 +6973,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6928,8 +7044,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -6999,8 +7115,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7070,8 +7186,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7141,8 +7257,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7212,8 +7328,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7283,8 +7399,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7354,8 +7470,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7425,8 +7541,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7496,8 +7612,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7567,8 +7683,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7638,8 +7754,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7709,8 +7825,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7780,8 +7896,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7851,8 +7967,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7922,8 +8038,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -7993,8 +8109,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8064,8 +8180,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8135,8 +8251,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8206,8 +8322,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8277,8 +8393,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8348,8 +8464,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8419,8 +8535,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8490,8 +8606,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8561,8 +8677,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8632,8 +8748,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8703,8 +8819,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8774,8 +8890,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8845,8 +8961,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8916,8 +9032,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -8987,8 +9103,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
