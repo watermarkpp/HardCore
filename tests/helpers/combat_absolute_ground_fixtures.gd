@@ -18,6 +18,7 @@ const FireWallControllerScript := preload(
 
 const DESIGN_256 := Vector2i(256, 256)
 const DESIGN_300x200 := Vector2i(300, 200)
+const FIXTURE_MONSTER_ID := 18
 
 
 static func map_center(design_size: Vector2i) -> Vector2:
@@ -65,17 +66,19 @@ static func make_enemy(
 	combat_radius_gu := 0.3
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{
-			"name": "p0_abs_%d" % serial,
-			"hp": 99999,
-			"attackMin": 1,
-			"attackMax": 1,
-			"level": 1,
-		},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"absolute-ground fixture canonical monster ID=%d must resolve" % FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, null, false)
+	# Spatial tests need durable targets and must not couple their result to the
+	# selected monster's authored combat stats. Identity remains canonical above;
+	# the high-HP test projection is applied only after setup.
+	enemy.max_hp = 99999
+	enemy.current_hp = enemy.max_hp
+	enemy.attack_min = 1
+	enemy.attack_max = 1
 	enemy.configure_runtime_map_projection(
 		map_id,
 		ground_to_screen(design_size),
