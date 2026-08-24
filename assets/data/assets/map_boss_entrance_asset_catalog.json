@@ -1,0 +1,813 @@
+{
+  "asset_schema_version": 2,
+  "catalog_id": "user_boss_map_entrance_pack_20260823_v1",
+  "display_name": "Boss地图出入口",
+  "package_id": "user_boss_map_entrance_pack_20260823_v1",
+  "package_version": 1,
+  "source_policy": "user_accepted_generated_transparent_assets",
+  "palette_path": "装饰物1/地图出入口",
+  "classification": "装饰物1/地图出入口",
+  "asset_count": 6,
+  "normalization": "alpha_trim_resize_448x320_pad4_v1",
+  "default_collision_policy": "none",
+  "assets": [
+    {
+      "asset_id": "user.boss_entrance.20260823.confusion_hall",
+      "display_name": "困惑殿堂入口",
+      "asset_type": "large_prop",
+      "category": "map_entrance",
+      "object_class": "map_entrance",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_confusion_hall.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_confusion_hall.png",
+      "canvas_size": [
+        456,
+        235
+      ],
+      "image_size": [
+        456,
+        235
+      ],
+      "visible_bounds_px": [
+        6,
+        6,
+        445,
+        222
+      ],
+      "selection_bounds_px": [
+        6,
+        6,
+        445,
+        222
+      ],
+      "anchor_px": [
+        228,
+        227
+      ],
+      "placement_anchor_px": [
+        228,
+        227
+      ],
+      "door_anchor_px": [
+        228,
+        227
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        7
+      ],
+      "visual_footprint_tiles": [
+        7,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        7
+      ],
+      "base_footprint_tiles": [
+        7,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "terrain",
+      "semantic_role": "map_portal",
+      "trigger_on_enter": true,
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "user_verified_alpha_bbox_bottom_center_v1",
+      "geometry_pending_manual": false,
+      "palette_path": "装饰物1/地图出入口",
+      "source_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-dd41a722-f10b-4eff-ac09-16a89f342b91.png",
+      "source_sha256": "a7b72dd3107f7b96899b836c0f11f83b585d7f1d88f070905c69abc676620c45",
+      "source_canvas": [
+        1774,
+        887
+      ],
+      "output_sha256": "53f2b1bdf44b7f66f265fefa7dec654aacffa4205d0bfc0e2ada42f1aaa203ba",
+      "thumbnail_source_sha256": "53f2b1bdf44b7f66f265fefa7dec654aacffa4205d0bfc0e2ada42f1aaa203ba",
+      "normalization": "alpha_trim_resize_448x320_pad4_v1",
+      "processing": {
+        "pipeline": "alpha_trim_resize_448x320_pad4_v1",
+        "alpha_threshold": 16,
+        "resize_max_px": [
+          448,
+          320
+        ],
+        "padding_px": 4,
+        "rgba_pixels_preserved": true,
+        "output_alpha_corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "map_entrance",
+        "boss_entrance",
+        "map_portal",
+        "user_palette",
+        "confusion_hall"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "requires_runtime_rotation": false,
+      "allow_flip": false,
+      "package_id": "user_boss_map_entrance_pack_20260823_v1",
+      "package_asset_id": "confusion_hall",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.boss_entrance.20260823.hellfire",
+      "display_name": "地狱烈焰入口",
+      "asset_type": "large_prop",
+      "category": "map_entrance",
+      "object_class": "map_entrance",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_hellfire.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_hellfire.png",
+      "canvas_size": [
+        456,
+        299
+      ],
+      "image_size": [
+        456,
+        299
+      ],
+      "visible_bounds_px": [
+        10,
+        23,
+        441,
+        240
+      ],
+      "selection_bounds_px": [
+        10,
+        23,
+        441,
+        240
+      ],
+      "anchor_px": [
+        230,
+        262
+      ],
+      "placement_anchor_px": [
+        230,
+        262
+      ],
+      "door_anchor_px": [
+        230,
+        262
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        8
+      ],
+      "visual_footprint_tiles": [
+        7,
+        8
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        8
+      ],
+      "base_footprint_tiles": [
+        7,
+        8
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "terrain",
+      "semantic_role": "map_portal",
+      "trigger_on_enter": true,
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "user_verified_alpha_bbox_bottom_center_v1",
+      "geometry_pending_manual": false,
+      "palette_path": "装饰物1/地图出入口",
+      "source_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-c1c3bdb7-30e0-4a04-a0ef-d8564bf7f6a5.png",
+      "source_sha256": "b8b82c8a1abafdc29053a9dc541b7e7b75b56f547bf7ab3d86016a424b540c13",
+      "source_canvas": [
+        1536,
+        1024
+      ],
+      "output_sha256": "6d045ea4a63c724c9064696899a44d84aa1340913da981d1b545e326b135cdce",
+      "thumbnail_source_sha256": "6d045ea4a63c724c9064696899a44d84aa1340913da981d1b545e326b135cdce",
+      "normalization": "alpha_trim_resize_448x320_pad4_v1",
+      "processing": {
+        "pipeline": "alpha_trim_resize_448x320_pad4_v1",
+        "alpha_threshold": 16,
+        "resize_max_px": [
+          448,
+          320
+        ],
+        "padding_px": 4,
+        "rgba_pixels_preserved": true,
+        "output_alpha_corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "map_entrance",
+        "boss_entrance",
+        "map_portal",
+        "user_palette",
+        "hellfire"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "requires_runtime_rotation": false,
+      "allow_flip": false,
+      "package_id": "user_boss_map_entrance_pack_20260823_v1",
+      "package_asset_id": "hellfire",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.boss_entrance.20260823.fallen_graveyard",
+      "display_name": "堕落坟场入口",
+      "asset_type": "large_prop",
+      "category": "map_entrance",
+      "object_class": "map_entrance",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_fallen_graveyard.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_fallen_graveyard.png",
+      "canvas_size": [
+        456,
+        260
+      ],
+      "image_size": [
+        456,
+        260
+      ],
+      "visible_bounds_px": [
+        5,
+        6,
+        445,
+        247
+      ],
+      "selection_bounds_px": [
+        5,
+        6,
+        445,
+        247
+      ],
+      "anchor_px": [
+        227,
+        252
+      ],
+      "placement_anchor_px": [
+        227,
+        252
+      ],
+      "door_anchor_px": [
+        227,
+        252
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        8
+      ],
+      "visual_footprint_tiles": [
+        7,
+        8
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        8
+      ],
+      "base_footprint_tiles": [
+        7,
+        8
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "terrain",
+      "semantic_role": "map_portal",
+      "trigger_on_enter": true,
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "user_verified_alpha_bbox_bottom_center_v1",
+      "geometry_pending_manual": false,
+      "palette_path": "装饰物1/地图出入口",
+      "source_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-c3838848-13c5-4cae-9da8-4d70c1716f77.png",
+      "source_sha256": "a62706b5cb7cb39db5f66ab7562cb49d09c1acd3590d4b142d34e40d44e9ff54",
+      "source_canvas": [
+        1672,
+        941
+      ],
+      "output_sha256": "35afc019520206f6877561741b13326c4702107f6682ff611ce7910ee5f42e9a",
+      "thumbnail_source_sha256": "35afc019520206f6877561741b13326c4702107f6682ff611ce7910ee5f42e9a",
+      "normalization": "alpha_trim_resize_448x320_pad4_v1",
+      "processing": {
+        "pipeline": "alpha_trim_resize_448x320_pad4_v1",
+        "alpha_threshold": 16,
+        "resize_max_px": [
+          448,
+          320
+        ],
+        "padding_px": 4,
+        "rgba_pixels_preserved": true,
+        "output_alpha_corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "map_entrance",
+        "boss_entrance",
+        "map_portal",
+        "user_palette",
+        "fallen_graveyard"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "requires_runtime_rotation": false,
+      "allow_flip": false,
+      "package_id": "user_boss_map_entrance_pack_20260823_v1",
+      "package_asset_id": "fallen_graveyard",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.boss_entrance.20260823.death_temple",
+      "display_name": "死亡神殿入口",
+      "asset_type": "large_prop",
+      "category": "map_entrance",
+      "object_class": "map_entrance",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_death_temple.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_death_temple.png",
+      "canvas_size": [
+        456,
+        233
+      ],
+      "image_size": [
+        456,
+        233
+      ],
+      "visible_bounds_px": [
+        5,
+        7,
+        443,
+        214
+      ],
+      "selection_bounds_px": [
+        5,
+        7,
+        443,
+        214
+      ],
+      "anchor_px": [
+        226,
+        220
+      ],
+      "placement_anchor_px": [
+        226,
+        220
+      ],
+      "door_anchor_px": [
+        226,
+        220
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        7
+      ],
+      "visual_footprint_tiles": [
+        7,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        7
+      ],
+      "base_footprint_tiles": [
+        7,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "terrain",
+      "semantic_role": "map_portal",
+      "trigger_on_enter": true,
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "user_verified_alpha_bbox_bottom_center_v1",
+      "geometry_pending_manual": false,
+      "palette_path": "装饰物1/地图出入口",
+      "source_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-dd170d96-cf30-4f54-98cd-a7d8aa19b913.png",
+      "source_sha256": "f744171a0a3e6ef233dab67ddf512c6acd85db7cdc136d4a30fc8b26c4aba7d7",
+      "source_canvas": [
+        1774,
+        887
+      ],
+      "output_sha256": "a06ff115cd69ec8f043dbdb556054680f99aec62a21a9c59da3df828f75404d9",
+      "thumbnail_source_sha256": "a06ff115cd69ec8f043dbdb556054680f99aec62a21a9c59da3df828f75404d9",
+      "normalization": "alpha_trim_resize_448x320_pad4_v1",
+      "processing": {
+        "pipeline": "alpha_trim_resize_448x320_pad4_v1",
+        "alpha_threshold": 16,
+        "resize_max_px": [
+          448,
+          320
+        ],
+        "padding_px": 4,
+        "rgba_pixels_preserved": true,
+        "output_alpha_corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "map_entrance",
+        "boss_entrance",
+        "map_portal",
+        "user_palette",
+        "death_temple"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "requires_runtime_rotation": false,
+      "allow_flip": false,
+      "package_id": "user_boss_map_entrance_pack_20260823_v1",
+      "package_asset_id": "death_temple",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.boss_entrance.20260823.abyss_domain",
+      "display_name": "深渊魔域入口",
+      "asset_type": "large_prop",
+      "category": "map_entrance",
+      "object_class": "map_entrance",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_abyss_domain.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_abyss_domain.png",
+      "canvas_size": [
+        456,
+        230
+      ],
+      "image_size": [
+        456,
+        230
+      ],
+      "visible_bounds_px": [
+        7,
+        24,
+        444,
+        188
+      ],
+      "selection_bounds_px": [
+        7,
+        24,
+        444,
+        188
+      ],
+      "anchor_px": [
+        229,
+        211
+      ],
+      "placement_anchor_px": [
+        229,
+        211
+      ],
+      "door_anchor_px": [
+        229,
+        211
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        6
+      ],
+      "visual_footprint_tiles": [
+        7,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        6
+      ],
+      "base_footprint_tiles": [
+        7,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "terrain",
+      "semantic_role": "map_portal",
+      "trigger_on_enter": true,
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "user_verified_alpha_bbox_bottom_center_v1",
+      "geometry_pending_manual": false,
+      "palette_path": "装饰物1/地图出入口",
+      "source_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-d06c1525-7797-4345-b5cf-31d690291934.png",
+      "source_sha256": "eb374e13dbe15ecd458ba635b9b9b0ff0132afb80f870359db14d7d5e09e78bc",
+      "source_canvas": [
+        1774,
+        887
+      ],
+      "output_sha256": "3c97dda1e30f3342f486986fe8cb07251bdaa16dc8ee987d45e872a2acfc5399",
+      "thumbnail_source_sha256": "3c97dda1e30f3342f486986fe8cb07251bdaa16dc8ee987d45e872a2acfc5399",
+      "normalization": "alpha_trim_resize_448x320_pad4_v1",
+      "processing": {
+        "pipeline": "alpha_trim_resize_448x320_pad4_v1",
+        "alpha_threshold": 16,
+        "resize_max_px": [
+          448,
+          320
+        ],
+        "padding_px": 4,
+        "rgba_pixels_preserved": true,
+        "output_alpha_corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "map_entrance",
+        "boss_entrance",
+        "map_portal",
+        "user_palette",
+        "abyss_domain"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "requires_runtime_rotation": false,
+      "allow_flip": false,
+      "package_id": "user_boss_map_entrance_pack_20260823_v1",
+      "package_asset_id": "abyss_domain",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "user.boss_entrance.20260823.pincer_nest",
+      "display_name": "钳虫巢穴入口",
+      "asset_type": "large_prop",
+      "category": "map_entrance",
+      "object_class": "map_entrance",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_pincer_nest.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_pincer_nest.png",
+      "canvas_size": [
+        456,
+        235
+      ],
+      "image_size": [
+        456,
+        235
+      ],
+      "visible_bounds_px": [
+        4,
+        6,
+        448,
+        221
+      ],
+      "selection_bounds_px": [
+        4,
+        6,
+        448,
+        221
+      ],
+      "anchor_px": [
+        228,
+        226
+      ],
+      "placement_anchor_px": [
+        228,
+        226
+      ],
+      "door_anchor_px": [
+        228,
+        226
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        7
+      ],
+      "visual_footprint_tiles": [
+        7,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        7
+      ],
+      "base_footprint_tiles": [
+        7,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "terrain",
+      "semantic_role": "map_portal",
+      "trigger_on_enter": true,
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "user_verified_alpha_bbox_bottom_center_v1",
+      "geometry_pending_manual": false,
+      "palette_path": "装饰物1/地图出入口",
+      "source_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-45c8910a-2707-4ab3-bacf-6d2c6885929a.png",
+      "source_sha256": "93503b8a4d897b3ced4660cb6a42c4dc6ecaf0f09c1dd964453e6d58f42ca11d",
+      "source_canvas": [
+        1774,
+        887
+      ],
+      "output_sha256": "3bf89e7c9c5bebbdca9eccbc22772d7af02b775e145a616787646b4af14e2517",
+      "thumbnail_source_sha256": "3bf89e7c9c5bebbdca9eccbc22772d7af02b775e145a616787646b4af14e2517",
+      "normalization": "alpha_trim_resize_448x320_pad4_v1",
+      "processing": {
+        "pipeline": "alpha_trim_resize_448x320_pad4_v1",
+        "alpha_threshold": 16,
+        "resize_max_px": [
+          448,
+          320
+        ],
+        "padding_px": 4,
+        "rgba_pixels_preserved": true,
+        "output_alpha_corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "map_entrance",
+        "boss_entrance",
+        "map_portal",
+        "user_palette",
+        "pincer_nest"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "requires_runtime_rotation": false,
+      "allow_flip": false,
+      "package_id": "user_boss_map_entrance_pack_20260823_v1",
+      "package_asset_id": "pincer_nest",
+      "projection": "orthographic_isometric_2_to_1"
+    }
+  ]
+}

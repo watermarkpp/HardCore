@@ -28,13 +28,9 @@
       16.0,
       16.0
     ],
-    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "default_connection_mode": "bidirectional",
-    "identity_contract_id": "hardcore.formal_map_identity.v1",
-    "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 1.0,
     "template_kind": "custom_empty_map",
     "workspace": "res://map_editor_workspace/chiyue_choice_land"
   },
@@ -65,7 +61,6 @@
     "workspace_manifest": "res://map_editor_workspace/chiyue_choice_land/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/chiyue_choice_land/ground/ground_state.json"
   },
-  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
     "boss_spawn": [],
     "collision": [
@@ -763,20 +758,18 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000001.chiyue_valley_square.map_exit_000002",
+        "connection_pair_id": "",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "赤月峡谷广场",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "portal.chiyue_choice_land.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "map_exit_000002",
-        "reciprocal_map_key": "chiyue_valley_square",
+        "reciprocal_exit_id": "",
+        "reciprocal_map_key": "",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -784,16 +777,9 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
-        "source_map_key": "chiyue_choice_land",
-        "target_configured": true,
-        "target_entrance_id": "map_exit_000002",
-        "target_map_id": 916002,
-        "target_map_key": "chiyue_valley_square",
-        "target_portal_id": "map_exit_000002",
-        "target_tile": [
-          45.0,
-          5.0
-        ],
+        "target_entrance_id": "",
+        "target_map_id": "",
+        "target_portal_id": "",
         "tile": [
           48.0,
           90.0
@@ -805,20 +791,18 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000002.chiyue_valley_secret_passage_a.map_exit_000001",
+        "connection_pair_id": "",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "山谷密道A",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
-        "official_connection_id": "portal.chiyue_choice_land.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "map_exit_000001",
-        "reciprocal_map_key": "chiyue_valley_secret_passage_a",
+        "reciprocal_exit_id": "",
+        "reciprocal_map_key": "",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -826,16 +810,9 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
-        "source_map_key": "chiyue_choice_land",
-        "target_configured": true,
-        "target_entrance_id": "map_exit_000001",
-        "target_map_id": 916004,
-        "target_map_key": "chiyue_valley_secret_passage_a",
-        "target_portal_id": "map_exit_000001",
-        "target_tile": [
-          22.0,
-          118.0
-        ],
+        "target_entrance_id": "",
+        "target_map_id": "",
+        "target_portal_id": "",
         "tile": [
           45.0,
           5.0
@@ -847,20 +824,18 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000003.chiyue_valley_secret_passage_b.map_exit_000001",
+        "connection_pair_id": "",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "山谷密道B",
         "exit_id": "map_exit_000003",
         "kind": "map_exit",
-        "official_connection_id": "portal.chiyue_choice_land.map_exit_000003",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "map_exit_000001",
-        "reciprocal_map_key": "chiyue_valley_secret_passage_b",
+        "reciprocal_exit_id": "",
+        "reciprocal_map_key": "",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -868,26 +843,112 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
-        "source_map_key": "chiyue_choice_land",
-        "target_configured": true,
-        "target_entrance_id": "map_exit_000001",
-        "target_map_id": 916005,
-        "target_map_key": "chiyue_valley_secret_passage_b",
-        "target_portal_id": "map_exit_000001",
-        "target_tile": [
-          22.0,
-          118.0
-        ],
+        "target_entrance_id": "",
+        "target_map_id": "",
+        "target_portal_id": "",
         "tile": [
-          87,
-          40
+          87.0,
+          40.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
     "monster_spawn": [],
-    "npc_points": [],
+    "npc_points": [
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.expansion.bich_pharmacist",
+        "content_layer": "personal_expansion",
+        "display_name": "药剂商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.expansion.bich_pharmacist",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000001",
+        "placement_anchor_px": [
+          32,
+          48
+        ],
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000001",
+        "service_identity_id": "npc.service.pharmacist.v1",
+        "service_role": "shop",
+        "tile": [
+          23,
+          28
+        ],
+        "tile_anchor": [
+          23,
+          28
+        ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.4.001",
+        "content_layer": "personal_expansion",
+        "display_name": "杂货商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.4.001",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000002",
+        "placement_anchor_px": [
+          32,
+          48
+        ],
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000002",
+        "service_identity_id": "npc.service.general_vendor.v1",
+        "service_role": "shop",
+        "tile": [
+          28,
+          23
+        ],
+        "tile_anchor": [
+          28,
+          23
+        ]
+      }
+    ],
     "object_base": [
       {
         "anchor_mode": "foot_tile",
@@ -3005,8 +3066,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3058,12 +3119,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          86,
-          39
+          86.0,
+          39.0
         ],
         "tile_anchor": [
-          86,
-          39
+          86.0,
+          39.0
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -17380,10 +17441,8 @@
     ],
     "terrain_front": []
   },
-  "legacy_map_id": "chiyue_choice_land",
-  "legacy_runtime_map_id": 990280,
   "map_id": "chiyue_choice_land",
-  "runtime_map_id": 916003,
+  "runtime_map_id": 990280.0,
   "schema_version": 4.0,
   "source_policy": "expansion_editable"
 }

@@ -701,7 +701,9 @@ static func _compile(
 	var instances: Array = []
 	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
 		if bool(instance.get("runtime_export", true)):
-			instances.append(instance.duplicate(true))
+			var runtime_instance := instance.duplicate(true)
+			runtime_instance.erase(MapEditorInstanceService.MAP_PORTAL_NOTE_FIELD)
+			instances.append(runtime_instance)
 	var blocked: Array = walkability.get("blocked_tiles", {}).keys()
 	blocked.sort()
 	var output := {

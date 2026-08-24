@@ -19,6 +19,9 @@ var open_template_button: Button
 var create_map_button: Button
 var create_map_dialog: ConfirmationDialog
 var create_dialog_submit_button: Button
+var delete_map_dialog: ConfirmationDialog
+var delete_map_button: Button
+var pending_map_template_delete: Dictionary = {}
 var create_chunk_x: SpinBox
 var create_chunk_y: SpinBox
 var create_size_preview: Label
@@ -46,6 +49,8 @@ var calibration_footprint_y: SpinBox
 var calibration_collision: OptionButton
 var calibration_occlusion: CheckBox
 var object_role_option: OptionButton
+var map_portal_note_container: VBoxContainer
+var map_portal_note_edit: LineEdit
 var collision_shape_option: OptionButton
 var collision_draw_toggle: CheckBox
 var collision_erase_toggle: CheckBox
@@ -57,6 +62,11 @@ var safe_polygon_points: Array[Vector2i] = []
 var semantic_kind_option: OptionButton
 var semantic_content_id: LineEdit
 var semantic_content_option: OptionButton
+var monster_picker_button: Button
+var monster_picker_popup: PanelContainer
+var monster_picker_list: ItemList
+var monster_picker_shield: Button
+var monster_picker_entries: Array[Dictionary] = []
 var semantic_display_name: LineEdit
 var semantic_target_map: LineEdit
 var semantic_target_entrance: LineEdit
@@ -69,6 +79,15 @@ var semantic_place_toggle: CheckBox
 var semantic_catalog_tree: Tree
 var semantic_detail_scroll: ScrollContainer
 var semantic_detail_label: Label
+var sidebar_scroll: ScrollContainer
+var sidebar: VBoxContainer
+var monster_inspector_panel: PanelContainer
+var monster_inspector_title: Label
+var monster_inspector_detail: RichTextLabel
+var monster_inspector_close_button: Button
+var monster_inspector_close_timer: Timer
+var monster_hover_suppressed_id := -1
+var _last_hovered_monster_id := -1
 var random_region_fill_toggle: CheckBox
 var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
@@ -89,10 +108,16 @@ var startup_document_load_started := false
 var startup_document_load_finished := false
 
 
-func _notification(what:int)->void:
-	if what==NOTIFICATION_WM_CLOSE_REQUEST and get_tree()!=null and get_tree().current_scene==self:
-		if not current_document.is_empty(): _save_current_document()
-		get_tree().quit()
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_WM_CLOSE_REQUEST:
+		return
+
+	if not current_document.is_empty():
+		_save_current_document()
+
+	var tree := get_tree()
+	if tree != null:
+		tree.quit()
 
 
 func _ready() -> void:
@@ -129,6 +154,7 @@ func _load_default_workspace_deferred() -> void:
 
 
 func _process(delta: float) -> void:
+	_poll_monster_hover()
 	if _last_build_candidate.is_empty():
 		_candidate_validation_elapsed = 0.0
 		return
@@ -159,12 +185,15 @@ func _build_ui() -> void:
 	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 12)
 	layout.add_theme_constant_override("separation", 12)
 	add_child(layout)
-	var sidebar_scroll := ScrollContainer.new()
-	sidebar_scroll.custom_minimum_size.x = 310
+	sidebar_scroll = ScrollContainer.new()
+	sidebar_scroll.custom_minimum_size.x = 320
+	sidebar_scroll.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	sidebar_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sidebar_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	layout.add_child(sidebar_scroll)
-	var sidebar := VBoxContainer.new()
-	sidebar.custom_minimum_size.x = 290
+	sidebar = VBoxContainer.new()
+	sidebar.custom_minimum_size.x = 320
+	sidebar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sidebar.add_theme_constant_override("separation", 8)
 	sidebar_scroll.add_child(sidebar)
 	var title := Label.new(); title.text = "MSE-V3.5.1 场景编辑器"; title.add_theme_font_size_override("font_size", 15); sidebar.add_child(title)
@@ -185,10 +214,12 @@ func _build_ui() -> void:
 	template_info_label = Label.new(); template_info_label.modulate = Color("9da7b3"); map_actions.add_child(template_info_label)
 	open_template_button = Button.new(); open_template_button.text = "打开地图模板"; open_template_button.pressed.connect(_on_open_template_pressed); map_actions.add_child(open_template_button)
 	create_map_button = Button.new(); create_map_button.text = "创建地图模板"; create_map_button.pressed.connect(_on_create_map_dialog_requested); map_actions.add_child(create_map_button)
+	delete_map_button = Button.new(); delete_map_button.text = "删除当前地图模板"; delete_map_button.pressed.connect(_on_delete_map_pressed); map_actions.add_child(delete_map_button)
 	var reload_button := Button.new(); reload_button.text = "重新载入当前地图"; reload_button.pressed.connect(_on_open_pressed); map_actions.add_child(reload_button)
 	size_label = Label.new(); size_label.text = "设计尺寸：-"; map_actions.add_child(size_label)
 	path_label = Label.new(); path_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; path_label.modulate = Color("8fb9c7"); map_actions.add_child(path_label)
 	_build_create_map_dialog()
+	_build_delete_map_dialog()
 	map_template_option.item_selected.connect(_on_map_template_selected)
 	if map_template_option.item_count > 0:
 		_on_map_template_selected(map_template_option.selected)
@@ -207,6 +238,23 @@ func _build_ui() -> void:
 	sidebar.add_child(wall_loop_button)
 	_build_wall_loop_dialog()
 	var select_button:=Button.new(); select_button.text="选择工具（悬停高亮／左键选取／方向键移动）"; select_button.pressed.connect(_activate_select_tool); sidebar.add_child(select_button)
+	map_portal_note_container = VBoxContainer.new()
+	map_portal_note_container.visible = false
+	var map_portal_note_label := Label.new()
+	map_portal_note_label.text = "选中地图出入口的备注"
+	map_portal_note_container.add_child(map_portal_note_label)
+	map_portal_note_edit = LineEdit.new()
+	map_portal_note_edit.placeholder_text = "例如：N方向连接祖玛寺庙二层 S方向入口"
+	map_portal_note_edit.max_length = 1024
+	map_portal_note_edit.text_submitted.connect(_on_map_portal_note_submitted)
+	map_portal_note_container.add_child(map_portal_note_edit)
+	var save_map_portal_note_button := Button.new()
+	save_map_portal_note_button.text = "保存选中入口备注"
+	save_map_portal_note_button.pressed.connect(
+		_on_save_selected_map_portal_note_pressed
+	)
+	map_portal_note_container.add_child(save_map_portal_note_button)
+	sidebar.add_child(map_portal_note_container)
 	random_region_fill_toggle = CheckBox.new(); random_region_fill_toggle.text = "自由套索选择模式"; random_region_fill_toggle.toggled.connect(_on_lasso_mode_toggled); sidebar.add_child(random_region_fill_toggle)
 	point_erase_toggle = CheckBox.new(); point_erase_toggle.text = "点选/拖动擦除地面和对象"; point_erase_toggle.toggled.connect(_on_point_erase_toggled); sidebar.add_child(point_erase_toggle)
 	var role_label := Label.new(); role_label.text = "对象语义角色"; sidebar.add_child(role_label)
@@ -287,15 +335,16 @@ func _build_ui() -> void:
 	preview.clipboard_paste_requested.connect(_on_clipboard_paste_requested)
 	preview.clipboard_paste_cancelled.connect(_on_clipboard_paste_cancelled)
 	region_fill_menu = PopupMenu.new(); region_fill_menu.add_item("用素材列表已选地面随机填充", 1); region_fill_menu.add_item("删除套索内地面和对象", 3); region_fill_menu.add_separator(); region_fill_menu.add_item("取消", 2); region_fill_menu.id_pressed.connect(_on_region_fill_menu_pressed); add_child(region_fill_menu)
-	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
+	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大 10%", 1); asset_size_menu.add_item("缩小 10%", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始大小", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	_build_asset_delete_dialog()
-	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
+	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材 10%", 1); instance_size_menu.add_item("缩小当前地图素材 10%", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
 	_on_semantic_kind_selected(0)
 	var first_asset := _first_asset_tree_item()
 	if first_asset != null:
 		first_asset.select(0)
 		_activate_asset_tree_item(first_asset)
 	_activate_select_tool()
+	_build_monster_inspector_panel()
 
 
 func _field(parent: Control, label_text: String, initial: String) -> LineEdit:
@@ -352,6 +401,20 @@ func _build_create_map_dialog() -> void:
 	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(create_map_dialog.hide); actions.add_child(cancel_button)
 	create_dialog_submit_button = Button.new(); create_dialog_submit_button.text = "创建地图模板"; create_dialog_submit_button.pressed.connect(_on_create_pressed); actions.add_child(create_dialog_submit_button)
 	_refresh_create_size_preview()
+
+
+func _build_delete_map_dialog() -> void:
+	delete_map_dialog = ConfirmationDialog.new()
+	delete_map_dialog.title = "彻底删除地图模板"
+	delete_map_dialog.dialog_text = ""
+	delete_map_dialog.min_size = Vector2i(520, 260)
+
+	delete_map_dialog.get_ok_button().text = "彻底删除"
+	delete_map_dialog.get_cancel_button().text = "取消"
+
+	delete_map_dialog.confirmed.connect(_on_delete_map_confirmed)
+
+	add_child(delete_map_dialog)
 
 
 func _build_asset_delete_dialog() -> void:
@@ -516,6 +579,7 @@ func _on_create_pressed() -> void:
 	var target_path := MapEditorSaveService.default_path(map_id)
 	var ground_manifest_path := "res://map_editor_workspace/%s/ground/ground_manifest.json" % map_id
 	if FileAccess.file_exists(target_path) or FileAccess.file_exists(ground_manifest_path):
+		create_map_dialog.dialog_text = "地图 ID「%s」已存在！请更换地图 ID，或关闭本窗口后在地图模板下拉菜单中找到并打开它。" % map_id
 		status_label.text = "创建地图模板失败：地图工作区 %s 已存在，请勿重复创建" % map_id
 		return
 	var map_type := str(map_type_option.get_item_metadata(map_type_option.selected))
@@ -524,39 +588,409 @@ func _on_create_pressed() -> void:
 	_adopt_new_document(document, "已创建地图模板")
 	var saved := _save_current_document()
 	if saved.get("ok", false):
+		_refresh_map_template_options()
+		_select_template_for_map_id(map_id)
 		status_label.text = "地图模板已创建、打开并保存：%s（%d×%d Chunk）" % [display_name, chunk_grid.x, chunk_grid.y]
 		create_map_dialog.hide()
 	else:
 		status_label.text = "地图模板已创建但保存失败：%s" % saved.get("errors", [])
 
 
+func _selected_map_template_delete_target() -> Dictionary:
+	if map_template_option == null:
+		return {}
+
+	var index := map_template_option.selected
+	if index < 0 or index >= map_template_option.item_count:
+		return {}
+
+	var meta: Variant = map_template_option.get_item_metadata(index)
+
+	# 用户创建的 workspace 地图
+	if meta is Dictionary:
+		var workspace_meta: Dictionary = meta
+
+		if str(workspace_meta.get("kind", "")) != "workspace":
+			return {}
+
+		var workspace_map_id := str(workspace_meta.get("map_id", ""))
+		if workspace_map_id.is_empty():
+			return {}
+
+		var matching_template := MapDesignCatalogService.find_blank_template_by_map_id(
+			workspace_map_id
+		)
+
+		return {
+			"kind": "workspace",
+			"map_id": workspace_map_id,
+			"template_id": str(
+				matching_template.get("template_id", "")
+			),
+			"display_name": str(
+				workspace_meta.get(
+					"display_name",
+					workspace_map_id
+				)
+			),
+			"path": str(
+				workspace_meta.get(
+					"path",
+					MapEditorSaveService.default_path(workspace_map_id)
+				)
+			),
+		}
+
+	# 内置 / blank template
+	var template_id := str(meta)
+	if template_id.is_empty():
+		return {}
+
+	var template := MapDesignCatalogService.find_blank_template(template_id)
+	if template.is_empty():
+		return {}
+
+	var template_map_id := str(template.get("map_id", ""))
+	if template_map_id.is_empty():
+		return {}
+
+	return {
+		"kind": "blank_template",
+		"map_id": template_map_id,
+		"template_id": template_id,
+		"display_name": str(
+			template.get(
+				"display_name",
+				template_map_id
+			)
+		),
+		"path": MapEditorSaveService.default_path(template_map_id),
+	}
+
+
+func _on_delete_map_pressed() -> void:
+	var target := _selected_map_template_delete_target()
+
+	if target.is_empty():
+		status_label.text = "请选择一个有效的地图模板"
+		return
+
+	pending_map_template_delete = target.duplicate(true)
+
+	var display_name := str(target.get("display_name", ""))
+	var map_id := str(target.get("map_id", ""))
+	var template_id := str(target.get("template_id", ""))
+
+	var template_line := "无独立模板定义"
+	if not template_id.is_empty():
+		template_line = template_id
+
+	delete_map_dialog.dialog_text = (
+		"确定彻底删除地图模板？\n\n"
+		+ "名称：%s\n" % display_name
+		+ "地图 ID：%s\n" % map_id
+		+ "模板 ID：%s\n\n" % template_line
+		+ "将删除：\n"
+		+ "• 地图编辑器模板定义（如果存在）\n"
+		+ "• map_editor_workspace/%s/ 工作区（如果存在）\n\n" % map_id
+		+ "不会删除 map_design_catalog.json 中的世界地图身份。\n\n"
+		+ "删除后可以重新使用相同名称和相同 map_id 创建地图模板。\n\n"
+		+ "此操作不可通过编辑器撤销。"
+	)
+
+	delete_map_dialog.popup_centered(Vector2i(560, 320))
+
+
+func _on_delete_map_confirmed() -> void:
+	if pending_map_template_delete.is_empty():
+		return
+
+	var target := pending_map_template_delete.duplicate(true)
+	pending_map_template_delete.clear()
+
+	var map_id := str(target.get("map_id", ""))
+	var template_id := str(target.get("template_id", ""))
+	var display_name := str(
+		target.get(
+			"display_name",
+			map_id
+		)
+	)
+
+	if map_id.is_empty():
+		status_label.text = "删除地图模板失败：map_id 为空"
+		return
+
+	var template_deleted := false
+	var workspace_deleted := false
+	var errors: Array[String] = []
+
+	# ---------------------------------------------------------
+	# 1. 删除 blank template 定义
+	# ---------------------------------------------------------
+
+	var template_result := MapDesignCatalogService.delete_blank_template(
+		template_id,
+		map_id
+	)
+
+	if bool(template_result.get("ok", false)):
+		template_deleted = true
+	else:
+		var template_errors: Array = template_result.get("errors", [])
+
+		# 没有 blank template 是允许的：
+		# 用户自建 workspace 本身可能没有 template entry。
+		if not template_errors.has("template_not_found"):
+			errors.append_array(
+				_to_string_array(template_errors)
+			)
+
+	# ---------------------------------------------------------
+	# 2. 删除该 map_id 的整个 workspace
+	# ---------------------------------------------------------
+
+	var workspace_result := MapEditorSaveService.delete_workspace_map(
+		map_id
+	)
+
+	if bool(workspace_result.get("ok", false)):
+		workspace_deleted = true
+	else:
+		var workspace_errors: Array = workspace_result.get(
+			"errors",
+			[]
+		)
+
+		# 没创建过 workspace 的 blank template：
+		# directory_not_found 属于正常情况。
+		if not workspace_errors.has("directory_not_found"):
+			errors.append_array(
+				_to_string_array(workspace_errors)
+			)
+
+	# ---------------------------------------------------------
+	# 3. 如果两种删除都失败，而且存在真实错误，则停止
+	# ---------------------------------------------------------
+
+	if (
+		not template_deleted
+		and not workspace_deleted
+		and not errors.is_empty()
+	):
+		status_label.text = "删除地图模板失败：%s" % errors
+		return
+
+	# ---------------------------------------------------------
+	# 4. 如果删除的是当前打开地图，彻底清空 session
+	# ---------------------------------------------------------
+
+	if str(current_document.get("map_id", "")) == map_id:
+		current_document = {}
+		current_document_path = ""
+
+		_reset_document_session_state()
+
+		if preview != null:
+			preview.set_document({})
+
+		_clear_deleted_last_document_path(map_id)
+
+	# ---------------------------------------------------------
+	# 5. 刷新下拉菜单
+	# ---------------------------------------------------------
+
+	_refresh_map_template_options()
+
+	if map_template_option.item_count > 0:
+		map_template_option.select(0)
+
+		if template_info_label != null:
+			_on_map_template_selected(0)
+	else:
+		if template_info_label != null:
+			template_info_label.text = "当前没有地图模板"
+
+	var deleted_parts: Array[String] = []
+
+	if template_deleted:
+		deleted_parts.append("模板定义")
+
+	if workspace_deleted:
+		deleted_parts.append("工作区")
+
+	var deleted_text := "模板注册"
+	if not deleted_parts.is_empty():
+		deleted_text = "、".join(deleted_parts)
+
+	status_label.text = (
+		"地图模板已彻底删除：%s（%s）[%s]"
+		% [
+			display_name,
+			map_id,
+			deleted_text,
+		]
+	)
+
+
+func _to_string_array(values: Array) -> Array[String]:
+	var result: Array[String] = []
+
+	for value: Variant in values:
+		result.append(str(value))
+
+	return result
+
+
+func _clear_deleted_last_document_path(map_id: String) -> void:
+	if map_id.is_empty():
+		return
+
+	var saved_path := _load_last_document_path()
+
+	if saved_path.is_empty():
+		return
+
+	var expected_path := MapEditorSaveService.default_path(map_id)
+
+	if saved_path != expected_path:
+		return
+
+	var file := FileAccess.open(
+		LAST_DOCUMENT_PATH_FILE,
+		FileAccess.WRITE
+	)
+
+	if file == null:
+		return
+
+	file.store_string("")
+	file.flush()
+	file.close()
+
+
 func _on_create_map_dialog_requested() -> void:
 	display_name_edit.text = "新地图模板"
-	map_id_edit.text = "new_map"
 	runtime_id_edit.value = 990100
 	map_type_option.select(_find_type_index("quest_room"))
 	create_chunk_x.value = 5
 	create_chunk_y.value = 5
+	map_id_edit.text = _next_default_map_id(str(map_type_option.get_item_metadata(map_type_option.selected)))
 	_refresh_create_size_preview()
+	create_map_dialog.dialog_text = "填写地图模板名称、地图 ID，并选择地图占用多少个布局 Chunk。"
 	create_map_dialog.popup_centered(Vector2i(520, 330))
 	display_name_edit.grab_focus()
 	display_name_edit.select_all()
+
+
+func _next_default_map_id(map_type := "") -> String:
+	var base := _map_type_id_prefix(map_type)
+	var taken := _all_existing_map_ids()
+	var i := 1
+	while taken.has("%s_%d" % [base, i]):
+		i += 1
+	return "%s_%d" % [base, i]
+
+
+func _all_existing_map_ids() -> Dictionary:
+	var taken := {}
+
+	# 只把当前真实存在的 blank template 当作占用。
+	for template: Dictionary in MapDesignCatalogService.blank_templates():
+		var template_map_id := str(
+			template.get(
+				"map_id",
+				""
+			)
+		)
+
+		if not template_map_id.is_empty():
+			taken[template_map_id] = true
+
+	# 只把真实 workspace 目录当作占用。
+	var dir := DirAccess.open(
+		MapEditorSaveService.EDITOR_ROOT
+	)
+
+	if dir != null:
+		dir.list_dir_begin()
+
+		var name := dir.get_next()
+
+		while name != "":
+			if (
+				dir.current_is_dir()
+				and name != "."
+				and name != ".."
+			):
+				var editor_path := (
+					MapEditorSaveService.EDITOR_ROOT
+					+ name
+					+ "/"
+					+ name
+					+ ".editor.json"
+				)
+
+				if FileAccess.file_exists(editor_path):
+					taken[name] = true
+
+			name = dir.get_next()
+
+		dir.list_dir_end()
+
+	return taken
+
+
+func _map_type_id_prefix(map_type: String) -> String:
+	return {
+		"outdoor_province": "province",
+		"outdoor_field": "field",
+		"dungeon_floor": "dungeon",
+		"mine_floor": "mine",
+		"temple_floor": "temple",
+		"corridor": "corridor",
+		"maze_room": "maze",
+		"boss_room": "boss_room",
+		"quest_room": "quest",
+		"arena_room": "arena",
+		"shop_interior": "shop",
+		"palace_room": "palace",
+		"city_embedded": "city",
+		"bich_city_outdoor": "bich_city",
+	}.get(map_type, "custom_map")
 
 
 func _on_open_template_pressed() -> void:
 	if map_template_option.selected < 0:
 		status_label.text = "请选择要打开的地图模板"
 		return
-	var template_id := str(map_template_option.get_item_metadata(map_template_option.selected))
-	_open_template_by_id(template_id)
+	var meta: Variant = map_template_option.get_item_metadata(map_template_option.selected)
+	if meta is Dictionary and str(meta.get("kind", "")) == "workspace":
+		_open_workspace_map(meta)
+		return
+	_open_template_by_id(str(meta))
+
+
+func _open_workspace_map(meta: Dictionary) -> void:
+	var path := str(meta.get("path", ""))
+	if path.is_empty() or not FileAccess.file_exists(path):
+		status_label.text = "自建地图文件不存在：%s" % path
+		return
+	_open_document_path(path)
+
+
+func _template_option_key(meta: Variant) -> String:
+	if meta is Dictionary:
+		return "workspace::" + str(meta.get("map_id", ""))
+	return str(meta)
 
 
 func _refresh_map_template_options(preferred_template_id := "") -> void:
 	if map_template_option == null:
 		return
-	var selected_template_id := preferred_template_id
-	if selected_template_id.is_empty() and map_template_option.selected >= 0:
-		selected_template_id = str(map_template_option.get_item_metadata(map_template_option.selected))
+	var selected_key := preferred_template_id
+	if selected_key.is_empty() and map_template_option.selected >= 0:
+		selected_key = _template_option_key(map_template_option.get_item_metadata(map_template_option.selected))
 	map_template_option.clear()
 	var selected_index := 0
 	for template: Dictionary in MapDesignCatalogService.blank_templates():
@@ -572,7 +1006,22 @@ func _refresh_map_template_options(preferred_template_id := "") -> void:
 		var index := map_template_option.item_count - 1
 		var template_id := str(template.get("template_id", ""))
 		map_template_option.set_item_metadata(index, template_id)
-		if template_id == selected_template_id:
+		if template_id == selected_key:
+			selected_index = index
+	for workspace_map: Dictionary in MapEditorSaveService.list_workspace_maps():
+		var design_size: Array = workspace_map.get("design_size", [0, 0])
+		map_template_option.add_item(
+			"%s · %d×%d"
+			% [
+				str(workspace_map.get("display_name", workspace_map.get("map_id", ""))),
+				int(design_size[0]),
+				int(design_size[1]),
+			]
+		)
+		var index := map_template_option.item_count - 1
+		var meta := {"kind": "workspace", "map_id": str(workspace_map.get("map_id", "")), "display_name": str(workspace_map.get("display_name", "")), "design_size": design_size, "path": str(workspace_map.get("path", ""))}
+		map_template_option.set_item_metadata(index, meta)
+		if _template_option_key(meta) == selected_key:
 			selected_index = index
 	if map_template_option.item_count > 0:
 		map_template_option.select(selected_index)
@@ -607,21 +1056,32 @@ func _open_template_by_id(template_id: String, document_path := "", workspace_ov
 func _on_map_template_selected(index: int) -> void:
 	if index < 0 or index >= map_template_option.item_count:
 		return
-	var template_id := str(map_template_option.get_item_metadata(index))
-	var template := MapDesignCatalogService.find_blank_template(template_id)
-	if template.is_empty(): return
+	var meta: Variant = map_template_option.get_item_metadata(index)
+	if meta is Dictionary:
+		var design_size: Array = meta.get("design_size", [0, 0])
+		template_info_label.text = "自建地图：%d×%d 格；将直接打开已保存的地图" % [int(design_size[0]), int(design_size[1])]
+		return
+	var template := MapDesignCatalogService.find_blank_template(str(meta))
+	if template.is_empty():
+		return
 	var design_size: Array = template.get("design_size", [0, 0])
 	template_info_label.text = "所选模板：%d×%d 格；尚未创建时会自动新建并打开" % [int(design_size[0]), int(design_size[1])]
 
 
 func _select_template_for_map_id(map_id: String) -> void:
 	for index in map_template_option.item_count:
-		var template_id := str(map_template_option.get_item_metadata(index))
-		var template := MapDesignCatalogService.find_blank_template(template_id)
-		if str(template.get("map_id", "")) == map_id:
-			map_template_option.select(index)
-			_on_map_template_selected(index)
-			return
+		var meta: Variant = map_template_option.get_item_metadata(index)
+		if meta is Dictionary:
+			if str(meta.get("map_id", "")) == map_id:
+				map_template_option.select(index)
+				_on_map_template_selected(index)
+				return
+		else:
+			var template := MapDesignCatalogService.find_blank_template(str(meta))
+			if str(template.get("map_id", "")) == map_id:
+				map_template_option.select(index)
+				_on_map_template_selected(index)
+				return
 
 
 func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_name: String) -> void:
@@ -978,7 +1438,9 @@ func _on_asset_size_menu_pressed(action_id: int) -> void:
 		_refresh_asset_tree()
 		selected_asset_id = asset_size_menu_asset_id
 		preview.set_selected_brush(selected_asset_id)
-		status_label.text = "素材占位已调整为 %d×%d 格" % [new_fp[0], new_fp[1]]
+		var new_scale_val := float(draft.get("approved_scale", float(base.get("approved_scale", 1.0))))
+		var base_scale_val := float(base.get("approved_scale", 1.0))
+		status_label.text = "整体缩放：%d%%｜占地 %d×%d" % [roundi(new_scale_val / maxf(0.01, base_scale_val) * 100.0), new_fp[0], new_fp[1]]
 	else:
 		status_label.text = "素材尺寸调整失败：%s" % result.get("errors", [])
 
@@ -1023,20 +1485,19 @@ func _on_asset_delete_cancelled() -> void:
 
 
 static func build_asset_resize_draft(asset: Dictionary, base: Dictionary, action_id: int) -> Dictionary:
+	# Unified 10% visual scale contract shared with resize_instance so the
+	# asset library calibration and map instance scaling stay in lockstep.
 	var base_fp: Array = base.get("base_footprint_tiles", base.get("footprint_tiles", [1, 1]))
-	var current_fp: Array = asset.get("footprint_tiles", base_fp)
-	var inferred_level := int(current_fp[0]) - int(base_fp[0])
-	var level := int(asset.get("logical_scale_level", inferred_level))
-	if action_id == 1: level += 1
-	elif action_id == 2: level -= 1
-	else: level = 0
-	var new_fp := [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
-	# Once both dimensions have reached one tile, further shrinking is a no-op.
-	level = maxi(level, 1 - mini(int(base_fp[0]), int(base_fp[1])))
-	new_fp = [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
-	var current_scale := Vector2(float(asset.get("approved_scale", 1.0)), float(asset.get("approved_scale", 1.0)))
-	var next_scale := Vector2(float(base.get("approved_scale", 1.0)), float(base.get("approved_scale", 1.0))) if action_id == 3 \
-		else MapEditorInstanceService.resized_visual_scale(current_scale, current_fp, new_fp)
+	var base_scale := float(base.get("approved_scale", 1.0))
+	var current_scale := float(asset.get("approved_scale", base_scale))
+	var new_scale: float
+	if action_id == 3:
+		new_scale = base_scale
+	else:
+		var direction := 1 if action_id == 1 else -1
+		new_scale = MapEditorInstanceService.stepped_visual_scale(current_scale, base_scale, direction)
+	var new_fp: Array = MapEditorInstanceService.footprint_for_visual_scale(base_fp, base_scale, new_scale)
+	var level := roundi((new_scale / maxf(base_scale, 0.01) - 1.0) / MapEditorInstanceService.UNIFORM_VISUAL_SCALE_STEP)
 	var collision_probe := {
 		"collision_policy": str(asset.get("collision_policy", "none")),
 		"collision_footprint_tiles": asset.get("collision_footprint_tiles", [0, 0]).duplicate(),
@@ -1044,12 +1505,13 @@ static func build_asset_resize_draft(asset: Dictionary, base: Dictionary, action
 	if action_id == 3:
 		collision_probe["collision_footprint_tiles"] = base.get("collision_footprint_tiles", [0, 0]).duplicate()
 	else:
+		var current_fp: Array = asset.get("footprint_tiles", base_fp)
 		MapEditorInstanceService._resize_instance_collision(collision_probe, current_fp, new_fp)
 	var collision_fp: Array = collision_probe.get("collision_footprint_tiles", [0, 0])
 	return {
 		"footprint_tiles": new_fp, "visual_footprint_tiles": new_fp,
 		"occupancy_footprint_tiles": new_fp, "collision_footprint_tiles": collision_fp,
-		"approved_scale": next_scale.x, "logical_scale_level": level,
+		"approved_scale": new_scale, "logical_scale_level": level,
 	}
 
 
@@ -1205,10 +1667,12 @@ func _activate_semantic_placement() -> void:
 
 func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 	if selectable_id.is_empty():
+		_hide_map_portal_note_editor()
 		status_label.text = "已清空选择"
 		return
 	var semantic := MapEditorGameplaySemanticService.find_entry(current_document, selectable_id)
 	if not semantic.is_empty():
+		_hide_map_portal_note_editor()
 		_select_semantic_kind(str(semantic.get("kind", "")), false)
 		_sync_semantic_editor_fields(semantic)
 		semantic_display_name.text = str(semantic.get("display_name", ""))
@@ -1216,7 +1680,58 @@ func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 		semantic_target_entrance.text = str(semantic.get("target_entrance_id", ""))
 		status_label.text = "已选中功能标注：%s；修改参数后点击“更新当前选中的功能标注”" % selectable_id
 		return
-	status_label.text="已选中：%s" % selectable_id
+	if _sync_map_portal_note_editor(selectable_id):
+		status_label.text = "已选中地图出入口：%s；可在左侧填写本入口连接备注" % selectable_id
+	else:
+		status_label.text="已选中：%s" % selectable_id
+
+
+func _sync_map_portal_note_editor(instance_id: String) -> bool:
+	_hide_map_portal_note_editor()
+	if not instance_id.begins_with("inst_"):
+		return false
+	var located := MapEditorInstanceService._locate(current_document, instance_id)
+	if not bool(located.get("ok", false)):
+		return false
+	var instance: Dictionary = located.instance
+	var asset := MapAssetCatalogService.find_asset(
+		str(instance.get("asset_id", ""))
+	)
+	if not PortalAnchorService.is_portal_asset(asset):
+		return false
+	map_portal_note_edit.text = str(
+		instance.get(MapEditorInstanceService.MAP_PORTAL_NOTE_FIELD, "")
+	)
+	map_portal_note_container.visible = true
+	return true
+
+
+func _hide_map_portal_note_editor() -> void:
+	if map_portal_note_edit != null:
+		map_portal_note_edit.text = ""
+	if map_portal_note_container != null:
+		map_portal_note_container.visible = false
+
+
+func _on_save_selected_map_portal_note_pressed() -> void:
+	var instance_id := preview.selected_selectable_id if preview != null else ""
+	if not instance_id.begins_with("inst_"):
+		status_label.text = "请先使用选择工具选中一个已放置的地图出入口"
+		return
+	var result := MapEditorInstanceService.update_map_portal_note(
+		current_document,
+		instance_id,
+		map_portal_note_edit.text
+	)
+	if not bool(result.get("ok", false)):
+		status_label.text = "入口备注保存失败：%s" % result.get("errors", [])
+		return
+	map_portal_note_edit.text = str(result.get("note", ""))
+	status_label.text = "入口备注已更新；点击“保存地图”写入工作文件"
+
+
+func _on_map_portal_note_submitted(_text: String) -> void:
+	_on_save_selected_map_portal_note_pressed()
 
 
 func _select_semantic_kind(kind: String, activate_placement := true) -> void:
@@ -1320,7 +1835,11 @@ func _on_instance_size_menu_pressed(action_id:int)->void:
 		preview.set_document(current_document)
 		if preview.show_walkable_preview: preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document),true)
 		_save_current_document()
-		status_label.text="当前地图素材已%s，中心点、占地和碰撞已同步"%("放大" if action_id==1 else "缩小")
+		var r_inst: Dictionary = result.get("instance", {})
+		var r_scale: Array = r_inst.get("scale", [1.0, 1.0])
+		var r_base := float(r_inst.get("instance_base_scale", 1.0))
+		var r_fp: Array = r_inst.get("footprint_tiles", [1, 1])
+		status_label.text = "整体缩放：%d%%｜占地 %d×%d" % [roundi(float(r_scale[0]) / maxf(0.01, r_base) * 100.0), int(r_fp[0]), int(r_fp[1])]
 	else:status_label.text="缩放失败：%s"%result.get("errors",[])
 
 
@@ -1673,23 +2192,20 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 		safe_polygon_points.clear()
 		if preview != null:
 			preview.set_semantic_polygon_draft(safe_polygon_points)
+	_close_monster_picker()
+	var is_monster := kind in ["monster_spawn", "boss_spawn", "special_monster"]
+	var is_npc := kind == "npc"
 	semantic_content_option.clear()
-	for entry: Dictionary in MapEditorContentCatalogService.entries(kind, 4):
-		var detail := ""
-		if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
-			if bool(entry.get("attributes_verified", false)):
-				detail = "  等级%s  生命%s  攻击%s-%s  防御%s-%s  魔防%s-%s  经验%s" % [entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""), entry.get("defense_min", ""), entry.get("defense_max", ""), entry.get("magic_defense_min", ""), entry.get("magic_defense_max", ""), entry.get("experience", "")]
-			else:
-				detail = "  属性未通过 canonical 核验"
-			detail += "  %s  %s  默认%d秒" % [str(entry.get("classification", "")), str(entry.get("drop_summary", "")), int(entry.get("default_respawn_seconds", 60))]
-			if not bool(entry.get("runtime_ready", false)):
-				detail += "  可布置｜运行时待闭环：%s" % str(entry.get("runtime_rejection_reason", "待闭环"))
-		elif kind == "npc":
-			detail = "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
-		semantic_content_option.add_item(str(entry.get("display_name", entry.get("content_id", ""))) + detail)
-		semantic_content_option.set_item_metadata(semantic_content_option.item_count - 1, entry)
-	semantic_content_option.visible = kind in ["npc", "monster_spawn", "boss_spawn", "special_monster"]
-	semantic_content_id.visible = semantic_content_option.visible
+	if is_npc:
+		for entry: Dictionary in MapEditorContentCatalogService.entries("npc", 4):
+			var detail := str(entry.get("display_name", entry.get("content_id", ""))) + "  [%s]" % _service_role_chinese(str(entry.get("service_role", "dialogue")))
+			semantic_content_option.add_item(detail)
+			semantic_content_option.set_item_metadata(semantic_content_option.item_count - 1, entry)
+	elif is_monster:
+		_refresh_monster_picker_list(kind)
+	semantic_content_option.visible = is_npc
+	monster_picker_button.visible = is_monster
+	semantic_content_id.visible = is_npc or is_monster
 	semantic_display_name.visible = kind in ["map_entrance", "map_exit", "respawn_point", "safe_area", "light", "region_trigger"]
 	semantic_target_map.visible = kind == "map_exit"
 	semantic_target_entrance.visible = kind == "map_exit"
@@ -1699,17 +2215,146 @@ func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 	semantic_radius.visible = kind in ["monster_spawn", "boss_spawn", "special_monster", "light", "region_trigger"]
 	if kind == "boss_spawn": semantic_radius.value = 0
 	elif kind == "monster_spawn" and semantic_radius.value <= 0: semantic_radius.value = 3
-	if semantic_content_option.item_count > 0:
+	if kind in ["monster_spawn", "boss_spawn", "special_monster"]:
+		semantic_respawn.value = 60 if kind == "monster_spawn" else 1800
+	if is_npc and semantic_content_option.item_count > 0:
 		semantic_content_option.select(0)
 		var first_entry: Variant = semantic_content_option.get_item_metadata(0)
 		if first_entry is Dictionary:
 			semantic_content_id.text = str(first_entry.get("content_id", ""))
-			_apply_semantic_combat_entry_defaults(kind, first_entry)
-			_show_semantic_entry_details(first_entry)
-	else:
-		_show_semantic_entry_details({})
+			_refresh_semantic_detail(first_entry)
+	elif is_monster and not monster_picker_entries.is_empty():
+		_apply_monster_picker_selection(0)
 	if preview != null and activate_placement:
 		_activate_semantic_placement()
+
+
+func _build_monster_picker() -> void:
+	monster_picker_button = Button.new()
+	monster_picker_button.text = "选择怪物…"
+	monster_picker_button.tooltip_text = "点击展开怪物列表；悬浮列表项可预览完整资料"
+	monster_picker_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_picker_button.pressed.connect(_on_monster_picker_button_pressed)
+	monster_picker_button.visible = false
+	sidebar.add_child(monster_picker_button)
+
+	monster_picker_shield = Button.new()
+	monster_picker_shield.flat = true
+	monster_picker_shield.text = ""
+	monster_picker_shield.mouse_filter = Control.MOUSE_FILTER_STOP
+	monster_picker_shield.pressed.connect(_close_monster_picker)
+	monster_picker_shield.visible = false
+	monster_picker_shield.top_level = true
+	monster_picker_shield.z_index = 80
+	add_child(monster_picker_shield)
+
+	monster_picker_popup = PanelContainer.new()
+	monster_picker_popup.visible = false
+	monster_picker_popup.top_level = true
+	monster_picker_popup.z_index = 90
+	monster_picker_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	var popup_style := StyleBoxFlat.new()
+	popup_style.bg_color = Color(0.09, 0.10, 0.13, 1.0)
+	popup_style.border_color = Color(0.36, 0.42, 0.50, 1.0)
+	popup_style.set_border_width_all(1)
+	popup_style.set_corner_radius_all(4)
+	popup_style.set_content_margin_all(4)
+	monster_picker_popup.add_theme_stylebox_override("panel", popup_style)
+	monster_picker_list = ItemList.new()
+	monster_picker_list.custom_minimum_size = Vector2(320, 380)
+	monster_picker_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	monster_picker_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	monster_picker_list.item_selected.connect(_on_monster_picker_item_selected)
+	monster_picker_popup.add_child(monster_picker_list)
+	add_child(monster_picker_popup)
+
+
+func _refresh_monster_picker_list(kind: String) -> void:
+	monster_picker_entries.clear()
+	monster_picker_list.clear()
+	var catalog_kind := "special_monster" if kind == "special_monster" else kind
+	for entry: Dictionary in MapEditorContentCatalogService.entries(catalog_kind, 4):
+		monster_picker_list.add_item(_monster_entry_label(entry))
+		monster_picker_entries.append(entry)
+
+
+func _apply_monster_picker_selection(index: int) -> void:
+	if index < 0 or index >= monster_picker_entries.size():
+		return
+	var entry := monster_picker_entries[index]
+	var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
+	monster_picker_button.text = _monster_entry_label(entry)
+	semantic_content_id.text = str(entry.get("content_id", ""))
+	_apply_semantic_combat_entry_defaults(kind, entry)
+	_refresh_semantic_detail(entry)
+
+
+func _on_monster_picker_button_pressed() -> void:
+	if monster_picker_popup.visible:
+		_close_monster_picker()
+	else:
+		_open_monster_picker()
+
+
+func _on_monster_picker_item_selected(index: int) -> void:
+	if index < 0 or index >= monster_picker_entries.size():
+		return
+	var entry := monster_picker_entries[index]
+	var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
+	_close_monster_picker()
+	_close_monster_inspector()
+	monster_hover_suppressed_id = int(entry.get("monster_id", -1))
+	_apply_monster_picker_selection(index)
+	if preview != null:
+		_activate_semantic_placement()
+	status_label.text = "已选择%s：%s；请在地图左键放置" % [_monster_catalog_name(kind), str(entry.get("display_name", ""))]
+
+
+func _open_monster_picker() -> void:
+	if monster_picker_shield != null:
+		monster_picker_shield.position = Vector2.ZERO
+		monster_picker_shield.size = get_viewport_rect().size
+		monster_picker_shield.visible = true
+	if monster_picker_popup != null:
+		monster_picker_popup.visible = true
+		_layout_monster_picker_popup()
+
+
+func _close_monster_picker() -> void:
+	if monster_picker_popup != null:
+		monster_picker_popup.visible = false
+	if monster_picker_shield != null:
+		monster_picker_shield.visible = false
+
+
+func _layout_monster_picker_popup() -> void:
+	if monster_picker_button == null or monster_picker_popup == null:
+		return
+	var viewport := get_viewport_rect().size
+	var popup_size := Vector2(330.0, 400.0)
+	var button_rect := monster_picker_button.get_global_rect()
+	var x := clampf(button_rect.position.x, 8.0, maxf(8.0, viewport.x - popup_size.x - 8.0))
+	var y := button_rect.position.y + button_rect.size.y + 4.0
+	if y + popup_size.y > viewport.y:
+		y = maxf(8.0, viewport.y - popup_size.y - 8.0)
+	monster_picker_popup.position = Vector2(x, y)
+	monster_picker_popup.size = popup_size
+
+
+func _monster_status_suffix(entry: Dictionary) -> String:
+	if not bool(entry.get("authoring_allowed", false)):
+		return "（不可布置）"
+	if not bool(entry.get("runtime_ready", false)):
+		return "（可布置｜运行时待闭环）"
+	return ""
+
+
+func _monster_entry_label(entry: Dictionary) -> String:
+	return "[%d] %s%s" % [int(entry.get("monster_id", -1)), str(entry.get("display_name", entry.get("content_id", ""))), _monster_status_suffix(entry)]
+
+
+func _monster_catalog_name(kind: String) -> String:
+	return "特殊地图怪物" if kind == "special_monster" else "怪物/Boss"
 
 
 func _refresh_semantic_catalog_tree() -> void:
@@ -1750,6 +2395,32 @@ func _on_semantic_catalog_selected() -> void:
 	_activate_semantic_catalog_item(item)
 
 
+func _preview_monster_catalog_item(item: TreeItem) -> void:
+	if item == null:
+		return
+	var metadata: Variant = item.get_metadata(0)
+	if not metadata is Dictionary:
+		return
+	var kind := str(metadata.get("kind", ""))
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+		return
+	var entry: Dictionary = metadata.get("entry", {})
+	if not entry.is_empty():
+		_show_monster_inspector(entry)
+
+
+func _monster_id_for_item(item: TreeItem) -> int:
+	if item == null:
+		return -1
+	var metadata: Variant = item.get_metadata(0)
+	if not metadata is Dictionary:
+		return -1
+	var kind := str(metadata.get("kind", ""))
+	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+		return -1
+	return int(metadata.get("entry", {}).get("monster_id", -1))
+
+
 func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
 	if not event is InputEventMouseButton or event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
 		return
@@ -1760,9 +2431,72 @@ func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
 	_activate_semantic_catalog_item(item)
 
 
+func _poll_monster_hover() -> void:
+	if monster_inspector_panel == null:
+		return
+	_poll_monster_hover_at(monster_inspector_panel.get_global_mouse_position())
+
+
+func _poll_monster_hover_at(mouse_global: Vector2) -> void:
+	if monster_inspector_panel == null:
+		return
+	var hovered := _hovered_monster_entry_at(mouse_global)
+	var hovered_id := int(hovered.get("monster_id", -1))
+	var panel_has_mouse := monster_inspector_panel.visible and monster_inspector_panel.get_global_rect().has_point(mouse_global)
+	if hovered_id > 0:
+		if hovered_id == monster_hover_suppressed_id:
+			# Mouse is parked on the row that was just clicked: keep the
+			# inspector hidden until the pointer leaves the row.
+			return
+		monster_hover_suppressed_id = -1
+		if hovered_id != _last_hovered_monster_id:
+			_show_monster_inspector(hovered)
+			_last_hovered_monster_id = hovered_id
+		_cancel_monster_inspector_close()
+		return
+	monster_hover_suppressed_id = -1
+	_last_hovered_monster_id = -1
+	if panel_has_mouse:
+		_cancel_monster_inspector_close()
+	else:
+		_schedule_monster_inspector_close()
+
+
+func _hovered_monster_entry_at(mouse_global: Vector2) -> Dictionary:
+	# Primary: the monster picker popup list (the user's actual selection surface).
+	if monster_picker_popup != null and monster_picker_popup.visible and monster_picker_list != null:
+		if monster_picker_list.get_global_rect().has_point(mouse_global):
+			var local := mouse_global - monster_picker_list.get_global_rect().position
+			var index := monster_picker_list.get_item_at_position(local, true)
+			if index >= 0 and index < monster_picker_entries.size():
+				return monster_picker_entries[index]
+	# Secondary: the full directory tree.
+	if semantic_catalog_tree != null:
+		if semantic_catalog_tree.get_global_rect().has_point(mouse_global):
+			var local := mouse_global - semantic_catalog_tree.get_global_rect().position
+			var item := semantic_catalog_tree.get_item_at_position(local)
+			var metadata: Variant = item.get_metadata(0) if item != null else null
+			if metadata is Dictionary:
+				var kind := str(metadata.get("kind", ""))
+				if kind in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+					var entry: Dictionary = metadata.get("entry", {})
+					if not entry.is_empty():
+						return entry
+	return {}
+
+
 func _activate_semantic_catalog_item(item: TreeItem) -> void:
 	var metadata:Variant=item.get_metadata(0); if not metadata is Dictionary:return
 	var kind:=str(metadata.get("kind","")); var entry:Dictionary=metadata.get("entry",{})
+	var is_monster := kind in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]
+	if is_monster:
+		monster_hover_suppressed_id = int(entry.get("monster_id", -1))
+		_close_monster_inspector()
+	var placeable := kind == "npc" or bool(entry.get("authoring_allowed", false))
+	if is_monster and not placeable:
+		semantic_content_id.text=str(entry.get("content_id",""))
+		status_label.text="当前条目不可布置：%s"%str(entry.get("display_name",""))
+		return
 	for index in semantic_kind_option.item_count:
 		if str(semantic_kind_option.get_item_metadata(index))==kind: semantic_kind_option.select(index); _on_semantic_kind_selected(index); break
 	semantic_content_id.text=str(entry.get("content_id",""))
@@ -2117,6 +2851,10 @@ func _on_save_calibration_pressed() -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not (event is InputEventKey) or not event.pressed or event.echo:
+		return
+	if event.keycode == KEY_ESCAPE and monster_inspector_panel != null and monster_inspector_panel.visible:
+		_close_monster_inspector()
+		get_viewport().set_input_as_handled()
 		return
 	var shortcut_pressed: bool = event.ctrl_pressed or event.meta_pressed
 	if shortcut_pressed and event.keycode == KEY_C:

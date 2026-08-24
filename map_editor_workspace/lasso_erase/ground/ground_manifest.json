@@ -1,5 +1,5 @@
 {
-  "blank_chunk_policy": "virtual_shared_until_dirty",
+  "blank_chunk_policy": "transparent_until_painted",
   "chunk_grid_size": [
     2.0,
     1.0
@@ -11,7 +11,7 @@
   "chunks": [
     {
       "chunk_id": "c_0_0",
-      "fill_asset_id": "ground.old_grass.001",
+      "fill_asset_id": "",
       "grid": [
         0.0,
         0.0
@@ -43,7 +43,8 @@
       "workspace_chunk": "ground/chunks/c_1_0.json"
     }
   ],
-  "default_fill_asset_id": "ground.old_grass.001",
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "",
   "design_size": [
     32.0,
     32.0
