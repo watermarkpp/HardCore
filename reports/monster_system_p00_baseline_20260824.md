@@ -11,6 +11,8 @@ INTEGRATION_SOURCE_SHA = c93ff50bcfce5e1c29c83eec89fc4830bc591e93
 MONSTER_SOURCE_SHA = 722bf580e64bbcfd2fbcfeee95f0def2182d7b64
 INTEGRATION_MONSTER_MERGE_BASE = 402011a7a914c96512c793ec15064292eb07b7d1
 MONSTER_MERGE_COMMIT = 1eca8b61460a8e1cff65ed0774a9013b72597982
+CONCURRENT_INTEGRATION_HEAD = 90685044f8f9cc34fa88d883748b503f662d1898
+CONCURRENT_INTEGRATION_MERGE_COMMIT = a996cfb06bcd048cb81c8513dcbcad1df34aaad9
 MAPS_ORIGIN_SHA = 7c8ed55d61661b40b9900fa4e4b42a281edb7866
 MAPS_MONSTER_DELTA_VERDICT = NONE
 
@@ -51,7 +53,9 @@ The complete `722bf580` line was merged with `--no-ff`; no last-commit cherry-pi
 
 ## P00-C maps semantic audit
 
-The first 31 committed maps changes after local `cef66165` changed 22 editor documents, but those documents contain exactly 0 `monster_spawn` and 0 `boss_spawn` entries. During final push verification, maps advanced to `ff96ceaf` (`feat(maps): canonicalize formal map network`). That commit changes no `assets/data/runtime/**`, `game_root`, runtime bridge, or map runtime release path; it adds 0 numeric canonical monster spawns and 0 numeric canonical Boss spawns. Its only Boss-layer change removes three legacy string-identified Orc Tomb entries already absent from the integrated `722bf580` authority. The audit freeze then advanced to `7c8ed55d` (`fix(maps): label world dungeon entrances by series`), which changes only portal labels/network authoring and again has no monster semantic or runtime path diff. Therefore the audited maps HEAD adds no monster runtime semantic delta. The remaining changes are map identity/network, layouts, art, entrances, annotations, or portal-note behavior and do not enter the monster baseline.
+The first 31 committed maps changes after local `cef66165` changed 22 editor documents, but those documents contain exactly 0 `monster_spawn` and 0 `boss_spawn` entries. During final push verification, maps advanced to `ff96ceaf` (`feat(maps): canonicalize formal map network`). That commit changes no `assets/data/runtime/**`, `game_root`, runtime bridge, or map runtime release path; it adds 0 numeric canonical monster spawns and 0 numeric canonical Boss spawns. Its only Boss-layer change removes three legacy string-identified Orc Tomb entries already absent from the integrated `722bf580` authority. The audit freeze then advanced to `7c8ed55d` (`fix(maps): label world dungeon entrances by series`), which changes only portal labels/network authoring and again has no monster semantic or runtime path diff. Therefore the audited maps HEAD adds no monster runtime semantic delta.
+
+Those two maps commits were independently integrated to `codex/integration` as `7be29d4f` and `90685044` while P00 was running, so the final P00 base includes them as current integration parents through merge `a996cfb0`. Their renamed editor workspaces intentionally have empty monster/Boss layers and do not migrate the published runtime release. P00 explicitly rejects those empty authoring layers as a reverse override: the current published runtime artifact and its stable Boss identity remain the monster spawn authority until a future integration stage performs a tested runtime-release migration.
 
 The dirty maps tree has 22 tracked changed editor documents and 45 untracked editor documents. It adds 0 monster spawns and 0 Boss spawns. Its removal of three legacy string-identified Orc Tomb Boss entries is already represented in the integrated `722bf580` authority line. No dirty maps file was copied into staging.
 

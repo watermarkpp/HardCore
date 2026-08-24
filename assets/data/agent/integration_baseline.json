@@ -5,6 +5,8 @@
   "integration_source_sha": "c93ff50bcfce5e1c29c83eec89fc4830bc591e93",
   "monster_source_sha": "722bf580e64bbcfd2fbcfeee95f0def2182d7b64",
   "functional_parent_head": "1eca8b61460a8e1cff65ed0774a9013b72597982",
+  "concurrent_integration_head": "90685044f8f9cc34fa88d883748b503f662d1898",
+  "concurrent_integration_merge": "a996cfb06bcd048cb81c8513dcbcad1df34aaad9",
   "maps_origin_sha": "7c8ed55d61661b40b9900fa4e4b42a281edb7866",
   "maps_delta_verdict": "NONE",
   "maps_delta_evidence": {
@@ -18,7 +20,8 @@
     "latest_maps_commit_runtime_paths_changed": 0,
     "latest_maps_commit_numeric_monster_spawns_added": 0,
     "latest_maps_commit_numeric_boss_spawns_added": 0,
-    "maps_freeze_snapshot_note": "7c8ed55d labels world dungeon entrances; no monster or runtime semantic paths changed"
+    "maps_freeze_snapshot_note": "7c8ed55d labels world dungeon entrances; no monster or runtime semantic paths changed",
+    "empty_migrated_authoring_layers_may_override_published_monster_runtime": false
   },
   "worktrees": {
     "codex/integration": {
