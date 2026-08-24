@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-24T00:00:00+08:00",
+  "purpose": "P00 monster-system integration baseline routing",
+  "worktrees": {
+    "codex/integration": {
+      "rule_file": "docs/agent_rules/integration.md",
+      "source_head": "c93ff50bcfce5e1c29c83eec89fc4830bc591e93",
+      "functional_parent_head": "1eca8b61460a8e1cff65ed0774a9013b72597982",
+      "state": "P00_BASELINE_CANDIDATE"
+    },
+    "codex/monsters": {
+      "rule_file": "docs/agent_rules/monsters.md",
+      "head": "722bf580e64bbcfd2fbcfeee95f0def2182d7b64",
+      "state": "MERGED_INTO_P00_STAGING"
+    },
+    "codex/maps": {
+      "rule_file": "docs/agent_rules/maps.md",
+      "origin_head": "5b7344a4cb9c36af89fa9da7d54214fa7a7a4a34",
+      "state": "NO_ADDITIONAL_MONSTER_SEMANTIC_DELTA"
+    },
+    "codex/ui-art": {"rule_file": "docs/agent_rules/ui-art.md"},
+    "codex/equipment": {"rule_file": "docs/agent_rules/equipment.md"},
+    "codex/professions-skills": {"rule_file": "docs/agent_rules/professions-skills.md"}
+  },
+  "stable_contracts": {
+    "monster_identity": "runtime is canonical monster_id only and fail-closed",
+    "combat_space": "map-global Ground GU is the only gameplay position authority",
+    "projection": "64x32 is a screen projection boundary, not a second gameplay space",
+    "frozen_user_assets": "approved Red Moon and fixed-area ground-spike assets must remain byte-identical"
+  },
+  "minimal_indexes": [
+    "PROJECT_CURRENT_STATUS.md",
+    "PROJECT_HISTORY_CONTEXT.md",
+    "PROJECT_INDEX.md",
+    "assets/data/source_priority_policy.json",
+    "assets/data/agent/worktree_ownership.json",
+    "reports/monster_attack_delivery_primary_closure_20260824.md"
+  ]
+}

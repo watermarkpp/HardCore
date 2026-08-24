@@ -1,0 +1,14 @@
+{
+  "schema_version": 2,
+  "status": "P00_RESTORED_FROM_CURRENT_AUTHORITY",
+  "entries": [
+    {"section": "startup", "action": "KEEP_ROOT", "target": "AGENTS.md"},
+    {"section": "branch ownership", "action": "MACHINE_ROUTE", "target": "assets/data/agent/worktree_ownership.json"},
+    {"section": "integration ownership", "action": "BRANCH_RULE", "target": "docs/agent_rules/integration.md"},
+    {"section": "maps ownership", "action": "BRANCH_RULE", "target": "docs/agent_rules/maps.md"},
+    {"section": "monsters ownership", "action": "BRANCH_RULE", "target": "docs/agent_rules/monsters.md"},
+    {"section": "source priority", "action": "KEEP_ROOT", "target": "assets/data/source_priority_policy.json"},
+    {"section": "frozen user assets", "action": "KEEP_ROOT", "target": "AGENTS.md"},
+    {"section": "Godot execution", "action": "MACHINE_ROUTE", "target": "tools/run_godot_tests.ps1"}
+  ]
+}
