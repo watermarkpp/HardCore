@@ -1,5 +1,5 @@
 {
-  "blank_chunk_policy": "virtual_shared_until_dirty",
+  "blank_chunk_policy": "transparent_until_painted",
   "chunk_grid_size": [
     4.0,
     2.0
@@ -29,7 +29,7 @@
       "workspace_chunk": "ground/chunks/c_0_0.json"
     },
     {
-      "baked_operation_count": 3030.0,
+      "baked_operation_count": 3038.0,
       "chunk_id": "c_1_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -48,7 +48,7 @@
       "workspace_chunk": "ground/chunks/c_1_0.json"
     },
     {
-      "baked_operation_count": 2578,
+      "baked_operation_count": 2578.0,
       "chunk_id": "c_2_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -162,7 +162,7 @@
       "workspace_chunk": "ground/chunks/c_3_1.json"
     }
   ],
-  "default_fill_asset_id": "ground.old_grass.001",
+  "default_fill_asset_id": "",
   "design_size": [
     64.0,
     64.0

@@ -1,0 +1,3693 @@
+{
+  "content_layer": "personal_expansion",
+  "design": {
+    "design_size": [
+      32.0,
+      32.0
+    ],
+    "map_type": "boss_room",
+    "source_size": [
+      null,
+      null
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "custom_blank_layout",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1",
+    "wall_loops": [
+      {
+        "bounds": [
+          0.0,
+          0.0,
+          32.0,
+          32.0
+        ],
+        "collision_authority": "manual_by_user",
+        "corner_join_mode": "dedicated_corner",
+        "corner_topology": "outer_corner",
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "visual_render_contract": "segmented_isometric_depth_v1",
+        "wall_family_id": "cave_granite_u0"
+      }
+    ]
+  },
+  "display_name": "地狱烈焰",
+  "editor_meta": {
+    "authoring_chunk_grid": [
+      2.0,
+      2.0
+    ],
+    "authoring_chunk_size_tiles": [
+      16.0,
+      16.0
+    ],
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
+    "content_policy": "empty_layers",
+    "created_by": "human_codex_shared_tool",
+    "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 2,
+    "template_kind": "custom_empty_map",
+    "workspace": "res://map_editor_workspace/hidden_hellfire"
+  },
+  "ground": {
+    "blank_chunk_policy": "transparent_until_painted",
+    "blank_fill_asset_id": "",
+    "blank_generated": false,
+    "chunk_manifest": "res://assets/data/maps/ground/hidden_hellfire.ground_chunks.json",
+    "chunk_size": [
+      1024.0,
+      1024.0
+    ],
+    "collision_from_ground": false,
+    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "editable_source_required": true,
+    "ground_mode": "generated_painted_chunks",
+    "mask_storage": "chunked_l8",
+    "master_image": null,
+    "origin_px": [
+      1024.0,
+      16.0
+    ],
+    "paint_manifest": "res://assets/data/maps/ground_paint/hidden_hellfire.ground_paint_ops.json",
+    "paint_state": "res://assets/data/maps/ground_paint/hidden_hellfire.ground_paint_state.json",
+    "source_manifest": "res://assets/data/maps/ground_paint/hidden_hellfire.ground_source_manifest.json",
+    "tile_anchor_mode": "cell_center",
+    "visual_only": true,
+    "workspace_manifest": "res://map_editor_workspace/hidden_hellfire/ground/ground_manifest.json",
+    "workspace_state": "res://map_editor_workspace/hidden_hellfire/ground/ground_state.json"
+  },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
+  "layers": {
+    "boss_spawn": [],
+    "collision": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            31.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            28.0,
+            4.0,
+            4.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            0.0,
+            4.0,
+            4.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000007",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            4.0,
+            4.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            27.0,
+            5.0,
+            5.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          27.0
+        ]
+      }
+    ],
+    "door_points": [],
+    "editor_guides": [],
+    "ground_base": [],
+    "ground_overlay": [],
+    "interactables": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_only": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "arrival_only",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "由比奇进入，单向只可进入",
+        "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
+        "kind": "map_exit",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "arrival_only_endpoint",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1,
+        "tile": [
+          14.0,
+          26.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": false
+      }
+    ],
+    "monster_spawn": [],
+    "npc_points": [],
+    "object_base": [
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          114.0,
+          465.0
+        ],
+        "asset_id": "user.f58c083228380482",
+        "base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000037",
+        "instance_scale_level": -6.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          114.0,
+          465.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.40000000000000013,
+          0.40000000000000013
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          2.0,
+          2.0
+        ],
+        "tile_anchor": [
+          2.0,
+          2.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          92.0,
+          477.0
+        ],
+        "asset_id": "user.401d313fe81426a1",
+        "base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000038",
+        "instance_scale_level": -6.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          92.0,
+          477.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.40000000000000013,
+          0.40000000000000013
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          2.0,
+          28.0
+        ],
+        "tile_anchor": [
+          2.0,
+          28.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          110.0,
+          478.0
+        ],
+        "asset_id": "user.ed21d95556020f5d",
+        "base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000039",
+        "instance_scale_level": -6.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          110.0,
+          478.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.40000000000000013,
+          0.40000000000000013
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          28.0,
+          28.0
+        ],
+        "tile_anchor": [
+          28.0,
+          28.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          124.0,
+          457.0
+        ],
+        "asset_id": "user.1681cdcf435c1b88",
+        "base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000040",
+        "instance_scale_level": -6.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          124.0,
+          457.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.40000000000000013,
+          0.40000000000000013
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          28.0,
+          2.0
+        ],
+        "tile_anchor": [
+          28.0,
+          2.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "tile_center",
+        "anchor_px": [
+          96.0,
+          48.0
+        ],
+        "asset_id": "mse.ground_graffiti.3x3.03",
+        "base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000041",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          48.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          13.0,
+          25.0
+        ],
+        "tile_anchor": [
+          13.0,
+          25.0
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          3.0
+        ]
+      }
+    ],
+    "object_front": [],
+    "region_semantics": [],
+    "region_trigger": [],
+    "respawn_points": [],
+    "safe_area": [],
+    "shadow": [],
+    "terrain_base": [
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          96.0,
+          160.0
+        ],
+        "asset_id": "cave_granite_outer_se_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000001",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          160.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "corner_min_min",
+        "tile": [
+          0.0,
+          0.0
+        ],
+        "tile_anchor": [
+          0.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000021",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_00",
+        "tile": [
+          0.0,
+          1.0
+        ],
+        "tile_anchor": [
+          0.0,
+          1.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v01",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000005",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_00",
+        "tile": [
+          1.0,
+          0.0
+        ],
+        "tile_anchor": [
+          1.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v02",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000022",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_01",
+        "tile": [
+          0.0,
+          5.0
+        ],
+        "tile_anchor": [
+          0.0,
+          5.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v02",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000006",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_01",
+        "tile": [
+          5.0,
+          0.0
+        ],
+        "tile_anchor": [
+          5.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v03",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000023",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_02",
+        "tile": [
+          0.0,
+          9.0
+        ],
+        "tile_anchor": [
+          0.0,
+          9.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v03",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000007",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_02",
+        "tile": [
+          9.0,
+          0.0
+        ],
+        "tile_anchor": [
+          9.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000024",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_03",
+        "tile": [
+          0.0,
+          13.0
+        ],
+        "tile_anchor": [
+          0.0,
+          13.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v01",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000008",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_03",
+        "tile": [
+          13.0,
+          0.0
+        ],
+        "tile_anchor": [
+          13.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v02",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000025",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_04",
+        "tile": [
+          0.0,
+          17.0
+        ],
+        "tile_anchor": [
+          0.0,
+          17.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v02",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000009",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_04",
+        "tile": [
+          17.0,
+          0.0
+        ],
+        "tile_anchor": [
+          17.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v03",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000026",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_05",
+        "tile": [
+          0.0,
+          21.0
+        ],
+        "tile_anchor": [
+          0.0,
+          21.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v03",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000010",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_05",
+        "tile": [
+          21.0,
+          0.0
+        ],
+        "tile_anchor": [
+          21.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000027",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_06",
+        "tile": [
+          0.0,
+          25.0
+        ],
+        "tile_anchor": [
+          0.0,
+          25.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v01",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000011",
+        "instance_scale_level": 0.0,
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_06",
+        "tile": [
+          25.0,
+          0.0
+        ],
+        "tile_anchor": [
+          25.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          96.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l2_v01",
+        "base_footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000028",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_x_07",
+        "tile": [
+          0.0,
+          29.0
+        ],
+        "tile_anchor": [
+          0.0,
+          29.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l2_v01",
+        "base_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000012",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_min_y_07",
+        "tile": [
+          29.0,
+          0.0
+        ],
+        "tile_anchor": [
+          29.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          96.0,
+          160.0
+        ],
+        "asset_id": "cave_granite_outer_ne_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000004",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          160.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "corner_min_max",
+        "tile": [
+          0.0,
+          31.0
+        ],
+        "tile_anchor": [
+          0.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          96.0,
+          160.0
+        ],
+        "asset_id": "cave_granite_outer_sw_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000002",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          160.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "corner_max_min",
+        "tile": [
+          31.0,
+          0.0
+        ],
+        "tile_anchor": [
+          31.0,
+          0.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v01",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000013",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_00",
+        "tile": [
+          1.0,
+          31.0
+        ],
+        "tile_anchor": [
+          1.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000029",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_00",
+        "tile": [
+          31.0,
+          1.0
+        ],
+        "tile_anchor": [
+          31.0,
+          1.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v02",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000014",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_01",
+        "tile": [
+          5.0,
+          31.0
+        ],
+        "tile_anchor": [
+          5.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v02",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000030",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_01",
+        "tile": [
+          31.0,
+          5.0
+        ],
+        "tile_anchor": [
+          31.0,
+          5.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v03",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000015",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_02",
+        "tile": [
+          9.0,
+          31.0
+        ],
+        "tile_anchor": [
+          9.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v03",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000031",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_02",
+        "tile": [
+          31.0,
+          9.0
+        ],
+        "tile_anchor": [
+          31.0,
+          9.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v01",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000016",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_03",
+        "tile": [
+          13.0,
+          31.0
+        ],
+        "tile_anchor": [
+          13.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000032",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_03",
+        "tile": [
+          31.0,
+          13.0
+        ],
+        "tile_anchor": [
+          31.0,
+          13.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v02",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000017",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_04",
+        "tile": [
+          17.0,
+          31.0
+        ],
+        "tile_anchor": [
+          17.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v02",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000033",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_04",
+        "tile": [
+          31.0,
+          17.0
+        ],
+        "tile_anchor": [
+          31.0,
+          17.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v03",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000018",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_05",
+        "tile": [
+          21.0,
+          31.0
+        ],
+        "tile_anchor": [
+          21.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v03",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000034",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_05",
+        "tile": [
+          31.0,
+          21.0
+        ],
+        "tile_anchor": [
+          31.0,
+          21.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l4_v01",
+        "base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000019",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_06",
+        "tile": [
+          25.0,
+          31.0
+        ],
+        "tile_anchor": [
+          25.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000035",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_06",
+        "tile": [
+          31.0,
+          25.0
+        ],
+        "tile_anchor": [
+          31.0,
+          25.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_x_l2_v01",
+        "base_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000020",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_y_07",
+        "tile": [
+          29.0,
+          31.0
+        ],
+        "tile_anchor": [
+          29.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          96.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l2_v01",
+        "base_footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000036",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          144.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "edge_max_x_07",
+        "tile": [
+          31.0,
+          29.0
+        ],
+        "tile_anchor": [
+          31.0,
+          29.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          96.0,
+          160.0
+        ],
+        "asset_id": "cave_granite_outer_nw_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "generated_by": "MapEditorWallLoopService",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000003",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          96.0,
+          160.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
+        "structure_role": "corner_max_max",
+        "tile": [
+          31.0,
+          31.0
+        ],
+        "tile_anchor": [
+          31.0,
+          31.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "terrain_front": []
+  },
+  "legacy_map_id": "dyly_2",
+  "legacy_runtime_map_id": 995566,
+  "map_id": "hidden_hellfire",
+  "runtime_map_id": 918002,
+  "schema_version": 4.0,
+  "source_policy": "expansion_editable"
+}
