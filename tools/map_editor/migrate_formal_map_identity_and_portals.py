@@ -134,6 +134,25 @@ LABEL_ALIASES = {
     "连接通道2层": "connection_passage_2",
     "山谷矿区": "connection_passage_1",
 }
+
+
+# A world-map entrance is named after the dungeon system that players are
+# entering, even when the physical destination is a currently available first
+# floor or intermediate map.  The label is UX metadata only; target_map_key
+# remains the exact canonical destination.
+WORLD_DUNGEON_PORTAL_LABELS = {
+    ("bich_province", "map_exit_000002"): "兽人古墓",
+    ("bich_province", "map_exit_000003"): "比奇矿区",
+    ("snake_valley", "map_exit_000003"): "山谷矿区",
+    ("mengzhong_province", "map_exit_000002"): "石墓",
+    ("mengzhong_province", "map_exit_000003"): "祖玛寺庙",
+    ("mengzhong_province", "map_exit_000005"): "死亡山谷",
+    ("wooma_forest", "map_exit_000001"): "沃玛寺庙",
+    ("fmg_1", "map_exit_000002"): "封魔矿区",
+    ("brm_2", "map_exit_000002"): "赤月峡谷",
+    ("cyd_1", "map_exit_000001"): "牛魔寺庙",
+    ("cyd_1", "map_exit_000002"): "骨魔洞",
+}
 for _n in range(1, 6):
     LABEL_ALIASES[f"骨魔洞{_n}层"] = f"gmd_{_n}"
 for _n in range(1, 5):
@@ -382,8 +401,8 @@ def configure_portals(docs: dict[str, dict[str, Any]], old_to_identity: dict[str
 
     if len(visited) != 102 or len(records) != 66:
         raise ValueError(f"network counts bidirectional_endpoints={len(visited)} records={len(records)}")
-    snake_exit = find_endpoint(docs["snake_valley"], "map_exit_000003")
-    snake_exit["display_name"] = "山谷矿区"
+    for (map_id, portal_id), display_name in WORLD_DUNGEON_PORTAL_LABELS.items():
+        find_endpoint(docs[map_id], portal_id)["display_name"] = display_name
     return sorted(records, key=lambda row: (row["mode"], json.dumps(row, ensure_ascii=False, sort_keys=True)))
 
 
@@ -590,11 +609,12 @@ def migrate(repo: Path, authority: Path) -> dict[str, Any]:
         "formal_portal_endpoint_count": 132,
         "display_label_overrides": [
             {
-                "map_id": "world_snake_valley",
-                "portal_id": "map_exit_000003",
-                "display_name": "山谷矿区",
-                "target_map_id": "snake_mine_passage_1",
+                "map_id": old_to_identity[map_id].new,
+                "portal_id": portal_id,
+                "display_name": display_name,
+                "target_map_id": str(find_endpoint(docs[map_id], portal_id).get("target_map_key", "")),
             }
+            for (map_id, portal_id), display_name in sorted(WORLD_DUNGEON_PORTAL_LABELS.items())
         ],
         "connections": records,
     }
@@ -670,9 +690,11 @@ def verify(repo: Path, expected_pngs: dict[str, str] | None = None) -> dict[str,
                 errors.append(f"pair:{map_id}:{portal_id}")
         elif mode == "one_way" and str(target.get("connection_mode", "")) != "arrival_only":
             errors.append(f"one_way_target:{map_id}:{portal_id}")
-    snake = find_endpoint(docs["world_snake_valley"], "map_exit_000003")
-    if str(snake.get("display_name", "")) != "山谷矿区" or str(snake.get("target_map_key", "")) != "snake_mine_passage_1":
-        errors.append("snake_valley_alias")
+    for (legacy_map_id, portal_id), display_name in WORLD_DUNGEON_PORTAL_LABELS.items():
+        map_id = next(row.new for row in rows if row.old == legacy_map_id)
+        endpoint = find_endpoint(docs[map_id], portal_id)
+        if str(endpoint.get("display_name", "")) != display_name:
+            errors.append(f"dungeon_portal_label:{map_id}:{portal_id}")
     ql_targets = {str(entry.get("target_map_key", "")) for entry in endpoints(docs["fengmo_forked_path"])}
     if ql_targets != {"world_fengmo_valley", "fengmo_light_corridor"}:
         errors.append(f"fengmo_forked_path_targets:{sorted(ql_targets)}")

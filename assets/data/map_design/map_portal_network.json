@@ -518,10 +518,70 @@
   "contract_id": "hardcore.formal_map_portal_network.v1",
   "display_label_overrides": [
     {
+      "display_name": "兽人古墓",
+      "map_id": "world_bich_province",
+      "portal_id": "map_exit_000002",
+      "target_map_id": "bich_orc_tomb_f1"
+    },
+    {
+      "display_name": "比奇矿区",
+      "map_id": "world_bich_province",
+      "portal_id": "map_exit_000003",
+      "target_map_id": "bich_mine_f1"
+    },
+    {
+      "display_name": "赤月峡谷",
+      "map_id": "world_white_day_gate",
+      "portal_id": "map_exit_000002",
+      "target_map_id": "chiyue_valley"
+    },
+    {
+      "display_name": "牛魔寺庙",
+      "map_id": "world_cangyue_island",
+      "portal_id": "map_exit_000001",
+      "target_map_id": "cangyue_bull_temple_f1"
+    },
+    {
+      "display_name": "骨魔洞",
+      "map_id": "world_cangyue_island",
+      "portal_id": "map_exit_000002",
+      "target_map_id": "cangyue_bone_cave_f1"
+    },
+    {
+      "display_name": "封魔矿区",
+      "map_id": "world_fengmo_valley",
+      "portal_id": "map_exit_000002",
+      "target_map_id": "fengmo_forked_path"
+    },
+    {
+      "display_name": "石墓",
+      "map_id": "world_mengzhong_province",
+      "portal_id": "map_exit_000002",
+      "target_map_id": "mengzhong_stone_tomb_f1"
+    },
+    {
+      "display_name": "祖玛寺庙",
+      "map_id": "world_mengzhong_province",
+      "portal_id": "map_exit_000003",
+      "target_map_id": "mengzhong_zuma_temple_f1"
+    },
+    {
+      "display_name": "死亡山谷",
+      "map_id": "world_mengzhong_province",
+      "portal_id": "map_exit_000005",
+      "target_map_id": "mengzhong_death_valley_dungeon"
+    },
+    {
       "display_name": "山谷矿区",
       "map_id": "world_snake_valley",
       "portal_id": "map_exit_000003",
       "target_map_id": "snake_mine_passage_1"
+    },
+    {
+      "display_name": "沃玛寺庙",
+      "map_id": "world_wooma_forest",
+      "portal_id": "map_exit_000001",
+      "target_map_id": "wooma_temple_f1"
     }
   ],
   "formal_map_count": 67,

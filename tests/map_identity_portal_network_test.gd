@@ -85,10 +85,24 @@ func _ready() -> void:
 		else:
 			assert(str(target.get("connection_mode", "")) == "arrival_only")
 
-	var snake: Dictionary = documents["world_snake_valley"]
-	var snake_alias := _endpoint(snake, "map_exit_000003")
-	assert(str(snake_alias.get("display_name", "")) == "山谷矿区")
-	assert(str(snake_alias.get("target_map_key", "")) == "snake_mine_passage_1")
+	var dungeon_labels := {
+		"world_bich_province::map_exit_000002": ["兽人古墓", "bich_orc_tomb_f1"],
+		"world_bich_province::map_exit_000003": ["比奇矿区", "bich_mine_f1"],
+		"world_snake_valley::map_exit_000003": ["山谷矿区", "snake_mine_passage_1"],
+		"world_mengzhong_province::map_exit_000002": ["石墓", "mengzhong_stone_tomb_f1"],
+		"world_mengzhong_province::map_exit_000003": ["祖玛寺庙", "mengzhong_zuma_temple_f1"],
+		"world_mengzhong_province::map_exit_000005": ["死亡山谷", "mengzhong_death_valley_dungeon"],
+		"world_wooma_forest::map_exit_000001": ["沃玛寺庙", "wooma_temple_f1"],
+		"world_fengmo_valley::map_exit_000002": ["封魔矿区", "fengmo_forked_path"],
+		"world_white_day_gate::map_exit_000002": ["赤月峡谷", "chiyue_valley"],
+		"world_cangyue_island::map_exit_000001": ["牛魔寺庙", "cangyue_bull_temple_f1"],
+		"world_cangyue_island::map_exit_000002": ["骨魔洞", "cangyue_bone_cave_f1"],
+	}
+	for key: String in dungeon_labels:
+		var expected: Array = dungeon_labels[key]
+		var endpoint: Dictionary = endpoint_index[key]
+		assert(str(endpoint.get("display_name", "")) == str(expected[0]))
+		assert(str(endpoint.get("target_map_key", "")) == str(expected[1]))
 	var forked: Dictionary = documents["fengmo_forked_path"]
 	var fork_targets := {}
 	for raw_endpoint: Variant in forked.get("layers", {}).get("map_exit_points", []):
