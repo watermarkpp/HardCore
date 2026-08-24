@@ -5,7 +5,7 @@
   "integration_source_sha": "c93ff50bcfce5e1c29c83eec89fc4830bc591e93",
   "monster_source_sha": "722bf580e64bbcfd2fbcfeee95f0def2182d7b64",
   "functional_parent_head": "1eca8b61460a8e1cff65ed0774a9013b72597982",
-  "maps_origin_sha": "5b7344a4cb9c36af89fa9da7d54214fa7a7a4a34",
+  "maps_origin_sha": "ff96ceaf8920666e309039091e76f58428f3761d",
   "maps_delta_verdict": "NONE",
   "maps_delta_evidence": {
     "origin_changed_editor_documents": 22,
@@ -14,7 +14,10 @@
     "local_dirty_editor_documents": 67,
     "local_dirty_additional_monster_spawn_entries": 0,
     "local_dirty_additional_boss_spawn_entries": 0,
-    "persistent_boss_identity_repair": "editor:315:boss:wooma_leader"
+    "persistent_boss_identity_repair": "editor:315:boss:wooma_leader",
+    "latest_maps_commit_runtime_paths_changed": 0,
+    "latest_maps_commit_numeric_monster_spawns_added": 0,
+    "latest_maps_commit_numeric_boss_spawns_added": 0
   },
   "worktrees": {
     "codex/integration": {
@@ -25,7 +28,7 @@
       "baseline_head": "722bf580e64bbcfd2fbcfeee95f0def2182d7b64"
     },
     "codex/maps": {
-      "baseline_head": "5b7344a4cb9c36af89fa9da7d54214fa7a7a4a34"
+      "baseline_head": "ff96ceaf8920666e309039091e76f58428f3761d"
     }
   },
   "frozen_asset_blobs": {

@@ -11,7 +11,7 @@ INTEGRATION_SOURCE_SHA = c93ff50bcfce5e1c29c83eec89fc4830bc591e93
 MONSTER_SOURCE_SHA = 722bf580e64bbcfd2fbcfeee95f0def2182d7b64
 INTEGRATION_MONSTER_MERGE_BASE = 402011a7a914c96512c793ec15064292eb07b7d1
 MONSTER_MERGE_COMMIT = 1eca8b61460a8e1cff65ed0774a9013b72597982
-MAPS_ORIGIN_SHA = 5b7344a4cb9c36af89fa9da7d54214fa7a7a4a34
+MAPS_ORIGIN_SHA = ff96ceaf8920666e309039091e76f58428f3761d
 MAPS_MONSTER_DELTA_VERDICT = NONE
 
 BOOTSTRAP_PASS = YES
@@ -37,7 +37,7 @@ No existing dirty worktree was reset, cleaned, stashed, overwritten, or used as 
 | --- | --- | --- | ---: | ---: | --- |
 | existing integration | `codex/integration` / `c93ff50b` | equal | 1 | 254 | tracked map catalog is `UNRELATED_CURRENT_WORK`; recognized generated `.uid`/translation outputs are `GENERATED_REBUILDABLE`; all remaining user or uncertain files are `USER_AUTHORED_KEEP` or `UNKNOWN_DO_NOT_TOUCH` |
 | monsters | `codex/monsters` / `722bf580` | equal | 0 | 17 | generated `.uid`/translation outputs are `GENERATED_REBUILDABLE`; preserved in place |
-| maps | `codex/maps` / `cef66165` | behind remote by 31 | 246 | 1248 | authored maps/assets are `USER_AUTHORED_KEEP`; previews/caches are `GENERATED_REBUILDABLE`; unrelated production is `UNRELATED_CURRENT_WORK`; unresolved items are `UNKNOWN_DO_NOT_TOUCH` |
+| maps | `codex/maps` / `cef66165` | behind audited remote by 32 | 246 | 1248 | authored maps/assets are `USER_AUTHORED_KEEP`; previews/caches are `GENERATED_REBUILDABLE`; unrelated production is `UNRELATED_CURRENT_WORK`; unresolved items are `UNKNOWN_DO_NOT_TOUCH` |
 
 Binary-safe tracked evidence was captured under ignored `outputs/monster_p00/`:
 
@@ -51,7 +51,7 @@ The complete `722bf580` line was merged with `--no-ff`; no last-commit cherry-pi
 
 ## P00-C maps semantic audit
 
-The 31 committed maps changes after local `cef66165` changed 22 editor documents, but those documents contain exactly 0 `monster_spawn` and 0 `boss_spawn` entries. The remaining changes are map layouts, art, entrances, annotations, or portal-note behavior and therefore do not enter the monster baseline.
+The first 31 committed maps changes after local `cef66165` changed 22 editor documents, but those documents contain exactly 0 `monster_spawn` and 0 `boss_spawn` entries. During final push verification, maps advanced once more to `ff96ceaf` (`feat(maps): canonicalize formal map network`). That commit changes no `assets/data/runtime/**`, `game_root`, runtime bridge, or map runtime release path; it adds 0 numeric canonical monster spawns and 0 numeric canonical Boss spawns. Its only Boss-layer change removes three legacy string-identified Orc Tomb entries already absent from the integrated `722bf580` authority. Therefore the latest maps HEAD adds no monster runtime semantic delta. The remaining changes are map identity/network, layouts, art, entrances, annotations, or portal-note behavior and do not enter the monster baseline.
 
 The dirty maps tree has 22 tracked changed editor documents and 45 untracked editor documents. It adds 0 monster spawns and 0 Boss spawns. Its removal of three legacy string-identified Orc Tomb Boss entries is already represented in the integrated `722bf580` authority line. No dirty maps file was copied into staging.
 
