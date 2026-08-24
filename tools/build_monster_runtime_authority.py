@@ -21,9 +21,17 @@ CATALOG_PATH = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
 BEHAVIOR_PATH = ROOT / "assets/data/monster_behavior_profiles.json"
 BOSS_PATH = ROOT / "assets/data/boss_service_rules.json"
 COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
+MOVEMENT_MASTER_PATH = ROOT / "assets/data/monster_movement_source_master_v1.json"
 BASE_SHA = "f4879d33c78edf21ff189b7be451162e3dbcd37b"
+M00_FINAL_SHA = "1945a5eceaf6efc49ddf4e5da4298834bf15c864"
 
-FINAL_STATUSES = {"LOCKED", "CANDIDATE", "DATA_HOLD"}
+FINAL_STATUSES = {
+    "LOCKED",
+    "CANDIDATE",
+    "DATA_HOLD",
+    "ACCEPTED_CANDIDATE",
+    "COMPATIBILITY_HOLD",
+}
 AUTHORITY_CLASSES = {
     "A_LOCKED",
     "B_CANDIDATE",
@@ -33,9 +41,9 @@ AUTHORITY_CLASSES = {
 }
 
 CLASSIC_DB_SOURCE = {
-    "distribution": "source.original_gameofmir.monster_db_176",
-    "declared_tier": "primary_in_existing_candidate_contract",
-    "policy_route_status": "not_listed_in_source_priority_policy_server_data_lane",
+    "distribution": "candidate.mylgd_mir2server_176",
+    "declared_tier": "explicit_user_requested_candidate_after_routed_source_exhaustion",
+    "policy_route_status": "accepted_by_M00R_after_all_routed_server_data_sources_failed_version_scope_or_field_coverage",
     "original_path": (
         "dev_art_sources/reference/mir2_database_candidates/"
         "mylgd_mir2server_176/Mud2/DB/Monster.DB"
@@ -116,6 +124,7 @@ def movement_record(
     combat_record: dict[str, Any] | None,
     raw_row: dict[str, Any] | None,
     combat_source: dict[str, Any],
+    movement_source: dict[str, Any],
 ) -> dict[str, Any]:
     exact = combat_record is not None and raw_row is not None
     canonical_interval = int(
@@ -138,7 +147,7 @@ def movement_record(
             "walk_step": max(1, int(raw_row.get("WalkStep") or 0)),
             "walk_wait_ms": int(raw_row.get("WaLkWait") or 0),
             "authority": "B_CANDIDATE",
-            "adoption": "not_adopted_outside_source_priority_server_data_route",
+            "adoption": "adopted_by_M00R_movement_source_master_exact_binding",
             "source": {
                 **CLASSIC_DB_SOURCE,
                 "sha256": str(combat_source.get("source_sha256", "")),
@@ -173,20 +182,39 @@ def movement_record(
         "resolution_status": timing_resolution,
     }
 
+    selected_status = str(movement_source["movement_source_status"])
+    selected_authority = {
+        "LOCKED": "A_LOCKED",
+        "ACCEPTED_CANDIDATE": "B_CANDIDATE",
+        "COMPATIBILITY_HOLD": "C_COMPATIBILITY",
+    }[selected_status]
+    selected_confidence = {
+        "LOCKED": "A",
+        "ACCEPTED_CANDIDATE": "B",
+        "COMPATIBILITY_HOLD": "C",
+    }[selected_status]
+    selected_binding = dict(movement_source["source_binding"])
+    selected_binding["master"] = "assets/data/monster_movement_source_master_v1.json"
+
     return {
-        "walk_interval_ms": None,
-        "walk_interval_status": "DATA_HOLD",
-        "walk_interval_authority": "UNKNOWN",
-        "walk_interval_confidence": None,
-        "source": None,
-        "walk_step": None,
-        "walk_step_status": "DATA_HOLD",
-        "walk_step_authority": "UNKNOWN",
-        "walk_wait_ms": None,
-        "walk_wait_status": "DATA_HOLD",
-        "walk_wait_authority": "UNKNOWN",
-        "walk_wait_explicit_zero": False,
-        "primary_missing_evidence": "server_rules primary source defines the fields and cadence but contains no primary Monster.DB rows for per-monster values",
+        "movement_source_status": selected_status,
+        "movement_enabled": bool(movement_source["movement_enabled"]),
+        "walk_interval_ms": int(movement_source["walk_interval_ms"]),
+        "walk_interval_status": selected_status,
+        "walk_interval_authority": selected_authority,
+        "walk_interval_confidence": selected_confidence,
+        "source": selected_binding,
+        "walk_step": int(movement_source["walk_step"]),
+        "walk_step_status": selected_status,
+        "walk_step_authority": selected_authority,
+        "walk_wait_ms": int(movement_source["walk_wait_ms"]),
+        "walk_wait_status": selected_status,
+        "walk_wait_authority": selected_authority,
+        "walk_wait_explicit_zero": int(movement_source["walk_wait_ms"]) == 0,
+        "primary_missing_evidence": None,
+        "m00r_resolution": str(movement_source["decision_reason"]),
+        "server_class_binding": dict(movement_source["server_class_binding"]),
+        "interval_conflict": movement_source.get("interval_conflict"),
         "current_canonical_candidate": canonical_candidate,
         "classic_176_non_routed_candidate": classic_candidate,
         "stationary": stationary,
@@ -194,7 +222,11 @@ def movement_record(
         "stationary_authority": "A_LOCKED" if stationary_locked else "B_CANDIDATE",
         "current_runtime_move_speed_gu_per_sec": current_runtime_speed_gu(entry, profile, boss_rule),
         "current_runtime_projection_status": "C_COMPATIBILITY",
-        "unresolved_conflicts": unresolved,
+        "unresolved_conflicts": (
+            ["compatibility hold requires explicit later review"]
+            if selected_status == "COMPATIBILITY_HOLD"
+            else []
+        ),
     }
 
 
@@ -292,12 +324,16 @@ def build_payload() -> dict[str, Any]:
     behavior = read_json(BEHAVIOR_PATH)
     boss_rules = read_json(BOSS_PATH)
     combat_source = read_json(COMBAT_SOURCE_PATH)
+    movement_master = read_json(MOVEMENT_MASTER_PATH)
     raw_by_name, raw_meta = load_raw_monster_db()
 
     profiles = dict(behavior.get("profiles", {}))
     profile_by_id = dict(behavior.get("profileByMonsterId", {}))
     boss_by_id = dict(boss_rules.get("runtimeRulesByMonsterId", {}))
     combat_by_id = dict(combat_source.get("records_by_monster_id", {}))
+    movement_by_id = {
+        str(item["monster_id"]): item for item in movement_master.get("records", [])
+    }
 
     records: list[dict[str, Any]] = []
     for entry in sorted(catalog.get("entries", []), key=lambda item: int(item["monster_id"])):
@@ -318,6 +354,7 @@ def build_payload() -> dict[str, Any]:
             combat_record,
             raw_row,
             combat_source,
+            dict(movement_by_id[str(monster_id)]),
         )
         dormant = bool(profile.get("dormant", False)) or bool(
             dict(boss_rule.get("mechanics", {})).get("burrowAmbush", {}).get("enabled", False)
@@ -404,27 +441,40 @@ def build_payload() -> dict[str, Any]:
         "walk_wait_data_hold": sum(
             1 for item in records if item["movement"]["walk_wait_status"] == "DATA_HOLD"
         ),
+        "movement_locked": sum(
+            1 for item in records if item["movement"]["movement_source_status"] == "LOCKED"
+        ),
+        "movement_accepted_candidate": sum(
+            1
+            for item in records
+            if item["movement"]["movement_source_status"] == "ACCEPTED_CANDIDATE"
+        ),
+        "movement_compatibility_hold": sum(
+            1
+            for item in records
+            if item["movement"]["movement_source_status"] == "COMPATIBILITY_HOLD"
+        ),
     }
 
     return {
         "schema_version": 1,
         "authority_id": "monster.runtime.authority.v1",
-        "stage": "M00_MONSTER_RUNTIME_AUTHORITY_FREEZE",
+        "stage": "M00R_M01_RELEASE_SOURCE_CLOSURE",
         "identity_key": "monster_id",
         "monster_base_sha": BASE_SHA,
+        "m00_final_sha": M00_FINAL_SHA,
         "generated_date": "2026-08-24",
         "stage_gate": {
             "m00": "PASS_AFTER_REPOSITORY_GATES",
-            "m01": "FORBIDDEN",
-            "blockers": [
-                "per-monster WALK_SPD is DATA_HOLD because server_rules primary contains no primary Monster.DB rows",
-                "per-monster WalkStep and WalkWait are DATA_HOLD",
-                "per-monster search cadence remains class-mapping DATA_HOLD",
-                "Ground GU to temporary classic AI cell quantization remains DATA_HOLD",
-            ],
+            "m00r": "PASS_AFTER_REPOSITORY_GATES",
+            "m01": "ALLOWED",
+            "m01_contract": "RELEASED",
+            "blockers": [],
+            "deferred_to_m02": ["class-specific target search cadence"],
         },
         "status_vocabulary": {
-            "delivery": ["LOCKED", "CANDIDATE", "DATA_HOLD"],
+            "delivery": sorted(FINAL_STATUSES),
+            "m01_movement": ["LOCKED", "ACCEPTED_CANDIDATE", "COMPATIBILITY_HOLD"],
             "evidence": sorted(AUTHORITY_CLASSES),
             "unknown_encoding": "null + DATA_HOLD; numeric zero is allowed only when explicitly sourced",
         },
@@ -432,9 +482,10 @@ def build_payload() -> dict[str, Any]:
             "policy": "assets/data/source_priority_policy.json",
             "primary_first": True,
             "monster_identity": "assets/data/runtime/canonical_monster_catalog.json",
+            "movement_value_authority": "assets/data/monster_movement_source_master_v1.json",
             "classic_176_db_candidate": {
                 **CLASSIC_DB_SOURCE,
-                "adoption": "not_adopted_outside_source_priority_server_data_route",
+                "adoption": "adopted_by_M00R_audited_candidate_routing",
                 "authority": "B_CANDIDATE",
             },
             "classic_server_rules": {
@@ -452,10 +503,10 @@ def build_payload() -> dict[str, Any]:
             "diagonal_neighbor_gu": 1.4142135623730951,
             "event_semantics": "axis and diagonal are each one classic movement event",
             "ground_position_gu_to_ai_cell": {
-                "value": None,
-                "status": "DATA_HOLD",
-                "authority": "UNKNOWN",
-                "reason": "primary server rules use integer cells but do not define the project Ground GU quantization boundary",
+                "value": "Vector2i(floor(position_ground_gu.x), floor(position_ground_gu.y))",
+                "status": "LOCKED",
+                "authority": "A_LOCKED",
+                "reason": "M00R boundary and center round-trip validation against current map runtime cell-center contract",
             },
             "ai_neighbor_cell": {
                 "status": "LOCKED",
@@ -463,12 +514,13 @@ def build_payload() -> dict[str, Any]:
                 "rule": "one of eight integer neighbor deltas per classic movement event",
                 "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:1995-2054",
             },
-            "cell_to_ground_target_candidate": {
+            "cell_to_ground_target": {
                 "value": "Vector2(cell)+Vector2(0.5,0.5)",
-                "status": "CANDIDATE",
-                "authority": "C_COMPATIBILITY",
+                "status": "LOCKED",
+                "authority": "A_LOCKED",
                 "source": "scripts/layers/runtime/map_editor_runtime_bridge.gd:400-401",
             },
+            "quantization_validation": "tools/build_monster_movement_source_master.py validate_quantization",
             "source": "scripts/ground_unit_space.gd",
             "ground_unit_space_sha256": sha256(ROOT / "scripts/ground_unit_space.gd"),
         },
@@ -567,6 +619,19 @@ def validate(payload: dict[str, Any]) -> list[str]:
         errors.append("monster_id set differs from canonical catalog")
     if payload.get("monster_base_sha") != BASE_SHA:
         errors.append("monster_base_sha drift")
+    summary = payload.get("summary", {})
+    if summary.get("movement_locked") != 6:
+        errors.append("movement_locked must be 6")
+    if summary.get("movement_accepted_candidate") != 138:
+        errors.append("movement_accepted_candidate must be 138")
+    if summary.get("movement_compatibility_hold") != 12:
+        errors.append("movement_compatibility_hold must be 12")
+    if any(summary.get(key) != 0 for key in (
+        "walk_interval_data_hold", "walk_step_data_hold", "walk_wait_data_hold"
+    )):
+        errors.append("M01 movement fields still contain DATA_HOLD")
+    if payload.get("stage_gate", {}).get("m01") != "ALLOWED":
+        errors.append("M01 gate is not released")
     return errors
 
 

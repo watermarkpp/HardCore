@@ -1,43 +1,42 @@
-# M01 Contract — Not Yet Released
+# M01 Contract — Released by M00R
 
-Baseline: `f4879d33c78edf21ff189b7be451162e3dbcd37b`
-Authority: `assets/data/monster_runtime_authority_v1.json`
+Baseline: `1945a5eceaf6efc49ddf4e5da4298834bf15c864`
+Movement authority: `assets/data/monster_movement_source_master_v1.json`
+Runtime authority: `assets/data/monster_runtime_authority_v1.json`
 
 ```text
 M00 = PASS
-M01 = FORBIDDEN
+M00R = PASS_AFTER_REPOSITORY_GATES
+M01 = ALLOWED
+M01_CONTRACT = RELEASED
 M01_IMPLEMENTATION = NOT_STARTED
 ```
 
-## Reason for the gate
+## Released M01 inputs
 
-M00 proved the classic cadence algorithm but could not lawfully lock the three per-ID inputs required to execute it:
+- Runtime identity is exact `monster_id`; runtime name binding is forbidden.
+- All 156 canonical IDs have a machine-bound movement source and server class/family binding.
+- Movement status is one of `LOCKED`, `ACCEPTED_CANDIDATE`, or `COMPATIBILITY_HOLD`; no M01 movement field remains `DATA_HOLD`.
+- Six source-locked stationary monsters never receive a movement grant.
+- Twelve explicitly listed variant IDs use stable-ID compatibility bindings to audited base rows; this does not reactivate retired IDs.
+- `WALK_SPD` is the movement-event cadence in milliseconds with the already locked 200ms minimum.
+- `WalkStep` counts granted neighbor events before `WalkWait`; the server-rule semantics are unchanged.
 
-- `walk_interval_ms`
-- `walk_step`
-- `walk_wait_ms`
+## Spatial contract
 
-The primary `server_rules` source contains the loader and runtime semantics but no primary per-monster database rows. Current canonical intervals and the selected local 1.76 DB are preserved as candidates; neither is silently elevated over the formal source policy. The exact Ground-GU-to-temporary-classic-cell quantization and class-specific search cadence are also held.
+- The sole persistent world position is `runtime_map_absolute_ground_gu`.
+- Temporary classic cell: `Vector2i(floor(position_ground_gu.x), floor(position_ground_gu.y))`.
+- Cell center: `Vector2(cell) + Vector2(0.5, 0.5)`.
+- Neighbor target: `Vector2(cell + neighbor) + Vector2(0.5, 0.5)`.
+- The temporary cell must never be persisted as a second logical position.
+- Each axis or diagonal neighbor consumes one movement grant; distances are `1 GU` and `sqrt(2) GU` respectively.
 
-## Frozen M01 inputs
+## M01 implementation boundary
 
-When the gate is later released, M01 must:
+M01 may replace only autonomous EnemyActor movement frequency/step execution with cadence-governed one-neighbor events and Ground GU interpolation. `move_speed_gu_per_sec` remains presentation/interpolation speed and cannot determine event frequency.
 
-1. Read only exact `monster_id` records from `monster_runtime_authority_v1.json`.
-2. Keep map-global Ground GU as the sole persistent position.
-3. Derive any classic cell transiently; never persist a second grid coordinate.
-4. Treat axis and diagonal neighbor movement as one classic event; use 1 GU and `sqrt(2)` GU presentation distances respectively.
-5. Drive movement from interval/step/wait cadence, not by reverse-engineering `move_speed_gu_per_sec`.
-6. Preserve stationary and dormant class/state semantics.
-7. Leave P00 attack delivery, collision, projectile, Red Moon, and fixed-area spike contracts unchanged.
-8. Keep continuous speed, spawn leash, return-to-spawn, and Boss multipliers in an explicit compatibility adapter until their replacement stage.
+M01 must not change target acquisition, perception, threat, leash, disengage, focus, recovery, world state, Boss persistence, attack delivery, player movement, `GroundUnitSpace`, or `MonsterIdentity`. Class-specific target-search cadence is explicitly deferred to M02.
 
-## Preconditions to release M01
+M01 must preserve the frozen deliveries for monsters 70, 124, 220, 222, physical projectiles, Red Moon, and fixed-area spikes.
 
-- Integration must resolve and record the formal source route for per-ID `WALK_SPD`, `WalkStep`, and `WalkWait`.
-- The authority must replace the relevant `null + DATA_HOLD` fields with sourced values and `LOCKED` or explicitly accepted `CANDIDATE` status.
-- Per-ID server class/search policy must be machine-bound without runtime name lookup.
-- Ground GU to temporary classic-cell quantization must be frozen and round-trip tested without changing `GroundUnitSpace`.
-- The updated authority must pass deterministic structure/source validation and canonical catalog checks.
-
-Until all preconditions are met, no edits are authorized to `scripts/enemy.gd`, `scripts/game_root.gd`, `scripts/ground_unit_space.gd`, `scripts/monster_unit_adapter.gd`, or `scripts/monster_identity.gd` for M01.
+M00R releases the contract only. It does not implement M01.
