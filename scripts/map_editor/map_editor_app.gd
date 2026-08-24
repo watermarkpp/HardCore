@@ -47,6 +47,8 @@ var calibration_footprint_y: SpinBox
 var calibration_collision: OptionButton
 var calibration_occlusion: CheckBox
 var object_role_option: OptionButton
+var map_portal_note_container: VBoxContainer
+var map_portal_note_edit: LineEdit
 var collision_shape_option: OptionButton
 var collision_draw_toggle: CheckBox
 var collision_erase_toggle: CheckBox
@@ -222,6 +224,23 @@ func _build_ui() -> void:
 	sidebar.add_child(wall_loop_button)
 	_build_wall_loop_dialog()
 	var select_button:=Button.new(); select_button.text="选择工具（悬停高亮／左键选取／方向键移动）"; select_button.pressed.connect(_activate_select_tool); sidebar.add_child(select_button)
+	map_portal_note_container = VBoxContainer.new()
+	map_portal_note_container.visible = false
+	var map_portal_note_label := Label.new()
+	map_portal_note_label.text = "选中地图出入口的备注"
+	map_portal_note_container.add_child(map_portal_note_label)
+	map_portal_note_edit = LineEdit.new()
+	map_portal_note_edit.placeholder_text = "例如：N方向连接祖玛寺庙二层 S方向入口"
+	map_portal_note_edit.max_length = 1024
+	map_portal_note_edit.text_submitted.connect(_on_map_portal_note_submitted)
+	map_portal_note_container.add_child(map_portal_note_edit)
+	var save_map_portal_note_button := Button.new()
+	save_map_portal_note_button.text = "保存选中入口备注"
+	save_map_portal_note_button.pressed.connect(
+		_on_save_selected_map_portal_note_pressed
+	)
+	map_portal_note_container.add_child(save_map_portal_note_button)
+	sidebar.add_child(map_portal_note_container)
 	random_region_fill_toggle = CheckBox.new(); random_region_fill_toggle.text = "自由套索选择模式"; random_region_fill_toggle.toggled.connect(_on_lasso_mode_toggled); sidebar.add_child(random_region_fill_toggle)
 	point_erase_toggle = CheckBox.new(); point_erase_toggle.text = "点选/拖动擦除地面和对象"; point_erase_toggle.toggled.connect(_on_point_erase_toggled); sidebar.add_child(point_erase_toggle)
 	var role_label := Label.new(); role_label.text = "对象语义角色"; sidebar.add_child(role_label)
@@ -1620,10 +1639,12 @@ func _activate_semantic_placement() -> void:
 
 func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 	if selectable_id.is_empty():
+		_hide_map_portal_note_editor()
 		status_label.text = "已清空选择"
 		return
 	var semantic := MapEditorGameplaySemanticService.find_entry(current_document, selectable_id)
 	if not semantic.is_empty():
+		_hide_map_portal_note_editor()
 		_select_semantic_kind(str(semantic.get("kind", "")), false)
 		_sync_semantic_editor_fields(semantic)
 		semantic_display_name.text = str(semantic.get("display_name", ""))
@@ -1631,7 +1652,58 @@ func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 		semantic_target_entrance.text = str(semantic.get("target_entrance_id", ""))
 		status_label.text = "已选中功能标注：%s；修改参数后点击“更新当前选中的功能标注”" % selectable_id
 		return
-	status_label.text="已选中：%s" % selectable_id
+	if _sync_map_portal_note_editor(selectable_id):
+		status_label.text = "已选中地图出入口：%s；可在左侧填写本入口连接备注" % selectable_id
+	else:
+		status_label.text="已选中：%s" % selectable_id
+
+
+func _sync_map_portal_note_editor(instance_id: String) -> bool:
+	_hide_map_portal_note_editor()
+	if not instance_id.begins_with("inst_"):
+		return false
+	var located := MapEditorInstanceService._locate(current_document, instance_id)
+	if not bool(located.get("ok", false)):
+		return false
+	var instance: Dictionary = located.instance
+	var asset := MapAssetCatalogService.find_asset(
+		str(instance.get("asset_id", ""))
+	)
+	if not PortalAnchorService.is_portal_asset(asset):
+		return false
+	map_portal_note_edit.text = str(
+		instance.get(MapEditorInstanceService.MAP_PORTAL_NOTE_FIELD, "")
+	)
+	map_portal_note_container.visible = true
+	return true
+
+
+func _hide_map_portal_note_editor() -> void:
+	if map_portal_note_edit != null:
+		map_portal_note_edit.text = ""
+	if map_portal_note_container != null:
+		map_portal_note_container.visible = false
+
+
+func _on_save_selected_map_portal_note_pressed() -> void:
+	var instance_id := preview.selected_selectable_id if preview != null else ""
+	if not instance_id.begins_with("inst_"):
+		status_label.text = "请先使用选择工具选中一个已放置的地图出入口"
+		return
+	var result := MapEditorInstanceService.update_map_portal_note(
+		current_document,
+		instance_id,
+		map_portal_note_edit.text
+	)
+	if not bool(result.get("ok", false)):
+		status_label.text = "入口备注保存失败：%s" % result.get("errors", [])
+		return
+	map_portal_note_edit.text = str(result.get("note", ""))
+	status_label.text = "入口备注已更新；点击“保存地图”写入工作文件"
+
+
+func _on_map_portal_note_submitted(_text: String) -> void:
+	_on_save_selected_map_portal_note_pressed()
 
 
 func _select_semantic_kind(kind: String, activate_placement := true) -> void:

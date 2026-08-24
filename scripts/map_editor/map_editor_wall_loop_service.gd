@@ -448,4 +448,5 @@ static func _family_display_name(family_id: String, theme: String) -> String:
 		"cave_granite_u0": "天然洞穴花岗岩墙",
 		"wooma_temple_gothic_stone_u0": "标准灰绿色哥特寺庙墙",
 		"wooma_temple_floor_warm_stone_u0": "沃玛寺庙暖灰褐石墙",
+		"chiyue_valley_rock_wall_u0": "赤月峡谷天然洞穴岩壁",
 	}.get(family_id, "%s（%s）" % [family_id, theme])

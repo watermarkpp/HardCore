@@ -51,7 +51,7 @@ func _ready() -> void:
 		assert(bool(asset.get("allows_edge_clipping", false)))
 		assert(str(asset.get("content_layer", "")) == "personal_expansion")
 		assert(str(asset.get("calibration_status", "")) == "placeable")
-		assert(bool(asset.get("placeable", false)))
+		assert(not bool(asset.get("placeable", false)))
 		assert(
 			str(asset.get("palette_path", "")).begins_with(
 				"装饰物1/树木/MSE深林44/"
@@ -75,7 +75,7 @@ func _ready() -> void:
 		)
 		var effective := MapAssetCatalogService.find_asset(asset_id)
 		assert(not effective.is_empty(), asset_id)
-		assert(bool(effective.get("placeable", false)), asset_id)
+		assert(not bool(effective.get("placeable", false)), asset_id)
 
 	assert(category_counts == EXPECTED_COUNTS)
 	var document := MapEditorTypes.new_map(
@@ -105,20 +105,32 @@ func _ready() -> void:
 		"collision_policy": "preset",
 	})
 	for asset: Dictionary in assets:
+		var in_bounds := MapEditorPlacementValidator.validate(
+			document,
+			str(asset.asset_id),
+			Vector2i(63, 63)
+		)
+		assert(not in_bounds.ok, str(asset.asset_id))
 		assert(
-			MapEditorPlacementValidator.validate(
-				document,
-				str(asset.asset_id),
-				Vector2i(63, 63)
-			).ok,
+			(in_bounds.get("errors", []) as Array).has("asset_not_placeable"),
+			str(asset.asset_id)
+		)
+		assert(not (in_bounds.get("asset", {}) as Dictionary).is_empty())
+		assert((in_bounds.get("footprint_tiles", []) as Array).size() == 2)
+		var out_of_bounds := MapEditorPlacementValidator.validate(
+			document,
+			str(asset.asset_id),
+			Vector2i(64, 63)
+		)
+		assert(not out_of_bounds.ok, str(asset.asset_id))
+		assert(
+			(out_of_bounds.get("errors", []) as Array).has("asset_not_placeable"),
 			str(asset.asset_id)
 		)
 		assert(
-			not MapEditorPlacementValidator.validate(
-				document,
-				str(asset.asset_id),
-				Vector2i(64, 63)
-			).ok,
+			(out_of_bounds.get("errors", []) as Array).has(
+				"portal_anchor_out_of_bounds"
+			),
 			str(asset.asset_id)
 		)
 	var placed := MapEditorInstanceService.create_instance(
@@ -127,23 +139,15 @@ func _ready() -> void:
 		str(assets[0].default_object_role),
 		Vector2i(20, 20)
 	)
-	assert(placed.ok, str(placed.get("errors", [])))
-	assert(str(placed.instance.collision_policy) == "none")
-	assert(str(placed.instance.collision_authority) == "manual_by_user")
-	assert((placed.instance.collision_cells as Array).is_empty())
-	var resized := MapEditorInstanceService.resize_instance(
-		document,
-		str(placed.instance.instance_id),
-		-1
+	assert(not placed.ok, str(placed.get("errors", [])))
+	assert(
+		(placed.get("errors", []) as Array).has("asset_not_placeable"),
+		str(placed.get("errors", []))
 	)
-	assert(resized.ok, str(resized.get("errors", [])))
-	assert(str(resized.instance.collision_policy) == "none")
-	assert(resized.instance.collision_footprint_tiles == [0, 0])
-	assert((resized.instance.collision_cells as Array).is_empty())
 
 	print(
 		"MSE_DEEP_FOREST_ASSET_PACK_PASS "
 		+ "assets=44 categories=4 alpha=44 textures=44 collision=none role=decoration "
-		+ "forest_clusters=excluded"
+		+ "forest_clusters=excluded placeable=0 placement_geometry=44"
 	)
 	get_tree().quit(0)
