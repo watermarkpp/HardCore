@@ -2,7 +2,7 @@ extends Node
 
 func _ready()->void:
 	var player:=PlayerCharacter.new();player.global_position=Vector2(300,0);add_child(player)
-	var enemy:=EnemyActor.new();enemy.setup(GameData.get_monster("多钩猫"),player,false);enemy.global_position=Vector2.ZERO;enemy.set_meta("spawn_position",Vector2.ZERO);enemy.set_meta("safe_zones",[]);add_child(enemy)
+	var enemy:=EnemyActor.new();enemy.setup(GameData.get_monster_by_id(24),player,false);enemy.global_position=Vector2.ZERO;enemy.set_meta("spawn_position",Vector2.ZERO);enemy.set_meta("safe_zones",[]);add_child(enemy)
 	assert(is_equal_approx(enemy.aggro_radius_gu, 12.0))
 	enemy._add_threat(player,100.0);assert(enemy._threat_for(player)>=100.0)
 	enemy._decay_threat(1.0);assert(enemy._threat_for(player)<100.0)
@@ -58,7 +58,10 @@ func _ready()->void:
 	assert(refresh_enemy.current_hp == 100)
 	refresh_enemy._update_status_effects(0.01)
 	assert(refresh_enemy.current_hp == 96, "poison refresh reset accumulated tick progress")
-	var fallback_enemy:=EnemyActor.new();fallback_enemy.display_name="测试占位怪";var fallback:=MonsterVisual.new();fallback.setup(fallback_enemy);fallback_enemy.visual=fallback;fallback.play_attack(0.46);fallback._attack_remaining=0.23
+	# Keep the procedural fallback check detached from the world/streaming boot.
+	# The actor still carries a real canonical ID; no name-only or rejected
+	# EnemyActor is ever added to the scene tree.
+	var fallback_enemy:=EnemyActor.new();fallback_enemy.monster_id=24;fallback_enemy.monster_data={"monster_id":24};fallback_enemy.display_name="测试占位怪";var fallback:=MonsterVisual.new();fallback.setup(fallback_enemy);fallback_enemy.visual=fallback;fallback.play_attack(0.46);fallback._attack_remaining=0.23
 	assert(not fallback.has_authored_client_art() and fallback.should_draw_procedural_fallback(), "unmapped test monster lost its intentional procedural fallback")
 	assert(fallback.is_fallback_attacking());assert(fallback.fallback_attack_scale()!=Vector2.ONE)
 	fallback.free();fallback_enemy.free();timing_enemy.queue_free();refresh_enemy.queue_free();enemy.queue_free();player.queue_free()

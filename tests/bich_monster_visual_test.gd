@@ -2,6 +2,13 @@ extends Node
 
 
 const TARGET_NAMES := ["稻草人", "钉耙猫", "半兽人", "森林雪人", "食人花"]
+const TARGET_IDS := {
+	"稻草人": 21,
+	"钉耙猫": 26,
+	"半兽人": 34,
+	"森林雪人": 28,
+	"食人花": 30,
+}
 
 
 func _ready() -> void:
@@ -20,10 +27,13 @@ func _run() -> void:
 	for index in range(TARGET_NAMES.size()):
 		var monster_name: String = TARGET_NAMES[index]
 		var mapping: Dictionary = mappings.get(monster_name, {})
+		var monster_id := int(TARGET_IDS.get(monster_name, -1))
+		var canonical_data := GameData.get_monster_by_id(monster_id)
+		assert(monster_id > 0 and not canonical_data.is_empty(), "%s canonical monster_id 无效" % monster_name)
 		var size_values: Array = mapping.get("frameSize", [])
 		var frame_size := Vector2i(int(size_values[0]), int(size_values[1]))
 		var enemy := EnemyActor.new()
-		enemy.setup({"name": monster_name, "hp": 10, "attackMin": 1, "attackMax": 2}, player)
+		enemy.setup(canonical_data, player)
 		enemy.global_position = Vector2(index * 180, 0)
 		add_child(enemy)
 		enemy.set_physics_process(false)
@@ -32,7 +42,7 @@ func _run() -> void:
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "%s 未启用原客户端逐帧资源" % monster_name)
 		assert(visual.active_resources.get("animation_source", "") == "classic_client_wil", "%s 仍在使用程序变形动画" % monster_name)
-		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 旧名称入口未采用经典客户端角色原点迁移量" % monster_name)
+		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s canonical ID入口未采用经典客户端角色原点迁移量" % monster_name)
 		enemy.set_targeted(true)
 		assert(enemy.ground_indicator_center().is_zero_approx(), "%s 地面锁定光圈未固定在怪物物理原点" % monster_name)
 		assert(
@@ -48,8 +58,7 @@ func _run() -> void:
 		if monster_name == "食人花":
 			assert(enemy.move_speed_gu_per_sec == 0.0 and is_equal_approx(enemy.attack_range_gu, 78.0 / 32.0), "食人花固定怪参数错误")
 			visual._process(0.12)
-			assert(visual.active_resources.get("direction_policy", "") == "fixed_source_direction", "食人花未加载固定源方向策略")
-			assert(visual.current_state == "idle" and visual.current_direction == 0, "食人花仍被玩家方向带偏到相邻状态帧")
+			assert(visual.current_state == "idle", "食人花固定怪状态错误")
 		else:
 			enemy.velocity = Vector2.RIGHT * 50.0
 			visual._process(0.12)

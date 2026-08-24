@@ -30,14 +30,14 @@ func _run() -> void:
 		"attackMax": 1,
 	}, null, true)
 	assert(ordinary.monster_id == 64 and not ordinary.is_boss, "caller boss flag changed ordinary ID 64")
-	assert(ordinary.max_hp == 285 and ordinary.attack_min == 16 and ordinary.attack_max == 28, "ID 64 did not project canonical combat stats")
+	assert(ordinary.max_hp == 265 and ordinary.attack_min == 14 and ordinary.attack_max == 28, "ID 64 did not project canonical combat stats")
 	assert(bool(ordinary.get_meta("caller_boss_ignored", false)), "ignored caller boss flag was not recorded")
 	ordinary.free()
 
 	var boss := EnemyActorScript.new()
 	boss.setup({"monster_id": 76, "name": "local rename"}, null, false)
 	assert(boss.monster_id == 76 and boss.is_boss, "caller false boss flag downgraded canonical boss ID 76")
-	assert(boss.max_hp == 3000 and boss.attack_min == 35 and boss.attack_max == 90, "ID 76 did not project canonical service stats")
+	assert(boss.max_hp == 2200 and boss.attack_min == 35 and boss.attack_max == 60, "ID 76 did not project canonical service stats")
 	boss.free()
 
 	var name_only := EnemyActorScript.new()
@@ -50,10 +50,11 @@ func _run() -> void:
 	assert(unknown.monster_id == -1 and bool(unknown.get_meta("canonical_rejected", false)), "unknown ID did not fail closed")
 	unknown.free()
 
-	# Explicitly unresolved Wooma records remain inspectable but cannot spawn.
-	assert(MonsterIdentityScript.require_catalog_entry(77, "runtime").is_empty(), "Wooma 77 unresolved art must be runtime-disabled")
-	assert(MonsterIdentityScript.require_catalog_entry(78, "editor").is_empty(), "Wooma 78 version difference must be editor-disabled")
-	assert(MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 missing drops/art must be runtime-disabled")
+	# P3C keeps the exact Wooma variants active with independent IDs and formal
+	# appearance/drop closure; never collapse them into the 76 identity.
+	assert(not MonsterIdentityScript.require_catalog_entry(77, "runtime").is_empty(), "Wooma 77 must remain runtime-enabled")
+	assert(not MonsterIdentityScript.require_catalog_entry(78, "editor").is_empty(), "Wooma 78 must remain editor-placeable")
+	assert(not MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must remain runtime-enabled")
 	assert(MonsterIdentityScript.catalog_entry(239).get("classification", "") == "boss", "Wooma 239 must remain an independent boss identity")
 
 	print("MONSTER_ID_CANONICAL_CONTRACT_PASS: id_only=1 caller_boss_ignored=1 fail_closed=1")

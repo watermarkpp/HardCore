@@ -24,7 +24,8 @@ func _run() -> void:
 	assert(player.collision_layer == 2 and player.collision_mask == 5, "玩家碰撞层未隔离为player/world+enemy")
 
 	var enemies: Array[EnemyActor] = []
-	var data := GameData.get_monster("稻草人")
+	var data := GameData.get_monster_by_id(21)
+	assert(not data.is_empty(), "稻草人 canonical monster_id=21 缺失")
 	for index in range(8):
 		var enemy := EnemyActor.new()
 		enemy.setup(data, player, false)

@@ -2,6 +2,7 @@ extends Node
 
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -15,7 +16,7 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
-	var rule: Dictionary = GameData.boss_service_rules.get("runtimeRules", {}).get("尸王", {})
+	var rule: Dictionary = GameData.boss_service_rules.get("runtimeRulesByMonsterId", {}).get("89", {})
 	assert(int(rule.get("serviceRace", 0)) == 81 and rule.get("serviceClass", "") == "TATMonster", "尸王服务端类映射错误")
 	assert(not bool(rule.get("specialSkill", {}).get("enabled", true)) and not bool(rule.get("phaseTwo", {}).get("enabled", true)), "尸王仍保留无来源范围技能")
 
@@ -31,7 +32,21 @@ func _run() -> void:
 	player.defense_max = 0
 	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 1.5)
 	var boss := EnemyActor.new()
-	boss.setup(GameData.get_monster("尸王"), player, true)
+	var canonical_monster: Dictionary = GameData.get_monster_by_id(89)
+	assert(not canonical_monster.is_empty(), "尸王 canonical monster_id=89 未加载")
+	boss.setup(canonical_monster, player, true)
+	# ID 89 is classified as an elite spawn in the canonical map catalog, while
+	# the service evidence still defines its Race81/TATMonster timing.  Project
+	# that ID-keyed boss rule explicitly for this mechanics fixture; production
+	# setup remains classification-authoritative and never uses the caller flag.
+	var canonical_boss_rule: Dictionary = MonsterIdentityScript.boss_rule(
+		canonical_monster,
+		GameData.boss_service_rules,
+	)
+	assert(not canonical_boss_rule.is_empty(), "尸王 ID 89 缺少 canonical boss rule")
+	boss.is_boss = true
+	boss.boss_rule = canonical_boss_rule
+	boss._apply_boss_rule()
 	boss.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
