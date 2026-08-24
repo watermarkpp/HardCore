@@ -25,6 +25,15 @@ const MonsterRangedProjectileEffectScript := preload(
 const MonsterTargetMagicEffectScript := preload(
 	"res://scripts/monster_target_magic_effect.gd"
 )
+const MonsterMovementCadenceScript := preload(
+	"res://scripts/monster_movement_cadence.gd"
+)
+const MonsterNeighborStepPolicyScript := preload(
+	"res://scripts/monster_neighbor_step_policy.gd"
+)
+const MONSTER_RUNTIME_AUTHORITY_PATH := (
+	"res://assets/data/monster_runtime_authority_v1.json"
+)
 const MONSTER_MAGIC_MELEE_EFFECT_ID := "monster.flame_wooma.magic_melee.v1"
 const MONSTER_AREA_MAGIC_EFFECT_ID := "monster.touch_dragon.area_magic.v1"
 const RETIRED_SOURCE_ONLY_MONSTER_IDS := [71]
@@ -83,6 +92,10 @@ static var _retarget_full_scan_count := 0
 static var _background_ai_evaluation_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
+
+static var _movement_authority_loaded := false
+static var _movement_authority_load_failed := false
+static var _movement_authority_by_id: Dictionary = {}
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
@@ -205,6 +218,16 @@ var _environment_guard_timer := 0.0
 var _last_environment_safe_position_px := Vector2.INF
 var actual_ground_motion_gu := Vector2.ZERO
 
+var _movement_cadence
+var _movement_authority_failed_closed := false
+var _movement_step_active := false
+var _movement_step_start_ground_gu := Vector2.INF
+var _movement_step_start_screen_px := Vector2.INF
+var _movement_step_target_ground_gu := Vector2.INF
+var _movement_step_neighbor := Vector2i.ZERO
+var _movement_step_speed_scale := 1.0
+var _movement_step_reason: StringName = &""
+
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
 	var requested_id := MonsterIdentityScript.monster_id(data)
@@ -272,6 +295,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 			_apply_boss_rule()
 	if stationary:
 		move_speed_gu_per_sec = 0.0
+	_configure_movement_cadence()
 
 
 func _apply_behavior_profile() -> void:
@@ -321,6 +345,262 @@ func _apply_source_locked_special_delivery_override() -> void:
 		"presentationDelaySeconds": 0.3,
 		"obstaclePolicy": "environment_adjacent_only",
 	}
+
+
+static func _load_movement_authority_once() -> void:
+	if _movement_authority_loaded or _movement_authority_load_failed:
+		return
+	var file := FileAccess.open(MONSTER_RUNTIME_AUTHORITY_PATH, FileAccess.READ)
+	if file == null:
+		_movement_authority_load_failed = true
+		push_error("EnemyActor: cannot open movement authority: ", MONSTER_RUNTIME_AUTHORITY_PATH)
+		return
+	var json_text := file.get_as_text()
+	file.close()
+	var parsed: Variant = JSON.parse_string(json_text)
+	if parsed == null or not (parsed is Dictionary):
+		_movement_authority_load_failed = true
+		push_error("EnemyActor: invalid JSON in movement authority")
+		return
+	var root: Dictionary = parsed
+	var records: Variant = root.get("records", null)
+	if records == null or not (records is Array):
+		_movement_authority_load_failed = true
+		push_error("EnemyActor: missing records array in movement authority")
+		return
+	var seen_ids: Dictionary = {}
+	for record_variant: Variant in (records as Array):
+		if not (record_variant is Dictionary):
+			continue
+		var record: Dictionary = record_variant
+		var raw_id: Variant = record.get("monster_id", null)
+		if raw_id == null:
+			continue
+		var monster_id_value := int(raw_id)
+		if monster_id_value <= 0:
+			continue
+		if seen_ids.has(monster_id_value):
+			_movement_authority_load_failed = true
+			push_error("EnemyActor: duplicate monster_id in movement authority: ", monster_id_value)
+			return
+		seen_ids[monster_id_value] = true
+		_movement_authority_by_id[monster_id_value] = record
+	_movement_authority_loaded = true
+	_movement_authority_load_failed = false
+
+
+static func _movement_authority_record_for_id(
+	requested_monster_id: int
+) -> Dictionary:
+	_load_movement_authority_once()
+	if _movement_authority_load_failed:
+		return {}
+	var raw: Variant = _movement_authority_by_id.get(requested_monster_id, null)
+	if raw == null or not (raw is Dictionary):
+		return {}
+	return (raw as Dictionary).duplicate(true)
+
+
+func _configure_movement_cadence() -> bool:
+	if monster_id <= 0:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		return false
+	var authority_record := _movement_authority_record_for_id(monster_id)
+	if authority_record.is_empty():
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		return false
+	var new_cadence := MonsterMovementCadenceScript.new()
+	var now_ms := Time.get_ticks_msec()
+	var ok: bool = new_cadence.configure(authority_record, now_ms)
+	if not ok:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		return false
+	_movement_cadence = new_cadence
+	_movement_authority_failed_closed = false
+	return true
+
+
+func _request_autonomous_step(
+	desired_direction_ground_gu: Vector2,
+	speed_scale: float,
+	use_crowd_steering: bool,
+	reason: StringName,
+	now_ms_override := -1
+) -> bool:
+	if _movement_step_active:
+		return false
+	if _movement_authority_failed_closed:
+		return false
+	if _movement_cadence == null:
+		return false
+	if stationary:
+		return false
+	if dormant:
+		return false
+	if control_time > 0.0:
+		return false
+	if charm_time > 0.0:
+		return false
+	if not desired_direction_ground_gu.is_finite():
+		return false
+	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
+		return false
+	var now_ms := now_ms_override
+	if now_ms < 0:
+		now_ms = Time.get_ticks_msec()
+	var cadence_result: Dictionary = _movement_cadence.evaluate(now_ms)
+	if cadence_result.authority_contract_violation:
+		_movement_authority_failed_closed = true
+		velocity = Vector2.ZERO
+		return false
+	if not cadence_result.granted:
+		return false
+	var pursuit_ground := desired_direction_ground_gu.normalized()
+	var steering_ground := pursuit_ground
+	if use_crowd_steering:
+		var separation_ground := _crowd_separation()
+		steering_ground = pursuit_ground + separation_ground * 0.72
+		if steering_ground.dot(pursuit_ground) < 0.12:
+			steering_ground += pursuit_ground * (
+				0.12 - steering_ground.dot(pursuit_ground)
+			)
+		_crowd_steering_evaluation_count += 1
+	var neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
+		steering_ground
+	)
+	if neighbor == Vector2i.ZERO:
+		return false
+	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not current_ground_gu.is_finite():
+		return false
+	var step := MonsterNeighborStepPolicyScript.build_neighbor_step(
+		current_ground_gu,
+		neighbor
+	)
+	if not bool(step.get("valid", false)):
+		return false
+	var target_ground_gu: Vector2 = step.get("target_ground_gu", Vector2.INF)
+	if not target_ground_gu.is_finite():
+		return false
+	_movement_step_start_ground_gu = current_ground_gu
+	_movement_step_start_screen_px = global_position
+	_movement_step_target_ground_gu = target_ground_gu
+	_movement_step_neighbor = neighbor
+	_movement_step_speed_scale = maxf(0.0, speed_scale)
+	_movement_step_reason = reason
+	_movement_step_active = true
+	var step_direction_ground := steering_ground.normalized()
+	movement_facing = _screen_facing_for_ground_direction(step_direction_ground)
+	facing = movement_facing
+	return true
+
+
+func _clear_autonomous_step_state() -> void:
+	_movement_step_active = false
+	_movement_step_start_ground_gu = Vector2.INF
+	_movement_step_start_screen_px = Vector2.INF
+	_movement_step_target_ground_gu = Vector2.INF
+	_movement_step_neighbor = Vector2i.ZERO
+	_movement_step_speed_scale = 1.0
+	_movement_step_reason = &""
+
+
+func _cancel_autonomous_step(preserve_current_position := true) -> void:
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_clear_autonomous_step_state()
+
+
+func _fail_autonomous_step_blocked() -> void:
+	if _movement_step_start_screen_px.is_finite() and _movement_step_start_screen_px != Vector2.INF:
+		set_combat_position(
+			_movement_step_start_screen_px,
+			&"autonomous_step_rollback"
+		)
+		_last_environment_safe_position_px = _movement_step_start_screen_px
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_clear_autonomous_step_state()
+
+
+func _advance_autonomous_step(delta: float) -> void:
+	if not _movement_step_active:
+		return
+	if stationary:
+		_cancel_autonomous_step(true)
+		return
+	if dormant:
+		_cancel_autonomous_step(true)
+		return
+	if control_time > 0.0:
+		_cancel_autonomous_step(true)
+		return
+	if charm_time > 0.0:
+		_cancel_autonomous_step(true)
+		return
+	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not current_ground_gu.is_finite():
+		_cancel_autonomous_step(true)
+		return
+	var remaining := _movement_step_target_ground_gu - current_ground_gu
+	if remaining.length_squared() <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		var target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
+		if target_screen.is_finite():
+			set_combat_position(target_screen, &"autonomous_step_arrival")
+		velocity = Vector2.ZERO
+		_clear_autonomous_step_state()
+		return
+	var base_speed := move_speed_gu_per_sec * _movement_step_speed_scale
+	var is_diagonal := _movement_step_neighbor.x != 0 and _movement_step_neighbor.y != 0
+	var presentation_speed := base_speed * (sqrt(2.0) if is_diagonal else 1.0)
+	if presentation_speed <= 0.0:
+		_cancel_autonomous_step(true)
+		return
+	var remaining_distance := remaining.length()
+	var very_small := 0.0001
+	var max_frame_distance := presentation_speed * maxf(delta, 0.0)
+	var frame_speed := minf(presentation_speed, remaining_distance / maxf(delta, very_small))
+	var frame_direction := remaining.normalized()
+	var frame_start_ground := current_ground_gu
+	var frame_start_screen := global_position
+	velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+		frame_direction,
+		frame_speed,
+	)
+	_move_with_spatial_rules(delta)
+	var after_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var blocked := false
+	if get_slide_collision_count() > 0:
+		blocked = true
+	elif not after_ground_gu.is_finite():
+		blocked = true
+	else:
+		var motion_ground_gu := after_ground_gu - frame_start_ground
+		if motion_ground_gu.length() > GroundUnitSpace.EPSILON_GU:
+			var forward_dot := motion_ground_gu.normalized().dot(frame_direction)
+			if forward_dot < -0.5:
+				blocked = true
+			elif forward_dot < 0.5:
+				var side_dot := motion_ground_gu.normalized().dot(
+					Vector2(-frame_direction.y, frame_direction.x)
+				)
+				if absf(side_dot) > 0.8:
+					blocked = true
+		else:
+			blocked = true
+	if blocked:
+		_fail_autonomous_step_blocked()
+		return
+	if after_ground_gu.distance_squared_to(_movement_step_target_ground_gu) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		var exact_target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
+		if exact_target_screen.is_finite():
+			set_combat_position(exact_target_screen, &"autonomous_step_arrival")
+		velocity = Vector2.ZERO
+		_clear_autonomous_step_state()
+		return
 
 
 func _apply_boss_rule() -> void:
@@ -479,15 +759,23 @@ func _physics_process(delta: float) -> void:
 			_background_ai_evaluation_count += 1
 			_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
 			if not is_instance_valid(target):
-				_return_to_spawn()
+				_return_to_spawn(delta)
+			elif _movement_step_active:
+				_advance_autonomous_step(delta)
+		elif _movement_step_active:
+			_advance_autonomous_step(delta)
 		return
 	_background_ai_timer = 0.0
 	_retarget(delta)
 	if _update_area_attack(delta):
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
 	if _update_behavior_summon(delta):
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
@@ -495,6 +783,8 @@ func _physics_process(delta: float) -> void:
 	# win over the no-target return path after an actor is relocated beyond its
 	# authored spawn leash.
 	if control_time > 0.0 or charm_time > 0.0:
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		if _control_anchor_ground_gu == Vector2.INF:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		else:
@@ -507,13 +797,15 @@ func _physics_process(delta: float) -> void:
 		return
 	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
-		_return_to_spawn()
+		_return_to_spawn(delta)
 		return
 	if target is PlayerCharacter and _point_inside_safe_zone(target.global_position):
 		_pending_attack_time = -1.0
 		_pending_attack_target = null
 		_pending_attack_damage = 0
 		_pending_attack_release_record = {}
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
 		var spawn_position:Vector2=get_meta("spawn_position",global_position)
 		var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
@@ -521,11 +813,17 @@ func _physics_process(delta: float) -> void:
 			spawn_position,
 		)
 		if _point_inside_safe_zone(global_position) and spawn_delta_ground_gu.length() > SAFE_ZONE_RETURN_EPSILON_GU:
-			velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+			var started := _request_autonomous_step(
 				spawn_delta_ground_gu,
-				move_speed_gu_per_sec,
+				1.0,
+				false,
+				&"safe_zone_return"
 			)
-			_move_with_spatial_rules(delta)
+			if started:
+				_advance_autonomous_step(delta)
+			else:
+				velocity = Vector2.ZERO
+				actual_ground_motion_gu = Vector2.ZERO
 		queue_redraw()
 		return
 	var offset_px := target.global_position - global_position
@@ -552,6 +850,10 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			return
+	if _movement_step_active:
+		_advance_autonomous_step(delta)
+		queue_redraw()
+		return
 	var contact_distance_gu := _contact_distance_gu_to_target(target)
 	var engagement_distance_gu := maxf(attack_range_gu, contact_distance_gu)
 	var engagement_ready := _attack_engagement_ready(
@@ -609,10 +911,17 @@ func _physics_process(delta: float) -> void:
 		and not target is PlayerCharacter
 	):
 		# 怪物和召唤物重叠时可以自行分离；玩家普通移动不能迫使怪物后退。
-		velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+		var started := _request_autonomous_step(
 			-offset_ground_gu,
-			move_speed_gu_per_sec * 0.72,
+			0.72,
+			false,
+			&"overlap_retreat"
 		)
+		if started:
+			_advance_autonomous_step(delta)
+		else:
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
 	elif engagement_ready:
 		velocity = Vector2.ZERO
 		if _attack_timer <= 0.0:
@@ -638,41 +947,19 @@ func _physics_process(delta: float) -> void:
 				_deal_melee_hit(target, dealt_damage)
 	elif distance_gu <= aggro_radius_gu:
 		var pursuit_ground := offset_ground_gu.normalized()
-		var steering_ground := pursuit_ground + _crowd_separation_for_motion(delta) * 0.72
-		# Separation may move sideways but must never reverse a pursuing monster.
-		# Removing the negative forward component eliminates visible rollback.
-		if steering_ground.dot(pursuit_ground) < 0.12:
-			steering_ground += pursuit_ground * (
-				0.12 - steering_ground.dot(pursuit_ground)
-			)
-		var desired_velocity_px_per_sec := GroundUnitSpace.desired_screen_velocity_px_per_sec(
-			steering_ground,
-			move_speed_gu_per_sec,
+		var started := _request_autonomous_step(
+			pursuit_ground,
+			1.0,
+			true,
+			&"pursuit"
 		)
-		velocity = velocity.lerp(
-			desired_velocity_px_per_sec,
-			clampf(delta * 10.0, 0.0, 1.0),
-		)
+		if started:
+			_advance_autonomous_step(delta)
+		else:
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
 	else:
-		var current_ground_velocity_gu_per_sec := (
-			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity)
-		)
-		current_ground_velocity_gu_per_sec = current_ground_velocity_gu_per_sec.move_toward(
-			Vector2.ZERO,
-			move_speed_gu_per_sec * 3.0 * delta,
-		)
-		velocity = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-			current_ground_velocity_gu_per_sec
-		)
-	# 零速度时不做碰撞恢复，避免玩家压住碰撞边缘时把怪物挤走。
-	if (
-		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity).length_squared()
-		> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
-	):
-		_move_with_spatial_rules(delta)
-		if actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-			movement_facing = _screen_facing_for_ground_direction(actual_ground_motion_gu)
-	else:
+		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
 	if is_boss and is_instance_valid(target):
 		var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
@@ -710,6 +997,16 @@ func set_combat_position(
 	position_px: Vector2,
 	reason: StringName = &""
 ) -> void:
+	if _movement_step_active:
+		var internal_reasons: Array[StringName] = [
+			&"autonomous_step_arrival",
+			&"autonomous_step_rollback",
+			&"entrapment_boundary_revert",
+			&"safe_zone_revert",
+			&"environment_revert",
+		]
+		if not internal_reasons.has(reason):
+			_cancel_autonomous_step(true)
 	global_position = position_px
 	_spatial_index_update()
 
@@ -2917,30 +3214,35 @@ func _decay_threat(delta:float)->void:
 		else:_threat_table[key]=record
 
 
-func _return_to_spawn()->void:
+func _return_to_spawn(
+	delta := 1.0 / 60.0
+) -> void:
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var return_direction_ground_gu := _ground_delta_gu_between_screen_positions(
 		global_position,
 		spawn_position,
 	)
+	if _movement_step_active:
+		_advance_autonomous_step(delta)
+		return
 	if return_direction_ground_gu.length() <= SPAWN_RETURN_EPSILON_GU:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
 		return
-	velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
-		return_direction_ground_gu,
-		move_speed_gu_per_sec * 0.75,
-	)
 	var return_facing_px := _screen_facing_for_ground_direction(return_direction_ground_gu)
-	# Walk animation reads movement_facing, not combat facing. Update both before
-	# moving so a monster never spends a frame playing its stale pursuit row and
-	# visibly backing toward its spawn point.
 	facing = return_facing_px
 	movement_facing = return_facing_px
-	_move_with_spatial_rules()
-	if actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-		facing = _screen_facing_for_ground_direction(actual_ground_motion_gu)
-		movement_facing=facing
+	var started := _request_autonomous_step(
+		return_direction_ground_gu,
+		0.75,
+		false,
+		&"return_to_spawn"
+	)
+	if started:
+		_advance_autonomous_step(delta)
+	else:
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
 	queue_redraw()
 
 

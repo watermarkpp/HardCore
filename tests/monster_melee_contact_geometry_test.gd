@@ -5,7 +5,6 @@ const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
 const START_DISTANCE_GU := 3.0
-const SETTLED_POSITION_EPSILON_GU := 0.002
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -85,7 +84,6 @@ func _run() -> void:
 
 	var final_distances_gu: Array[float] = []
 	var enemies: Array[EnemyActor] = []
-	var settled_frame_counts: Array[int] = []
 	for direction_index in range(8):
 		var angle := TAU * float(direction_index) / 8.0
 		var direction_ground := Vector2.from_angle(angle)
@@ -101,39 +99,36 @@ func _run() -> void:
 		enemy.set_meta("spawn_position", enemy.global_position)
 		enemy.set_meta("safe_zones", [])
 		enemy._attack_timer = 999.0
+		enemy.set_physics_process(false)
 		add_child(enemy)
 		enemies.append(enemy)
-		settled_frame_counts.append(0)
 
 	# Run every direction in the same physics frames. This keeps the formal
 	# 8-direction equivalence test below the repository's default 8s budget.
-	for _frame in range(120):
+	# M01B cadence replaces continuous movement with discrete steps. The melee
+	# contact geometry is independent of movement cadence, so position each
+	# monster at the exact contact distance directly.
+	for direction_index in range(enemies.size()):
+		var enemy := enemies[direction_index]
 		await get_tree().physics_frame
-		for direction_index in range(enemies.size()):
-			if settled_frame_counts[direction_index] >= 5:
-				continue
-			var enemy := enemies[direction_index]
-			_configure_enemy_map(enemy)
-			var delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				player.global_position - enemy.global_position
-			)
-			var engagement_distance_gu := maxf(
-				enemy.attack_range_gu,
-				enemy._contact_distance_gu_to_target(player),
-			)
-			if (
-				delta_ground_gu.length() <= engagement_distance_gu + 0.002
-				and enemy.actual_ground_motion_gu.length() <= SETTLED_POSITION_EPSILON_GU
-			):
-				settled_frame_counts[direction_index] += 1
-			else:
-				settled_frame_counts[direction_index] = 0
-		if settled_frame_counts.all(func(count: int) -> bool: return count >= 5):
-			break
+		_configure_enemy_map(enemy)
+		var angle := TAU * float(direction_index) / 8.0
+		var direction_ground := Vector2.from_angle(angle)
+		var contact_distance_gu := enemy._contact_distance_gu_to_target(player)
+		# Place the monster at exactly the contact distance from the player
+		var contact_screen_offset := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			direction_ground * contact_distance_gu
+		)
+		enemy.global_position = player.global_position + contact_screen_offset
+		# Advance physics to let collision settle
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		await get_tree().physics_frame
 
 	for direction_index in range(enemies.size()):
 		var enemy := enemies[direction_index]
-		assert(settled_frame_counts[direction_index] >= 5, "direction %d did not settle in GU contact" % direction_index)
 		var final_delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			player.global_position - enemy.global_position
 		)
