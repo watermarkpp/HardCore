@@ -225,6 +225,7 @@ var _movement_step_start_ground_gu := Vector2.INF
 var _movement_step_start_screen_px := Vector2.INF
 var _movement_step_target_ground_gu := Vector2.INF
 var _movement_step_neighbor := Vector2i.ZERO
+var _movement_step_engagement_target_instance_id := 0
 var _movement_step_speed_scale := 1.0
 var _movement_step_reason: StringName = &""
 
@@ -428,7 +429,8 @@ func _request_autonomous_step(
 	speed_scale: float,
 	use_crowd_steering: bool,
 	reason: StringName,
-	now_ms_override := -1
+	now_ms_override := -1,
+	engagement_target: Node2D = null
 ) -> bool:
 	if _movement_step_active:
 		return false
@@ -491,8 +493,15 @@ func _request_autonomous_step(
 	_movement_step_neighbor = neighbor
 	_movement_step_speed_scale = maxf(0.0, speed_scale)
 	_movement_step_reason = reason
+	_movement_step_engagement_target_instance_id = (
+		engagement_target.get_instance_id()
+		if is_instance_valid(engagement_target)
+		else 0
+	)
 	_movement_step_active = true
-	var step_direction_ground := steering_ground.normalized()
+	var step_direction_ground := (
+		MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
+	)
 	movement_facing = _screen_facing_for_ground_direction(step_direction_ground)
 	facing = movement_facing
 	return true
@@ -504,6 +513,7 @@ func _clear_autonomous_step_state() -> void:
 	_movement_step_start_screen_px = Vector2.INF
 	_movement_step_target_ground_gu = Vector2.INF
 	_movement_step_neighbor = Vector2i.ZERO
+	_movement_step_engagement_target_instance_id = 0
 	_movement_step_speed_scale = 1.0
 	_movement_step_reason = &""
 
@@ -512,6 +522,48 @@ func _cancel_autonomous_step(preserve_current_position := true) -> void:
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
+
+
+func _movement_step_engagement_target() -> Node2D:
+	if _movement_step_engagement_target_instance_id <= 0:
+		return null
+	var candidate: Object = instance_from_id(
+		_movement_step_engagement_target_instance_id
+	)
+	if not (candidate is Node2D):
+		return null
+	var target_node := candidate as Node2D
+	if (
+		not is_instance_valid(target_node)
+		or target_node.is_queued_for_deletion()
+	):
+		return null
+	return target_node
+
+
+func _movement_step_engagement_ready() -> bool:
+	var hit_target := _movement_step_engagement_target()
+	if hit_target == null:
+		return false
+	if _target_is_safe_player(hit_target):
+		return false
+	var offset_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		hit_target.global_position,
+	)
+	var distance_gu := offset_ground_gu.length()
+	var contact_distance_gu := _contact_distance_gu_to_target(hit_target)
+	var engagement_distance_gu := maxf(
+		attack_range_gu,
+		contact_distance_gu,
+	)
+	return _attack_engagement_ready(
+		hit_target,
+		offset_ground_gu,
+		distance_gu,
+		contact_distance_gu,
+		engagement_distance_gu,
+	)
 
 
 func _fail_autonomous_step_blocked() -> void:
@@ -545,6 +597,15 @@ func _advance_autonomous_step(delta: float) -> void:
 	if not current_ground_gu.is_finite():
 		_cancel_autonomous_step(true)
 		return
+	# A pursuit step is allowed to finish early when the already-selected
+	# combat target becomes attack-ready. This preserves the existing attack
+	# geometry and prevents a full-cell attempt from colliding with the target
+	# and rolling back outside melee/ranged engagement distance.
+	if _movement_step_engagement_ready():
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
+		_clear_autonomous_step_state()
+		return
 	var remaining := _movement_step_target_ground_gu - current_ground_gu
 	if remaining.length_squared() <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		var target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
@@ -572,6 +633,13 @@ func _advance_autonomous_step(delta: float) -> void:
 	)
 	_move_with_spatial_rules(delta)
 	var after_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	# The step target itself remains immutable, but an autonomous pursuit may
+	# stop before that center once the frozen combat target becomes attack-ready.
+	# This is a successful movement event, not a blocked-step rollback.
+	if after_ground_gu.is_finite() and _movement_step_engagement_ready():
+		velocity = Vector2.ZERO
+		_clear_autonomous_step_state()
+		return
 	var blocked := false
 	if get_slide_collision_count() > 0:
 		blocked = true
@@ -747,6 +815,9 @@ func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
+	# actual_ground_motion_gu describes this physics tick only. A monster that
+	# does not move this tick must never retain the previous tick's motion.
+	actual_ground_motion_gu = Vector2.ZERO
 	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
@@ -951,7 +1022,9 @@ func _physics_process(delta: float) -> void:
 			pursuit_ground,
 			1.0,
 			true,
-			&"pursuit"
+			&"pursuit",
+			-1,
+			target
 		)
 		if started:
 			_advance_autonomous_step(delta)

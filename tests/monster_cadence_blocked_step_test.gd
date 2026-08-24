@@ -62,6 +62,7 @@ func _make_enemy(monster_id: int) -> EnemyActor:
 	enemy.global_position = Vector2.ZERO
 	enemy.set_meta("spawn_position", Vector2.ZERO)
 	enemy.set_meta("safe_zones", [])
+	enemy.set_physics_process(false)
 	add_child(enemy)
 	await get_tree().physics_frame
 	_checks += 1
@@ -125,13 +126,11 @@ func _await_blocked_step_rolls_back() -> void:
 	)
 
 	# Advance physics so the step hits the wall.
-	enemy.set_physics_process(true)
 	for _frame in range(30):
 		if not enemy._movement_step_active:
 			break
 		enemy._advance_autonomous_step(1.0 / 60.0)
 		await get_tree().physics_frame
-	enemy.set_physics_process(false)
 
 	# Verify rollback to step_start.
 	assert(
@@ -193,13 +192,11 @@ func _test_grant_consumed_no_free_retry() -> void:
 	)
 	assert(started, "first step must be granted")
 
-	enemy.set_physics_process(true)
 	for _frame in range(30):
 		if not enemy._movement_step_active:
 			break
 		enemy._advance_autonomous_step(1.0 / 60.0)
 		await get_tree().physics_frame
-	enemy.set_physics_process(false)
 
 	assert(
 		not enemy._movement_step_active,
