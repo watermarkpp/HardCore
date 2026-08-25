@@ -4,6 +4,12 @@ const SkillDataLoader := preload(
 	"res://scripts/skills/skill_data_loader.gd"
 )
 
+const DROP_AUTHORING_OVERLAY_PATH := (
+	"res://assets/data/"
+	+ "canonical_monster_drop_authoring_overrides_v1.json"
+)
+const BASE_CANONICAL_DROP_ROW_COUNT := 7032
+
 
 # ITEM-P0C-FULL: 9 aliases (4 legacy source + 5 runtime authority).
 const ALIAS_EXPECTATIONS := {
@@ -303,10 +309,14 @@ func _run() -> void:
 					),
 				})
 
+	var expected_drop_rows := (
+		BASE_CANONICAL_DROP_ROW_COUNT
+		+ _expected_authoring_row_count(profiles.size())
+	)
 	assert(
-		total_drop_rows == 7032,
-		"canonical drop row count drifted: %d"
-		% total_drop_rows
+		total_drop_rows == expected_drop_rows,
+		"canonical drop row count drifted: observed=%d expected=%d"
+		% [total_drop_rows, expected_drop_rows]
 	)
 
 	assert(
@@ -512,7 +522,7 @@ func _run() -> void:
 
 	print(
 		"CANONICAL_DROP_ITEM_ALIAS_PASS: "
-		+ "drop_rows=7032 unresolved=0 "
+		+ "drop_rows=%d unresolved=0 " % total_drop_rows
 		+ "authority_items=13 aliases=%d "
 		% alias_count
 		+ "stackable_skill_books=%d "
@@ -521,6 +531,46 @@ func _run() -> void:
 	)
 
 	get_tree().quit(0)
+
+
+func _expected_authoring_row_count(
+	profile_count: int
+) -> int:
+	assert(
+		FileAccess.file_exists(
+			DROP_AUTHORING_OVERLAY_PATH
+		)
+	)
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(
+			DROP_AUTHORING_OVERLAY_PATH
+		)
+	)
+	assert(parsed is Dictionary)
+	var overlay: Dictionary = parsed
+
+	var enabled_global := 0
+	for raw: Variant in overlay.get(
+		"global_additions", []
+	):
+		if raw is Dictionary and bool(
+			raw.get("enabled", false)
+		):
+			enabled_global += 1
+
+	var enabled_monster := 0
+	for raw: Variant in overlay.get(
+		"monster_additions", []
+	):
+		if raw is Dictionary and bool(
+			raw.get("enabled", false)
+		):
+			enabled_monster += 1
+
+	return (
+		enabled_global * profile_count
+		+ enabled_monster
+	)
 
 
 func _stable_item_id(

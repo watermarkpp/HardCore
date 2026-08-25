@@ -63,6 +63,11 @@
       "hash_normalization": "lf_text",
       "role": "generator_input"
     },
+    "assets/data/canonical_monster_drop_authoring_overrides_v1.json": {
+      "sha256": "C8B5B0FA97C0461DFA1DD12D89A76AD2E5AEE663B33EB9709598F94C57F41C1A",
+      "hash_normalization": "lf_text",
+      "role": "generator_input"
+    },
     "assets/data/canonical_monster_combat_source_v1.json": {
       "sha256": "62E76B475A8FDA99F07FE7E21DC842EFBE84A9A547BD60CC8796CDEC222D9974",
       "hash_normalization": "lf_text",
@@ -95,7 +100,13 @@
     "unresolved_count": 3,
     "version_difference_count": 0,
     "appearance_profile_count": 110,
-    "drop_profile_count": 156
+    "drop_profile_count": 156,
+    "drop_base_row_count": 7032,
+    "drop_authoring_enabled_global_count": 0,
+    "drop_authoring_global_expanded_row_count": 0,
+    "drop_authoring_enabled_monster_count": 0,
+    "drop_authoring_monster_added_row_count": 0,
+    "drop_final_row_count": 7032
   },
   "appearance_profiles": {
     "appearance.毒蜘蛛_2c55132ecddab863": {

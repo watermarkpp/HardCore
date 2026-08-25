@@ -17,6 +17,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from monster_drop_authoring_overlay import (
+    load_overlay as load_drop_authoring_overlay,
+    runtime_rows_for_monster,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
@@ -29,6 +34,10 @@ CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classificatio
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
+DROP_AUTHORING_OVERLAY_PATH = (
+    ROOT
+    / "assets/data/canonical_monster_drop_authoring_overrides_v1.json"
+)
 COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
 # Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
 # is no longer read by the generator and is intentionally absent from
@@ -752,9 +761,43 @@ def build_catalog() -> dict[str, Any]:
     drop_overrides: dict[str, Any] = {}
     id_to_art, appearance_profiles, art_evidence = art_profiles()
     records = vanilla.get("records", [])
+    if not isinstance(records, list):
+        raise RuntimeError("vanilla records must be a list")
+
+    active_monster_ids = {
+        int(record.get("monsterId", -1))
+        for record in records
+        if (
+            isinstance(record, dict)
+            and record.get("recordStatus") != "retired"
+            and int(record.get("monsterId", -1)) > 0
+        )
+    }
+    drop_authoring_source_label = (
+        DROP_AUTHORING_OVERLAY_PATH.relative_to(ROOT).as_posix()
+    )
+    drop_authoring_overlay = load_drop_authoring_overlay(
+        DROP_AUTHORING_OVERLAY_PATH,
+        active_monster_ids,
+        drop_authoring_source_label,
+    )
+    drop_authoring_source_evidence = source_ref(
+        DROP_AUTHORING_OVERLAY_PATH,
+        role="drop_profile_authoring_overlay",
+        distribution="source.user_drop_authoring_overlay",
+        tier="user_authoritative",
+        evidence=(
+            "Exact entry_key authoring rows; global rows project to every "
+            "active canonical profile, monster rows join by monster_id only"
+        ),
+    )
+
     entries: list[dict[str, Any]] = []
     drop_profiles: dict[str, dict[str, Any]] = {}
     entries_by_id: dict[str, dict[str, Any]] = {}
+    base_drop_row_count = 0
+    global_authoring_expanded_row_count = 0
+    monster_authoring_added_row_count = 0
     for record in sorted(records, key=lambda item: int(item.get("monsterId", -1))):
         monster_id = int(record.get("monsterId", -1))
         if record.get("recordStatus") == "retired":
@@ -990,6 +1033,83 @@ def build_catalog() -> dict[str, Any]:
                     "sourceDistribution": "source.angelk727.mir2_server_databases",
                 }
         drop_profile_id, drop_profile = drop_for(monster_id, drop_source_by_id, drop_overrides)
+
+        base_entries_value = drop_profile.get("entries", [])
+        if not isinstance(base_entries_value, list):
+            raise RuntimeError(
+                f"monster_id={monster_id} drop entries must be a list"
+            )
+        base_entry_count = len(base_entries_value)
+        base_drop_row_count += base_entry_count
+
+        global_entry_count = len(
+            drop_authoring_overlay["enabled_global_additions"]
+        )
+        monster_entry_count = len(
+            drop_authoring_overlay[
+                "enabled_monster_additions_by_id"
+            ].get(monster_id, [])
+        )
+        authoring_rows = runtime_rows_for_monster(
+            monster_id,
+            drop_authoring_overlay,
+        )
+        if len(authoring_rows) != (
+            global_entry_count + monster_entry_count
+        ):
+            raise RuntimeError(
+                f"monster_id={monster_id} authoring projection count mismatch"
+            )
+
+        global_authoring_expanded_row_count += global_entry_count
+        monster_authoring_added_row_count += monster_entry_count
+
+        if authoring_rows:
+            final_entries = [
+                *copy.deepcopy(base_entries_value),
+                *authoring_rows,
+            ]
+            drop_profile["entries"] = final_entries
+            drop_profile["entry_count"] = len(final_entries)
+
+            if str(drop_profile.get("status", "")) == "missing_for_hostile":
+                drop_profile["base_status"] = "missing_for_hostile"
+                drop_profile["status"] = "authoring_overlay_only"
+
+            entry_keys = [
+                str(row.get("authoring_entry_key", ""))
+                for row in authoring_rows
+            ]
+            drop_profile["authoring_overlay"] = {
+                "entry_count": len(authoring_rows),
+                "global_entry_count": global_entry_count,
+                "monster_entry_count": monster_entry_count,
+                "entry_keys": entry_keys,
+            }
+
+            evidence_container = drop_profile.setdefault(
+                "source_evidence",
+                {},
+            )
+            if not isinstance(evidence_container, dict):
+                raise RuntimeError(
+                    f"monster_id={monster_id} source_evidence must be a dictionary"
+                )
+            evidence_sources = evidence_container.setdefault(
+                "sources",
+                [],
+            )
+            if not isinstance(evidence_sources, list):
+                raise RuntimeError(
+                    f"monster_id={monster_id} source evidence sources must be a list"
+                )
+            authoring_evidence = copy.deepcopy(
+                drop_authoring_source_evidence
+            )
+            authoring_evidence["row_count"] = len(authoring_rows)
+            authoring_evidence["entry_keys"] = entry_keys
+            evidence_sources.append(authoring_evidence)
+
         drop_profiles[drop_profile_id] = drop_profile
         appearance = appearance_profiles[art_profile_id]
         art_ok = appearance.get("status") == "formal"
@@ -1192,6 +1312,41 @@ def build_catalog() -> dict[str, Any]:
         }
         entries.append(entry)
         entries_by_id[str(monster_id)] = entry
+    expected_global_expansion = (
+        len(drop_authoring_overlay["enabled_global_additions"])
+        * len(entries)
+    )
+    if global_authoring_expanded_row_count != expected_global_expansion:
+        raise RuntimeError(
+            "global authoring expansion mismatch: "
+            f"actual={global_authoring_expanded_row_count} "
+            f"expected={expected_global_expansion}"
+        )
+
+    expected_monster_additions = int(
+        drop_authoring_overlay[
+            "enabled_monster_addition_count"
+        ]
+    )
+    if monster_authoring_added_row_count != expected_monster_additions:
+        raise RuntimeError(
+            "monster authoring addition mismatch: "
+            f"actual={monster_authoring_added_row_count} "
+            f"expected={expected_monster_additions}"
+        )
+
+    final_drop_row_count = sum(
+        int(profile.get("entry_count", 0))
+        for profile in drop_profiles.values()
+    )
+    if final_drop_row_count != (
+        base_drop_row_count
+        + global_authoring_expanded_row_count
+        + monster_authoring_added_row_count
+    ):
+        raise RuntimeError(
+            "final drop row count invariant failed"
+        )
     source_files = [
         VANILLA_PATH,
         SERVICE_PATH,
@@ -1202,6 +1357,7 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
         DROP_SOURCE_PATH,
+        DROP_AUTHORING_OVERLAY_PATH,
         COMBAT_SOURCE_PATH,
         *ART_PATHS,
     ]
@@ -1233,6 +1389,20 @@ def build_catalog() -> dict[str, Any]:
             "version_difference_count": sum(x["status"] == "version_difference" for x in entries),
             "appearance_profile_count": len(appearance_profiles),
             "drop_profile_count": len(drop_profiles),
+            "drop_base_row_count": base_drop_row_count,
+            "drop_authoring_enabled_global_count": len(
+                drop_authoring_overlay["enabled_global_additions"]
+            ),
+            "drop_authoring_global_expanded_row_count": (
+                global_authoring_expanded_row_count
+            ),
+            "drop_authoring_enabled_monster_count": (
+                expected_monster_additions
+            ),
+            "drop_authoring_monster_added_row_count": (
+                monster_authoring_added_row_count
+            ),
+            "drop_final_row_count": final_drop_row_count,
         },
         "appearance_profiles": appearance_profiles,
         "drop_profiles": drop_profiles,
@@ -1285,6 +1455,43 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     by_id = catalog.get("entries_by_id", {})
     profiles = catalog.get("appearance_profiles", {})
     drops = catalog.get("drop_profiles", {})
+
+    summary = catalog.get("summary", {})
+    if not isinstance(summary, dict):
+        errors.append("summary is not a dictionary")
+        summary = {}
+
+    base_rows = int(summary.get("drop_base_row_count", -1))
+    global_enabled = int(
+        summary.get("drop_authoring_enabled_global_count", -1)
+    )
+    global_expanded = int(
+        summary.get("drop_authoring_global_expanded_row_count", -1)
+    )
+    monster_enabled = int(
+        summary.get("drop_authoring_enabled_monster_count", -1)
+    )
+    monster_added = int(
+        summary.get("drop_authoring_monster_added_row_count", -1)
+    )
+    final_rows = int(summary.get("drop_final_row_count", -1))
+
+    if global_expanded != global_enabled * len(drops):
+        errors.append("drop authoring global expansion invariant failed")
+    if monster_added != monster_enabled:
+        errors.append("drop authoring monster addition invariant failed")
+    if final_rows != base_rows + global_expanded + monster_added:
+        errors.append("drop authoring final row invariant failed")
+
+    observed_final_rows = sum(
+        len(profile.get("entries", []))
+        for profile in drops.values()
+        if isinstance(profile, dict)
+    )
+    if observed_final_rows != final_rows:
+        errors.append(
+            "drop authoring observed final row count mismatch"
+        )
     for entry in entries:
         if not isinstance(entry, dict):
             errors.append("non-dictionary entry")
@@ -1558,11 +1765,11 @@ def main() -> int:
             if current != rendered:
                 print(f"ERROR: {args.output} differs from generated catalog", file=sys.stderr)
                 return 1
-            print(f"CANONICAL_MONSTER_CATALOG_CHECK_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']}")
+            print(f"CANONICAL_MONSTER_CATALOG_CHECK_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']} drop_rows={catalog['summary']['drop_final_row_count']} authoring_rows={catalog['summary']['drop_final_row_count'] - catalog['summary']['drop_base_row_count']}")
             return 0
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8", newline="\n")
-        print(f"CANONICAL_MONSTER_CATALOG_BUILD_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']}")
+        print(f"CANONICAL_MONSTER_CATALOG_BUILD_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']} drop_rows={catalog['summary']['drop_final_row_count']} authoring_rows={catalog['summary']['drop_final_row_count'] - catalog['summary']['drop_base_row_count']}")
         return 0
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

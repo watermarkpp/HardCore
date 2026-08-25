@@ -142,7 +142,7 @@ func _run() -> void:
 		var anchor_id: int = anchor[0]
 		var anchor_entry: Dictionary = entries_by_id.get(str(anchor_id), {})
 		var anchor_drop: Dictionary = drop_profiles.get(str(anchor_entry.get("drop_profile_id", "")), {})
-		assert(int(anchor_drop.get("entry_count", -1)) == anchor[1], "Excel drop anchor %d slot count mismatch" % anchor_id)
+		assert(_base_drop_row_count(anchor_drop) == anchor[1], "Excel base drop anchor %d slot count mismatch" % anchor_id)
 	var snowman: Dictionary = entries_by_id.get("33", {})
 	assert(drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status", "") == "no_drop_confirmed", "Snowman must be no_drop_confirmed")
 
@@ -196,6 +196,21 @@ func _assert_clean_value(value: Variant, monster_id: int) -> void:
 	elif value is Array:
 		for child: Variant in value:
 			_assert_clean_value(child, monster_id)
+
+
+func _base_drop_row_count(profile: Dictionary) -> int:
+	var count := 0
+	for raw_row: Variant in profile.get(
+		"entries", []
+	):
+		if (
+			raw_row is Dictionary
+			and not raw_row.has(
+				"authoring_entry_key"
+			)
+		):
+			count += 1
+	return count
 
 
 func _load_json(path: String) -> Dictionary:

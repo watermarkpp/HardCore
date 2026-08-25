@@ -34,7 +34,7 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     for monster_id, expected in anchors.items():
         entry = entries_by_id.get(str(monster_id), {})
         profile = drop_profiles.get(str(entry.get("drop_profile_id", "")), {})
-        assert int(profile.get("entry_count", 0)) == expected, (monster_id, profile.get("entry_count"))
+        assert _base_drop_row_count(profile) == expected, (monster_id, profile.get("entry_count"))
         assert profile.get("status") == "exact_slots", (monster_id, profile.get("status"))
 
     snowman = entries_by_id.get("33", {})
@@ -67,9 +67,19 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     assert excel_primary_count == 156, excel_primary_count
     assert crystal_primary_count == 0, crystal_primary_count
 
-    total = sum(int(p.get("entry_count", 0)) for p in drop_profiles.values())
-    # Active runtime drop slots: P3C active universe total = 7032.
+    total = sum(_base_drop_row_count(p) for p in drop_profiles.values())
+    # Active runtime base drop slots: P3C active universe total = 7032.
+    # Authoring overlay rows are excluded from the base count so future
+    # authoring additions do not break the Excel authority anchor.
     assert total == 7032, total
+
+
+def _base_drop_row_count(profile: dict[str, object]) -> int:
+    count = 0
+    for raw_row in profile.get("entries", []):
+        if isinstance(raw_row, dict) and "authoring_entry_key" not in raw_row:
+            count += 1
+    return count
 
 
 def _assert_classification_placement_kind() -> None:
