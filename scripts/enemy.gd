@@ -28,6 +28,9 @@ const MonsterTargetMagicEffectScript := preload(
 const MonsterMovementCadenceScript := preload(
 	"res://scripts/monster_movement_cadence.gd"
 )
+const MonsterNaturalRegenPolicyScript := preload(
+	"res://scripts/monster_natural_regen_policy.gd"
+)
 const MonsterNeighborStepPolicyScript := preload(
 	"res://scripts/monster_neighbor_step_policy.gd"
 )
@@ -219,6 +222,7 @@ var _last_environment_safe_position_px := Vector2.INF
 var actual_ground_motion_gu := Vector2.ZERO
 
 var _movement_cadence
+var _natural_regen := MonsterNaturalRegenPolicyScript.new()
 var _movement_authority_failed_closed := false
 var _movement_step_active := false
 var _movement_step_start_ground_gu := Vector2.INF
@@ -266,6 +270,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	var runtime_projection: Dictionary = combat.get("runtime_projection", {})
 	max_hp = maxi(1, int(stats.get("hp", 0)))
 	current_hp = max_hp
+	_natural_regen = MonsterNaturalRegenPolicyScript.new()
 	attack_min = maxi(1, int(stats.get("attack_min", 0)))
 	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
 	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
@@ -811,6 +816,14 @@ func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 		target_requested.emit(self)
 
 
+func _update_natural_regen(delta: float) -> void:
+	var regen_result: Dictionary = _natural_regen.advance(delta, current_hp, max_hp)
+	if int(regen_result.get("healed", 0)) <= 0:
+		return
+	current_hp = int(regen_result.get("hp", current_hp))
+	_refresh_overhead_health()
+
+
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
@@ -820,6 +833,12 @@ func _physics_process(delta: float) -> void:
 	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
+	# Poison/status damage and natural regeneration are independent. Resolve
+	# status first, but never allow a lethal status tick to be resurrected by
+	# a natural-regeneration tick in the same physics frame.
+	if _dying:
+		return
+	_update_natural_regen(delta)
 	_update_entrapment_state(delta)
 	_update_pending_attack(delta)
 	if _can_use_background_ai():
