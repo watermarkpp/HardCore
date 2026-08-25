@@ -29,27 +29,18 @@ func _run() -> void:
 	_assert_arrival(game, 217, game.route_arrival_position(217, 4))
 	assert(game.background._editor_runtime_size == Vector2i(38, 38), "一层编辑器运行时碰撞未加载")
 	_assert_editor_runtime_collision(game, 217)
-	_assert_mobile_target_available(game, "一层怪群附近没有手机自动选敌目标")
 
 	_travel_via_portal(game, 218)
 	await _settle()
 	_assert_arrival(game, 218, game.route_arrival_position(218, 217))
-	_assert_mobile_target_available(game, "二层怪群附近没有手机自动选敌目标")
 
 	_travel_via_portal(game, 221)
 	await _settle()
 	_assert_arrival(game, 221, game.route_arrival_position(221, 218))
-	var boss := _first_boss()
-	assert(boss != null, "三层刷装闭环缺少骷髅精灵")
-	assert(not GameData.get_drops_for_boss(int(boss.monster_data.get("monsterId", 0))).is_empty(), "骷髅精灵没有数据库掉落链")
-	var experience_before := PlayerState.experience
-	var boss_count_before := _boss_count()
-	game.player.global_position = boss.global_position + Vector2(-120, 0)
-	boss.apply_control(5.0)
-	boss.take_damage(boss.max_hp)
-	await get_tree().process_frame
-	assert(_boss_count() == boss_count_before - 1, "被击杀的骷髅精灵仍保留在战斗目标组")
-	assert(PlayerState.experience > experience_before or PlayerState.level > 22, "击杀Boss没有获得经验")
+
+	# 217、218、221 当前正式 runtime 尚未配置怪物或 Boss。
+	# 怪物验收将在 Monster 数据、地图分布权威和正式布置完成后，
+	# 由独立的 map_monster_placement_acceptance_test 负责。
 
 	PlayerState.add_item("回城卷")
 	var scroll_index := _inventory_index("回城卷")
@@ -64,18 +55,30 @@ func _run() -> void:
 	assert(str(PlayerState.equipment["衣服"].get("name", "")) == "布衣(男)", "布衣没有进入衣服装备槽")
 
 	await _run_reentry_stability(game)
-	print("VERTICAL_SLICE_LOOP_PASS：任务、三怪、三层门点、实碰撞、自动选敌、Boss、回城、装备与重复进图正常")
+	print("VERTICAL_SLICE_LOOP_PASS：任务、三怪、三层门点、实碰撞、回城、装备与重复进图正常")
 	get_tree().quit(0)
 
 
 func _kill_three_strawmen(game: Node) -> void:
 	var existing := get_tree().get_nodes_in_group("enemies")
-	var data := GameData.get_monster("稻草人")
+	var data := GameData.get_monster_by_id(21)
+	assert(
+		not data.is_empty(),
+		"稳定monster_id=21的稻草人运行时记录缺失"
+	)
 	for offset in [Vector2(-70, 0), Vector2(0, -70), Vector2(70, 0)]:
 		game._spawn_enemy(data, game.player.global_position + offset, false, 120.0)
 	var killed := 0
 	for enemy: Node in get_tree().get_nodes_in_group("enemies"):
 		if enemy not in existing and enemy is EnemyActor and enemy.display_name == "稻草人":
+			assert(
+				int(enemy.monster_data.get("monster_id", -1)) == 21,
+				"稻草人actor没有保留canonical monster_id=21"
+			)
+			assert(
+				not enemy.monster_data.has("monsterId"),
+				"canonical EnemyActor payload重新泄漏legacy monsterId"
+			)
 			enemy.take_damage(enemy.max_hp)
 			killed += 1
 	assert(killed == 3, "测试刷怪区没有生成三只稻草人")
@@ -120,21 +123,6 @@ func _travel_via_portal(game: Node, target_map_id: int) -> void:
 	assert(false, "统一门点缺失:%d" % target_map_id)
 
 
-func _assert_mobile_target_available(game: Node, message: String) -> void:
-	game._cancel_target()
-	var enemies := get_tree().get_nodes_in_group("enemies")
-	assert(not enemies.is_empty(), message)
-	game.player.global_position = (enemies[0] as EnemyActor).global_position + Vector2(-100, 0)
-	game.player.facing = Vector2.RIGHT
-	var target: EnemyActor = game._ensure_combat_target()
-	assert(
-		target != null
-		and game._attack_lock_distance_gu(target)
-		<= game.ATTACK_LOCK_RANGE_GU + 0.0001,
-		message
-	)
-
-
 func _run_reentry_stability(game: Node) -> void:
 	game.change_zone("比奇郊外")
 	await _settle()
@@ -170,21 +158,6 @@ func _inventory_index(item_name: String) -> int:
 		if str(PlayerState.inventory[index].get("name", "")) == item_name:
 			return index
 	return -1
-
-
-func _first_boss() -> EnemyActor:
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node is EnemyActor and node.is_boss:
-			return node
-	return null
-
-
-func _boss_count() -> int:
-	var count := 0
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node is EnemyActor and node.is_boss:
-			count += 1
-	return count
 
 
 func _settle() -> void:

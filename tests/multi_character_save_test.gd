@@ -190,11 +190,20 @@ func _run() -> void:
 		PlayerState.taoist_main_pet_runtime_state_for_restore("divine_beast"),
 		divine_snapshot
 	)
+	# This is only a CharacterSelect UI construction smoke.
+	# CharacterSelect intentionally suppresses the asynchronous main-scene
+	# preload while PlayerState.test_mode is true.  Running that production
+	# background preload and immediately queue_free()/quit() creates a teardown
+	# race unrelated to profile persistence.
+	var launcher_test_mode_before := PlayerState.test_mode
+	PlayerState.test_mode = true
 	var launcher: Node = load("res://scenes/character_select.tscn").instantiate()
 	add_child(launcher)
 	await get_tree().process_frame
 	assert(launcher.get("list_box") != null and launcher.get("name_input") != null)
 	launcher.queue_free()
+	await get_tree().process_frame
+	PlayerState.test_mode = launcher_test_mode_before
 
 	PlayerState.profile_directory = old_directory
 	PlayerState.profile_index_path = old_index

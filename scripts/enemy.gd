@@ -250,7 +250,6 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	# into later combat/death consumers.
 	monster_data = {
 		"monster_id": requested_id,
-		"monsterId": requested_id,
 		"canonical_name": str(canonical_entry.get("canonical_name", "")),
 		"classification": classification,
 		"appearance_profile_id": str(canonical_entry.get("appearance_profile_id", "")),
