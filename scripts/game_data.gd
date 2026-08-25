@@ -24,9 +24,10 @@ const MERCHANT_CATALOG_PATH := "res://assets/data/merchant_catalog_v1.json"
 const CANONICAL_MONSTER_CATALOG_PATH := (
 	"res://assets/data/runtime/canonical_monster_catalog.json"
 )
-const CANONICAL_DROP_ITEM_AUTHORITY_PATH := (
-	"res://assets/data/canonical_drop_item_authority_v1.json"
+const ITEM_RUNTIME_AUTHORITY_PATH := (
+	"res://assets/data/item_runtime_authority_v1.json"
 )
+
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
 	"金疮药(小量)": "金创药(小量)",
@@ -43,13 +44,6 @@ const ITEM_ALIASES := {
 	"食人树的果实": "食人花果",
 	"蝎子的尾巴": "蝎尾",
 
-	# ITEM-P0C canonical monster-drop exact aliases.
-	# These are spelling/name compatibility boundaries only;
-	# distinct potion identities are intentionally NOT collapsed.
-	"篮翡翠项链": "蓝翡翠项链",
-	"铂金项链": "白金项链",
-	"群体治愈术": "群体治疗术",
-	"极速神水": "疾风药水",
 }
 # 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
@@ -75,7 +69,7 @@ var service_item_catalog: Dictionary = {}
 var equipment_price_candidates: Dictionary = {}
 var merchant_catalog: Dictionary = {}
 var canonical_monster_catalog: Dictionary = {}
-var canonical_drop_item_authority: Dictionary = {}
+var item_runtime_authority: Dictionary = {}
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -178,7 +172,7 @@ func load_database() -> bool:
 	_load_boss_service_rules()
 	_load_service_reference()
 	_load_service_item_catalog()
-	if not _load_canonical_drop_item_authority():
+	if not _load_item_runtime_authority():
 		return false
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
@@ -265,62 +259,64 @@ func _load_service_item_catalog() -> void:
 		push_error("完整物品目录不是有效JSON：%s" % SERVICE_ITEM_CATALOG_PATH)
 
 
-func _load_canonical_drop_item_authority() -> bool:
-	canonical_drop_item_authority = {}
-	if not FileAccess.file_exists(
-		CANONICAL_DROP_ITEM_AUTHORITY_PATH
-	):
-		load_error = "canonical_drop_item_authority_missing"
+func _load_item_runtime_authority() -> bool:
+	item_runtime_authority = {}
+	if not FileAccess.file_exists(ITEM_RUNTIME_AUTHORITY_PATH):
+		load_error = "item_runtime_authority_missing"
 		return false
 
 	var parsed: Variant = JSON.parse_string(
-		FileAccess.get_file_as_string(
-			CANONICAL_DROP_ITEM_AUTHORITY_PATH
-		)
+		FileAccess.get_file_as_string(ITEM_RUNTIME_AUTHORITY_PATH)
 	)
 
 	if not parsed is Dictionary:
-		load_error = "canonical_drop_item_authority_invalid"
+		load_error = "item_runtime_authority_invalid"
 		return false
 
-	if (
-		str(parsed.get("contractId", ""))
-		!= "item.canonical_drop_authority.v1"
-	):
-		load_error = "canonical_drop_item_authority_contract_invalid"
+	if str(parsed.get("contractId", "")) != "item.runtime.authority.v1":
+		load_error = "item_runtime_authority_contract_invalid"
 		return false
 
-	var authority_items: Variant = parsed.get("items", [])
+	var aliases: Variant = parsed.get("aliases", {})
+	if not aliases is Dictionary or aliases.size() != 5:
+		load_error = "item_runtime_authority_aliases_invalid"
+		return false
 
-	if not authority_items is Array or authority_items.is_empty():
-		load_error = "canonical_drop_item_authority_items_missing"
+	var new_items: Variant = parsed.get("newItems", [])
+	if not new_items is Array or new_items.size() != 13:
+		load_error = "item_runtime_authority_new_items_count_invalid"
 		return false
 
 	var seen_ids := {}
 	var seen_names := {}
 
-	for raw_record: Variant in authority_items:
+	for raw_record: Variant in new_items:
 		if not raw_record is Dictionary:
-			load_error = "canonical_drop_item_authority_record_invalid"
+			load_error = "item_runtime_authority_new_item_record_invalid"
 			return false
 
 		var record: Dictionary = raw_record
 		var item_id := _stable_item_id(record)
 		var item_name := str(record.get("name", ""))
 
-		if (
-			item_id <= 0
-			or item_name.is_empty()
-			or seen_ids.has(item_id)
-			or seen_names.has(item_name)
-		):
-			load_error = "canonical_drop_item_authority_identity_invalid"
+		if item_id <= 0 or item_name.is_empty() or seen_ids.has(item_id) or seen_names.has(item_name):
+			load_error = "item_runtime_authority_identity_invalid"
 			return false
 
 		seen_ids[item_id] = true
 		seen_names[item_name] = true
 
-	canonical_drop_item_authority = parsed
+		# Collision check against service runtime items
+		var service_runtime: Variant = service_item_catalog.get("runtimeItems", {})
+		if service_runtime is Dictionary:
+			for service_record: Variant in service_runtime.values():
+				if service_record is Dictionary:
+					var sid := _stable_item_id(service_record as Dictionary)
+					if sid == item_id:
+						load_error = "item_runtime_authority_item_id_collision"
+						return false
+
+	item_runtime_authority = parsed
 	return true
 
 
@@ -824,6 +820,32 @@ func _build_canonical_monster_runtime_drop_closure() -> void:
 				bosses.append(entry.duplicate(true))
 
 
+
+func _apply_item_runtime_authority_overrides(record: Dictionary, skill_names: Dictionary) -> Dictionary:
+	var result: Dictionary = record.duplicate(true)
+	var name := str(result.get("name", ""))
+	var kind := str(result.get("kind", ""))
+	var service_index := int(result.get("serviceIndex", result.get("service_index", -1)))
+	var policies: Dictionary = item_runtime_authority.get("policies", {})
+
+	if kind == "skill_book" and skill_names.has(name):
+		var book_policy: Variant = policies.get("vanillaSkillBook", {})
+		if book_policy is Dictionary:
+			if book_policy.has("stackable"):
+				result["stackable"] = book_policy["stackable"]
+			if book_policy.has("maxStack"):
+				result["maxStack"] = book_policy["maxStack"]
+
+	var overrides_by_index: Variant = policies.get("serviceOverridesByIndex", {})
+	if overrides_by_index is Dictionary:
+		var override_key := str(service_index)
+		if overrides_by_index.has(override_key):
+			var override_entry: Variant = overrides_by_index[override_key]
+			if override_entry is Dictionary:
+				for key: String in override_entry:
+					result[key] = override_entry[key]
+
+	return result
 func _build_item_catalog() -> void:
 	item_catalog.clear()
 	_catalog_by_name.clear()
@@ -857,22 +879,19 @@ func _build_item_catalog() -> void:
 		if str(service_record.get("kind", "")) == "skill_book" and not skill_names.has(str(service_record.get("name", ""))):
 			service_record["usable"] = false
 			service_record["useEffect"] = "skill_not_in_current_class_catalog"
-		_register_catalog_item(service_record)
+		var override_record := _apply_item_runtime_authority_overrides(service_record, skill_names)
+		_register_catalog_item(override_record)
 	for special_item: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
 		if special_item is Dictionary:
-			_register_catalog_item(special_item.duplicate(true))
+			var override_special := _apply_item_runtime_authority_overrides(special_item.duplicate(true), skill_names)
+			_register_catalog_item(override_special)
 
-	# ITEM-P0C project-owned stable Item identities for canonical
-	# monster-drop tokens absent from the service/equipment authorities.
-	# They register before heuristic runtime fallbacks so every intended
-	# drop resolves through a stable numeric identity.
-	for authority_item: Variant in canonical_drop_item_authority.get(
-		"items", []
-	):
+
+
+		# ITEM-P0C-FULL: register runtime authority newItems before fallback.
+	for authority_item: Variant in item_runtime_authority.get("newItems", []):
 		if authority_item is Dictionary:
-			_register_catalog_item(
-				(authority_item as Dictionary).duplicate(true)
-			)
+			_register_catalog_item((authority_item as Dictionary).duplicate(true))
 
 	var extra_names := {}
 	for drop: Variant in drops:
@@ -1230,7 +1249,7 @@ func get_bosses_for_map(_map_data: Dictionary) -> Array:
 
 
 func get_item(item_name: String) -> Dictionary:
-	return _items_by_name.get(str(ITEM_ALIASES.get(item_name, item_name)), {})
+	return _items_by_name.get(_canonical_item_name(item_name), {})
 
 
 func player_base_appearance(profession: String, gender: String) -> Dictionary:
@@ -1335,6 +1354,9 @@ func _ensure_price_index() -> void:
 
 
 func _canonical_item_name(item_name: String) -> String:
+	var authority_aliases: Variant = item_runtime_authority.get("aliases", {})
+	if authority_aliases is Dictionary and authority_aliases.has(item_name):
+		return str(authority_aliases.get(item_name))
 	return str(ITEM_ALIASES.get(item_name, item_name))
 
 

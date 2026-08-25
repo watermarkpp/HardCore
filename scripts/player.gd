@@ -117,6 +117,7 @@ var _pending_combat_action_active := false
 var _pending_combat_action_committed := false
 var _pending_combat_action_kind := ""
 var _test_combat_time_ms := -1
+var _last_temporary_item_buff_revision := -1
 var _last_revival_at_ms := -60000
 var _pending_potion_health := 0
 var _pending_potion_mana := 0
@@ -1345,6 +1346,14 @@ func _apply_profile_stats() -> void:
 		else clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
 	)
 	current_mp = clampi(current_mp, 0, max_mp)
+	# Preserve absolute HP/MP values across temporary buff stat changes.
+	var buff_revision: int = PlayerState.temporary_item_buff_revision
+	if buff_revision != _last_temporary_item_buff_revision:
+		_last_temporary_item_buff_revision = buff_revision
+		# When a buff activates or expires, keep the absolute current values
+		# and only clamp to the new caps.
+		current_hp = mini(current_hp, max_hp)
+		current_mp = mini(current_mp, max_mp)
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	if visual != null:

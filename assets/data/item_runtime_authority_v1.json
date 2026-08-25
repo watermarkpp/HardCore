@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "contractId": "item.runtime.authority.v1",
+
+  "aliases": {
+    "篮翡翠项链": "蓝翡翠项链",
+    "铂金项链": "白金项链",
+    "群体治愈术": "群体治疗术",
+    "极速神水": "疾风药水",
+    "道力神水": "精神神水"
+  },
+
+  "policies": {
+    "vanillaSkillBook": {
+      "stackable": true,
+      "maxStack": 20
+    },
+
+    "serviceOverridesByIndex": {
+      "673": {
+        "stackable": true,
+        "maxStack": 20
+      }
+    }
+  },
+
+  "newItems": [
+    {
+      "itemId": 910001,
+      "name": "体力强效神水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "max_hp",
+        "durationSeconds": 120,
+        "modifiers": {
+          "max_hp": 50
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910002,
+      "name": "魔力强效神水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "max_mp",
+        "durationSeconds": 120,
+        "modifiers": {
+          "max_mp": 50
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910003,
+      "name": "疾风神水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "attack_speed_tier",
+        "durationSeconds": 180,
+        "modifiers": {
+          "attack_speed_tier": 1
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910004,
+      "name": "攻击神水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "attack_max",
+        "durationSeconds": 180,
+        "modifiers": {
+          "attack_max": 5
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910005,
+      "name": "魔力神水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "magic_max",
+        "durationSeconds": 180,
+        "modifiers": {
+          "magic_max": 3
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910006,
+      "name": "精神神水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "tao_max",
+        "durationSeconds": 180,
+        "modifiers": {
+          "tao_max": 3
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910007,
+      "name": "疗伤药",
+      "kind": "consumable",
+      "category": "混合药品",
+      "weight": 1,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "restore_both",
+      "restoreHealth": 100,
+      "restoreMana": 160,
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910008,
+      "name": "HP强化水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "max_hp",
+        "durationSeconds": 120,
+        "modifiers": {
+          "max_hp": 50
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910009,
+      "name": "MP强化水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "max_mp",
+        "durationSeconds": 120,
+        "modifiers": {
+          "max_mp": 50
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910010,
+      "name": "攻击力药水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "attack_max",
+        "durationSeconds": 180,
+        "modifiers": {
+          "attack_max": 5
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910011,
+      "name": "魔法力药水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "magic_max",
+        "durationSeconds": 180,
+        "modifiers": {
+          "magic_max": 3
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910012,
+      "name": "道术力药水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "tao_max",
+        "durationSeconds": 180,
+        "modifiers": {
+          "tao_max": 3
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    },
+    {
+      "itemId": 910013,
+      "name": "疾风药水",
+      "kind": "consumable",
+      "category": "增益药品",
+      "weight": 3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "useEffect": "temporary_stat_buff",
+      "effectProfile": {
+        "contractId": "item.temporary_stat_buff.v1",
+        "buffGroup": "attack_speed_tier",
+        "durationSeconds": 180,
+        "modifiers": {
+          "attack_speed_tier": 1
+        }
+      },
+      "art": {
+        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
+        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+      },
+      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+    }
+  ]
+}

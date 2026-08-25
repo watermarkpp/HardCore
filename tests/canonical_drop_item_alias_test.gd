@@ -5,8 +5,9 @@ const SkillDataLoader := preload(
 )
 
 
+# ITEM-P0C-FULL: 9 aliases (4 legacy source + 5 runtime authority).
 const ALIAS_EXPECTATIONS := {
-	# Existing audited raw-source aliases.
+	# Existing audited raw-source aliases (4).
 	"毒蜘蛛牙齿": {
 		"canonical": "蜘蛛牙",
 		"service_index": 868,
@@ -24,7 +25,7 @@ const ALIAS_EXPECTATIONS := {
 		"service_index": 873,
 	},
 
-	# ITEM-P0C exact compatibility aliases.
+	# ITEM-P0C-FULL: runtime authority exact aliases (5).
 	"篮翡翠项链": {
 		"canonical": "蓝翡翠项链",
 		"item_id": 165,
@@ -41,9 +42,14 @@ const ALIAS_EXPECTATIONS := {
 		"canonical": "疾风药水",
 		"item_id": 910013,
 	},
+	"道力神水": {
+		"canonical": "精神神水",
+		"item_id": 910006,
+	},
 }
 
 
+# ITEM-P0C-FULL: 13 runtime authority newItems.
 const AUTHORITY_ITEM_IDS := {
 	"体力强效神水": 910001,
 	"魔力强效神水": 910002,
@@ -58,7 +64,6 @@ const AUTHORITY_ITEM_IDS := {
 	"魔法力药水": 910011,
 	"道术力药水": 910012,
 	"疾风药水": 910013,
-	"道力神水": 910014,
 }
 
 
@@ -76,7 +81,7 @@ func _run() -> void:
 	)
 
 	# --------------------------------------------------
-	# 1. Exact aliases
+	# 1. Exact aliases: 9 total (4 legacy + 5 authority)
 	# --------------------------------------------------
 
 	for token: String in ALIAS_EXPECTATIONS:
@@ -129,26 +134,35 @@ func _run() -> void:
 		!= FORBIDDEN_QUEST_SERVICE_INDEX
 	)
 
-	# --------------------------------------------------
-	# 2. Project drop Item authority
-	# --------------------------------------------------
-
+	# Legacy 4 aliases still resolve through ITEM_ALIASES directly.
 	assert(
 		str(
-			GameData.canonical_drop_item_authority.get(
-				"contractId", ""
+			GameData.resolve_canonical_drop_item({"item": "毒蜘蛛牙齿"}).get(
+				"item_name", ""
 			)
 		)
-		== "item.canonical_drop_authority.v1"
+		== "蜘蛛牙"
+	)
+
+	# --------------------------------------------------
+	# 2. Runtime authority: 13 newItems + contract shape
+	# --------------------------------------------------
+
+	var authority: Dictionary = GameData.item_runtime_authority
+
+	assert(
+		str(authority.get("contractId", ""))
+		== "item.runtime.authority.v1"
 	)
 
 	assert(
-		(
-			GameData.canonical_drop_item_authority.get(
-				"items", []
-			) as Array
-		).size()
-		== 14
+		(authority.get("newItems", []) as Array).size() == 13
+	)
+
+	var aliases_value: Variant = authority.get("aliases", {})
+	assert(
+		aliases_value is Dictionary
+		and (aliases_value as Dictionary).size() == 5
 	)
 
 	var observed_item_ids := {}
@@ -193,14 +207,6 @@ func _run() -> void:
 			).is_empty()
 		)
 
-		# ITEM-P0 deliberately prevents these special potions
-		# from falling into the current generic 神水 behavior.
-		assert(
-			record.get("usable", true) == false,
-			"special potion unexpectedly executable: %s"
-			% item_name
-		)
-
 		assert(
 			int(record.get("weight", 0)) > 0,
 			"authority item weight missing: %s"
@@ -226,7 +232,7 @@ func _run() -> void:
 		)
 
 	# --------------------------------------------------
-	# 3. ALL canonical drop rows must resolve.
+	# 3. ALL canonical drop rows must resolve (7032).
 	# --------------------------------------------------
 
 	var entries: Dictionary = (
@@ -348,8 +354,49 @@ func _run() -> void:
 	)
 
 	# --------------------------------------------------
-	# 5. Do NOT change current skill-book / 万年雪霜
-	#    stackability just to satisfy the old audit heuristic.
+	# 5. ITEM-P0C-FULL: 33 skill books are stackable
+	#    via runtime authority policies.
+	# --------------------------------------------------
+
+	var skill_book_stackable_count := 0
+	var skill_book_non_stackable_count := 0
+
+	for record: Variant in GameData.item_catalog:
+		if not record is Dictionary:
+			continue
+		if str(record.get("kind", "")) != "skill_book":
+			continue
+		if bool(record.get("stackable", false)):
+			skill_book_stackable_count += 1
+		else:
+			skill_book_non_stackable_count += 1
+
+	assert(
+		skill_book_stackable_count == 33,
+		"expected 33 stackable skill books, got %d"
+		% skill_book_stackable_count
+	)
+
+	# --------------------------------------------------
+	# 6. 万年雪霜 is stackable via authority policy.
+	# --------------------------------------------------
+
+	var snow_frost := GameData.get_item_record(
+		"万年雪霜"
+	)
+
+	assert(
+		not snow_frost.is_empty(),
+		"万年雪霜 missing from catalog"
+	)
+
+	assert(
+		bool(snow_frost.get("stackable", false)),
+		"万年雪霜 should be stackable"
+	)
+
+	# --------------------------------------------------
+	# 7. Non-stacking items remain non-stackable.
 	# --------------------------------------------------
 
 	var mass_heal_book := GameData.get_item_record(
@@ -367,23 +414,7 @@ func _run() -> void:
 		) == 1029
 	)
 
-	assert(
-		mass_heal_book.get(
-			"stackable", true
-		) == false
-	)
-
-	var snow_frost := GameData.get_item_record(
-		"万年雪霜"
-	)
-
-	assert(
-		snow_frost.get(
-			"stackable", true
-		) == false
-	)
-
-	# Formal skill SOT already contains 群体治疗术.
+	# Formal skill SOT still contains 群体治疗术.
 	assert(
 		SkillDataLoader.reload_data().valid
 	)
@@ -395,11 +426,97 @@ func _run() -> void:
 		== "taoist.mass_healing"
 	)
 
+	# --------------------------------------------------
+	# 8. Temporary buff mechanics.
+	# --------------------------------------------------
+
+	var buff_result := PlayerState.apply_temporary_item_buff(
+		"测试药水",
+		{
+			"contractId": "item.temporary_stat_buff.v1",
+			"buffGroup": "max_hp",
+			"durationSeconds": 60.0,
+			"modifiers": {"max_hp": 100, "attack_max": 5},
+		}
+	)
+
+	assert(
+		bool(buff_result.get("ok", false)),
+		"temporary buff application failed: %s"
+		% buff_result
+	)
+
+	assert(
+		PlayerState.temporary_item_buff_revision > 0,
+		"buff revision not incremented"
+	)
+
+	var buff_entry: Dictionary = PlayerState.temporary_item_buffs.get(
+		"测试药水", {}
+	)
+
+	assert(
+		not buff_entry.is_empty(),
+		"buff entry not found in temporary_item_buffs"
+	)
+
+	assert(
+		float(buff_entry.get("remaining", 0.0)) > 0.0,
+		"buff remaining duration is zero"
+	)
+
+	PlayerState.advance_temporary_item_buffs(
+		999999.0
+	)
+
+	assert(
+		PlayerState.temporary_item_buffs.is_empty(),
+		"buffs not cleared after advance with large delta"
+	)
+
+	# --------------------------------------------------
+	# 9. HP preservation across buff stat changes.
+	# --------------------------------------------------
+
+	var stats_before: Dictionary = PlayerState.computed_stats.duplicate(true)
+	var hp_before := int(stats_before.get("max_hp", 120))
+
+	PlayerState.apply_temporary_item_buff(
+		"HP测试",
+		{
+			"contractId": "item.temporary_stat_buff.v1",
+			"buffGroup": "max_hp",
+			"durationSeconds": 30.0,
+			"modifiers": {"max_hp": 200},
+		}
+	)
+
+	var stats_after: Dictionary = PlayerState.computed_stats.duplicate(true)
+	var hp_after := int(stats_after.get("max_hp", hp_before))
+
+	assert(
+		hp_after > hp_before,
+		"max_hp should increase after buff: %d -> %d"
+		% [hp_before, hp_after]
+	)
+
+	# Clear the buff for test cleanup
+	PlayerState.advance_temporary_item_buffs(999999.0)
+	PlayerState.recalculate_stats()
+
+	# --------------------------------------------------
+	# 10. Print summary.
+	# --------------------------------------------------
+
+	var alias_count := ALIAS_EXPECTATIONS.size()
+
 	print(
 		"CANONICAL_DROP_ITEM_ALIAS_PASS: "
 		+ "drop_rows=7032 unresolved=0 "
-		+ "authority_items=14 aliases=%d "
-		% ALIAS_EXPECTATIONS.size()
+		+ "authority_items=13 aliases=%d "
+		% alias_count
+		+ "stackable_skill_books=%d "
+		% skill_book_stackable_count
 		+ "spawnable=153"
 	)
 

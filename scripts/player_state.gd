@@ -92,6 +92,12 @@ const VERIFIED_EXPERIENCE_1_TO_22 := {
 	10: 6000, 11: 8000, 12: 10000, 13: 15000, 14: 30000, 15: 40000, 16: 50000,
 	17: 70000, 18: 100000, 19: 120000, 20: 140000, 21: 250000, 22: 300000,
 }
+const TEMPORARY_ITEM_BUFF_CONTRACT_ID := "gameplay.item.temporary_stat_buff.v1"
+const TEMPORARY_ITEM_BUFF_ALLOWED_STATS := {
+    "max_hp": true, "max_mp": true, "attack_max": true,
+    "magic_max": true, "tao_max": true, "attack_speed_tier": true,
+}
+
 
 var level := 1
 var profession := "战士"
@@ -156,6 +162,9 @@ var last_receive_result: Dictionary = {
 var _taoist_main_pets_persistence_provider := Callable()
 # Test-only failure injection. Production ignores it unless test_mode is true.
 var _test_force_atomic_write_failure := false
+var temporary_item_buffs: Dictionary = {}
+var temporary_item_buff_revision := 0
+
 
 
 func _notification(what: int) -> void:
@@ -208,6 +217,8 @@ func reset_progress(emit_updates := true) -> void:
 	_consumed_shop_buy_quote_ids.clear()
 	_shop_buy_quote_serial = 0
 	durability_event_commit_count = 0
+	temporary_item_buffs = {}
+	temporary_item_buff_revision = 0
 	if _shop_pricing_session_nonce.is_empty():
 		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	saved_map_id = 4
@@ -1017,6 +1028,17 @@ func use_inventory_index(index: int) -> String:
 		var weapon_value: Variant = equipment.get("武器", {})
 		if not weapon_value is Dictionary or weapon_value.is_empty():
 			return "需要先装备武器"
+	if effect == "temporary_stat_buff":
+		var profile: Variant = item.get("effectProfile", {})
+		if not profile is Dictionary:
+			return "%s效果配置无效" % item_name
+		var buff_result := apply_temporary_item_buff(item_name, profile)
+		if not bool(buff_result.get("ok", false)):
+			return str(buff_result.get("reason", "增益效果应用失败"))
+		if remove_item(item_name):
+			recalculate_stats()
+			return "使用：%s" % item_name
+		return "物品数量不足"
 	if remove_item(item_name):
 		consumable_requested.emit(item_name)
 		return "使用：%s" % item_name
@@ -1711,6 +1733,7 @@ func recalculate_stats(emit_profile_change := true) -> void:
 	result["anti_magic_points"] = clampi(int(result.get("anti_magic_points", CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS)), 0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES)
 	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
 	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
+	_apply_temporary_item_stat_modifiers(result)
 	computed_stats = result
 	if emit_profile_change:
 		profile_changed.emit()
@@ -3714,6 +3737,77 @@ func ensure_zuma_test_character() -> void:
 	if not replaced:
 		profiles.append(entry)
 	_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+
+
+
+
+func apply_temporary_item_buff(item_name: String, effect_profile: Dictionary) -> Dictionary:
+	if effect_profile.is_empty() or item_name.is_empty():
+		return {"ok": false, "reason": "invalid_arguments"}
+	if str(effect_profile.get("contractId", "")) != "item.temporary_stat_buff.v1":
+		return {"ok": false, "reason": "contract_mismatch"}
+	var duration_seconds: float = maxf(0.0, float(effect_profile.get("durationSeconds", 0.0)))
+	if duration_seconds <= 0.0:
+		return {"ok": false, "reason": "duration_invalid"}
+	var buff_group := str(effect_profile.get("buffGroup", ""))
+	if buff_group.is_empty():
+		return {"ok": false, "reason": "buff_group_missing"}
+	var modifiers: Variant = effect_profile.get("modifiers", {})
+	if not modifiers is Dictionary or (modifiers as Dictionary).is_empty():
+		return {"ok": false, "reason": "modifiers_missing"}
+	var allowed: Dictionary = TEMPORARY_ITEM_BUFF_ALLOWED_STATS.duplicate(true)
+	for stat_name: String in modifiers:
+		if not allowed.has(stat_name):
+			return {"ok": false, "reason": "stat_not_allowed", "stat": stat_name}
+	# Same buffGroup: refresh duration, do not stack.
+	# Different buffGroup: add as separate entry.
+	for existing_key: String in temporary_item_buffs:
+		var existing: Dictionary = temporary_item_buffs[existing_key]
+		if str(existing.get("buffGroup", "")) == buff_group:
+			temporary_item_buffs.erase(existing_key)
+			break
+	temporary_item_buffs[item_name] = {
+		"contract_id": TEMPORARY_ITEM_BUFF_CONTRACT_ID,
+		"item_name": item_name,
+		"buffGroup": buff_group,
+		"modifiers": (modifiers as Dictionary).duplicate(true),
+		"duration": duration_seconds,
+		"remaining": duration_seconds,
+	}
+	temporary_item_buff_revision += 1
+	recalculate_stats()
+	return {"ok": true, "item_name": item_name, "revision": temporary_item_buff_revision}
+
+
+func advance_temporary_item_buffs(delta: float) -> void:
+	if temporary_item_buffs.is_empty():
+		return
+	var expired: Array[String] = []
+	for item_name: String in temporary_item_buffs:
+		var entry: Dictionary = temporary_item_buffs[item_name]
+		var remaining: float = maxf(0.0, float(entry.get("remaining", 0.0)) - delta)
+		entry["remaining"] = remaining
+		if remaining <= 0.0:
+			expired.append(item_name)
+	if expired.is_empty():
+		return
+	for item_name: String in expired:
+		temporary_item_buffs.erase(item_name)
+	temporary_item_buff_revision += 1
+	recalculate_stats()
+
+
+func _apply_temporary_item_stat_modifiers(result: Dictionary) -> void:
+	for entry: Variant in temporary_item_buffs.values():
+		if not entry is Dictionary:
+			continue
+		var modifiers: Dictionary = (entry as Dictionary).get("modifiers", {})
+		for stat_name: String in modifiers:
+			var value: Variant = modifiers[stat_name]
+			if value is int:
+				result[stat_name] = int(result.get(stat_name, 0)) + int(value)
+			elif value is float:
+				result[stat_name] = float(result.get(stat_name, 0.0)) + float(value)
 
 
 func _default_world_position_fields() -> Dictionary:
