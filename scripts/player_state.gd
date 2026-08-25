@@ -9,6 +9,9 @@ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.g
 const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
 const PricingServiceScript := preload("res://scripts/pricing_service.gd")
+const WorldMonsterRespawnStateScript := preload(
+	"res://scripts/world_monster_respawn_state.gd"
+)
 
 signal profile_changed
 signal inventory_changed
@@ -125,6 +128,9 @@ var taoist_main_pet_runtime_states: Dictionary = {
 	"slots": {},
 }
 var quest_states: Dictionary = {}
+var world_monster_respawn_state: Dictionary = (
+	WorldMonsterRespawnStateScript.empty_snapshot()
+)
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
 var saved_ground_position_gu := Vector2.ZERO
@@ -213,6 +219,7 @@ func reset_progress(emit_updates := true) -> void:
 	warrior_runtime_state = _default_warrior_runtime_state()
 	taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 	quest_states = {}
+	world_monster_respawn_state = WorldMonsterRespawnStateScript.empty_snapshot()
 	_consumed_shop_sell_quote_ids.clear()
 	_consumed_shop_buy_quote_ids.clear()
 	_shop_buy_quote_serial = 0
@@ -2622,6 +2629,7 @@ func save_game() -> bool:
 		"skill_button_assignments": skill_button_assignments_snapshot(),
 		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
+		"world_monster_respawn_state": world_monster_respawn_state.duplicate(true),
 		"content_packages": ContentLayers.enabled_package_ids(),
 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": saved_map_id,
@@ -2881,6 +2889,11 @@ func load_save() -> void:
 				legacy_main_pet
 			)
 	quest_states = parsed.get("quest_states", {})
+	world_monster_respawn_state = (
+		WorldMonsterRespawnStateScript.normalize_snapshot(
+			parsed.get("world_monster_respawn_state", {})
+		)
+	)
 	saved_map_id = int(parsed.get("map_id", 4))
 	var position_data: Variant = parsed.get(
 		"position_screen_px",
@@ -2923,6 +2936,57 @@ func load_save() -> void:
 	):
 		_commit_save()
 	recalculate_stats()
+
+
+func monster_respawn_state_for_restore() -> Dictionary:
+	return world_monster_respawn_state.duplicate(true)
+
+
+func monster_respawn_entry(
+	runtime_map_id: int,
+	spawn_slot_id: String
+) -> Dictionary:
+	return WorldMonsterRespawnStateScript.entry_for(
+		world_monster_respawn_state,
+		runtime_map_id,
+		spawn_slot_id
+	)
+
+
+func mark_monster_respawn_dead(
+	runtime_map_id: int,
+	spawn_slot_id: String,
+	monster_id: int,
+	policy_id: String,
+	respawn_at_unix: float
+) -> bool:
+	var next_state := WorldMonsterRespawnStateScript.with_deadline(
+		world_monster_respawn_state,
+		runtime_map_id,
+		spawn_slot_id,
+		monster_id,
+		policy_id,
+		respawn_at_unix
+	)
+	if WorldMonsterRespawnStateScript.entry_for(
+		next_state,
+		runtime_map_id,
+		spawn_slot_id
+	).is_empty():
+		return false
+	world_monster_respawn_state = next_state
+	return true
+
+
+func clear_monster_respawn_slot(
+	runtime_map_id: int,
+	spawn_slot_id: String
+) -> void:
+	world_monster_respawn_state = WorldMonsterRespawnStateScript.without_slot(
+		world_monster_respawn_state,
+		runtime_map_id,
+		spawn_slot_id
+	)
 
 
 func apply_quick_slot_assignment(result: Dictionary) -> bool:

@@ -78,8 +78,11 @@ const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
 )
 const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
-const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
-const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
+const MonsterRespawnPolicyScript := preload(
+	"res://scripts/monster_respawn_policy.gd"
+)
+const DEFAULT_NORMAL_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BEGINNER_OUTDOOR_SECONDS
+const DEFAULT_BOSS_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BOSS_SECONDS
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
 const CANONICAL_MATERIAL_ITEMS := PlayerState.CANONICAL_MATERIAL_ITEMS
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
@@ -1705,7 +1708,9 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 
 func _spawn_editor_runtime_content(content: Dictionary) -> void:
 	_active_safe_zones = content.get("safe_areas", []).duplicate(true)
+	var editor_spawn_index := -1
 	for spawn: Dictionary in content.get("spawns", []):
+		editor_spawn_index += 1
 		var monster_id := GameData.canonical_monster_id(
 			spawn.get("monster_id", null)
 		)
@@ -1733,7 +1738,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 				var raw_group: Dictionary = spawn.get("spawn_group", {})
 				var group_id := str(spawn.get(
 					"spawnGroupId",
-					raw_group.get("id", "editor:%d:%d" % [current_map_id, int(content.get("spawns", []).find(spawn))])
+					raw_group.get("id", "editor:%d:%d" % [current_map_id, editor_spawn_index])
 				))
 				_spawn_enemy(
 					monster,
@@ -1743,11 +1748,14 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 					{
 						"spawn_group_id": group_id,
 						"spawn_slot_id": "%s:%d" % [group_id, copy_index],
+						"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 						"respawn_evidence": spawn.get("respawnEvidence", {"status": "map_editor_authored"}),
 						"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 					}
 				)
+	var editor_boss_index := -1
 	for spawn: Dictionary in content.get("bosses", []):
+		editor_boss_index += 1
 		var boss_id := GameData.canonical_monster_id(
 			spawn.get("monster_id", null)
 		)
@@ -1759,7 +1767,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			"spawn_group_id",
 			"editor:%d:boss:%d" % [
 				current_map_id,
-				int(content.get("bosses", []).find(spawn)),
+				editor_boss_index,
 			]
 		))
 		_spawn_enemy(
@@ -1770,6 +1778,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			{
 				"spawn_group_id": group_id,
 				"spawn_slot_id": "%s:0" % group_id,
+				"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 				"respawn_evidence": {
 					"status": "map_editor_authored",
 				},
@@ -1804,7 +1813,9 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 			_handle_home_resolution_failure(&"camp_spawn", home)
 			return
 		camp_home = home.get("position_px", Vector2.ZERO) as Vector2
+	var authored_spawn_index := -1
 	for spawn: Variant in content.get("spawns", []):
+		authored_spawn_index += 1
 		if not spawn is Dictionary:
 			continue
 		var monster_id := GameData.canonical_monster_id(
@@ -1813,14 +1824,16 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 		var monster := GameData.get_monster_by_id(monster_id)
 		if not monster.is_empty():
 			var spawn_position: Vector2 = spawn.get("position", Vector2.ZERO)
+			var group_id := str(spawn.get(
+				"spawnGroupId",
+				"map:%d:spawn:%d" % [current_map_id, authored_spawn_index]
+			))
 			if current_map_id == 4:
 				var copies := int(camp_layout.get("fieldSpawnCopies", 4))
 				var radii: Array = camp_layout.get("fieldSpawnRadii", [940, 1180, 1460, 1740])
-				var spawn_index := int(content.get("spawns", []).find(spawn))
 				for copy_index in range(copies):
-					var angle := float(spawn_index * copies + copy_index) * TAU / float(maxi(1, content.get("spawns", []).size() * copies))
+					var angle := float(authored_spawn_index * copies + copy_index) * TAU / float(maxi(1, content.get("spawns", []).size() * copies))
 					var radius := float(radii[copy_index % radii.size()])
-					var group_id := str(spawn.get("spawnGroupId", "map:%d:spawn:%d" % [current_map_id, spawn_index]))
 					_spawn_enemy(
 						monster,
 						camp_home + Vector2.RIGHT.rotated(angle) * radius,
@@ -1829,6 +1842,7 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 						{
 							"spawn_group_id": group_id,
 							"spawn_slot_id": "%s:%d" % [group_id, copy_index],
+							"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 							"respawn_evidence": spawn.get("respawnEvidence", {}),
 							"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 						}
@@ -1840,12 +1854,16 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 				false,
 				float(spawn.get("respawn_seconds", DEFAULT_NORMAL_RESPAWN_SECONDS)),
 				{
-					"spawn_group_id": str(spawn.get("spawnGroupId", "")),
+					"spawn_group_id": group_id,
+					"spawn_slot_id": "%s:0" % group_id,
+					"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 					"respawn_evidence": spawn.get("respawnEvidence", {}),
 					"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 				}
 			)
+	var authored_boss_index := -1
 	for boss_spawn: Variant in content.get("bosses", []):
+		authored_boss_index += 1
 		if not boss_spawn is Dictionary:
 			continue
 		var boss_id := GameData.canonical_monster_id(
@@ -1853,13 +1871,19 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 		)
 		var boss := GameData.get_monster_by_id(boss_id)
 		if not boss.is_empty():
+			var boss_group_id := str(boss_spawn.get(
+				"spawnGroupId",
+				"map:%d:boss:%d" % [current_map_id, authored_boss_index]
+			))
 			_spawn_enemy(
 				boss,
 				boss_spawn.get("position", Vector2(560, 230)),
 				true,
 				float(boss_spawn.get("respawn_seconds", DEFAULT_BOSS_RESPAWN_SECONDS)),
 				{
-					"spawn_group_id": str(boss_spawn.get("spawnGroupId", "")),
+					"spawn_group_id": boss_group_id,
+					"spawn_slot_id": "%s:0" % boss_group_id,
+					"respawn_policy_id": str(boss_spawn.get("respawn_policy_id", "")),
 					"respawn_evidence": boss_spawn.get("respawnEvidence", {}),
 					"respawn_random_seconds": float(boss_spawn.get("respawn_random_seconds", 0.0)),
 				}
@@ -1937,10 +1961,22 @@ func _spawn_outskirts_content() -> void:
 		[30, Vector2(520, 160)],
 		[56, Vector2(670, 280)],
 	]
-	for entry: Array in spawn_plan:
+	for spawn_index in range(spawn_plan.size()):
+		var entry: Array = spawn_plan[spawn_index]
 		var monster := GameData.get_monster_by_id(int(entry[0]))
 		if not monster.is_empty():
-			_spawn_enemy(monster, entry[1], false)
+			var group_id := "outskirts:%d:spawn:%d" % [current_map_id, spawn_index]
+			_spawn_enemy(
+				monster,
+				entry[1],
+				false,
+				DEFAULT_NORMAL_RESPAWN_SECONDS,
+				{
+					"spawn_group_id": group_id,
+					"spawn_slot_id": "%s:0" % group_id,
+					"respawn_policy_id": MonsterRespawnPolicyScript.BEGINNER_OUTDOOR,
+				}
+			)
 	_spawn_portal(Vector2(560, -305), "比奇城", "进入比奇城")
 
 
@@ -2030,15 +2066,77 @@ func _spawn_enemy(
 			return null
 	_runtime_spawn_serial += 1
 	var context := spawn_context.duplicate(true)
+	var respawn_enabled := bool(context.get("respawn_enabled", true))
 	var slot_id := str(context.get("spawn_slot_id", context.get("spawn_group_id", "")))
 	if slot_id.is_empty():
+		if respawn_enabled:
+			push_error(
+				"Monster respawn authority rejected unstable formal slot: monster_id=%d map_id=%d"
+				% [monster_id, current_map_id]
+			)
+			return null
 		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
 	context["spawn_slot_id"] = slot_id
-	var effective_respawn := float(respawn_seconds)
-	if effective_respawn <= 0.0:
-		effective_respawn = DEFAULT_BOSS_RESPAWN_SECONDS if is_boss else DEFAULT_NORMAL_RESPAWN_SECONDS
+	var classification := str(canonical_monster.get("classification", ""))
+	var policy: Dictionary = {}
+	var effective_respawn := maxf(0.0, float(respawn_seconds))
+	if respawn_enabled:
+		policy = MonsterRespawnPolicyScript.resolve(
+			str(context.get("respawn_policy_id", "")),
+			classification,
+			float(respawn_seconds)
+		)
+		if not bool(policy.get("valid", false)):
+			push_error(
+				"Monster respawn policy rejected monster_id=%d slot=%s reason=%s"
+				% [
+					monster_id,
+					slot_id,
+					str(policy.get("reason", "invalid_policy")),
+				]
+			)
+			return null
+		effective_respawn = float(policy.get("seconds", 0.0))
+		context["respawn_policy_id"] = str(policy.get("policy_id", ""))
+		context["respawn_policy_source"] = str(policy.get("source", ""))
+		context["respawn_policy_requires_authored_policy"] = bool(
+			policy.get("requires_authored_policy", false)
+		)
+	else:
+		context["respawn_policy_id"] = ""
+		context["respawn_policy_source"] = "respawn_disabled"
+		context["respawn_policy_requires_authored_policy"] = false
+	context["respawn_runtime_map_id"] = current_map_id
 	context["respawn_base_seconds"] = effective_respawn
-	context["respawn_random_seconds"] = maxf(0.0, float(context.get("respawn_random_seconds", 0.0)))
+	# MFC-4 fixed tiers are exact. Historical random variance remains readable
+	# in old authored data but is retired from runtime authority.
+	context["respawn_random_seconds"] = 0.0
+
+	var clear_persisted_respawn_after_spawn := false
+	if respawn_enabled:
+		var persisted := PlayerState.monster_respawn_entry(current_map_id, slot_id)
+		if not persisted.is_empty():
+			if int(persisted.get("monster_id", -1)) != monster_id:
+				# The map slot was deliberately re-authored to another
+				# canonical identity. A stale death record must not suppress it.
+				PlayerState.clear_monster_respawn_slot(current_map_id, slot_id)
+			else:
+				var remaining := maxf(
+					0.0,
+					float(persisted.get("respawn_at_unix", 0.0))
+					- Time.get_unix_time_from_system()
+				)
+				if remaining > 0.0:
+					_respawn_later(
+						canonical_monster,
+						spawn_position,
+						is_boss,
+						remaining,
+						_zone_generation,
+						context
+					)
+					return null
+				clear_persisted_respawn_after_spawn = true
 	var enemy := EnemyActor.new()
 	enemy.setup(monster_data, player, is_boss)
 	enemy.configure_runtime_map_projection(
@@ -2073,7 +2171,10 @@ func _spawn_enemy(
 	enemy.set_meta("spawn_is_boss", is_boss)
 	enemy.set_meta("respawn_seconds", effective_respawn)
 	enemy.set_meta("respawn_random_seconds", float(context["respawn_random_seconds"]))
-	enemy.set_meta("respawn_enabled", bool(context.get("respawn_enabled", true)))
+	enemy.set_meta("respawn_enabled", respawn_enabled)
+	enemy.set_meta("respawn_policy_id", str(context.get("respawn_policy_id", "")))
+	enemy.set_meta("respawn_policy_source", str(context.get("respawn_policy_source", "")))
+	enemy.set_meta("respawn_policy_requires_authored_policy", bool(context.get("respawn_policy_requires_authored_policy", false)))
 	enemy.set_meta("spawn_slot_id", slot_id)
 	enemy.set_meta("spawn_group_id", str(context.get("spawn_group_id", slot_id)))
 	enemy.set_meta("spawn_context", context)
@@ -2090,6 +2191,8 @@ func _spawn_enemy(
 		_on_enemy_fixed_area_ground_spike_requested.bind(enemy)
 	)
 	add_child(enemy)
+	if clear_persisted_respawn_after_spawn:
+		PlayerState.clear_monster_respawn_slot(current_map_id, slot_id)
 	return enemy
 
 
@@ -8400,7 +8503,6 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	var was_boss: bool = enemy.get_meta("spawn_is_boss", false)
 	var generation: int = enemy.get_meta("zone_generation", _zone_generation)
 	var configured_respawn := float(enemy.get_meta("respawn_seconds", -1.0))
-	var configured_random_respawn := float(enemy.get_meta("respawn_random_seconds", 0.0))
 	var respawn_enabled := bool(enemy.get_meta("respawn_enabled", true))
 	var spawn_context: Dictionary = enemy.get_meta("spawn_context", {}).duplicate(true)
 	var monster_id := _strict_runtime_monster_id(monster_data)
@@ -8423,14 +8525,49 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 			)
 	if not respawn_enabled:
 		return
-	var respawn_seconds := configured_respawn if configured_respawn > 0.0 else (DEFAULT_BOSS_RESPAWN_SECONDS if was_boss else DEFAULT_NORMAL_RESPAWN_SECONDS)
-	var respawn_wait_seconds := respawn_seconds
-	if configured_random_respawn > 0.0:
-		respawn_wait_seconds = maxf(
-			60.0,
-			respawn_seconds - configured_random_respawn + _rng.randf_range(0.0, configured_random_respawn * 2.0)
+	var classification := str(canonical_monster.get("classification", ""))
+	var policy := MonsterRespawnPolicyScript.resolve(
+		str(spawn_context.get("respawn_policy_id", "")),
+		classification,
+		configured_respawn
+	)
+	if not bool(policy.get("valid", false)):
+		push_error(
+			"Monster death respawn policy rejected monster_id=%d reason=%s"
+			% [monster_id, str(policy.get("reason", "invalid_policy"))]
 		)
-	_respawn_later(canonical_monster, spawn_position, was_boss, respawn_wait_seconds, generation, spawn_context)
+		return
+	var respawn_wait_seconds := float(policy.get("seconds", 0.0))
+	var respawn_runtime_map_id := int(
+		spawn_context.get("respawn_runtime_map_id", current_map_id)
+	)
+	var spawn_slot_id := str(spawn_context.get("spawn_slot_id", ""))
+	var respawn_at_unix := (
+		Time.get_unix_time_from_system() + respawn_wait_seconds
+	)
+	if not PlayerState.mark_monster_respawn_dead(
+		respawn_runtime_map_id,
+		spawn_slot_id,
+		monster_id,
+		str(policy.get("policy_id", "")),
+		respawn_at_unix
+	):
+		push_error(
+			"Monster respawn state rejected unstable slot monster_id=%d map_id=%d slot=%s"
+			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
+		)
+		return
+	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
+	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
+	spawn_context["respawn_random_seconds"] = 0.0
+	_respawn_later(
+		canonical_monster,
+		spawn_position,
+		was_boss,
+		respawn_wait_seconds,
+		generation,
+		spawn_context
+	)
 
 
 func _spawn_loot(item_name: String, position: Vector2) -> void:
