@@ -24,6 +24,9 @@ const MERCHANT_CATALOG_PATH := "res://assets/data/merchant_catalog_v1.json"
 const CANONICAL_MONSTER_CATALOG_PATH := (
 	"res://assets/data/runtime/canonical_monster_catalog.json"
 )
+const CANONICAL_DROP_ITEM_AUTHORITY_PATH := (
+	"res://assets/data/canonical_drop_item_authority_v1.json"
+)
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
 	"金疮药(小量)": "金创药(小量)",
@@ -39,6 +42,14 @@ const ITEM_ALIASES := {
 	"食人树叶": "食人花叶",
 	"食人树的果实": "食人花果",
 	"蝎子的尾巴": "蝎尾",
+
+	# ITEM-P0C canonical monster-drop exact aliases.
+	# These are spelling/name compatibility boundaries only;
+	# distinct potion identities are intentionally NOT collapsed.
+	"篮翡翠项链": "蓝翡翠项链",
+	"铂金项链": "白金项链",
+	"群体治愈术": "群体治疗术",
+	"极速神水": "疾风药水",
 }
 # 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
@@ -64,6 +75,7 @@ var service_item_catalog: Dictionary = {}
 var equipment_price_candidates: Dictionary = {}
 var merchant_catalog: Dictionary = {}
 var canonical_monster_catalog: Dictionary = {}
+var canonical_drop_item_authority: Dictionary = {}
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -166,6 +178,8 @@ func load_database() -> bool:
 	_load_boss_service_rules()
 	_load_service_reference()
 	_load_service_item_catalog()
+	if not _load_canonical_drop_item_authority():
+		return false
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
 	_build_indexes()
@@ -249,6 +263,65 @@ func _load_service_item_catalog() -> void:
 		service_item_catalog = parsed
 	else:
 		push_error("完整物品目录不是有效JSON：%s" % SERVICE_ITEM_CATALOG_PATH)
+
+
+func _load_canonical_drop_item_authority() -> bool:
+	canonical_drop_item_authority = {}
+	if not FileAccess.file_exists(
+		CANONICAL_DROP_ITEM_AUTHORITY_PATH
+	):
+		load_error = "canonical_drop_item_authority_missing"
+		return false
+
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(
+			CANONICAL_DROP_ITEM_AUTHORITY_PATH
+		)
+	)
+
+	if not parsed is Dictionary:
+		load_error = "canonical_drop_item_authority_invalid"
+		return false
+
+	if (
+		str(parsed.get("contractId", ""))
+		!= "item.canonical_drop_authority.v1"
+	):
+		load_error = "canonical_drop_item_authority_contract_invalid"
+		return false
+
+	var authority_items: Variant = parsed.get("items", [])
+
+	if not authority_items is Array or authority_items.is_empty():
+		load_error = "canonical_drop_item_authority_items_missing"
+		return false
+
+	var seen_ids := {}
+	var seen_names := {}
+
+	for raw_record: Variant in authority_items:
+		if not raw_record is Dictionary:
+			load_error = "canonical_drop_item_authority_record_invalid"
+			return false
+
+		var record: Dictionary = raw_record
+		var item_id := _stable_item_id(record)
+		var item_name := str(record.get("name", ""))
+
+		if (
+			item_id <= 0
+			or item_name.is_empty()
+			or seen_ids.has(item_id)
+			or seen_names.has(item_name)
+		):
+			load_error = "canonical_drop_item_authority_identity_invalid"
+			return false
+
+		seen_ids[item_id] = true
+		seen_names[item_name] = true
+
+	canonical_drop_item_authority = parsed
+	return true
 
 
 func _load_equipment_price_candidates() -> void:
@@ -788,6 +861,19 @@ func _build_item_catalog() -> void:
 	for special_item: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
 		if special_item is Dictionary:
 			_register_catalog_item(special_item.duplicate(true))
+
+	# ITEM-P0C project-owned stable Item identities for canonical
+	# monster-drop tokens absent from the service/equipment authorities.
+	# They register before heuristic runtime fallbacks so every intended
+	# drop resolves through a stable numeric identity.
+	for authority_item: Variant in canonical_drop_item_authority.get(
+		"items", []
+	):
+		if authority_item is Dictionary:
+			_register_catalog_item(
+				(authority_item as Dictionary).duplicate(true)
+			)
+
 	var extra_names := {}
 	for drop: Variant in drops:
 		if drop is Dictionary:
