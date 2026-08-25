@@ -664,6 +664,7 @@ static func _combat_spawn(
 			entry.get("tile", [0, 0])
 		),
 		"respawn_seconds": respawn_seconds,
+		"respawn_policy_id": str(entry.get("respawn_policy_id", "")),
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
 		"radius_gu": float(entry.get("radius_gu", 0.0)),
