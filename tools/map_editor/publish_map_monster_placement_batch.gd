@@ -50,7 +50,7 @@ func _run() -> void:
 		var row: Dictionary = raw
 		if str(row.get("status", "")) == TARGET_STATUS:
 			targets.append(row)
-	if targets.size() != 60:
+	if targets.size() != 66:
 		_fail("placement_target_count_mismatch:%d" % targets.size())
 		return
 	var before_registry_sha := _file_sha256(REGISTRY_PATH)

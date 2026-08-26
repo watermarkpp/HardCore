@@ -468,8 +468,16 @@ def _validate_document(entry: Mapping[str, Any], document: Mapping[str, Any], *,
             label=f"registry[{legacy_map_id}].legacy_runtime_map_id",
             positive=True,
         )
-        if document_runtime != expected_runtime:
-            errors.append(f"document-runtime-map-id-mismatch:{document_runtime}!={expected_runtime}")
+        formal_runtime = _integer_number(
+            entry.get("runtime_map_id"),
+            label=f"registry[{legacy_map_id}].runtime_map_id",
+            positive=True,
+        )
+        if document_runtime not in {expected_runtime, formal_runtime}:
+            errors.append(
+                "document-runtime-map-id-mismatch:"
+                f"{document_runtime}!={expected_runtime}/{formal_runtime}"
+            )
     except SafeWriterError as exc:
         errors.append(str(exc))
     if not isinstance(document.get("display_name"), str) or not document.get("display_name", "").strip():
@@ -766,6 +774,56 @@ def _snapshot_without_timestamp(value: Mapping[str, Any]) -> dict[str, Any]:
     return result
 
 
+def _snapshot_for_authorized_batch_compare(value: Mapping[str, Any]) -> dict[str, Any]:
+    """Project the snapshot to fields not owned by the monster batch.
+
+    Portal normalization is an independent map-network operation and monster
+    layers are the deliberate output of this batch.  Existing batch candidates
+    can therefore be revalidated against the authoring snapshot only after
+    those owned fields (and their derived byte/mtime witnesses) are removed.
+    The default snapshot verifier remains byte/field strict.
+    """
+
+    result = _snapshot_without_timestamp(value)
+    result.pop("portal_overlay", None)
+    registry = result.get("registry")
+    if isinstance(registry, dict):
+        registry.pop("sha256", None)
+    ignored_layers = {
+        "monster_spawn",
+        "boss_spawn",
+        "door_points",
+        "map_exit_points",
+        "map_entrance_points",
+        "map_exits",
+        "map_exit",
+        "door",
+        "doors",
+    }
+    for row in result.get("maps", []):
+        if not isinstance(row, dict):
+            continue
+        for field in (
+            "source_sha256",
+            "sha256",
+            "source_byte_size",
+            "source_mtime_ns",
+            "mtime_ns",
+            "source_mtime_utc",
+            "document_runtime_map_id",
+        ):
+            row.pop(field, None)
+        document = row.get("document")
+        if isinstance(document, dict):
+            document.pop("runtime_map_id", None)
+        for field in ("layers", "layer_counts", "layer_hashes"):
+            values = row.get(field)
+            if isinstance(values, dict):
+                for layer in ignored_layers:
+                    values.pop(layer, None)
+    return result
+
+
 def verify_snapshot(
     source_root: Path,
     snapshot_path: Path,
@@ -773,6 +831,7 @@ def verify_snapshot(
     registry_path: Path = DEFAULT_REGISTRY_PATH,
     portal_overlay_path: Path = DEFAULT_PORTAL_OVERLAY_PATH,
     require_formal_count: bool = True,
+    allow_authorized_batch_drift: bool = False,
 ) -> dict[str, Any]:
     source_root_resolved = _resolve_existing(Path(source_root), label="source-root")
     snapshot_file = _resolve_existing(Path(snapshot_path), label="snapshot")
@@ -785,7 +844,13 @@ def verify_snapshot(
         portal_overlay_path=portal_overlay_path,
         require_formal_count=require_formal_count,
     )
-    difference = _first_difference(_snapshot_without_timestamp(saved), _snapshot_without_timestamp(current))
+    if allow_authorized_batch_drift:
+        saved_compare = _snapshot_for_authorized_batch_compare(saved)
+        current_compare = _snapshot_for_authorized_batch_compare(current)
+    else:
+        saved_compare = _snapshot_without_timestamp(saved)
+        current_compare = _snapshot_without_timestamp(current)
+    difference = _first_difference(saved_compare, current_compare)
     if difference:
         _error(f"snapshot-drift-fail-closed:{difference}")
     return {
@@ -1156,7 +1221,12 @@ def _validate_authority_binding(
     policy = (authority_ref_policy or {}).get(key)
     if policy is not None and not isinstance(policy, Mapping):
         _error(f"{label}.authority_ref-policy-invalid:{key}")
-    if token.get("placement_kind") != layer_name:
+    # A placement may explicitly use a target-map source-marker token when a
+    # policy declares an audited cross-map pool inheritance.  The policy must
+    # name the allowed source marker kind; ordinary placements retain the
+    # strict layer-to-authority-kind binding below.
+    policy_kinds = set(policy.get("allowed_placement_kinds", [])) if policy else set()
+    if token.get("placement_kind") != layer_name and token.get("placement_kind") not in policy_kinds:
         _error(
             f"{label}.authority_ref-placement-kind-mismatch:"
             f"{token.get('placement_kind')!r}!={layer_name!r}"
@@ -1388,6 +1458,7 @@ def write_candidate(
     authority_path: Path = DEFAULT_AUTHORITY_PATH,
     require_formal_count: bool = True,
     authority_ref_policy: Mapping[tuple[str, int, str, int], Mapping[str, Any]] | None = None,
+    allow_authorized_batch_drift: bool = False,
 ) -> dict[str, Any]:
     source_root_resolved = _resolve_existing(Path(source_root), label="source-root")
     snapshot_file = _resolve_existing(Path(snapshot_path), label="snapshot")
@@ -1398,6 +1469,7 @@ def write_candidate(
         registry_path=registry_path,
         portal_overlay_path=portal_overlay_path,
         require_formal_count=require_formal_count,
+        allow_authorized_batch_drift=allow_authorized_batch_drift,
     )
     registry, _, _ = load_registry(
         registry_path,

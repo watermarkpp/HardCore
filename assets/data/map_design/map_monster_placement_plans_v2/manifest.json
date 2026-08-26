@@ -6,16 +6,16 @@
     "authority_sha256": "6a757a948ce161aa500f925502048e1ba7d1346f4064e082b43a011693f4cb8c",
     "identity_registry_sha256": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
     "current_monster_library_sha256": "0f6ed32f1f77b92523410819526a648c05f23a4a1a7d7c5ad89e950b729b1143",
-    "execution_policy_sha256": "bc0592118e09969234a66037655b9b6f8bbbbbf7e952760aed5055c5b614f4c5"
+    "execution_policy_sha256": "21d4559de8d4a54d268fdfad6a8a66292988e004262ffe21474d42ba47a05f9c"
   },
   "summary": {
     "formal_map_count": 67,
-    "candidate_map_count": 60,
+    "candidate_map_count": 66,
     "preserved_map_count": 1,
-    "transition_backfill_map_count": 5,
-    "no_fixed_spawn_map_count": 1,
-    "placement_entry_count": 364,
-    "skipped_token_count": 21
+    "transition_backfill_map_count": 0,
+    "no_fixed_spawn_map_count": 0,
+    "placement_entry_count": 405,
+    "skipped_token_count": 26
   },
   "maps": [
     {
@@ -23,9 +23,91 @@
       "legacy_map_id": "bich_province",
       "runtime_map_id": 910001,
       "display_name": "比奇省（单机重制）",
-      "source_sha256": "d357457b9fb52bd47c79904006eea4c420413328a535e3466a03136217b87ab3",
-      "status": "TRANSITION_BACKFILL_REQUIRED",
-      "placement_count": 0
+      "source_sha256": "369f112d7ded43aea47baadcc4069b4d6aae6bd7637e5ca285031401ecff7a93",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 4510,
+      "component_sizes": [
+        4510
+      ],
+      "monster_spawn_count": 8,
+      "boss_spawn_count": 0,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 18,
+          "canonical_name": "毒蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 19,
+          "canonical_name": "蛤蟆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 21,
+          "canonical_name": "稻草人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 24,
+          "canonical_name": "多钩猫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 26,
+          "canonical_name": "钉耙猫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 28,
+          "canonical_name": "森林雪人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 30,
+          "canonical_name": "食人花",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "半兽人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "鸡",
+          "source_category_role": "ordinary",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "鹿",
+          "source_category_role": "ordinary",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "弓箭护卫",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "eb97721edeb34595c8c545a0cbacaa96d730fbb006c9ece5d33c7f9031762e80",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
     },
     {
       "map_id": "bich_orc_tomb_f1",
@@ -1351,9 +1433,186 @@
       "legacy_map_id": "sgcw_2",
       "runtime_map_id": 913202,
       "display_name": "石棺材屋",
-      "source_sha256": "8379dc0f47c0be8c72b68d407a4643d0d16db8143a357f777ca0ec34966bf0b6",
-      "status": "NO_FIXED_SPAWN",
-      "placement_count": 0
+      "source_sha256": "5301cf742330209cbf417df4795f3b1a5d344c688a61664218beee5a5e304b19",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 721,
+      "component_sizes": [
+        721
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "邪恶钳虫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "source_map_id": "mengzhong_death_valley_dungeon",
+          "raw_token": "弓箭护卫（入口附近，可选）",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "bfb9150109eb7aba2272ca557666389ef4508b0e3ae420d48bf1d0427fb9cdfe",
+      "non_target_fields_unchanged": true,
+      "pool_inheritance": {
+        "mode": "adjacent_pool_union",
+        "target_map_id": "mengzhong_stone_coffin_room",
+        "target_authority_ref": {
+          "map_id": "mengzhong_stone_coffin_room",
+          "source_line": 130,
+          "source_category_role": "special",
+          "source_token_index": 1
+        },
+        "source_map_ids": [
+          "mengzhong_death_valley_dungeon",
+          "mengzhong_dark_area"
+        ],
+        "source_reports": [
+          {
+            "map_id": "mengzhong_death_valley_dungeon",
+            "selected_monster_ids": [
+              110,
+              112,
+              114,
+              116
+            ],
+            "skipped_count": 1
+          },
+          {
+            "map_id": "mengzhong_dark_area",
+            "selected_monster_ids": [
+              110,
+              112,
+              114,
+              116,
+              118,
+              120
+            ],
+            "skipped_count": 0
+          }
+        ],
+        "selected_monster_ids": [
+          110,
+          112,
+          114,
+          116,
+          118,
+          120
+        ],
+        "source_authority_refs_by_monster_id": {
+          "110": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 1
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 1
+            }
+          ],
+          "112": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 4
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 4
+            }
+          ],
+          "114": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 2
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 2
+            }
+          ],
+          "116": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 3
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 3
+            }
+          ],
+          "118": [
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 5
+            }
+          ],
+          "120": [
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 134,
+              "source_category_role": "elite",
+              "source_token_index": 1
+            }
+          ]
+        }
+      },
+      "replaced_source_spawn_count": 0
     },
     {
       "map_id": "mengzhong_dark_area",
@@ -1651,36 +1910,255 @@
       "legacy_map_id": "wooma_forest",
       "runtime_map_id": 910004,
       "display_name": "沃玛森林",
-      "source_sha256": "aeebd040f2de777298102be15bbfc8682612cd02658cfdc53914db139f6d75f9",
-      "status": "TRANSITION_BACKFILL_REQUIRED",
-      "placement_count": 0
+      "source_sha256": "84e64ff166f43dae5f2114a9c003bafdc74c6cf4152e52da0cb0534954c3612f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2256,
+      "component_sizes": [
+        2233,
+        23
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 24,
+          "canonical_name": "多钩猫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 26,
+          "canonical_name": "钉耙猫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 28,
+          "canonical_name": "森林雪人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "半兽人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 36,
+          "canonical_name": "半兽战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 38,
+          "canonical_name": "半兽勇士",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "弓箭护卫",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "f93426acb2f4630887b15fe7d5d6a479e7b9ffe267930cdee3d7c15e48178ea1",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
     },
     {
       "map_id": "wooma_temple_f1",
       "legacy_map_id": "wooma_temple_1",
       "runtime_map_id": 915001,
       "display_name": "沃玛寺庙一层",
-      "source_sha256": "3d502914601e6f57cd0fac041eba3f1a6a645d480d9a889890863d0f3da9f54e",
-      "status": "TRANSITION_BACKFILL_REQUIRED",
-      "placement_count": 0
+      "source_sha256": "03ca90d79bd6209488204f4cf39c32927f00b31643d682727fe917d4475f2f0f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1625,
+      "component_sizes": [
+        1625
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "山洞蝙蝠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 60,
+          "canonical_name": "粪虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 64,
+          "canonical_name": "沃玛战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 66,
+          "canonical_name": "沃玛勇士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 68,
+          "canonical_name": "沃玛战将",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 70,
+          "canonical_name": "火焰沃玛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d3253b6f8a89f5e085bd7ea02e962e4bf439623b6d9afe1c9324b72133b25415",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
     },
     {
       "map_id": "wooma_temple_f2",
       "legacy_map_id": "wooma_temple_2",
       "runtime_map_id": 915002,
       "display_name": "沃玛寺庙二层",
-      "source_sha256": "68672fe1c975c214054ed19fd062817d18ea370a667b4e9a97acad699bfe59a1",
-      "status": "TRANSITION_BACKFILL_REQUIRED",
-      "placement_count": 0
+      "source_sha256": "95a8f313a246144bf03996430e03c298d7752236ce5b954f6f7b0b07276a76a3",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1582,
+      "component_sizes": [
+        1582
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "山洞蝙蝠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 60,
+          "canonical_name": "粪虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 62,
+          "canonical_name": "暗黑战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 64,
+          "canonical_name": "沃玛战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 66,
+          "canonical_name": "沃玛勇士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 68,
+          "canonical_name": "沃玛战将",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 70,
+          "canonical_name": "火焰沃玛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 73,
+          "canonical_name": "沃玛卫士",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "eee285caeda63b1ccca098e05ac5b8dda116bddd40cd264f2c031ddddd99b24f",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
     },
     {
       "map_id": "wooma_temple_boss_hall",
       "legacy_map_id": "wooma_temple_3",
       "runtime_map_id": 915003,
       "display_name": "沃玛教主大厅",
-      "source_sha256": "bc283728cfcb8f804aee57885e1c8edcd3b1598ef23adcf8af0d6bf46b8dbf69",
-      "status": "TRANSITION_BACKFILL_REQUIRED",
-      "placement_count": 0
+      "source_sha256": "1788e420db4465ce108fc219ee9433dbfdb0d4969491b09e039dc3a74c5803ef",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1640,
+      "component_sizes": [
+        1640
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 2,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 62,
+          "canonical_name": "暗黑战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 64,
+          "canonical_name": "沃玛战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 66,
+          "canonical_name": "沃玛勇士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 68,
+          "canonical_name": "沃玛战将",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 70,
+          "canonical_name": "火焰沃玛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 73,
+          "canonical_name": "沃玛卫士",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 76,
+          "canonical_name": "沃玛教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "56c0e54307677770942934e22af2401ba66482b9718e2bb5d24bf10dc63de18c",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
     },
     {
       "map_id": "hidden_fallen_graveyard",
@@ -2215,7 +2693,7 @@
       "legacy_map_id": "gmhl_purgatory_corridor",
       "runtime_map_id": 914007,
       "display_name": "炼狱回廊",
-      "source_sha256": "a33c37a4b5c9909ef7ab91d794f942c8d199d607155fa1183d893016d90f34ec",
+      "source_sha256": "62e52339a0c1c818f41861ecde3d91a1def54894596e31bcfea5997de2a36bb9",
       "status": "PRESERVE_USER_ACCEPTED",
       "placement_count": 15
     },

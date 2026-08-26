@@ -23,6 +23,26 @@
     "exact_current_library_ids": [39, 57, 74, 77, 90, 121, 137, 142],
     "missing_or_deleted_variants": ["鸡（未知暗殿变体）", "鹿（未知暗殿变体）", "稻草人（未知暗殿变体）", "巨型多角虫（未知暗殿变体）"]
   },
+  "pool_inheritance_overrides": [
+    {
+      "map_id": "mengzhong_stone_coffin_room",
+      "mode": "adjacent_pool_union",
+      "source_map_ids": [
+        "mengzhong_death_valley_dungeon",
+        "mengzhong_dark_area"
+      ],
+      "source_series": "mengzhong_death_valley",
+      "include_classifications": ["ordinary", "elite", "boss"],
+      "skip_special_systems": true,
+      "expected_monster_ids": [110, 112, 114, 116, 118, 120],
+      "target_authority_ref": {
+        "map_id": "mengzhong_stone_coffin_room",
+        "source_line": 130,
+        "source_category_role": "special",
+        "source_token_index": 1
+      }
+    }
+  ],
   "frozen_maps": [
     {
       "map_id": "fengmo_purgatory_corridor",
@@ -32,12 +52,13 @@
       "preserve": true
     }
   ],
-  "transition_backfill_maps": [
+  "replace_existing_spawn_maps": [
     "world_bich_province",
     "world_wooma_forest",
     "wooma_temple_f1",
     "wooma_temple_f2",
     "wooma_temple_boss_hall"
   ],
-  "no_fixed_spawn_maps": ["mengzhong_stone_coffin_room"]
+  "transition_backfill_maps": [],
+  "no_fixed_spawn_maps": []
 }

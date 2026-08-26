@@ -1,5 +1,7 @@
 import hashlib
+import importlib.util
 import json
+import sys
 import unittest
 from pathlib import Path
 
@@ -10,6 +12,18 @@ POLICY = ROOT / "assets/data/map_design/map_monster_placement_execution_policy_v
 CATALOG = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
 SNAPSHOT = ROOT / "assets/data/map_design/map_authoring_snapshot_20260826.json"
 EDITOR_ROOT = ROOT / "map_editor_workspace"
+
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+PLANNER = load_module("map_monster_auto_planner_batch_test", ROOT / "tools/map_editor/plan_map_monster_auto_placement.py")
+WRITER = load_module("map_monster_safe_writer_batch_test", ROOT / "tools/map_editor/map_monster_placement_safe_writer.py")
 
 
 def load(path: Path):
@@ -44,10 +58,66 @@ class MapMonsterPlacementBatchTest(unittest.TestCase):
         )
         self.assertEqual(156, len(self.catalog_by_id))
         self.assertEqual(67, self.manifest["summary"]["formal_map_count"])
-        self.assertEqual(60, self.manifest["summary"]["candidate_map_count"])
-        self.assertEqual(5, self.manifest["summary"]["transition_backfill_map_count"])
+        self.assertEqual(66, self.manifest["summary"]["candidate_map_count"])
+        self.assertEqual(0, self.manifest["summary"]["transition_backfill_map_count"])
         self.assertEqual(1, self.manifest["summary"]["preserved_map_count"])
-        self.assertEqual(1, self.manifest["summary"]["no_fixed_spawn_map_count"])
+        self.assertEqual(0, self.manifest["summary"]["no_fixed_spawn_map_count"])
+
+    def test_replacement_policy_and_inheritance_contract_are_explicit(self):
+        self.assertEqual(
+            {
+                "world_bich_province",
+                "world_wooma_forest",
+                "wooma_temple_f1",
+                "wooma_temple_f2",
+                "wooma_temple_boss_hall",
+            },
+            set(self.policy["replace_existing_spawn_maps"]),
+        )
+        override = self.policy["pool_inheritance_overrides"][0]
+        self.assertEqual("mengzhong_stone_coffin_room", override["map_id"])
+        self.assertEqual(
+            ["mengzhong_death_valley_dungeon", "mengzhong_dark_area"],
+            override["source_map_ids"],
+        )
+        self.assertEqual([110, 112, 114, 116, 118, 120], override["expected_monster_ids"])
+        self.assertEqual([], self.policy["transition_backfill_maps"])
+        self.assertEqual([], self.policy["no_fixed_spawn_maps"])
+
+    def test_stone_coffin_inherits_adjacent_pool_and_binds_target_map(self):
+        row = next(value for value in self.manifest["maps"] if value["map_id"] == "mengzhong_stone_coffin_room")
+        self.assertEqual("CANDIDATE_WRITTEN", row["status"])
+        self.assertEqual({110, 112, 114, 116, 118, 120}, {value["monster_id"] for value in row["selected"]})
+        self.assertEqual({"mengzhong_death_valley_dungeon", "mengzhong_dark_area"}, set(row["pool_inheritance"]["source_map_ids"]))
+        candidate_path = EDITOR_ROOT / row["legacy_map_id"] / f"{row['legacy_map_id']}.editor.json"
+        candidate = load(candidate_path)
+        entries = candidate["layers"]["monster_spawn"] + candidate["layers"]["boss_spawn"]
+        self.assertEqual({110, 112, 114, 116, 118, 120}, {entry["monster_id"] for entry in entries})
+        self.assertEqual(6, len(entries))
+        for entry in entries:
+            self.assertEqual("mengzhong_stone_coffin_room", entry["authority_ref"]["map_id"])
+            self.assertEqual("adjacent_pool_union", entry["placement_evidence"]["pool_inheritance"]["mode"])
+
+    def test_replacement_maps_have_safe_fresh_positions(self):
+        replacement_ids = set(self.policy["replace_existing_spawn_maps"])
+        for row in self.manifest["maps"]:
+            if row["map_id"] not in replacement_ids:
+                continue
+            candidate_path = EDITOR_ROOT / row["legacy_map_id"] / f"{row['legacy_map_id']}.editor.json"
+            candidate = load(candidate_path)
+            collision = PLANNER.build_collision(candidate)
+            collision["blocked"] = set(collision["blocked"]) | WRITER._collect_static_blocked(candidate, collision["size"])
+            reservations = PLANNER.build_reservations(candidate, collision)
+            occupied = set()
+            entries = candidate["layers"]["monster_spawn"] + candidate["layers"]["boss_spawn"]
+            self.assertTrue(entries, row["map_id"])
+            for entry in entries:
+                tile = tuple(entry["tile"])
+                self.assertNotIn(tile, collision["blocked"], row["map_id"])
+                self.assertNotIn(tile, reservations["reserved"], row["map_id"])
+                self.assertNotIn(tile, occupied, row["map_id"])
+                occupied.add(tile)
+            self.assertIn("replaced_source_spawn_count", row)
 
     def test_candidates_only_change_spawn_layers_and_use_current_library(self):
         for row in self.manifest["maps"]:

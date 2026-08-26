@@ -76,7 +76,94 @@
     "workspace_state": "res://map_editor_workspace/wooma_temple_3/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "kind": "boss_spawn",
+        "monster_id": 76,
+        "classification": "boss",
+        "display_name": "沃玛教主",
+        "tile": [
+          42,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.wooma_temple_boss_hall.000076",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:boss:000076",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 172,
+          "source_category_role": "boss",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            62,
+            1,
+            1,
+            1640,
+            -1,
+            -42
+          ],
+          "current_monster_library_only": true
+        }
+      },
+      {
+        "kind": "boss_spawn",
+        "monster_id": 73,
+        "classification": "elite",
+        "display_name": "沃玛卫士",
+        "tile": [
+          1,
+          42
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.wooma_temple_boss_hall.000073",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:elite:000073",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 171,
+          "source_category_role": "elite",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            82,
+            20,
+            1,
+            1640,
+            -42,
+            -1
+          ],
+          "current_monster_library_only": true
+        }
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -1844,7 +1931,228 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "kind": "monster_spawn",
+        "monster_id": 62,
+        "classification": "ordinary",
+        "display_name": "暗黑战士",
+        "tile": [
+          1,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.wooma_temple_boss_hall.000062",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:ordinary:000062",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 170,
+          "source_category_role": "ordinary",
+          "source_token_index": 5
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            41,
+            59,
+            1,
+            1640,
+            -1,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 64,
+        "classification": "ordinary",
+        "display_name": "沃玛战士",
+        "tile": [
+          42,
+          42
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.wooma_temple_boss_hall.000064",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:ordinary:000064",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 170,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            41,
+            23,
+            1,
+            1640,
+            -42,
+            -42
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 66,
+        "classification": "ordinary",
+        "display_name": "沃玛勇士",
+        "tile": [
+          22,
+          21
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.wooma_temple_boss_hall.000066",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:ordinary:000066",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 170,
+          "source_category_role": "ordinary",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            40,
+            22,
+            21,
+            1640,
+            -21,
+            -22
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 68,
+        "classification": "ordinary",
+        "display_name": "沃玛战将",
+        "tile": [
+          2,
+          22
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.wooma_temple_boss_hall.000068",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:ordinary:000068",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 170,
+          "source_category_role": "ordinary",
+          "source_token_index": 3
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            21,
+            37,
+            2,
+            1640,
+            -22,
+            -2
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 70,
+        "classification": "ordinary",
+        "display_name": "火焰沃玛",
+        "tile": [
+          13,
+          33
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.wooma_temple_boss_hall.000070",
+        "spawn_group_id": "auto:v2:wooma_temple_boss_hall:ordinary:000070",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "wooma_temple_boss_hall",
+          "source_line": 170,
+          "source_category_role": "ordinary",
+          "source_token_index": 4
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            21,
+            15,
+            10,
+            1640,
+            -33,
+            -13
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

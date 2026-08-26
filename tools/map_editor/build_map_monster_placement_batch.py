@@ -210,6 +210,173 @@ def select_identities(
     return [by_id[key] for key in sorted(by_id)], skipped, overlay
 
 
+def _inheritance_overrides(policy: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
+    """Return the explicit, fail-closed cross-map pool overrides by target ID."""
+
+    raw = policy.get("pool_inheritance_overrides", [])
+    if not isinstance(raw, list):
+        _error("pool_inheritance_overrides_must_be_array")
+    result: dict[str, dict[str, Any]] = {}
+    for index, value in enumerate(raw):
+        if not isinstance(value, dict):
+            _error(f"pool_inheritance_override_invalid:{index}")
+        map_id = value.get("map_id")
+        if not isinstance(map_id, str) or not map_id.strip():
+            _error(f"pool_inheritance_override_map_id_invalid:{index}")
+        map_id = map_id.strip()
+        if map_id in result:
+            _error(f"pool_inheritance_override_duplicate:{map_id}")
+        if value.get("mode") != "adjacent_pool_union":
+            _error(f"pool_inheritance_override_mode_invalid:{map_id}")
+        source_map_ids = value.get("source_map_ids")
+        if (
+            not isinstance(source_map_ids, list)
+            or not source_map_ids
+            or any(not isinstance(source_id, str) or not source_id.strip() for source_id in source_map_ids)
+            or len(set(source_map_ids)) != len(source_map_ids)
+        ):
+            _error(f"pool_inheritance_override_sources_invalid:{map_id}")
+        expected_ids = value.get("expected_monster_ids")
+        if (
+            not isinstance(expected_ids, list)
+            or not expected_ids
+            or any(isinstance(monster_id, bool) or not isinstance(monster_id, int) or monster_id <= 0 for monster_id in expected_ids)
+            or len(set(expected_ids)) != len(expected_ids)
+        ):
+            _error(f"pool_inheritance_override_expected_ids_invalid:{map_id}")
+        classifications = value.get("include_classifications")
+        if (
+            not isinstance(classifications, list)
+            or not classifications
+            or any(classification not in {"ordinary", "elite", "boss"} for classification in classifications)
+        ):
+            _error(f"pool_inheritance_override_classifications_invalid:{map_id}")
+        if value.get("skip_special_systems") is not True:
+            _error(f"pool_inheritance_override_must_skip_special_systems:{map_id}")
+        target_ref = value.get("target_authority_ref")
+        if not isinstance(target_ref, dict):
+            _error(f"pool_inheritance_override_target_ref_invalid:{map_id}")
+        required_ref = {"map_id", "source_line", "source_category_role", "source_token_index"}
+        if set(target_ref) != required_ref:
+            _error(f"pool_inheritance_override_target_ref_shape_invalid:{map_id}")
+        if target_ref.get("map_id") != map_id:
+            _error(f"pool_inheritance_override_target_ref_map_mismatch:{map_id}")
+        result[map_id] = copy.deepcopy(value)
+    return result
+
+
+def select_inherited_identities(
+    target_record: Mapping[str, Any],
+    source_records: list[Mapping[str, Any]],
+    catalog_by_id: Mapping[int, Mapping[str, Any]],
+    policy: Mapping[str, Any],
+    override: Mapping[str, Any],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[tuple[str, int, str, int], dict[str, Any]], dict[str, Any]]:
+    """Build target-bound identities from an explicit adjacent-map pool union.
+
+    The target map deliberately has a source marker rather than a monster token.
+    Every emitted identity is therefore bound to that target marker, while the
+    source token references remain recorded in the policy overlay/evidence.  The
+    checks here are intentionally strict: source map uniqueness, series, current
+    library membership, classification and the policy's expected union must all
+    agree before a candidate can be written.
+    """
+
+    target_map_id = str(target_record.get("map_id", ""))
+    target_ref = copy.deepcopy(override["target_authority_ref"])
+    if target_ref.get("map_id") != target_map_id:
+        _error(f"pool_inheritance_target_map_mismatch:{target_map_id}")
+    target_tokens = [
+        token
+        for token in target_record.get("tokens", [])
+        if isinstance(token, dict) and _ref_key(target_ref) == _ref_key(_authority_ref(token))
+    ]
+    if len(target_tokens) != 1:
+        _error(f"pool_inheritance_target_ref_not_unique:{target_map_id}:{len(target_tokens)}")
+    target_token = target_tokens[0]
+    if str(target_token.get("source_category_role", "")) != "special":
+        _error(f"pool_inheritance_target_ref_not_special:{target_map_id}")
+    if not bool(override.get("skip_special_systems")):
+        _error(f"pool_inheritance_skip_special_systems_required:{target_map_id}")
+
+    source_map_ids = [str(source_id) for source_id in override["source_map_ids"]]
+    actual_source_ids = [str(record.get("map_id", "")) for record in source_records]
+    if actual_source_ids != source_map_ids:
+        _error(f"pool_inheritance_source_order_mismatch:{target_map_id}:{actual_source_ids}")
+    expected_series = str(override.get("source_series", ""))
+    if not expected_series:
+        _error(f"pool_inheritance_source_series_missing:{target_map_id}")
+
+    merged: dict[int, dict[str, Any]] = {}
+    source_refs_by_id: dict[int, list[dict[str, Any]]] = {}
+    skipped: list[dict[str, Any]] = []
+    source_reports: list[dict[str, Any]] = []
+    allowed_classifications = {str(value) for value in override["include_classifications"]}
+    for source_record in source_records:
+        source_id = str(source_record.get("map_id", ""))
+        if str(source_record.get("series", "")) != expected_series:
+            _error(f"pool_inheritance_source_series_mismatch:{target_map_id}:{source_id}")
+        identities, source_skipped, _source_overlay = select_identities(source_record, catalog_by_id, policy)
+        for item in source_skipped:
+            skipped.append({"source_map_id": source_id, **item})
+        selected_source_ids: list[int] = []
+        for item in identities:
+            monster_id = int(item["monster_id"])
+            classification = str(item["canonical_classification"])
+            if classification not in allowed_classifications:
+                _error(f"pool_inheritance_classification_forbidden:{target_map_id}:{source_id}:{monster_id}")
+            catalog_entry = catalog_by_id.get(monster_id)
+            if catalog_entry is None or catalog_entry.get("runtime_allowed") is not True or catalog_entry.get("status") != "formal":
+                _error(f"pool_inheritance_current_library_forbidden:{target_map_id}:{source_id}:{monster_id}")
+            source_ref = copy.deepcopy(item["authority_ref"])
+            source_refs_by_id.setdefault(monster_id, []).append(source_ref)
+            selected_source_ids.append(monster_id)
+            if monster_id not in merged:
+                inherited = copy.deepcopy(item)
+                inherited["authority_ref"] = copy.deepcopy(target_ref)
+                inherited["raw_token"] = f"inherited:{source_id}:{item['raw_token']}"
+                inherited["pool_inheritance"] = {
+                    "mode": "adjacent_pool_union",
+                    "target_map_id": target_map_id,
+                    "source_map_id": source_id,
+                    "source_authority_refs": [copy.deepcopy(source_ref)],
+                }
+                merged[monster_id] = inherited
+            else:
+                merged[monster_id]["pool_inheritance"]["source_authority_refs"].append(copy.deepcopy(source_ref))
+        source_reports.append({
+            "map_id": source_id,
+            "selected_monster_ids": sorted(set(selected_source_ids)),
+            "skipped_count": len(source_skipped),
+        })
+
+    selected_ids = sorted(merged)
+    expected_ids = sorted(int(value) for value in override["expected_monster_ids"])
+    if selected_ids != expected_ids:
+        _error(f"pool_inheritance_union_mismatch:{target_map_id}:expected={expected_ids}:actual={selected_ids}")
+    target_key = _ref_key(target_ref)
+    overlay = {
+        target_key: {
+            "allowed_statuses": [str(target_token.get("auto_placement_status", ""))],
+            "allowed_source_category_roles": ["special"],
+            "allowed_placement_kinds": [str(target_token.get("placement_kind", ""))],
+            "selected_monster_ids": selected_ids,
+            "allow_unresolved": True,
+            "inherited_source_refs": copy.deepcopy(source_refs_by_id),
+        }
+    }
+    evidence = {
+        "mode": "adjacent_pool_union",
+        "target_map_id": target_map_id,
+        "target_authority_ref": target_ref,
+        "source_map_ids": source_map_ids,
+        "source_reports": source_reports,
+        "selected_monster_ids": selected_ids,
+        "source_authority_refs_by_monster_id": copy.deepcopy(source_refs_by_id),
+    }
+    return [merged[monster_id] for monster_id in selected_ids], skipped, overlay, evidence
+
+
 def _respawn_policy(series: str) -> str:
     if series == "world":
         return "beginner_outdoor"
@@ -246,6 +413,8 @@ def _spawn_entry(map_record: Mapping[str, Any], placement: Mapping[str, Any]) ->
             "current_monster_library_only": True,
         },
     }
+    if "pool_inheritance" in placement:
+        entry["placement_evidence"]["pool_inheritance"] = copy.deepcopy(placement["pool_inheritance"])
     if layer == "monster_spawn":
         entry["respawn_policy_id"] = _respawn_policy(str(map_record.get("series", "")))
     return entry
@@ -278,8 +447,34 @@ def build(paths: argparse.Namespace) -> dict[str, Any]:
     if len(identity_by_id) != 67 or len({int(row["runtime_map_id"]) for row in identity_maps}) != 67:
         _error("identity_uniqueness_mismatch")
     frozen_by_id = {str(row["map_id"]): row for row in policy["frozen_maps"]}
-    transition = {str(value) for value in policy["transition_backfill_maps"]}
-    no_fixed = {str(value) for value in policy["no_fixed_spawn_maps"]}
+    transition = {str(value) for value in policy.get("transition_backfill_maps", [])}
+    no_fixed = {str(value) for value in policy.get("no_fixed_spawn_maps", [])}
+    replace_existing = {str(value) for value in policy.get("replace_existing_spawn_maps", [])}
+    inheritance = _inheritance_overrides(policy)
+    rebuild_map_ids = replace_existing | set(inheritance)
+    if transition or no_fixed:
+        _error("legacy_transition_or_no_fixed_policy_not_retired")
+    if len(rebuild_map_ids) != 6:
+        _error(f"rebuild_map_count_mismatch:{len(rebuild_map_ids)}")
+    if frozen_by_id.keys() & rebuild_map_ids:
+        _error("rebuild_map_overlaps_frozen_map")
+    base_manifest: dict[str, Any] | None = None
+    base_manifest_rows: dict[str, dict[str, Any]] = {}
+    if paths.base_manifest is not None:
+        base_manifest, _base_manifest_raw = _load(paths.base_manifest.resolve())
+        if base_manifest.get("contract_id") != CONTRACT_ID:
+            _error("base_manifest_contract_mismatch")
+        base_rows = base_manifest.get("maps")
+        if not isinstance(base_rows, list) or len(base_rows) != 67:
+            _error("base_manifest_map_count_mismatch")
+        for row in base_rows:
+            if not isinstance(row, dict) or not isinstance(row.get("map_id"), str):
+                _error("base_manifest_row_invalid")
+            if row["map_id"] in base_manifest_rows:
+                _error(f"base_manifest_duplicate_map:{row['map_id']}")
+            base_manifest_rows[row["map_id"]] = row
+        if set(base_manifest_rows) != {str(row["map_id"]) for row in maps}:
+            _error("base_manifest_map_identity_mismatch")
     plan_output = paths.plan_output.resolve()
     candidate_output = paths.candidate_output.resolve()
     if plan_output.exists() or candidate_output.exists():
@@ -299,7 +494,14 @@ def build(paths: argparse.Namespace) -> dict[str, Any]:
             legacy = str(identity_row["legacy_map_id"])
             source_path = source_root / legacy / f"{legacy}.editor.json"
             document, source_raw = _load(source_path)
-            if str(document.get("map_id")) != legacy or int(document.get("runtime_map_id", -1)) != int(identity_row["legacy_runtime_map_id"]):
+            if (
+                str(document.get("map_id")) != legacy
+                or int(document.get("runtime_map_id", -1))
+                not in {
+                    int(identity_row["legacy_runtime_map_id"]),
+                    int(identity_row["runtime_map_id"]),
+                }
+            ):
                 _error(f"source_identity_mismatch:{map_id}")
             base_report = {
                 "map_id": map_id,
@@ -314,16 +516,38 @@ def build(paths: argparse.Namespace) -> dict[str, Any]:
                     _error(f"frozen_source_hash_mismatch:{map_id}")
                 reports.append({**base_report, "status": "PRESERVE_USER_ACCEPTED", "placement_count": sum(len(document.get("layers", {}).get(layer, [])) for layer in TARGET_LAYERS)})
                 continue
-            if map_id in transition:
-                reports.append({**base_report, "status": "TRANSITION_BACKFILL_REQUIRED", "placement_count": 0})
-                continue
-            if map_id in no_fixed:
-                reports.append({**base_report, "status": "NO_FIXED_SPAWN", "placement_count": 0})
+            if map_id not in rebuild_map_ids:
+                # Existing candidates are already authoritative output from the
+                # previous batch.  Preserve their bytes and report verbatim;
+                # only the six explicitly authorized maps may be regenerated.
+                existing = base_manifest_rows.get(map_id)
+                if existing is None or existing.get("status") != "CANDIDATE_WRITTEN":
+                    _error(f"existing_candidate_missing_for_preserved_map:{map_id}")
+                candidate_sha = str(existing.get("candidate_sha256", ""))
+                if not candidate_sha or _sha(source_raw) != candidate_sha:
+                    _error(f"preserved_candidate_changed:{map_id}")
+                reports.append(copy.deepcopy(existing))
+                written_candidates += 1
                 continue
             layers = document.get("layers", {})
-            if any(layers.get(layer, []) for layer in TARGET_LAYERS):
-                _error(f"source_spawn_layers_not_empty:{map_id}")
-            identities, skipped, overlay = select_identities(map_record, catalog_by_id, policy)
+            if map_id in inheritance:
+                source_ids = [str(value) for value in inheritance[map_id]["source_map_ids"]]
+                source_records = []
+                for source_id in source_ids:
+                    matches = [record for record in maps if str(record.get("map_id", "")) == source_id]
+                    if len(matches) != 1:
+                        _error(f"pool_inheritance_source_map_not_unique:{map_id}:{source_id}:{len(matches)}")
+                    source_records.append(matches[0])
+                identities, skipped, overlay, inheritance_evidence = select_inherited_identities(
+                    map_record,
+                    source_records,
+                    catalog_by_id,
+                    policy,
+                    inheritance[map_id],
+                )
+            else:
+                identities, skipped, overlay = select_identities(map_record, catalog_by_id, policy)
+                inheritance_evidence = None
             if not identities:
                 _error(f"no_current_library_monsters_selected:{map_id}")
             collision = PLANNER.build_collision(document)
@@ -359,6 +583,7 @@ def build(paths: argparse.Namespace) -> dict[str, Any]:
                 registry_path=paths.identity_registry.resolve(),
                 authority_path=paths.authority.resolve(),
                 authority_ref_policy=overlay,
+                allow_authorized_batch_drift=True,
             )
             report = {
                 **base_report,
@@ -373,6 +598,11 @@ def build(paths: argparse.Namespace) -> dict[str, Any]:
                 "candidate_sha256": hashlib.sha256(candidate_file.read_bytes()).hexdigest(),
                 "non_target_fields_unchanged": bool(write_result["non_target_fields_unchanged"]),
             }
+            if inheritance_evidence is not None:
+                report["pool_inheritance"] = inheritance_evidence
+            report["replaced_source_spawn_count"] = sum(
+                len(layers.get(layer, [])) for layer in TARGET_LAYERS
+            )
             (map_plan_dir / "placement_report.json").write_bytes(_json_bytes(report))
             reports.append(report)
             written_candidates += 1
@@ -421,6 +651,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--policy", type=Path, required=True)
     parser.add_argument("--plan-output", type=Path, required=True)
     parser.add_argument("--candidate-output", type=Path, required=True)
+    parser.add_argument(
+        "--base-manifest",
+        type=Path,
+        help="existing batch manifest whose 60 unchanged candidate rows are preserved verbatim",
+    )
     parser.add_argument("--write", action="store_true")
     return parser
 
