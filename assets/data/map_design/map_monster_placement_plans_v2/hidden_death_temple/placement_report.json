@@ -1,0 +1,26 @@
+{
+  "map_id": "hidden_death_temple",
+  "legacy_map_id": "swsd_2",
+  "runtime_map_id": 918004,
+  "display_name": "死亡神殿",
+  "source_sha256": "d0d4406135b31b26f19ffd065f341fa9c26b7d2608ef96d2cc60c3ea095a64f1",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 835,
+  "component_sizes": [
+    835
+  ],
+  "monster_spawn_count": 0,
+  "boss_spawn_count": 1,
+  "placement_count": 1,
+  "selected": [
+    {
+      "monster_id": 240,
+      "canonical_name": "暗之虹魔教主",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "980805940babbe7ad5974540f450c075e163ebac86e5e42d8ac94843ce0e5039",
+  "non_target_fields_unchanged": true
+}

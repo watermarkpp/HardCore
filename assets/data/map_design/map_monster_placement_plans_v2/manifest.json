@@ -1,0 +1,3664 @@
+{
+  "schema_version": 1,
+  "contract_id": "hardcore.map_monster_placement_batch.v1",
+  "generated_by": "tools/map_editor/build_map_monster_placement_batch.py",
+  "inputs": {
+    "authority_sha256": "6a757a948ce161aa500f925502048e1ba7d1346f4064e082b43a011693f4cb8c",
+    "identity_registry_sha256": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+    "current_monster_library_sha256": "0f6ed32f1f77b92523410819526a648c05f23a4a1a7d7c5ad89e950b729b1143",
+    "execution_policy_sha256": "bc0592118e09969234a66037655b9b6f8bbbbbf7e952760aed5055c5b614f4c5"
+  },
+  "summary": {
+    "formal_map_count": 67,
+    "candidate_map_count": 60,
+    "preserved_map_count": 1,
+    "transition_backfill_map_count": 5,
+    "no_fixed_spawn_map_count": 1,
+    "placement_entry_count": 364,
+    "skipped_token_count": 21
+  },
+  "maps": [
+    {
+      "map_id": "world_bich_province",
+      "legacy_map_id": "bich_province",
+      "runtime_map_id": 910001,
+      "display_name": "比奇省（单机重制）",
+      "source_sha256": "d357457b9fb52bd47c79904006eea4c420413328a535e3466a03136217b87ab3",
+      "status": "TRANSITION_BACKFILL_REQUIRED",
+      "placement_count": 0
+    },
+    {
+      "map_id": "bich_orc_tomb_f1",
+      "legacy_map_id": "orc_tomb_1",
+      "runtime_map_id": 911001,
+      "display_name": "兽人古墓一层",
+      "source_sha256": "613394c63c95e6121b7765387121b91da319eb142f8926e6742d6c47d423a509",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1162,
+      "component_sizes": [
+        1162
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "山洞蝙蝠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 45,
+          "canonical_name": "蝎子",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "掷斧骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "骷髅战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "6881162875a92c0bbd250f8decbcd60bfece7c39c2c6cb1594d3e0e80b585080",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_orc_tomb_f2",
+      "legacy_map_id": "orc_tomb_2",
+      "runtime_map_id": 911002,
+      "display_name": "兽人古墓二层",
+      "source_sha256": "12e81ca5072588a099300e6806118e87d81e9b00da5985a57dbd1bf5a38701f7",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1126,
+      "component_sizes": [
+        1126
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "山洞蝙蝠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 45,
+          "canonical_name": "蝎子",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "掷斧骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "骷髅战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "1634497b4d5b18e9f540ecf5cbcaf16c49ca1da0ee9574ae4ec214214ce19cac",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_orc_tomb_f3",
+      "legacy_map_id": "orc_tomb_3",
+      "runtime_map_id": 911003,
+      "display_name": "兽人古墓三层",
+      "source_sha256": "e71f32925d3cfdaf10fbb8f02d56fbb4c90903b79cf35a23afbefddfdfbedfed",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1198,
+      "component_sizes": [
+        1198
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "山洞蝙蝠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 45,
+          "canonical_name": "蝎子",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "掷斧骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "骷髅战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 54,
+          "canonical_name": "骷髅战将",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 56,
+          "canonical_name": "骷髅精灵",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "b80f7994899ee195c10c47af2244971c084d77df723b7c621fd250dcb8c80cf5",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_mine_f1",
+      "legacy_map_id": "bich_mine_1",
+      "runtime_map_id": 911101,
+      "display_name": "矿区一层",
+      "source_sha256": "ae6811ffd06f89ed67716a224f463328b43fc8d43d0a38370b16b6293fe79b8f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2037,
+      "component_sizes": [
+        2037
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 1,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "僵尸1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "僵尸2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "僵尸3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "僵尸4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "僵尸5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "尸王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "c48180150c97ef2394774898b85513bcda22f9da4cca67e65a2f13b607e59b6d",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_mine_f2",
+      "legacy_map_id": "bich_mine_2",
+      "runtime_map_id": 911102,
+      "display_name": "矿区二层",
+      "source_sha256": "0cd1842da384ec5eef7cd0131a519b4187381870f5da2a9860dbd3785e268cd9",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2002,
+      "component_sizes": [
+        2002
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 1,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "僵尸1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "僵尸2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "僵尸3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "僵尸4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "僵尸5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "尸王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "2e4618510920f941711150bcde24da0e2538e5887891696c671ee5a141e3a3eb",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_corpse_king_hall",
+      "legacy_map_id": "corpse_king_hall",
+      "runtime_map_id": 911103,
+      "display_name": "尸王殿",
+      "source_sha256": "5345dd1b493c9357eae032ca6593b43ca2dd5de15c2172910f89bf23f4b3e296",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 709,
+      "component_sizes": [
+        709
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 89,
+          "canonical_name": "尸王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "89c10b97d5c7b184f7faa8c337530df48374ad56a73d6f18baaa343d4106a627",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_hellfire",
+      "legacy_map_id": "dyly_2",
+      "runtime_map_id": 918002,
+      "display_name": "地狱烈焰",
+      "source_sha256": "bd1b858fb312531fd16dcfcf1ac773414ef9e92e46e1b0becd30c7a8051fc5d1",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 815,
+      "component_sizes": [
+        815
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 238,
+          "canonical_name": "暗之骷髅精灵",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "7e4a2b7327122d14d05291230d16a991d6f934d88220b90fa205a748ba167df4",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_snake_valley",
+      "legacy_map_id": "snake_valley",
+      "runtime_map_id": 910002,
+      "display_name": "毒蛇山谷",
+      "source_sha256": "9bbf068504c1ecfd0080186ec0e8e0ddf224666e9370a80f7fadb9ba9a7dfefb",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2065,
+      "component_sizes": [
+        2065
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 0,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 18,
+          "canonical_name": "毒蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 30,
+          "canonical_name": "食人花",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "半兽人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 92,
+          "canonical_name": "红蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 94,
+          "canonical_name": "虎蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "弓箭护卫",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "e7069febd5479505f11c9354d7011fdedcb9071a73496b82e69c63eaad3c78f6",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "snake_mine_passage_1",
+      "legacy_map_id": "connection_passage_1",
+      "runtime_map_id": 912001,
+      "display_name": "连接通道1",
+      "source_sha256": "a28807d5ec6ba1741fac827ba27bba54886d1b1478b2d49e4e324aa31debacba",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2024,
+      "component_sizes": [
+        2024
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "僵尸1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "僵尸2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "僵尸3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "僵尸4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "僵尸5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "9c8d4ad5edce36a437837ceaffafd060881f67d876ce1f76bb574b674a9c991c",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "snake_mine_passage_2",
+      "legacy_map_id": "connection_passage_2",
+      "runtime_map_id": 912002,
+      "display_name": "连接通道2",
+      "source_sha256": "615dc2805da527510bce753dfdc68e1ad04d7c515305e31645f814a524161e13",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1994,
+      "component_sizes": [
+        1994
+      ],
+      "monster_spawn_count": 10,
+      "boss_spawn_count": 1,
+      "placement_count": 11,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "僵尸1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "僵尸2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "僵尸3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "僵尸4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "僵尸5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "尸王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "b0af4bd2327347c8618d20757e8de4b899ba2ac09eb8afc27398d15724bec059",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "snake_unknown_dark_palace",
+      "legacy_map_id": "quest_1",
+      "runtime_map_id": 912003,
+      "display_name": "未知暗殿",
+      "source_sha256": "1462445453781d9d495dc6dd6c0edcb7dca7e478288caacb655e57c2da6363af",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2003,
+      "component_sizes": [
+        2003
+      ],
+      "monster_spawn_count": 8,
+      "boss_spawn_count": 0,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 39,
+          "canonical_name": "半兽勇士1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 57,
+          "canonical_name": "骷髅精灵1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 74,
+          "canonical_name": "沃玛卫士1",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 77,
+          "canonical_name": "沃玛教主1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 90,
+          "canonical_name": "尸王1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 121,
+          "canonical_name": "邪恶钳虫1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 137,
+          "canonical_name": "白野猪1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 142,
+          "canonical_name": "邪恶毒蛇1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "鸡（未知暗殿变体）",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "鹿（未知暗殿变体）",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "稻草人（未知暗殿变体）",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "巨型多角虫（未知暗殿变体）",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "dd4d146b7af057c43b5f0b8783d7434d7556527a3b0cd8467ca524f60eafdb97",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_mengzhong_province",
+      "legacy_map_id": "mengzhong_province",
+      "runtime_map_id": 910003,
+      "display_name": "盟重省",
+      "source_sha256": "056b54043b1f0d3ffa5b7e2f6c36bf7cdf59d90fe6fb9eca580be9435f0fe97d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 5554,
+      "component_sizes": [
+        5554
+      ],
+      "monster_spawn_count": 8,
+      "boss_spawn_count": 0,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 96,
+          "canonical_name": "羊",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 97,
+          "canonical_name": "猎鹰",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 100,
+          "canonical_name": "狼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 101,
+          "canonical_name": "盔甲虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 103,
+          "canonical_name": "威思而小虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 104,
+          "canonical_name": "沙虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 105,
+          "canonical_name": "多角虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 107,
+          "canonical_name": "巨型多角虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "弓箭护卫",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "7caa62184c84ed60c5868e40ad4bf6cf096b10335859327ac368398bd1d9db07",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f1",
+      "legacy_map_id": "stone_tomb_1",
+      "runtime_map_id": 913001,
+      "display_name": "石墓一层",
+      "source_sha256": "a8e042b76c2d522fa34e2da99fafe02bdb9dd6f6445652d35148b513781354e9",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2023,
+      "component_sizes": [
+        2023
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "da04da5d14e2365a8f6c8989747fdfc69002c309ce0eeca6a086378cfb9d7733",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f2",
+      "legacy_map_id": "stone_tomb_2",
+      "runtime_map_id": 913002,
+      "display_name": "石墓二层",
+      "source_sha256": "314421ae23d6e296d20f2e54477a5e8c2cf18a3d2084b781231a04d3f37edf04",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2023,
+      "component_sizes": [
+        2023
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "11d465c677cbbd95c562bea2c9a2991f24487d16c213993a6d968931e2d9e710",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f3",
+      "legacy_map_id": "stone_tomb_3",
+      "runtime_map_id": 913003,
+      "display_name": "石墓三层",
+      "source_sha256": "dbf5b269863708891c35383307d34b649d8b60dd8f89397fa6a535f570013022",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1999,
+      "component_sizes": [
+        1999
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "蝎蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "ce8af4adc1bae4547cb94cc1433706be12fed5f87d9595238b4c45328af6b10b",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f4",
+      "legacy_map_id": "stone_tomb_4",
+      "runtime_map_id": 913004,
+      "display_name": "石墓四层",
+      "source_sha256": "1d11eb615cbd0e2e76d047930b93e867d5a2ba1dd03c775ee656b94c9182acc9",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2023,
+      "component_sizes": [
+        2023
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 3,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "白野猪",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "蝎蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 141,
+          "canonical_name": "邪恶毒蛇",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 143,
+          "canonical_name": "石墓尸王",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "1a7ffa20aac07f277d78a5db2e08f6e76cf2dc55b52a78681164ea1271fe09af",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_confusion_hall",
+      "legacy_map_id": "boss_2",
+      "runtime_map_id": 918001,
+      "display_name": "困惑殿堂",
+      "source_sha256": "ecf586d1b55c8aaceab173436e2abf3f3a5cfd19040af6a643766562cd21fcb0",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 359,
+      "component_sizes": [
+        359
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 235,
+          "canonical_name": "暗之双头血魔",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "dc34a4c8ae9e9f9700b6edf1b6dd26f76b11504301176d7e412307c7b3da4648",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f1",
+      "legacy_map_id": "zuma_temple_1",
+      "runtime_map_id": 913101,
+      "display_name": "祖玛寺庙一层",
+      "source_sha256": "7519359ce01e6f9ec29c331b68b096293966e7892cfedddd4aa9c52c0b2888ac",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2008,
+      "component_sizes": [
+        2008
+      ],
+      "monster_spawn_count": 3,
+      "boss_spawn_count": 0,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "大老鼠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "b1c2e733a3f0e42eafae375e678d933353531a3836bc22aa1fab69148cafcb28",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f2",
+      "legacy_map_id": "zuma_temple_2",
+      "runtime_map_id": 913102,
+      "display_name": "祖玛寺庙二层",
+      "source_sha256": "f051c73feb1d9e85c13b89c31dc0746c3dd3287f8d923cf8fb09d4bf8aaf6c03",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2008,
+      "component_sizes": [
+        2008
+      ],
+      "monster_spawn_count": 3,
+      "boss_spawn_count": 0,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "大老鼠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "7a08d8c5c30d3392cd3c14f5f953c007c29b4f09ffd356044c7a04ad77c5e07a",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f3",
+      "legacy_map_id": "zuma_temple_3",
+      "runtime_map_id": 913103,
+      "display_name": "祖玛寺庙三层",
+      "source_sha256": "f771066188dd78963bfca3d0234a30357212befbabe4e4b2d4b0d766ecc03e8b",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1981,
+      "component_sizes": [
+        1981
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "大老鼠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "祖玛弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "祖玛雕像",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "祖玛卫士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "46b97294997d0f5485c2832d452c7bb719b92b0a3853c0c666e7e54a00373c6c",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f4",
+      "legacy_map_id": "zuma_temple_4",
+      "runtime_map_id": 913104,
+      "display_name": "祖玛寺庙四层",
+      "source_sha256": "c08e04b0b3dffc95c40c1ed145e377d79f75cddd7df358f76cbd52bd65dc0e32",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2008,
+      "component_sizes": [
+        2008
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "大老鼠",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "祖玛弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "祖玛雕像",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "祖玛卫士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "f22faaf661046e37a2af5e43a49cb01e7a69b176dff1439d44e9e8c5b4a61866",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_pavilion",
+      "legacy_map_id": "zumage_1",
+      "runtime_map_id": 913105,
+      "display_name": "祖玛阁",
+      "source_sha256": "ded7a06daf6777ea34b232fa9f2f151d93108ea73f21924dbf95b0a599839614",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3415,
+      "component_sizes": [
+        3415
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 3,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "祖玛弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 152,
+          "canonical_name": "祖玛弓箭手3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "祖玛雕像",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 155,
+          "canonical_name": "祖玛雕像3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "祖玛卫士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 158,
+          "canonical_name": "祖玛卫士3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d3e82b6af81073de92ab17978491c5361a03755aa7ebbb8781cad22e1eb84d00",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_leader_home",
+      "legacy_map_id": "zmjzzj_2",
+      "runtime_map_id": 913106,
+      "display_name": "祖玛教主之家",
+      "source_sha256": "0235e7afe5544ebaadcfe4af638e855efb2a9005ace361e80be8e69fded88678",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1281,
+      "component_sizes": [
+        1281
+      ],
+      "monster_spawn_count": 2,
+      "boss_spawn_count": 1,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 160,
+          "canonical_name": "祖玛教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "813e9e3b62750d8561399926ccf4e73f3772435d1295bb01d0eff3d45983d425",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_death_valley_dungeon",
+      "legacy_map_id": "swsg_2",
+      "runtime_map_id": 913201,
+      "display_name": "死亡山谷地牢",
+      "source_sha256": "071498e2e261fd13c3ece9504ff49b6ca99e8bd38a4ae9707bf06d85dd02c10a",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1844,
+      "component_sizes": [
+        1844
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "弓箭护卫（入口附近，可选）",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "4637fe75bf9e0363ca1a0d21a7388292615bc0ffb9d5ecf118b9025ace222b90",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_coffin_room",
+      "legacy_map_id": "sgcw_2",
+      "runtime_map_id": 913202,
+      "display_name": "石棺材屋",
+      "source_sha256": "8379dc0f47c0be8c72b68d407a4643d0d16db8143a357f777ca0ec34966bf0b6",
+      "status": "NO_FIXED_SPAWN",
+      "placement_count": 0
+    },
+    {
+      "map_id": "mengzhong_dark_area",
+      "legacy_map_id": "hadd_2",
+      "runtime_map_id": 913203,
+      "display_name": "黑暗地带",
+      "source_sha256": "a5236037d1e8ab232f0bc083e32992c54a401ecead59b6bb38b667b05b63b04d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1027,
+      "component_sizes": [
+        1026,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "邪恶钳虫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "907c36f49b8267f7795ec6332159c85c3314361cf624395046cde566097f7dd9",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_between_life_and_death",
+      "legacy_map_id": "between_life_and_death",
+      "runtime_map_id": 913204,
+      "display_name": "生死之间",
+      "source_sha256": "f5f96ca71a3de04e5edf85d4fa2081a420979da389e4fd368820cd6e1a8cb6c0",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1027,
+      "component_sizes": [
+        1026,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "邪恶钳虫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "a33805470dc095d055167fc785b76fef7e43e0e38bf41f033e6f42bae6e8b92a",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_terror_space",
+      "legacy_map_id": "terror_space",
+      "runtime_map_id": 913205,
+      "display_name": "恐怖空间",
+      "source_sha256": "1737e0919b2a52fce0453d0703190dc19c50c492b8f4cc3e3a7d29bce5f1d701",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 992,
+      "component_sizes": [
+        991,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "邪恶钳虫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "1c74e0e355eb728bcfcab30cdf1a8c4e627d62ddcac6a576ecd40c8e52985d87",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_thin_sky_passage",
+      "legacy_map_id": "thin_sky_passage",
+      "runtime_map_id": 913206,
+      "display_name": "一线天",
+      "source_sha256": "18c7ee6d1684df31b5d708aa569e5573d0d9452aa330479bfbf2608b5bbb56f7",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1027,
+      "component_sizes": [
+        1026,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "邪恶钳虫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "fdf5fa6095c21c9e507d97acfb0576d4bf8e78fe8938541837f5158aac43939a",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_death_coffin",
+      "legacy_map_id": "death_coffin",
+      "runtime_map_id": 913207,
+      "display_name": "死亡棺材",
+      "source_sha256": "18308100af372cf0c18424cc5f62a8845df76c0923097ad5ac57450664861e08",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1076,
+      "component_sizes": [
+        1075,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 2,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "蜈蚣",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "跳跳蜂",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "巨型蠕虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "钳虫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "邪恶钳虫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 124,
+          "canonical_name": "触龙神",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "f33894a21a9bd7f8d6b60729b4083a2720474ff24608a396e47575724fbd9eaf",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_wooma_forest",
+      "legacy_map_id": "wooma_forest",
+      "runtime_map_id": 910004,
+      "display_name": "沃玛森林",
+      "source_sha256": "aeebd040f2de777298102be15bbfc8682612cd02658cfdc53914db139f6d75f9",
+      "status": "TRANSITION_BACKFILL_REQUIRED",
+      "placement_count": 0
+    },
+    {
+      "map_id": "wooma_temple_f1",
+      "legacy_map_id": "wooma_temple_1",
+      "runtime_map_id": 915001,
+      "display_name": "沃玛寺庙一层",
+      "source_sha256": "3d502914601e6f57cd0fac041eba3f1a6a645d480d9a889890863d0f3da9f54e",
+      "status": "TRANSITION_BACKFILL_REQUIRED",
+      "placement_count": 0
+    },
+    {
+      "map_id": "wooma_temple_f2",
+      "legacy_map_id": "wooma_temple_2",
+      "runtime_map_id": 915002,
+      "display_name": "沃玛寺庙二层",
+      "source_sha256": "68672fe1c975c214054ed19fd062817d18ea370a667b4e9a97acad699bfe59a1",
+      "status": "TRANSITION_BACKFILL_REQUIRED",
+      "placement_count": 0
+    },
+    {
+      "map_id": "wooma_temple_boss_hall",
+      "legacy_map_id": "wooma_temple_3",
+      "runtime_map_id": 915003,
+      "display_name": "沃玛教主大厅",
+      "source_sha256": "bc283728cfcb8f804aee57885e1c8edcd3b1598ef23adcf8af0d6bf46b8dbf69",
+      "status": "TRANSITION_BACKFILL_REQUIRED",
+      "placement_count": 0
+    },
+    {
+      "map_id": "hidden_fallen_graveyard",
+      "legacy_map_id": "dlfc_2",
+      "runtime_map_id": 918003,
+      "display_name": "堕落坟场",
+      "source_sha256": "51742f5f2c0fa741abb876766479be3acc64f2a6fc9608f17c189f75b5417f58",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 843,
+      "component_sizes": [
+        843
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 237,
+          "canonical_name": "暗之黄泉教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "4aea37570d949d475c6f8a567976f11232b2e093991a53203140ff28bcf54937",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_abyss_domain",
+      "legacy_map_id": "symy_2",
+      "runtime_map_id": 918005,
+      "display_name": "深渊魔域",
+      "source_sha256": "5e8fc91c4d18926e1e9d14b65c7cf5f7767482db8ef3f293dac87c56a3599996",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 831,
+      "component_sizes": [
+        831
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 236,
+          "canonical_name": "暗之双头金刚",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "18b56ae195abd6a4b4f81e1094ca44da0fc062e1b4c4b1190ea8aee827726e22",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_fengmo_valley",
+      "legacy_map_id": "fmg_1",
+      "runtime_map_id": 910005,
+      "display_name": "封魔谷",
+      "source_sha256": "2376258e0d3b83c1f7703b723ea0c52ffc61512af1f52836b358f4c541dfaae8",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1517,
+      "component_sizes": [
+        1496,
+        18,
+        3
+      ],
+      "monster_spawn_count": 11,
+      "boss_spawn_count": 2,
+      "placement_count": 13,
+      "selected": [
+        {
+          "monster_id": 36,
+          "canonical_name": "半兽战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 38,
+          "canonical_name": "半兽勇士",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "掷斧骷髅",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "骷髅战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 54,
+          "canonical_name": "骷髅战将",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 56,
+          "canonical_name": "骷髅精灵",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "僵尸1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "僵尸2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "僵尸3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "僵尸4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "僵尸5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 195,
+          "canonical_name": "千年树妖",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "恶魔弓箭手",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            194
+          ]
+        }
+      ],
+      "candidate_sha256": "71e9b9027ef57057b4598765c2e922d836ada06bb54121776a40081672b5b318",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_forked_path",
+      "legacy_map_id": "ql_1",
+      "runtime_map_id": 914001,
+      "display_name": "崎路",
+      "source_sha256": "385eff206f6630f8f4c0bff676243b337c6b4c420fa31dde1d9e1551e5093741",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1679,
+      "component_sizes": [
+        1679
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 1,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "洞蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "僵尸1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "僵尸2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "僵尸3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "僵尸4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "僵尸5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "尸王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "c233130c2bfff3be17c80e0cd361112c45fcd9ffa51044cf4b9662ebad422777",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_light_corridor",
+      "legacy_map_id": "gmhl_1",
+      "runtime_map_id": 914002,
+      "display_name": "光芒回廊",
+      "source_sha256": "6eba2e723c0fd339f393d32da201111cdc5aafcb943576bf73f5b87a81ff6361",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "503cb3678c7e74bfb6a7b5e0275967d1a5052bfdf8f9f89adab268dca50dc7cc",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_thunder_road",
+      "legacy_map_id": "gmhl_thunder_road",
+      "runtime_map_id": 914003,
+      "display_name": "雷霆之路",
+      "source_sha256": "257226aea8d23b40edcb542777b7fb5b6f12036282da62145e0130e410e338da",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 1,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "白野猪",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "9a5083b44c1b5c6081e919e985452fee25e00c3eab0ae0030774549dd340556e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_bazhe_hall",
+      "legacy_map_id": "gmhl_bazhe_hall",
+      "runtime_map_id": 914004,
+      "display_name": "霸者大厅",
+      "source_sha256": "218911db769d6393ceab4f8ae1ec57768426925fa6ef3b6983e1d0c23633ea3d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 2,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "白野猪",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "蝎蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 188,
+          "canonical_name": "虹魔猪卫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "407f088cff8946cfe06845d7294f15b6630c7b1d79e1dfe1cb2bd6849a2a7606",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_zonghengdao",
+      "legacy_map_id": "gmhl_zonghengdao",
+      "runtime_map_id": 914005,
+      "display_name": "纵横道",
+      "source_sha256": "b33f3fe10c46d45c1c71c551cd4c09fe6948d474d932a0e996fba4cdd3861afc",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2506,
+      "component_sizes": [
+        2506
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 2,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "白野猪",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "蝎蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 141,
+          "canonical_name": "邪恶毒蛇",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "4b871aebdf9e02df41523f1ad0babf33defa7308fe6203725e71c3401736f5a0",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_mohun_hall",
+      "legacy_map_id": "gmhl_mohun_dian",
+      "runtime_map_id": 914006,
+      "display_name": "魔魂殿",
+      "source_sha256": "1e5590026c2edeb74a9358a6f743b612f327cc73a7f7b6b49fda5bfa57c6f4b5",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 3,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "黑色恶蛆",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "红野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "黑野猪",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "白野猪",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "蝎蛇",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 141,
+          "canonical_name": "邪恶毒蛇",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 191,
+          "canonical_name": "虹魔蝎卫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "01ea360be6d2d6ec199a69f83ecc768052870c44516523e3e17d8866701f583b",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_purgatory_corridor",
+      "legacy_map_id": "gmhl_purgatory_corridor",
+      "runtime_map_id": 914007,
+      "display_name": "炼狱回廊",
+      "source_sha256": "a33c37a4b5c9909ef7ab91d794f942c8d199d607155fa1183d893016d90f34ec",
+      "status": "PRESERVE_USER_ACCEPTED",
+      "placement_count": 15
+    },
+    {
+      "map_id": "fengmo_final_hall",
+      "legacy_map_id": "gmhl_fengmo_dian",
+      "runtime_map_id": 914008,
+      "display_name": "封魔殿",
+      "source_sha256": "3e15cd7212b485c8dd4ee7e2cdec811beefdb1f080cb4cfd57647434ee11c487",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2661,
+      "component_sizes": [
+        2661
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 6,
+      "placement_count": 11,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "角蝇",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "楔蛾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "祖玛弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 152,
+          "canonical_name": "祖玛弓箭手3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "祖玛雕像",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 155,
+          "canonical_name": "祖玛雕像3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "祖玛卫士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 158,
+          "canonical_name": "祖玛卫士3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 188,
+          "canonical_name": "虹魔猪卫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 191,
+          "canonical_name": "虹魔蝎卫",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 193,
+          "canonical_name": "虹魔教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "ad1f90dce755f3bfb5ddb819d708b688f82b63ce5d70a68a4cc7752181d2c91f",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_death_temple",
+      "legacy_map_id": "swsd_2",
+      "runtime_map_id": 918004,
+      "display_name": "死亡神殿",
+      "source_sha256": "d0d4406135b31b26f19ffd065f341fa9c26b7d2608ef96d2cc60c3ea095a64f1",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 835,
+      "component_sizes": [
+        835
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 240,
+          "canonical_name": "暗之虹魔教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "980805940babbe7ad5974540f450c075e163ebac86e5e42d8ac94843ce0e5039",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_white_day_gate",
+      "legacy_map_id": "brm_2",
+      "runtime_map_id": 910006,
+      "display_name": "白日门",
+      "source_sha256": "295748315885dd1ced03e68f58d3ffe2fc4df05a8d5743247576e9900470e556",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1602,
+      "component_sizes": [
+        1602
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 3,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 28,
+          "canonical_name": "森林雪人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 31,
+          "canonical_name": "多钩猫王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 32,
+          "canonical_name": "钉耙猫王",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 36,
+          "canonical_name": "半兽战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 38,
+          "canonical_name": "半兽勇士",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 42,
+          "canonical_name": "半兽统领",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "天狼蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 185,
+          "canonical_name": "剧毒蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "雪人王",
+          "source_category_role": "elite",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "弓箭护卫",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "55c15e3b1c6708148c838dcf68ea2fc048675007fab4677d0d0845ceb4e62794",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley",
+      "legacy_map_id": "cyxg_2",
+      "runtime_map_id": 916001,
+      "display_name": "赤月峡谷",
+      "source_sha256": "4fe41e22a9c106e302a0f148a7ee4be4fabd9f29441d33f9e1ce9f8a320aca65",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2557,
+      "component_sizes": [
+        2557
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "天狼蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "aa01561a405a3b71ecf7a00b9e2cba471899414ca8c18d754486efd2541c97c4",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley_square",
+      "legacy_map_id": "cyxggc_2",
+      "runtime_map_id": 916002,
+      "display_name": "赤月峡谷广场",
+      "source_sha256": "45b5a95bfb58dba97ad1b9d63e48fea84c5abcceea3c80aae18591c02743c11e",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 7623,
+      "component_sizes": [
+        3148,
+        1415,
+        1398,
+        903,
+        759
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 0,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "天狼蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "幻影蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "fe216033b2a420be4beab97c4fbc2a441f48bcfc883c0533509eceec5e132e9e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_choice_land",
+      "legacy_map_id": "chiyue_choice_land",
+      "runtime_map_id": 916003,
+      "display_name": "抉择之地",
+      "source_sha256": "73df38d3a8b221df2aaf2570e44625d0aec7626da6d40b80055090c8814b32c5",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 7555,
+      "component_sizes": [
+        3080,
+        1415,
+        1398,
+        903,
+        759
+      ],
+      "monster_spawn_count": 9,
+      "boss_spawn_count": 0,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "血巨人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "血僵尸",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "天狼蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "幻影蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "f96cb7b0dc10b9ffdc5155a7c99f12c0df45a0f465e825da116c87ca8d414716",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley_secret_passage_a",
+      "legacy_map_id": "chiyue_valley_secret_passage_a",
+      "runtime_map_id": 916004,
+      "display_name": "山谷密道A",
+      "source_sha256": "22fa62dd8d996a364579c282074906e194ffa600cf916746a6a2343f2f6838ae",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2557,
+      "component_sizes": [
+        2557
+      ],
+      "monster_spawn_count": 9,
+      "boss_spawn_count": 0,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "血巨人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "血僵尸",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "天狼蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "幻影蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "495b85a138cbc2b0a7c9685d8166f5da6f492e856cce5bfa21d6bc2b399d2453",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_demon_altar",
+      "legacy_map_id": "emjt_2",
+      "runtime_map_id": 916006,
+      "display_name": "恶魔祭坛",
+      "source_sha256": "fbc01b21e9a7ba7ab5b381debef5a1c815c3f035ee2d34371108180507cfd7c3",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1775,
+      "component_sizes": [
+        1775
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 2,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 162,
+          "canonical_name": "双头血魔",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 163,
+          "canonical_name": "双头金刚",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 164,
+          "canonical_name": "血巨人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "血僵尸",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "fb0c958b88552f5632dc0ba57a73f47c440c3fa01865702d1dd02f2fc27fff4d",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley_secret_passage_b",
+      "legacy_map_id": "chiyue_valley_secret_passage_b",
+      "runtime_map_id": 916005,
+      "display_name": "山谷密道B",
+      "source_sha256": "07196b1596bffe65e2d19cbd33461eb76d1f818d8caa3209b533c248274c9bd7",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2557,
+      "component_sizes": [
+        2557
+      ],
+      "monster_spawn_count": 9,
+      "boss_spawn_count": 0,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "血巨人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "血僵尸",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "天狼蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "幻影蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "ff29ece78a4ad6be0784a5852195304f2a3e5f56ed692b9c17e74bdf129f38b5",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_red_moon_lair",
+      "legacy_map_id": "cymx_2",
+      "runtime_map_id": 916007,
+      "display_name": "赤月魔穴",
+      "source_sha256": "01ce431acf95f6fe2c764a1985d1b74352546b8179a8422580f56bfa8e85552d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 795,
+      "component_sizes": [
+        795
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "血巨人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "血僵尸",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "月魔蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "黑锷蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "钢牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "暴牙蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "花吻蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 180,
+          "canonical_name": "赤月恶魔",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d1b09b95db927359fb43a673fddd23bd444b0cb5a281f1ba728b5a396e92b4f7",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_pincer_nest",
+      "legacy_map_id": "qccx_2",
+      "runtime_map_id": 918006,
+      "display_name": "钳虫巢穴",
+      "source_sha256": "0ac2ae0930d41a0a48d535d551ed0267f4bf8a78baccdee5b8a9a9d78c382733",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 823,
+      "component_sizes": [
+        823
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 239,
+          "canonical_name": "暗之沃玛教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "551ff44123e7e22378e16811b42e141cd795c09396f18402b0d4b3079759457e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_cangyue_island",
+      "legacy_map_id": "cyd_1",
+      "runtime_map_id": 910007,
+      "display_name": "苍月岛",
+      "source_sha256": "87c53c163f7b87ba2444d91dc7f3b111624d88b14221be760f4955fb77975be3",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1683,
+      "component_sizes": [
+        1683
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 18,
+          "canonical_name": "毒蜘蛛",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 21,
+          "canonical_name": "稻草人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 26,
+          "canonical_name": "钉耙猫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 28,
+          "canonical_name": "森林雪人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 30,
+          "canonical_name": "食人花",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "半兽人",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "鹿",
+          "source_category_role": "ordinary",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "68181e36975751d9b18df3b9ef37ef2a658fcae9d1d86aed207c587ee3c8df62",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f1",
+      "legacy_map_id": "gmd_1",
+      "runtime_map_id": 917001,
+      "display_name": "骨魔洞一层",
+      "source_sha256": "2e2cf474e6951d4cb2af4c610ee38f9ccc741f56b3dfe2c6e0c184e3805373b6",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2112,
+      "component_sizes": [
+        2112
+      ],
+      "monster_spawn_count": 3,
+      "boss_spawn_count": 0,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 202,
+          "canonical_name": "骷髅长枪兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "骷髅刀斧手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "骷髅弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "3c9c83f16bacf6f78dbb9f603509e5bb53638ffc736a248d7c3d60ae540055a8",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f2",
+      "legacy_map_id": "gmd_2",
+      "runtime_map_id": 917002,
+      "display_name": "骨魔洞二层",
+      "source_sha256": "a22dcbd6934cdd55e37a33cfad43e140afa2c13f4b7cf6f6d9abe47e1cb19781",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2112,
+      "component_sizes": [
+        2112
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "骷髅锤兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "骷髅长枪兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "骷髅刀斧手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "骷髅弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "4a8204208f20ec85d346766a2fd46a056c06a5ccbfc9e77133c0b4afea37b3bd",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f3",
+      "legacy_map_id": "gmd_3",
+      "runtime_map_id": 917003,
+      "display_name": "骨魔洞三层",
+      "source_sha256": "b4e708a98367ee1dfc46a71af5710043f57c2303293e3446240a6777278b7d0d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2085,
+      "component_sizes": [
+        2085
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "骷髅锤兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "骷髅长枪兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "骷髅刀斧手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "骷髅弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "51f4fb20bea11af49de23261350554a6f69fcfc7aa1c7964bb1d31529228fad3",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f4",
+      "legacy_map_id": "gmd_4",
+      "runtime_map_id": 917004,
+      "display_name": "骨魔洞四层",
+      "source_sha256": "a2b263c8daa8360059d23dad0f0a33e550376ab1b5b00785b74e5538c0f646e8",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2112,
+      "component_sizes": [
+        2112
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "骷髅锤兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "骷髅长枪兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "骷髅刀斧手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "骷髅弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "ca4b6dfc1b61a448b8f1ea6d0704a378a1f8c13231010b6f5d1f26547310e410",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f5",
+      "legacy_map_id": "gmd_5",
+      "runtime_map_id": 917005,
+      "display_name": "骨魔洞五层",
+      "source_sha256": "c196d7aff417b35e9dab09996aa87479d6ce98791014e3c4ec42963144b90334",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2161,
+      "component_sizes": [
+        2161
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 1,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "骷髅锤兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "骷髅长枪兵",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "骷髅刀斧手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "骷髅弓箭手",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 208,
+          "canonical_name": "黄泉教主",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "ccde7414b269b6816946b4581066a31da1d00212dabd6759e3fc17e194cec2bd",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f1",
+      "legacy_map_id": "nmsm_1",
+      "runtime_map_id": 917101,
+      "display_name": "牛魔寺庙一层",
+      "source_sha256": "ee261b7bb6b2a3ccdb322e16fb06f3dac36ea7781b782fa36c4a1dc71e06a7a2",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3220,
+      "component_sizes": [
+        3215,
+        5
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "牛头魔",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "牛魔战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "牛魔斗士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "牛魔侍卫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "cccf5aea12fa3186ada87a00466a61698560cbef450548d43056c87dbeb25be7",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f2",
+      "legacy_map_id": "nmsm_2",
+      "runtime_map_id": 917102,
+      "display_name": "牛魔寺庙二层",
+      "source_sha256": "fb0e8dacb884d5dc8d9672f258c9112933976a44f15c6cb5ff02e30bf3d65a67",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3220,
+      "component_sizes": [
+        3215,
+        5
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "牛头魔",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "牛魔战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "牛魔斗士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "牛魔侍卫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "e5140ed040c97e907c3ed912218b2c2f7957fbad01095a73ff3921c3af69484e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f3",
+      "legacy_map_id": "nmsm_3",
+      "runtime_map_id": 917103,
+      "display_name": "牛魔寺庙三层",
+      "source_sha256": "4107a38dd9c26e6974a27caf620af2557aa24c916f9851325ab06b4ab2dbfb4f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3190,
+      "component_sizes": [
+        3185,
+        5
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 0,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "牛头魔",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "牛魔战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "牛魔斗士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "牛魔侍卫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 220,
+          "canonical_name": "牛魔法师",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "1b649940222e0cd358e8c4618a43a2c3d74ed3b7f04700bb518d2d484ba08a2a",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f4",
+      "legacy_map_id": "nmsm_4",
+      "runtime_map_id": 917104,
+      "display_name": "牛魔寺庙四层",
+      "source_sha256": "e7c85cb642b4fb96ad995731d682bb50c464b4857ea7b19f9ef88236f5741009",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3220,
+      "component_sizes": [
+        3215,
+        5
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "牛头魔",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "牛魔战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "牛魔斗士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "牛魔侍卫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 218,
+          "canonical_name": "牛魔将军",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 220,
+          "canonical_name": "牛魔法师",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "1b218913439d436eb5680f62669bbb3aadffdb5cd30bd749d5194f001628c90e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_hall",
+      "legacy_map_id": "nmsm_hall",
+      "runtime_map_id": 917105,
+      "display_name": "牛魔寺庙大厅",
+      "source_sha256": "06694798e7da58fc2510fb8e4e0b6d7663b3e290393a147b3e8d5890f8acb960",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3272,
+      "component_sizes": [
+        3272
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "牛头魔",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "牛魔战士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "牛魔斗士",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "牛魔侍卫",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 218,
+          "canonical_name": "牛魔将军",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 220,
+          "canonical_name": "牛魔法师",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 222,
+          "canonical_name": "牛魔祭司",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 224,
+          "canonical_name": "牛魔王",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "宝箱怪",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "7c93b93dcbbc070ed3c03039271eafdf0f275986d4446116fa2e576150d00f6a",
+      "non_target_fields_unchanged": true
+    }
+  ]
+}

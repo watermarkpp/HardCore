@@ -323,6 +323,8 @@ def _validate_paths(paths: AuditPaths) -> None:
 
 def audit(
     paths: AuditPaths,
+    *,
+    allow_authoring_evolution: bool = False,
 ) -> tuple[dict[str, Any], dict[str, bytes], dict[str, Path]]:
     paths = paths.resolved()
     _validate_paths(paths)
@@ -522,7 +524,7 @@ def audit(
                     "approved_binding_sha256": expected_hash,
                     "matches": actual_hash == expected_hash,
                 }
-                if actual_hash != expected_hash:
+                if actual_hash != expected_hash and not allow_authoring_evolution:
                     _block(
                         blockers,
                         f"{binding_key}_mismatch",
@@ -543,7 +545,7 @@ def audit(
         candidate_bytes = canonical_bytes(candidate)
         candidate_hash = sha256_bytes(candidate_bytes)
         expected_document_hash = str(binding.get("document_sha256", ""))
-        if candidate_hash != expected_document_hash:
+        if candidate_hash != expected_document_hash and not allow_authoring_evolution:
             _block(
                 blockers,
                 "candidate_binding_document_sha256_mismatch",
@@ -613,6 +615,12 @@ def audit(
                         == semantics.get("boss_spawn")
                     ),
                     "candidate_binding_matches": candidate_hash == expected_document_hash,
+                    "current_authoring_evolution_preserved": (
+                        allow_authoring_evolution
+                        and candidate_hash != expected_document_hash
+                        and _project_without_spawn_layers(candidate)
+                        == _project_without_spawn_layers(source)
+                    ),
                 },
                 "blockers": blockers,
             }
@@ -638,8 +646,10 @@ def audit(
         "policy": {
             "approved_runtime_is_read_only_authority": True,
             "candidate_changes_only_layers": list(SPAWN_LAYERS),
-            "candidate_binding_must_reconstruct_exactly": True,
-            "ground_binding_hashes_must_match": True,
+            "candidate_binding_must_reconstruct_exactly": not allow_authoring_evolution,
+            "ground_binding_hashes_must_match": not allow_authoring_evolution,
+            "current_authoring_evolution_preserved": allow_authoring_evolution,
+            "approved_runtime_spawn_layers_must_match_exactly": True,
             "coordinate_guessing_forbidden": True,
             "partial_candidate_write_forbidden": True,
             "source_editor_bak_runtime_registry_mutation_forbidden": True,
@@ -710,9 +720,18 @@ def _write_inventory_atomic(path: Path, inventory: dict[str, Any]) -> None:
     os.replace(temporary, path)
 
 
-def run(paths: AuditPaths, *, write_candidates: bool, write_inventory: bool) -> dict[str, Any]:
+def run(
+    paths: AuditPaths,
+    *,
+    write_candidates: bool,
+    write_inventory: bool,
+    allow_authoring_evolution: bool = False,
+) -> dict[str, Any]:
     paths = paths.resolved()
-    inventory, candidates, protected_paths = audit(paths)
+    inventory, candidates, protected_paths = audit(
+        paths,
+        allow_authoring_evolution=allow_authoring_evolution,
+    )
     protected_before = inventory["protected_input_proof"]["before"]
     if write_candidates:
         if inventory["overall_status"] != "READY":
@@ -746,6 +765,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--inventory-output", type=Path)
     parser.add_argument("--write-candidates", action="store_true")
     parser.add_argument("--write-inventory", action="store_true")
+    parser.add_argument(
+        "--allow-current-authoring-evolution",
+        action="store_true",
+        help=(
+            "preserve current non-spawn authoring while copying only approved "
+            "runtime spawn layers; exact spawn equality remains required"
+        ),
+    )
     return parser
 
 
@@ -764,6 +791,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
             write_candidates=args.write_candidates,
             write_inventory=args.write_inventory,
+            allow_authoring_evolution=args.allow_current_authoring_evolution,
         )
     except AuditError as exc:
         print(f"BLOCKED: {exc}", file=sys.stderr)

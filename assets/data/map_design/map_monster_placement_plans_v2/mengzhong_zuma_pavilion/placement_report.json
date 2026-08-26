@@ -1,0 +1,68 @@
+{
+  "map_id": "mengzhong_zuma_pavilion",
+  "legacy_map_id": "zumage_1",
+  "runtime_map_id": 913105,
+  "display_name": "祖玛阁",
+  "source_sha256": "ded7a06daf6777ea34b232fa9f2f151d93108ea73f21924dbf95b0a599839614",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 3415,
+  "component_sizes": [
+    3415
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 3,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 150,
+      "canonical_name": "祖玛弓箭手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 152,
+      "canonical_name": "祖玛弓箭手3",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 153,
+      "canonical_name": "祖玛雕像",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 155,
+      "canonical_name": "祖玛雕像3",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 156,
+      "canonical_name": "祖玛卫士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 158,
+      "canonical_name": "祖玛卫士3",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "d3e82b6af81073de92ab17978491c5361a03755aa7ebbb8781cad22e1eb84d00",
+  "non_target_fields_unchanged": true
+}

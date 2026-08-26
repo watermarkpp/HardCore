@@ -1,0 +1,86 @@
+{
+  "map_id": "cangyue_bull_temple_hall",
+  "legacy_map_id": "nmsm_hall",
+  "runtime_map_id": 917105,
+  "display_name": "牛魔寺庙大厅",
+  "source_sha256": "06694798e7da58fc2510fb8e4e0b6d7663b3e290393a147b3e8d5890f8acb960",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 3272,
+  "component_sizes": [
+    3272
+  ],
+  "monster_spawn_count": 7,
+  "boss_spawn_count": 1,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 210,
+      "canonical_name": "牛头魔",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 212,
+      "canonical_name": "牛魔战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 214,
+      "canonical_name": "牛魔斗士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 216,
+      "canonical_name": "牛魔侍卫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 218,
+      "canonical_name": "牛魔将军",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 220,
+      "canonical_name": "牛魔法师",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 222,
+      "canonical_name": "牛魔祭司",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 224,
+      "canonical_name": "牛魔王",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "宝箱怪",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234
+      ]
+    }
+  ],
+  "candidate_sha256": "7c93b93dcbbc070ed3c03039271eafdf0f275986d4446116fa2e576150d00f6a",
+  "non_target_fields_unchanged": true
+}

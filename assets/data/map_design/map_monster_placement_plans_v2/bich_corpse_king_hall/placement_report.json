@@ -1,0 +1,26 @@
+{
+  "map_id": "bich_corpse_king_hall",
+  "legacy_map_id": "corpse_king_hall",
+  "runtime_map_id": 911103,
+  "display_name": "尸王殿",
+  "source_sha256": "5345dd1b493c9357eae032ca6593b43ca2dd5de15c2172910f89bf23f4b3e296",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 709,
+  "component_sizes": [
+    709
+  ],
+  "monster_spawn_count": 0,
+  "boss_spawn_count": 1,
+  "placement_count": 1,
+  "selected": [
+    {
+      "monster_id": 89,
+      "canonical_name": "尸王",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "89c10b97d5c7b184f7faa8c337530df48374ad56a73d6f18baaa343d4106a627",
+  "non_target_fields_unchanged": true
+}

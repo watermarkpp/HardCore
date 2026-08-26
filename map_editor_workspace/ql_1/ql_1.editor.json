@@ -78,7 +78,51 @@
     "workspace_state": "res://map_editor_workspace/ql_1/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "kind": "boss_spawn",
+        "monster_id": 89,
+        "classification": "elite",
+        "display_name": "尸王",
+        "tile": [
+          31,
+          30
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.fengmo_forked_path.000089",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:elite:000089",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 192,
+          "source_category_role": "elite",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            44,
+            1,
+            1,
+            1679,
+            -30,
+            -31
+          ],
+          "current_monster_library_only": true
+        }
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -646,7 +690,272 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "kind": "monster_spawn",
+        "monster_id": 46,
+        "classification": "ordinary",
+        "display_name": "洞蛆",
+        "tile": [
+          62,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.fengmo_forked_path.000046",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:ordinary:000046",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 191,
+          "source_category_role": "ordinary",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            60,
+            16,
+            1,
+            1679,
+            -1,
+            -62
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 79,
+        "classification": "ordinary",
+        "display_name": "僵尸1",
+        "tile": [
+          2,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.fengmo_forked_path.000079",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:ordinary:000079",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 191,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            58,
+            14,
+            1,
+            1679,
+            -1,
+            -2
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 81,
+        "classification": "ordinary",
+        "display_name": "僵尸2",
+        "tile": [
+          32,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.fengmo_forked_path.000081",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:ordinary:000081",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 191,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            30,
+            42,
+            1,
+            1679,
+            -1,
+            -32
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 83,
+        "classification": "ordinary",
+        "display_name": "僵尸3",
+        "tile": [
+          1,
+          30
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.fengmo_forked_path.000083",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:ordinary:000083",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 191,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            30,
+            18,
+            1,
+            1679,
+            -30,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 85,
+        "classification": "ordinary",
+        "display_name": "僵尸4",
+        "tile": [
+          61,
+          30
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.fengmo_forked_path.000085",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:ordinary:000085",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 191,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            30,
+            16,
+            1,
+            1679,
+            -30,
+            -61
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 87,
+        "classification": "ordinary",
+        "display_name": "僵尸5",
+        "tile": [
+          17,
+          15
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.fengmo_forked_path.000087",
+        "spawn_group_id": "auto:v2:fengmo_forked_path:ordinary:000087",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "fengmo_forked_path",
+          "source_line": 191,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            29,
+            15,
+            15,
+            1679,
+            -15,
+            -17
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

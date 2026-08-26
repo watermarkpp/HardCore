@@ -1,0 +1,68 @@
+{
+  "map_id": "fengmo_bazhe_hall",
+  "legacy_map_id": "gmhl_bazhe_hall",
+  "runtime_map_id": 914004,
+  "display_name": "霸者大厅",
+  "source_sha256": "218911db769d6393ceab4f8ae1ec57768426925fa6ef3b6983e1d0c23633ea3d",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2536,
+  "component_sizes": [
+    2536
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 2,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 135,
+      "canonical_name": "白野猪",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 138,
+      "canonical_name": "蝎蛇",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 188,
+      "canonical_name": "虹魔猪卫",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "407f088cff8946cfe06845d7294f15b6630c7b1d79e1dfe1cb2bd6849a2a7606",
+  "non_target_fields_unchanged": true
+}

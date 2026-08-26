@@ -1,0 +1,62 @@
+{
+  "map_id": "bich_mine_f1",
+  "legacy_map_id": "bich_mine_1",
+  "runtime_map_id": 911101,
+  "display_name": "矿区一层",
+  "source_sha256": "ae6811ffd06f89ed67716a224f463328b43fc8d43d0a38370b16b6293fe79b8f",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2037,
+  "component_sizes": [
+    2037
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 1,
+  "placement_count": 7,
+  "selected": [
+    {
+      "monster_id": 46,
+      "canonical_name": "洞蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 79,
+      "canonical_name": "僵尸1",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 81,
+      "canonical_name": "僵尸2",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 83,
+      "canonical_name": "僵尸3",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 85,
+      "canonical_name": "僵尸4",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 87,
+      "canonical_name": "僵尸5",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 89,
+      "canonical_name": "尸王",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "c48180150c97ef2394774898b85513bcda22f9da4cca67e65a2f13b607e59b6d",
+  "non_target_fields_unchanged": true
+}

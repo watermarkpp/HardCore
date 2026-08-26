@@ -1,0 +1,68 @@
+{
+  "map_id": "chiyue_red_moon_lair",
+  "legacy_map_id": "cymx_2",
+  "runtime_map_id": 916007,
+  "display_name": "赤月魔穴",
+  "source_sha256": "01ce431acf95f6fe2c764a1985d1b74352546b8179a8422580f56bfa8e85552d",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 795,
+  "component_sizes": [
+    795
+  ],
+  "monster_spawn_count": 7,
+  "boss_spawn_count": 1,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 164,
+      "canonical_name": "血巨人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 166,
+      "canonical_name": "血僵尸",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 180,
+      "canonical_name": "赤月恶魔",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "d1b09b95db927359fb43a673fddd23bd444b0cb5a281f1ba728b5a396e92b4f7",
+  "non_target_fields_unchanged": true
+}

@@ -1,0 +1,56 @@
+{
+  "map_id": "mengzhong_stone_tomb_f3",
+  "legacy_map_id": "stone_tomb_3",
+  "runtime_map_id": 913003,
+  "display_name": "石墓三层",
+  "source_sha256": "dbf5b269863708891c35383307d34b649d8b60dd8f89397fa6a535f570013022",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1999,
+  "component_sizes": [
+    1999
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 0,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 138,
+      "canonical_name": "蝎蛇",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "ce8af4adc1bae4547cb94cc1433706be12fed5f87d9595238b4c45328af6b10b",
+  "non_target_fields_unchanged": true
+}

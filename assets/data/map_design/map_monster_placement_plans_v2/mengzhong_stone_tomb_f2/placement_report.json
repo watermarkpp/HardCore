@@ -1,0 +1,44 @@
+{
+  "map_id": "mengzhong_stone_tomb_f2",
+  "legacy_map_id": "stone_tomb_2",
+  "runtime_map_id": 913002,
+  "display_name": "石墓二层",
+  "source_sha256": "314421ae23d6e296d20f2e54477a5e8c2cf18a3d2084b781231a04d3f37edf04",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2023,
+  "component_sizes": [
+    2023
+  ],
+  "monster_spawn_count": 4,
+  "boss_spawn_count": 0,
+  "placement_count": 4,
+  "selected": [
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "11d465c677cbbd95c562bea2c9a2991f24487d16c213993a6d968931e2d9e710",
+  "non_target_fields_unchanged": true
+}

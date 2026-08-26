@@ -267,6 +267,37 @@ class MonsterSpawnBackfillTest(unittest.TestCase):
         self.assertIn("ground_state_sha256_mismatch", codes)
         self.assertIn("candidate_binding_document_sha256_mismatch", codes)
 
+    def test_explicit_authoring_evolution_mode_preserves_non_spawn_and_copies_exact_spawns(self) -> None:
+        target = BACKFILL.TARGET_MAPS[0]
+        state = self.fixture.source_root / target / "ground" / "ground_state.json"
+        state.write_bytes(state.read_bytes() + b" ")
+        source_path = self.fixture.source_root / target / f"{target}.editor.json"
+        source = BACKFILL._load_json(source_path)
+        source["layers"]["editor_guides"][0]["note"] = "new-human-geometry"
+        write_json(source_path, source)
+        inventory = BACKFILL.run(
+            self.fixture.paths(),
+            write_candidates=True,
+            write_inventory=False,
+            allow_authoring_evolution=True,
+        )
+        self.assertEqual("READY", inventory["overall_status"])
+        row = inventory["maps"][0]
+        self.assertFalse(row["proof"]["candidate_binding_matches"])
+        self.assertTrue(row["proof"]["current_authoring_evolution_preserved"])
+        candidate = BACKFILL._load_json(
+            self.fixture.candidate_output / target / f"{target}.editor.json"
+        )
+        runtime = BACKFILL._load_json(
+            self.fixture.runtime_root / f"{target}.runtime.json"
+        )
+        self.assertEqual(
+            BACKFILL._project_without_spawn_layers(source),
+            BACKFILL._project_without_spawn_layers(candidate),
+        )
+        for layer in BACKFILL.SPAWN_LAYERS:
+            self.assertEqual(runtime["semantics"][layer], candidate["layers"][layer])
+
     def test_missing_runtime_spawn_field_is_a_blocker(self) -> None:
         target = BACKFILL.TARGET_MAPS[0]
         runtime_path = self.fixture.runtime_root / f"{target}.runtime.json"

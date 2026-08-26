@@ -1,0 +1,227 @@
+{
+  "layers": {
+    "monster_spawn": [
+      {
+        "kind": "monster_spawn",
+        "monster_id": 18,
+        "classification": "ordinary",
+        "display_name": "毒蜘蛛",
+        "tile": [
+          1,
+          24
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.world_snake_valley.000018",
+        "spawn_group_id": "auto:v2:world_snake_valley:ordinary:000018",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "world_snake_valley",
+          "source_line": 67,
+          "source_category_role": "ordinary",
+          "source_token_index": 4
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            41,
+            1,
+            1,
+            2065,
+            -24,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "beginner_outdoor"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 30,
+        "classification": "ordinary",
+        "display_name": "食人花",
+        "tile": [
+          48,
+          48
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.world_snake_valley.000030",
+        "spawn_group_id": "auto:v2:world_snake_valley:ordinary:000030",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "world_snake_valley",
+          "source_line": 67,
+          "source_category_role": "ordinary",
+          "source_token_index": 5
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            71,
+            29,
+            1,
+            2065,
+            -48,
+            -48
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "beginner_outdoor"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 34,
+        "classification": "ordinary",
+        "display_name": "半兽人",
+        "tile": [
+          37,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.world_snake_valley.000034",
+        "spawn_group_id": "auto:v2:world_snake_valley:ordinary:000034",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "world_snake_valley",
+          "source_line": 67,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            58,
+            18,
+            1,
+            2065,
+            -1,
+            -37
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "beginner_outdoor"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 92,
+        "classification": "ordinary",
+        "display_name": "红蛇",
+        "tile": [
+          31,
+          30
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.world_snake_valley.000092",
+        "spawn_group_id": "auto:v2:world_snake_valley:ordinary:000092",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "world_snake_valley",
+          "source_line": 67,
+          "source_category_role": "ordinary",
+          "source_token_index": 3
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            35,
+            20,
+            18,
+            2065,
+            -30,
+            -31
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "beginner_outdoor"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 94,
+        "classification": "ordinary",
+        "display_name": "虎蛇",
+        "tile": [
+          12,
+          48
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.world_snake_valley.000094",
+        "spawn_group_id": "auto:v2:world_snake_valley:ordinary:000094",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "world_snake_valley",
+          "source_line": 67,
+          "source_category_role": "ordinary",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            35,
+            17,
+            1,
+            2065,
+            -48,
+            -12
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "beginner_outdoor"
+      }
+    ],
+    "boss_spawn": []
+  }
+}

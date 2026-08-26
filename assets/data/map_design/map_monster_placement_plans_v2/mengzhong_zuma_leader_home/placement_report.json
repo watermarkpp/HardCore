@@ -1,0 +1,38 @@
+{
+  "map_id": "mengzhong_zuma_leader_home",
+  "legacy_map_id": "zmjzzj_2",
+  "runtime_map_id": 913106,
+  "display_name": "祖玛教主之家",
+  "source_sha256": "0235e7afe5544ebaadcfe4af638e855efb2a9005ace361e80be8e69fded88678",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1281,
+  "component_sizes": [
+    1281
+  ],
+  "monster_spawn_count": 2,
+  "boss_spawn_count": 1,
+  "placement_count": 3,
+  "selected": [
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 160,
+      "canonical_name": "祖玛教主",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "813e9e3b62750d8561399926ccf4e73f3772435d1295bb01d0eff3d45983d425",
+  "non_target_fields_unchanged": true
+}

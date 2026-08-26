@@ -1,0 +1,271 @@
+{
+  "layers": {
+    "monster_spawn": [
+      {
+        "kind": "monster_spawn",
+        "monster_id": 168,
+        "classification": "ordinary",
+        "display_name": "月魔蜘蛛",
+        "tile": [
+          5,
+          60
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_valley.000168",
+        "spawn_group_id": "auto:v2:chiyue_valley:ordinary:000168",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_line": 235,
+          "source_category_role": "ordinary",
+          "source_token_index": 4
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            74,
+            5,
+            5,
+            2557,
+            -60,
+            -5
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 170,
+        "classification": "ordinary",
+        "display_name": "黑锷蜘蛛",
+        "tile": [
+          30,
+          126
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_valley.000170",
+        "spawn_group_id": "auto:v2:chiyue_valley:ordinary:000170",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_line": 235,
+          "source_category_role": "ordinary",
+          "source_token_index": 6
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            91,
+            16,
+            1,
+            2557,
+            -126,
+            -30
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 172,
+        "classification": "ordinary",
+        "display_name": "钢牙蜘蛛",
+        "tile": [
+          30,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_valley.000172",
+        "spawn_group_id": "auto:v2:chiyue_valley:ordinary:000172",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_line": 235,
+          "source_category_role": "ordinary",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            84,
+            10,
+            1,
+            2557,
+            -1,
+            -30
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 174,
+        "classification": "ordinary",
+        "display_name": "暴牙蜘蛛",
+        "tile": [
+          1,
+          105
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_valley.000174",
+        "spawn_group_id": "auto:v2:chiyue_valley:ordinary:000174",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_line": 235,
+          "source_category_role": "ordinary",
+          "source_token_index": 5
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            49,
+            34,
+            1,
+            2557,
+            -105,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 176,
+        "classification": "ordinary",
+        "display_name": "天狼蜘蛛",
+        "tile": [
+          1,
+          18
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_valley.000176",
+        "spawn_group_id": "auto:v2:chiyue_valley:ordinary:000176",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_line": 235,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            46,
+            36,
+            1,
+            2557,
+            -18,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 178,
+        "classification": "ordinary",
+        "display_name": "花吻蜘蛛",
+        "tile": [
+          30,
+          80
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_valley.000178",
+        "spawn_group_id": "auto:v2:chiyue_valley:ordinary:000178",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_line": 235,
+          "source_category_role": "ordinary",
+          "source_token_index": 3
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            45,
+            46,
+            1,
+            2557,
+            -80,
+            -30
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      }
+    ],
+    "boss_spawn": []
+  }
+}

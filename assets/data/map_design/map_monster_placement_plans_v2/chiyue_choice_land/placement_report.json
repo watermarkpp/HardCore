@@ -1,0 +1,78 @@
+{
+  "map_id": "chiyue_choice_land",
+  "legacy_map_id": "chiyue_choice_land",
+  "runtime_map_id": 916003,
+  "display_name": "抉择之地",
+  "source_sha256": "73df38d3a8b221df2aaf2570e44625d0aec7626da6d40b80055090c8814b32c5",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 7555,
+  "component_sizes": [
+    3080,
+    1415,
+    1398,
+    903,
+    759
+  ],
+  "monster_spawn_count": 9,
+  "boss_spawn_count": 0,
+  "placement_count": 9,
+  "selected": [
+    {
+      "monster_id": 164,
+      "canonical_name": "血巨人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 166,
+      "canonical_name": "血僵尸",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 176,
+      "canonical_name": "天狼蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 182,
+      "canonical_name": "幻影蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "f96cb7b0dc10b9ffdc5155a7c99f12c0df45a0f465e825da116c87ca8d414716",
+  "non_target_fields_unchanged": true
+}

@@ -1,0 +1,76 @@
+{
+  "map_id": "world_mengzhong_province",
+  "legacy_map_id": "mengzhong_province",
+  "runtime_map_id": 910003,
+  "display_name": "盟重省",
+  "source_sha256": "056b54043b1f0d3ffa5b7e2f6c36bf7cdf59d90fe6fb9eca580be9435f0fe97d",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 5554,
+  "component_sizes": [
+    5554
+  ],
+  "monster_spawn_count": 8,
+  "boss_spawn_count": 0,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 96,
+      "canonical_name": "羊",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 97,
+      "canonical_name": "猎鹰",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 100,
+      "canonical_name": "狼",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 101,
+      "canonical_name": "盔甲虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 103,
+      "canonical_name": "威思而小虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 104,
+      "canonical_name": "沙虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 105,
+      "canonical_name": "多角虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 107,
+      "canonical_name": "巨型多角虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "弓箭护卫",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "7caa62184c84ed60c5868e40ad4bf6cf096b10335859327ac368398bd1d9db07",
+  "non_target_fields_unchanged": true
+}

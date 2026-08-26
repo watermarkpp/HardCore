@@ -1,0 +1,56 @@
+{
+  "map_id": "snake_mine_passage_1",
+  "legacy_map_id": "connection_passage_1",
+  "runtime_map_id": 912001,
+  "display_name": "连接通道1",
+  "source_sha256": "a28807d5ec6ba1741fac827ba27bba54886d1b1478b2d49e4e324aa31debacba",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2024,
+  "component_sizes": [
+    2024
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 0,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 46,
+      "canonical_name": "洞蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 79,
+      "canonical_name": "僵尸1",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 81,
+      "canonical_name": "僵尸2",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 83,
+      "canonical_name": "僵尸3",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 85,
+      "canonical_name": "僵尸4",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 87,
+      "canonical_name": "僵尸5",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "9c8d4ad5edce36a437837ceaffafd060881f67d876ce1f76bb574b674a9c991c",
+  "non_target_fields_unchanged": true
+}

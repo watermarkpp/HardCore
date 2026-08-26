@@ -1,0 +1,86 @@
+{
+  "map_id": "fengmo_final_hall",
+  "legacy_map_id": "gmhl_fengmo_dian",
+  "runtime_map_id": 914008,
+  "display_name": "封魔殿",
+  "source_sha256": "3e15cd7212b485c8dd4ee7e2cdec811beefdb1f080cb4cfd57647434ee11c487",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2661,
+  "component_sizes": [
+    2661
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 6,
+  "placement_count": 11,
+  "selected": [
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 150,
+      "canonical_name": "祖玛弓箭手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 152,
+      "canonical_name": "祖玛弓箭手3",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 153,
+      "canonical_name": "祖玛雕像",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 155,
+      "canonical_name": "祖玛雕像3",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 156,
+      "canonical_name": "祖玛卫士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 158,
+      "canonical_name": "祖玛卫士3",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 188,
+      "canonical_name": "虹魔猪卫",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 191,
+      "canonical_name": "虹魔蝎卫",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 193,
+      "canonical_name": "虹魔教主",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "ad1f90dce755f3bfb5ddb819d708b688f82b63ce5d70a68a4cc7752181d2c91f",
+  "non_target_fields_unchanged": true
+}

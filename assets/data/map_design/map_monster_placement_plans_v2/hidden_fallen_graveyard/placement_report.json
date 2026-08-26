@@ -1,0 +1,26 @@
+{
+  "map_id": "hidden_fallen_graveyard",
+  "legacy_map_id": "dlfc_2",
+  "runtime_map_id": 918003,
+  "display_name": "堕落坟场",
+  "source_sha256": "51742f5f2c0fa741abb876766479be3acc64f2a6fc9608f17c189f75b5417f58",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 843,
+  "component_sizes": [
+    843
+  ],
+  "monster_spawn_count": 0,
+  "boss_spawn_count": 1,
+  "placement_count": 1,
+  "selected": [
+    {
+      "monster_id": 237,
+      "canonical_name": "暗之黄泉教主",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "4aea37570d949d475c6f8a567976f11232b2e093991a53203140ff28bcf54937",
+  "non_target_fields_unchanged": true
+}

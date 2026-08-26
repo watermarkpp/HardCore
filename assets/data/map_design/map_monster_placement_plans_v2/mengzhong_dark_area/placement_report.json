@@ -1,0 +1,57 @@
+{
+  "map_id": "mengzhong_dark_area",
+  "legacy_map_id": "hadd_2",
+  "runtime_map_id": 913203,
+  "display_name": "黑暗地带",
+  "source_sha256": "a5236037d1e8ab232f0bc083e32992c54a401ecead59b6bb38b667b05b63b04d",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1027,
+  "component_sizes": [
+    1026,
+    1
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 1,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 116,
+      "canonical_name": "巨型蠕虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 118,
+      "canonical_name": "钳虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 120,
+      "canonical_name": "邪恶钳虫",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "907c36f49b8267f7795ec6332159c85c3314361cf624395046cde566097f7dd9",
+  "non_target_fields_unchanged": true
+}

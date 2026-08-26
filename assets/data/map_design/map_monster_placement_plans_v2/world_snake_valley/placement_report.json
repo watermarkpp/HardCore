@@ -1,0 +1,58 @@
+{
+  "map_id": "world_snake_valley",
+  "legacy_map_id": "snake_valley",
+  "runtime_map_id": 910002,
+  "display_name": "毒蛇山谷",
+  "source_sha256": "9bbf068504c1ecfd0080186ec0e8e0ddf224666e9370a80f7fadb9ba9a7dfefb",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2065,
+  "component_sizes": [
+    2065
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 0,
+  "placement_count": 5,
+  "selected": [
+    {
+      "monster_id": 18,
+      "canonical_name": "毒蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 30,
+      "canonical_name": "食人花",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 34,
+      "canonical_name": "半兽人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 92,
+      "canonical_name": "红蛇",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 94,
+      "canonical_name": "虎蛇",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "弓箭护卫",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "e7069febd5479505f11c9354d7011fdedcb9071a73496b82e69c63eaad3c78f6",
+  "non_target_fields_unchanged": true
+}

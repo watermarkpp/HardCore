@@ -1,0 +1,26 @@
+{
+  "map_id": "hidden_confusion_hall",
+  "legacy_map_id": "boss_2",
+  "runtime_map_id": 918001,
+  "display_name": "困惑殿堂",
+  "source_sha256": "ecf586d1b55c8aaceab173436e2abf3f3a5cfd19040af6a643766562cd21fcb0",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 359,
+  "component_sizes": [
+    359
+  ],
+  "monster_spawn_count": 0,
+  "boss_spawn_count": 1,
+  "placement_count": 1,
+  "selected": [
+    {
+      "monster_id": 235,
+      "canonical_name": "暗之双头血魔",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "dc34a4c8ae9e9f9700b6edf1b6dd26f76b11504301176d7e412307c7b3da4648",
+  "non_target_fields_unchanged": true
+}

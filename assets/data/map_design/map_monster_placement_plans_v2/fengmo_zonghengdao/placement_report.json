@@ -1,0 +1,68 @@
+{
+  "map_id": "fengmo_zonghengdao",
+  "legacy_map_id": "gmhl_zonghengdao",
+  "runtime_map_id": 914005,
+  "display_name": "纵横道",
+  "source_sha256": "b33f3fe10c46d45c1c71c551cd4c09fe6948d474d932a0e996fba4cdd3861afc",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2506,
+  "component_sizes": [
+    2506
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 2,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 135,
+      "canonical_name": "白野猪",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 138,
+      "canonical_name": "蝎蛇",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 141,
+      "canonical_name": "邪恶毒蛇",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "4b871aebdf9e02df41523f1ad0babf33defa7308fe6203725e71c3401736f5a0",
+  "non_target_fields_unchanged": true
+}

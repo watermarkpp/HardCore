@@ -1,0 +1,57 @@
+{
+  "map_id": "mengzhong_between_life_and_death",
+  "legacy_map_id": "between_life_and_death",
+  "runtime_map_id": 913204,
+  "display_name": "生死之间",
+  "source_sha256": "f5f96ca71a3de04e5edf85d4fa2081a420979da389e4fd368820cd6e1a8cb6c0",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1027,
+  "component_sizes": [
+    1026,
+    1
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 1,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 116,
+      "canonical_name": "巨型蠕虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 118,
+      "canonical_name": "钳虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 120,
+      "canonical_name": "邪恶钳虫",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "a33805470dc095d055167fc785b76fef7e43e0e38bf41f033e6f42bae6e8b92a",
+  "non_target_fields_unchanged": true
+}

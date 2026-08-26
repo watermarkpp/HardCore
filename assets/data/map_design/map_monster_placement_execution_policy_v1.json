@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "contract_id": "hardcore.map_monster_placement_execution_policy.v1",
+  "current_monster_library": {
+    "path": "assets/data/runtime/canonical_monster_catalog.json",
+    "sha256": "0f6ed32f1f77b92523410819526a648c05f23a4a1a7d7c5ad89e950b729b1143",
+    "required_entry_count": 156,
+    "current_runtime_allowed_only": true
+  },
+  "placement": {
+    "one_entry_per_listed_current_library_monster": true,
+    "deleted_or_missing_monsters": "skip_and_report",
+    "restore_or_create_monster_ids": false,
+    "non_unknown_dark_variants": "skip",
+    "zombie_visual_forms_are_ordinary": [79, 81, 83, 85, 87],
+    "listed_horn_fly_is_ordinary_layer": 126,
+    "zuma_elite_guard_id": 158,
+    "denied_monster_ids": [159],
+    "special_systems_skipped": ["宝箱怪", "弓箭护卫", "恶魔弓箭手", "无固定刷新"]
+  },
+  "unknown_dark_palace": {
+    "map_id": "snake_unknown_dark_palace",
+    "exact_current_library_ids": [39, 57, 74, 77, 90, 121, 137, 142],
+    "missing_or_deleted_variants": ["鸡（未知暗殿变体）", "鹿（未知暗殿变体）", "稻草人（未知暗殿变体）", "巨型多角虫（未知暗殿变体）"]
+  },
+  "frozen_maps": [
+    {
+      "map_id": "fengmo_purgatory_corridor",
+      "legacy_map_id": "gmhl_purgatory_corridor",
+      "source_sha256": "a33c37a4b5c9909ef7ab91d794f942c8d199d607155fa1183d893016d90f34ec",
+      "approved_runtime_build_sha256": "e6085fa11ccbcd3a09872b6a83a9292257a658d32d46a3d6e1fb53997c683ec5",
+      "preserve": true
+    }
+  ],
+  "transition_backfill_maps": [
+    "world_bich_province",
+    "world_wooma_forest",
+    "wooma_temple_f1",
+    "wooma_temple_f2",
+    "wooma_temple_boss_hall"
+  ],
+  "no_fixed_spawn_maps": ["mengzhong_stone_coffin_room"]
+}

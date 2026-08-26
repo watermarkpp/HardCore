@@ -1,0 +1,86 @@
+{
+  "map_id": "snake_mine_passage_2",
+  "legacy_map_id": "connection_passage_2",
+  "runtime_map_id": 912002,
+  "display_name": "连接通道2",
+  "source_sha256": "615dc2805da527510bce753dfdc68e1ad04d7c515305e31645f814a524161e13",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1994,
+  "component_sizes": [
+    1994
+  ],
+  "monster_spawn_count": 10,
+  "boss_spawn_count": 1,
+  "placement_count": 11,
+  "selected": [
+    {
+      "monster_id": 46,
+      "canonical_name": "洞蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 79,
+      "canonical_name": "僵尸1",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 81,
+      "canonical_name": "僵尸2",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 83,
+      "canonical_name": "僵尸3",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 85,
+      "canonical_name": "僵尸4",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 87,
+      "canonical_name": "僵尸5",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 89,
+      "canonical_name": "尸王",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 118,
+      "canonical_name": "钳虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "b0af4bd2327347c8618d20757e8de4b899ba2ac09eb8afc27398d15724bec059",
+  "non_target_fields_unchanged": true
+}

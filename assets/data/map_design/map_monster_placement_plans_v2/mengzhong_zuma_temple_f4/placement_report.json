@@ -1,0 +1,56 @@
+{
+  "map_id": "mengzhong_zuma_temple_f4",
+  "legacy_map_id": "zuma_temple_4",
+  "runtime_map_id": 913104,
+  "display_name": "祖玛寺庙四层",
+  "source_sha256": "c08e04b0b3dffc95c40c1ed145e377d79f75cddd7df358f76cbd52bd65dc0e32",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2008,
+  "component_sizes": [
+    2008
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 0,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 148,
+      "canonical_name": "大老鼠",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 150,
+      "canonical_name": "祖玛弓箭手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 153,
+      "canonical_name": "祖玛雕像",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 156,
+      "canonical_name": "祖玛卫士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "f22faaf661046e37a2af5e43a49cb01e7a69b176dff1439d44e9e8c5b4a61866",
+  "non_target_fields_unchanged": true
+}

@@ -1,0 +1,38 @@
+{
+  "map_id": "mengzhong_zuma_temple_f1",
+  "legacy_map_id": "zuma_temple_1",
+  "runtime_map_id": 913101,
+  "display_name": "祖玛寺庙一层",
+  "source_sha256": "7519359ce01e6f9ec29c331b68b096293966e7892cfedddd4aa9c52c0b2888ac",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2008,
+  "component_sizes": [
+    2008
+  ],
+  "monster_spawn_count": 3,
+  "boss_spawn_count": 0,
+  "placement_count": 3,
+  "selected": [
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 148,
+      "canonical_name": "大老鼠",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "b1c2e733a3f0e42eafae375e678d933353531a3836bc22aa1fab69148cafcb28",
+  "non_target_fields_unchanged": true
+}

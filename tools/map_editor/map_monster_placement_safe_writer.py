@@ -1134,6 +1134,7 @@ def _validate_authority_binding(
     label: str,
     current_canonical_map_id: str,
     authority_index: Mapping[tuple[str, int, str, int], Mapping[str, Any]],
+    authority_ref_policy: Mapping[tuple[str, int, str, int], Mapping[str, Any]] | None = None,
 ) -> None:
     ref_key = "authority_ref" if "authority_ref" in entry else "authority_reference"
     if ref_key not in entry:
@@ -1152,6 +1153,9 @@ def _validate_authority_binding(
     token = authority_index.get(key)
     if token is None:
         _error(f"{label}.authority_ref-not-found:{key}")
+    policy = (authority_ref_policy or {}).get(key)
+    if policy is not None and not isinstance(policy, Mapping):
+        _error(f"{label}.authority_ref-policy-invalid:{key}")
     if token.get("placement_kind") != layer_name:
         _error(
             f"{label}.authority_ref-placement-kind-mismatch:"
@@ -1159,24 +1163,71 @@ def _validate_authority_binding(
         )
     role = token.get("source_category_role")
     expected_roles = {"ordinary"} if layer_name == "monster_spawn" else {"elite", "boss"}
-    if role not in expected_roles:
+    policy_roles = set(policy.get("allowed_source_category_roles", [])) if policy else set()
+    if role not in expected_roles and role not in policy_roles:
         _error(f"{label}.authority_ref-category-role-mismatch:{role!r}")
+    allowed_statuses = set(policy.get("allowed_statuses", [])) if policy else set()
+    token_status = token.get("auto_placement_status")
+    if policy is None:
+        if (
+            token.get("auto_placement_allowed") is not True
+            or token_status != "AUTO_PLACEMENT_ALLOWED"
+            or token.get("placement_allowed") is not True
+        ):
+            _error(f"{label}.authority_ref-auto-placement-forbidden:{key}")
+    elif token_status not in allowed_statuses:
+        _error(
+            f"{label}.authority_ref-policy-status-forbidden:{token_status!r}:{key}"
+        )
     if (
-        token.get("auto_placement_allowed") is not True
-        or token.get("auto_placement_status") != "AUTO_PLACEMENT_ALLOWED"
-        or token.get("placement_allowed") is not True
+        policy is None
+        and (token.get("status") != "resolved" or token.get("resolution_status") != "resolved")
+    ) or (
+        policy is not None
+        and not bool(policy.get("allow_unresolved", False))
+        and (token.get("status") != "resolved" or token.get("resolution_status") != "resolved")
     ):
-        _error(f"{label}.authority_ref-auto-placement-forbidden:{key}")
-    if token.get("status") != "resolved" or token.get("resolution_status") != "resolved":
         _error(f"{label}.authority_ref-unresolved-or-not-resolved:{key}")
     resolved_ids = token.get("resolved_monster_ids")
-    if not isinstance(resolved_ids, list) or len(resolved_ids) != 1:
-        _error(f"{label}.authority_ref-monster-id-not-unique:{key}")
-    resolved_id = _integer_number(
-        resolved_ids[0],
-        label=f"{label}.authority_ref.resolved_monster_id",
-        positive=True,
-    )
+    selected_values = policy.get("selected_monster_ids") if policy else None
+    if selected_values is not None:
+        if not isinstance(selected_values, list) or not selected_values:
+            _error(f"{label}.authority_ref-policy-selected-ids-invalid:{key}")
+        allowed_selected_ids = {
+            _integer_number(
+                value,
+                label=f"{label}.authority_ref.policy.selected_monster_ids",
+                positive=True,
+            )
+            for value in selected_values
+        }
+        resolved_id = _integer_number(
+            entry.get("monster_id"),
+            label=f"{label}.monster_id",
+            positive=True,
+        )
+        if resolved_id not in allowed_selected_ids:
+            _error(f"{label}.authority_ref-policy-monster-id-forbidden:{resolved_id}:{key}")
+        if not isinstance(resolved_ids, list):
+            _error(f"{label}.authority_ref-resolved-ids-invalid:{key}")
+        if resolved_id not in {
+            _integer_number(
+                value,
+                label=f"{label}.authority_ref.resolved_monster_id",
+                positive=True,
+            )
+            for value in resolved_ids
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        } and not bool(policy.get("allow_unresolved", False)):
+            _error(f"{label}.authority_ref-selected-id-not-in-authority:{key}")
+    else:
+        if not isinstance(resolved_ids, list) or len(resolved_ids) != 1:
+            _error(f"{label}.authority_ref-monster-id-not-unique:{key}")
+        resolved_id = _integer_number(
+            resolved_ids[0],
+            label=f"{label}.authority_ref.resolved_monster_id",
+            positive=True,
+        )
     if entry.get("monster_id") != resolved_id:
         _error(f"{label}.authority_ref-monster-id-mismatch:{entry.get('monster_id')}!={resolved_id}")
     entry.pop("authority_reference", None)
@@ -1196,6 +1247,7 @@ def _validate_spawn_entry(
     authority_ref_required: bool,
     current_canonical_map_id: str,
     authority_index: Mapping[tuple[str, int, str, int], Mapping[str, Any]],
+    authority_ref_policy: Mapping[tuple[str, int, str, int], Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     label = f"{layer_name}[{index}]"
     if not isinstance(entry, dict):
@@ -1220,6 +1272,7 @@ def _validate_spawn_entry(
             label=label,
             current_canonical_map_id=current_canonical_map_id,
             authority_index=authority_index,
+            authority_ref_policy=authority_ref_policy,
         )
 
     spawn_group_id = _stable_id(normalized.get("spawn_group_id"), label=f"{label}.spawn_group_id")
@@ -1334,6 +1387,7 @@ def write_candidate(
     portal_overlay_path: Path = DEFAULT_PORTAL_OVERLAY_PATH,
     authority_path: Path = DEFAULT_AUTHORITY_PATH,
     require_formal_count: bool = True,
+    authority_ref_policy: Mapping[tuple[str, int, str, int], Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     source_root_resolved = _resolve_existing(Path(source_root), label="source-root")
     snapshot_file = _resolve_existing(Path(snapshot_path), label="snapshot")
@@ -1410,6 +1464,7 @@ def write_candidate(
                 authority_ref_required=layer_name in requested_layers,
                 current_canonical_map_id=str(registry_entry["map_id"]),
                 authority_index=authority_index,
+                authority_ref_policy=authority_ref_policy,
             )
             for index, entry in enumerate(entries_to_validate)
         ]

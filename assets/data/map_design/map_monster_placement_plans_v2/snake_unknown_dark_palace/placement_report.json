@@ -1,0 +1,97 @@
+{
+  "map_id": "snake_unknown_dark_palace",
+  "legacy_map_id": "quest_1",
+  "runtime_map_id": 912003,
+  "display_name": "未知暗殿",
+  "source_sha256": "1462445453781d9d495dc6dd6c0edcb7dca7e478288caacb655e57c2da6363af",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2003,
+  "component_sizes": [
+    2003
+  ],
+  "monster_spawn_count": 8,
+  "boss_spawn_count": 0,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 39,
+      "canonical_name": "半兽勇士1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 57,
+      "canonical_name": "骷髅精灵1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 74,
+      "canonical_name": "沃玛卫士1",
+      "classification": "elite",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 77,
+      "canonical_name": "沃玛教主1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 90,
+      "canonical_name": "尸王1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 121,
+      "canonical_name": "邪恶钳虫1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 137,
+      "canonical_name": "白野猪1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 142,
+      "canonical_name": "邪恶毒蛇1",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "鸡（未知暗殿变体）",
+      "source_category_role": "special",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    },
+    {
+      "raw_token": "鹿（未知暗殿变体）",
+      "source_category_role": "special",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    },
+    {
+      "raw_token": "稻草人（未知暗殿变体）",
+      "source_category_role": "special",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    },
+    {
+      "raw_token": "巨型多角虫（未知暗殿变体）",
+      "source_category_role": "special",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "dd4d146b7af057c43b5f0b8783d7434d7556527a3b0cd8467ca524f60eafdb97",
+  "non_target_fields_unchanged": true
+}

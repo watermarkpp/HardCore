@@ -1,0 +1,26 @@
+{
+  "map_id": "hidden_hellfire",
+  "legacy_map_id": "dyly_2",
+  "runtime_map_id": 918002,
+  "display_name": "地狱烈焰",
+  "source_sha256": "bd1b858fb312531fd16dcfcf1ac773414ef9e92e46e1b0becd30c7a8051fc5d1",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 815,
+  "component_sizes": [
+    815
+  ],
+  "monster_spawn_count": 0,
+  "boss_spawn_count": 1,
+  "placement_count": 1,
+  "selected": [
+    {
+      "monster_id": 238,
+      "canonical_name": "暗之骷髅精灵",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "7e4a2b7327122d14d05291230d16a991d6f934d88220b90fa205a748ba167df4",
+  "non_target_fields_unchanged": true
+}

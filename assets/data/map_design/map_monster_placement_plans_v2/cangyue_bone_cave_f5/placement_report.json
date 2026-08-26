@@ -1,0 +1,68 @@
+{
+  "map_id": "cangyue_bone_cave_f5",
+  "legacy_map_id": "gmd_5",
+  "runtime_map_id": 917005,
+  "display_name": "骨魔洞五层",
+  "source_sha256": "c196d7aff417b35e9dab09996aa87479d6ce98791014e3c4ec42963144b90334",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2161,
+  "component_sizes": [
+    2161
+  ],
+  "monster_spawn_count": 4,
+  "boss_spawn_count": 1,
+  "placement_count": 5,
+  "selected": [
+    {
+      "monster_id": 200,
+      "canonical_name": "骷髅锤兵",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 202,
+      "canonical_name": "骷髅长枪兵",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 204,
+      "canonical_name": "骷髅刀斧手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 206,
+      "canonical_name": "骷髅弓箭手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 208,
+      "canonical_name": "黄泉教主",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "宝箱怪",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234
+      ]
+    }
+  ],
+  "candidate_sha256": "ccde7414b269b6816946b4581066a31da1d00212dabd6759e3fc17e194cec2bd",
+  "non_target_fields_unchanged": true
+}

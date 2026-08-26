@@ -1,0 +1,69 @@
+{
+  "map_id": "cangyue_bull_temple_f3",
+  "legacy_map_id": "nmsm_3",
+  "runtime_map_id": 917103,
+  "display_name": "牛魔寺庙三层",
+  "source_sha256": "4107a38dd9c26e6974a27caf620af2557aa24c916f9851325ab06b4ab2dbfb4f",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 3190,
+  "component_sizes": [
+    3185,
+    5
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 0,
+  "placement_count": 5,
+  "selected": [
+    {
+      "monster_id": 210,
+      "canonical_name": "牛头魔",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 212,
+      "canonical_name": "牛魔战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 214,
+      "canonical_name": "牛魔斗士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 216,
+      "canonical_name": "牛魔侍卫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 220,
+      "canonical_name": "牛魔法师",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "宝箱怪",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234
+      ]
+    }
+  ],
+  "candidate_sha256": "1b649940222e0cd358e8c4618a43a2c3d74ed3b7f04700bb518d2d484ba08a2a",
+  "non_target_fields_unchanged": true
+}

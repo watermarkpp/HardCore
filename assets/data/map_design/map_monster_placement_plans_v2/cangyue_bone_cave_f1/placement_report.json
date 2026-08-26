@@ -1,0 +1,56 @@
+{
+  "map_id": "cangyue_bone_cave_f1",
+  "legacy_map_id": "gmd_1",
+  "runtime_map_id": 917001,
+  "display_name": "骨魔洞一层",
+  "source_sha256": "2e2cf474e6951d4cb2af4c610ee38f9ccc741f56b3dfe2c6e0c184e3805373b6",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2112,
+  "component_sizes": [
+    2112
+  ],
+  "monster_spawn_count": 3,
+  "boss_spawn_count": 0,
+  "placement_count": 3,
+  "selected": [
+    {
+      "monster_id": 202,
+      "canonical_name": "骷髅长枪兵",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 204,
+      "canonical_name": "骷髅刀斧手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 206,
+      "canonical_name": "骷髅弓箭手",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "宝箱怪",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234
+      ]
+    }
+  ],
+  "candidate_sha256": "3c9c83f16bacf6f78dbb9f603509e5bb53638ffc736a248d7c3d60ae540055a8",
+  "non_target_fields_unchanged": true
+}

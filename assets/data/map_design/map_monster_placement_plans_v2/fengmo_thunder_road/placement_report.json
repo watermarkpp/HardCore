@@ -1,0 +1,50 @@
+{
+  "map_id": "fengmo_thunder_road",
+  "legacy_map_id": "gmhl_thunder_road",
+  "runtime_map_id": 914003,
+  "display_name": "雷霆之路",
+  "source_sha256": "257226aea8d23b40edcb542777b7fb5b6f12036282da62145e0130e410e338da",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2536,
+  "component_sizes": [
+    2536
+  ],
+  "monster_spawn_count": 4,
+  "boss_spawn_count": 1,
+  "placement_count": 5,
+  "selected": [
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 135,
+      "canonical_name": "白野猪",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "9a5083b44c1b5c6081e919e985452fee25e00c3eab0ae0030774549dd340556e",
+  "non_target_fields_unchanged": true
+}

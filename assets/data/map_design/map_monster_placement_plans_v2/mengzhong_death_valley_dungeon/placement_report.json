@@ -1,0 +1,52 @@
+{
+  "map_id": "mengzhong_death_valley_dungeon",
+  "legacy_map_id": "swsg_2",
+  "runtime_map_id": 913201,
+  "display_name": "死亡山谷地牢",
+  "source_sha256": "071498e2e261fd13c3ece9504ff49b6ca99e8bd38a4ae9707bf06d85dd02c10a",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1844,
+  "component_sizes": [
+    1844
+  ],
+  "monster_spawn_count": 4,
+  "boss_spawn_count": 0,
+  "placement_count": 4,
+  "selected": [
+    {
+      "monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 116,
+      "canonical_name": "巨型蠕虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "弓箭护卫（入口附近，可选）",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "4637fe75bf9e0363ca1a0d21a7388292615bc0ffb9d5ecf118b9025ace222b90",
+  "non_target_fields_unchanged": true
+}

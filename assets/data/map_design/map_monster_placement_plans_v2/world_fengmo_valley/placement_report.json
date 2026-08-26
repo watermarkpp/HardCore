@@ -1,0 +1,110 @@
+{
+  "map_id": "world_fengmo_valley",
+  "legacy_map_id": "fmg_1",
+  "runtime_map_id": 910005,
+  "display_name": "封魔谷",
+  "source_sha256": "2376258e0d3b83c1f7703b723ea0c52ffc61512af1f52836b358f4c541dfaae8",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1517,
+  "component_sizes": [
+    1496,
+    18,
+    3
+  ],
+  "monster_spawn_count": 11,
+  "boss_spawn_count": 2,
+  "placement_count": 13,
+  "selected": [
+    {
+      "monster_id": 36,
+      "canonical_name": "半兽战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 38,
+      "canonical_name": "半兽勇士",
+      "classification": "elite",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 47,
+      "canonical_name": "骷髅",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 50,
+      "canonical_name": "掷斧骷髅",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 52,
+      "canonical_name": "骷髅战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 54,
+      "canonical_name": "骷髅战将",
+      "classification": "elite",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 56,
+      "canonical_name": "骷髅精灵",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 79,
+      "canonical_name": "僵尸1",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 81,
+      "canonical_name": "僵尸2",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 83,
+      "canonical_name": "僵尸3",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 85,
+      "canonical_name": "僵尸4",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 87,
+      "canonical_name": "僵尸5",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 195,
+      "canonical_name": "千年树妖",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "恶魔弓箭手",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": [
+        194
+      ]
+    }
+  ],
+  "candidate_sha256": "71e9b9027ef57057b4598765c2e922d836ada06bb54121776a40081672b5b318",
+  "non_target_fields_unchanged": true
+}

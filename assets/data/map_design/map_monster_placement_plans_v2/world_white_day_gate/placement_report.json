@@ -1,0 +1,83 @@
+{
+  "map_id": "world_white_day_gate",
+  "legacy_map_id": "brm_2",
+  "runtime_map_id": 910006,
+  "display_name": "白日门",
+  "source_sha256": "295748315885dd1ced03e68f58d3ffe2fc4df05a8d5743247576e9900470e556",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1602,
+  "component_sizes": [
+    1602
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 3,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 28,
+      "canonical_name": "森林雪人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 31,
+      "canonical_name": "多钩猫王",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 32,
+      "canonical_name": "钉耙猫王",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 36,
+      "canonical_name": "半兽战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 38,
+      "canonical_name": "半兽勇士",
+      "classification": "elite",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 42,
+      "canonical_name": "半兽统领",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 176,
+      "canonical_name": "天狼蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 185,
+      "canonical_name": "剧毒蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "雪人王",
+      "source_category_role": "elite",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "INTENTIONALLY_EXCLUDED",
+      "resolved_monster_ids": []
+    },
+    {
+      "raw_token": "弓箭护卫",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "55c15e3b1c6708148c838dcf68ea2fc048675007fab4677d0d0845ceb4e62794",
+  "non_target_fields_unchanged": true
+}

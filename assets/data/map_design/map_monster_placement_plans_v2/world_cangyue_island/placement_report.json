@@ -1,0 +1,64 @@
+{
+  "map_id": "world_cangyue_island",
+  "legacy_map_id": "cyd_1",
+  "runtime_map_id": 910007,
+  "display_name": "苍月岛",
+  "source_sha256": "87c53c163f7b87ba2444d91dc7f3b111624d88b14221be760f4955fb77975be3",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1683,
+  "component_sizes": [
+    1683
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 0,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 18,
+      "canonical_name": "毒蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 21,
+      "canonical_name": "稻草人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 26,
+      "canonical_name": "钉耙猫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 28,
+      "canonical_name": "森林雪人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 30,
+      "canonical_name": "食人花",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 34,
+      "canonical_name": "半兽人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "鹿",
+      "source_category_role": "ordinary",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "INTENTIONALLY_EXCLUDED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "68181e36975751d9b18df3b9ef37ef2a658fcae9d1d86aed207c587ee3c8df62",
+  "non_target_fields_unchanged": true
+}

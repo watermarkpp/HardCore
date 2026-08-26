@@ -1,0 +1,26 @@
+{
+  "map_id": "hidden_abyss_domain",
+  "legacy_map_id": "symy_2",
+  "runtime_map_id": 918005,
+  "display_name": "深渊魔域",
+  "source_sha256": "5e8fc91c4d18926e1e9d14b65c7cf5f7767482db8ef3f293dac87c56a3599996",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 831,
+  "component_sizes": [
+    831
+  ],
+  "monster_spawn_count": 0,
+  "boss_spawn_count": 1,
+  "placement_count": 1,
+  "selected": [
+    {
+      "monster_id": 236,
+      "canonical_name": "暗之双头金刚",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "18b56ae195abd6a4b4f81e1094ca44da0fc062e1b4c4b1190ea8aee827726e22",
+  "non_target_fields_unchanged": true
+}

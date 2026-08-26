@@ -1,0 +1,50 @@
+{
+  "layers": {
+    "monster_spawn": [],
+    "boss_spawn": [
+      {
+        "kind": "boss_spawn",
+        "monster_id": 240,
+        "classification": "boss",
+        "display_name": "暗之虹魔教主",
+        "tile": [
+          28,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.hidden_death_temple.000240",
+        "spawn_group_id": "auto:v2:hidden_death_temple:boss:000240",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "hidden_death_temple",
+          "source_line": 223,
+          "source_category_role": "boss",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            38,
+            1,
+            1,
+            835,
+            -1,
+            -28
+          ],
+          "current_monster_library_only": true
+        }
+      }
+    ]
+  }
+}

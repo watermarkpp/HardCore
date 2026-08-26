@@ -1,0 +1,44 @@
+{
+  "map_id": "fengmo_light_corridor",
+  "legacy_map_id": "gmhl_1",
+  "runtime_map_id": 914002,
+  "display_name": "光芒回廊",
+  "source_sha256": "6eba2e723c0fd339f393d32da201111cdc5aafcb943576bf73f5b87a81ff6361",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2536,
+  "component_sizes": [
+    2536
+  ],
+  "monster_spawn_count": 4,
+  "boss_spawn_count": 0,
+  "placement_count": 4,
+  "selected": [
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "503cb3678c7e74bfb6a7b5e0275967d1a5052bfdf8f9f89adab268dca50dc7cc",
+  "non_target_fields_unchanged": true
+}

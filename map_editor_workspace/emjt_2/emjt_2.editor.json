@@ -78,7 +78,94 @@
     "workspace_state": "res://map_editor_workspace/emjt_2/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "kind": "boss_spawn",
+        "monster_id": 162,
+        "classification": "boss",
+        "display_name": "双头血魔",
+        "tile": [
+          27,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.chiyue_demon_altar.000162",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:boss:000162",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 248,
+          "source_category_role": "boss",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            67,
+            1,
+            1,
+            1775,
+            -1,
+            -27
+          ],
+          "current_monster_library_only": true
+        }
+      },
+      {
+        "kind": "boss_spawn",
+        "monster_id": 163,
+        "classification": "boss",
+        "display_name": "双头金刚",
+        "tile": [
+          1,
+          59
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.chiyue_demon_altar.000163",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:boss:000163",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 248,
+          "source_category_role": "boss",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            84,
+            17,
+            1,
+            1775,
+            -59,
+            -1
+          ],
+          "current_monster_library_only": true
+        }
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -252,7 +339,316 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "kind": "monster_spawn",
+        "monster_id": 164,
+        "classification": "ordinary",
+        "display_name": "血巨人",
+        "tile": [
+          30,
+          43
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000164",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000164",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 7
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            45,
+            28,
+            1,
+            1775,
+            -43,
+            -30
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 166,
+        "classification": "ordinary",
+        "display_name": "血僵尸",
+        "tile": [
+          1,
+          17
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000166",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000166",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 6
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            42,
+            51,
+            1,
+            1775,
+            -17,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 168,
+        "classification": "ordinary",
+        "display_name": "月魔蜘蛛",
+        "tile": [
+          22,
+          23
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000168",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000168",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            27,
+            40,
+            9,
+            1775,
+            -23,
+            -22
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 170,
+        "classification": "ordinary",
+        "display_name": "黑锷蜘蛛",
+        "tile": [
+          8,
+          37
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000170",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000170",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            27,
+            24,
+            8,
+            1775,
+            -37,
+            -8
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 172,
+        "classification": "ordinary",
+        "display_name": "钢牙蜘蛛",
+        "tile": [
+          24,
+          62
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000172",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000172",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 4
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            25,
+            17,
+            1,
+            1775,
+            -62,
+            -24
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 174,
+        "classification": "ordinary",
+        "display_name": "暴牙蜘蛛",
+        "tile": [
+          6,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000174",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000174",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 3
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            21,
+            62,
+            1,
+            1775,
+            -1,
+            -6
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 178,
+        "classification": "ordinary",
+        "display_name": "花吻蜘蛛",
+        "tile": [
+          16,
+          49
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_demon_altar.000178",
+        "spawn_group_id": "auto:v2:chiyue_demon_altar:ordinary:000178",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_demon_altar",
+          "source_line": 247,
+          "source_category_role": "ordinary",
+          "source_token_index": 5
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            20,
+            8,
+            14,
+            1775,
+            -49,
+            -16
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

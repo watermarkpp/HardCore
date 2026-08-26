@@ -1,0 +1,62 @@
+{
+  "map_id": "fengmo_forked_path",
+  "legacy_map_id": "ql_1",
+  "runtime_map_id": 914001,
+  "display_name": "崎路",
+  "source_sha256": "385eff206f6630f8f4c0bff676243b337c6b4c420fa31dde1d9e1551e5093741",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1679,
+  "component_sizes": [
+    1679
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 1,
+  "placement_count": 7,
+  "selected": [
+    {
+      "monster_id": 46,
+      "canonical_name": "洞蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 79,
+      "canonical_name": "僵尸1",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 81,
+      "canonical_name": "僵尸2",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 83,
+      "canonical_name": "僵尸3",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 85,
+      "canonical_name": "僵尸4",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 87,
+      "canonical_name": "僵尸5",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 89,
+      "canonical_name": "尸王",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "c233130c2bfff3be17c80e0cd361112c45fcd9ffa51044cf4b9662ebad422777",
+  "non_target_fields_unchanged": true
+}

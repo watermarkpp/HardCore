@@ -1,0 +1,74 @@
+{
+  "map_id": "chiyue_valley_secret_passage_a",
+  "legacy_map_id": "chiyue_valley_secret_passage_a",
+  "runtime_map_id": 916004,
+  "display_name": "山谷密道A",
+  "source_sha256": "22fa62dd8d996a364579c282074906e194ffa600cf916746a6a2343f2f6838ae",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2557,
+  "component_sizes": [
+    2557
+  ],
+  "monster_spawn_count": 9,
+  "boss_spawn_count": 0,
+  "placement_count": 9,
+  "selected": [
+    {
+      "monster_id": 164,
+      "canonical_name": "血巨人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 166,
+      "canonical_name": "血僵尸",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 176,
+      "canonical_name": "天狼蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 182,
+      "canonical_name": "幻影蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "495b85a138cbc2b0a7c9685d8166f5da6f492e856cce5bfa21d6bc2b399d2453",
+  "non_target_fields_unchanged": true
+}

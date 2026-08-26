@@ -1,0 +1,359 @@
+{
+  "layers": {
+    "monster_spawn": [
+      {
+        "kind": "monster_spawn",
+        "monster_id": 164,
+        "classification": "ordinary",
+        "display_name": "血巨人",
+        "tile": [
+          8,
+          3
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000164",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000164",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 7
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            49,
+            5,
+            3,
+            795,
+            -3,
+            -8
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 166,
+        "classification": "ordinary",
+        "display_name": "血僵尸",
+        "tile": [
+          1,
+          28
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000166",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000166",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 6
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            31,
+            27,
+            1,
+            795,
+            -28,
+            -1
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 168,
+        "classification": "ordinary",
+        "display_name": "月魔蜘蛛",
+        "tile": [
+          30,
+          1
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000168",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000168",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            24,
+            29,
+            1,
+            795,
+            -1,
+            -30
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 170,
+        "classification": "ordinary",
+        "display_name": "黑锷蜘蛛",
+        "tile": [
+          18,
+          18
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000170",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000170",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 2
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            24,
+            28,
+            13,
+            795,
+            -18,
+            -18
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 172,
+        "classification": "ordinary",
+        "display_name": "钢牙蜘蛛",
+        "tile": [
+          4,
+          15
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000172",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000172",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 4
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            16,
+            11,
+            4,
+            795,
+            -15,
+            -4
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 174,
+        "classification": "ordinary",
+        "display_name": "暴牙蜘蛛",
+        "tile": [
+          15,
+          30
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000174",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000174",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 3
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            15,
+            37,
+            1,
+            795,
+            -30,
+            -15
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      },
+      {
+        "kind": "monster_spawn",
+        "monster_id": 178,
+        "classification": "ordinary",
+        "display_name": "花吻蜘蛛",
+        "tile": [
+          30,
+          16
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "monster_spawn.auto.v2.chiyue_red_moon_lair.000178",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:ordinary:000178",
+        "auto_placement_status": "AUTO_POSITIONED",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 254,
+          "source_category_role": "ordinary",
+          "source_token_index": 5
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            0,
+            14,
+            38,
+            1,
+            795,
+            -16,
+            -30
+          ],
+          "current_monster_library_only": true
+        },
+        "respawn_policy_id": "normal_cave"
+      }
+    ],
+    "boss_spawn": [
+      {
+        "kind": "boss_spawn",
+        "monster_id": 180,
+        "classification": "boss",
+        "display_name": "赤月恶魔",
+        "tile": [
+          30,
+          30
+        ],
+        "count": 1,
+        "max_alive": 1,
+        "radius_gu": 0.0,
+        "spawn_rule": "single_anchor_user_copy_template",
+        "runtime_export": true,
+        "content_layer": "personal_expansion",
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "semantic_id": "boss_spawn.auto.v2.chiyue_red_moon_lair.000180",
+        "spawn_group_id": "auto:v2:chiyue_red_moon_lair:boss:000180",
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_line": 255,
+          "source_category_role": "boss",
+          "source_token_index": 1
+        },
+        "placement_evidence": {
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "component_id": 0,
+          "selection_score": [
+            1,
+            52,
+            1,
+            1,
+            795,
+            -30,
+            -30
+          ],
+          "current_monster_library_only": true
+        }
+      }
+    ]
+  }
+}

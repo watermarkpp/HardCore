@@ -1,0 +1,63 @@
+{
+  "map_id": "mengzhong_death_coffin",
+  "legacy_map_id": "death_coffin",
+  "runtime_map_id": 913207,
+  "display_name": "死亡棺材",
+  "source_sha256": "18308100af372cf0c18424cc5f62a8845df76c0923097ad5ac57450664861e08",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1076,
+  "component_sizes": [
+    1075,
+    1
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 2,
+  "placement_count": 7,
+  "selected": [
+    {
+      "monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 116,
+      "canonical_name": "巨型蠕虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 118,
+      "canonical_name": "钳虫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 120,
+      "canonical_name": "邪恶钳虫",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 124,
+      "canonical_name": "触龙神",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "f33894a21a9bd7f8d6b60729b4083a2720474ff24608a396e47575724fbd9eaf",
+  "non_target_fields_unchanged": true
+}

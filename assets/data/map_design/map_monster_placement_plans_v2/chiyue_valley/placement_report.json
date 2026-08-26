@@ -1,0 +1,56 @@
+{
+  "map_id": "chiyue_valley",
+  "legacy_map_id": "cyxg_2",
+  "runtime_map_id": 916001,
+  "display_name": "赤月峡谷",
+  "source_sha256": "4fe41e22a9c106e302a0f148a7ee4be4fabd9f29441d33f9e1ce9f8a320aca65",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2557,
+  "component_sizes": [
+    2557
+  ],
+  "monster_spawn_count": 6,
+  "boss_spawn_count": 0,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 176,
+      "canonical_name": "天狼蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "aa01561a405a3b71ecf7a00b9e2cba471899414ca8c18d754486efd2541c97c4",
+  "non_target_fields_unchanged": true
+}

@@ -1,0 +1,74 @@
+{
+  "map_id": "chiyue_demon_altar",
+  "legacy_map_id": "emjt_2",
+  "runtime_map_id": 916006,
+  "display_name": "恶魔祭坛",
+  "source_sha256": "fbc01b21e9a7ba7ab5b381debef5a1c815c3f035ee2d34371108180507cfd7c3",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1775,
+  "component_sizes": [
+    1775
+  ],
+  "monster_spawn_count": 7,
+  "boss_spawn_count": 2,
+  "placement_count": 9,
+  "selected": [
+    {
+      "monster_id": 162,
+      "canonical_name": "双头血魔",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 163,
+      "canonical_name": "双头金刚",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 164,
+      "canonical_name": "血巨人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 166,
+      "canonical_name": "血僵尸",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "fb0c958b88552f5632dc0ba57a73f47c440c3fa01865702d1dd02f2fc27fff4d",
+  "non_target_fields_unchanged": true
+}
