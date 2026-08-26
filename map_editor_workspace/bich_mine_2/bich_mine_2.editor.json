@@ -72,36 +72,28 @@
   "layers": {
     "boss_spawn": [
       {
-        "kind": "boss_spawn",
-        "monster_id": 89,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "elite",
+          "source_line": 54,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
         "classification": "elite",
-        "display_name": "尸王",
-        "tile": [
-          46,
-          48
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 89,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "boss_spawn.auto.v2.bich_mine_f2.000089",
-        "spawn_group_id": "auto:v2:bich_mine_f2:elite:000089",
-        "auto_placement_status": "AUTO_POSITIONED_BOSS",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 54,
-          "source_category_role": "elite",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             1,
             45,
@@ -110,9 +102,17 @@
             2002,
             -48,
             -46
-          ],
-          "current_monster_library_only": true
-        }
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v2.bich_mine_f2.000089",
+        "spawn_group_id": "auto:v2:bich_mine_f2:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46,
+          48
+        ]
       }
     ],
     "collision": [
@@ -821,13 +821,13 @@
         "blocks_movement": false,
         "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "bich_mine_1_2_pair_v1",
+        "connection_pair_id": "portal_pair.bich_mine_f1.map_exit_000002.bich_mine_f2.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "返回矿区一层",
+        "display_name": "矿区一层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "bich_mine_2_to_1_v1",
+        "official_connection_id": "portal.bich_mine_2.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
@@ -843,7 +843,7 @@
         "source_map_key": "bich_mine_2",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 406.0,
+        "target_map_id": 406,
         "target_map_key": "bich_mine_1",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -861,14 +861,15 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "one_way",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "进入尸王殿",
+        "display_name": "尸王殿",
         "exit_id": "map_exit_000002",
-        "explicit_one_way_reason": "尸王殿只允许进入，离开必须使用回城功能或死亡回城",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
-        "official_connection_id": "bich_mine_2_to_corpse_king_hall_one_way_v1",
+        "official_connection_id": "portal.bich_mine_2.map_exit_000002",
         "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "one_way_endpoint",
@@ -882,7 +883,7 @@
         "source_map_key": "bich_mine_2",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 1578.0,
+        "target_map_id": 1578,
         "target_map_key": "corpse_king_hall",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -899,36 +900,28 @@
     ],
     "monster_spawn": [
       {
-        "kind": "monster_spawn",
-        "monster_id": 46,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "ordinary",
+          "source_line": 53,
+          "source_token_index": 2
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "洞蛆",
-        "tile": [
-          1,
-          1
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 46,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000046",
-        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000046",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 53,
-          "source_category_role": "ordinary",
-          "source_token_index": 2
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             92,
@@ -937,42 +930,42 @@
             2002,
             -1,
             -1
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000046",
+        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000046",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          1
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 79,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "ordinary",
+          "source_line": 53,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "僵尸1",
-        "tile": [
-          24,
-          24
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 79,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000079",
-        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000079",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 53,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             46,
@@ -981,42 +974,42 @@
             2002,
             -24,
             -24
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000079",
+        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000079",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          24
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 81,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "ordinary",
+          "source_line": 53,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "僵尸2",
-        "tile": [
-          43,
-          1
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 81,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000081",
-        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000081",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 53,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             42,
@@ -1025,42 +1018,42 @@
             2002,
             -1,
             -43
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000081",
+        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000081",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43,
+          1
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 83,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "ordinary",
+          "source_line": 53,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "僵尸3",
-        "tile": [
-          1,
-          42
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 83,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000083",
-        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000083",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 53,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             41,
@@ -1069,42 +1062,42 @@
             2002,
             -42,
             -1
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000083",
+        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000083",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          42
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 85,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "ordinary",
+          "source_line": 53,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "僵尸4",
-        "tile": [
-          48,
-          22
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 85,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000085",
-        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000085",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 53,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             26,
@@ -1113,42 +1106,42 @@
             2002,
             -22,
             -48
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000085",
+        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000085",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48,
+          22
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 87,
+        "authority_ref": {
+          "map_id": "bich_mine_f2",
+          "source_category_role": "ordinary",
+          "source_line": 53,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "僵尸5",
-        "tile": [
-          22,
-          47
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 87,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000087",
-        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000087",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "bich_mine_f2",
-          "source_line": 53,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             25,
@@ -1157,10 +1150,18 @@
             2002,
             -47,
             -22
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.bich_mine_f2.000087",
+        "spawn_group_id": "auto:v2:bich_mine_f2:ordinary:000087",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          47
+        ]
       }
     ],
     "npc_points": [

@@ -83,36 +83,28 @@
   "layers": {
     "boss_spawn": [
       {
-        "kind": "boss_spawn",
-        "monster_id": 124,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "boss",
+          "source_line": 151,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
         "classification": "boss",
-        "display_name": "触龙神",
-        "tile": [
-          1,
-          1
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "触龙神",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 124,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "boss_spawn.auto.v2.mengzhong_death_coffin.000124",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:boss:000124",
-        "auto_placement_status": "AUTO_POSITIONED_BOSS",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 151,
-          "source_category_role": "boss",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             1,
             80,
@@ -121,41 +113,41 @@
             1075,
             -1,
             -1
-          ],
-          "current_monster_library_only": true
-        }
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v2.mengzhong_death_coffin.000124",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:boss:000124",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          1
+        ]
       },
       {
-        "kind": "boss_spawn",
-        "monster_id": 120,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "elite",
+          "source_line": 150,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
         "classification": "elite",
-        "display_name": "邪恶钳虫",
-        "tile": [
-          30,
-          62
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 120,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "boss_spawn.auto.v2.mengzhong_death_coffin.000120",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:elite:000120",
-        "auto_placement_status": "AUTO_POSITIONED_BOSS",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 150,
-          "source_category_role": "elite",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             90,
@@ -164,9 +156,17 @@
             1075,
             -62,
             -30
-          ],
-          "current_monster_library_only": true
-        }
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v2.mengzhong_death_coffin.000120",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:elite:000120",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30,
+          62
+        ]
       }
     ],
     "collision": [
@@ -5159,70 +5159,61 @@
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
+        "arrival_only": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "arrival_only",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "由一线天进入，单向只可进入",
+        "display_name": "一线天",
         "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "arrival_only_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
         "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1,
         "tile": [
           25.0,
           57.0
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": false
       }
     ],
     "monster_spawn": [
       {
-        "kind": "monster_spawn",
-        "monster_id": 110,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 149,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "蜈蚣",
-        "tile": [
-          30,
-          17
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 110,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000110",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000110",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 149,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             45,
@@ -5231,42 +5222,42 @@
             1075,
             -17,
             -30
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000110",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000110",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30,
+          17
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 112,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 149,
+          "source_token_index": 4
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "黑色恶蛆",
-        "tile": [
-          7,
-          40
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 112,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000112",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000112",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 149,
-          "source_category_role": "ordinary",
-          "source_token_index": 4
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             45,
@@ -5275,42 +5266,42 @@
             1075,
             -40,
             -7
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000112",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000112",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          40
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 114,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 149,
+          "source_token_index": 2
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "跳跳蜂",
-        "tile": [
-          8,
-          18
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 114,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000114",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000114",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 149,
-          "source_category_role": "ordinary",
-          "source_token_index": 2
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             23,
@@ -5319,42 +5310,42 @@
             1075,
             -18,
             -8
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000114",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000114",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          18
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 116,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 149,
+          "source_token_index": 3
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "巨型蠕虫",
-        "tile": [
-          20,
-          30
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 116,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000116",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000116",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 149,
-          "source_category_role": "ordinary",
-          "source_token_index": 3
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             23,
@@ -5363,42 +5354,42 @@
             1075,
             -30,
             -20
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000116",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000116",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          30
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 118,
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 149,
+          "source_token_index": 5
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "钳虫",
-        "tile": [
-          21,
-          3
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 118,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000118",
-        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000118",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_death_coffin",
-          "source_line": 149,
-          "source_category_role": "ordinary",
-          "source_token_index": 5
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             22,
@@ -5407,10 +5398,18 @@
             1075,
             -3,
             -21
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_death_coffin.000118",
+        "spawn_group_id": "auto:v2:mengzhong_death_coffin:ordinary:000118",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          3
+        ]
       }
     ],
     "npc_points": [],

@@ -1807,13 +1807,13 @@
         "blocks_movement": false,
         "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
+        "connection_pair_id": "portal_pair.wooma_temple_f2.map_exit_000001.wooma_temple_boss_hall.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "返回沃玛寺庙二层",
+        "display_name": "沃玛寺庙二层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "wooma_leader_hall_to_temple_2_v1",
+        "official_connection_id": "portal.wooma_temple_3.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
@@ -1829,12 +1829,12 @@
         "source_map_key": "wooma_temple_3",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 314.0,
+        "target_map_id": 314,
         "target_map_key": "wooma_temple_2",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
-          18.0,
-          2.0
+          19,
+          1
         ],
         "tile": [
           20.0,

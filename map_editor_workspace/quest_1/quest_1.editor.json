@@ -2485,70 +2485,61 @@
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
+        "arrival_only": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "arrival_only",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "由连接通道2层出口进入，只可进入",
+        "display_name": "连接通道2层",
         "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "arrival_only_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
         "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1,
         "tile": [
           21.0,
           40.0
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": false
       }
     ],
     "monster_spawn": [
       {
-        "kind": "monster_spawn",
-        "monster_id": 39,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 5
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "半兽勇士1",
-        "tile": [
-          44,
-          1
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "半兽勇士1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 39,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000039",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000039",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 5
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             1,
             62,
@@ -2557,42 +2548,42 @@
             2003,
             -1,
             -44
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000039",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000039",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44,
+          1
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 57,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 6
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "骷髅精灵1",
-        "tile": [
-          1,
-          44
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "骷髅精灵1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 57,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000057",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000057",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 6
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             86,
@@ -2601,42 +2592,42 @@
             2003,
             -44,
             -1
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000057",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000057",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          44
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 74,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 8
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "elite",
-        "display_name": "沃玛卫士1",
-        "tile": [
-          46,
-          44
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "沃玛卫士1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 74,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000074",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:elite:000074",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 8
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             45,
@@ -2645,42 +2636,42 @@
             2003,
             -44,
             -46
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000074",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:elite:000074",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46,
+          44
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 77,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 12
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "沃玛教主1",
-        "tile": [
-          3,
-          3
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "沃玛教主1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 77,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000077",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000077",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 12
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             43,
@@ -2689,42 +2680,42 @@
             2003,
             -3,
             -3
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000077",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000077",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          3
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 90,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 7
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "尸王1",
-        "tile": [
-          24,
-          24
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "尸王1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 90,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000090",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000090",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 7
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             42,
@@ -2733,42 +2724,42 @@
             2003,
             -24,
             -24
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000090",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000090",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          24
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 121,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 9
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "邪恶钳虫1",
-        "tile": [
-          25,
-          46
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "邪恶钳虫1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 121,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000121",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000121",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 9
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             23,
@@ -2777,42 +2768,42 @@
             2003,
             -46,
             -25
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000121",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000121",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25,
+          46
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 137,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 10
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "白野猪1",
-        "tile": [
-          46,
-          21
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "白野猪1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 137,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000137",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000137",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 10
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             22,
@@ -2821,42 +2812,42 @@
             2003,
             -21,
             -46
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000137",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000137",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46,
+          21
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 142,
+        "authority_ref": {
+          "map_id": "snake_unknown_dark_palace",
+          "source_category_role": "special",
+          "source_line": 78,
+          "source_token_index": 11
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "邪恶毒蛇1",
-        "tile": [
-          34,
-          12
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "邪恶毒蛇1",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 142,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000142",
-        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000142",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "snake_unknown_dark_palace",
-          "source_line": 78,
-          "source_category_role": "special",
-          "source_token_index": 11
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             21,
@@ -2865,10 +2856,18 @@
             2003,
             -12,
             -34
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.snake_unknown_dark_palace.000142",
+        "spawn_group_id": "auto:v2:snake_unknown_dark_palace:special:000142",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34,
+          12
+        ]
       }
     ],
     "npc_points": [],

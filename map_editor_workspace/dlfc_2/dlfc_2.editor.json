@@ -80,36 +80,28 @@
   "layers": {
     "boss_spawn": [
       {
-        "kind": "boss_spawn",
-        "monster_id": 237,
+        "authority_ref": {
+          "map_id": "hidden_fallen_graveyard",
+          "source_category_role": "boss",
+          "source_line": 175,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
         "classification": "boss",
-        "display_name": "暗之黄泉教主",
-        "tile": [
-          2,
-          1
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "暗之黄泉教主",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 237,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "boss_spawn.auto.v2.hidden_fallen_graveyard.000237",
-        "spawn_group_id": "auto:v2:hidden_fallen_graveyard:boss:000237",
-        "auto_placement_status": "AUTO_POSITIONED_BOSS",
-        "authority_ref": {
-          "map_id": "hidden_fallen_graveyard",
-          "source_line": 175,
-          "source_category_role": "boss",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             1,
             47,
@@ -118,9 +110,17 @@
             843,
             -1,
             -2
-          ],
-          "current_monster_library_only": true
-        }
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v2.hidden_fallen_graveyard.000237",
+        "spawn_group_id": "auto:v2:hidden_fallen_graveyard:boss:000237",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2,
+          1
+        ]
       }
     ],
     "collision": [
@@ -769,36 +769,35 @@
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
+        "arrival_only": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "arrival_only",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "由沃玛森林进入，单向只可进入",
+        "display_name": "沃玛森林",
         "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "arrival_only_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
         "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1,
         "tile": [
           25.0,
           25.0
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": false
       }
     ],
     "monster_spawn": [],

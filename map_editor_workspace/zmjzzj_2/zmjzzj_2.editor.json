@@ -80,36 +80,28 @@
   "layers": {
     "boss_spawn": [
       {
-        "kind": "boss_spawn",
-        "monster_id": 160,
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "boss",
+          "source_line": 123,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
         "classification": "boss",
-        "display_name": "祖玛教主",
-        "tile": [
-          27,
-          1
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "祖玛教主",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 160,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "boss_spawn.auto.v2.mengzhong_zuma_leader_home.000160",
-        "spawn_group_id": "auto:v2:mengzhong_zuma_leader_home:boss:000160",
-        "auto_placement_status": "AUTO_POSITIONED_BOSS",
-        "authority_ref": {
-          "map_id": "mengzhong_zuma_leader_home",
-          "source_line": 123,
-          "source_category_role": "boss",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             1,
             52,
@@ -118,9 +110,17 @@
             1281,
             -1,
             -27
-          ],
-          "current_monster_library_only": true
-        }
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v2.mengzhong_zuma_leader_home.000160",
+        "spawn_group_id": "auto:v2:mengzhong_zuma_leader_home:boss:000160",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27,
+          1
+        ]
       }
     ],
     "collision": [
@@ -1000,70 +1000,61 @@
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
+        "arrival_only": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "arrival_only",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "由祖玛阁进入，单向只可进入",
+        "display_name": "祖玛阁",
         "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "arrival_only_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
         "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1,
         "tile": [
           15.0,
           41.0
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": false
       }
     ],
     "monster_spawn": [
       {
-        "kind": "monster_spawn",
-        "monster_id": 126,
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "ordinary",
+          "source_line": 122,
+          "source_token_index": 2
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "special",
-        "display_name": "角蝇",
-        "tile": [
-          1,
-          43
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "角蝇",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 126,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_zuma_leader_home.000126",
-        "spawn_group_id": "auto:v2:mengzhong_zuma_leader_home:special:000126",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_zuma_leader_home",
-          "source_line": 122,
-          "source_category_role": "ordinary",
-          "source_token_index": 2
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             68,
@@ -1072,42 +1063,42 @@
             1281,
             -43,
             -1
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_zuma_leader_home.000126",
+        "spawn_group_id": "auto:v2:mengzhong_zuma_leader_home:special:000126",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          43
+        ]
       },
       {
-        "kind": "monster_spawn",
-        "monster_id": 128,
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "ordinary",
+          "source_line": 122,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
-        "display_name": "楔蛾",
-        "tile": [
-          30,
-          35
-        ],
-        "count": 1,
-        "max_alive": 1,
-        "radius_gu": 0.0,
-        "spawn_rule": "single_anchor_user_copy_template",
-        "runtime_export": true,
         "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "楔蛾",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 128,
         "occupancy_footprint_tiles": [
           1,
           1
         ],
-        "semantic_id": "monster_spawn.auto.v2.mengzhong_zuma_leader_home.000128",
-        "spawn_group_id": "auto:v2:mengzhong_zuma_leader_home:ordinary:000128",
-        "auto_placement_status": "AUTO_POSITIONED",
-        "authority_ref": {
-          "map_id": "mengzhong_zuma_leader_home",
-          "source_line": 122,
-          "source_category_role": "ordinary",
-          "source_token_index": 1
-        },
         "placement_evidence": {
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "component_id": 0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0,
             37,
@@ -1116,10 +1107,18 @@
             1281,
             -35,
             -30
-          ],
-          "current_monster_library_only": true
+          ]
         },
-        "respawn_policy_id": "normal_cave"
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v2.mengzhong_zuma_leader_home.000128",
+        "spawn_group_id": "auto:v2:mengzhong_zuma_leader_home:ordinary:000128",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30,
+          35
+        ]
       }
     ],
     "npc_points": [],
