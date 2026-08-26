@@ -27,7 +27,7 @@ static func new_exit_defaults() -> Dictionary:
 		"arrival_locks_current_portal": true,
 		"requires_leave_before_retrigger": true,
 		"return_minimum_seconds": RETURN_MINIMUM_SECONDS,
-		"return_unlock_distance_tiles": RETURN_UNLOCK_DISTANCE_TILES,
+		"return_unlock_distance_gu": RETURN_UNLOCK_DISTANCE_TILES,
 		"return_requires_fresh_activation": true,
 		"travel_request_single_flight": true,
 	}
@@ -376,7 +376,6 @@ static func _configure_endpoint(
 	connection_id: String
 ) -> void:
 	endpoint.merge(new_exit_defaults(), true)
-	endpoint.erase("radius_tiles")
 	endpoint.erase("explicit_one_way_reason")
 	endpoint.erase("shared_with_entrance_id")
 	endpoint["display_name"] = display_name
@@ -432,7 +431,10 @@ static func _validate_bidirectional(
 		errors.append("leave_before_retrigger_required:%s" % semantic_id)
 	if float(endpoint.get("return_minimum_seconds", 0.0)) < RETURN_MINIMUM_SECONDS:
 		errors.append("return_minimum_seconds_required:%s" % semantic_id)
-	if float(endpoint.get("return_unlock_distance_tiles", 0.0)) < RETURN_UNLOCK_DISTANCE_TILES:
+	var return_unlock_distance := float(endpoint.get(
+		"return_unlock_distance_gu", 0.0
+	))
+	if return_unlock_distance < RETURN_UNLOCK_DISTANCE_TILES:
 		errors.append("return_unlock_distance_required:%s" % semantic_id)
 	if not bool(endpoint.get("return_requires_fresh_activation", false)):
 		errors.append("fresh_activation_required:%s" % semantic_id)

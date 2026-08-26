@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/map_monster_placement_formal_pilot_build_test.gd" id="1"]
+
+[node name="MapMonsterPlacementFormalPilotBuildTest" type="Node"]
+script = ExtResource("1")

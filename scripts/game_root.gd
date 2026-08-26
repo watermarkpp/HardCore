@@ -1735,11 +1735,9 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 						offset_ground_gu
 					)
 				)
-				var raw_group: Dictionary = spawn.get("spawn_group", {})
-				var group_id := str(spawn.get(
-					"spawnGroupId",
-					raw_group.get("id", "editor:%d:%d" % [current_map_id, editor_spawn_index])
-				))
+				var group_id := _editor_spawn_group_id(
+					spawn, current_map_id, editor_spawn_index, false
+				)
 				_spawn_enemy(
 					monster,
 					center_screen_px + offset_screen_px,
@@ -1762,14 +1760,9 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 		var boss := GameData.get_monster_by_id(boss_id)
 		if boss.is_empty():
 			continue
-		var raw_group: Dictionary = spawn.get("spawn_group", {})
-		var group_id := str(raw_group.get(
-			"spawn_group_id",
-			"editor:%d:boss:%d" % [
-				current_map_id,
-				editor_boss_index,
-			]
-		))
+		var group_id := _editor_spawn_group_id(
+			spawn, current_map_id, editor_boss_index, true
+		)
 		_spawn_enemy(
 			boss,
 			spawn.get("screen_position_px", Vector2.ZERO),
@@ -1802,6 +1795,33 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			str(portal.get("label", "地图入口")),
 			portal
 		)
+
+
+static func _editor_spawn_group_id(
+	spawn: Dictionary,
+	map_id: int,
+	spawn_index: int,
+	is_boss: bool
+) -> String:
+	var raw_group: Dictionary = (
+		spawn.get("spawn_group", {})
+		if spawn.get("spawn_group", {}) is Dictionary
+		else {}
+	)
+	for candidate: Variant in [
+		spawn.get("spawn_group_id", ""),
+		spawn.get("spawnGroupId", ""),
+		raw_group.get("spawn_group_id", ""),
+		raw_group.get("id", ""),
+	]:
+		var stable_id := str(candidate).strip_edges()
+		if not stable_id.is_empty():
+			return stable_id
+	return (
+		"editor:%d:boss:%d" % [map_id, spawn_index]
+		if is_boss
+		else "editor:%d:%d" % [map_id, spawn_index]
+	)
 
 
 func _spawn_authored_map_content(content: Dictionary) -> void:

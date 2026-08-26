@@ -2088,15 +2088,15 @@ func _on_tile_hovered(tile: Vector2i) -> void:
 
 ## FREEZE-P0.3R step 1: Build Runtime Candidate. Never touches the formal
 ## release artifact, the Release Registry or formal playable state.
+## build_formal_candidate() composes authority, then delegates to the frozen
+## build_candidate() output-only boundary in MapEditorBuildRuntimeService.
 func _on_build_candidate_pressed() -> void:
 	if current_document.is_empty():
 		status_label.text = "请先创建或打开地图"
 		return
-	var approval := MapEditorBuildRuntimeService.approve_for_runtime(current_document)
-	if not approval.ok:
-		status_label.text = "Runtime 审核未通过：%s" % approval.get("errors", [])
-		return
-	var candidate := MapEditorBuildRuntimeService.build_candidate(current_document)
+	var candidate := (
+		MapEditorBuildRuntimeService.build_formal_candidate(current_document)
+	)
 	if not candidate.ok:
 		status_label.text = "Runtime 候选构建失败：%s" % candidate.get("errors", [])
 		return
@@ -2128,10 +2128,17 @@ func _on_publish_runtime_pressed() -> void:
 	if not FileAccess.file_exists(candidate_path):
 		status_label.text = "候选文件不存在：%s" % candidate_path
 		return
-	var runtime_map_id := int(current_document.get("runtime_map_id", -1))
-	var map_key := str(current_document.get("map_id", ""))
+	var prepared := (
+		MapEditorBuildRuntimeService.prepare_formal_document(current_document)
+	)
+	if not bool(prepared.get("ok", false)):
+		status_label.text = "正式权威重组失败：%s" % prepared.get("errors", [])
+		return
+	var formal_document: Dictionary = prepared.document
+	var runtime_map_id := int(formal_document.get("runtime_map_id", -1))
+	var map_key := str(formal_document.get("map_id", ""))
 	var current_binding := MapEditorBuildRuntimeService.document_binding(
-		current_document
+		formal_document
 	)
 	var result := MapEditorBuildRuntimeService.publish_runtime_release(
 		candidate_path,

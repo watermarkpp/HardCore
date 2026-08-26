@@ -1,0 +1,479 @@
+{
+  "layers": {
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "elite",
+          "source_line": 215,
+          "source_token_index": 3
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "祖玛弓箭手3",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 152,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            1,
+            45,
+            1,
+            1,
+            2536,
+            -46,
+            -37
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v1.fengmo_purgatory_corridor.000152",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:elite:000152",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          46
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "elite",
+          "source_line": 215,
+          "source_token_index": 4
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "祖玛雕像3",
+        "kind": "boss_spawn",
+        "max_alive": 1,
+        "monster_id": 155,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            78,
+            33,
+            1,
+            2536,
+            -1,
+            -4
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v1.fengmo_purgatory_corridor.000155",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:elite:000155",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          1
+        ]
+      }
+    ],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 3
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            64,
+            19,
+            1,
+            2536,
+            -7,
+            -62
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000112",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000112",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          62,
+          7
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 5
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "楔蛾",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 128,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            42,
+            39,
+            1,
+            2536,
+            -40,
+            -1
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000128",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000128",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 1
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "红野猪",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 129,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            39,
+            16,
+            14,
+            2536,
+            -14,
+            -30
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000129",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000129",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 2
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "黑野猪",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 132,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            32,
+            19,
+            1,
+            2536,
+            -39,
+            -62
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000132",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000132",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          62,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 4
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 138,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            28,
+            12,
+            15,
+            2536,
+            -24,
+            -48
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000138",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000138",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48,
+          24
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 7
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "大老鼠",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 148,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            27,
+            18,
+            13,
+            2536,
+            -34,
+            -22
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000148",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000148",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 8
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "祖玛弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 150,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            25,
+            39,
+            1,
+            2536,
+            -1,
+            -42
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000150",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000150",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42,
+          1
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 9
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "祖玛雕像",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 153,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            25,
+            14,
+            8,
+            2536,
+            -22,
+            -8
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000153",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000153",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          22
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_purgatory_corridor",
+          "source_category_role": "ordinary",
+          "source_line": 214,
+          "source_token_index": 10
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1,
+        "display_name": "祖玛卫士",
+        "kind": "monster_spawn",
+        "max_alive": 1,
+        "monster_id": 156,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "placement_evidence": {
+          "component_id": 0,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v1",
+          "selection_score": [
+            0,
+            19,
+            32,
+            1,
+            2536,
+            -46,
+            -14
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "monster_spawn.auto.v1.fengmo_purgatory_corridor.000156",
+        "spawn_group_id": "auto:v1:fengmo_purgatory_corridor:ordinary:000156",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14,
+          46
+        ]
+      }
+    ]
+  }
+}

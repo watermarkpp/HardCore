@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/map_editor_spawn_group_runtime_identity_test.gd" type="Script" id="1"]
+
+[node name="MapEditorSpawnGroupRuntimeIdentityTest" type="Node"]
+script = ExtResource("1")

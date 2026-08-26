@@ -1,0 +1,588 @@
+{
+  "generated_by": "tools/map_editor/backfill_approved_runtime_monster_spawns.py",
+  "inputs": {
+    "candidate_output": {
+      "root_kind": "explicit_candidate_output"
+    },
+    "identity_registry": {
+      "path": "repo:assets/data/map_design/map_identity_registry.json",
+      "sha256": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8"
+    },
+    "portal_overlay": {
+      "path": "repo:assets/data/map_design/map_portal_network.json",
+      "sha256": "2847952e26609b484fae02f0a5874244b1ba1dfdce3827d7aea3268d464114a9"
+    },
+    "release_registry": {
+      "path": "repo:assets/data/runtime/map_editor/map_runtime_release_registry.json",
+      "sha256": "3eefa27ba2c12d09c4817edf4ba60c57c8f18e044502e55edf4e2fc10ee40d4d"
+    },
+    "runtime_root": {
+      "root_kind": "explicit_read_only_runtime_root"
+    },
+    "source_editor_root": {
+      "root_kind": "explicit_read_only_source_editor_root"
+    }
+  },
+  "inventory_id": "hardcore.map_monster_spawn_backfill_inventory.v1",
+  "maps": [
+    {
+      "approved_runtime": {
+        "candidate_binding_document_sha256": "19e3c907599189e5bab0304cb8879b6c0aa8665f4bf6ce2efba53fdfb230d766",
+        "computed_self_sha256": "177b96d4787207327b4912a658748d970c1cb9ee2d7c3e4dce7ee10f3ded240f",
+        "file_sha256": "5c5632fcb9160b808311b7a37cff031ce5d64ec7e085344fbed1c37bd266af44",
+        "hash_chain_matches": true,
+        "path": "repo:assets/data/runtime/map_editor/bich_province.runtime.json",
+        "reconstructed_candidate_document_sha256": "f1cff6c3dcca6dd89238b506ce5283696c39f6fff8c7ca514aa1bc619d8c5cdf",
+        "recorded_self_sha256": "177b96d4787207327b4912a658748d970c1cb9ee2d7c3e4dce7ee10f3ded240f",
+        "registry_build_sha256": "177b96d4787207327b4912a658748d970c1cb9ee2d7c3e4dce7ee10f3ded240f"
+      },
+      "blockers": [
+        {
+          "approved_binding": "79432136307bba114496d9aafeab9b8755002c2a669d269cecf3a6ccb74db296",
+          "code": "ground_manifest_sha256_mismatch",
+          "current": "96bbca8aa382e188e67fdc140cebf3919cc35c308b25a620a2ccdf01cfc5fc75"
+        },
+        {
+          "approved_binding": "808557b405b21ce1c54d9d11cb6cba43ca92cefbdaae3a3f2a433abb925542d1",
+          "code": "ground_state_sha256_mismatch",
+          "current": "7a1c9837e7ba999aa6cfac6483a80f421c00d4a55c0fd544b2e7300529440956"
+        },
+        {
+          "approved_binding": "19e3c907599189e5bab0304cb8879b6c0aa8665f4bf6ce2efba53fdfb230d766",
+          "code": "candidate_binding_document_sha256_mismatch",
+          "reconstructed_candidate": "f1cff6c3dcca6dd89238b506ce5283696c39f6fff8c7ca514aa1bc619d8c5cdf"
+        }
+      ],
+      "formal_map_id": "world_bich_province",
+      "formal_runtime_map_id": 910001,
+      "ground_binding": {
+        "workspace_manifest": {
+          "approved_binding_sha256": "79432136307bba114496d9aafeab9b8755002c2a669d269cecf3a6ccb74db296",
+          "current_sha256": "96bbca8aa382e188e67fdc140cebf3919cc35c308b25a620a2ccdf01cfc5fc75",
+          "matches": false,
+          "path": "source_editor_root:bich_province/ground/ground_manifest.json"
+        },
+        "workspace_state": {
+          "approved_binding_sha256": "808557b405b21ce1c54d9d11cb6cba43ca92cefbdaae3a3f2a433abb925542d1",
+          "current_sha256": "7a1c9837e7ba999aa6cfac6483a80f421c00d4a55c0fd544b2e7300529440956",
+          "matches": false,
+          "path": "source_editor_root:bich_province/ground/ground_state.json"
+        }
+      },
+      "legacy_map_id": "bich_province",
+      "legacy_runtime_map_id": 4,
+      "proof": {
+        "candidate_binding_matches": false,
+        "candidate_boss_spawn_deep_equal_runtime": true,
+        "candidate_monster_spawn_deep_equal_runtime": true,
+        "candidate_non_spawn_layers_deep_equal_source": true
+      },
+      "source_editor": {
+        "boss_spawn_count": 0,
+        "design_size": [
+          80,
+          80
+        ],
+        "monster_spawn_count": 0,
+        "path": "source_editor_root:bich_province/bich_province.editor.json",
+        "revision": "5.0",
+        "schema_version": "4.0",
+        "sha256": "d357457b9fb52bd47c79904006eea4c420413328a535e3466a03136217b87ab3"
+      },
+      "spawn_layers": [
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 43,
+          "layer": "monster_spawn",
+          "monster_ids": [
+            18,
+            19,
+            21,
+            24,
+            26,
+            28
+          ],
+          "semantic_ids_sha256": "ab07f9d0e342d7fc276317fb19ac332d054090522b65d213a93ba99fa20054ad",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 43
+        },
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 0,
+          "layer": "boss_spawn",
+          "monster_ids": [],
+          "semantic_ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 0
+        }
+      ],
+      "status": "BLOCKED"
+    },
+    {
+      "approved_runtime": {
+        "candidate_binding_document_sha256": "34f6466cbebdafccc6372faf7d485e4723478ba34c344f5fe1a5a94d696f99c1",
+        "computed_self_sha256": "fe10b14f488a7cb52a54d363e0ab4c04619485ae544652036a88869f1037354e",
+        "file_sha256": "78157fb517e1a484c02280cdd090209e28af30d6e542fc783d163a90a715e7b4",
+        "hash_chain_matches": true,
+        "path": "repo:assets/data/runtime/map_editor/wooma_forest.runtime.json",
+        "reconstructed_candidate_document_sha256": "75836acd68d283afe0df4bfe6a7be2a8ac43148700638adef829a68d39b8a1bf",
+        "recorded_self_sha256": "fe10b14f488a7cb52a54d363e0ab4c04619485ae544652036a88869f1037354e",
+        "registry_build_sha256": "fe10b14f488a7cb52a54d363e0ab4c04619485ae544652036a88869f1037354e"
+      },
+      "blockers": [
+        {
+          "approved_binding": "0966d03dfe0e15a597c517880cdbfbbb4684686ec170c20324cdbee5b220040f",
+          "code": "ground_manifest_sha256_mismatch",
+          "current": "fef93c94b6be35aafeba20c2c6c5a9058c1241fd0178fc1582b9df672081b6eb"
+        },
+        {
+          "approved_binding": "02f036b34a15fc035883e160e5198b038668c01f2d000458e7bfc66e85a9a984",
+          "code": "ground_state_sha256_mismatch",
+          "current": "f61e454467d5e27799dd301a11ea555e79b8075f8c075d25900dcb6097cbb3fc"
+        },
+        {
+          "approved_binding": "34f6466cbebdafccc6372faf7d485e4723478ba34c344f5fe1a5a94d696f99c1",
+          "code": "candidate_binding_document_sha256_mismatch",
+          "reconstructed_candidate": "75836acd68d283afe0df4bfe6a7be2a8ac43148700638adef829a68d39b8a1bf"
+        }
+      ],
+      "formal_map_id": "world_wooma_forest",
+      "formal_runtime_map_id": 910004,
+      "ground_binding": {
+        "workspace_manifest": {
+          "approved_binding_sha256": "0966d03dfe0e15a597c517880cdbfbbb4684686ec170c20324cdbee5b220040f",
+          "current_sha256": "fef93c94b6be35aafeba20c2c6c5a9058c1241fd0178fc1582b9df672081b6eb",
+          "matches": false,
+          "path": "source_editor_root:wooma_forest/ground/ground_manifest.json"
+        },
+        "workspace_state": {
+          "approved_binding_sha256": "02f036b34a15fc035883e160e5198b038668c01f2d000458e7bfc66e85a9a984",
+          "current_sha256": "f61e454467d5e27799dd301a11ea555e79b8075f8c075d25900dcb6097cbb3fc",
+          "matches": false,
+          "path": "source_editor_root:wooma_forest/ground/ground_state.json"
+        }
+      },
+      "legacy_map_id": "wooma_forest",
+      "legacy_runtime_map_id": 268,
+      "proof": {
+        "candidate_binding_matches": false,
+        "candidate_boss_spawn_deep_equal_runtime": true,
+        "candidate_monster_spawn_deep_equal_runtime": true,
+        "candidate_non_spawn_layers_deep_equal_source": true
+      },
+      "source_editor": {
+        "boss_spawn_count": 0,
+        "design_size": [
+          56,
+          56
+        ],
+        "monster_spawn_count": 0,
+        "path": "source_editor_root:wooma_forest/wooma_forest.editor.json",
+        "revision": "6.0",
+        "schema_version": "4.0",
+        "sha256": "aeebd040f2de777298102be15bbfc8682612cd02658cfdc53914db139f6d75f9"
+      },
+      "spawn_layers": [
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 20,
+          "layer": "monster_spawn",
+          "monster_ids": [
+            24,
+            26,
+            34
+          ],
+          "semantic_ids_sha256": "61a27ada24d6c2c8a5f6c25b074bb437d7dfbb3b756b26283c77790305f3b532",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 20
+        },
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 0,
+          "layer": "boss_spawn",
+          "monster_ids": [],
+          "semantic_ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 0
+        }
+      ],
+      "status": "BLOCKED"
+    },
+    {
+      "approved_runtime": {
+        "candidate_binding_document_sha256": "3d5c657f8ff5783bb3f329525f7ee2b8bb622c2f378faf4d1b2bbbde8d75c93a",
+        "computed_self_sha256": "53e36567f5031a8c1fa86f345373837dbf2cf815ceaef58eef90c3c976253b5f",
+        "file_sha256": "0b10d652bac037d452e5562e828158047daba6b7452e1d55cb6e39fac4eebe06",
+        "hash_chain_matches": true,
+        "path": "repo:assets/data/runtime/map_editor/wooma_temple_1.runtime.json",
+        "reconstructed_candidate_document_sha256": "e2112e43ccfe8184ac8fa430b0d0a93bfbaf4456af5c7be20ccc7e5f6676a7bb",
+        "recorded_self_sha256": "53e36567f5031a8c1fa86f345373837dbf2cf815ceaef58eef90c3c976253b5f",
+        "registry_build_sha256": "53e36567f5031a8c1fa86f345373837dbf2cf815ceaef58eef90c3c976253b5f"
+      },
+      "blockers": [
+        {
+          "approved_binding": "ea7148d5c453cb1b1d01b4cb889d3653ef3775068cd7d4b536573c8fb8328d28",
+          "code": "ground_manifest_sha256_mismatch",
+          "current": "2d8c6d557f1f24ebcfec3c2d9941d0b8224a65f10751f6426c61563c2c47c64b"
+        },
+        {
+          "approved_binding": "8f02adac5f4df4eeb117eaa46608ea433bf3e88935278a7c2367f57d94fc6da7",
+          "code": "ground_state_sha256_mismatch",
+          "current": "5705cc0f828a60d87873abcf3135b3a3e16966f5d33684f308eb92d0d8f30ad0"
+        },
+        {
+          "approved_binding": "3d5c657f8ff5783bb3f329525f7ee2b8bb622c2f378faf4d1b2bbbde8d75c93a",
+          "code": "candidate_binding_document_sha256_mismatch",
+          "reconstructed_candidate": "e2112e43ccfe8184ac8fa430b0d0a93bfbaf4456af5c7be20ccc7e5f6676a7bb"
+        }
+      ],
+      "formal_map_id": "wooma_temple_f1",
+      "formal_runtime_map_id": 915001,
+      "ground_binding": {
+        "workspace_manifest": {
+          "approved_binding_sha256": "ea7148d5c453cb1b1d01b4cb889d3653ef3775068cd7d4b536573c8fb8328d28",
+          "current_sha256": "2d8c6d557f1f24ebcfec3c2d9941d0b8224a65f10751f6426c61563c2c47c64b",
+          "matches": false,
+          "path": "source_editor_root:wooma_temple_1/ground/ground_manifest.json"
+        },
+        "workspace_state": {
+          "approved_binding_sha256": "8f02adac5f4df4eeb117eaa46608ea433bf3e88935278a7c2367f57d94fc6da7",
+          "current_sha256": "5705cc0f828a60d87873abcf3135b3a3e16966f5d33684f308eb92d0d8f30ad0",
+          "matches": false,
+          "path": "source_editor_root:wooma_temple_1/ground/ground_state.json"
+        }
+      },
+      "legacy_map_id": "wooma_temple_1",
+      "legacy_runtime_map_id": 313,
+      "proof": {
+        "candidate_binding_matches": false,
+        "candidate_boss_spawn_deep_equal_runtime": true,
+        "candidate_monster_spawn_deep_equal_runtime": true,
+        "candidate_non_spawn_layers_deep_equal_source": true
+      },
+      "source_editor": {
+        "boss_spawn_count": 0,
+        "design_size": [
+          44,
+          44
+        ],
+        "monster_spawn_count": 0,
+        "path": "source_editor_root:wooma_temple_1/wooma_temple_1.editor.json",
+        "revision": "5.0",
+        "schema_version": "4.0",
+        "sha256": "3d502914601e6f57cd0fac041eba3f1a6a645d480d9a889890863d0f3da9f54e"
+      },
+      "spawn_layers": [
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 15,
+          "layer": "monster_spawn",
+          "monster_ids": [
+            64,
+            66,
+            70
+          ],
+          "semantic_ids_sha256": "f7679288a38ced36873679eab49a54f4d44b3403b07bb0aef4a2be2e3036c5df",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 15
+        },
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 0,
+          "layer": "boss_spawn",
+          "monster_ids": [],
+          "semantic_ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 0
+        }
+      ],
+      "status": "BLOCKED"
+    },
+    {
+      "approved_runtime": {
+        "candidate_binding_document_sha256": "e4454fe5630dcc020c922f1411f10326e366871f77e8668bfec1e562ffad1520",
+        "computed_self_sha256": "b00a00abeb4fd194431965039e270b16c2963c7ed31b6c2452cb11b7e2080b74",
+        "file_sha256": "ff05053e41c59c5ba34b0cea48dd6d2e18b6dc57bb470bc07fc628339c2ec990",
+        "hash_chain_matches": true,
+        "path": "repo:assets/data/runtime/map_editor/wooma_temple_2.runtime.json",
+        "reconstructed_candidate_document_sha256": "de37cc74572fe0c0e54f997f5b5aefc91cceb0f89f1b33da20b1dac0cc3c5898",
+        "recorded_self_sha256": "b00a00abeb4fd194431965039e270b16c2963c7ed31b6c2452cb11b7e2080b74",
+        "registry_build_sha256": "b00a00abeb4fd194431965039e270b16c2963c7ed31b6c2452cb11b7e2080b74"
+      },
+      "blockers": [
+        {
+          "approved_binding": "830dfadde2df84e0b56a7dd64a721e90ab7e8f1842ff14d28503ef06986479eb",
+          "code": "ground_manifest_sha256_mismatch",
+          "current": "8585598f7f3465e3d13097148945083530ffc6aea1baa418149f69bf31f5e339"
+        },
+        {
+          "approved_binding": "65acffca55b85fc27a9771129c2f18c8d26a2e53990fbe30c6d24346577fbcd6",
+          "code": "ground_state_sha256_mismatch",
+          "current": "1a05eaa46e49550b38fed535f9926438e66f5e680ddd67630b81fc25574fb59c"
+        },
+        {
+          "approved_binding": "e4454fe5630dcc020c922f1411f10326e366871f77e8668bfec1e562ffad1520",
+          "code": "candidate_binding_document_sha256_mismatch",
+          "reconstructed_candidate": "de37cc74572fe0c0e54f997f5b5aefc91cceb0f89f1b33da20b1dac0cc3c5898"
+        }
+      ],
+      "formal_map_id": "wooma_temple_f2",
+      "formal_runtime_map_id": 915002,
+      "ground_binding": {
+        "workspace_manifest": {
+          "approved_binding_sha256": "830dfadde2df84e0b56a7dd64a721e90ab7e8f1842ff14d28503ef06986479eb",
+          "current_sha256": "8585598f7f3465e3d13097148945083530ffc6aea1baa418149f69bf31f5e339",
+          "matches": false,
+          "path": "source_editor_root:wooma_temple_2/ground/ground_manifest.json"
+        },
+        "workspace_state": {
+          "approved_binding_sha256": "65acffca55b85fc27a9771129c2f18c8d26a2e53990fbe30c6d24346577fbcd6",
+          "current_sha256": "1a05eaa46e49550b38fed535f9926438e66f5e680ddd67630b81fc25574fb59c",
+          "matches": false,
+          "path": "source_editor_root:wooma_temple_2/ground/ground_state.json"
+        }
+      },
+      "legacy_map_id": "wooma_temple_2",
+      "legacy_runtime_map_id": 314,
+      "proof": {
+        "candidate_binding_matches": false,
+        "candidate_boss_spawn_deep_equal_runtime": true,
+        "candidate_monster_spawn_deep_equal_runtime": true,
+        "candidate_non_spawn_layers_deep_equal_source": true
+      },
+      "source_editor": {
+        "boss_spawn_count": 0,
+        "design_size": [
+          44,
+          44
+        ],
+        "monster_spawn_count": 0,
+        "path": "source_editor_root:wooma_temple_2/wooma_temple_2.editor.json",
+        "revision": "5.0",
+        "schema_version": "4.0",
+        "sha256": "68672fe1c975c214054ed19fd062817d18ea370a667b4e9a97acad699bfe59a1"
+      },
+      "spawn_layers": [
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 15,
+          "layer": "monster_spawn",
+          "monster_ids": [
+            64,
+            66,
+            70
+          ],
+          "semantic_ids_sha256": "f7679288a38ced36873679eab49a54f4d44b3403b07bb0aef4a2be2e3036c5df",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 15
+        },
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 0,
+          "layer": "boss_spawn",
+          "monster_ids": [],
+          "semantic_ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 0
+        }
+      ],
+      "status": "BLOCKED"
+    },
+    {
+      "approved_runtime": {
+        "candidate_binding_document_sha256": "26f70b419c6dded3978139d325dd452e8fa4e5494a8257850f7fd36f88dc9ffd",
+        "computed_self_sha256": "e88a7ca3385b91914c88808ecc0c1598c96cb961e677e056077562c6eb1f00b3",
+        "file_sha256": "e57c7afcc7a5a2337a32c629d4b18f668234ac183dff1f52cd4f5ef227bd99f4",
+        "hash_chain_matches": true,
+        "path": "repo:assets/data/runtime/map_editor/wooma_temple_3.runtime.json",
+        "reconstructed_candidate_document_sha256": "2b9202251bbebce29fbf23d9c53730261a1958986609ea30746bad7ee27ae17e",
+        "recorded_self_sha256": "e88a7ca3385b91914c88808ecc0c1598c96cb961e677e056077562c6eb1f00b3",
+        "registry_build_sha256": "e88a7ca3385b91914c88808ecc0c1598c96cb961e677e056077562c6eb1f00b3"
+      },
+      "blockers": [
+        {
+          "approved_binding": "98aac62f1841e6a04880a13d99c1638a43c40dd5870b857142e39808ef48dbc7",
+          "code": "ground_manifest_sha256_mismatch",
+          "current": "1f9328737c05f63fc8798c15daca542796c2ba07d627041e6ab7560e01a03a7f"
+        },
+        {
+          "approved_binding": "a8fd6870b3d82be2a129635995c49a45e7b6f31e4a7de0b66455ed73b6008156",
+          "code": "ground_state_sha256_mismatch",
+          "current": "cf37e0858710c41ea5a6cbda7036003a65e4daf0b646f1948366e7a957b0bb2d"
+        },
+        {
+          "approved_binding": "26f70b419c6dded3978139d325dd452e8fa4e5494a8257850f7fd36f88dc9ffd",
+          "code": "candidate_binding_document_sha256_mismatch",
+          "reconstructed_candidate": "2b9202251bbebce29fbf23d9c53730261a1958986609ea30746bad7ee27ae17e"
+        }
+      ],
+      "formal_map_id": "wooma_temple_boss_hall",
+      "formal_runtime_map_id": 915003,
+      "ground_binding": {
+        "workspace_manifest": {
+          "approved_binding_sha256": "98aac62f1841e6a04880a13d99c1638a43c40dd5870b857142e39808ef48dbc7",
+          "current_sha256": "1f9328737c05f63fc8798c15daca542796c2ba07d627041e6ab7560e01a03a7f",
+          "matches": false,
+          "path": "source_editor_root:wooma_temple_3/ground/ground_manifest.json"
+        },
+        "workspace_state": {
+          "approved_binding_sha256": "a8fd6870b3d82be2a129635995c49a45e7b6f31e4a7de0b66455ed73b6008156",
+          "current_sha256": "cf37e0858710c41ea5a6cbda7036003a65e4daf0b646f1948366e7a957b0bb2d",
+          "matches": false,
+          "path": "source_editor_root:wooma_temple_3/ground/ground_state.json"
+        }
+      },
+      "legacy_map_id": "wooma_temple_3",
+      "legacy_runtime_map_id": 315,
+      "proof": {
+        "candidate_binding_matches": false,
+        "candidate_boss_spawn_deep_equal_runtime": true,
+        "candidate_monster_spawn_deep_equal_runtime": true,
+        "candidate_non_spawn_layers_deep_equal_source": true
+      },
+      "source_editor": {
+        "boss_spawn_count": 0,
+        "design_size": [
+          44,
+          44
+        ],
+        "monster_spawn_count": 0,
+        "path": "source_editor_root:wooma_temple_3/wooma_temple_3.editor.json",
+        "revision": "4.0",
+        "schema_version": "4.0",
+        "sha256": "bc283728cfcb8f804aee57885e1c8edcd3b1598ef23adcf8af0d6bf46b8dbf69"
+      },
+      "spawn_layers": [
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 13,
+          "layer": "monster_spawn",
+          "monster_ids": [
+            64,
+            66,
+            70
+          ],
+          "semantic_ids_sha256": "e721c4957879786f1ce7ac2c9d221f353b370650f753a59626c1c8d298485baf",
+          "spawn_group_ids": [],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 13
+        },
+        {
+          "classification_encoding": "semantic_layer_and_kind",
+          "entry_count": 1,
+          "layer": "boss_spawn",
+          "monster_ids": [
+            76
+          ],
+          "semantic_ids_sha256": "52bca0661b48eb6600caf8a8fa7ea0494ade14a9afad0adc18fb54d43ffea50b",
+          "spawn_group_ids": [
+            "editor:315:boss:wooma_leader"
+          ],
+          "tile_coordinate_contract": "integer_editor_tile_direct_reversible",
+          "total_count": 1
+        }
+      ],
+      "status": "BLOCKED"
+    }
+  ],
+  "mode": "dry_run",
+  "overall_status": "BLOCKED",
+  "policy": {
+    "approved_runtime_is_read_only_authority": true,
+    "candidate_binding_must_reconstruct_exactly": true,
+    "candidate_changes_only_layers": [
+      "monster_spawn",
+      "boss_spawn"
+    ],
+    "coordinate_guessing_forbidden": true,
+    "ground_binding_hashes_must_match": true,
+    "partial_candidate_write_forbidden": true,
+    "source_editor_bak_runtime_registry_mutation_forbidden": true
+  },
+  "protected_input_proof": {
+    "after": {
+      "repo:assets/data/map_design/map_identity_registry.json": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+      "repo:assets/data/map_design/map_portal_network.json": "2847952e26609b484fae02f0a5874244b1ba1dfdce3827d7aea3268d464114a9",
+      "repo:assets/data/runtime/map_editor/bich_province.runtime.json": "5c5632fcb9160b808311b7a37cff031ce5d64ec7e085344fbed1c37bd266af44",
+      "repo:assets/data/runtime/map_editor/map_runtime_release_registry.json": "3eefa27ba2c12d09c4817edf4ba60c57c8f18e044502e55edf4e2fc10ee40d4d",
+      "repo:assets/data/runtime/map_editor/wooma_forest.runtime.json": "78157fb517e1a484c02280cdd090209e28af30d6e542fc783d163a90a715e7b4",
+      "repo:assets/data/runtime/map_editor/wooma_temple_1.runtime.json": "0b10d652bac037d452e5562e828158047daba6b7452e1d55cb6e39fac4eebe06",
+      "repo:assets/data/runtime/map_editor/wooma_temple_2.runtime.json": "ff05053e41c59c5ba34b0cea48dd6d2e18b6dc57bb470bc07fc628339c2ec990",
+      "repo:assets/data/runtime/map_editor/wooma_temple_3.runtime.json": "e57c7afcc7a5a2337a32c629d4b18f668234ac183dff1f52cd4f5ef227bd99f4",
+      "source_editor_root:bich_province/bich_province.editor.json": "d357457b9fb52bd47c79904006eea4c420413328a535e3466a03136217b87ab3",
+      "source_editor_root:bich_province/bich_province.editor.json.bak": "be72ca5553560bbaa75c98823ddcaac9460e57830db9f82313c5f504738387d5",
+      "source_editor_root:bich_province/ground/ground_manifest.json": "96bbca8aa382e188e67fdc140cebf3919cc35c308b25a620a2ccdf01cfc5fc75",
+      "source_editor_root:bich_province/ground/ground_state.json": "7a1c9837e7ba999aa6cfac6483a80f421c00d4a55c0fd544b2e7300529440956",
+      "source_editor_root:wooma_forest/ground/ground_manifest.json": "fef93c94b6be35aafeba20c2c6c5a9058c1241fd0178fc1582b9df672081b6eb",
+      "source_editor_root:wooma_forest/ground/ground_state.json": "f61e454467d5e27799dd301a11ea555e79b8075f8c075d25900dcb6097cbb3fc",
+      "source_editor_root:wooma_forest/wooma_forest.editor.json": "aeebd040f2de777298102be15bbfc8682612cd02658cfdc53914db139f6d75f9",
+      "source_editor_root:wooma_forest/wooma_forest.editor.json.bak": "ac4d8943a48b785ec0ec0ce601fffb9d2b585e935b33462a003aca139fc728aa",
+      "source_editor_root:wooma_temple_1/ground/ground_manifest.json": "2d8c6d557f1f24ebcfec3c2d9941d0b8224a65f10751f6426c61563c2c47c64b",
+      "source_editor_root:wooma_temple_1/ground/ground_state.json": "5705cc0f828a60d87873abcf3135b3a3e16966f5d33684f308eb92d0d8f30ad0",
+      "source_editor_root:wooma_temple_1/wooma_temple_1.editor.json": "3d502914601e6f57cd0fac041eba3f1a6a645d480d9a889890863d0f3da9f54e",
+      "source_editor_root:wooma_temple_1/wooma_temple_1.editor.json.bak": "f5ebc8780a77e0faac55ac5af51f4569054d86baf9b081c29197ff78d5d3d6d8",
+      "source_editor_root:wooma_temple_2/ground/ground_manifest.json": "8585598f7f3465e3d13097148945083530ffc6aea1baa418149f69bf31f5e339",
+      "source_editor_root:wooma_temple_2/ground/ground_state.json": "1a05eaa46e49550b38fed535f9926438e66f5e680ddd67630b81fc25574fb59c",
+      "source_editor_root:wooma_temple_2/wooma_temple_2.editor.json": "68672fe1c975c214054ed19fd062817d18ea370a667b4e9a97acad699bfe59a1",
+      "source_editor_root:wooma_temple_2/wooma_temple_2.editor.json.bak": "61972f4a3e00df32a6e135c95ca26d11e478ede57b8b7c2d7cc0c1847b375865",
+      "source_editor_root:wooma_temple_3/ground/ground_manifest.json": "1f9328737c05f63fc8798c15daca542796c2ba07d627041e6ab7560e01a03a7f",
+      "source_editor_root:wooma_temple_3/ground/ground_state.json": "cf37e0858710c41ea5a6cbda7036003a65e4daf0b646f1948366e7a957b0bb2d",
+      "source_editor_root:wooma_temple_3/wooma_temple_3.editor.json": "bc283728cfcb8f804aee57885e1c8edcd3b1598ef23adcf8af0d6bf46b8dbf69",
+      "source_editor_root:wooma_temple_3/wooma_temple_3.editor.json.bak": "94cf59bec42226c628ccb84bde0daf100da16eb8d02636b677dfa3328894e2a8"
+    },
+    "all_unchanged": true,
+    "before": {
+      "repo:assets/data/map_design/map_identity_registry.json": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+      "repo:assets/data/map_design/map_portal_network.json": "2847952e26609b484fae02f0a5874244b1ba1dfdce3827d7aea3268d464114a9",
+      "repo:assets/data/runtime/map_editor/bich_province.runtime.json": "5c5632fcb9160b808311b7a37cff031ce5d64ec7e085344fbed1c37bd266af44",
+      "repo:assets/data/runtime/map_editor/map_runtime_release_registry.json": "3eefa27ba2c12d09c4817edf4ba60c57c8f18e044502e55edf4e2fc10ee40d4d",
+      "repo:assets/data/runtime/map_editor/wooma_forest.runtime.json": "78157fb517e1a484c02280cdd090209e28af30d6e542fc783d163a90a715e7b4",
+      "repo:assets/data/runtime/map_editor/wooma_temple_1.runtime.json": "0b10d652bac037d452e5562e828158047daba6b7452e1d55cb6e39fac4eebe06",
+      "repo:assets/data/runtime/map_editor/wooma_temple_2.runtime.json": "ff05053e41c59c5ba34b0cea48dd6d2e18b6dc57bb470bc07fc628339c2ec990",
+      "repo:assets/data/runtime/map_editor/wooma_temple_3.runtime.json": "e57c7afcc7a5a2337a32c629d4b18f668234ac183dff1f52cd4f5ef227bd99f4",
+      "source_editor_root:bich_province/bich_province.editor.json": "d357457b9fb52bd47c79904006eea4c420413328a535e3466a03136217b87ab3",
+      "source_editor_root:bich_province/bich_province.editor.json.bak": "be72ca5553560bbaa75c98823ddcaac9460e57830db9f82313c5f504738387d5",
+      "source_editor_root:bich_province/ground/ground_manifest.json": "96bbca8aa382e188e67fdc140cebf3919cc35c308b25a620a2ccdf01cfc5fc75",
+      "source_editor_root:bich_province/ground/ground_state.json": "7a1c9837e7ba999aa6cfac6483a80f421c00d4a55c0fd544b2e7300529440956",
+      "source_editor_root:wooma_forest/ground/ground_manifest.json": "fef93c94b6be35aafeba20c2c6c5a9058c1241fd0178fc1582b9df672081b6eb",
+      "source_editor_root:wooma_forest/ground/ground_state.json": "f61e454467d5e27799dd301a11ea555e79b8075f8c075d25900dcb6097cbb3fc",
+      "source_editor_root:wooma_forest/wooma_forest.editor.json": "aeebd040f2de777298102be15bbfc8682612cd02658cfdc53914db139f6d75f9",
+      "source_editor_root:wooma_forest/wooma_forest.editor.json.bak": "ac4d8943a48b785ec0ec0ce601fffb9d2b585e935b33462a003aca139fc728aa",
+      "source_editor_root:wooma_temple_1/ground/ground_manifest.json": "2d8c6d557f1f24ebcfec3c2d9941d0b8224a65f10751f6426c61563c2c47c64b",
+      "source_editor_root:wooma_temple_1/ground/ground_state.json": "5705cc0f828a60d87873abcf3135b3a3e16966f5d33684f308eb92d0d8f30ad0",
+      "source_editor_root:wooma_temple_1/wooma_temple_1.editor.json": "3d502914601e6f57cd0fac041eba3f1a6a645d480d9a889890863d0f3da9f54e",
+      "source_editor_root:wooma_temple_1/wooma_temple_1.editor.json.bak": "f5ebc8780a77e0faac55ac5af51f4569054d86baf9b081c29197ff78d5d3d6d8",
+      "source_editor_root:wooma_temple_2/ground/ground_manifest.json": "8585598f7f3465e3d13097148945083530ffc6aea1baa418149f69bf31f5e339",
+      "source_editor_root:wooma_temple_2/ground/ground_state.json": "1a05eaa46e49550b38fed535f9926438e66f5e680ddd67630b81fc25574fb59c",
+      "source_editor_root:wooma_temple_2/wooma_temple_2.editor.json": "68672fe1c975c214054ed19fd062817d18ea370a667b4e9a97acad699bfe59a1",
+      "source_editor_root:wooma_temple_2/wooma_temple_2.editor.json.bak": "61972f4a3e00df32a6e135c95ca26d11e478ede57b8b7c2d7cc0c1847b375865",
+      "source_editor_root:wooma_temple_3/ground/ground_manifest.json": "1f9328737c05f63fc8798c15daca542796c2ba07d627041e6ab7560e01a03a7f",
+      "source_editor_root:wooma_temple_3/ground/ground_state.json": "cf37e0858710c41ea5a6cbda7036003a65e4daf0b646f1948366e7a957b0bb2d",
+      "source_editor_root:wooma_temple_3/wooma_temple_3.editor.json": "bc283728cfcb8f804aee57885e1c8edcd3b1598ef23adcf8af0d6bf46b8dbf69",
+      "source_editor_root:wooma_temple_3/wooma_temple_3.editor.json.bak": "94cf59bec42226c628ccb84bde0daf100da16eb8d02636b677dfa3328894e2a8"
+    }
+  },
+  "schema_version": 1,
+  "scope": [
+    "bich_province",
+    "wooma_forest",
+    "wooma_temple_1",
+    "wooma_temple_2",
+    "wooma_temple_3"
+  ],
+  "summary": {
+    "approved_boss_spawn_count": 1,
+    "approved_monster_spawn_count": 106,
+    "blocked_map_count": 5,
+    "ready_map_count": 0,
+    "target_map_count": 5
+  }
+}

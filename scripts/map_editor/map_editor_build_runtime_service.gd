@@ -18,6 +18,9 @@ const RuntimeBridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
 const JsonCodec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
+const FormalAuthorityCompositionService := preload(
+	"res://scripts/map_editor/map_editor_formal_authority_composition_service.gd"
+)
 
 const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
 const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
@@ -48,6 +51,56 @@ static func approve_for_runtime(document: Dictionary) -> Dictionary:
 	meta["runtime_approved_revision"] = int(meta.get("revision", 1))
 	document["editor_meta"] = meta
 	return {"ok": true, "validation": validation}
+
+
+## Build-time formal authority composition. This is deliberately separate
+## from approve_for_runtime(): the raw editor authority is never upgraded,
+## canonicalized or approval-stamped in place.
+static func prepare_formal_document(document: Dictionary) -> Dictionary:
+	var composition := (
+		FormalAuthorityCompositionService.compose_for_runtime(document)
+	)
+	if not bool(composition.get("ok", false)):
+		return composition
+	var formal_document: Dictionary = composition.document
+	var approval := approve_for_runtime(formal_document)
+	if not bool(approval.get("ok", false)):
+		return {
+			"ok": false,
+			"errors": approval.get("errors", []),
+			"warnings": approval.get("warnings", []),
+			"composition": composition,
+		}
+	return {
+		"ok": true,
+		"document": formal_document,
+		"validation": approval.validation,
+		"identity": composition.identity,
+		"composition": composition,
+	}
+
+
+static func build_formal_candidate(document: Dictionary) -> Dictionary:
+	var prepared := prepare_formal_document(document)
+	if not bool(prepared.get("ok", false)):
+		return prepared
+	var candidate := build_candidate(prepared.document)
+	if not bool(candidate.get("ok", false)):
+		return candidate
+	candidate["formal_authority_composed"] = true
+	candidate["formal_identity"] = prepared.identity.duplicate(true)
+	candidate["composition"] = {
+		"source_map_id": str(prepared.composition.source_map_id),
+		"formal_map_id": str(prepared.composition.formal_map_id),
+		"formal_runtime_map_id": int(
+			prepared.composition.formal_runtime_map_id
+		),
+		"composed_portal_count": int(
+			prepared.composition.composed_portal_count
+		),
+		"authority": prepared.composition.authority.duplicate(true),
+	}
+	return candidate
 
 
 ## FREEZE-P0.3R: Publish Runtime Release is a TRANSACTION over the formal
@@ -531,11 +584,17 @@ static func candidate_matches_document(
 ) -> bool:
 	if candidate.is_empty() or document.is_empty():
 		return false
+	var binding_document := document
+	if bool(candidate.get("formal_authority_composed", false)):
+		var prepared := prepare_formal_document(document)
+		if not bool(prepared.get("ok", false)):
+			return false
+		binding_document = prepared.document
 	return (
 		_normalize_candidate_binding(
 			candidate.get("document_binding", {})
 		)
-		== document_binding(document)
+		== document_binding(binding_document)
 	)
 
 
