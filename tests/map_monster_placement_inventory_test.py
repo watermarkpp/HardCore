@@ -427,14 +427,14 @@ def main() -> None:
     assert sum(row["placement_state"] == "PRESERVE" for row in maps) == 1
     assert summary["walkable_state_counts"] == {"UNKNOWN": 67}
     assert summary["editor_spawn_counts"] == {
-        "monster_spawn": 0,
-        "boss_spawn": 0,
-        "total": 0,
+        "monster_spawn": 10,
+        "boss_spawn": 5,
+        "total": 15,
     }
     assert summary["runtime_spawn_counts"] == {
-        "monster_spawn": 115,
-        "boss_spawn": 3,
-        "total": 118,
+        "monster_spawn": 116,
+        "boss_spawn": 6,
+        "total": 122,
     }
     assert summary["authority_counts"] == {
         "allowed": 299,
@@ -455,7 +455,7 @@ def main() -> None:
         "maps=67 editor=67 runtime=12 playable=12 "
         "transition_debt=5 structure_only=6 ready=52 "
         "planner_validation=7 source_required=1 preserve=1 placement_blocked=6 "
-        "runtime_spawns=118"
+        "runtime_spawns=122"
     )
 
 

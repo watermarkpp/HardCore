@@ -32,11 +32,18 @@ const IDENTITY_PATH := (
 const NETWORK_PATH := (
 	"res://assets/data/map_design/map_portal_network.json"
 )
+const FORMAL_RUNTIME_PATH := (
+	"res://assets/data/runtime/map_editor/"
+	+ "fengmo_purgatory_corridor.runtime.json"
+)
 const EXPECTED_EDITOR_SHA256 := (
-	"9c97baeabe5069c962bf5ba38e66bf1ae9a196b66ff72182851365e7aac40aad"
+	"731e6ed095bc76f01fda7e7843f09760f3c13d9f465c6c38501f4bafefeaf629"
 )
 const EXPECTED_REGISTRY_SHA256 := (
-	"3eefa27ba2c12d09c4817edf4ba60c57c8f18e044502e55edf4e2fc10ee40d4d"
+	"40c6baa69a0df2d1a368b5aeada824087ce7a84680e410f515e1988c744e1536"
+)
+const EXPECTED_RUNTIME_SHA256 := (
+	"59ed2f4191f8d200a8c36e1004998a43775936fa358417c39267a035c69a8b19"
 )
 const EXPECTED_IDENTITY_SHA256 := (
 	"7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8"
@@ -45,11 +52,15 @@ const EXPECTED_NETWORK_SHA256 := (
 	"2847952e26609b484fae02f0a5874244b1ba1dfdce3827d7aea3268d464114a9"
 )
 const EXPECTED_CANDIDATE_SHA256 := (
+	"e6085fa11ccbcd3a09872b6a83a9292257a658d32d46a3d6e1fb53997c683ec5"
+)
+const EXPECTED_PREVIOUS_BUILD_SHA256 := (
 	"c3f88e3fc868ecf05bee29c320482c79cf767faa37b264bee1596e9466382b91"
 )
-const MISSING_HASH := "missing"
+const EXPECTED_PREVIOUS_APPROVAL_REVISION := 1
 const EXPECTED_SPAWNS := [
 	[112, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000112", "auto:v1:fengmo_purgatory_corridor:ordinary:000112"],
+	[126, "monster_spawn", "special", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000126", "auto:v1:fengmo_purgatory_corridor:ordinary:000126"],
 	[128, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000128", "auto:v1:fengmo_purgatory_corridor:ordinary:000128"],
 	[129, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000129", "auto:v1:fengmo_purgatory_corridor:ordinary:000129"],
 	[132, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000132", "auto:v1:fengmo_purgatory_corridor:ordinary:000132"],
@@ -58,8 +69,11 @@ const EXPECTED_SPAWNS := [
 	[150, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000150", "auto:v1:fengmo_purgatory_corridor:ordinary:000150"],
 	[153, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000153", "auto:v1:fengmo_purgatory_corridor:ordinary:000153"],
 	[156, "monster_spawn", "ordinary", "monster_spawn.auto.v1.fengmo_purgatory_corridor.000156", "auto:v1:fengmo_purgatory_corridor:ordinary:000156"],
+	[135, "boss_spawn", "elite", "boss_spawn.auto.v1.fengmo_purgatory_corridor.000135", "auto:v1:fengmo_purgatory_corridor:elite:000135"],
+	[141, "boss_spawn", "elite", "boss_spawn.auto.v1.fengmo_purgatory_corridor.000141", "auto:v1:fengmo_purgatory_corridor:elite:000141"],
 	[152, "boss_spawn", "elite", "boss_spawn.auto.v1.fengmo_purgatory_corridor.000152", "auto:v1:fengmo_purgatory_corridor:elite:000152"],
 	[155, "boss_spawn", "elite", "boss_spawn.auto.v1.fengmo_purgatory_corridor.000155", "auto:v1:fengmo_purgatory_corridor:elite:000155"],
+	[158, "boss_spawn", "elite", "boss_spawn.auto.v1.fengmo_purgatory_corridor.000158", "auto:v1:fengmo_purgatory_corridor:elite:000158"],
 ]
 
 var _publish := false
@@ -127,8 +141,23 @@ static func test_execute_scratch(
 		return _failure("formal_services_unreadable")
 	_build_service.test_formal_runtime_root_override = runtime_root
 	_runtime_bridge.test_override_release_registry_path(registry_path)
+	var scratch_runtime_path: String = str(
+		_build_service.default_runtime_path(CANONICAL_MAP_ID)
+	)
+	var scratch_registry := _read_json(registry_path)
+	var scratch_targets := _target_registry_entries(scratch_registry)
+	if scratch_targets.size() != 1:
+		_runtime_bridge.reset_release_registry_override()
+		_build_service.test_formal_runtime_root_override = ""
+		return _failure("scratch_previous_release_not_unique")
+	var scratch_target: Dictionary = scratch_targets[0]
 	var result := _execute(
-		publish, registry_path, _file_sha256(registry_path)
+		publish,
+		registry_path,
+		_file_sha256(registry_path),
+		_file_sha256(scratch_runtime_path),
+		str(scratch_target.get("approved_build_sha256", "")),
+		int(scratch_target.get("approval_revision", -1))
 	)
 	_runtime_bridge.reset_release_registry_override()
 	_build_service.test_formal_runtime_root_override = ""
@@ -138,7 +167,10 @@ static func test_execute_scratch(
 static func _execute(
 	publish: bool,
 	registry_path: String,
-	expected_registry_sha256: String
+	expected_registry_sha256: String,
+	expected_runtime_sha256: String = EXPECTED_RUNTIME_SHA256,
+	expected_previous_build_sha256: String = EXPECTED_PREVIOUS_BUILD_SHA256,
+	expected_previous_approval_revision: int = EXPECTED_PREVIOUS_APPROVAL_REVISION
 ) -> Dictionary:
 	if not _ensure_services():
 		return _failure("formal_services_unreadable")
@@ -156,7 +188,7 @@ static func _execute(
 		return _failure("editor_source_hash_mismatch", preflight)
 	if str(preflight.registry.sha256) != expected_registry_sha256:
 		return _failure("release_registry_baseline_drift", preflight)
-	if str(preflight.runtime.sha256) != MISSING_HASH:
+	if str(preflight.runtime.sha256) != expected_runtime_sha256:
 		return _failure("pilot_runtime_baseline_drift", preflight)
 	if str(preflight.identity.sha256) != EXPECTED_IDENTITY_SHA256:
 		return _failure("identity_authority_hash_mismatch", preflight)
@@ -182,8 +214,28 @@ static func _execute(
 	if registry_before.is_empty():
 		return _failure("release_registry_unreadable", preflight)
 	var target_before := _target_registry_entries(registry_before)
-	if not target_before.is_empty():
-		return _failure("pilot_registry_entry_already_exists", preflight)
+	var previous_release_errors := _previous_release_errors(
+		target_before,
+		expected_previous_build_sha256,
+		expected_previous_approval_revision
+	)
+	if not previous_release_errors.is_empty():
+		return _failure("pilot_previous_release_mismatch", {
+			"preflight": preflight,
+			"errors": previous_release_errors,
+		})
+	var previous_runtime: Dictionary = _runtime_map_service.load_runtime(
+		runtime_path
+	)
+	if (
+		not bool(previous_runtime.get("ok", false))
+		or str(previous_runtime.get("runtime", {}).get("build_sha256", ""))
+			!= expected_previous_build_sha256
+	):
+		return _failure("pilot_previous_runtime_invalid", {
+			"preflight": preflight,
+			"runtime": previous_runtime,
+		})
 
 	var candidate: Dictionary = _build_service.build_formal_candidate(document)
 	if not bool(candidate.get("ok", false)):
@@ -228,8 +280,10 @@ static func _execute(
 		"preflight": preflight,
 		"candidate_path": candidate.get("candidate_path", ""),
 		"candidate_sha256": candidate_hash,
-		"ordinary_count": 9,
-		"boss_count": 2,
+		"ordinary_count": 10,
+		"boss_count": 5,
+		"previous_build_sha256": expected_previous_build_sha256,
+		"previous_approval_revision": expected_previous_approval_revision,
 		"runtime_map_id": CANONICAL_RUNTIME_MAP_ID,
 	}
 	if not publish:
@@ -246,9 +300,21 @@ static func _execute(
 		CANONICAL_MAP_ID
 	)
 	if not bool(published.get("success", false)):
+		var failed_postcondition := _protected_hashes(
+			registry_path, runtime_path
+		)
+		if not _formal_state_matches_preflight(
+			preflight, failed_postcondition
+		):
+			return _failure("formal_publish_failed_rollback_broken", {
+				"preflight": preflight,
+				"post_publish": failed_postcondition,
+				"publish_result": published,
+			})
 		return _failure("formal_publish_failed", {
 			"preflight": preflight,
 			"publish_result": published,
+			"rollback_verified": true,
 		})
 	if _read_bytes(EDITOR_PATH) != source_bytes:
 		return _failure("editor_source_changed_during_publish", preflight)
@@ -319,9 +385,9 @@ static func _spawn_errors(layers: Dictionary) -> Array[String]:
 				str(entry.get("classification", "")),
 				group_id,
 			]
-	if (layers.get("monster_spawn", []) as Array).size() != 9:
+	if (layers.get("monster_spawn", []) as Array).size() != 10:
 		errors.append("ordinary_count_mismatch")
-	if (layers.get("boss_spawn", []) as Array).size() != 2:
+	if (layers.get("boss_spawn", []) as Array).size() != 5:
 		errors.append("boss_count_mismatch")
 	for expected: Array in EXPECTED_SPAWNS:
 		var semantic_id := str(expected[3])
@@ -343,8 +409,12 @@ static func _verify_registry_delta(
 ) -> Dictionary:
 	var before_maps: Array = before.get("maps", [])
 	var after_maps: Array = after.get("maps", [])
-	if after_maps.size() != before_maps.size() + 1:
+	if after_maps.size() != before_maps.size():
 		return _failure("registry_map_count_delta_invalid")
+	var previous_entries := _target_registry_entries(before)
+	if previous_entries.size() != 1:
+		return _failure("registry_previous_target_entry_not_unique")
+	var previous: Dictionary = previous_entries[0]
 	var target_entries := _target_registry_entries(after)
 	if target_entries.size() != 1:
 		return _failure("registry_target_entry_not_unique")
@@ -355,6 +425,12 @@ static func _verify_registry_delta(
 		or str(target.get("approved_build_sha256", "")) != candidate_hash
 		or str(target.get("runtime_path", "")) != runtime_path
 		or str(target.get("release_state", "")) != "implemented_playable"
+		or str(target.get("approval_source", ""))
+			!= "published_via_publish_runtime_release"
+		or int(target.get("approval_revision", -1))
+			!= int(previous.get("approval_revision", -1)) + 1
+		or str(target.get("display_name", ""))
+			!= str(previous.get("display_name", ""))
 	):
 		return _failure("registry_target_entry_invalid", target)
 	if (
@@ -368,6 +444,48 @@ static func _verify_registry_delta(
 		"after_count": after_maps.size(),
 		"target_entry": target,
 	}
+
+
+static func _previous_release_errors(
+	entries: Array,
+	expected_build_sha256: String,
+	expected_approval_revision: int
+) -> Array[String]:
+	var errors: Array[String] = []
+	if entries.size() != 1:
+		return ["registry_previous_target_entry_count:%d" % entries.size()]
+	var entry: Dictionary = entries[0]
+	if str(entry.get("map_key", "")) != CANONICAL_MAP_ID:
+		errors.append("registry_previous_map_key_mismatch")
+	if int(entry.get("runtime_map_id", -1)) != CANONICAL_RUNTIME_MAP_ID:
+		errors.append("registry_previous_runtime_map_id_mismatch")
+	if str(entry.get("runtime_path", "")) != FORMAL_RUNTIME_PATH:
+		errors.append("registry_previous_runtime_path_mismatch")
+	if str(entry.get("release_state", "")) != "implemented_playable":
+		errors.append("registry_previous_release_state_mismatch")
+	if (
+		str(entry.get("approved_build_sha256", ""))
+		!= expected_build_sha256
+	):
+		errors.append("registry_previous_build_hash_mismatch")
+	if (
+		int(entry.get("approval_revision", -1))
+		!= expected_approval_revision
+	):
+		errors.append("registry_previous_approval_revision_mismatch")
+	return errors
+
+
+static func _formal_state_matches_preflight(
+	preflight: Dictionary,
+	postcondition: Dictionary
+) -> bool:
+	return (
+		str(postcondition.get("registry_sha256", ""))
+			== str(preflight.get("registry", {}).get("sha256", ""))
+		and str(postcondition.get("runtime_sha256", ""))
+			== str(preflight.get("runtime", {}).get("sha256", ""))
+	)
 
 
 static func _target_registry_entries(registry: Dictionary) -> Array:
@@ -432,7 +550,7 @@ static func _read_bytes(path: String) -> PackedByteArray:
 
 static func _file_sha256(path: String) -> String:
 	if not FileAccess.file_exists(path):
-		return MISSING_HASH
+		return "missing"
 	var context := HashingContext.new()
 	context.start(HashingContext.HASH_SHA256)
 	context.update(_read_bytes(path))

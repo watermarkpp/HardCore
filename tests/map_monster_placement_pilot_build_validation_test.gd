@@ -1,6 +1,8 @@
 extends Node
 
 const BuildService := preload("res://scripts/map_editor/map_editor_build_runtime_service.gd")
+const EXPECTED_ORDINARY_IDS := [112, 126, 128, 129, 132, 138, 148, 150, 153, 156]
+const EXPECTED_BOSS_IDS := [135, 141, 152, 155, 158]
 
 
 func _ready() -> void:
@@ -17,10 +19,12 @@ func _ready() -> void:
 	var semantics: Dictionary = runtime.get("semantics", {})
 	var ordinary: Array = semantics.get("monster_spawn", [])
 	var bosses: Array = semantics.get("boss_spawn", [])
-	assert(ordinary.size() == 9, "pilot ordinary spawn count must remain 9")
-	assert(bosses.size() == 2, "pilot boss/elite spawn count must remain 2")
+	assert(ordinary.size() == 10, "pilot ordinary spawn count must remain 10")
+	assert(bosses.size() == 5, "pilot boss/elite spawn count must remain 5")
 	_assert_spawn_identity(ordinary, "monster_spawn")
 	_assert_spawn_identity(bosses, "boss_spawn")
+	assert(_sorted_monster_ids(ordinary) == EXPECTED_ORDINARY_IDS)
+	assert(_sorted_monster_ids(bosses) == EXPECTED_BOSS_IDS)
 	assert(not str(candidate.get("build_sha256", "")).is_empty())
 	print(
 		"MAP_MONSTER_PLACEMENT_PILOT_BUILD_VALIDATION_PASS map=%s ordinary=%d boss=%d"
@@ -45,6 +49,14 @@ func _assert_spawn_identity(entries: Array, expected_kind: String) -> void:
 		assert(not group_ids.has(group_id), "duplicate spawn_group_id: %s" % group_id)
 		semantic_ids[semantic_id] = true
 		group_ids[group_id] = true
+
+
+func _sorted_monster_ids(entries: Array) -> Array:
+	var ids: Array = []
+	for entry: Dictionary in entries:
+		ids.append(int(entry.get("monster_id", -1)))
+	ids.sort()
+	return ids
 
 
 func _read_json(path: String) -> Dictionary:

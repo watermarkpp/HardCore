@@ -10,6 +10,8 @@ const JsonCodec := preload(
 const LEGACY_MAP_ID := "gmhl_purgatory_corridor"
 const FORMAL_MAP_ID := "fengmo_purgatory_corridor"
 const FORMAL_RUNTIME_MAP_ID := 914007
+const EXPECTED_ORDINARY_IDS := [112, 126, 128, 129, 132, 138, 148, 150, 153, 156]
+const EXPECTED_BOSS_IDS := [135, 141, 152, 155, 158]
 
 
 func _ready() -> void:
@@ -32,10 +34,13 @@ func _ready() -> void:
 	var semantics: Dictionary = candidate.runtime.semantics
 	var ordinary: Array = semantics.get("monster_spawn", [])
 	var bosses: Array = semantics.get("boss_spawn", [])
-	assert(ordinary.size() == 9)
-	assert(bosses.size() == 2)
+	assert(ordinary.size() == 10)
+	assert(bosses.size() == 5)
 	_assert_spawn_identity(ordinary, "monster_spawn")
 	_assert_spawn_identity(bosses, "boss_spawn")
+	assert(_sorted_monster_ids(ordinary) == EXPECTED_ORDINARY_IDS)
+	assert(_sorted_monster_ids(bosses) == EXPECTED_BOSS_IDS)
+	_assert_variant_selection(bosses)
 	assert(BuildService.candidate_matches_document(candidate, document))
 	assert(JsonCodec.encode(document) == document_before)
 	assert(_read_text(source_path) == source_bytes)
@@ -75,6 +80,34 @@ func _assert_spawn_identity(entries: Array, expected_kind: String) -> void:
 		assert(not group_ids.has(group_id))
 		semantic_ids[semantic_id] = true
 		group_ids[group_id] = true
+
+
+func _sorted_monster_ids(entries: Array) -> Array:
+	var ids: Array = []
+	for entry: Dictionary in entries:
+		ids.append(int(entry.get("monster_id", -1)))
+	ids.sort()
+	return ids
+
+
+func _assert_variant_selection(entries: Array) -> void:
+	for entry: Dictionary in entries:
+		if int(entry.get("monster_id", -1)) != 158:
+			continue
+		assert(
+			_normalized_ids(entry.get("placement_evidence", {}).get(
+				"selected_from_variant_group", []
+			)) == [158, 159]
+		)
+		return
+	assert(false, "monster_id=158 must be present exactly once")
+
+
+func _normalized_ids(values: Array) -> Array:
+	var ids: Array = []
+	for value: Variant in values:
+		ids.append(int(value))
+	return ids
 
 
 func _read_text(path: String) -> String:
