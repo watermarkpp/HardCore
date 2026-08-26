@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import importlib.util
 import json
@@ -73,6 +74,12 @@ def main() -> None:
         "tools/map_editor/build_map_monster_placement_inventory.py"
     )
     assert_no_host_paths(inventory)
+    assert inventory["policy"]["runtime_spawn_counts_role"] == (
+        "published_runtime_observation_not_authoring_input"
+    )
+    assert inventory["policy"][
+        "published_runtime_release_does_not_request_redeployment"
+    ] is True
 
     expected_inputs = {
         "authoring_snapshot": SNAPSHOT_PATH,
@@ -100,12 +107,22 @@ def main() -> None:
     assert len(identity_by_key) == 67
 
     release_rows = release["maps"]
-    release_by_key = {row["map_key"]: row for row in release_rows}
-    assert len(release_by_key) == 11
+    release_by_registry_key = {row["map_key"]: row for row in release_rows}
+    assert len(release_by_registry_key) == 12
+    identity_by_map_id = {row["map_id"]: row for row in identity_rows}
+    release_by_key = {}
+    for release_row in release_rows:
+        registry_key = release_row["map_key"]
+        ident = identity_by_key.get(registry_key) or identity_by_map_id.get(registry_key)
+        assert ident is not None, registry_key
+        normalized_key = ident["legacy_map_id"]
+        assert normalized_key not in release_by_key, normalized_key
+        release_by_key[normalized_key] = release_row
     runtime_file_refs = inputs["runtime_release_files"]
     assert set(runtime_file_refs) == set(release_by_key)
     for map_key, release_row in release_by_key.items():
-        runtime_path = ROOT / Path(runtime_row_path(release_row, map_key))
+        registry_key = release_row["map_key"]
+        runtime_path = ROOT / Path(runtime_row_path(release_row, registry_key))
         ref = runtime_file_refs[map_key]
         assert ref["path"] == runtime_path.relative_to(ROOT).as_posix()
         assert ref["file_sha256"] == sha256(runtime_path)
@@ -113,6 +130,90 @@ def main() -> None:
         assert ref["build_sha256"] == runtime["build_sha256"].upper()
         assert ref["approved_build_sha256"] == release_row["approved_build_sha256"].upper()
         assert ref["hash_match"] is True
+
+    canonical_release = release_by_registry_key["fengmo_purgatory_corridor"]
+    canonical_identity = identity_by_map_id["fengmo_purgatory_corridor"]
+    assert canonical_release["runtime_map_id"] == canonical_identity["runtime_map_id"]
+    canonical_inventory_row = next(
+        row for row in inventory["maps"] if row["map_key"] == "gmhl_purgatory_corridor"
+    )
+    assert canonical_inventory_row["runtime_exists"] is True
+    assert canonical_inventory_row["formal_playable"] is True
+    assert canonical_inventory_row["runtime"]["registry_map_key"] == (
+        "fengmo_purgatory_corridor"
+    )
+    assert canonical_inventory_row["runtime"]["registry_key_kind"] == "formal_canonical"
+    assert canonical_inventory_row["runtime"]["normalized_map_key"] == (
+        "gmhl_purgatory_corridor"
+    )
+    assert canonical_inventory_row["runtime"]["runtime_map_id"] == 914007
+    assert canonical_inventory_row["runtime"]["redeployment_required"] is False
+    assert canonical_inventory_row["runtime"]["spawn_counts_role"] == (
+        "published_runtime_observation_not_authoring_input"
+    )
+    assert canonical_inventory_row["placement_state"] == "PRESERVE"
+    assert canonical_inventory_row["requires_geometry_validation"] is False
+    assert canonical_inventory_row["placement_reasons"] == [
+        "approved_formal_runtime_contains_published_monster_layer",
+        "published_runtime_layer_requires_no_redeployment",
+    ]
+
+    def expect_inventory_error(callback: Any) -> None:
+        try:
+            callback()
+        except GENERATOR.InventoryError:
+            return
+        raise AssertionError("expected InventoryError")
+
+    wrong_id_release = copy.deepcopy(release)
+    next(
+        row
+        for row in wrong_id_release["maps"]
+        if row["map_key"] == "fengmo_purgatory_corridor"
+    )["runtime_map_id"] = 914006
+    expect_inventory_error(
+        lambda: GENERATOR._validate_release_registry(
+            wrong_id_release, identity_by_key
+        )
+    )
+
+    unknown_key_release = copy.deepcopy(release)
+    unknown_key_release["maps"].append(
+        {
+            "approval_revision": 1,
+            "approval_source": "test",
+            "approved_build_sha256": "0" * 64,
+            "display_name": "unknown",
+            "map_key": "unknown_map_key",
+            "release_state": "implemented_playable",
+            "runtime_map_id": 123456,
+            "runtime_path": "res://assets/data/runtime/map_editor/unknown_map_key.runtime.json",
+        }
+    )
+    expect_inventory_error(
+        lambda: GENERATOR._validate_release_registry(
+            unknown_key_release, identity_by_key
+        )
+    )
+
+    ambiguous_release = copy.deepcopy(release)
+    ambiguous_release["maps"].append(
+        {
+            "approval_revision": 1,
+            "approval_source": "test",
+            "approved_build_sha256": "0" * 64,
+            "display_name": "duplicate normalized binding",
+            "map_key": "world_bich_province",
+            "release_state": "implemented_playable",
+            "runtime_map_id": 910001,
+            "runtime_path": "res://assets/data/runtime/map_editor/world_bich_province.runtime.json",
+        }
+    )
+    expect_inventory_error(
+        lambda: GENERATOR._validate_release_registry(
+            ambiguous_release, identity_by_key
+        )
+    )
 
     maps = inventory["maps"]
     assert isinstance(maps, list) and len(maps) == 67
@@ -178,6 +279,16 @@ def main() -> None:
                 runtime_counts["monster_spawn"] + runtime_counts["boss_spawn"]
             )
             assert row["runtime"]["hash_match"] is True
+            assert row["runtime"]["registry_map_key"] == release_by_key[map_key]["map_key"]
+            assert row["runtime"]["normalized_map_key"] == map_key
+            assert row["runtime"]["redeployment_required"] is False
+            assert row["runtime"]["spawn_counts_role"] == (
+                "published_runtime_observation_not_authoring_input"
+            )
+            if runtime_counts["total"] == 0:
+                # A published runtime with no monster/boss layer must not be
+                # mistaken for completed monster placement.
+                assert row["placement_state"] != "PRESERVE"
         else:
             assert row["runtime_exists"] is False
             assert row["formal_playable"] is False
@@ -242,6 +353,23 @@ def main() -> None:
                 "ground_state_sha256_mismatch",
                 "candidate_binding_document_sha256_mismatch",
             }
+        elif (
+            row["runtime_exists"]
+            and row["formal_playable"]
+            and row["runtime_spawn_counts"]["total"] > 0
+        ):
+            # An approved formal runtime with an existing monster layer is
+            # evidence of completed/published placement, never a new route.
+            assert row["placement_state"] == "PRESERVE"
+            assert row["requires_geometry_validation"] is False
+            assert (
+                "approved_formal_runtime_contains_published_monster_layer"
+                in row["placement_reasons"]
+            )
+            assert (
+                "published_runtime_layer_requires_no_redeployment"
+                in row["placement_reasons"]
+            )
         elif map_key in STRUCTURE_KEYS:
             assert row["authoring_state"] == "STRUCTURE_ONLY"
             assert row["editor_spawn_counts"]["total"] == 0
@@ -275,15 +403,15 @@ def main() -> None:
     assert summary["formal_map_count"] == 67
     assert summary["source_map_count"] == 67
     assert summary["editor_exists_count"] == 67
-    assert summary["runtime_exists_count"] == 11
-    assert summary["formal_playable_count"] == 11
+    assert summary["runtime_exists_count"] == 12
+    assert summary["formal_playable_count"] == 12
     assert summary["transition_debt_count"] == 5
     assert summary["structure_only_count"] == 6
-    assert summary["ready_for_auto_placement_count"] == 53
+    assert summary["ready_for_auto_placement_count"] == 52
     assert summary["ready_for_planner_validation_count"] == 7
     assert summary["source_required_count"] == 1
     assert summary["placement_blocked_count"] == 6
-    assert summary["preserve_count"] == 0
+    assert summary["preserve_count"] == 1
     assert summary["authoring_state_counts"] == {
         "NORMAL_EDITOR_AUTHORITY": 56,
         "STRUCTURE_ONLY": 6,
@@ -291,11 +419,12 @@ def main() -> None:
     }
     assert summary["placement_state_counts"] == {
         "PLACEMENT_BLOCKED": 6,
-        "READY_FOR_AUTO_PLACEMENT": 53,
+        "PRESERVE": 1,
+        "READY_FOR_AUTO_PLACEMENT": 52,
         "READY_FOR_PLANNER_VALIDATION": 7,
         "SOURCE_REQUIRED": 1,
     }
-    assert all(row["placement_state"] != "PRESERVE" for row in maps)
+    assert sum(row["placement_state"] == "PRESERVE" for row in maps) == 1
     assert summary["walkable_state_counts"] == {"UNKNOWN": 67}
     assert summary["editor_spawn_counts"] == {
         "monster_spawn": 0,
@@ -303,9 +432,9 @@ def main() -> None:
         "total": 0,
     }
     assert summary["runtime_spawn_counts"] == {
-        "monster_spawn": 106,
-        "boss_spawn": 1,
-        "total": 107,
+        "monster_spawn": 115,
+        "boss_spawn": 3,
+        "total": 118,
     }
     assert summary["authority_counts"] == {
         "allowed": 299,
@@ -323,10 +452,10 @@ def main() -> None:
 
     print(
         "MAP_MONSTER_PLACEMENT_INVENTORY_PASS "
-        "maps=67 editor=67 runtime=11 playable=11 "
-        "transition_debt=5 structure_only=6 ready=53 "
-        "planner_validation=7 source_required=1 placement_blocked=6 "
-        "runtime_spawns=107"
+        "maps=67 editor=67 runtime=12 playable=12 "
+        "transition_debt=5 structure_only=6 ready=52 "
+        "planner_validation=7 source_required=1 preserve=1 placement_blocked=6 "
+        "runtime_spawns=118"
     )
 
 

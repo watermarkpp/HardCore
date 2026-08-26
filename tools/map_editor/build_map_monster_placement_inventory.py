@@ -436,13 +436,13 @@ def _validate_backfill(
     return result
 
 
-def _runtime_path_from_registry(value: Any, map_key: str) -> str:
-    path = _as_string(value, f"release.{map_key}.runtime_path").replace("\\", "/")
+def _runtime_path_from_registry(value: Any, registry_map_key: str) -> str:
+    path = _as_string(value, f"release.{registry_map_key}.runtime_path").replace("\\", "/")
     if not path.startswith("res://") or path.startswith("res:///"):
-        raise InventoryError(f"release {map_key} runtime_path must be a res:// path")
-    expected = f"res://assets/data/runtime/map_editor/{map_key}.runtime.json"
+        raise InventoryError(f"release {registry_map_key} runtime_path must be a res:// path")
+    expected = f"res://assets/data/runtime/map_editor/{registry_map_key}.runtime.json"
     if path != expected:
-        raise InventoryError(f"release {map_key} runtime_path mismatch: {path}")
+        raise InventoryError(f"release {registry_map_key} runtime_path mismatch: {path}")
     return path
 
 
@@ -452,21 +452,78 @@ def _validate_release_registry(
     if release.get("registry_contract_id") != RELEASE_CONTRACT:
         raise InventoryError(f"unexpected release registry contract: {release.get('registry_contract_id')!r}")
     rows = _ensure_list(release.get("maps"), "release.maps")
+    # Releases historically used the legacy authoring key, while newly
+    # published formal releases use the canonical identity map_id.  Keep the
+    # inventory join keyed by legacy_map_id, but retain the registry spelling
+    # and key kind in a binding descriptor so the distinction is auditable.
+    identity_by_map_id = {
+        str(identity["map_id"]): identity for identity in identity_by_key.values()
+    }
     result: dict[str, dict[str, Any]] = {}
+    registry_keys: set[str] = set()
     for index, raw in enumerate(rows):
         row = _ensure_dict(raw, f"release.maps[{index}]")
-        map_key = _as_string(row.get("map_key"), f"release.maps[{index}].map_key")
-        if map_key in result:
-            raise InventoryError(f"duplicate release map key: {map_key}")
-        identity = identity_by_key.get(map_key)
-        if identity is None:
-            raise InventoryError(f"release map absent from identity registry: {map_key}")
-        if _as_int(row.get("runtime_map_id"), f"release.maps[{index}].runtime_map_id") != int(identity["legacy_runtime_map_id"]):
-            raise InventoryError(f"release {map_key} legacy runtime id mismatch")
-        _runtime_path_from_registry(row.get("runtime_path"), map_key)
+        registry_map_key = _as_string(row.get("map_key"), f"release.maps[{index}].map_key")
+        if registry_map_key in registry_keys:
+            raise InventoryError(f"duplicate release map key: {registry_map_key}")
+        registry_keys.add(registry_map_key)
+
+        legacy_identity = identity_by_key.get(registry_map_key)
+        canonical_identity = identity_by_map_id.get(registry_map_key)
+        if legacy_identity is not None and canonical_identity is not None:
+            raise InventoryError(
+                "ambiguous release map key matches both legacy_map_id and map_id: "
+                f"{registry_map_key}"
+            )
+        if legacy_identity is not None:
+            identity = legacy_identity
+            key_kind = "legacy"
+            normalized_map_key = str(identity["legacy_map_id"])
+            expected_runtime_id = _as_int(
+                identity["legacy_runtime_map_id"],
+                f"identity.{normalized_map_key}.legacy_runtime_map_id",
+            )
+            expected_source_map_id = normalized_map_key
+        elif canonical_identity is not None:
+            identity = canonical_identity
+            key_kind = "formal_canonical"
+            normalized_map_key = str(identity["legacy_map_id"])
+            expected_runtime_id = _as_int(
+                identity["runtime_map_id"],
+                f"identity.{normalized_map_key}.runtime_map_id",
+            )
+            expected_source_map_id = registry_map_key
+        else:
+            raise InventoryError(
+                f"release map absent from identity registry: {registry_map_key}"
+            )
+
+        runtime_map_id = _as_int(
+            row.get("runtime_map_id"), f"release.maps[{index}].runtime_map_id"
+        )
+        if runtime_map_id != expected_runtime_id:
+            raise InventoryError(
+                f"release {registry_map_key} {key_kind} runtime id mismatch: "
+                f"expected {expected_runtime_id}, got {runtime_map_id}"
+            )
+        _runtime_path_from_registry(row.get("runtime_path"), registry_map_key)
         _as_string(row.get("release_state"), f"release.maps[{index}].release_state")
         _hash_is_valid(row.get("approved_build_sha256"), f"release.maps[{index}].approved_build_sha256")
-        result[map_key] = row
+        if normalized_map_key in result:
+            previous = result[normalized_map_key]
+            raise InventoryError(
+                "ambiguous release bindings for normalized legacy map key "
+                f"{normalized_map_key}: {previous['registry_map_key']} and "
+                f"{registry_map_key}"
+            )
+        result[normalized_map_key] = {
+            "row": row,
+            "registry_map_key": registry_map_key,
+            "registry_key_kind": key_kind,
+            "normalized_map_key": normalized_map_key,
+            "expected_runtime_map_id": expected_runtime_id,
+            "expected_source_map_id": expected_source_map_id,
+        }
     return result
 
 
@@ -584,19 +641,46 @@ def _resolve_map_type(
 def _safe_runtime_doc(
     repo: Path,
     map_key: str,
-    release_row: dict[str, Any] | None,
+    release_binding: dict[str, Any] | None,
 ) -> tuple[dict[str, Any] | None, dict[str, Any]]:
-    if release_row is None:
+    if release_binding is None:
         return None, {
             "state": "NOT_IN_RELEASE_REGISTRY",
             "exists": False,
             "path": None,
+            "runtime_path": None,
             "file_sha256": None,
             "approved_build_sha256": None,
             "build_sha256": None,
             "hash_match": False,
+            "registry_map_key": None,
+            "registry_key_kind": None,
+            "normalized_map_key": map_key,
+            "runtime_map_id": None,
+            "redeployment_required": False,
+            "spawn_counts_role": "no_published_runtime",
         }
-    runtime_path = _runtime_path_from_registry(release_row.get("runtime_path"), map_key)
+    release_row = _ensure_dict(release_binding.get("row"), f"release.{map_key}")
+    registry_map_key = _as_string(
+        release_binding.get("registry_map_key"), f"release.{map_key}.registry_map_key"
+    )
+    registry_key_kind = _as_string(
+        release_binding.get("registry_key_kind"), f"release.{map_key}.registry_key_kind"
+    )
+    normalized_map_key = _as_string(
+        release_binding.get("normalized_map_key"), f"release.{map_key}.normalized_map_key"
+    )
+    expected_runtime_id = _as_int(
+        release_binding.get("expected_runtime_map_id"),
+        f"release.{map_key}.expected_runtime_map_id",
+    )
+    expected_source_map_id = _as_string(
+        release_binding.get("expected_source_map_id"),
+        f"release.{map_key}.expected_source_map_id",
+    )
+    runtime_path = _runtime_path_from_registry(
+        release_row.get("runtime_path"), registry_map_key
+    )
     relative = Path(runtime_path.removeprefix("res://"))
     absolute = repo / relative
     if not absolute.is_file():
@@ -606,28 +690,65 @@ def _safe_runtime_doc(
             "path": relative.as_posix(),
             "runtime_path": runtime_path,
             "file_sha256": None,
-            "approved_build_sha256": _hash_is_valid(release_row.get("approved_build_sha256"), f"release.{map_key}.approved_build_sha256"),
+            "approved_build_sha256": _hash_is_valid(
+                release_row.get("approved_build_sha256"),
+                f"release.{registry_map_key}.approved_build_sha256",
+            ),
             "build_sha256": None,
             "hash_match": False,
             "release_state": release_row.get("release_state"),
+            "registry_map_key": registry_map_key,
+            "registry_key_kind": registry_key_kind,
+            "normalized_map_key": normalized_map_key,
+            "runtime_map_id": expected_runtime_id,
+            "redeployment_required": False,
+            "spawn_counts_role": "published_runtime_observation_not_authoring_input",
         }
     raw = absolute.read_bytes()
     try:
         doc = json.loads(raw.decode("utf-8-sig"), parse_constant=_reject_constant)
     except (UnicodeError, json.JSONDecodeError, ValueError) as exc:
-        raise InventoryError(f"cannot parse approved runtime {map_key}: {exc}") from exc
+        raise InventoryError(
+            f"cannot parse approved runtime {registry_map_key}: {exc}"
+        ) from exc
     if not isinstance(doc, dict):
-        raise InventoryError(f"approved runtime {map_key} must be an object")
-    source = _ensure_dict(doc.get("source"), f"runtime.{map_key}.source")
-    identity_map_key = _as_string(source.get("map_id"), f"runtime.{map_key}.source.map_id")
-    if identity_map_key != map_key:
-        raise InventoryError(f"runtime {map_key} source map_id mismatch")
-    _as_int(source.get("runtime_map_id"), f"runtime.{map_key}.source.runtime_map_id")
-    semantics = _ensure_dict(doc.get("semantics"), f"runtime.{map_key}.semantics")
-    monster_spawn = _ensure_list(semantics.get("monster_spawn"), f"runtime.{map_key}.semantics.monster_spawn")
-    boss_spawn = _ensure_list(semantics.get("boss_spawn"), f"runtime.{map_key}.semantics.boss_spawn")
-    approved = _hash_is_valid(release_row.get("approved_build_sha256"), f"release.{map_key}.approved_build_sha256")
-    build_sha = _hash_is_valid(doc.get("build_sha256"), f"runtime.{map_key}.build_sha256")
+        raise InventoryError(
+            f"approved runtime {registry_map_key} must be an object"
+        )
+    source = _ensure_dict(doc.get("source"), f"runtime.{registry_map_key}.source")
+    identity_map_key = _as_string(
+        source.get("map_id"), f"runtime.{registry_map_key}.source.map_id"
+    )
+    if identity_map_key != expected_source_map_id:
+        raise InventoryError(
+            f"runtime {registry_map_key} source map_id mismatch: "
+            f"expected {expected_source_map_id}, got {identity_map_key}"
+        )
+    source_runtime_id = _as_int(
+        source.get("runtime_map_id"),
+        f"runtime.{registry_map_key}.source.runtime_map_id",
+    )
+    if source_runtime_id != expected_runtime_id:
+        raise InventoryError(
+            f"runtime {registry_map_key} source runtime id mismatch: "
+            f"expected {expected_runtime_id}, got {source_runtime_id}"
+        )
+    semantics = _ensure_dict(doc.get("semantics"), f"runtime.{registry_map_key}.semantics")
+    monster_spawn = _ensure_list(
+        semantics.get("monster_spawn"),
+        f"runtime.{registry_map_key}.semantics.monster_spawn",
+    )
+    boss_spawn = _ensure_list(
+        semantics.get("boss_spawn"),
+        f"runtime.{registry_map_key}.semantics.boss_spawn",
+    )
+    approved = _hash_is_valid(
+        release_row.get("approved_build_sha256"),
+        f"release.{registry_map_key}.approved_build_sha256",
+    )
+    build_sha = _hash_is_valid(
+        doc.get("build_sha256"), f"runtime.{registry_map_key}.build_sha256"
+    )
     return doc, {
         "state": "APPROVED_RELEASE_FILE" if build_sha == approved else "RELEASE_HASH_MISMATCH",
         "exists": build_sha == approved,
@@ -638,6 +759,15 @@ def _safe_runtime_doc(
         "build_sha256": build_sha,
         "hash_match": build_sha == approved,
         "release_state": release_row.get("release_state"),
+        "registry_map_key": registry_map_key,
+        "registry_key_kind": registry_key_kind,
+        "normalized_map_key": normalized_map_key,
+        "runtime_map_id": expected_runtime_id,
+        # A published runtime is an observation/evidence source.  Its spawn
+        # counts must never be interpreted as a request to redeploy the user
+        # authoring layer.
+        "redeployment_required": False,
+        "spawn_counts_role": "published_runtime_observation_not_authoring_input",
         "spawn_counts": {
             "monster_spawn": len(monster_spawn),
             "boss_spawn": len(boss_spawn),
@@ -738,7 +868,7 @@ def _build_map_row(
     snapshot_row: dict[str, Any],
     authority_records: list[dict[str, Any]],
     backfill_row: dict[str, Any] | None,
-    release_row: dict[str, Any] | None,
+    release_binding: dict[str, Any] | None,
     runtime_doc: dict[str, Any] | None,
     runtime_evidence: dict[str, Any],
     catalog_by_id: dict[str, str],
@@ -749,7 +879,7 @@ def _build_map_row(
     map_type, map_type_evidence = _resolve_map_type(
         map_key,
         identity,
-        release_row,
+        release_binding,
         runtime_doc,
         catalog_by_id,
         template_by_key,
@@ -771,6 +901,23 @@ def _build_map_row(
     walkable = _walkable_evidence(snapshot_row, map_key)
     authority_counts = _authority_counts(authority_records)
 
+    runtime_counts = runtime_evidence.get("spawn_counts")
+    runtime_exists = bool(runtime_evidence.get("exists"))
+    formal_playable = bool(
+        runtime_exists and runtime_row_is_playable(release_binding)
+    )
+    # A hash-valid, formally playable runtime that already contains a monster
+    # or boss layer is a published result, not an instruction to repopulate the
+    # user's authoring document.  It must be excluded from both ordinary and
+    # planner placement selection.  Transition debt keeps its stronger
+    # PLACEMENT_BLOCKED precedence below.
+    published_runtime_has_spawn_layer = bool(
+        formal_playable
+        and runtime_evidence.get("state") == "APPROVED_RELEASE_FILE"
+        and runtime_counts is not None
+        and runtime_counts.get("total", 0) > 0
+    )
+
     # Geometry is deliberately not promoted from the collision digest to a
     # walkable grid.  That uncertainty is a planner validation requirement,
     # not a reason to hide an otherwise valid ordinary authority.  A map with
@@ -779,6 +926,12 @@ def _build_map_row(
     if authoring_state == "TRANSITION_DEBT":
         placement_state = "PLACEMENT_BLOCKED"
         placement_reasons = ["transition_backfill_binding_mismatch"]
+    elif published_runtime_has_spawn_layer:
+        placement_state = "PRESERVE"
+        placement_reasons = [
+            "approved_formal_runtime_contains_published_monster_layer",
+            "published_runtime_layer_requires_no_redeployment",
+        ]
     elif authoring_state == "NOT_READY":
         placement_state = "PLACEMENT_BLOCKED"
         placement_reasons = ["map_type_unresolved"]
@@ -835,7 +988,6 @@ def _build_map_row(
         },
     }
 
-    runtime_counts = runtime_evidence.get("spawn_counts")
     runtime_count_row = {
         "state": runtime_evidence["state"],
         "monster_spawn": runtime_counts["monster_spawn"] if runtime_counts else None,
@@ -849,10 +1001,6 @@ def _build_map_row(
     if backfill_row is not None:
         transition.update(backfill_row)
 
-    runtime_exists = bool(runtime_evidence.get("exists"))
-    formal_playable = bool(
-        runtime_exists and runtime_row_is_playable(release_row)
-    )
     return {
         "map_id": map_id,
         "map_key": map_key,
@@ -883,8 +1031,11 @@ def _build_map_row(
     }
 
 
-def runtime_row_is_playable(row: dict[str, Any] | None) -> bool:
-    return row is not None and row.get("release_state") == "implemented_playable"
+def runtime_row_is_playable(binding: dict[str, Any] | None) -> bool:
+    if binding is None:
+        return False
+    release_row = _ensure_dict(binding.get("row"), "release binding.row")
+    return release_row.get("release_state") == "implemented_playable"
 
 
 def _validate_no_host_paths(value: Any, path: str = "inventory") -> None:
@@ -933,13 +1084,15 @@ def build_inventory(
     snapshot_by_key = _validate_snapshot(snapshot, identity_rows, identity_by_key)
     authority_by_key, authority_object = _validate_authority(authority, identity_by_key)
     backfill_by_key = _validate_backfill(backfill, identity_by_key)
+    # The validator returns bindings keyed by normalized legacy authoring key;
+    # a formal canonical release therefore joins the same stable 67-map row.
     release_by_key = _validate_release_registry(release, identity_by_key)
     catalog_by_id, template_by_key = _validate_design_sources(design_catalog, blank_templates)
 
     runtime_files: dict[str, dict[str, Any]] = {}
     runtime_docs: dict[str, dict[str, Any] | None] = {}
-    for map_key, release_row in sorted(release_by_key.items()):
-        runtime_doc, evidence = _safe_runtime_doc(repo, map_key, release_row)
+    for map_key, release_binding in sorted(release_by_key.items()):
+        runtime_doc, evidence = _safe_runtime_doc(repo, map_key, release_binding)
         runtime_docs[map_key] = runtime_doc
         runtime_files[map_key] = {
             key: evidence[key]
@@ -951,6 +1104,12 @@ def build_inventory(
                 "hash_match",
                 "state",
                 "exists",
+                "registry_map_key",
+                "registry_key_kind",
+                "normalized_map_key",
+                "runtime_map_id",
+                "redeployment_required",
+                "spawn_counts_role",
             )
             if key in evidence
         }
@@ -969,10 +1128,16 @@ def build_inventory(
             "approved_build_sha256": None,
             "build_sha256": None,
             "hash_match": False,
+            "registry_map_key": None,
+            "registry_key_kind": None,
+            "normalized_map_key": map_key,
+            "runtime_map_id": None,
+            "redeployment_required": False,
+            "spawn_counts_role": "no_published_runtime",
         }
-        release_row = release_by_key.get(map_key)
-        if release_row is not None:
-            _, runtime_evidence = _safe_runtime_doc(repo, map_key, release_row)
+        release_binding = release_by_key.get(map_key)
+        if release_binding is not None:
+            _, runtime_evidence = _safe_runtime_doc(repo, map_key, release_binding)
         maps.append(
             _build_map_row(
                 repo,
@@ -980,7 +1145,7 @@ def build_inventory(
                 snapshot_by_key[map_key],
                 authority_by_key.get(map_key, []),
                 backfill_by_key.get(map_key),
-                release_row,
+                release_binding,
                 runtime_docs.get(map_key),
                 runtime_evidence,
                 catalog_by_id,
@@ -1048,6 +1213,9 @@ def build_inventory(
             "editor_exists_means": "source record is present in the tracked authoring snapshot; permanent map files are not opened",
             "runtime_exists_means": "release registry entry, approved runtime file and build hash all agree",
             "formal_playable_means": "runtime_exists and release_state=implemented_playable",
+            "runtime_spawn_counts_role": "published_runtime_observation_not_authoring_input",
+            "published_runtime_release_does_not_request_redeployment": True,
+            "published_runtime_with_spawn_placement_state": "PRESERVE",
             "walkable": {
                 "state_when_unavailable": "UNKNOWN",
                 "evidence_when_unavailable": "collision_contract_available",
@@ -1059,6 +1227,7 @@ def build_inventory(
             "structure_only_map_keys": list(STRUCTURE_ONLY_MAP_KEYS),
             "placement_state_precedence": [
                 "TRANSITION_DEBT -> PLACEMENT_BLOCKED",
+                "approved formal runtime with published monster/boss layer -> PRESERVE",
                 "unresolved authority token -> PLACEMENT_BLOCKED",
                 "allowed authority + editor -> READY_FOR_AUTO_PLACEMENT",
                 "explicit authority without allowed authority -> READY_FOR_PLANNER_VALIDATION",
@@ -1164,6 +1333,7 @@ def main(argv: list[str] | None = None) -> int:
                 f"ready={summary['ready_for_auto_placement_count']} "
                 f"planner_validation={summary['ready_for_planner_validation_count']} "
                 f"source_required={summary['source_required_count']} "
+                f"preserve={summary['preserve_count']} "
                 f"blocked={summary['placement_blocked_count']}"
             )
             return 0
@@ -1178,6 +1348,7 @@ def main(argv: list[str] | None = None) -> int:
             f"ready={summary['ready_for_auto_placement_count']} "
             f"planner_validation={summary['ready_for_planner_validation_count']} "
             f"source_required={summary['source_required_count']} "
+            f"preserve={summary['preserve_count']} "
             f"blocked={summary['placement_blocked_count']}"
         )
         return 0
