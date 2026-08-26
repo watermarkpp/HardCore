@@ -98,6 +98,7 @@ def main() -> None:
         "canonical_variant_group",
         "special_npc_system",
         "intentionally_retired_excluded",
+        "intentionally_editor_excluded",
         "unresolved_blocked",
     }
     status_counts = Counter()
@@ -134,8 +135,10 @@ def main() -> None:
                 # Exact and explicit-variant resolutions may only point at
                 # the active canonical runtime universe.
                 assert monster_id not in {33, 183, 241}, token
+                assert monster_id not in {59, 78, 157, 161}, token
                 assert monster_id in catalog_by_id, monster_id
                 assert catalog_by_id[monster_id]["runtime_allowed"] is True
+                assert catalog_by_id[monster_id]["editor_placement"]["allowed"] is True
             if token["status"] == "resolved":
                 assert token["placement_allowed"] is True
             elif token["status"] in {"excluded", "blocked"}:
@@ -192,6 +195,17 @@ def main() -> None:
         }
     )
 
+    leak_validation = manifest["leak_validation"]
+    assert leak_validation == {
+        "editor_placement_forbidden_ids": [59, 78, 157, 161],
+        "resolved_monster_id_leaks": [],
+        "auto_placement_id_leaks": [],
+        "passed": True,
+    }
+    assert not set(leak_validation["editor_placement_forbidden_ids"]).intersection(
+        manifest["summary"]["resolved_monster_ids"]
+    )
+
     by_raw = {
         str(token["raw_token"]): token
         for token in records
@@ -215,7 +229,6 @@ def main() -> None:
     assert by_raw["祖玛弓箭手（极品变体）"]["resolved_monster_ids"] == [152]
     assert by_raw["祖玛雕像（极品变体）"]["resolved_monster_ids"] == [155]
     assert by_raw["祖玛卫士（极品变体）"]["resolved_monster_ids"] == [
-        157,
         158,
         159,
     ]
@@ -244,6 +257,34 @@ def main() -> None:
             assert token["auto_placement_allowed"] is False, token
             assert token["auto_placement_status"] == "SPECIAL_SYSTEM_REQUIRED", token
 
+    # Exact canonical names for editor-disabled identities fail closed too,
+    # even when runtime_allowed remains true for the internal subtype.
+    source_refs = {
+        "path": "canonical_monster_catalog.json",
+        "sha256": "catalog",
+    }
+    for forbidden_id in (59, 78, 157, 161):
+        exact_name = str(catalog_by_id[forbidden_id]["canonical_name"])
+        exact = GENERATOR.resolve_token(
+            {
+                "raw_token": exact_name,
+                "normalized_token": exact_name,
+                "source_line": 1,
+                "source_category": "普通刷新",
+                "source_category_role": "ordinary",
+                "source_token_index": 1,
+            },
+            by_name=GENERATOR.canonical_name_index(catalog),
+            by_base=GENERATOR.variant_index(GENERATOR.canonical_name_index(catalog)),
+            retired_by_name={},
+            catalog_ref=source_refs,
+            classification_ref=source_refs,
+            vanilla_ref=source_refs,
+        )
+        assert exact["status"] == "excluded", exact
+        assert exact["resolved_monster_ids"] == [], exact
+        assert exact["auto_placement_allowed"] is False, exact
+
     # Rebuilding from the same authorities must exactly reproduce the tracked
     # structure.  This is the same operation used by the CLI --check.
     rebuilt = GENERATOR.build_manifest(
@@ -260,7 +301,7 @@ def main() -> None:
     print(
         "MAP_MONSTER_PLACEMENT_AUTHORITY_PASS "
         "maps=67 tokens=401 monster_tokens=400 exact=352 "
-        "variant_groups=32 special_system=8 excluded=4 blocked=5"
+        "variant_groups=32 special_system=8 excluded=4 blocked=5 editor_quarantine=4"
     )
 
 

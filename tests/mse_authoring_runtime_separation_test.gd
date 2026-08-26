@@ -79,16 +79,21 @@ func _ready() -> void:
 		var exempt_suffix := _monster_status_suffix(exempt)
 		assert(not exempt_suffix.contains("待闭环"), "ID%d must NOT show 待闭环: %s" % [exempt_id, exempt_suffix])
 
-	# ---- TEST E: VERSION_DIFFERENCE MONSTER IS AUTHORING + RUNTIME READY ----
-	# ID78 沃玛教主9 is version_difference but runtime_allowed=true with
-	# hostile_requires_non_empty=false, so it is authorable and runtime-ready.
-	var vd := Catalog.find_by_monster_id("special_monster", 78)
-	assert(not vd.is_empty(), "ID78 must exist in catalog")
-	assert(str(vd.get("classification", "")) == "version_difference", "ID78 classification must be version_difference")
-	assert(bool(vd.get("authoring_allowed", false)), "ID78 must be authoring_allowed")
-	assert(bool(vd.get("runtime_ready", false)), "ID78 must be runtime_ready (no hostile drop requirement)")
-	var vd_suffix := _monster_status_suffix(vd)
-	assert(not vd_suffix.contains("待闭环"), "ID78 must NOT show 待闭环: %s" % vd_suffix)
+	# ---- TEST E: EDITOR-DISABLED CANONICAL IDENTITIES ARE HIDDEN ----
+	# These exact IDs remain valid runtime evidence in the canonical catalog,
+	# but editor_placement.allowed=false is a hard editor-pool boundary.
+	for editor_disabled_id: int in [59, 78, 157, 161]:
+		assert(
+			Catalog.find_any_monster(editor_disabled_id).is_empty(),
+			"ID%d must not appear in any monster editor catalog" % editor_disabled_id
+		)
+		for kind: String in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
+			assert(
+				Catalog.find_by_monster_id(kind, editor_disabled_id).is_empty(),
+				"ID%d must be hidden from %s" % [editor_disabled_id, kind]
+			)
+	var visible_npcs := Catalog.entries("npc", 4)
+	assert(not visible_npcs.is_empty(), "NPC catalog must remain unaffected")
 
 	# ---- TEST F: GOLD-ONLY ENTITY IS AUTHORING + RUNTIME READY ----
 	# ID226 宝箱 has 1 canonical drop row (quantity gold) and runtime_allowed=true.
@@ -107,7 +112,7 @@ func _ready() -> void:
 		["boss_spawn", 33],
 		["boss_spawn", 180],
 		["special_monster", 186],
-		["special_monster", 78],
+		["boss_spawn", 158],
 		["special_monster", 226],
 	]
 	for case_data: Array in stability_cases:
@@ -134,7 +139,7 @@ func _ready() -> void:
 	var by_wrong_name := Catalog.find_by_monster_id("boss_spawn", 33)
 	assert(int(by_wrong_name.get("monster_id", -1)) == 33, "lookup by monster_id must be stable")
 
-	print("MSE_AUTHORING_RUNTIME_SEPARATION_PASS authoring=yes runtime_gate=fail_closed id_stable=true exemption=2 version_diff=1 gold_entity=1")
+	print("MSE_AUTHORING_RUNTIME_SEPARATION_PASS authoring=yes runtime_gate=fail_closed id_stable=true exemption=2 editor_quarantine=4 gold_entity=1")
 	get_tree().quit()
 
 

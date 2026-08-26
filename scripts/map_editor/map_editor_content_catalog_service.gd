@@ -39,6 +39,12 @@ static func entries(kind: String, preferred_map_id := 4) -> Array[Dictionary]:
 		var catalog_kind := _catalog_kind_for_classification(classification)
 		if catalog_kind != kind:
 			continue
+		# The canonical catalog owns the editor pool.  Runtime eligibility is a
+		# separate publish-time gate, but an explicitly disabled editor identity
+		# must never appear in any monster browse/find path.  NPCs use the branch
+		# above and are intentionally unaffected by this filter.
+		if not _editor_placement_allowed(record):
+			continue
 		var entry := _canonical_entry(record, source, catalog_kind)
 		if not entry.is_empty():
 			result.append(entry)
@@ -122,6 +128,9 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		return {}
 	var classification := str(record.get("classification", ""))
 	var placement: Dictionary = record.get("editor_placement", {})
+	var editor_placement_allowed := _editor_placement_allowed(record)
+	if not editor_placement_allowed:
+		return {}
 	var placement_kind := str(placement.get("placement_kind", ""))
 	if placement_kind not in ["monster_spawn", "boss_spawn"]:
 		placement_kind = "boss_spawn" if classification in ["elite", "boss"] else "monster_spawn"
@@ -138,7 +147,7 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	var ai: Dictionary = combat.get("ai", {})
 	# Presence in the final active canonical catalog is the authoring contract.
 	# Runtime closure is an independent publish-time gate.
-	var authoring_allowed := numeric_id > 0
+	var authoring_allowed := numeric_id > 0 and editor_placement_allowed
 	var runtime_reasons: Array[String] = []
 	if not bool(record.get("runtime_allowed", false)):
 		runtime_reasons.append("运行时未允许")
@@ -178,6 +187,7 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"editor_catalog_kind": catalog_kind,
 		"placement_kind": placement_kind,
 		"authoring_allowed": authoring_allowed,
+		"editor_placement_allowed": editor_placement_allowed,
 		"runtime_ready": runtime_ready,
 		"runtime_rejection_reason": ";".join(runtime_reasons),
 		"source_status": str(record.get("status", "")),
@@ -211,6 +221,11 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"boss_class": classification,
 		"source_evidence": record.get("source_evidence", {}),
 	}
+
+
+static func _editor_placement_allowed(record: Dictionary) -> bool:
+	var placement: Variant = record.get("editor_placement", null)
+	return placement is Dictionary and bool(placement.get("allowed", false))
 
 
 static func _combat_attributes_verified(record: Dictionary) -> bool:

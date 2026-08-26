@@ -42,6 +42,7 @@ SCHEMA_VERSION = 2
 MANIFEST_ID = "hardcore.map_monster_placement_authority.v2"
 IDENTITY_CONTRACT = "hardcore.formal_map_identity.v1"
 FORBIDDEN_RESOLVED_IDS = {33, 183, 241}
+FORBIDDEN_EDITOR_PLACEMENT_IDS = {59, 78, 157, 161}
 
 HEADING_RE = re.compile(
     r"\[(?P<width>\d+)\s*[×xX]\s*(?P<height>\d+)\s*格\s*\|\s*"
@@ -94,9 +95,9 @@ GROUP_RULES: dict[str, dict[str, Any]] = {
         "rule_id": "canonical_group.zuma_guard_elite_variants.v1",
         "group_code": "zuma_guard_elite_variants",
         "base_name": "祖玛卫士",
-        "variant_codes": ["0", "3", "00"],
+        "variant_codes": ["3", "00"],
         "classification": "elite",
-        "reason": "用户表明确标注极品变体；展开正式 canonical 0/3/00 变体组。",
+        "reason": "用户表明确标注极品变体；祖玛卫士0是普通怪内部 subtype，仅展开正式极品 3/00 变体组。",
     },
     "宝箱怪": {
         "rule_id": "canonical_group.treasure_chest_forms.v1",
@@ -286,6 +287,9 @@ def canonical_name_index(catalog: dict[str, Any]) -> dict[str, dict[str, Any]]:
         monster_id = entry.get("monster_id")
         if not name or not isinstance(monster_id, int) or isinstance(monster_id, bool):
             raise ValueError(f"invalid canonical monster entry: {entry!r}")
+        placement = entry.get("editor_placement")
+        if not isinstance(placement, dict) or not isinstance(placement.get("allowed"), bool):
+            raise ValueError(f"invalid canonical editor placement authority: {entry!r}")
         if name in result:
             raise ValueError(f"duplicate canonical name is unsafe: {name!r}")
         result[name] = entry
@@ -302,6 +306,11 @@ def canonical_name_index(catalog: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return result
 
 
+def editor_placement_allowed(entry: dict[str, Any]) -> bool:
+    placement = entry.get("editor_placement")
+    return isinstance(placement, dict) and placement.get("allowed") is True
+
+
 def base_name(entry: dict[str, Any]) -> str:
     name = str(entry.get("canonical_name", ""))
     variant_code = str(entry.get("variant_code", ""))
@@ -315,6 +324,12 @@ def variant_index(
 ) -> dict[str, list[dict[str, Any]]]:
     result: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for entry in by_name.values():
+        # Variant/group expansion is an editor-placement route as well as a
+        # runtime route.  Both authorities must allow an identity before it
+        # can become a group candidate; disabled variants are omitted rather
+        # than leaking an ID into a resolved group.
+        if not bool(entry.get("runtime_allowed", False)) or not editor_placement_allowed(entry):
+            continue
         result[base_name(entry)].append(entry)
     for values in result.values():
         values.sort(key=lambda item: (str(item.get("variant_code", "")), int(item["monster_id"])))
@@ -342,6 +357,7 @@ def canonical_entry_summary(entry: dict[str, Any]) -> dict[str, Any]:
         "classification": str(entry.get("classification", "")),
         "monster_id": int(entry["monster_id"]),
         "runtime_allowed": bool(entry.get("runtime_allowed", False)),
+        "editor_placement_allowed": editor_placement_allowed(entry),
         "status": str(entry.get("status", "")),
     }
 
@@ -370,6 +386,15 @@ def _assert_allowed(entries: Iterable[dict[str, Any]], context: str) -> None:
     ]
     if not_allowed:
         raise ValueError(f"non-runtime monster IDs in resolution {context}: {not_allowed}")
+    editor_not_allowed = [
+        int(entry["monster_id"])
+        for entry in values
+        if not editor_placement_allowed(entry)
+    ]
+    if editor_not_allowed:
+        raise ValueError(
+            f"editor-placement-forbidden monster IDs in resolution {context}: {editor_not_allowed}"
+        )
 
 
 AUTO_PLACEMENT_ALLOWED = "AUTO_PLACEMENT_ALLOWED"
@@ -514,10 +539,22 @@ def resolve_token(
     # offline authoring audit.  It is never a runtime fallback.
     exact = by_name.get(raw)
     if exact is not None:
-        if not bool(exact.get("runtime_allowed", False)):
+        runtime_allowed = bool(exact.get("runtime_allowed", False))
+        editor_allowed = editor_placement_allowed(exact)
+        if not runtime_allowed or not editor_allowed:
+            exclusion_kind = (
+                "intentionally_retired_excluded"
+                if not runtime_allowed
+                else "intentionally_editor_excluded"
+            )
+            reasons: list[str] = []
+            if not runtime_allowed:
+                reasons.append("runtime_allowed=false")
+            if not editor_allowed:
+                reasons.append("editor_placement.allowed=false")
             return resolved_record(
                 token,
-                resolution_kind="intentionally_retired_excluded",
+                resolution_kind=exclusion_kind,
                 status="excluded",
                 classification=str(exact.get("classification", "")) or None,
                 placement_kind=placement_kind,
@@ -526,9 +563,14 @@ def resolve_token(
                     "method": "exact_canonical_name_runtime_reject",
                     "authority": "canonical_monster_catalog",
                     "matched_canonical_name": str(exact["canonical_name"]),
-                    "runtime_allowed": False,
+                    "runtime_allowed": runtime_allowed,
+                    "editor_placement_allowed": editor_allowed,
                     "catalog_status": str(exact.get("status", "")),
-                    "reason": "exact canonical identity exists but is not runtime_allowed; no ID is emitted",
+                    "reason": (
+                        "exact canonical identity is disabled for this route ("
+                        + ", ".join(reasons)
+                        + "); no ID is emitted"
+                    ),
                     "source_path": catalog_ref["path"],
                     "source_sha256": catalog_ref["sha256"],
                 },
@@ -894,6 +936,24 @@ def build_manifest(
     )
     if FORBIDDEN_RESOLVED_IDS.intersection(resolved_ids):
         raise ValueError("forbidden excluded ID leaked into resolved manifest")
+    editor_placement_resolved_id_leaks = sorted(
+        FORBIDDEN_EDITOR_PLACEMENT_IDS.intersection(resolved_ids)
+    )
+    editor_placement_auto_id_leaks = sorted(
+        {
+            int(monster_id)
+            for token in all_tokens
+            if bool(token.get("auto_placement_allowed", False))
+            for monster_id in token.get("resolved_monster_ids", [])
+            if int(monster_id) in FORBIDDEN_EDITOR_PLACEMENT_IDS
+        }
+    )
+    if editor_placement_resolved_id_leaks or editor_placement_auto_id_leaks:
+        raise ValueError(
+            "editor-placement-forbidden ID leaked into manifest: "
+            f"resolved={editor_placement_resolved_id_leaks} "
+            f"auto={editor_placement_auto_id_leaks}"
+        )
 
     authority = {
         "placement_source": table_ref,
@@ -931,6 +991,7 @@ def build_manifest(
                     "system_code": "special_system_required",
                     "special_classification": "special_system_required",
                     "other_resolved_identity": "explicit_placement_required",
+                    "editor_placement": "canonical_monster_catalog.editor_placement.allowed",
                 },
             },
             "fuzzy_match": False,
@@ -943,6 +1004,7 @@ def build_manifest(
                 "canonical_variant_group",
                 "special_npc_system",
                 "intentionally_retired_excluded",
+                "intentionally_editor_excluded",
                 "unresolved_blocked",
             ],
         },
@@ -978,6 +1040,14 @@ def build_manifest(
             ),
             "unresolved_blocked": bool(unresolved),
             "resolved_monster_ids": resolved_ids,
+        },
+        "leak_validation": {
+            "editor_placement_forbidden_ids": sorted(FORBIDDEN_EDITOR_PLACEMENT_IDS),
+            "resolved_monster_id_leaks": editor_placement_resolved_id_leaks,
+            "auto_placement_id_leaks": editor_placement_auto_id_leaks,
+            "passed": not (
+                editor_placement_resolved_id_leaks or editor_placement_auto_id_leaks
+            ),
         },
         "maps": maps,
         "token_records": all_tokens,
