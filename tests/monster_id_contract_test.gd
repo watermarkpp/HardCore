@@ -53,7 +53,9 @@ func _run() -> void:
 	# P3C keeps the exact Wooma variants active with independent IDs and formal
 	# appearance/drop closure; never collapse them into the 76 identity.
 	assert(not MonsterIdentityScript.require_catalog_entry(77, "runtime").is_empty(), "Wooma 77 must remain runtime-enabled")
-	assert(not MonsterIdentityScript.require_catalog_entry(78, "editor").is_empty(), "Wooma 78 must remain editor-placeable")
+	assert(MonsterIdentityScript.require_catalog_entry(78, "editor").is_empty(), "Wooma 78 quarantine must stay out of the formal editor pool")
+	var wooma_78 := MonsterIdentityScript.require_catalog_entry(78, "runtime")
+	assert(str(wooma_78.get("disposition", "")) == "quarantine", "Wooma 78 must retain quarantine disposition at runtime")
 	assert(not MonsterIdentityScript.require_catalog_entry(239, "runtime").is_empty(), "Wooma 239 must remain runtime-enabled")
 	assert(MonsterIdentityScript.catalog_entry(239).get("classification", "") == "boss", "Wooma 239 must remain an independent boss identity")
 
