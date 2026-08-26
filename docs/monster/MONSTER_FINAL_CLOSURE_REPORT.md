@@ -7,7 +7,7 @@
 | 项 | 值 |
 |---|---|
 | BASE_SHA | `4e40a709df424c823b2605806cea50df501a78d2`（MFC-2 merge，codex/integration）|
-| FINAL_SHA | `__FINAL_SHA__` |
+| FINAL_SHA | `6173e9466138539b93fd5a07e74da2c759908cf7` |
 | 任务分支 | `codex/mfc5-final-gate` |
 
 基线链：`09679983`（MFC-4 merge）→ `4e6d33e9`（MFC-1 merge）→ `4e40a709`（MFC-2 merge）→ 本分支。
