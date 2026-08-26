@@ -19,6 +19,12 @@ const WOOma_EXPECTED := {
 }
 # Retired Wooma variants must not appear in the P3C active canonical catalog.
 const WOOma_RETIRED := [65, 67, 69, 71]
+const EXPLICIT_NON_AUTHORABLE := {
+	59: "quarantine",
+	78: "quarantine",
+	157: "internal_subtype",
+	161: "quarantine",
+}
 
 
 func _ready() -> void:
@@ -47,6 +53,17 @@ func _run() -> void:
 		assert(monster_id >= 0 and not seen_ids.has(key), "duplicate/invalid monster_id=%s" % key)
 		seen_ids[key] = true
 		assert(entries_by_id.get(key, {}) == entry, "entries_by_id closure failed for monster_id=%d" % monster_id)
+		var placement: Dictionary = entry.get("editor_placement", {})
+		var disposition := str(entry.get("disposition", ""))
+		if EXPLICIT_NON_AUTHORABLE.has(monster_id):
+			assert(disposition == str(EXPLICIT_NON_AUTHORABLE[monster_id]), "monster_id=%d disposition drifted" % monster_id)
+			assert(not bool(placement.get("allowed", true)), "monster_id=%d explicit disposition must be non-authorable" % monster_id)
+			assert(str(placement.get("disposition", "")) == disposition, "monster_id=%d placement disposition mismatch" % monster_id)
+			assert(entry.get("disposition_evidence", {}) is Dictionary and not entry.get("disposition_evidence", {}).is_empty(), "monster_id=%d disposition evidence missing" % monster_id)
+			assert(bool(entry.get("runtime_allowed", false)), "monster_id=%d explicit disposition must retain runtime" % monster_id)
+		else:
+			assert(disposition.is_empty(), "unexpected monster disposition for monster_id=%d" % monster_id)
+			assert(bool(placement.get("allowed", false)), "historical placement policy unexpectedly re-closed monster_id=%d" % monster_id)
 		var runtime_projection: Dictionary = entry.get("combat", {}).get("runtime_projection", {})
 		assert(runtime_projection.get("agility") == 15 and runtime_projection.get("anti_poison") == 0, "monster_id=%d runtime projection defaults changed" % monster_id)
 		for projection_field: String in ["agility", "anti_poison"]:
@@ -97,8 +114,8 @@ func _run() -> void:
 		):
 			var closure := GameData.canonical_monster_runtime_drop_closure(monster_id)
 			assert(int(closure.get("resolved_reward_count", -1)) > 0, "monster_id=%d requires resolved reward closure (item or gold)" % monster_id)
-		# P3C: editor placement is decoupled from drop closure (all active are
-		# placeable); drop rows are only required by runtime drop_policy.
+		# P3C: editor placement is decoupled from drop closure; only explicit
+		# quarantine/internal-subtype dispositions are non-authorable.
 		var profile_id := str(entry.get("appearance_profile_id", ""))
 		var appearance: Dictionary = appearance_profiles.get(profile_id, {})
 		assert(not appearance.is_empty(), "monster_id=%d missing appearance profile closure" % monster_id)
@@ -128,6 +145,9 @@ func _run() -> void:
 			assert(bool(wooma.get("runtime_allowed", false)), "Wooma %d must be runtime allowed" % monster_id)
 			var wooma_appearance: Dictionary = appearance_profiles.get(str(wooma.get("appearance_profile_id", "")), {})
 			assert(str(wooma_appearance.get("status", "")) == "formal", "Wooma %d appearance must be formal" % monster_id)
+		if monster_id == 78:
+			assert(str(wooma.get("disposition", "")) == "quarantine", "Wooma 78 disposition must be quarantine")
+			assert(not bool(wooma.get("editor_placement", {}).get("allowed", true)), "Wooma 78 must stay out of the formal editor pool")
 		if monster_id == 68:
 			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
 			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)

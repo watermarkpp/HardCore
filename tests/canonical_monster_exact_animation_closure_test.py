@@ -105,11 +105,22 @@ entries = {
 
 assert set(entries) == active_ids
 
-# P3B: 全部 active 可布置。
+# P3C: historical placement=false rows remain audit-only; only explicit
+# exact-ID dispositions close the formal editor pool.
+EXPLICIT_NON_AUTHORABLE = {
+    59: "quarantine",
+    78: "quarantine",
+    157: "internal_subtype",
+    161: "quarantine",
+}
 assert all(
     bool(entries[mid]["editor_placement"].get("allowed", False))
+    == (mid not in EXPLICIT_NON_AUTHORABLE)
     for mid in sorted(active_ids)
 )
+for monster_id, disposition in EXPLICIT_NON_AUTHORABLE.items():
+    assert entries[monster_id].get("disposition") == disposition
+    assert entries[monster_id].get("runtime_allowed") is True
 
 # Combat stats authority is owned by
 # canonical_monster_combat_authority_reconciliation_test.py. This animation
