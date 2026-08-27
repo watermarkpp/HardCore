@@ -820,17 +820,12 @@ func _load_dpv2_direct_baseline() -> bool:
 		load_error = "dpv2_direct_probability_policy_missing"
 		return false
 	var baseline_policy: Dictionary = baseline_policy_value
-	var direct_effective_formula := str(baseline_policy.get(
-		"effective_probability", ""
-	))
 	if (
 		str(baseline.get("identity_key", "")) != "canonical_monster_id"
 		or str(baseline_policy.get("base_authority", ""))
 			!= "per_slot_base_numerator_over_base_denominator"
-		or direct_effective_formula not in [
-			"min(1.0, base_numerator * global_drop_rate_scale / base_denominator)",
-			"min(1, base_numerator * scale_num / (base_denominator * scale_den))",
-		]
+		or str(baseline_policy.get("effective_probability", ""))
+			!= "min(1, base_numerator * scale_num / (base_denominator * scale_den))"
 		or not bool(baseline_policy.get(
 			"global_drop_rate_scale_is_only_multiplier", false
 		))
@@ -842,7 +837,6 @@ func _load_dpv2_direct_baseline() -> bool:
 		load_error = "dpv2_direct_probability_policy_invalid"
 		return false
 	var direct_global_contract: Dictionary = dpv2_global_drop_rate_authority
-	var direct_baseline_active := bool(baseline.get("production_active", false))
 	if (
 		str(direct_global_contract.get("schema", ""))
 			!= "hardcore.dpv2.global_drop_rate_authority.v1"
@@ -851,12 +845,12 @@ func _load_dpv2_direct_baseline() -> bool:
 		or not bool(direct_global_contract.get("activation", {}).get(
 			"production_active", false
 		))
-		or (direct_baseline_active and str(direct_global_contract.get(
-			"activation", {}
-		).get("selected_authority", "")) != "dpv2_direct_baseline_v2")
-		or (direct_baseline_active and not bool(direct_global_contract.get(
-			"activation", {}
-		).get("fallback_forbidden", false)))
+		or str(direct_global_contract.get("activation", {}).get(
+			"selected_authority", ""
+		)) != "dpv2_direct_baseline_v2"
+		or not bool(direct_global_contract.get("activation", {}).get(
+			"fallback_forbidden", false
+		))
 	):
 		load_error = "dpv2_direct_global_authority_contract_invalid"
 		return false

@@ -1,8 +1,8 @@
 {
   "schema": "hardcore.dpv2.direct_baseline_manifest.v2",
   "manifest_id": "dpv2.direct_baseline.manifest.v2",
-  "status": "REPRODUCIBLE_SIDE_BY_SIDE_BUILD_PASS",
-  "production_active": false,
+  "status": "REPRODUCIBLE_PRODUCTION_BUILD_PASS",
+  "production_active": true,
   "hash_policy": {
     "generated_text_artifacts": "UTF-8_WITH_LF_NORMALIZATION",
     "tracked_source_raw_hash_also_preserved": true
@@ -41,7 +41,7 @@
     },
     "direct_baseline_authority": {
       "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
-      "sha256": "BFE89562F5D07795374D80C5BD429E4851CE2FB99ECB131F5FB068B914ABF556",
+      "sha256": "B3C334F1BA2F5C3DF2A3B8B112FA22610A63544CBB36EFAF213B56EFBEAC8E02",
       "hash_normalization": "lf_text"
     },
     "source_correction_authority": {
@@ -57,7 +57,7 @@
     },
     "global_drop_rate_authority": {
       "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
-      "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+      "sha256": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0",
       "hash_normalization": "lf_text"
     }
   },

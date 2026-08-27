@@ -1002,17 +1002,17 @@ def build_direct_baseline(
     return {
         "schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
         "authority_id": "dpv2.direct_baseline.v2",
-        "status": "SIDE_BY_SIDE_DATA_PARITY_PASS",
-        "production_active": False,
-        "production_runtime": "V1_UNCHANGED",
+        "status": "PRODUCTION_ACTIVE_DIRECT_BASELINE",
+        "production_active": True,
+        "production_runtime": "V2_DIRECT_BASELINE",
         "identity_key": "canonical_monster_id",
         "probability_policy": {
             "base_authority": "per_slot_base_numerator_over_base_denominator",
             "global_drop_rate_scale": 1.0,
             "global_drop_rate_scale_is_only_multiplier": True,
             "effective_probability": (
-                "min(1.0, base_numerator * global_drop_rate_scale "
-                "/ base_denominator)"
+                "min(1, base_numerator * scale_num "
+                "/ (base_denominator * scale_den))"
             ),
             "role_factor_participates": False,
             "tier_denominator_participates": False,
@@ -1077,8 +1077,8 @@ def build_manifest(rendered: dict[Path, str]) -> dict[str, Any]:
     return {
         "schema": "hardcore.dpv2.direct_baseline_manifest.v2",
         "manifest_id": "dpv2.direct_baseline.manifest.v2",
-        "status": "REPRODUCIBLE_SIDE_BY_SIDE_BUILD_PASS",
-        "production_active": False,
+        "status": "REPRODUCIBLE_PRODUCTION_BUILD_PASS",
+        "production_active": True,
         "hash_policy": {
             "generated_text_artifacts": "UTF-8_WITH_LF_NORMALIZATION",
             "tracked_source_raw_hash_also_preserved": True,

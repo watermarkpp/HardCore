@@ -1,6 +1,6 @@
 extends Node
 
-const DROP_CONTRACT_ID := "monster.loot.canonical_id_only.v1"
+const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
 
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 
@@ -11,7 +11,18 @@ func roll_monster_drops(
 ) -> Dictionary:
 	var result := {
 		"contract_id": DROP_CONTRACT_ID,
+		"runtime_authority": {
+			"authority_id": "dpv2.direct_baseline.v2",
+			"schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
+			"identity_key": "canonical_monster_id",
+			"fallback_forbidden": true,
+			"probability_formula": (
+				"min(1, base_numerator * scale_num "
+				+ "/(base_denominator * scale_den))"
+			),
+		},
 		"monster_id": monster_id,
+		"canonical_monster_id": -1,
 		"configured": false,
 		"reason": "",
 		"source_entry_count": 0,
@@ -35,133 +46,108 @@ func roll_monster_drops(
 		"gold_drops": [],
 		"overflow_discarded": [],
 		"rejected_entries": [],
+		"attempts": [],
+		"slot_attempts": [],
+		"debug": [],
 	}
 	result["source_slot_gate"] = GameData.dpv2_source_slot_gate()
+	if not GameData.is_dpv2_direct_baseline_loaded():
+		result.reason = "dpv2_direct_baseline_unavailable"
+		return result
 	var resolved_id := GameData.canonical_monster_id(monster_id)
 	if resolved_id <= 0:
 		result.reason = "invalid_monster_id"
 		return result
-	var monster := GameData.get_canonical_monster_entry(resolved_id, "runtime")
-	if monster.is_empty():
-		var catalog_entry := GameData.get_canonical_monster_entry(
-			resolved_id, "catalog"
-		)
-		var closure := GameData.canonical_monster_runtime_drop_closure(
-			resolved_id
-		)
-		if (
-			not catalog_entry.is_empty()
-			and bool(catalog_entry.get("runtime_allowed", false))
-			and str(closure.get("reason", "")) == "drop_items_unresolved"
-		):
-			result.reason = "drop_items_unresolved"
-		else:
-			result.reason = "monster_not_runtime_allowed"
+	result.canonical_monster_id = resolved_id
+
+	# The direct profile is joined by canonical_monster_id. Its display/profile
+	# token is telemetry only and is never used to locate a runtime drop table.
+	var profile := GameData.dpv2_direct_profile(resolved_id)
+	if profile.is_empty():
+		result.reason = "dpv2_direct_profile_unresolved"
 		return result
-	var profile := GameData.get_canonical_monster_drop_profile(resolved_id)
-	var profile_entries_value: Variant = profile.get("entries", [])
-	var profile_entry_count: int = (
-		profile_entries_value.size()
-		if profile_entries_value is Array
-		else 0
-	)
-	result.source_entry_count = profile_entry_count
-	var monster_drop_state := GameData.dpv2_monster_drop_state(resolved_id)
-	if monster_drop_state.is_empty():
-		result.reason = "monster_role_authority_unresolved"
+	result["direct_profile"] = {
+		"canonical_monster_id": resolved_id,
+		"drop_profile_id": str(profile.get("drop_profile_id", "")),
+		"baseline_origin": str(profile.get("baseline_origin", "")),
+	}
+	var slots_value: Variant = profile.get("slots", [])
+	if not slots_value is Array:
+		result.reason = "dpv2_direct_slots_invalid"
 		return result
-	if not bool(monster_drop_state.get("drop_enabled", false)):
-		result.configured = true
+	var slots: Array = slots_value
+	result.configured = true
+	result.source_entry_count = slots.size()
+	if not bool(profile.get("drop_enabled", false)):
 		result.reason = "drop_disabled"
-		result.drop_disabled_source_slots = profile_entry_count
+		result.drop_disabled_source_slots = 0
 		result.all_resolved_slots_rng = true
 		result.all_enabled_resolved_slots_rng_before_overflow = true
 		return result
-	if profile.is_empty():
-		# A legal no-drop entity: canonical policy does not require a non-empty
-		# table, or a valid exemption applies. This is not a runtime error.
-		var drop_policy: Dictionary = monster.get("drop_policy", {})
-		var requires_non_empty := bool(
-			drop_policy.get("hostile_requires_non_empty", false)
-		)
-		var exemption_value: Variant = drop_policy.get("exemption", null)
-		var exemption_valid := (
-			exemption_value is Dictionary
-			and bool(exemption_value.get("allowed", false))
-			and not str(exemption_value.get("reason", "")).is_empty()
-		)
-		if not requires_non_empty or exemption_valid:
-			result.configured = true
-			result.reason = ""
-			result.source_entry_count = 0
-			result.all_resolved_slots_rng = true
-			result.all_enabled_resolved_slots_rng_before_overflow = true
-			return result
-		result.reason = "drop_profile_missing_or_empty"
+	result.drop_enabled_source_slots = slots.size()
+	if slots.is_empty():
+		# An enabled profile with no direct slots is a valid zero-drop profile;
+		# it is not allowed to consult any legacy catalog as a fallback.
+		result.reason = ""
+		result.all_resolved_slots_rng = true
+		result.all_enabled_resolved_slots_rng_before_overflow = true
 		return result
-	var entries_value: Variant = profile.get("entries", [])
-	if not entries_value is Array or entries_value.is_empty():
-		var drop_policy: Dictionary = monster.get("drop_policy", {})
-		var requires_non_empty := bool(
-			drop_policy.get("hostile_requires_non_empty", false)
-		)
-		var exemption_value: Variant = drop_policy.get("exemption", null)
-		var exemption_valid := (
-			exemption_value is Dictionary
-			and bool(exemption_value.get("allowed", false))
-			and not str(exemption_value.get("reason", "")).is_empty()
-		)
-		if not requires_non_empty or exemption_valid:
-			result.configured = true
-			result.reason = ""
-			result.source_entry_count = 0
-			result.all_resolved_slots_rng = true
-			result.all_enabled_resolved_slots_rng_before_overflow = true
-			return result
-		result.reason = "drop_profile_missing_or_empty"
-		return result
-	var entries: Array = entries_value
-	result.configured = true
-	result.source_entry_count = entries.size()
-	result.drop_enabled_source_slots = entries.size()
 	if rng == null:
 		result.reason = "rng_missing"
 		return result
+
 	var successful_rewards: Array = []
-	for raw_entry: Variant in entries:
+	for raw_slot: Variant in slots:
 		result.resolution_attempted_count += 1
-		if not raw_entry is Dictionary:
-			_append_rejection(result, -1, "drop_entry_invalid")
+		if not raw_slot is Dictionary:
+			_append_rejection(result, {}, "dpv2_direct_slot_invalid")
 			continue
-		var entry: Dictionary = raw_entry
-		var reward := GameData.resolve_canonical_drop_reward(entry)
+		var slot: Dictionary = raw_slot
+		var slot_uid := str(slot.get("slot_uid", ""))
+		var probability := GameData.dpv2_direct_slot_probability(
+			resolved_id,
+			slot_uid,
+		)
+		if not bool(probability.get("ok", false)):
+			_append_rejection(
+				result,
+				slot,
+				str(probability.get("reason", "dpv2_direct_probability_invalid")),
+			)
+			continue
+		result.probability_resolved_enabled_slots += 1
+		var reward := GameData.dpv2_direct_resolve_slot_reward(slot)
 		if not bool(reward.get("ok", false)):
 			_append_rejection(
 				result,
-				int(entry.get("line_number", -1)),
-				str(reward.get("reason", "item_authority_unresolved"))
+				slot,
+				str(reward.get("reason", "dpv2_direct_reward_unresolved")),
 			)
 			continue
 		result.reward_resolved_enabled_slots += 1
-		var policy := GameData.dpv2_resolve_reward_policy(resolved_id, reward)
-		if not bool(policy.get("ok", false)):
-			_append_rejection(
-				result,
-				int(entry.get("line_number", -1)),
-				str(policy.get("reason", "drop_probability_authority_invalid"))
-			)
-			continue
 		result.resolved_entry_count += 1
-		var numerator := int(policy.get("probability_numerator", 0))
-		var denominator := int(policy.get("probability_denominator", 0))
-		result.probability_resolved_enabled_slots += 1
 		result.rng_eligible_slots += 1
+		var denominator := int(probability.get("final_denominator", 0))
+		var numerator := int(probability.get("final_numerator", 0))
+		if numerator <= 0 or denominator <= 0:
+			_append_rejection(result, slot, "dpv2_direct_probability_invalid")
+			result.reward_resolved_enabled_slots -= 1
+			result.resolved_entry_count -= 1
+			result.rng_eligible_slots -= 1
+			result.probability_resolved_enabled_slots -= 1
+			continue
 		result.rng_roll_count += 1
-		if rng.randi_range(1, denominator) <= numerator:
+		var draw := rng.randi_range(1, denominator)
+		var success := draw <= numerator
+		var attempt := _build_attempt(slot, probability, reward, draw, success)
+		_record_attempt(result, attempt)
+		if success:
 			successful_rewards.append({
-				"line_number": int(entry.get("line_number", -1)),
+				"slot_uid": slot_uid,
+				"canonical_item_id": int(probability.get("canonical_item_id", -1)),
 				"reward": reward.duplicate(true),
-				"policy": policy.duplicate(true),
+				"policy": probability.duplicate(true),
+				"attempt": attempt,
 			})
 	result.successful_roll_count = successful_rewards.size()
 	result.all_resolved_slots_rng = (
@@ -173,11 +159,12 @@ func roll_monster_drops(
 		and result.probability_resolved_enabled_slots
 			== result.reward_resolved_enabled_slots
 		and result.rng_eligible_slots == result.resolved_entry_count
+		and result.resolved_entry_count == slots.size()
 	)
 	var selection := _select_ground_rewards(
 		successful_rewards,
 		rng,
-		GameData.dpv2_ground_slot_limit()
+		GameData.dpv2_ground_slot_limit(),
 	)
 	for raw_selected: Variant in selection.get("selected", []):
 		if not raw_selected is Dictionary:
@@ -190,9 +177,7 @@ func roll_monster_drops(
 		else:
 			result.items.append(str(reward.get("item_name", "")))
 	result.overflow_discarded = selection.get("discarded", [])
-	result.ground_output_count = (
-		result.items.size() + result.gold_drops.size()
-	)
+	result.ground_output_count = result.items.size() + result.gold_drops.size()
 	result.overflow_discarded_count = result.overflow_discarded.size()
 	result.protected_overflow_count = int(
 		selection.get("protected_discarded_count", 0)
@@ -201,13 +186,72 @@ func roll_monster_drops(
 		result.ground_output_count + result.overflow_discarded_count
 		== result.successful_roll_count
 	)
+	_sync_attempt_views(result)
 	return result
+
+
+func _build_attempt(
+	slot: Dictionary,
+	probability: Dictionary,
+	reward: Dictionary,
+	draw: int,
+	success: bool,
+) -> Dictionary:
+	var attempt := {
+		"slot_uid": str(slot.get("slot_uid", "")),
+		"canonical_monster_id": int(probability.get("canonical_monster_id", -1)),
+		"canonical_item_id": int(probability.get("canonical_item_id", -1)),
+		"gold_amount": int(probability.get("gold_amount", -1)),
+		"reward_kind": str(probability.get("reward_kind", reward.get("kind", ""))),
+		"item_name": str(reward.get("item_name", "")),
+		"base_numerator": int(probability.get("base_numerator", 0)),
+		"base_denominator": int(probability.get("base_denominator", 0)),
+		"base_probability": float(probability.get("base_probability", 0.0)),
+		"global_preset": str(probability.get("global_preset", "")),
+		"global_scale_numerator": int(probability.get("global_scale_numerator", 0)),
+		"global_scale_denominator": int(probability.get("global_scale_denominator", 0)),
+		"global_scale": float(probability.get("global_scale", 0.0)),
+		"final_numerator": int(probability.get("final_numerator", 0)),
+		"final_denominator": int(probability.get("final_denominator", 0)),
+		"final_probability": float(probability.get("final_probability", 0.0)),
+		"probability_numerator": int(probability.get("final_numerator", 0)),
+		"probability_denominator": int(probability.get("final_denominator", 0)),
+		"draw": draw,
+		"draw_success": success,
+		"success": success,
+		"overflow": "pending" if success else "not_applicable",
+		"overflow_discarded": false,
+		"protected_drop": bool(probability.get("protected_drop", false)),
+		"protected_overflow": false,
+		"overflow_priority": int(probability.get("overflow_priority", 0)),
+		"baseline_origin": str(probability.get("baseline_origin", "")),
+		"source_provenance_id": str(probability.get("source_provenance_id", "")),
+	}
+	return attempt
+
+
+func _record_attempt(result: Dictionary, attempt: Dictionary) -> void:
+	result.attempts.append(attempt)
+	result.slot_attempts.append(attempt.duplicate(true))
+	result.debug.append(attempt.duplicate(true))
+
+
+func _sync_attempt_views(result: Dictionary) -> void:
+	# Selection annotates the authoritative attempt in place. Refresh the two
+	# compatibility/debug views after overflow so no view can report stale
+	# pending state.
+	result.slot_attempts.clear()
+	result.debug.clear()
+	for raw_attempt: Variant in result.attempts:
+		if raw_attempt is Dictionary:
+			result.slot_attempts.append((raw_attempt as Dictionary).duplicate(true))
+			result.debug.append((raw_attempt as Dictionary).duplicate(true))
 
 
 func _select_ground_rewards(
 	successful_rewards: Array,
 	rng: RandomNumberGenerator,
-	maximum_ground_slots: int
+	maximum_ground_slots: int,
 ) -> Dictionary:
 	var result := {
 		"selected": [],
@@ -215,36 +259,68 @@ func _select_ground_rewards(
 		"protected_discarded_count": 0,
 	}
 	var limit := maxi(0, maximum_ground_slots)
-	var groups := {}
+	var protected_groups: Dictionary = {}
+	var ordinary_groups: Dictionary = {}
 	for raw_candidate: Variant in successful_rewards:
 		if not raw_candidate is Dictionary:
 			continue
 		var candidate: Dictionary = raw_candidate
 		var policy: Dictionary = candidate.get("policy", {})
 		var priority := int(policy.get("overflow_priority", 0))
+		var groups: Dictionary = (
+			protected_groups if bool(policy.get("protected_drop", false))
+			else ordinary_groups
+		)
 		if not groups.has(priority):
 			groups[priority] = []
 		(groups[priority] as Array).append(candidate)
-	var priorities: Array = groups.keys()
-	priorities.sort()
-	priorities.reverse()
-	for raw_priority: Variant in priorities:
-		var group: Array = groups.get(int(raw_priority), []).duplicate(true)
-		var remaining: int = limit - result.selected.size()
-		if remaining <= 0:
-			_append_discarded_group(result, group)
-			continue
-		# A same-priority random subset is required only when this group itself
-		# crosses the remaining ground-capacity boundary. Successful rolls that
-		# fit do not consume an extra RNG draw.
-		if group.size() > remaining:
-			_shuffle_candidates(group, rng)
-		for raw_candidate: Variant in group:
-			if result.selected.size() < limit:
-				result.selected.append(raw_candidate)
-			else:
-				_append_discarded(result, raw_candidate)
+	var protected_priorities: Array = protected_groups.keys()
+	protected_priorities.sort()
+	protected_priorities.reverse()
+	for raw_priority: Variant in protected_priorities:
+		var protected_group: Array = protected_groups.get(int(raw_priority), [])
+		_consume_group(
+			result,
+			protected_group.duplicate(false),
+			rng,
+			limit,
+		)
+	var ordinary_priorities: Array = ordinary_groups.keys()
+	ordinary_priorities.sort()
+	ordinary_priorities.reverse()
+	for raw_priority: Variant in ordinary_priorities:
+		var ordinary_group: Array = ordinary_groups.get(int(raw_priority), [])
+		_consume_group(
+			result,
+			ordinary_group.duplicate(false),
+			rng,
+			limit,
+		)
 	return result
+
+
+func _consume_group(
+	result: Dictionary,
+	group: Array,
+	rng: RandomNumberGenerator,
+	limit: int,
+) -> void:
+	var remaining: int = limit - result.selected.size()
+	if remaining <= 0:
+		_append_discarded_group(result, group)
+		return
+	# Same protected/priority ties are unbiased only when the group crosses the
+	# cap. Fitting groups preserve source order and consume no extra RNG.
+	if group.size() > remaining:
+		_shuffle_candidates(group, rng)
+	for raw_candidate: Variant in group:
+		if not raw_candidate is Dictionary:
+			continue
+		if result.selected.size() < limit:
+			result.selected.append(raw_candidate)
+			_mark_selected(raw_candidate)
+		else:
+			_append_discarded(result, raw_candidate)
 
 
 func _append_discarded_group(result: Dictionary, group: Array) -> void:
@@ -253,10 +329,25 @@ func _append_discarded_group(result: Dictionary, group: Array) -> void:
 			_append_discarded(result, raw_candidate)
 
 
+func _mark_selected(candidate: Dictionary) -> void:
+	var attempt: Variant = candidate.get("attempt", {})
+	if not attempt is Dictionary:
+		return
+	attempt["overflow"] = "selected"
+	attempt["overflow_discarded"] = false
+	attempt["protected_overflow"] = false
+
+
 func _append_discarded(result: Dictionary, candidate: Dictionary) -> void:
 	result.discarded.append(candidate)
 	var policy: Dictionary = candidate.get("policy", {})
-	if bool(policy.get("protected_drop", false)):
+	var protected := bool(policy.get("protected_drop", false))
+	var attempt: Variant = candidate.get("attempt", {})
+	if attempt is Dictionary:
+		attempt["overflow"] = "discarded"
+		attempt["overflow_discarded"] = true
+		attempt["protected_overflow"] = protected
+	if protected:
 		result.protected_discarded_count += 1
 
 
@@ -271,6 +362,8 @@ func _shuffle_candidates(candidates: Array, rng: RandomNumberGenerator) -> void:
 
 
 func _chance_denominator(token: String) -> int:
+	# Retained for the historical source-audit probe only. Production rolls
+	# never parse chance tokens; V2 slots carry exact numerator/denominator.
 	var parts := token.split("/", false)
 	if parts.size() != 2 or parts[0] != "1":
 		return -1
@@ -325,8 +418,17 @@ func clear_overflow_telemetry() -> void:
 	_overflow_telemetry_by_monster_id.clear()
 
 
-func _append_rejection(result: Dictionary, line_number: int, reason: String) -> void:
+func _append_rejection(
+	result: Dictionary,
+	slot: Dictionary,
+	reason: String,
+) -> void:
 	result.rejected_entries.append({
-		"line_number": line_number,
+		"line_number": -1,
+		"slot_uid": str(slot.get("slot_uid", "")),
+		"canonical_item_id": int(slot.get("canonical_item_id", -1)),
+		"gold_amount": int(slot.get("gold_amount", -1)),
 		"reason": reason,
+		"baseline_origin": str(slot.get("baseline_origin", "")),
+		"source_provenance_id": str(slot.get("source_provenance_id", "")),
 	})

@@ -1,7 +1,7 @@
 {
   "schema": "hardcore.dpv2.global_drop_rate_authority.v1",
   "authority_id": "dpv2.global_drop_rate_scale.v1",
-  "status": "PRODUCTION_ACTIVE",
+  "status": "PRODUCTION_ACTIVE_DIRECT_BASELINE",
   "authority": {
     "kind": "single_global_probability_control",
     "control_key": "global_drop_rate_scale",
@@ -38,13 +38,23 @@
     }
   ],
   "probability_contract": {
-    "formula": "min(1, role_factor * active_global_scale / tier_base_denominator)",
+    "formula": "min(1, base_numerator * scale_num / (base_denominator * scale_den))",
     "arithmetic": "exact_positive_rational",
+    "base_probability_source": "dpv2_direct_baseline_v2",
+    "base_probability_numerator_field": "base_numerator",
+    "base_probability_denominator_field": "base_denominator",
+    "global_scale_numerator_field": "numerator",
+    "global_scale_denominator_field": "denominator",
     "source_rate_role": "provenance_only",
+    "role_factor_participates": false,
+    "tier_denominator_participates": false,
     "all_resolved_source_slots_rng_before_overflow": true
   },
   "activation": {
     "production_active": true,
-    "runtime_consumer": "scripts/layers/runtime/loot_runtime_service.gd"
+    "runtime_consumer": "scripts/layers/runtime/loot_runtime_service.gd",
+    "selected_authority": "dpv2_direct_baseline_v2",
+    "join_key": "canonical_monster_id",
+    "fallback_forbidden": true
   }
 }
