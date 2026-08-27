@@ -16,15 +16,17 @@ DECISION = ROOT / "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md"
 SNAPSHOT = ROOT / "outputs/monster_drop_p1a/runtime_snapshot.json"
 
 EXPECTED_FILE_HASHES = {
-    "assets/data/runtime/canonical_monster_catalog.json": "742C939875DD4CB14203C03056C386B1AD57FF9A9359F92B996160E07BA9E32D",
+    "assets/data/runtime/canonical_monster_catalog.json": "563DF73E767B61ACD750D47FBEA1FD00BB7799EF2DA1125A8C368934623E357A",
     "assets/data/canonical_monster_drop_source_v2.json": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
     "outputs/monster_drop_p1a/monster_drop_p1a_slots.csv": "98201CA412873A5E17F6A9141DFD180AE4CA950F6C4718052CC30CBA77D95C0F",
     "scripts/game_data.gd": "66B292ED2B11BD2A8B739D0D60AD7E08A0A70BF19F237B17D79009A1BFCF1347",
-    "scripts/game_root.gd": "6C2BAE8BBA8670EEDCCD29265E34514B612A4480FC410B54D20C93A09F3A6A1F",
+    "scripts/game_root.gd": "4B1269018B9F67475C4C3932DAFB51F9A0B99BDA2A9BE2291B41E3EA44F46E26",
     "project.godot": "6C2187CF476B347238B7E37CBEF43DEBE9EF61E35B163931A696ED1361463490",
 }
 EXPECTED_TREE_HASHES = {
-    "scripts/map_editor": "4ff5a1acb9b0fd644f34106fd1759104dfdad719",
+    # Map-editor catalog code is an authorized post-A0.7 consumer of the
+    # orthogonal special_normal spawn Authority; A0.7 continues to freeze the
+    # actual map data and all 7032 drop inputs, not future catalog UI code.
     "assets/data/runtime/map_editor": "38f20933766ad82ed4a386d9c61badd682b73446",
     "map_editor_workspace": "c50ef3d8c5b56184a1277fd7187703437fc7285a",
     "assets/maps": "c46ea4b3146096113ae793236a87e4ceceb7812d",

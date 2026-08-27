@@ -2,6 +2,9 @@ class_name MapEditorRuntimeBridge
 extends RefCounted
 
 const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
+const MonsterRespawnPolicyScript := preload(
+	"res://scripts/monster_respawn_policy.gd"
+)
 const BICH_MAP_ID := 4
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
@@ -637,6 +640,9 @@ static func _combat_spawn(
 	).is_empty():
 		return {}
 	var classification := str(canonical.get("classification", ""))
+	var spawn_classification := str(
+		canonical.get("spawn_classification", "")
+	)
 	var canonical_placement := str(
 		canonical.get("editor_placement", {}).get("placement_kind", "")
 	)
@@ -644,17 +650,31 @@ static func _combat_spawn(
 		return {}
 	if not canonical_placement.is_empty() and canonical_placement != placement_kind:
 		return {}
-	if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
-		return {}
-	if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
-		return {}
+	if spawn_classification == MonsterRespawnPolicyScript.SPECIAL_NORMAL:
+		if placement_kind != "monster_spawn":
+			return {}
+		if int(entry.get("count", 1)) != 1 or int(entry.get("max_alive", 1)) != 1:
+			return {}
+	else:
+		if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
+			return {}
+		if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
+			return {}
 	var respawn_seconds := float(entry.get("respawn_seconds", 60.0))
+	var respawn_policy_id := str(entry.get("respawn_policy_id", ""))
+	if spawn_classification == MonsterRespawnPolicyScript.SPECIAL_NORMAL:
+		# Canonical Authority upgrades legacy/dirty authoring values without
+		# mutating the user's map workspace. Published runtime always receives
+		# the frozen special_normal tier.
+		respawn_policy_id = MonsterRespawnPolicyScript.SPECIAL_NORMAL
+		respawn_seconds = MonsterRespawnPolicyScript.SPECIAL_NORMAL_SECONDS
 	if respawn_override > 0.0:
 		respawn_seconds = respawn_override
 	return {
 		"name": str(canonical.get("canonical_name", "")),
 		"monster_id": numeric_id,
 		"classification": classification,
+		"spawn_classification": spawn_classification,
 		"placement_kind": placement_kind,
 		"is_boss": classification == "boss",
 		"screen_position_px": grid_cell_to_screen_position_px(
@@ -664,7 +684,7 @@ static func _combat_spawn(
 			entry.get("tile", [0, 0])
 		),
 		"respawn_seconds": respawn_seconds,
-		"respawn_policy_id": str(entry.get("respawn_policy_id", "")),
+		"respawn_policy_id": respawn_policy_id,
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
 		"radius_gu": float(entry.get("radius_gu", 0.0)),

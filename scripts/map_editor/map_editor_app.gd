@@ -2523,6 +2523,9 @@ func _apply_semantic_combat_entry_defaults(kind: String, entry: Variant) -> void
 	if kind not in ["monster_spawn", "boss_spawn", "special_monster"] or not entry is Dictionary:
 		return
 	semantic_respawn.value = int(entry.get("default_respawn_seconds", 60 if kind == "monster_spawn" else 1800))
+	if str(entry.get("spawn_classification", "")) == "special_normal":
+		semantic_count.value = 1
+		semantic_max_alive.value = 1
 	var placement_kind := str(entry.get("placement_kind", kind))
 	if placement_kind == "boss_spawn":
 		semantic_radius.value = 0
@@ -2538,7 +2541,7 @@ func _show_semantic_entry_details(entry: Dictionary) -> void:
 		return
 	var lines: Array[String] = []
 	lines.append("内容：%s  |  稳定 ID：%s" % [str(entry.get("display_name", "")), str(entry.get("monster_id", entry.get("numeric_id", "")))])
-	lines.append("分类：%s  |  实际语义：%s  |  默认刷新：%s 秒" % [str(entry.get("classification", "")), str(entry.get("placement_kind", "")), str(entry.get("default_respawn_seconds", 0))])
+	lines.append("分类：%s  |  刷新分类：%s  |  实际语义：%s  |  默认刷新：%s 秒" % [str(entry.get("classification", "")), str(entry.get("spawn_classification", "")), str(entry.get("placement_kind", "")), str(entry.get("default_respawn_seconds", 0))])
 	lines.append("作者可布置：%s" % ("是" if bool(entry.get("authoring_allowed", false)) else "否"))
 	lines.append("运行时闭环：%s" % ("是" if bool(entry.get("runtime_ready", false)) else "否"))
 	if not bool(entry.get("runtime_ready", false)):
@@ -2811,6 +2814,11 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		properties["count"] = int(semantic_count.value)
 		properties["respawn_seconds"] = int(semantic_respawn.value)
 		properties["max_alive"] = int(semantic_max_alive.value)
+		var default_respawn_policy_id := str(
+			combat_entry.get("default_respawn_policy_id", "")
+		)
+		if not default_respawn_policy_id.is_empty():
+			properties["respawn_policy_id"] = default_respawn_policy_id
 	var result := MapEditorGameplaySemanticService.add_entry(current_document, actual_kind, tile, properties)
 	if result.ok:
 		if actual_kind in ["monster_spawn", "boss_spawn"]:

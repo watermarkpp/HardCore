@@ -9,6 +9,7 @@ var _checks := 0
 func _ready() -> void:
 	_test_five_authoritative_durations()
 	_test_classification_lock()
+	_test_special_normal_spawn_classification_lock()
 	_test_ordinary_explicit_policy()
 	_test_legacy_seconds_fold_into_allowed_tiers()
 	_test_absolute_world_state()
@@ -40,6 +41,28 @@ func _test_classification_lock() -> void:
 	assert(not Policy.resolve(Policy.NORMAL_CAVE, "boss", 480.0).valid)
 	assert(not Policy.resolve(Policy.BOSS, "elite", 3600.0).valid)
 	_checks += 4
+
+
+func _test_special_normal_spawn_classification_lock() -> void:
+	var elite_variant := Policy.resolve(
+		Policy.SPECIAL_NORMAL,
+		"elite",
+		480.0,
+		Policy.SPECIAL_NORMAL
+	)
+	assert(elite_variant.valid)
+	assert(elite_variant.policy_id == Policy.SPECIAL_NORMAL)
+	assert(elite_variant.seconds == 900.0)
+	assert(elite_variant.source == "canonical_spawn_classification")
+	assert(
+		not Policy.resolve(
+			Policy.NORMAL_CAVE,
+			"elite",
+			480.0,
+			Policy.SPECIAL_NORMAL
+		).valid
+	)
+	_checks += 5
 
 
 func _test_ordinary_explicit_policy() -> void:

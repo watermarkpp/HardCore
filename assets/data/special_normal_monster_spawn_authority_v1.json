@@ -1,0 +1,254 @@
+{
+  "schema": "hardcore.monster_special_normal_spawn_authority.v1",
+  "authority_id": "special_normal.monster_spawn.v1",
+  "status": "FORMAL_SPAWN_AUTHORITY_ACTIVE",
+  "scope": {
+    "identity_key": "monster_id",
+    "selection": "explicit_exact_monster_id_set",
+    "canonical_monster_ids": [
+      39,
+      57,
+      74,
+      77,
+      90,
+      121,
+      137,
+      142
+    ],
+    "classification_field": "spawn_classification",
+    "combat_classification_is_independent": true,
+    "name_or_suffix_resolution_forbidden": true
+  },
+  "authority": {
+    "kind": "user_authoritative_exact_id_set",
+    "decision": "special_normal正式复用；未知暗殿已布置的八个精确monster_id统一使用标准monster_spawn刷新与全局DPV2掉落规则",
+    "sources": [
+      {
+        "path": "assets/data/vanilla_176/monsters.json",
+        "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
+        "role": "canonical identity and exact canonical name evidence"
+      },
+      {
+        "path": "assets/data/canonical_monster_classification_v1.json",
+        "sha256": "C74E4A7A891A6542B09BBB388383A2AFDC9900FC2A37534726F7EAB649D35535",
+        "role": "combat classification preservation evidence"
+      },
+      {
+        "path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
+        "sha256": null,
+        "role": "A0.7 monster drop role and factor authority"
+      },
+      {
+        "path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+        "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+        "role": "A0.7 item Tier and denominator authority"
+      }
+    ]
+  },
+  "defaults": {
+    "spawn_classification": "special_normal",
+    "placement_kind": "monster_spawn",
+    "respawn_policy_id": "special_normal",
+    "respawn_seconds": 900,
+    "random_seconds": 0,
+    "count": 1,
+    "max_alive": 1
+  },
+  "spawn_activation": {
+    "production_active": true,
+    "runtime_consumers": [
+      "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+      "scripts/monster_respawn_policy.gd",
+      "scripts/game_root.gd"
+    ],
+    "map_data_mutated": false
+  },
+  "drop_binding": {
+    "rule": "reuse_global_dpv2_role_and_item_tier_authority",
+    "additional_multiplier": null,
+    "per_item_denominator_override_allowed": false,
+    "role_authority_path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
+    "item_tier_authority_path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+    "source_rate_policy": {
+      "source_path": "outputs/monster_drop_p1a/monster_drop_p1a_slots.csv",
+      "field": "source_rate",
+      "role": "provenance_only",
+      "used_for_tier": false,
+      "used_for_denominator": false
+    },
+    "production_active": false,
+    "phase_1_allowed": false,
+    "runtime_consumer": null,
+    "persistence_consumer": null
+  },
+  "records": [
+    {
+      "monster_id": 39,
+      "canonical_name": "半兽勇士1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 57,
+      "canonical_name": "骷髅精灵1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 74,
+      "canonical_name": "沃玛卫士1",
+      "combat_classification": "elite",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 77,
+      "canonical_name": "沃玛教主1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "role_assignment_authority": "HUMAN_FROZEN",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 90,
+      "canonical_name": "尸王1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 121,
+      "canonical_name": "邪恶钳虫1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 137,
+      "canonical_name": "白野猪1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "role_assignment_authority": "HUMAN_FROZEN",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    },
+    {
+      "monster_id": 142,
+      "canonical_name": "邪恶毒蛇1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      },
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "role_assignment_authority": "HUMAN_FROZEN",
+      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
+      "additional_multiplier": null,
+      "source_rate_role": "provenance_only"
+    }
+  ]
+}

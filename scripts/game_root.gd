@@ -2078,13 +2078,17 @@ func _spawn_enemy(
 		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
 	context["spawn_slot_id"] = slot_id
 	var classification := str(canonical_monster.get("classification", ""))
+	var spawn_classification := str(
+		canonical_monster.get("spawn_classification", "")
+	)
 	var policy: Dictionary = {}
 	var effective_respawn := maxf(0.0, float(respawn_seconds))
 	if respawn_enabled:
 		policy = MonsterRespawnPolicyScript.resolve(
 			str(context.get("respawn_policy_id", "")),
 			classification,
-			float(respawn_seconds)
+			float(respawn_seconds),
+			spawn_classification
 		)
 		if not bool(policy.get("valid", false)):
 			push_error(
@@ -2099,6 +2103,7 @@ func _spawn_enemy(
 		effective_respawn = float(policy.get("seconds", 0.0))
 		context["respawn_policy_id"] = str(policy.get("policy_id", ""))
 		context["respawn_policy_source"] = str(policy.get("source", ""))
+		context["spawn_classification"] = spawn_classification
 		context["respawn_policy_requires_authored_policy"] = bool(
 			policy.get("requires_authored_policy", false)
 		)
@@ -8526,10 +8531,14 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	if not respawn_enabled:
 		return
 	var classification := str(canonical_monster.get("classification", ""))
+	var spawn_classification := str(
+		canonical_monster.get("spawn_classification", "")
+	)
 	var policy := MonsterRespawnPolicyScript.resolve(
 		str(spawn_context.get("respawn_policy_id", "")),
 		classification,
-		configured_respawn
+		configured_respawn,
+		spawn_classification
 	)
 	if not bool(policy.get("valid", false)):
 		push_error(
@@ -8558,6 +8567,7 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		)
 		return
 	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
+	spawn_context["spawn_classification"] = spawn_classification
 	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
 	spawn_context["respawn_random_seconds"] = 0.0
 	_respawn_later(

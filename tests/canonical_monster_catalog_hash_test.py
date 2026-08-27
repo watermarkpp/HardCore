@@ -227,9 +227,18 @@ def main() -> None:
     _assert_retired_ids()
     _assert_no_generic_fallback()
     entries_by_id = catalog.get("entries_by_id", {})
-    assert entries_by_id.get("39", {}).get("editor_placement", {}).get(
-        "placement_kind"
-    ) == "boss_spawn", entries_by_id.get("39", {}).get("editor_placement", {})
+    special_normal_ids = {39, 57, 74, 77, 90, 121, 137, 142}
+    assert {
+        int(monster_id)
+        for monster_id, entry in entries_by_id.items()
+        if entry.get("spawn_classification") == "special_normal"
+    } == special_normal_ids
+    for monster_id in special_normal_ids:
+        entry = entries_by_id[str(monster_id)]
+        assert entry.get("editor_placement", {}).get("placement_kind") == "monster_spawn"
+        assert entry.get("spawn_authority", {}).get("respawn_policy_id") == "special_normal"
+        assert entry.get("spawn_authority", {}).get("respawn_seconds") == 900
+    assert entries_by_id["74"].get("classification") == "elite"
 
     print(
         "CANONICAL_MONSTER_CATALOG_HASH_PASS: "
@@ -238,7 +247,7 @@ def main() -> None:
         "local_from_res_portable=1 excel_source_sha=1 crystal_primary_zero=1 "
         "variant_visual_pairs=8 undead_exact_id=25 boss_variants=3 "
         "retired_source_preserved=3 retired_active_absent=3 "
-        "no_generic_fallback=1"
+        "no_generic_fallback=1 special_normal_exact_ids=8"
     )
 
 

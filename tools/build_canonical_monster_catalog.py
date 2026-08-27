@@ -33,6 +33,9 @@ ANIMATION_PATH = ROOT / "assets/data/runtime/monster_animation_catalog.json"
 CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classification_v1.json"
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
+SPECIAL_NORMAL_AUTHORITY_PATH = ROOT / "assets/data/special_normal_monster_spawn_authority_v1.json"
+DPV2_ROLE_AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_monster_role_authority_v1.json"
+DPV2_ITEM_TIER_AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_item_tier_authority_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
 DROP_AUTHORING_OVERLAY_PATH = (
     ROOT
@@ -107,6 +110,26 @@ WOOma_SLUG_BY_ID = {
     239: "dark_wooma_taurus",
 }
 
+SPECIAL_NORMAL_IDS = frozenset({39, 57, 74, 77, 90, 121, 137, 142})
+SPECIAL_NORMAL_AUTHORITY_SCHEMA = "hardcore.monster_special_normal_spawn_authority.v1"
+SPECIAL_NORMAL_AUTHORITY_STATUS = "FORMAL_SPAWN_AUTHORITY_ACTIVE"
+SPECIAL_NORMAL_DEFAULTS = {
+    "spawn_classification": "special_normal",
+    "placement_kind": "monster_spawn",
+    "respawn_policy_id": "special_normal",
+    "respawn_seconds": 900,
+    "random_seconds": 0,
+    "count": 1,
+    "max_alive": 1,
+}
+SPECIAL_NORMAL_SOURCE_RATE_POLICY = {
+    "source_path": "outputs/monster_drop_p1a/monster_drop_p1a_slots.csv",
+    "field": "source_rate",
+    "role": "provenance_only",
+    "used_for_tier": False,
+    "used_for_denominator": False,
+}
+
 # The old runtime payload sometimes carried agility/anti-poison fields, but
 # those values have no authoritative monster-service evidence in this lane.
 # Keep the projection explicit and fail-safe: consumers receive the project
@@ -148,6 +171,141 @@ def load_json(path: Path) -> Any:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:  # pragma: no cover - error is reported by caller
         raise RuntimeError(f"cannot parse {path}: {exc}") from exc
+
+
+def validate_special_normal_authority(
+    authority: dict[str, Any],
+    vanilla: dict[str, Any],
+    role_authority: dict[str, Any],
+    item_tier_authority: dict[str, Any],
+) -> dict[int, dict[str, Any]]:
+    """Validate the exact-ID special_normal overlay before catalog generation.
+
+    ``special_normal`` is a spawn classification overlay, not a replacement
+    for the combat classification or the DPV2 role.  Keeping this contract in
+    the ID-keyed catalog builder makes it impossible for a name/suffix join or
+    a map-specific fallback to silently widen the category.
+    """
+
+    def require(condition: bool, message: str) -> None:
+        if not condition:
+            raise RuntimeError(f"special_normal authority: {message}")
+
+    require(authority.get("schema") == SPECIAL_NORMAL_AUTHORITY_SCHEMA, "schema mismatch")
+    require(authority.get("status") == SPECIAL_NORMAL_AUTHORITY_STATUS, "status mismatch")
+    scope = authority.get("scope", {})
+    require(isinstance(scope, dict), "scope must be a dictionary")
+    require(scope.get("identity_key") == "monster_id", "identity key must be monster_id")
+    require(scope.get("selection") == "explicit_exact_monster_id_set", "selection is not exact-ID")
+    require(scope.get("classification_field") == "spawn_classification", "spawn classification field drift")
+    require(scope.get("combat_classification_is_independent") is True, "combat classification is not independent")
+    require(scope.get("name_or_suffix_resolution_forbidden") is True, "name/suffix resolution guard missing")
+    expected_ids = sorted(SPECIAL_NORMAL_IDS)
+    actual_scope_ids = sorted(int(value) for value in scope.get("canonical_monster_ids", []))
+    require(actual_scope_ids == expected_ids, f"scope IDs={actual_scope_ids} expected {expected_ids}")
+
+    defaults = authority.get("defaults", {})
+    require(defaults == SPECIAL_NORMAL_DEFAULTS, f"defaults={defaults!r} expected {SPECIAL_NORMAL_DEFAULTS!r}")
+
+    drop_binding = authority.get("drop_binding", {})
+    require(isinstance(drop_binding, dict), "drop_binding must be a dictionary")
+    require(drop_binding.get("rule") == "reuse_global_dpv2_role_and_item_tier_authority", "DPV2 reuse rule missing")
+    require(drop_binding.get("additional_multiplier") is None, "special_normal adds a drop multiplier")
+    require(drop_binding.get("per_item_denominator_override_allowed") is False, "per-item denominator override enabled")
+    require(drop_binding.get("role_authority_path") == DPV2_ROLE_AUTHORITY_PATH.relative_to(ROOT).as_posix(), "role authority path drift")
+    require(drop_binding.get("item_tier_authority_path") == DPV2_ITEM_TIER_AUTHORITY_PATH.relative_to(ROOT).as_posix(), "Tier authority path drift")
+    require(drop_binding.get("source_rate_policy") == SPECIAL_NORMAL_SOURCE_RATE_POLICY, "source_rate policy drift")
+    require(drop_binding.get("production_active") is False, "special_normal production is active")
+    require(drop_binding.get("phase_1_allowed") is False, "special_normal phase 1 is allowed")
+    require(drop_binding.get("runtime_consumer") is None, "special_normal has a runtime consumer")
+    require(drop_binding.get("persistence_consumer") is None, "special_normal has a persistence consumer")
+    require(
+        authority.get("spawn_activation")
+        == {
+            "production_active": True,
+            "runtime_consumers": [
+                "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+                "scripts/monster_respawn_policy.gd",
+                "scripts/game_root.gd",
+            ],
+            "map_data_mutated": False,
+        },
+        "spawn activation contract drift",
+    )
+
+    expected_sources = {
+        "assets/data/vanilla_176/monsters.json": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
+        "assets/data/canonical_monster_classification_v1.json": "C74E4A7A891A6542B09BBB388383A2AFDC9900FC2A37534726F7EAB649D35535",
+        "assets/data/drop/dpv2_item_tier_authority_v1.json": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+    }
+    source_rows = authority.get("authority", {}).get("sources", [])
+    source_by_path = {
+        str(row.get("path")): row
+        for row in source_rows
+        if isinstance(row, dict)
+    }
+    for relative_path, expected_hash in expected_sources.items():
+        source = source_by_path.get(relative_path, {})
+        require(source.get("sha256", "").upper() == expected_hash, f"source hash mismatch for {relative_path}")
+        source_path = ROOT / relative_path
+        require(source_path.is_file(), f"missing source {relative_path}")
+        require(sha256_file(source_path) == expected_hash, f"checked-in source drift for {relative_path}")
+    role_source = source_by_path.get(
+        DPV2_ROLE_AUTHORITY_PATH.relative_to(ROOT).as_posix(), {}
+    )
+    require(role_source.get("sha256") is None, "role source hash creates a catalog/role cycle")
+    require(
+        role_source.get("role") == "A0.7 monster drop role and factor authority",
+        "role source evidence drift",
+    )
+
+    require(role_authority.get("schema") == "hardcore.dpv2.monster_role_authority.v1", "A0.7 role authority schema mismatch")
+    require(role_authority.get("activation") == {"production_active": False, "runtime_consumer": None, "phase_1_allowed": False}, "A0.7 role authority must remain inactive")
+    role_rows = {
+        int(row.get("canonical_monster_id", -1)): row
+        for row in role_authority.get("monsters", [])
+        if isinstance(row, dict)
+    }
+    require(len(role_rows) == 156, "A0.7 role authority is not the 156-monster closure")
+
+    require(item_tier_authority.get("schema") == "hardcore.dpv2.item_tier_authority.v1", "A0.7 Tier authority schema mismatch")
+    require(item_tier_authority.get("activation") == {"production_active": False, "phase1_allowed": False, "runtime_consumer": None, "persistence_consumer": None}, "A0.7 Tier authority must remain inactive")
+    require(item_tier_authority.get("source_rate_policy") == SPECIAL_NORMAL_SOURCE_RATE_POLICY, "A0.7 source_rate is not provenance-only")
+    tier_rows = item_tier_authority.get("records", [])
+    require(len(tier_rows) == 233, "A0.7 Tier authority is not the 233-item closure")
+    require(all(isinstance(row, dict) and row.get("tier_status") == "RESOLVED" for row in tier_rows), "A0.7 Tier authority has unresolved records")
+
+    vanilla_by_id = {
+        int(record.get("monsterId", -1)): record
+        for record in vanilla.get("records", [])
+        if isinstance(record, dict) and record.get("recordStatus") != "retired"
+    }
+    records = authority.get("records", [])
+    require(isinstance(records, list) and len(records) == len(expected_ids), "record count is not eight")
+    by_id: dict[int, dict[str, Any]] = {}
+    for row in records:
+        require(isinstance(row, dict), "record is not a dictionary")
+        monster_id = row.get("monster_id")
+        require(isinstance(monster_id, int) and not isinstance(monster_id, bool), f"invalid monster_id={monster_id!r}")
+        require(monster_id in SPECIAL_NORMAL_IDS, f"unexpected monster_id={monster_id}")
+        require(monster_id not in by_id, f"duplicate monster_id={monster_id}")
+        by_id[monster_id] = row
+        canonical = vanilla_by_id.get(monster_id)
+        require(isinstance(canonical, dict), f"monster_id={monster_id} is not an active canonical identity")
+        require(row.get("canonical_name") == canonical.get("name"), f"monster_id={monster_id} canonical name drift")
+        spawn = row.get("spawn")
+        require(spawn == SPECIAL_NORMAL_DEFAULTS, f"monster_id={monster_id} spawn policy drift")
+        role = role_rows.get(monster_id)
+        require(isinstance(role, dict), f"monster_id={monster_id} missing A0.7 role row")
+        require(row.get("drop_enabled") is True, f"monster_id={monster_id} must remain drop-enabled")
+        require(row.get("drop_role") == role.get("drop_role"), f"monster_id={monster_id} role drift")
+        require(row.get("role_factor") == role.get("role_factor"), f"monster_id={monster_id} factor drift")
+        require(row.get("role_assignment_authority") == role.get("assignment_authority"), f"monster_id={monster_id} role authority drift")
+        require(row.get("item_tier_resolution") == "A0_7_ITEM_TIER_AUTHORITY_V1", f"monster_id={monster_id} Tier authority drift")
+        require(row.get("additional_multiplier") is None, f"monster_id={monster_id} adds a drop multiplier")
+        require(row.get("source_rate_role") == "provenance_only", f"monster_id={monster_id} source_rate role drift")
+    require(sorted(by_id) == expected_ids, f"records IDs={sorted(by_id)} expected {expected_ids}")
+    return by_id
 
 
 def source_ref(
@@ -747,6 +905,15 @@ def build_catalog() -> dict[str, Any]:
     boss_rules = load_json(BOSS_RULE_PATH)
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
     policy = load_json(POLICY_PATH)
+    special_normal_authority = load_json(SPECIAL_NORMAL_AUTHORITY_PATH)
+    dpv2_role_authority = load_json(DPV2_ROLE_AUTHORITY_PATH)
+    dpv2_item_tier_authority = load_json(DPV2_ITEM_TIER_AUTHORITY_PATH)
+    special_normal_by_id = validate_special_normal_authority(
+        special_normal_authority,
+        vanilla,
+        dpv2_role_authority,
+        dpv2_item_tier_authority,
+    )
     drop_source = load_json(DROP_SOURCE_PATH)
     combat_source = load_json(COMBAT_SOURCE_PATH)
     combat_source_by_id = combat_source.get("records_by_monster_id", {})
@@ -831,6 +998,38 @@ def build_catalog() -> dict[str, Any]:
         classification_name, placement_allowed, placement_kind, map_codes, class_evidence = classification_for(
             monster_id, classification_ids, policy
         )
+        special_normal_row = special_normal_by_id.get(monster_id)
+        spawn_classification: str | None = None
+        spawn_authority: dict[str, Any] | None = None
+        placement_source_scope = "classification_and_drop_closure"
+        if special_normal_row is not None:
+            if classification_name != str(special_normal_row.get("combat_classification", "")):
+                raise RuntimeError(
+                    f"special_normal authority combat classification mismatch for monster_id={monster_id}: "
+                    f"catalog={classification_name!r} authority={special_normal_row.get('combat_classification')!r}"
+                )
+            spawn = copy.deepcopy(special_normal_row["spawn"])
+            spawn_classification = str(spawn["spawn_classification"])
+            placement_kind = str(spawn["placement_kind"])
+            placement_allowed = True
+            placement_source_scope = "special_normal_spawn_authority_v1"
+            spawn_authority = {
+                "authority_id": str(special_normal_authority["authority_id"]),
+                "authority_path": SPECIAL_NORMAL_AUTHORITY_PATH.relative_to(ROOT).as_posix(),
+                "record_key": f"monster_id={monster_id}",
+                **spawn,
+                "drop_binding": {
+                    "drop_enabled": bool(special_normal_row["drop_enabled"]),
+                    "drop_role": special_normal_row["drop_role"],
+                    "role_factor": special_normal_row["role_factor"],
+                    "role_assignment_authority": special_normal_row["role_assignment_authority"],
+                    "item_tier_resolution": special_normal_row["item_tier_resolution"],
+                    "additional_multiplier": special_normal_row["additional_multiplier"],
+                    "source_rate_role": special_normal_row["source_rate_role"],
+                },
+                "production_active": True,
+                "phase_1_allowed": False,
+            }
         art_profile_id = id_to_art.get(monster_id, f"appearance.unresolved.{monster_id}")
         if monster_id not in id_to_art:
             appearance_profiles.setdefault(
@@ -1243,12 +1442,14 @@ def build_catalog() -> dict[str, Any]:
             "canonical_name": canonical_name,
             "variant_code": str(record.get("variantCode", "")),
             "classification": classification_name,
+            "spawn_classification": spawn_classification,
             "editor_placement": {
                 "allowed": placement_allowed,
                 "placement_kind": placement_kind,
                 "map_codes": map_codes,
-                "source_scope": "classification_and_drop_closure",
+                "source_scope": placement_source_scope,
             },
+            "spawn_authority": spawn_authority,
             "runtime_allowed": runtime_allowed,
             "runtime_capability": {
                 "allowed": runtime_allowed,
@@ -1288,6 +1489,21 @@ def build_catalog() -> dict[str, Any]:
                 "canonical_name": canonical_name_evidence,
                 "identity_resolution": identity_resolution,
                 "classification": class_evidence,
+                "spawn_classification": (
+                    source_ref(
+                        SPECIAL_NORMAL_AUTHORITY_PATH,
+                        role="special_normal_spawn_classification",
+                        distribution="source.user_authoritative_special_normal",
+                        tier="user_authoritative",
+                        field="spawn_classification",
+                        evidence=(
+                            f"Explicit special_normal authority record for exact monster_id={monster_id}; "
+                            "combat classification and DPV2 probability role remain independent"
+                        ),
+                    )
+                    if special_normal_row is not None
+                    else None
+                ),
                 "combat_stats": stats_source,
                 "combat_ai_timing": behavior_extra["evidence"],
                 "combat_auxiliary": auxiliary_combat_evidence,
@@ -1356,6 +1572,8 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_PATH,
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
+        SPECIAL_NORMAL_AUTHORITY_PATH,
+        DPV2_ITEM_TIER_AUTHORITY_PATH,
         DROP_SOURCE_PATH,
         DROP_AUTHORING_OVERLAY_PATH,
         COMBAT_SOURCE_PATH,
@@ -1403,6 +1621,19 @@ def build_catalog() -> dict[str, Any]:
                 monster_authoring_added_row_count
             ),
             "drop_final_row_count": final_drop_row_count,
+            "special_normal_spawn_count": sum(
+                x.get("spawn_classification") == "special_normal"
+                for x in entries
+            ),
+        },
+        "special_normal_spawn_authority": {
+            "schema": special_normal_authority["schema"],
+            "authority_id": special_normal_authority["authority_id"],
+            "path": SPECIAL_NORMAL_AUTHORITY_PATH.relative_to(ROOT).as_posix(),
+            "sha256": sha256_file(SPECIAL_NORMAL_AUTHORITY_PATH),
+            "canonical_monster_ids": sorted(SPECIAL_NORMAL_IDS),
+            "production_active": True,
+            "phase_1_allowed": False,
         },
         "appearance_profiles": appearance_profiles,
         "drop_profiles": drop_profiles,
@@ -1416,6 +1647,16 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     combat_source = load_json(COMBAT_SOURCE_PATH)
     combat_source_by_id = combat_source.get("records_by_monster_id", {})
+    try:
+        special_normal_by_id = validate_special_normal_authority(
+            load_json(SPECIAL_NORMAL_AUTHORITY_PATH),
+            load_json(VANILLA_PATH),
+            load_json(DPV2_ROLE_AUTHORITY_PATH),
+            load_json(DPV2_ITEM_TIER_AUTHORITY_PATH),
+        )
+    except (RuntimeError, ValueError, TypeError) as exc:
+        errors.append(str(exc))
+        special_normal_by_id = {}
 
     def reject_replacement_paths(value: Any, context: str) -> None:
         if isinstance(value, dict):
@@ -1497,10 +1738,44 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             errors.append("non-dictionary entry")
             continue
         monster_id = int(entry.get("monster_id", -1))
-        required = ("canonical_name", "classification", "editor_placement", "runtime_allowed", "status", "drop_policy", "combat", "appearance_profile_id", "drop_profile_id", "spawn_contexts", "source_evidence")
+        required = ("canonical_name", "classification", "spawn_classification", "editor_placement", "spawn_authority", "runtime_allowed", "status", "drop_policy", "combat", "appearance_profile_id", "drop_profile_id", "spawn_contexts", "source_evidence")
         for field in required:
             if field not in entry:
                 errors.append(f"monster_id={monster_id} missing {field}")
+        special_normal_row = special_normal_by_id.get(monster_id)
+        if special_normal_row is None:
+            if entry.get("spawn_classification") is not None:
+                errors.append(f"monster_id={monster_id} has an unexpected spawn_classification")
+            if entry.get("spawn_authority") is not None:
+                errors.append(f"monster_id={monster_id} has an unexpected spawn_authority")
+        else:
+            if entry.get("spawn_classification") != "special_normal":
+                errors.append(f"monster_id={monster_id} spawn_classification is not special_normal")
+            placement = entry.get("editor_placement", {})
+            if placement.get("placement_kind") != "monster_spawn":
+                errors.append(f"monster_id={monster_id} special_normal placement is not monster_spawn")
+            if placement.get("source_scope") != "special_normal_spawn_authority_v1":
+                errors.append(f"monster_id={monster_id} special_normal placement source scope drift")
+            spawn_authority = entry.get("spawn_authority")
+            if not isinstance(spawn_authority, dict):
+                errors.append(f"monster_id={monster_id} missing special_normal spawn_authority")
+            else:
+                for key, expected in SPECIAL_NORMAL_DEFAULTS.items():
+                    if spawn_authority.get(key) != expected:
+                        errors.append(f"monster_id={monster_id} spawn_authority.{key}={spawn_authority.get(key)!r} expected {expected!r}")
+                drop_binding = spawn_authority.get("drop_binding", {})
+                for key in ("drop_enabled", "drop_role", "role_factor", "role_assignment_authority", "item_tier_resolution", "additional_multiplier", "source_rate_role"):
+                    expected = {
+                        "drop_enabled": special_normal_row["drop_enabled"],
+                        "drop_role": special_normal_row["drop_role"],
+                        "role_factor": special_normal_row["role_factor"],
+                        "role_assignment_authority": special_normal_row["role_assignment_authority"],
+                        "item_tier_resolution": special_normal_row["item_tier_resolution"],
+                        "additional_multiplier": None,
+                        "source_rate_role": "provenance_only",
+                    }[key]
+                    if not isinstance(drop_binding, dict) or drop_binding.get(key) != expected:
+                        errors.append(f"monster_id={monster_id} spawn_authority.drop_binding.{key} drift")
         combat_value = entry.get("combat", {})
         projection = combat_value.get("runtime_projection", {}) if isinstance(combat_value, dict) else {}
         if not isinstance(projection, dict):

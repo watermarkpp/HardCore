@@ -73,9 +73,16 @@ func _ready() -> void:
 
 	# Every final active identity remains authorable. Runtime readiness is a
 	# separate publish-time gate and these three active variants are ready.
-	_assert_entry(special, "boss.39", true)
+	_assert_entry(special, "monster.39", true)
 	_assert_entry(special, "monster.77", true)
 	_assert_entry(special, "monster.78", true)
+	_assert_entry(special, "monster.74", true)
+	_assert_entry(bosses, "boss.74", false)
+	var special_guardian := Catalog.find("special_monster", "monster.74")
+	assert(str(special_guardian.get("classification", "")) == "elite")
+	assert(str(special_guardian.get("spawn_classification", "")) == "special_normal")
+	assert(str(special_guardian.get("placement_kind", "")) == "monster_spawn")
+	assert(int(special_guardian.get("default_respawn_seconds", 0)) == 900)
 	var unknown_hall := Catalog.find("special_monster", "monster.77")
 	assert(str(unknown_hall.get("classification", "")) == "special")
 	assert(bool(unknown_hall.get("authoring_allowed", false)))
@@ -124,9 +131,13 @@ func _ready() -> void:
 	editor._on_semantic_kind_selected(boss_index, false)
 	_select_catalog_content(editor, "boss.76")
 	assert(int(editor.semantic_respawn.value) == 1800)
-	assert(editor.semantic_detail_label.text.contains("沃玛号角"))
+	assert(editor._build_monster_detail_text(
+		Catalog.find("boss_spawn", "boss.76")
+	).contains("沃玛号角"))
 	_select_catalog_content(editor, "boss.33")
-	assert(editor.semantic_detail_label.text.contains("运行时待闭环"))
+	assert(editor._build_monster_detail_text(
+		Catalog.find("boss_spawn", "boss.33")
+	).contains("运行时待闭环"))
 
 	# End-to-end editor contract: select canonical ordinary/elite/Boss entries,
 	# place an active special variant, save, reload, build and publish in a
@@ -209,6 +220,11 @@ func _select_catalog_content(editor: MapEditorApp, content_id: String) -> void:
 		if entry is Dictionary and str(entry.get("content_id", "")) == content_id:
 			editor.semantic_content_option.select(index)
 			editor._on_semantic_content_selected(index)
+			return
+	for index in editor.monster_picker_entries.size():
+		var entry: Variant = editor.monster_picker_entries[index]
+		if entry is Dictionary and str(entry.get("content_id", "")) == content_id:
+			editor._apply_monster_picker_selection(index)
 			return
 	assert(false, "catalog content missing: %s" % content_id)
 

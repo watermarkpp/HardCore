@@ -9,6 +9,7 @@ const NORMAL_RESPAWN_SECONDS := 60
 const ELITE_RESPAWN_SECONDS := 900
 const BOSS_RESPAWN_SECONDS := 1800
 const SPECIAL_RESPAWN_SECONDS := 60
+const SPECIAL_NORMAL_RESPAWN_SECONDS := 900
 
 static var _source_parse_counts: Dictionary = {}
 static var _canonical_cache: Dictionary = {}
@@ -35,8 +36,7 @@ static func entries(kind: String, preferred_map_id := 4) -> Array[Dictionary]:
 	var source := _canonical_source()
 	var result: Array[Dictionary] = []
 	for record: Dictionary in source.get("entries", []):
-		var classification := str(record.get("classification", ""))
-		var catalog_kind := _catalog_kind_for_classification(classification)
+		var catalog_kind := _catalog_kind_for_record(record)
 		if catalog_kind != kind:
 			continue
 		var entry := _canonical_entry(record, source, catalog_kind)
@@ -116,11 +116,21 @@ static func _catalog_kind_for_classification(classification: String) -> String:
 	return "unresolved_monster"
 
 
+static func _catalog_kind_for_record(record: Dictionary) -> String:
+	# special_normal is an orthogonal spawn classification. It intentionally
+	# keeps the combat classification/DPV2 role intact while placing the exact
+	# frozen variants in the reusable special-map authoring category.
+	if str(record.get("spawn_classification", "")) == "special_normal":
+		return "special_monster"
+	return _catalog_kind_for_classification(str(record.get("classification", "")))
+
+
 static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kind: String) -> Dictionary:
 	var numeric_id := int(record.get("monster_id", -1))
 	if numeric_id <= 0:
 		return {}
 	var classification := str(record.get("classification", ""))
+	var spawn_classification := str(record.get("spawn_classification", ""))
 	var placement: Dictionary = record.get("editor_placement", {})
 	var placement_kind := str(placement.get("placement_kind", ""))
 	if placement_kind not in ["monster_spawn", "boss_spawn"]:
@@ -175,6 +185,7 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"numeric_id": numeric_id,
 		"monster_id": numeric_id,
 		"classification": classification,
+		"spawn_classification": spawn_classification,
 		"editor_catalog_kind": catalog_kind,
 		"placement_kind": placement_kind,
 		"authoring_allowed": authoring_allowed,
@@ -207,7 +218,13 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"location_summary": ", ".join(map_codes),
 		"map_codes": map_codes,
 		"spawn_contexts": record.get("spawn_contexts", []),
-		"default_respawn_seconds": _default_respawn_seconds(classification),
+		"spawn_authority": record.get("spawn_authority", {}),
+		"default_respawn_seconds": _default_respawn_seconds(
+			classification, spawn_classification
+		),
+		"default_respawn_policy_id": (
+			"special_normal" if spawn_classification == "special_normal" else ""
+		),
 		"boss_class": classification,
 		"source_evidence": record.get("source_evidence", {}),
 	}
@@ -231,7 +248,12 @@ static func _first_drop_source(drop_profile: Dictionary) -> Dictionary:
 	return {}
 
 
-static func _default_respawn_seconds(classification: String) -> int:
+static func _default_respawn_seconds(
+	classification: String,
+	spawn_classification := ""
+) -> int:
+	if spawn_classification == "special_normal":
+		return SPECIAL_NORMAL_RESPAWN_SECONDS
 	match classification:
 		"ordinary": return NORMAL_RESPAWN_SECONDS
 		"elite": return ELITE_RESPAWN_SECONDS

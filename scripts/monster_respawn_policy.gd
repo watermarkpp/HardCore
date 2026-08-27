@@ -52,10 +52,30 @@ static func seconds_for(policy_id: String) -> float:
 static func resolve(
 	requested_policy_id: String,
 	classification: String,
-	legacy_respawn_seconds := -1.0
+	legacy_respawn_seconds := -1.0,
+	spawn_classification := ""
 ) -> Dictionary:
 	var normalized_classification := classification.strip_edges().to_lower()
+	var normalized_spawn_classification := (
+		spawn_classification.strip_edges().to_lower()
+	)
 	var explicit_policy := requested_policy_id.strip_edges()
+
+	# A canonical special-map variant keeps its combat classification (and the
+	# corresponding DPV2 drop role), while its spawn classification owns the
+	# reusable ordinary-slot cadence. This check deliberately precedes the
+	# elite/boss combat classification locks: e.g. 沃玛卫士1 remains ELITE for
+	# combat/drop purposes but is a special_normal map spawn at exactly 900s.
+	if normalized_spawn_classification == SPECIAL_NORMAL:
+		if not explicit_policy.is_empty() and explicit_policy != SPECIAL_NORMAL:
+			return _invalid("special_normal_policy_mismatch", explicit_policy)
+		return _result(
+			SPECIAL_NORMAL,
+			"canonical_spawn_classification",
+			false,
+			false,
+			legacy_respawn_seconds
+		)
 
 	if normalized_classification == "boss":
 		if not explicit_policy.is_empty() and explicit_policy != BOSS:
