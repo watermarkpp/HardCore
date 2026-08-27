@@ -39,6 +39,15 @@ const DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH := (
 const DPV2_DROP_RUNTIME_AUTHORITY_PATH := (
 	"res://assets/data/drop/dpv2_drop_runtime_authority_v1.json"
 )
+const DPV2_DIRECT_BASELINE_MANIFEST_PATH := (
+	"res://assets/data/drop/dpv2_direct_baseline_manifest_v2.json"
+)
+const DPV2_DIRECT_BASELINE_PATH := (
+	"res://assets/data/drop/dpv2_direct_baseline_v2.json"
+)
+const DPV2_DIRECT_ITEM_MAPPING_PATH := (
+	"res://assets/data/drop/dpv2_21cq_item_mapping_v1.json"
+)
 
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
@@ -86,6 +95,9 @@ var dpv2_item_tier_authority: Dictionary = {}
 var dpv2_monster_role_authority: Dictionary = {}
 var dpv2_global_drop_rate_authority: Dictionary = {}
 var dpv2_drop_runtime_authority: Dictionary = {}
+var dpv2_direct_baseline_manifest: Dictionary = {}
+var dpv2_direct_baseline: Dictionary = {}
+var dpv2_direct_baseline_loaded := false
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -118,6 +130,9 @@ var _dpv2_monster_role_by_id: Dictionary = {}
 var _dpv2_global_scale_by_preset: Dictionary = {}
 var _dpv2_item_overflow_by_id: Dictionary = {}
 var _dpv2_item_overflow_by_name: Dictionary = {}
+var _dpv2_direct_profile_by_id: Dictionary = {}
+var _dpv2_direct_slot_by_uid: Dictionary = {}
+var _dpv2_direct_item_by_id: Dictionary = {}
 
 const CANONICAL_MONSTER_COUNTS_CONTRACT_ID := (
 	"monster.catalog.runtime_counts.v1"
@@ -201,6 +216,8 @@ func load_database() -> bool:
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
 	_build_indexes()
+	if not _load_dpv2_direct_baseline():
+		return false
 	load_error = ""
 	_initial_load_complete = true
 	database_reloaded.emit()
@@ -428,11 +445,21 @@ func _load_dpv2_drop_authorities() -> bool:
 		var expected_schema := str(expected.get("schema", ""))
 		var declared_sha := str(declared.get("sha256", "")).to_upper()
 		var actual_sha := _sha256_lf_file(expected_path)
+		# The V1 runtime manifest is retained for compatibility while the
+		# direct V2 manifest owns the global authority hash. Its copied V1
+		# global SHA is intentionally stale after the production cutover;
+		# direct-baseline loading below performs the authoritative hash check.
+		var legacy_global_binding := (
+			key == "global_scale"
+			and str(global_authority.get("activation", {}).get(
+				"selected_authority", ""
+			)) == "dpv2_direct_baseline_v2"
+		)
 		if (
 			normalized_declared_path != normalized_expected_path
 			or declared_schema != expected_schema
 			or actual_sha.is_empty()
-			or declared_sha != actual_sha
+			or (not legacy_global_binding and declared_sha != actual_sha)
 		):
 			load_error = "dpv2_source_authority_binding_invalid:%s" % key
 			return false
@@ -488,13 +515,46 @@ func _load_dpv2_drop_authorities() -> bool:
 	):
 		load_error = "dpv2_drop_runtime_authority_contract_invalid"
 		return false
-	if (
+	var global_formula := str(global_authority.get("probability_contract", {}).get(
+		"formula", ""
+	))
+	var direct_global_active := (
+		global_formula
+			== "min(1, base_numerator * scale_num / (base_denominator * scale_den))"
+	)
+	var global_contract_valid := (
 		str(global_authority.get("schema", ""))
-			!= "hardcore.dpv2.global_drop_rate_authority.v1"
-		or not bool(global_authority.get("activation", {}).get("production_active", false))
-		or str(global_authority.get("authority", {}).get("control_key", ""))
-			!= "global_drop_rate_scale"
-	):
+			== "hardcore.dpv2.global_drop_rate_authority.v1"
+		and bool(global_authority.get("activation", {}).get("production_active", false))
+		and str(global_authority.get("authority", {}).get("control_key", ""))
+			== "global_drop_rate_scale"
+		and str(global_authority.get("probability_contract", {}).get("arithmetic", ""))
+			== "exact_positive_rational"
+	)
+	if direct_global_active:
+		global_contract_valid = global_contract_valid and (
+			str(global_authority.get("probability_contract", {}).get(
+				"base_probability_source", ""
+			)) == "dpv2_direct_baseline_v2"
+			and not bool(global_authority.get("probability_contract", {}).get(
+				"role_factor_participates", true
+			))
+			and not bool(global_authority.get("probability_contract", {}).get(
+				"tier_denominator_participates", true
+			))
+			and str(global_authority.get("activation", {}).get(
+				"selected_authority", ""
+			)) == "dpv2_direct_baseline_v2"
+			and bool(global_authority.get("activation", {}).get(
+				"fallback_forbidden", false
+			))
+		)
+	else:
+		global_contract_valid = global_contract_valid and (
+			global_formula
+				== "min(1, role_factor * active_global_scale / tier_base_denominator)"
+		)
+	if not global_contract_valid:
 		load_error = "dpv2_global_drop_rate_authority_contract_invalid"
 		return false
 
@@ -643,6 +703,390 @@ func _load_dpv2_drop_authorities() -> bool:
 	dpv2_global_drop_rate_authority = global_authority
 	dpv2_drop_runtime_authority = runtime_authority
 	return true
+
+
+func _load_dpv2_direct_baseline() -> bool:
+	dpv2_direct_baseline_manifest = {}
+	dpv2_direct_baseline = {}
+	dpv2_direct_baseline_loaded = false
+	_dpv2_direct_profile_by_id.clear()
+	_dpv2_direct_slot_by_uid.clear()
+	_dpv2_direct_item_by_id.clear()
+
+	for path: String in [
+		DPV2_DIRECT_BASELINE_MANIFEST_PATH,
+		DPV2_DIRECT_BASELINE_PATH,
+		DPV2_DIRECT_ITEM_MAPPING_PATH,
+	]:
+		if not FileAccess.file_exists(path):
+			load_error = "dpv2_direct_authority_missing:%s" % path
+			return false
+
+	var manifest_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_DIRECT_BASELINE_MANIFEST_PATH)
+	)
+	var baseline_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_DIRECT_BASELINE_PATH)
+	)
+	var item_mapping_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_DIRECT_ITEM_MAPPING_PATH)
+	)
+	if (
+		not manifest_value is Dictionary
+		or not baseline_value is Dictionary
+		or not item_mapping_value is Dictionary
+	):
+		load_error = "dpv2_direct_authority_invalid_json"
+		return false
+
+	var manifest: Dictionary = manifest_value
+	var baseline: Dictionary = baseline_value
+	var item_mapping: Dictionary = item_mapping_value
+	if (
+		str(manifest.get("schema", ""))
+			!= "hardcore.dpv2.direct_baseline_manifest.v2"
+		or str(manifest.get("manifest_id", ""))
+			!= "dpv2.direct_baseline.manifest.v2"
+	):
+		load_error = "dpv2_direct_manifest_contract_invalid"
+		return false
+	if (
+		str(baseline.get("schema", ""))
+			!= "hardcore.dpv2.direct_monster_drop_baseline.v2"
+		or str(baseline.get("authority_id", ""))
+			!= "dpv2.direct_baseline.v2"
+	):
+		load_error = "dpv2_direct_baseline_contract_invalid"
+		return false
+	if str(item_mapping.get("schema", "")) != "hardcore.dpv2.21cq_item_mapping.v1":
+		load_error = "dpv2_direct_item_mapping_contract_invalid"
+		return false
+
+	var artifacts_value: Variant = manifest.get("artifacts", null)
+	if not artifacts_value is Dictionary:
+		load_error = "dpv2_direct_manifest_artifacts_missing"
+		return false
+	var artifacts: Dictionary = artifacts_value
+	var required_artifacts := {
+		"direct_baseline_authority": DPV2_DIRECT_BASELINE_PATH,
+		"global_drop_rate_authority": DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
+		"item_mapping": DPV2_DIRECT_ITEM_MAPPING_PATH,
+	}
+	for raw_key: Variant in required_artifacts.keys():
+		var key := str(raw_key)
+		var descriptor_value: Variant = artifacts.get(key, null)
+		if not descriptor_value is Dictionary:
+			load_error = "dpv2_direct_manifest_artifact_missing:%s" % key
+			return false
+		var descriptor: Dictionary = descriptor_value
+		var declared_path := str(descriptor.get("path", ""))
+		var expected_path := str(required_artifacts[key])
+		if (
+			declared_path.trim_prefix("res://")
+				!= expected_path.trim_prefix("res://")
+			or str(descriptor.get("hash_normalization", "")) != "lf_text"
+		):
+			load_error = "dpv2_direct_manifest_artifact_binding_invalid:%s" % key
+			return false
+	# Validate every manifest-bound artifact. This keeps the direct baseline,
+	# identity mapping and global control as one immutable load contract.
+	for raw_key: Variant in artifacts.keys():
+		var key := str(raw_key)
+		var descriptor_value: Variant = artifacts.get(key, null)
+		if not descriptor_value is Dictionary:
+			load_error = "dpv2_direct_manifest_artifact_invalid:%s" % key
+			return false
+		var descriptor: Dictionary = descriptor_value
+		var relative_path := str(descriptor.get("path", ""))
+		if relative_path.is_empty():
+			load_error = "dpv2_direct_manifest_artifact_path_invalid:%s" % key
+			return false
+		var path := (
+			relative_path if relative_path.begins_with("res://")
+			else "res://" + relative_path
+		)
+		var declared_sha := str(descriptor.get("sha256", "")).to_upper()
+		var actual_sha := _sha256_lf_file(path)
+		if (
+			declared_sha.is_empty()
+			or actual_sha.is_empty()
+			or declared_sha != actual_sha
+		):
+			load_error = "dpv2_direct_manifest_hash_mismatch:%s" % key
+			return false
+
+	var baseline_policy_value: Variant = baseline.get("probability_policy", null)
+	if not baseline_policy_value is Dictionary:
+		load_error = "dpv2_direct_probability_policy_missing"
+		return false
+	var baseline_policy: Dictionary = baseline_policy_value
+	var direct_effective_formula := str(baseline_policy.get(
+		"effective_probability", ""
+	))
+	if (
+		str(baseline.get("identity_key", "")) != "canonical_monster_id"
+		or str(baseline_policy.get("base_authority", ""))
+			!= "per_slot_base_numerator_over_base_denominator"
+		or direct_effective_formula not in [
+			"min(1.0, base_numerator * global_drop_rate_scale / base_denominator)",
+			"min(1, base_numerator * scale_num / (base_denominator * scale_den))",
+		]
+		or not bool(baseline_policy.get(
+			"global_drop_rate_scale_is_only_multiplier", false
+		))
+		or bool(baseline_policy.get("role_factor_participates", true))
+		or bool(baseline_policy.get("tier_denominator_participates", true))
+		or not bool(baseline_policy.get("all_slots_rng_before_overflow", false))
+		or int(baseline_policy.get("post_rng_ground_slot_limit", 0)) != 9
+	):
+		load_error = "dpv2_direct_probability_policy_invalid"
+		return false
+	var direct_global_contract: Dictionary = dpv2_global_drop_rate_authority
+	var direct_baseline_active := bool(baseline.get("production_active", false))
+	if (
+		str(direct_global_contract.get("schema", ""))
+			!= "hardcore.dpv2.global_drop_rate_authority.v1"
+		or str(direct_global_contract.get("authority_id", ""))
+			!= "dpv2.global_drop_rate_scale.v1"
+		or not bool(direct_global_contract.get("activation", {}).get(
+			"production_active", false
+		))
+		or (direct_baseline_active and str(direct_global_contract.get(
+			"activation", {}
+		).get("selected_authority", "")) != "dpv2_direct_baseline_v2")
+		or (direct_baseline_active and not bool(direct_global_contract.get(
+			"activation", {}
+		).get("fallback_forbidden", false)))
+	):
+		load_error = "dpv2_direct_global_authority_contract_invalid"
+		return false
+	var direct_presets: Variant = direct_global_contract.get("presets", [])
+	if not direct_presets is Array or direct_presets.size() != 5:
+		load_error = "dpv2_direct_global_authority_count_invalid"
+		return false
+	for raw_direct_preset: Variant in direct_presets:
+		if not raw_direct_preset is Dictionary:
+			load_error = "dpv2_direct_global_authority_preset_invalid"
+			return false
+		var direct_preset: Dictionary = raw_direct_preset
+		if (
+			_dpv2_json_integer(direct_preset.get("numerator", null)) <= 0
+			or _dpv2_json_integer(direct_preset.get("denominator", null)) <= 0
+		):
+			load_error = "dpv2_direct_global_authority_ratio_invalid"
+			return false
+
+	var summary_value: Variant = baseline.get("summary", null)
+	if not summary_value is Dictionary:
+		load_error = "dpv2_direct_baseline_summary_missing"
+		return false
+	var summary: Dictionary = summary_value
+	if (
+		int(summary.get("active_monsters", -1)) != 156
+		or int(summary.get("drop_enabled_monsters", -1)) != 131
+		or int(summary.get("non_loot_monsters", -1)) != 25
+		or int(summary.get("compiled_slots", -1)) != 5995
+	):
+		load_error = "dpv2_direct_baseline_summary_count_invalid"
+		return false
+	var origin_counts_value: Variant = summary.get("baseline_origin_counts", null)
+	if not origin_counts_value is Dictionary:
+		load_error = "dpv2_direct_baseline_origin_counts_invalid"
+		return false
+	var origin_counts: Dictionary = origin_counts_value
+	if (
+		int(origin_counts.get("LEGACY_21CQ_MONITEMS", -1)) != 5926
+		or int(origin_counts.get("PROJECT_EXTENSION", -1)) != 69
+	):
+		load_error = "dpv2_direct_baseline_origin_counts_invalid"
+		return false
+
+	var item_records_value: Variant = item_mapping.get("records", null)
+	if not item_records_value is Array or item_records_value.size() != 244:
+		load_error = "dpv2_direct_item_mapping_count_invalid"
+		return false
+	var identity_ids: Dictionary = {}
+	for raw_item: Variant in item_records_value:
+		if not raw_item is Dictionary:
+			load_error = "dpv2_direct_item_mapping_record_invalid"
+			return false
+		var item_record: Dictionary = raw_item
+		var reward_kind := str(item_record.get("reward_kind", ""))
+		var mapping_status := str(item_record.get("mapping_status", ""))
+		if reward_kind == "retired_source_only":
+			if (
+				mapping_status != "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG"
+				or item_record.get("canonical_item_id", null) != null
+				or item_record.get("canonical_item_name", null) != null
+			):
+				load_error = "dpv2_direct_retired_item_mapping_invalid"
+				return false
+			continue
+		if reward_kind == "gold":
+			if (
+				mapping_status.is_empty()
+				or item_record.get("canonical_item_id", null) != null
+				or item_record.get("canonical_item_name", null) != null
+			):
+				load_error = "dpv2_direct_gold_mapping_invalid"
+				return false
+			continue
+		if reward_kind != "item" or mapping_status not in ["EXACT", "EXPLICIT_ALIAS"]:
+			load_error = "dpv2_direct_item_mapping_kind_invalid"
+			return false
+		var item_id_value: Variant = item_record.get("canonical_item_id", null)
+		var item_name := str(item_record.get("canonical_item_name", ""))
+		if _dpv2_json_integer(item_id_value) <= 0 or item_name.is_empty():
+			load_error = "dpv2_direct_item_mapping_identity_invalid"
+			return false
+		var item_id := _dpv2_json_integer(item_id_value)
+		if identity_ids.has(item_id):
+			var existing_identity: Dictionary = identity_ids[item_id]
+			if str(existing_identity.get("canonical_item_name", "")) != item_name:
+				load_error = "dpv2_direct_item_mapping_identity_conflict"
+				return false
+		else:
+			identity_ids[item_id] = item_record.duplicate(true)
+	if identity_ids.size() != 233:
+		load_error = "dpv2_direct_item_mapping_identity_count_invalid"
+		return false
+
+	var profiles_value: Variant = baseline.get("profiles", null)
+	if not profiles_value is Array or profiles_value.size() != 156:
+		load_error = "dpv2_direct_profile_count_invalid"
+		return false
+	var profile_ids: Dictionary = {}
+	var slot_uids: Dictionary = {}
+	var provenance_ids: Dictionary = {}
+	var enabled_profile_count := 0
+	var compiled_slot_count := 0
+	var origin_totals: Dictionary = {}
+	for raw_profile: Variant in profiles_value:
+		if not raw_profile is Dictionary:
+			load_error = "dpv2_direct_profile_invalid"
+			return false
+		var profile: Dictionary = raw_profile
+		var monster_id_value: Variant = profile.get("canonical_monster_id", null)
+		var monster_id := _dpv2_json_integer(monster_id_value)
+		var canonical_entry: Variant = _monsters_by_id.get(monster_id, null)
+		if (
+			monster_id <= 0
+			or not canonical_entry is Dictionary
+			or profile_ids.has(monster_id)
+		):
+			load_error = "dpv2_direct_profile_identity_invalid"
+			return false
+		var canonical_name := str((canonical_entry as Dictionary).get("canonical_name", ""))
+		if str(profile.get("canonical_monster_name", "")) != canonical_name:
+			load_error = "dpv2_direct_profile_name_invalid"
+			return false
+		var slots_value: Variant = profile.get("slots", null)
+		if not slots_value is Array:
+			load_error = "dpv2_direct_profile_slots_invalid"
+			return false
+		var drop_enabled := bool(profile.get("drop_enabled", false))
+		if drop_enabled:
+			enabled_profile_count += 1
+			if str(profile.get("drop_profile_id", "")).is_empty():
+				load_error = "dpv2_direct_enabled_profile_id_invalid"
+				return false
+		else:
+			if (
+				profile.get("drop_profile_id", null) != null
+				or str(profile.get("reporting_label", "")) != "NON_LOOT"
+				or not slots_value.is_empty()
+			):
+				load_error = "dpv2_direct_non_loot_profile_invalid"
+				return false
+		profile_ids[monster_id] = true
+		var profile_id := str(profile.get("drop_profile_id", ""))
+		for raw_slot: Variant in slots_value:
+			if not raw_slot is Dictionary:
+				load_error = "dpv2_direct_slot_invalid"
+				return false
+			var slot: Dictionary = raw_slot
+			var slot_uid := str(slot.get("slot_uid", ""))
+			var provenance_id := str(slot.get("source_provenance_id", ""))
+			var base_numerator: Variant = slot.get("base_numerator", null)
+			var base_denominator: Variant = slot.get("base_denominator", null)
+			var priority: Variant = slot.get("overflow_priority", null)
+			var reward_key_count := int(slot.has("canonical_item_id")) + int(slot.has("gold_amount"))
+			if (
+				slot_uid.is_empty()
+				or provenance_id.is_empty()
+				or slot_uids.has(slot_uid)
+				or provenance_ids.has(provenance_id)
+				or _dpv2_json_integer(base_numerator) <= 0
+				or _dpv2_json_integer(base_denominator) <= 0
+				or _dpv2_json_integer(priority) < 0
+				or not slot.get("protected_drop", null) is bool
+				or reward_key_count != 1
+			):
+				load_error = "dpv2_direct_slot_contract_invalid"
+				return false
+			for forbidden_key: String in [
+				"chance", "source_rate", "item_name", "canonical_name",
+				"tier", "drop_role", "role", "role_factor", "factor",
+			]:
+				if slot.has(forbidden_key):
+					load_error = "dpv2_direct_slot_legacy_probability_field:%s" % forbidden_key
+					return false
+			if slot.has("canonical_item_id"):
+				var item_id_value: Variant = slot.get("canonical_item_id", null)
+				var item_id := _dpv2_json_integer(item_id_value)
+				if item_id <= 0 or not identity_ids.has(item_id):
+					load_error = "dpv2_direct_slot_item_identity_unresolved"
+					return false
+			else:
+				var gold_amount: Variant = slot.get("gold_amount", null)
+				if _dpv2_json_integer(gold_amount) <= 0:
+					load_error = "dpv2_direct_slot_gold_invalid"
+					return false
+			var origin := str(slot.get("baseline_origin", ""))
+			if origin not in ["LEGACY_21CQ_MONITEMS", "PROJECT_EXTENSION"]:
+				load_error = "dpv2_direct_slot_origin_invalid"
+				return false
+			slot_uids[slot_uid] = true
+			provenance_ids[provenance_id] = true
+			origin_totals[origin] = int(origin_totals.get(origin, 0)) + 1
+			_dpv2_direct_slot_by_uid[slot_uid] = {
+				"canonical_monster_id": monster_id,
+				"drop_profile_id": profile_id,
+				"slot": slot.duplicate(true),
+			}
+			compiled_slot_count += 1
+		_dpv2_direct_profile_by_id[monster_id] = profile.duplicate(true)
+	if (
+		profile_ids.size() != 156
+		or enabled_profile_count != 131
+		or compiled_slot_count != 5995
+		or origin_totals != {"LEGACY_21CQ_MONITEMS": 5926, "PROJECT_EXTENSION": 69}
+	):
+		load_error = "dpv2_direct_profile_closure_invalid"
+		return false
+	for raw_id: Variant in _monsters_by_id.keys():
+		if not profile_ids.has(int(raw_id)):
+			load_error = "dpv2_direct_profile_missing_monster"
+			return false
+
+	dpv2_direct_baseline_manifest = manifest
+	dpv2_direct_baseline = baseline
+	_dpv2_direct_item_by_id = identity_ids
+	dpv2_direct_baseline_loaded = true
+	return true
+
+
+func _dpv2_json_integer(value: Variant) -> int:
+	# JSON.parse_string represents all numeric literals as floats in this
+	# runtime. Accept only finite integral values so IDs and rational fields
+	# cannot silently truncate a malformed decimal.
+	if value is int:
+		return int(value)
+	if value is float:
+		var numeric := float(value)
+		if numeric == floor(numeric) and abs(numeric) <= 2147483647.0:
+			return int(numeric)
+	return -1
 
 
 func _sha256_lf_file(path: String) -> String:
@@ -1560,6 +2004,189 @@ func resolve_canonical_drop_reward(drop_entry: Dictionary) -> Dictionary:
 	return item_result
 
 
+func is_dpv2_direct_baseline_loaded() -> bool:
+	return dpv2_direct_baseline_loaded
+
+
+func dpv2_direct_profile(monster_id: Variant) -> Dictionary:
+	if not dpv2_direct_baseline_loaded:
+		return {}
+	var resolved_id := canonical_monster_id(monster_id)
+	var value: Variant = _dpv2_direct_profile_by_id.get(resolved_id, {})
+	return value.duplicate(true) if value is Dictionary else {}
+
+
+func get_dpv2_direct_profile(monster_id: Variant) -> Dictionary:
+	return dpv2_direct_profile(monster_id)
+
+
+func dpv2_direct_profile_slots(monster_id: Variant) -> Array:
+	var profile := dpv2_direct_profile(monster_id)
+	var slots: Variant = profile.get("slots", [])
+	return slots.duplicate(true) if slots is Array else []
+
+
+func get_dpv2_direct_slots(monster_id: Variant) -> Array:
+	return dpv2_direct_profile_slots(monster_id)
+
+
+func dpv2_direct_slot(slot_uid: String) -> Dictionary:
+	if not dpv2_direct_baseline_loaded or slot_uid.is_empty():
+		return {}
+	var value: Variant = _dpv2_direct_slot_by_uid.get(slot_uid, {})
+	if not value is Dictionary or (value as Dictionary).is_empty():
+		return {}
+	var indexed: Dictionary = value
+	var slot: Variant = indexed.get("slot", {})
+	if not slot is Dictionary:
+		return {}
+	var result: Dictionary = (slot as Dictionary).duplicate(true)
+	result["canonical_monster_id"] = int(indexed.get("canonical_monster_id", -1))
+	result["drop_profile_id"] = str(indexed.get("drop_profile_id", ""))
+	return result
+
+
+func get_dpv2_direct_slot(slot_uid: String) -> Dictionary:
+	return dpv2_direct_slot(slot_uid)
+
+
+func dpv2_direct_item_identity(canonical_item_id: Variant) -> Dictionary:
+	var item_id := _dpv2_json_integer(canonical_item_id)
+	if not dpv2_direct_baseline_loaded or item_id <= 0:
+		return {}
+	var value: Variant = _dpv2_direct_item_by_id.get(item_id, {})
+	return value.duplicate(true) if value is Dictionary else {}
+
+
+func dpv2_direct_resolve_slot_reward(slot: Dictionary) -> Dictionary:
+	if not dpv2_direct_baseline_loaded:
+		return {"ok": false, "reason": "dpv2_direct_baseline_unavailable"}
+	var has_item := slot.has("canonical_item_id")
+	var has_gold := slot.has("gold_amount")
+	if int(has_item) + int(has_gold) != 1:
+		return {"ok": false, "reason": "dpv2_direct_reward_identity_invalid"}
+	if has_gold:
+		var gold_amount: Variant = slot.get("gold_amount", null)
+		var resolved_gold_amount := _dpv2_json_integer(gold_amount)
+		if resolved_gold_amount <= 0:
+			return {"ok": false, "reason": "dpv2_direct_gold_amount_invalid"}
+		return {
+			"ok": true,
+			"reason": "",
+			"kind": "gold",
+			"gold_amount": resolved_gold_amount,
+		}
+	var item_id_value: Variant = slot.get("canonical_item_id", null)
+	var item_id := _dpv2_json_integer(item_id_value)
+	if item_id <= 0:
+		return {"ok": false, "reason": "dpv2_direct_item_id_invalid"}
+	var identity := dpv2_direct_item_identity(item_id)
+	var canonical_name := str(identity.get("canonical_item_name", ""))
+	if identity.is_empty() or canonical_name.is_empty():
+		return {"ok": false, "reason": "dpv2_direct_item_identity_unresolved"}
+	# The canonical ID is authoritative. Name lookup is deliberately delayed
+	# until after that ID has been validated against the direct identity map.
+	var item := get_item_record(canonical_name)
+	if item.is_empty():
+		return {"ok": false, "reason": "dpv2_direct_item_name_unresolved"}
+	var resolved_name := str(item.get("name", ""))
+	if resolved_name.is_empty() or _canonical_item_name(resolved_name) != _canonical_item_name(canonical_name):
+		return {"ok": false, "reason": "dpv2_direct_item_identity_mismatch"}
+	return {
+		"ok": true,
+		"reason": "",
+		"kind": "item",
+		"canonical_item_id": item_id,
+		"item_name": resolved_name,
+	}
+
+
+func dpv2_direct_slot_probability(
+	monster_id: Variant,
+	slot_uid: String
+) -> Dictionary:
+	if not dpv2_direct_baseline_loaded:
+		return {"ok": false, "reason": "dpv2_direct_baseline_unavailable"}
+	var resolved_id := canonical_monster_id(monster_id)
+	var indexed_value: Variant = _dpv2_direct_slot_by_uid.get(slot_uid, {})
+	if resolved_id <= 0 or not indexed_value is Dictionary:
+		return {"ok": false, "reason": "dpv2_direct_slot_unresolved"}
+	var indexed: Dictionary = indexed_value
+	if int(indexed.get("canonical_monster_id", -1)) != resolved_id:
+		return {"ok": false, "reason": "dpv2_direct_slot_monster_mismatch"}
+	var slot_value: Variant = indexed.get("slot", {})
+	if not slot_value is Dictionary:
+		return {"ok": false, "reason": "dpv2_direct_slot_invalid"}
+	var slot: Dictionary = slot_value
+	var base_numerator: Variant = slot.get("base_numerator", null)
+	var base_denominator: Variant = slot.get("base_denominator", null)
+	var resolved_base_numerator := _dpv2_json_integer(base_numerator)
+	var resolved_base_denominator := _dpv2_json_integer(base_denominator)
+	if (
+		resolved_base_numerator <= 0
+		or resolved_base_denominator <= 0
+	):
+		return {"ok": false, "reason": "dpv2_direct_probability_invalid"}
+	var global_scale := dpv2_active_global_drop_rate()
+	var scale_numerator: Variant = global_scale.get("numerator", null)
+	var scale_denominator: Variant = global_scale.get("denominator", null)
+	var resolved_scale_numerator := _dpv2_json_integer(scale_numerator)
+	var resolved_scale_denominator := _dpv2_json_integer(scale_denominator)
+	if (
+		resolved_scale_numerator <= 0
+		or resolved_scale_denominator <= 0
+	):
+		return {"ok": false, "reason": "dpv2_global_scale_invalid"}
+	var raw_numerator := resolved_base_numerator * resolved_scale_numerator
+	var raw_denominator := resolved_base_denominator * resolved_scale_denominator
+	if raw_numerator <= 0 or raw_denominator <= 0:
+		return {"ok": false, "reason": "dpv2_probability_ratio_invalid"}
+	var final_numerator := raw_numerator
+	var final_denominator := raw_denominator
+	if final_numerator >= final_denominator:
+		final_numerator = 1
+		final_denominator = 1
+	else:
+		var divisor := _positive_gcd(final_numerator, final_denominator)
+		final_numerator /= divisor
+		final_denominator /= divisor
+	var final_probability := float(final_numerator) / float(final_denominator)
+	return {
+		"ok": true,
+		"reason": "",
+		"slot_uid": slot_uid,
+		"canonical_monster_id": resolved_id,
+		"canonical_item_id": _dpv2_json_integer(slot.get("canonical_item_id", -1)),
+		"gold_amount": _dpv2_json_integer(slot.get("gold_amount", -1)),
+		"reward_kind": "item" if slot.has("canonical_item_id") else "gold",
+		"base_numerator": resolved_base_numerator,
+		"base_denominator": resolved_base_denominator,
+		"base_probability": float(resolved_base_numerator) / float(resolved_base_denominator),
+		"global_preset": str(global_scale.get("preset", "")),
+		"global_scale_numerator": resolved_scale_numerator,
+		"global_scale_denominator": resolved_scale_denominator,
+		"global_scale": float(resolved_scale_numerator) / float(resolved_scale_denominator),
+		"unreduced_final_numerator": raw_numerator,
+		"unreduced_final_denominator": raw_denominator,
+		"final_numerator": final_numerator,
+		"final_denominator": final_denominator,
+		"final_probability": final_probability,
+		"probability_numerator": final_numerator,
+		"probability_denominator": final_denominator,
+		"overflow_priority": int(slot.get("overflow_priority", 0)),
+		"protected_drop": bool(slot.get("protected_drop", false)),
+		"baseline_origin": str(slot.get("baseline_origin", "")),
+		"source_provenance_id": str(slot.get("source_provenance_id", "")),
+	}
+
+
+func get_dpv2_direct_slot_probability(
+	monster_id: Variant,
+	slot_uid: String
+) -> Dictionary:
+	return dpv2_direct_slot_probability(monster_id, slot_uid)
+
+
 func dpv2_monster_drop_state(monster_id: int) -> Dictionary:
 	var resolved_id := canonical_monster_id(monster_id)
 	var value: Variant = _dpv2_monster_role_by_id.get(resolved_id, {})
@@ -1579,11 +2206,14 @@ func dpv2_active_global_drop_rate() -> Dictionary:
 
 
 func dpv2_ground_slot_limit() -> int:
-	return int(
-		dpv2_drop_runtime_authority.get("ground_overflow_policy", {}).get(
-			"maximum_ground_slots", 0
-		)
-	)
+	if not dpv2_direct_baseline_loaded:
+		return 0
+	var policy: Variant = dpv2_direct_baseline.get("probability_policy", {})
+	if not policy is Dictionary:
+		return 0
+	return maxi(0, _dpv2_json_integer(
+		(policy as Dictionary).get("post_rng_ground_slot_limit", 0)
+	))
 
 
 func _dpv2_expected_overflow_policy(tier: String) -> Dictionary:
@@ -1640,11 +2270,53 @@ func _dpv2_expected_overflow_policy(tier: String) -> Dictionary:
 
 
 func dpv2_source_slot_gate() -> Dictionary:
-	var contract: Variant = dpv2_drop_runtime_authority.get(
-		"source_slot_contract",
-		{}
+	if not dpv2_direct_baseline_loaded:
+		return {
+			"authority": "dpv2.direct_baseline.v2",
+			"available": false,
+			"compiled_slots": 0,
+		}
+	var summary: Variant = dpv2_direct_baseline.get("summary", {})
+	var tracked_source: Variant = dpv2_direct_baseline_manifest.get(
+		"tracked_logical_source", {}
 	)
-	return contract.duplicate(true) if contract is Dictionary else {}
+	var logical_rows := 0
+	if tracked_source is Dictionary:
+		logical_rows = _dpv2_json_integer(
+			(tracked_source as Dictionary).get("logical_rows", 0)
+		)
+	var compiled_slots := 0
+	var enabled_monsters := 0
+	var non_loot_monsters := 0
+	if summary is Dictionary:
+		compiled_slots = _dpv2_json_integer(
+			(summary as Dictionary).get("compiled_slots", 0)
+		)
+		enabled_monsters = _dpv2_json_integer(
+			(summary as Dictionary).get("drop_enabled_monsters", 0)
+		)
+		non_loot_monsters = _dpv2_json_integer(
+			(summary as Dictionary).get("non_loot_monsters", 0)
+		)
+	return {
+		"authority": "dpv2.direct_baseline.v2",
+		"available": true,
+		"identity_key": "canonical_monster_id",
+		"logical_source_rows": logical_rows,
+		"compiled_slots": compiled_slots,
+		"canonical_source_slots": compiled_slots,
+		"drop_enabled_source_slots": compiled_slots,
+		"drop_disabled_source_slots": 0,
+		"drop_enabled_monsters": enabled_monsters,
+		"non_loot_monsters": non_loot_monsters,
+		"reward_resolved_enabled_slots": compiled_slots,
+		"probability_resolved_enabled_slots": compiled_slots,
+		"rng_eligible_slots": compiled_slots,
+		"rng_roll_count": compiled_slots,
+		"all_enabled_resolved_slots_rng_before_overflow": true,
+		"overflow_stage": "after_all_probability_rolls",
+		"maximum_ground_slots": dpv2_ground_slot_limit(),
+	}
 
 
 func dpv2_resolve_reward_policy(monster_id: int, reward: Dictionary) -> Dictionary:

@@ -54,6 +54,11 @@
       "sha256": "1E75418BB02A17885F4A14527E2F5E4D6D71316A99CBA3DD8ED4D640825CF4E7",
       "hash_normalization": "lf_text",
       "lane": "monster_drop_probability"
+    },
+    "global_drop_rate_authority": {
+      "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+      "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+      "hash_normalization": "lf_text"
     }
   },
   "build_entrypoint": "tools/build_dpv2_21cq_direct_baseline.py",

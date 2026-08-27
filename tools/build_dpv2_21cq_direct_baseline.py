@@ -35,6 +35,9 @@ MAPPING_REPORT_PATH = ROOT / "docs/dpv2_21cq_mapping_report.md"
 PROVENANCE_PATH = ROOT / "assets/data/drop/dpv2_21cq_source_provenance_v1.json"
 DIRECT_BASELINE_PATH = ROOT / "assets/data/drop/dpv2_direct_baseline_v2.json"
 MANIFEST_PATH = ROOT / "assets/data/drop/dpv2_direct_baseline_manifest_v2.json"
+GLOBAL_DROP_RATE_AUTHORITY_PATH = (
+    ROOT / "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
+)
 PARITY_REPORT_PATH = ROOT / "docs/dpv2_21cq_x1_parity_report.md"
 CANONICAL_CATALOG_PATH = (
     ROOT / "assets/data/runtime/canonical_monster_catalog.json"
@@ -1065,6 +1068,11 @@ def build_manifest(rendered: dict[Path, str]) -> dict[str, Any]:
         "sha256": sha256_lf(source_priority_path),
         "hash_normalization": "lf_text",
         "lane": "monster_drop_probability",
+    }
+    artifacts["global_drop_rate_authority"] = {
+        "path": GLOBAL_DROP_RATE_AUTHORITY_PATH.relative_to(ROOT).as_posix(),
+        "sha256": sha256_lf(GLOBAL_DROP_RATE_AUTHORITY_PATH),
+        "hash_normalization": "lf_text",
     }
     return {
         "schema": "hardcore.dpv2.direct_baseline_manifest.v2",
