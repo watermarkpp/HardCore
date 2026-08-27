@@ -1,13 +1,12 @@
 # DPV2-21CQ-X1 Final Closure Record
 
-Status: `BLOCKED / FINAL_CLOSURE_PENDING`
+Status: `CLOSED`
 
 `FINAL_SHA: THIS_CLOSURE_COMMIT`
 
-This is the Package3B closure record for the final-gate/report lane. It is not
-marked `CLOSED` because the final gate observed blockers. A real closure SHA
-must be supplied by integration after the remaining protected conditions are
-resolved and the gate is rerun.
+This is the Package3C closure record for the direct-baseline final gate. It is
+marked `CLOSED` because the final gate completed with zero blockers. The actual
+closure SHA must be supplied by integration in the final handoff.
 
 ## Frozen final accounting
 
@@ -39,9 +38,12 @@ preserved exact duplicate rows beyond first. No duplicates are collapsed.
 
 ## Runtime and safety evidence
 
-- Direct x1 parity is `0` mismatches. The compiled view contains `189` base
-  `1/10` slots as the requested x10/base-denominator evidence; the frozen
-  global authority has no `10x` preset, so no unsupported 10x claim is made.
+- Direct x1 parity is `0` mismatches. The direct runtime test injects a `10x`
+  preset only in memory, selects real slot `dpv2.direct.m21.slot_002` (`1/20`),
+  and proves exact `1/20 * 10/1 = 1/2`; a real `1/3 * 10/1` result clamps to
+  `1/1`. The formal global authority JSON is unchanged and the test restores
+  its preset list, active preset, and scale index. The compiled view contains
+  `189` base `1/10` slots, separate from the x10 scale test.
 - Exact rational scale evidence passed for `1x`, `0.5x`, and `2x`; invalid
   scales fail closed and over-one results clamp to `1/1`.
 - Independent per-slot RNG, duplicate independence, debug/provenance fields,
@@ -54,38 +56,32 @@ preserved exact duplicate rows beyond first. No duplicates are collapsed.
 - A0.x material remains historical `LEGACY/HISTORICAL` and is not a final-gate
   production input.
 
-## Gate state and required integration
+## Gate state
 
-The final gate result on the Package3B worktree was:
+The final gate result on the Package3C worktree was:
 
 ```text
-DPV2_FINAL_GATE_FAIL blocker_count=3
+DPV2_FINAL_GATE_PASS blocker_count=0
 ```
 
-Two failed steps report the same protected manifest drift: the manifest records
-source-priority LF hash
-`1E75418BB02A17885F4A14527E2F5E4D6D71316A99CBA3DD8ED4D640825CF4E7`, while the
-policy already integrated by `77777fa6` hashes to
-`0ABE78CD15EE75C59328269880DE25F4B6E892333C5BDF88BADDC9B60C0925EB`. The
-direct generator check and 17-test Python suite consequently report failure
-(the suite is otherwise `16 passed, 1 failed`). Refreshing that protected
-manifest belongs to integration, not this report/gate package.
+Manifest source-priority hash is now
+`0ABE78CD15EE75C59328269880DE25F4B6E892333C5BDF88BADDC9B60C0925EB`, matching
+the already-integrated `77777fa6` policy. The builder confirmed no generated
+data/report drift beyond that manifest field. The world test now removes and
+restores only the direct profile index for monster 64, while identity/GameData
+and bridge remain accessible and LootRuntime returns
+`configured=false, reason=dpv2_direct_profile_unresolved`.
 
-The third failure is the protected `monster_world_integration_test`: its
-no-drop assertion at line 369 still expects the retired closure path, and its
-line-118 assertion is a cascade after the earlier assertion aborts restoration.
-This package does not edit that test or Production Runtime.
+Direct loader/runtime/policy/P1A/gold Godot tests passed `5/5`; fresh P1A and
+deterministic audit passed; canonical catalog, source-priority verifier,
+production legacy search, 17 Python tests, world integration, and diff check
+passed.
 
-All direct loader/runtime/policy/P1A/gold Godot tests passed `5/5`; fresh P1A
-and deterministic audit passed; canonical catalog, source-priority verifier,
-production legacy search, and `git diff --check` passed. Once the two protected
-conditions are resolved, rerun:
+The final gate command was:
 
 ```text
 tools/run_dpv2_final_gate.ps1
 ```
 
-Only a result with `DPV2_FINAL_GATE_PASS blocker_count=0` may change this record
-to `CLOSED`. Integration must then replace the placeholder with the real commit
-SHA in the final response; this file deliberately does not predict its own
-hash.
+The final response must replace the placeholder with the actual Package3C
+commit SHA; this file deliberately does not predict its own hash.

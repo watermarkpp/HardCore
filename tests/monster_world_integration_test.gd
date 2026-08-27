@@ -345,33 +345,48 @@ func _test_region_content_contract() -> void:
 
 
 func _test_runtime_no_drop_rejection() -> void:
-	# The final catalog is expected to close every runtime hostile drop table.
-	# Temporarily replace one already-built closure to exercise the real public
-	# GameData, bridge and LootRuntime rejection paths without inventing a test
-	# monster or changing the generated catalog.
-	var saved_closure: Dictionary = GameData._monster_runtime_drop_closure.get(
-		64, {}
-	).duplicate(true)
-	GameData._monster_runtime_drop_closure[64] = {
-		"allowed": false,
-		"reason": "drop_items_unresolved",
-		"resolved_non_gold_count": 0,
-	}
-	assert(GameData.get_monster_by_id(64).is_empty(), "no-drop GameData gate failed")
+	# Temporarily remove one direct V2 profile to exercise the real fail-closed
+	# LootRuntime path without changing canonical monster identity or its spawn
+	# closure. The direct profile index is the only state under test here.
+	var had_profile := GameData._dpv2_direct_profile_by_id.has(64)
+	var saved_profile: Variant = GameData._dpv2_direct_profile_by_id.get(64, {})
+	if had_profile:
+		GameData._dpv2_direct_profile_by_id.erase(64)
+	var canonical_id := GameData.canonical_monster_id(64)
+	var game_data_entry := GameData.get_monster_by_id(64)
 	var bridge_result := BridgeScript._combat_spawn(
 		{"design": {"design_size": [50, 50]}},
 		{"monster_id": 64, "tile": [0, 0]},
 		"monster_spawn"
 	)
-	assert(bridge_result.is_empty(), "no-drop bridge gate failed")
 	var rng := RandomNumberGenerator.new()
 	var roll := LootRuntimeScript.new().roll_monster_drops(64, rng)
-	assert(not bool(roll.get("configured", false)), "no-drop loot was configured")
-	assert(
-		str(roll.get("reason", "")) == "drop_items_unresolved",
-		"no-drop loot reason drifted"
+	var identity_ok := canonical_id == 64
+	var game_data_ok := (
+		not game_data_entry.is_empty()
+		and int(game_data_entry.get("monster_id", -1)) == 64
 	)
-	GameData._monster_runtime_drop_closure[64] = saved_closure
+	var bridge_ok := (
+		not bridge_result.is_empty()
+		and int(bridge_result.get("monster_id", -1)) == 64
+	)
+	var loot_ok := (
+		not bool(roll.get("configured", false))
+		and str(roll.get("reason", "")) == "dpv2_direct_profile_unresolved"
+	)
+	if had_profile:
+		GameData._dpv2_direct_profile_by_id[64] = saved_profile
+	else:
+		GameData._dpv2_direct_profile_by_id.erase(64)
+	var restored := GameData.dpv2_direct_profile(64)
+	assert(identity_ok, "canonical identity changed while direct profile was absent")
+	assert(game_data_ok, "GameData identity became inaccessible while direct profile was absent")
+	assert(bridge_ok, "bridge identity became inaccessible while direct profile was absent")
+	assert(loot_ok, "direct V2 unresolved profile did not fail closed: %s" % str(roll))
+	assert(
+		not restored.is_empty() if had_profile else restored.is_empty(),
+		"direct profile index was not restored"
+	)
 
 
 func _test_game_root_spawn(wrong_display_payload: Dictionary) -> void:

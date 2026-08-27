@@ -1,48 +1,36 @@
-# DPV2-21CQ-X1 Phase 7 Package3B Cutover Report
+# DPV2-21CQ-X1 Phase 7 Package3C Cutover Report
 
-Status: `BLOCKED / NOT_CLOSED`
+Status: `CLOSED`
 
 Baseline branch: `codex/integration`
 
-Package baseline HEAD: `571985ECEC77A83155272F52C02894366B7D8ABF`
+Package3C baseline HEAD: `738D11A5E86829E91359106C424C0CF5027C9E0C`
 
 Integrated source-priority change: `77777FA664B5DA96F1DAB5A721B24B7F0E6FDAD0`
 `FINAL_SHA: THIS_CLOSURE_COMMIT`
 
-This package changes only the final gate and these reports. Production
-Runtime, the direct baseline data, the canonical catalog, the source-priority
-policy, P1A tooling, and tests remain outside this package's write scope.
+This package changes only the direct-baseline manifest hash, the direct runtime
+scale/world-contract tests, and these reports. It uses the previously committed
+direct-baseline final gate. Production Runtime, the direct baseline authority,
+the canonical catalog, the source-priority policy, P1A tooling, and unrelated
+tests remain unchanged.
 
 ## Gate decision
 
-The final gate was run after the Package3B gate rewrite:
+The final gate was rerun after the Package3C manifest refresh, x10 test, and
+direct V2 world fail-closed test:
 
 ```text
-DPV2_FINAL_GATE_FAIL blocker_count=3
+DPV2_FINAL_GATE_PASS blocker_count=0
 ```
 
-The three failed steps are two checks of one protected-data condition and one
-protected legacy-integration condition:
-
-1. `direct_baseline_generator_check` reports generated output drift in
-   `assets/data/drop/dpv2_direct_baseline_manifest_v2.json`. The manifest
-   records the old LF-normalized `source_priority_policy.json` hash
-   `1E75418BB02A17885F4A14527E2F5E4D6D71316A99CBA3DD8ED4D640825CF4E7`, while
-   the policy integrated by `77777fa6` hashes to
-   `0ABE78CD15EE75C59328269880DE25F4B6E892333C5BDF88BADDC9B60C0925EB`.
-   Updating or regenerating that protected manifest is an integration action,
-   not a Package3B write.
-2. `dpv2_direct_python_tests` ran 17 tests: 16 passed and the one failure is
-   the same manifest source-priority hash mismatch.
-3. `world_integration` remains a protected test and fails at
-   `tests/monster_world_integration_test.gd:369` (`no-drop loot was
-   configured`). Its later line-118 identity assertion is a cascade because
-   the earlier assertion aborts before restoring the temporary closure. This
-   package does not alter that test or Production Runtime.
-
-The gate intentionally does not call the historical runtime activator or the
-A0.7 production-freeze validator. It writes `CLOSED` only when the blocker
-count is zero; this report therefore remains `NOT_CLOSED`.
+The formal builder refreshed only the manifest's source-priority artifact hash;
+all other generated baseline/mapping/provenance/report outputs remained byte
+identical. The world integration test now removes and restores only the direct
+profile index entry for monster 64, proving identity/GameData/bridge access is
+independent from the direct profile and that LootRuntime fails closed with
+`dpv2_direct_profile_unresolved`. The gate intentionally does not call retired
+pre-cutover validators. Because blocker count is zero, this report is `CLOSED`.
 
 ## Dual-view accounting
 
@@ -97,16 +85,20 @@ preserved exact duplicate rows beyond first. Every compiled slot retains a
 unique `slot_uid`; no duplicate is merged or aggregated.
 
 `x1_probability_mismatch=0` is recorded by the direct baseline summary and
-covered by the direct baseline/P1A checks. For the requested `x10` evidence,
-the compiled direct view contains `189` slots with base denominator `10`
-(`1/10` source probability); there is no `10x` global preset in the frozen
-global authority (its available presets are `0.5x`, `0.8x`, `1x`, `1.5x`, and
-`2x`), so this report does not mislabel a 10x-scale run.
+covered by the direct baseline/P1A checks. The direct runtime test injects a
+`10x` preset only in memory, selects real slot
+`dpv2.direct.m21.slot_002` (`1/20`), and proves exact `1/20 * 10/1 = 1/2`;
+it also proves a real `1/3 * 10/1` result clamps to `1/1`. The formal global
+authority JSON remains unchanged and the test restores both its preset list
+and active preset/index after the assertions. The compiled direct view contains
+`189` slots with base denominator `10` (`1/10` source probability), separate
+from the x10 scale test.
 
 The formal direct runtime test passed the available rational-scale and safety
 evidence:
 
 - `1x`: `1/3 -> 1/3`; `0.5x`: `1/3 -> 1/6`; `2x`: `1/3 -> 2/3`.
+- Temporary test-only `10x`: `1/20 -> 1/2`; clamp: `1/3 -> 1/1`.
 - Invalid scale selection fails closed; an over-one result clamps to `1/1`.
 - Every eligible slot receives an independent draw before retention; duplicate
   rows remain independent. Diagnostics include `slot_uid`, canonical ID, base
@@ -136,22 +128,22 @@ evidence and are not gate inputs.
 
 | Command | Result |
 | --- | --- |
-| `py -3.12 tools/build_dpv2_21cq_direct_baseline.py --check` | **FAIL**: generated manifest drift, protected source-priority hash mismatch |
+| `py -3.12 tools/build_dpv2_21cq_direct_baseline.py --write` | **PASS**: only manifest source-priority hash changed; no other generated output drift |
+| `py -3.12 tools/build_dpv2_21cq_direct_baseline.py --check` | **PASS**: `logical_records=217 source_rows=9590 corrected=1 monster_unresolved=0 item_unresolved=0 compiled_slots=5995 x1_mismatch=0` |
 | `py -3.12 tools/build_canonical_monster_catalog.py --check` | **PASS**: `identities=156 runtime_allowed=153 drop_rows=7032 authoring_rows=0` |
 | `py -3.12 tools/verify_source_priority_policy.py` | **PASS**: JSON `passed=true`, all checks true |
-| `py -3.12 -m unittest tests/test_dpv2_21cq_source_audit.py tests/test_dpv2_21cq_mapping_authority.py tests/test_dpv2_21cq_direct_baseline.py -v` | **16 passed, 1 failed, 17 total**; only manifest hash assertion failed |
-| `tools/run_godot_tests.ps1 -TimeoutSeconds 60 -TestPaths tests/dpv2_21cq_direct_loader_test.tscn, tests/dpv2_21cq_direct_runtime_test.tscn, tests/dpv2_drop_runtime_policy_test.tscn, tests/monster_drop_p1a_runtime_contract_test.tscn, tests/monster_gold_drop_runtime_test.tscn` | **PASS 5/5**, engine log errors `0` |
+| `py -3.12 -m unittest tests/test_dpv2_21cq_source_audit.py tests/test_dpv2_21cq_mapping_authority.py tests/test_dpv2_21cq_direct_baseline.py -v` | **PASS 17/17** |
+| `tools/run_godot_tests.ps1 -TimeoutSeconds 60 -TestPaths tests/dpv2_21cq_direct_loader_test.tscn, tests/dpv2_21cq_direct_runtime_test.tscn, tests/dpv2_drop_runtime_policy_test.tscn, tests/monster_drop_p1a_runtime_contract_test.tscn, tests/monster_gold_drop_runtime_test.tscn` | **PASS 5/5**, engine log errors `0`; direct marker includes `10x=1/20_to_1/2 clamp=1/1` |
 | `tools/run_monster_drop_p1a.ps1` (inside gate) | **PASS**: `MONSTER_DROP_P1A_ALL_PASS`; analyzer unit `8/8`, Godot `2/2` |
 | `tools/run_monster_drop_p1a_audit.ps1` (inside gate) | **PASS**: `MONSTER_DROP_P1A_AUDIT_PASS`, deterministic snapshot `216C4F372FD6FBD44C24D5199E3CC6C7ED4F2B790197116FE50D14CAB43AFECF` |
-| `tools/run_godot_tests.ps1 -TimeoutSeconds 60 -TestPaths tests/monster_world_integration_test.tscn` | **FAIL**: protected no-drop assertion at line 369; cascade at line 118 |
-| `tools/run_dpv2_final_gate.ps1` | **FAIL**: `DPV2_FINAL_GATE_FAIL blocker_count=3` |
+| `tools/run_godot_tests.ps1 -TimeoutSeconds 60 -TestPaths tests/monster_world_integration_test.tscn` | **PASS 1/1**, engine log errors `0` |
+| `tools/run_dpv2_final_gate.ps1` | **PASS**: `DPV2_FINAL_GATE_PASS blocker_count=0` |
 | `git diff --check` | **PASS** |
 
-## Integration handoff
+## Closure handoff
 
-Before closure can be marked `CLOSED`, integration must refresh the protected
-direct-baseline manifest (or otherwise reconcile its source-priority artifact
-hash) against the already-integrated policy, then decide the separately
-protected world-test contract at line 369. Rerun the final gate on the resulting
-HEAD. The final response must replace `FINAL_SHA: THIS_CLOSURE_COMMIT` with the
-actual closure commit hash; no self-referential SHA is asserted here.
+The Package3C commit contains only these five authorized files: the direct
+baseline manifest, direct runtime test, world integration test, and the two
+reports. The final response must report the actual closure commit hash in place
+of `FINAL_SHA: THIS_CLOSURE_COMMIT`; the placeholder is retained here because a
+commit cannot embed its own SHA.

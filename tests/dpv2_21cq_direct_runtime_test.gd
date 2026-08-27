@@ -16,11 +16,13 @@ func _run() -> void:
 	_test_exact_id_profile_join()
 	_test_direct_identity_resolution()
 	_test_rational_probability()
+	_test_ten_x_rational_probability()
 	_test_independent_slot_rng_and_diagnostics()
 	_test_fail_closed_without_direct_authority()
 	_test_protected_overflow_selection()
 	print(
 		"DPV2_21CQ_DIRECT_RUNTIME_PASS: profiles=156 slots=5995 "
+		+ "10x=1/20_to_1/2 clamp=1/1 "
 		+ "direct_id_rng=independent protected_first cap=9"
 	)
 	get_tree().quit(0)
@@ -141,6 +143,62 @@ func _test_rational_probability() -> void:
 	assert(bool(clamped.get("ok", false)), str(clamped))
 	assert(int(clamped.get("final_numerator", -1)) == 1)
 	assert(int(clamped.get("final_denominator", -1)) == 1)
+
+
+func _test_ten_x_rational_probability() -> void:
+	# Inject 10x only in this test's in-memory authority view. The production
+	# JSON remains unchanged; the private index is mirrored because GameData
+	# validates presets into it once during startup.
+	var authority: Dictionary = GameData.dpv2_global_drop_rate_authority
+	var original_active := str(authority.get("active_preset", ""))
+	var original_presets: Array = (authority.get("presets", []) as Array).duplicate(true)
+	var had_index := GameData._dpv2_global_scale_by_preset.has("10x")
+	var original_index: Variant = GameData._dpv2_global_scale_by_preset.get(
+		"10x", Vector2i.ZERO
+	)
+	var temporary_presets := original_presets.duplicate(true)
+	temporary_presets.append({"preset": "10x", "numerator": 10, "denominator": 1})
+	authority["presets"] = temporary_presets
+	authority["active_preset"] = "10x"
+	GameData._dpv2_global_scale_by_preset["10x"] = Vector2i(10, 1)
+
+	var ten_x := GameData.dpv2_direct_slot_probability(
+		21, "dpv2.direct.m21.slot_002"
+	)
+	var clamp := GameData.dpv2_direct_slot_probability(
+		18, "dpv2.direct.m18.slot_001"
+	)
+	var ten_x_ok := (
+		bool(ten_x.get("ok", false))
+		and int(ten_x.get("base_numerator", -1)) == 1
+		and int(ten_x.get("base_denominator", -1)) == 20
+		and int(ten_x.get("global_scale_numerator", -1)) == 10
+		and int(ten_x.get("global_scale_denominator", -1)) == 1
+		and int(ten_x.get("unreduced_final_numerator", -1)) == 10
+		and int(ten_x.get("unreduced_final_denominator", -1)) == 20
+		and int(ten_x.get("final_numerator", -1)) == 1
+		and int(ten_x.get("final_denominator", -1)) == 2
+		and is_equal_approx(float(ten_x.get("final_probability", -1.0)), 0.5)
+	)
+	var clamp_ok := (
+		bool(clamp.get("ok", false))
+		and int(clamp.get("base_numerator", -1)) == 1
+		and int(clamp.get("base_denominator", -1)) == 3
+		and int(clamp.get("final_numerator", -1)) == 1
+		and int(clamp.get("final_denominator", -1)) == 1
+		and is_equal_approx(float(clamp.get("final_probability", -1.0)), 1.0)
+	)
+
+	# Restore every mutated in-memory value before asserting, so a failed check
+	# cannot poison the remaining tests in this scene.
+	authority["presets"] = original_presets
+	authority["active_preset"] = original_active
+	if had_index:
+		GameData._dpv2_global_scale_by_preset["10x"] = original_index
+	else:
+		GameData._dpv2_global_scale_by_preset.erase("10x")
+	assert(ten_x_ok, str(ten_x))
+	assert(clamp_ok, str(clamp))
 
 
 func _test_independent_slot_rng_and_diagnostics() -> void:
