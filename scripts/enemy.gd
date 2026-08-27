@@ -121,7 +121,13 @@ var max_hp := 20
 var current_hp := 20
 var attack_min := 1
 var attack_max := 2
+var defense := 0
+var magic_defense := 0
 var agility := WarriorCombatMath.BASE_AGILITY
+var accuracy := WarriorCombatMath.BASE_HIT
+var life_type := ""
+var undead := false
+var anti_stealth := false
 var anti_poison := 0
 var level := 1
 var move_speed_gu_per_sec := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(55.0)
@@ -182,6 +188,7 @@ var _pending_attack_damage := 0
 var _pending_attack_target: Node2D
 var _pending_attack_release_record: Dictionary = {}
 var last_magic_attack_resolution: Dictionary = {}
+var last_physical_hit_resolution: Dictionary = {}
 var _retarget_timer := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
@@ -271,11 +278,25 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	max_hp = maxi(1, int(stats.get("hp", 0)))
 	current_hp = max_hp
 	_natural_regen = MonsterNaturalRegenPolicyScript.new()
+	defense = maxi(0, int(stats.get("defense", 0)))
+	magic_defense = maxi(0, int(stats.get("magic_defense", 0)))
 	attack_min = maxi(1, int(stats.get("attack_min", 0)))
 	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
 	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
+	accuracy = maxi(0, int(runtime_projection.get("accuracy", WarriorCombatMath.BASE_HIT)))
+	life_type = str(runtime_projection.get("life_type", ""))
+	undead = bool(runtime_projection.get("undead", life_type == "不死系"))
+	anti_stealth = bool(runtime_projection.get("anti_stealth", false))
 	anti_poison = maxi(0, int(runtime_projection.get("anti_poison", 0)))
 	level = maxi(1, int(stats.get("level", 0)))
+	# Keep the existing canonical payload boundary while exposing only the
+	# detail flags needed by current skill/runtime consumers.  Caller-provided
+	# combat fields still never enter this dictionary.
+	monster_data["level"] = level
+	monster_data["accuracy"] = accuracy
+	monster_data["life_type"] = life_type
+	monster_data["undead"] = undead
+	monster_data["anti_stealth"] = anti_stealth
 	move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(
 		40.0 if is_boss else 58.0
 	)
@@ -2054,7 +2075,54 @@ func _deal_melee_hit(
 	_apply_attack_damage(hit_target, dealt_damage)
 
 
-func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
+func _target_agility_for_monster_hit(hit_target: Node2D) -> int:
+	var target_agility_value: Variant = hit_target.get("agility")
+	if target_agility_value != null:
+		return maxi(1, int(target_agility_value))
+	if hit_target is PlayerCharacter:
+		return maxi(1, int(PlayerState.computed_stats.get("agility", WarriorCombatMath.BASE_AGILITY)))
+	return WarriorCombatMath.BASE_AGILITY
+
+
+func _monster_physical_hit_succeeds(hit_target: Node2D, forced_roll := -1) -> bool:
+	var target_agility := _target_agility_for_monster_hit(hit_target)
+	var random_roll := int(forced_roll)
+	if random_roll < 0:
+		# Existing test mode is a deterministic presentation harness used by the
+		# geometry suites.  Production still follows the primary strict-< rule.
+		if PlayerState.test_mode:
+			last_physical_hit_resolution = {
+				"policy_id": WarriorCombatMath.PHYSICAL_HIT_POLICY_ID,
+				"accuracy": accuracy,
+				"target_agility": target_agility,
+				"random_roll": null,
+				"success": true,
+				"test_mode_bypass": true,
+			}
+			return true
+		random_roll = _rng.randi_range(0, target_agility - 1)
+	var success := WarriorCombatMath.hit_succeeds(accuracy, target_agility, random_roll)
+	last_physical_hit_resolution = {
+		"policy_id": WarriorCombatMath.PHYSICAL_HIT_POLICY_ID,
+		"accuracy": accuracy,
+		"target_agility": target_agility,
+		"random_roll": random_roll,
+		"success": success,
+		"test_mode_bypass": false,
+	}
+	return success
+
+
+func _apply_attack_damage(
+	hit_target: Node2D,
+	dealt_damage: int,
+	use_accuracy := true,
+	forced_roll := -1,
+) -> void:
+	if use_accuracy and not _monster_physical_hit_succeeds(hit_target, forced_roll):
+		# A miss consumes the existing attack event/timer and damage roll but
+		# submits no damage or on-hit side effects.
+		return
 	hit_target.take_damage(dealt_damage)
 	apply_life_steal(dealt_damage)
 	if control_on_hit_seconds > 0.0 and hit_target.has_method("apply_control"):
@@ -2628,7 +2696,9 @@ func _settle_area_attack_release_records() -> void:
 		var victim := candidate as Node2D
 		if not _area_attack_release_target_is_valid(victim, release_record):
 			continue
-		_apply_attack_damage(victim, int(release_record.get("damage", 0)))
+		# Fixed-area magic is a separate delivery path; preserve its existing
+		# damage semantics and do not apply physical accuracy to it.
+		_apply_attack_damage(victim, int(release_record.get("damage", 0)), false)
 
 
 func _area_attack_release_target_is_valid(

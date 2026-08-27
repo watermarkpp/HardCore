@@ -150,6 +150,14 @@ static func behavior_profile(monster_data: Dictionary) -> Dictionary:
 			"resolutionStatus": str(ai.get("resolution_status", "")),
 			"sourceDistribution": str(ai.get("source_distribution", "")),
 		}
+	# The canonical service behavior is rebuilt above from the authoritative AI
+	# row.  Preserve only the 21CQ-scoped life flags from the canonical profile;
+	# they are attributes, not a replacement for the service AI formula.
+	var canonical_service: Variant = profile.get("serviceBehavior", {})
+	if canonical_service is Dictionary:
+		for field: String in ["undead", "lifeType", "antiStealth"]:
+			if (canonical_service as Dictionary).has(field):
+				result["serviceBehavior"][field] = (canonical_service as Dictionary).get(field)
 	return result
 
 

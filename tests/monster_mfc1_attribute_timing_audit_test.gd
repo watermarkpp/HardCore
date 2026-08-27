@@ -22,6 +22,7 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
 const AUTHORITY_PATH := "res://assets/data/monster_runtime_authority_v1.json"
 const BOSS_RULES_PATH := "res://assets/data/boss_service_rules.json"
+const DETAIL_SOURCE_PATH := "res://assets/data/monster_21cq_detail_source_v1.json"
 const PX_PER_GU := 32.0
 
 var _failures: Array[String] = []
@@ -42,6 +43,7 @@ var _stats := {
 	"legacy_name_fallback": 0,
 	"identity_drift": 0,
 	"formal_runtime_accidental_default": 0,
+	"detail_source_mismatch": 0,
 }
 
 
@@ -54,9 +56,11 @@ func _run() -> void:
 	var catalog := _load_json(CATALOG_PATH)
 	var authority := _load_json(AUTHORITY_PATH)
 	var boss_rules := _load_json(BOSS_RULES_PATH)
+	var detail_source := _load_json(DETAIL_SOURCE_PATH)
 	var auth_by_id := _index_by_id(authority.get("records", []))
+	var detail_by_id := _index_by_id(detail_source.get("records", []))
 	var boss_by_id := _index_boss_rules(boss_rules.get("runtimeRulesByMonsterId", {}))
-	_audit_all_monsters(catalog, auth_by_id, boss_by_id)
+	_audit_all_monsters(catalog, auth_by_id, boss_by_id, detail_by_id)
 	_audit_direction_speed_isometry()
 	_audit_frame_rate_independent_cadence()
 	_audit_hit_delay_and_double_hit()
@@ -72,7 +76,8 @@ func _run() -> void:
 func _audit_all_monsters(
 	catalog: Dictionary,
 	auth_by_id: Dictionary,
-	boss_by_id: Dictionary
+	boss_by_id: Dictionary,
+	detail_by_id: Dictionary,
 ) -> void:
 	var entries: Array = catalog.get("entries", [])
 	for raw: Variant in entries:
@@ -93,16 +98,35 @@ func _audit_all_monsters(
 		var classification := str(entry.get("classification", ""))
 		var is_boss := classification == "boss"
 		var boss_rule: Dictionary = boss_by_id.get(mid, {}) if is_boss else {}
+		var detail: Dictionary = detail_by_id.get(mid, {})
+		if detail.is_empty():
+			_stats["detail_source_mismatch"] = int(_stats["detail_source_mismatch"]) + 1
+			_failures.append("detail_source_missing:%d" % mid)
+			continue
 
 		# --- Attribute presence ---
 		for field: String in ["level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max"]:
 			if not stats.has(field):
 				_stats["attribute_missing"] = int(_stats["attribute_missing"]) + 1
 				_failures.append("attr_missing:%d:%s" % [mid, field])
-		for field: String in ["agility", "anti_poison"]:
+		for field: String in ["agility", "accuracy", "life_type", "undead", "anti_stealth", "anti_poison"]:
 			if not runtime_projection.has(field):
 				_stats["attribute_missing"] = int(_stats["attribute_missing"]) + 1
 				_failures.append("attr_missing:%d:%s" % [mid, field])
+		# Every active canonical attribute in this audit is compared to the exact
+		# ID-keyed 21CQ detail row.  The site is the user-authoritative override
+		# for these fields; this check does not inspect or alter drops/spawn data.
+		for field: String in ["level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max"]:
+			_check_int_attr(mid, field, int(stats.get(field, -1)), int(detail.get(field, -2)))
+		_check_int_attr(mid, "agility", int(runtime_projection.get("agility", -1)), int(detail.get("agility", -2)))
+		_check_int_attr(mid, "accuracy", int(runtime_projection.get("accuracy", -1)), int(detail.get("accuracy", -2)))
+		if str(runtime_projection.get("life_type", "")) != str(detail.get("life_type", "")):
+			_stats["detail_source_mismatch"] = int(_stats["detail_source_mismatch"]) + 1
+			_failures.append("detail_value_mismatch:%d:life_type" % mid)
+		for field: String in ["undead", "anti_stealth"]:
+			if bool(runtime_projection.get(field, false)) != bool(detail.get(field, false)):
+				_stats["detail_source_mismatch"] = int(_stats["detail_source_mismatch"]) + 1
+				_failures.append("detail_value_mismatch:%d:%s" % [mid, field])
 
 		# --- Instantiate the production runtime consumer ---
 		var enemy := EnemyActorScript.new()
@@ -114,8 +138,20 @@ func _audit_all_monsters(
 		_check_int_attr(mid, "attack_min", enemy.attack_min, maxi(1, int(stats.get("attack_min", 0))))
 		var expected_amax := maxi(maxi(1, int(stats.get("attack_min", 0))), int(stats.get("attack_max", 0)))
 		_check_int_attr(mid, "attack_max", enemy.attack_max, expected_amax)
+		_check_int_attr(mid, "defense", enemy.defense, maxi(0, int(stats.get("defense", 0))))
+		_check_int_attr(mid, "magic_defense", enemy.magic_defense, maxi(0, int(stats.get("magic_defense", 0))))
 		_check_int_attr(mid, "agility", enemy.agility, maxi(1, int(runtime_projection.get("agility", 15))))
+		_check_int_attr(mid, "accuracy", enemy.accuracy, maxi(0, int(runtime_projection.get("accuracy", 0))))
 		_check_int_attr(mid, "anti_poison", enemy.anti_poison, maxi(0, int(runtime_projection.get("anti_poison", 0))))
+		if enemy.life_type != str(runtime_projection.get("life_type", "")):
+			_stats["attribute_runtime_mismatch"] = int(_stats["attribute_runtime_mismatch"]) + 1
+			_failures.append("attr_runtime_mismatch:%d:life_type runtime=%s expected=%s" % [mid, enemy.life_type, str(runtime_projection.get("life_type", ""))])
+		if enemy.undead != bool(runtime_projection.get("undead", false)):
+			_stats["attribute_runtime_mismatch"] = int(_stats["attribute_runtime_mismatch"]) + 1
+			_failures.append("attr_runtime_mismatch:%d:undead" % mid)
+		if enemy.anti_stealth != bool(runtime_projection.get("anti_stealth", false)):
+			_stats["attribute_runtime_mismatch"] = int(_stats["attribute_runtime_mismatch"]) + 1
+			_failures.append("attr_runtime_mismatch:%d:anti_stealth" % mid)
 
 		# --- Movement authority ---
 		var authority_record: Dictionary = auth_by_id.get(mid, {})
@@ -155,9 +191,15 @@ func _audit_all_monsters(
 			if a_speed == null:
 				_stats["movement_default_fallback"] = int(_stats["movement_default_fallback"]) + 1
 				_failures.append("mv_speed_no_authority_record:%d" % mid)
+			var interval_authority: Dictionary = a_movement.get("interval_authority", {})
+			_check_int_attr(mid, "move_interval_ms", int(interval_authority.get("raw_interval_ms", -1)), int(detail.get("move_interval_ms", -2)))
+			var expected_effective_interval := 0 if bool(a_movement.get("stationary", false)) else maxi(200, int(detail.get("move_interval_ms", 0)))
+			_check_int_attr(mid, "effective_move_interval_ms", int(a_movement.get("walk_interval_ms", -1)), expected_effective_interval)
 
 		# --- Attack timing authority ---
 		var bp_attack_ms := int(bp_timing.get("attackIntervalMs", 0))
+		_check_int_attr(mid, "behavior_attack_interval_ms", bp_attack_ms, int(detail.get("attack_interval_ms", -1)))
+		_check_int_attr(mid, "behavior_move_interval_ms", int(bp_timing.get("moveIntervalMs", 0)), int(detail.get("move_interval_ms", -1)))
 		var boss_attack_ms := int(boss_rule.get("timing", {}).get("attackIntervalMs", 0))
 		if bp_attack_ms <= 0 and boss_attack_ms <= 0:
 			_stats["attack_timing_authority_missing"] = int(_stats["attack_timing_authority_missing"]) + 1

@@ -3,6 +3,7 @@ extends Node
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const EnemyActorScript := preload("res://scripts/enemy.gd")
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
+const DETAIL_SOURCE_PATH := "res://assets/data/monster_21cq_detail_source_v1.json"
 
 const WOOma_EXPECTED := {
 	64: "ordinary",
@@ -34,6 +35,8 @@ func _ready() -> void:
 func _run() -> void:
 	MonsterIdentityScript.reset_caches_for_test()
 	var catalog := _load_json(CATALOG_PATH)
+	var detail_source := _load_json(DETAIL_SOURCE_PATH)
+	var detail_by_id := _index_by_id(detail_source.get("records", []))
 	var entries: Array = catalog.get("entries", [])
 	var entries_by_id: Dictionary = catalog.get("entries_by_id", {})
 	var appearance_profiles: Dictionary = catalog.get("appearance_profiles", {})
@@ -65,9 +68,21 @@ func _run() -> void:
 			assert(disposition.is_empty(), "unexpected monster disposition for monster_id=%d" % monster_id)
 			assert(bool(placement.get("allowed", false)), "historical placement policy unexpectedly re-closed monster_id=%d" % monster_id)
 		var runtime_projection: Dictionary = entry.get("combat", {}).get("runtime_projection", {})
-		assert(runtime_projection.get("agility") == 15 and runtime_projection.get("anti_poison") == 0, "monster_id=%d runtime projection defaults changed" % monster_id)
-		for projection_field: String in ["agility", "anti_poison"]:
-			assert(str(runtime_projection.get("source_evidence", {}).get(projection_field, {}).get("tier", "")) == "project_rule", "monster_id=%d projection evidence missing for %s" % [monster_id, projection_field])
+		var detail: Dictionary = detail_by_id.get(monster_id, {})
+		assert(not detail.is_empty(), "monster_id=%d missing 21CQ detail source row" % monster_id)
+		var stats: Dictionary = entry.get("combat", {}).get("stats", {})
+		for field: String in ["level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max"]:
+			assert(int(stats.get(field, -1)) == int(detail.get(field, -2)), "monster_id=%d 21CQ core mismatch for %s" % [monster_id, field])
+		for field: String in ["agility", "accuracy"]:
+			assert(int(runtime_projection.get(field, -1)) == int(detail.get(field, -2)), "monster_id=%d 21CQ projection mismatch for %s" % [monster_id, field])
+		assert(str(runtime_projection.get("life_type", "")) == str(detail.get("life_type", "")), "monster_id=%d 21CQ life_type mismatch" % monster_id)
+		for field: String in ["undead", "anti_stealth"]:
+			assert(bool(runtime_projection.get(field, false)) == bool(detail.get(field, false)), "monster_id=%d 21CQ projection mismatch for %s" % [monster_id, field])
+		for projection_field: String in ["agility", "accuracy", "life_type", "undead", "anti_stealth"]:
+			var detail_evidence: Dictionary = runtime_projection.get("source_evidence", {}).get(projection_field, {})
+			assert(str(detail_evidence.get("authority", "")) == "user_authoritative_override", "monster_id=%d projection evidence missing user authority for %s" % [monster_id, projection_field])
+			assert(str(detail_evidence.get("field", "")) == projection_field, "monster_id=%d projection evidence field mismatch for %s" % [monster_id, projection_field])
+		assert(str(runtime_projection.get("source_evidence", {}).get("anti_poison", {}).get("tier", "")) == "project_rule", "monster_id=%d projection evidence missing for anti_poison" % monster_id)
 		for required: String in [
 			"canonical_name",
 			"classification",
@@ -149,8 +164,8 @@ func _run() -> void:
 			assert(str(wooma.get("disposition", "")) == "quarantine", "Wooma 78 disposition must be quarantine")
 			assert(not bool(wooma.get("editor_placement", {}).get("allowed", true)), "Wooma 78 must stay out of the formal editor pool")
 		if monster_id == 68:
-			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
-			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)
+			var wooma_stats: Dictionary = wooma.get("combat", {}).get("stats", {})
+			assert(wooma_stats.get("level") == 30 and wooma_stats.get("hp") == 285 and wooma_stats.get("defense") == 3 and wooma_stats.get("magic_defense") == 2 and wooma_stats.get("attack_min") == 15 and wooma_stats.get("attack_max") == 29 and wooma_stats.get("exp") == 280, "Wooma %d 21CQ full combat row mismatch" % monster_id)
 			var drop: Dictionary = drop_profiles.get(str(wooma.get("drop_profile_id", "")), {})
 			assert(int(drop.get("entry_count", -1)) > 0, "Wooma %d must carry an audited Excel drop table" % monster_id)
 			assert(drop.get("status", "") == "exact_slots", "Wooma %d drop status must be exact_slots (Excel authority)" % monster_id)
@@ -196,7 +211,8 @@ func _run() -> void:
 	var ordinary_enemy := EnemyActorScript.new()
 	ordinary_enemy.setup({"monster_id": 64, "name": "wrong", "agility": 999, "antiPoison": 999}, null, true)
 	assert(not ordinary_enemy.is_boss, "caller boss flag must not upgrade an ordinary canonical monster")
-	assert(ordinary_enemy.agility == 15 and ordinary_enemy.anti_poison == 0, "legacy combat payload fields must not override canonical safe defaults")
+	var id64_detail: Dictionary = detail_by_id.get(64, {})
+	assert(ordinary_enemy.agility == int(id64_detail.get("agility", -1)) and ordinary_enemy.accuracy == int(id64_detail.get("accuracy", -1)) and ordinary_enemy.anti_poison == 0, "legacy combat payload fields must not override canonical detail projection")
 	assert(not ordinary_enemy.monster_data.has("agility") and not ordinary_enemy.monster_data.has("name"), "legacy caller fields must not leak into EnemyActor payload")
 	var boss_enemy := EnemyActorScript.new()
 	boss_enemy.setup({"monster_id": 76, "name": "wrong"}, null, false)
@@ -253,6 +269,14 @@ func _load_json(path: String) -> Dictionary:
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	assert(parsed is Dictionary, "invalid JSON: %s" % path)
 	return parsed
+
+func _index_by_id(records: Array) -> Dictionary:
+	var result := {}
+	for raw: Variant in records:
+		if raw is Dictionary:
+			var record: Dictionary = raw
+			result[int(record.get("monster_id", -1))] = record
+	return result
 
 func _read_text(path: String) -> String:
 	var file := FileAccess.open(path, FileAccess.READ)

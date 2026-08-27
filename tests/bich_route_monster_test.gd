@@ -6,7 +6,7 @@ const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd
 const EXPECTED := {
 	36: {"name": "半兽战士", "attack_ms": 2000, "move_ms": 1500, "move_speed": 40.0, "ai": 0},
 	38: {"name": "半兽勇士", "attack_ms": 1500, "move_ms": 1500, "move_speed": 40.0, "ai": 0},
-	60: {"name": "粪虫", "attack_ms": 2500, "move_ms": 1800, "move_speed": 32.0, "ai": 7},
+	60: {"name": "粪虫", "attack_ms": 2500, "move_ms": 1500, "move_speed": 32.0, "ai": 7},
 	62: {"name": "暗黑战士", "attack_ms": 2500, "move_ms": 900, "move_speed": 52.0, "ai": 8},
 	64: {"name": "沃玛战士", "attack_ms": 2000, "move_ms": 1000, "move_speed": 48.0, "ai": 0},
 	66: {"name": "沃玛勇士", "attack_ms": 2000, "move_ms": 1000, "move_speed": 48.0, "ai": 0},
