@@ -29,7 +29,7 @@ function Invoke-Python {
         & $Python.Source @Arguments
     }
     if ($LASTEXITCODE -ne 0) {
-        throw "Python failed with exit code $LASTEXITCODE: $($Arguments -join ' ')"
+        throw "Python failed with exit code ${LASTEXITCODE}: $($Arguments -join ' ')"
     }
 }
 
@@ -38,7 +38,7 @@ function Invoke-GodotScene {
 
     & $Godot --headless --path $ProjectRoot $Scene
     if ($LASTEXITCODE -ne 0) {
-        throw "Godot scene failed with exit code $LASTEXITCODE: $Scene"
+        throw "Godot scene failed with exit code ${LASTEXITCODE}: $Scene"
     }
 }
 

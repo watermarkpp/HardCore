@@ -284,9 +284,11 @@ func _run() -> void:
 	output.close()
 
 	print(
-		"MONSTER_DROP_P1A_RUNTIME_EXPORT_PASS: "
-		+ "profiles=%d slots=%d chance_invalid=%d "
-		+ "reward_unresolved=%d slot_rollable=%d reachable=%d"
+		(
+			"MONSTER_DROP_P1A_RUNTIME_EXPORT_PASS: "
+			+ "profiles=%d slots=%d chance_invalid=%d "
+			+ "reward_unresolved=%d slot_rollable=%d reachable=%d"
+		)
 		% [
 			profiles.size(),
 			slots.size(),
