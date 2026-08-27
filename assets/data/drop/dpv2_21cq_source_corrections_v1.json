@@ -1,7 +1,7 @@
 {
   "schema": "hardcore.dpv2.21cq_source_corrections.v1",
   "authority_id": "dpv2.21cq.source_corrections.v1",
-  "status": "HUMAN_FROZEN",
+  "status": "VERIFIED_SOURCE_CORRECTION",
   "source": {
     "path": "assets/data/canonical_monster_drop_source_v2.json",
     "schema": "canonical_monster_drop_source_excel_v1",
@@ -30,7 +30,7 @@
         "url": "https://www.21cq.com/mir/Mob.aspx?id=168",
         "retrieved_on": "2026-08-28",
         "reported_rule": "1/2800 灵魂战衣(男)",
-        "authority": "HUMAN_FROZEN"
+        "authority": "EXTERNAL_SOURCE_VERIFIED"
       }
     }
   ]

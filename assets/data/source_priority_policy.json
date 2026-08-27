@@ -31,9 +31,49 @@
     "vanilla_skill_membership_progression_mp_target_material_formula_geometry_timing_proficiency_state_machine": "skills",
     "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
     "combat_movement_ai_timing_protocol": "server_rules",
-    "combat_movement_ai_projectile_distance_units": "combat_units"
+    "combat_movement_ai_projectile_distance_units": "combat_units",
+    "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability"
   },
   "lanes": {
+    "monster_drop_probability": {
+      "description": "HardCore direct monster-drop probability and post-RNG nine-slot retention Authority only",
+      "scopeExclusions": {
+        "server_data": [
+          "monster_identity",
+          "monster_stats",
+          "monster_ai",
+          "monster_combat",
+          "monster_respawn",
+          "monster_spawn",
+          "monster_map_placement",
+          "item_identity",
+          "item_attributes"
+        ],
+        "server_rules": [
+          "monster_ai",
+          "monster_combat",
+          "monster_respawn"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.dpv2_21cq_direct_baseline.v2",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/canonical_monster_drop_source_v2.json",
+          "contractId": "dpv2.21cq.direct_baseline.v2",
+          "authority": "user_authoritative_override",
+          "sourceKind": "tracked_user_locked_logical_21cq_artifact",
+          "originalPath": "assets/data/canonical_monster_drop_source_v2.json",
+          "evidenceSha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+          "directRuntimeArtifact": "assets/data/drop/dpv2_direct_baseline_v2.json",
+          "reason": "The user explicitly selected the tracked user_locked 217-record/9590-row logical 21CQ artifact as the unique x1 drop-probability baseline on 2026-08-28. This lane does not authorize changes to monster identity, attributes, AI, combat, respawn, spawn, maps, placement, item identity or item attributes."
+        }
+      ]
+    },
     "combat_units": {
       "description": "HardCore formal GU/GS/PX unit, metric and 64x32 projection contract for combat, movement, AI and projectiles",
       "scopeExclusions": {

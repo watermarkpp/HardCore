@@ -24,6 +24,31 @@ CORRECTIONS_PATH = (
     ROOT / "assets/data/drop/dpv2_21cq_source_corrections_v1.json"
 )
 IMPORT_AUDIT_PATH = ROOT / "docs/dpv2_21cq_import_audit.md"
+MONSTER_MAPPING_PATH = (
+    ROOT / "assets/data/drop/dpv2_21cq_monster_mapping_v1.json"
+)
+ITEM_MAPPING_PATH = ROOT / "assets/data/drop/dpv2_21cq_item_mapping_v1.json"
+OVERFLOW_AUTHORITY_PATH = (
+    ROOT / "assets/data/drop/dpv2_21cq_overflow_authority_v1.json"
+)
+MAPPING_REPORT_PATH = ROOT / "docs/dpv2_21cq_mapping_report.md"
+CANONICAL_CATALOG_PATH = (
+    ROOT / "assets/data/runtime/canonical_monster_catalog.json"
+)
+VANILLA_MONSTERS_PATH = ROOT / "assets/data/vanilla_176/monsters.json"
+LEGACY_ROLE_PATH = (
+    ROOT / "assets/data/drop/dpv2_monster_role_authority_v1.json"
+)
+LEGACY_ITEM_POLICY_PATH = (
+    ROOT / "assets/data/drop/dpv2_item_tier_authority_v1.json"
+)
+LEGACY_RUNTIME_POLICY_PATH = (
+    ROOT / "assets/data/drop/dpv2_drop_runtime_authority_v1.json"
+)
+ITEM_IDENTITY_PATH = (
+    ROOT / "assets/data/drop/dpv2_item_identity_authority_v1.json"
+)
+ITEM_RUNTIME_AUTHORITY_PATH = ROOT / "assets/data/item_runtime_authority_v1.json"
 
 EXPECTED_SOURCE_SCHEMA = "canonical_monster_drop_source_excel_v1"
 EXPECTED_SOURCE_RECORDS = 217
@@ -267,6 +292,592 @@ def parse_source() -> dict[str, Any]:
     }
 
 
+def pretty_json(value: dict[str, Any]) -> str:
+    return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
+
+
+def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
+    catalog = load_json(CANONICAL_CATALOG_PATH)
+    entries_by_id = catalog.get("entries_by_id", {})
+    if not isinstance(entries_by_id, dict) or len(entries_by_id) != 156:
+        raise DirectBaselineError("canonical active monster catalog is not 156 rows")
+    role_seed = load_json(LEGACY_ROLE_PATH)
+    role_by_id = {
+        int(row["canonical_monster_id"]): row
+        for row in role_seed.get("monsters", [])
+        if isinstance(row, dict)
+    }
+    if len(role_by_id) != 156:
+        raise DirectBaselineError("legacy NON_LOOT migration seed is not 156 rows")
+    vanilla = load_json(VANILLA_MONSTERS_PATH)
+    vanilla_by_id = {
+        int(row["monsterId"]): row
+        for row in vanilla.get("records", [])
+        if isinstance(row, dict) and int(row.get("monsterId", -1)) > 0
+    }
+
+    records: list[dict[str, Any]] = []
+    status_counts: Counter[str] = Counter()
+    disposition_row_counts: Counter[str] = Counter()
+    active_count = enabled_count = non_loot_count = 0
+    for source_record in audit["records"]:
+        monster_id = int(source_record["stable_monster_id"])
+        source_name = str(source_record["name"])
+        row_count = len(source_record.get("rows", []))
+        vanilla_row = vanilla_by_id.get(monster_id)
+        if not isinstance(vanilla_row, dict):
+            raise DirectBaselineError(
+                f"source monster_id={monster_id} missing canonical identity"
+            )
+        canonical_name = str(vanilla_row.get("name", ""))
+        if canonical_name != source_name:
+            raise DirectBaselineError(
+                f"source/canonical exact-ID name mismatch: {monster_id} "
+                f"{source_name!r} != {canonical_name!r}"
+            )
+
+        runtime_active = str(monster_id) in entries_by_id
+        role_row = role_by_id.get(monster_id)
+        if runtime_active and not isinstance(role_row, dict):
+            raise DirectBaselineError(
+                f"active monster_id={monster_id} missing frozen drop disposition"
+            )
+        if runtime_active:
+            active_count += 1
+            if monster_id == 225:
+                mapping_status = "PROJECT_EXTENSION"
+                baseline_origin = "PROJECT_EXTENSION"
+                drop_enabled = True
+                drop_profile_id: str | None = f"drop.{monster_id}"
+                source_disposition = "PROJECT_EXTENSION_COMPILED"
+            elif bool(role_row.get("drop_enabled", False)):
+                mapping_status = "EXACT"
+                baseline_origin = "LEGACY_21CQ_MONITEMS"
+                drop_enabled = True
+                drop_profile_id = f"drop.{monster_id}"
+                source_disposition = "LEGACY_21CQ_COMPILED"
+            else:
+                mapping_status = "NON_LOOT"
+                baseline_origin = "NON_LOOT"
+                drop_enabled = False
+                drop_profile_id = None
+                source_disposition = "NON_LOOT_EXCLUDED"
+                non_loot_count += 1
+            if drop_enabled:
+                enabled_count += 1
+        else:
+            mapping_status = "EXACT"
+            baseline_origin = "LEGACY_21CQ_MONITEMS"
+            drop_enabled = False
+            drop_profile_id = None
+            source_disposition = "RETIRED_OUT_OF_RUNTIME"
+
+        status_counts[mapping_status] += 1
+        disposition_row_counts[source_disposition] += row_count
+        records.append({
+            "source_monster_id": monster_id,
+            "source_monster_name": source_name,
+            "canonical_monster_id": monster_id,
+            "canonical_monster_name": canonical_name,
+            "mapping_status": mapping_status,
+            "mapping_basis": "STABLE_MONSTER_ID_EXACT",
+            "runtime_active": runtime_active,
+            "drop_enabled": drop_enabled,
+            "drop_profile_id": drop_profile_id,
+            "baseline_origin": baseline_origin,
+            "source_record_status": str(source_record.get("status", "")),
+            "source_row_count": row_count,
+            "source_disposition": source_disposition,
+        })
+
+    expected_dispositions = {
+        "LEGACY_21CQ_COMPILED": 5926,
+        "PROJECT_EXTENSION_COMPILED": 69,
+        "NON_LOOT_EXCLUDED": 1037,
+        "RETIRED_OUT_OF_RUNTIME": 2558,
+    }
+    if dict(disposition_row_counts) != expected_dispositions:
+        raise DirectBaselineError(
+            "monster source disposition drift: "
+            f"{dict(disposition_row_counts)} != {expected_dispositions}"
+        )
+    if (
+        len(records) != 217
+        or active_count != 156
+        or enabled_count != 131
+        or non_loot_count != 25
+        or status_counts.get("UNRESOLVED", 0) != 0
+    ):
+        raise DirectBaselineError("monster mapping closure mismatch")
+    return {
+        "schema": "hardcore.dpv2.21cq_monster_mapping.v1",
+        "authority_id": "dpv2.21cq.monster_mapping.v1",
+        "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
+        "production_active": False,
+        "identity_key": "canonical_monster_id",
+        "source": {
+            "path": SOURCE_PATH.relative_to(ROOT).as_posix(),
+            "sha256": sha256_raw(SOURCE_PATH),
+            "hash_normalization": "raw_bytes",
+        },
+        "policy": {
+            "name_fallback": False,
+            "suffix_trimming": False,
+            "contains_matching": False,
+            "map_or_class_inference": False,
+            "unresolved_blocks_cutover": True,
+            "non_loot_has_null_profile": True,
+            "project_extension_requires_direct_frozen_profile": True,
+        },
+        "migration_seed": {
+            "path": LEGACY_ROLE_PATH.relative_to(ROOT).as_posix(),
+            "sha256": sha256_raw(LEGACY_ROLE_PATH),
+            "role": "one_time_NON_LOOT_disposition_seed_not_probability_authority",
+        },
+        "summary": {
+            "source_monster_records": len(records),
+            "active_canonical_monsters": active_count,
+            "drop_enabled_monsters": enabled_count,
+            "non_loot_monsters": non_loot_count,
+            "mapping_status_counts": dict(sorted(status_counts.items())),
+            "mapping_unresolved": status_counts.get("UNRESOLVED", 0),
+            "source_disposition_row_counts": expected_dispositions,
+            "source_disposition_row_sum": sum(expected_dispositions.values()),
+        },
+        "records": records,
+    }
+
+
+def _register_alias(
+    aliases: dict[str, tuple[int, str, str]],
+    source_label: str,
+    canonical_id: int,
+    canonical_name: str,
+    reason: str,
+) -> None:
+    existing = aliases.get(source_label)
+    candidate = (canonical_id, canonical_name, reason)
+    if existing is not None and existing[:2] != candidate[:2]:
+        raise DirectBaselineError(
+            f"conflicting item alias {source_label!r}: {existing} != {candidate}"
+        )
+    aliases[source_label] = candidate
+
+
+def build_item_mapping(
+    audit: dict[str, Any],
+    monster_mapping: dict[str, Any],
+) -> dict[str, Any]:
+    item_policy_seed = load_json(LEGACY_ITEM_POLICY_PATH)
+    canonical_records = item_policy_seed.get("records", [])
+    if not isinstance(canonical_records, list) or len(canonical_records) != 233:
+        raise DirectBaselineError("formal canonical item identity seed is not 233 rows")
+    canonical_by_name: dict[str, tuple[int, str]] = {}
+    canonical_by_id: dict[int, str] = {}
+    for row in canonical_records:
+        if not isinstance(row, dict):
+            raise DirectBaselineError("invalid canonical item identity seed row")
+        item_id = int(row.get("canonical_item_id", -1))
+        name = str(row.get("canonical_name", ""))
+        if (
+            item_id <= 0
+            or not name
+            or item_id in canonical_by_id
+            or name in canonical_by_name
+        ):
+            raise DirectBaselineError(f"invalid canonical item identity: {item_id}/{name}")
+        canonical_by_id[item_id] = name
+        canonical_by_name[name] = (item_id, name)
+
+    aliases: dict[str, tuple[int, str, str]] = {}
+    identity = load_json(ITEM_IDENTITY_PATH)
+    for row in identity.get("records", []):
+        if not isinstance(row, dict):
+            continue
+        item_id = int(row.get("canonical_item_id", -1))
+        canonical_name = str(row.get("normalized_item_name", ""))
+        if canonical_by_id.get(item_id) != canonical_name:
+            raise DirectBaselineError(
+                f"item identity overlay mismatch: {item_id}/{canonical_name}"
+            )
+        for raw_label in row.get("legacy_names", []):
+            _register_alias(
+                aliases,
+                str(raw_label),
+                item_id,
+                canonical_name,
+                "DPV2_ITEM_IDENTITY_LEGACY_NAME",
+            )
+
+    runtime_authority = load_json(ITEM_RUNTIME_AUTHORITY_PATH)
+    runtime_aliases = runtime_authority.get("aliases", {})
+    if not isinstance(runtime_aliases, dict) or len(runtime_aliases) != 5:
+        raise DirectBaselineError("item runtime alias authority is not five rows")
+    for source_label, target_name in runtime_aliases.items():
+        target = canonical_by_name.get(str(target_name))
+        if target is None:
+            raise DirectBaselineError(
+                f"runtime alias target is not canonical: {source_label}->{target_name}"
+            )
+        _register_alias(
+            aliases,
+            str(source_label),
+            target[0],
+            target[1],
+            "ITEM_RUNTIME_AUTHORITY_EXPLICIT_ALIAS",
+        )
+
+    disposition_by_monster = {
+        int(row["source_monster_id"]): str(row["source_disposition"])
+        for row in monster_mapping["records"]
+    }
+    occurrences_by_label: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for source_record in audit["records"]:
+        monster_id = int(source_record["stable_monster_id"])
+        disposition = disposition_by_monster[monster_id]
+        for source_row in source_record.get("rows", []):
+            label = str(source_row["item"])
+            occurrences_by_label[label].append({
+                "source_monster_id": monster_id,
+                "source_monster_name": str(source_record["name"]),
+                "source_line_number": int(source_row["line_number"]),
+                "source_slot_index": str(source_row["slot_index"]),
+                "raw_text": str(source_row["raw_text"]),
+                "source_kind": str(source_row["source_kind"]),
+                "source_ref": str(source_row["source_ref"]),
+                "source_disposition": disposition,
+            })
+
+    source_labels = sorted(occurrences_by_label)
+    records: list[dict[str, Any]] = []
+    status_counts: Counter[str] = Counter()
+    for label in source_labels:
+        if label == "金币":
+            record = {
+                "source_item_label": label,
+                "mapping_status": "GOLD_REWARD_KIND",
+                "reward_kind": "gold",
+                "canonical_item_id": None,
+                "canonical_item_name": None,
+                "mapping_reason": "Gold uses quantity authority and has no canonical item identity.",
+            }
+        elif label in canonical_by_name:
+            item_id, canonical_name = canonical_by_name[label]
+            record = {
+                "source_item_label": label,
+                "mapping_status": "EXACT",
+                "reward_kind": "item",
+                "canonical_item_id": item_id,
+                "canonical_item_name": canonical_name,
+                "mapping_reason": "Exact canonical item label.",
+            }
+        elif label in aliases:
+            item_id, canonical_name, reason = aliases[label]
+            record = {
+                "source_item_label": label,
+                "mapping_status": "EXPLICIT_ALIAS",
+                "reward_kind": "item",
+                "canonical_item_id": item_id,
+                "canonical_item_name": canonical_name,
+                "mapping_reason": reason,
+            }
+        elif all(
+            occurrence["source_disposition"] == "RETIRED_OUT_OF_RUNTIME"
+            for occurrence in occurrences_by_label[label]
+        ):
+            record = {
+                "source_item_label": label,
+                "mapping_status": "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG",
+                "reward_kind": "retired_source_only",
+                "canonical_item_id": None,
+                "canonical_item_name": None,
+                "mapping_reason": (
+                    "The label occurs only on retired source monsters and has no "
+                    "identity in the formal 233-item canonical catalog; no mapping "
+                    "is invented and no row is compiled."
+                ),
+                "source_occurrences": occurrences_by_label[label],
+            }
+        else:
+            record = {
+                "source_item_label": label,
+                "mapping_status": "UNRESOLVED",
+                "reward_kind": "item",
+                "canonical_item_id": None,
+                "canonical_item_name": None,
+                "mapping_reason": "No exact or explicit alias Authority.",
+            }
+        status_counts[str(record["mapping_status"])] += 1
+        records.append(record)
+
+    if status_counts.get("UNRESOLVED", 0) != 0:
+        missing = [
+            row["source_item_label"]
+            for row in records
+            if row["mapping_status"] == "UNRESOLVED"
+        ]
+        raise DirectBaselineError(f"unresolved source item labels: {missing}")
+    resolved_item_ids = {
+        int(row["canonical_item_id"])
+        for row in records
+        if row["reward_kind"] == "item"
+    }
+    if len(resolved_item_ids) != 233:
+        raise DirectBaselineError(
+            f"resolved canonical item coverage={len(resolved_item_ids)} expected=233"
+        )
+    return {
+        "schema": "hardcore.dpv2.21cq_item_mapping.v1",
+        "authority_id": "dpv2.21cq.item_mapping.v1",
+        "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
+        "production_active": False,
+        "source": {
+            "path": SOURCE_PATH.relative_to(ROOT).as_posix(),
+            "sha256": sha256_raw(SOURCE_PATH),
+            "hash_normalization": "raw_bytes",
+        },
+        "policy": {
+            "runtime_name_lookup_forbidden": True,
+            "fuzzy_matching_forbidden": True,
+            "unresolved_blocks_cutover": True,
+            "gold_has_no_canonical_item_id": True,
+            "retired_source_only_labels_are_not_compiled": True,
+            "retired_source_only_labels_are_not_aliases": True,
+        },
+        "migration_seeds": [
+            {
+                "path": LEGACY_ITEM_POLICY_PATH.relative_to(ROOT).as_posix(),
+                "sha256": sha256_raw(LEGACY_ITEM_POLICY_PATH),
+                "role": "one_time_233_canonical_identity_seed_not_probability_authority",
+            },
+            {
+                "path": ITEM_IDENTITY_PATH.relative_to(ROOT).as_posix(),
+                "sha256": sha256_raw(ITEM_IDENTITY_PATH),
+                "role": "formal_project_canonical_identity_and_legacy_names",
+            },
+            {
+                "path": ITEM_RUNTIME_AUTHORITY_PATH.relative_to(ROOT).as_posix(),
+                "sha256": sha256_raw(ITEM_RUNTIME_AUTHORITY_PATH),
+                "role": "five_explicit_item_aliases",
+            },
+        ],
+        "summary": {
+            "source_item_labels": len(records),
+            "canonical_item_ids_covered": len(resolved_item_ids),
+            "mapping_status_counts": dict(sorted(status_counts.items())),
+            "mapping_unresolved": status_counts.get("UNRESOLVED", 0),
+            "compiled_mapping_unresolved": status_counts.get("UNRESOLVED", 0),
+            "retired_source_only_not_in_canonical_catalog": status_counts.get(
+                "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG", 0
+            ),
+        },
+        "records": records,
+    }
+
+
+def build_overflow_authority(item_mapping: dict[str, Any]) -> dict[str, Any]:
+    runtime_seed = load_json(LEGACY_RUNTIME_POLICY_PATH)
+    runtime_rows = runtime_seed.get("item_overflow_records", [])
+    item_policy_seed = load_json(LEGACY_ITEM_POLICY_PATH)
+    policy_by_id = {
+        int(row["canonical_item_id"]): row
+        for row in item_policy_seed.get("records", [])
+        if isinstance(row, dict)
+    }
+    if not isinstance(runtime_rows, list) or len(runtime_rows) != 233:
+        raise DirectBaselineError("legacy overflow migration seed is not 233 rows")
+
+    records: list[dict[str, Any]] = []
+    priority_counts: Counter[int] = Counter()
+    protected_count = 0
+    for raw in sorted(runtime_rows, key=lambda row: int(row["canonical_item_id"])):
+        if not isinstance(raw, dict):
+            raise DirectBaselineError("invalid overflow migration seed row")
+        item_id = int(raw["canonical_item_id"])
+        name = str(raw["canonical_name"])
+        old_priority = int(raw.get("overflow_priority", 0))
+        protected = bool(raw.get("protected_drop", False))
+        old_policy = policy_by_id.get(item_id, {})
+        old_policy_label = str(old_policy.get("tier", ""))
+        if protected and old_priority >= 400:
+            priority = 1000
+            reason = "Frozen critical/key/progress protection migrated to the highest post-RNG retention priority."
+        elif protected and old_policy_label in {"BOOK_HIGH", "BOOK_35"}:
+            priority = 800
+            reason = "Frozen protected high skill-book decision migrated to post-RNG retention priority."
+        elif protected:
+            priority = 600
+            reason = "Frozen protected high-value item decision migrated to post-RNG retention priority."
+        elif old_priority >= 200:
+            priority = 300
+            reason = "Frozen ordinary equipment/skill-book retention decision."
+        else:
+            priority = 200
+            reason = "Frozen potion/material/ordinary reward retention decision."
+        records.append({
+            "canonical_item_id": item_id,
+            "canonical_item_name": name,
+            "overflow_priority": priority,
+            "protected_drop": protected,
+            "reason": reason,
+            "probability_effect": "NONE",
+        })
+        priority_counts[priority] += 1
+        protected_count += int(protected)
+
+    item_ids = {
+        int(row["canonical_item_id"])
+        for row in item_mapping["records"]
+        if row["reward_kind"] == "item"
+    }
+    if {row["canonical_item_id"] for row in records} != item_ids:
+        raise DirectBaselineError("overflow/item mapping canonical identity mismatch")
+    return {
+        "schema": "hardcore.dpv2.21cq_overflow_authority.v1",
+        "authority_id": "dpv2.21cq.overflow.v1",
+        "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
+        "production_active": False,
+        "policy": {
+            "stage": "AFTER_ALL_SLOT_RNG",
+            "ground_slot_limit": 9,
+            "protected_candidates_before_non_protected": True,
+            "priority_sort": "DESCENDING",
+            "hard_cap_applies_to_protected": True,
+            "protected_overflow_telemetry_required": True,
+            "probability_influence_forbidden": True,
+            "gold": {
+                "overflow_priority": 100,
+                "protected_drop": False,
+            },
+        },
+        "migration_seed": {
+            "path": LEGACY_RUNTIME_POLICY_PATH.relative_to(ROOT).as_posix(),
+            "sha256": sha256_raw(LEGACY_RUNTIME_POLICY_PATH),
+            "role": "one_time_post_RNG_retention_seed_not_runtime_dependency",
+        },
+        "summary": {
+            "canonical_item_records": len(records),
+            "protected_item_records": protected_count,
+            "priority_counts": {
+                str(key): value for key, value in sorted(priority_counts.items())
+            },
+        },
+        "records": records,
+    }
+
+
+def render_mapping_report(
+    monster_mapping: dict[str, Any],
+    item_mapping: dict[str, Any],
+    overflow: dict[str, Any],
+) -> str:
+    monster = monster_mapping["summary"]
+    item = item_mapping["summary"]
+    retired_only_rows = []
+    for record in item_mapping["records"]:
+        if (
+            record["mapping_status"]
+            != "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG"
+        ):
+            continue
+        evidence = "<br>".join(
+            f"ID {row['source_monster_id']} {row['source_monster_name']} "
+            f"line {row['source_line_number']} `{row['raw_text']}`; "
+            f"{row['source_kind']}; `{row['source_ref']}`"
+            for row in record["source_occurrences"]
+        )
+        retired_only_rows.append(
+            f"| {record['source_item_label']} | none | {evidence} |"
+        )
+    retired_only_table = "\n".join(retired_only_rows)
+    return f"""# DPV2-21CQ-X1 Phase 2 Mapping Report
+
+Status: `MAPPING_AUTHORITY_CLOSED / CUTOVER_NOT_STARTED / PRODUCTION_STILL_V1`
+
+## Monster mapping
+
+| Metric | Count |
+| --- | ---: |
+| logical source monsters | {monster['source_monster_records']} |
+| active canonical monsters | {monster['active_canonical_monsters']} |
+| drop-enabled active monsters | {monster['drop_enabled_monsters']} |
+| explicit NON_LOOT monsters | {monster['non_loot_monsters']} |
+| EXACT mappings | {monster['mapping_status_counts'].get('EXACT', 0)} |
+| EXPLICIT_ALIAS mappings | {monster['mapping_status_counts'].get('EXPLICIT_ALIAS', 0)} |
+| PROJECT_EXTENSION mappings | {monster['mapping_status_counts'].get('PROJECT_EXTENSION', 0)} |
+| NON_LOOT mappings | {monster['mapping_status_counts'].get('NON_LOOT', 0)} |
+| UNRESOLVED mappings | {monster['mapping_unresolved']} |
+
+All joins use the already-frozen stable `monster_id`. No name, suffix, map,
+class, Role or approximate matching is used. Monster 225 is explicitly
+`PROJECT_EXTENSION`; its 69 source-artifact rows are frozen as project-owned
+direct rules and are not represented as 21CQ legacy provenance.
+
+The 25 existing NON_LOOT decisions are explicit and expose
+`drop_enabled=false, drop_profile_id=null`. Their 1037 logical source rows remain
+in the disposition ledger but are not compiled into V2 production slots.
+
+## Source row disposition ledger
+
+| Disposition | Rows |
+| --- | ---: |
+| LEGACY_21CQ_COMPILED | {monster['source_disposition_row_counts']['LEGACY_21CQ_COMPILED']} |
+| PROJECT_EXTENSION_COMPILED | {monster['source_disposition_row_counts']['PROJECT_EXTENSION_COMPILED']} |
+| NON_LOOT_EXCLUDED | {monster['source_disposition_row_counts']['NON_LOOT_EXCLUDED']} |
+| RETIRED_OUT_OF_RUNTIME | {monster['source_disposition_row_counts']['RETIRED_OUT_OF_RUNTIME']} |
+| total | {monster['source_disposition_row_sum']} |
+
+## Item mapping
+
+| Metric | Count |
+| --- | ---: |
+| source labels including gold | {item['source_item_labels']} |
+| canonical item IDs covered | {item['canonical_item_ids_covered']} |
+| EXACT labels | {item['mapping_status_counts'].get('EXACT', 0)} |
+| EXPLICIT_ALIAS labels | {item['mapping_status_counts'].get('EXPLICIT_ALIAS', 0)} |
+| GOLD_REWARD_KIND labels | {item['mapping_status_counts'].get('GOLD_REWARD_KIND', 0)} |
+| RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG labels | {item['retired_source_only_not_in_canonical_catalog']} |
+| UNRESOLVED labels | {item['mapping_unresolved']} |
+
+Compiled item slots will carry only a positive `canonical_item_id`; Runtime
+name lookup is forbidden. Gold remains a separate reward kind with a positive
+amount and no canonical item ID.
+
+### Retired-source-only labels
+
+These labels are real UTF-8 source labels, not aliases or mojibake in the
+tracked JSON. They occur only on `RETIRED_OUT_OF_RUNTIME` monsters and have no
+identity in the formal 233-item catalog. No canonical mapping is invented and
+none of these rows is compiled.
+
+| source label | proposed canonical item | exact source evidence |
+| --- | --- | --- |
+{retired_only_table}
+
+## Post-RNG overflow Authority
+
+- Explicit per-item records: {overflow['summary']['canonical_item_records']}.
+- Protected item records: {overflow['summary']['protected_item_records']}.
+- Priority counts: `{json.dumps(overflow['summary']['priority_counts'], ensure_ascii=False, sort_keys=True)}`.
+- Gold is explicit priority `100`, unprotected.
+
+The migration used the old retained-value decisions once, then froze direct
+per-item values. The new Authority contains no Tier, Drop Role, factor or
+probability denominator. `overflow_priority` and `protected_drop` have no
+probability effect and apply only after all independent slot RNG draws.
+
+## Gate
+
+```text
+monster_mapping_unresolved = {monster['mapping_unresolved']}
+item_mapping_unresolved = {item['mapping_unresolved']}
+source_disposition_sum = {monster['source_disposition_row_sum']}
+CUTOVER = NOT_STARTED
+Production = V1
+```
+"""
+
+
 def render_import_audit(audit: dict[str, Any]) -> str:
     metrics = audit["metrics"]
     invalid_rows = audit["invalid_source_rows"]
@@ -320,7 +931,7 @@ The source contains exactly one malformed probability token:
 | ---: | --- | ---: | --- | --- | --- | --- |
 | {invalid_rows[0]['monster_id']} | {invalid_rows[0]['monster_name']} | {invalid_rows[0]['line_number']} | {invalid_rows[0]['slot_index']} | {invalid_rows[0]['item']} | `{invalid_rows[0]['chance']}` | `1/2800` |
 
-The tracked historical row is not rewritten. The correction is frozen in
+The tracked historical row is not rewritten. The externally verified correction is recorded in
 `assets/data/drop/dpv2_21cq_source_corrections_v1.json`, with evidence URL,
 retrieval date, exact slot identity and original value. Silent correction and
 silent skipping are forbidden.
@@ -340,7 +951,20 @@ drop probability was changed in this phase.
 
 def desired_outputs() -> dict[Path, str]:
     audit = parse_source()
-    return {IMPORT_AUDIT_PATH: render_import_audit(audit)}
+    monster_mapping = build_monster_mapping(audit)
+    item_mapping = build_item_mapping(audit, monster_mapping)
+    overflow = build_overflow_authority(item_mapping)
+    return {
+        IMPORT_AUDIT_PATH: render_import_audit(audit),
+        MONSTER_MAPPING_PATH: pretty_json(monster_mapping),
+        ITEM_MAPPING_PATH: pretty_json(item_mapping),
+        OVERFLOW_AUTHORITY_PATH: pretty_json(overflow),
+        MAPPING_REPORT_PATH: render_mapping_report(
+            monster_mapping,
+            item_mapping,
+            overflow,
+        ),
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -366,12 +990,15 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
         audit = parse_source()
         metrics = audit["metrics"]
+        monster_mapping = build_monster_mapping(audit)
+        item_mapping = build_item_mapping(audit, monster_mapping)
         print(
-            "DPV2_21CQ_SOURCE_AUDIT_PASS: "
+            "DPV2_21CQ_MAPPING_BUILD_PASS: "
             f"logical_records={metrics['logical_monster_records']} "
             f"source_rows={metrics['logical_source_rows']} "
             f"corrected={metrics['explicitly_corrected_rows']} "
-            f"uncorrected_invalid={metrics['uncorrected_invalid_probability_rows']}"
+            f"monster_unresolved={monster_mapping['summary']['mapping_unresolved']} "
+            f"item_unresolved={item_mapping['summary']['mapping_unresolved']}"
         )
         return 0
     except (DirectBaselineError, KeyError, ValueError, TypeError) as exc:

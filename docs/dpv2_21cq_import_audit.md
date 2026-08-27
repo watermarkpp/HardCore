@@ -47,7 +47,7 @@ The source contains exactly one malformed probability token:
 | ---: | --- | ---: | --- | --- | --- | --- |
 | 168 | 月魔蜘蛛 | 20 | slot_020 | 灵魂战衣(男) | `1/00` | `1/2800` |
 
-The tracked historical row is not rewritten. The correction is frozen in
+The tracked historical row is not rewritten. The externally verified correction is recorded in
 `assets/data/drop/dpv2_21cq_source_corrections_v1.json`, with evidence URL,
 retrieval date, exact slot identity and original value. Silent correction and
 silent skipping are forbidden.
