@@ -32,6 +32,34 @@ DETAIL_URL_TEMPLATE = "https://www.21cq.com/mir/Mob.Aspx?ID={monster_id}"
 PARSER_VERSION = "21cq_monster_detail_parser_v1.0.0"
 USER_AGENT = "HardCore-monster-source-audit/1.0 (+https://www.21cq.com/mir/)"
 EXPECTED_RECORD_COUNT = 217
+FORBIDDEN_RECORD_KEYS = frozenset(
+    {
+        "drop",
+        "drops",
+        "drop_table",
+        "drop_tables",
+        "drop_probability",
+        "drop_probabilities",
+        "probability",
+        "spawn",
+        "spawns",
+        "spawn_table",
+        "spawn_quantity",
+        "spawn_quantities",
+        "quantity",
+        "respawn",
+        "respawn_time",
+        "respawn_times",
+        "refresh",
+        "refresh_time",
+        "refresh_times",
+        "refresh_quantity",
+        "refresh_quantities",
+        "refresh_interval",
+        "map",
+        "maps",
+    }
+)
 
 
 def sha256(data: bytes) -> str:
@@ -348,12 +376,11 @@ def validate_snapshot(payload: dict[str, Any]) -> list[str]:
             errors.append(f"record[{index}] undead/life_type mismatch")
         if row.get("http_status") != 200 or not re.fullmatch(r"[0-9A-F]{64}", str(row.get("raw_html_sha256", ""))):
             errors.append(f"record[{index}] HTTP/hash evidence invalid")
-        if "drop" in json.dumps(row, ensure_ascii=False).lower() or "spawn" in json.dumps(row, ensure_ascii=False).lower():
-            # Source URLs and parser evidence are allowed; page-derived rows
-            # must not grow forbidden content fields.
-            forbidden = {"drop", "spawn", "respawn", "map", "quantity", "probability"}
-            if any(key.lower() in forbidden for key in row):
-                errors.append(f"record[{index}] contains excluded field")
+        forbidden_keys = sorted(
+            str(key).lower() for key in row if str(key).lower() in FORBIDDEN_RECORD_KEYS
+        )
+        if forbidden_keys:
+            errors.append(f"record[{index}] contains excluded field(s): {forbidden_keys}")
     if ids != sorted(ids) or len(set(ids)) != len(ids):
         errors.append("record IDs must be unique and sorted")
     if ids != local_ids():
