@@ -37,8 +37,8 @@ class DirectBaselineTests(unittest.TestCase):
 
     def test_active_profiles_and_compiled_slot_counts_close(self) -> None:
         summary = self.baseline["summary"]
-        self.assertFalse(self.baseline["production_active"])
-        self.assertEqual(self.baseline["production_runtime"], "V1_UNCHANGED")
+        self.assertTrue(self.baseline["production_active"])
+        self.assertEqual(self.baseline["production_runtime"], "V2_DIRECT_BASELINE")
         self.assertEqual(summary["active_monsters"], 156)
         self.assertEqual(summary["drop_enabled_monsters"], 131)
         self.assertEqual(summary["non_loot_monsters"], 25)
