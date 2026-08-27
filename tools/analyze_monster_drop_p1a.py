@@ -26,6 +26,11 @@ EXPECTED_FINAL_DROP_ROW_COUNT = 7032
 EXPECTED_AUDIT_ONLY_COUNT = 7032
 EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT = 7032
 EXPECTED_INVALID_CHANCE_COUNT = 1
+EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT = 5995
+EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT = 1037
+EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT = 5995
+EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT = 5995
+EXPECTED_RNG_ELIGIBLE_SLOT_COUNT = 5995
 
 EXPECTED_ANOMALY = {
     "drop_profile_id": "drop.168",
@@ -60,7 +65,12 @@ def runtime_semantics_key(slot: dict[str, Any]) -> tuple[Any, ...]:
         slot.get("reward_resolution_status"),
         slot.get("reward_resolution_reason"),
         slot.get("runtime_reward_attempted"),
+        slot.get("drop_enabled"),
+        slot.get("reward_resolved_enabled"),
         slot.get("probability_authority_resolvable"),
+        slot.get("probability_resolved_enabled"),
+        slot.get("rng_eligible"),
+        slot.get("rng_eligible_before_overflow"),
         slot.get("slot_runtime_rollable"),
         slot.get("runtime_rollable"),
         slot.get("non_rollable_reason"),
@@ -77,8 +87,19 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
 
     chance_valid = _as_bool(slot.get("chance_valid", False))
     reward_resolvable = _as_bool(slot.get("reward_resolvable", False))
+    drop_enabled = _as_bool(slot.get("drop_enabled", False))
+    reward_resolved_enabled = _as_bool(
+        slot.get("reward_resolved_enabled", False)
+    )
     probability_resolvable = _as_bool(
         slot.get("probability_authority_resolvable", False)
+    )
+    probability_resolved_enabled = _as_bool(
+        slot.get("probability_resolved_enabled", False)
+    )
+    rng_eligible = _as_bool(slot.get("rng_eligible", False))
+    rng_eligible_before_overflow = _as_bool(
+        slot.get("rng_eligible_before_overflow", False)
     )
     slot_rollable = _as_bool(slot.get("slot_runtime_rollable", False))
     runtime_rollable_alias = _as_bool(slot.get("runtime_rollable", False))
@@ -91,6 +112,16 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
     reward_reason = slot.get("reward_resolution_reason")
     monster_allowed = _as_bool(slot.get("monster_runtime_allowed", False))
     runtime_reachable = _as_bool(slot.get("runtime_reachable", False))
+
+    for field in (
+        "drop_enabled",
+        "reward_resolved_enabled",
+        "probability_resolved_enabled",
+        "rng_eligible",
+        "rng_eligible_before_overflow",
+    ):
+        if field not in slot:
+            errors.append(f"{prefix} {field} is required")
 
     if chance_valid:
         denominator = slot.get("chance_denominator")
@@ -129,7 +160,37 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
                 f"{prefix} unresolved reward requires a concrete reason"
             )
 
-    expected_rollable = reward_resolvable and probability_resolvable
+    expected_reward_resolved = drop_enabled and reward_resolvable
+    if reward_resolved_enabled != expected_reward_resolved:
+        errors.append(
+            f"{prefix} reward_resolved_enabled={reward_resolved_enabled} "
+            f"expected={expected_reward_resolved}"
+        )
+
+    expected_probability_resolved = drop_enabled and probability_resolvable
+    if probability_resolved_enabled != expected_probability_resolved:
+        errors.append(
+            f"{prefix} probability_resolved_enabled="
+            f"{probability_resolved_enabled} "
+            f"expected={expected_probability_resolved}"
+        )
+
+    expected_rng_eligible = (
+        expected_reward_resolved and expected_probability_resolved
+    )
+    if rng_eligible != expected_rng_eligible:
+        errors.append(
+            f"{prefix} rng_eligible={rng_eligible} "
+            f"expected={expected_rng_eligible}"
+        )
+    if rng_eligible_before_overflow != expected_rng_eligible:
+        errors.append(
+            f"{prefix} rng_eligible_before_overflow="
+            f"{rng_eligible_before_overflow} "
+            f"expected={expected_rng_eligible}"
+        )
+
+    expected_rollable = expected_rng_eligible
     if slot_rollable != expected_rollable:
         errors.append(
             f"{prefix} slot_runtime_rollable={slot_rollable} "
@@ -143,6 +204,9 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
     if not reward_resolvable:
         expected_non_rollable = "unresolved_reward"
         expected_runtime_rejection = reward_reason
+    elif not drop_enabled:
+        expected_non_rollable = "probability_authority_blocked"
+        expected_runtime_rejection = "drop_disabled"
     elif not probability_resolvable:
         expected_non_rollable = "probability_authority_blocked"
         policy = slot.get("probability_policy", {})
@@ -199,6 +263,11 @@ def _recompute_summary(slots: list[dict[str, Any]]) -> dict[str, Any]:
     reward_resolvable = 0
     rollable = 0
     reachable = 0
+    drop_enabled = 0
+    drop_disabled = 0
+    reward_resolved_enabled = 0
+    probability_resolved_enabled = 0
+    rng_eligible = 0
 
     for slot in slots:
         source = slot.get("source_entry", {})
@@ -220,6 +289,16 @@ def _recompute_summary(slots: list[dict[str, Any]]) -> dict[str, Any]:
                     "unresolved_unspecified",
                 ))
             )
+        if _as_bool(slot.get("drop_enabled", False)):
+            drop_enabled += 1
+        else:
+            drop_disabled += 1
+        if _as_bool(slot.get("reward_resolved_enabled", False)):
+            reward_resolved_enabled += 1
+        if _as_bool(slot.get("probability_resolved_enabled", False)):
+            probability_resolved_enabled += 1
+        if _as_bool(slot.get("rng_eligible", False)):
+            rng_eligible += 1
         if _as_bool(slot.get("slot_runtime_rollable", False)):
             rollable += 1
         else:
@@ -254,6 +333,21 @@ def _recompute_summary(slots: list[dict[str, Any]]) -> dict[str, Any]:
         "non_rollable_reason_counts": _counter_dict(non_rollable),
         "runtime_rejection_reason_counts": _counter_dict(runtime_rejections),
         "reward_resolution_reason_counts": _counter_dict(reward_reasons),
+        "canonical_source_slots": total,
+        "drop_enabled_source_slots": drop_enabled,
+        "drop_disabled_source_slots": drop_disabled,
+        "reward_resolved_enabled_slots": reward_resolved_enabled,
+        "probability_resolved_enabled_slots": probability_resolved_enabled,
+        "rng_eligible_slots": rng_eligible,
+        # The exporter reports source rows reaching the RNG stage, not the
+        # number of random values consumed by one particular death.
+        "rng_roll_count": rng_eligible,
+        "all_enabled_resolved_slots_rng_before_overflow": (
+            drop_enabled == reward_resolved_enabled
+            and reward_resolved_enabled == probability_resolved_enabled
+            and probability_resolved_enabled == rng_eligible
+        ),
+        "overflow_stage": "after_all_probability_rolls",
     }
 
 
@@ -283,6 +377,11 @@ def validate_snapshot(
             "canonical catalog changed during export "
             f"before={sha_before} after={sha_after}"
         )
+
+    authority_gate = authority.get("source_slot_gate")
+    if not isinstance(authority_gate, dict):
+        errors.append("authority.source_slot_gate must be an object")
+        authority_gate = {}
 
     slots_raw = snapshot.get("slots")
     if not isinstance(slots_raw, list):
@@ -345,6 +444,44 @@ def validate_snapshot(
             errors.append(
                 f"slot count={len(slots)} "
                 f"expected={EXPECTED_FINAL_DROP_ROW_COUNT}"
+            )
+
+        expected_gate = {
+            "canonical_source_slots": EXPECTED_BASE_DROP_ROW_COUNT,
+            "drop_enabled_source_slots": EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT,
+            "drop_disabled_source_slots": EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT,
+            "reward_resolved_enabled_slots": EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT,
+            "probability_resolved_enabled_slots": EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT,
+            "rng_eligible_slots": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+            "rng_roll_count": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+        }
+        for key, expected in expected_gate.items():
+            if int(authority_gate.get(key, -1)) != expected:
+                errors.append(
+                    f"authority.source_slot_gate.{key}="
+                    f"{authority_gate.get(key)!r} expected={expected}"
+                )
+        if (
+            not bool(authority_gate.get(
+                "all_enabled_resolved_slots_rng_before_overflow",
+                False,
+            ))
+            or str(authority_gate.get("overflow_stage", ""))
+            != "after_all_probability_rolls"
+        ):
+            errors.append(
+                "authority.source_slot_gate must prove all enabled rows reach "
+                "RNG before overflow"
+            )
+
+        for key, expected in expected_gate.items():
+            if int(observed.get(key, -1)) != expected:
+                errors.append(
+                    f"summary.{key}={observed.get(key)!r} expected={expected}"
+                )
+        if not bool(observed.get("all_enabled_resolved_slots_rng_before_overflow", False)):
+            errors.append(
+                "summary source-slot gate does not prove pre-overflow RNG coverage"
             )
         if (
             observed["rate_policy_counts"].get("AUDIT_ONLY", 0)
@@ -506,6 +643,18 @@ def _slot_csv_row(slot: dict[str, Any]) -> dict[str, Any]:
         "runtime_reward_attempted": slot.get(
             "runtime_reward_attempted"
         ),
+        "drop_enabled": slot.get("drop_enabled"),
+        "reward_resolved_enabled": slot.get("reward_resolved_enabled"),
+        "probability_authority_resolvable": slot.get(
+            "probability_authority_resolvable"
+        ),
+        "probability_resolved_enabled": slot.get(
+            "probability_resolved_enabled"
+        ),
+        "rng_eligible": slot.get("rng_eligible"),
+        "rng_eligible_before_overflow": slot.get(
+            "rng_eligible_before_overflow"
+        ),
         "slot_runtime_rollable": slot.get(
             "slot_runtime_rollable"
         ),
@@ -551,7 +700,9 @@ def _markdown_report(analysis: dict[str, Any]) -> str:
         "## Runtime contract",
         "",
         "- `rate_policy` / `slot_status` are provenance metadata only.",
-        "- Slot gate order mirrors production: chance -> reward authority -> RNG.",
+        "- Production slot gate order is canonical source slot -> canonical reward authority -> DPV2 probability authority -> RNG; legacy source chance is parsed only into parallel provenance diagnostics and never gates the DPV2 roll.",
+        "- `drop_enabled_source_slots`, `drop_disabled_source_slots`, `reward_resolved_enabled_slots`, `probability_resolved_enabled_slots`, and `rng_eligible_slots` are recomputed from every exported source row.",
+        "- Overflow selection runs only after all RNG-eligible rows have reached the probability roll stage.",
         "- `runtime_rollable` is a compatibility alias of `slot_runtime_rollable`.",
         "- `runtime_reachable` additionally requires the monster-level GameData gate.",
         "",
@@ -570,6 +721,13 @@ def _markdown_report(analysis: dict[str, Any]) -> str:
         "slot_runtime_non_rollable_count",
         "runtime_reachable_count",
         "runtime_unreachable_count",
+        "canonical_source_slots",
+        "drop_enabled_source_slots",
+        "drop_disabled_source_slots",
+        "reward_resolved_enabled_slots",
+        "probability_resolved_enabled_slots",
+        "rng_eligible_slots",
+        "rng_roll_count",
     ):
         lines.append(f"| `{key}` | {summary.get(key, 0)} |")
 
@@ -728,7 +886,10 @@ def main() -> int:
         f"invalid_chance={summary['chance_invalid_count']} "
         f"reward_unresolved={summary['reward_unresolved_count']} "
         f"slot_rollable={summary['slot_runtime_rollable_count']} "
-        f"reachable={summary['runtime_reachable_count']}"
+        f"reachable={summary['runtime_reachable_count']} "
+        f"enabled={summary['drop_enabled_source_slots']} "
+        f"disabled={summary['drop_disabled_source_slots']} "
+        f"rng_roll={summary['rng_roll_count']}"
     )
     for key, path in paths.items():
         print(f"P1A_OUTPUT {key}={path}")

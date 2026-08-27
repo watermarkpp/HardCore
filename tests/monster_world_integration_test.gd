@@ -1,5 +1,6 @@
 extends Node
 
+const GameRootScript := preload("res://scripts/game_root.gd")
 const BridgeScript := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
@@ -85,6 +86,7 @@ func _run() -> void:
 	)
 
 	_test_runtime_no_drop_rejection()
+	_test_overflow_telemetry_death_entry()
 
 	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 999999]:
 		var monster_id := GameData.canonical_monster_id(rejected)
@@ -259,6 +261,38 @@ func _test_loot_contract() -> void:
 	})
 	assert(not bool(bad_item.get("ok", false)), "unknown item token escaped authority")
 	assert(str(bad_item.get("reason", "")) == "unknown_item_token", "bad item reason drifted")
+
+
+func _test_overflow_telemetry_death_entry() -> void:
+	# Exercise the real GameRoot death callback with a disabled-drop monster:
+	# no overflow means no telemetry aggregate and no diagnostic event.
+	LootRuntime.clear_overflow_telemetry()
+	var game := GameRootScript.new()
+	var enemy := EnemyActor.new()
+	enemy.global_position = Vector2.ZERO
+	enemy.set_meta("respawn_enabled", false)
+	var monster_data := GameData.get_monster_by_id(226).duplicate(true)
+	assert(int(monster_data.get("monster_id", -1)) == 226)
+	game._on_enemy_died(enemy, monster_data)
+	assert(
+		LootRuntime.overflow_telemetry_snapshot().is_empty(),
+		"disabled-drop death must not create overflow telemetry"
+	)
+	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
+	assert(source.contains("if overflow_discarded_count > 0:"))
+	for field: String in [
+		"monster_id",
+		"successful_roll_count",
+		"ground_output_count",
+		"overflow_discarded_count",
+		"protected_overflow_count",
+	]:
+		assert(
+			source.contains('"%s"' % field),
+			"GameRoot overflow telemetry field missing: %s" % field
+		)
+	game.free()
+	enemy.free()
 
 
 func _test_region_content_contract() -> void:

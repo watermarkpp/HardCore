@@ -36,6 +36,7 @@ POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
 SPECIAL_NORMAL_AUTHORITY_PATH = ROOT / "assets/data/special_normal_monster_spawn_authority_v1.json"
 DPV2_ROLE_AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_monster_role_authority_v1.json"
 DPV2_ITEM_TIER_AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_item_tier_authority_v1.json"
+DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
 DROP_AUTHORING_OVERLAY_PATH = (
     ROOT
@@ -178,6 +179,7 @@ def validate_special_normal_authority(
     vanilla: dict[str, Any],
     role_authority: dict[str, Any],
     item_tier_authority: dict[str, Any],
+    global_drop_rate_authority: dict[str, Any],
 ) -> dict[int, dict[str, Any]]:
     """Validate the exact-ID special_normal overlay before catalog generation.
 
@@ -237,6 +239,8 @@ def validate_special_normal_authority(
         "assets/data/vanilla_176/monsters.json": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
         "assets/data/canonical_monster_classification_v1.json": "C74E4A7A891A6542B09BBB388383A2AFDC9900FC2A37534726F7EAB649D35535",
         "assets/data/drop/dpv2_item_tier_authority_v1.json": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+        "assets/data/drop/dpv2_monster_role_authority_v1.json": sha256_file(DPV2_ROLE_AUTHORITY_PATH),
+        "assets/data/drop/dpv2_global_drop_rate_authority_v1.json": sha256_file(DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH),
     }
     source_rows = authority.get("authority", {}).get("sources", [])
     source_by_path = {
@@ -253,10 +257,17 @@ def validate_special_normal_authority(
     role_source = source_by_path.get(
         DPV2_ROLE_AUTHORITY_PATH.relative_to(ROOT).as_posix(), {}
     )
-    require(role_source.get("sha256") is None, "role source hash creates a catalog/role cycle")
     require(
         role_source.get("role") == "A0.7 monster drop role and factor authority",
         "role source evidence drift",
+    )
+
+    global_source = source_by_path.get(
+        DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH.relative_to(ROOT).as_posix(), {}
+    )
+    require(
+        global_source.get("role") == "A0.7 global drop-rate scale authority",
+        "global scale source evidence drift",
     )
 
     require(role_authority.get("schema") == "hardcore.dpv2.monster_role_authority.v1", "A0.7 role authority schema mismatch")
@@ -274,6 +285,35 @@ def validate_special_normal_authority(
     tier_rows = item_tier_authority.get("records", [])
     require(len(tier_rows) == 233, "A0.7 Tier authority is not the 233-item closure")
     require(all(isinstance(row, dict) and row.get("tier_status") == "RESOLVED" for row in tier_rows), "A0.7 Tier authority has unresolved records")
+    require(
+        global_drop_rate_authority.get("schema")
+        == "hardcore.dpv2.global_drop_rate_authority.v1",
+        "A0.7 global scale authority schema mismatch",
+    )
+    require(
+        global_drop_rate_authority.get("active_preset") == "1x",
+        "A0.7 global scale active preset drift",
+    )
+
+    provenance = drop_binding.get("authority_provenance", {})
+    require(isinstance(provenance, dict), "special_normal DPV2 provenance missing")
+    expected_provenance = {
+        "item_tier_sha": expected_sources[
+            "assets/data/drop/dpv2_item_tier_authority_v1.json"
+        ],
+        "monster_role_sha": expected_sources[
+            "assets/data/drop/dpv2_monster_role_authority_v1.json"
+        ],
+        "global_scale_sha": expected_sources[
+            "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
+        ],
+        "hash_normalization": "lf_text",
+    }
+    require(provenance == expected_provenance, "special_normal DPV2 provenance drift")
+    for key, expected in expected_provenance.items():
+        if key == "hash_normalization":
+            continue
+        require(drop_binding.get(key) == expected, f"special_normal drop_binding.{key} drift")
 
     vanilla_by_id = {
         int(record.get("monsterId", -1)): record
@@ -908,11 +948,15 @@ def build_catalog() -> dict[str, Any]:
     special_normal_authority = load_json(SPECIAL_NORMAL_AUTHORITY_PATH)
     dpv2_role_authority = load_json(DPV2_ROLE_AUTHORITY_PATH)
     dpv2_item_tier_authority = load_json(DPV2_ITEM_TIER_AUTHORITY_PATH)
+    dpv2_global_drop_rate_authority = load_json(
+        DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH
+    )
     special_normal_by_id = validate_special_normal_authority(
         special_normal_authority,
         vanilla,
         dpv2_role_authority,
         dpv2_item_tier_authority,
+        dpv2_global_drop_rate_authority,
     )
     drop_source = load_json(DROP_SOURCE_PATH)
     combat_source = load_json(COMBAT_SOURCE_PATH)
@@ -1026,6 +1070,20 @@ def build_catalog() -> dict[str, Any]:
                     "item_tier_resolution": special_normal_row["item_tier_resolution"],
                     "additional_multiplier": special_normal_row["additional_multiplier"],
                     "source_rate_role": special_normal_row["source_rate_role"],
+                    "item_tier_sha": str(
+                        special_normal_authority["drop_binding"]["item_tier_sha"]
+                    ),
+                    "monster_role_sha": str(
+                        special_normal_authority["drop_binding"]["monster_role_sha"]
+                    ),
+                    "global_scale_sha": str(
+                        special_normal_authority["drop_binding"]["global_scale_sha"]
+                    ),
+                    "authority_provenance": copy.deepcopy(
+                        special_normal_authority["drop_binding"][
+                            "authority_provenance"
+                        ]
+                    ),
                 },
                 "production_active": True,
                 "phase_1_allowed": True,
@@ -1574,6 +1632,8 @@ def build_catalog() -> dict[str, Any]:
         POLICY_PATH,
         SPECIAL_NORMAL_AUTHORITY_PATH,
         DPV2_ITEM_TIER_AUTHORITY_PATH,
+        DPV2_ROLE_AUTHORITY_PATH,
+        DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
         DROP_SOURCE_PATH,
         DROP_AUTHORING_OVERLAY_PATH,
         COMBAT_SOURCE_PATH,
@@ -1634,6 +1694,11 @@ def build_catalog() -> dict[str, Any]:
             "canonical_monster_ids": sorted(SPECIAL_NORMAL_IDS),
             "production_active": True,
             "phase_1_allowed": True,
+            "authority_provenance": copy.deepcopy(
+                special_normal_authority["drop_binding"][
+                    "authority_provenance"
+                ]
+            ),
         },
         "appearance_profiles": appearance_profiles,
         "drop_profiles": drop_profiles,
@@ -1647,12 +1712,14 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     combat_source = load_json(COMBAT_SOURCE_PATH)
     combat_source_by_id = combat_source.get("records_by_monster_id", {})
+    special_normal_authority = load_json(SPECIAL_NORMAL_AUTHORITY_PATH)
     try:
         special_normal_by_id = validate_special_normal_authority(
-            load_json(SPECIAL_NORMAL_AUTHORITY_PATH),
+            special_normal_authority,
             load_json(VANILLA_PATH),
             load_json(DPV2_ROLE_AUTHORITY_PATH),
             load_json(DPV2_ITEM_TIER_AUTHORITY_PATH),
+            load_json(DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH),
         )
     except (RuntimeError, ValueError, TypeError) as exc:
         errors.append(str(exc))
@@ -1776,6 +1843,24 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                     }[key]
                     if not isinstance(drop_binding, dict) or drop_binding.get(key) != expected:
                         errors.append(f"monster_id={monster_id} spawn_authority.drop_binding.{key} drift")
+                expected_provenance = special_normal_authority.get(
+                    "drop_binding", {}
+                ).get("authority_provenance", {})
+                if (
+                    not isinstance(drop_binding, dict)
+                    or drop_binding.get("authority_provenance")
+                    != expected_provenance
+                    or drop_binding.get("item_tier_sha")
+                    != expected_provenance.get("item_tier_sha")
+                    or drop_binding.get("monster_role_sha")
+                    != expected_provenance.get("monster_role_sha")
+                    or drop_binding.get("global_scale_sha")
+                    != expected_provenance.get("global_scale_sha")
+                ):
+                    errors.append(
+                        f"monster_id={monster_id} special_normal DPV2 provenance drift"
+                    )
+
         combat_value = entry.get("combat", {})
         projection = combat_value.get("runtime_projection", {}) if isinstance(combat_value, dict) else {}
         if not isinstance(projection, dict):
@@ -1827,6 +1912,16 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         for field in ("canonical_name", "classification", "combat_stats", "combat_ai_timing", "appearance", "drops", "status"):
             if field not in evidence:
                 errors.append(f"monster_id={monster_id} missing source evidence {field}")
+    catalog_special_normal = catalog.get("special_normal_spawn_authority", {})
+    expected_catalog_provenance = special_normal_authority.get(
+        "drop_binding", {}
+    ).get("authority_provenance", {})
+    if (
+        not isinstance(catalog_special_normal, dict)
+        or catalog_special_normal.get("authority_provenance")
+        != expected_catalog_provenance
+    ):
+        errors.append("catalog special_normal DPV2 provenance drift")
     matrix = catalog.get("entries_by_id", {})
 
     # P3C: historical WOOma_IDS 保留为审计证据；生产校验只覆盖 active

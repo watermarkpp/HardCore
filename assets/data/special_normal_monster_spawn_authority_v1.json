@@ -35,13 +35,18 @@
       },
       {
         "path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
-        "sha256": null,
+        "sha256": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
         "role": "A0.7 monster drop role and factor authority"
       },
       {
         "path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
         "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
         "role": "A0.7 item Tier and denominator authority"
+      },
+      {
+        "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+        "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+        "role": "A0.7 global drop-rate scale authority"
       }
     ]
   },
@@ -79,7 +84,16 @@
     "production_active": true,
     "phase_1_allowed": true,
     "runtime_consumer": "scripts/layers/runtime/loot_runtime_service.gd",
-    "persistence_consumer": null
+    "persistence_consumer": null,
+    "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+    "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+    "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+    "authority_provenance": {
+      "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+      "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+      "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+      "hash_normalization": "lf_text"
+    }
   },
   "records": [
     {

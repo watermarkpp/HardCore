@@ -17,6 +17,7 @@ SNAPSHOT = ROOT / "outputs/monster_drop_p1a/runtime_snapshot.json"
 RUNTIME_AUTHORITY = ROOT / "assets/data/drop/dpv2_drop_runtime_authority_v1.json"
 GLOBAL_AUTHORITY = ROOT / "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
 CATALOG = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
+SPECIAL_NORMAL_AUTHORITY = ROOT / "assets/data/special_normal_monster_spawn_authority_v1.json"
 
 EXPECTED_FILE_HASHES = {
     "assets/data/canonical_monster_drop_source_v2.json": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
@@ -40,6 +41,12 @@ def load(path: Path):
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
+
+
+def sha256_lf(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest().upper()
 
 
 def require(condition: bool, message: str) -> None:
@@ -75,6 +82,7 @@ def main() -> int:
     runtime = load(RUNTIME_AUTHORITY)
     global_scale = load(GLOBAL_AUTHORITY)
     catalog = load(CATALOG)
+    special_normal = load(SPECIAL_NORMAL_AUTHORITY)
 
     require(sha256(DECISION) == DECISION_SHA256, "A0.7 decision hash drift")
     for document in (item, role):
@@ -94,6 +102,38 @@ def main() -> int:
     require(all(row["tier_status"] == "RESOLVED" for row in item_records), "unresolved item Tier")
     require(item["summary"]["resolved_items"] == 233 and item["summary"]["unresolved_items"] == 0, "item summary drift")
     require(item["source_rate_policy"]["role"] == "provenance_only", "source rate became probability Authority")
+
+    expected_special_provenance = {
+        "item_tier_sha": sha256_lf(ITEM_AUTHORITY),
+        "monster_role_sha": sha256_lf(ROLE_AUTHORITY),
+        "global_scale_sha": sha256_lf(GLOBAL_AUTHORITY),
+        "hash_normalization": "lf_text",
+    }
+    special_binding = special_normal.get("drop_binding", {})
+    require(
+        special_binding.get("authority_provenance") == expected_special_provenance,
+        "special_normal DPV2 provenance drift",
+    )
+    for key in ("item_tier_sha", "monster_role_sha", "global_scale_sha"):
+        require(
+            special_binding.get(key) == expected_special_provenance[key],
+            f"special_normal drop_binding.{key} drift",
+        )
+    special_sources = {
+        str(row.get("path")): row
+        for row in special_normal.get("authority", {}).get("sources", [])
+        if isinstance(row, dict)
+    }
+    for relative, key in (
+        ("assets/data/drop/dpv2_item_tier_authority_v1.json", "item_tier_sha"),
+        ("assets/data/drop/dpv2_monster_role_authority_v1.json", "monster_role_sha"),
+        ("assets/data/drop/dpv2_global_drop_rate_authority_v1.json", "global_scale_sha"),
+    ):
+        require(
+            special_sources.get(relative, {}).get("sha256")
+            == expected_special_provenance[key],
+            f"special_normal source hash drift: {relative}",
+        )
 
     boss_keys = {int(row["canonical_item_id"]): row for row in item_records if row["tier"] == "BOSS_KEY_ITEM"}
     materials = {int(row["canonical_item_id"]): row for row in item_records if row["tier"] == "MONSTER_MATERIAL"}
@@ -144,7 +184,95 @@ def main() -> int:
     require(runtime["activation"]["production_active"] is True, "runtime Authority inactive")
     require(runtime["ground_overflow_policy"]["maximum_ground_slots"] == 9, "ground slot limit drift")
     require(len(runtime["item_overflow_records"]) == 233, "overflow item coverage drift")
+	# Runtime overflow priority is derived from the resolved DPV2 tier, never
+	# from item_type or source-array order. Ordinary equipment/books are useful
+	# but are not protected telemetry classes.
+    progress_tiers = {"BOSS_KEY_ITEM"}
+    high_value_tiers = {
+        "BOOK_35", "BOOK_HIGH", "REDMOON_SET", "NEW_CLOTHES",
+        "LEGENDARY_WEAPON", "SPECIAL_RING", "ZUMA_GEAR",
+        "HIGH_CLASS_WEAPON", "EXPANDED_HIGH_WEAPON", "MYSTERY_SIGNATURE",
+        "PRAYER_MEMORY", "MAGICBLOOD_RAINBOW", "RARE_CONSUMABLE",
+        "FUNCTIONAL_SPECIAL", "SOLAR_CONSUMABLE",
+    }
+    standard_equipment_tiers = {
+        "EQUIP_LOW", "EQUIP_MID", "EQUIP_HIGH_MID", "WOOMA_GEAR",
+    }
+    standard_book_tiers = {"BOOK_LOW", "BOOK_MID"}
+    expected_runtime_policy = {}
+    for tier_name in progress_tiers:
+        expected_runtime_policy[tier_name] = ("PROTECTED_PROGRESS", True, 400)
+    for tier_name in high_value_tiers:
+        expected_runtime_policy[tier_name] = ("PROTECTED_HIGH_VALUE", True, 300)
+    for tier_name in standard_equipment_tiers:
+        expected_runtime_policy[tier_name] = ("EQUIPMENT_STANDARD", False, 200)
+    for tier_name in standard_book_tiers:
+        expected_runtime_policy[tier_name] = ("BOOK_STANDARD", False, 200)
+    for raw_record in runtime["item_overflow_records"]:
+        tier_name = str(raw_record.get("tier", ""))
+        expected_class, expected_protected, expected_priority = expected_runtime_policy.get(
+            tier_name, ("ORDINARY_CONSUMABLE", False, 100)
+        )
+        require(
+            (raw_record.get("overflow_class"), raw_record.get("protected_drop"), raw_record.get("overflow_priority"))
+            == (expected_class, expected_protected, expected_priority),
+            f"runtime tier overflow policy drift: {tier_name}",
+        )
     require(global_scale["active_preset"] == "1x", "global drop scale drift")
+
+    source_contract = runtime["source_slot_contract"]
+    expected_gate = {
+        "canonical_source_slots": 7032,
+        "drop_enabled_source_slots": 5995,
+        "drop_disabled_source_slots": 1037,
+        "reward_resolved_enabled_slots": 5995,
+        "probability_resolved_enabled_slots": 5995,
+        "rng_eligible_slots": 5995,
+        "rng_roll_count": 5995,
+    }
+    for key, expected in expected_gate.items():
+        require(source_contract.get(key) == expected, f"runtime source gate drift: {key}")
+        require(snapshot["summary"].get(key) == expected, f"snapshot source gate drift: {key}")
+        require(snapshot["authority"].get("source_slot_gate", {}).get(key) == expected, f"snapshot authority source gate drift: {key}")
+    require(
+        source_contract["canonical_source_slots"]
+        == source_contract["drop_enabled_source_slots"]
+        + source_contract["drop_disabled_source_slots"],
+        "runtime source gate partition does not close",
+    )
+    require(
+        source_contract["all_enabled_resolved_slots_rng_before_overflow"] is True
+        and source_contract["overflow_stage"] == "after_all_probability_rolls",
+        "runtime source gate does not prove pre-overflow RNG coverage",
+    )
+    slots = snapshot.get("slots", [])
+    require(len(slots) == 7032, "snapshot slot rows drift")
+    observed_gate = {
+        "canonical_source_slots": len(slots),
+        "drop_enabled_source_slots": sum(bool(row.get("drop_enabled")) for row in slots),
+        "drop_disabled_source_slots": sum(not bool(row.get("drop_enabled")) for row in slots),
+        "reward_resolved_enabled_slots": sum(bool(row.get("reward_resolved_enabled")) for row in slots),
+        "probability_resolved_enabled_slots": sum(bool(row.get("probability_resolved_enabled")) for row in slots),
+        "rng_eligible_slots": sum(bool(row.get("rng_eligible")) for row in slots),
+        "rng_roll_count": sum(bool(row.get("rng_eligible_before_overflow")) for row in slots),
+    }
+    require(observed_gate == expected_gate, f"snapshot row gate recomputation drift: {observed_gate}")
+    require(snapshot["summary"].get("rng_roll_count") == 5995, "snapshot RNG roll-stage count drift")
+    require(snapshot["summary"].get("all_enabled_resolved_slots_rng_before_overflow") is True, "snapshot pre-overflow gate drift")
+
+    catalog_special = catalog.get("special_normal_spawn_authority", {})
+    require(
+        catalog_special.get("authority_provenance") == expected_special_provenance,
+        "catalog special_normal DPV2 provenance drift",
+    )
+    for monster_id in special_normal.get("scope", {}).get("canonical_monster_ids", []):
+        entry = catalog.get("entries_by_id", {}).get(str(monster_id), {})
+        spawn = entry.get("spawn_authority", {})
+        binding = spawn.get("drop_binding", {})
+        require(
+            binding.get("authority_provenance") == expected_special_provenance,
+            f"catalog monster {monster_id} special_normal provenance drift",
+        )
     require(
         [row["preset"] for row in global_scale["presets"]]
         == ["0.5x", "0.8x", "1x", "1.5x", "2x"],

@@ -202,8 +202,33 @@ func _run() -> void:
 		"every DPV2-resolved row must reach RNG: %s" % rolled
 	)
 	assert(
+		int(rolled.get("reward_resolved_enabled_slots", -1))
+		== int(rolled.get("resolved_entry_count", -2)),
+		"reward resolution count must precede probability resolution: %s" % rolled
+	)
+	assert(
+		int(rolled.get("probability_resolved_enabled_slots", -1))
+		== int(rolled.get("rng_eligible_slots", -2))
+		and int(rolled.get("rng_eligible_slots", -1))
+		== int(rolled.get("rng_roll_count", -2)),
+		"all eligible rows must reach the RNG stage: %s" % rolled
+	)
+	assert(
 		bool(rolled.get("all_resolved_slots_rng", false)),
 		"full-slot RNG contract was not reported: %s" % rolled
+	)
+	assert(
+		bool(rolled.get(
+			"all_enabled_resolved_slots_rng_before_overflow",
+			false
+		)),
+		"pre-overflow RNG gate was not reported: %s" % rolled
+	)
+	assert(
+		int(rolled.get("ground_output_count", -1))
+			+ int(rolled.get("overflow_discarded_count", -2))
+		== int(rolled.get("successful_roll_count", -3)),
+		"ground output and overflow accounting must close: %s" % rolled
 	)
 
 	print(

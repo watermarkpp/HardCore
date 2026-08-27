@@ -13,6 +13,11 @@ const EXPECTED_FINAL_DROP_ROW_COUNT := 7032
 const EXPECTED_AUDIT_ONLY_COUNT := 7032
 const EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT := 7032
 const EXPECTED_INVALID_CHANCE_COUNT := 1
+const EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT := 5995
+const EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT := 1037
+const EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT := 5995
+const EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT := 5995
+const EXPECTED_RNG_ELIGIBLE_SLOT_COUNT := 5995
 
 const EXPECTED_ANOMALY_DROP_PROFILE_ID := "drop.168"
 const EXPECTED_ANOMALY_MONSTER_ID := 168
@@ -187,6 +192,9 @@ func _run() -> void:
 		invalid_slots,
 		failures
 	)
+	_check_source_slot_fields(slots, failures)
+	var source_gate_counts := _recompute_source_gate_counts(slots)
+	_check_source_gate_counts(source_gate_counts, failures)
 
 	var catalog_text_after := FileAccess.get_file_as_string(CATALOG_PATH)
 	var source_sha256_after := _sha256_text(catalog_text_after)
@@ -219,6 +227,35 @@ func _run() -> void:
 		"runtime_rejection_reason_counts": runtime_rejection_reason_counts,
 		"reward_resolution_reason_counts": reward_resolution_reason_counts,
 		"monster_runtime_gate_counts": monster_runtime_gate_counts,
+		# These are counts of source rows that pass each authority stage.  The
+		# exporter does not perform random draws; rng_roll_count names the rows
+		# that are eligible to reach the real LootRuntime RNG stage.
+		"canonical_source_slots": int(source_gate_counts.get(
+			"canonical_source_slots", 0
+		)),
+		"drop_enabled_source_slots": int(source_gate_counts.get(
+			"drop_enabled_source_slots", 0
+		)),
+		"drop_disabled_source_slots": int(source_gate_counts.get(
+			"drop_disabled_source_slots", 0
+		)),
+		"reward_resolved_enabled_slots": int(source_gate_counts.get(
+			"reward_resolved_enabled_slots", 0
+		)),
+		"probability_resolved_enabled_slots": int(source_gate_counts.get(
+			"probability_resolved_enabled_slots", 0
+		)),
+		"rng_eligible_slots": int(source_gate_counts.get(
+			"rng_eligible_slots", 0
+		)),
+		"rng_roll_count": int(source_gate_counts.get("rng_roll_count", 0)),
+		"all_enabled_resolved_slots_rng_before_overflow": bool(
+			source_gate_counts.get(
+				"all_enabled_resolved_slots_rng_before_overflow",
+				false
+			)
+		),
+		"overflow_stage": "after_all_probability_rolls",
 	}
 
 	var snapshot := {
@@ -240,6 +277,7 @@ func _run() -> void:
 			"rate_policy_runtime_semantics": (
 				"provenance_only; not used by LootRuntime"
 			),
+			"source_slot_gate": GameData.dpv2_source_slot_gate(),
 		},
 		"current_corpus_freeze": {
 			"expected_drop_profile_count": EXPECTED_DROP_PROFILE_COUNT,
@@ -250,6 +288,25 @@ func _run() -> void:
 				EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT
 			),
 			"expected_invalid_chance_count": EXPECTED_INVALID_CHANCE_COUNT,
+			"expected_source_slot_gate": {
+				"canonical_source_slots": EXPECTED_BASE_DROP_ROW_COUNT,
+				"drop_enabled_source_slots": (
+					EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT
+				),
+				"drop_disabled_source_slots": (
+					EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT
+				),
+				"reward_resolved_enabled_slots": (
+					EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT
+				),
+				"probability_resolved_enabled_slots": (
+					EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT
+				),
+				"rng_eligible_slots": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+				"rng_roll_count": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+				"all_enabled_resolved_slots_rng_before_overflow": true,
+				"overflow_stage": "after_all_probability_rolls",
+			},
 			"expected_anomaly": {
 				"drop_profile_id": EXPECTED_ANOMALY_DROP_PROFILE_ID,
 				"monster_id": EXPECTED_ANOMALY_MONSTER_ID,
@@ -333,6 +390,11 @@ func _snapshot_slot(
 	var reward_resolution_status := (
 		"resolved" if reward_resolvable else "unresolved"
 	)
+	var monster_drop_state: Dictionary = GameData.dpv2_monster_drop_state(
+		monster_id
+	)
+	var drop_enabled := bool(monster_drop_state.get("drop_enabled", false))
+	var reward_resolved_enabled := drop_enabled and reward_resolvable
 
 	var probability_policy: Dictionary = {}
 	if reward_resolvable:
@@ -342,9 +404,13 @@ func _snapshot_slot(
 	var probability_authority_resolvable := bool(
 		probability_policy.get("ok", false)
 	)
-	var slot_runtime_rollable := (
-		reward_resolvable and probability_authority_resolvable
+	var probability_resolved_enabled := (
+		drop_enabled and probability_authority_resolvable
 	)
+	var rng_eligible := (
+		reward_resolved_enabled and probability_resolved_enabled
+	)
+	var slot_runtime_rollable := rng_eligible
 	var non_rollable_reason: Variant = null
 	var runtime_rejection_reason: Variant = null
 	if not reward_resolvable:
@@ -389,8 +455,13 @@ func _snapshot_slot(
 		),
 		"reward_probe": reward_probe.duplicate(true),
 		"runtime_reward_attempted": true,
+		"drop_enabled": drop_enabled,
+		"reward_resolved_enabled": reward_resolved_enabled,
 		"probability_authority_resolvable": probability_authority_resolvable,
+		"probability_resolved_enabled": probability_resolved_enabled,
 		"probability_policy": probability_policy.duplicate(true),
+		"rng_eligible": rng_eligible,
+		"rng_eligible_before_overflow": rng_eligible,
 		"slot_runtime_rollable": slot_runtime_rollable,
 		# Compatibility alias for the partially implemented R1 tooling.
 		"runtime_rollable": slot_runtime_rollable,
@@ -465,6 +536,63 @@ func _check_current_corpus_summary(
 		0,
 		failures
 	)
+	var source_gate := GameData.dpv2_source_slot_gate()
+	_expect_int(
+		"authority.canonical_source_slots",
+		int(source_gate.get("canonical_source_slots", -1)),
+		EXPECTED_BASE_DROP_ROW_COUNT,
+		failures
+	)
+	_expect_int(
+		"authority.drop_enabled_source_slots",
+		int(source_gate.get("drop_enabled_source_slots", -1)),
+		EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"authority.drop_disabled_source_slots",
+		int(source_gate.get("drop_disabled_source_slots", -1)),
+		EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"authority.reward_resolved_enabled_slots",
+		int(source_gate.get("reward_resolved_enabled_slots", -1)),
+		EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"authority.probability_resolved_enabled_slots",
+		int(source_gate.get("probability_resolved_enabled_slots", -1)),
+		EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"authority.rng_eligible_slots",
+		int(source_gate.get("rng_eligible_slots", -1)),
+		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"authority.rng_roll_count",
+		int(source_gate.get("rng_roll_count", -1)),
+		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+		failures
+	)
+	if (
+		int(source_gate.get("canonical_source_slots", -1))
+			!= int(source_gate.get("drop_enabled_source_slots", -1))
+			+ int(source_gate.get("drop_disabled_source_slots", -1))
+		or not bool(source_gate.get(
+			"all_enabled_resolved_slots_rng_before_overflow",
+			false
+		))
+		or str(source_gate.get("overflow_stage", ""))
+			!= "after_all_probability_rolls"
+	):
+		failures.append(
+			"authority source-slot gate is not a complete pre-overflow partition"
+		)
 
 
 func _check_current_corpus_rows(
@@ -568,6 +696,148 @@ func _check_current_corpus_rows(
 		failures.append("1/00 provenance anomaly must remain DPV2 runtime rollable")
 	if anomaly.get("runtime_rejection_reason", null) != null:
 		failures.append("1/00 provenance anomaly must not carry a runtime rejection")
+
+
+func _recompute_source_gate_counts(slots: Array) -> Dictionary:
+	var canonical := slots.size()
+	var drop_enabled := 0
+	var drop_disabled := 0
+	var reward_resolved_enabled := 0
+	var probability_resolved_enabled := 0
+	var rng_eligible := 0
+	for raw_slot: Variant in slots:
+		if not raw_slot is Dictionary:
+			continue
+		var slot: Dictionary = raw_slot
+		if bool(slot.get("drop_enabled", false)):
+			drop_enabled += 1
+		else:
+			drop_disabled += 1
+		if bool(slot.get("reward_resolved_enabled", false)):
+			reward_resolved_enabled += 1
+		if bool(slot.get("probability_resolved_enabled", false)):
+			probability_resolved_enabled += 1
+		if bool(slot.get("rng_eligible", false)):
+			rng_eligible += 1
+	return {
+		"canonical_source_slots": canonical,
+		"drop_enabled_source_slots": drop_enabled,
+		"drop_disabled_source_slots": drop_disabled,
+		"reward_resolved_enabled_slots": reward_resolved_enabled,
+		"probability_resolved_enabled_slots": probability_resolved_enabled,
+		"rng_eligible_slots": rng_eligible,
+		"rng_roll_count": rng_eligible,
+		"all_enabled_resolved_slots_rng_before_overflow": (
+			drop_enabled == reward_resolved_enabled
+			and reward_resolved_enabled == probability_resolved_enabled
+			and probability_resolved_enabled == rng_eligible
+		),
+		"overflow_stage": "after_all_probability_rolls",
+	}
+
+
+func _check_source_slot_fields(slots: Array, failures: Array[String]) -> void:
+	for raw_slot: Variant in slots:
+		if not raw_slot is Dictionary:
+			failures.append("source-slot gate row is not a Dictionary")
+			continue
+		var slot: Dictionary = raw_slot
+		var prefix := "%s:%s" % [
+			str(slot.get("drop_profile_id", "<profile?>")),
+			str(slot.get("line_number", "<line?>")),
+		]
+		var drop_enabled := bool(slot.get("drop_enabled", false))
+		var reward_resolvable := bool(slot.get("reward_resolvable", false))
+		var probability_resolvable := bool(
+			slot.get("probability_authority_resolvable", false)
+		)
+		var expected_reward_resolved := drop_enabled and reward_resolvable
+		var expected_probability_resolved := (
+			drop_enabled and probability_resolvable
+		)
+		var expected_rng_eligible := (
+			expected_reward_resolved and expected_probability_resolved
+		)
+		if bool(slot.get("reward_resolved_enabled", false)) != expected_reward_resolved:
+			failures.append(
+				"%s reward_resolved_enabled disagrees with drop/reward gate" % prefix
+			)
+		if bool(slot.get("probability_resolved_enabled", false)) != expected_probability_resolved:
+			failures.append(
+				"%s probability_resolved_enabled disagrees with drop/policy gate" % prefix
+			)
+		if bool(slot.get("rng_eligible", false)) != expected_rng_eligible:
+			failures.append(
+				"%s rng_eligible disagrees with reward/probability gate" % prefix
+			)
+		if bool(slot.get("rng_eligible_before_overflow", false)) != expected_rng_eligible:
+			failures.append(
+				"%s rng_eligible_before_overflow disagrees with RNG gate" % prefix
+			)
+		if bool(slot.get("slot_runtime_rollable", false)) != expected_rng_eligible:
+			failures.append(
+				"%s slot_runtime_rollable disagrees with RNG eligibility" % prefix
+			)
+
+
+func _check_source_gate_counts(
+	counts: Dictionary,
+	failures: Array[String]
+) -> void:
+	_expect_int(
+		"observed canonical source slots",
+		int(counts.get("canonical_source_slots", -1)),
+		EXPECTED_BASE_DROP_ROW_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed drop-enabled source slots",
+		int(counts.get("drop_enabled_source_slots", -1)),
+		EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed drop-disabled source slots",
+		int(counts.get("drop_disabled_source_slots", -1)),
+		EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed reward-resolved enabled slots",
+		int(counts.get("reward_resolved_enabled_slots", -1)),
+		EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed probability-resolved enabled slots",
+		int(counts.get("probability_resolved_enabled_slots", -1)),
+		EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed RNG-eligible slots",
+		int(counts.get("rng_eligible_slots", -1)),
+		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed RNG-roll stage slots",
+		int(counts.get("rng_roll_count", -1)),
+		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+		failures
+	)
+	if (
+		int(counts.get("canonical_source_slots", -1))
+			!= int(counts.get("drop_enabled_source_slots", -1))
+			+ int(counts.get("drop_disabled_source_slots", -1))
+		or not bool(counts.get(
+			"all_enabled_resolved_slots_rng_before_overflow",
+			false
+		))
+	):
+		failures.append(
+			"observed source-slot gate is not a complete pre-overflow partition"
+		)
 
 
 func _expect_int(

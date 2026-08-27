@@ -391,6 +391,51 @@ func _load_dpv2_drop_authorities() -> bool:
 	var role_authority: Dictionary = role_value
 	var global_authority: Dictionary = global_value
 	var runtime_authority: Dictionary = runtime_value
+	var expected_source_authorities: Dictionary = {
+		"item_tier": {
+			"path": DPV2_ITEM_TIER_AUTHORITY_PATH,
+			"schema": "hardcore.dpv2.item_tier_authority.v1",
+		},
+		"monster_role": {
+			"path": DPV2_MONSTER_ROLE_AUTHORITY_PATH,
+			"schema": "hardcore.dpv2.monster_role_authority.v1",
+		},
+		"global_scale": {
+			"path": DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
+			"schema": "hardcore.dpv2.global_drop_rate_authority.v1",
+		},
+	}
+	var declared_source_authorities: Variant = runtime_authority.get(
+		"source_authorities",
+		null
+	)
+	if not declared_source_authorities is Dictionary:
+		load_error = "dpv2_source_authorities_missing"
+		return false
+	for raw_key: Variant in expected_source_authorities.keys():
+		var key := str(raw_key)
+		var expected: Dictionary = expected_source_authorities[key]
+		var declared_value: Variant = declared_source_authorities.get(key, null)
+		if not declared_value is Dictionary:
+			load_error = "dpv2_source_authority_missing:%s" % key
+			return false
+		var declared: Dictionary = declared_value
+		var declared_path := str(declared.get("path", ""))
+		var expected_path := str(expected.get("path", ""))
+		var normalized_declared_path := declared_path.trim_prefix("res://")
+		var normalized_expected_path := expected_path.trim_prefix("res://")
+		var declared_schema := str(declared.get("schema", ""))
+		var expected_schema := str(expected.get("schema", ""))
+		var declared_sha := str(declared.get("sha256", "")).to_upper()
+		var actual_sha := _sha256_lf_file(expected_path)
+		if (
+			normalized_declared_path != normalized_expected_path
+			or declared_schema != expected_schema
+			or actual_sha.is_empty()
+			or declared_sha != actual_sha
+		):
+			load_error = "dpv2_source_authority_binding_invalid:%s" % key
+			return false
 	if (
 		str(tier_authority.get("schema", ""))
 			!= "hardcore.dpv2.item_tier_authority.v1"
@@ -415,6 +460,30 @@ func _load_dpv2_drop_authorities() -> bool:
 		)) != 7032
 		or bool(runtime_authority.get("source_slot_contract", {}).get(
 			"source_slot_mutated", true
+		))
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"canonical_source_slots", 0
+		)) != 7032
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"drop_enabled_source_slots", -1
+		)) != 5995
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"drop_disabled_source_slots", -1
+		)) != 1037
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"reward_resolved_enabled_slots", -1
+		)) != 5995
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"probability_resolved_enabled_slots", -1
+		)) != 5995
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"rng_eligible_slots", -1
+		)) != 5995
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"rng_roll_count", -1
+		)) != 5995
+		or not bool(runtime_authority.get("source_slot_contract", {}).get(
+			"all_enabled_resolved_slots_rng_before_overflow", false
 		))
 	):
 		load_error = "dpv2_drop_runtime_authority_contract_invalid"
@@ -464,16 +533,27 @@ func _load_dpv2_drop_authorities() -> bool:
 		var overflow_record: Dictionary = raw_overflow
 		var overflow_item_id := int(overflow_record.get("canonical_item_id", -1))
 		var overflow_name := str(overflow_record.get("canonical_name", ""))
+		var overflow_tier := str(overflow_record.get("tier", ""))
 		var priority := int(overflow_record.get("overflow_priority", 0))
 		var tier_match: Variant = _dpv2_item_tier_by_id.get(overflow_item_id, {})
+		var expected_overflow := _dpv2_expected_overflow_policy(overflow_tier)
 		if (
 			overflow_item_id <= 0
 			or overflow_name.is_empty()
-			or priority not in [100, 200, 300]
+			or overflow_tier.is_empty()
+			or priority not in [100, 200, 300, 400]
 			or _dpv2_item_overflow_by_id.has(overflow_item_id)
 			or _dpv2_item_overflow_by_name.has(overflow_name)
 			or not tier_match is Dictionary
 			or str(tier_match.get("canonical_name", "")) != overflow_name
+			or str(tier_match.get("tier", "")) != overflow_tier
+			or str(overflow_record.get("priority_band", ""))
+				!= str(expected_overflow.get("priority_band", ""))
+			or str(overflow_record.get("overflow_class", ""))
+				!= str(expected_overflow.get("overflow_class", ""))
+			or bool(overflow_record.get("protected_drop", false))
+				!= bool(expected_overflow.get("protected_drop", false))
+			or priority != int(expected_overflow.get("overflow_priority", 0))
 		):
 			load_error = "dpv2_item_overflow_identity_invalid"
 			return false
@@ -563,6 +643,18 @@ func _load_dpv2_drop_authorities() -> bool:
 	dpv2_global_drop_rate_authority = global_authority
 	dpv2_drop_runtime_authority = runtime_authority
 	return true
+
+
+func _sha256_lf_file(path: String) -> String:
+	if not FileAccess.file_exists(path):
+		return ""
+	var text := FileAccess.get_file_as_string(path)
+	text = text.replace("\r\n", "\n").replace("\r", "\n")
+	var context := HashingContext.new()
+	if context.start(HashingContext.HASH_SHA256) != OK:
+		return ""
+	context.update(text.to_utf8_buffer())
+	return context.finish().hex_encode().to_upper()
 
 
 func _load_equipment_price_candidates() -> void:
@@ -1492,6 +1584,67 @@ func dpv2_ground_slot_limit() -> int:
 			"maximum_ground_slots", 0
 		)
 	)
+
+
+func _dpv2_expected_overflow_policy(tier: String) -> Dictionary:
+	if tier == "BOSS_KEY_ITEM":
+		return {
+			"overflow_class": "PROTECTED_PROGRESS",
+			"protected_drop": true,
+			"overflow_priority": 400,
+			"priority_band": "progress_key",
+		}
+	if tier in [
+		"BOOK_35",
+		"BOOK_HIGH",
+		"REDMOON_SET",
+		"NEW_CLOTHES",
+		"LEGENDARY_WEAPON",
+		"SPECIAL_RING",
+		"ZUMA_GEAR",
+		"HIGH_CLASS_WEAPON",
+		"EXPANDED_HIGH_WEAPON",
+		"MYSTERY_SIGNATURE",
+		"PRAYER_MEMORY",
+		"MAGICBLOOD_RAINBOW",
+		"RARE_CONSUMABLE",
+		"FUNCTIONAL_SPECIAL",
+		"SOLAR_CONSUMABLE",
+	]:
+		return {
+			"overflow_class": "PROTECTED_HIGH_VALUE",
+			"protected_drop": true,
+			"overflow_priority": 300,
+			"priority_band": "high_value_tier",
+		}
+	if tier in ["EQUIP_LOW", "EQUIP_MID", "EQUIP_HIGH_MID", "WOOMA_GEAR"]:
+		return {
+			"overflow_class": "EQUIPMENT_STANDARD",
+			"protected_drop": false,
+			"overflow_priority": 200,
+			"priority_band": "standard_equipment",
+		}
+	if tier in ["BOOK_LOW", "BOOK_MID"]:
+		return {
+			"overflow_class": "BOOK_STANDARD",
+			"protected_drop": false,
+			"overflow_priority": 200,
+			"priority_band": "standard_book",
+		}
+	return {
+		"overflow_class": "ORDINARY_CONSUMABLE",
+		"protected_drop": false,
+		"overflow_priority": 100,
+		"priority_band": "ordinary",
+	}
+
+
+func dpv2_source_slot_gate() -> Dictionary:
+	var contract: Variant = dpv2_drop_runtime_authority.get(
+		"source_slot_contract",
+		{}
+	)
+	return contract.duplicate(true) if contract is Dictionary else {}
 
 
 func dpv2_resolve_reward_policy(monster_id: int, reward: Dictionary) -> Dictionary:

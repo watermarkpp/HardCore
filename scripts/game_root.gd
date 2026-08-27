@@ -8519,6 +8519,34 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	PlayerState.record_kill(str(canonical_monster.get("canonical_name", "")))
 	PlayerState.add_experience(int(stats.get("exp", 0)))
 	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng)
+	var overflow_discarded_count := int(
+		drop_roll.get("overflow_discarded_count", 0)
+	)
+	if overflow_discarded_count > 0:
+		var overflow_telemetry := LootRuntime.record_overflow_telemetry(
+			monster_id,
+			drop_roll
+		)
+		if (
+			not overflow_telemetry.is_empty()
+			and CombatDiagnosticLogScript.capture_enabled()
+		):
+			CombatDiagnosticLogScript.record({
+				"event": "loot_overflow_discarded",
+				"monster_id": int(overflow_telemetry.get("monster_id", monster_id)),
+				"successful_roll_count": int(
+					overflow_telemetry.get("successful_roll_count", 0)
+				),
+				"ground_output_count": int(
+					overflow_telemetry.get("ground_output_count", 0)
+				),
+				"overflow_discarded_count": int(
+					overflow_telemetry.get("overflow_discarded_count", 0)
+				),
+				"protected_overflow_count": int(
+					overflow_telemetry.get("protected_overflow_count", 0)
+				),
+			})
 	for item_name: String in drop_roll.get("items", []):
 		_spawn_loot(item_name, death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18)))
 	for raw_gold: Variant in drop_roll.get("gold_drops", []):

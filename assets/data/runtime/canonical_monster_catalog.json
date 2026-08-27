@@ -59,12 +59,22 @@
       "role": "generator_input"
     },
     "assets/data/special_normal_monster_spawn_authority_v1.json": {
-      "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+      "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
       "hash_normalization": "lf_text",
       "role": "generator_input"
     },
     "assets/data/drop/dpv2_item_tier_authority_v1.json": {
       "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+      "hash_normalization": "lf_text",
+      "role": "generator_input"
+    },
+    "assets/data/drop/dpv2_monster_role_authority_v1.json": {
+      "sha256": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+      "hash_normalization": "lf_text",
+      "role": "generator_input"
+    },
+    "assets/data/drop/dpv2_global_drop_rate_authority_v1.json": {
+      "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
       "hash_normalization": "lf_text",
       "role": "generator_input"
     },
@@ -123,7 +133,7 @@
     "schema": "hardcore.monster_special_normal_spawn_authority.v1",
     "authority_id": "special_normal.monster_spawn.v1",
     "path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-    "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+    "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
     "canonical_monster_ids": [
       39,
       57,
@@ -135,7 +145,13 @@
       142
     ],
     "production_active": true,
-    "phase_1_allowed": true
+    "phase_1_allowed": true,
+    "authority_provenance": {
+      "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+      "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+      "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+      "hash_normalization": "lf_text"
+    }
   },
   "appearance_profiles": {
     "appearance.毒蜘蛛_2c55132ecddab863": {
@@ -236372,7 +236388,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -236509,7 +236534,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -239945,7 +239970,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -240078,7 +240112,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -242761,7 +242795,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -242917,7 +242960,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -243736,7 +243779,16 @@
           "role_assignment_authority": "HUMAN_FROZEN",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -243869,7 +243921,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -246117,7 +246169,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -246250,7 +246311,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -251345,7 +251406,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -251482,7 +251552,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -255568,7 +255638,16 @@
           "role_assignment_authority": "HUMAN_FROZEN",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -255701,7 +255780,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -256824,7 +256903,16 @@
           "role_assignment_authority": "HUMAN_FROZEN",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -256957,7 +257045,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -283461,7 +283549,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -283598,7 +283695,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -287034,7 +287131,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -287167,7 +287273,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -289850,7 +289956,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -290006,7 +290121,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -290825,7 +290940,16 @@
           "role_assignment_authority": "HUMAN_FROZEN",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -290958,7 +291082,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -293206,7 +293330,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -293339,7 +293472,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -298434,7 +298567,16 @@
           "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -298571,7 +298713,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -302657,7 +302799,16 @@
           "role_assignment_authority": "HUMAN_FROZEN",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -302790,7 +302941,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
@@ -303913,7 +304064,16 @@
           "role_assignment_authority": "HUMAN_FROZEN",
           "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
           "additional_multiplier": null,
-          "source_rate_role": "provenance_only"
+          "source_rate_role": "provenance_only",
+          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+          "authority_provenance": {
+            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
+            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+            "hash_normalization": "lf_text"
+          }
         },
         "production_active": true,
         "phase_1_allowed": true
@@ -304046,7 +304206,7 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "21825EF29ECE04E0A1215C18E7211A37B10174E3044C9CC3D8914C75A7429597",
+          "sha256": "567038CF98B01E4900DA5BFA81912BD0DB2CE7CA639606323A6CB88A5D68242A",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",

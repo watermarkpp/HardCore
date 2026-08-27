@@ -43,12 +43,17 @@ def base_slot() -> dict:
             "item_id": 1,
         },
         "runtime_reward_attempted": True,
+        "drop_enabled": True,
+        "reward_resolved_enabled": True,
         "probability_authority_resolvable": True,
+        "probability_resolved_enabled": True,
         "probability_policy": {
             "ok": True,
             "probability_numerator": 1,
             "probability_denominator": 32,
         },
+        "rng_eligible": True,
+        "rng_eligible_before_overflow": True,
         "slot_runtime_rollable": True,
         "runtime_rollable": True,
         "non_rollable_reason": None,
@@ -78,6 +83,16 @@ def minimal_snapshot(slot: dict) -> dict:
         "authority": {
             "catalog_sha256_before": "same",
             "catalog_sha256_after": "same",
+            "source_slot_gate": {
+                "canonical_source_slots": 1,
+                "drop_enabled_source_slots": 1,
+                "drop_disabled_source_slots": 0,
+                "reward_resolved_enabled_slots": 1,
+                "probability_resolved_enabled_slots": 1,
+                "rng_eligible_slots": 1,
+                "all_enabled_resolved_slots_rng_before_overflow": True,
+                "overflow_stage": "after_all_probability_rolls",
+            },
         },
         "summary": summary,
         "slots": [slot],
@@ -143,6 +158,10 @@ class P1AAnalyzerContractTest(unittest.TestCase):
                 "reason": "item_authority_unresolved",
             },
             "probability_authority_resolvable": False,
+            "reward_resolved_enabled": False,
+            "probability_resolved_enabled": False,
+            "rng_eligible": False,
+            "rng_eligible_before_overflow": False,
             "probability_policy": {},
             "slot_runtime_rollable": False,
             "runtime_rollable": False,
@@ -162,6 +181,10 @@ class P1AAnalyzerContractTest(unittest.TestCase):
             "reward_resolution_reason": "item_authority_unresolved",
             "runtime_reward_attempted": True,
             "probability_authority_resolvable": False,
+            "reward_resolved_enabled": False,
+            "probability_resolved_enabled": False,
+            "rng_eligible": False,
+            "rng_eligible_before_overflow": False,
             "probability_policy": {},
             "slot_runtime_rollable": False,
             "runtime_rollable": False,
@@ -183,6 +206,39 @@ class P1AAnalyzerContractTest(unittest.TestCase):
         errors = MODULE.validate_slot_contract(slot)
         self.assertTrue(
             any("slot_runtime_rollable" in error for error in errors),
+            errors,
+        )
+
+    def test_reward_gate_cannot_be_reported_after_probability_gate(self) -> None:
+        slot = base_slot()
+        slot["reward_resolved_enabled"] = False
+        errors = MODULE.validate_slot_contract(slot)
+        self.assertTrue(
+            any("reward_resolved_enabled" in error for error in errors),
+            errors,
+        )
+
+    def test_disabled_slot_cannot_enter_rng_gate(self) -> None:
+        slot = base_slot()
+        slot.update({
+            "drop_enabled": False,
+            "reward_resolved_enabled": False,
+            "probability_resolved_enabled": False,
+            "probability_authority_resolvable": False,
+            "rng_eligible": False,
+            "rng_eligible_before_overflow": False,
+            "slot_runtime_rollable": False,
+            "runtime_rollable": False,
+            "non_rollable_reason": "probability_authority_blocked",
+            "runtime_rejection_reason": "drop_disabled",
+            "runtime_reachable": False,
+        })
+        errors = MODULE.validate_slot_contract(slot)
+        self.assertEqual(errors, [], errors)
+        slot["rng_eligible"] = True
+        errors = MODULE.validate_slot_contract(slot)
+        self.assertTrue(
+            any("rng_eligible" in error for error in errors),
             errors,
         )
 

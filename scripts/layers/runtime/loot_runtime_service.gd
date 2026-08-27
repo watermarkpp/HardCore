@@ -2,6 +2,8 @@ extends Node
 
 const DROP_CONTRACT_ID := "monster.loot.canonical_id_only.v1"
 
+var _overflow_telemetry_by_monster_id: Dictionary = {}
+
 
 func roll_monster_drops(
 	monster_id: int,
@@ -16,17 +18,25 @@ func roll_monster_drops(
 		"resolution_attempted_count": 0,
 		"resolved_entry_count": 0,
 		"resolved_gold_count": 0,
+		"drop_enabled_source_slots": 0,
+		"drop_disabled_source_slots": 0,
+		"reward_resolved_enabled_slots": 0,
+		"probability_resolved_enabled_slots": 0,
+		"rng_eligible_slots": 0,
 		"rng_roll_count": 0,
 		"successful_roll_count": 0,
 		"ground_output_count": 0,
 		"overflow_discarded_count": 0,
 		"protected_overflow_count": 0,
 		"all_resolved_slots_rng": false,
+		"all_enabled_resolved_slots_rng_before_overflow": false,
+		"ground_output_plus_discarded_equals_successful": true,
 		"items": [],
 		"gold_drops": [],
 		"overflow_discarded": [],
 		"rejected_entries": [],
 	}
+	result["source_slot_gate"] = GameData.dpv2_source_slot_gate()
 	var resolved_id := GameData.canonical_monster_id(monster_id)
 	if resolved_id <= 0:
 		result.reason = "invalid_monster_id"
@@ -48,6 +58,14 @@ func roll_monster_drops(
 		else:
 			result.reason = "monster_not_runtime_allowed"
 		return result
+	var profile := GameData.get_canonical_monster_drop_profile(resolved_id)
+	var profile_entries_value: Variant = profile.get("entries", [])
+	var profile_entry_count: int = (
+		profile_entries_value.size()
+		if profile_entries_value is Array
+		else 0
+	)
+	result.source_entry_count = profile_entry_count
 	var monster_drop_state := GameData.dpv2_monster_drop_state(resolved_id)
 	if monster_drop_state.is_empty():
 		result.reason = "monster_role_authority_unresolved"
@@ -55,9 +73,10 @@ func roll_monster_drops(
 	if not bool(monster_drop_state.get("drop_enabled", false)):
 		result.configured = true
 		result.reason = "drop_disabled"
+		result.drop_disabled_source_slots = profile_entry_count
 		result.all_resolved_slots_rng = true
+		result.all_enabled_resolved_slots_rng_before_overflow = true
 		return result
-	var profile := GameData.get_canonical_monster_drop_profile(resolved_id)
 	if profile.is_empty():
 		# A legal no-drop entity: canonical policy does not require a non-empty
 		# table, or a valid exemption applies. This is not a runtime error.
@@ -76,6 +95,7 @@ func roll_monster_drops(
 			result.reason = ""
 			result.source_entry_count = 0
 			result.all_resolved_slots_rng = true
+			result.all_enabled_resolved_slots_rng_before_overflow = true
 			return result
 		result.reason = "drop_profile_missing_or_empty"
 		return result
@@ -96,12 +116,14 @@ func roll_monster_drops(
 			result.reason = ""
 			result.source_entry_count = 0
 			result.all_resolved_slots_rng = true
+			result.all_enabled_resolved_slots_rng_before_overflow = true
 			return result
 		result.reason = "drop_profile_missing_or_empty"
 		return result
 	var entries: Array = entries_value
 	result.configured = true
 	result.source_entry_count = entries.size()
+	result.drop_enabled_source_slots = entries.size()
 	if rng == null:
 		result.reason = "rng_missing"
 		return result
@@ -120,6 +142,7 @@ func roll_monster_drops(
 				str(reward.get("reason", "item_authority_unresolved"))
 			)
 			continue
+		result.reward_resolved_enabled_slots += 1
 		var policy := GameData.dpv2_resolve_reward_policy(resolved_id, reward)
 		if not bool(policy.get("ok", false)):
 			_append_rejection(
@@ -129,9 +152,11 @@ func roll_monster_drops(
 			)
 			continue
 		result.resolved_entry_count += 1
-		result.rng_roll_count += 1
 		var numerator := int(policy.get("probability_numerator", 0))
 		var denominator := int(policy.get("probability_denominator", 0))
+		result.probability_resolved_enabled_slots += 1
+		result.rng_eligible_slots += 1
+		result.rng_roll_count += 1
 		if rng.randi_range(1, denominator) <= numerator:
 			successful_rewards.append({
 				"line_number": int(entry.get("line_number", -1)),
@@ -141,6 +166,13 @@ func roll_monster_drops(
 	result.successful_roll_count = successful_rewards.size()
 	result.all_resolved_slots_rng = (
 		result.rng_roll_count == result.resolved_entry_count
+	)
+	result.all_enabled_resolved_slots_rng_before_overflow = (
+		result.rng_roll_count == result.rng_eligible_slots
+		and result.rng_eligible_slots == result.probability_resolved_enabled_slots
+		and result.probability_resolved_enabled_slots
+			== result.reward_resolved_enabled_slots
+		and result.rng_eligible_slots == result.resolved_entry_count
 	)
 	var selection := _select_ground_rewards(
 		successful_rewards,
@@ -164,6 +196,10 @@ func roll_monster_drops(
 	result.overflow_discarded_count = result.overflow_discarded.size()
 	result.protected_overflow_count = int(
 		selection.get("protected_discarded_count", 0)
+	)
+	result.ground_output_plus_discarded_equals_successful = (
+		result.ground_output_count + result.overflow_discarded_count
+		== result.successful_roll_count
 	)
 	return result
 
@@ -194,16 +230,34 @@ func _select_ground_rewards(
 	priorities.reverse()
 	for raw_priority: Variant in priorities:
 		var group: Array = groups.get(int(raw_priority), []).duplicate(true)
-		_shuffle_candidates(group, rng)
+		var remaining: int = limit - result.selected.size()
+		if remaining <= 0:
+			_append_discarded_group(result, group)
+			continue
+		# A same-priority random subset is required only when this group itself
+		# crosses the remaining ground-capacity boundary. Successful rolls that
+		# fit do not consume an extra RNG draw.
+		if group.size() > remaining:
+			_shuffle_candidates(group, rng)
 		for raw_candidate: Variant in group:
 			if result.selected.size() < limit:
 				result.selected.append(raw_candidate)
 			else:
-				result.discarded.append(raw_candidate)
-				var policy: Dictionary = raw_candidate.get("policy", {})
-				if bool(policy.get("protected_drop", false)):
-					result.protected_discarded_count += 1
+				_append_discarded(result, raw_candidate)
 	return result
+
+
+func _append_discarded_group(result: Dictionary, group: Array) -> void:
+	for raw_candidate: Variant in group:
+		if raw_candidate is Dictionary:
+			_append_discarded(result, raw_candidate)
+
+
+func _append_discarded(result: Dictionary, candidate: Dictionary) -> void:
+	result.discarded.append(candidate)
+	var policy: Dictionary = candidate.get("policy", {})
+	if bool(policy.get("protected_drop", false)):
+		result.protected_discarded_count += 1
 
 
 func _shuffle_candidates(candidates: Array, rng: RandomNumberGenerator) -> void:
@@ -229,6 +283,46 @@ func _chance_denominator(token: String) -> int:
 			return -1
 	var denominator := int(denominator_token)
 	return denominator if denominator > 0 else -1
+
+
+func record_overflow_telemetry(monster_id: int, drop_roll: Dictionary) -> Dictionary:
+	var overflow_discarded_count := int(
+		drop_roll.get("overflow_discarded_count", 0)
+	)
+	if overflow_discarded_count <= 0:
+		return {}
+	var resolved_id := GameData.canonical_monster_id(monster_id)
+	if resolved_id <= 0:
+		return {}
+	var key := str(resolved_id)
+	var aggregate: Dictionary = _overflow_telemetry_by_monster_id.get(key, {
+		"monster_id": resolved_id,
+		"death_count": 0,
+		"successful_roll_count": 0,
+		"ground_output_count": 0,
+		"overflow_discarded_count": 0,
+		"protected_overflow_count": 0,
+	})
+	aggregate["death_count"] = int(aggregate.get("death_count", 0)) + 1
+	for field: String in [
+		"successful_roll_count",
+		"ground_output_count",
+		"overflow_discarded_count",
+		"protected_overflow_count",
+	]:
+		aggregate[field] = int(aggregate.get(field, 0)) + int(
+			drop_roll.get(field, 0)
+		)
+	_overflow_telemetry_by_monster_id[key] = aggregate
+	return aggregate.duplicate(true)
+
+
+func overflow_telemetry_snapshot() -> Dictionary:
+	return _overflow_telemetry_by_monster_id.duplicate(true)
+
+
+func clear_overflow_telemetry() -> void:
+	_overflow_telemetry_by_monster_id.clear()
 
 
 func _append_rejection(result: Dictionary, line_number: int, reason: String) -> void:
