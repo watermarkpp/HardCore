@@ -1,0 +1,3639 @@
+{
+  "schema": "hardcore.dpv2.monster_role_authority.v1",
+  "status": "A0_7_FORMAL_AUTHORITY_COMPLETE_PHASE_1_FORBIDDEN",
+  "authority": {
+    "kind": "user_authoritative_override",
+    "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+    "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC",
+    "canonical_identity_authority": "assets/data/runtime/canonical_monster_catalog.json",
+    "sources": [
+      {
+        "path": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC",
+        "role": "A0.7 exhaustive two-state and human override authority"
+      },
+      {
+        "path": "assets/data/runtime/canonical_monster_catalog.json",
+        "sha256": "742C939875DD4CB14203C03056C386B1AD57FF9A9359F92B996160E07BA9E32D",
+        "role": "current canonical monster ID/name/runtime authority"
+      },
+      {
+        "path": "assets/data/drop/dpv2_drop_role_design_authority_v1.json",
+        "sha256": "30FE94845CF44298F3F054AEF14142B591FB4AAD727EFACEC6489E2C053E42C3",
+        "role": "A0.6 legal roles and frozen boss mappings"
+      },
+      {
+        "path": "docs/drop/DPV2_A06_MONSTER_ROLE_DECISION_PACKAGE.md",
+        "sha256": "424CEAE8948D4C2B465FEDF32E3167C73D487B4C81F4737456B66A9D76D951CC",
+        "role": "A0.6 conflict recommendation evidence"
+      },
+      {
+        "path": "outputs/drop/dpv2_monster_role_seed_candidate.json",
+        "sha256": "9A5B3689CB78ED74DE6E0F5E3C35E10A52ABD04B83FCCB1B935ED4F4A247E8D5",
+        "role": "A0.5 124 deterministic recommendations; construction evidence only"
+      },
+      {
+        "path": "outputs/drop/dpv2_monster_role_conflicts_32.json",
+        "sha256": "72018CFAB46EC92A7ED635F15F0D85C8E52498E6CA66ADD72637AA561C051D35",
+        "role": "A0.6 32 conflict recommendations; construction evidence only"
+      }
+    ]
+  },
+  "contract": {
+    "exhaustive_state_model": "EXACTLY_ONE_OF_ENABLED_PROBABILITY_ROLE_OR_DISABLED_NON_LOOT",
+    "enabled_state": {
+      "drop_enabled": true,
+      "drop_role": "NON_NULL_FORMAL_ROLE",
+      "role_factor": "LEGAL_POSITIVE_FACTOR",
+      "reporting_label": null
+    },
+    "disabled_state": {
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT"
+    },
+    "zero_factor_final_assignment_forbidden": true,
+    "reconciliation_code": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+    "reconciliation_reason": "A0.6 PRESENTATION, SYSTEM and NON_LOOT factor-zero recommendations are represented as the exact disabled NON_LOOT reporting state required by the user's exhaustive A0.7 two-state contract; this changes probability-state representation only and is not a semantic monster identity rewrite.",
+    "semantic_identity_rewrite": false
+  },
+  "formal_probability_roles": [
+    {
+      "role": "COMMON",
+      "factor": 1
+    },
+    {
+      "role": "STRONG_COMMON",
+      "factor": 1.5
+    },
+    {
+      "role": "ELITE",
+      "factor": 3
+    },
+    {
+      "role": "OFFICIAL_JP",
+      "factor": 4
+    },
+    {
+      "role": "OFFICIAL_SUPER_JP",
+      "factor": 5
+    },
+    {
+      "role": "MINOR_BOSS",
+      "factor": 6
+    },
+    {
+      "role": "BOSS",
+      "factor": 8
+    },
+    {
+      "role": "MAJOR_BOSS",
+      "factor": 12
+    },
+    {
+      "role": "ENDGAME_BOSS",
+      "factor": 16
+    },
+    {
+      "role": "NEW_CLOTHES_BOSS",
+      "factor": 16
+    }
+  ],
+  "forbidden_probability_roles": [
+    "NON_LOOT",
+    "PRESENTATION",
+    "SYSTEM",
+    "UNIQUE_GEAR_BOSS",
+    "VETERAN"
+  ],
+  "summary": {
+    "canonical_monsters": 156,
+    "runtime_allowed": 153,
+    "enabled": 131,
+    "disabled_non_loot": 25,
+    "unresolved": 0,
+    "waiting_human_authority": 0,
+    "a06_non_conflict_accepted": 124,
+    "a06_conflict_finalized": 32,
+    "a06_conflict_recommendations_accepted": 29,
+    "human_frozen_overrides": 3,
+    "veteran_formal_definitions": 0,
+    "veteran_assignments": 0,
+    "role_distribution": {
+      "BOSS": 4,
+      "COMMON": 41,
+      "ELITE": 16,
+      "ENDGAME_BOSS": 4,
+      "MAJOR_BOSS": 8,
+      "MINOR_BOSS": 13,
+      "NEW_CLOTHES_BOSS": 6,
+      "OFFICIAL_JP": 6,
+      "OFFICIAL_SUPER_JP": 1,
+      "STRONG_COMMON": 32
+    }
+  },
+  "new_clothes_boss_authority": {
+    "role": "NEW_CLOTHES_BOSS",
+    "factor": 16,
+    "boss_count": 6,
+    "item_count": 6,
+    "one_to_one_required": true,
+    "mappings": [
+      {
+        "canonical_monster_id": 235,
+        "canonical_monster_name": "暗之双头血魔",
+        "canonical_item_id": 140,
+        "canonical_item_name": "天魔神甲"
+      },
+      {
+        "canonical_monster_id": 236,
+        "canonical_monster_name": "暗之双头金刚",
+        "canonical_item_id": 144,
+        "canonical_item_name": "天尊道袍"
+      },
+      {
+        "canonical_monster_id": 237,
+        "canonical_monster_name": "暗之黄泉教主",
+        "canonical_item_id": 142,
+        "canonical_item_name": "法神披风"
+      },
+      {
+        "canonical_monster_id": 238,
+        "canonical_monster_name": "暗之骷髅精灵",
+        "canonical_item_id": 141,
+        "canonical_item_name": "圣战宝甲"
+      },
+      {
+        "canonical_monster_id": 239,
+        "canonical_monster_name": "暗之沃玛教主",
+        "canonical_item_id": 145,
+        "canonical_item_name": "天师长袍"
+      },
+      {
+        "canonical_monster_id": 240,
+        "canonical_monster_name": "暗之虹魔教主",
+        "canonical_item_id": 143,
+        "canonical_item_name": "霓裳羽衣"
+      }
+    ]
+  },
+  "dark_cow_king": {
+    "canonical_monster_id": 225,
+    "canonical_name": "暗之牛魔王",
+    "drop_role": "ENDGAME_BOSS",
+    "role_factor": 16,
+    "new_clothes_eligible": false
+  },
+  "activation": {
+    "production_active": false,
+    "runtime_consumer": null,
+    "phase_1_allowed": false
+  },
+  "monsters": [
+    {
+      "canonical_monster_id": 18,
+      "canonical_name": "毒蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 19,
+      "canonical_name": "蛤蟆",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 21,
+      "canonical_name": "稻草人",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 24,
+      "canonical_name": "多钩猫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 26,
+      "canonical_name": "钉耙猫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 28,
+      "canonical_name": "森林雪人",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 30,
+      "canonical_name": "食人花",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 31,
+      "canonical_name": "多钩猫王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 32,
+      "canonical_name": "钉耙猫王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 33,
+      "canonical_name": "雪人王",
+      "runtime_allowed": false,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 34,
+      "canonical_name": "半兽人",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 36,
+      "canonical_name": "半兽战士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 38,
+      "canonical_name": "半兽勇士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 39,
+      "canonical_name": "半兽勇士1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 41,
+      "canonical_name": "半兽勇士9",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 42,
+      "canonical_name": "半兽统领",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 43,
+      "canonical_name": "山洞蝙蝠",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 45,
+      "canonical_name": "蝎子",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 46,
+      "canonical_name": "洞蛆",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 47,
+      "canonical_name": "骷髅",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 50,
+      "canonical_name": "掷斧骷髅",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 52,
+      "canonical_name": "骷髅战士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 54,
+      "canonical_name": "骷髅战将",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 55,
+      "canonical_name": "骷髅战将0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 56,
+      "canonical_name": "骷髅精灵",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 57,
+      "canonical_name": "骷髅精灵1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 59,
+      "canonical_name": "骷髅精灵9",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": true
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 60,
+      "canonical_name": "粪虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 62,
+      "canonical_name": "暗黑战士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 64,
+      "canonical_name": "沃玛战士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 66,
+      "canonical_name": "沃玛勇士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 68,
+      "canonical_name": "沃玛战将",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 70,
+      "canonical_name": "火焰沃玛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 73,
+      "canonical_name": "沃玛卫士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 74,
+      "canonical_name": "沃玛卫士1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 75,
+      "canonical_name": "沃玛卫士2",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 76,
+      "canonical_name": "沃玛教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 77,
+      "canonical_name": "沃玛教主1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "HUMAN_FROZEN",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC",
+        "override_of_a06_recommendation": {
+          "role": "NON_LOOT",
+          "factor": 0
+        }
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 78,
+      "canonical_name": "沃玛教主9",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": true
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 79,
+      "canonical_name": "僵尸1",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "PRESENTATION",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 81,
+      "canonical_name": "僵尸2",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "PRESENTATION",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 83,
+      "canonical_name": "僵尸3",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "PRESENTATION",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 85,
+      "canonical_name": "僵尸4",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "PRESENTATION",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 87,
+      "canonical_name": "僵尸5",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "PRESENTATION",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 89,
+      "canonical_name": "尸王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 90,
+      "canonical_name": "尸王1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 91,
+      "canonical_name": "尸王2",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 92,
+      "canonical_name": "红蛇",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 94,
+      "canonical_name": "虎蛇",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 96,
+      "canonical_name": "羊",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 97,
+      "canonical_name": "猎鹰",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 100,
+      "canonical_name": "狼",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 101,
+      "canonical_name": "盔甲虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 103,
+      "canonical_name": "威思而小虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 104,
+      "canonical_name": "沙虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 105,
+      "canonical_name": "多角虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 107,
+      "canonical_name": "巨型多角虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 116,
+      "canonical_name": "巨型蠕虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 118,
+      "canonical_name": "钳虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 120,
+      "canonical_name": "邪恶钳虫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 121,
+      "canonical_name": "邪恶钳虫1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 122,
+      "canonical_name": "邪恶钳虫2",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 123,
+      "canonical_name": "邪恶钳虫9",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 124,
+      "canonical_name": "触龙神",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 126,
+      "canonical_name": "角蝇",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 127,
+      "canonical_name": "蝙蝠",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 128,
+      "canonical_name": "楔蛾",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 129,
+      "canonical_name": "红野猪",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 131,
+      "canonical_name": "红野猪3",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_JP",
+      "role_factor": 4,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_JP",
+        "factor": 4,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 132,
+      "canonical_name": "黑野猪",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 133,
+      "canonical_name": "黑野猪0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 134,
+      "canonical_name": "黑野猪3",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_JP",
+      "role_factor": 4,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_JP",
+        "factor": 4,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 135,
+      "canonical_name": "白野猪",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 136,
+      "canonical_name": "白野猪0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 137,
+      "canonical_name": "白野猪1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "HUMAN_FROZEN",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC",
+        "override_of_a06_recommendation": {
+          "role": "NON_LOOT",
+          "factor": 0
+        }
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 138,
+      "canonical_name": "蝎蛇",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 140,
+      "canonical_name": "蝎蛇3",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_JP",
+      "role_factor": 4,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_JP",
+        "factor": 4,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 141,
+      "canonical_name": "邪恶毒蛇",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MINOR_BOSS",
+        "factor": 6,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 142,
+      "canonical_name": "邪恶毒蛇1",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MINOR_BOSS",
+      "role_factor": 6,
+      "reporting_label": null,
+      "assignment_authority": "HUMAN_FROZEN",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC",
+        "override_of_a06_recommendation": {
+          "role": "NON_LOOT",
+          "factor": 0
+        }
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 143,
+      "canonical_name": "石墓尸王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "BOSS",
+      "role_factor": 8,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "BOSS",
+        "factor": 8,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 144,
+      "canonical_name": "蜜蜂",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 145,
+      "canonical_name": "变异骷髅0",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 146,
+      "canonical_name": "神兽0",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 147,
+      "canonical_name": "神兽2",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 148,
+      "canonical_name": "大老鼠",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 150,
+      "canonical_name": "祖玛弓箭手",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 152,
+      "canonical_name": "祖玛弓箭手3",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_JP",
+      "role_factor": 4,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_JP",
+        "factor": 4,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 153,
+      "canonical_name": "祖玛雕像",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 155,
+      "canonical_name": "祖玛雕像3",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_JP",
+      "role_factor": 4,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_JP",
+        "factor": 4,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 156,
+      "canonical_name": "祖玛卫士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 157,
+      "canonical_name": "祖玛卫士0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 158,
+      "canonical_name": "祖玛卫士3",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_JP",
+      "role_factor": 4,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_JP",
+        "factor": 4,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 159,
+      "canonical_name": "祖玛卫士00",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "OFFICIAL_SUPER_JP",
+      "role_factor": 5,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "OFFICIAL_SUPER_JP",
+        "factor": 5,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 160,
+      "canonical_name": "祖玛教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 161,
+      "canonical_name": "祖玛教主9",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": true
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 162,
+      "canonical_name": "双头血魔",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ENDGAME_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ENDGAME_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 163,
+      "canonical_name": "双头金刚",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ENDGAME_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ENDGAME_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 164,
+      "canonical_name": "血巨人",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 166,
+      "canonical_name": "血僵尸",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 176,
+      "canonical_name": "天狼蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 180,
+      "canonical_name": "赤月恶魔",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ENDGAME_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ENDGAME_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 182,
+      "canonical_name": "幻影蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 183,
+      "canonical_name": "爆裂蜘蛛",
+      "runtime_allowed": false,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 185,
+      "canonical_name": "剧毒蜘蛛",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 186,
+      "canonical_name": "鹰卫",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 187,
+      "canonical_name": "虎卫",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NON_LOOT",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 188,
+      "canonical_name": "虹魔猪卫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 189,
+      "canonical_name": "虹魔猪卫0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 190,
+      "canonical_name": "虹魔猪卫9",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 191,
+      "canonical_name": "虹魔蝎卫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 192,
+      "canonical_name": "虹魔蝎卫0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ELITE",
+      "role_factor": 3,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ELITE",
+        "factor": 3,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 193,
+      "canonical_name": "虹魔教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 194,
+      "canonical_name": "恶魔弓箭手",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 195,
+      "canonical_name": "千年树妖",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "BOSS",
+      "role_factor": 8,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "BOSS",
+        "factor": 8,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 196,
+      "canonical_name": "恶灵僵尸",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 198,
+      "canonical_name": "恶灵尸王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "BOSS",
+      "role_factor": 8,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "BOSS",
+        "factor": 8,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 199,
+      "canonical_name": "恶灵尸王0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "BOSS",
+      "role_factor": 8,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "BOSS",
+        "factor": 8,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 200,
+      "canonical_name": "骷髅锤兵",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 202,
+      "canonical_name": "骷髅长枪兵",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 204,
+      "canonical_name": "骷髅刀斧手",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 206,
+      "canonical_name": "骷髅弓箭手",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 208,
+      "canonical_name": "黄泉教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 209,
+      "canonical_name": "黄泉教主0",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": true
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 210,
+      "canonical_name": "牛头魔",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "COMMON",
+      "role_factor": 1,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "COMMON",
+        "factor": 1,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 212,
+      "canonical_name": "牛魔战士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 214,
+      "canonical_name": "牛魔斗士",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 216,
+      "canonical_name": "牛魔侍卫",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 218,
+      "canonical_name": "牛魔将军",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 220,
+      "canonical_name": "牛魔法师",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 222,
+      "canonical_name": "牛魔祭司",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "STRONG_COMMON",
+      "role_factor": 1.5,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "STRONG_COMMON",
+        "factor": 1.5,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 224,
+      "canonical_name": "牛魔王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "MAJOR_BOSS",
+      "role_factor": 12,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "MAJOR_BOSS",
+        "factor": 12,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 225,
+      "canonical_name": "暗之牛魔王",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "ENDGAME_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "ENDGAME_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 226,
+      "canonical_name": "宝箱",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 227,
+      "canonical_name": "宝箱1",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 228,
+      "canonical_name": "宝箱2",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 229,
+      "canonical_name": "宝箱3",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 230,
+      "canonical_name": "宝箱4",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 231,
+      "canonical_name": "宝箱5",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 232,
+      "canonical_name": "宝箱6",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 233,
+      "canonical_name": "宝箱7",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 234,
+      "canonical_name": "宝箱8",
+      "runtime_allowed": true,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    },
+    {
+      "canonical_monster_id": 235,
+      "canonical_name": "暗之双头血魔",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "NEW_CLOTHES_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NEW_CLOTHES_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": true,
+      "new_clothes_item_id": 140
+    },
+    {
+      "canonical_monster_id": 236,
+      "canonical_name": "暗之双头金刚",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "NEW_CLOTHES_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NEW_CLOTHES_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": true,
+      "new_clothes_item_id": 144
+    },
+    {
+      "canonical_monster_id": 237,
+      "canonical_name": "暗之黄泉教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "NEW_CLOTHES_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NEW_CLOTHES_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": true,
+      "new_clothes_item_id": 142
+    },
+    {
+      "canonical_monster_id": 238,
+      "canonical_name": "暗之骷髅精灵",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "NEW_CLOTHES_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NEW_CLOTHES_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": true,
+      "new_clothes_item_id": 141
+    },
+    {
+      "canonical_monster_id": 239,
+      "canonical_name": "暗之沃玛教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "NEW_CLOTHES_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NEW_CLOTHES_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": true,
+      "new_clothes_item_id": 145
+    },
+    {
+      "canonical_monster_id": 240,
+      "canonical_name": "暗之虹魔教主",
+      "runtime_allowed": true,
+      "drop_enabled": true,
+      "drop_role": "NEW_CLOTHES_BOSS",
+      "role_factor": 16,
+      "reporting_label": null,
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "NEW_CLOTHES_BOSS",
+        "factor": 16,
+        "conflict": false
+      },
+      "state_reconciliation": null,
+      "new_clothes_eligible": true,
+      "new_clothes_item_id": 143
+    },
+    {
+      "canonical_monster_id": 241,
+      "canonical_name": "飞火流星",
+      "runtime_allowed": false,
+      "drop_enabled": false,
+      "drop_role": null,
+      "role_factor": null,
+      "reporting_label": "NON_LOOT",
+      "assignment_authority": "A0_6_DETERMINISTIC_ACCEPTED",
+      "authority_evidence": {
+        "decision_document": "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md",
+        "decision_document_sha256": "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+      },
+      "a06_source_recommendation": {
+        "role": "SYSTEM",
+        "factor": 0,
+        "conflict": false
+      },
+      "state_reconciliation": "A0_7_ZERO_ROLE_TO_DISABLED_NON_LOOT",
+      "new_clothes_eligible": false,
+      "new_clothes_item_id": null
+    }
+  ]
+}

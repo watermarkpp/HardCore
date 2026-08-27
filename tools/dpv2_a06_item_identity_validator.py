@@ -30,6 +30,9 @@ EXPECTED_MISSING_COUNT = 53
 RESERVED_START = 920001
 RESERVED_END = 920053
 DECISION_DOCUMENT_RELATIVE = "docs/drop/DPV2_A06_AUTHORITY_DECISION.md"
+DOWNSTREAM_TIER_AUTHORITY_RELATIVE = (
+    "assets/data/drop/dpv2_item_tier_authority_v1.json"
+)
 DECISION_DOCUMENT_SHA256 = (
     "70f76cc3c7aca7ca3cdbd5186c06ae7b5a9ded173fc0dede12c0d422a7e969e4"
 )
@@ -243,8 +246,11 @@ def _reserved_text_hits(
             len(relative_parts) >= 3
             and relative_parts[0] == "docs"
             and relative_parts[1] == "drop"
-            and relative_parts[2].startswith("DPV2_A06_")
-        ) or relative_parts[:1] == ("outputs",):
+            and relative_parts[2].startswith(("DPV2_A06_", "DPV2_A07_"))
+        ) or relative_parts[:1] == ("outputs",) or (
+            relative_parts[:1] == ("tools",)
+            and "dpv2_a07" in path.name.lower()
+        ):
             continue
         try:
             text = path.read_text(encoding="utf-8")
@@ -493,7 +499,13 @@ def validate_authority_documents(
     if len(service_indices) != EXPECTED_MISSING_COUNT:
         raise AuthorityValidationError("authority service indices are not unique")
 
+    # The A0.7 Tier Authority is an explicit downstream reference to this
+    # allocation, not a second identity allocation. Its own validator checks
+    # exact one-to-one parity with these records.
+    downstream_tier_authority = (repo_root / DOWNSTREAM_TIER_AUTHORITY_RELATIVE).resolve()
     excluded = {authority_path.resolve()}
+    if downstream_tier_authority.exists():
+        excluded.add(downstream_tier_authority)
     existing_by_file = _existing_formal_ids(repo_root, excluded)
     existing_ids = {
         item_id
