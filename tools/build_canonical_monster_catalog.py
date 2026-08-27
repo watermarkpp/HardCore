@@ -215,9 +215,9 @@ def validate_special_normal_authority(
     require(drop_binding.get("role_authority_path") == DPV2_ROLE_AUTHORITY_PATH.relative_to(ROOT).as_posix(), "role authority path drift")
     require(drop_binding.get("item_tier_authority_path") == DPV2_ITEM_TIER_AUTHORITY_PATH.relative_to(ROOT).as_posix(), "Tier authority path drift")
     require(drop_binding.get("source_rate_policy") == SPECIAL_NORMAL_SOURCE_RATE_POLICY, "source_rate policy drift")
-    require(drop_binding.get("production_active") is False, "special_normal production is active")
-    require(drop_binding.get("phase_1_allowed") is False, "special_normal phase 1 is allowed")
-    require(drop_binding.get("runtime_consumer") is None, "special_normal has a runtime consumer")
+    require(drop_binding.get("production_active") is True, "special_normal production binding is inactive")
+    require(drop_binding.get("phase_1_allowed") is True, "special_normal phase 1 binding is blocked")
+    require(drop_binding.get("runtime_consumer") == "scripts/layers/runtime/loot_runtime_service.gd", "special_normal runtime consumer drift")
     require(drop_binding.get("persistence_consumer") is None, "special_normal has a persistence consumer")
     require(
         authority.get("spawn_activation")
@@ -1028,7 +1028,7 @@ def build_catalog() -> dict[str, Any]:
                     "source_rate_role": special_normal_row["source_rate_role"],
                 },
                 "production_active": True,
-                "phase_1_allowed": False,
+                "phase_1_allowed": True,
             }
         art_profile_id = id_to_art.get(monster_id, f"appearance.unresolved.{monster_id}")
         if monster_id not in id_to_art:
@@ -1633,7 +1633,7 @@ def build_catalog() -> dict[str, Any]:
             "sha256": sha256_file(SPECIAL_NORMAL_AUTHORITY_PATH),
             "canonical_monster_ids": sorted(SPECIAL_NORMAL_IDS),
             "production_active": True,
-            "phase_1_allowed": False,
+            "phase_1_allowed": True,
         },
         "appearance_profiles": appearance_profiles,
         "drop_profiles": drop_profiles,

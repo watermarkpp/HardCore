@@ -27,6 +27,18 @@ const CANONICAL_MONSTER_CATALOG_PATH := (
 const ITEM_RUNTIME_AUTHORITY_PATH := (
 	"res://assets/data/item_runtime_authority_v1.json"
 )
+const DPV2_ITEM_TIER_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_item_tier_authority_v1.json"
+)
+const DPV2_MONSTER_ROLE_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_monster_role_authority_v1.json"
+)
+const DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
+)
+const DPV2_DROP_RUNTIME_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_drop_runtime_authority_v1.json"
+)
 
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
@@ -70,6 +82,10 @@ var equipment_price_candidates: Dictionary = {}
 var merchant_catalog: Dictionary = {}
 var canonical_monster_catalog: Dictionary = {}
 var item_runtime_authority: Dictionary = {}
+var dpv2_item_tier_authority: Dictionary = {}
+var dpv2_monster_role_authority: Dictionary = {}
+var dpv2_global_drop_rate_authority: Dictionary = {}
+var dpv2_drop_runtime_authority: Dictionary = {}
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -96,6 +112,12 @@ var _price_by_name: Dictionary = {}
 var _price_by_item_id: Dictionary = {}
 var _price_by_service_index: Dictionary = {}
 var _bich_quests_by_id: Dictionary = {}
+var _dpv2_item_tier_by_id: Dictionary = {}
+var _dpv2_item_tier_by_name: Dictionary = {}
+var _dpv2_monster_role_by_id: Dictionary = {}
+var _dpv2_global_scale_by_preset: Dictionary = {}
+var _dpv2_item_overflow_by_id: Dictionary = {}
+var _dpv2_item_overflow_by_name: Dictionary = {}
 
 const CANONICAL_MONSTER_COUNTS_CONTRACT_ID := (
 	"monster.catalog.runtime_counts.v1"
@@ -173,6 +195,8 @@ func load_database() -> bool:
 	_load_service_reference()
 	_load_service_item_catalog()
 	if not _load_item_runtime_authority():
+		return false
+	if not _load_dpv2_drop_authorities():
 		return false
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
@@ -317,6 +341,227 @@ func _load_item_runtime_authority() -> bool:
 						return false
 
 	item_runtime_authority = parsed
+	return true
+
+
+func _load_dpv2_drop_authorities() -> bool:
+	dpv2_item_tier_authority = {}
+	dpv2_monster_role_authority = {}
+	dpv2_global_drop_rate_authority = {}
+	dpv2_drop_runtime_authority = {}
+	_dpv2_item_tier_by_id.clear()
+	_dpv2_item_tier_by_name.clear()
+	_dpv2_monster_role_by_id.clear()
+	_dpv2_global_scale_by_preset.clear()
+	_dpv2_item_overflow_by_id.clear()
+	_dpv2_item_overflow_by_name.clear()
+
+	for path: String in [
+		DPV2_ITEM_TIER_AUTHORITY_PATH,
+		DPV2_MONSTER_ROLE_AUTHORITY_PATH,
+		DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
+		DPV2_DROP_RUNTIME_AUTHORITY_PATH,
+	]:
+		if not FileAccess.file_exists(path):
+			load_error = "dpv2_drop_authority_missing:%s" % path
+			return false
+
+	var tier_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_ITEM_TIER_AUTHORITY_PATH)
+	)
+	var role_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_MONSTER_ROLE_AUTHORITY_PATH)
+	)
+	var global_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH)
+	)
+	var runtime_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_DROP_RUNTIME_AUTHORITY_PATH)
+	)
+	if (
+		not tier_value is Dictionary
+		or not role_value is Dictionary
+		or not global_value is Dictionary
+		or not runtime_value is Dictionary
+	):
+		load_error = "dpv2_drop_authority_invalid_json"
+		return false
+
+	var tier_authority: Dictionary = tier_value
+	var role_authority: Dictionary = role_value
+	var global_authority: Dictionary = global_value
+	var runtime_authority: Dictionary = runtime_value
+	if (
+		str(tier_authority.get("schema", ""))
+			!= "hardcore.dpv2.item_tier_authority.v1"
+	):
+		load_error = "dpv2_item_tier_authority_contract_invalid"
+		return false
+	if (
+		str(role_authority.get("schema", ""))
+			!= "hardcore.dpv2.monster_role_authority.v1"
+	):
+		load_error = "dpv2_monster_role_authority_contract_invalid"
+		return false
+	if (
+		str(runtime_authority.get("schema", ""))
+			!= "hardcore.dpv2.drop_runtime_authority.v1"
+		or not bool(runtime_authority.get("activation", {}).get("production_active", false))
+		or int(runtime_authority.get("ground_overflow_policy", {}).get(
+			"maximum_ground_slots", 0
+		)) != 9
+		or int(runtime_authority.get("source_slot_contract", {}).get(
+			"canonical_source_slot_count", 0
+		)) != 7032
+		or bool(runtime_authority.get("source_slot_contract", {}).get(
+			"source_slot_mutated", true
+		))
+	):
+		load_error = "dpv2_drop_runtime_authority_contract_invalid"
+		return false
+	if (
+		str(global_authority.get("schema", ""))
+			!= "hardcore.dpv2.global_drop_rate_authority.v1"
+		or not bool(global_authority.get("activation", {}).get("production_active", false))
+		or str(global_authority.get("authority", {}).get("control_key", ""))
+			!= "global_drop_rate_scale"
+	):
+		load_error = "dpv2_global_drop_rate_authority_contract_invalid"
+		return false
+
+	var tier_records: Variant = tier_authority.get("records", [])
+	if not tier_records is Array or tier_records.size() != 233:
+		load_error = "dpv2_item_tier_authority_count_invalid"
+		return false
+	for raw_record: Variant in tier_records:
+		if not raw_record is Dictionary:
+			load_error = "dpv2_item_tier_record_invalid"
+			return false
+		var record: Dictionary = raw_record
+		var item_id := int(record.get("canonical_item_id", -1))
+		var item_name := str(record.get("canonical_name", ""))
+		if (
+			item_id <= 0
+			or item_name.is_empty()
+			or str(record.get("tier_status", "")) != "RESOLVED"
+			or int(record.get("base_denominator", 0)) <= 0
+			or record.get("denominator_override", null) != null
+			or _dpv2_item_tier_by_id.has(item_id)
+			or _dpv2_item_tier_by_name.has(item_name)
+		):
+			load_error = "dpv2_item_tier_record_identity_invalid"
+			return false
+		_dpv2_item_tier_by_id[item_id] = record.duplicate(true)
+		_dpv2_item_tier_by_name[item_name] = record.duplicate(true)
+	var overflow_records: Variant = runtime_authority.get("item_overflow_records", [])
+	if not overflow_records is Array or overflow_records.size() != 233:
+		load_error = "dpv2_item_overflow_authority_count_invalid"
+		return false
+	for raw_overflow: Variant in overflow_records:
+		if not raw_overflow is Dictionary:
+			load_error = "dpv2_item_overflow_record_invalid"
+			return false
+		var overflow_record: Dictionary = raw_overflow
+		var overflow_item_id := int(overflow_record.get("canonical_item_id", -1))
+		var overflow_name := str(overflow_record.get("canonical_name", ""))
+		var priority := int(overflow_record.get("overflow_priority", 0))
+		var tier_match: Variant = _dpv2_item_tier_by_id.get(overflow_item_id, {})
+		if (
+			overflow_item_id <= 0
+			or overflow_name.is_empty()
+			or priority not in [100, 200, 300]
+			or _dpv2_item_overflow_by_id.has(overflow_item_id)
+			or _dpv2_item_overflow_by_name.has(overflow_name)
+			or not tier_match is Dictionary
+			or str(tier_match.get("canonical_name", "")) != overflow_name
+		):
+			load_error = "dpv2_item_overflow_identity_invalid"
+			return false
+		_dpv2_item_overflow_by_id[overflow_item_id] = overflow_record.duplicate(true)
+		_dpv2_item_overflow_by_name[overflow_name] = overflow_record.duplicate(true)
+	var gold_policy: Variant = runtime_authority.get("gold_policy", {})
+	if (
+		not gold_policy is Dictionary
+		or str(gold_policy.get("tier", "")) != "GOLD_COMMON"
+		or int(gold_policy.get("base_denominator", 0)) <= 0
+		or int(gold_policy.get("overflow_priority", 0)) != 100
+		or bool(gold_policy.get("protected_drop", true))
+	):
+		load_error = "dpv2_gold_tier_policy_invalid"
+		return false
+
+	var role_records: Variant = role_authority.get("monsters", [])
+	if not role_records is Array or role_records.size() != 156:
+		load_error = "dpv2_monster_role_authority_count_invalid"
+		return false
+	for raw_role: Variant in role_records:
+		if not raw_role is Dictionary:
+			load_error = "dpv2_monster_role_record_invalid"
+			return false
+		var role_record: Dictionary = raw_role
+		var monster_id := int(role_record.get("canonical_monster_id", -1))
+		var drop_enabled := bool(role_record.get("drop_enabled", false))
+		var drop_role: Variant = role_record.get("drop_role", null)
+		var role_factor: Variant = role_record.get("role_factor", null)
+		if monster_id <= 0 or _dpv2_monster_role_by_id.has(monster_id):
+			load_error = "dpv2_monster_role_identity_invalid"
+			return false
+		if drop_enabled:
+			var role_ratio := _dpv2_role_ratio(str(drop_role))
+			if (
+				role_ratio.x <= 0
+				or role_ratio.y <= 0
+				or role_factor == null
+				or not is_equal_approx(
+					float(role_factor),
+					float(role_ratio.x) / float(role_ratio.y)
+				)
+			):
+				load_error = "dpv2_monster_probability_role_invalid"
+				return false
+		elif (
+			drop_role != null
+			or role_factor != null
+			or str(role_record.get("reporting_label", "")) != "NON_LOOT"
+		):
+			load_error = "dpv2_non_loot_state_invalid"
+			return false
+		_dpv2_monster_role_by_id[monster_id] = role_record.duplicate(true)
+
+	var expected_presets := {
+		"0.5x": Vector2i(1, 2),
+		"0.8x": Vector2i(4, 5),
+		"1x": Vector2i(1, 1),
+		"1.5x": Vector2i(3, 2),
+		"2x": Vector2i(2, 1),
+	}
+	var presets: Variant = global_authority.get("presets", [])
+	if not presets is Array or presets.size() != expected_presets.size():
+		load_error = "dpv2_global_drop_rate_presets_invalid"
+		return false
+	for raw_preset: Variant in presets:
+		if not raw_preset is Dictionary:
+			load_error = "dpv2_global_drop_rate_preset_invalid"
+			return false
+		var preset: Dictionary = raw_preset
+		var preset_name := str(preset.get("preset", ""))
+		var ratio := Vector2i(
+			int(preset.get("numerator", 0)),
+			int(preset.get("denominator", 0))
+		)
+		if not expected_presets.has(preset_name) or ratio != expected_presets[preset_name]:
+			load_error = "dpv2_global_drop_rate_preset_ratio_invalid"
+			return false
+		_dpv2_global_scale_by_preset[preset_name] = ratio
+	var active_preset := str(global_authority.get("active_preset", ""))
+	if not _dpv2_global_scale_by_preset.has(active_preset):
+		load_error = "dpv2_global_drop_rate_active_preset_invalid"
+		return false
+
+	dpv2_item_tier_authority = tier_authority
+	dpv2_monster_role_authority = role_authority
+	dpv2_global_drop_rate_authority = global_authority
+	dpv2_drop_runtime_authority = runtime_authority
 	return true
 
 
@@ -1211,8 +1456,151 @@ func resolve_canonical_drop_reward(drop_entry: Dictionary) -> Dictionary:
 	var item_result := resolve_canonical_drop_item(drop_entry)
 	if not bool(item_result.get("ok", false)):
 		return item_result
+	var item_authority: Variant = _dpv2_item_tier_by_name.get(
+		str(item_result.get("item_name", "")), {}
+	)
+	if not item_authority is Dictionary or item_authority.is_empty():
+		return {"ok": false, "reason": "dpv2_item_tier_authority_unresolved"}
+	item_result["canonical_item_id"] = int(
+		item_authority.get("canonical_item_id", -1)
+	)
 	item_result["kind"] = "item"
 	return item_result
+
+
+func dpv2_monster_drop_state(monster_id: int) -> Dictionary:
+	var resolved_id := canonical_monster_id(monster_id)
+	var value: Variant = _dpv2_monster_role_by_id.get(resolved_id, {})
+	return value.duplicate(true) if value is Dictionary else {}
+
+
+func dpv2_active_global_drop_rate() -> Dictionary:
+	var preset := str(dpv2_global_drop_rate_authority.get("active_preset", ""))
+	var ratio: Variant = _dpv2_global_scale_by_preset.get(preset, Vector2i.ZERO)
+	if not ratio is Vector2i or ratio.x <= 0 or ratio.y <= 0:
+		return {}
+	return {
+		"preset": preset,
+		"numerator": ratio.x,
+		"denominator": ratio.y,
+	}
+
+
+func dpv2_ground_slot_limit() -> int:
+	return int(
+		dpv2_drop_runtime_authority.get("ground_overflow_policy", {}).get(
+			"maximum_ground_slots", 0
+		)
+	)
+
+
+func dpv2_resolve_reward_policy(monster_id: int, reward: Dictionary) -> Dictionary:
+	var monster_state := dpv2_monster_drop_state(monster_id)
+	if monster_state.is_empty():
+		return {"ok": false, "reason": "monster_role_authority_unresolved"}
+	if not bool(monster_state.get("drop_enabled", false)):
+		return {
+			"ok": false,
+			"reason": "drop_disabled",
+			"reporting_label": str(monster_state.get("reporting_label", "")),
+		}
+	var role := str(monster_state.get("drop_role", ""))
+	var role_ratio := _dpv2_role_ratio(role)
+	if role_ratio.x <= 0 or role_ratio.y <= 0:
+		return {"ok": false, "reason": "monster_probability_role_invalid"}
+
+	var reward_policy: Dictionary = {}
+	var reward_kind := str(reward.get("kind", ""))
+	if reward_kind == "gold":
+		var gold_value: Variant = dpv2_drop_runtime_authority.get("gold_policy", {})
+		if gold_value is Dictionary:
+			reward_policy = gold_value.duplicate(true)
+	elif reward_kind == "item":
+		var item_name := str(reward.get("item_name", ""))
+		var item_value: Variant = _dpv2_item_tier_by_name.get(item_name, {})
+		if item_value is Dictionary:
+			reward_policy = item_value.duplicate(true)
+		var overflow_value: Variant = _dpv2_item_overflow_by_name.get(
+			item_name, {}
+		)
+		if overflow_value is Dictionary:
+			for key: Variant in overflow_value.keys():
+				reward_policy[key] = overflow_value[key]
+	else:
+		return {"ok": false, "reason": "reward_kind_invalid"}
+	if reward_policy.is_empty():
+		return {"ok": false, "reason": "reward_tier_authority_unresolved"}
+
+	var base_denominator := int(reward_policy.get("base_denominator", 0))
+	var global_scale := dpv2_active_global_drop_rate()
+	if base_denominator <= 0 or global_scale.is_empty():
+		return {"ok": false, "reason": "drop_probability_authority_invalid"}
+	var numerator := role_ratio.x * int(global_scale.get("numerator", 0))
+	var denominator := (
+		role_ratio.y
+		* int(global_scale.get("denominator", 0))
+		* base_denominator
+	)
+	if numerator <= 0 or denominator <= 0:
+		return {"ok": false, "reason": "drop_probability_ratio_invalid"}
+	if numerator >= denominator:
+		numerator = 1
+		denominator = 1
+	else:
+		var divisor := _positive_gcd(numerator, denominator)
+		numerator /= divisor
+		denominator /= divisor
+	return {
+		"ok": true,
+		"reason": "",
+		"role": role,
+		"role_factor_numerator": role_ratio.x,
+		"role_factor_denominator": role_ratio.y,
+		"tier": str(reward_policy.get("tier", "")),
+		"base_denominator": base_denominator,
+		"global_preset": str(global_scale.get("preset", "")),
+		"probability_numerator": numerator,
+		"probability_denominator": denominator,
+		"overflow_class": str(reward_policy.get("overflow_class", (
+			"ORDINARY_CONSUMABLE" if reward_kind == "gold" else ""
+		))),
+		"protected_drop": bool(reward_policy.get("protected_drop", false)),
+		"overflow_priority": int(reward_policy.get("overflow_priority", 0)),
+		"canonical_item_id": int(reward_policy.get("canonical_item_id", -1)),
+	}
+
+
+func _dpv2_role_ratio(role: String) -> Vector2i:
+	match role:
+		"COMMON":
+			return Vector2i(1, 1)
+		"STRONG_COMMON":
+			return Vector2i(3, 2)
+		"ELITE":
+			return Vector2i(3, 1)
+		"OFFICIAL_JP":
+			return Vector2i(4, 1)
+		"OFFICIAL_SUPER_JP":
+			return Vector2i(5, 1)
+		"MINOR_BOSS":
+			return Vector2i(6, 1)
+		"BOSS":
+			return Vector2i(8, 1)
+		"MAJOR_BOSS":
+			return Vector2i(12, 1)
+		"ENDGAME_BOSS", "NEW_CLOTHES_BOSS":
+			return Vector2i(16, 1)
+	return Vector2i.ZERO
+
+
+func _positive_gcd(left: int, right: int) -> int:
+	var a := absi(left)
+	var b := absi(right)
+	while b != 0:
+		var remainder := a % b
+		a = b
+		b = remainder
+	return maxi(1, a)
 
 
 func get_map_by_id(map_id: int) -> Dictionary:

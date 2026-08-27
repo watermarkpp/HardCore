@@ -8518,7 +8518,7 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	var stats: Dictionary = combat.get("stats", {})
 	PlayerState.record_kill(str(canonical_monster.get("canonical_name", "")))
 	PlayerState.add_experience(int(stats.get("exp", 0)))
-	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, 6)
+	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng)
 	for item_name: String in drop_roll.get("items", []):
 		_spawn_loot(item_name, death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18)))
 	for raw_gold: Variant in drop_roll.get("gold_drops", []):

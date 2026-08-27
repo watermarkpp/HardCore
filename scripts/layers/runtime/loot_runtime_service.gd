@@ -5,8 +5,7 @@ const DROP_CONTRACT_ID := "monster.loot.canonical_id_only.v1"
 
 func roll_monster_drops(
 	monster_id: int,
-	rng: RandomNumberGenerator,
-	maximum := 6
+	rng: RandomNumberGenerator
 ) -> Dictionary:
 	var result := {
 		"contract_id": DROP_CONTRACT_ID,
@@ -17,8 +16,15 @@ func roll_monster_drops(
 		"resolution_attempted_count": 0,
 		"resolved_entry_count": 0,
 		"resolved_gold_count": 0,
+		"rng_roll_count": 0,
+		"successful_roll_count": 0,
+		"ground_output_count": 0,
+		"overflow_discarded_count": 0,
+		"protected_overflow_count": 0,
+		"all_resolved_slots_rng": false,
 		"items": [],
 		"gold_drops": [],
+		"overflow_discarded": [],
 		"rejected_entries": [],
 	}
 	var resolved_id := GameData.canonical_monster_id(monster_id)
@@ -42,6 +48,15 @@ func roll_monster_drops(
 		else:
 			result.reason = "monster_not_runtime_allowed"
 		return result
+	var monster_drop_state := GameData.dpv2_monster_drop_state(resolved_id)
+	if monster_drop_state.is_empty():
+		result.reason = "monster_role_authority_unresolved"
+		return result
+	if not bool(monster_drop_state.get("drop_enabled", false)):
+		result.configured = true
+		result.reason = "drop_disabled"
+		result.all_resolved_slots_rng = true
+		return result
 	var profile := GameData.get_canonical_monster_drop_profile(resolved_id)
 	if profile.is_empty():
 		# A legal no-drop entity: canonical policy does not require a non-empty
@@ -60,6 +75,7 @@ func roll_monster_drops(
 			result.configured = true
 			result.reason = ""
 			result.source_entry_count = 0
+			result.all_resolved_slots_rng = true
 			return result
 		result.reason = "drop_profile_missing_or_empty"
 		return result
@@ -79,6 +95,7 @@ func roll_monster_drops(
 			result.configured = true
 			result.reason = ""
 			result.source_entry_count = 0
+			result.all_resolved_slots_rng = true
 			return result
 		result.reason = "drop_profile_missing_or_empty"
 		return result
@@ -88,21 +105,13 @@ func roll_monster_drops(
 	if rng == null:
 		result.reason = "rng_missing"
 		return result
-	var limit := maxi(0, int(maximum))
+	var successful_rewards: Array = []
 	for raw_entry: Variant in entries:
 		result.resolution_attempted_count += 1
 		if not raw_entry is Dictionary:
 			_append_rejection(result, -1, "drop_entry_invalid")
 			continue
 		var entry: Dictionary = raw_entry
-		var denominator := _chance_denominator(str(entry.get("chance", "")))
-		if denominator <= 0:
-			_append_rejection(
-				result,
-				int(entry.get("line_number", -1)),
-				"chance_token_invalid"
-			)
-			continue
 		var reward := GameData.resolve_canonical_drop_reward(entry)
 		if not bool(reward.get("ok", false)):
 			_append_rejection(
@@ -111,18 +120,100 @@ func roll_monster_drops(
 				str(reward.get("reason", "item_authority_unresolved"))
 			)
 			continue
-		result.resolved_entry_count += 1
-		if result.items.size() + result.gold_drops.size() >= limit:
+		var policy := GameData.dpv2_resolve_reward_policy(resolved_id, reward)
+		if not bool(policy.get("ok", false)):
+			_append_rejection(
+				result,
+				int(entry.get("line_number", -1)),
+				str(policy.get("reason", "drop_probability_authority_invalid"))
+			)
 			continue
-		if rng.randi_range(1, denominator) == 1:
-			if str(reward.get("kind", "")) == "gold":
-				result.resolved_gold_count += 1
-				result.gold_drops.append(
-					int(reward.get("gold_amount", 0))
-				)
-			else:
-				result.items.append(str(reward.get("item_name", "")))
+		result.resolved_entry_count += 1
+		result.rng_roll_count += 1
+		var numerator := int(policy.get("probability_numerator", 0))
+		var denominator := int(policy.get("probability_denominator", 0))
+		if rng.randi_range(1, denominator) <= numerator:
+			successful_rewards.append({
+				"line_number": int(entry.get("line_number", -1)),
+				"reward": reward.duplicate(true),
+				"policy": policy.duplicate(true),
+			})
+	result.successful_roll_count = successful_rewards.size()
+	result.all_resolved_slots_rng = (
+		result.rng_roll_count == result.resolved_entry_count
+	)
+	var selection := _select_ground_rewards(
+		successful_rewards,
+		rng,
+		GameData.dpv2_ground_slot_limit()
+	)
+	for raw_selected: Variant in selection.get("selected", []):
+		if not raw_selected is Dictionary:
+			continue
+		var selected: Dictionary = raw_selected
+		var reward: Dictionary = selected.get("reward", {})
+		if str(reward.get("kind", "")) == "gold":
+			result.resolved_gold_count += 1
+			result.gold_drops.append(int(reward.get("gold_amount", 0)))
+		else:
+			result.items.append(str(reward.get("item_name", "")))
+	result.overflow_discarded = selection.get("discarded", [])
+	result.ground_output_count = (
+		result.items.size() + result.gold_drops.size()
+	)
+	result.overflow_discarded_count = result.overflow_discarded.size()
+	result.protected_overflow_count = int(
+		selection.get("protected_discarded_count", 0)
+	)
 	return result
+
+
+func _select_ground_rewards(
+	successful_rewards: Array,
+	rng: RandomNumberGenerator,
+	maximum_ground_slots: int
+) -> Dictionary:
+	var result := {
+		"selected": [],
+		"discarded": [],
+		"protected_discarded_count": 0,
+	}
+	var limit := maxi(0, maximum_ground_slots)
+	var groups := {}
+	for raw_candidate: Variant in successful_rewards:
+		if not raw_candidate is Dictionary:
+			continue
+		var candidate: Dictionary = raw_candidate
+		var policy: Dictionary = candidate.get("policy", {})
+		var priority := int(policy.get("overflow_priority", 0))
+		if not groups.has(priority):
+			groups[priority] = []
+		(groups[priority] as Array).append(candidate)
+	var priorities: Array = groups.keys()
+	priorities.sort()
+	priorities.reverse()
+	for raw_priority: Variant in priorities:
+		var group: Array = groups.get(int(raw_priority), []).duplicate(true)
+		_shuffle_candidates(group, rng)
+		for raw_candidate: Variant in group:
+			if result.selected.size() < limit:
+				result.selected.append(raw_candidate)
+			else:
+				result.discarded.append(raw_candidate)
+				var policy: Dictionary = raw_candidate.get("policy", {})
+				if bool(policy.get("protected_drop", false)):
+					result.protected_discarded_count += 1
+	return result
+
+
+func _shuffle_candidates(candidates: Array, rng: RandomNumberGenerator) -> void:
+	if rng == null:
+		return
+	for index in range(candidates.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var temporary: Variant = candidates[index]
+		candidates[index] = candidates[swap_index]
+		candidates[swap_index] = temporary
 
 
 func _chance_denominator(token: String) -> int:

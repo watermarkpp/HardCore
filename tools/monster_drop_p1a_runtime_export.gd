@@ -316,9 +316,8 @@ func _snapshot_slot(
 	)
 	var chance_valid := chance_denominator > 0
 
-	# Probe the real reward resolver for every row so the audit can distinguish
-	# source metadata from actual item authority. The runtime itself only reaches
-	# this resolver after chance validation; runtime_reward_attempted records that.
+	# Probe the real reward resolver for every row. Source chance remains audited
+	# as provenance, but no longer gates the production DPV2 probability roll.
 	var reward_probe: Dictionary = (
 		GameData.resolve_canonical_drop_reward(entry)
 	)
@@ -335,15 +334,27 @@ func _snapshot_slot(
 		"resolved" if reward_resolvable else "unresolved"
 	)
 
-	var slot_runtime_rollable := chance_valid and reward_resolvable
+	var probability_policy: Dictionary = {}
+	if reward_resolvable:
+		probability_policy = GameData.dpv2_resolve_reward_policy(
+			monster_id, reward_probe
+		)
+	var probability_authority_resolvable := bool(
+		probability_policy.get("ok", false)
+	)
+	var slot_runtime_rollable := (
+		reward_resolvable and probability_authority_resolvable
+	)
 	var non_rollable_reason: Variant = null
 	var runtime_rejection_reason: Variant = null
-	if not chance_valid:
-		non_rollable_reason = "invalid_chance"
-		runtime_rejection_reason = "chance_token_invalid"
-	elif not reward_resolvable:
+	if not reward_resolvable:
 		non_rollable_reason = "unresolved_reward"
 		runtime_rejection_reason = reward_resolution_reason
+	elif not probability_authority_resolvable:
+		non_rollable_reason = "probability_authority_blocked"
+		runtime_rejection_reason = str(
+			probability_policy.get("reason", "drop_probability_authority_invalid")
+		)
 
 	var monster_runtime_allowed := bool(closure.get("allowed", false))
 	var monster_runtime_reason := str(closure.get("reason", ""))
@@ -377,12 +388,14 @@ func _snapshot_slot(
 			else null
 		),
 		"reward_probe": reward_probe.duplicate(true),
-		"runtime_reward_attempted": chance_valid,
+		"runtime_reward_attempted": true,
+		"probability_authority_resolvable": probability_authority_resolvable,
+		"probability_policy": probability_policy.duplicate(true),
 		"slot_runtime_rollable": slot_runtime_rollable,
 		# Compatibility alias for the partially implemented R1 tooling.
 		"runtime_rollable": slot_runtime_rollable,
 		"non_rollable_reason": non_rollable_reason,
-		# Exact reason emitted by the real LootRuntime rejection path.
+		# Exact reason emitted by the real LootRuntime authority rejection path.
 		"runtime_rejection_reason": runtime_rejection_reason,
 		"monster_runtime_allowed": monster_runtime_allowed,
 		"monster_runtime_reason": monster_runtime_reason,
@@ -547,24 +560,14 @@ func _check_current_corpus_rows(
 		EXPECTED_ANOMALY_RAW_TEXT,
 		failures
 	)
-	_expect_string(
-		"anomaly.non_rollable_reason",
-		str(anomaly.get("non_rollable_reason", "")),
-		"invalid_chance",
-		failures
-	)
-	_expect_string(
-		"anomaly.runtime_rejection_reason",
-		str(anomaly.get("runtime_rejection_reason", "")),
-		"chance_token_invalid",
-		failures
-	)
-	if bool(anomaly.get("runtime_reward_attempted", true)):
+	if not bool(anomaly.get("runtime_reward_attempted", false)):
 		failures.append(
-			"1/00 anomaly must be rejected before runtime reward resolution"
+			"1/00 provenance anomaly must still reach reward resolution"
 		)
-	if bool(anomaly.get("slot_runtime_rollable", true)):
-		failures.append("1/00 anomaly must not be slot_runtime_rollable")
+	if not bool(anomaly.get("slot_runtime_rollable", false)):
+		failures.append("1/00 provenance anomaly must remain DPV2 runtime rollable")
+	if anomaly.get("runtime_rejection_reason", null) != null:
+		failures.append("1/00 provenance anomaly must not carry a runtime rejection")
 
 
 func _expect_int(

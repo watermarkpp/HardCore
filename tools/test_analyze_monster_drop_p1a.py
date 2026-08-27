@@ -43,6 +43,12 @@ def base_slot() -> dict:
             "item_id": 1,
         },
         "runtime_reward_attempted": True,
+        "probability_authority_resolvable": True,
+        "probability_policy": {
+            "ok": True,
+            "probability_numerator": 1,
+            "probability_denominator": 32,
+        },
         "slot_runtime_rollable": True,
         "runtime_rollable": True,
         "non_rollable_reason": None,
@@ -112,17 +118,16 @@ class P1AAnalyzerContractTest(unittest.TestCase):
             "chance_raw": "1/00",
             "chance_denominator": None,
             "chance_valid": False,
-            # Audit probe can still resolve independently, but real runtime
-            # must not attempt reward resolution for an invalid chance.
+            # Source chance is provenance-only in production DPV2.
             "reward_resolution_status": "resolved",
             "reward_resolvable": True,
             "reward_resolution_reason": None,
-            "runtime_reward_attempted": False,
-            "slot_runtime_rollable": False,
-            "runtime_rollable": False,
-            "non_rollable_reason": "invalid_chance",
-            "runtime_rejection_reason": "chance_token_invalid",
-            "runtime_reachable": False,
+            "runtime_reward_attempted": True,
+            "slot_runtime_rollable": True,
+            "runtime_rollable": True,
+            "non_rollable_reason": None,
+            "runtime_rejection_reason": None,
+            "runtime_reachable": True,
         })
         slot["source_entry"]["chance"] = "1/00"
         self.assertEqual(MODULE.validate_slot_contract(slot), [])
@@ -137,6 +142,8 @@ class P1AAnalyzerContractTest(unittest.TestCase):
                 "ok": False,
                 "reason": "item_authority_unresolved",
             },
+            "probability_authority_resolvable": False,
+            "probability_policy": {},
             "slot_runtime_rollable": False,
             "runtime_rollable": False,
             "non_rollable_reason": "unresolved_reward",
@@ -145,7 +152,7 @@ class P1AAnalyzerContractTest(unittest.TestCase):
         })
         self.assertEqual(MODULE.validate_slot_contract(slot), [])
 
-    def test_invalid_chance_has_priority_over_unresolved_reward(self) -> None:
+    def test_invalid_source_chance_does_not_mask_unresolved_reward(self) -> None:
         slot = base_slot()
         slot.update({
             "chance_denominator": None,
@@ -153,11 +160,13 @@ class P1AAnalyzerContractTest(unittest.TestCase):
             "reward_resolution_status": "unresolved",
             "reward_resolvable": False,
             "reward_resolution_reason": "item_authority_unresolved",
-            "runtime_reward_attempted": False,
+            "runtime_reward_attempted": True,
+            "probability_authority_resolvable": False,
+            "probability_policy": {},
             "slot_runtime_rollable": False,
             "runtime_rollable": False,
-            "non_rollable_reason": "invalid_chance",
-            "runtime_rejection_reason": "chance_token_invalid",
+            "non_rollable_reason": "unresolved_reward",
+            "runtime_rejection_reason": "item_authority_unresolved",
             "runtime_reachable": False,
         })
         self.assertEqual(MODULE.validate_slot_contract(slot), [])
@@ -166,7 +175,11 @@ class P1AAnalyzerContractTest(unittest.TestCase):
         slot = base_slot()
         slot["chance_valid"] = False
         slot["chance_denominator"] = None
-        slot["runtime_reward_attempted"] = False
+        slot["probability_authority_resolvable"] = False
+        slot["probability_policy"] = {
+            "ok": False,
+            "reason": "drop_probability_authority_invalid",
+        }
         errors = MODULE.validate_slot_contract(slot)
         self.assertTrue(
             any("slot_runtime_rollable" in error for error in errors),

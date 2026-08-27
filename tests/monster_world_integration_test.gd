@@ -226,7 +226,7 @@ func _test_loot_contract() -> void:
 	var loot_runtime := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260815
-	var wooma_boss := loot_runtime.roll_monster_drops(76, rng, 6)
+	var wooma_boss := loot_runtime.roll_monster_drops(76, rng)
 	assert(bool(wooma_boss.get("configured", false)), "ID 76 drop profile not configured")
 	assert(int(wooma_boss.get("source_entry_count", 0)) == 33, "ID 76 must expose all 33 source rows")
 	assert(int(wooma_boss.get("resolution_attempted_count", 0)) == 33, "ID 76 rows did not enter item resolution")
@@ -239,7 +239,7 @@ func _test_loot_contract() -> void:
 	)
 	for monster_id: int in [68]:
 		var ordinary_roll := loot_runtime.roll_monster_drops(
-			monster_id, rng, 6
+			monster_id, rng
 		)
 		assert(
 			bool(ordinary_roll.get("configured", false)),
@@ -250,7 +250,7 @@ func _test_loot_contract() -> void:
 			"ID %d has no resolvable drop" % monster_id
 		)
 	for rejected: Variant in [0, 999999]:
-		var rejected_roll := loot_runtime.roll_monster_drops(int(rejected), rng, 6)
+		var rejected_roll := loot_runtime.roll_monster_drops(int(rejected), rng)
 		assert(not bool(rejected_roll.get("configured", false)), "rejected monster rolled drops")
 		assert(not str(rejected_roll.get("reason", "")).is_empty(), "rejected roll has no reason")
 	var bad_item := GameData.resolve_canonical_drop_item({
@@ -331,7 +331,7 @@ func _test_runtime_no_drop_rejection() -> void:
 	)
 	assert(bridge_result.is_empty(), "no-drop bridge gate failed")
 	var rng := RandomNumberGenerator.new()
-	var roll := LootRuntimeScript.new().roll_monster_drops(64, rng, 6)
+	var roll := LootRuntimeScript.new().roll_monster_drops(64, rng)
 	assert(not bool(roll.get("configured", false)), "no-drop loot was configured")
 	assert(
 		str(roll.get("reason", "")) == "drop_items_unresolved",

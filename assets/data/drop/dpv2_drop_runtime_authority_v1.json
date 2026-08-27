@@ -1,0 +1,1704 @@
+{
+  "schema": "hardcore.dpv2.drop_runtime_authority.v1",
+  "authority_id": "dpv2.drop_runtime.v1",
+  "status": "PRODUCTION_ACTIVE",
+  "activation": {
+    "production_active": true,
+    "runtime_consumer": "scripts/layers/runtime/loot_runtime_service.gd",
+    "historical_a07_activation_boundaries_preserved": true
+  },
+  "source_authorities": {
+    "item_tier": {
+      "path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+      "schema": "hardcore.dpv2.item_tier_authority.v1",
+      "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A"
+    },
+    "monster_role": {
+      "path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
+      "schema": "hardcore.dpv2.monster_role_authority.v1",
+      "sha256": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D"
+    },
+    "global_scale": {
+      "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+      "schema": "hardcore.dpv2.global_drop_rate_authority.v1",
+      "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687"
+    }
+  },
+  "source_slot_contract": {
+    "canonical_source_slot_count": 7032,
+    "source_slot_mutated": false,
+    "source_chance_role": "provenance_only",
+    "all_resolved_slots_rng_before_overflow": true
+  },
+  "ground_overflow_policy": {
+    "maximum_ground_slots": 9,
+    "selection_stage": "after_all_probability_rolls",
+    "priority_order": [
+      {
+        "class": "EQUIPMENT",
+        "priority": 300
+      },
+      {
+        "class": "PROTECTED_HIGH_VALUE",
+        "priority": 200
+      },
+      {
+        "class": "ORDINARY_CONSUMABLE",
+        "priority": 100
+      }
+    ],
+    "same_priority_selection": "uniform_random_without_replacement",
+    "protected_over_capacity": "uniform_random_keep_n_with_telemetry",
+    "source_array_order_priority_forbidden": true
+  },
+  "gold_policy": {
+    "reward_kind": "gold",
+    "tier": "GOLD_COMMON",
+    "base_denominator": 32,
+    "amount_role": "resolved_quantity_provenance",
+    "overflow_class": "ORDINARY_CONSUMABLE",
+    "protected_drop": false,
+    "overflow_priority": 100
+  },
+  "summary": {
+    "canonical_item_policy_count": 233,
+    "overflow_class_counts": {
+      "EQUIPMENT": 167,
+      "ORDINARY_CONSUMABLE": 36,
+      "PROTECTED_HIGH_VALUE": 30
+    }
+  },
+  "item_overflow_records": [
+    {
+      "canonical_item_id": 910008,
+      "canonical_name": "HP强化水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 910009,
+      "canonical_name": "MP强化水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920001,
+      "canonical_name": "万年雪霜",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 191,
+      "canonical_name": "三眼手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 121,
+      "canonical_name": "中型盔甲(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 120,
+      "canonical_name": "中型盔甲(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 82,
+      "canonical_name": "乌木剑",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 102,
+      "canonical_name": "井中月",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 154,
+      "canonical_name": "传统项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 254,
+      "canonical_name": "传送戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910001,
+      "canonical_name": "体力强效神水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 97,
+      "canonical_name": "修罗",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 95,
+      "canonical_name": "偃月",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 89,
+      "canonical_name": "八荒",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 198,
+      "canonical_name": "六角戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920002,
+      "canonical_name": "冰咆哮",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 92,
+      "canonical_name": "凌风",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 98,
+      "canonical_name": "凝霜",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 163,
+      "canonical_name": "凤凰明珠",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920003,
+      "canonical_name": "刺杀剑术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 215,
+      "canonical_name": "力量戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 81,
+      "canonical_name": "匕首",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 91,
+      "canonical_name": "半月",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920004,
+      "canonical_name": "半月弯刀",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 197,
+      "canonical_name": "古铜戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920005,
+      "canonical_name": "召唤神兽",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920006,
+      "canonical_name": "召唤骷髅",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 109,
+      "canonical_name": "嗜魂法杖",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920007,
+      "canonical_name": "回城卷",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920008,
+      "canonical_name": "困魔咒",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 232,
+      "canonical_name": "圣战头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 141,
+      "canonical_name": "圣战宝甲",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 235,
+      "canonical_name": "圣战戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 234,
+      "canonical_name": "圣战手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 233,
+      "canonical_name": "圣战项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920009,
+      "canonical_name": "圣言术",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920010,
+      "canonical_name": "地狱火",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920011,
+      "canonical_name": "地狱雷光",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 182,
+      "canonical_name": "坚固手套",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920012,
+      "canonical_name": "基本剑术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 256,
+      "canonical_name": "复活戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 180,
+      "canonical_name": "夏普儿手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 179,
+      "canonical_name": "大手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920013,
+      "canonical_name": "大火球",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 240,
+      "canonical_name": "天尊头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 243,
+      "canonical_name": "天尊戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 242,
+      "canonical_name": "天尊手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 144,
+      "canonical_name": "天尊道袍",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 241,
+      "canonical_name": "天尊项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 145,
+      "canonical_name": "天师长袍",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 170,
+      "canonical_name": "天珠项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 140,
+      "canonical_name": "天魔神甲",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920014,
+      "canonical_name": "太阳水",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 175,
+      "canonical_name": "小手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 108,
+      "canonical_name": "屠龙",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 117,
+      "canonical_name": "布衣(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 116,
+      "canonical_name": "布衣(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 133,
+      "canonical_name": "幽灵战衣(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 132,
+      "canonical_name": "幽灵战衣(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 189,
+      "canonical_name": "幽灵手套",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920015,
+      "canonical_name": "幽灵盾",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 168,
+      "canonical_name": "幽灵项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920016,
+      "canonical_name": "强效太阳水",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920018,
+      "canonical_name": "心灵启示",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 195,
+      "canonical_name": "心灵手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 113,
+      "canonical_name": "怒斩",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 190,
+      "canonical_name": "思贝儿手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 172,
+      "canonical_name": "恶魔铃铛",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 131,
+      "canonical_name": "恶魔长袍(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 130,
+      "canonical_name": "恶魔长袍(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920019,
+      "canonical_name": "战神油",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 129,
+      "canonical_name": "战神盔甲(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 128,
+      "canonical_name": "战神盔甲(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 250,
+      "canonical_name": "技巧项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920020,
+      "canonical_name": "抗拒火环",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 257,
+      "canonical_name": "护身戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 251,
+      "canonical_name": "探测项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910010,
+      "canonical_name": "攻击力药水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 910004,
+      "canonical_name": "攻击神水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920021,
+      "canonical_name": "攻杀剑术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 166,
+      "canonical_name": "放大镜",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 94,
+      "canonical_name": "斩马刀",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920022,
+      "canonical_name": "施毒术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 104,
+      "canonical_name": "无极棍",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 80,
+      "canonical_name": "木剑",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 187,
+      "canonical_name": "死神手套",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 260,
+      "canonical_name": "求婚戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920023,
+      "canonical_name": "沃玛号角",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920024,
+      "canonical_name": "治愈术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 236,
+      "canonical_name": "法神头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 239,
+      "canonical_name": "法神戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 238,
+      "canonical_name": "法神手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 142,
+      "canonical_name": "法神披风",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 237,
+      "canonical_name": "法神项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 217,
+      "canonical_name": "泰坦戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 90,
+      "canonical_name": "海魂",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920025,
+      "canonical_name": "火墙",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 259,
+      "canonical_name": "火焰戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920026,
+      "canonical_name": "火球术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 164,
+      "canonical_name": "灯笼项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 127,
+      "canonical_name": "灵魂战衣(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 126,
+      "canonical_name": "灵魂战衣(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920027,
+      "canonical_name": "灵魂火符",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 173,
+      "canonical_name": "灵魂项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 99,
+      "canonical_name": "炼狱",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920028,
+      "canonical_name": "烈火剑法",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920029,
+      "canonical_name": "爆裂火焰",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 200,
+      "canonical_name": "牛角戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 222,
+      "canonical_name": "狂风戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 221,
+      "canonical_name": "狂风项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 199,
+      "canonical_name": "玻璃戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 210,
+      "canonical_name": "珊瑚戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 205,
+      "canonical_name": "珍珠戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 162,
+      "canonical_name": "琥珀项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 169,
+      "canonical_name": "生命项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 201,
+      "canonical_name": "生铁戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910007,
+      "canonical_name": "疗伤药",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920030,
+      "canonical_name": "疾光电影",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 910003,
+      "canonical_name": "疾风神水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 910013,
+      "canonical_name": "疾风药水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 159,
+      "canonical_name": "白色虎齿项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 155,
+      "canonical_name": "白金项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 177,
+      "canonical_name": "皮制手套",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920031,
+      "canonical_name": "瞬息移动",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 84,
+      "canonical_name": "短剑",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 93,
+      "canonical_name": "破魂",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 223,
+      "canonical_name": "祈祷之刃",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 224,
+      "canonical_name": "祈祷头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 227,
+      "canonical_name": "祈祷戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 226,
+      "canonical_name": "祈祷手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 225,
+      "canonical_name": "祈祷项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920032,
+      "canonical_name": "祖玛头像",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920033,
+      "canonical_name": "祝福油",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920034,
+      "canonical_name": "神圣战甲术",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 218,
+      "canonical_name": "神秘头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 220,
+      "canonical_name": "神秘戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 219,
+      "canonical_name": "神秘腰带",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 167,
+      "canonical_name": "竹笛",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920035,
+      "canonical_name": "精神力战法",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 910006,
+      "canonical_name": "精神神水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 216,
+      "canonical_name": "紫碧螺",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 213,
+      "canonical_name": "红宝石戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 171,
+      "canonical_name": "绿色项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 88,
+      "canonical_name": "罗刹",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920036,
+      "canonical_name": "群体治疗术",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920037,
+      "canonical_name": "肉",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 165,
+      "canonical_name": "蓝翡翠项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 202,
+      "canonical_name": "蓝色水晶戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 247,
+      "canonical_name": "虹魔戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 248,
+      "canonical_name": "虹魔手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 249,
+      "canonical_name": "虹魔项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920038,
+      "canonical_name": "蛆卵",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 204,
+      "canonical_name": "蛇眼戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920039,
+      "canonical_name": "蜘蛛牙",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920040,
+      "canonical_name": "蝎尾",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 105,
+      "canonical_name": "裁决之杖",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 228,
+      "canonical_name": "记忆头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 231,
+      "canonical_name": "记忆戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 230,
+      "canonical_name": "记忆手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 229,
+      "canonical_name": "记忆项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920041,
+      "canonical_name": "诱惑之光",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920017,
+      "canonical_name": "超级金创药",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920042,
+      "canonical_name": "超级魔法药",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 258,
+      "canonical_name": "超负载戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 160,
+      "canonical_name": "躲避手链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 119,
+      "canonical_name": "轻型盔甲(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 118,
+      "canonical_name": "轻型盔甲(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 181,
+      "canonical_name": "辟邪手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 115,
+      "canonical_name": "逍遥扇",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 149,
+      "canonical_name": "道士头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 185,
+      "canonical_name": "道士手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 209,
+      "canonical_name": "道德戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910012,
+      "canonical_name": "道术力药水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 123,
+      "canonical_name": "重盔甲(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 122,
+      "canonical_name": "重盔甲(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920043,
+      "canonical_name": "野蛮冲撞",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920044,
+      "canonical_name": "金创药(中量)",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920045,
+      "canonical_name": "金创药(小量)",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 206,
+      "canonical_name": "金戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 188,
+      "canonical_name": "金手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 153,
+      "canonical_name": "金项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 178,
+      "canonical_name": "钢手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 85,
+      "canonical_name": "铁剑",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 174,
+      "canonical_name": "铁手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 214,
+      "canonical_name": "铂金戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 176,
+      "canonical_name": "银手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 101,
+      "canonical_name": "银蛇",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 192,
+      "canonical_name": "阎罗手套",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 255,
+      "canonical_name": "防御戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 211,
+      "canonical_name": "降妖除魔戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 96,
+      "canonical_name": "降魔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 253,
+      "canonical_name": "隐身戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920046,
+      "canonical_name": "隐身术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920047,
+      "canonical_name": "集体隐身术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920048,
+      "canonical_name": "雷电术",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 143,
+      "canonical_name": "霓裳羽衣",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 83,
+      "canonical_name": "青铜剑",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 147,
+      "canonical_name": "青铜头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 87,
+      "canonical_name": "青铜斧",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920049,
+      "canonical_name": "食人花叶",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920050,
+      "canonical_name": "食人花果",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 193,
+      "canonical_name": "骑士手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 106,
+      "canonical_name": "骨玉权杖",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 150,
+      "canonical_name": "骷髅头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 207,
+      "canonical_name": "骷髅戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 208,
+      "canonical_name": "魅力戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910002,
+      "canonical_name": "魔力强效神水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 186,
+      "canonical_name": "魔力手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910005,
+      "canonical_name": "魔力神水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 100,
+      "canonical_name": "魔杖",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 910011,
+      "canonical_name": "魔法力药水",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 148,
+      "canonical_name": "魔法头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 183,
+      "canonical_name": "魔法手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 920051,
+      "canonical_name": "魔法盾",
+      "overflow_class": "PROTECTED_HIGH_VALUE",
+      "protected_drop": true,
+      "overflow_priority": 200
+    },
+    {
+      "canonical_item_id": 920052,
+      "canonical_name": "魔法药(中量)",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 920053,
+      "canonical_name": "魔法药(小量)",
+      "overflow_class": "ORDINARY_CONSUMABLE",
+      "protected_drop": false,
+      "overflow_priority": 100
+    },
+    {
+      "canonical_item_id": 125,
+      "canonical_name": "魔法长袍(女)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 124,
+      "canonical_name": "魔法长袍(男)",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 244,
+      "canonical_name": "魔血戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 245,
+      "canonical_name": "魔血手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 246,
+      "canonical_name": "魔血项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 161,
+      "canonical_name": "魔鬼项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 252,
+      "canonical_name": "麻痹戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 158,
+      "canonical_name": "黄色水晶项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 184,
+      "canonical_name": "黑檀手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 157,
+      "canonical_name": "黑檀项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 203,
+      "canonical_name": "黑色水晶戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 156,
+      "canonical_name": "黑色水晶项链",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 151,
+      "canonical_name": "黑铁头盔",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 212,
+      "canonical_name": "龙之戒指",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 194,
+      "canonical_name": "龙之手镯",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 114,
+      "canonical_name": "龙牙",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    },
+    {
+      "canonical_item_id": 107,
+      "canonical_name": "龙纹剑",
+      "overflow_class": "EQUIPMENT",
+      "protected_drop": true,
+      "overflow_priority": 300
+    }
+  ]
+}

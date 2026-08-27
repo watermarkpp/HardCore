@@ -14,13 +14,12 @@ ITEM_AUTHORITY = ROOT / "assets/data/drop/dpv2_item_tier_authority_v1.json"
 ROLE_AUTHORITY = ROOT / "assets/data/drop/dpv2_monster_role_authority_v1.json"
 DECISION = ROOT / "docs/drop/DPV2_A07_HUMAN_AUTHORITY_DECISION.md"
 SNAPSHOT = ROOT / "outputs/monster_drop_p1a/runtime_snapshot.json"
+RUNTIME_AUTHORITY = ROOT / "assets/data/drop/dpv2_drop_runtime_authority_v1.json"
+GLOBAL_AUTHORITY = ROOT / "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
+CATALOG = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
 
 EXPECTED_FILE_HASHES = {
-    "assets/data/runtime/canonical_monster_catalog.json": "563DF73E767B61ACD750D47FBEA1FD00BB7799EF2DA1125A8C368934623E357A",
     "assets/data/canonical_monster_drop_source_v2.json": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
-    "outputs/monster_drop_p1a/monster_drop_p1a_slots.csv": "98201CA412873A5E17F6A9141DFD180AE4CA950F6C4718052CC30CBA77D95C0F",
-    "scripts/game_data.gd": "66B292ED2B11BD2A8B739D0D60AD7E08A0A70BF19F237B17D79009A1BFCF1347",
-    "scripts/game_root.gd": "4B1269018B9F67475C4C3932DAFB51F9A0B99BDA2A9BE2291B41E3EA44F46E26",
     "project.godot": "6C2187CF476B347238B7E37CBEF43DEBE9EF61E35B163931A696ED1361463490",
 }
 EXPECTED_TREE_HASHES = {
@@ -32,6 +31,7 @@ EXPECTED_TREE_HASHES = {
     "assets/maps": "c46ea4b3146096113ae793236a87e4ceceb7812d",
 }
 DECISION_SHA256 = "FDEEAAD95AC824E8CBDB98D4D7D8CD58844AB822DFF912F8F5B54E6FF9235EDC"
+SOURCE_SLOT_PROJECTION_SHA256 = "9481DAB12C3D6B0EAA279493242BD6FC523BA819750276487A4D8825B4CFB24B"
 
 
 def load(path: Path):
@@ -53,10 +53,28 @@ def git_tree_hash(relative: str) -> str:
     ).strip()
 
 
+def source_slot_projection_sha256(catalog: dict) -> str:
+    rows = [
+        {"profile": profile_id, "entry": entry}
+        for profile_id in sorted(catalog["drop_profiles"])
+        for entry in catalog["drop_profiles"][profile_id]["entries"]
+    ]
+    encoded = json.dumps(
+        rows,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest().upper()
+
+
 def main() -> int:
     item = load(ITEM_AUTHORITY)
     role = load(ROLE_AUTHORITY)
     snapshot = load(SNAPSHOT)
+    runtime = load(RUNTIME_AUTHORITY)
+    global_scale = load(GLOBAL_AUTHORITY)
+    catalog = load(CATALOG)
 
     require(sha256(DECISION) == DECISION_SHA256, "A0.7 decision hash drift")
     for document in (item, role):
@@ -122,6 +140,21 @@ def main() -> int:
     require(summary["slot_count"] == 7032, "P1A slot count drift")
     require(summary["reward_unresolved_count"] == 0, "P1A reward unresolved drift")
 
+    require(runtime["schema"] == "hardcore.dpv2.drop_runtime_authority.v1", "runtime Authority schema drift")
+    require(runtime["activation"]["production_active"] is True, "runtime Authority inactive")
+    require(runtime["ground_overflow_policy"]["maximum_ground_slots"] == 9, "ground slot limit drift")
+    require(len(runtime["item_overflow_records"]) == 233, "overflow item coverage drift")
+    require(global_scale["active_preset"] == "1x", "global drop scale drift")
+    require(
+        [row["preset"] for row in global_scale["presets"]]
+        == ["0.5x", "0.8x", "1x", "1.5x", "2x"],
+        "global drop presets drift",
+    )
+    require(
+        source_slot_projection_sha256(catalog) == SOURCE_SLOT_PROJECTION_SHA256,
+        "7032 source slot projection changed",
+    )
+
     for relative, expected in EXPECTED_FILE_HASHES.items():
         require(sha256(ROOT / relative) == expected, f"protected file changed: {relative}")
     for relative, expected in EXPECTED_TREE_HASHES.items():
@@ -130,7 +163,8 @@ def main() -> int:
     print(
         "DPV2_A07_HUMAN_AUTHORITY_FREEZE_PASS: items=233/233 tiers_unresolved=0 "
         "monsters=156 enabled=131 non_loot=25 role_unresolved=0 veteran=0 "
-        "clothes=6x6 cow225=ENDGAME_BOSS@16 slots=7032 protected_hashes=PASS phase1=false"
+        "clothes=6x6 cow225=ENDGAME_BOSS@16 slots=7032 source_slots_unchanged=1 "
+        "runtime_binding=ACTIVE ground_slots=9 global=1x"
     )
     return 0
 

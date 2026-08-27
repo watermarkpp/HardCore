@@ -168,8 +168,7 @@ func _run() -> void:
 	var rolled: Dictionary = (
 		LootRuntime.roll_monster_drops(
 			EXPECTED_MONSTER_ID,
-			rng,
-			100000
+			rng
 		)
 	)
 	assert(
@@ -177,7 +176,7 @@ func _run() -> void:
 		"LootRuntime did not enter drop.168 profile: %s" % rolled
 	)
 
-	var found_runtime_rejection := false
+	var found_obsolete_runtime_rejection := false
 	var rejected_value: Variant = rolled.get("rejected_entries", [])
 	assert(rejected_value is Array)
 	for rejection_value: Variant in rejected_value:
@@ -190,18 +189,27 @@ func _run() -> void:
 			and str(rejection.get("reason", ""))
 				== "chance_token_invalid"
 		):
-			found_runtime_rejection = true
+			found_obsolete_runtime_rejection = true
 			break
 	assert(
-		found_runtime_rejection,
-		"LootRuntime must reject line 20 as chance_token_invalid: %s"
+		not found_obsolete_runtime_rejection,
+		"source chance provenance must not reject a DPV2 runtime slot: %s"
 		% rolled
+	)
+	assert(
+		int(rolled.get("rng_roll_count", -1))
+		== int(rolled.get("resolved_entry_count", -2)),
+		"every DPV2-resolved row must reach RNG: %s" % rolled
+	)
+	assert(
+		bool(rolled.get("all_resolved_slots_rng", false)),
+		"full-slot RNG contract was not reported: %s" % rolled
 	)
 
 	print(
 		"MONSTER_DROP_P1A_RUNTIME_CONTRACT_PASS: "
-		+ "1/00 rejected before reward/RNG; "
+		+ "1/00 retained as provenance and does not gate RNG; "
 		+ "AUDIT_ONLY proven provenance-only; "
-		+ "metadata unresolved_token decoupled from runtime resolver"
+		+ "all resolved slots reached DPV2 RNG"
 	)
 	get_tree().quit(0)

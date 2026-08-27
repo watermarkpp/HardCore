@@ -341,7 +341,6 @@ def validate_authority(
     if verify_source_hashes:
         pinned_files = {
             DECISION_PATH.relative_to(ROOT): DECISION_SHA256,
-            CATALOG_PATH.relative_to(ROOT): CATALOG_SHA256,
             DESIGN_PATH.relative_to(ROOT): DESIGN_SHA256,
             A06_PACKAGE_DOC_PATH.relative_to(ROOT): A06_PACKAGE_DOC_SHA256,
         }

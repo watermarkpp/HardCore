@@ -53,24 +53,34 @@ func _run() -> void:
 	assert(str(reward.get("item_name", "")) == "金币", "ID 226 reward item_name must be 金币")
 	assert(int(reward.get("gold_amount", 0)) == 3000, "ID 226 gold amount must be 3000")
 
-	# F. LootRuntime must roll the gold row on a hit (1/2), never reject it.
+	# F. LootRuntime must roll an enabled monster's gold row through the unified
+	#    gold Tier and never reject its amount-bearing reward identity.
 	var hit := false
-	for seed: int in range(64):
+	for seed: int in range(4096):
 		var rng := RandomNumberGenerator.new()
 		rng.seed = seed
-		var roll := LootRuntimeScript.new().roll_monster_drops(226, rng, 6)
-		if int(roll.get("resolved_entry_count", 0)) == 1:
+		var roll := LootRuntimeScript.new().roll_monster_drops(19, rng)
+		if int(roll.get("resolved_entry_count", 0)) > 0:
 			var gold_drops: Array = roll.get("gold_drops", [])
-			if gold_drops.size() == 1 and int(gold_drops[0]) == 3000:
+			if gold_drops.size() == 1 and int(gold_drops[0]) == 30:
 				hit = true
 				break
-	assert(hit, "no deterministic seed produced the ID 226 gold roll")
-	# Sanity: the gold row must never appear in rejected_entries.
+	assert(hit, "no deterministic seed produced the ID 19 gold roll")
+	# Sanity: the enabled gold row must never appear in rejected_entries.
 	var rng_final := RandomNumberGenerator.new()
 	rng_final.seed = 0
-	var roll_final := LootRuntimeScript.new().roll_monster_drops(226, rng_final, 6)
+	var roll_final := LootRuntimeScript.new().roll_monster_drops(19, rng_final)
 	for rejected: Variant in roll_final.get("rejected_entries", []):
-		assert(not (rejected is Dictionary and int(rejected.get("line_number", -1)) == 1), "ID 226 gold row was rejected")
+		assert(not (rejected is Dictionary and int(rejected.get("line_number", -1)) == 1), "ID 19 gold row was rejected")
 
-	print("MONSTER_GOLD_DROP_RUNTIME_PASS: identity=156 allowed=153 spawnable=153 rejected=0 gold_226=3000")
+	# G. ID226 remains NON_LOOT even though its historical profile carries gold.
+	var rng_non_loot := RandomNumberGenerator.new()
+	rng_non_loot.seed = 226
+	var non_loot := LootRuntimeScript.new().roll_monster_drops(226, rng_non_loot)
+	assert(bool(non_loot.get("configured", false)))
+	assert(str(non_loot.get("reason", "")) == "drop_disabled")
+	assert((non_loot.get("gold_drops", []) as Array).is_empty())
+	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
+
+	print("MONSTER_GOLD_DROP_RUNTIME_PASS: identity=156 allowed=153 spawnable=153 rejected=0 gold_19=30 non_loot_226=1")
 	get_tree().quit(0)

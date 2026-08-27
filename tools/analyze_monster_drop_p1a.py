@@ -5,7 +5,8 @@ Important semantic boundary:
 - This analyzer does NOT parse chance strings.
 - It does NOT resolve item authority.
 - It consumes the classifications exported by Godot after calling the real
-  LootRuntime chance parser and GameData reward resolver.
+  LootRuntime provenance chance parser, GameData reward resolver, and DPV2
+  probability authority resolver.
 """
 
 from __future__ import annotations
@@ -35,8 +36,6 @@ EXPECTED_ANOMALY = {
     "slot_index": "slot_020",
     "chance_raw": "1/00",
     "raw_text": "1/00 灵魂战衣(男)",
-    "non_rollable_reason": "invalid_chance",
-    "runtime_rejection_reason": "chance_token_invalid",
 }
 
 
@@ -61,6 +60,7 @@ def runtime_semantics_key(slot: dict[str, Any]) -> tuple[Any, ...]:
         slot.get("reward_resolution_status"),
         slot.get("reward_resolution_reason"),
         slot.get("runtime_reward_attempted"),
+        slot.get("probability_authority_resolvable"),
         slot.get("slot_runtime_rollable"),
         slot.get("runtime_rollable"),
         slot.get("non_rollable_reason"),
@@ -77,6 +77,9 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
 
     chance_valid = _as_bool(slot.get("chance_valid", False))
     reward_resolvable = _as_bool(slot.get("reward_resolvable", False))
+    probability_resolvable = _as_bool(
+        slot.get("probability_authority_resolvable", False)
+    )
     slot_rollable = _as_bool(slot.get("slot_runtime_rollable", False))
     runtime_rollable_alias = _as_bool(slot.get("runtime_rollable", False))
     runtime_reward_attempted = _as_bool(
@@ -100,11 +103,11 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
             f"{prefix} chance_valid=false requires chance_denominator=null"
         )
 
-    # Exact real-runtime ordering: reward resolution is reached only after
-    # chance validation. Exporter still performs an independent audit probe.
-    if runtime_reward_attempted != chance_valid:
+    # Source chance is provenance only. Every source row reaches canonical
+    # reward resolution before the DPV2 role/tier probability authority.
+    if not runtime_reward_attempted:
         errors.append(
-            f"{prefix} runtime_reward_attempted must equal chance_valid"
+            f"{prefix} runtime_reward_attempted must be true"
         )
 
     if reward_resolvable:
@@ -126,7 +129,7 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
                 f"{prefix} unresolved reward requires a concrete reason"
             )
 
-    expected_rollable = chance_valid and reward_resolvable
+    expected_rollable = reward_resolvable and probability_resolvable
     if slot_rollable != expected_rollable:
         errors.append(
             f"{prefix} slot_runtime_rollable={slot_rollable} "
@@ -137,12 +140,17 @@ def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
             f"{prefix} runtime_rollable compatibility alias drifted"
         )
 
-    if not chance_valid:
-        expected_non_rollable = "invalid_chance"
-        expected_runtime_rejection = "chance_token_invalid"
-    elif not reward_resolvable:
+    if not reward_resolvable:
         expected_non_rollable = "unresolved_reward"
         expected_runtime_rejection = reward_reason
+    elif not probability_resolvable:
+        expected_non_rollable = "probability_authority_blocked"
+        policy = slot.get("probability_policy", {})
+        expected_runtime_rejection = (
+            policy.get("reason", "drop_probability_authority_invalid")
+            if isinstance(policy, dict)
+            else "drop_probability_authority_invalid"
+        )
     else:
         expected_non_rollable = None
         expected_runtime_rejection = None
@@ -381,14 +389,16 @@ def validate_snapshot(
                         f"anomaly.{key}={anomaly.get(key)!r} "
                         f"expected={expected!r}"
                     )
-            if _as_bool(anomaly.get("runtime_reward_attempted", True)):
+            if not _as_bool(anomaly.get("runtime_reward_attempted", False)):
                 errors.append(
-                    "anomaly runtime_reward_attempted must be false"
+                    "anomaly runtime_reward_attempted must be true"
                 )
-            if _as_bool(anomaly.get("slot_runtime_rollable", True)):
+            if not _as_bool(anomaly.get("slot_runtime_rollable", False)):
                 errors.append(
-                    "anomaly slot_runtime_rollable must be false"
+                    "anomaly slot_runtime_rollable must be true"
                 )
+            if anomaly.get("runtime_rejection_reason") is not None:
+                errors.append("anomaly must not have a runtime rejection")
 
     return errors
 

@@ -76,9 +76,9 @@
       "used_for_tier": false,
       "used_for_denominator": false
     },
-    "production_active": false,
-    "phase_1_allowed": false,
-    "runtime_consumer": null,
+    "production_active": true,
+    "phase_1_allowed": true,
+    "runtime_consumer": "scripts/layers/runtime/loot_runtime_service.gd",
     "persistence_consumer": null
   },
   "records": [
