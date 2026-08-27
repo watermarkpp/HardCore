@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Stop'
 
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
+$GodotTestRunner = Join-Path $ProjectRoot 'tools\run_godot_tests.ps1'
 $RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata_p1a'
 
 if (-not (Test-Path -LiteralPath $Godot -PathType Leaf)) {
@@ -20,20 +21,14 @@ New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 function Invoke-Python {
     param([string[]]$Arguments)
 
-    $Py = Get-Command py -ErrorAction SilentlyContinue
-    if ($null -ne $Py) {
-        & $Py.Source -3 @Arguments
-    }
-    else {
-        $Python = Get-Command python -ErrorAction Stop
-        & $Python.Source @Arguments
-    }
+    $Py = Get-Command py -ErrorAction Stop
+    & $Py.Source -3.12 @Arguments
     if ($LASTEXITCODE -ne 0) {
         throw "Python failed with exit code ${LASTEXITCODE}: $($Arguments -join ' ')"
     }
 }
 
-function Invoke-GodotScene {
+function Invoke-GodotTool {
     param([string]$Scene)
 
     & $Godot --headless --path $ProjectRoot $Scene
@@ -47,11 +42,17 @@ try {
     Write-Host '[P1A 1/4] Python analyzer unit tests'
     Invoke-Python @('tools/test_analyze_monster_drop_p1a.py')
 
-    Write-Host '[P1A 2/4] Real LootRuntime/GameData contract'
-    Invoke-GodotScene 'res://tests/monster_drop_p1a_runtime_contract_test.tscn'
+    Write-Host '[P1A 2/4] Direct LootRuntime/GameData and gold contracts'
+    & $GodotTestRunner -TestPaths @(
+        'tests/monster_drop_p1a_runtime_contract_test.tscn',
+        'tests/monster_gold_drop_runtime_test.tscn'
+    ) -TimeoutSeconds 60
+    if ($LASTEXITCODE -ne 0) {
+        throw 'direct P1A Godot tests failed'
+    }
 
     Write-Host '[P1A 3/4] Export runtime-grounded snapshot'
-    Invoke-GodotScene 'res://tools/monster_drop_p1a_runtime_export.tscn'
+    Invoke-GodotTool 'res://tools/monster_drop_p1a_runtime_export.tscn'
 
     $Snapshot = Join-Path $ProjectRoot 'outputs\monster_drop_p1a\runtime_snapshot.json'
     if (-not (Test-Path -LiteralPath $Snapshot -PathType Leaf)) {

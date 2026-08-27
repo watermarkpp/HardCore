@@ -1,11 +1,15 @@
 extends Node
 
-const EXPECTED_PROFILE_ID := "drop.168"
-const EXPECTED_MONSTER_ID := 168
-const EXPECTED_LINE_NUMBER := 20
-const EXPECTED_SLOT_INDEX := "slot_020"
-const EXPECTED_CHANCE := "1/00"
-const EXPECTED_RAW_TEXT := "1/00 灵魂战衣(男)"
+const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
+const EXPECTED_SOURCE_PROFILE_COUNT := 156
+const EXPECTED_SOURCE_ROW_COUNT := 7032
+const EXPECTED_ENABLED_SOURCE_ROW_COUNT := 5995
+const EXPECTED_NON_LOOT_SOURCE_ROW_COUNT := 1037
+const EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT := 1
+const EXPECTED_RUNTIME_PROFILE_COUNT := 156
+const EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT := 131
+const EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT := 25
+const EXPECTED_RUNTIME_SLOT_COUNT := 5995
 
 
 func _ready() -> void:
@@ -15,226 +19,248 @@ func _ready() -> void:
 func _run() -> void:
 	assert(
 		GameData.ensure_loaded(),
-		"GameData failed to load for P1A runtime contract test"
+		"GameData failed to load: %s" % GameData.load_error
 	)
-	assert(
-		LootRuntime.has_method("_chance_denominator"),
-		"LootRuntime._chance_denominator missing"
-	)
-
-	# These assertions exercise the real runtime parser rather than a P1A copy.
-	assert(
-		int(LootRuntime.call("_chance_denominator", "1/3")) == 3
-	)
-	assert(
-		int(LootRuntime.call("_chance_denominator", "1/0")) < 0,
-		"1/0 must fail closed"
-	)
-	assert(
-		int(LootRuntime.call("_chance_denominator", "1/00")) < 0,
-		"1/00 must fail closed"
-	)
-	# Current LootRuntime accepts digit-only leading-zero denominators and then
-	# converts them numerically. Freeze the behavior we actually scanned.
-	assert(
-		int(LootRuntime.call("_chance_denominator", "1/010")) == 10,
-		"current runtime contract changed for 1/010"
-	)
-
-	var profile: Dictionary = (
-		GameData.get_canonical_monster_drop_profile(EXPECTED_MONSTER_ID)
-	)
-	assert(not profile.is_empty(), "drop.168 profile missing")
-	assert(
-		str(profile.get("drop_profile_id", "")) == EXPECTED_PROFILE_ID
-	)
-
-	var entries_value: Variant = profile.get("entries", [])
-	assert(entries_value is Array, "drop.168 entries must be Array")
-	var entries: Array = entries_value
-
-	var anomaly: Dictionary = {}
-	var valid_audit_only_entry: Dictionary = {}
-	var metadata_unresolved_but_runtime_resolved: Dictionary = {}
-
-	for row_value: Variant in entries:
-		assert(row_value is Dictionary)
-		var row: Dictionary = row_value
-		if (
-			int(row.get("line_number", -1)) == EXPECTED_LINE_NUMBER
-			and str(row.get("chance", "")) == EXPECTED_CHANCE
-		):
-			anomaly = row
-
-		var denominator := int(
-			LootRuntime.call(
-				"_chance_denominator",
-				str(row.get("chance", ""))
-			)
-		)
-		var reward := GameData.resolve_canonical_drop_reward(row)
-		if (
-			valid_audit_only_entry.is_empty()
-			and str(row.get("rate_policy", "")) == "AUDIT_ONLY"
-			and denominator > 0
-			and bool(reward.get("ok", false))
-		):
-			valid_audit_only_entry = row
-		if (
-			metadata_unresolved_but_runtime_resolved.is_empty()
-			and str(row.get("item_resolution_status", ""))
-				== "unresolved_token"
-			and denominator > 0
-			and bool(reward.get("ok", false))
-		):
-			metadata_unresolved_but_runtime_resolved = row
-
-	assert(not anomaly.is_empty(), "unique 1/00 anomaly not found")
-	assert(
-		str(anomaly.get("slot_index", "")) == EXPECTED_SLOT_INDEX
-	)
-	assert(
-		str(anomaly.get("raw_text", "")) == EXPECTED_RAW_TEXT
-	)
-	assert(
-		str(anomaly.get("rate_policy", "")) == "AUDIT_ONLY"
-	)
-	assert(
-		str(anomaly.get("slot_status", ""))
-			== "CONFIRMED_SOURCE_SLOT"
-	)
-	assert(
-		int(LootRuntime.call(
-			"_chance_denominator",
-			str(anomaly.get("chance", ""))
-		)) < 0
-	)
-
-	# Prove provenance is independent of the real parser and reward resolver.
-	assert(
-		not valid_audit_only_entry.is_empty(),
-		"no valid AUDIT_ONLY runtime-resolvable row found in drop.168"
-	)
-	var synthetic := valid_audit_only_entry.duplicate(true)
-	synthetic["rate_policy"] = "SYNTHETIC_PROVENANCE_ONLY"
-	var original_denominator := int(
-		LootRuntime.call(
-			"_chance_denominator",
-			str(valid_audit_only_entry.get("chance", ""))
-		)
-	)
-	var synthetic_denominator := int(
-		LootRuntime.call(
-			"_chance_denominator",
-			str(synthetic.get("chance", ""))
-		)
-	)
-	assert(original_denominator == synthetic_denominator)
-	var original_reward := (
-		GameData.resolve_canonical_drop_reward(
-			valid_audit_only_entry
-		)
-	)
-	var synthetic_reward := (
-		GameData.resolve_canonical_drop_reward(synthetic)
-	)
-	assert(
-		bool(original_reward.get("ok", false))
-		== bool(synthetic_reward.get("ok", false))
-	)
-
-	# This is the exact semantic split that P1A-R1 previously got wrong:
-	# source metadata may say unresolved_token while the actual runtime resolver
-	# succeeds through canonical item authority.
-	assert(
-		not metadata_unresolved_but_runtime_resolved.is_empty(),
-		"expected at least one unresolved_token metadata row "
-		+ "that resolves at runtime"
-	)
-
-	var closure: Dictionary = (
-		GameData.canonical_monster_runtime_drop_closure(
-			EXPECTED_MONSTER_ID
-		)
-	)
-	assert(
-		bool(closure.get("allowed", false)),
-		"monster 168 must currently pass the monster-level runtime gate: %s"
-		% closure
-	)
-
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 16820260825
-	var rolled: Dictionary = (
-		LootRuntime.roll_monster_drops(
-			EXPECTED_MONSTER_ID,
-			rng
-		)
-	)
-	assert(
-		bool(rolled.get("configured", false)),
-		"LootRuntime did not enter drop.168 profile: %s" % rolled
-	)
-
-	var found_obsolete_runtime_rejection := false
-	var rejected_value: Variant = rolled.get("rejected_entries", [])
-	assert(rejected_value is Array)
-	for rejection_value: Variant in rejected_value:
-		if not rejection_value is Dictionary:
-			continue
-		var rejection: Dictionary = rejection_value
-		if (
-			int(rejection.get("line_number", -1))
-				== EXPECTED_LINE_NUMBER
-			and str(rejection.get("reason", ""))
-				== "chance_token_invalid"
-		):
-			found_obsolete_runtime_rejection = true
-			break
-	assert(
-		not found_obsolete_runtime_rejection,
-		"source chance provenance must not reject a DPV2 runtime slot: %s"
-		% rolled
-	)
-	assert(
-		int(rolled.get("rng_roll_count", -1))
-		== int(rolled.get("resolved_entry_count", -2)),
-		"every DPV2-resolved row must reach RNG: %s" % rolled
-	)
-	assert(
-		int(rolled.get("reward_resolved_enabled_slots", -1))
-		== int(rolled.get("resolved_entry_count", -2)),
-		"reward resolution count must precede probability resolution: %s" % rolled
-	)
-	assert(
-		int(rolled.get("probability_resolved_enabled_slots", -1))
-		== int(rolled.get("rng_eligible_slots", -2))
-		and int(rolled.get("rng_eligible_slots", -1))
-		== int(rolled.get("rng_roll_count", -2)),
-		"all eligible rows must reach the RNG stage: %s" % rolled
-	)
-	assert(
-		bool(rolled.get("all_resolved_slots_rng", false)),
-		"full-slot RNG contract was not reported: %s" % rolled
-	)
-	assert(
-		bool(rolled.get(
-			"all_enabled_resolved_slots_rng_before_overflow",
-			false
-		)),
-		"pre-overflow RNG gate was not reported: %s" % rolled
-	)
-	assert(
-		int(rolled.get("ground_output_count", -1))
-			+ int(rolled.get("overflow_discarded_count", -2))
-		== int(rolled.get("successful_roll_count", -3)),
-		"ground output and overflow accounting must close: %s" % rolled
-	)
-
+	assert(GameData.is_dpv2_direct_baseline_loaded())
+	assert(LootRuntime.has_method("_chance_denominator"))
+	_test_exact_canonical_id_join()
+	_test_dual_view_counts()
+	_test_malformed_provenance_correction()
+	_test_direct_roll_and_non_loot_gate()
 	print(
 		"MONSTER_DROP_P1A_RUNTIME_CONTRACT_PASS: "
-		+ "1/00 retained as provenance and does not gate RNG; "
-		+ "AUDIT_ONLY proven provenance-only; "
-		+ "all resolved slots reached DPV2 RNG"
+		+ "source=156/7032/5995/1037/1 "
+		+ "compiled=156/131/25/5995 "
+		+ "direct_id_join=canonical_monster_id"
 	)
 	get_tree().quit(0)
+
+
+func _load_catalog() -> Dictionary:
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(CATALOG_PATH)
+	)
+	assert(parsed is Dictionary, "canonical catalog is not an object")
+	return parsed
+
+
+func _catalog_profile_to_id(catalog: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var entries_value: Variant = catalog.get("entries_by_id", {})
+	assert(entries_value is Dictionary)
+	for raw_id: Variant in (entries_value as Dictionary).keys():
+		var entry_value: Variant = (entries_value as Dictionary).get(
+			raw_id,
+			{}
+		)
+		assert(entry_value is Dictionary)
+		var entry: Dictionary = entry_value
+		var canonical_id := int(raw_id)
+		assert(int(entry.get("monster_id", -1)) == canonical_id)
+		var source_profile_id := str(entry.get("drop_profile_id", ""))
+		assert(not source_profile_id.is_empty())
+		assert(not result.has(source_profile_id))
+		result[source_profile_id] = canonical_id
+	return result
+
+
+func _test_exact_canonical_id_join() -> void:
+	var catalog := _load_catalog()
+	var profile_map := _catalog_profile_to_id(catalog)
+	assert(int(profile_map.get("drop.18", -1)) == 18)
+	var direct := GameData.dpv2_direct_profile(18)
+	assert(not direct.is_empty())
+	assert(int(direct.get("canonical_monster_id", -1)) == 18)
+	assert(str(direct.get("drop_profile_id", "")) == "dpv2.direct.18")
+	assert(str(profile_map.get("drop.18", "")) == "18")
+	assert(str(direct.get("drop_profile_id", "")) != "drop.18")
+	assert(GameData.dpv2_direct_profile(999999).is_empty())
+
+
+func _test_dual_view_counts() -> void:
+	var catalog := _load_catalog()
+	var source_profiles_value: Variant = catalog.get("drop_profiles", {})
+	assert(source_profiles_value is Dictionary)
+	var source_profiles: Dictionary = source_profiles_value
+	assert(source_profiles.size() == EXPECTED_SOURCE_PROFILE_COUNT)
+	var profile_map := _catalog_profile_to_id(catalog)
+
+	var source_rows := 0
+	var enabled_source_rows := 0
+	var disabled_source_rows := 0
+	var malformed_source_rows := 0
+	for raw_profile_id: Variant in source_profiles.keys():
+		var source_profile_id := str(raw_profile_id)
+		var source_profile_value: Variant = source_profiles.get(
+			source_profile_id,
+			{}
+		)
+		assert(source_profile_value is Dictionary)
+		var source_profile: Dictionary = source_profile_value
+		var entries_value: Variant = source_profile.get("entries", [])
+		assert(entries_value is Array)
+		var entries: Array = entries_value
+		var canonical_id := int(profile_map.get(source_profile_id, -1))
+		assert(canonical_id > 0)
+		var direct := GameData.dpv2_direct_profile(canonical_id)
+		assert(not direct.is_empty())
+		var enabled := bool(direct.get("drop_enabled", false))
+		var direct_slots: Array = direct.get("slots", [])
+		assert(enabled or direct_slots.is_empty())
+		assert(not enabled or direct_slots.size() == entries.size())
+		for ordinal: int in range(entries.size()):
+			var entry: Dictionary = entries[ordinal]
+			source_rows += 1
+			if int(LootRuntime.call(
+				"_chance_denominator",
+				str(entry.get("chance", ""))
+			)) > 0:
+				pass
+			else:
+				malformed_source_rows += 1
+			if not enabled:
+				disabled_source_rows += 1
+				continue
+			enabled_source_rows += 1
+			var slot: Dictionary = direct_slots[ordinal]
+			assert(str(slot.get("slot_uid", "")).begins_with(
+				"dpv2.direct.m%d." % canonical_id
+			))
+			assert(bool(GameData.dpv2_direct_resolve_slot_reward(slot).get(
+				"ok",
+				false
+			)))
+			assert(bool(GameData.dpv2_direct_slot_probability(
+				canonical_id,
+				str(slot.get("slot_uid", ""))
+			).get("ok", false)))
+
+	assert(source_rows == EXPECTED_SOURCE_ROW_COUNT)
+	assert(enabled_source_rows == EXPECTED_ENABLED_SOURCE_ROW_COUNT)
+	assert(disabled_source_rows == EXPECTED_NON_LOOT_SOURCE_ROW_COUNT)
+	assert(
+		malformed_source_rows
+			== EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT
+	)
+
+	var baseline: Dictionary = GameData.dpv2_direct_baseline
+	var baseline_profiles: Array = baseline.get("profiles", [])
+	assert(baseline_profiles.size() == EXPECTED_RUNTIME_PROFILE_COUNT)
+	var enabled_profiles := 0
+	var non_loot_profiles := 0
+	var compiled_slots := 0
+	var origin_counts := {}
+	for raw_profile: Variant in baseline_profiles:
+		assert(raw_profile is Dictionary)
+		var profile: Dictionary = raw_profile
+		if bool(profile.get("drop_enabled", false)):
+			enabled_profiles += 1
+		else:
+			non_loot_profiles += 1
+		var slots: Array = profile.get("slots", [])
+		compiled_slots += slots.size()
+		if bool(profile.get("drop_enabled", false)):
+			var origin := str(profile.get("baseline_origin", ""))
+			origin_counts[origin] = int(origin_counts.get(origin, 0)) \
+				+ slots.size()
+	assert(enabled_profiles == EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT)
+	assert(non_loot_profiles == EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT)
+	assert(compiled_slots == EXPECTED_RUNTIME_SLOT_COUNT)
+	assert(int(origin_counts.get("LEGACY_21CQ_MONITEMS", 0)) == 5926)
+	assert(int(origin_counts.get("PROJECT_EXTENSION", 0)) == 69)
+
+
+func _test_malformed_provenance_correction() -> void:
+	var catalog := _load_catalog()
+	var source_profiles: Dictionary = catalog.get("drop_profiles", {})
+	var anomaly: Dictionary = source_profiles.get("drop.168", {})
+	var entries: Array = anomaly.get("entries", [])
+	assert(entries.size() > 19)
+	var source_row: Dictionary = entries[19]
+	assert(int(source_row.get("line_number", -1)) == 20)
+	assert(str(source_row.get("slot_index", "")) == "slot_020")
+	assert(str(source_row.get("chance", "")) == "1/00")
+	assert(str(source_row.get("raw_text", "")) == "1/00 灵魂战衣(男)")
+	assert(int(LootRuntime.call(
+		"_chance_denominator",
+		str(source_row.get("chance", ""))
+	)) < 0)
+
+	var direct := GameData.dpv2_direct_profile(168)
+	var direct_slot: Dictionary = (direct.get("slots", []) as Array)[19]
+	assert(str(direct_slot.get("source_provenance_id", "")) \
+		== "dpv2.source.m168.slot_020")
+	assert(int(direct_slot.get("base_numerator", -1)) == 1)
+	assert(int(direct_slot.get("base_denominator", -1)) == 2800)
+	var probability := GameData.dpv2_direct_slot_probability(
+		168,
+		str(direct_slot.get("slot_uid", ""))
+	)
+	assert(bool(probability.get("ok", false)), str(probability))
+	assert(int(probability.get("final_numerator", -1)) == 1)
+	assert(int(probability.get("final_denominator", -1)) == 2800)
+
+
+func _test_direct_roll_and_non_loot_gate() -> void:
+	var service := LootRuntime
+	var non_loot_rng := RandomNumberGenerator.new()
+	non_loot_rng.seed = 226
+	var non_loot := service.roll_monster_drops(226, non_loot_rng)
+	assert(bool(non_loot.get("configured", false)))
+	assert(str(non_loot.get("reason", "")) == "drop_disabled")
+	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
+	assert((non_loot.get("attempts", []) as Array).is_empty())
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 20260828
+	var direct_profile := GameData.dpv2_direct_profile(31)
+	var direct_slots: Array = direct_profile.get("slots", [])
+	var roll := service.roll_monster_drops(31, rng)
+	assert(bool(roll.get("configured", false)), str(roll))
+	assert(int(roll.get("source_entry_count", -1)) == direct_slots.size())
+	assert(int(roll.get("resolution_attempted_count", -1)) == direct_slots.size())
+	assert(int(roll.get("reward_resolved_enabled_slots", -1)) \
+		== direct_slots.size())
+	assert(int(roll.get("probability_resolved_enabled_slots", -1)) \
+		== direct_slots.size())
+	assert(int(roll.get("rng_eligible_slots", -1)) == direct_slots.size())
+	assert(int(roll.get("rng_roll_count", -1)) == direct_slots.size())
+	assert(bool(roll.get("all_resolved_slots_rng", false)))
+	assert(bool(roll.get(
+		"all_enabled_resolved_slots_rng_before_overflow",
+		false
+	)))
+	assert(int(roll.get("ground_output_count", 0)) <= 9)
+	assert(
+		int(roll.get("ground_output_count", 0))
+			+ int(roll.get("overflow_discarded_count", 0))
+		== int(roll.get("successful_roll_count", -1))
+	)
+	var attempts: Array = roll.get("attempts", [])
+	assert(attempts.size() == direct_slots.size())
+	var seen_slots := {}
+	for raw_attempt: Variant in attempts:
+		assert(raw_attempt is Dictionary)
+		var attempt: Dictionary = raw_attempt
+		var slot_uid := str(attempt.get("slot_uid", ""))
+		assert(not seen_slots.has(slot_uid))
+		seen_slots[slot_uid] = true
+		for field: String in [
+			"canonical_item_id",
+			"base_numerator",
+			"base_denominator",
+			"base_probability",
+			"global_scale",
+			"final_probability",
+			"draw",
+			"draw_success",
+			"overflow",
+			"protected_overflow",
+			"baseline_origin",
+			"source_provenance_id",
+		]:
+			assert(attempt.has(field), "%s absent: %s" % [field, attempt])
+	var debug: Array = roll.get("debug", [])
+	var slot_attempts: Array = roll.get("slot_attempts", [])
+	assert(debug == attempts)
+	assert(slot_attempts == attempts)

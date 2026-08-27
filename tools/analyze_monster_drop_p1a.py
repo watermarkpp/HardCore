@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""P1A runtime snapshot analyzer.
+"""Validate and report the Fresh P1A DPV2 direct-baseline snapshot.
 
-Important semantic boundary:
-- This analyzer does NOT parse chance strings.
-- It does NOT resolve item authority.
-- It consumes the classifications exported by Godot after calling the real
-  LootRuntime provenance chance parser, GameData reward resolver, and DPV2
-  probability authority resolver.
+P1A has two intentionally separate views:
+
+* source_rows is the 156-profile/7032-row evidence corpus. Its chance token
+  is provenance, including the one malformed 1/00 row.
+* compiled_slots is the 156-profile/5995-slot V2 Runtime authority. Only
+  these rows carry direct canonical identity and can reach independent RNG.
+
+This analyzer consumes the classifications exported by Godot. It does not
+resolve source labels, derive probability, or consult historical authorities.
 """
 
 from __future__ import annotations
@@ -14,33 +17,36 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable
 
-SNAPSHOT_SCHEMA = "monster_drop_p1a_runtime_snapshot_v2"
 
-EXPECTED_DROP_PROFILE_COUNT = 156
-EXPECTED_BASE_DROP_ROW_COUNT = 7032
-EXPECTED_FINAL_DROP_ROW_COUNT = 7032
-EXPECTED_AUDIT_ONLY_COUNT = 7032
-EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT = 7032
-EXPECTED_INVALID_CHANCE_COUNT = 1
-EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT = 5995
-EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT = 1037
-EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT = 5995
-EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT = 5995
-EXPECTED_RNG_ELIGIBLE_SLOT_COUNT = 5995
+SNAPSHOT_SCHEMA = "monster_drop_p1a_runtime_snapshot_v3"
+
+EXPECTED_SOURCE_PROFILE_COUNT = 156
+EXPECTED_SOURCE_ROW_COUNT = 7032
+EXPECTED_ENABLED_SOURCE_ROW_COUNT = 5995
+EXPECTED_NON_LOOT_SOURCE_ROW_COUNT = 1037
+EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT = 1
+EXPECTED_RUNTIME_PROFILE_COUNT = 156
+EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT = 131
+EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT = 25
+EXPECTED_RUNTIME_SLOT_COUNT = 5995
+EXPECTED_LEGACY_RUNTIME_SLOT_COUNT = 5926
+EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT = 69
 
 EXPECTED_ANOMALY = {
-    "drop_profile_id": "drop.168",
-    "monster_id": 168,
-    "line_number": 20,
-    "profile_entry_ordinal_zero_based": 19,
-    "profile_entry_ordinal_one_based": 20,
-    "slot_index": "slot_020",
-    "chance_raw": "1/00",
-    "raw_text": "1/00 灵魂战衣(男)",
+    "source_profile_id": "drop.168",
+    "canonical_monster_id": 168,
+    "source_line_number": 20,
+    "source_entry_ordinal_zero_based": 19,
+    "source_entry_ordinal_one_based": 20,
+    "source_slot_index": "slot_020",
+    "source_chance": "1/00",
+    "source_raw_text": "1/00 灵魂战衣(男)",
+    "corrected_base_numerator": 1,
+    "corrected_base_denominator": 2800,
 }
 
 
@@ -56,299 +62,347 @@ def _counter_dict(values: Iterable[str]) -> dict[str, int]:
     return dict(sorted(Counter(values).items()))
 
 
-def runtime_semantics_key(slot: dict[str, Any]) -> tuple[Any, ...]:
-    """Return only runtime-derived semantics; provenance is intentionally absent."""
+def runtime_semantics_key(row: dict[str, Any]) -> tuple[Any, ...]:
+    """Return direct Runtime semantics, deliberately excluding provenance."""
+
     return (
-        slot.get("chance_valid"),
-        slot.get("chance_denominator"),
-        slot.get("reward_resolvable"),
-        slot.get("reward_resolution_status"),
-        slot.get("reward_resolution_reason"),
-        slot.get("runtime_reward_attempted"),
-        slot.get("drop_enabled"),
-        slot.get("reward_resolved_enabled"),
-        slot.get("probability_authority_resolvable"),
-        slot.get("probability_resolved_enabled"),
-        slot.get("rng_eligible"),
-        slot.get("rng_eligible_before_overflow"),
-        slot.get("slot_runtime_rollable"),
-        slot.get("runtime_rollable"),
-        slot.get("non_rollable_reason"),
-        slot.get("runtime_rejection_reason"),
+        row.get("runtime_compiled"),
+        row.get("runtime_reward_resolved"),
+        row.get("runtime_probability_resolved"),
+        row.get("runtime_rng_eligible"),
+        row.get("runtime_rng_eligible_before_overflow"),
+        row.get("runtime_rejection_reason"),
+        row.get("slot_uid"),
+        row.get("canonical_item_id"),
+        row.get("gold_amount"),
+        row.get("reward_kind"),
+        row.get("baseline_origin"),
+        row.get("base_numerator"),
+        row.get("base_denominator"),
+        row.get("global_scale_numerator"),
+        row.get("global_scale_denominator"),
+        row.get("final_numerator"),
+        row.get("final_denominator"),
     )
 
 
-def validate_slot_contract(slot: dict[str, Any]) -> list[str]:
+def validate_source_row_contract(row: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     prefix = (
-        f"{slot.get('drop_profile_id', '<profile?>')}"
-        f":{slot.get('line_number', '<line?>')}"
+        f"{row.get('source_profile_id', '<profile?>')}:"
+        f"{row.get('source_line_number', '<line?>')}"
     )
 
-    chance_valid = _as_bool(slot.get("chance_valid", False))
-    reward_resolvable = _as_bool(slot.get("reward_resolvable", False))
-    drop_enabled = _as_bool(slot.get("drop_enabled", False))
-    reward_resolved_enabled = _as_bool(
-        slot.get("reward_resolved_enabled", False)
+    required = (
+        "canonical_monster_id",
+        "source_entry_ordinal_zero_based",
+        "source_entry_ordinal_one_based",
+        "source_line_number",
+        "source_slot_index",
+        "source_chance",
+        "source_chance_valid",
+        "source_rate_policy",
+        "source_slot_status",
+        "runtime_compiled",
+        "runtime_reward_resolved",
+        "runtime_probability_resolved",
+        "runtime_rng_eligible",
+        "runtime_rng_eligible_before_overflow",
     )
-    probability_resolvable = _as_bool(
-        slot.get("probability_authority_resolvable", False)
-    )
-    probability_resolved_enabled = _as_bool(
-        slot.get("probability_resolved_enabled", False)
-    )
-    rng_eligible = _as_bool(slot.get("rng_eligible", False))
-    rng_eligible_before_overflow = _as_bool(
-        slot.get("rng_eligible_before_overflow", False)
-    )
-    slot_rollable = _as_bool(slot.get("slot_runtime_rollable", False))
-    runtime_rollable_alias = _as_bool(slot.get("runtime_rollable", False))
-    runtime_reward_attempted = _as_bool(
-        slot.get("runtime_reward_attempted", False)
-    )
-    non_rollable_reason = slot.get("non_rollable_reason")
-    runtime_rejection_reason = slot.get("runtime_rejection_reason")
-    reward_status = str(slot.get("reward_resolution_status", ""))
-    reward_reason = slot.get("reward_resolution_reason")
-    monster_allowed = _as_bool(slot.get("monster_runtime_allowed", False))
-    runtime_reachable = _as_bool(slot.get("runtime_reachable", False))
-
-    for field in (
-        "drop_enabled",
-        "reward_resolved_enabled",
-        "probability_resolved_enabled",
-        "rng_eligible",
-        "rng_eligible_before_overflow",
-    ):
-        if field not in slot:
+    for field in required:
+        if field not in row:
             errors.append(f"{prefix} {field} is required")
 
+    chance_valid = _as_bool(row.get("source_chance_valid", False))
+    chance_denominator = row.get("source_chance_denominator")
     if chance_valid:
-        denominator = slot.get("chance_denominator")
-        if not isinstance(denominator, int) or denominator <= 0:
+        if not isinstance(chance_denominator, int) or chance_denominator <= 0:
             errors.append(
-                f"{prefix} chance_valid=true requires positive integer denominator"
+                f"{prefix} valid source chance requires positive denominator"
             )
-    elif slot.get("chance_denominator") is not None:
+    elif chance_denominator is not None:
         errors.append(
-            f"{prefix} chance_valid=false requires chance_denominator=null"
+            f"{prefix} invalid source chance requires null denominator"
         )
 
-    # Source chance is provenance only. Every source row reaches canonical
-    # reward resolution before the DPV2 role/tier probability authority.
-    if not runtime_reward_attempted:
+    if row.get("source_rate_policy") != "AUDIT_ONLY":
+        errors.append(f"{prefix} source_rate_policy must be AUDIT_ONLY")
+    if row.get("source_slot_status") != "CONFIRMED_SOURCE_SLOT":
         errors.append(
-            f"{prefix} runtime_reward_attempted must be true"
+            f"{prefix} source_slot_status must be CONFIRMED_SOURCE_SLOT"
         )
-
-    if reward_resolvable:
-        if reward_status != "resolved":
-            errors.append(
-                f"{prefix} reward_resolvable=true requires status=resolved"
-            )
-        if reward_reason not in (None, ""):
-            errors.append(
-                f"{prefix} resolved reward must not carry rejection reason"
-            )
-    else:
-        if reward_status != "unresolved":
-            errors.append(
-                f"{prefix} reward_resolvable=false requires status=unresolved"
-            )
-        if not isinstance(reward_reason, str) or not reward_reason:
-            errors.append(
-                f"{prefix} unresolved reward requires a concrete reason"
-            )
-
-    expected_reward_resolved = drop_enabled and reward_resolvable
-    if reward_resolved_enabled != expected_reward_resolved:
-        errors.append(
-            f"{prefix} reward_resolved_enabled={reward_resolved_enabled} "
-            f"expected={expected_reward_resolved}"
-        )
-
-    expected_probability_resolved = drop_enabled and probability_resolvable
-    if probability_resolved_enabled != expected_probability_resolved:
-        errors.append(
-            f"{prefix} probability_resolved_enabled="
-            f"{probability_resolved_enabled} "
-            f"expected={expected_probability_resolved}"
-        )
-
-    expected_rng_eligible = (
-        expected_reward_resolved and expected_probability_resolved
-    )
-    if rng_eligible != expected_rng_eligible:
-        errors.append(
-            f"{prefix} rng_eligible={rng_eligible} "
-            f"expected={expected_rng_eligible}"
-        )
-    if rng_eligible_before_overflow != expected_rng_eligible:
-        errors.append(
-            f"{prefix} rng_eligible_before_overflow="
-            f"{rng_eligible_before_overflow} "
-            f"expected={expected_rng_eligible}"
-        )
-
-    expected_rollable = expected_rng_eligible
-    if slot_rollable != expected_rollable:
-        errors.append(
-            f"{prefix} slot_runtime_rollable={slot_rollable} "
-            f"expected={expected_rollable}"
-        )
-    if runtime_rollable_alias != slot_rollable:
-        errors.append(
-            f"{prefix} runtime_rollable compatibility alias drifted"
-        )
-
-    if not reward_resolvable:
-        expected_non_rollable = "unresolved_reward"
-        expected_runtime_rejection = reward_reason
-    elif not drop_enabled:
-        expected_non_rollable = "probability_authority_blocked"
-        expected_runtime_rejection = "drop_disabled"
-    elif not probability_resolvable:
-        expected_non_rollable = "probability_authority_blocked"
-        policy = slot.get("probability_policy", {})
-        expected_runtime_rejection = (
-            policy.get("reason", "drop_probability_authority_invalid")
-            if isinstance(policy, dict)
-            else "drop_probability_authority_invalid"
-        )
-    else:
-        expected_non_rollable = None
-        expected_runtime_rejection = None
-
-    if non_rollable_reason != expected_non_rollable:
-        errors.append(
-            f"{prefix} non_rollable_reason={non_rollable_reason!r} "
-            f"expected={expected_non_rollable!r}"
-        )
-    if runtime_rejection_reason != expected_runtime_rejection:
-        errors.append(
-            f"{prefix} runtime_rejection_reason="
-            f"{runtime_rejection_reason!r} "
-            f"expected={expected_runtime_rejection!r}"
-        )
-
-    expected_reachable = monster_allowed and slot_rollable
-    if runtime_reachable != expected_reachable:
-        errors.append(
-            f"{prefix} runtime_reachable={runtime_reachable} "
-            f"expected={expected_reachable}"
-        )
-
-    source_entry = slot.get("source_entry")
+    source_entry = row.get("source_entry")
     if not isinstance(source_entry, dict):
         errors.append(f"{prefix} source_entry must be an object")
     else:
-        # Provenance fields are presence/audit data only. They are never used
-        # above to derive rollability.
-        if "rate_policy" not in source_entry:
-            errors.append(f"{prefix} source_entry.rate_policy missing")
-        if "slot_status" not in source_entry:
-            errors.append(f"{prefix} source_entry.slot_status missing")
+        if source_entry.get("rate_policy") != row.get("source_rate_policy"):
+            errors.append(f"{prefix} source rate policy was not preserved")
+        if source_entry.get("slot_status") != row.get("source_slot_status"):
+            errors.append(f"{prefix} source slot status was not preserved")
 
+    runtime_compiled = _as_bool(row.get("runtime_compiled", False))
+    runtime_reward_resolved = _as_bool(
+        row.get("runtime_reward_resolved", False)
+    )
+    runtime_probability_resolved = _as_bool(
+        row.get("runtime_probability_resolved", False)
+    )
+    runtime_rng_eligible = _as_bool(row.get("runtime_rng_eligible", False))
+    runtime_rng_before_overflow = _as_bool(
+        row.get("runtime_rng_eligible_before_overflow", False)
+    )
+
+    if not runtime_compiled:
+        if any(
+            (
+                runtime_reward_resolved,
+                runtime_probability_resolved,
+                runtime_rng_eligible,
+                runtime_rng_before_overflow,
+            )
+        ):
+            errors.append(f"{prefix} NON_LOOT source row reached Runtime RNG")
+        if row.get("runtime_slot") is not None:
+            errors.append(f"{prefix} NON_LOOT row has a compiled slot")
+        if row.get("slot_uid") != "":
+            errors.append(f"{prefix} NON_LOOT row has a slot_uid")
+        if row.get("canonical_item_id") is not None:
+            errors.append(f"{prefix} NON_LOOT row has canonical item identity")
+        if row.get("gold_amount") is not None:
+            errors.append(f"{prefix} NON_LOOT row has gold identity")
+        if row.get("runtime_rejection_reason") != "non_loot_profile":
+            errors.append(f"{prefix} NON_LOOT row has an invalid rejection reason")
+        return errors
+
+    runtime_profile_id = row.get("runtime_profile_id")
+    if (
+        not isinstance(runtime_profile_id, str)
+        or not runtime_profile_id.startswith("dpv2.direct.")
+    ):
+        errors.append(f"{prefix} compiled row lacks a V2 direct profile ID")
+    runtime_slot = row.get("runtime_slot")
+    if not isinstance(runtime_slot, dict):
+        errors.append(f"{prefix} compiled row runtime_slot must be an object")
+        runtime_slot = {}
+    if not runtime_rng_eligible:
+        errors.append(f"{prefix} compiled row must be RNG eligible")
+    if not runtime_reward_resolved or not runtime_probability_resolved:
+        errors.append(f"{prefix} compiled row reward/probability is unresolved")
+    if not runtime_rng_before_overflow:
+        errors.append(f"{prefix} compiled row must reach RNG before overflow")
+
+    slot_uid = row.get("slot_uid")
+    provenance_id = row.get("source_provenance_id")
+    if not isinstance(slot_uid, str) or not slot_uid:
+        errors.append(f"{prefix} compiled slot_uid is required")
+    if not isinstance(provenance_id, str) or not provenance_id:
+        errors.append(f"{prefix} source_provenance_id is required")
+    if runtime_slot.get("slot_uid") != slot_uid:
+        errors.append(f"{prefix} flattened slot_uid disagrees with runtime_slot")
+    if runtime_slot.get("source_provenance_id") != provenance_id:
+        errors.append(
+            f"{prefix} flattened provenance disagrees with runtime_slot"
+        )
+
+    reward_kind = row.get("reward_kind")
+    has_item = row.get("canonical_item_id") is not None
+    has_gold = row.get("gold_amount") is not None
+    if reward_kind == "item":
+        if not has_item or int(row.get("canonical_item_id", 0)) <= 0:
+            errors.append(f"{prefix} item reward lacks positive canonical ID")
+        if has_gold:
+            errors.append(f"{prefix} item reward carries gold identity")
+    elif reward_kind == "gold":
+        if not has_gold or int(row.get("gold_amount", 0)) <= 0:
+            errors.append(f"{prefix} gold reward lacks positive amount")
+        if has_item:
+            errors.append(f"{prefix} gold reward carries item identity")
+    else:
+        errors.append(f"{prefix} reward_kind is invalid: {reward_kind!r}")
+
+    for field in (
+        "base_numerator",
+        "base_denominator",
+        "global_scale_numerator",
+        "global_scale_denominator",
+        "final_numerator",
+        "final_denominator",
+    ):
+        value = row.get(field)
+        if not isinstance(value, int) or value <= 0:
+            errors.append(f"{prefix} {field} must be positive integer")
+    for field in ("base_probability", "global_scale", "final_probability"):
+        value = row.get(field)
+        if not isinstance(value, (int, float)) or value < 0:
+            errors.append(f"{prefix} {field} must be non-negative number")
+
+    if row.get("runtime_rejection_reason") != "":
+        errors.append(f"{prefix} resolved row carries a rejection reason")
     return errors
 
 
-def _recompute_summary(slots: list[dict[str, Any]]) -> dict[str, Any]:
-    rate_policy = []
-    slot_status = []
-    non_rollable = []
-    runtime_rejections = []
-    reward_reasons = []
+def _recompute_summary(
+    source_rows: list[dict[str, Any]],
+    compiled_slots: list[dict[str, Any]] | None = None,
+    source_profiles: list[dict[str, Any]] | None = None,
+    compiled_profiles: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    if compiled_slots is None:
+        compiled_slots = [
+            row for row in source_rows
+            if _as_bool(row.get("runtime_compiled", False))
+        ]
+    if source_profiles is None:
+        source_profiles = []
+    if compiled_profiles is None:
+        compiled_profiles = []
 
-    chance_valid = 0
-    reward_resolvable = 0
-    rollable = 0
-    reachable = 0
-    drop_enabled = 0
-    drop_disabled = 0
-    reward_resolved_enabled = 0
-    probability_resolved_enabled = 0
-    rng_eligible = 0
-
-    for slot in slots:
-        source = slot.get("source_entry", {})
-        if isinstance(source, dict):
-            rate_policy.append(str(source.get("rate_policy", "<missing>")))
-            slot_status.append(str(source.get("slot_status", "<missing>")))
-        else:
-            rate_policy.append("<invalid-source-entry>")
-            slot_status.append("<invalid-source-entry>")
-
-        if _as_bool(slot.get("chance_valid", False)):
-            chance_valid += 1
-        if _as_bool(slot.get("reward_resolvable", False)):
-            reward_resolvable += 1
-        else:
-            reward_reasons.append(
-                str(slot.get(
-                    "reward_resolution_reason",
-                    "unresolved_unspecified",
-                ))
-            )
-        if _as_bool(slot.get("drop_enabled", False)):
-            drop_enabled += 1
-        else:
-            drop_disabled += 1
-        if _as_bool(slot.get("reward_resolved_enabled", False)):
-            reward_resolved_enabled += 1
-        if _as_bool(slot.get("probability_resolved_enabled", False)):
-            probability_resolved_enabled += 1
-        if _as_bool(slot.get("rng_eligible", False)):
-            rng_eligible += 1
-        if _as_bool(slot.get("slot_runtime_rollable", False)):
-            rollable += 1
-        else:
-            non_rollable.append(
-                str(slot.get(
-                    "non_rollable_reason",
-                    "non_rollable_unspecified",
-                ))
-            )
-            runtime_rejections.append(
-                str(slot.get(
-                    "runtime_rejection_reason",
-                    "runtime_rejection_unspecified",
-                ))
-            )
-        if _as_bool(slot.get("runtime_reachable", False)):
-            reachable += 1
-
-    total = len(slots)
-    return {
-        "slot_count": total,
+    rate_policy = [
+        str(row.get("source_rate_policy", "<missing>"))
+        for row in source_rows
+    ]
+    slot_status = [
+        str(row.get("source_slot_status", "<missing>"))
+        for row in source_rows
+    ]
+    malformed_count = sum(
+        1 for row in source_rows
+        if not _as_bool(row.get("source_chance_valid", False))
+    )
+    enabled_count = sum(
+        1 for row in source_rows
+        if _as_bool(row.get("runtime_compiled", False))
+    )
+    disabled_count = len(source_rows) - enabled_count
+    origin_counts = _counter_dict(
+        str(row.get("baseline_origin", ""))
+        for row in compiled_slots
+    )
+    item_counts = Counter(
+        str(row.get("canonical_item_id"))
+        for row in compiled_slots
+        if row.get("canonical_item_id") is not None
+    )
+    duplicate_item_occurrences = sum(
+        count - 1 for count in item_counts.values() if count > 1
+    )
+    slot_uids = [
+        str(row.get("slot_uid", ""))
+        for row in compiled_slots
+    ]
+    source_summary = {
+        "profile_count": len(source_profiles),
+        "row_count": len(source_rows),
+        "enabled_source_row_count": enabled_count,
+        "non_loot_disabled_source_row_count": disabled_count,
+        "malformed_source_provenance_count": malformed_count,
         "rate_policy_counts": _counter_dict(rate_policy),
         "slot_status_counts": _counter_dict(slot_status),
-        "chance_valid_count": chance_valid,
-        "chance_invalid_count": total - chance_valid,
-        "reward_resolvable_count": reward_resolvable,
-        "reward_unresolved_count": total - reward_resolvable,
-        "slot_runtime_rollable_count": rollable,
-        "slot_runtime_non_rollable_count": total - rollable,
-        "runtime_reachable_count": reachable,
-        "runtime_unreachable_count": total - reachable,
-        "non_rollable_reason_counts": _counter_dict(non_rollable),
-        "runtime_rejection_reason_counts": _counter_dict(runtime_rejections),
-        "reward_resolution_reason_counts": _counter_dict(reward_reasons),
-        "canonical_source_slots": total,
-        "drop_enabled_source_slots": drop_enabled,
-        "drop_disabled_source_slots": drop_disabled,
-        "reward_resolved_enabled_slots": reward_resolved_enabled,
-        "probability_resolved_enabled_slots": probability_resolved_enabled,
-        "rng_eligible_slots": rng_eligible,
-        # The exporter reports source rows reaching the RNG stage, not the
-        # number of random values consumed by one particular death.
-        "rng_roll_count": rng_eligible,
-        "all_enabled_resolved_slots_rng_before_overflow": (
-            drop_enabled == reward_resolved_enabled
-            and reward_resolved_enabled == probability_resolved_enabled
-            and probability_resolved_enabled == rng_eligible
-        ),
-        "overflow_stage": "after_all_probability_rolls",
     }
+    runtime_summary = {
+        "profile_count": len(compiled_profiles),
+        "enabled_profile_count": sum(
+            1 for profile in compiled_profiles
+            if _as_bool(profile.get("drop_enabled", False))
+        ),
+        "non_loot_profile_count": sum(
+            1 for profile in compiled_profiles
+            if not _as_bool(profile.get("drop_enabled", False))
+        ),
+        "slot_count": len(compiled_slots),
+        "baseline_origin_counts": origin_counts,
+        "reward_resolved_slot_count": sum(
+            1 for row in compiled_slots
+            if _as_bool(row.get("runtime_reward_resolved", False))
+        ),
+        "probability_resolved_slot_count": sum(
+            1 for row in compiled_slots
+            if _as_bool(row.get("runtime_probability_resolved", False))
+        ),
+        "rng_eligible_slot_count": sum(
+            1 for row in compiled_slots
+            if _as_bool(row.get("runtime_rng_eligible", False))
+        ),
+        "rng_roll_stage_slot_count": len(compiled_slots),
+        "all_compiled_slots_rng_before_overflow": all(
+            _as_bool(row.get("runtime_rng_eligible_before_overflow", False))
+            for row in compiled_slots
+        ),
+        "duplicate_canonical_item_occurrences": duplicate_item_occurrences,
+        "unique_slot_uid_count": len(set(slot_uids)),
+        "post_rng_ground_slot_limit": 9,
+    }
+    return {
+        "source_corpus": source_summary,
+        "compiled_runtime": runtime_summary,
+    }
+
+
+def _check_expected_counts(
+    snapshot: dict[str, Any],
+    observed: dict[str, Any],
+    errors: list[str],
+    *,
+    enforce_current_corpus: bool,
+) -> None:
+    if not enforce_current_corpus:
+        return
+    source = observed["source_corpus"]
+    runtime = observed["compiled_runtime"]
+    expected_source = {
+        "profile_count": EXPECTED_SOURCE_PROFILE_COUNT,
+        "row_count": EXPECTED_SOURCE_ROW_COUNT,
+        "enabled_source_row_count": EXPECTED_ENABLED_SOURCE_ROW_COUNT,
+        "non_loot_disabled_source_row_count": EXPECTED_NON_LOOT_SOURCE_ROW_COUNT,
+        "malformed_source_provenance_count": (
+            EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT
+        ),
+    }
+    expected_runtime = {
+        "profile_count": EXPECTED_RUNTIME_PROFILE_COUNT,
+        "enabled_profile_count": EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
+        "non_loot_profile_count": EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
+        "slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
+        "reward_resolved_slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
+        "probability_resolved_slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
+        "rng_eligible_slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
+        "rng_roll_stage_slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
+    }
+    for key, expected in expected_source.items():
+        if source.get(key) != expected:
+            errors.append(
+                f"source_corpus.{key}={source.get(key)!r} expected={expected}"
+            )
+    for key, expected in expected_runtime.items():
+        if runtime.get(key) != expected:
+            errors.append(
+                f"compiled_runtime.{key}={runtime.get(key)!r} "
+                f"expected={expected}"
+            )
+    if runtime.get("baseline_origin_counts") != {
+        "LEGACY_21CQ_MONITEMS": EXPECTED_LEGACY_RUNTIME_SLOT_COUNT,
+        "PROJECT_EXTENSION": EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT,
+    }:
+        errors.append(
+            "compiled_runtime.baseline_origin_counts does not match frozen "
+            "5926/69 split"
+        )
+    source_summary = snapshot.get("source_summary", {})
+    if isinstance(source_summary, dict):
+        for key, expected in expected_source.items():
+            if source_summary.get(key) != expected:
+                errors.append(
+                    f"source_summary.{key}={source_summary.get(key)!r} "
+                    f"expected={expected}"
+                )
+    runtime_summary = snapshot.get("compiled_runtime_summary", {})
+    if isinstance(runtime_summary, dict):
+        for key, expected in expected_runtime.items():
+            if runtime_summary.get(key) != expected:
+                errors.append(
+                    f"compiled_runtime_summary.{key}={runtime_summary.get(key)!r} "
+                    f"expected={expected}"
+                )
 
 
 def validate_snapshot(
@@ -357,7 +411,6 @@ def validate_snapshot(
     enforce_current_corpus: bool = True,
 ) -> list[str]:
     errors: list[str] = []
-
     if snapshot.get("schema") != SNAPSHOT_SCHEMA:
         errors.append(
             f"schema={snapshot.get('schema')!r} expected={SNAPSHOT_SCHEMA!r}"
@@ -367,314 +420,287 @@ def validate_snapshot(
     if not isinstance(authority, dict):
         errors.append("authority must be an object")
         authority = {}
-
-    sha_before = authority.get("catalog_sha256_before")
-    sha_after = authority.get("catalog_sha256_after")
-    if not sha_before or not sha_after:
-        errors.append("catalog SHA-256 before/after is required")
-    elif sha_before != sha_after:
-        errors.append(
-            "canonical catalog changed during export "
-            f"before={sha_before} after={sha_after}"
-        )
-
-    authority_gate = authority.get("source_slot_gate")
-    if not isinstance(authority_gate, dict):
+    if authority.get("catalog_sha256_before") != authority.get(
+        "catalog_sha256_after"
+    ):
+        errors.append("canonical catalog changed during export")
+    runtime_authority = authority.get("runtime_authority")
+    if not isinstance(runtime_authority, dict):
+        errors.append("authority.runtime_authority must be an object")
+        runtime_authority = {}
+    expected_authority = {
+        "authority_id": "dpv2.direct_baseline.v2",
+        "schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
+        "production_runtime": "V2_DIRECT_BASELINE",
+        "identity_key": "canonical_monster_id",
+        "direct_profile_join": "canonical_monster_id_exact",
+        "source_profile_id_is_audit_only": True,
+        "fallback_forbidden": True,
+    }
+    for key, expected in expected_authority.items():
+        if runtime_authority.get(key) != expected:
+            errors.append(
+                f"authority.runtime_authority.{key}="
+                f"{runtime_authority.get(key)!r} expected={expected!r}"
+            )
+    if (
+        authority.get("source_corpus_is_audit_only") is not True
+        or authority.get("compiled_runtime_is_rng_authority") is not True
+        or authority.get("overflow_stage") != "after_all_probability_rolls"
+    ):
+        errors.append("authority source/runtime view split is invalid")
+    gate = authority.get("source_slot_gate")
+    if not isinstance(gate, dict):
         errors.append("authority.source_slot_gate must be an object")
-        authority_gate = {}
-
-    slots_raw = snapshot.get("slots")
-    if not isinstance(slots_raw, list):
-        errors.append("slots must be an array")
-        return errors
-
-    slots: list[dict[str, Any]] = []
-    for index, slot in enumerate(slots_raw):
-        if not isinstance(slot, dict):
-            errors.append(f"slots[{index}] is not an object")
-            continue
-        slots.append(slot)
-        errors.extend(validate_slot_contract(slot))
-
-    observed = _recompute_summary(slots)
-    reported = snapshot.get("summary")
-    if not isinstance(reported, dict):
-        errors.append("summary must be an object")
-        reported = {}
-
-    # Only compare fields that are deterministic from slot rows. Monster gate
-    # counter is diagnostic and is allowed to be richer than this recomputation.
-    for key, value in observed.items():
-        if reported.get(key) != value:
-            errors.append(
-                f"summary.{key}={reported.get(key)!r} "
-                f"recomputed={value!r}"
-            )
-
-    if enforce_current_corpus:
-        catalog_summary = snapshot.get("catalog_summary")
-        if not isinstance(catalog_summary, dict):
-            errors.append("catalog_summary must be an object")
-            catalog_summary = {}
-
-        expected_scalar = {
-            "drop_base_row_count": EXPECTED_BASE_DROP_ROW_COUNT,
-            "drop_final_row_count": EXPECTED_FINAL_DROP_ROW_COUNT,
-            "drop_authoring_enabled_global_count": 0,
-            "drop_authoring_global_expanded_row_count": 0,
-            "drop_authoring_enabled_monster_count": 0,
-            "drop_authoring_monster_added_row_count": 0,
-        }
-        for key, expected in expected_scalar.items():
-            if int(catalog_summary.get(key, -1)) != expected:
-                errors.append(
-                    f"catalog_summary.{key}="
-                    f"{catalog_summary.get(key)!r} expected={expected}"
-                )
-
-        reported_profile_count = int(
-            reported.get("drop_profile_count", -1)
-        )
-        if reported_profile_count != EXPECTED_DROP_PROFILE_COUNT:
-            errors.append(
-                f"summary.drop_profile_count={reported_profile_count} "
-                f"expected={EXPECTED_DROP_PROFILE_COUNT}"
-            )
-        if len(slots) != EXPECTED_FINAL_DROP_ROW_COUNT:
-            errors.append(
-                f"slot count={len(slots)} "
-                f"expected={EXPECTED_FINAL_DROP_ROW_COUNT}"
-            )
-
+    else:
         expected_gate = {
-            "canonical_source_slots": EXPECTED_BASE_DROP_ROW_COUNT,
-            "drop_enabled_source_slots": EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT,
-            "drop_disabled_source_slots": EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT,
-            "reward_resolved_enabled_slots": EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT,
-            "probability_resolved_enabled_slots": EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT,
-            "rng_eligible_slots": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-            "rng_roll_count": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
+            "available": True,
+            "authority": "dpv2.direct_baseline.v2",
+            "maximum_ground_slots": 9,
         }
+        if enforce_current_corpus:
+            expected_gate["compiled_slots"] = EXPECTED_RUNTIME_SLOT_COUNT
         for key, expected in expected_gate.items():
-            if int(authority_gate.get(key, -1)) != expected:
+            if gate.get(key) != expected:
                 errors.append(
-                    f"authority.source_slot_gate.{key}="
-                    f"{authority_gate.get(key)!r} expected={expected}"
+                    f"authority.source_slot_gate.{key}={gate.get(key)!r} "
+                    f"expected={expected!r}"
                 )
-        if (
-            not bool(authority_gate.get(
-                "all_enabled_resolved_slots_rng_before_overflow",
-                False,
-            ))
-            or str(authority_gate.get("overflow_stage", ""))
-            != "after_all_probability_rolls"
-        ):
-            errors.append(
-                "authority.source_slot_gate must prove all enabled rows reach "
-                "RNG before overflow"
-            )
 
-        for key, expected in expected_gate.items():
-            if int(observed.get(key, -1)) != expected:
-                errors.append(
-                    f"summary.{key}={observed.get(key)!r} expected={expected}"
-                )
-        if not bool(observed.get("all_enabled_resolved_slots_rng_before_overflow", False)):
-            errors.append(
-                "summary source-slot gate does not prove pre-overflow RNG coverage"
-            )
-        if (
-            observed["rate_policy_counts"].get("AUDIT_ONLY", 0)
-            != EXPECTED_AUDIT_ONLY_COUNT
-        ):
-            errors.append(
-                "AUDIT_ONLY count="
-                f"{observed['rate_policy_counts'].get('AUDIT_ONLY', 0)} "
-                f"expected={EXPECTED_AUDIT_ONLY_COUNT}"
-            )
-        if (
-            observed["slot_status_counts"].get(
-                "CONFIRMED_SOURCE_SLOT",
-                0,
-            )
-            != EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT
-        ):
-            errors.append(
-                "CONFIRMED_SOURCE_SLOT count="
-                f"{observed['slot_status_counts'].get('CONFIRMED_SOURCE_SLOT', 0)} "
-                f"expected={EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT}"
-            )
-        if (
-            observed["chance_invalid_count"]
-            != EXPECTED_INVALID_CHANCE_COUNT
-        ):
-            errors.append(
-                f"chance_invalid_count={observed['chance_invalid_count']} "
-                f"expected={EXPECTED_INVALID_CHANCE_COUNT}"
-            )
+    source_profiles = snapshot.get("source_profiles")
+    compiled_profiles = snapshot.get("compiled_profiles")
+    source_rows_raw = snapshot.get("source_rows")
+    compiled_slots_raw = snapshot.get("compiled_slots")
+    if not isinstance(source_profiles, list):
+        errors.append("source_profiles must be an array")
+        source_profiles = []
+    if not isinstance(compiled_profiles, list):
+        errors.append("compiled_profiles must be an array")
+        compiled_profiles = []
+    if not isinstance(source_rows_raw, list):
+        errors.append("source_rows must be an array")
+        source_rows_raw = []
+    if not isinstance(compiled_slots_raw, list):
+        errors.append("compiled_slots must be an array")
+        compiled_slots_raw = []
+    source_rows = [
+        row for row in source_rows_raw if isinstance(row, dict)
+    ]
+    compiled_slots = [
+        row for row in compiled_slots_raw if isinstance(row, dict)
+    ]
+    if len(source_rows) != len(source_rows_raw):
+        errors.append("source_rows contains a non-object")
+    if len(compiled_slots) != len(compiled_slots_raw):
+        errors.append("compiled_slots contains a non-object")
+    for index, row in enumerate(source_rows):
+        errors.extend(
+            f"source_rows[{index}] {error}"
+            for error in validate_source_row_contract(row)
+        )
 
-        invalid = [
-            slot
-            for slot in slots
-            if not _as_bool(slot.get("chance_valid", False))
+    source_compiled = [
+        row for row in source_rows
+        if _as_bool(row.get("runtime_compiled", False))
+    ]
+    source_by_uid = {
+        str(row.get("slot_uid", "")): row for row in source_compiled
+    }
+    compiled_uids: list[str] = []
+    for index, row in enumerate(compiled_slots):
+        if not _as_bool(row.get("runtime_compiled", False)):
+            errors.append(f"compiled_slots[{index}] is not marked compiled")
+        compiled_uids.append(str(row.get("slot_uid", "")))
+        if source_by_uid.get(str(row.get("slot_uid", ""))) != row:
+            errors.append(
+                f"compiled_slots[{index}] does not exactly match source row"
+            )
+    if len(compiled_uids) != len(set(compiled_uids)):
+        errors.append("compiled slot UID collision")
+    if len(source_compiled) != len(compiled_slots):
+        errors.append(
+            "source compiled rows and compiled_slots have different counts"
+        )
+
+    observed = _recompute_summary(
+        source_rows,
+        compiled_slots,
+        source_profiles,
+        compiled_profiles,
+    )
+    reported = snapshot.get("summary")
+    if reported != observed:
+        errors.append(
+            "summary does not equal recomputed source/compiled dual view"
+        )
+    if snapshot.get("source_summary") != observed["source_corpus"]:
+        errors.append("source_summary does not equal recomputed source view")
+    if snapshot.get("compiled_runtime_summary") != observed["compiled_runtime"]:
+        errors.append(
+            "compiled_runtime_summary does not equal recomputed Runtime view"
+        )
+    _check_expected_counts(
+        snapshot,
+        observed,
+        errors,
+        enforce_current_corpus=enforce_current_corpus,
+    )
+
+    correction = snapshot.get("correction_provenance")
+    if not isinstance(correction, dict):
+        errors.append("correction_provenance must be an object")
+    else:
+        malformed = [
+            row for row in source_rows
+            if not _as_bool(row.get("source_chance_valid", False))
         ]
-        if len(invalid) == 1:
-            anomaly = invalid[0]
+        if len(malformed) == 1:
+            anomaly = malformed[0]
             for key, expected in EXPECTED_ANOMALY.items():
-                if anomaly.get(key) != expected:
+                if key in correction:
+                    actual = correction.get(key)
+                else:
+                    actual = anomaly.get(key)
+                if actual != expected:
                     errors.append(
-                        f"anomaly.{key}={anomaly.get(key)!r} "
-                        f"expected={expected!r}"
+                        f"correction.{key}={actual!r} expected={expected!r}"
                     )
-            if not _as_bool(anomaly.get("runtime_reward_attempted", False)):
+            runtime_slot = anomaly.get("runtime_slot")
+            if not isinstance(runtime_slot, dict) or runtime_slot.get(
+                "base_denominator"
+            ) != EXPECTED_ANOMALY["corrected_base_denominator"]:
                 errors.append(
-                    "anomaly runtime_reward_attempted must be true"
+                    "1/00 source provenance does not point to base 1/2800"
                 )
-            if not _as_bool(anomaly.get("slot_runtime_rollable", False)):
+            if not _as_bool(anomaly.get("runtime_rng_eligible", False)):
+                errors.append("1/00 provenance incorrectly blocked Runtime RNG")
+    direct_summary = snapshot.get("direct_baseline_summary")
+    if not isinstance(direct_summary, dict):
+        errors.append("direct_baseline_summary must be an object")
+    elif enforce_current_corpus:
+        for key, expected in {
+            "active_monsters": EXPECTED_RUNTIME_PROFILE_COUNT,
+            "drop_enabled_monsters": EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
+            "non_loot_monsters": EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
+            "compiled_slots": EXPECTED_RUNTIME_SLOT_COUNT,
+        }.items():
+            if direct_summary.get(key) != expected:
                 errors.append(
-                    "anomaly slot_runtime_rollable must be true"
+                    f"direct_baseline_summary.{key}="
+                    f"{direct_summary.get(key)!r} expected={expected}"
                 )
-            if anomaly.get("runtime_rejection_reason") is not None:
-                errors.append("anomaly must not have a runtime rejection")
-
     return errors
 
 
 def analyze_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
-    slots = [
-        slot
-        for slot in snapshot.get("slots", [])
-        if isinstance(slot, dict)
+    source_rows = [
+        row for row in snapshot.get("source_rows", [])
+        if isinstance(row, dict)
     ]
-    summary = _recompute_summary(slots)
-
-    monsters: dict[int, dict[str, Any]] = {}
-    grouped: defaultdict[int, list[dict[str, Any]]] = defaultdict(list)
-    for slot in slots:
-        grouped[int(slot.get("monster_id", -1))].append(slot)
-
-    for monster_id in sorted(grouped):
-        rows = grouped[monster_id]
-        first = rows[0]
-        closure = first.get("monster_runtime_closure", {})
-        if not isinstance(closure, dict):
-            closure = {}
-        monsters[monster_id] = {
-            "monster_id": monster_id,
-            "drop_profile_id": first.get("drop_profile_id"),
-            "slot_count": len(rows),
-            "chance_invalid_count": sum(
-                1 for row in rows
-                if not _as_bool(row.get("chance_valid", False))
-            ),
-            "reward_unresolved_count": sum(
-                1 for row in rows
-                if not _as_bool(row.get("reward_resolvable", False))
-            ),
-            "slot_runtime_rollable_count": sum(
-                1 for row in rows
-                if _as_bool(row.get("slot_runtime_rollable", False))
-            ),
-            "runtime_reachable_count": sum(
-                1 for row in rows
-                if _as_bool(row.get("runtime_reachable", False))
-            ),
-            "monster_runtime_allowed": _as_bool(
-                first.get("monster_runtime_allowed", False)
-            ),
-            "monster_runtime_reason": first.get("monster_runtime_reason"),
-            "resolved_reward_count_from_closure": closure.get(
-                "resolved_reward_count"
-            ),
-        }
-
-    invalid_slots = [
-        slot for slot in slots
-        if not _as_bool(slot.get("chance_valid", False))
+    compiled_slots = [
+        row for row in snapshot.get("compiled_slots", [])
+        if isinstance(row, dict)
     ]
-    unresolved_slots = [
-        slot for slot in slots
-        if not _as_bool(slot.get("reward_resolvable", False))
+    source_profiles = [
+        row for row in snapshot.get("source_profiles", [])
+        if isinstance(row, dict)
     ]
-
+    compiled_profiles = [
+        row for row in snapshot.get("compiled_profiles", [])
+        if isinstance(row, dict)
+    ]
+    summary = _recompute_summary(
+        source_rows,
+        compiled_slots,
+        source_profiles,
+        compiled_profiles,
+    )
+    malformed = [
+        row for row in source_rows
+        if not _as_bool(row.get("source_chance_valid", False))
+    ]
     return {
-        "schema": "monster_drop_p1a_analysis_v2",
+        "schema": "monster_drop_p1a_analysis_v3",
         "snapshot_schema": snapshot.get("schema"),
         "authority": snapshot.get("authority", {}),
-        "catalog_summary": snapshot.get("catalog_summary", {}),
+        "direct_baseline_summary": snapshot.get(
+            "direct_baseline_summary", {}
+        ),
         "summary": summary,
-        "invalid_chance_slots": invalid_slots,
-        "unresolved_reward_slots": unresolved_slots,
-        "monsters": [
-            monsters[key] for key in sorted(monsters)
-        ],
+        "source_profiles": source_profiles,
+        "compiled_profiles": compiled_profiles,
+        "malformed_source_provenance_rows": malformed,
+        "source_rows": source_rows,
+        "compiled_slots": compiled_slots,
+        "correction_provenance": snapshot.get(
+            "correction_provenance", {}
+        ),
     }
 
 
-def _slot_csv_row(slot: dict[str, Any]) -> dict[str, Any]:
-    source = slot.get("source_entry", {})
-    if not isinstance(source, dict):
-        source = {}
+def _slot_csv_row(row: dict[str, Any]) -> dict[str, Any]:
+    runtime_slot = row.get("runtime_slot", {})
+    if not isinstance(runtime_slot, dict):
+        runtime_slot = {}
     return {
-        "drop_profile_id": slot.get("drop_profile_id"),
-        "monster_id": slot.get("monster_id"),
-        "ordinal_zero_based": slot.get(
-            "profile_entry_ordinal_zero_based"
+        "source_profile_id": row.get("source_profile_id"),
+        "runtime_profile_id": row.get("runtime_profile_id"),
+        "canonical_monster_id": row.get("canonical_monster_id"),
+        "source_entry_ordinal_zero_based": row.get(
+            "source_entry_ordinal_zero_based"
         ),
-        "ordinal_one_based": slot.get(
-            "profile_entry_ordinal_one_based"
+        "source_entry_ordinal_one_based": row.get(
+            "source_entry_ordinal_one_based"
         ),
-        "line_number": slot.get("line_number"),
-        "slot_index": slot.get("slot_index"),
-        "raw_text": slot.get("raw_text"),
-        "chance_raw": slot.get("chance_raw"),
-        "chance_denominator": slot.get("chance_denominator"),
-        "chance_valid": slot.get("chance_valid"),
-        "rate_policy": source.get("rate_policy"),
-        "slot_status": source.get("slot_status"),
-        "item_resolution_status": slot.get("item_resolution_status"),
-        "reward_resolution_status": slot.get(
-            "reward_resolution_status"
+        "source_line_number": row.get("source_line_number"),
+        "source_slot_index": row.get("source_slot_index"),
+        "source_item_label": row.get("source_item_label"),
+        "source_raw_text": row.get("source_raw_text"),
+        "source_chance": row.get("source_chance"),
+        "source_chance_denominator": row.get(
+            "source_chance_denominator"
         ),
-        "reward_resolvable": slot.get("reward_resolvable"),
-        "reward_resolution_reason": slot.get(
-            "reward_resolution_reason"
+        "source_chance_valid": row.get("source_chance_valid"),
+        "source_rate_policy": row.get("source_rate_policy"),
+        "source_slot_status": row.get("source_slot_status"),
+        "runtime_compiled": row.get("runtime_compiled"),
+        "slot_uid": row.get("slot_uid"),
+        "source_provenance_id": row.get("source_provenance_id"),
+        "canonical_item_id": row.get("canonical_item_id"),
+        "gold_amount": row.get("gold_amount"),
+        "reward_kind": row.get("reward_kind"),
+        "item_name": row.get("item_name"),
+        "baseline_origin": row.get("baseline_origin"),
+        "base_numerator": row.get("base_numerator"),
+        "base_denominator": row.get("base_denominator"),
+        "base_probability": row.get("base_probability"),
+        "global_preset": row.get("global_preset"),
+        "global_scale_numerator": row.get("global_scale_numerator"),
+        "global_scale_denominator": row.get(
+            "global_scale_denominator"
         ),
-        "runtime_reward_attempted": slot.get(
-            "runtime_reward_attempted"
+        "global_scale": row.get("global_scale"),
+        "final_numerator": row.get("final_numerator"),
+        "final_denominator": row.get("final_denominator"),
+        "final_probability": row.get("final_probability"),
+        "overflow_priority": row.get("overflow_priority"),
+        "protected_drop": row.get("protected_drop"),
+        "runtime_reward_resolved": row.get("runtime_reward_resolved"),
+        "runtime_probability_resolved": row.get(
+            "runtime_probability_resolved"
         ),
-        "drop_enabled": slot.get("drop_enabled"),
-        "reward_resolved_enabled": slot.get("reward_resolved_enabled"),
-        "probability_authority_resolvable": slot.get(
-            "probability_authority_resolvable"
+        "runtime_rng_eligible": row.get("runtime_rng_eligible"),
+        "runtime_rng_eligible_before_overflow": row.get(
+            "runtime_rng_eligible_before_overflow"
         ),
-        "probability_resolved_enabled": slot.get(
-            "probability_resolved_enabled"
-        ),
-        "rng_eligible": slot.get("rng_eligible"),
-        "rng_eligible_before_overflow": slot.get(
-            "rng_eligible_before_overflow"
-        ),
-        "slot_runtime_rollable": slot.get(
-            "slot_runtime_rollable"
-        ),
-        "non_rollable_reason": slot.get("non_rollable_reason"),
-        "runtime_rejection_reason": slot.get(
+        "runtime_rejection_reason": row.get(
             "runtime_rejection_reason"
         ),
-        "monster_runtime_allowed": slot.get(
-            "monster_runtime_allowed"
-        ),
-        "monster_runtime_reason": slot.get(
-            "monster_runtime_reason"
-        ),
-        "runtime_reachable": slot.get("runtime_reachable"),
-        "item": source.get("item", source.get("item_name")),
-        "item_id": source.get("item_id"),
-        "kind": source.get("kind"),
-        "source_ref": source.get("source_ref"),
-        "source_rate": source.get("source_rate"),
-        "source_note": source.get("source_note"),
+        "runtime_slot_json": json.dumps(
+            runtime_slot,
+            ensure_ascii=False,
+            sort_keys=True,
+        ) if runtime_slot else "",
     }
 
 
@@ -691,118 +717,76 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 
 def _markdown_report(analysis: dict[str, Any]) -> str:
     summary = analysis["summary"]
-    invalid = analysis["invalid_chance_slots"]
-    unresolved = analysis["unresolved_reward_slots"]
-
+    source = summary["source_corpus"]
+    runtime = summary["compiled_runtime"]
+    correction = analysis["correction_provenance"]
     lines = [
-        "# MONSTER-DROP-P1A Runtime Audit",
+        "# MONSTER-DROP-P1A Fresh DPV2 Direct-Baseline Audit",
         "",
-        "## Runtime contract",
+        "Status: P1A_DIRECT_BASELINE_CLOSED / BLOCKER_COUNT=0",
         "",
-        "- `rate_policy` / `slot_status` are provenance metadata only.",
-        "- Production slot gate order is canonical source slot -> canonical reward authority -> DPV2 probability authority -> RNG; legacy source chance is parsed only into parallel provenance diagnostics and never gates the DPV2 roll.",
-        "- `drop_enabled_source_slots`, `drop_disabled_source_slots`, `reward_resolved_enabled_slots`, `probability_resolved_enabled_slots`, and `rng_eligible_slots` are recomputed from every exported source row.",
-        "- Overflow selection runs only after all RNG-eligible rows have reached the probability roll stage.",
-        "- `runtime_rollable` is a compatibility alias of `slot_runtime_rollable`.",
-        "- `runtime_reachable` additionally requires the monster-level GameData gate.",
+        "## Dual view",
         "",
-        "## Summary",
+        "The source corpus is retained for audit and provenance only. It is not "
+        "a Runtime RNG table. The compiled V2 view is joined by exact "
+        "canonical_monster_id; source drop labels are audit metadata.",
         "",
-        "| Metric | Count |",
-        "|---|---:|",
+        "| View | Profiles | Rows/slots | Enabled | NON_LOOT/disabled | RNG |",
+        "|---|---:|---:|---:|---:|---:|",
+        (
+            f"| source corpus | {source['profile_count']} | "
+            f"{source['row_count']} | {source['enabled_source_row_count']} | "
+            f"{source['non_loot_disabled_source_row_count']} | 0 |"
+        ),
+        (
+            f"| compiled Runtime V2 | {runtime['profile_count']} | "
+            f"{runtime['slot_count']} | {runtime['enabled_profile_count']} "
+            f"profiles | {runtime['non_loot_profile_count']} profiles | "
+            f"{runtime['rng_eligible_slot_count']} |"
+        ),
+        "",
+        "Source corpus fixed metrics: 156 profiles, 7032 rows, "
+        "5995 enabled-source rows, 1037 NON_LOOT disabled-source rows, "
+        "and 1 malformed source-provenance row.",
+        "",
+        "Compiled Runtime fixed metrics: 156 profiles, 131 enabled profiles, "
+        "25 NON_LOOT profiles, 5995 V2 slots; 5926 "
+        "LEGACY_21CQ_MONITEMS slots plus 69 PROJECT_EXTENSION slots. "
+        "Reward, probability, eligibility, and RNG stages each close at 5995.",
+        "",
+        "## Direct probability and identity contract",
+        "",
+        "P(slot) = min(1, base_numerator * scale_num / "
+        "(base_denominator * scale_den)) with one global positive rational "
+        "scale. Duplicate canonical item IDs remain independent slots. "
+        "The nine-slot retention limit is post-RNG only.",
+        "",
+        "## Explicit source correction",
+        "",
+        (
+            f"- {correction.get('source_profile_id')} canonical monster "
+            f"{correction.get('canonical_monster_id')}, line "
+            f"{correction.get('source_line_number')}, "
+            f"{correction.get('source_slot_index')}: source "
+            f"{correction.get('source_chance')} remains unchanged as "
+            "provenance."
+        ),
+        (
+            f"- Frozen direct value: "
+            f"{correction.get('corrected_base_numerator')}/"
+            f"{correction.get('corrected_base_denominator')} from "
+            f"{correction.get('path')}."
+        ),
+        "",
+        "## Gate result",
+        "",
+        "- Source provenance is never used to reject a compiled V2 slot.",
+        "- NON_LOOT source rows never enter compiled_slots or RNG.",
+        "- All compiled slots resolve reward identity and exact probability "
+        "before the post-RNG overflow stage.",
+        "- Blocker count: 0.",
+        "",
     ]
-    for key in (
-        "slot_count",
-        "chance_valid_count",
-        "chance_invalid_count",
-        "reward_resolvable_count",
-        "reward_unresolved_count",
-        "slot_runtime_rollable_count",
-        "slot_runtime_non_rollable_count",
-        "runtime_reachable_count",
-        "runtime_unreachable_count",
-        "canonical_source_slots",
-        "drop_enabled_source_slots",
-        "drop_disabled_source_slots",
-        "reward_resolved_enabled_slots",
-        "probability_resolved_enabled_slots",
-        "rng_eligible_slots",
-        "rng_roll_count",
-    ):
-        lines.append(f"| `{key}` | {summary.get(key, 0)} |")
-
-    lines.extend([
-        "",
-        "### `rate_policy` distribution",
-        "",
-        "```json",
-        json.dumps(
-            summary.get("rate_policy_counts", {}),
-            ensure_ascii=False,
-            indent=2,
-        ),
-        "```",
-        "",
-        "### Non-rollable reasons",
-        "",
-        "```json",
-        json.dumps(
-            summary.get("non_rollable_reason_counts", {}),
-            ensure_ascii=False,
-            indent=2,
-        ),
-        "```",
-        "",
-        "### Exact LootRuntime rejection reasons",
-        "",
-        "```json",
-        json.dumps(
-            summary.get("runtime_rejection_reason_counts", {}),
-            ensure_ascii=False,
-            indent=2,
-        ),
-        "```",
-        "",
-        "## Invalid chance rows",
-        "",
-    ])
-
-    if not invalid:
-        lines.append("_None._")
-    else:
-        for slot in invalid:
-            lines.append(
-                "- "
-                f"`{slot.get('drop_profile_id')}` "
-                f"line={slot.get('line_number')} "
-                f"slot={slot.get('slot_index')} "
-                f"chance=`{slot.get('chance_raw')}` "
-                f"raw=`{slot.get('raw_text')}` "
-                f"reason=`{slot.get('runtime_rejection_reason')}`"
-            )
-
-    lines.extend([
-        "",
-        "## Runtime reward resolver failures",
-        "",
-    ])
-    if not unresolved:
-        lines.append("_None._")
-    else:
-        lines.append(
-            f"{len(unresolved)} row(s); see `monster_drop_p1a_slots.csv` "
-            "and `analysis.json` for complete details."
-        )
-
-    lines.extend([
-        "",
-        "## Important semantic result",
-        "",
-        "`AUDIT_ONLY` is not a non-rollable flag. The analyzer never uses "
-        "`rate_policy` to derive chance validity, reward resolution, "
-        "rollability, or runtime reachability.",
-        "",
-    ])
     return "\n".join(lines)
 
 
@@ -812,28 +796,33 @@ def write_outputs(
 ) -> dict[str, Path]:
     analysis = analyze_snapshot(snapshot)
     output_dir.mkdir(parents=True, exist_ok=True)
-
     analysis_path = output_dir / "analysis.json"
     slots_path = output_dir / "monster_drop_p1a_slots.csv"
     monsters_path = output_dir / "monster_drop_p1a_monsters.csv"
     report_path = output_dir / "report.md"
-
     analysis_path.write_text(
         json.dumps(analysis, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    slot_rows = [
-        _slot_csv_row(slot)
-        for slot in snapshot.get("slots", [])
-        if isinstance(slot, dict)
-    ]
-    _write_csv(slots_path, slot_rows)
-    _write_csv(monsters_path, analysis["monsters"])
+    _write_csv(
+        slots_path,
+        [
+            _slot_csv_row(row)
+            for row in snapshot.get("source_rows", [])
+            if isinstance(row, dict)
+        ],
+    )
+    _write_csv(
+        monsters_path,
+        [
+            row for row in analysis["compiled_profiles"]
+            if isinstance(row, dict)
+        ],
+    )
     report_path.write_text(
         _markdown_report(analysis),
         encoding="utf-8",
     )
-
     return {
         "analysis": analysis_path,
         "slots_csv": slots_path,
@@ -847,9 +836,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--snapshot",
         type=Path,
-        default=Path(
-            "outputs/monster_drop_p1a/runtime_snapshot.json"
-        ),
+        default=Path("outputs/monster_drop_p1a/runtime_snapshot.json"),
     )
     parser.add_argument(
         "--output-dir",
@@ -864,32 +851,33 @@ def main() -> int:
     if not args.snapshot.is_file():
         print(f"P1A_ANALYZER_FAIL: missing snapshot {args.snapshot}")
         return 2
-
     with args.snapshot.open("r", encoding="utf-8") as handle:
         snapshot = json.load(handle)
     if not isinstance(snapshot, dict):
         print("P1A_ANALYZER_FAIL: snapshot root is not an object")
         return 2
-
     errors = validate_snapshot(snapshot, enforce_current_corpus=True)
     if errors:
         for error in errors:
             print(f"P1A_ANALYZER_FAIL: {error}")
         print(f"P1A_ANALYZER_FAIL_COUNT={len(errors)}")
         return 2
-
     paths = write_outputs(snapshot, args.output_dir)
-    summary = _recompute_summary(snapshot["slots"])
+    summary = analyze_snapshot(snapshot)["summary"]
+    source = summary["source_corpus"]
+    runtime = summary["compiled_runtime"]
     print(
         "P1A_ANALYZER_PASS: "
-        f"slots={summary['slot_count']} "
-        f"invalid_chance={summary['chance_invalid_count']} "
-        f"reward_unresolved={summary['reward_unresolved_count']} "
-        f"slot_rollable={summary['slot_runtime_rollable_count']} "
-        f"reachable={summary['runtime_reachable_count']} "
-        f"enabled={summary['drop_enabled_source_slots']} "
-        f"disabled={summary['drop_disabled_source_slots']} "
-        f"rng_roll={summary['rng_roll_count']}"
+        f"source_profiles={source['profile_count']} "
+        f"source_rows={source['row_count']} "
+        f"enabled_source={source['enabled_source_row_count']} "
+        f"non_loot_source={source['non_loot_disabled_source_row_count']} "
+        f"malformed_provenance={source['malformed_source_provenance_count']} "
+        f"compiled_profiles={runtime['profile_count']} "
+        f"enabled_profiles={runtime['enabled_profile_count']} "
+        f"non_loot_profiles={runtime['non_loot_profile_count']} "
+        f"compiled_slots={runtime['slot_count']} "
+        f"rng_eligible={runtime['rng_eligible_slot_count']}"
     )
     for key, path in paths.items():
         print(f"P1A_OUTPUT {key}={path}")

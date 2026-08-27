@@ -1,30 +1,33 @@
 extends Node
 
-const SNAPSHOT_SCHEMA := "monster_drop_p1a_runtime_snapshot_v2"
+const SNAPSHOT_SCHEMA := "monster_drop_p1a_runtime_snapshot_v3"
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
+const CORRECTION_PATH := (
+	"res://assets/data/drop/dpv2_21cq_source_corrections_v1.json"
+)
 const OUTPUT_PATH := "res://outputs/monster_drop_p1a/runtime_snapshot.json"
 
-# P1A current-corpus freeze for codex/integration.
-# These values describe the current P0R base-only catalog and are intentionally
-# not presented as universal future rules for user-authoring overlays.
-const EXPECTED_DROP_PROFILE_COUNT := 156
-const EXPECTED_BASE_DROP_ROW_COUNT := 7032
-const EXPECTED_FINAL_DROP_ROW_COUNT := 7032
-const EXPECTED_AUDIT_ONLY_COUNT := 7032
-const EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT := 7032
-const EXPECTED_INVALID_CHANCE_COUNT := 1
-const EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT := 5995
-const EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT := 1037
-const EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT := 5995
-const EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT := 5995
-const EXPECTED_RNG_ELIGIBLE_SLOT_COUNT := 5995
+# P1A deliberately keeps the source audit and the compiled Runtime view
+# separate. Source rows are evidence; only compiled V2 slots can reach RNG.
+const EXPECTED_SOURCE_PROFILE_COUNT := 156
+const EXPECTED_SOURCE_ROW_COUNT := 7032
+const EXPECTED_ENABLED_SOURCE_ROW_COUNT := 5995
+const EXPECTED_NON_LOOT_SOURCE_ROW_COUNT := 1037
+const EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT := 1
+const EXPECTED_RUNTIME_PROFILE_COUNT := 156
+const EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT := 131
+const EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT := 25
+const EXPECTED_RUNTIME_SLOT_COUNT := 5995
+const EXPECTED_LEGACY_RUNTIME_SLOT_COUNT := 5926
+const EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT := 69
 
-const EXPECTED_ANOMALY_DROP_PROFILE_ID := "drop.168"
+const EXPECTED_ANOMALY_SOURCE_PROFILE_ID := "drop.168"
 const EXPECTED_ANOMALY_MONSTER_ID := 168
 const EXPECTED_ANOMALY_LINE_NUMBER := 20
 const EXPECTED_ANOMALY_SLOT_INDEX := "slot_020"
 const EXPECTED_ANOMALY_CHANCE := "1/00"
 const EXPECTED_ANOMALY_RAW_TEXT := "1/00 灵魂战衣(男)"
+const EXPECTED_ANOMALY_CORRECTED_DENOMINATOR := 2800
 
 
 func _ready() -> void:
@@ -37,288 +40,391 @@ func _run() -> void:
 	if not GameData.ensure_loaded():
 		_fail(["GameData.ensure_loaded() returned false"])
 		return
-	if not LootRuntime.has_method("_chance_denominator"):
+	if not GameData.is_dpv2_direct_baseline_loaded():
 		_fail([
-			"LootRuntime._chance_denominator is missing; "
-			+ "P1A refuses to invent a second chance parser"
+			"GameData direct baseline is unavailable: %s" % GameData.load_error
 		])
+		return
+	if not LootRuntime.has_method("_chance_denominator"):
+		_fail(["LootRuntime source-provenance chance parser is missing"])
 		return
 	if not FileAccess.file_exists(CATALOG_PATH):
 		_fail(["missing canonical catalog: %s" % CATALOG_PATH])
 		return
 
 	var catalog_text_before := FileAccess.get_file_as_string(CATALOG_PATH)
-	var source_sha256_before := _sha256_text(catalog_text_before)
-	var parsed: Variant = JSON.parse_string(catalog_text_before)
-	if not parsed is Dictionary:
+	var catalog_sha256_before := _sha256_text(catalog_text_before)
+	var parsed_catalog: Variant = JSON.parse_string(catalog_text_before)
+	if not parsed_catalog is Dictionary:
 		_fail(["canonical catalog is not a JSON object"])
 		return
-	var catalog: Dictionary = parsed
-	var profiles_value: Variant = catalog.get("drop_profiles", null)
-	if not profiles_value is Dictionary:
+	var catalog: Dictionary = parsed_catalog
+	var source_profiles_value: Variant = catalog.get("drop_profiles", null)
+	if not source_profiles_value is Dictionary:
 		_fail(["canonical catalog drop_profiles is not a Dictionary"])
 		return
-	var profiles: Dictionary = profiles_value
-	var catalog_summary_value: Variant = catalog.get("summary", {})
-	var catalog_summary: Dictionary = (
-		catalog_summary_value
-		if catalog_summary_value is Dictionary
-		else {}
+	var source_profiles: Dictionary = source_profiles_value
+	var catalog_profile_to_id := _build_catalog_profile_index(
+		catalog,
+		failures
 	)
 
-	_check_current_corpus_summary(catalog_summary, profiles, failures)
+	var source_rows: Array = []
+	var compiled_slots: Array = []
+	var source_profile_summaries: Array = []
+	var compiled_profile_summaries: Array = []
+	var source_rate_policy_counts: Dictionary = {}
+	var source_status_counts: Dictionary = {}
+	var origin_counts: Dictionary = {}
+	var item_occurrences: Dictionary = {}
+	var malformed_source_rows: Array = []
+	var enabled_source_row_count := 0
+	var disabled_source_row_count := 0
+	var runtime_enabled_profile_count := 0
+	var runtime_non_loot_profile_count := 0
+	var seen_canonical_ids: Dictionary = {}
+	var seen_runtime_profile_ids: Dictionary = {}
+	var seen_slot_uids: Dictionary = {}
 
-	var slots: Array = []
-	var rate_policy_counts := {}
-	var slot_status_counts := {}
-	var non_rollable_reason_counts := {}
-	var runtime_rejection_reason_counts := {}
-	var reward_resolution_reason_counts := {}
-	var monster_runtime_gate_counts := {}
-	var invalid_slots: Array = []
-	var slot_runtime_rollable_count := 0
-	var runtime_reachable_count := 0
-	var reward_resolvable_count := 0
+	var source_profile_ids := _sorted_numeric_keys(source_profiles)
+	_expect_int(
+		"source profile count",
+		source_profile_ids.size(),
+		EXPECTED_SOURCE_PROFILE_COUNT,
+		failures
+	)
 
-	var monster_ids: Array[int] = []
-	for raw_profile_id: Variant in profiles.keys():
-		var profile_id := str(raw_profile_id)
-		if not profile_id.begins_with("drop."):
-			failures.append("unexpected drop profile id: %s" % profile_id)
-			continue
-		var suffix := profile_id.trim_prefix("drop.")
-		if not suffix.is_valid_int():
-			failures.append("non-numeric drop profile id: %s" % profile_id)
-			continue
-		monster_ids.append(int(suffix))
-	monster_ids.sort()
-
-	for monster_id: int in monster_ids:
-		var profile_id := "drop.%d" % monster_id
-		var profile_value: Variant = profiles.get(profile_id, {})
-		if not profile_value is Dictionary:
-			failures.append("%s is not a Dictionary" % profile_id)
-			continue
-		var profile: Dictionary = profile_value
-		var entries_value: Variant = profile.get("entries", [])
-		if not entries_value is Array:
-			failures.append("%s entries is not an Array" % profile_id)
-			continue
-
-		var closure: Dictionary = (
-			GameData.canonical_monster_runtime_drop_closure(monster_id)
+	for raw_source_profile_id: Variant in source_profile_ids:
+		var source_profile_id := str(raw_source_profile_id)
+		var source_profile_value: Variant = source_profiles.get(
+			source_profile_id,
+			{}
 		)
-		var monster_runtime_allowed := bool(closure.get("allowed", false))
-		var monster_runtime_reason := str(closure.get("reason", ""))
-		var monster_gate_key := "allowed"
-		if not monster_runtime_allowed:
-			monster_gate_key = (
-				monster_runtime_reason
-				if not monster_runtime_reason.is_empty()
-				else "blocked_unspecified"
+		if not source_profile_value is Dictionary:
+			failures.append(
+				"source profile %s is not a Dictionary" % source_profile_id
 			)
-		_bump(monster_runtime_gate_counts, monster_gate_key)
+			continue
+		var source_profile: Dictionary = source_profile_value
+		var canonical_id := int(
+			catalog_profile_to_id.get(source_profile_id, -1)
+		)
+		if canonical_id <= 0:
+			failures.append(
+				"source profile %s has no exact canonical monster ID" %
+				source_profile_id
+			)
+			continue
+		if seen_canonical_ids.has(canonical_id):
+			failures.append(
+				"canonical monster ID appears more than once: %d" %
+				canonical_id
+			)
+			continue
+		seen_canonical_ids[canonical_id] = true
 
+		# This is the only Runtime join: the source catalog's drop.* label is
+		# audit metadata, while GameData is queried by canonical monster ID.
+		var direct_profile: Dictionary = GameData.dpv2_direct_profile(
+			canonical_id
+		)
+		if direct_profile.is_empty():
+			failures.append(
+				"direct profile unresolved for canonical monster ID %d" %
+				canonical_id
+			)
+			continue
+		var direct_profile_id_value: Variant = direct_profile.get(
+			"drop_profile_id",
+			null,
+		)
+		var direct_profile_id := (
+			"" if direct_profile_id_value == null
+			else str(direct_profile_id_value)
+		)
+
+		var entries_value: Variant = source_profile.get("entries", [])
+		if not entries_value is Array:
+			failures.append(
+				"source profile %s entries is not an Array" %
+				source_profile_id
+			)
+			continue
 		var entries: Array = entries_value
+		var direct_slots_value: Variant = direct_profile.get("slots", [])
+		if not direct_slots_value is Array:
+			failures.append(
+				"direct profile %s slots is not an Array" % direct_profile_id
+			)
+			continue
+		var direct_slots: Array = direct_slots_value
+		var runtime_drop_enabled := bool(direct_profile.get(
+			"drop_enabled",
+			false
+		))
+		if runtime_drop_enabled:
+			if not direct_profile_id.begins_with("dpv2.direct."):
+				failures.append(
+					"direct profile ID is not V2 for monster %d: %s" %
+					[canonical_id, direct_profile_id]
+				)
+			if seen_runtime_profile_ids.has(direct_profile_id):
+				failures.append(
+					"direct profile ID collision: %s" % direct_profile_id
+				)
+			seen_runtime_profile_ids[direct_profile_id] = true
+			runtime_enabled_profile_count += 1
+			if entries.size() != direct_slots.size():
+				failures.append(
+					"source/direct slot count mismatch for canonical ID %d: " %
+					canonical_id
+					+ "source=%d direct=%d" % [entries.size(), direct_slots.size()]
+				)
+		else:
+			if not direct_profile_id.is_empty():
+				failures.append(
+					"NON_LOOT direct profile %d has a runtime profile ID: %s" %
+					[canonical_id, direct_profile_id]
+				)
+			runtime_non_loot_profile_count += 1
+			if not direct_slots.is_empty():
+				failures.append(
+					"NON_LOOT direct profile %s contains slots" %
+					direct_profile_id
+				)
+
+		source_profile_summaries.append({
+			"source_profile_id": source_profile_id,
+			"canonical_monster_id": canonical_id,
+			"source_row_count": entries.size(),
+			"source_status": str(source_profile.get("status", "")),
+			"runtime_profile_id": direct_profile_id,
+			"runtime_drop_enabled": runtime_drop_enabled,
+			"runtime_slot_count": direct_slots.size(),
+			"runtime_baseline_origin": str(
+				direct_profile.get("baseline_origin", "")
+			),
+		})
+		compiled_profile_summaries.append({
+			"canonical_monster_id": canonical_id,
+			"canonical_monster_name": str(
+				direct_profile.get("canonical_monster_name", "")
+			),
+			"runtime_profile_id": direct_profile_id,
+			"drop_enabled": runtime_drop_enabled,
+			"baseline_origin": str(
+				direct_profile.get("baseline_origin", "")
+			),
+			"slot_count": direct_slots.size(),
+		})
+
 		for ordinal_zero_based: int in range(entries.size()):
 			var entry_value: Variant = entries[ordinal_zero_based]
 			if not entry_value is Dictionary:
 				failures.append(
-					"%s entry[%d] is not a Dictionary"
-					% [profile_id, ordinal_zero_based]
+					"%s source entry[%d] is not a Dictionary" %
+					[source_profile_id, ordinal_zero_based]
 				)
 				continue
 			var entry: Dictionary = entry_value
-			var slot := _snapshot_slot(
-				profile_id,
-				monster_id,
+			var direct_slot: Dictionary = {}
+			if runtime_drop_enabled:
+				if ordinal_zero_based >= direct_slots.size():
+					failures.append(
+						"missing direct slot for canonical ID %d ordinal %d" %
+						[canonical_id, ordinal_zero_based]
+					)
+					continue
+				var direct_slot_value: Variant = direct_slots[
+					ordinal_zero_based
+				]
+				if not direct_slot_value is Dictionary:
+					failures.append(
+						"direct slot is not a Dictionary for canonical ID %d " +
+						"ordinal %d" % [canonical_id, ordinal_zero_based]
+					)
+					continue
+				direct_slot = direct_slot_value
+
+			var snapshot_row := _build_source_row(
+				source_profile_id,
+				canonical_id,
 				ordinal_zero_based,
 				entry,
-				closure
+				direct_profile,
+				direct_slot,
+				runtime_drop_enabled,
+				failures
 			)
-			slots.append(slot)
-
-			var source_entry: Dictionary = slot.get("source_entry", {})
+			source_rows.append(snapshot_row)
 			_bump(
-				rate_policy_counts,
-				str(source_entry.get("rate_policy", "<missing>"))
+				source_rate_policy_counts,
+				str(entry.get("rate_policy", "<missing>"))
 			)
 			_bump(
-				slot_status_counts,
-				str(source_entry.get("slot_status", "<missing>"))
+				source_status_counts,
+				str(entry.get("slot_status", "<missing>"))
 			)
+			if not bool(snapshot_row.get("source_chance_valid", false)):
+				malformed_source_rows.append(snapshot_row)
 
-			if bool(slot.get("chance_valid", false)):
-				pass
-			else:
-				invalid_slots.append(slot)
-
-			if bool(slot.get("reward_resolvable", false)):
-				reward_resolvable_count += 1
-			else:
-				_bump(
-					reward_resolution_reason_counts,
-					str(slot.get(
-						"reward_resolution_reason",
-						"unresolved_unspecified"
+			if runtime_drop_enabled:
+				enabled_source_row_count += 1
+				compiled_slots.append(snapshot_row.duplicate(true))
+				var compiled_slot_uid := str(snapshot_row.get(
+					"slot_uid",
+					""
+				))
+				if compiled_slot_uid.is_empty():
+					failures.append(
+						"compiled row is missing slot_uid for canonical ID %d" %
+						canonical_id
+					)
+				elif seen_slot_uids.has(compiled_slot_uid):
+					failures.append(
+						"compiled slot UID collision: %s" % compiled_slot_uid
+					)
+				else:
+					seen_slot_uids[compiled_slot_uid] = true
+				if bool(snapshot_row.get("runtime_reward_resolved", false)) \
+						and bool(snapshot_row.get(
+							"runtime_probability_resolved",
+							false
+						)) \
+						and bool(snapshot_row.get("runtime_rng_eligible", false)):
+					var origin := str(snapshot_row.get(
+						"baseline_origin",
+						""
 					))
+					_bump(origin_counts, origin)
+				var item_id_value: Variant = snapshot_row.get(
+					"canonical_item_id",
+					null
 				)
-
-			if bool(slot.get("slot_runtime_rollable", false)):
-				slot_runtime_rollable_count += 1
+				var item_id := int(item_id_value) if item_id_value != null else -1
+				if item_id > 0:
+					_bump(item_occurrences, str(item_id))
 			else:
-				_bump(
-					non_rollable_reason_counts,
-					str(slot.get(
-						"non_rollable_reason",
-						"non_rollable_unspecified"
-					))
-				)
-				_bump(
-					runtime_rejection_reason_counts,
-					str(slot.get(
-						"runtime_rejection_reason",
-						"runtime_rejection_unspecified"
-					))
-				)
-
-			if bool(slot.get("runtime_reachable", false)):
-				runtime_reachable_count += 1
-
-	_check_current_corpus_rows(
-		slots,
-		rate_policy_counts,
-		slot_status_counts,
-		invalid_slots,
-		failures
-	)
-	_check_source_slot_fields(slots, failures)
-	var source_gate_counts := _recompute_source_gate_counts(slots)
-	_check_source_gate_counts(source_gate_counts, failures)
+				disabled_source_row_count += 1
 
 	var catalog_text_after := FileAccess.get_file_as_string(CATALOG_PATH)
-	var source_sha256_after := _sha256_text(catalog_text_after)
-	if source_sha256_before != source_sha256_after:
+	var catalog_sha256_after := _sha256_text(catalog_text_after)
+	if catalog_sha256_before != catalog_sha256_after:
 		failures.append(
-			"canonical catalog changed during export: before=%s after=%s"
-			% [source_sha256_before, source_sha256_after]
+			"canonical catalog changed during export: before=%s after=%s" %
+			[catalog_sha256_before, catalog_sha256_after]
 		)
+
+	_check_runtime_summary(
+		GameData.dpv2_direct_baseline,
+		origin_counts,
+		compiled_slots,
+		runtime_enabled_profile_count,
+		runtime_non_loot_profile_count,
+		failures
+	)
+	_check_source_summary(
+		source_profiles,
+		source_rows,
+		enabled_source_row_count,
+		disabled_source_row_count,
+		malformed_source_rows,
+		source_rate_policy_counts,
+		source_status_counts,
+		failures
+	)
+	var correction_provenance := _load_correction_provenance(failures)
+	_check_correction_provenance(
+		malformed_source_rows,
+		correction_provenance,
+		failures
+	)
 
 	if not failures.is_empty():
 		_fail(failures)
 		return
 
-	var summary := {
-		"drop_profile_count": profiles.size(),
-		"slot_count": slots.size(),
-		"rate_policy_counts": rate_policy_counts,
-		"slot_status_counts": slot_status_counts,
-		"chance_valid_count": slots.size() - invalid_slots.size(),
-		"chance_invalid_count": invalid_slots.size(),
-		"reward_resolvable_count": reward_resolvable_count,
-		"reward_unresolved_count": slots.size() - reward_resolvable_count,
-		"slot_runtime_rollable_count": slot_runtime_rollable_count,
-		"slot_runtime_non_rollable_count": (
-			slots.size() - slot_runtime_rollable_count
-		),
-		"runtime_reachable_count": runtime_reachable_count,
-		"runtime_unreachable_count": slots.size() - runtime_reachable_count,
-		"non_rollable_reason_counts": non_rollable_reason_counts,
-		"runtime_rejection_reason_counts": runtime_rejection_reason_counts,
-		"reward_resolution_reason_counts": reward_resolution_reason_counts,
-		"monster_runtime_gate_counts": monster_runtime_gate_counts,
-		# These are counts of source rows that pass each authority stage.  The
-		# exporter does not perform random draws; rng_roll_count names the rows
-		# that are eligible to reach the real LootRuntime RNG stage.
-		"canonical_source_slots": int(source_gate_counts.get(
-			"canonical_source_slots", 0
-		)),
-		"drop_enabled_source_slots": int(source_gate_counts.get(
-			"drop_enabled_source_slots", 0
-		)),
-		"drop_disabled_source_slots": int(source_gate_counts.get(
-			"drop_disabled_source_slots", 0
-		)),
-		"reward_resolved_enabled_slots": int(source_gate_counts.get(
-			"reward_resolved_enabled_slots", 0
-		)),
-		"probability_resolved_enabled_slots": int(source_gate_counts.get(
-			"probability_resolved_enabled_slots", 0
-		)),
-		"rng_eligible_slots": int(source_gate_counts.get(
-			"rng_eligible_slots", 0
-		)),
-		"rng_roll_count": int(source_gate_counts.get("rng_roll_count", 0)),
-		"all_enabled_resolved_slots_rng_before_overflow": bool(
-			source_gate_counts.get(
-				"all_enabled_resolved_slots_rng_before_overflow",
-				false
-			)
-		),
-		"overflow_stage": "after_all_probability_rolls",
-	}
+	var duplicate_item_occurrences := 0
+	for raw_count: Variant in item_occurrences.values():
+		var count := int(raw_count)
+		if count > 1:
+			duplicate_item_occurrences += count - 1
 
+	var source_summary := {
+		"profile_count": source_profiles.size(),
+		"row_count": source_rows.size(),
+		"enabled_source_row_count": enabled_source_row_count,
+		"non_loot_disabled_source_row_count": disabled_source_row_count,
+		"malformed_source_provenance_count": malformed_source_rows.size(),
+		"rate_policy_counts": source_rate_policy_counts,
+		"slot_status_counts": source_status_counts,
+	}
+	var runtime_summary := {
+		"profile_count": seen_canonical_ids.size(),
+		"enabled_profile_count": runtime_enabled_profile_count,
+		"non_loot_profile_count": runtime_non_loot_profile_count,
+		"slot_count": compiled_slots.size(),
+		"baseline_origin_counts": origin_counts,
+		"reward_resolved_slot_count": compiled_slots.size(),
+		"probability_resolved_slot_count": compiled_slots.size(),
+		"rng_eligible_slot_count": compiled_slots.size(),
+		"rng_roll_stage_slot_count": compiled_slots.size(),
+		"all_compiled_slots_rng_before_overflow": true,
+		"duplicate_canonical_item_occurrences": duplicate_item_occurrences,
+		"unique_slot_uid_count": seen_slot_uids.size(),
+		"post_rng_ground_slot_limit": GameData.dpv2_ground_slot_limit(),
+	}
+	var summary := {
+		"source_corpus": source_summary,
+		"compiled_runtime": runtime_summary,
+	}
 	var snapshot := {
 		"schema": SNAPSHOT_SCHEMA,
-		"generated_at_utc": Time.get_datetime_string_from_system(true, true),
 		"authority": {
 			"catalog_path": CATALOG_PATH,
-			"catalog_sha256_before": source_sha256_before,
-			"catalog_sha256_after": source_sha256_after,
-			"runtime_chance_parser": (
-				"LootRuntime._chance_denominator"
-			),
-			"runtime_reward_resolver": (
-				"GameData.resolve_canonical_drop_reward"
-			),
-			"monster_runtime_gate": (
-				"GameData.canonical_monster_runtime_drop_closure"
-			),
-			"rate_policy_runtime_semantics": (
-				"provenance_only; not used by LootRuntime"
+			"catalog_sha256_before": catalog_sha256_before,
+			"catalog_sha256_after": catalog_sha256_after,
+			"runtime_authority": {
+				"authority_id": str(
+					GameData.dpv2_direct_baseline.get("authority_id", "")
+				),
+				"schema": str(
+					GameData.dpv2_direct_baseline.get("schema", "")
+				),
+				"production_runtime": str(
+					GameData.dpv2_direct_baseline.get(
+						"production_runtime",
+						""
+					)
+				),
+				"identity_key": "canonical_monster_id",
+				"direct_profile_join": "canonical_monster_id_exact",
+				"source_profile_id_is_audit_only": true,
+				"fallback_forbidden": true,
+				"probability_formula": (
+					"min(1, base_numerator * scale_num "
+					+ "/(base_denominator * scale_den))"
+				),
+			},
+			"active_global_drop_rate": (
+				GameData.dpv2_active_global_drop_rate()
 			),
 			"source_slot_gate": GameData.dpv2_source_slot_gate(),
+			"source_corpus_is_audit_only": true,
+			"compiled_runtime_is_rng_authority": true,
+			"overflow_stage": "after_all_probability_rolls",
 		},
-		"current_corpus_freeze": {
-			"expected_drop_profile_count": EXPECTED_DROP_PROFILE_COUNT,
-			"expected_base_drop_row_count": EXPECTED_BASE_DROP_ROW_COUNT,
-			"expected_final_drop_row_count": EXPECTED_FINAL_DROP_ROW_COUNT,
-			"expected_audit_only_count": EXPECTED_AUDIT_ONLY_COUNT,
-			"expected_confirmed_source_slot_count": (
-				EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT
-			),
-			"expected_invalid_chance_count": EXPECTED_INVALID_CHANCE_COUNT,
-			"expected_source_slot_gate": {
-				"canonical_source_slots": EXPECTED_BASE_DROP_ROW_COUNT,
-				"drop_enabled_source_slots": (
-					EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT
-				),
-				"drop_disabled_source_slots": (
-					EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT
-				),
-				"reward_resolved_enabled_slots": (
-					EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT
-				),
-				"probability_resolved_enabled_slots": (
-					EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT
-				),
-				"rng_eligible_slots": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-				"rng_roll_count": EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-				"all_enabled_resolved_slots_rng_before_overflow": true,
-				"overflow_stage": "after_all_probability_rolls",
-			},
-			"expected_anomaly": {
-				"drop_profile_id": EXPECTED_ANOMALY_DROP_PROFILE_ID,
-				"monster_id": EXPECTED_ANOMALY_MONSTER_ID,
-				"line_number": EXPECTED_ANOMALY_LINE_NUMBER,
-				"slot_index": EXPECTED_ANOMALY_SLOT_INDEX,
-				"chance": EXPECTED_ANOMALY_CHANCE,
-				"raw_text": EXPECTED_ANOMALY_RAW_TEXT,
-			},
-		},
-		"catalog_summary": catalog_summary.duplicate(true),
+		"direct_baseline_summary": (
+			GameData.dpv2_direct_baseline.get("summary", {})
+		),
+		"source_summary": source_summary,
+		"compiled_runtime_summary": runtime_summary,
 		"summary": summary,
-		"slots": slots,
+		"correction_provenance": correction_provenance,
+		"source_profiles": source_profile_summaries,
+		"compiled_profiles": compiled_profile_summaries,
+		"source_rows": source_rows,
+		"compiled_slots": compiled_slots,
 	}
 
 	var output_dir := OUTPUT_PATH.get_base_dir()
@@ -327,11 +433,10 @@ func _run() -> void:
 	)
 	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
 		_fail([
-			"cannot create output directory %s: error=%d"
-			% [output_dir, mkdir_error]
+			"cannot create output directory %s: error=%d" %
+			[output_dir, mkdir_error]
 		])
 		return
-
 	var output := FileAccess.open(OUTPUT_PATH, FileAccess.WRITE)
 	if output == null:
 		_fail(["cannot open output for write: %s" % OUTPUT_PATH])
@@ -339,505 +444,570 @@ func _run() -> void:
 	output.store_string(JSON.stringify(snapshot, "\t"))
 	output.store_string("\n")
 	output.close()
-
 	print(
-		(
-			"MONSTER_DROP_P1A_RUNTIME_EXPORT_PASS: "
-			+ "profiles=%d slots=%d chance_invalid=%d "
-			+ "reward_unresolved=%d slot_rollable=%d reachable=%d"
-		)
-		% [
-			profiles.size(),
-			slots.size(),
-			invalid_slots.size(),
-			slots.size() - reward_resolvable_count,
-			slot_runtime_rollable_count,
-			runtime_reachable_count,
+		("MONSTER_DROP_P1A_RUNTIME_EXPORT_PASS: "
+		+ "source_profiles=%d source_rows=%d enabled_source=%d "
+		+ "non_loot_source=%d malformed_provenance=%d "
+		+ "compiled_profiles=%d enabled_profiles=%d non_loot_profiles=%d "
+		+ "compiled_slots=%d") % [
+			source_summary.profile_count,
+			source_summary.row_count,
+			source_summary.enabled_source_row_count,
+			source_summary.non_loot_disabled_source_row_count,
+			source_summary.malformed_source_provenance_count,
+			runtime_summary.profile_count,
+			runtime_summary.enabled_profile_count,
+			runtime_summary.non_loot_profile_count,
+			runtime_summary.slot_count,
 		]
 	)
 	get_tree().quit(0)
 
 
-func _snapshot_slot(
-	profile_id: String,
-	monster_id: int,
+func _build_catalog_profile_index(
+	catalog: Dictionary,
+	failures: Array[String]
+) -> Dictionary:
+	var result: Dictionary = {}
+	var entries_by_id_value: Variant = catalog.get("entries_by_id", {})
+	if not entries_by_id_value is Dictionary:
+		failures.append("canonical catalog entries_by_id is not a Dictionary")
+		return result
+	var entries_by_id: Dictionary = entries_by_id_value
+	for raw_id: Variant in entries_by_id.keys():
+		var key_id := int(str(raw_id))
+		var entry_value: Variant = entries_by_id.get(raw_id, {})
+		if not entry_value is Dictionary:
+			failures.append("catalog entry %s is not a Dictionary" % raw_id)
+			continue
+		var entry: Dictionary = entry_value
+		var monster_id := int(entry.get("monster_id", key_id))
+		if monster_id != key_id or monster_id <= 0:
+			failures.append("catalog canonical ID key mismatch: %s" % raw_id)
+			continue
+		var source_profile_id := str(entry.get("drop_profile_id", ""))
+		if source_profile_id.is_empty():
+			failures.append(
+				"catalog monster %d has no source drop profile ID" % monster_id
+			)
+			continue
+		if result.has(source_profile_id):
+			failures.append(
+				"source drop profile ID maps to multiple canonical IDs: %s" %
+				source_profile_id
+			)
+			continue
+		result[source_profile_id] = monster_id
+	return result
+
+
+func _build_source_row(
+	source_profile_id: String,
+	canonical_id: int,
 	ordinal_zero_based: int,
 	entry: Dictionary,
-	closure: Dictionary
+	direct_profile: Dictionary,
+	direct_slot: Dictionary,
+	runtime_drop_enabled: bool,
+	failures: Array[String]
 ) -> Dictionary:
-	var chance_raw := str(entry.get("chance", ""))
-	# Deliberately call the real LootRuntime parser. P1A must not maintain a
-	# second parser with subtly different semantics.
-	var chance_denominator := int(
-		LootRuntime.call("_chance_denominator", chance_raw)
+	var source_chance := str(entry.get("chance", ""))
+	var source_chance_denominator := int(
+		LootRuntime.call("_chance_denominator", source_chance)
 	)
-	var chance_valid := chance_denominator > 0
-
-	# Probe the real reward resolver for every row. Source chance remains audited
-	# as provenance, but no longer gates the production DPV2 probability roll.
-	var reward_probe: Dictionary = (
-		GameData.resolve_canonical_drop_reward(entry)
+	var source_chance_valid := source_chance_denominator > 0
+	var runtime_profile_id_value: Variant = direct_profile.get(
+		"drop_profile_id",
+		null,
 	)
-	var reward_resolvable := bool(reward_probe.get("ok", false))
-	var reward_resolution_reason := (
-		""
-		if reward_resolvable
-		else str(reward_probe.get(
-			"reason",
-			"item_authority_unresolved"
-		))
+	var runtime_profile_id := (
+		"" if runtime_profile_id_value == null
+		else str(runtime_profile_id_value)
 	)
-	var reward_resolution_status := (
-		"resolved" if reward_resolvable else "unresolved"
-	)
-	var monster_drop_state: Dictionary = GameData.dpv2_monster_drop_state(
-		monster_id
-	)
-	var drop_enabled := bool(monster_drop_state.get("drop_enabled", false))
-	var reward_resolved_enabled := drop_enabled and reward_resolvable
-
-	var probability_policy: Dictionary = {}
-	if reward_resolvable:
-		probability_policy = GameData.dpv2_resolve_reward_policy(
-			monster_id, reward_probe
-		)
-	var probability_authority_resolvable := bool(
-		probability_policy.get("ok", false)
-	)
-	var probability_resolved_enabled := (
-		drop_enabled and probability_authority_resolvable
-	)
-	var rng_eligible := (
-		reward_resolved_enabled and probability_resolved_enabled
-	)
-	var slot_runtime_rollable := rng_eligible
-	var non_rollable_reason: Variant = null
-	var runtime_rejection_reason: Variant = null
-	if not reward_resolvable:
-		non_rollable_reason = "unresolved_reward"
-		runtime_rejection_reason = reward_resolution_reason
-	elif not probability_authority_resolvable:
-		non_rollable_reason = "probability_authority_blocked"
-		runtime_rejection_reason = str(
-			probability_policy.get("reason", "drop_probability_authority_invalid")
-		)
-
-	var monster_runtime_allowed := bool(closure.get("allowed", false))
-	var monster_runtime_reason := str(closure.get("reason", ""))
-	var runtime_reachable := (
-		monster_runtime_allowed and slot_runtime_rollable
-	)
-
-	return {
-		"drop_profile_id": profile_id,
-		"monster_id": monster_id,
-		"profile_entry_ordinal_zero_based": ordinal_zero_based,
-		"profile_entry_ordinal_one_based": ordinal_zero_based + 1,
-		"line_number": int(entry.get("line_number", -1)),
-		"slot_index": str(entry.get("slot_index", "")),
-		"raw_text": str(entry.get("raw_text", "")),
-		"chance_raw": chance_raw,
-		"chance_denominator": (
-			chance_denominator if chance_valid else null
+	var row := {
+		"source_profile_id": source_profile_id,
+		"canonical_monster_id": canonical_id,
+		"source_entry_ordinal_zero_based": ordinal_zero_based,
+		"source_entry_ordinal_one_based": ordinal_zero_based + 1,
+		"source_line_number": int(entry.get("line_number", -1)),
+		"source_slot_index": str(entry.get("slot_index", "")),
+		"source_item_label": str(entry.get("item", "")),
+		"source_raw_text": str(entry.get("raw_text", "")),
+		"source_chance": source_chance,
+		"source_chance_denominator": (
+			source_chance_denominator if source_chance_valid else null
 		),
-		"chance_valid": chance_valid,
-		"item_resolution_status": str(entry.get(
-			"item_resolution_status",
-			""
-		)),
-		"reward_probe_performed": true,
-		"reward_resolution_status": reward_resolution_status,
-		"reward_resolvable": reward_resolvable,
-		"reward_resolution_reason": (
-			reward_resolution_reason
-			if not reward_resolvable
-			else null
-		),
-		"reward_probe": reward_probe.duplicate(true),
-		"runtime_reward_attempted": true,
-		"drop_enabled": drop_enabled,
-		"reward_resolved_enabled": reward_resolved_enabled,
-		"probability_authority_resolvable": probability_authority_resolvable,
-		"probability_resolved_enabled": probability_resolved_enabled,
-		"probability_policy": probability_policy.duplicate(true),
-		"rng_eligible": rng_eligible,
-		"rng_eligible_before_overflow": rng_eligible,
-		"slot_runtime_rollable": slot_runtime_rollable,
-		# Compatibility alias for the partially implemented R1 tooling.
-		"runtime_rollable": slot_runtime_rollable,
-		"non_rollable_reason": non_rollable_reason,
-		# Exact reason emitted by the real LootRuntime authority rejection path.
-		"runtime_rejection_reason": runtime_rejection_reason,
-		"monster_runtime_allowed": monster_runtime_allowed,
-		"monster_runtime_reason": monster_runtime_reason,
-		"monster_runtime_closure": closure.duplicate(true),
-		"runtime_reachable": runtime_reachable,
-		# Full, untouched row from the generated canonical catalog.
+		"source_chance_valid": source_chance_valid,
+		"source_rate_policy": str(entry.get("rate_policy", "")),
+		"source_slot_status": str(entry.get("slot_status", "")),
+		"source_kind": str(entry.get("source_kind", "")),
+		"source_ref": str(entry.get("source_ref", "")),
 		"source_entry": entry.duplicate(true),
+		"runtime_profile_id": runtime_profile_id,
+		"runtime_compiled": runtime_drop_enabled,
+		"runtime_reward_resolved": false,
+		"runtime_probability_resolved": false,
+		"runtime_rng_eligible": false,
+		"runtime_rng_eligible_before_overflow": false,
+		"runtime_rejection_reason": (
+			"" if runtime_drop_enabled else "non_loot_profile"
+		),
+		"runtime_slot": null,
+		"slot_uid": "",
+		"source_provenance_id": "",
+		"canonical_item_id": null,
+		"gold_amount": null,
+		"reward_kind": "",
+		"item_name": "",
+		"baseline_origin": "",
+		"base_numerator": null,
+		"base_denominator": null,
+		"base_probability": null,
+		"global_preset": "",
+		"global_scale_numerator": null,
+		"global_scale_denominator": null,
+		"global_scale": null,
+		"final_numerator": null,
+		"final_denominator": null,
+		"final_probability": null,
+		"overflow_priority": null,
+		"protected_drop": null,
+	}
+	if not runtime_drop_enabled:
+		return row
+	if direct_slot.is_empty():
+		failures.append(
+			"compiled source row has no direct slot: %s line=%d" %
+			[source_profile_id, int(entry.get("line_number", -1))]
+		)
+		return row
+
+	var slot_uid := str(direct_slot.get("slot_uid", ""))
+	var provenance_id := str(direct_slot.get("source_provenance_id", ""))
+	var expected_provenance_id := "dpv2.source.m%d.%s" % [
+		canonical_id,
+		str(entry.get("slot_index", "")),
+	]
+	if slot_uid.is_empty() or provenance_id.is_empty():
+		failures.append(
+			"compiled slot identity is incomplete: %s" % direct_slot
+		)
+	if provenance_id != expected_provenance_id:
+		failures.append(
+			"source/direct slot provenance mismatch for canonical ID %d: " %
+			canonical_id
+			+ "%s != %s" % [provenance_id, expected_provenance_id]
+		)
+
+	var reward := GameData.dpv2_direct_resolve_slot_reward(direct_slot)
+	var probability := GameData.dpv2_direct_slot_probability(
+		canonical_id,
+		slot_uid
+	)
+	var reward_ok := bool(reward.get("ok", false))
+	var probability_ok := bool(probability.get("ok", false))
+	if not reward_ok:
+		failures.append(
+			"direct reward unresolved for %s: %s" %
+			[slot_uid, str(reward.get("reason", ""))]
+		)
+	if not probability_ok:
+		failures.append(
+			"direct probability unresolved for %s: %s" %
+			[slot_uid, str(probability.get("reason", ""))]
+		)
+	row["runtime_slot"] = direct_slot.duplicate(true)
+	row["slot_uid"] = slot_uid
+	row["source_provenance_id"] = provenance_id
+	row["runtime_reward_resolved"] = reward_ok
+	row["runtime_probability_resolved"] = probability_ok
+	row["runtime_rng_eligible"] = reward_ok and probability_ok
+	row["runtime_rng_eligible_before_overflow"] = (
+		reward_ok and probability_ok
+	)
+	if not reward_ok or not probability_ok:
+		row["runtime_rejection_reason"] = (
+			str(reward.get("reason", ""))
+			if not reward_ok
+			else str(probability.get("reason", ""))
+		)
+	if reward_ok:
+		row["reward_kind"] = str(reward.get("kind", ""))
+		row["canonical_item_id"] = (
+			int(reward.get("canonical_item_id", -1))
+			if str(reward.get("kind", "")) == "item"
+			else null
+		)
+		row["gold_amount"] = (
+			int(reward.get("gold_amount", -1))
+			if str(reward.get("kind", "")) == "gold"
+			else null
+		)
+		row["item_name"] = str(reward.get("item_name", ""))
+	if probability_ok:
+		for field: String in [
+			"baseline_origin",
+			"base_numerator",
+			"base_denominator",
+			"base_probability",
+			"global_preset",
+			"global_scale_numerator",
+			"global_scale_denominator",
+			"global_scale",
+			"final_numerator",
+			"final_denominator",
+			"final_probability",
+			"overflow_priority",
+			"protected_drop",
+		]:
+			row[field] = probability.get(field, row.get(field))
+		if row.get("canonical_item_id") == null \
+				and str(probability.get("reward_kind", "")) == "item":
+			row["canonical_item_id"] = int(
+				probability.get("canonical_item_id", -1)
+			)
+		if row.get("gold_amount") == null \
+				and str(probability.get("reward_kind", "")) == "gold":
+			row["gold_amount"] = int(probability.get("gold_amount", -1))
+	return row
+
+
+func _check_runtime_summary(
+	baseline: Dictionary,
+	origin_counts: Dictionary,
+	compiled_slots: Array,
+	runtime_enabled_profile_count: int,
+	runtime_non_loot_profile_count: int,
+	failures: Array[String]
+) -> void:
+	var baseline_summary_value: Variant = baseline.get("summary", {})
+	if not baseline_summary_value is Dictionary:
+		failures.append("direct baseline summary is not a Dictionary")
+		return
+	var summary: Dictionary = baseline_summary_value
+	_expect_int(
+		"runtime profile count",
+		int(summary.get("active_monsters", -1)),
+		EXPECTED_RUNTIME_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"runtime enabled profile count",
+		int(summary.get("drop_enabled_monsters", -1)),
+		EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"runtime NON_LOOT profile count",
+		int(summary.get("non_loot_monsters", -1)),
+		EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"runtime compiled slot count",
+		int(summary.get("compiled_slots", -1)),
+		EXPECTED_RUNTIME_SLOT_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed runtime enabled profile count",
+		runtime_enabled_profile_count,
+		EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed runtime NON_LOOT profile count",
+		runtime_non_loot_profile_count,
+		EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed runtime compiled slot count",
+		compiled_slots.size(),
+		EXPECTED_RUNTIME_SLOT_COUNT,
+		failures
+	)
+	var expected_origins := {
+		"LEGACY_21CQ_MONITEMS": EXPECTED_LEGACY_RUNTIME_SLOT_COUNT,
+		"PROJECT_EXTENSION": EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT,
+	}
+	if origin_counts != expected_origins:
+		failures.append(
+			"runtime baseline origin counts mismatch: actual=%s expected=%s" %
+			[origin_counts, expected_origins]
+		)
+	_expect_int(
+		"baseline invalid probability count",
+		int(summary.get("invalid_compiled_numerator_or_denominator", -1)),
+		0,
+		failures
+	)
+	_expect_int(
+		"baseline x1 mismatch count",
+		int(summary.get("x1_probability_mismatch", -1)),
+		0,
+		failures
+	)
+	_expect_int(
+		"baseline duplicate slot collapse count",
+		int(summary.get("duplicate_slot_collapse", -1)),
+		0,
+		failures
+	)
+	for raw_slot: Variant in compiled_slots:
+		if not raw_slot is Dictionary:
+			failures.append("compiled slot snapshot is not a Dictionary")
+			continue
+		var slot: Dictionary = raw_slot
+		if not bool(slot.get("runtime_reward_resolved", false)) \
+				or not bool(slot.get("runtime_probability_resolved", false)) \
+				or not bool(slot.get("runtime_rng_eligible", false)):
+			failures.append(
+				"compiled slot did not close reward/probability/RNG: %s" %
+				slot.get("slot_uid", "")
+			)
+
+
+func _check_source_summary(
+	source_profiles: Dictionary,
+	source_rows: Array,
+	enabled_source_row_count: int,
+	disabled_source_row_count: int,
+	malformed_source_rows: Array,
+	source_rate_policy_counts: Dictionary,
+	source_status_counts: Dictionary,
+	failures: Array[String]
+) -> void:
+	_expect_int(
+		"source corpus profile count",
+		source_profiles.size(),
+		EXPECTED_SOURCE_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"source corpus row count",
+		source_rows.size(),
+		EXPECTED_SOURCE_ROW_COUNT,
+		failures
+	)
+	_expect_int(
+		"enabled source row count",
+		enabled_source_row_count,
+		EXPECTED_ENABLED_SOURCE_ROW_COUNT,
+		failures
+	)
+	_expect_int(
+		"NON_LOOT source row count",
+		disabled_source_row_count,
+		EXPECTED_NON_LOOT_SOURCE_ROW_COUNT,
+		failures
+	)
+	_expect_int(
+		"malformed source provenance count",
+		malformed_source_rows.size(),
+		EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT,
+		failures
+	)
+	_expect_int(
+		"source rate_policy=AUDIT_ONLY count",
+		int(source_rate_policy_counts.get("AUDIT_ONLY", 0)),
+		EXPECTED_SOURCE_ROW_COUNT,
+		failures
+	)
+	_expect_int(
+		"source slot_status=CONFIRMED_SOURCE_SLOT count",
+		int(source_status_counts.get("CONFIRMED_SOURCE_SLOT", 0)),
+		EXPECTED_SOURCE_ROW_COUNT,
+		failures
+	)
+	if enabled_source_row_count + disabled_source_row_count \
+			!= source_rows.size():
+		failures.append(
+			"source corpus enabled/disabled partition does not close"
+		)
+	for raw_row: Variant in source_rows:
+		if not raw_row is Dictionary:
+			failures.append("source row snapshot is not a Dictionary")
+			continue
+		var row: Dictionary = raw_row
+		var runtime_compiled := bool(row.get("runtime_compiled", false))
+		if not runtime_compiled and (
+			bool(row.get("runtime_rng_eligible", false))
+			or row.get("runtime_slot", null) != null
+		):
+			failures.append(
+				"NON_LOOT source row reached Runtime fields: %s" %
+				row.get("source_profile_id", "")
+			)
+
+
+func _load_correction_provenance(failures: Array[String]) -> Dictionary:
+	if not FileAccess.file_exists(CORRECTION_PATH):
+		failures.append(
+			"missing source correction authority: %s" % CORRECTION_PATH
+		)
+		return {}
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(CORRECTION_PATH)
+	)
+	if not parsed is Dictionary:
+		failures.append("source correction authority is not a JSON object")
+		return {}
+	var authority: Dictionary = parsed
+	if str(authority.get("schema", "")) \
+			!= "hardcore.dpv2.21cq_source_corrections.v1":
+		failures.append("source correction authority schema mismatch")
+	if str(authority.get("status", "")) != "VERIFIED_SOURCE_CORRECTION":
+		failures.append("source correction authority is not verified")
+	var corrections_value: Variant = authority.get("corrections", [])
+	if not corrections_value is Array or (corrections_value as Array).size() != 1:
+		failures.append("source correction authority must contain one correction")
+		return {}
+	var correction_value: Variant = (corrections_value as Array)[0]
+	if not correction_value is Dictionary:
+		failures.append("source correction record is not a Dictionary")
+		return {}
+	var correction: Dictionary = correction_value
+	var evidence_value: Variant = correction.get("evidence", {})
+	var evidence: Dictionary = (
+		evidence_value.duplicate(true)
+		if evidence_value is Dictionary
+		else {}
+	)
+	return {
+		"authority_id": str(authority.get("authority_id", "")),
+		"path": CORRECTION_PATH,
+		"correction_id": str(correction.get("correction_id", "")),
+		"source_profile_id": "drop.%d" % int(correction.get("stable_monster_id", -1)),
+		"canonical_monster_id": int(correction.get("stable_monster_id", -1)),
+		"stable_monster_id": int(correction.get("stable_monster_id", -1)),
+		"source_line_number": int(
+			correction.get("source_line_number", -1)
+		),
+		"source_slot_index": str(
+			correction.get("source_slot_index", "")
+		),
+		"source_item_label": str(
+			correction.get("source_item_label", "")
+		),
+		"source_chance": str(correction.get("original_chance", "")),
+		"source_raw_text": "%s %s" % [
+			str(correction.get("original_chance", "")),
+			str(correction.get("source_item_label", "")),
+		],
+		"original_chance": str(correction.get("original_chance", "")),
+		"corrected_base_numerator": int(
+			correction.get("corrected_base_numerator", -1)
+		),
+		"corrected_base_denominator": int(
+			correction.get("corrected_base_denominator", -1)
+		),
+		"reason": str(correction.get("reason", "")),
+		"evidence": evidence,
 	}
 
 
-func _check_current_corpus_summary(
-	catalog_summary: Dictionary,
-	profiles: Dictionary,
+func _check_correction_provenance(
+	malformed_source_rows: Array,
+	correction: Dictionary,
 	failures: Array[String]
 ) -> void:
-	_expect_int(
-		"drop profile count",
-		profiles.size(),
-		EXPECTED_DROP_PROFILE_COUNT,
-		failures
-	)
-	_expect_int(
-		"summary.drop_base_row_count",
-		int(catalog_summary.get("drop_base_row_count", -1)),
-		EXPECTED_BASE_DROP_ROW_COUNT,
-		failures
-	)
-	_expect_int(
-		"summary.drop_final_row_count",
-		int(catalog_summary.get("drop_final_row_count", -1)),
-		EXPECTED_FINAL_DROP_ROW_COUNT,
-		failures
-	)
-	_expect_int(
-		"summary.drop_authoring_enabled_global_count",
-		int(catalog_summary.get(
-			"drop_authoring_enabled_global_count",
-			-1
-		)),
-		0,
-		failures
-	)
-	_expect_int(
-		"summary.drop_authoring_global_expanded_row_count",
-		int(catalog_summary.get(
-			"drop_authoring_global_expanded_row_count",
-			-1
-		)),
-		0,
-		failures
-	)
-	_expect_int(
-		"summary.drop_authoring_enabled_monster_count",
-		int(catalog_summary.get(
-			"drop_authoring_enabled_monster_count",
-			-1
-		)),
-		0,
-		failures
-	)
-	_expect_int(
-		"summary.drop_authoring_monster_added_row_count",
-		int(catalog_summary.get(
-			"drop_authoring_monster_added_row_count",
-			-1
-		)),
-		0,
-		failures
-	)
-	var source_gate := GameData.dpv2_source_slot_gate()
-	_expect_int(
-		"authority.canonical_source_slots",
-		int(source_gate.get("canonical_source_slots", -1)),
-		EXPECTED_BASE_DROP_ROW_COUNT,
-		failures
-	)
-	_expect_int(
-		"authority.drop_enabled_source_slots",
-		int(source_gate.get("drop_enabled_source_slots", -1)),
-		EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"authority.drop_disabled_source_slots",
-		int(source_gate.get("drop_disabled_source_slots", -1)),
-		EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"authority.reward_resolved_enabled_slots",
-		int(source_gate.get("reward_resolved_enabled_slots", -1)),
-		EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"authority.probability_resolved_enabled_slots",
-		int(source_gate.get("probability_resolved_enabled_slots", -1)),
-		EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"authority.rng_eligible_slots",
-		int(source_gate.get("rng_eligible_slots", -1)),
-		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"authority.rng_roll_count",
-		int(source_gate.get("rng_roll_count", -1)),
-		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-		failures
-	)
-	if (
-		int(source_gate.get("canonical_source_slots", -1))
-			!= int(source_gate.get("drop_enabled_source_slots", -1))
-			+ int(source_gate.get("drop_disabled_source_slots", -1))
-		or not bool(source_gate.get(
-			"all_enabled_resolved_slots_rng_before_overflow",
-			false
-		))
-		or str(source_gate.get("overflow_stage", ""))
-			!= "after_all_probability_rolls"
-	):
-		failures.append(
-			"authority source-slot gate is not a complete pre-overflow partition"
-		)
-
-
-func _check_current_corpus_rows(
-	slots: Array,
-	rate_policy_counts: Dictionary,
-	slot_status_counts: Dictionary,
-	invalid_slots: Array,
-	failures: Array[String]
-) -> void:
-	_expect_int(
-		"observed slot count",
-		slots.size(),
-		EXPECTED_FINAL_DROP_ROW_COUNT,
-		failures
-	)
-	_expect_int(
-		"rate_policy=AUDIT_ONLY count",
-		int(rate_policy_counts.get("AUDIT_ONLY", 0)),
-		EXPECTED_AUDIT_ONLY_COUNT,
-		failures
-	)
-	_expect_int(
-		"slot_status=CONFIRMED_SOURCE_SLOT count",
-		int(slot_status_counts.get("CONFIRMED_SOURCE_SLOT", 0)),
-		EXPECTED_CONFIRMED_SOURCE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"invalid chance count",
-		invalid_slots.size(),
-		EXPECTED_INVALID_CHANCE_COUNT,
-		failures
-	)
-
-	if invalid_slots.size() != 1:
+	if malformed_source_rows.size() != 1:
 		return
-	var anomaly_value: Variant = invalid_slots[0]
-	if not anomaly_value is Dictionary:
-		failures.append("invalid slot snapshot is not a Dictionary")
+	var row_value: Variant = malformed_source_rows[0]
+	if not row_value is Dictionary:
 		return
-	var anomaly: Dictionary = anomaly_value
+	var row: Dictionary = row_value
 	_expect_string(
-		"anomaly.drop_profile_id",
-		str(anomaly.get("drop_profile_id", "")),
-		EXPECTED_ANOMALY_DROP_PROFILE_ID,
+		"malformed source profile",
+		str(row.get("source_profile_id", "")),
+		EXPECTED_ANOMALY_SOURCE_PROFILE_ID,
 		failures
 	)
 	_expect_int(
-		"anomaly.monster_id",
-		int(anomaly.get("monster_id", -1)),
+		"malformed source monster ID",
+		int(row.get("canonical_monster_id", -1)),
 		EXPECTED_ANOMALY_MONSTER_ID,
 		failures
 	)
 	_expect_int(
-		"anomaly.line_number",
-		int(anomaly.get("line_number", -1)),
-		EXPECTED_ANOMALY_LINE_NUMBER,
-		failures
-	)
-	_expect_int(
-		"anomaly.profile_entry_ordinal_zero_based",
-		int(anomaly.get(
-			"profile_entry_ordinal_zero_based",
-			-1
-		)),
-		EXPECTED_ANOMALY_LINE_NUMBER - 1,
-		failures
-	)
-	_expect_int(
-		"anomaly.profile_entry_ordinal_one_based",
-		int(anomaly.get(
-			"profile_entry_ordinal_one_based",
-			-1
-		)),
+		"malformed source line",
+		int(row.get("source_line_number", -1)),
 		EXPECTED_ANOMALY_LINE_NUMBER,
 		failures
 	)
 	_expect_string(
-		"anomaly.slot_index",
-		str(anomaly.get("slot_index", "")),
+		"malformed source slot",
+		str(row.get("source_slot_index", "")),
 		EXPECTED_ANOMALY_SLOT_INDEX,
 		failures
 	)
 	_expect_string(
-		"anomaly.chance_raw",
-		str(anomaly.get("chance_raw", "")),
+		"malformed source chance",
+		str(row.get("source_chance", "")),
 		EXPECTED_ANOMALY_CHANCE,
 		failures
 	)
 	_expect_string(
-		"anomaly.raw_text",
-		str(anomaly.get("raw_text", "")),
+		"malformed source raw text",
+		str(row.get("source_raw_text", "")),
 		EXPECTED_ANOMALY_RAW_TEXT,
 		failures
 	)
-	if not bool(anomaly.get("runtime_reward_attempted", false)):
+	_expect_int(
+		"correction monster ID",
+		int(correction.get("stable_monster_id", -1)),
+		EXPECTED_ANOMALY_MONSTER_ID,
+		failures
+	)
+	_expect_string(
+		"correction source slot",
+		str(correction.get("source_slot_index", "")),
+		EXPECTED_ANOMALY_SLOT_INDEX,
+		failures
+	)
+	_expect_string(
+		"correction original chance",
+		str(correction.get("original_chance", "")),
+		EXPECTED_ANOMALY_CHANCE,
+		failures
+	)
+	_expect_int(
+		"correction numerator",
+		int(correction.get("corrected_base_numerator", -1)),
+		1,
+		failures
+	)
+	_expect_int(
+		"correction denominator",
+		int(correction.get("corrected_base_denominator", -1)),
+		EXPECTED_ANOMALY_CORRECTED_DENOMINATOR,
+		failures
+	)
+	var runtime_slot_value: Variant = row.get("runtime_slot", null)
+	if not runtime_slot_value is Dictionary:
+		failures.append("malformed source row has no compiled runtime slot")
+		return
+	var runtime_slot: Dictionary = runtime_slot_value
+	_expect_int(
+		"malformed source compiled denominator",
+		int(runtime_slot.get("base_denominator", -1)),
+		EXPECTED_ANOMALY_CORRECTED_DENOMINATOR,
+		failures
+	)
+	if not bool(row.get("runtime_rng_eligible", false)):
 		failures.append(
-			"1/00 provenance anomaly must still reach reward resolution"
+			"malformed source provenance must not block direct Runtime RNG"
 		)
-	if not bool(anomaly.get("slot_runtime_rollable", false)):
-		failures.append("1/00 provenance anomaly must remain DPV2 runtime rollable")
-	if anomaly.get("runtime_rejection_reason", null) != null:
-		failures.append("1/00 provenance anomaly must not carry a runtime rejection")
 
 
-func _recompute_source_gate_counts(slots: Array) -> Dictionary:
-	var canonical := slots.size()
-	var drop_enabled := 0
-	var drop_disabled := 0
-	var reward_resolved_enabled := 0
-	var probability_resolved_enabled := 0
-	var rng_eligible := 0
-	for raw_slot: Variant in slots:
-		if not raw_slot is Dictionary:
-			continue
-		var slot: Dictionary = raw_slot
-		if bool(slot.get("drop_enabled", false)):
-			drop_enabled += 1
-		else:
-			drop_disabled += 1
-		if bool(slot.get("reward_resolved_enabled", false)):
-			reward_resolved_enabled += 1
-		if bool(slot.get("probability_resolved_enabled", false)):
-			probability_resolved_enabled += 1
-		if bool(slot.get("rng_eligible", false)):
-			rng_eligible += 1
-	return {
-		"canonical_source_slots": canonical,
-		"drop_enabled_source_slots": drop_enabled,
-		"drop_disabled_source_slots": drop_disabled,
-		"reward_resolved_enabled_slots": reward_resolved_enabled,
-		"probability_resolved_enabled_slots": probability_resolved_enabled,
-		"rng_eligible_slots": rng_eligible,
-		"rng_roll_count": rng_eligible,
-		"all_enabled_resolved_slots_rng_before_overflow": (
-			drop_enabled == reward_resolved_enabled
-			and reward_resolved_enabled == probability_resolved_enabled
-			and probability_resolved_enabled == rng_eligible
-		),
-		"overflow_stage": "after_all_probability_rolls",
-	}
-
-
-func _check_source_slot_fields(slots: Array, failures: Array[String]) -> void:
-	for raw_slot: Variant in slots:
-		if not raw_slot is Dictionary:
-			failures.append("source-slot gate row is not a Dictionary")
-			continue
-		var slot: Dictionary = raw_slot
-		var prefix := "%s:%s" % [
-			str(slot.get("drop_profile_id", "<profile?>")),
-			str(slot.get("line_number", "<line?>")),
-		]
-		var drop_enabled := bool(slot.get("drop_enabled", false))
-		var reward_resolvable := bool(slot.get("reward_resolvable", false))
-		var probability_resolvable := bool(
-			slot.get("probability_authority_resolvable", false)
-		)
-		var expected_reward_resolved := drop_enabled and reward_resolvable
-		var expected_probability_resolved := (
-			drop_enabled and probability_resolvable
-		)
-		var expected_rng_eligible := (
-			expected_reward_resolved and expected_probability_resolved
-		)
-		if bool(slot.get("reward_resolved_enabled", false)) != expected_reward_resolved:
-			failures.append(
-				"%s reward_resolved_enabled disagrees with drop/reward gate" % prefix
-			)
-		if bool(slot.get("probability_resolved_enabled", false)) != expected_probability_resolved:
-			failures.append(
-				"%s probability_resolved_enabled disagrees with drop/policy gate" % prefix
-			)
-		if bool(slot.get("rng_eligible", false)) != expected_rng_eligible:
-			failures.append(
-				"%s rng_eligible disagrees with reward/probability gate" % prefix
-			)
-		if bool(slot.get("rng_eligible_before_overflow", false)) != expected_rng_eligible:
-			failures.append(
-				"%s rng_eligible_before_overflow disagrees with RNG gate" % prefix
-			)
-		if bool(slot.get("slot_runtime_rollable", false)) != expected_rng_eligible:
-			failures.append(
-				"%s slot_runtime_rollable disagrees with RNG eligibility" % prefix
-			)
-
-
-func _check_source_gate_counts(
-	counts: Dictionary,
-	failures: Array[String]
-) -> void:
-	_expect_int(
-		"observed canonical source slots",
-		int(counts.get("canonical_source_slots", -1)),
-		EXPECTED_BASE_DROP_ROW_COUNT,
-		failures
+func _sorted_numeric_keys(value: Dictionary) -> Array:
+	var result: Array = value.keys()
+	result.sort_custom(func(left: Variant, right: Variant) -> bool:
+		return int(str(left).trim_prefix("drop.")) \
+			< int(str(right).trim_prefix("drop."))
 	)
-	_expect_int(
-		"observed drop-enabled source slots",
-		int(counts.get("drop_enabled_source_slots", -1)),
-		EXPECTED_DROP_ENABLED_SOURCE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"observed drop-disabled source slots",
-		int(counts.get("drop_disabled_source_slots", -1)),
-		EXPECTED_DROP_DISABLED_SOURCE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"observed reward-resolved enabled slots",
-		int(counts.get("reward_resolved_enabled_slots", -1)),
-		EXPECTED_REWARD_RESOLVED_ENABLED_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"observed probability-resolved enabled slots",
-		int(counts.get("probability_resolved_enabled_slots", -1)),
-		EXPECTED_PROBABILITY_RESOLVED_ENABLED_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"observed RNG-eligible slots",
-		int(counts.get("rng_eligible_slots", -1)),
-		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-		failures
-	)
-	_expect_int(
-		"observed RNG-roll stage slots",
-		int(counts.get("rng_roll_count", -1)),
-		EXPECTED_RNG_ELIGIBLE_SLOT_COUNT,
-		failures
-	)
-	if (
-		int(counts.get("canonical_source_slots", -1))
-			!= int(counts.get("drop_enabled_source_slots", -1))
-			+ int(counts.get("drop_disabled_source_slots", -1))
-		or not bool(counts.get(
-			"all_enabled_resolved_slots_rng_before_overflow",
-			false
-		))
-	):
-		failures.append(
-			"observed source-slot gate is not a complete pre-overflow partition"
-		)
+	return result
 
 
 func _expect_int(
@@ -848,8 +1018,7 @@ func _expect_int(
 ) -> void:
 	if actual != expected:
 		failures.append(
-			"%s mismatch: actual=%d expected=%d"
-			% [label, actual, expected]
+			"%s mismatch: actual=%d expected=%d" % [label, actual, expected]
 		)
 
 
@@ -861,8 +1030,7 @@ func _expect_string(
 ) -> void:
 	if actual != expected:
 		failures.append(
-			"%s mismatch: actual=%s expected=%s"
-			% [label, actual, expected]
+			"%s mismatch: actual=%s expected=%s" % [label, actual, expected]
 		)
 
 
@@ -884,7 +1052,6 @@ func _fail(failures: Array[String]) -> void:
 	for failure: String in failures:
 		push_error("MONSTER_DROP_P1A_RUNTIME_EXPORT_FAIL: %s" % failure)
 	print(
-		"MONSTER_DROP_P1A_RUNTIME_EXPORT_FAIL_COUNT=%d"
-		% failures.size()
+		"MONSTER_DROP_P1A_RUNTIME_EXPORT_FAIL_COUNT=%d" % failures.size()
 	)
 	get_tree().quit(1)
