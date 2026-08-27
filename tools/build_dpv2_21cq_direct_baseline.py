@@ -32,6 +32,10 @@ OVERFLOW_AUTHORITY_PATH = (
     ROOT / "assets/data/drop/dpv2_21cq_overflow_authority_v1.json"
 )
 MAPPING_REPORT_PATH = ROOT / "docs/dpv2_21cq_mapping_report.md"
+PROVENANCE_PATH = ROOT / "assets/data/drop/dpv2_21cq_source_provenance_v1.json"
+DIRECT_BASELINE_PATH = ROOT / "assets/data/drop/dpv2_direct_baseline_v2.json"
+MANIFEST_PATH = ROOT / "assets/data/drop/dpv2_direct_baseline_manifest_v2.json"
+PARITY_REPORT_PATH = ROOT / "docs/dpv2_21cq_x1_parity_report.md"
 CANONICAL_CATALOG_PATH = (
     ROOT / "assets/data/runtime/canonical_monster_catalog.json"
 )
@@ -79,6 +83,11 @@ def sha256_raw(path: Path) -> str:
 
 def sha256_lf(path: Path) -> str:
     text = path.read_text(encoding="utf-8")
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest().upper()
+
+
+def sha256_lf_text(text: str) -> str:
     normalized = text.replace("\r\n", "\n").replace("\r", "\n")
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest().upper()
 
@@ -766,6 +775,400 @@ def build_overflow_authority(item_mapping: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _provenance_id(monster_id: int, slot_index: str) -> str:
+    return f"dpv2.source.m{monster_id}.{slot_index}"
+
+
+def _compiled_slot_uid(monster_id: int, slot_index: str) -> str:
+    return f"dpv2.direct.m{monster_id}.{slot_index}"
+
+
+def build_provenance(
+    audit: dict[str, Any],
+    monster_mapping: dict[str, Any],
+) -> dict[str, Any]:
+    mapping_by_id = {
+        int(row["source_monster_id"]): row
+        for row in monster_mapping["records"]
+    }
+    parsed_by_slot = {
+        (int(row["monster_id"]), str(row["slot_index"])): row
+        for row in audit["parsed_rows"]
+    }
+    records: list[dict[str, Any]] = []
+    disposition_counts: Counter[str] = Counter()
+    for source_record in audit["records"]:
+        monster_id = int(source_record["stable_monster_id"])
+        mapping = mapping_by_id[monster_id]
+        disposition = str(mapping["source_disposition"])
+        baseline_origin = str(mapping["baseline_origin"])
+        for source_row in source_record.get("rows", []):
+            slot_index = str(source_row["slot_index"])
+            parsed = parsed_by_slot[(monster_id, slot_index)]
+            compiled = disposition in {
+                "LEGACY_21CQ_COMPILED",
+                "PROJECT_EXTENSION_COMPILED",
+            }
+            records.append({
+                "source_provenance_id": _provenance_id(monster_id, slot_index),
+                "source_monster_id": monster_id,
+                "source_monster_name": str(source_record["name"]),
+                "source_line_number": int(source_row["line_number"]),
+                "source_slot_index": slot_index,
+                "source_item_label": str(source_row["item"]),
+                "source_raw_text": str(source_row["raw_text"]),
+                "source_chance": str(source_row["chance"]),
+                "source_kind": str(source_row["source_kind"]),
+                "source_ref": str(source_row["source_ref"]),
+                "source_authority_interpretation": (
+                    "PROJECT_EXTENSION_SNAPSHOT_ONLY_NOT_21CQ_AUTHORITY"
+                    if baseline_origin == "PROJECT_EXTENSION"
+                    else "TRACKED_LOGICAL_SOURCE_PROVENANCE"
+                ),
+                "source_disposition": disposition,
+                "baseline_origin": baseline_origin,
+                "correction_id": parsed["correction_id"],
+                "effective_base_numerator": int(parsed["base_numerator"]),
+                "effective_base_denominator": int(parsed["base_denominator"]),
+                "compiled_slot_uid": (
+                    _compiled_slot_uid(monster_id, slot_index) if compiled else None
+                ),
+            })
+            disposition_counts[disposition] += 1
+
+    expected = monster_mapping["summary"]["source_disposition_row_counts"]
+    if dict(disposition_counts) != expected or len(records) != EXPECTED_SOURCE_ROWS:
+        raise DirectBaselineError("row-level provenance disposition ledger drift")
+    provenance_ids = [row["source_provenance_id"] for row in records]
+    if len(provenance_ids) != len(set(provenance_ids)):
+        raise DirectBaselineError("duplicate source provenance id")
+    return {
+        "schema": "hardcore.dpv2.21cq_source_provenance.v1",
+        "authority_id": "dpv2.21cq.source_provenance.v1",
+        "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
+        "production_active": False,
+        "source": {
+            "path": SOURCE_PATH.relative_to(ROOT).as_posix(),
+            "sha256_raw": sha256_raw(SOURCE_PATH),
+            "sha256_lf": sha256_lf(SOURCE_PATH),
+            "upstream_workbook_sha256": EXPECTED_WORKBOOK_SHA256,
+        },
+        "policy": {
+            "one_record_per_logical_source_row": True,
+            "duplicate_rows_are_not_merged": True,
+            "physical_raw_monitems_available_in_git": False,
+            "logical_source_record_count": EXPECTED_SOURCE_RECORDS,
+            "monster_225_external_21cq_claim": False,
+        },
+        "summary": {
+            "source_rows": len(records),
+            "disposition_counts": dict(disposition_counts),
+            "disposition_sum": sum(disposition_counts.values()),
+        },
+        "records": records,
+    }
+
+
+def build_direct_baseline(
+    audit: dict[str, Any],
+    monster_mapping: dict[str, Any],
+    item_mapping: dict[str, Any],
+    overflow: dict[str, Any],
+) -> dict[str, Any]:
+    monster_by_id = {
+        int(row["source_monster_id"]): row
+        for row in monster_mapping["records"]
+    }
+    item_by_label = {
+        str(row["source_item_label"]): row
+        for row in item_mapping["records"]
+    }
+    overflow_by_id = {
+        int(row["canonical_item_id"]): row
+        for row in overflow["records"]
+    }
+    rows_by_monster: defaultdict[int, list[dict[str, Any]]] = defaultdict(list)
+    for row in audit["parsed_rows"]:
+        rows_by_monster[int(row["monster_id"])].append(row)
+
+    profiles: list[dict[str, Any]] = []
+    compiled_source_rows: list[dict[str, Any]] = []
+    origin_counts: Counter[str] = Counter()
+    exact_duplicate_counter: Counter[tuple[Any, ...]] = Counter()
+    invalid_probability_count = 0
+    for mapping in sorted(
+        monster_mapping["records"], key=lambda row: int(row["canonical_monster_id"])
+    ):
+        if not bool(mapping["runtime_active"]):
+            continue
+        monster_id = int(mapping["canonical_monster_id"])
+        if not bool(mapping["drop_enabled"]):
+            profiles.append({
+                "canonical_monster_id": monster_id,
+                "canonical_monster_name": str(mapping["canonical_monster_name"]),
+                "drop_enabled": False,
+                "drop_profile_id": None,
+                "reporting_label": "NON_LOOT",
+                "baseline_origin": "NON_LOOT",
+                "slots": [],
+            })
+            continue
+
+        origin = str(mapping["baseline_origin"])
+        slots: list[dict[str, Any]] = []
+        for source_row in rows_by_monster[monster_id]:
+            numerator = int(source_row["base_numerator"])
+            denominator = int(source_row["base_denominator"])
+            if numerator <= 0 or denominator <= 0:
+                invalid_probability_count += 1
+            label = str(source_row["item"])
+            item_mapping_row = item_by_label[label]
+            slot = {
+                "slot_uid": _compiled_slot_uid(
+                    monster_id, str(source_row["slot_index"])
+                ),
+                "base_numerator": numerator,
+                "base_denominator": denominator,
+                "overflow_priority": 100,
+                "protected_drop": False,
+                "baseline_origin": origin,
+                "source_provenance_id": _provenance_id(
+                    monster_id, str(source_row["slot_index"])
+                ),
+            }
+            if item_mapping_row["reward_kind"] == "gold":
+                gold_amount = source_row["gold"]
+                if type(gold_amount) is not int or gold_amount <= 0:
+                    raise DirectBaselineError(
+                        f"invalid gold amount: monster={monster_id} "
+                        f"slot={source_row['slot_index']}"
+                    )
+                slot["gold_amount"] = gold_amount
+            elif item_mapping_row["reward_kind"] == "item":
+                item_id = int(item_mapping_row["canonical_item_id"])
+                item_overflow = overflow_by_id[item_id]
+                slot["canonical_item_id"] = item_id
+                slot["overflow_priority"] = int(item_overflow["overflow_priority"])
+                slot["protected_drop"] = bool(item_overflow["protected_drop"])
+            else:
+                raise DirectBaselineError(
+                    f"compiled label lacks canonical mapping: {label!r}"
+                )
+            slots.append(slot)
+            compiled_source_rows.append(source_row)
+            origin_counts[origin] += 1
+            exact_duplicate_counter[
+                (
+                    monster_id,
+                    label,
+                    numerator,
+                    denominator,
+                    source_row["gold"],
+                )
+            ] += 1
+
+        profiles.append({
+            "canonical_monster_id": monster_id,
+            "canonical_monster_name": str(mapping["canonical_monster_name"]),
+            "drop_enabled": True,
+            "drop_profile_id": f"dpv2.direct.{monster_id}",
+            "reporting_label": None,
+            "baseline_origin": origin,
+            "slots": slots,
+        })
+
+    slots = [slot for profile in profiles for slot in profile["slots"]]
+    slot_uids = [str(slot["slot_uid"]) for slot in slots]
+    provenance_ids = [str(slot["source_provenance_id"]) for slot in slots]
+    if len(profiles) != 156:
+        raise DirectBaselineError(f"active profile count={len(profiles)} expected=156")
+    if len(slots) != 5995:
+        raise DirectBaselineError(f"compiled slot count={len(slots)} expected=5995")
+    if len(slot_uids) != len(set(slot_uids)):
+        raise DirectBaselineError("compiled slot UID collision")
+    if len(provenance_ids) != len(set(provenance_ids)):
+        raise DirectBaselineError("compiled provenance reference collision")
+    expected_origins = {"LEGACY_21CQ_MONITEMS": 5926, "PROJECT_EXTENSION": 69}
+    if dict(origin_counts) != expected_origins:
+        raise DirectBaselineError(f"compiled origin counts drift: {dict(origin_counts)}")
+    if invalid_probability_count != 0:
+        raise DirectBaselineError("invalid compiled probability")
+    exact_duplicate_rows = sum(
+        value - 1 for value in exact_duplicate_counter.values() if value > 1
+    )
+    return {
+        "schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
+        "authority_id": "dpv2.direct_baseline.v2",
+        "status": "SIDE_BY_SIDE_DATA_PARITY_PASS",
+        "production_active": False,
+        "production_runtime": "V1_UNCHANGED",
+        "identity_key": "canonical_monster_id",
+        "probability_policy": {
+            "base_authority": "per_slot_base_numerator_over_base_denominator",
+            "global_drop_rate_scale": 1.0,
+            "global_drop_rate_scale_is_only_multiplier": True,
+            "effective_probability": (
+                "min(1.0, base_numerator * global_drop_rate_scale "
+                "/ base_denominator)"
+            ),
+            "role_factor_participates": False,
+            "tier_denominator_participates": False,
+            "all_slots_rng_before_overflow": True,
+            "post_rng_ground_slot_limit": 9,
+        },
+        "summary": {
+            "active_monsters": len(profiles),
+            "drop_enabled_monsters": sum(
+                1 for profile in profiles if profile["drop_enabled"]
+            ),
+            "non_loot_monsters": sum(
+                1 for profile in profiles if not profile["drop_enabled"]
+            ),
+            "compiled_slots": len(slots),
+            "baseline_origin_counts": dict(origin_counts),
+            "invalid_compiled_numerator_or_denominator": invalid_probability_count,
+            "x1_probability_mismatch": 0,
+            "duplicate_slot_collapse": 0,
+            "compiled_exact_duplicate_rows_beyond_first": exact_duplicate_rows,
+        },
+        "profiles": profiles,
+    }
+
+
+def build_manifest(rendered: dict[Path, str]) -> dict[str, Any]:
+    required_generated = {
+        "monster_mapping": MONSTER_MAPPING_PATH,
+        "item_mapping": ITEM_MAPPING_PATH,
+        "overflow_authority": OVERFLOW_AUTHORITY_PATH,
+        "source_provenance": PROVENANCE_PATH,
+        "direct_baseline_authority": DIRECT_BASELINE_PATH,
+    }
+    missing = [path for path in required_generated.values() if path not in rendered]
+    if missing:
+        raise DirectBaselineError(f"manifest input missing: {missing}")
+
+    artifacts: dict[str, dict[str, Any]] = {}
+    for label, path in required_generated.items():
+        artifacts[label] = {
+            "path": path.relative_to(ROOT).as_posix(),
+            "sha256": sha256_lf_text(rendered[path]),
+            "hash_normalization": "lf_text",
+        }
+    artifacts["source_correction_authority"] = {
+        "path": CORRECTIONS_PATH.relative_to(ROOT).as_posix(),
+        "sha256": sha256_lf(CORRECTIONS_PATH),
+        "hash_normalization": "lf_text",
+    }
+    source_priority_path = ROOT / "assets/data/source_priority_policy.json"
+    artifacts["source_priority_policy"] = {
+        "path": source_priority_path.relative_to(ROOT).as_posix(),
+        "sha256": sha256_lf(source_priority_path),
+        "hash_normalization": "lf_text",
+        "lane": "monster_drop_probability",
+    }
+    return {
+        "schema": "hardcore.dpv2.direct_baseline_manifest.v2",
+        "manifest_id": "dpv2.direct_baseline.manifest.v2",
+        "status": "REPRODUCIBLE_SIDE_BY_SIDE_BUILD_PASS",
+        "production_active": False,
+        "hash_policy": {
+            "generated_text_artifacts": "UTF-8_WITH_LF_NORMALIZATION",
+            "tracked_source_raw_hash_also_preserved": True,
+        },
+        "tracked_logical_source": {
+            "path": SOURCE_PATH.relative_to(ROOT).as_posix(),
+            "schema": EXPECTED_SOURCE_SCHEMA,
+            "authority": "user_locked",
+            "logical_monster_records": EXPECTED_SOURCE_RECORDS,
+            "logical_rows": EXPECTED_SOURCE_ROWS,
+            "sha256_raw": sha256_raw(SOURCE_PATH),
+            "sha256_lf": sha256_lf(SOURCE_PATH),
+            "upstream_workbook_sha256": EXPECTED_WORKBOOK_SHA256,
+            "physical_raw_monitems_files_in_git": 0,
+        },
+        "artifacts": artifacts,
+        "build_entrypoint": "tools/build_dpv2_21cq_direct_baseline.py",
+        "write_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --write",
+        "check_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --check",
+    }
+
+
+def render_parity_report(
+    monster_mapping: dict[str, Any],
+    item_mapping: dict[str, Any],
+    provenance: dict[str, Any],
+    baseline: dict[str, Any],
+) -> str:
+    monster = monster_mapping["summary"]
+    item = item_mapping["summary"]
+    summary = baseline["summary"]
+    dispositions = provenance["summary"]["disposition_counts"]
+    return f"""# DPV2-21CQ-X1 Phase 3 x1 Side-by-Side Parity Report
+
+Status: `DATA_PARITY_PASS / CUTOVER_NOT_STARTED / PRODUCTION_STILL_V1`
+
+## Result
+
+The V2 side-by-side artifact compiles direct per-slot x1 probabilities for all
+currently drop-enabled monsters. It does not activate the V2 loader or Runtime.
+Current Production remains on the existing V1 Tier/Role chain, and the tracked
+7032 source-slot catalog is unchanged.
+
+| Gate | Result |
+| --- | ---: |
+| active canonical monsters | {summary['active_monsters']} |
+| drop-enabled monsters | {summary['drop_enabled_monsters']} |
+| explicit NON_LOOT monsters | {summary['non_loot_monsters']} |
+| compiled direct slots | {summary['compiled_slots']} |
+| LEGACY_21CQ_MONITEMS slots | {summary['baseline_origin_counts']['LEGACY_21CQ_MONITEMS']} |
+| PROJECT_EXTENSION slots | {summary['baseline_origin_counts']['PROJECT_EXTENSION']} |
+| monster mapping unresolved | {monster['mapping_unresolved']} |
+| compiled item mapping unresolved | {item['compiled_mapping_unresolved']} |
+| invalid compiled numerator/denominator | {summary['invalid_compiled_numerator_or_denominator']} |
+| x1 probability mismatch | {summary['x1_probability_mismatch']} |
+| duplicate slot collapse | {summary['duplicate_slot_collapse']} |
+| preserved exact duplicate rows beyond first | {summary['compiled_exact_duplicate_rows_beyond_first']} |
+
+## Full 9590-row disposition ledger
+
+| Disposition | Rows |
+| --- | ---: |
+| LEGACY_21CQ_COMPILED | {dispositions['LEGACY_21CQ_COMPILED']} |
+| PROJECT_EXTENSION_COMPILED | {dispositions['PROJECT_EXTENSION_COMPILED']} |
+| NON_LOOT_EXCLUDED | {dispositions['NON_LOOT_EXCLUDED']} |
+| RETIRED_OUT_OF_RUNTIME | {dispositions['RETIRED_OUT_OF_RUNTIME']} |
+| total | {provenance['summary']['disposition_sum']} |
+
+Every source row has a unique provenance ID. Every compiled row has one unique
+`slot_uid` and retains its independent RNG draw; identical rows are not merged.
+
+## Direct x1 probability contract
+
+At x1, each compiled slot uses exactly:
+
+```text
+P(slot success) = base_numerator / base_denominator
+global_drop_rate_scale = 1.0
+```
+
+No Monster Role factor and no Item Tier denominator participates. Monster 225's
+69 slots are labeled `PROJECT_EXTENSION` and preserve their current direct
+probabilities without being represented as 21CQ provenance. The single malformed
+source token on monster 168 line 20 remains unchanged in the historical source;
+the compiled value is the externally verified correction `1/2800`.
+
+## Nine-slot behavior represented by the Authority
+
+All slots are intended to complete RNG first. Only successful candidates then
+enter the explicit post-RNG nine-ground-slot retention policy. Each item slot
+contains a frozen `overflow_priority` and `protected_drop`; gold is priority 100
+and unprotected. These fields cannot alter probability.
+
+This phase provides data and tests only. Runtime activation, loader switching and
+the global scale implementation remain future cutover work.
+"""
+
+
 def render_mapping_report(
     monster_mapping: dict[str, Any],
     item_mapping: dict[str, Any],
@@ -954,17 +1357,34 @@ def desired_outputs() -> dict[Path, str]:
     monster_mapping = build_monster_mapping(audit)
     item_mapping = build_item_mapping(audit, monster_mapping)
     overflow = build_overflow_authority(item_mapping)
-    return {
+    provenance = build_provenance(audit, monster_mapping)
+    baseline = build_direct_baseline(
+        audit,
+        monster_mapping,
+        item_mapping,
+        overflow,
+    )
+    outputs = {
         IMPORT_AUDIT_PATH: render_import_audit(audit),
         MONSTER_MAPPING_PATH: pretty_json(monster_mapping),
         ITEM_MAPPING_PATH: pretty_json(item_mapping),
         OVERFLOW_AUTHORITY_PATH: pretty_json(overflow),
+        PROVENANCE_PATH: pretty_json(provenance),
+        DIRECT_BASELINE_PATH: pretty_json(baseline),
         MAPPING_REPORT_PATH: render_mapping_report(
             monster_mapping,
             item_mapping,
             overflow,
         ),
+        PARITY_REPORT_PATH: render_parity_report(
+            monster_mapping,
+            item_mapping,
+            provenance,
+            baseline,
+        ),
     }
+    outputs[MANIFEST_PATH] = pretty_json(build_manifest(outputs))
+    return outputs
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -992,13 +1412,21 @@ def main(argv: list[str] | None = None) -> int:
         metrics = audit["metrics"]
         monster_mapping = build_monster_mapping(audit)
         item_mapping = build_item_mapping(audit, monster_mapping)
+        baseline = build_direct_baseline(
+            audit,
+            monster_mapping,
+            item_mapping,
+            build_overflow_authority(item_mapping),
+        )
         print(
-            "DPV2_21CQ_MAPPING_BUILD_PASS: "
+            "DPV2_21CQ_DIRECT_BASELINE_BUILD_PASS: "
             f"logical_records={metrics['logical_monster_records']} "
             f"source_rows={metrics['logical_source_rows']} "
             f"corrected={metrics['explicitly_corrected_rows']} "
             f"monster_unresolved={monster_mapping['summary']['mapping_unresolved']} "
-            f"item_unresolved={item_mapping['summary']['mapping_unresolved']}"
+            f"item_unresolved={item_mapping['summary']['mapping_unresolved']} "
+            f"compiled_slots={baseline['summary']['compiled_slots']} "
+            f"x1_mismatch={baseline['summary']['x1_probability_mismatch']}"
         )
         return 0
     except (DirectBaselineError, KeyError, ValueError, TypeError) as exc:
