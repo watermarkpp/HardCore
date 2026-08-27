@@ -20,31 +20,37 @@ class SpecialNormalMonsterSpawnAuthorityTests(unittest.TestCase):
     def setUp(self) -> None:
         self.authority = builder.load_json(builder.SPECIAL_NORMAL_AUTHORITY_PATH)
         self.vanilla = builder.load_json(builder.VANILLA_PATH)
-        self.roles = builder.load_json(builder.DPV2_ROLE_AUTHORITY_PATH)
-        self.tiers = builder.load_json(builder.DPV2_ITEM_TIER_AUTHORITY_PATH)
 
     def validate(self, authority):
-        return builder.validate_special_normal_authority(
-            authority, self.vanilla, self.roles, self.tiers
-        )
+        return builder.validate_special_normal_authority(authority, self.vanilla)
 
-    def test_exact_eight_and_global_drop_binding(self) -> None:
+    def test_exact_eight_and_spawn_only_contract(self) -> None:
         rows = self.validate(copy.deepcopy(self.authority))
         self.assertEqual(set(rows), {39, 57, 74, 77, 90, 121, 137, 142})
         self.assertEqual(rows[74]["combat_classification"], "elite")
-        self.assertEqual(rows[74]["drop_role"], "ELITE")
-        self.assertEqual(rows[74]["role_factor"], 3)
-        self.assertIsNone(rows[74]["additional_multiplier"])
+        self.assertEqual(rows[74]["spawn"], builder.SPECIAL_NORMAL_DEFAULTS)
+        self.assertEqual(
+            self.authority["drop_probability"],
+            builder.SPECIAL_NORMAL_DROP_PROBABILITY_POLICY,
+        )
+        self.assertNotIn(
+            "assets/data/drop/dpv2_monster_role_authority_v1.json",
+            {source["path"] for source in self.authority["authority"]["sources"]},
+        )
+        for row in self.authority["records"]:
+            self.assertEqual(
+                set(row), {"monster_id", "canonical_name", "combat_classification", "spawn"}
+            )
 
-    def test_name_widening_and_custom_multiplier_fail_closed(self) -> None:
+    def test_name_widening_and_spawn_drift_fail_closed(self) -> None:
         widened = copy.deepcopy(self.authority)
         widened["scope"]["selection"] = "name_suffix"
         with self.assertRaisesRegex(RuntimeError, "selection is not exact-ID"):
             self.validate(widened)
-        multiplied = copy.deepcopy(self.authority)
-        multiplied["records"][0]["additional_multiplier"] = 2
-        with self.assertRaisesRegex(RuntimeError, "adds a drop multiplier"):
-            self.validate(multiplied)
+        drifted = copy.deepcopy(self.authority)
+        drifted["records"][0]["spawn"]["respawn_seconds"] = 480
+        with self.assertRaisesRegex(RuntimeError, "spawn policy drift"):
+            self.validate(drifted)
 
 
 if __name__ == "__main__":

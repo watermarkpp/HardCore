@@ -157,6 +157,20 @@ func _run() -> void:
 		if monster_id == 239:
 			assert(int(wooma.get("monster_id", -1)) != int(entries_by_id.get("76", {}).get("monster_id", -1)), "Wooma 239 identity collapsed into 76")
 
+	var special_authority: Dictionary = catalog.get("special_normal_spawn_authority", {})
+	assert(special_authority.keys().size() == 7, "special-normal catalog authority shape drifted")
+	var special_probability: Dictionary = special_authority.get("drop_probability", {})
+	assert(str(special_probability.get("authority", "")) == "external_direct_baseline")
+	assert(str(special_probability.get("identity_key", "")) == "canonical_monster_id")
+	assert(str(special_probability.get("resolution", "")) == "direct_baseline_by_canonical_monster_id")
+	assert(not bool(special_probability.get("production_rng_input", true)))
+	for special_id: int in [39, 57, 74, 77, 90, 121, 137, 142]:
+		var special_entry: Dictionary = entries_by_id.get(str(special_id), {})
+		var spawn_authority: Dictionary = special_entry.get("spawn_authority", {})
+		for forbidden: String in ["drop_binding", "drop_role", "role_factor", "item_tier_resolution", "item_tier_sha", "monster_role_sha", "global_scale_sha"]:
+			assert(not spawn_authority.has(forbidden), "special-normal spawn authority leaked %s" % forbidden)
+		assert(spawn_authority.keys().size() == 10, "special-normal spawn authority shape drifted for %d" % special_id)
+
 	# Excel drop authority anchors.
 	for anchor: Array in [[76, 33], [239, 54], [240, 54]]:
 		var anchor_id: int = anchor[0]

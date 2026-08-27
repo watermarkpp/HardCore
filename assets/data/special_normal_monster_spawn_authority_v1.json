@@ -21,7 +21,7 @@
   },
   "authority": {
     "kind": "user_authoritative_exact_id_set",
-    "decision": "special_normal正式复用；未知暗殿已布置的八个精确monster_id统一使用标准monster_spawn刷新与全局DPV2掉落规则",
+    "decision": "special_normal正式复用；未知暗殿已布置的八个精确monster_id统一使用标准monster_spawn刷新，掉落概率由外部direct-baseline按canonical_monster_id解析",
     "sources": [
       {
         "path": "assets/data/vanilla_176/monsters.json",
@@ -32,21 +32,6 @@
         "path": "assets/data/canonical_monster_classification_v1.json",
         "sha256": "0A6DB865644E2B91D972B438B14D51974A32524080A62ED5D30C620421F4B377",
         "role": "combat classification preservation evidence"
-      },
-      {
-        "path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
-        "sha256": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-        "role": "A0.7 monster drop role and factor authority"
-      },
-      {
-        "path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
-        "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-        "role": "A0.7 item Tier and denominator authority"
-      },
-      {
-        "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
-        "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-        "role": "A0.7 global drop-rate scale authority"
       }
     ]
   },
@@ -68,32 +53,13 @@
     ],
     "map_data_mutated": false
   },
-  "drop_binding": {
-    "rule": "reuse_global_dpv2_role_and_item_tier_authority",
-    "additional_multiplier": null,
-    "per_item_denominator_override_allowed": false,
-    "role_authority_path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
-    "item_tier_authority_path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
-    "source_rate_policy": {
-      "source_path": "outputs/monster_drop_p1a/monster_drop_p1a_slots.csv",
-      "field": "source_rate",
-      "role": "provenance_only",
-      "used_for_tier": false,
-      "used_for_denominator": false
-    },
-    "production_active": true,
-    "phase_1_allowed": true,
-    "runtime_consumer": "scripts/layers/runtime/loot_runtime_service.gd",
-    "persistence_consumer": null,
-    "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-    "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-    "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-    "authority_provenance": {
-      "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-      "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-      "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-      "hash_normalization": "lf_text"
-    }
+  "drop_probability": {
+    "authority": "external_direct_baseline",
+    "authority_id": "dpv2.direct_baseline.v2",
+    "source_path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+    "identity_key": "canonical_monster_id",
+    "resolution": "direct_baseline_by_canonical_monster_id",
+    "production_rng_input": false
   },
   "records": [
     {
@@ -108,14 +74,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "STRONG_COMMON",
-      "role_factor": 1.5,
-      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 57,
@@ -129,14 +88,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "MINOR_BOSS",
-      "role_factor": 6,
-      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 74,
@@ -150,14 +102,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "ELITE",
-      "role_factor": 3,
-      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 77,
@@ -171,14 +116,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "MAJOR_BOSS",
-      "role_factor": 12,
-      "role_assignment_authority": "HUMAN_FROZEN",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 90,
@@ -192,14 +130,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "MINOR_BOSS",
-      "role_factor": 6,
-      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 121,
@@ -213,14 +144,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "MINOR_BOSS",
-      "role_factor": 6,
-      "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 137,
@@ -234,14 +158,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "ELITE",
-      "role_factor": 3,
-      "role_assignment_authority": "HUMAN_FROZEN",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     },
     {
       "monster_id": 142,
@@ -255,14 +172,7 @@
         "random_seconds": 0,
         "count": 1,
         "max_alive": 1
-      },
-      "drop_enabled": true,
-      "drop_role": "MINOR_BOSS",
-      "role_factor": 6,
-      "role_assignment_authority": "HUMAN_FROZEN",
-      "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-      "additional_multiplier": null,
-      "source_rate_role": "provenance_only"
+      }
     }
   ]
 }

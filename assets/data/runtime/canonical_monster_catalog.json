@@ -59,22 +59,7 @@
       "role": "generator_input"
     },
     "assets/data/special_normal_monster_spawn_authority_v1.json": {
-      "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
-      "hash_normalization": "lf_text",
-      "role": "generator_input"
-    },
-    "assets/data/drop/dpv2_item_tier_authority_v1.json": {
-      "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-      "hash_normalization": "lf_text",
-      "role": "generator_input"
-    },
-    "assets/data/drop/dpv2_monster_role_authority_v1.json": {
-      "sha256": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-      "hash_normalization": "lf_text",
-      "role": "generator_input"
-    },
-    "assets/data/drop/dpv2_global_drop_rate_authority_v1.json": {
-      "sha256": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
+      "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
       "hash_normalization": "lf_text",
       "role": "generator_input"
     },
@@ -133,7 +118,7 @@
     "schema": "hardcore.monster_special_normal_spawn_authority.v1",
     "authority_id": "special_normal.monster_spawn.v1",
     "path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-    "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+    "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
     "canonical_monster_ids": [
       39,
       57,
@@ -145,12 +130,13 @@
       142
     ],
     "production_active": true,
-    "phase_1_allowed": true,
-    "authority_provenance": {
-      "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-      "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-      "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-      "hash_normalization": "lf_text"
+    "drop_probability": {
+      "authority": "external_direct_baseline",
+      "authority_id": "dpv2.direct_baseline.v2",
+      "source_path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "identity_key": "canonical_monster_id",
+      "resolution": "direct_baseline_by_canonical_monster_id",
+      "production_rng_input": false
     }
   },
   "appearance_profiles": {
@@ -236380,27 +236366,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "STRONG_COMMON",
-          "role_factor": 1.5,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -236534,11 +236500,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=39; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=39; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -239962,27 +239928,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -240112,11 +240058,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=57; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=57; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -242808,27 +242754,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "ELITE",
-          "role_factor": 3,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -242981,11 +242907,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=74; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=74; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -243792,27 +243718,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MAJOR_BOSS",
-          "role_factor": 12,
-          "role_assignment_authority": "HUMAN_FROZEN",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -243942,11 +243848,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=77; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=77; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -246203,27 +246109,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -246353,11 +246239,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=90; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=90; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -251440,27 +251326,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -251594,11 +251460,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=121; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=121; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -255672,27 +255538,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "ELITE",
-          "role_factor": 3,
-          "role_assignment_authority": "HUMAN_FROZEN",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -255822,11 +255668,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=137; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=137; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -256937,27 +256783,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "HUMAN_FROZEN",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -257087,11 +256913,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=142; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=142; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -283631,27 +283457,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "STRONG_COMMON",
-          "role_factor": 1.5,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -283785,11 +283591,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=39; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=39; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -287213,27 +287019,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -287363,11 +287149,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=57; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=57; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -290059,27 +289845,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "ELITE",
-          "role_factor": 3,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -290232,11 +289998,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=74; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=74; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -291043,27 +290809,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MAJOR_BOSS",
-          "role_factor": 12,
-          "role_assignment_authority": "HUMAN_FROZEN",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -291193,11 +290939,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=77; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=77; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -293454,27 +293200,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -293604,11 +293330,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=90; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=90; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -298691,27 +298417,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "A0_7_HUMAN_ACCEPTED_A0_6_RECOMMENDATION",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -298845,11 +298551,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=121; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=121; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -302923,27 +302629,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "ELITE",
-          "role_factor": 3,
-          "role_assignment_authority": "HUMAN_FROZEN",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -303073,11 +302759,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=137; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=137; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {
@@ -304188,27 +303874,7 @@
         "respawn_seconds": 900,
         "random_seconds": 0,
         "count": 1,
-        "max_alive": 1,
-        "drop_binding": {
-          "drop_enabled": true,
-          "drop_role": "MINOR_BOSS",
-          "role_factor": 6,
-          "role_assignment_authority": "HUMAN_FROZEN",
-          "item_tier_resolution": "A0_7_ITEM_TIER_AUTHORITY_V1",
-          "additional_multiplier": null,
-          "source_rate_role": "provenance_only",
-          "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-          "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-          "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-          "authority_provenance": {
-            "item_tier_sha": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
-            "monster_role_sha": "EFED2D56D5BDF27165434EEB65495664BDC9BE48F6ACF502D1F2FDF1CA42A98D",
-            "global_scale_sha": "B82E125D0CBC602282BBAF4074248BE79FF866D0543E4134D289EBA7F72C7687",
-            "hash_normalization": "lf_text"
-          }
-        },
-        "production_active": true,
-        "phase_1_allowed": true
+        "max_alive": 1
       },
       "runtime_allowed": true,
       "runtime_capability": {
@@ -304338,11 +304004,11 @@
           "distribution": "source.user_authoritative_special_normal",
           "tier": "user_authoritative",
           "original_path": "assets/data/special_normal_monster_spawn_authority_v1.json",
-          "sha256": "CD53B6C4B437C111BD8558594FF034015CEB270A9110F1FE09A27EC4A3EDEE60",
+          "sha256": "DD059F667474E72E8B4A906471E75342D9C8D05FA4F43E06D65FC5978403F3F1",
           "hash_normalization": "lf_text",
           "role": "special_normal_spawn_classification",
           "field": "spawn_classification",
-          "evidence": "Explicit special_normal authority record for exact monster_id=142; combat classification and DPV2 probability role remain independent"
+          "evidence": "Explicit special_normal authority record for exact monster_id=142; combat classification is preserved and drop probability remains external"
         },
         "combat_stats": {
           "level": {

@@ -4,16 +4,7 @@ const Catalog := preload("res://scripts/map_editor/map_editor_content_catalog_se
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const RespawnPolicy := preload("res://scripts/monster_respawn_policy.gd")
 
-const EXPECTED := {
-	39: ["STRONG_COMMON", 1.5],
-	57: ["MINOR_BOSS", 6.0],
-	74: ["ELITE", 3.0],
-	77: ["MAJOR_BOSS", 12.0],
-	90: ["MINOR_BOSS", 6.0],
-	121: ["MINOR_BOSS", 6.0],
-	137: ["ELITE", 3.0],
-	142: ["MINOR_BOSS", 6.0],
-}
+const EXPECTED_IDS := [39, 57, 74, 77, 90, 121, 137, 142]
 
 
 func _ready() -> void:
@@ -24,18 +15,22 @@ func _ready() -> void:
 			continue
 		var monster_id := int(entry.get("monster_id", -1))
 		exact_ids.append(monster_id)
-		assert(EXPECTED.has(monster_id))
+		assert(monster_id in EXPECTED_IDS)
 		assert(str(entry.get("placement_kind", "")) == "monster_spawn")
 		assert(int(entry.get("default_respawn_seconds", 0)) == 900)
 		assert(str(entry.get("default_respawn_policy_id", "")) == RespawnPolicy.SPECIAL_NORMAL)
 		var spawn_authority: Dictionary = entry.get("spawn_authority", {})
-		var binding: Dictionary = spawn_authority.get("drop_binding", {})
-		assert(str(binding.get("drop_role", "")) == str(EXPECTED[monster_id][0]))
-		assert(float(binding.get("role_factor", 0.0)) == float(EXPECTED[monster_id][1]))
-		assert(binding.has("additional_multiplier"))
-		assert(binding.get("additional_multiplier") == null)
+		for forbidden: String in ["drop_binding", "drop_role", "role_factor", "item_tier_resolution", "item_tier_sha", "monster_role_sha", "global_scale_sha"]:
+			assert(not spawn_authority.has(forbidden), "special_normal spawn authority leaked %s" % forbidden)
+		assert(spawn_authority.get("spawn_classification", "") == RespawnPolicy.SPECIAL_NORMAL)
+		assert(str(spawn_authority.get("placement_kind", "")) == "monster_spawn")
+		assert(str(spawn_authority.get("respawn_policy_id", "")) == RespawnPolicy.SPECIAL_NORMAL)
+		assert(int(spawn_authority.get("respawn_seconds", 0)) == 900)
+		assert(int(spawn_authority.get("random_seconds", -1)) == 0)
+		assert(int(spawn_authority.get("count", 0)) == 1)
+		assert(int(spawn_authority.get("max_alive", 0)) == 1)
 	exact_ids.sort()
-	assert(exact_ids == EXPECTED.keys())
+	assert(exact_ids == EXPECTED_IDS)
 
 	var guardian := Catalog.find_by_monster_id("special_monster", 74)
 	assert(str(guardian.get("classification", "")) == "elite")
@@ -66,5 +61,5 @@ func _ready() -> void:
 		RespawnPolicy.SPECIAL_NORMAL, "elite", 480.0, RespawnPolicy.SPECIAL_NORMAL
 	)
 	assert(resolved.valid and resolved.seconds == 900.0)
-	print("SPECIAL_NORMAL_SPAWN_AUTHORITY_PASS: ids=8 id74=ELITE@3 respawn=900 extra_drop_multiplier=none")
+	print("SPECIAL_NORMAL_SPAWN_AUTHORITY_PASS: ids=8 classification_preserved=1 respawn=900 drop_probability=external_direct_baseline")
 	get_tree().quit(0)

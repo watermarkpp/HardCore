@@ -74,6 +74,54 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
     assert total == 7032, total
 
 
+def _assert_special_normal_spawn_only(catalog: dict[str, object]) -> None:
+    """The special-normal overlay must not carry a probability binding."""
+    expected_ids = {39, 57, 74, 77, 90, 121, 137, 142}
+    special = catalog.get("special_normal_spawn_authority", {})
+    assert isinstance(special, dict)
+    assert set(special) == {
+        "schema",
+        "authority_id",
+        "path",
+        "sha256",
+        "canonical_monster_ids",
+        "production_active",
+        "drop_probability",
+    }
+    assert set(special.get("canonical_monster_ids", [])) == expected_ids
+    assert special.get("drop_probability") == {
+        "authority": "external_direct_baseline",
+        "authority_id": "dpv2.direct_baseline.v2",
+        "source_path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+        "identity_key": "canonical_monster_id",
+        "resolution": "direct_baseline_by_canonical_monster_id",
+        "production_rng_input": False,
+    }
+    source_paths = set(catalog.get("sources", {}))
+    assert not any("dpv2_monster_role" in path for path in source_paths)
+    assert not any("dpv2_item_tier" in path for path in source_paths)
+    assert not any("dpv2_global_drop_rate" in path for path in source_paths)
+    entries_by_id = catalog.get("entries_by_id", {})
+    expected_spawn_keys = {
+        "authority_id",
+        "authority_path",
+        "record_key",
+        "spawn_classification",
+        "placement_kind",
+        "respawn_policy_id",
+        "respawn_seconds",
+        "random_seconds",
+        "count",
+        "max_alive",
+    }
+    for monster_id in expected_ids:
+        entry = entries_by_id[str(monster_id)]
+        assert set(entry.get("spawn_authority", {})) == expected_spawn_keys
+    for profile in catalog.get("drop_profiles", {}).values():
+        for row in profile.get("entries", []):
+            assert row.get("rate_policy") == "AUDIT_ONLY"
+
+
 def _base_drop_row_count(profile: dict[str, object]) -> int:
     count = 0
     for raw_row in profile.get("entries", []):
@@ -219,6 +267,7 @@ def main() -> None:
         assert evidence.get("hash_normalization") == expected, (path, evidence)
 
     _assert_excel_drop_authority(catalog)
+    _assert_special_normal_spawn_only(catalog)
     _assert_classification_placement_kind()
     _assert_local_from_res_portable()
     _assert_variant_visual_pairs(catalog)
