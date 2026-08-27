@@ -14,6 +14,7 @@ import importlib.util
 import json
 import math
 import struct
+import subprocess
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -27,7 +28,9 @@ SERVICE_PATH = ROOT / "assets/data/service_monster_runtime_catalog.json"
 COMBAT_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
 BEHAVIOR_PATH = ROOT / "assets/data/monster_behavior_profiles.json"
 POLICY_PATH = ROOT / "assets/data/source_priority_policy.json"
+DETAIL_SOURCE_PATH = ROOT / "assets/data/monster_21cq_detail_source_v1.json"
 M00_SHA = "1945a5eceaf6efc49ddf4e5da4298834bf15c864"
+PRE_21CQ_AUTHORITY_COMMIT = "29692163b72664600a027e76a3e4ab3bf74ae089"
 
 CRYSTAL_ROOT = ROOT / "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database"
 PRIMARY_DB = CRYSTAL_ROOT / "cjlaaa/Server.MirDB"
@@ -67,6 +70,26 @@ def sha256(path: Path) -> str:
 
 def source_path(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
+
+
+def load_pre_21cq_authority() -> dict[str, Any]:
+    """Load the pre-override candidate snapshot for conflict classification.
+
+    The current runtime authority is regenerated from this source master, so
+    reading it directly would make a rebuild compare the new output with
+    itself.  The task baseline is fixed by the integration handoff; retaining
+    that candidate snapshot only preserves historical conflict classes and
+    never supplies a runtime value.
+    """
+    relative = "assets/data/monster_runtime_authority_v1.json"
+    try:
+        raw = subprocess.check_output(
+            ["git", "show", f"{PRE_21CQ_AUTHORITY_COMMIT}:{relative}"],
+            cwd=ROOT,
+        )
+        return json.loads(raw.decode("utf-8"))
+    except (OSError, subprocess.CalledProcessError, UnicodeDecodeError, json.JSONDecodeError):
+        return read_json(AUTHORITY_PATH)
 
 
 def load_local_rows() -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -219,7 +242,17 @@ def classify_interval_conflict(
 
 def build_payload() -> dict[str, Any]:
     catalog = read_json(CATALOG_PATH)
-    old_authority = read_json(AUTHORITY_PATH)
+    detail_source = read_json(DETAIL_SOURCE_PATH)
+    if detail_source.get("authority") != "user_authoritative_override":
+        raise ValueError("21CQ detail source is not user-authoritative")
+    detail_by_id = {
+        int(row["monster_id"]): row
+        for row in detail_source.get("records", [])
+        if isinstance(row, dict)
+    }
+    if len(detail_by_id) != 217:
+        raise ValueError("21CQ detail source must contain 217 rows")
+    old_authority = load_pre_21cq_authority()
     service = read_json(SERVICE_PATH)
     combat = read_json(COMBAT_PATH)
     behavior = read_json(BEHAVIOR_PATH)
@@ -238,6 +271,9 @@ def build_payload() -> dict[str, Any]:
         monster_id = int(canonical["monster_id"])
         old = old_by_id[monster_id]
         old_movement = old["movement"]
+        detail_row = detail_by_id.get(monster_id)
+        if not isinstance(detail_row, dict):
+            raise ValueError(f"21CQ detail source missing monster_id={monster_id}")
         combat_row = combat_by_id.get(monster_id)
         exact = combat_row is not None
         source_name = str(combat_row.get("source_name", "")) if exact else ""
@@ -255,6 +291,7 @@ def build_payload() -> dict[str, Any]:
             binding_status = "SOURCE_ROW_MISSING"
 
         stationary = bool(old_movement["stationary"])
+        detail_interval_raw_ms = int(detail_row["move_interval_ms"])
         if stationary:
             status = "LOCKED"
             movement_enabled = False
@@ -265,17 +302,20 @@ def build_payload() -> dict[str, Any]:
         elif exact:
             status = "ACCEPTED_CANDIDATE"
             movement_enabled = True
-            walk_interval_ms = max(200, int(source_row["WALK_SPD"] or 0))
+            # 21CQ is authoritative for the interval value.  The existing
+            # server cadence contract still enforces its 200ms effective
+            # minimum; keep the raw website value in the evidence below.
+            walk_interval_ms = max(200, detail_interval_raw_ms)
             walk_step = max(1, int(source_row["WalkStep"] or 0))
             walk_wait_ms = int(source_row["WaLkWait"] or 0)
-            decision_reason = "exact stable-ID offline binding to the audited 1.76-labeled Paradox candidate"
+            decision_reason = "21CQ authoritative move interval with audited 1.76 step/wait cadence candidate"
         else:
             status = "COMPATIBILITY_HOLD"
             movement_enabled = True
-            walk_interval_ms = max(200, int(source_row["WALK_SPD"] or 0))
+            walk_interval_ms = max(200, detail_interval_raw_ms)
             walk_step = max(1, int(source_row["WalkStep"] or 0))
             walk_wait_ms = int(source_row["WaLkWait"] or 0)
-            decision_reason = "exact row missing; explicit stable-ID compatibility binding to the canonical base row"
+            decision_reason = "21CQ authoritative move interval with explicit stable-ID compatibility step/wait binding"
 
         classic = old_movement.get("classic_176_non_routed_candidate")
         conflict_class = None
@@ -317,6 +357,18 @@ def build_payload() -> dict[str, Any]:
                 "source": "candidate.mylgd_mir2server_176",
                 "path": source_path(LOCAL_176_DB),
                 "sha256": sha256(LOCAL_176_DB),
+            },
+            "interval_authority": {
+                "authority": "user_authoritative_override",
+                "distribution": str(detail_source.get("distribution", "")),
+                "source": source_path(DETAIL_SOURCE_PATH),
+                "sha256": sha256(DETAIL_SOURCE_PATH),
+                "source_url": str(detail_row.get("source_url", "")),
+                "raw_html_sha256": str(detail_row.get("raw_html_sha256", "")),
+                "field": "move_interval_ms",
+                "raw_interval_ms": detail_interval_raw_ms,
+                "effective_interval_ms": walk_interval_ms,
+                "minimum_contract_ms": 200,
             },
             "source_row": {
                 "WALK_SPD": int(source_row["WALK_SPD"] or 0),
@@ -392,6 +444,16 @@ def build_payload() -> dict[str, Any]:
             "missing_exact_bindings": missing_count,
             "interval_conflicts": len(interval_conflicts),
         },
+        "interval_value_authority": {
+            "authority": "user_authoritative_override",
+            "distribution": str(detail_source.get("distribution", "")),
+            "source": source_path(DETAIL_SOURCE_PATH),
+            "sha256": sha256(DETAIL_SOURCE_PATH),
+            "field": "move_interval_ms",
+            "raw_value_policy": "exact_21cq_detail_value",
+            "effective_value_policy": "existing_strict_cadence_minimum_200ms_for_nonstationary_runtime",
+            "excluded": ["spawn", "respawn", "map", "quantity", "drops", "drop_probability"],
+        },
         "conflict_policy": {
             "allowed_classes": sorted(CONFLICT_CLASSES),
             "interval_conflict_count": len(interval_conflicts),
@@ -451,6 +513,14 @@ def validate_quantization(contract: dict[str, Any]) -> list[str]:
 def validate(payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     catalog = read_json(CATALOG_PATH)
+    detail_source = read_json(DETAIL_SOURCE_PATH)
+    detail_by_id = {
+        int(item["monster_id"]): item
+        for item in detail_source.get("records", [])
+        if isinstance(item, dict)
+    }
+    if detail_source.get("authority") != "user_authoritative_override" or len(detail_by_id) != 217:
+        errors.append("21CQ detail source authority/coverage invalid")
     canonical = {int(row["monster_id"]): row for row in catalog["entries"]}
     records = payload.get("records", [])
     seen: set[int] = set()
@@ -465,6 +535,20 @@ def validate(payload: dict[str, Any]) -> list[str]:
         status = str(row.get("movement_source_status", ""))
         if status not in ALLOWED_SOURCE_STATUSES:
             errors.append(f"monster_id={monster_id} invalid movement status={status}")
+        detail_row = detail_by_id.get(monster_id, {})
+        interval_authority = dict(row.get("interval_authority", {}))
+        expected_raw_interval = detail_row.get("move_interval_ms")
+        expected_effective_interval = (
+            0
+            if bool(row.get("movement_enabled", False)) is False
+            else max(200, int(expected_raw_interval or 0))
+        )
+        if interval_authority.get("authority") != "user_authoritative_override":
+            errors.append(f"monster_id={monster_id} move interval lacks 21CQ authority")
+        if interval_authority.get("raw_interval_ms") != expected_raw_interval:
+            errors.append(f"monster_id={monster_id} raw 21CQ move interval mismatch")
+        if int(row.get("walk_interval_ms", -1)) != expected_effective_interval:
+            errors.append(f"monster_id={monster_id} effective 21CQ move interval mismatch")
         if status != "LOCKED" and (
             int(row.get("walk_interval_ms", 0)) < 200
             or int(row.get("walk_step", 0)) < 1
@@ -495,6 +579,8 @@ def validate(payload: dict[str, Any]) -> list[str]:
         errors.append("local 1.76 exact binding count must be 144")
     if payload.get("conflict_policy", {}).get("interval_conflict_count") != 75:
         errors.append("interval conflict count must be 75")
+    if payload.get("interval_value_authority", {}).get("authority") != "user_authoritative_override":
+        errors.append("top-level move interval authority is not 21CQ")
     for audit in payload.get("server_data_source_audit", []):
         if sha256(ROOT / audit["file"]) != EXPECTED_HASHES[audit["distribution"]]:
             errors.append(f"source hash drift: {audit['distribution']}")

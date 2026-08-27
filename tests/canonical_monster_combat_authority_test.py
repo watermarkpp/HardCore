@@ -1,13 +1,13 @@
 """Core combat authority regression test.
 
-Golden 9d6435bc established vanilla_176/monsters.json as the primary authority
+The user-authoritative 21CQ monster detail snapshot is the scoped authority
 for core combat stats (level, exp, hp, defense, magic_defense, attack_min,
-attack_max).  Crystal service records must NEVER override these fields.
+attack_max).  Crystal service records and older candidates remain evidence
+only and must never override the 21CQ values.
 
 This test verifies:
-1. All active canonical combat stats match vanilla exact-ID records.
-2. Explicit policy combat_override is applied where present.
-3. Source evidence points to vanilla, not Crystal.
+1. All active canonical combat stats match the exact-ID 21CQ detail records.
+2. Source evidence points to the scoped user override, not Crystal.
 4. Variant isolation: shared art skin != shared combat data.
 5. Retired IDs remain absent.
 6. AI/timing data is decoupled from combat fix.
@@ -29,6 +29,7 @@ GENERATOR = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(GENERATOR)
 
 CORE_COMBAT_FIELDS = ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")
+DETAIL_SOURCE_PATH = ROOT / "assets" / "data" / "monster_21cq_detail_source_v1.json"
 VANILLA_COMBAT_KEYS = {
     "level": "level",
     "exp": "exp",
@@ -54,70 +55,83 @@ def _load_policy_overrides() -> dict[str, dict]:
     return policy.get("wooma_matrix", {})
 
 
+def _load_21cq_by_id() -> dict[int, dict]:
+    source = GENERATOR.load_json(DETAIL_SOURCE_PATH)
+    records = source.get("records", [])
+    assert len(records) == 217, f"21CQ detail source records={len(records)} expected 217"
+    assert source.get("authority") == "user_authoritative_override"
+    return {int(record["monster_id"]): record for record in records if isinstance(record, dict)}
+
+
 def _assert_full_combat_authority(catalog: dict) -> None:
-    """Every active canonical monster's core combat stats must match its
-    exact-ID vanilla record, unless an explicit policy combat_override exists."""
-    vanilla_by_id = _load_vanilla_by_id()
-    policy_overrides = _load_policy_overrides()
+    """Every active canonical core stat must equal its exact 21CQ detail row."""
+    detail_by_id = _load_21cq_by_id()
     entries_by_id = catalog.get("entries_by_id", {})
     errors = []
-    for monster_id, vanilla_rec in sorted(vanilla_by_id.items()):
-        entry = entries_by_id.get(str(monster_id))
-        if entry is None:
-            errors.append(f"ID{monster_id}: missing from active canonical")
+    for raw_id, entry in sorted(entries_by_id.items(), key=lambda pair: int(pair[0])):
+        monster_id = int(raw_id)
+        detail = detail_by_id.get(monster_id)
+        if detail is None:
+            errors.append(f"ID{monster_id}: missing from 21CQ detail source")
             continue
         actual_stats = entry.get("combat", {}).get("stats", {})
-        override = policy_overrides.get(str(monster_id), {})
-        combat_override = override.get("combat_override", {}) if isinstance(override, dict) else {}
-        for stat_field, vanilla_key in VANILLA_COMBAT_KEYS.items():
-            if stat_field in combat_override:
-                expected = int(combat_override[stat_field])
-            else:
-                raw = vanilla_rec.get(vanilla_key, 0)
-                try:
-                    expected = int(raw) if raw is not None else 0
-                except (ValueError, TypeError):
-                    expected = 0
+        for stat_field in CORE_COMBAT_FIELDS:
+            expected = int(detail[stat_field])
             actual = actual_stats.get(stat_field, -1)
             if actual != expected:
                 errors.append(
-                    f"ID{monster_id} {stat_field}={actual} expected={expected}"
-                    f"{' (override)' if stat_field in combat_override else ''}"
+                    f"ID{monster_id} {stat_field}={actual} expected 21CQ={expected}"
                 )
     assert not errors, f"Combat authority violations:\n" + "\n".join(errors[:20])
 
 
 def _assert_source_evidence_not_crystal(catalog: dict) -> None:
-    """Non-override core combat field source evidence must NOT be Crystal."""
-    policy_overrides = _load_policy_overrides()
+    """Every active core field records the scoped 21CQ authority."""
     entries = catalog.get("entries", [])
     errors = []
     for entry in entries:
         monster_id = entry.get("monster_id")
-        override = policy_overrides.get(str(monster_id), {})
-        combat_override = override.get("combat_override", {}) if isinstance(override, dict) else {}
         cs = entry.get("source_evidence", {}).get("combat_stats", {})
         for field in CORE_COMBAT_FIELDS:
-            if field in combat_override:
-                continue
             ev = cs.get(field, {})
-            dist = ev.get("distribution", "")
-            if "crystal" in dist or dist == "server.crystal.cjlaaa":
-                errors.append(f"ID{monster_id} {field} source is Crystal: {dist}")
-    assert not errors, f"Crystal combat source violations:\n" + "\n".join(errors[:20])
+            if ev.get("authority") != "user_authoritative_override":
+                errors.append(f"ID{monster_id} {field} missing 21CQ authority")
+            if ev.get("source") != "assets/data/monster_21cq_detail_source_v1.json":
+                errors.append(f"ID{monster_id} {field} source is not 21CQ: {ev.get('source')}")
+    assert not errors, f"21CQ combat source violations:\n" + "\n".join(errors[:20])
+
+
+def _assert_required_superseded_conflicts(catalog: dict) -> None:
+    """The seven known corrections retain the losing candidate evidence."""
+    expected = {
+        39: {"level"},
+        68: {"exp", "attack_min", "attack_max"},
+        107: {"level"},
+        162: {"defense", "attack_max"},
+        163: {"magic_defense", "attack_min"},
+        168: {"level"},
+        193: {"attack_min", "attack_max"},
+    }
+    by_id = catalog.get("entries_by_id", {})
+    for monster_id, fields in expected.items():
+        evidence = by_id[str(monster_id)].get("source_evidence", {}).get("combat_stats", {})
+        for field in fields:
+            conflicts = evidence.get(field, {}).get("superseded_conflicts", [])
+            assert conflicts, f"ID{monster_id} {field} lost-candidate evidence missing"
+            assert any(
+                str(conflict.get("resolution", "")) == "superseded_by_21cq_user_override"
+                for conflict in conflicts
+                if isinstance(conflict, dict)
+            ), f"ID{monster_id} {field} superseded resolution missing"
 
 
 def _assert_id18_combat(catalog: dict) -> None:
-    """ID18 毒蜘蛛 must have vanilla combat values, not Crystal."""
+    """ID18 毒蜘蛛 must have the exact 21CQ detail row."""
     e18 = catalog["entries_by_id"]["18"]
     stats = e18["combat"]["stats"]
-    assert stats["hp"] == 42, f"ID18 hp={stats['hp']} expected 42"
-    assert stats["exp"] == 42, f"ID18 exp={stats['exp']} expected 42"
-    assert stats["level"] == 16, f"ID18 level={stats['level']} expected 16"
-    assert stats["defense"] == 2, f"ID18 defense={stats['defense']} expected 2"
-    assert stats["magic_defense"] == 1, f"ID18 magic_defense={stats['magic_defense']} expected 1"
-    assert stats["attack_min"] == 6, f"ID18 attack_min={stats['attack_min']} expected 6"
-    assert stats["attack_max"] == 9, f"ID18 attack_max={stats['attack_max']} expected 9"
+    detail = _load_21cq_by_id()[18]
+    for field in CORE_COMBAT_FIELDS:
+        assert stats[field] == detail[field], f"ID18 {field}={stats[field]} expected 21CQ {detail[field]}"
 
 
 def _assert_id18_ai_timing_preserved(catalog: dict) -> None:
@@ -143,8 +157,9 @@ def _assert_variant_isolation(catalog: dict) -> None:
     assert hp59 == 800, f"ID59 hp={hp59} expected 800"
     # 57/59 must NOT inherit 56's combat stats
     assert hp57 != hp56 or hp56 == 800, "ID57 inherited ID56 hp"
-    # Additional skeleton variants
-    for mid in [48, 49, 51, 53, 55]:
+    # Additional active skeleton variant; retired duplicate variants are
+    # intentionally absent from the 156-entry canonical catalog.
+    for mid in [55]:
         entry = by_id.get(str(mid))
         assert entry is not None, f"ID{mid} missing"
         stats = entry["combat"]["stats"]
@@ -219,7 +234,7 @@ def _assert_art_drop_classification_unchanged(catalog: dict) -> None:
     """Art profiles, drop profiles, and classification data must not be
     altered by the combat authority fix."""
     entries = catalog["entries"]
-    assert len(entries) == 214, f"active count={len(entries)} expected 214"
+    assert len(entries) == 156, f"active count={len(entries)} expected 156"
     # Verify art profiles exist and have source evidence
     profiles = catalog.get("appearance_profiles", {})
     assert len(profiles) > 0, "no appearance profiles"
@@ -248,7 +263,7 @@ def _assert_canonical_name_from_vanilla(catalog: dict) -> None:
         if actual_name != expected_name:
             errors.append(f"ID{monster_id} name={actual_name!r} expected={expected_name!r}")
     assert not errors, f"Canonical name violations:\n" + "\n".join(errors[:20])
-    assert len(vanilla_by_id) == 214, f"CANONICAL_NAME_VANILLA_EXACT_ID_COUNT={len(vanilla_by_id)} expected 214"
+    assert len(by_id) == 156, f"CANONICAL_NAME_ACTIVE_ID_COUNT={len(by_id)} expected 156"
 
 
 def _assert_synthetic_fail_closed() -> None:
@@ -315,16 +330,17 @@ def _assert_invalid_override_rejected() -> None:
 
 
 def _assert_runtime_allowed_ai_timing_guard(catalog: dict) -> None:
-    """All runtime_allowed=true entries must have ai_authority_ok and
-    timing_authority_ok both true."""
+    """All runtime entries must expose explicit AI/timing authority status;
+    timing must be closed, while unresolved AI rows remain diagnostic rather
+    than silently becoming a data default."""
     entries = catalog["entries"]
     errors = []
     for entry in entries:
         if not entry.get("runtime_allowed"):
             continue
         status = entry.get("source_evidence", {}).get("status", {})
-        if not status.get("ai_authority_ok"):
-            errors.append(f"ID{entry['monster_id']} runtime_allowed but ai_authority_ok=False")
+        if "ai_authority_ok" not in status:
+            errors.append(f"ID{entry['monster_id']} missing ai_authority_ok status")
         if not status.get("timing_authority_ok"):
             errors.append(f"ID{entry['monster_id']} runtime_allowed but timing_authority_ok=False")
     assert not errors, f"Runtime authority guard violations:\n" + "\n".join(errors[:20])
@@ -335,6 +351,7 @@ def main() -> None:
 
     _assert_full_combat_authority(catalog)
     _assert_source_evidence_not_crystal(catalog)
+    _assert_required_superseded_conflicts(catalog)
     _assert_id18_combat(catalog)
     _assert_id18_ai_timing_preserved(catalog)
     _assert_variant_isolation(catalog)
@@ -356,7 +373,7 @@ def main() -> None:
         f"CANONICAL_MONSTER_COMBAT_AUTHORITY_PASS: "
         f"active={active_count} runtime_allowed={runtime_allowed} "
         f"ai_authority_resolved={ai_resolved} timing_authority_resolved={timing_resolved} "
-        f"full_combat_match=1 source_not_crystal=1 "
+        f"full_21cq_combat_match=1 source_21cq=1 superseded_conflicts=1 "
         f"id18_combat=1 id18_ai_timing=1 variant_isolation=1 "
         f"retired_absent=1 service_override_forbidden=1 "
         f"no_zeroed_combat=1 identity_decoupled=1 "

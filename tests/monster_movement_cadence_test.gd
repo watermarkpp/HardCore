@@ -183,16 +183,20 @@ func _test_clock_regression_fail_closed() -> void:
 
 func _test_walk_wait_strict_unlock() -> void:
 	var cadence := Cadence.new(_record(162))
-	assert(cadence.walk_interval_ms == 500 and cadence.walk_step == 5 and cadence.walk_wait_ms == 1200)
+	# ID162's move interval is now the user-authoritative 21CQ value; the
+	# strict cadence algorithm and the audited step/wait semantics are unchanged.
+	assert(cadence.walk_interval_ms == 1000 and cadence.walk_step == 5 and cadence.walk_wait_ms == 1200)
+	var event_delta := cadence.walk_interval_ms + 1
 	for event_index: int in range(1, 6):
-		var now := event_index * 501
+		var now := event_index * event_delta
 		assert(cadence.evaluate(now).granted, "WalkStep event %d must grant" % event_index)
-	var sixth := cadence.evaluate(3006)
+	var sixth_tick := 6 * event_delta
+	var sixth := cadence.evaluate(sixth_tick)
 	assert(sixth.granted, "WalkStep threshold event still grants")
 	assert(sixth.walk_count == 0 and sixth.walk_wait_locked)
-	var exact_wait := cadence.evaluate(4206)
+	var exact_wait := cadence.evaluate(sixth_tick + cadence.walk_wait_ms)
 	assert(not exact_wait.granted and exact_wait.reason == "walk_wait_locked", "wait unlock is strict >")
-	var unlocked := cadence.evaluate(4207)
+	var unlocked := cadence.evaluate(sixth_tick + cadence.walk_wait_ms + 1)
 	assert(unlocked.granted, "wait must unlock after strict boundary")
 	_checks += 10
 

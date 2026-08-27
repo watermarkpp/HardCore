@@ -22,6 +22,7 @@ BEHAVIOR_PATH = ROOT / "assets/data/monster_behavior_profiles.json"
 BOSS_PATH = ROOT / "assets/data/boss_service_rules.json"
 COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
 MOVEMENT_MASTER_PATH = ROOT / "assets/data/monster_movement_source_master_v1.json"
+DETAIL_SOURCE_PATH = ROOT / "assets/data/monster_21cq_detail_source_v1.json"
 BASE_SHA = "f4879d33c78edf21ff189b7be451162e3dbcd37b"
 M00_FINAL_SHA = "1945a5eceaf6efc49ddf4e5da4298834bf15c864"
 
@@ -195,6 +196,7 @@ def movement_record(
     }[selected_status]
     selected_binding = dict(movement_source["source_binding"])
     selected_binding["master"] = "assets/data/monster_movement_source_master_v1.json"
+    interval_authority = dict(movement_source.get("interval_authority", {}))
 
     return {
         "movement_source_status": selected_status,
@@ -204,6 +206,7 @@ def movement_record(
         "walk_interval_authority": selected_authority,
         "walk_interval_confidence": selected_confidence,
         "source": selected_binding,
+        "interval_authority": interval_authority,
         "walk_step": int(movement_source["walk_step"]),
         "walk_step_status": selected_status,
         "walk_step_authority": selected_authority,
@@ -483,6 +486,12 @@ def build_payload() -> dict[str, Any]:
             "primary_first": True,
             "monster_identity": "assets/data/runtime/canonical_monster_catalog.json",
             "movement_value_authority": "assets/data/monster_movement_source_master_v1.json",
+            "move_interval_user_override": {
+                "authority": "user_authoritative_override",
+                "source": "assets/data/monster_21cq_detail_source_v1.json",
+                "field": "move_interval_ms",
+                "scope": "monster timing only; strict cadence algorithm and stationary gate unchanged",
+            },
             "classic_176_db_candidate": {
                 **CLASSIC_DB_SOURCE,
                 "adoption": "adopted_by_M00R_audited_candidate_routing",
@@ -578,6 +587,13 @@ def validate(payload: dict[str, Any]) -> list[str]:
         if record.get("classification") != expected.get("classification"):
             errors.append(f"monster_id={monster_id} classification drift")
         movement = dict(record.get("movement", {}))
+        interval_authority = dict(movement.get("interval_authority", {}))
+        if interval_authority.get("authority") != "user_authoritative_override":
+            errors.append(f"monster_id={monster_id} move interval authority is not 21CQ")
+        if interval_authority.get("source") != "assets/data/monster_21cq_detail_source_v1.json":
+            errors.append(f"monster_id={monster_id} move interval source drift")
+        if int(interval_authority.get("effective_interval_ms", -1)) != int(movement.get("walk_interval_ms", -2)):
+            errors.append(f"monster_id={monster_id} move interval effective value drift")
         for value_key, status_key in (
             ("walk_interval_ms", "walk_interval_status"),
             ("walk_step", "walk_step_status"),
