@@ -30,11 +30,66 @@
     "equipment_attributes_requirements_weights_affinity": "equipment_attributes",
     "vanilla_skill_membership_progression_mp_target_material_formula_geometry_timing_proficiency_state_machine": "skills",
     "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
+    "monster_attributes_timing_life_flags": "monster_attributes_21cq",
     "combat_movement_ai_timing_protocol": "server_rules",
     "combat_movement_ai_projectile_distance_units": "combat_units",
     "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability"
   },
   "lanes": {
+    "monster_attributes_21cq": {
+      "description": "User-authoritative 21CQ monster attributes, timing and life flags only",
+      "scopeExclusions": {
+        "server_data": [
+          "monster_spawn",
+          "monster_respawn",
+          "monster_map_placement"
+        ],
+        "server_rules": [
+          "monster_ai",
+          "monster_special_delivery"
+        ],
+        "monster_drop_probability": [
+          "monster_drop_probability",
+          "monster_drop_tables",
+          "post_rng_overflow"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "user.21cq.com.mir.monster_detail",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/monster_21cq_detail_source_v1.json",
+          "contractId": "monster.21cq.detail.user_override.v1",
+          "authority": "user_authoritative_override",
+          "sourceKind": "tracked_exact_id_site_snapshot",
+          "originalPath": "https://www.21cq.com/mir/Monster.Aspx and https://www.21cq.com/mir/Mob.Aspx?ID={monster_id}",
+          "evidenceSha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+          "scope": [
+            "monster_combat_stats",
+            "monster_agility",
+            "monster_accuracy",
+            "monster_attack_interval",
+            "monster_move_interval",
+            "monster_life_type",
+            "monster_anti_stealth"
+          ],
+          "excludedContent": [
+            "drops",
+            "drop_probability",
+            "spawn",
+            "respawn",
+            "map",
+            "spawn_quantity",
+            "respawn_time"
+          ],
+          "reason": "The user explicitly ordered all non-drop and non-refresh monster fields to match 21CQ on 2026-08-28. This dedicated lane overrides Crystal, Monster.DB and Wooma only for the listed exact-ID attribute, timing and life-flag fields; it does not authorize drop, spawn, respawn, map, AI or special-delivery changes."
+        }
+      ]
+    },
     "monster_drop_probability": {
       "description": "HardCore direct monster-drop probability and post-RNG nine-slot retention Authority only",
       "scopeExclusions": {

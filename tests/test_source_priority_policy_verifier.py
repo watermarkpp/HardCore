@@ -29,7 +29,7 @@ class SourcePriorityPolicyVerifierTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.policy = load_json(ROOT / "assets/data/source_priority_policy.json")
 
-    def test_eighth_lane_is_required_and_drop_only_contract_passes(self) -> None:
+    def test_required_lanes_and_scoped_monster_contracts_pass(self) -> None:
         self.assertEqual(set(self.policy["lanes"]), verifier.EXPECTED_LANES)
 
         checks: dict[str, bool] = {}
@@ -41,6 +41,17 @@ class SourcePriorityPolicyVerifierTests(unittest.TestCase):
                 "monsterDropProbabilityRouting": True,
                 "monsterDropProbabilityPrimaryIsProjectMaster": True,
                 "monsterDropProbabilityScopeIsDropOnly": True,
+            },
+        )
+
+        attribute_checks: dict[str, bool] = {}
+        verifier._check_monster_attribute_lane(self.policy, attribute_checks)
+        self.assertEqual(
+            attribute_checks,
+            {
+                "monsterAttributeRouting": True,
+                "monsterAttributePrimaryIsUserOverride": True,
+                "monsterAttributeScopeIsExact": True,
             },
         )
 

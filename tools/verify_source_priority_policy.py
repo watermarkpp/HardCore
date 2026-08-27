@@ -23,6 +23,48 @@ EXPECTED_LANES = {
     "server_data",
     "server_rules",
     "monster_drop_probability",
+    "monster_attributes_21cq",
+}
+
+MONSTER_ATTRIBUTE_ROUTING_KEY = "monster_attributes_timing_life_flags"
+MONSTER_ATTRIBUTE_PRIMARY = {
+    "distribution": "user.21cq.com.mir.monster_detail",
+    "tier": "primary",
+    "order": 0,
+    "weight": 100,
+    "catalogRequired": False,
+    "rootPrefix": "assets/data/monster_21cq_detail_source_v1.json",
+    "contractId": "monster.21cq.detail.user_override.v1",
+    "authority": "user_authoritative_override",
+    "sourceKind": "tracked_exact_id_site_snapshot",
+    "evidenceSha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+}
+MONSTER_ATTRIBUTE_SCOPE = {
+    "monster_combat_stats",
+    "monster_agility",
+    "monster_accuracy",
+    "monster_attack_interval",
+    "monster_move_interval",
+    "monster_life_type",
+    "monster_anti_stealth",
+}
+MONSTER_ATTRIBUTE_EXCLUDED_CONTENT = {
+    "drops",
+    "drop_probability",
+    "spawn",
+    "respawn",
+    "map",
+    "spawn_quantity",
+    "respawn_time",
+}
+MONSTER_ATTRIBUTE_SCOPE_EXCLUSIONS = {
+    "server_data": {"monster_spawn", "monster_respawn", "monster_map_placement"},
+    "server_rules": {"monster_ai", "monster_special_delivery"},
+    "monster_drop_probability": {
+        "monster_drop_probability",
+        "monster_drop_tables",
+        "post_rng_overflow",
+    },
 }
 
 MONSTER_DROP_ROUTING_KEY = "monster_drop_probability_and_post_rng_overflow"
@@ -116,6 +158,47 @@ def _check_monster_drop_lane(policy: dict, checks: dict[str, bool]) -> None:
     )
 
 
+def _check_monster_attribute_lane(policy: dict, checks: dict[str, bool]) -> None:
+    """Validate the exact user-authoritative 21CQ attribute-only lane."""
+
+    lanes = policy.get("lanes", {})
+    routing = policy.get("routing", {})
+    lane = lanes.get("monster_attributes_21cq") if isinstance(lanes, dict) else None
+    if not isinstance(lane, dict):
+        checks["monsterAttributeRouting"] = False
+        checks["monsterAttributePrimaryIsUserOverride"] = False
+        checks["monsterAttributeScopeIsExact"] = False
+        return
+
+    checks["monsterAttributeRouting"] = (
+        isinstance(routing, dict)
+        and routing.get(MONSTER_ATTRIBUTE_ROUTING_KEY) == "monster_attributes_21cq"
+    )
+    exclusions = lane.get("scopeExclusions")
+    sources = lane.get("sources", [])
+    primary = sources[0] if isinstance(sources, list) and len(sources) == 1 else {}
+    checks["monsterAttributePrimaryIsUserOverride"] = (
+        bool(primary)
+        and all(primary.get(key) == value for key, value in MONSTER_ATTRIBUTE_PRIMARY.items())
+    )
+    checks["monsterAttributeScopeIsExact"] = all(
+        [
+            isinstance(exclusions, dict),
+            isinstance(exclusions, dict)
+            and set(exclusions) == set(MONSTER_ATTRIBUTE_SCOPE_EXCLUSIONS),
+            isinstance(exclusions, dict)
+            and all(
+                _matches_exact_scope(exclusions.get(scope), expected)
+                for scope, expected in MONSTER_ATTRIBUTE_SCOPE_EXCLUSIONS.items()
+            ),
+            _matches_exact_scope(primary.get("scope"), MONSTER_ATTRIBUTE_SCOPE),
+            _matches_exact_scope(
+                primary.get("excludedContent"), MONSTER_ATTRIBUTE_EXCLUDED_CONTENT
+            ),
+        ]
+    )
+
+
 def main() -> None:
     policy = load_json(POLICY_PATH)
     catalog = load_json(CATALOG_PATH)
@@ -152,6 +235,7 @@ def main() -> None:
     checks["strictOrderPerLane"] = order_strict
 
     _check_monster_drop_lane(policy, checks)
+    _check_monster_attribute_lane(policy, checks)
 
     checks["clientPrimaryIsAcceptedClassic"] = active_sources(policy, "client_assets")[0]["distribution"] == "client.classic_raw_complete"
     checks["serverPrimaryIsCleanDatabase"] = active_sources(policy, "server_data")[0]["distribution"] == "server.crystal.cjlaaa"
