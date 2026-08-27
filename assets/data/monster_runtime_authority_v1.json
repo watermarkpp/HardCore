@@ -157,16 +157,16 @@
     "canonical_identities": 156,
     "runtime_allowed": 153,
     "classification": {
-      "ordinary": 74,
-      "elite": 30,
+      "ordinary": 75,
+      "elite": 29,
       "special": 25,
       "version_difference": 6,
       "boss": 20,
       "non_hostile": 1
     },
     "runtime_classification": {
-      "ordinary": 73,
-      "elite": 29,
+      "ordinary": 74,
+      "elite": 28,
       "special": 24,
       "version_difference": 6,
       "boss": 20,
@@ -16096,7 +16096,7 @@
     {
       "monster_id": 157,
       "canonical_name": "祖玛卫士0",
-      "classification": "elite",
+      "classification": "ordinary",
       "runtime_allowed": true,
       "behavior_profile_id": "zuma_guard_holy_word",
       "movement": {
@@ -16250,7 +16250,7 @@
       },
       "special": {
         "boss": false,
-        "elite": true,
+        "elite": false,
         "stationary": false,
         "dormant": true,
         "dormant_status": "LOCKED",

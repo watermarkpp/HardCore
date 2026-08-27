@@ -113,12 +113,33 @@ for monster_id in sorted(production_ids):
     )
 
 
-# P3B/P3C: all 156 final active identities remain authorable in the map editor.
-# placement 与 runtime 完全解耦：可布置不要求 runtime 已闭环。
+# P3B/P3C: placement 与 runtime 完全解耦：可布置不要求 runtime 已闭环。
+# Only the four explicit current dispositions narrow the formal editor pool;
+# historical placement_allowed=false rows remain audit-only inputs.
+EXPLICIT_NON_AUTHORABLE = {
+    59: "quarantine",
+    78: "quarantine",
+    157: "internal_subtype",
+    161: "quarantine",
+}
 assert all(
     bool(entries[mid]["editor_placement"].get("allowed", False))
+    == (mid not in EXPLICIT_NON_AUTHORABLE)
     for mid in sorted(production_ids)
-), "P3B contract: every active monster must be placeable"
+), "explicit placement disposition drifted"
+
+for monster_id, disposition in EXPLICIT_NON_AUTHORABLE.items():
+    entry = entries[monster_id]
+    assert entry.get("disposition") == disposition, (monster_id, entry.get("disposition"))
+    assert entry["editor_placement"].get("disposition") == disposition
+    assert isinstance(entry.get("disposition_evidence"), dict)
+    assert entry["disposition_evidence"].get("formal_editor_pool") is False
+    assert entry["runtime_allowed"] is True
+
+assert entries[157]["classification"] == "ordinary"
+for monster_id in (158, 159):
+    assert entries[monster_id]["classification"] == "elite"
+    assert entries[monster_id]["editor_placement"].get("allowed") is True
 
 
 # exact-ID map spawn evidence must no longer be left

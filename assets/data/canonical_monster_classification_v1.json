@@ -379,7 +379,14 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_internal_variant_no_spawn",
-      "notes": "内部编号变体；无地图刷新，version_difference"
+      "notes": "内部编号变体；无地图刷新，version_difference",
+      "disposition": "quarantine",
+      "evidence": {
+        "basis": "exact_id_internal_variant_no_spawn",
+        "classification": "version_difference",
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "60": {
       "classification": "ordinary",
@@ -488,7 +495,15 @@
       "classification": "version_difference",
       "placement_kind": "",
       "placement_allowed": false,
-      "resolution": "attachment_exact_id_override"
+      "resolution": "attachment_exact_id_override",
+      "notes": "用户最新裁决：保留 exact ID、素材与战斗数据并允许运行；不进入正式 map/editor pool",
+      "disposition": "quarantine",
+      "evidence": {
+        "basis": "user_latest_adjudication",
+        "classification": "version_difference",
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "79": {
       "classification": "ordinary",
@@ -1134,10 +1149,20 @@
       "resolution": "attachment_exact_id_override"
     },
     "157": {
-      "classification": "elite",
+      "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
-      "resolution": "attachment_exact_id_override"
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户最新裁决：祖玛卫士0为 ordinary 普通怪内部 subtype；非极品、非独立地图怪种；保留 exact ID 与 runtime 能力；不进入正式 map/editor pool",
+      "disposition": "internal_subtype",
+      "evidence": {
+        "basis": "user_latest_adjudication",
+        "classification": "ordinary",
+        "elite": false,
+        "independent_map_monster": false,
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "158": {
       "classification": "elite",
@@ -1175,7 +1200,14 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_internal_variant_no_spawn",
-      "notes": "内部编号变体；无地图刷新，version_difference"
+      "notes": "内部编号变体；无地图刷新，version_difference",
+      "disposition": "quarantine",
+      "evidence": {
+        "basis": "exact_id_internal_variant_no_spawn",
+        "classification": "version_difference",
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "162": {
       "classification": "boss",

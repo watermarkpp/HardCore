@@ -64,6 +64,15 @@ RUNTIME_CAPABLE_CLASSIFICATIONS = frozenset({
     "version_difference",
 })
 
+# P3C keeps the historical placement fields in the exact-ID attachment for
+# auditability, but those fields are not themselves a current editor gate.
+# Only an explicit disposition is allowed to narrow the formal editor pool;
+# this prevents re-opening the old broad placement=false defaults by accident.
+EDITOR_PLACEMENT_DISPOSITIONS = frozenset({
+    "quarantine",
+    "internal_subtype",
+})
+
 # P3B: version_difference 只是 classification/metadata 提醒，不再自动
 # 排除 runtime。排除集合保持为空结构，等待未来明确的排除裁决。
 INTENTIONAL_EXCLUSION_CLASSIFICATIONS = frozenset()
@@ -237,7 +246,7 @@ def validate_special_normal_authority(
 
     expected_sources = {
         "assets/data/vanilla_176/monsters.json": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-        "assets/data/canonical_monster_classification_v1.json": "C74E4A7A891A6542B09BBB388383A2AFDC9900FC2A37534726F7EAB649D35535",
+        "assets/data/canonical_monster_classification_v1.json": "0A6DB865644E2B91D972B438B14D51974A32524080A62ED5D30C620421F4B377",
         "assets/data/drop/dpv2_item_tier_authority_v1.json": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
         "assets/data/drop/dpv2_monster_role_authority_v1.json": sha256_file(DPV2_ROLE_AUTHORITY_PATH),
         "assets/data/drop/dpv2_global_drop_rate_authority_v1.json": sha256_file(DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH),
@@ -534,6 +543,20 @@ def classification_for(
         override = {}
     if not isinstance(policy_override, dict):
         policy_override = {}
+    disposition_value = override.get(
+        "disposition",
+        policy_override.get("disposition", ""),
+    )
+    disposition = str(disposition_value).strip()
+    disposition_evidence_value = override.get(
+        "evidence",
+        policy_override.get("evidence", {}),
+    )
+    disposition_evidence = (
+        copy.deepcopy(disposition_evidence_value)
+        if isinstance(disposition_evidence_value, dict)
+        else {}
+    )
     classification_name = str(
         policy_override.get("classification", override.get("classification", ""))
     )
@@ -548,6 +571,10 @@ def classification_for(
     if "placement_allowed" in policy_override:
         placement_allowed = bool(policy_override["placement_allowed"])
     if classification_name in ("unresolved", "version_difference"):
+        placement_allowed = False
+    if disposition:
+        # An explicit disposition is the only current placement restriction.
+        # Unknown values fail closed here and are reported by validate_catalog.
         placement_allowed = False
     placement_kind = str(override.get("placement_kind", ""))
     if placement_kind == "":
@@ -585,6 +612,9 @@ def classification_for(
             "allowed": True,
             "reason": str(exemption.get("reason")),
         }
+    if disposition:
+        evidence["disposition"] = disposition
+        evidence["disposition_evidence"] = disposition_evidence
     return classification_name, placement_allowed, placement_kind, map_codes, evidence
 
 
@@ -1042,6 +1072,13 @@ def build_catalog() -> dict[str, Any]:
         classification_name, placement_allowed, placement_kind, map_codes, class_evidence = classification_for(
             monster_id, classification_ids, policy
         )
+        classification_disposition = str(
+            class_evidence.get("disposition", "")
+        ).strip()
+        disposition_evidence = class_evidence.get(
+            "disposition_evidence",
+            {},
+        )
         special_normal_row = special_normal_by_id.get(monster_id)
         spawn_classification: str | None = None
         spawn_authority: dict[str, Any] | None = None
@@ -1447,10 +1484,11 @@ def build_catalog() -> dict[str, Any]:
             and combat_identity_ok
         )
 
-        # P3B/P3C: 全部 active monster（当前 156）都允许地图编辑器布置。
-        # 不存在由 classification/variant/version_difference 引起的
-        # "不可布置"。placement 不再参与 runtime 计算，也不再收紧。
-        placement_allowed = True
+        # P3B/P3C: historical placement_allowed=false values are retained as
+        # source evidence, but do not re-close the current editor pool.  A
+        # current restriction must be an explicit, machine-checkable
+        # disposition so quarantine/internal-subtype decisions stay narrow.
+        placement_allowed = not bool(classification_disposition)
 
         classification_ok = runtime_classification_ok
 
@@ -1495,18 +1533,24 @@ def build_catalog() -> dict[str, Any]:
             status = "version_difference"
         else:
             status = "unresolved"
+        editor_placement = {
+            "allowed": placement_allowed,
+            "placement_kind": placement_kind,
+            "map_codes": map_codes,
+            "source_scope": placement_source_scope,
+        }
+        if classification_disposition:
+            editor_placement["disposition"] = classification_disposition
+            editor_placement["disposition_evidence"] = copy.deepcopy(
+                disposition_evidence
+            )
         entry = {
             "monster_id": monster_id,
             "canonical_name": canonical_name,
             "variant_code": str(record.get("variantCode", "")),
             "classification": classification_name,
             "spawn_classification": spawn_classification,
-            "editor_placement": {
-                "allowed": placement_allowed,
-                "placement_kind": placement_kind,
-                "map_codes": map_codes,
-                "source_scope": placement_source_scope,
-            },
+            "editor_placement": editor_placement,
             "spawn_authority": spawn_authority,
             "runtime_allowed": runtime_allowed,
             "runtime_capability": {
@@ -1584,6 +1628,11 @@ def build_catalog() -> dict[str, Any]:
                 },
             },
         }
+        if classification_disposition:
+            entry["disposition"] = classification_disposition
+            entry["disposition_evidence"] = copy.deepcopy(
+                disposition_evidence
+            )
         entries.append(entry)
         entries_by_id[str(monster_id)] = entry
     expected_global_expansion = (
@@ -1877,6 +1926,47 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
                     errors.append(f"monster_id={monster_id} {projection_field} missing project_rule evidence")
         if by_id.get(str(monster_id)) != entry:
             errors.append(f"monster_id={monster_id} entries_by_id closure")
+        placement = entry.get("editor_placement", {})
+        disposition = str(entry.get("disposition", "")).strip()
+        placement_disposition = str(
+            placement.get("disposition", "")
+        ).strip() if isinstance(placement, dict) else ""
+        disposition_evidence = entry.get("disposition_evidence", {})
+        source_evidence = entry.get("source_evidence", {})
+        classification_evidence = (
+            source_evidence.get("classification", {})
+            if isinstance(source_evidence, dict)
+            else {}
+        )
+        if disposition:
+            if disposition not in EDITOR_PLACEMENT_DISPOSITIONS:
+                errors.append(
+                    f"monster_id={monster_id} unsupported disposition={disposition}"
+                )
+            if not isinstance(placement, dict) or bool(placement.get("allowed", True)):
+                errors.append(
+                    f"monster_id={monster_id} disposition requires editor placement=false"
+                )
+            if placement_disposition != disposition:
+                errors.append(
+                    f"monster_id={monster_id} editor disposition mismatch"
+                )
+            if not isinstance(disposition_evidence, dict) or not disposition_evidence:
+                errors.append(
+                    f"monster_id={monster_id} disposition evidence missing"
+                )
+            if not isinstance(classification_evidence, dict) or (
+                classification_evidence.get("disposition") != disposition
+                or classification_evidence.get("disposition_evidence")
+                != disposition_evidence
+            ):
+                errors.append(
+                    f"monster_id={monster_id} classification disposition evidence mismatch"
+                )
+        elif placement_disposition:
+            errors.append(
+                f"monster_id={monster_id} editor disposition has no entry disposition"
+            )
         appearance_id = str(entry.get("appearance_profile_id", ""))
         profile = profiles.get(appearance_id)
         if not isinstance(profile, dict):
