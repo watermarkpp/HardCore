@@ -1,0 +1,37 @@
+{
+  "schema": "hardcore.dpv2.21cq_source_corrections.v1",
+  "authority_id": "dpv2.21cq.source_corrections.v1",
+  "status": "HUMAN_FROZEN",
+  "source": {
+    "path": "assets/data/canonical_monster_drop_source_v2.json",
+    "schema": "canonical_monster_drop_source_excel_v1",
+    "sha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+    "hash_normalization": "raw_bytes"
+  },
+  "policy": {
+    "source_file_mutation_forbidden": true,
+    "exact_slot_identity_required": true,
+    "silent_correction_forbidden": true,
+    "uncorrected_invalid_probability_blocks_compile": true
+  },
+  "corrections": [
+    {
+      "correction_id": "21cq.monster_168.slot_020.invalid_1_over_00",
+      "stable_monster_id": 168,
+      "source_monster_name": "月魔蜘蛛",
+      "source_line_number": 20,
+      "source_slot_index": "slot_020",
+      "source_item_label": "灵魂战衣(男)",
+      "original_chance": "1/00",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 2800,
+      "reason": "The tracked logical source preserves the historical malformed 1/00 token. Human Authority freezes the independently verified 21CQ value as 1/2800 without rewriting source history.",
+      "evidence": {
+        "url": "https://www.21cq.com/mir/Mob.aspx?id=168",
+        "retrieved_on": "2026-08-28",
+        "reported_rule": "1/2800 灵魂战衣(男)",
+        "authority": "HUMAN_FROZEN"
+      }
+    }
+  ]
+}
