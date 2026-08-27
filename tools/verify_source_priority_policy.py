@@ -14,6 +14,107 @@ POLICY_PATH = ROOT / "assets/data/source_priority_policy.json"
 CATALOG_PATH = ROOT / "outputs/resource_catalog/complete_local_mir_sources/manifest.json"
 EXAMPLE_PATH = ROOT / "assets/data/source_priority_fallback_evidence.example.json"
 
+EXPECTED_LANES = {
+    "combat_units",
+    "skills",
+    "equipment_attributes",
+    "client_assets",
+    "client_rules",
+    "server_data",
+    "server_rules",
+    "monster_drop_probability",
+}
+
+MONSTER_DROP_ROUTING_KEY = "monster_drop_probability_and_post_rng_overflow"
+MONSTER_DROP_PRIMARY = {
+    "distribution": "project.hardcore.dpv2_21cq_direct_baseline.v2",
+    "tier": "primary",
+    "order": 0,
+    "weight": 100,
+    "catalogRequired": False,
+    "rootPrefix": "assets/data/canonical_monster_drop_source_v2.json",
+    "contractId": "dpv2.21cq.direct_baseline.v2",
+    "authority": "user_authoritative_override",
+    "sourceKind": "tracked_user_locked_logical_21cq_artifact",
+    "originalPath": "assets/data/canonical_monster_drop_source_v2.json",
+    "directRuntimeArtifact": "assets/data/drop/dpv2_direct_baseline_v2.json",
+    "evidenceSha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+}
+MONSTER_DROP_SCOPE_EXCLUSIONS = {
+    "server_data": {
+        "monster_identity",
+        "monster_stats",
+        "monster_ai",
+        "monster_combat",
+        "monster_respawn",
+        "monster_spawn",
+        "monster_map_placement",
+        "item_identity",
+        "item_attributes",
+    },
+    "server_rules": {
+        "monster_ai",
+        "monster_combat",
+        "monster_respawn",
+    },
+}
+
+
+def _matches_exact_scope(actual: object, expected: set[str]) -> bool:
+    """Require the drop lane's exclusions to contain no omissions or extras."""
+
+    if not isinstance(actual, list) or not all(isinstance(item, str) for item in actual):
+        return False
+    return len(actual) == len(expected) and set(actual) == expected
+
+
+def _check_monster_drop_lane(policy: dict, checks: dict[str, bool]) -> None:
+    """Validate the DPV2 lane's routing, authority, and drop-only exclusions."""
+
+    lanes = policy.get("lanes", {})
+    routing = policy.get("routing", {})
+    lane = lanes.get("monster_drop_probability") if isinstance(lanes, dict) else None
+    if not isinstance(lane, dict):
+        checks["monsterDropProbabilityRouting"] = False
+        checks["monsterDropProbabilityPrimaryIsProjectMaster"] = False
+        checks["monsterDropProbabilityScopeIsDropOnly"] = False
+        return
+
+    checks["monsterDropProbabilityRouting"] = (
+        isinstance(routing, dict)
+        and routing.get(MONSTER_DROP_ROUTING_KEY) == "monster_drop_probability"
+    )
+
+    scope_exclusions = lane.get("scopeExclusions")
+    checks["monsterDropProbabilityScopeIsDropOnly"] = (
+        isinstance(scope_exclusions, dict)
+        and set(scope_exclusions) == set(MONSTER_DROP_SCOPE_EXCLUSIONS)
+        and all(
+            _matches_exact_scope(scope_exclusions.get(scope), expected)
+            for scope, expected in MONSTER_DROP_SCOPE_EXCLUSIONS.items()
+        )
+    )
+
+    sources = lane.get("sources", [])
+    if not isinstance(sources, list):
+        sources = []
+    eligible_sources = [
+        source
+        for source in sources
+        if isinstance(source, dict) and source.get("eligible", False)
+    ]
+    eligible_sources.sort(
+        key=lambda source: (
+            int(source.get("order", 999)),
+            -int(source.get("weight", 0)),
+        )
+    )
+    primary = eligible_sources[0] if len(eligible_sources) == 1 else {}
+    checks["monsterDropProbabilityPrimaryIsProjectMaster"] = (
+        bool(primary)
+        and all(primary.get(key) == value for key, value in MONSTER_DROP_PRIMARY.items())
+    )
+
 
 def main() -> None:
     policy = load_json(POLICY_PATH)
@@ -22,15 +123,7 @@ def main() -> None:
     expected_weights = policy["weights"]
     checks: dict[str, bool] = {}
 
-    checks["requiredLanesPresent"] = set(policy["lanes"]) == {
-        "combat_units",
-        "skills",
-        "equipment_attributes",
-        "client_assets",
-        "client_rules",
-        "server_data",
-        "server_rules",
-    }
+    checks["requiredLanesPresent"] = set(policy["lanes"]) == EXPECTED_LANES
     checks["strictFallbackRules"] = all([
         policy["rules"].get("singleSourceFirst") is True,
         policy["rules"].get("crossDistributionMergeByDefault") is False,
@@ -57,6 +150,8 @@ def main() -> None:
     checks["exactlyOnePrimaryPerLane"] = exactly_one_primary
     checks["tierWeightsMatch"] = weights_match
     checks["strictOrderPerLane"] = order_strict
+
+    _check_monster_drop_lane(policy, checks)
 
     checks["clientPrimaryIsAcceptedClassic"] = active_sources(policy, "client_assets")[0]["distribution"] == "client.classic_raw_complete"
     checks["serverPrimaryIsCleanDatabase"] = active_sources(policy, "server_data")[0]["distribution"] == "server.crystal.cjlaaa"
