@@ -58,7 +58,7 @@
       "COMMON_RECOVERY_SUPPLY_UNCHANGED": 1357,
       "EXPLICIT_RARE_CONSUMABLE_BLESSING_OIL": 22,
       "FAIL_SAFE_UNCLASSIFIED_BASE_PARITY": 463,
-      "GOLD_SUPPLY_UNCHANGED": 128,
+      "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED": 128,
       "NEW_ARMOR_BOSS_MANUAL_LATER": 324
     },
     "overlapping_population_counts": {
@@ -73,6 +73,13 @@
     "ceiling_applied_slots": 2203,
     "disabled_counterfactual_records": 6809,
     "disabled_counterfactual_mismatch": 0,
+    "gold_amount_multiplier": {
+      "numerator": 10,
+      "denominator": 1
+    },
+    "gold_amount_slots": 134,
+    "gold_amount_mismatch": 0,
+    "disabled_gold_amount_mismatch": 0,
     "base_mirror_mismatch": 0,
     "probability_decreases": 0,
     "ceiling_violations": 0,
@@ -114,6 +121,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 30,
+      "effective_gold_amount": 300,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -122,7 +131,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -400,6 +409,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 30,
+      "effective_gold_amount": 300,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -408,7 +419,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -730,6 +741,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 50,
+      "effective_gold_amount": 500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -738,7 +751,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -1038,6 +1051,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 50,
+      "effective_gold_amount": 500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -1046,7 +1061,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -1324,6 +1339,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 70,
+      "effective_gold_amount": 700,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -1332,7 +1349,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -1918,6 +1935,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3500,
+      "effective_gold_amount": 35000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -1926,7 +1945,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -2842,6 +2861,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3500,
+      "effective_gold_amount": 35000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -2850,7 +2871,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -3766,6 +3787,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 100,
+      "effective_gold_amount": 1000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -3774,7 +3797,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -3788,6 +3811,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -3796,7 +3821,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -4272,6 +4297,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -4280,7 +4307,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -5174,6 +5201,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1160,
+      "effective_gold_amount": 11600,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -5182,7 +5211,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -6912,6 +6941,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -6920,7 +6951,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -8012,6 +8043,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -8020,7 +8053,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -9002,6 +9035,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 50,
+      "effective_gold_amount": 500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -9010,7 +9045,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -9222,6 +9257,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -9230,7 +9267,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 3,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -9970,6 +10007,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -9978,7 +10017,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -10718,6 +10757,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -10726,7 +10767,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -11510,6 +11551,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -11518,7 +11561,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -12346,6 +12389,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 380,
+      "effective_gold_amount": 3800,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -12354,7 +12399,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -12940,6 +12985,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1200,
+      "effective_gold_amount": 12000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -12948,7 +12995,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -15778,6 +15825,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 190,
+      "effective_gold_amount": 1900,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -15786,7 +15835,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -16834,6 +16883,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -16842,7 +16893,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -17912,6 +17963,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -17920,7 +17973,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -17934,6 +17987,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 220,
+      "effective_gold_amount": 2200,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -17942,7 +17997,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -19078,6 +19133,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 220,
+      "effective_gold_amount": 2200,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -19086,7 +19143,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -20156,6 +20213,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 100,
+      "effective_gold_amount": 1000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -20164,7 +20223,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 40,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -21058,6 +21117,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2700,
+      "effective_gold_amount": 27000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -21066,7 +21127,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -23676,6 +23737,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -23684,7 +23747,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -25392,6 +25455,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 6000,
+      "effective_gold_amount": 60000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -25400,7 +25465,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -26756,6 +26821,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -26764,7 +26831,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -26778,6 +26845,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -26786,7 +26855,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 5000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -28054,6 +28123,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -28062,7 +28133,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -28076,6 +28147,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -28084,7 +28157,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 5000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -29374,6 +29447,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -29382,7 +29457,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -29396,6 +29471,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -29404,7 +29481,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 5000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -30672,6 +30749,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -30680,7 +30759,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -30694,6 +30773,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -30702,7 +30783,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 5000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -31970,6 +32051,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -31978,7 +32061,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -31992,6 +32075,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -32000,7 +32085,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 5000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -34390,6 +34475,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 70,
+      "effective_gold_amount": 700,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -34398,7 +34485,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -34522,6 +34609,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 350,
+      "effective_gold_amount": 3500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -34530,7 +34619,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -35336,6 +35425,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 30,
+      "effective_gold_amount": 300,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -35344,7 +35435,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -36018,6 +36109,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 420,
+      "effective_gold_amount": 4200,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -36026,7 +36119,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -37184,6 +37277,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 250,
+      "effective_gold_amount": 2500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -37192,7 +37287,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -37690,6 +37785,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 5000,
+      "effective_gold_amount": 50000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -37698,7 +37795,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10000,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -37712,6 +37809,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 320,
+      "effective_gold_amount": 3200,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -37720,7 +37819,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -38834,6 +38933,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 300,
+      "effective_gold_amount": 3000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -38842,7 +38943,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -39912,6 +40013,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 350,
+      "effective_gold_amount": 3500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -39920,7 +40023,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -40946,6 +41049,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 380,
+      "effective_gold_amount": 3800,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -40954,7 +41059,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -42002,6 +42107,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -42010,7 +42117,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -45060,6 +45167,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -45068,7 +45177,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -46050,6 +46159,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -46058,7 +46169,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -48514,6 +48625,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 14000,
+      "effective_gold_amount": 140000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -48522,7 +48635,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -51044,6 +51157,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 150,
+      "effective_gold_amount": 1500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -51052,7 +51167,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -51242,6 +51357,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 200,
+      "effective_gold_amount": 2000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -51250,7 +51367,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -51418,6 +51535,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 375,
+      "effective_gold_amount": 3750,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -51426,7 +51545,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -52914,6 +53033,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 375,
+      "effective_gold_amount": 3750,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -52922,7 +53043,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -54014,6 +54135,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -54022,7 +54145,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -55422,6 +55545,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 5000,
+      "effective_gold_amount": 50000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -55430,7 +55555,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -58194,6 +58319,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -58202,7 +58329,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -60834,6 +60961,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -60842,7 +60971,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -62286,6 +62415,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -62294,7 +62425,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -65036,6 +65167,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -65044,7 +65177,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -67456,6 +67589,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -67464,7 +67599,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -68490,6 +68625,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 300,
+      "effective_gold_amount": 3000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -68498,7 +68635,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -69700,6 +69837,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 300,
+      "effective_gold_amount": 3000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -69708,7 +69847,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -70822,6 +70961,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -70830,7 +70971,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -71900,6 +72041,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -71908,7 +72051,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -71922,6 +72065,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -71930,7 +72075,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 100,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -73132,6 +73277,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -73140,7 +73287,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -74210,6 +74357,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -74218,7 +74367,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 10,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -74232,6 +74381,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 600,
+      "effective_gold_amount": 6000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -74240,7 +74391,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 100,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -75442,6 +75593,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 600,
+      "effective_gold_amount": 6000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -75450,7 +75603,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -76586,6 +76739,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -76594,7 +76749,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -77774,6 +77929,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -77782,7 +77939,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -78500,6 +78657,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 400,
+      "effective_gold_amount": 4000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -78508,7 +78667,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 5,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -80040,6 +80199,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 30000,
+      "effective_gold_amount": 300000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -80048,7 +80209,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -81624,6 +81785,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -81632,7 +81795,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -83494,6 +83657,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -83502,7 +83667,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -85364,6 +85529,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 950,
+      "effective_gold_amount": 9500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -85372,7 +85539,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -85386,6 +85553,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 950,
+      "effective_gold_amount": 9500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -85394,7 +85563,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -86486,6 +86655,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 950,
+      "effective_gold_amount": 9500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -86494,7 +86665,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -86508,6 +86679,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 950,
+      "effective_gold_amount": 9500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -86516,7 +86689,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 60,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -87608,6 +87781,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -87616,7 +87791,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -87630,6 +87805,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -87638,7 +87815,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -88818,6 +88995,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -88826,7 +89005,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 3,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -88840,6 +89019,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 600,
+      "effective_gold_amount": 6000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -88848,7 +89029,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 3,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -89126,6 +89307,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 850,
+      "effective_gold_amount": 8500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -89134,7 +89317,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -90248,6 +90431,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -90256,7 +90441,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 8,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -91392,6 +91577,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -91400,7 +91587,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -92514,6 +92701,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 850,
+      "effective_gold_amount": 8500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -92522,7 +92711,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -93636,6 +93825,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -93644,7 +93835,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -95462,6 +95653,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 450,
+      "effective_gold_amount": 4500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -95470,7 +95663,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 3,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -96672,6 +96865,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -96680,7 +96875,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -98652,6 +98847,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1200,
+      "effective_gold_amount": 12000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -98660,7 +98857,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -99906,6 +100103,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -99914,7 +100113,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -101160,6 +101359,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -101168,7 +101369,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -103118,6 +103319,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1200,
+      "effective_gold_amount": 12000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -103126,7 +103329,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -104350,6 +104553,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -104358,7 +104563,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -106220,6 +106425,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1500,
+      "effective_gold_amount": 15000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -106228,7 +106435,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 30,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -108310,6 +108517,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 600,
+      "effective_gold_amount": 6000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -108318,7 +108527,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 4,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -108332,6 +108541,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -108340,7 +108551,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2500,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -108794,6 +109005,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -108802,7 +109015,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 8,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -110290,6 +110503,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 4000,
+      "effective_gold_amount": 40000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -110298,7 +110513,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -111874,6 +112089,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -111882,7 +112099,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 12,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -112798,6 +113015,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -112806,7 +113025,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 8,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -113788,6 +114007,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 800,
+      "effective_gold_amount": 8000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -113796,7 +114017,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 40,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -114646,6 +114867,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 500,
+      "effective_gold_amount": 5000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -114654,7 +114877,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -115746,6 +115969,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -115754,7 +115979,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -118298,6 +118523,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2000,
+      "effective_gold_amount": 20000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -118306,7 +118533,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -120652,6 +120879,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 675,
+      "effective_gold_amount": 6750,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -120660,7 +120889,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 8,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -121664,6 +121893,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 850,
+      "effective_gold_amount": 8500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -121672,7 +121903,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -122412,6 +122643,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 850,
+      "effective_gold_amount": 8500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -122420,7 +122653,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -123160,6 +123393,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 650,
+      "effective_gold_amount": 6500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -123168,7 +123403,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -124238,6 +124473,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -124246,7 +124483,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 20,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -125558,6 +125795,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 850,
+      "effective_gold_amount": 8500,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -125566,7 +125805,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 6,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -126526,6 +126765,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1000,
+      "effective_gold_amount": 10000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -126534,7 +126775,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 20,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -127780,6 +128021,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 5000,
+      "effective_gold_amount": 50000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -127788,7 +128031,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -129848,6 +130091,8 @@
       "overflow_priority": 100,
       "baseline_origin": "PROJECT_EXTENSION",
       "reward_kind": "GOLD",
+      "base_gold_amount": 10000,
+      "effective_gold_amount": 100000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -129856,7 +130101,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 1,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -131366,6 +131611,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -131374,7 +131621,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -131388,6 +131635,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 240,
+      "effective_gold_amount": 2400,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -131396,7 +131645,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -132180,6 +132429,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 600,
+      "effective_gold_amount": 6000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -132188,7 +132439,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -133302,6 +133553,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 2160,
+      "effective_gold_amount": 21600,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -133310,7 +133563,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -134094,6 +134347,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 7500,
+      "effective_gold_amount": 75000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -134102,7 +134357,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -135502,6 +135757,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 1400,
+      "effective_gold_amount": 14000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -135510,7 +135767,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -136756,6 +137013,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 8000,
+      "effective_gold_amount": 80000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -136764,7 +137023,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -138846,6 +139105,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 6000,
+      "effective_gold_amount": 60000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -138854,7 +139115,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -140958,6 +141219,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 7000,
+      "effective_gold_amount": 70000,
       "boost_policy": "BYPASS_GOLD",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -140966,7 +141229,7 @@
       "ceiling_applied": false,
       "effective_numerator": 1,
       "effective_denominator": 2,
-      "reason_code": "GOLD_SUPPLY_UNCHANGED",
+      "reason_code": "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
       "formula_reason_code": "BYPASS_BASE_PARITY"
     },
     {
@@ -143906,6 +144169,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -145094,6 +145359,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -146282,6 +146549,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -147470,6 +147739,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -148658,6 +148929,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,
@@ -149846,6 +150119,8 @@
       "overflow_priority": 100,
       "baseline_origin": "LEGACY_21CQ_MONITEMS",
       "reward_kind": "GOLD",
+      "base_gold_amount": 3000,
+      "effective_gold_amount": 30000,
       "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
       "boost_multiplier_numerator": 1,
       "boost_multiplier_denominator": 1,

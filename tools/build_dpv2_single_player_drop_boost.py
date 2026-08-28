@@ -66,6 +66,7 @@ EXPECTED_OVERLAPPING_COUNTS = {
 
 MULTIPLIER = (25, 1)
 CEILING = (1, 20)
+GOLD_AMOUNT_MULTIPLIER = (10, 1)
 COMMON_RECOVERY_IDS = (
     920045,
     920044,
@@ -342,7 +343,10 @@ def classify_slot(
     if monster_id in NEW_ARMOR_BOSS_IDS:
         return "BYPASS_NEW_ARMOR_BOSS", "NEW_ARMOR_BOSS_MANUAL_LATER"
     if "gold_amount" in row:
-        return "BYPASS_GOLD", "GOLD_SUPPLY_UNCHANGED"
+        return (
+            "BYPASS_GOLD",
+            "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
+        )
     if item_id in COMMON_RECOVERY_IDS:
         return "BYPASS_COMMON_RECOVERY", "COMMON_RECOVERY_SUPPLY_UNCHANGED"
     if item_id in rare_consumable_ids:
@@ -493,6 +497,8 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
     ceiling_violations = 0
     boost_mismatches = 0
     bypass_mismatches = 0
+    gold_amount_mismatches = 0
+    disabled_gold_amount_mismatches = 0
     for row in slots:
         policy, classification_reason = classify_slot(
             row, equipment_ids, rare_consumable_ids
@@ -530,6 +536,18 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             if key in row
         }
         record["reward_kind"] = "GOLD" if "gold_amount" in row else "ITEM"
+        if "gold_amount" in row:
+            base_gold_amount = int(row["gold_amount"])
+            effective_gold_amount = (
+                base_gold_amount * GOLD_AMOUNT_MULTIPLIER[0]
+                // GOLD_AMOUNT_MULTIPLIER[1]
+            )
+            record["base_gold_amount"] = base_gold_amount
+            record["effective_gold_amount"] = effective_gold_amount
+            if effective_gold_amount != base_gold_amount * 10:
+                gold_amount_mismatches += 1
+            if base_gold_amount != int(row["gold_amount"]):
+                disabled_gold_amount_mismatches += 1
         record.update(
             {
                 "boost_policy": policy,
@@ -561,6 +579,8 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             ceiling_violations,
             boost_mismatches,
             bypass_mismatches,
+            gold_amount_mismatches,
+            disabled_gold_amount_mismatches,
         )
     ):
         raise BoostBuildError("effective probability invariant mismatch")
@@ -582,6 +602,7 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "enabled": True,
             "boost_multiplier": {"numerator": 25, "denominator": 1},
             "auto_boost_ceiling": {"numerator": 1, "denominator": 20},
+            "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
             "required_global_drop_rate_preset": "1x",
             "required_global_drop_rate_multiplier": {
                 "numerator": 1,
@@ -598,6 +619,13 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "overflow_occurs_after_all_rng": True,
             "protected_drop_and_overflow_priority_do_not_affect_probability": True,
             "missing_effective_record_runtime_result": "FAIL_CLOSED_SPB_EFFECTIVE_PROBABILITY_UNRESOLVED",
+        },
+        "reward_amount_contract": {
+            "gold_probability_policy": "BYPASS_GOLD_BASE_PROBABILITY",
+            "enabled_gold_amount": "base_gold_amount_times_10",
+            "disabled_gold_amount": "base_gold_amount",
+            "direct_baseline_gold_amount_mutation_forbidden": True,
+            "non_gold_reward_amount_overlay_forbidden": True,
         },
         "classification_contract": {
             "runtime_classification": "EXACT_CANONICAL_IDS_FROZEN_IN_THIS_AUTHORITY",
@@ -627,6 +655,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "effective_policy_counts": dict(sorted(policy_counts.items())),
             "ceiling_applied_slots": ceiling_count,
             "disabled_counterfactual_mismatch": disabled_mismatch,
+            "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
+            "gold_amount_slots": overlap_counts["gold_slots"],
+            "gold_amount_mismatch": gold_amount_mismatches,
+            "disabled_gold_amount_mismatch": disabled_gold_amount_mismatches,
             "probability_decreases": probability_decreases,
             "ceiling_violations": ceiling_violations,
             "boost_formula_mismatch": boost_mismatches,
@@ -655,6 +687,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "ceiling_applied_slots": ceiling_count,
             "disabled_counterfactual_records": len(effective_records),
             "disabled_counterfactual_mismatch": disabled_mismatch,
+            "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
+            "gold_amount_slots": overlap_counts["gold_slots"],
+            "gold_amount_mismatch": gold_amount_mismatches,
+            "disabled_gold_amount_mismatch": disabled_gold_amount_mismatches,
             "base_mirror_mismatch": 0,
             "probability_decreases": probability_decreases,
             "ceiling_violations": ceiling_violations,
@@ -695,6 +731,15 @@ def validate_documents(
         expected_reward_kind = "GOLD" if "gold_amount" in source else "ITEM"
         if row.get("reward_kind") != expected_reward_kind:
             raise BoostBuildError(f"effective reward kind drift {uid}")
+        if expected_reward_kind == "GOLD":
+            base_gold_amount = int(source["gold_amount"])
+            if (
+                row.get("base_gold_amount") != base_gold_amount
+                or row.get("effective_gold_amount") != base_gold_amount * 10
+            ):
+                raise BoostBuildError(f"effective gold amount mismatch {uid}")
+        elif "base_gold_amount" in row or "effective_gold_amount" in row:
+            raise BoostBuildError(f"non-gold record has gold amount overlay {uid}")
         if gcd(int(row["effective_numerator"]), int(row["effective_denominator"])) != 1:
             raise BoostBuildError(f"effective probability is not reduced {uid}")
 

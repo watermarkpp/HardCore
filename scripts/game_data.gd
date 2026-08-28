@@ -36,6 +36,12 @@ const DPV2_DIRECT_BASELINE_MANIFEST_PATH := (
 const DPV2_DIRECT_BASELINE_PATH := (
 	"res://assets/data/drop/dpv2_direct_baseline_v2.json"
 )
+const DPV2_SINGLE_PLAYER_DROP_BOOST_PATH := (
+	"res://assets/data/drop/dpv2_single_player_drop_boost_v1.json"
+)
+const DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH := (
+	"res://assets/data/drop/dpv2_single_player_effective_probability_v1.json"
+)
 const DPV2_DIRECT_ITEM_MAPPING_PATH := (
 	"res://assets/data/drop/dpv2_21cq_item_mapping_v1.json"
 )
@@ -57,6 +63,19 @@ const DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS := {
 }
 const DPV2_RUNTIME_DISABLED_IDS := {33: true, 183: true, 241: true}
 const DPV2_PROJECT_EXTENSION_ID := 225
+const DPV2_SPB_BASE_SHA := "98ea003b66915622b5c265602e54386f9213016c"
+const DPV2_SPB_SOURCE_SHA256 := (
+	"59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013"
+)
+const DPV2_SPB_DIRECT_BASELINE_SHA256 := (
+	"9E9225DF113BDC94ECDA071388DC5FCFA92ED34BF8028519B06F205E06FF4DD0"
+)
+const DPV2_SPB_PROVENANCE_SHA256 := (
+	"F48A033D5A33D80B795A838BE837AE84FA93469B6055FE012309ACC07082E347"
+)
+const DPV2_SPB_LEDGER_SHA256 := (
+	"057F3664C2CE5376B2A937CB317E978769860AA1B3390D0EF038B512CD496B80"
+)
 const DPV2_EXPLICIT_NON_LOOT_REASON_CODES := {
 	59: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
 	78: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
@@ -116,6 +135,9 @@ var dpv2_direct_baseline_manifest: Dictionary = {}
 var dpv2_direct_baseline: Dictionary = {}
 var dpv2_monster_drop_semantic_authority: Dictionary = {}
 var dpv2_direct_baseline_loaded := false
+var dpv2_single_player_drop_boost: Dictionary = {}
+var dpv2_single_player_effective_probability: Dictionary = {}
+var dpv2_single_player_drop_boost_loaded := false
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -145,6 +167,7 @@ var _bich_quests_by_id: Dictionary = {}
 var _dpv2_global_scale_by_preset: Dictionary = {}
 var _dpv2_direct_profile_by_id: Dictionary = {}
 var _dpv2_direct_slot_by_uid: Dictionary = {}
+var _dpv2_spb_effective_by_uid: Dictionary = {}
 var _dpv2_semantic_by_id: Dictionary = {}
 var _dpv2_direct_item_by_id: Dictionary = {}
 var _dpv2_direct_item_by_source_label: Dictionary = {}
@@ -232,6 +255,8 @@ func load_database() -> bool:
 	# can resolve through the explicit item identity mapping without consulting
 	# retired probability authorities.
 	if not _load_dpv2_direct_baseline():
+		return false
+	if not _load_dpv2_single_player_drop_boost():
 		return false
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
@@ -931,6 +956,321 @@ func _load_dpv2_direct_baseline() -> bool:
 					denominator,
 				)
 	dpv2_direct_baseline_loaded = true
+	return true
+
+
+func _load_dpv2_single_player_drop_boost() -> bool:
+	dpv2_single_player_drop_boost = {}
+	dpv2_single_player_effective_probability = {}
+	dpv2_single_player_drop_boost_loaded = false
+	_dpv2_spb_effective_by_uid.clear()
+	for path: String in [
+		DPV2_SINGLE_PLAYER_DROP_BOOST_PATH,
+		DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH,
+	]:
+		if not FileAccess.file_exists(path):
+			load_error = "spb_effective_probability_authority_missing:%s" % path
+			return false
+	var authority_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_SINGLE_PLAYER_DROP_BOOST_PATH)
+	)
+	var effective_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH)
+	)
+	if not authority_value is Dictionary or not effective_value is Dictionary:
+		load_error = "spb_effective_probability_authority_invalid_json"
+		return false
+	var authority: Dictionary = authority_value
+	var effective: Dictionary = effective_value
+	if (
+		str(authority.get("schema", ""))
+			!= "hardcore.dpv2.single_player_drop_boost.v1"
+		or str(authority.get("authority_id", ""))
+			!= "dpv2.single_player_drop_boost.v1"
+		or str(authority.get("status", "")) != "PRODUCTION_ENABLED"
+	):
+		load_error = "spb_boost_authority_contract_invalid"
+		return false
+	if (
+		str(effective.get("schema", ""))
+			!= "hardcore.dpv2.single_player_effective_probability.v1"
+		or str(effective.get("authority_id", ""))
+			!= "dpv2.single_player_effective_probability.v1"
+		or str(effective.get("status", "")) != "PRODUCTION_EFFECTIVE_LEDGER"
+		or str(effective.get("source_authority", ""))
+			!= "dpv2.single_player_drop_boost.v1"
+		or str(effective.get("source_direct_baseline", ""))
+			!= "dpv2.direct_baseline.v2"
+	):
+		load_error = "spb_effective_probability_contract_invalid"
+		return false
+	var production_value: Variant = authority.get("production", null)
+	if not production_value is Dictionary:
+		load_error = "spb_production_contract_missing"
+		return false
+	var production: Dictionary = production_value
+	var enabled_value: Variant = production.get("enabled", null)
+	var multiplier_value: Variant = production.get("boost_multiplier", null)
+	var ceiling_value: Variant = production.get("auto_boost_ceiling", null)
+	var gold_multiplier_value: Variant = production.get("gold_amount_multiplier", null)
+	var global_value: Variant = production.get(
+		"required_global_drop_rate_multiplier", null
+	)
+	if (
+		not enabled_value is bool
+		or not multiplier_value is Dictionary
+		or not ceiling_value is Dictionary
+		or not gold_multiplier_value is Dictionary
+		or not global_value is Dictionary
+		or _dpv2_json_integer(multiplier_value.get("numerator", null)) != 25
+		or _dpv2_json_integer(multiplier_value.get("denominator", null)) != 1
+		or _dpv2_json_integer(ceiling_value.get("numerator", null)) != 1
+		or _dpv2_json_integer(ceiling_value.get("denominator", null)) != 20
+		or _dpv2_json_integer(gold_multiplier_value.get("numerator", null)) != 10
+		or _dpv2_json_integer(gold_multiplier_value.get("denominator", null)) != 1
+		or str(production.get("required_global_drop_rate_preset", "")) != "1x"
+		or _dpv2_json_integer(global_value.get("numerator", null)) != 1
+		or _dpv2_json_integer(global_value.get("denominator", null)) != 1
+		or str(production.get("disabled_mode", ""))
+			!= "SELECT_BASE_NUMERATOR_AND_DENOMINATOR"
+	):
+		load_error = "spb_production_contract_invalid"
+		return false
+	for document: Dictionary in [authority, effective]:
+		var bindings_value: Variant = document.get("source_bindings", null)
+		if not bindings_value is Dictionary:
+			load_error = "spb_source_bindings_missing"
+			return false
+		var bindings: Dictionary = bindings_value
+		if (
+			str(bindings.get("base_sha", "")) != DPV2_SPB_BASE_SHA
+			or str(bindings.get("source_sha256_raw", "")).to_upper()
+				!= DPV2_SPB_SOURCE_SHA256
+			or str(bindings.get("direct_baseline_sha256_raw", "")).to_upper()
+				!= DPV2_SPB_DIRECT_BASELINE_SHA256
+			or str(bindings.get("source_provenance_sha256_raw", "")).to_upper()
+				!= DPV2_SPB_PROVENANCE_SHA256
+			or str(bindings.get("direct_slot_ledger_sha256", "")).to_upper()
+				!= DPV2_SPB_LEDGER_SHA256
+			or _dpv2_json_integer(bindings.get("direct_slot_count", null)) != 6809
+			or _dpv2_json_integer(bindings.get("source_drift", null)) != 0
+			or _dpv2_json_integer(bindings.get("base_probability_drift", null)) != 0
+			or _dpv2_json_integer(bindings.get("slot_uid_drift", null)) != 0
+			or _dpv2_json_integer(bindings.get("reward_identity_drift", null)) != 0
+			or _dpv2_json_integer(bindings.get("provenance_drift", null)) != 0
+			or _dpv2_json_integer(
+				bindings.get("protected_priority_origin_drift", null)
+			) != 0
+			or _dpv2_json_integer(bindings.get("duplicate_slot_collapse", null)) != 0
+		):
+			load_error = "spb_source_bindings_invalid"
+			return false
+	var authority_summary_value: Variant = authority.get("summary", null)
+	var effective_summary_value: Variant = effective.get("summary", null)
+	if (
+		not authority_summary_value is Dictionary
+		or not effective_summary_value is Dictionary
+	):
+		load_error = "spb_summary_missing"
+		return false
+	var authority_summary: Dictionary = authority_summary_value
+	var effective_summary: Dictionary = effective_summary_value
+	var expected_policy_counts := {
+		"AUTO_BOOST": 4537,
+		"BYPASS_COMMON_RECOVERY": 1357,
+		"BYPASS_GOLD": 128,
+		"BYPASS_NEW_ARMOR_BOSS": 324,
+		"BYPASS_UNCLASSIFIED": 463,
+	}
+	var expected_population_counts := {
+		"gold_slots": 134,
+		"common_recovery_slots": 1597,
+		"new_armor_boss_slots": 324,
+		"blessing_oil_slots": 22,
+		"equipment_candidate_slots": 4311,
+		"rare_consumable_candidate_slots": 268,
+		"unclassified_candidate_slots": 499,
+	}
+	for summary: Dictionary in [authority_summary, effective_summary]:
+		var policy_counts_value: Variant = summary.get("effective_policy_counts", null)
+		var populations_value: Variant = summary.get("overlapping_population_counts", null)
+		if not policy_counts_value is Dictionary or not populations_value is Dictionary:
+			load_error = "spb_summary_counts_missing"
+			return false
+		for key: String in expected_policy_counts:
+			if _dpv2_json_integer(policy_counts_value.get(key, null)) != expected_policy_counts[key]:
+				load_error = "spb_policy_count_invalid:%s" % key
+				return false
+		for key: String in expected_population_counts:
+			if _dpv2_json_integer(populations_value.get(key, null)) != expected_population_counts[key]:
+				load_error = "spb_population_count_invalid:%s" % key
+		if (
+			_dpv2_json_integer(summary.get("ceiling_applied_slots", null)) != 2203
+			or _dpv2_json_integer(summary.get("disabled_counterfactual_mismatch", null)) != 0
+			or _dpv2_json_integer(summary.get("probability_decreases", null)) != 0
+			or _dpv2_json_integer(summary.get("ceiling_violations", null)) != 0
+			or _dpv2_json_integer(summary.get("boost_formula_mismatch", null)) != 0
+			or _dpv2_json_integer(summary.get("bypass_probability_mismatch", null)) != 0
+			or _dpv2_json_integer(summary.get("duplicate_slot_collapse", null)) != 0
+			or _dpv2_json_integer(summary.get("gold_amount_slots", null)) != 134
+			or _dpv2_json_integer(summary.get("gold_amount_mismatch", null)) != 0
+			or _dpv2_json_integer(
+				summary.get("disabled_gold_amount_mismatch", null)
+			) != 0
+		):
+			load_error = "spb_summary_invariant_invalid"
+			return false
+		var summary_gold_multiplier: Variant = summary.get("gold_amount_multiplier", null)
+		if (
+			not summary_gold_multiplier is Dictionary
+			or _dpv2_json_integer(summary_gold_multiplier.get("numerator", null)) != 10
+			or _dpv2_json_integer(summary_gold_multiplier.get("denominator", null)) != 1
+		):
+			load_error = "spb_gold_amount_summary_invalid"
+			return false
+	if (
+		_dpv2_json_integer(authority_summary.get("production_slots", null)) != 6809
+		or _dpv2_json_integer(authority_summary.get("equipment_item_ids", null)) != 167
+		or _dpv2_json_integer(
+			authority_summary.get("rare_functional_consumable_item_ids", null)
+		) != 13
+		or _dpv2_json_integer(authority_summary.get("auto_boost_item_ids", null)) != 180
+		or _dpv2_json_integer(effective_summary.get("records", null)) != 6809
+		or _dpv2_json_integer(
+			effective_summary.get("disabled_counterfactual_records", null)
+		) != 6809
+		or _dpv2_json_integer(effective_summary.get("base_mirror_mismatch", null)) != 0
+	):
+		load_error = "spb_summary_cardinality_invalid"
+		return false
+	var records_value: Variant = effective.get("records", null)
+	if not records_value is Array or records_value.size() != 6809:
+		load_error = "spb_effective_probability_cardinality_invalid"
+		return false
+	var allowed_policies := {
+		"AUTO_BOOST": true,
+		"BYPASS_COMMON_RECOVERY": true,
+		"BYPASS_GOLD": true,
+		"BYPASS_NEW_ARMOR_BOSS": true,
+		"BYPASS_UNCLASSIFIED": true,
+	}
+	var policy_counts: Dictionary = {}
+	var ceiling_count := 0
+	for raw_record: Variant in records_value:
+		if not raw_record is Dictionary:
+			load_error = "spb_effective_probability_record_invalid"
+			return false
+		var record: Dictionary = raw_record
+		var slot_uid := str(record.get("slot_uid", ""))
+		var indexed_value: Variant = _dpv2_direct_slot_by_uid.get(slot_uid, null)
+		if slot_uid.is_empty() or _dpv2_spb_effective_by_uid.has(slot_uid):
+			load_error = "spb_effective_probability_slot_uid_invalid"
+			return false
+		if not indexed_value is Dictionary:
+			load_error = "spb_effective_probability_direct_slot_missing"
+			return false
+		var indexed: Dictionary = indexed_value
+		var direct_slot_value: Variant = indexed.get("slot", null)
+		if not direct_slot_value is Dictionary:
+			load_error = "spb_effective_probability_direct_slot_invalid"
+			return false
+		var direct_slot: Dictionary = direct_slot_value
+		if _dpv2_json_integer(record.get("canonical_monster_id", null)) != int(
+			indexed.get("canonical_monster_id", -1)
+		):
+			load_error = "spb_effective_probability_monster_mismatch"
+			return false
+		for field: String in [
+			"base_numerator", "base_denominator", "source_provenance_id",
+			"protected_drop", "overflow_priority", "baseline_origin",
+			"canonical_item_id", "gold_amount",
+		]:
+			if record.has(field) != direct_slot.has(field):
+				load_error = "spb_effective_probability_mirror_field_mismatch:%s" % field
+				return false
+			if record.has(field) and record.get(field) != direct_slot.get(field):
+				load_error = "spb_effective_probability_mirror_value_mismatch:%s" % field
+				return false
+		var expected_reward_kind := "ITEM" if direct_slot.has("canonical_item_id") else "GOLD"
+		if str(record.get("reward_kind", "")) != expected_reward_kind:
+			load_error = "spb_effective_probability_reward_kind_mismatch"
+			return false
+		if expected_reward_kind == "GOLD":
+			var base_gold_amount := _dpv2_json_integer(
+				record.get("base_gold_amount", null)
+			)
+			var effective_gold_amount := _dpv2_json_integer(
+				record.get("effective_gold_amount", null)
+			)
+			if (
+				base_gold_amount != _dpv2_json_integer(direct_slot.get("gold_amount", null))
+				or effective_gold_amount != base_gold_amount * 10
+			):
+				load_error = "spb_effective_gold_amount_mismatch"
+				return false
+		elif record.has("base_gold_amount") or record.has("effective_gold_amount"):
+			load_error = "spb_non_gold_amount_overlay_invalid"
+			return false
+		var base_numerator := _dpv2_json_integer(record.get("base_numerator", null))
+		var base_denominator := _dpv2_json_integer(record.get("base_denominator", null))
+		var effective_numerator := _dpv2_json_integer(record.get("effective_numerator", null))
+		var effective_denominator := _dpv2_json_integer(record.get("effective_denominator", null))
+		var policy := str(record.get("boost_policy", ""))
+		if (
+			base_numerator <= 0 or base_denominator <= 0
+			or effective_numerator <= 0 or effective_denominator <= 0
+			or not allowed_policies.has(policy)
+			or str(record.get("reason_code", "")).is_empty()
+			or str(record.get("formula_reason_code", "")).is_empty()
+			or not record.get("ceiling_applied", null) is bool
+			or _dpv2_json_integer(
+				record.get("auto_boost_ceiling_numerator", null)
+			) != 1
+			or _dpv2_json_integer(
+				record.get("auto_boost_ceiling_denominator", null)
+			) != 20
+		):
+			load_error = "spb_effective_probability_record_contract_invalid"
+			return false
+		var is_auto := policy == "AUTO_BOOST"
+		if (
+			_dpv2_json_integer(record.get("boost_multiplier_numerator", null))
+				!= (25 if is_auto else 1)
+			or _dpv2_json_integer(record.get("boost_multiplier_denominator", null)) != 1
+		):
+			load_error = "spb_effective_probability_multiplier_invalid"
+			return false
+		var expected := dpv2_single_player_boost_formula(
+			base_numerator, base_denominator, is_auto
+		)
+		var expected_numerator := int(expected.get("numerator", 0))
+		var expected_denominator := int(expected.get("denominator", 0))
+		var expected_ceiling := bool(expected.get("ceiling_applied", false))
+		if (
+			effective_numerator != expected_numerator
+			or effective_denominator != expected_denominator
+			or bool(record.get("ceiling_applied", false)) != expected_ceiling
+			or _positive_gcd(effective_numerator, effective_denominator) != 1
+		):
+			load_error = "spb_effective_probability_formula_mismatch"
+			return false
+		policy_counts[policy] = int(policy_counts.get(policy, 0)) + 1
+		ceiling_count += int(expected_ceiling)
+		_dpv2_spb_effective_by_uid[slot_uid] = record.duplicate(true)
+	if (
+		_dpv2_spb_effective_by_uid.size() != _dpv2_direct_slot_by_uid.size()
+		or _dpv2_spb_effective_by_uid.size() != 6809
+		or ceiling_count != 2203
+	):
+		load_error = "spb_effective_probability_closure_invalid"
+		return false
+	for key: String in expected_policy_counts:
+		if int(policy_counts.get(key, 0)) != expected_policy_counts[key]:
+			load_error = "spb_effective_probability_policy_closure_invalid:%s" % key
+			return false
+	dpv2_single_player_drop_boost = authority
+	dpv2_single_player_effective_probability = effective
+	dpv2_single_player_drop_boost_loaded = true
 	return true
 
 
@@ -2437,6 +2777,219 @@ func get_dpv2_direct_slot_probability(
 	slot_uid: String
 ) -> Dictionary:
 	return dpv2_direct_slot_probability(monster_id, slot_uid)
+
+
+func is_dpv2_single_player_drop_boost_loaded() -> bool:
+	return dpv2_single_player_drop_boost_loaded
+
+
+func dpv2_single_player_boost_formula(
+	base_numerator: int,
+	base_denominator: int,
+	auto_boost: bool = true
+) -> Dictionary:
+	if base_numerator <= 0 or base_denominator <= 0:
+		return {"ok": false, "reason": "spb_base_probability_invalid"}
+	var base_divisor := _positive_gcd(base_numerator, base_denominator)
+	var reduced_numerator := base_numerator / base_divisor
+	var reduced_denominator := base_denominator / base_divisor
+	if not auto_boost or reduced_numerator * 20 >= reduced_denominator:
+		return {
+			"ok": true,
+			"numerator": reduced_numerator,
+			"denominator": reduced_denominator,
+			"ceiling_applied": false,
+		}
+	var boosted_numerator := reduced_numerator * 25
+	if boosted_numerator * 20 > reduced_denominator:
+		return {
+			"ok": true,
+			"numerator": 1,
+			"denominator": 20,
+			"ceiling_applied": true,
+		}
+	var boosted_divisor := _positive_gcd(boosted_numerator, reduced_denominator)
+	return {
+		"ok": true,
+		"numerator": boosted_numerator / boosted_divisor,
+		"denominator": reduced_denominator / boosted_divisor,
+		"ceiling_applied": false,
+	}
+
+
+func dpv2_effective_slot_probability(
+	monster_id: Variant,
+	slot_uid: String
+) -> Dictionary:
+	if not dpv2_direct_baseline_loaded:
+		return {"ok": false, "reason": "spb_direct_baseline_unavailable"}
+	if (
+		not dpv2_single_player_drop_boost_loaded
+		or dpv2_single_player_drop_boost.is_empty()
+		or dpv2_single_player_effective_probability.is_empty()
+	):
+		return {"ok": false, "reason": "spb_effective_probability_unavailable"}
+	var resolved_id := canonical_monster_id(monster_id)
+	var direct_indexed_value: Variant = _dpv2_direct_slot_by_uid.get(slot_uid, null)
+	var effective_value: Variant = _dpv2_spb_effective_by_uid.get(slot_uid, null)
+	if not direct_indexed_value is Dictionary or not effective_value is Dictionary:
+		return {"ok": false, "reason": "spb_effective_probability_unresolved"}
+	var direct_indexed: Dictionary = direct_indexed_value
+	var effective: Dictionary = effective_value
+	if (
+		resolved_id <= 0
+		or int(direct_indexed.get("canonical_monster_id", -1)) != resolved_id
+		or _dpv2_json_integer(effective.get("canonical_monster_id", null)) != resolved_id
+	):
+		return {"ok": false, "reason": "spb_effective_probability_monster_mismatch"}
+	var direct_slot_value: Variant = direct_indexed.get("slot", null)
+	if not direct_slot_value is Dictionary:
+		return {"ok": false, "reason": "spb_direct_slot_invalid"}
+	var direct_slot: Dictionary = direct_slot_value
+	for field: String in [
+		"base_numerator", "base_denominator", "source_provenance_id",
+		"protected_drop", "overflow_priority", "baseline_origin",
+		"canonical_item_id", "gold_amount",
+	]:
+		if (
+			effective.has(field) != direct_slot.has(field)
+			or effective.has(field) and effective.get(field) != direct_slot.get(field)
+		):
+			return {
+				"ok": false,
+				"reason": "spb_effective_probability_mirror_mismatch:%s" % field,
+			}
+	var production_value: Variant = dpv2_single_player_drop_boost.get(
+		"production", null
+	)
+	if not production_value is Dictionary:
+		return {"ok": false, "reason": "spb_boost_authority_unavailable"}
+	var production: Dictionary = production_value
+	var enabled_value: Variant = production.get("enabled", null)
+	if not enabled_value is bool:
+		return {"ok": false, "reason": "spb_enabled_flag_invalid"}
+	var spb_enabled := bool(enabled_value)
+	var global_scale := dpv2_active_global_drop_rate()
+	var scale_numerator := _dpv2_json_integer(global_scale.get("numerator", null))
+	var scale_denominator := _dpv2_json_integer(global_scale.get("denominator", null))
+	if scale_numerator <= 0 or scale_denominator <= 0:
+		return {"ok": false, "reason": "spb_global_scale_invalid"}
+	if spb_enabled and (
+		str(global_scale.get("preset", "")) != "1x"
+		or scale_numerator != 1
+		or scale_denominator != 1
+	):
+		return {"ok": false, "reason": "spb_enabled_requires_global_1x"}
+	var base_numerator := _dpv2_json_integer(effective.get("base_numerator", null))
+	var base_denominator := _dpv2_json_integer(effective.get("base_denominator", null))
+	var table_effective_numerator := _dpv2_json_integer(
+		effective.get("effective_numerator", null)
+	)
+	var table_effective_denominator := _dpv2_json_integer(
+		effective.get("effective_denominator", null)
+	)
+	if (
+		base_numerator <= 0 or base_denominator <= 0
+		or table_effective_numerator <= 0 or table_effective_denominator <= 0
+	):
+		return {"ok": false, "reason": "spb_effective_probability_invalid"}
+	var selected_numerator := (
+		table_effective_numerator if spb_enabled else base_numerator
+	)
+	var selected_denominator := (
+		table_effective_denominator if spb_enabled else base_denominator
+	)
+	var raw_numerator := selected_numerator * scale_numerator
+	var raw_denominator := selected_denominator * scale_denominator
+	if raw_numerator <= 0 or raw_denominator <= 0:
+		return {"ok": false, "reason": "spb_final_probability_invalid"}
+	var final_numerator := raw_numerator
+	var final_denominator := raw_denominator
+	if final_numerator >= final_denominator:
+		final_numerator = 1
+		final_denominator = 1
+	else:
+		var divisor := _positive_gcd(final_numerator, final_denominator)
+		final_numerator /= divisor
+		final_denominator /= divisor
+	var result := {
+		"ok": true,
+		"reason": "",
+		"slot_uid": slot_uid,
+		"canonical_monster_id": resolved_id,
+		"canonical_item_id": _dpv2_json_integer(effective.get("canonical_item_id", -1)),
+		"gold_amount": _dpv2_json_integer(effective.get("gold_amount", -1)),
+		"reward_kind": "item" if effective.has("canonical_item_id") else "gold",
+		"spb_enabled": spb_enabled,
+		"spb_selected_source": "effective" if spb_enabled else "base",
+		"boost_policy": str(effective.get("boost_policy", "")),
+		"boost_reason_code": str(effective.get("reason_code", "")),
+		"boost_formula_reason_code": str(effective.get("formula_reason_code", "")),
+		"boost_multiplier_numerator": _dpv2_json_integer(
+			effective.get("boost_multiplier_numerator", null)
+		),
+		"boost_multiplier_denominator": _dpv2_json_integer(
+			effective.get("boost_multiplier_denominator", null)
+		),
+		"ceiling_numerator": _dpv2_json_integer(
+			effective.get("auto_boost_ceiling_numerator", null)
+		),
+		"ceiling_denominator": _dpv2_json_integer(
+			effective.get("auto_boost_ceiling_denominator", null)
+		),
+		"ceiling_applied": bool(effective.get("ceiling_applied", false)),
+		"base_numerator": base_numerator,
+		"base_denominator": base_denominator,
+		"base_probability": float(base_numerator) / float(base_denominator),
+		"effective_numerator": table_effective_numerator,
+		"effective_denominator": table_effective_denominator,
+		"effective_probability": (
+			float(table_effective_numerator) / float(table_effective_denominator)
+		),
+		"selected_numerator": selected_numerator,
+		"selected_denominator": selected_denominator,
+		"global_preset": str(global_scale.get("preset", "")),
+		"global_scale_numerator": scale_numerator,
+		"global_scale_denominator": scale_denominator,
+		"global_scale": float(scale_numerator) / float(scale_denominator),
+		"unreduced_final_numerator": raw_numerator,
+		"unreduced_final_denominator": raw_denominator,
+		"final_numerator": final_numerator,
+		"final_denominator": final_denominator,
+		"final_probability": float(final_numerator) / float(final_denominator),
+		"probability_numerator": final_numerator,
+		"probability_denominator": final_denominator,
+		"overflow_priority": int(effective.get("overflow_priority", 0)),
+		"protected_drop": bool(effective.get("protected_drop", false)),
+		"baseline_origin": str(effective.get("baseline_origin", "")),
+		"source_provenance_id": str(effective.get("source_provenance_id", "")),
+	}
+	if effective.has("gold_amount"):
+		var base_gold_amount := _dpv2_json_integer(
+			effective.get("base_gold_amount", null)
+		)
+		var effective_gold_amount := _dpv2_json_integer(
+			effective.get("effective_gold_amount", null)
+		)
+		if (
+			base_gold_amount <= 0
+			or effective_gold_amount != base_gold_amount * 10
+			or base_gold_amount != _dpv2_json_integer(effective.get("gold_amount", null))
+		):
+			return {"ok": false, "reason": "spb_effective_gold_amount_mismatch"}
+		result["base_gold_amount"] = base_gold_amount
+		result["effective_gold_amount"] = effective_gold_amount
+		result["final_gold_amount"] = (
+			effective_gold_amount if spb_enabled else base_gold_amount
+		)
+	return result
+
+
+func get_dpv2_effective_slot_probability(
+	monster_id: Variant,
+	slot_uid: String
+) -> Dictionary:
+	return dpv2_effective_slot_probability(monster_id, slot_uid)
 
 
 func dpv2_active_global_drop_rate() -> Dictionary:

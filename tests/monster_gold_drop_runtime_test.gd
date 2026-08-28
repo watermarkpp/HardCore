@@ -51,9 +51,21 @@ func _run() -> void:
 	assert(bool(gold_probability.get("ok", false)), "ID 19 gold probability failed")
 	assert(int(gold_probability.get("base_numerator", 0)) == 1, "ID 19 gold numerator drifted")
 	assert(int(gold_probability.get("base_denominator", 0)) == 4, "ID 19 gold denominator drifted")
+	var spb_gold_probability := GameData.dpv2_effective_slot_probability(
+		19,
+		str(gold_slot.get("slot_uid", "")),
+	)
+	assert(bool(spb_gold_probability.get("ok", false)))
+	assert(int(spb_gold_probability.get("base_numerator", 0)) == 1)
+	assert(int(spb_gold_probability.get("base_denominator", 0)) == 4)
+	assert(int(spb_gold_probability.get("effective_numerator", 0)) == 1)
+	assert(int(spb_gold_probability.get("effective_denominator", 0)) == 4)
+	assert(int(spb_gold_probability.get("base_gold_amount", 0)) == 30)
+	assert(int(spb_gold_probability.get("effective_gold_amount", 0)) == 300)
+	assert(int(spb_gold_probability.get("final_gold_amount", 0)) == 300)
 
 	# The production roll uses the same direct slot and keeps gold separate from
-	# item output. At least one deterministic seed must produce 30 gold.
+	# item output. SPB changes reward amount only: 30 base becomes 300 effective.
 	var hit := false
 	for seed: int in range(4096):
 		var rng := RandomNumberGenerator.new()
@@ -61,10 +73,22 @@ func _run() -> void:
 		var roll := LootRuntimeScript.new().roll_monster_drops(19, rng)
 		if int(roll.get("resolved_entry_count", 0)) > 0:
 			var gold_drops: Array = roll.get("gold_drops", [])
-			if gold_drops.has(30):
+			if gold_drops.has(300):
 				hit = true
 				break
-	assert(hit, "no deterministic seed produced the ID 19 gold roll")
+	assert(hit, "no deterministic seed produced the ID 19 SPB gold roll")
+	var production: Dictionary = GameData.dpv2_single_player_drop_boost.get("production", {})
+	var original_enabled: Variant = production.get("enabled", null)
+	production["enabled"] = false
+	var disabled_gold := GameData.dpv2_effective_slot_probability(
+		19,
+		str(gold_slot.get("slot_uid", "")),
+	)
+	assert(bool(disabled_gold.get("ok", false)))
+	assert(int(disabled_gold.get("base_gold_amount", 0)) == 30)
+	assert(int(disabled_gold.get("effective_gold_amount", 0)) == 300)
+	assert(int(disabled_gold.get("final_gold_amount", 0)) == 30)
+	production["enabled"] = original_enabled
 
 	# ID 226 is a restored direct profile; its amount-bearing gold slot is part
 	# of the frozen 21CQ contract and must remain independent from item output.
@@ -100,5 +124,5 @@ func _run() -> void:
 	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
 	assert((non_loot.get("attempts", []) as Array).is_empty())
 
-	print("MONSTER_GOLD_DROP_RUNTIME_PASS: direct_gold_19=30 direct_gold_226=3000 direct_probability=1/4 non_loot_145=1")
+	print("MONSTER_GOLD_DROP_RUNTIME_PASS: base_gold_19=30 spb_gold_19=300 direct_gold_226=3000 direct_probability=1/4 non_loot_145=1")
 	get_tree().quit(0)

@@ -14,11 +14,15 @@ func roll_monster_drops(
 		"runtime_authority": {
 			"authority_id": "dpv2.direct_baseline.v2",
 			"schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
+			"effective_probability_authority_id": "dpv2.single_player_drop_boost.v1",
+			"effective_probability_schema": (
+				"hardcore.dpv2.single_player_effective_probability.v1"
+			),
 			"identity_key": "canonical_monster_id",
 			"fallback_forbidden": true,
 			"probability_formula": (
-				"min(1, base_numerator * scale_num "
-				+ "/(base_denominator * scale_den))"
+				"SPB enabled: effective x required 1x; "
+				+ "SPB disabled: base x global exactly once"
 			),
 		},
 		"monster_id": monster_id,
@@ -53,6 +57,9 @@ func roll_monster_drops(
 	result["source_slot_gate"] = GameData.dpv2_source_slot_gate()
 	if not GameData.is_dpv2_direct_baseline_loaded():
 		result.reason = "dpv2_direct_baseline_unavailable"
+		return result
+	if not GameData.is_dpv2_single_player_drop_boost_loaded():
+		result.reason = "spb_effective_probability_unavailable"
 		return result
 	var resolved_id := GameData.canonical_monster_id(monster_id)
 	if resolved_id <= 0:
@@ -96,7 +103,10 @@ func roll_monster_drops(
 		result.reason = "rng_missing"
 		return result
 
-	var successful_rewards: Array = []
+	# Resolve every slot before the first RNG draw. A missing/mismatched SPB row
+	# fails the whole monster roll closed and therefore cannot consume a partial
+	# RNG sequence before the error becomes visible.
+	var resolved_slots: Array = []
 	for raw_slot: Variant in slots:
 		result.resolution_attempted_count += 1
 		if not raw_slot is Dictionary:
@@ -104,7 +114,7 @@ func roll_monster_drops(
 			continue
 		var slot: Dictionary = raw_slot
 		var slot_uid := str(slot.get("slot_uid", ""))
-		var probability := GameData.dpv2_direct_slot_probability(
+		var probability := GameData.dpv2_effective_slot_probability(
 			resolved_id,
 			slot_uid,
 		)
@@ -124,18 +134,43 @@ func roll_monster_drops(
 				str(reward.get("reason", "dpv2_direct_reward_unresolved")),
 			)
 			continue
+		if str(reward.get("kind", "")) == "gold":
+			var final_gold_amount := int(probability.get("final_gold_amount", 0))
+			if final_gold_amount <= 0:
+				_append_rejection(result, slot, "spb_effective_gold_amount_invalid")
+				continue
+			reward = reward.duplicate(true)
+			reward["gold_amount"] = final_gold_amount
 		result.reward_resolved_enabled_slots += 1
 		result.resolved_entry_count += 1
 		result.rng_eligible_slots += 1
 		var denominator := int(probability.get("final_denominator", 0))
 		var numerator := int(probability.get("final_numerator", 0))
 		if numerator <= 0 or denominator <= 0:
-			_append_rejection(result, slot, "dpv2_direct_probability_invalid")
+			_append_rejection(result, slot, "spb_effective_probability_invalid")
 			result.reward_resolved_enabled_slots -= 1
 			result.resolved_entry_count -= 1
 			result.rng_eligible_slots -= 1
 			result.probability_resolved_enabled_slots -= 1
 			continue
+		resolved_slots.append({
+			"slot": slot,
+			"probability": probability,
+			"reward": reward,
+		})
+	if not result.rejected_entries.is_empty() or resolved_slots.size() != slots.size():
+		result.reason = "spb_effective_probability_fail_closed"
+		return result
+
+	var successful_rewards: Array = []
+	for raw_resolved: Variant in resolved_slots:
+		var resolved: Dictionary = raw_resolved
+		var slot: Dictionary = resolved.get("slot", {})
+		var probability: Dictionary = resolved.get("probability", {})
+		var reward: Dictionary = resolved.get("reward", {})
+		var slot_uid := str(slot.get("slot_uid", ""))
+		var denominator := int(probability.get("final_denominator", 0))
+		var numerator := int(probability.get("final_numerator", 0))
 		result.rng_roll_count += 1
 		var draw := rng.randi_range(1, denominator)
 		var success := draw <= numerator
@@ -202,11 +237,37 @@ func _build_attempt(
 		"canonical_monster_id": int(probability.get("canonical_monster_id", -1)),
 		"canonical_item_id": int(probability.get("canonical_item_id", -1)),
 		"gold_amount": int(probability.get("gold_amount", -1)),
+		"base_gold_amount": int(probability.get("base_gold_amount", -1)),
+		"effective_gold_amount": int(
+			probability.get("effective_gold_amount", -1)
+		),
+		"final_gold_amount": int(probability.get("final_gold_amount", -1)),
 		"reward_kind": str(probability.get("reward_kind", reward.get("kind", ""))),
 		"item_name": str(reward.get("item_name", "")),
 		"base_numerator": int(probability.get("base_numerator", 0)),
 		"base_denominator": int(probability.get("base_denominator", 0)),
 		"base_probability": float(probability.get("base_probability", 0.0)),
+		"spb_enabled": bool(probability.get("spb_enabled", false)),
+		"spb_selected_source": str(probability.get("spb_selected_source", "")),
+		"boost_policy": str(probability.get("boost_policy", "")),
+		"boost_reason_code": str(probability.get("boost_reason_code", "")),
+		"boost_formula_reason_code": str(
+			probability.get("boost_formula_reason_code", "")
+		),
+		"boost_multiplier_numerator": int(
+			probability.get("boost_multiplier_numerator", 0)
+		),
+		"boost_multiplier_denominator": int(
+			probability.get("boost_multiplier_denominator", 0)
+		),
+		"ceiling_numerator": int(probability.get("ceiling_numerator", 0)),
+		"ceiling_denominator": int(probability.get("ceiling_denominator", 0)),
+		"ceiling_applied": bool(probability.get("ceiling_applied", false)),
+		"effective_numerator": int(probability.get("effective_numerator", 0)),
+		"effective_denominator": int(probability.get("effective_denominator", 0)),
+		"effective_probability": float(
+			probability.get("effective_probability", 0.0)
+		),
 		"global_preset": str(probability.get("global_preset", "")),
 		"global_scale_numerator": int(probability.get("global_scale_numerator", 0)),
 		"global_scale_denominator": int(probability.get("global_scale_denominator", 0)),

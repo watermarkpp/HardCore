@@ -12,6 +12,10 @@
       "numerator": 1,
       "denominator": 20
     },
+    "gold_amount_multiplier": {
+      "numerator": 10,
+      "denominator": 1
+    },
     "required_global_drop_rate_preset": "1x",
     "required_global_drop_rate_multiplier": {
       "numerator": 1,
@@ -28,6 +32,13 @@
     "overflow_occurs_after_all_rng": true,
     "protected_drop_and_overflow_priority_do_not_affect_probability": true,
     "missing_effective_record_runtime_result": "FAIL_CLOSED_SPB_EFFECTIVE_PROBABILITY_UNRESOLVED"
+  },
+  "reward_amount_contract": {
+    "gold_probability_policy": "BYPASS_GOLD_BASE_PROBABILITY",
+    "enabled_gold_amount": "base_gold_amount_times_10",
+    "disabled_gold_amount": "base_gold_amount",
+    "direct_baseline_gold_amount_mutation_forbidden": true,
+    "non_gold_reward_amount_overlay_forbidden": true
   },
   "classification_contract": {
     "runtime_classification": "EXACT_CANONICAL_IDS_FROZEN_IN_THIS_AUTHORITY",
@@ -1842,6 +1853,13 @@
     },
     "ceiling_applied_slots": 2203,
     "disabled_counterfactual_mismatch": 0,
+    "gold_amount_multiplier": {
+      "numerator": 10,
+      "denominator": 1
+    },
+    "gold_amount_slots": 134,
+    "gold_amount_mismatch": 0,
+    "disabled_gold_amount_mismatch": 0,
     "probability_decreases": 0,
     "ceiling_violations": 0,
     "boost_formula_mismatch": 0,
