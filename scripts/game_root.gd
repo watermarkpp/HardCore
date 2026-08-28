@@ -206,6 +206,9 @@ var _queued_mobile_attacks: int:
 var _warrior_hud_timer := 0.0
 var _system_menu_layer: CanvasLayer
 var _system_menu_panel: Control
+## The system menu is the only owner of the pause it creates.  Keep this
+## explicit so an unrelated pause source is never released by a panel hide.
+var _system_menu_pause_owned := false
 var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
@@ -414,7 +417,10 @@ func _exit_tree() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		call_deferred("_show_system_menu")
+		# Android's WM back notification does not travel through ui_cancel, so
+		# defer the same toggle used by the keyboard path.  This also lets a
+		# paused tree close the WHEN_PAUSED menu cleanly on the next idle tick.
+		call_deferred("_toggle_system_menu")
 	elif what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
 		if is_instance_valid(hud):
 			hud.cancel_attack_inputs(&"application_interrupted")
@@ -433,10 +439,7 @@ func _notification(what: int) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		if _system_menu_panel != null and _system_menu_panel.visible:
-			_hide_system_menu()
-		else:
-			_show_system_menu()
+		_toggle_system_menu()
 		get_viewport().set_input_as_handled()
 
 
@@ -607,6 +610,7 @@ func _build_system_menu() -> void:
 	_system_menu_panel.name = "SystemMenuPanel"
 	_system_menu_panel.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	_system_menu_panel.visible = false
+	_system_menu_panel.visibility_changed.connect(_on_system_menu_visibility_changed)
 	_system_menu_panel.continue_requested.connect(_hide_system_menu)
 	_system_menu_panel.return_to_character_select_requested.connect(_return_to_character_select)
 	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
@@ -621,14 +625,40 @@ func _build_system_menu() -> void:
 func _show_system_menu() -> void:
 	if _system_menu_panel == null:
 		return
+	_system_menu_pause_owned = true
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
 
 
 func _hide_system_menu() -> void:
-	get_tree().paused = false
 	if _system_menu_panel != null:
 		_system_menu_panel.close_menu()
+	_release_system_menu_pause()
+
+
+func _toggle_system_menu() -> void:
+	if _system_menu_panel != null and _system_menu_panel.visible:
+		_hide_system_menu()
+	else:
+		_show_system_menu()
+
+
+func _on_system_menu_visibility_changed() -> void:
+	if _system_menu_panel == null:
+		return
+	# A panel can be hidden by an owner other than the Continue action (for
+	# example a modal coordinator or a scene transition).  Do not leave the
+	# world paused behind an invisible menu, but only release a pause this menu
+	# actually acquired.
+	if not _system_menu_panel.visible or not _system_menu_panel.is_visible_in_tree():
+		_release_system_menu_pause()
+
+
+func _release_system_menu_pause() -> void:
+	if not _system_menu_pause_owned:
+		return
+	_system_menu_pause_owned = false
+	get_tree().paused = false
 
 
 func _audio_bus_enabled(bus_name: StringName) -> bool:
