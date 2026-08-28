@@ -21,16 +21,18 @@ Primary behavior evidence is `dev_art_sources/reference/original_gameofmir/M2Ser
 
 ## Final verification
 
-The evidence commit must be verified after this document and the formal test registration are committed:
+The tracked evidence commit was verified with:
 
 ```powershell
 tools/run_godot_tests.ps1 -Suite monster -TimeoutSeconds 60
 ```
 
-Acceptance requires all 32 registered monster scenes to pass, including:
+Result: `PASS 32/32`, `failed=0`, `engine_log_errors=0`.
+
+All 32 registered monster scenes passed, including:
 
 - `monster_accuracy_runtime_test`
 - `monster_anti_stealth_runtime_test`
 - `monster_mfc1_attribute_timing_audit_test`
 
-The runner result must report the Git commit that contains this document. No GitHub Actions run is claimed; this is the tracked local final-HEAD acceptance record requested during independent review.
+The formal suite is rerun after this result is committed so its runner `git_head` reports the final Git commit containing this document. No GitHub Actions run is claimed; this is the tracked local final-HEAD acceptance record requested during independent review.
