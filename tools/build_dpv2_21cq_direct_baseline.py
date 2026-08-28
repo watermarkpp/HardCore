@@ -446,6 +446,52 @@ def pretty_json(value: dict[str, Any]) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
 
 
+def _semantic_evidence(
+    monster_id: int,
+    catalog_row: dict[str, Any],
+    source_row_count: int,
+    current_user_decision: str,
+    runtime_evidence: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Return auditable evidence for one semantic disposition.
+
+    The selectors intentionally identify the exact catalog identity,
+    classification and logical source-row record.  The semantic authority
+    remains independent of the catalog's drop entries and of any historical
+    classification/role seed.
+    """
+
+    catalog_path = CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()
+    source_path = SOURCE_PATH.relative_to(ROOT).as_posix()
+    entry_selector = f"entries[monster_id={monster_id}]"
+    source_selector = f"records[stable_monster_id={monster_id}]"
+    classification_path = f"{catalog_path}#{entry_selector}.classification"
+    source_row_path = f"{source_path}#{source_selector}.rows"
+    evidence: dict[str, Any] = {
+        "current_user_decision": current_user_decision,
+        "catalog_path": catalog_path,
+        "catalog_entry_selector": entry_selector,
+        "classification_path": classification_path,
+        "classification": str(catalog_row.get("classification", "")),
+        "source_row_path": source_row_path,
+        "source_row": {
+            "path": source_path,
+            "selector": source_selector,
+            "count": source_row_count,
+            "identity_fields": ["stable_monster_id", "slot_index"],
+        },
+        "catalog": {
+            "path": catalog_path,
+            "selector": entry_selector,
+            "runtime_allowed_path": f"{catalog_path}#{entry_selector}.runtime_allowed",
+            "runtime_allowed": bool(catalog_row.get("runtime_allowed", False)),
+        },
+    }
+    if runtime_evidence is not None:
+        evidence["runtime_evidence"] = runtime_evidence
+    return evidence
+
+
 def build_semantic_authority(audit: dict[str, Any]) -> dict[str, Any]:
     """Build the independent monster drop semantic partition.
 
@@ -526,54 +572,174 @@ def build_semantic_authority(audit: dict[str, Any]) -> dict[str, Any]:
     semantic_counts: Counter[str] = Counter()
     for monster_id in sorted(catalog_by_id):
         catalog_row = catalog_by_id[monster_id]
-        source_row = source_by_id[monster_id]
+        source_row_count = source_rows_by_id[monster_id]
         runtime_allowed = bool(catalog_row["runtime_allowed"])
         if not runtime_allowed:
             semantic_status = "RUNTIME_DISABLED"
             slot_policy = "RUNTIME_DISABLED_EXCLUDED"
             decision_basis = "CANONICAL_CATALOG_RUNTIME_ALLOWED_FALSE"
+            reason_code = "RUNTIME_DISABLED"
+            human_frozen = True
+            current_user_decision = (
+                "CURRENT_USER_DECISION: runtime_allowed=false disables this "
+                "identity and its drops in the current runtime."
+            )
+            runtime_evidence = {
+                "script_path": (
+                    "scripts/game_data.gd#_build_canonical_monster_runtime_drop_closure"
+                ),
+                "effect_path": (
+                    f"{CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()}"
+                    f"#entries[monster_id={monster_id}].runtime_capability"
+                ),
+                "runtime_path": (
+                    f"{CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()}"
+                    f"#entries[monster_id={monster_id}].drop_policy"
+                ),
+                "runtime_allowed": False,
+            }
             exemption: dict[str, Any] | None = None
             profile_id: str | None = None
         elif monster_id == EXPECTED_PROJECT_EXTENSION_ID:
             semantic_status = "PROJECT_EXTENSION"
             slot_policy = "COMPILE_DIRECT"
             decision_basis = "PROJECT_EXTENSION_FROZEN"
+            reason_code = "PROJECT_EXTENSION"
+            human_frozen = True
+            current_user_decision = (
+                "CURRENT_USER_DECISION: monster 225 is a project extension "
+                "with direct frozen rules."
+            )
+            runtime_evidence = None
             exemption = None
             profile_id = f"dpv2.direct.{monster_id}"
         elif monster_id in expected_explicit:
             semantic_status = "EXPLICIT_NON_LOOT"
             slot_policy = "EXPLICIT_NON_LOOT_EXCLUDED"
             decision_basis = "EXPLICIT_NON_LOOT_FROZEN"
+            human_frozen = True
+            runtime_evidence = None
+            if monster_id in {145, 146, 147}:
+                reason_code = "SUMMON_OR_EVENT_COMBAT_ENTITY"
+                current_user_decision = (
+                    "CURRENT_USER_DECISION: IDs 145, 146 and 147 are summon "
+                    "or event combat entities; exclude their loot while "
+                    "retaining source rows for audit."
+                )
+            elif monster_id in {59, 78, 161}:
+                reason_code = "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE"
+                current_user_decision = (
+                    "CURRENT_USER_DECISION: internal/version-difference "
+                    "identities with no source rows remain explicitly non-loot."
+                )
+            elif monster_id in {186, 187}:
+                reason_code = "TAMEABLE_CURRENT_EXEMPTION"
+                current_user_decision = (
+                    "CURRENT_USER_DECISION: current tameable entities are "
+                    "explicitly exempt from monster loot."
+                )
+                runtime_evidence = {
+                    "script_path": (
+                        "scripts/game_data.gd#_build_canonical_monster_runtime_drop_closure"
+                    ),
+                    "effect_path": (
+                        f"{CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()}"
+                        f"#entries[monster_id={monster_id}].drop_policy.exemption"
+                    ),
+                    "runtime_path": (
+                        f"{CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()}"
+                        f"#entries[monster_id={monster_id}].classification"
+                    ),
+                    "runtime_allowed": True,
+                }
+            elif monster_id == 194:
+                reason_code = "GUARD_SCRIPT_CURRENT_EXEMPTION"
+                current_user_decision = (
+                    "CURRENT_USER_DECISION: the current guard/script object is "
+                    "explicitly exempt from monster loot."
+                )
+                runtime_evidence = {
+                    "script_path": (
+                        "scripts/game_data.gd#_build_canonical_monster_runtime_drop_closure"
+                    ),
+                    "effect_path": (
+                        f"{CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()}"
+                        f"#entries[monster_id={monster_id}].drop_policy.exemption"
+                    ),
+                    "runtime_path": (
+                        f"{CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix()}"
+                        f"#entries[monster_id={monster_id}].classification"
+                    ),
+                    "runtime_allowed": True,
+                }
+            else:
+                raise DirectBaselineError(
+                    f"unclassified explicit non-loot monster: {monster_id}"
+                )
             exemption = {
                 "required": True,
                 "kind": "EXPLICIT_NON_LOOT",
-                "reason": (
-                    "Human-frozen non-loot decision; source rows remain in the "
-                    "provenance ledger and are excluded from production slots."
-                ),
+                "reason_code": reason_code,
+                "reason": current_user_decision,
             }
             profile_id = None
         else:
             semantic_status = "DIRECT_21CQ"
             slot_policy = "COMPILE_DIRECT"
-            decision_basis = "ELIGIBLE_SOURCE_ID_DEFAULT"
+            if monster_id in EXPECTED_DIRECT_OVERRIDES:
+                reason_code = "HUMAN_FROZEN_DIRECT_21CQ"
+                human_frozen = True
+                decision_basis = "HUMAN_FROZEN_DIRECT_21CQ"
+                current_user_decision = (
+                    "CURRENT_USER_DECISION: restore this direct 21CQ identity "
+                    "with its frozen independent source rows."
+                )
+            else:
+                reason_code = "DIRECT_CATALOG_SOURCE_EXACT"
+                human_frozen = False
+                decision_basis = "ELIGIBLE_SOURCE_ID_DEFAULT"
+                current_user_decision = (
+                    "CURRENT_USER_DECISION: all other eligible source identities "
+                    "compile as DIRECT_21CQ."
+                )
+            runtime_evidence = None
             exemption = None
             profile_id = f"dpv2.direct.{monster_id}"
 
+        evidence = _semantic_evidence(
+            monster_id,
+            catalog_row,
+            source_row_count,
+            current_user_decision,
+            runtime_evidence,
+        )
+        if (
+            not isinstance(reason_code, str)
+            or reason_code == ""
+            or type(human_frozen) is not bool
+            or not evidence
+        ):
+            raise DirectBaselineError(
+                f"semantic evidence incomplete: monster={monster_id}"
+            )
         semantic_counts[semantic_status] += 1
         records.append({
             "canonical_monster_id": monster_id,
             "canonical_monster_name": str(catalog_row.get("canonical_name", "")),
             "runtime_allowed": runtime_allowed,
             "semantic_status": semantic_status,
+            "drop_semantic_state": semantic_status,
             "slot_policy": slot_policy,
             "drop_profile_id": profile_id,
-            "source_row_count": source_rows_by_id[monster_id],
+            "source_row_count": source_row_count,
             "decision_basis": decision_basis,
+            "reason_code": reason_code,
+            "evidence": evidence,
+            "human_frozen": human_frozen,
             "exemption": exemption,
         })
 
-        if semantic_status == "RUNTIME_DISABLED" and source_rows_by_id[monster_id] != 0:
+        if semantic_status == "RUNTIME_DISABLED" and source_row_count != 0:
             raise DirectBaselineError(
                 f"runtime-disabled monster has source rows: {monster_id}"
             )

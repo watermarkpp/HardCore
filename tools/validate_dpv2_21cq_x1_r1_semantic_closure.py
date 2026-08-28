@@ -58,6 +58,7 @@ EXPECTED_DIRECT_OVERRIDES = {
     233: 96,
     234: 82,
 }
+EXPECTED_DIRECT_FROZEN_IDS = frozenset(EXPECTED_DIRECT_OVERRIDES)
 EXPECTED_RESTORED_SLOT_COUNT = sum(EXPECTED_DIRECT_OVERRIDES.values())
 EXPECTED_EXPLICIT_ROWS = {145: 74, 146: 78, 147: 71}
 EXPECTED_ACCOUNTING = {
@@ -284,6 +285,35 @@ def _expected_semantic_status(monster_id: int, runtime_allowed: bool) -> str:
     return "DIRECT_21CQ"
 
 
+def _expected_reason_and_freeze(
+    monster_id: int,
+    semantic_status: str,
+) -> tuple[str, bool]:
+    if semantic_status == "RUNTIME_DISABLED":
+        return "RUNTIME_DISABLED", True
+    if semantic_status == "PROJECT_EXTENSION":
+        return "PROJECT_EXTENSION", True
+    if semantic_status == "EXPLICIT_NON_LOOT":
+        if monster_id in {145, 146, 147}:
+            return "SUMMON_OR_EVENT_COMBAT_ENTITY", True
+        if monster_id in {59, 78, 161}:
+            return "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE", True
+        if monster_id in {186, 187}:
+            return "TAMEABLE_CURRENT_EXEMPTION", True
+        if monster_id == 194:
+            return "GUARD_SCRIPT_CURRENT_EXEMPTION", True
+        raise SemanticClosureValidationError(
+            f"unknown explicit non-loot identity: {monster_id}"
+        )
+    if semantic_status == "DIRECT_21CQ":
+        if monster_id in EXPECTED_DIRECT_FROZEN_IDS:
+            return "HUMAN_FROZEN_DIRECT_21CQ", True
+        return "DIRECT_CATALOG_SOURCE_EXACT", False
+    raise SemanticClosureValidationError(
+        f"unknown semantic status: {semantic_status}"
+    )
+
+
 def validate_authority(
     authority: dict[str, Any] | None = None,
     *,
@@ -306,7 +336,17 @@ def validate_authority(
     _require(authority.get("status") == "SEMANTIC_AUTHORITY_COMPLETE", "semantic authority status mismatch")
     _require(authority.get("production_active") is True, "semantic authority activation drift")
     semantic_text = json.dumps(authority, ensure_ascii=False)
-    for forbidden in ("tier", "role", "factor"):
+    for forbidden in (
+        "tier",
+        "role",
+        "factor",
+        "a0.7",
+        "a07",
+        "a0_7",
+        "legacy_role",
+        "drop_role",
+        "role_factor",
+    ):
         _require(forbidden not in semantic_text.lower(), f"semantic authority contains forbidden {forbidden}")
     source_binding = authority.get("source")
     _require(isinstance(source_binding, dict), "semantic authority source binding missing")
@@ -332,12 +372,62 @@ def validate_authority(
         _require(raw.get("runtime_allowed") is catalog_row.get("runtime_allowed"), f"semantic runtime_allowed drift: {monster_id}")
         expected_status = _expected_semantic_status(monster_id, bool(catalog_row["runtime_allowed"]))
         _require(raw.get("semantic_status") == expected_status, f"semantic status drift: {monster_id}")
+        _require(raw.get("drop_semantic_state") == expected_status, f"semantic state drift: {monster_id}")
+        expected_reason, expected_human_frozen = _expected_reason_and_freeze(
+            monster_id,
+            expected_status,
+        )
+        _require(
+            isinstance(raw.get("reason_code"), str)
+            and bool(raw.get("reason_code")),
+            f"semantic reason missing: {monster_id}",
+        )
+        _require(raw.get("reason_code") == expected_reason, f"semantic reason drift: {monster_id}")
+        _require(type(raw.get("human_frozen")) is bool, f"semantic human_frozen type drift: {monster_id}")
+        _require(raw.get("human_frozen") is expected_human_frozen, f"semantic human_frozen drift: {monster_id}")
         _require(int(raw.get("source_row_count", -1)) == len(source_by_id[str(monster_id)].get("rows", [])), f"semantic source row count drift: {monster_id}")
+        evidence = raw.get("evidence")
+        _require(isinstance(evidence, dict) and bool(evidence), f"semantic evidence missing: {monster_id}")
+        catalog_path = "assets/data/runtime/canonical_monster_catalog.json"
+        source_path = "assets/data/canonical_monster_drop_source_v2.json"
+        catalog_selector = f"entries[monster_id={monster_id}]"
+        source_selector = f"records[stable_monster_id={monster_id}]"
+        expected_classification_path = f"{catalog_path}#{catalog_selector}.classification"
+        expected_source_row_path = f"{source_path}#{source_selector}.rows"
+        _require(
+            isinstance(evidence.get("current_user_decision"), str)
+            and bool(evidence.get("current_user_decision")),
+            f"semantic current decision evidence missing: {monster_id}",
+        )
+        _require(evidence.get("catalog_path") == catalog_path, f"semantic catalog evidence drift: {monster_id}")
+        _require(evidence.get("classification_path") == expected_classification_path, f"semantic classification evidence drift: {monster_id}")
+        _require(evidence.get("classification") == catalog_row.get("classification"), f"semantic classification value drift: {monster_id}")
+        _require(evidence.get("source_row_path") == expected_source_row_path, f"semantic source evidence drift: {monster_id}")
+        source_evidence = evidence.get("source_row")
+        _require(isinstance(source_evidence, dict), f"semantic source row evidence missing: {monster_id}")
+        _require(source_evidence.get("path") == source_path, f"semantic source path drift: {monster_id}")
+        _require(source_evidence.get("selector") == source_selector, f"semantic source selector drift: {monster_id}")
+        _require(source_evidence.get("count") == raw.get("source_row_count"), f"semantic source evidence count drift: {monster_id}")
+        catalog_evidence = evidence.get("catalog")
+        _require(isinstance(catalog_evidence, dict), f"semantic catalog evidence missing: {monster_id}")
+        _require(catalog_evidence.get("path") == catalog_path, f"semantic catalog path evidence drift: {monster_id}")
+        _require(catalog_evidence.get("selector") == catalog_selector, f"semantic catalog selector drift: {monster_id}")
+        _require(catalog_evidence.get("runtime_allowed") is catalog_row["runtime_allowed"], f"semantic catalog runtime evidence drift: {monster_id}")
+        if expected_status == "RUNTIME_DISABLED":
+            runtime_evidence = evidence.get("runtime_evidence")
+            _require(isinstance(runtime_evidence, dict), f"runtime-disabled evidence missing: {monster_id}")
+            _require(runtime_evidence.get("runtime_allowed") is False, f"runtime-disabled evidence enabled: {monster_id}")
+            for key in ("script_path", "effect_path", "runtime_path"):
+                _require(isinstance(runtime_evidence.get(key), str) and bool(runtime_evidence.get(key)), f"runtime-disabled evidence {key} missing: {monster_id}")
+        else:
+            if expected_status in {"DIRECT_21CQ", "PROJECT_EXTENSION"}:
+                _require("runtime_evidence" not in evidence, f"unexpected runtime evidence: {monster_id}")
         semantic_by_id[monster_id] = raw
         if expected_status == "EXPLICIT_NON_LOOT":
             exemption = raw.get("exemption")
             _require(isinstance(exemption, dict) and exemption.get("required") is True, f"missing explicit exemption: {monster_id}")
             _require(exemption.get("kind") == "EXPLICIT_NON_LOOT", f"explicit exemption kind drift: {monster_id}")
+            _require(exemption.get("reason_code") == expected_reason, f"explicit exemption reason drift: {monster_id}")
         else:
             _require(raw.get("exemption") is None, f"unexpected semantic exemption: {monster_id}")
     _require(set(semantic_by_id) == set(catalog_by_id), "semantic/catalog ID set drift")

@@ -94,6 +94,64 @@ class SemanticClosureTests(unittest.TestCase):
             )
         )
 
+    def test_semantic_rows_have_formal_state_reason_evidence_and_freeze_flag(self) -> None:
+        records = {
+            int(row["canonical_monster_id"]): row
+            for row in self.authority["records"]
+        }
+        expected_reasons = {
+            145: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+            146: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+            147: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+            59: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+            78: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+            161: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+            186: "TAMEABLE_CURRENT_EXEMPTION",
+            187: "TAMEABLE_CURRENT_EXEMPTION",
+            194: "GUARD_SCRIPT_CURRENT_EXEMPTION",
+            225: "PROJECT_EXTENSION",
+            33: "RUNTIME_DISABLED",
+            183: "RUNTIME_DISABLED",
+            241: "RUNTIME_DISABLED",
+        }
+        for monster_id, row in records.items():
+            self.assertEqual(row["drop_semantic_state"], row["semantic_status"])
+            self.assertIsInstance(row["reason_code"], str)
+            self.assertTrue(row["reason_code"])
+            self.assertIsInstance(row["evidence"], dict)
+            self.assertTrue(row["evidence"])
+            self.assertIs(type(row["human_frozen"]), bool)
+            self.assertEqual(
+                row["evidence"]["source_row"]["count"],
+                row["source_row_count"],
+            )
+            self.assertIn("classification_path", row["evidence"])
+        for monster_id, reason in expected_reasons.items():
+            self.assertEqual(records[monster_id]["reason_code"], reason)
+            self.assertTrue(records[monster_id]["human_frozen"])
+        self.assertTrue(
+            all(
+                row["human_frozen"] is True
+                for monster_id, row in records.items()
+                if monster_id in {79, 81, 83, 85, 87, 226, 227, 228, 229, 230, 231, 232, 233, 234}
+            )
+        )
+        self.assertTrue(
+            all(
+                row["human_frozen"] is False
+                and row["reason_code"] == "DIRECT_CATALOG_SOURCE_EXACT"
+                for monster_id, row in records.items()
+                if row["semantic_status"] == "DIRECT_21CQ"
+                and monster_id not in {79, 81, 83, 85, 87, 226, 227, 228, 229, 230, 231, 232, 233, 234}
+            )
+        )
+        for monster_id in (33, 183, 241):
+            runtime_evidence = records[monster_id]["evidence"]["runtime_evidence"]
+            self.assertIs(runtime_evidence["runtime_allowed"], False)
+            self.assertTrue(runtime_evidence["script_path"])
+            self.assertTrue(runtime_evidence["effect_path"])
+            self.assertTrue(runtime_evidence["runtime_path"])
+
     def test_semantic_authority_has_no_legacy_probability_axes(self) -> None:
         text = json.dumps(self.authority, ensure_ascii=False).lower()
         for forbidden in ("tier", "role", "factor"):
