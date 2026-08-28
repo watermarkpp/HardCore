@@ -1,0 +1,104 @@
+{
+  "base_color": "#17121c",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/ff0f4fffdb1ffa6bfc7296c33aeb494ed2b65fd784cf1cee29c0b8f0ee50d067.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "ff0f4fffdb1ffa6bfc7296c33aeb494ed2b65fd784cf1cee29c0b8f0ee50d067"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/78bd28a49e48aaea5ab3b687e8bef1f6232eb691f6a0d2811fc74fbd29115300.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "78bd28a49e48aaea5ab3b687e8bef1f6232eb691f6a0d2811fc74fbd29115300"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/9eada32e75ce976ba7d2f15180eeed45eff14a0c4ca52c6258b206da694a6167.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "9eada32e75ce976ba7d2f15180eeed45eff14a0c4ca52c6258b206da694a6167"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/a17f3c349d05c350919ef4e41b3fbfad2f73d9db1c7bbcc899cd3569cd60f124.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "a17f3c349d05c350919ef4e41b3fbfad2f73d9db1c7bbcc899cd3569cd60f124"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/e69fdceb88347792ce3c21d457ab93383b34761ccae52ee722a066cc0e3323ac.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "e69fdceb88347792ce3c21d457ab93383b34761ccae52ee722a066cc0e3323ac"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/80cfa3166f117e26ed923bf6725a15c7a9028a797fb81736d9e23aa960119b8e.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "80cfa3166f117e26ed923bf6725a15c7a9028a797fb81736d9e23aa960119b8e"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 6,
+    "required_chunk_count": 6,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    32,
+    64
+  ],
+  "ground_pixel_center": [
+    1536.0,
+    768.0
+  ],
+  "ground_pixel_size": [
+    3072,
+    1536
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "chiyue_demon_altar",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 916006,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "9d10f0bff56e6ba3336094281a67ad82a4829bdf391380960e23f00f33ec53ac",
+  "source_ground_manifest_sha256": "6855c43f87802a8fcdb9ee194db0f9bb2dc28f3d34b2e332cb4ba9b170e23343",
+  "source_ground_state_sha256": "0d421689a1040578e7a578a4c074657ecb26c5cee5b71fbd4c270aaa840b9f8e",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

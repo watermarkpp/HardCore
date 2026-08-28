@@ -5,28 +5,20 @@ const CollisionGeometry := preload(
 )
 const WorldBackgroundScript := preload("res://scripts/world_background.gd")
 
-const PUBLISHED_RUNTIME_MAPS := {
-	4: "bich_province",
-	217: "orc_tomb_1",
-	218: "orc_tomb_2",
-	221: "orc_tomb_3",
-	268: "wooma_forest",
-	313: "wooma_temple_1",
-	314: "wooma_temple_2",
-	315: "wooma_temple_3",
-	406: "bich_mine_1",
-	408: "bich_mine_2",
-	1578: "corpse_king_hall",
-}
+const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
+const RELEASE_REGISTRY_PATH := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
+const VISUAL_CONTRACT_ID := "mse.map.runtime.visual.v1"
+const FORMAL_GROUND_CHUNK_ROOT := "assets/data/runtime/map_editor/formal_ground_chunks/sha256/"
 
 
 func _ready() -> void:
+	var published_runtime_maps := _published_runtime_maps()
 	var total_blocked := 0
 	var total_manual := 0
 	var total_erased := 0
 	var covered_maps := 0
-	for runtime_map_id: int in PUBLISHED_RUNTIME_MAPS:
-		var map_key := str(PUBLISHED_RUNTIME_MAPS[runtime_map_id])
+	for runtime_map_id: int in published_runtime_maps:
+		var map_key := str(published_runtime_maps[runtime_map_id])
 		var loaded := MapEditorRuntimeMapService.load_runtime(
 			"res://assets/data/runtime/map_editor/%s.runtime.json" % map_key
 		)
@@ -112,7 +104,7 @@ func _ready() -> void:
 		total_manual += (runtime_collision.manual_shapes as Array).size()
 		total_erased += (runtime_collision.erased_cells as Array).size()
 		covered_maps += 1
-	assert(covered_maps == PUBLISHED_RUNTIME_MAPS.size())
+	assert(covered_maps == published_runtime_maps.size())
 	assert(total_blocked > 0)
 	assert(total_erased > 0)
 	_assert_manual_provenance_is_not_a_second_physics_source()
@@ -149,6 +141,27 @@ func _assert_ground_origin(
 	assert(parsed is Dictionary, "%s visual invalid" % map_key)
 	var visual: Dictionary = parsed
 	assert(int(visual.get("runtime_map_id", -1)) == runtime_map_id, map_key)
+	assert(str(visual.get("visual_contract_id", "")) == VISUAL_CONTRACT_ID, "%s visual contract missing" % map_key)
+	assert(str(visual.get("source_authority", "")) == "user_authored_baked_ground", "%s visual authority missing" % map_key)
+	assert(bool(visual.get("coverage", {}).get("complete", false)), "%s visual coverage incomplete" % map_key)
+	var coverage: Dictionary = visual.get("coverage", {})
+	var visual_chunks: Variant = visual.get("chunks", [])
+	assert(visual_chunks is Array and not (visual_chunks as Array).is_empty(), "%s visual chunks missing" % map_key)
+	assert(int(coverage.get("required_chunk_count", -1)) == (visual_chunks as Array).size(), "%s visual coverage count mismatch" % map_key)
+	var chunk_store: Dictionary = visual.get("chunk_store", {})
+	assert(str(chunk_store.get("contract_id", "")) == "mse.map.runtime.ground_chunk_store.sha256.v1", "%s visual chunk store contract missing" % map_key)
+	assert(str(chunk_store.get("root", "")) == FORMAL_GROUND_CHUNK_ROOT.trim_suffix("/"), "%s visual chunk store root mismatch" % map_key)
+	var seen_hashes := {}
+	for chunk: Dictionary in visual_chunks:
+		var image_path := str(chunk.get("image", ""))
+		var chunk_sha := str(chunk.get("sha256", ""))
+		assert(image_path.begins_with(FORMAL_GROUND_CHUNK_ROOT), "%s visual points outside formal chunk store" % map_key)
+		assert(not image_path.contains("map_editor_workspace"), "%s visual leaks workspace path" % map_key)
+		assert(chunk_sha.length() == 64, "%s visual chunk hash missing" % map_key)
+		assert(FileAccess.file_exists("res://" + image_path), "%s formal visual chunk missing %s" % [map_key, image_path])
+		assert(FileAccess.get_sha256("res://" + image_path) == chunk_sha, "%s formal visual chunk hash mismatch %s" % [map_key, image_path])
+		seen_hashes[chunk_sha] = image_path
+	assert(not seen_hashes.is_empty(), "%s visual chunk hash coverage missing" % map_key)
 	var raw_center: Array = visual.get("ground_pixel_center", [])
 	assert(raw_center.size() == 2, "%s ground center missing" % map_key)
 	var ground_center := Vector2(float(raw_center[0]), float(raw_center[1]))
@@ -177,9 +190,18 @@ func _assert_ground_origin(
 			ground_cell_center.is_equal_approx(world_cell_center),
 			"%s ground/world origin mismatch at %s" % [map_key, cell]
 		)
-	var visible_top_world := Vector2(ground_center.x, 0.0) - ground_center
+	# A rectangular logical map is not necessarily square. Its top and bottom
+	# canvas vertices therefore have x=(height/2) and x=(width/2), respectively;
+	# using the canvas midpoint for both silently rejects non-square authored maps.
+	var visible_top_world := (
+		MapEditorCoordinate.tile_to_ground_px(
+			Vector2(-0.5, -0.5), design_size
+		) - ground_center
+	)
 	var visible_bottom_world := (
-		Vector2(ground_center.x, ground_pixel_size.y) - ground_center
+		MapEditorCoordinate.tile_to_ground_px(
+			Vector2(design_size) - Vector2(0.5, 0.5), design_size
+		) - ground_center
 	)
 	assert(
 		visible_top_world.is_equal_approx(MapEditorCoordinate.ground_position_gu_to_screen_position_px(
@@ -358,7 +380,7 @@ func _assert_future_build_contract() -> void:
 	)
 	var walkability := MapEditorCollisionService.build_walkability(document)
 	var compiled := MapEditorBuildRuntimeService._compile(
-		document, walkability
+		document, walkability, {}
 	)
 	assert(
 		compiled.collision.coordinate_contract_id
@@ -372,17 +394,30 @@ func _assert_future_build_contract() -> void:
 
 func _assert_bich_runtime_physics() -> void:
 	var loaded := MapEditorRuntimeMapService.load_runtime(
-		"res://assets/data/runtime/map_editor/bich_province.runtime.json"
+		"res://assets/data/runtime/map_editor/world_bich_province.runtime.json"
 	)
 	assert(loaded.ok, str(loaded.get("errors", [])))
 	var runtime: Dictionary = loaded.runtime
 	var raw_size: Array = runtime.design.design_size
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var background := WorldBackgroundScript.new()
-	background.zone_data = {"mapId": 4}
+	background.zone_data = {"mapId": 910001}
 	add_child(background)
 	await get_tree().physics_frame
 	await get_tree().process_frame
+	assert(
+		background.editor_runtime_chunk_texture_count() == 13,
+		"910001 must consume the 13 authored Bich visual chunks"
+	)
+	assert(
+		not background.uses_editor_runtime_fallback_ground(),
+		"910001 must not fall back to full_ground"
+	)
+	assert(
+		str(background._editor_runtime_visual.get("map_id", ""))
+		== "world_bich_province",
+		"910001 visual identity must be world_bich_province"
+	)
 	var expected_shapes := (
 		CollisionGeometry.blocked_cell_runs(runtime.collision).size() + 4
 	)
@@ -447,6 +482,30 @@ func _assert_bich_runtime_physics() -> void:
 	assert(erased_checked == 12, "Bich erased collision coverage missing")
 	background.queue_free()
 	await get_tree().process_frame
+
+
+func _published_runtime_maps() -> Dictionary:
+	var identity_file := FileAccess.open(IDENTITY_PATH, FileAccess.READ)
+	assert(identity_file != null, "formal identity registry missing")
+	var identity: Variant = JSON.parse_string(identity_file.get_as_text())
+	identity_file.close()
+	assert(identity is Dictionary, "formal identity registry invalid")
+	var registry_file := FileAccess.open(RELEASE_REGISTRY_PATH, FileAccess.READ)
+	assert(registry_file != null, "formal release registry missing")
+	var registry: Variant = JSON.parse_string(registry_file.get_as_text())
+	registry_file.close()
+	assert(registry is Dictionary, "formal release registry invalid")
+	var identity_ids := {}
+	for entry: Dictionary in (identity as Dictionary).get("maps", []):
+		identity_ids[int(entry.get("runtime_map_id", -1))] = str(entry.get("map_id", ""))
+	var result := {}
+	for entry: Dictionary in (registry as Dictionary).get("maps", []):
+		var runtime_map_id := int(entry.get("runtime_map_id", -1))
+		var map_key := str(entry.get("map_key", ""))
+		assert(identity_ids.get(runtime_map_id, "") == map_key, "release registry identity mismatch %d" % runtime_map_id)
+		result[runtime_map_id] = map_key
+	assert(result.size() == 67, "formal release coverage must include all 67 maps")
+	return result
 
 
 func _physics_hits(world_position: Vector2) -> Array[Dictionary]:

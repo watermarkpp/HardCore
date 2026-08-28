@@ -1,0 +1,115 @@
+{
+  "base_color": "#16120e",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/e892fa537b01adeccf7395fe51df017eeb2796144a04ea2252c5f833758afdb5.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "e892fa537b01adeccf7395fe51df017eeb2796144a04ea2252c5f833758afdb5"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/e2879e4445159558a2c794db98a11a04ea7ed5d71313ff9c1762f982422a67b0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "e2879e4445159558a2c794db98a11a04ea7ed5d71313ff9c1762f982422a67b0"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/ce56566112e29981f8c8b67a8d5ed0b7365d1a5e82213de04b37b1bb594ae134.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "ce56566112e29981f8c8b67a8d5ed0b7365d1a5e82213de04b37b1bb594ae134"
+    },
+    {
+      "chunk_id": "c_3_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/2a58fc11b3ebba9206043e5089dde84662b45c9e596a18fdbdc44cb346d1153a.png",
+      "rect_px": [
+        3072.0,
+        0.0,
+        128.0,
+        1024.0
+      ],
+      "sha256": "2a58fc11b3ebba9206043e5089dde84662b45c9e596a18fdbdc44cb346d1153a"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/1c24122d62f182a82a0189d1e5528e6b992d2ba2fcc159fa9ce2bd900891ae2b.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        576.0
+      ],
+      "sha256": "1c24122d62f182a82a0189d1e5528e6b992d2ba2fcc159fa9ce2bd900891ae2b"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/e5dd30ff66421241bfb13bfe3463a0969d1c61e7143b2f4fbd7e44657e9c7574.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        576.0
+      ],
+      "sha256": "e5dd30ff66421241bfb13bfe3463a0969d1c61e7143b2f4fbd7e44657e9c7574"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/6e0e0d6062fbe42c36a7e946249cbcda8f2550cc8ebff8ff1b152afa06b56b8b.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        576.0
+      ],
+      "sha256": "6e0e0d6062fbe42c36a7e946249cbcda8f2550cc8ebff8ff1b152afa06b56b8b"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 7,
+    "required_chunk_count": 7,
+    "source_chunk_count": 8
+  },
+  "design_size": [
+    50,
+    50
+  ],
+  "ground_pixel_center": [
+    1600.0,
+    800.0
+  ],
+  "ground_pixel_size": [
+    3200,
+    1600
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "mengzhong_stone_tomb_f2",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 913002,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "29c8212dfafa2be3e9bfb7ec3024275ad6c0b0124a1ea6d43ac39ee3ad150a39",
+  "source_ground_manifest_sha256": "86a4e7f5253558cc388aca3205f6477d1af8316b48ead27f710721e558e1d8ab",
+  "source_ground_state_sha256": "7526224d617f50023b510fe178b9571feae2564f3683f9b11ffb129667d9663b",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

@@ -1,0 +1,115 @@
+{
+  "base_color": "#16120e",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/594e43b9b805315b933cde898f8db53b428f7e3c525784077fefec1a635c3c71.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "594e43b9b805315b933cde898f8db53b428f7e3c525784077fefec1a635c3c71"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/66a149159a10cc38727ce5687c5f3d6b9c993395fe16347333ef91adae0b7809.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "66a149159a10cc38727ce5687c5f3d6b9c993395fe16347333ef91adae0b7809"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/53fcd5d4c0c316a70aa9f601907cda562629cf7e6bfe7255bd66e251195451c5.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "53fcd5d4c0c316a70aa9f601907cda562629cf7e6bfe7255bd66e251195451c5"
+    },
+    {
+      "chunk_id": "c_3_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/20cf612dadc91e30053b3f97c7d89f9311bab14a0c2098e06ed11781fcfa0881.png",
+      "rect_px": [
+        3072.0,
+        0.0,
+        128.0,
+        1024.0
+      ],
+      "sha256": "20cf612dadc91e30053b3f97c7d89f9311bab14a0c2098e06ed11781fcfa0881"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/9c39b963cc4d0c364631aa4853e906acc1d3d4d958cdc6169e0ea35c7f1c0ba1.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        576.0
+      ],
+      "sha256": "9c39b963cc4d0c364631aa4853e906acc1d3d4d958cdc6169e0ea35c7f1c0ba1"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/087254c0f27d9f776ac3237203a1c7f4763d09478d3e589555b858805d4e00d5.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        576.0
+      ],
+      "sha256": "087254c0f27d9f776ac3237203a1c7f4763d09478d3e589555b858805d4e00d5"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/2ad485333fc5631dcfa85b02d5835df33e6a01373321690e0d79d198a529c825.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        576.0
+      ],
+      "sha256": "2ad485333fc5631dcfa85b02d5835df33e6a01373321690e0d79d198a529c825"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 7,
+    "required_chunk_count": 7,
+    "source_chunk_count": 8
+  },
+  "design_size": [
+    50,
+    50
+  ],
+  "ground_pixel_center": [
+    1600.0,
+    800.0
+  ],
+  "ground_pixel_size": [
+    3200,
+    1600
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "mengzhong_zuma_temple_f2",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 913102,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "29df59c8819ddad91cc7ce1eeea1d3a961b3e09a708e51503f971718e6599b75",
+  "source_ground_manifest_sha256": "5b635a7eb25e31928266f5bfa860800b7489ae062cfe64e9a2c48e0b16bd60b8",
+  "source_ground_state_sha256": "8994af6d648ead68352240456971eb26a30261cd287c55bebcfbbeef5a301cdc",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

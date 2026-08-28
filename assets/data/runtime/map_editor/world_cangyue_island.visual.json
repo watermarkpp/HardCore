@@ -1,0 +1,104 @@
+{
+  "base_color": "#182018",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/8d79b673310494ac51b85412dcc3100b22bf15bbb580c2cd2d567c0a8f184083.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "8d79b673310494ac51b85412dcc3100b22bf15bbb580c2cd2d567c0a8f184083"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/874667fb14b469245e46e45303a4af8e69d9ec35b7b22ea100b4fb4616111905.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "874667fb14b469245e46e45303a4af8e69d9ec35b7b22ea100b4fb4616111905"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/45b5343c295b6b6b0fac78159809ecd70997d396bb5f9a02e41da34dbbf6a6c2.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "45b5343c295b6b6b0fac78159809ecd70997d396bb5f9a02e41da34dbbf6a6c2"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/6f62b8af149c0b456432cab2eb5f0979a63e4fb72d3f68afb0584ee4e8c42e45.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "6f62b8af149c0b456432cab2eb5f0979a63e4fb72d3f68afb0584ee4e8c42e45"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/ac44057b44991ab3c3cb7a4edd72d2cdf277af59438e0b58b13e75e1efb44837.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "ac44057b44991ab3c3cb7a4edd72d2cdf277af59438e0b58b13e75e1efb44837"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/5dda9919fae87492f3e1ecef701964f02507da65f9fedf48ab9d3c9c336203d1.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "5dda9919fae87492f3e1ecef701964f02507da65f9fedf48ab9d3c9c336203d1"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 6,
+    "required_chunk_count": 6,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    48,
+    48
+  ],
+  "ground_pixel_center": [
+    1536.0,
+    768.0
+  ],
+  "ground_pixel_size": [
+    3072,
+    1536
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "world_cangyue_island",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 910007,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "74d67384453f9ecc07d43e0a97e383fe6c34f76f3082144e43f75b8ecb6852f5",
+  "source_ground_manifest_sha256": "0627a88ca63b3dbe27698808d866af676e17e44b1c69e2dcd44185dbe2cf48fb",
+  "source_ground_state_sha256": "222b425f38bb32ee14e379dc71698c1af24fd2be6e2551487c1cafd49485074e",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

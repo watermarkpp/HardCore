@@ -1,0 +1,104 @@
+{
+  "base_color": "#16120e",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/5df712948e3e0145ca4a7ca186e8e687544331c81d5707838b6a239f532a5f7d.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "5df712948e3e0145ca4a7ca186e8e687544331c81d5707838b6a239f532a5f7d"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/e0f2d14025da302c9a154ff5e25811bfd09452fdef6448ec3e52b6af62d99060.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "e0f2d14025da302c9a154ff5e25811bfd09452fdef6448ec3e52b6af62d99060"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/8960858bc3a9f5b9cc8d61569036441f61511a9ae856d32bee9ba6d01ff1dda8.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "8960858bc3a9f5b9cc8d61569036441f61511a9ae856d32bee9ba6d01ff1dda8"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/f79217c56b2183c6e10b9f06dcb82d1498057489ec7e20d0f5677716e16ae819.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "f79217c56b2183c6e10b9f06dcb82d1498057489ec7e20d0f5677716e16ae819"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/b722888128bcd889f6a842169f7f82a44dd13abb0e56e6ba08f262bf2694a233.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "b722888128bcd889f6a842169f7f82a44dd13abb0e56e6ba08f262bf2694a233"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/6b1fdcb66afb1a27419a5d5f231762142a70fbe24b07a325b24efe4a909a8d78.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "6b1fdcb66afb1a27419a5d5f231762142a70fbe24b07a325b24efe4a909a8d78"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 6,
+    "required_chunk_count": 6,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    32,
+    64
+  ],
+  "ground_pixel_center": [
+    1536.0,
+    768.0
+  ],
+  "ground_pixel_size": [
+    3072,
+    1536
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "mengzhong_terror_space",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 913205,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "2625ce669d045bb7a30b85787efa5902d2056d451251c145d352d6167c0b3a95",
+  "source_ground_manifest_sha256": "83e2897922750a4eff8f4f427ac7d8da7937b480f39f4a887d582063a9393ff5",
+  "source_ground_state_sha256": "5e8d0f60369f78d8e719419479624fc0b068f2aeaae480982ac1a9e580fa0f9c",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

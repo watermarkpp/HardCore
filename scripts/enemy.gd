@@ -235,8 +235,12 @@ var _movement_step_active := false
 var _movement_step_start_ground_gu := Vector2.INF
 var _movement_step_start_screen_px := Vector2.INF
 var _movement_step_target_ground_gu := Vector2.INF
+var _movement_step_distance_gu := 0.0
 var _movement_step_neighbor := Vector2i.ZERO
 var _movement_step_engagement_target_instance_id := 0
+## Retain the existing caller scale as part of the step state for diagnostics
+## and call-site compatibility.  The canonical walk interval owns the visual
+## duration; autonomous movement must not introduce a second actor multiplier.
 var _movement_step_speed_scale := 1.0
 var _movement_step_reason: StringName = &""
 
@@ -515,6 +519,7 @@ func _request_autonomous_step(
 	_movement_step_start_ground_gu = current_ground_gu
 	_movement_step_start_screen_px = global_position
 	_movement_step_target_ground_gu = target_ground_gu
+	_movement_step_distance_gu = current_ground_gu.distance_to(target_ground_gu)
 	_movement_step_neighbor = neighbor
 	_movement_step_speed_scale = maxf(0.0, speed_scale)
 	_movement_step_reason = reason
@@ -537,6 +542,7 @@ func _clear_autonomous_step_state() -> void:
 	_movement_step_start_ground_gu = Vector2.INF
 	_movement_step_start_screen_px = Vector2.INF
 	_movement_step_target_ground_gu = Vector2.INF
+	_movement_step_distance_gu = 0.0
 	_movement_step_neighbor = Vector2i.ZERO
 	_movement_step_engagement_target_instance_id = 0
 	_movement_step_speed_scale = 1.0
@@ -639,9 +645,23 @@ func _advance_autonomous_step(delta: float) -> void:
 		velocity = Vector2.ZERO
 		_clear_autonomous_step_state()
 		return
-	var base_speed := move_speed_gu_per_sec * _movement_step_speed_scale
-	var is_diagonal := _movement_step_neighbor.x != 0 and _movement_step_neighbor.y != 0
-	var presentation_speed := base_speed * (sqrt(2.0) if is_diagonal else 1.0)
+	# `walk_interval_ms` is the canonical interval between adjacent logical
+	# movement grants.  The old path used move_speed_gu_per_sec here, so a
+	# one-neighbor step arrived early and left the actor standing until the next
+	# grant.  Use the fixed distance captured at grant time and spread it across
+	# exactly that legal interval; this keeps logical cadence authoritative while
+	# making the visual step continuously bridge adjacent grants.
+	var walk_interval_ms := (
+		int(_movement_cadence.walk_interval_ms)
+		if _movement_cadence != null and _movement_cadence.configured
+		else 0
+	)
+	var interval_seconds := float(walk_interval_ms) / 1000.0
+	var presentation_speed := (
+		(_movement_step_distance_gu / interval_seconds) * _movement_step_speed_scale
+		if interval_seconds > 0.0 and _movement_step_speed_scale > 0.0
+		else 0.0
+	)
 	if presentation_speed <= 0.0:
 		_cancel_autonomous_step(true)
 		return

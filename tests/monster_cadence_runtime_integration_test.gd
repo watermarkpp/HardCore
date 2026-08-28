@@ -27,6 +27,8 @@ func _run() -> void:
 	await _test_target_moves_mid_step()
 	await _await_axis_step_reaches_exact_target()
 	await _await_diagonal_step_reaches_exact_target()
+	await _test_multi_step_visual_continuity()
+	await _test_scaled_step_keeps_continuous_motion()
 	await _test_next_event_waits_for_cadence_interval()
 	await _test_stationary_and_compatibility_runtime()
 	await _test_quantized_facing_matches_neighbor()
@@ -308,7 +310,144 @@ func _await_diagonal_step_reaches_exact_target() -> void:
 
 
 # ---------------------------------------------------------------------------
-# Test 6: Next movement event must wait for cadence interval
+# Test 6: Every logical step owns the full canonical interval.  Three grants
+#         must form a continuous multi-step path without the old early-arrival
+#         idle gap, while the cadence timestamps remain the step-start clock.
+# ---------------------------------------------------------------------------
+
+func _test_multi_step_visual_continuity() -> void:
+	var enemy := await _make_enemy(18)
+	# This test advances the step explicitly.  Disable the actor's normal
+	# physics callback after it enters the tree so an awaited physics frame does
+	# not advance the same step a second time.
+	enemy.set_physics_process(false)
+	var cadence = enemy._movement_cadence
+	var interval_ms := int(cadence.walk_interval_ms)
+	var physics_delta := 1.0 / float(Engine.physics_ticks_per_second)
+	var expected_frames := int(ceil(float(interval_ms) / 1000.0 / physics_delta))
+	var next_start_ms := Time.get_ticks_msec() + interval_ms + 1
+	var logical_starts: Array[int] = []
+
+	for step_index in range(3):
+		var started := enemy._request_autonomous_step(
+			Vector2.RIGHT,
+			1.0,
+			false,
+			&"continuity_test",
+			next_start_ms,
+		)
+		assert(started, "multi-step path grant %d must start" % step_index)
+		logical_starts.append(next_start_ms)
+		assert(
+			int(cadence.walk_tick_ms) == next_start_ms,
+			"logical step start must be recorded at the cadence grant timestamp"
+		)
+		var target_ground := enemy._movement_step_target_ground_gu
+		var step_motion_gu := 0.0
+		for frame_index in range(expected_frames):
+			assert(
+				enemy._movement_step_active,
+				"step %d arrived before its canonical interval at frame %d/%d"
+				% [step_index, frame_index, expected_frames]
+				+ " current=%s target=%s distance=%f interval_ms=%d"
+				% [
+					_screen_px_to_ground_gu(enemy.global_position),
+					target_ground,
+					enemy._movement_step_distance_gu,
+					interval_ms,
+				],
+			)
+			var before_ground := _screen_px_to_ground_gu(enemy.global_position)
+			enemy._advance_autonomous_step(physics_delta)
+			var after_ground := _screen_px_to_ground_gu(enemy.global_position)
+			var frame_motion := before_ground.distance_to(after_ground)
+			assert(
+				frame_motion > GroundUnitSpaceScript.EPSILON_GU,
+				"step %d has an intermediate idle frame at %d/%d"
+				% [step_index, frame_index, expected_frames],
+			)
+			step_motion_gu += frame_motion
+			await get_tree().physics_frame
+		assert(not enemy._movement_step_active, "step %d must end at interval" % step_index)
+		assert(
+			_screen_px_to_ground_gu(enemy.global_position).distance_to(target_ground)
+			<= GroundUnitSpaceScript.EPSILON_GU,
+			"step %d must finish at its selected neighbor" % step_index,
+		)
+		assert(step_motion_gu > GroundUnitSpaceScript.EPSILON_GU)
+		next_start_ms += interval_ms + 1
+
+	assert(
+		logical_starts[1] - logical_starts[0] == interval_ms + 1
+		and logical_starts[2] - logical_starts[1] == interval_ms + 1,
+		"adjacent logical step starts must preserve walk_interval_ms: %s"
+		% str(logical_starts),
+	)
+	_checks += 3 + 3 * (expected_frames * 2 + 5)
+
+	enemy.queue_free()
+	await get_tree().physics_frame
+
+
+# ---------------------------------------------------------------------------
+# Test 7: Existing return/overlap speed scales retain their slower semantics
+#         without reintroducing an early-arrival idle gap.
+# ---------------------------------------------------------------------------
+
+func _test_scaled_step_keeps_continuous_motion() -> void:
+	var enemy := await _make_enemy(18)
+	enemy.set_physics_process(false)
+	var cadence = enemy._movement_cadence
+	var interval_ms := int(cadence.walk_interval_ms)
+	var physics_delta := 1.0 / float(Engine.physics_ticks_per_second)
+	var speed_scale := 0.75
+	var expected_duration_seconds := float(interval_ms) / 1000.0 / speed_scale
+	var expected_frames := int(ceil(expected_duration_seconds / physics_delta))
+	var started := enemy._request_autonomous_step(
+		Vector2.RIGHT,
+		speed_scale,
+		false,
+		&"scaled_continuity_test",
+		Time.get_ticks_msec() + interval_ms + 1,
+	)
+	assert(started, "scaled step must start after canonical interval")
+	var target_ground := enemy._movement_step_target_ground_gu
+	var travelled_gu := 0.0
+	for frame_index in range(expected_frames):
+		assert(
+			enemy._movement_step_active,
+			"scaled step arrived before its scaled duration at frame %d/%d"
+			% [frame_index, expected_frames],
+		)
+		var before_ground := _screen_px_to_ground_gu(enemy.global_position)
+		enemy._advance_autonomous_step(physics_delta)
+		var after_ground := _screen_px_to_ground_gu(enemy.global_position)
+		var frame_motion := before_ground.distance_to(after_ground)
+		assert(
+			frame_motion > GroundUnitSpaceScript.EPSILON_GU,
+			"scaled step must move every visual frame, including its final frame",
+		)
+		travelled_gu += frame_motion
+		await get_tree().physics_frame
+	assert(not enemy._movement_step_active, "scaled step must finish")
+	assert(
+		_screen_px_to_ground_gu(enemy.global_position).distance_to(target_ground)
+		<= GroundUnitSpaceScript.EPSILON_GU,
+		"scaled step must finish at its selected neighbor",
+	)
+	assert(
+		travelled_gu > GroundUnitSpaceScript.EPSILON_GU
+		and expected_frames > int(ceil(float(interval_ms) / 1000.0 / physics_delta)),
+		"scale 0.75 must preserve the existing slower step semantics",
+	)
+	_checks += 4 + expected_frames * 2
+
+	enemy.queue_free()
+	await get_tree().physics_frame
+
+
+# ---------------------------------------------------------------------------
+# Test 8: Next movement event must wait for cadence interval
 # ---------------------------------------------------------------------------
 
 func _test_next_event_waits_for_cadence_interval() -> void:

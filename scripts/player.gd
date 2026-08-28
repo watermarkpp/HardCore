@@ -1135,6 +1135,11 @@ func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
 
 
 func restore_health(amount: int) -> void:
+	# Formal death stays at 0 HP until GameRoot completes an explicit revival.
+	# This also blocks delayed potion/ongoing-heal callbacks from reviving a
+	# dead player at the source-map position.
+	if _dead:
+		return
 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
@@ -1326,7 +1331,13 @@ func _draw() -> void:
 
 func _apply_profile_stats() -> void:
 	var old_max := maxi(1, max_hp)
-	var hp_ratio := float(current_hp) / float(old_max) if current_hp > 0 else 1.0
+	# A lethal physical hit applies incoming durability before it marks `_dead`.
+	# That durability transaction emits profile_changed synchronously. Preserve
+	# an already-zero HP value during that transition; treating zero as a full
+	# health ratio would bypass the formal death branch below the hit transaction
+	# and silently revive the player in place.
+	var hp_was_zero := current_hp <= 0
+	var hp_ratio := float(current_hp) / float(old_max) if not hp_was_zero else 1.0
 	var stats: Dictionary = PlayerState.computed_stats
 	max_hp = int(stats.get("max_hp", 120))
 	max_mp = int(stats.get("max_mp", 40))
@@ -1342,7 +1353,7 @@ func _apply_profile_stats() -> void:
 	# state machine; only the respawn completion owns that transition.
 	current_hp = (
 		0
-		if _dead
+		if _dead or hp_was_zero
 		else clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
 	)
 	current_mp = clampi(current_mp, 0, max_mp)

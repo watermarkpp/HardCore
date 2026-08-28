@@ -1,0 +1,126 @@
+{
+  "base_color": "#18252b",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/8f9372c2550dd5cd4f46e91948aff12740399a28e803d3bf797b0fd117b63cc9.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "8f9372c2550dd5cd4f46e91948aff12740399a28e803d3bf797b0fd117b63cc9"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/52f2a5347eb163c3b3b2ea9fb11d1a94f62d8cbf53f6003155b960417525fb79.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "52f2a5347eb163c3b3b2ea9fb11d1a94f62d8cbf53f6003155b960417525fb79"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/d5f3da9c8bd0dcb1ba836ccf52506160b5254f67906f652b26e8542ca9e35226.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "d5f3da9c8bd0dcb1ba836ccf52506160b5254f67906f652b26e8542ca9e35226"
+    },
+    {
+      "chunk_id": "c_3_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/fed58676ba3d4ede8274ca212aaa83c9a51ba1eefd227e2eb60f6ce6b032a8bd.png",
+      "rect_px": [
+        3072.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "fed58676ba3d4ede8274ca212aaa83c9a51ba1eefd227e2eb60f6ce6b032a8bd"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/4cf327b9fe5d5e050e74599975731f90da1d0a6cb1fdc7ef026658e9eba4eb9a.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "4cf327b9fe5d5e050e74599975731f90da1d0a6cb1fdc7ef026658e9eba4eb9a"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/956893cfaf8bc7a7cd45986c9d24f5d8dfaebb53829eea202e4fca1c5a84e6a7.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "956893cfaf8bc7a7cd45986c9d24f5d8dfaebb53829eea202e4fca1c5a84e6a7"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/a7cceb0533d43ae648973392776606657c6066bd754f04c2be81d1b9b327f11b.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "a7cceb0533d43ae648973392776606657c6066bd754f04c2be81d1b9b327f11b"
+    },
+    {
+      "chunk_id": "c_3_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/6a031cbf420f2a30cd700d4e2d12d8f8ce98924f5751a984297f81362aca6252.png",
+      "rect_px": [
+        3072.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "6a031cbf420f2a30cd700d4e2d12d8f8ce98924f5751a984297f81362aca6252"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 8,
+    "required_chunk_count": 8,
+    "source_chunk_count": 8
+  },
+  "design_size": [
+    80,
+    48
+  ],
+  "ground_pixel_center": [
+    2048.0,
+    1024.0
+  ],
+  "ground_pixel_size": [
+    4096,
+    2048
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "cangyue_bull_temple_f2",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 917102,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "46a4ec02d90c9c91e0b2a74ef61c920add6fab51c04223505be1a11481ecf17d",
+  "source_ground_manifest_sha256": "76d2a4e3853d44ff9cba7d99b6295363f5bd2c9f7fb179a86b2ea5fbe0de5ac8",
+  "source_ground_state_sha256": "852b047309a61b2face6b4259cf93b658e7ee76c0580914caf0fcf7d6f1ca418",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

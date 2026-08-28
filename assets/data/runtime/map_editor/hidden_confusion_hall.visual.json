@@ -1,0 +1,60 @@
+{
+  "base_color": "#141116",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/5605e960ea9d1c2d194c232549ecee1942cecb3c1f699d9e99b55ec79afb6b98.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        768.0
+      ],
+      "sha256": "5605e960ea9d1c2d194c232549ecee1942cecb3c1f699d9e99b55ec79afb6b98"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/da522e8c573bf71f3025b580ef657223fedc9271a5faad878edd2106275f3ec5.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        512.0,
+        768.0
+      ],
+      "sha256": "da522e8c573bf71f3025b580ef657223fedc9271a5faad878edd2106275f3ec5"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 2,
+    "required_chunk_count": 2,
+    "source_chunk_count": 2
+  },
+  "design_size": [
+    32,
+    16
+  ],
+  "ground_pixel_center": [
+    768.0,
+    384.0
+  ],
+  "ground_pixel_size": [
+    1536,
+    768
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "hidden_confusion_hall",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 918001,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "1a56a49e6c3d68fbb56eca0cd481f766852a1acb6a849a82d0e583edb8df02ed",
+  "source_ground_manifest_sha256": "4010b0c57479755bd1e89fc10cfd0cb859bc232d94208f1c16dd54add1c0f17f",
+  "source_ground_state_sha256": "58656da4fd83b6b143d5376ed2d3b25d4696d7d8523352ee93238634680ebf68",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

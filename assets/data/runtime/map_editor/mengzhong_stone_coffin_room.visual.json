@@ -1,0 +1,60 @@
+{
+  "base_color": "#16120e",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/1698ad8f52ac97e3fecdae76a2fd9b822d2e94768c6d5ad126e4e662a300c0a1.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "1698ad8f52ac97e3fecdae76a2fd9b822d2e94768c6d5ad126e4e662a300c0a1"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/cbcd8eada63ed366bbe579ff058c2b6e1b4ed10f96688da127562ad97cf0cc50.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "cbcd8eada63ed366bbe579ff058c2b6e1b4ed10f96688da127562ad97cf0cc50"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 2,
+    "required_chunk_count": 2,
+    "source_chunk_count": 2
+  },
+  "design_size": [
+    32,
+    32
+  ],
+  "ground_pixel_center": [
+    1024.0,
+    512.0
+  ],
+  "ground_pixel_size": [
+    2048,
+    1024
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "mengzhong_stone_coffin_room",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 913202,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "18afd7e9e59ac305226fbb05116970240ad79ccd703089488919b15c310ba9eb",
+  "source_ground_manifest_sha256": "9dd9f8f16d7e83cc32947b787350663586f449b74fdc730ceb80cf997eada9fa",
+  "source_ground_state_sha256": "237bd3fc7682f7d32bc51ca50cf1e45435fa19ae8fd17a6e4956f91032a07d3a",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

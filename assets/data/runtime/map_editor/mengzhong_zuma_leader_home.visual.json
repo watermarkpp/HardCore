@@ -1,0 +1,93 @@
+{
+  "base_color": "#16120e",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/0a9f7f0c404c3865a11a90515de600088278b52b3ea74d368f6c4550ce784ed4.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "0a9f7f0c404c3865a11a90515de600088278b52b3ea74d368f6c4550ce784ed4"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/62e316e2d39a2b84a7bcc9976dc6b0b36370ff67eb92fd777bbe7ee7f534a7f8.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "62e316e2d39a2b84a7bcc9976dc6b0b36370ff67eb92fd777bbe7ee7f534a7f8"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/ed5e9c2c53e10d4a45a56a319124eedda0f76cefd914678b06d8fa3d23eb2014.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        512.0,
+        1024.0
+      ],
+      "sha256": "ed5e9c2c53e10d4a45a56a319124eedda0f76cefd914678b06d8fa3d23eb2014"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/a82c5e5c109080c8d4641cf2214c203b13dc710bee180175a89f3f4893f7fb09.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        256.0
+      ],
+      "sha256": "a82c5e5c109080c8d4641cf2214c203b13dc710bee180175a89f3f4893f7fb09"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/28417ec8aec2aa11d869472038e1cd054fe48612fb7ffe03920abeba4563f1c3.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        256.0
+      ],
+      "sha256": "28417ec8aec2aa11d869472038e1cd054fe48612fb7ffe03920abeba4563f1c3"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 5,
+    "required_chunk_count": 5,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    32,
+    48
+  ],
+  "ground_pixel_center": [
+    1280.0,
+    640.0
+  ],
+  "ground_pixel_size": [
+    2560,
+    1280
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "mengzhong_zuma_leader_home",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 913106,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "00ffe6fba99f8ce756530784d854d581e534764773e4ebaa32982a32540b9167",
+  "source_ground_manifest_sha256": "c823f769dfc15ed7b8ec0838f8ba64d7ea5f2ba38374614dce8a4ac6a7b496ae",
+  "source_ground_state_sha256": "87e5ced98d6086bef65f66e4a86ac51cc71ef6b8dd942706fe797bb64e5362b4",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

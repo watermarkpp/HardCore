@@ -1,0 +1,60 @@
+{
+  "base_color": "#17121c",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/4912ba2888c456df91f1f87732b8bad29f819a7a2e59e9d9e7d9ba16f70ecfab.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "4912ba2888c456df91f1f87732b8bad29f819a7a2e59e9d9e7d9ba16f70ecfab"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/77676db033acb55f02d26162d2c686bb4160d68328904d54a14172b917e3fa45.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "77676db033acb55f02d26162d2c686bb4160d68328904d54a14172b917e3fa45"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 2,
+    "required_chunk_count": 2,
+    "source_chunk_count": 2
+  },
+  "design_size": [
+    32,
+    32
+  ],
+  "ground_pixel_center": [
+    1024.0,
+    512.0
+  ],
+  "ground_pixel_size": [
+    2048,
+    1024
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "chiyue_red_moon_lair",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 916007,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "63c3596a05171876d70701e3a3e74ae6b5d232ac17c8e4d41af6d4b9d709be23",
+  "source_ground_manifest_sha256": "cca79bbaba68e38be6c24a7a0ff10b34e3d304c9ef25437849e2a44b29f8ee9d",
+  "source_ground_state_sha256": "9e5743bd4fdba455a1bfc3551db657c223163aedd04d3fdcf662624c7602c484",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}
