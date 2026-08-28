@@ -5,13 +5,13 @@ const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd
 const MonsterRespawnPolicyScript := preload(
 	"res://scripts/monster_respawn_policy.gd"
 )
-const BICH_MAP_ID := 4
+const BICH_MAP_ID := 910001
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
 const BOSS_RESPAWN_OVERRIDES := {
-	218: 3600.0,
-	221: 3600.0,
-	1578: 1800.0,
+	911002: 3600.0,
+	911003: 3600.0,
+	911103: 1800.0,
 }
 ## FREEZE-P0.2R: formal map implementation states. Only maps with a MapEditor
 ## runtime build + ready marker are implemented_playable; world/reference data

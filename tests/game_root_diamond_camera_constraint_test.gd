@@ -12,7 +12,7 @@ func _ready() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	assert(game.current_map_id == 4, "camera fixture did not enter the runtime Bich map")
+	assert(game.current_map_id == 910001, "camera fixture did not enter canonical Bich runtime")
 	var camera: Camera2D = game.get("_world_camera") as Camera2D
 	assert(camera != null and camera.name == "WorldCamera")
 	var runtime := MapEditorRuntimeBridge.load_map(game.current_map_id)

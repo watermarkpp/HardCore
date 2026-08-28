@@ -131,7 +131,7 @@ var quest_states: Dictionary = {}
 var world_monster_respawn_state: Dictionary = (
 	WorldMonsterRespawnStateScript.empty_snapshot()
 )
-var saved_map_id := 4
+var saved_map_id := 910001
 var saved_position := Vector2.ZERO
 var saved_ground_position_gu := Vector2.ZERO
 var saved_ground_position_gu_valid := false
@@ -228,7 +228,7 @@ func reset_progress(emit_updates := true) -> void:
 	temporary_item_buff_revision = 0
 	if _shop_pricing_session_nonce.is_empty():
 		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
-	saved_map_id = 4
+	saved_map_id = 910001
 	saved_position = Vector2.ZERO
 	saved_ground_position_gu = Vector2.ZERO
 	saved_ground_position_gu_valid = false
@@ -2894,7 +2894,7 @@ func load_save() -> void:
 			parsed.get("world_monster_respawn_state", {})
 		)
 	)
-	saved_map_id = int(parsed.get("map_id", 4))
+	saved_map_id = int(parsed.get("map_id", 910001))
 	var position_data: Variant = parsed.get(
 		"position_screen_px",
 		parsed.get("position", [0.0, 0.0])
@@ -3716,7 +3716,7 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		"quest_states": {},
 		"content_packages": ContentLayers.enabled_package_ids(),
 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
-		"map_id": 4,
+		"map_id": 910001,
 		"position": [0.0, 0.0],
 		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
 		"position_screen_px": [0.0, 0.0],
@@ -3738,7 +3738,7 @@ func ensure_developer_test_character()->void:
 		if skill is Dictionary:all_skills[str(skill.get("skillName",""))]=3
 	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
 	var now:=int(Time.get_unix_time_from_system())
-	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
+	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":910001,"position":[0.0,0.0]}
 	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id),payload):return
 	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
@@ -3784,7 +3784,7 @@ func ensure_zuma_test_character() -> void:
 		"quick_item_slots": ["", "", "", ""],
 		"equip_cycle_cursor": _default_equip_cycle_cursor(), "quest_states": {},
 		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
-		"map_id": 4, "position": [0.0, 0.0],
+		"map_id": 910001, "position": [0.0, 0.0],
 	}
 	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id), payload):
@@ -4091,7 +4091,7 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	warrior_runtime_state = (snapshot.get("warrior_runtime_state", {}) as Dictionary).duplicate(true)
 	taoist_main_pet_runtime_states = (snapshot.get("taoist_main_pet_runtime_states", {}) as Dictionary).duplicate(true)
 	quest_states = (snapshot.get("quest_states", {}) as Dictionary).duplicate(true)
-	saved_map_id = int(snapshot.get("saved_map_id", 4))
+	saved_map_id = int(snapshot.get("saved_map_id", 910001))
 	saved_position = snapshot.get("saved_position", Vector2.ZERO)
 	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
 	saved_ground_position_gu_valid = bool(snapshot.get("saved_ground_position_gu_valid", false))

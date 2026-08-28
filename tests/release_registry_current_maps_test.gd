@@ -5,9 +5,6 @@ const Bridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
 
-const EXPECTED_11 := [4, 217, 218, 221, 268, 313, 314, 315, 406, 408, 1578]
-
-
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -15,9 +12,10 @@ func _ready() -> void:
 func _run() -> void:
 	Bridge.reset_release_registry_override()
 	var released: Array[int] = Bridge.released_map_ids()
+	var expected := _formal_runtime_ids()
 	assert(
-		released == EXPECTED_11,
-		"current released map ids must be exactly the 11; got %s" % str(released)
+		released == expected,
+		"current released map ids must match all 67 identities; got %s" % str(released)
 	)
 	for map_id: int in released:
 		assert(
@@ -46,7 +44,20 @@ func _run() -> void:
 		)
 	await get_tree().process_frame
 	print(
-		"RELEASE_REGISTRY_CURRENT_MAPS_PASS released=%d 11/11 valid+approved+key-match+profile-ready"
+		"RELEASE_REGISTRY_CURRENT_MAPS_PASS released=%d 67/67 valid+approved+key-match+profile-ready"
 		% released.size()
 	)
 	get_tree().quit(0)
+
+
+func _formal_runtime_ids() -> Array[int]:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://assets/data/map_design/map_identity_registry.json"
+	))
+	assert(parsed is Dictionary)
+	var result: Array[int] = []
+	for entry: Dictionary in parsed.get("maps", []):
+		result.append(int(entry.get("runtime_map_id", -1)))
+	result.sort()
+	assert(result.size() == 67)
+	return result

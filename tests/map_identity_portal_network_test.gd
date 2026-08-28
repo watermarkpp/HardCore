@@ -1,5 +1,6 @@
 extends Node
 
+const Bridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 const NETWORK_PATH := "res://assets/data/map_design/map_portal_network.json"
 
@@ -30,13 +31,11 @@ func _ready() -> void:
 		assert(not legacy_ids.has(legacy_map_id))
 		runtime_ids[runtime_map_id] = true
 		legacy_ids[legacy_map_id] = true
-		var path := "res://map_editor_workspace/%s/%s.editor.json" % [map_id, map_id]
-		var document := _read_json(path)
-		assert(not document.is_empty(), "formal workspace missing: %s" % path)
-		assert(str(document.get("map_id", "")) == map_id)
-		assert(int(document.get("runtime_map_id", -1)) == runtime_map_id)
-		assert(str(document.get("legacy_map_id", "")) == legacy_map_id)
-		documents[map_id] = document
+		var runtime := Bridge.load_map(runtime_map_id)
+		assert(not runtime.is_empty(), "formal runtime missing: %d" % runtime_map_id)
+		assert(str(runtime.get("source", {}).get("map_id", "")) == map_id)
+		assert(int(runtime.get("source", {}).get("runtime_map_id", -1)) == runtime_map_id)
+		documents[map_id] = runtime
 
 	var endpoint_index := {}
 	var bidirectional := 0
@@ -44,10 +43,10 @@ func _ready() -> void:
 	var arrival := 0
 	for map_id: String in documents:
 		var document: Dictionary = documents[map_id]
-		for raw_door: Variant in document.get("layers", {}).get("door_points", []):
+		for raw_door: Variant in document.get("semantics", {}).get("door_points", []):
 			if raw_door is Dictionary:
 				assert(str(raw_door.get("semantic_role", "")) != "map_portal")
-		for raw_endpoint: Variant in document.get("layers", {}).get("map_exit_points", []):
+		for raw_endpoint: Variant in document.get("semantics", {}).get("map_exit_points", []):
 			assert(raw_endpoint is Dictionary)
 			var endpoint: Dictionary = raw_endpoint
 			var portal_id := str(endpoint.get("semantic_id", ""))
@@ -105,7 +104,7 @@ func _ready() -> void:
 		assert(str(endpoint.get("target_map_key", "")) == str(expected[1]))
 	var forked: Dictionary = documents["fengmo_forked_path"]
 	var fork_targets := {}
-	for raw_endpoint: Variant in forked.get("layers", {}).get("map_exit_points", []):
+	for raw_endpoint: Variant in forked.get("semantics", {}).get("map_exit_points", []):
 		fork_targets[str(raw_endpoint.get("target_map_key", ""))] = true
 	assert(fork_targets.keys().size() == 2)
 	assert(fork_targets.has("world_fengmo_valley"))

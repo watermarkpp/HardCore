@@ -17,36 +17,32 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	game.travel_to_map(4)
+	game.travel_to_map(910001)
 	await _settle()
-	assert(game.current_map_id == 4 and game.background.uses_bich_art(), "刷装路线没有从比奇省开始")
+	assert(game.current_map_id == 910001 and game.background.uses_bich_art(), "刷装路线没有从正式比奇省开始")
 	_kill_three_strawmen(game)
 	await get_tree().process_frame
 	assert(PlayerState.quest_progress("bich_beginner_gear") == 3, "三只稻草人没有推进任务")
 
-	_travel_via_portal(game, 217)
+	_travel_via_portal(game, 911001)
 	await _settle()
-	_assert_arrival(game, 217, game.route_arrival_position(217, 4))
+	_assert_arrival(game, 911001, game.route_arrival_position(911001, 910001))
 	assert(game.background._editor_runtime_size == Vector2i(38, 38), "一层编辑器运行时碰撞未加载")
-	_assert_editor_runtime_collision(game, 217)
+	_assert_editor_runtime_collision(game, 911001)
 
-	_travel_via_portal(game, 218)
+	_travel_via_portal(game, 911002)
 	await _settle()
-	_assert_arrival(game, 218, game.route_arrival_position(218, 217))
+	_assert_arrival(game, 911002, game.route_arrival_position(911002, 911001))
 
-	_travel_via_portal(game, 221)
+	_travel_via_portal(game, 911003)
 	await _settle()
-	_assert_arrival(game, 221, game.route_arrival_position(221, 218))
-
-	# 217、218、221 当前正式 runtime 尚未配置怪物或 Boss。
-	# 怪物验收将在 Monster 数据、地图分布权威和正式布置完成后，
-	# 由独立的 map_monster_placement_acceptance_test 负责。
+	_assert_arrival(game, 911003, game.route_arrival_position(911003, 911002))
 
 	PlayerState.add_item("回城卷")
 	var scroll_index := _inventory_index("回城卷")
 	assert(scroll_index >= 0 and PlayerState.use_inventory_index(scroll_index).begins_with("使用"), "Boss后无法使用回城卷")
 	await _settle()
-	assert(game.current_zone == "比奇省" and game.current_map_id == 4, "回城卷没有返回服务端HomeMap=0对应的比奇省")
+	assert(game.current_zone.begins_with("比奇省") and game.current_map_id == 910001, "回城卷没有返回服务端HomeMap=0对应的正式比奇省")
 	var gold_before := PlayerState.gold
 	assert(PlayerState.claim_quest("bich_beginner_gear").begins_with("已领取"), "回城后无法领取任务奖励")
 	assert(PlayerState.gold == gold_before + 100 and PlayerState.has_item("布衣(男)"), "任务金币或布衣奖励缺失")
@@ -67,7 +63,13 @@ func _kill_three_strawmen(game: Node) -> void:
 		"稳定monster_id=21的稻草人运行时记录缺失"
 	)
 	for offset in [Vector2(-70, 0), Vector2(0, -70), Vector2(70, 0)]:
-		game._spawn_enemy(data, game.player.global_position + offset, false, 120.0)
+		game._spawn_enemy(
+			data,
+			game.player.global_position + offset,
+			false,
+			120.0,
+			{"respawn_enabled": false}
+		)
 	var killed := 0
 	for enemy: Node in get_tree().get_nodes_in_group("enemies"):
 		if enemy not in existing and enemy is EnemyActor and enemy.display_name == "稻草人":
@@ -124,12 +126,10 @@ func _travel_via_portal(game: Node, target_map_id: int) -> void:
 
 
 func _run_reentry_stability(game: Node) -> void:
-	game.change_zone("比奇郊外")
-	await _settle()
 	var stable_environment_counts := {}
 	var stable_child_counts := {}
 	# 里程碑只采样一次完整往返；长时间压力测试不混入日常功能验收。
-	for map_id in [4, 217, 218, 221, 4]:
+	for map_id in [910001, 911001, 911002, 911003, 910001]:
 		game.travel_to_map(map_id)
 		await _settle()
 		var environment_count: int = game.background.environment_node_count()
@@ -150,7 +150,7 @@ func _run_reentry_stability(game: Node) -> void:
 			stable_environment_counts[map_id] = environment_count
 			stable_child_counts[map_id] = child_count
 		assert(get_tree().get_nodes_in_group("route_guidance").is_empty(), "连续往返后不应生成单箭头导航信标")
-	assert(game.current_map_id == 4 and game.background.uses_bich_art(), "再次出发没有回到比奇省")
+	assert(game.current_map_id == 910001 and game.background.uses_bich_art(), "再次出发没有回到正式比奇省")
 
 
 func _inventory_index(item_name: String) -> int:

@@ -1,0 +1,5361 @@
+{
+  "build_sha256": "3ea6f0fcb777f565043ed321f0701329e0ccc767c31546153c5ebd8c7a1a600d",
+  "collision": {
+    "blocked_count": 185.0,
+    "blocked_tiles": [
+      "0,0",
+      "0,1",
+      "0,10",
+      "0,11",
+      "0,12",
+      "0,13",
+      "0,14",
+      "0,15",
+      "0,16",
+      "0,17",
+      "0,18",
+      "0,19",
+      "0,2",
+      "0,20",
+      "0,21",
+      "0,22",
+      "0,23",
+      "0,24",
+      "0,25",
+      "0,26",
+      "0,27",
+      "0,28",
+      "0,29",
+      "0,3",
+      "0,30",
+      "0,31",
+      "0,4",
+      "0,5",
+      "0,6",
+      "0,7",
+      "0,8",
+      "0,9",
+      "1,0",
+      "1,10",
+      "1,11",
+      "1,31",
+      "1,7",
+      "1,8",
+      "1,9",
+      "10,0",
+      "10,1",
+      "10,2",
+      "10,31",
+      "11,0",
+      "11,31",
+      "12,0",
+      "12,31",
+      "13,0",
+      "13,31",
+      "14,0",
+      "14,31",
+      "15,0",
+      "15,31",
+      "16,0",
+      "16,31",
+      "17,0",
+      "17,31",
+      "18,0",
+      "18,31",
+      "19,0",
+      "19,31",
+      "2,0",
+      "2,10",
+      "2,11",
+      "2,31",
+      "2,7",
+      "2,8",
+      "2,9",
+      "20,0",
+      "20,31",
+      "21,0",
+      "21,31",
+      "22,0",
+      "22,31",
+      "23,0",
+      "23,31",
+      "24,0",
+      "24,31",
+      "25,0",
+      "25,17",
+      "25,18",
+      "25,31",
+      "26,0",
+      "26,17",
+      "26,18",
+      "26,19",
+      "26,31",
+      "27,0",
+      "27,17",
+      "27,18",
+      "27,19",
+      "27,20",
+      "27,31",
+      "28,0",
+      "28,17",
+      "28,18",
+      "28,19",
+      "28,20",
+      "28,31",
+      "29,0",
+      "29,18",
+      "29,19",
+      "29,20",
+      "29,31",
+      "3,0",
+      "3,10",
+      "3,31",
+      "3,8",
+      "3,9",
+      "30,0",
+      "30,19",
+      "30,20",
+      "30,21",
+      "30,31",
+      "31,0",
+      "31,1",
+      "31,10",
+      "31,11",
+      "31,12",
+      "31,13",
+      "31,14",
+      "31,15",
+      "31,16",
+      "31,17",
+      "31,18",
+      "31,19",
+      "31,2",
+      "31,20",
+      "31,21",
+      "31,22",
+      "31,23",
+      "31,24",
+      "31,25",
+      "31,26",
+      "31,27",
+      "31,28",
+      "31,29",
+      "31,3",
+      "31,30",
+      "31,31",
+      "31,4",
+      "31,5",
+      "31,6",
+      "31,7",
+      "31,8",
+      "31,9",
+      "4,0",
+      "4,31",
+      "5,0",
+      "5,26",
+      "5,27",
+      "5,28",
+      "5,31",
+      "6,0",
+      "6,1",
+      "6,26",
+      "6,27",
+      "6,28",
+      "6,29",
+      "6,30",
+      "6,31",
+      "7,0",
+      "7,1",
+      "7,2",
+      "7,26",
+      "7,27",
+      "7,28",
+      "7,29",
+      "7,30",
+      "7,31",
+      "8,0",
+      "8,1",
+      "8,2",
+      "8,26",
+      "8,27",
+      "8,28",
+      "8,29",
+      "8,30",
+      "8,31",
+      "9,0",
+      "9,1",
+      "9,2",
+      "9,29",
+      "9,30",
+      "9,31"
+    ],
+    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v2",
+    "erased_cells": [],
+    "manual_shapes": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            31.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              0.0,
+              11.0
+            ],
+            [
+              3.0,
+              12.0
+            ],
+            [
+              4.0,
+              10.0
+            ],
+            [
+              4.0,
+              8.0
+            ],
+            [
+              2.0,
+              7.0
+            ],
+            [
+              1.0,
+              7.0
+            ],
+            [
+              0.0,
+              11.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              6.0,
+              0.0
+            ],
+            [
+              7.0,
+              3.0
+            ],
+            [
+              9.0,
+              3.0
+            ],
+            [
+              10.0,
+              3.0
+            ],
+            [
+              11.0,
+              2.0
+            ],
+            [
+              10.0,
+              0.0
+            ],
+            [
+              6.0,
+              0.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000007",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              31.0,
+              22.0
+            ],
+            [
+              26.0,
+              20.0
+            ],
+            [
+              25.0,
+              18.0
+            ],
+            [
+              26.0,
+              17.0
+            ],
+            [
+              28.0,
+              17.0
+            ],
+            [
+              32.0,
+              20.0
+            ],
+            [
+              31.0,
+              22.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              6.0,
+              31.0
+            ],
+            [
+              5.0,
+              27.0
+            ],
+            [
+              6.0,
+              26.0
+            ],
+            [
+              8.0,
+              26.0
+            ],
+            [
+              9.0,
+              27.0
+            ],
+            [
+              10.0,
+              31.0
+            ],
+            [
+              6.0,
+              31.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      }
+    ],
+    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+  },
+  "design": {
+    "design_size": [
+      32.0,
+      32.0
+    ],
+    "map_type": "boss_room",
+    "source_size": [
+      null,
+      null
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "custom_blank_layout",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1",
+    "wall_loops": [
+      {
+        "bounds": [
+          0.0,
+          0.0,
+          32.0,
+          32.0
+        ],
+        "collision_authority": "manual_by_user",
+        "corner_join_mode": "straight_overlap",
+        "corner_topology": "outer_corner",
+        "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+        "visual_render_contract": "native_2to1_straight_overlap_v1",
+        "wall_family_id": "chiyue_valley_rock_wall_u0"
+      }
+    ]
+  },
+  "ground": {
+    "default_fill_asset_id": "",
+    "ground_mode": "generated_painted_chunks",
+    "tile_overrides": {
+      "0,0": "mse.ground.chiyue_valley_floor.05",
+      "0,1": "mse.ground.chiyue_valley_floor.02",
+      "0,10": "mse.ground.chiyue_valley_floor.01",
+      "0,11": "mse.ground.chiyue_valley_floor.05",
+      "0,12": "mse.ground.chiyue_valley_floor.04",
+      "0,13": "mse.ground.chiyue_valley_floor.03",
+      "0,14": "mse.ground.chiyue_valley_floor.01",
+      "0,15": "mse.ground.chiyue_valley_floor.01",
+      "0,16": "mse.ground.chiyue_valley_floor.02",
+      "0,17": "mse.ground.chiyue_valley_floor.02",
+      "0,18": "mse.ground.chiyue_valley_floor.05",
+      "0,19": "mse.ground.chiyue_valley_floor.01",
+      "0,2": "mse.ground.chiyue_valley_floor.06",
+      "0,20": "mse.ground.chiyue_valley_floor.06",
+      "0,21": "mse.ground.chiyue_valley_floor.01",
+      "0,22": "mse.ground.chiyue_valley_floor.04",
+      "0,23": "mse.ground.chiyue_valley_floor.03",
+      "0,24": "mse.ground.chiyue_valley_floor.03",
+      "0,25": "mse.ground.chiyue_valley_floor.03",
+      "0,26": "mse.ground.chiyue_valley_floor.01",
+      "0,27": "mse.ground.chiyue_valley_floor.03",
+      "0,28": "mse.ground.chiyue_valley_floor.03",
+      "0,29": "mse.ground.chiyue_valley_floor.06",
+      "0,3": "mse.ground.chiyue_valley_floor.02",
+      "0,30": "mse.ground.chiyue_valley_floor.05",
+      "0,31": "mse.ground.chiyue_valley_floor.05",
+      "0,4": "mse.ground.chiyue_valley_floor.05",
+      "0,5": "mse.ground.chiyue_valley_floor.02",
+      "0,6": "mse.ground.chiyue_valley_floor.02",
+      "0,7": "mse.ground.chiyue_valley_floor.01",
+      "0,8": "mse.ground.chiyue_valley_floor.03",
+      "0,9": "mse.ground.chiyue_valley_floor.03",
+      "1,0": "mse.ground.chiyue_valley_floor.01",
+      "1,1": "mse.ground.chiyue_valley_floor.06",
+      "1,10": "mse.ground.chiyue_valley_floor.02",
+      "1,11": "mse.ground.chiyue_valley_floor.04",
+      "1,12": "mse.ground.chiyue_valley_floor.06",
+      "1,13": "mse.ground.chiyue_valley_floor.06",
+      "1,14": "mse.ground.chiyue_valley_floor.03",
+      "1,15": "mse.ground.chiyue_valley_floor.05",
+      "1,16": "mse.ground.chiyue_valley_floor.03",
+      "1,17": "mse.ground.chiyue_valley_floor.06",
+      "1,18": "mse.ground.chiyue_valley_floor.01",
+      "1,19": "mse.ground.chiyue_valley_floor.04",
+      "1,2": "mse.ground.chiyue_valley_floor.06",
+      "1,20": "mse.ground.chiyue_valley_floor.04",
+      "1,21": "mse.ground.chiyue_valley_floor.02",
+      "1,22": "mse.ground.chiyue_valley_floor.02",
+      "1,23": "mse.ground.chiyue_valley_floor.06",
+      "1,24": "mse.ground.chiyue_valley_floor.02",
+      "1,25": "mse.ground.chiyue_valley_floor.01",
+      "1,26": "mse.ground.chiyue_valley_floor.05",
+      "1,27": "mse.ground.chiyue_valley_floor.03",
+      "1,28": "mse.ground.chiyue_valley_floor.06",
+      "1,29": "mse.ground.chiyue_valley_floor.05",
+      "1,3": "mse.ground.chiyue_valley_floor.03",
+      "1,30": "mse.ground.chiyue_valley_floor.05",
+      "1,31": "mse.ground.chiyue_valley_floor.04",
+      "1,4": "mse.ground.chiyue_valley_floor.02",
+      "1,5": "mse.ground.chiyue_valley_floor.02",
+      "1,6": "mse.ground.chiyue_valley_floor.02",
+      "1,7": "mse.ground.chiyue_valley_floor.06",
+      "1,8": "mse.ground.chiyue_valley_floor.03",
+      "1,9": "mse.ground.chiyue_valley_floor.03",
+      "10,0": "mse.ground.chiyue_valley_floor.02",
+      "10,1": "mse.ground.chiyue_valley_floor.04",
+      "10,10": "mse.ground.chiyue_valley_floor.06",
+      "10,11": "mse.ground.chiyue_valley_floor.04",
+      "10,12": "mse.ground.chiyue_valley_floor.01",
+      "10,13": "mse.ground.chiyue_valley_floor.04",
+      "10,14": "mse.ground.chiyue_valley_floor.02",
+      "10,15": "mse.ground.chiyue_valley_floor.01",
+      "10,16": "mse.ground.chiyue_valley_floor.06",
+      "10,17": "mse.ground.chiyue_valley_floor.05",
+      "10,18": "mse.ground.chiyue_valley_floor.05",
+      "10,19": "mse.ground.chiyue_valley_floor.04",
+      "10,2": "mse.ground.chiyue_valley_floor.06",
+      "10,20": "mse.ground.chiyue_valley_floor.06",
+      "10,21": "mse.ground.chiyue_valley_floor.05",
+      "10,22": "mse.ground.chiyue_valley_floor.05",
+      "10,23": "mse.ground.chiyue_valley_floor.03",
+      "10,24": "mse.ground.chiyue_valley_floor.04",
+      "10,25": "mse.ground.chiyue_valley_floor.01",
+      "10,26": "mse.ground.chiyue_valley_floor.04",
+      "10,27": "mse.ground.chiyue_valley_floor.03",
+      "10,28": "mse.ground.chiyue_valley_floor.06",
+      "10,29": "mse.ground.chiyue_valley_floor.04",
+      "10,3": "mse.ground.chiyue_valley_floor.06",
+      "10,30": "mse.ground.chiyue_valley_floor.05",
+      "10,31": "mse.ground.chiyue_valley_floor.01",
+      "10,4": "mse.ground.chiyue_valley_floor.06",
+      "10,5": "mse.ground.chiyue_valley_floor.04",
+      "10,6": "mse.ground.chiyue_valley_floor.06",
+      "10,7": "mse.ground.chiyue_valley_floor.04",
+      "10,8": "mse.ground.chiyue_valley_floor.05",
+      "10,9": "mse.ground.chiyue_valley_floor.02",
+      "11,0": "mse.ground.chiyue_valley_floor.06",
+      "11,1": "mse.ground.chiyue_valley_floor.05",
+      "11,10": "mse.ground.chiyue_valley_floor.01",
+      "11,11": "mse.ground.chiyue_valley_floor.04",
+      "11,12": "mse.ground.chiyue_valley_floor.02",
+      "11,13": "mse.ground.chiyue_valley_floor.03",
+      "11,14": "mse.ground.chiyue_valley_floor.01",
+      "11,15": "mse.ground.chiyue_valley_floor.01",
+      "11,16": "mse.ground.chiyue_valley_floor.02",
+      "11,17": "mse.ground.chiyue_valley_floor.06",
+      "11,18": "mse.ground.chiyue_valley_floor.02",
+      "11,19": "mse.ground.chiyue_valley_floor.02",
+      "11,2": "mse.ground.chiyue_valley_floor.06",
+      "11,20": "mse.ground.chiyue_valley_floor.04",
+      "11,21": "mse.ground.chiyue_valley_floor.04",
+      "11,22": "mse.ground.chiyue_valley_floor.01",
+      "11,23": "mse.ground.chiyue_valley_floor.04",
+      "11,24": "mse.ground.chiyue_valley_floor.05",
+      "11,25": "mse.ground.chiyue_valley_floor.04",
+      "11,26": "mse.ground.chiyue_valley_floor.04",
+      "11,27": "mse.ground.chiyue_valley_floor.05",
+      "11,28": "mse.ground.chiyue_valley_floor.05",
+      "11,29": "mse.ground.chiyue_valley_floor.03",
+      "11,3": "mse.ground.chiyue_valley_floor.02",
+      "11,30": "mse.ground.chiyue_valley_floor.02",
+      "11,31": "mse.ground.chiyue_valley_floor.06",
+      "11,4": "mse.ground.chiyue_valley_floor.05",
+      "11,5": "mse.ground.chiyue_valley_floor.03",
+      "11,6": "mse.ground.chiyue_valley_floor.04",
+      "11,7": "mse.ground.chiyue_valley_floor.02",
+      "11,8": "mse.ground.chiyue_valley_floor.06",
+      "11,9": "mse.ground.chiyue_valley_floor.01",
+      "12,0": "mse.ground.chiyue_valley_floor.03",
+      "12,1": "mse.ground.chiyue_valley_floor.05",
+      "12,10": "mse.ground.chiyue_valley_floor.04",
+      "12,11": "mse.ground.chiyue_valley_floor.02",
+      "12,12": "mse.ground.chiyue_valley_floor.06",
+      "12,13": "mse.ground.chiyue_valley_floor.05",
+      "12,14": "mse.ground.chiyue_valley_floor.02",
+      "12,15": "mse.ground.chiyue_valley_floor.03",
+      "12,16": "mse.ground.chiyue_valley_floor.01",
+      "12,17": "mse.ground.chiyue_valley_floor.06",
+      "12,18": "mse.ground.chiyue_valley_floor.04",
+      "12,19": "mse.ground.chiyue_valley_floor.01",
+      "12,2": "mse.ground.chiyue_valley_floor.03",
+      "12,20": "mse.ground.chiyue_valley_floor.03",
+      "12,21": "mse.ground.chiyue_valley_floor.02",
+      "12,22": "mse.ground.chiyue_valley_floor.05",
+      "12,23": "mse.ground.chiyue_valley_floor.04",
+      "12,24": "mse.ground.chiyue_valley_floor.02",
+      "12,25": "mse.ground.chiyue_valley_floor.01",
+      "12,26": "mse.ground.chiyue_valley_floor.05",
+      "12,27": "mse.ground.chiyue_valley_floor.04",
+      "12,28": "mse.ground.chiyue_valley_floor.04",
+      "12,29": "mse.ground.chiyue_valley_floor.01",
+      "12,3": "mse.ground.chiyue_valley_floor.06",
+      "12,30": "mse.ground.chiyue_valley_floor.03",
+      "12,31": "mse.ground.chiyue_valley_floor.02",
+      "12,4": "mse.ground.chiyue_valley_floor.01",
+      "12,5": "mse.ground.chiyue_valley_floor.05",
+      "12,6": "mse.ground.chiyue_valley_floor.02",
+      "12,7": "mse.ground.chiyue_valley_floor.05",
+      "12,8": "mse.ground.chiyue_valley_floor.02",
+      "12,9": "mse.ground.chiyue_valley_floor.06",
+      "13,0": "mse.ground.chiyue_valley_floor.04",
+      "13,1": "mse.ground.chiyue_valley_floor.06",
+      "13,10": "mse.ground.chiyue_valley_floor.03",
+      "13,11": "mse.ground.chiyue_valley_floor.01",
+      "13,12": "mse.ground.chiyue_valley_floor.06",
+      "13,13": "mse.ground.chiyue_valley_floor.01",
+      "13,14": "mse.ground.chiyue_valley_floor.06",
+      "13,15": "mse.ground.chiyue_valley_floor.01",
+      "13,16": "mse.ground.chiyue_valley_floor.06",
+      "13,17": "mse.ground.chiyue_valley_floor.05",
+      "13,18": "mse.ground.chiyue_valley_floor.01",
+      "13,19": "mse.ground.chiyue_valley_floor.01",
+      "13,2": "mse.ground.chiyue_valley_floor.04",
+      "13,20": "mse.ground.chiyue_valley_floor.06",
+      "13,21": "mse.ground.chiyue_valley_floor.02",
+      "13,22": "mse.ground.chiyue_valley_floor.06",
+      "13,23": "mse.ground.chiyue_valley_floor.05",
+      "13,24": "mse.ground.chiyue_valley_floor.02",
+      "13,25": "mse.ground.chiyue_valley_floor.03",
+      "13,26": "mse.ground.chiyue_valley_floor.01",
+      "13,27": "mse.ground.chiyue_valley_floor.02",
+      "13,28": "mse.ground.chiyue_valley_floor.03",
+      "13,29": "mse.ground.chiyue_valley_floor.06",
+      "13,3": "mse.ground.chiyue_valley_floor.01",
+      "13,30": "mse.ground.chiyue_valley_floor.02",
+      "13,31": "mse.ground.chiyue_valley_floor.05",
+      "13,4": "mse.ground.chiyue_valley_floor.01",
+      "13,5": "mse.ground.chiyue_valley_floor.03",
+      "13,6": "mse.ground.chiyue_valley_floor.04",
+      "13,7": "mse.ground.chiyue_valley_floor.03",
+      "13,8": "mse.ground.chiyue_valley_floor.03",
+      "13,9": "mse.ground.chiyue_valley_floor.05",
+      "14,0": "mse.ground.chiyue_valley_floor.03",
+      "14,1": "mse.ground.chiyue_valley_floor.03",
+      "14,10": "mse.ground.chiyue_valley_floor.02",
+      "14,11": "mse.ground.chiyue_valley_floor.03",
+      "14,12": "mse.ground.chiyue_valley_floor.06",
+      "14,13": "mse.ground.chiyue_valley_floor.06",
+      "14,14": "mse.ground.chiyue_valley_floor.03",
+      "14,15": "mse.ground.chiyue_valley_floor.02",
+      "14,16": "mse.ground.chiyue_valley_floor.04",
+      "14,17": "mse.ground.chiyue_valley_floor.03",
+      "14,18": "mse.ground.chiyue_valley_floor.04",
+      "14,19": "mse.ground.chiyue_valley_floor.02",
+      "14,2": "mse.ground.chiyue_valley_floor.04",
+      "14,20": "mse.ground.chiyue_valley_floor.02",
+      "14,21": "mse.ground.chiyue_valley_floor.05",
+      "14,22": "mse.ground.chiyue_valley_floor.01",
+      "14,23": "mse.ground.chiyue_valley_floor.02",
+      "14,24": "mse.ground.chiyue_valley_floor.05",
+      "14,25": "mse.ground.chiyue_valley_floor.01",
+      "14,26": "mse.ground.chiyue_valley_floor.06",
+      "14,27": "mse.ground.chiyue_valley_floor.01",
+      "14,28": "mse.ground.chiyue_valley_floor.06",
+      "14,29": "mse.ground.chiyue_valley_floor.06",
+      "14,3": "mse.ground.chiyue_valley_floor.06",
+      "14,30": "mse.ground.chiyue_valley_floor.03",
+      "14,31": "mse.ground.chiyue_valley_floor.05",
+      "14,4": "mse.ground.chiyue_valley_floor.06",
+      "14,5": "mse.ground.chiyue_valley_floor.06",
+      "14,6": "mse.ground.chiyue_valley_floor.01",
+      "14,7": "mse.ground.chiyue_valley_floor.05",
+      "14,8": "mse.ground.chiyue_valley_floor.03",
+      "14,9": "mse.ground.chiyue_valley_floor.03",
+      "15,0": "mse.ground.chiyue_valley_floor.03",
+      "15,1": "mse.ground.chiyue_valley_floor.06",
+      "15,10": "mse.ground.chiyue_valley_floor.04",
+      "15,11": "mse.ground.chiyue_valley_floor.01",
+      "15,12": "mse.ground.chiyue_valley_floor.02",
+      "15,13": "mse.ground.chiyue_valley_floor.02",
+      "15,14": "mse.ground.chiyue_valley_floor.01",
+      "15,15": "mse.ground.chiyue_valley_floor.05",
+      "15,16": "mse.ground.chiyue_valley_floor.02",
+      "15,17": "mse.ground.chiyue_valley_floor.02",
+      "15,18": "mse.ground.chiyue_valley_floor.06",
+      "15,19": "mse.ground.chiyue_valley_floor.01",
+      "15,2": "mse.ground.chiyue_valley_floor.01",
+      "15,20": "mse.ground.chiyue_valley_floor.02",
+      "15,21": "mse.ground.chiyue_valley_floor.04",
+      "15,22": "mse.ground.chiyue_valley_floor.03",
+      "15,23": "mse.ground.chiyue_valley_floor.04",
+      "15,24": "mse.ground.chiyue_valley_floor.05",
+      "15,25": "mse.ground.chiyue_valley_floor.01",
+      "15,26": "mse.ground.chiyue_valley_floor.05",
+      "15,27": "mse.ground.chiyue_valley_floor.04",
+      "15,28": "mse.ground.chiyue_valley_floor.05",
+      "15,29": "mse.ground.chiyue_valley_floor.04",
+      "15,3": "mse.ground.chiyue_valley_floor.04",
+      "15,30": "mse.ground.chiyue_valley_floor.02",
+      "15,31": "mse.ground.chiyue_valley_floor.05",
+      "15,4": "mse.ground.chiyue_valley_floor.02",
+      "15,5": "mse.ground.chiyue_valley_floor.04",
+      "15,6": "mse.ground.chiyue_valley_floor.06",
+      "15,7": "mse.ground.chiyue_valley_floor.04",
+      "15,8": "mse.ground.chiyue_valley_floor.02",
+      "15,9": "mse.ground.chiyue_valley_floor.06",
+      "16,0": "mse.ground.chiyue_valley_floor.05",
+      "16,1": "mse.ground.chiyue_valley_floor.03",
+      "16,10": "mse.ground.chiyue_valley_floor.01",
+      "16,11": "mse.ground.chiyue_valley_floor.01",
+      "16,12": "mse.ground.chiyue_valley_floor.05",
+      "16,13": "mse.ground.chiyue_valley_floor.06",
+      "16,14": "mse.ground.chiyue_valley_floor.05",
+      "16,15": "mse.ground.chiyue_valley_floor.04",
+      "16,16": "mse.ground.chiyue_valley_floor.01",
+      "16,17": "mse.ground.chiyue_valley_floor.05",
+      "16,18": "mse.ground.chiyue_valley_floor.05",
+      "16,19": "mse.ground.chiyue_valley_floor.05",
+      "16,2": "mse.ground.chiyue_valley_floor.02",
+      "16,20": "mse.ground.chiyue_valley_floor.03",
+      "16,21": "mse.ground.chiyue_valley_floor.04",
+      "16,22": "mse.ground.chiyue_valley_floor.05",
+      "16,23": "mse.ground.chiyue_valley_floor.06",
+      "16,24": "mse.ground.chiyue_valley_floor.06",
+      "16,25": "mse.ground.chiyue_valley_floor.02",
+      "16,26": "mse.ground.chiyue_valley_floor.04",
+      "16,27": "mse.ground.chiyue_valley_floor.03",
+      "16,28": "mse.ground.chiyue_valley_floor.01",
+      "16,29": "mse.ground.chiyue_valley_floor.02",
+      "16,3": "mse.ground.chiyue_valley_floor.03",
+      "16,30": "mse.ground.chiyue_valley_floor.04",
+      "16,31": "mse.ground.chiyue_valley_floor.05",
+      "16,4": "mse.ground.chiyue_valley_floor.06",
+      "16,5": "mse.ground.chiyue_valley_floor.02",
+      "16,6": "mse.ground.chiyue_valley_floor.06",
+      "16,7": "mse.ground.chiyue_valley_floor.02",
+      "16,8": "mse.ground.chiyue_valley_floor.02",
+      "16,9": "mse.ground.chiyue_valley_floor.05",
+      "17,0": "mse.ground.chiyue_valley_floor.03",
+      "17,1": "mse.ground.chiyue_valley_floor.01",
+      "17,10": "mse.ground.chiyue_valley_floor.04",
+      "17,11": "mse.ground.chiyue_valley_floor.06",
+      "17,12": "mse.ground.chiyue_valley_floor.05",
+      "17,13": "mse.ground.chiyue_valley_floor.01",
+      "17,14": "mse.ground.chiyue_valley_floor.06",
+      "17,15": "mse.ground.chiyue_valley_floor.06",
+      "17,16": "mse.ground.chiyue_valley_floor.01",
+      "17,17": "mse.ground.chiyue_valley_floor.03",
+      "17,18": "mse.ground.chiyue_valley_floor.02",
+      "17,19": "mse.ground.chiyue_valley_floor.03",
+      "17,2": "mse.ground.chiyue_valley_floor.04",
+      "17,20": "mse.ground.chiyue_valley_floor.04",
+      "17,21": "mse.ground.chiyue_valley_floor.05",
+      "17,22": "mse.ground.chiyue_valley_floor.01",
+      "17,23": "mse.ground.chiyue_valley_floor.04",
+      "17,24": "mse.ground.chiyue_valley_floor.05",
+      "17,25": "mse.ground.chiyue_valley_floor.01",
+      "17,26": "mse.ground.chiyue_valley_floor.01",
+      "17,27": "mse.ground.chiyue_valley_floor.01",
+      "17,28": "mse.ground.chiyue_valley_floor.03",
+      "17,29": "mse.ground.chiyue_valley_floor.04",
+      "17,3": "mse.ground.chiyue_valley_floor.06",
+      "17,30": "mse.ground.chiyue_valley_floor.02",
+      "17,31": "mse.ground.chiyue_valley_floor.05",
+      "17,4": "mse.ground.chiyue_valley_floor.05",
+      "17,5": "mse.ground.chiyue_valley_floor.03",
+      "17,6": "mse.ground.chiyue_valley_floor.05",
+      "17,7": "mse.ground.chiyue_valley_floor.02",
+      "17,8": "mse.ground.chiyue_valley_floor.02",
+      "17,9": "mse.ground.chiyue_valley_floor.02",
+      "18,0": "mse.ground.chiyue_valley_floor.04",
+      "18,1": "mse.ground.chiyue_valley_floor.06",
+      "18,10": "mse.ground.chiyue_valley_floor.05",
+      "18,11": "mse.ground.chiyue_valley_floor.04",
+      "18,12": "mse.ground.chiyue_valley_floor.04",
+      "18,13": "mse.ground.chiyue_valley_floor.05",
+      "18,14": "mse.ground.chiyue_valley_floor.03",
+      "18,15": "mse.ground.chiyue_valley_floor.01",
+      "18,16": "mse.ground.chiyue_valley_floor.04",
+      "18,17": "mse.ground.chiyue_valley_floor.01",
+      "18,18": "mse.ground.chiyue_valley_floor.04",
+      "18,19": "mse.ground.chiyue_valley_floor.03",
+      "18,2": "mse.ground.chiyue_valley_floor.05",
+      "18,20": "mse.ground.chiyue_valley_floor.04",
+      "18,21": "mse.ground.chiyue_valley_floor.02",
+      "18,22": "mse.ground.chiyue_valley_floor.02",
+      "18,23": "mse.ground.chiyue_valley_floor.01",
+      "18,24": "mse.ground.chiyue_valley_floor.05",
+      "18,25": "mse.ground.chiyue_valley_floor.04",
+      "18,26": "mse.ground.chiyue_valley_floor.06",
+      "18,27": "mse.ground.chiyue_valley_floor.04",
+      "18,28": "mse.ground.chiyue_valley_floor.03",
+      "18,29": "mse.ground.chiyue_valley_floor.03",
+      "18,3": "mse.ground.chiyue_valley_floor.01",
+      "18,30": "mse.ground.chiyue_valley_floor.04",
+      "18,31": "mse.ground.chiyue_valley_floor.04",
+      "18,4": "mse.ground.chiyue_valley_floor.01",
+      "18,5": "mse.ground.chiyue_valley_floor.04",
+      "18,6": "mse.ground.chiyue_valley_floor.04",
+      "18,7": "mse.ground.chiyue_valley_floor.03",
+      "18,8": "mse.ground.chiyue_valley_floor.01",
+      "18,9": "mse.ground.chiyue_valley_floor.03",
+      "19,0": "mse.ground.chiyue_valley_floor.06",
+      "19,1": "mse.ground.chiyue_valley_floor.01",
+      "19,10": "mse.ground.chiyue_valley_floor.05",
+      "19,11": "mse.ground.chiyue_valley_floor.02",
+      "19,12": "mse.ground.chiyue_valley_floor.05",
+      "19,13": "mse.ground.chiyue_valley_floor.01",
+      "19,14": "mse.ground.chiyue_valley_floor.03",
+      "19,15": "mse.ground.chiyue_valley_floor.03",
+      "19,16": "mse.ground.chiyue_valley_floor.04",
+      "19,17": "mse.ground.chiyue_valley_floor.05",
+      "19,18": "mse.ground.chiyue_valley_floor.03",
+      "19,19": "mse.ground.chiyue_valley_floor.06",
+      "19,2": "mse.ground.chiyue_valley_floor.06",
+      "19,20": "mse.ground.chiyue_valley_floor.05",
+      "19,21": "mse.ground.chiyue_valley_floor.05",
+      "19,22": "mse.ground.chiyue_valley_floor.05",
+      "19,23": "mse.ground.chiyue_valley_floor.04",
+      "19,24": "mse.ground.chiyue_valley_floor.04",
+      "19,25": "mse.ground.chiyue_valley_floor.06",
+      "19,26": "mse.ground.chiyue_valley_floor.04",
+      "19,27": "mse.ground.chiyue_valley_floor.05",
+      "19,28": "mse.ground.chiyue_valley_floor.06",
+      "19,29": "mse.ground.chiyue_valley_floor.01",
+      "19,3": "mse.ground.chiyue_valley_floor.01",
+      "19,30": "mse.ground.chiyue_valley_floor.01",
+      "19,4": "mse.ground.chiyue_valley_floor.06",
+      "19,5": "mse.ground.chiyue_valley_floor.06",
+      "19,6": "mse.ground.chiyue_valley_floor.01",
+      "19,7": "mse.ground.chiyue_valley_floor.03",
+      "19,8": "mse.ground.chiyue_valley_floor.04",
+      "19,9": "mse.ground.chiyue_valley_floor.05",
+      "2,0": "mse.ground.chiyue_valley_floor.05",
+      "2,1": "mse.ground.chiyue_valley_floor.05",
+      "2,10": "mse.ground.chiyue_valley_floor.05",
+      "2,11": "mse.ground.chiyue_valley_floor.02",
+      "2,12": "mse.ground.chiyue_valley_floor.02",
+      "2,13": "mse.ground.chiyue_valley_floor.05",
+      "2,14": "mse.ground.chiyue_valley_floor.03",
+      "2,15": "mse.ground.chiyue_valley_floor.03",
+      "2,16": "mse.ground.chiyue_valley_floor.02",
+      "2,17": "mse.ground.chiyue_valley_floor.04",
+      "2,18": "mse.ground.chiyue_valley_floor.01",
+      "2,19": "mse.ground.chiyue_valley_floor.05",
+      "2,2": "mse.ground.chiyue_valley_floor.05",
+      "2,20": "mse.ground.chiyue_valley_floor.06",
+      "2,21": "mse.ground.chiyue_valley_floor.01",
+      "2,22": "mse.ground.chiyue_valley_floor.05",
+      "2,23": "mse.ground.chiyue_valley_floor.02",
+      "2,24": "mse.ground.chiyue_valley_floor.01",
+      "2,25": "mse.ground.chiyue_valley_floor.04",
+      "2,26": "mse.ground.chiyue_valley_floor.01",
+      "2,27": "mse.ground.chiyue_valley_floor.06",
+      "2,28": "mse.ground.chiyue_valley_floor.05",
+      "2,29": "mse.ground.chiyue_valley_floor.01",
+      "2,3": "mse.ground.chiyue_valley_floor.03",
+      "2,30": "mse.ground.chiyue_valley_floor.02",
+      "2,31": "mse.ground.chiyue_valley_floor.05",
+      "2,4": "mse.ground.chiyue_valley_floor.03",
+      "2,5": "mse.ground.chiyue_valley_floor.03",
+      "2,6": "mse.ground.chiyue_valley_floor.03",
+      "2,7": "mse.ground.chiyue_valley_floor.05",
+      "2,8": "mse.ground.chiyue_valley_floor.06",
+      "2,9": "mse.ground.chiyue_valley_floor.02",
+      "20,0": "mse.ground.chiyue_valley_floor.06",
+      "20,1": "mse.ground.chiyue_valley_floor.04",
+      "20,10": "mse.ground.chiyue_valley_floor.02",
+      "20,11": "mse.ground.chiyue_valley_floor.05",
+      "20,12": "mse.ground.chiyue_valley_floor.05",
+      "20,13": "mse.ground.chiyue_valley_floor.04",
+      "20,14": "mse.ground.chiyue_valley_floor.06",
+      "20,15": "mse.ground.chiyue_valley_floor.04",
+      "20,16": "mse.ground.chiyue_valley_floor.03",
+      "20,17": "mse.ground.chiyue_valley_floor.05",
+      "20,18": "mse.ground.chiyue_valley_floor.04",
+      "20,19": "mse.ground.chiyue_valley_floor.01",
+      "20,2": "mse.ground.chiyue_valley_floor.06",
+      "20,20": "mse.ground.chiyue_valley_floor.05",
+      "20,21": "mse.ground.chiyue_valley_floor.04",
+      "20,22": "mse.ground.chiyue_valley_floor.03",
+      "20,23": "mse.ground.chiyue_valley_floor.06",
+      "20,24": "mse.ground.chiyue_valley_floor.02",
+      "20,25": "mse.ground.chiyue_valley_floor.04",
+      "20,26": "mse.ground.chiyue_valley_floor.06",
+      "20,27": "mse.ground.chiyue_valley_floor.03",
+      "20,28": "mse.ground.chiyue_valley_floor.05",
+      "20,29": "mse.ground.chiyue_valley_floor.05",
+      "20,3": "mse.ground.chiyue_valley_floor.04",
+      "20,30": "mse.ground.chiyue_valley_floor.01",
+      "20,31": "mse.ground.chiyue_valley_floor.05",
+      "20,4": "mse.ground.chiyue_valley_floor.06",
+      "20,5": "mse.ground.chiyue_valley_floor.05",
+      "20,6": "mse.ground.chiyue_valley_floor.05",
+      "20,7": "mse.ground.chiyue_valley_floor.02",
+      "20,8": "mse.ground.chiyue_valley_floor.06",
+      "20,9": "mse.ground.chiyue_valley_floor.02",
+      "21,0": "mse.ground.chiyue_valley_floor.06",
+      "21,1": "mse.ground.chiyue_valley_floor.04",
+      "21,10": "mse.ground.chiyue_valley_floor.05",
+      "21,11": "mse.ground.chiyue_valley_floor.06",
+      "21,12": "mse.ground.chiyue_valley_floor.02",
+      "21,13": "mse.ground.chiyue_valley_floor.03",
+      "21,14": "mse.ground.chiyue_valley_floor.06",
+      "21,15": "mse.ground.chiyue_valley_floor.05",
+      "21,16": "mse.ground.chiyue_valley_floor.03",
+      "21,17": "mse.ground.chiyue_valley_floor.04",
+      "21,18": "mse.ground.chiyue_valley_floor.01",
+      "21,19": "mse.ground.chiyue_valley_floor.06",
+      "21,2": "mse.ground.chiyue_valley_floor.03",
+      "21,20": "mse.ground.chiyue_valley_floor.05",
+      "21,21": "mse.ground.chiyue_valley_floor.02",
+      "21,22": "mse.ground.chiyue_valley_floor.06",
+      "21,23": "mse.ground.chiyue_valley_floor.03",
+      "21,24": "mse.ground.chiyue_valley_floor.05",
+      "21,25": "mse.ground.chiyue_valley_floor.04",
+      "21,26": "mse.ground.chiyue_valley_floor.05",
+      "21,27": "mse.ground.chiyue_valley_floor.03",
+      "21,28": "mse.ground.chiyue_valley_floor.06",
+      "21,29": "mse.ground.chiyue_valley_floor.01",
+      "21,3": "mse.ground.chiyue_valley_floor.05",
+      "21,30": "mse.ground.chiyue_valley_floor.04",
+      "21,31": "mse.ground.chiyue_valley_floor.01",
+      "21,4": "mse.ground.chiyue_valley_floor.02",
+      "21,5": "mse.ground.chiyue_valley_floor.03",
+      "21,6": "mse.ground.chiyue_valley_floor.01",
+      "21,7": "mse.ground.chiyue_valley_floor.03",
+      "21,8": "mse.ground.chiyue_valley_floor.05",
+      "21,9": "mse.ground.chiyue_valley_floor.01",
+      "22,0": "mse.ground.chiyue_valley_floor.03",
+      "22,1": "mse.ground.chiyue_valley_floor.02",
+      "22,10": "mse.ground.chiyue_valley_floor.03",
+      "22,11": "mse.ground.chiyue_valley_floor.06",
+      "22,12": "mse.ground.chiyue_valley_floor.05",
+      "22,13": "mse.ground.chiyue_valley_floor.04",
+      "22,14": "mse.ground.chiyue_valley_floor.02",
+      "22,15": "mse.ground.chiyue_valley_floor.02",
+      "22,16": "mse.ground.chiyue_valley_floor.06",
+      "22,17": "mse.ground.chiyue_valley_floor.06",
+      "22,18": "mse.ground.chiyue_valley_floor.01",
+      "22,19": "mse.ground.chiyue_valley_floor.03",
+      "22,2": "mse.ground.chiyue_valley_floor.02",
+      "22,20": "mse.ground.chiyue_valley_floor.03",
+      "22,21": "mse.ground.chiyue_valley_floor.06",
+      "22,22": "mse.ground.chiyue_valley_floor.04",
+      "22,23": "mse.ground.chiyue_valley_floor.04",
+      "22,24": "mse.ground.chiyue_valley_floor.01",
+      "22,25": "mse.ground.chiyue_valley_floor.01",
+      "22,26": "mse.ground.chiyue_valley_floor.06",
+      "22,27": "mse.ground.chiyue_valley_floor.05",
+      "22,28": "mse.ground.chiyue_valley_floor.01",
+      "22,29": "mse.ground.chiyue_valley_floor.03",
+      "22,3": "mse.ground.chiyue_valley_floor.04",
+      "22,30": "mse.ground.chiyue_valley_floor.02",
+      "22,31": "mse.ground.chiyue_valley_floor.01",
+      "22,4": "mse.ground.chiyue_valley_floor.02",
+      "22,5": "mse.ground.chiyue_valley_floor.05",
+      "22,6": "mse.ground.chiyue_valley_floor.05",
+      "22,7": "mse.ground.chiyue_valley_floor.02",
+      "22,8": "mse.ground.chiyue_valley_floor.01",
+      "22,9": "mse.ground.chiyue_valley_floor.06",
+      "23,0": "mse.ground.chiyue_valley_floor.04",
+      "23,1": "mse.ground.chiyue_valley_floor.04",
+      "23,10": "mse.ground.chiyue_valley_floor.02",
+      "23,11": "mse.ground.chiyue_valley_floor.06",
+      "23,12": "mse.ground.chiyue_valley_floor.05",
+      "23,13": "mse.ground.chiyue_valley_floor.05",
+      "23,14": "mse.ground.chiyue_valley_floor.02",
+      "23,15": "mse.ground.chiyue_valley_floor.01",
+      "23,16": "mse.ground.chiyue_valley_floor.03",
+      "23,17": "mse.ground.chiyue_valley_floor.01",
+      "23,18": "mse.ground.chiyue_valley_floor.05",
+      "23,19": "mse.ground.chiyue_valley_floor.04",
+      "23,2": "mse.ground.chiyue_valley_floor.02",
+      "23,20": "mse.ground.chiyue_valley_floor.03",
+      "23,21": "mse.ground.chiyue_valley_floor.05",
+      "23,22": "mse.ground.chiyue_valley_floor.04",
+      "23,23": "mse.ground.chiyue_valley_floor.05",
+      "23,24": "mse.ground.chiyue_valley_floor.01",
+      "23,25": "mse.ground.chiyue_valley_floor.06",
+      "23,26": "mse.ground.chiyue_valley_floor.03",
+      "23,27": "mse.ground.chiyue_valley_floor.05",
+      "23,28": "mse.ground.chiyue_valley_floor.01",
+      "23,29": "mse.ground.chiyue_valley_floor.02",
+      "23,3": "mse.ground.chiyue_valley_floor.03",
+      "23,30": "mse.ground.chiyue_valley_floor.06",
+      "23,31": "mse.ground.chiyue_valley_floor.02",
+      "23,4": "mse.ground.chiyue_valley_floor.02",
+      "23,5": "mse.ground.chiyue_valley_floor.02",
+      "23,6": "mse.ground.chiyue_valley_floor.01",
+      "23,7": "mse.ground.chiyue_valley_floor.02",
+      "23,8": "mse.ground.chiyue_valley_floor.01",
+      "23,9": "mse.ground.chiyue_valley_floor.05",
+      "24,0": "mse.ground.chiyue_valley_floor.03",
+      "24,1": "mse.ground.chiyue_valley_floor.04",
+      "24,10": "mse.ground.chiyue_valley_floor.02",
+      "24,11": "mse.ground.chiyue_valley_floor.04",
+      "24,12": "mse.ground.chiyue_valley_floor.06",
+      "24,13": "mse.ground.chiyue_valley_floor.04",
+      "24,14": "mse.ground.chiyue_valley_floor.05",
+      "24,15": "mse.ground.chiyue_valley_floor.03",
+      "24,16": "mse.ground.chiyue_valley_floor.01",
+      "24,17": "mse.ground.chiyue_valley_floor.02",
+      "24,18": "mse.ground.chiyue_valley_floor.02",
+      "24,19": "mse.ground.chiyue_valley_floor.05",
+      "24,2": "mse.ground.chiyue_valley_floor.03",
+      "24,20": "mse.ground.chiyue_valley_floor.04",
+      "24,21": "mse.ground.chiyue_valley_floor.04",
+      "24,22": "mse.ground.chiyue_valley_floor.05",
+      "24,23": "mse.ground.chiyue_valley_floor.03",
+      "24,24": "mse.ground.chiyue_valley_floor.03",
+      "24,25": "mse.ground.chiyue_valley_floor.02",
+      "24,26": "mse.ground.chiyue_valley_floor.03",
+      "24,27": "mse.ground.chiyue_valley_floor.01",
+      "24,28": "mse.ground.chiyue_valley_floor.02",
+      "24,29": "mse.ground.chiyue_valley_floor.04",
+      "24,3": "mse.ground.chiyue_valley_floor.02",
+      "24,30": "mse.ground.chiyue_valley_floor.06",
+      "24,31": "mse.ground.chiyue_valley_floor.02",
+      "24,4": "mse.ground.chiyue_valley_floor.05",
+      "24,5": "mse.ground.chiyue_valley_floor.04",
+      "24,6": "mse.ground.chiyue_valley_floor.05",
+      "24,7": "mse.ground.chiyue_valley_floor.05",
+      "24,8": "mse.ground.chiyue_valley_floor.06",
+      "24,9": "mse.ground.chiyue_valley_floor.02",
+      "25,0": "mse.ground.chiyue_valley_floor.04",
+      "25,1": "mse.ground.chiyue_valley_floor.06",
+      "25,10": "mse.ground.chiyue_valley_floor.03",
+      "25,11": "mse.ground.chiyue_valley_floor.03",
+      "25,12": "mse.ground.chiyue_valley_floor.02",
+      "25,13": "mse.ground.chiyue_valley_floor.03",
+      "25,14": "mse.ground.chiyue_valley_floor.01",
+      "25,15": "mse.ground.chiyue_valley_floor.02",
+      "25,16": "mse.ground.chiyue_valley_floor.04",
+      "25,17": "mse.ground.chiyue_valley_floor.04",
+      "25,18": "mse.ground.chiyue_valley_floor.02",
+      "25,19": "mse.ground.chiyue_valley_floor.02",
+      "25,2": "mse.ground.chiyue_valley_floor.01",
+      "25,20": "mse.ground.chiyue_valley_floor.06",
+      "25,21": "mse.ground.chiyue_valley_floor.01",
+      "25,22": "mse.ground.chiyue_valley_floor.03",
+      "25,23": "mse.ground.chiyue_valley_floor.02",
+      "25,24": "mse.ground.chiyue_valley_floor.03",
+      "25,25": "mse.ground.chiyue_valley_floor.01",
+      "25,26": "mse.ground.chiyue_valley_floor.05",
+      "25,27": "mse.ground.chiyue_valley_floor.01",
+      "25,28": "mse.ground.chiyue_valley_floor.02",
+      "25,29": "mse.ground.chiyue_valley_floor.02",
+      "25,3": "mse.ground.chiyue_valley_floor.04",
+      "25,30": "mse.ground.chiyue_valley_floor.03",
+      "25,31": "mse.ground.chiyue_valley_floor.03",
+      "25,4": "mse.ground.chiyue_valley_floor.02",
+      "25,5": "mse.ground.chiyue_valley_floor.06",
+      "25,6": "mse.ground.chiyue_valley_floor.04",
+      "25,7": "mse.ground.chiyue_valley_floor.06",
+      "25,8": "mse.ground.chiyue_valley_floor.01",
+      "25,9": "mse.ground.chiyue_valley_floor.04",
+      "26,0": "mse.ground.chiyue_valley_floor.06",
+      "26,1": "mse.ground.chiyue_valley_floor.02",
+      "26,10": "mse.ground.chiyue_valley_floor.05",
+      "26,11": "mse.ground.chiyue_valley_floor.03",
+      "26,12": "mse.ground.chiyue_valley_floor.03",
+      "26,13": "mse.ground.chiyue_valley_floor.04",
+      "26,14": "mse.ground.chiyue_valley_floor.04",
+      "26,15": "mse.ground.chiyue_valley_floor.02",
+      "26,16": "mse.ground.chiyue_valley_floor.06",
+      "26,17": "mse.ground.chiyue_valley_floor.02",
+      "26,18": "mse.ground.chiyue_valley_floor.01",
+      "26,19": "mse.ground.chiyue_valley_floor.06",
+      "26,2": "mse.ground.chiyue_valley_floor.01",
+      "26,20": "mse.ground.chiyue_valley_floor.04",
+      "26,21": "mse.ground.chiyue_valley_floor.01",
+      "26,22": "mse.ground.chiyue_valley_floor.03",
+      "26,23": "mse.ground.chiyue_valley_floor.06",
+      "26,24": "mse.ground.chiyue_valley_floor.01",
+      "26,25": "mse.ground.chiyue_valley_floor.02",
+      "26,26": "mse.ground.chiyue_valley_floor.03",
+      "26,27": "mse.ground.chiyue_valley_floor.04",
+      "26,28": "mse.ground.chiyue_valley_floor.04",
+      "26,29": "mse.ground.chiyue_valley_floor.05",
+      "26,3": "mse.ground.chiyue_valley_floor.04",
+      "26,30": "mse.ground.chiyue_valley_floor.03",
+      "26,31": "mse.ground.chiyue_valley_floor.03",
+      "26,4": "mse.ground.chiyue_valley_floor.06",
+      "26,5": "mse.ground.chiyue_valley_floor.06",
+      "26,6": "mse.ground.chiyue_valley_floor.01",
+      "26,7": "mse.ground.chiyue_valley_floor.05",
+      "26,8": "mse.ground.chiyue_valley_floor.01",
+      "26,9": "mse.ground.chiyue_valley_floor.04",
+      "27,0": "mse.ground.chiyue_valley_floor.03",
+      "27,1": "mse.ground.chiyue_valley_floor.04",
+      "27,10": "mse.ground.chiyue_valley_floor.03",
+      "27,11": "mse.ground.chiyue_valley_floor.04",
+      "27,12": "mse.ground.chiyue_valley_floor.04",
+      "27,13": "mse.ground.chiyue_valley_floor.04",
+      "27,14": "mse.ground.chiyue_valley_floor.03",
+      "27,15": "mse.ground.chiyue_valley_floor.04",
+      "27,16": "mse.ground.chiyue_valley_floor.01",
+      "27,17": "mse.ground.chiyue_valley_floor.04",
+      "27,18": "mse.ground.chiyue_valley_floor.01",
+      "27,19": "mse.ground.chiyue_valley_floor.01",
+      "27,2": "mse.ground.chiyue_valley_floor.02",
+      "27,20": "mse.ground.chiyue_valley_floor.01",
+      "27,21": "mse.ground.chiyue_valley_floor.02",
+      "27,22": "mse.ground.chiyue_valley_floor.05",
+      "27,23": "mse.ground.chiyue_valley_floor.04",
+      "27,24": "mse.ground.chiyue_valley_floor.03",
+      "27,25": "mse.ground.chiyue_valley_floor.04",
+      "27,26": "mse.ground.chiyue_valley_floor.03",
+      "27,27": "mse.ground.chiyue_valley_floor.03",
+      "27,28": "mse.ground.chiyue_valley_floor.02",
+      "27,29": "mse.ground.chiyue_valley_floor.02",
+      "27,3": "mse.ground.chiyue_valley_floor.03",
+      "27,30": "mse.ground.chiyue_valley_floor.03",
+      "27,31": "mse.ground.chiyue_valley_floor.04",
+      "27,4": "mse.ground.chiyue_valley_floor.03",
+      "27,5": "mse.ground.chiyue_valley_floor.03",
+      "27,6": "mse.ground.chiyue_valley_floor.04",
+      "27,7": "mse.ground.chiyue_valley_floor.02",
+      "27,8": "mse.ground.chiyue_valley_floor.05",
+      "27,9": "mse.ground.chiyue_valley_floor.02",
+      "28,0": "mse.ground.chiyue_valley_floor.06",
+      "28,1": "mse.ground.chiyue_valley_floor.01",
+      "28,10": "mse.ground.chiyue_valley_floor.03",
+      "28,11": "mse.ground.chiyue_valley_floor.02",
+      "28,12": "mse.ground.chiyue_valley_floor.06",
+      "28,13": "mse.ground.chiyue_valley_floor.02",
+      "28,14": "mse.ground.chiyue_valley_floor.04",
+      "28,15": "mse.ground.chiyue_valley_floor.06",
+      "28,16": "mse.ground.chiyue_valley_floor.04",
+      "28,17": "mse.ground.chiyue_valley_floor.03",
+      "28,18": "mse.ground.chiyue_valley_floor.02",
+      "28,19": "mse.ground.chiyue_valley_floor.03",
+      "28,2": "mse.ground.chiyue_valley_floor.06",
+      "28,20": "mse.ground.chiyue_valley_floor.05",
+      "28,21": "mse.ground.chiyue_valley_floor.04",
+      "28,22": "mse.ground.chiyue_valley_floor.04",
+      "28,23": "mse.ground.chiyue_valley_floor.05",
+      "28,24": "mse.ground.chiyue_valley_floor.06",
+      "28,25": "mse.ground.chiyue_valley_floor.06",
+      "28,26": "mse.ground.chiyue_valley_floor.01",
+      "28,27": "mse.ground.chiyue_valley_floor.02",
+      "28,28": "mse.ground.chiyue_valley_floor.02",
+      "28,29": "mse.ground.chiyue_valley_floor.04",
+      "28,3": "mse.ground.chiyue_valley_floor.05",
+      "28,30": "mse.ground.chiyue_valley_floor.03",
+      "28,31": "mse.ground.chiyue_valley_floor.05",
+      "28,4": "mse.ground.chiyue_valley_floor.01",
+      "28,5": "mse.ground.chiyue_valley_floor.01",
+      "28,6": "mse.ground.chiyue_valley_floor.03",
+      "28,7": "mse.ground.chiyue_valley_floor.01",
+      "28,8": "mse.ground.chiyue_valley_floor.02",
+      "28,9": "mse.ground.chiyue_valley_floor.06",
+      "29,0": "mse.ground.chiyue_valley_floor.02",
+      "29,1": "mse.ground.chiyue_valley_floor.06",
+      "29,10": "mse.ground.chiyue_valley_floor.04",
+      "29,11": "mse.ground.chiyue_valley_floor.05",
+      "29,12": "mse.ground.chiyue_valley_floor.02",
+      "29,13": "mse.ground.chiyue_valley_floor.03",
+      "29,14": "mse.ground.chiyue_valley_floor.04",
+      "29,15": "mse.ground.chiyue_valley_floor.01",
+      "29,16": "mse.ground.chiyue_valley_floor.04",
+      "29,17": "mse.ground.chiyue_valley_floor.04",
+      "29,18": "mse.ground.chiyue_valley_floor.06",
+      "29,19": "mse.ground.chiyue_valley_floor.01",
+      "29,2": "mse.ground.chiyue_valley_floor.02",
+      "29,20": "mse.ground.chiyue_valley_floor.06",
+      "29,21": "mse.ground.chiyue_valley_floor.01",
+      "29,22": "mse.ground.chiyue_valley_floor.02",
+      "29,23": "mse.ground.chiyue_valley_floor.01",
+      "29,24": "mse.ground.chiyue_valley_floor.01",
+      "29,25": "mse.ground.chiyue_valley_floor.01",
+      "29,26": "mse.ground.chiyue_valley_floor.05",
+      "29,27": "mse.ground.chiyue_valley_floor.01",
+      "29,28": "mse.ground.chiyue_valley_floor.03",
+      "29,29": "mse.ground.chiyue_valley_floor.02",
+      "29,3": "mse.ground.chiyue_valley_floor.05",
+      "29,30": "mse.ground.chiyue_valley_floor.01",
+      "29,31": "mse.ground.chiyue_valley_floor.03",
+      "29,4": "mse.ground.chiyue_valley_floor.05",
+      "29,5": "mse.ground.chiyue_valley_floor.02",
+      "29,6": "mse.ground.chiyue_valley_floor.03",
+      "29,7": "mse.ground.chiyue_valley_floor.01",
+      "29,8": "mse.ground.chiyue_valley_floor.04",
+      "29,9": "mse.ground.chiyue_valley_floor.03",
+      "3,0": "mse.ground.chiyue_valley_floor.01",
+      "3,1": "mse.ground.chiyue_valley_floor.01",
+      "3,10": "mse.ground.chiyue_valley_floor.05",
+      "3,11": "mse.ground.chiyue_valley_floor.06",
+      "3,12": "mse.ground.chiyue_valley_floor.06",
+      "3,13": "mse.ground.chiyue_valley_floor.01",
+      "3,14": "mse.ground.chiyue_valley_floor.01",
+      "3,15": "mse.ground.chiyue_valley_floor.05",
+      "3,16": "mse.ground.chiyue_valley_floor.04",
+      "3,17": "mse.ground.chiyue_valley_floor.03",
+      "3,18": "mse.ground.chiyue_valley_floor.01",
+      "3,19": "mse.ground.chiyue_valley_floor.02",
+      "3,2": "mse.ground.chiyue_valley_floor.06",
+      "3,20": "mse.ground.chiyue_valley_floor.04",
+      "3,21": "mse.ground.chiyue_valley_floor.05",
+      "3,22": "mse.ground.chiyue_valley_floor.01",
+      "3,23": "mse.ground.chiyue_valley_floor.06",
+      "3,24": "mse.ground.chiyue_valley_floor.04",
+      "3,25": "mse.ground.chiyue_valley_floor.02",
+      "3,26": "mse.ground.chiyue_valley_floor.05",
+      "3,27": "mse.ground.chiyue_valley_floor.02",
+      "3,28": "mse.ground.chiyue_valley_floor.05",
+      "3,29": "mse.ground.chiyue_valley_floor.01",
+      "3,3": "mse.ground.chiyue_valley_floor.01",
+      "3,30": "mse.ground.chiyue_valley_floor.02",
+      "3,31": "mse.ground.chiyue_valley_floor.02",
+      "3,4": "mse.ground.chiyue_valley_floor.06",
+      "3,5": "mse.ground.chiyue_valley_floor.06",
+      "3,6": "mse.ground.chiyue_valley_floor.03",
+      "3,7": "mse.ground.chiyue_valley_floor.06",
+      "3,8": "mse.ground.chiyue_valley_floor.02",
+      "3,9": "mse.ground.chiyue_valley_floor.02",
+      "30,0": "mse.ground.chiyue_valley_floor.06",
+      "30,1": "mse.ground.chiyue_valley_floor.01",
+      "30,10": "mse.ground.chiyue_valley_floor.02",
+      "30,11": "mse.ground.chiyue_valley_floor.06",
+      "30,12": "mse.ground.chiyue_valley_floor.03",
+      "30,13": "mse.ground.chiyue_valley_floor.04",
+      "30,14": "mse.ground.chiyue_valley_floor.02",
+      "30,15": "mse.ground.chiyue_valley_floor.06",
+      "30,16": "mse.ground.chiyue_valley_floor.05",
+      "30,17": "mse.ground.chiyue_valley_floor.01",
+      "30,18": "mse.ground.chiyue_valley_floor.06",
+      "30,19": "mse.ground.chiyue_valley_floor.02",
+      "30,2": "mse.ground.chiyue_valley_floor.05",
+      "30,20": "mse.ground.chiyue_valley_floor.05",
+      "30,21": "mse.ground.chiyue_valley_floor.06",
+      "30,22": "mse.ground.chiyue_valley_floor.02",
+      "30,23": "mse.ground.chiyue_valley_floor.06",
+      "30,24": "mse.ground.chiyue_valley_floor.04",
+      "30,25": "mse.ground.chiyue_valley_floor.03",
+      "30,26": "mse.ground.chiyue_valley_floor.06",
+      "30,27": "mse.ground.chiyue_valley_floor.01",
+      "30,28": "mse.ground.chiyue_valley_floor.05",
+      "30,29": "mse.ground.chiyue_valley_floor.02",
+      "30,3": "mse.ground.chiyue_valley_floor.05",
+      "30,30": "mse.ground.chiyue_valley_floor.03",
+      "30,31": "mse.ground.chiyue_valley_floor.02",
+      "30,4": "mse.ground.chiyue_valley_floor.05",
+      "30,5": "mse.ground.chiyue_valley_floor.02",
+      "30,6": "mse.ground.chiyue_valley_floor.03",
+      "30,7": "mse.ground.chiyue_valley_floor.04",
+      "30,8": "mse.ground.chiyue_valley_floor.05",
+      "30,9": "mse.ground.chiyue_valley_floor.06",
+      "31,0": "mse.ground.chiyue_valley_floor.04",
+      "31,1": "mse.ground.chiyue_valley_floor.01",
+      "31,10": "mse.ground.chiyue_valley_floor.01",
+      "31,11": "mse.ground.chiyue_valley_floor.04",
+      "31,12": "mse.ground.chiyue_valley_floor.02",
+      "31,13": "mse.ground.chiyue_valley_floor.03",
+      "31,14": "mse.ground.chiyue_valley_floor.02",
+      "31,15": "mse.ground.chiyue_valley_floor.02",
+      "31,16": "mse.ground.chiyue_valley_floor.05",
+      "31,17": "mse.ground.chiyue_valley_floor.02",
+      "31,18": "mse.ground.chiyue_valley_floor.05",
+      "31,19": "mse.ground.chiyue_valley_floor.03",
+      "31,2": "mse.ground.chiyue_valley_floor.02",
+      "31,20": "mse.ground.chiyue_valley_floor.06",
+      "31,21": "mse.ground.chiyue_valley_floor.01",
+      "31,22": "mse.ground.chiyue_valley_floor.04",
+      "31,23": "mse.ground.chiyue_valley_floor.03",
+      "31,24": "mse.ground.chiyue_valley_floor.04",
+      "31,25": "mse.ground.chiyue_valley_floor.03",
+      "31,26": "mse.ground.chiyue_valley_floor.02",
+      "31,27": "mse.ground.chiyue_valley_floor.02",
+      "31,28": "mse.ground.chiyue_valley_floor.04",
+      "31,29": "mse.ground.chiyue_valley_floor.02",
+      "31,3": "mse.ground.chiyue_valley_floor.02",
+      "31,30": "mse.ground.chiyue_valley_floor.05",
+      "31,4": "mse.ground.chiyue_valley_floor.05",
+      "31,5": "mse.ground.chiyue_valley_floor.02",
+      "31,6": "mse.ground.chiyue_valley_floor.05",
+      "31,7": "mse.ground.chiyue_valley_floor.02",
+      "31,8": "mse.ground.chiyue_valley_floor.04",
+      "31,9": "mse.ground.chiyue_valley_floor.06",
+      "4,0": "mse.ground.chiyue_valley_floor.02",
+      "4,1": "mse.ground.chiyue_valley_floor.01",
+      "4,10": "mse.ground.chiyue_valley_floor.05",
+      "4,11": "mse.ground.chiyue_valley_floor.01",
+      "4,12": "mse.ground.chiyue_valley_floor.02",
+      "4,13": "mse.ground.chiyue_valley_floor.05",
+      "4,14": "mse.ground.chiyue_valley_floor.05",
+      "4,15": "mse.ground.chiyue_valley_floor.02",
+      "4,16": "mse.ground.chiyue_valley_floor.05",
+      "4,17": "mse.ground.chiyue_valley_floor.02",
+      "4,18": "mse.ground.chiyue_valley_floor.01",
+      "4,19": "mse.ground.chiyue_valley_floor.04",
+      "4,2": "mse.ground.chiyue_valley_floor.04",
+      "4,20": "mse.ground.chiyue_valley_floor.04",
+      "4,21": "mse.ground.chiyue_valley_floor.01",
+      "4,22": "mse.ground.chiyue_valley_floor.05",
+      "4,23": "mse.ground.chiyue_valley_floor.02",
+      "4,24": "mse.ground.chiyue_valley_floor.01",
+      "4,25": "mse.ground.chiyue_valley_floor.05",
+      "4,26": "mse.ground.chiyue_valley_floor.02",
+      "4,27": "mse.ground.chiyue_valley_floor.05",
+      "4,28": "mse.ground.chiyue_valley_floor.02",
+      "4,29": "mse.ground.chiyue_valley_floor.01",
+      "4,3": "mse.ground.chiyue_valley_floor.06",
+      "4,30": "mse.ground.chiyue_valley_floor.02",
+      "4,31": "mse.ground.chiyue_valley_floor.04",
+      "4,4": "mse.ground.chiyue_valley_floor.03",
+      "4,5": "mse.ground.chiyue_valley_floor.02",
+      "4,6": "mse.ground.chiyue_valley_floor.05",
+      "4,7": "mse.ground.chiyue_valley_floor.05",
+      "4,8": "mse.ground.chiyue_valley_floor.05",
+      "4,9": "mse.ground.chiyue_valley_floor.06",
+      "5,0": "mse.ground.chiyue_valley_floor.06",
+      "5,1": "mse.ground.chiyue_valley_floor.03",
+      "5,10": "mse.ground.chiyue_valley_floor.03",
+      "5,11": "mse.ground.chiyue_valley_floor.03",
+      "5,12": "mse.ground.chiyue_valley_floor.04",
+      "5,13": "mse.ground.chiyue_valley_floor.01",
+      "5,14": "mse.ground.chiyue_valley_floor.05",
+      "5,15": "mse.ground.chiyue_valley_floor.01",
+      "5,16": "mse.ground.chiyue_valley_floor.03",
+      "5,17": "mse.ground.chiyue_valley_floor.06",
+      "5,18": "mse.ground.chiyue_valley_floor.06",
+      "5,19": "mse.ground.chiyue_valley_floor.02",
+      "5,2": "mse.ground.chiyue_valley_floor.02",
+      "5,20": "mse.ground.chiyue_valley_floor.05",
+      "5,21": "mse.ground.chiyue_valley_floor.06",
+      "5,22": "mse.ground.chiyue_valley_floor.02",
+      "5,23": "mse.ground.chiyue_valley_floor.05",
+      "5,24": "mse.ground.chiyue_valley_floor.05",
+      "5,25": "mse.ground.chiyue_valley_floor.01",
+      "5,26": "mse.ground.chiyue_valley_floor.02",
+      "5,27": "mse.ground.chiyue_valley_floor.04",
+      "5,28": "mse.ground.chiyue_valley_floor.06",
+      "5,29": "mse.ground.chiyue_valley_floor.06",
+      "5,3": "mse.ground.chiyue_valley_floor.06",
+      "5,30": "mse.ground.chiyue_valley_floor.03",
+      "5,31": "mse.ground.chiyue_valley_floor.03",
+      "5,4": "mse.ground.chiyue_valley_floor.03",
+      "5,5": "mse.ground.chiyue_valley_floor.04",
+      "5,6": "mse.ground.chiyue_valley_floor.05",
+      "5,7": "mse.ground.chiyue_valley_floor.02",
+      "5,8": "mse.ground.chiyue_valley_floor.02",
+      "5,9": "mse.ground.chiyue_valley_floor.05",
+      "6,0": "mse.ground.chiyue_valley_floor.01",
+      "6,1": "mse.ground.chiyue_valley_floor.03",
+      "6,10": "mse.ground.chiyue_valley_floor.04",
+      "6,11": "mse.ground.chiyue_valley_floor.06",
+      "6,12": "mse.ground.chiyue_valley_floor.02",
+      "6,13": "mse.ground.chiyue_valley_floor.01",
+      "6,14": "mse.ground.chiyue_valley_floor.05",
+      "6,15": "mse.ground.chiyue_valley_floor.06",
+      "6,16": "mse.ground.chiyue_valley_floor.01",
+      "6,17": "mse.ground.chiyue_valley_floor.02",
+      "6,18": "mse.ground.chiyue_valley_floor.03",
+      "6,19": "mse.ground.chiyue_valley_floor.04",
+      "6,2": "mse.ground.chiyue_valley_floor.05",
+      "6,20": "mse.ground.chiyue_valley_floor.04",
+      "6,21": "mse.ground.chiyue_valley_floor.04",
+      "6,22": "mse.ground.chiyue_valley_floor.05",
+      "6,23": "mse.ground.chiyue_valley_floor.05",
+      "6,24": "mse.ground.chiyue_valley_floor.03",
+      "6,25": "mse.ground.chiyue_valley_floor.05",
+      "6,26": "mse.ground.chiyue_valley_floor.04",
+      "6,27": "mse.ground.chiyue_valley_floor.01",
+      "6,28": "mse.ground.chiyue_valley_floor.06",
+      "6,29": "mse.ground.chiyue_valley_floor.04",
+      "6,3": "mse.ground.chiyue_valley_floor.05",
+      "6,30": "mse.ground.chiyue_valley_floor.04",
+      "6,31": "mse.ground.chiyue_valley_floor.02",
+      "6,4": "mse.ground.chiyue_valley_floor.01",
+      "6,5": "mse.ground.chiyue_valley_floor.02",
+      "6,6": "mse.ground.chiyue_valley_floor.02",
+      "6,7": "mse.ground.chiyue_valley_floor.02",
+      "6,8": "mse.ground.chiyue_valley_floor.05",
+      "6,9": "mse.ground.chiyue_valley_floor.05",
+      "7,0": "mse.ground.chiyue_valley_floor.06",
+      "7,1": "mse.ground.chiyue_valley_floor.03",
+      "7,10": "mse.ground.chiyue_valley_floor.06",
+      "7,11": "mse.ground.chiyue_valley_floor.05",
+      "7,12": "mse.ground.chiyue_valley_floor.04",
+      "7,13": "mse.ground.chiyue_valley_floor.01",
+      "7,14": "mse.ground.chiyue_valley_floor.06",
+      "7,15": "mse.ground.chiyue_valley_floor.02",
+      "7,16": "mse.ground.chiyue_valley_floor.05",
+      "7,17": "mse.ground.chiyue_valley_floor.01",
+      "7,18": "mse.ground.chiyue_valley_floor.03",
+      "7,19": "mse.ground.chiyue_valley_floor.02",
+      "7,2": "mse.ground.chiyue_valley_floor.03",
+      "7,20": "mse.ground.chiyue_valley_floor.05",
+      "7,21": "mse.ground.chiyue_valley_floor.05",
+      "7,22": "mse.ground.chiyue_valley_floor.04",
+      "7,23": "mse.ground.chiyue_valley_floor.06",
+      "7,24": "mse.ground.chiyue_valley_floor.04",
+      "7,25": "mse.ground.chiyue_valley_floor.02",
+      "7,26": "mse.ground.chiyue_valley_floor.02",
+      "7,27": "mse.ground.chiyue_valley_floor.06",
+      "7,28": "mse.ground.chiyue_valley_floor.04",
+      "7,29": "mse.ground.chiyue_valley_floor.01",
+      "7,3": "mse.ground.chiyue_valley_floor.04",
+      "7,30": "mse.ground.chiyue_valley_floor.02",
+      "7,31": "mse.ground.chiyue_valley_floor.05",
+      "7,4": "mse.ground.chiyue_valley_floor.06",
+      "7,5": "mse.ground.chiyue_valley_floor.06",
+      "7,6": "mse.ground.chiyue_valley_floor.06",
+      "7,7": "mse.ground.chiyue_valley_floor.06",
+      "7,8": "mse.ground.chiyue_valley_floor.02",
+      "7,9": "mse.ground.chiyue_valley_floor.01",
+      "8,0": "mse.ground.chiyue_valley_floor.02",
+      "8,1": "mse.ground.chiyue_valley_floor.03",
+      "8,10": "mse.ground.chiyue_valley_floor.06",
+      "8,11": "mse.ground.chiyue_valley_floor.02",
+      "8,12": "mse.ground.chiyue_valley_floor.02",
+      "8,13": "mse.ground.chiyue_valley_floor.01",
+      "8,14": "mse.ground.chiyue_valley_floor.03",
+      "8,15": "mse.ground.chiyue_valley_floor.02",
+      "8,16": "mse.ground.chiyue_valley_floor.01",
+      "8,17": "mse.ground.chiyue_valley_floor.03",
+      "8,18": "mse.ground.chiyue_valley_floor.02",
+      "8,19": "mse.ground.chiyue_valley_floor.01",
+      "8,2": "mse.ground.chiyue_valley_floor.04",
+      "8,20": "mse.ground.chiyue_valley_floor.02",
+      "8,21": "mse.ground.chiyue_valley_floor.04",
+      "8,22": "mse.ground.chiyue_valley_floor.05",
+      "8,23": "mse.ground.chiyue_valley_floor.02",
+      "8,24": "mse.ground.chiyue_valley_floor.05",
+      "8,25": "mse.ground.chiyue_valley_floor.01",
+      "8,26": "mse.ground.chiyue_valley_floor.02",
+      "8,27": "mse.ground.chiyue_valley_floor.03",
+      "8,28": "mse.ground.chiyue_valley_floor.06",
+      "8,29": "mse.ground.chiyue_valley_floor.02",
+      "8,3": "mse.ground.chiyue_valley_floor.04",
+      "8,30": "mse.ground.chiyue_valley_floor.06",
+      "8,31": "mse.ground.chiyue_valley_floor.05",
+      "8,4": "mse.ground.chiyue_valley_floor.06",
+      "8,5": "mse.ground.chiyue_valley_floor.03",
+      "8,6": "mse.ground.chiyue_valley_floor.02",
+      "8,7": "mse.ground.chiyue_valley_floor.02",
+      "8,8": "mse.ground.chiyue_valley_floor.06",
+      "8,9": "mse.ground.chiyue_valley_floor.03",
+      "9,0": "mse.ground.chiyue_valley_floor.05",
+      "9,1": "mse.ground.chiyue_valley_floor.02",
+      "9,10": "mse.ground.chiyue_valley_floor.06",
+      "9,11": "mse.ground.chiyue_valley_floor.01",
+      "9,12": "mse.ground.chiyue_valley_floor.03",
+      "9,13": "mse.ground.chiyue_valley_floor.04",
+      "9,14": "mse.ground.chiyue_valley_floor.05",
+      "9,15": "mse.ground.chiyue_valley_floor.05",
+      "9,16": "mse.ground.chiyue_valley_floor.02",
+      "9,17": "mse.ground.chiyue_valley_floor.02",
+      "9,18": "mse.ground.chiyue_valley_floor.06",
+      "9,19": "mse.ground.chiyue_valley_floor.04",
+      "9,2": "mse.ground.chiyue_valley_floor.06",
+      "9,20": "mse.ground.chiyue_valley_floor.04",
+      "9,21": "mse.ground.chiyue_valley_floor.06",
+      "9,22": "mse.ground.chiyue_valley_floor.06",
+      "9,23": "mse.ground.chiyue_valley_floor.01",
+      "9,24": "mse.ground.chiyue_valley_floor.03",
+      "9,25": "mse.ground.chiyue_valley_floor.04",
+      "9,26": "mse.ground.chiyue_valley_floor.06",
+      "9,27": "mse.ground.chiyue_valley_floor.06",
+      "9,28": "mse.ground.chiyue_valley_floor.05",
+      "9,29": "mse.ground.chiyue_valley_floor.05",
+      "9,3": "mse.ground.chiyue_valley_floor.03",
+      "9,30": "mse.ground.chiyue_valley_floor.05",
+      "9,31": "mse.ground.chiyue_valley_floor.06",
+      "9,4": "mse.ground.chiyue_valley_floor.01",
+      "9,5": "mse.ground.chiyue_valley_floor.02",
+      "9,6": "mse.ground.chiyue_valley_floor.03",
+      "9,7": "mse.ground.chiyue_valley_floor.03",
+      "9,8": "mse.ground.chiyue_valley_floor.02",
+      "9,9": "mse.ground.chiyue_valley_floor.06"
+    }
+  },
+  "instances": [
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        96.0,
+        80.36363983154297
+      ],
+      "asset_id": "chiyue_valley_ground_rock_pile_04",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000036",
+      "instance_scale_level": 1.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        96.0,
+        80.36363983154297
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.1,
+        1.1
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        8.0
+      ],
+      "tile_anchor": [
+        1.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        93.0,
+        351.0
+      ],
+      "asset_id": "user.3ad8dd403e6fd121",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000037",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        93.0,
+        351.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        2.0,
+        2.0
+      ],
+      "tile_anchor": [
+        2.0,
+        2.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        93.0,
+        351.0
+      ],
+      "asset_id": "user.3ad8dd403e6fd121",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000038",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        93.0,
+        351.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        28.0,
+        1.0
+      ],
+      "tile_anchor": [
+        28.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        93.0,
+        351.0
+      ],
+      "asset_id": "user.3ad8dd403e6fd121",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000039",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        93.0,
+        351.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        29.0
+      ],
+      "tile_anchor": [
+        29.0,
+        29.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        93.0,
+        351.0
+      ],
+      "asset_id": "user.3ad8dd403e6fd121",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000040",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        93.0,
+        351.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        28.0
+      ],
+      "tile_anchor": [
+        1.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        76.0,
+        90.0
+      ],
+      "asset_id": "chiyue_valley_ground_rock_pile_01",
+      "base_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000041",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        76.0,
+        90.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        26.0,
+        18.0
+      ],
+      "tile_anchor": [
+        26.0,
+        18.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        92.0,
+        71.66666412353516
+      ],
+      "asset_id": "chiyue_valley_ground_rock_pile_02",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000042",
+      "instance_scale_level": -1.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        92.0,
+        71.66666412353516
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.9,
+        0.9
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        7.0,
+        0.0
+      ],
+      "tile_anchor": [
+        7.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        96.0,
+        62.0
+      ],
+      "asset_id": "chiyue_valley_ground_rock_pile_03",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000043",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        96.0,
+        62.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        4.0,
+        25.0
+      ],
+      "tile_anchor": [
+        4.0,
+        25.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "tile_center",
+      "anchor_px": [
+        96.0,
+        48.0
+      ],
+      "asset_id": "mse.ground_graffiti.3x3.08",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000044",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        96.0,
+        48.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        3.0,
+        3.0
+      ],
+      "tile_anchor": [
+        3.0,
+        3.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000017",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_00",
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000001",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_00",
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000018",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_01",
+      "tile": [
+        0.0,
+        4.0
+      ],
+      "tile_anchor": [
+        0.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000002",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_01",
+      "tile": [
+        4.0,
+        0.0
+      ],
+      "tile_anchor": [
+        4.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000019",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_02",
+      "tile": [
+        0.0,
+        8.0
+      ],
+      "tile_anchor": [
+        0.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000003",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_02",
+      "tile": [
+        8.0,
+        0.0
+      ],
+      "tile_anchor": [
+        8.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000020",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_03",
+      "tile": [
+        0.0,
+        12.0
+      ],
+      "tile_anchor": [
+        0.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000004",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_03",
+      "tile": [
+        12.0,
+        0.0
+      ],
+      "tile_anchor": [
+        12.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000021",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_04",
+      "tile": [
+        0.0,
+        16.0
+      ],
+      "tile_anchor": [
+        0.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000005",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_04",
+      "tile": [
+        16.0,
+        0.0
+      ],
+      "tile_anchor": [
+        16.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000022",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_05",
+      "tile": [
+        0.0,
+        20.0
+      ],
+      "tile_anchor": [
+        0.0,
+        20.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000006",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_05",
+      "tile": [
+        20.0,
+        0.0
+      ],
+      "tile_anchor": [
+        20.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000023",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_06",
+      "tile": [
+        0.0,
+        24.0
+      ],
+      "tile_anchor": [
+        0.0,
+        24.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000007",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_06",
+      "tile": [
+        24.0,
+        0.0
+      ],
+      "tile_anchor": [
+        24.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000024",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_07",
+      "tile": [
+        0.0,
+        28.0
+      ],
+      "tile_anchor": [
+        0.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000008",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_07",
+      "tile": [
+        28.0,
+        0.0
+      ],
+      "tile_anchor": [
+        28.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000009",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_00",
+      "tile": [
+        0.0,
+        31.0
+      ],
+      "tile_anchor": [
+        0.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000025",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_00",
+      "tile": [
+        31.0,
+        0.0
+      ],
+      "tile_anchor": [
+        31.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000010",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_01",
+      "tile": [
+        4.0,
+        31.0
+      ],
+      "tile_anchor": [
+        4.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000026",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_01",
+      "tile": [
+        31.0,
+        4.0
+      ],
+      "tile_anchor": [
+        31.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000011",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_02",
+      "tile": [
+        8.0,
+        31.0
+      ],
+      "tile_anchor": [
+        8.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000027",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_02",
+      "tile": [
+        31.0,
+        8.0
+      ],
+      "tile_anchor": [
+        31.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000012",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_03",
+      "tile": [
+        12.0,
+        31.0
+      ],
+      "tile_anchor": [
+        12.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000028",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_03",
+      "tile": [
+        31.0,
+        12.0
+      ],
+      "tile_anchor": [
+        31.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000013",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_04",
+      "tile": [
+        16.0,
+        31.0
+      ],
+      "tile_anchor": [
+        16.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000029",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_04",
+      "tile": [
+        31.0,
+        16.0
+      ],
+      "tile_anchor": [
+        31.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000014",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_05",
+      "tile": [
+        20.0,
+        31.0
+      ],
+      "tile_anchor": [
+        20.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000030",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_05",
+      "tile": [
+        31.0,
+        20.0
+      ],
+      "tile_anchor": [
+        31.0,
+        20.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000015",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_06",
+      "tile": [
+        24.0,
+        31.0
+      ],
+      "tile_anchor": [
+        24.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000031",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_06",
+      "tile": [
+        31.0,
+        24.0
+      ],
+      "tile_anchor": [
+        31.0,
+        24.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000016",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_07",
+      "tile": [
+        28.0,
+        31.0
+      ],
+      "tile_anchor": [
+        28.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000032",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "chiyue_red_moon_lair.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_07",
+      "tile": [
+        31.0,
+        28.0
+      ],
+      "tile_anchor": [
+        31.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    }
+  ],
+  "projection_contract_id": "world.ground_projection.iso_64x32.v1",
+  "runtime_schema_version": 2.0,
+  "semantics": {
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "boss",
+          "source_line": 255.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "赤月恶魔",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 180.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            52.0,
+            1.0,
+            1.0,
+            795.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          14.0
+        ]
+      }
+    ],
+    "door_points": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_only": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "arrival_only",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "由山谷密道B进入，单向只可进入",
+        "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
+        "kind": "map_exit",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "arrival_only_endpoint",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
+        "tile": [
+          4.0,
+          4.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": false
+      }
+    ],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血巨人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 164.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            5.0,
+            3.0,
+            795.0,
+            -3.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            31.0,
+            27.0,
+            1.0,
+            795.0,
+            -28.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "月魔蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 168.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            24.0,
+            29.0,
+            1.0,
+            795.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            24.0,
+            28.0,
+            13.0,
+            795.0,
+            -18.0,
+            -18.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钢牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 172.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            16.0,
+            11.0,
+            4.0,
+            795.0,
+            -15.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暴牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 174.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            15.0,
+            37.0,
+            1.0,
+            795.0,
+            -30.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "花吻蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 178.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            14.0,
+            38.0,
+            1.0,
+            795.0,
+            -16.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血巨人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 164.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            5.0,
+            3.0,
+            795.0,
+            -3.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_red_moon_lair",
+          "source_category_role": "ordinary",
+          "source_line": 254.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            31.0,
+            27.0,
+            1.0,
+            795.0,
+            -28.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 480.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_red_moon_lair.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.chiyue_red_moon_lair.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          19.0
+        ]
+      }
+    ],
+    "npc_points": [],
+    "region_trigger": [],
+    "respawn_points": [],
+    "safe_area": []
+  },
+  "source": {
+    "candidate_binding": {
+      "authoring_sha256": "bc3a29e8ebda6b6251e1ff67e918fb5751e4eaad67535e109ef87a6ae0d0aefe",
+      "contract_id": "mse.map.runtime.candidate_binding.v1",
+      "document_revision": 2.0,
+      "document_sha256": "ac2233efbc5152a383b493e836cab68743214b4e58aa95ee4cefc7621e25723a",
+      "ground_manifest_sha256": "cca79bbaba68e38be6c24a7a0ff10b34e3d304c9ef25437849e2a44b29f8ee9d",
+      "ground_state_sha256": "9e5743bd4fdba455a1bfc3551db657c223163aedd04d3fdcf662624c7602c484",
+      "map_key": "chiyue_red_moon_lair",
+      "runtime_map_id": 916007.0
+    },
+    "content_layer": "personal_expansion",
+    "display_name": "赤月魔穴",
+    "editor_schema_version": 5.0,
+    "map_id": "chiyue_red_moon_lair",
+    "revision": 2.0,
+    "runtime_map_id": 916007.0
+  },
+  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+}

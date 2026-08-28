@@ -18,6 +18,9 @@ const BICH_UNDEAD_ART_PATH := "res://assets/data/bich_undead_client_art_sources.
 const BICH_COMMON_ART_PATH := "res://assets/data/bich_common_client_art_sources.json"
 const BOSS_SERVICE_RULES_PATH := "res://assets/data/boss_service_rules.json"
 const BICH_COMMUNITY_BASELINE_PATH := "res://assets/data/bich_community_baseline.json"
+const FORMAL_MAP_IDENTITY_REGISTRY_PATH := (
+	"res://assets/data/map_design/map_identity_registry.json"
+)
 const SERVICE_ITEM_CATALOG_PATH := "res://assets/data/service_item_catalog.json"
 const EQUIPMENT_PRICE_CANDIDATES_PATH := "res://assets/data/equipment_price_candidates_v1.json"
 const MERCHANT_CATALOG_PATH := "res://assets/data/merchant_catalog_v1.json"
@@ -108,8 +111,9 @@ const ITEM_ALIASES := {
 	"蝎子的尾巴": "蝎尾",
 
 }
-# 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
-const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
+# 服务端使用经典MAP代码；正式地图运行时使用冻结 canonical IDs。
+# 别名必须显式保留，禁止用名称或数组顺序推导。
+const SERVICE_RUNTIME_MAP_ALIASES := {0: 910001}
 const PROFESSION_VISUAL_IDS := {
 	"战士": "warrior",
 	"法师": "wizard",
@@ -225,6 +229,8 @@ func load_database() -> bool:
 	database = parsed
 	maps = database.get("maps", [])
 	_normalize_map_ids()
+	if not _append_formal_map_identities():
+		return false
 	# The merged legacy database remains available for maps/items/tasks, but it
 	# is no longer a monster authority.  Runtime monster identity, combat,
 	# appearance and drops all come from the canonical ID-keyed catalog.
@@ -2229,6 +2235,64 @@ func _normalize_map_ids() -> void:
 			entry["mapId"] = 900000 + int(str(raw_id).trim_prefix("LATE-"))
 
 
+func _append_formal_map_identities() -> bool:
+	if not FileAccess.file_exists(FORMAL_MAP_IDENTITY_REGISTRY_PATH):
+		load_error = "formal_map_identity_registry_missing"
+		return false
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(FORMAL_MAP_IDENTITY_REGISTRY_PATH)
+	)
+	if (
+		not parsed is Dictionary
+		or str(parsed.get("contract_id", ""))
+			!= "hardcore.formal_map_identity.v1"
+	):
+		load_error = "formal_map_identity_registry_invalid"
+		return false
+	var identity_maps: Variant = parsed.get("maps", null)
+	if not identity_maps is Array or identity_maps.size() != 67:
+		load_error = "formal_map_identity_count_invalid"
+		return false
+	var occupied_ids: Dictionary = {}
+	var formal_keys: Dictionary = {}
+	for raw_map: Variant in maps:
+		if raw_map is Dictionary:
+			occupied_ids[int(raw_map.get("mapId", -1))] = true
+	for raw_identity: Variant in identity_maps:
+		if not raw_identity is Dictionary:
+			load_error = "formal_map_identity_entry_invalid"
+			return false
+		var identity: Dictionary = raw_identity
+		var map_key := str(identity.get("map_id", ""))
+		var runtime_map_id := int(identity.get("runtime_map_id", -1))
+		var display_name := str(identity.get("display_name", "")).strip_edges()
+		if (
+			map_key.is_empty()
+			or display_name.is_empty()
+			or runtime_map_id < 910001
+			or runtime_map_id > 918006
+			or occupied_ids.has(runtime_map_id)
+			or formal_keys.has(map_key)
+		):
+			load_error = "formal_map_identity_collision"
+			return false
+		maps.append({
+			"mapId": runtime_map_id,
+			"name": display_name,
+			"formalMapKey": map_key,
+			"legacyMapId": str(identity.get("legacy_map_id", "")),
+			"legacyRuntimeMapId": int(
+				identity.get("legacy_runtime_map_id", -1)
+			),
+			"availabilityDefault": true,
+			"runtimeAuthority": "hardcore.formal_map_identity.v1",
+		})
+		occupied_ids[runtime_map_id] = true
+		formal_keys[map_key] = true
+	database["maps"] = maps
+	return true
+
+
 func _build_indexes() -> void:
 	_items_by_name.clear()
 	_items_by_id.clear()
@@ -2239,7 +2303,10 @@ func _build_indexes() -> void:
 			continue
 		_maps_by_id[int(entry.get("mapId", -1))] = entry
 		var map_name := str(entry.get("name", ""))
-		if not _maps_by_name.has(map_name):
+		if (
+			not _maps_by_name.has(map_name)
+			or not str(entry.get("formalMapKey", "")).is_empty()
+		):
 			_maps_by_name[map_name] = entry
 	for entry: Variant in items:
 		if entry is Dictionary:

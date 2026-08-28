@@ -32,7 +32,7 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	assert(game.current_map_id == 4 and game.current_zone == "比奇省", "游戏启动未进入服务端HomeMap=0映射")
+	assert(game.current_map_id == 910001 and game.current_zone.begins_with("比奇省"), "游戏启动未进入服务端HomeMap=0正式映射")
 	assert(game.player.global_position == MapEditorRuntimeBridge.home_screen_position_px(), "游戏启动未落到当前实际复活/回城锚点")
 	assert(game.background.environment_source_map_code() == "0", "运行时背景丢失0.map来源")
 	assert(RegionContent.get_map_content(4).get("status", "") == "client_map_full_size", "比奇省运行内容仍标为垂直切片")

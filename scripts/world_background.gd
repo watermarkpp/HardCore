@@ -188,7 +188,10 @@ func _apply_pending_collision_rebuild() -> void:
 
 
 func uses_bich_art() -> bool:
-	return str(_active_theme().get("asset_set", "")) == "bich" and _active_map_id() == 4
+	return (
+		str(_active_theme().get("asset_set", "")) == "bich"
+		and _presentation_map_id(_active_map_id()) == 4
+	)
 
 
 func uses_orc_tomb_art() -> bool:
@@ -236,7 +239,9 @@ func uses_environment_template() -> bool:
 
 
 func environment_profile() -> Dictionary:
-	return EnvironmentCatalogScript.get_map_profile(_active_map_id())
+	return EnvironmentCatalogScript.get_map_profile(
+		_presentation_map_id(_active_map_id())
+	)
 
 
 func environment_theme_id() -> String:
@@ -675,7 +680,7 @@ func _finish_map_build() -> void:
 
 
 func _default_zone_name(map_id: int) -> String:
-	if map_id == 4:
+	if _presentation_map_id(map_id) == 4:
 		return "比奇省"
 	if _orc_tomb_map_id() in [217, 218, 221]:
 		return "兽人古墓"
@@ -775,7 +780,10 @@ func _ground_atlas_path_for(profile: Dictionary) -> String:
 	var override_path := str(profile.get("ground_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
 		return override_path
-	if _active_map_id() == 4 or str(profile.get("asset_set", "")) == "bich":
+	if (
+		_presentation_map_id(_active_map_id()) == 4
+		or str(profile.get("asset_set", "")) == "bich"
+	):
 		return _REGION_ATLAS_PATHS.get("gothic_bich_ground", "")
 	return _REGION_ATLAS_PATHS.get("orc_tomb_ground", "")
 
@@ -936,7 +944,10 @@ func _append_profile_map_descriptors(
 	var profile := environment_profile()
 	if profile.is_empty():
 		return
-	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+	if (
+		_presentation_map_id(map_id) == 4
+		and bool(profile.get("gothic_camp_enabled", true))
+	):
 		descriptors.append(_descriptor(
 			"gothic_camp", 0, "ground", "", Vector2.ZERO, -20,
 			{
@@ -1023,7 +1034,7 @@ func _append_profile_map_descriptors(
 # ── HC-P1-004 target-map resource collection ──
 
 func _region_id_for_map(map_id: int, profile: Dictionary) -> String:
-	if map_id == 4:
+	if _presentation_map_id(map_id) == 4:
 		return "bich"
 	var asset_set := str(profile.get("asset_set", ""))
 	if asset_set == "":
@@ -1070,7 +1081,10 @@ func _collect_target_map_resources(map_id: int) -> void:
 		coord.register_resource(
 			mask_path, "collision_mask", true, "collision_mask", "target", region
 		)
-	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+	if (
+		_presentation_map_id(map_id) == 4
+		and bool(profile.get("gothic_camp_enabled", true))
+	):
 		_register_gothic_camp_resources(region)
 
 
@@ -1120,7 +1134,7 @@ func _register_profile_ground_resources(
 				base_path, "texture", true, "tomb_ground_draw",
 				"shared", "global"
 			)
-	if map_id == 4:
+	if _presentation_map_id(map_id) == 4:
 		var bich_ground: String = str(_REGION_ATLAS_PATHS.get("bich_ground", ""))
 		if not bich_ground.is_empty() and ResourceLoader.exists(bich_ground):
 			coord.register_resource(
@@ -1318,7 +1332,10 @@ func _append_profile_collision_descriptors(
 	var profile := environment_profile()
 	if profile.is_empty():
 		return
-	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+	if (
+		_presentation_map_id(map_id) == 4
+		and bool(profile.get("gothic_camp_enabled", true))
+	):
 		descriptors.append(_collision_descriptor(
 			"gothic_camp_collisions", 0, {}, generation
 		))
@@ -1587,7 +1604,9 @@ func _load_editor_runtime_visual(
 		return {}
 	if int(visual.get("runtime_map_id", -1)) != runtime_map_id:
 		return {}
-	if not bool(visual.get("coverage", {}).get("complete", runtime_map_id == 4)):
+	if not bool(visual.get("coverage", {}).get(
+		"complete", _presentation_map_id(runtime_map_id) == 4
+	)):
 		return {}
 	return visual
 
@@ -2103,7 +2122,10 @@ func _source_mask_blocks_world(world_position: Vector2) -> bool:
 
 
 func _source_cell_is_cleared(source_coordinate: Vector2i, profile: Dictionary) -> bool:
-	if _active_map_id() == 4 and not _gothic_camp_layout.is_empty():
+	if (
+		_presentation_map_id(_active_map_id()) == 4
+		and not _gothic_camp_layout.is_empty()
+	):
 		var camp_world := MapCoordinateMapperScript.source_to_world(Vector2(source_coordinate), profile.get("source_size", Vector2i.ZERO))
 		if camp_world.distance_to(profile.get("runtime_home_position", Vector2.ZERO)) <= float(_gothic_camp_layout.get("safeRadius", 690.0)):
 			return true
@@ -2229,7 +2251,7 @@ func _add_static_body_node(position: Vector2, shape: Shape2D) -> CollisionObject
 
 
 func _orc_tomb_map_id() -> int:
-	var map_id := int(zone_data.get("mapId", -1))
+	var map_id := _presentation_map_id(int(zone_data.get("mapId", -1)))
 	if map_id in [217, 218, 221]:
 		return map_id
 	match zone_name:
@@ -2244,8 +2266,16 @@ func _active_map_id() -> int:
 	if map_id > 0:
 		return map_id
 	if zone_name in ["比奇郊外", "比奇省"]:
-		return 4
+		return 910001
 	return _orc_tomb_map_id()
+
+
+func _presentation_map_id(runtime_map_id: int) -> int:
+	if runtime_map_id == int(zone_data.get("mapId", -1)):
+		var legacy_id := int(zone_data.get("legacyRuntimeMapId", -1))
+		if legacy_id > 0:
+			return legacy_id
+	return runtime_map_id
 
 
 func _active_theme() -> Dictionary:

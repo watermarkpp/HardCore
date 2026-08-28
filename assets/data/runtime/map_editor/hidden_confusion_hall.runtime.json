@@ -1,0 +1,3434 @@
+{
+  "build_sha256": "df4d185dc28ad7be3c2096325626a8c97445b851d783beae6316d4f82a95a5a0",
+  "collision": {
+    "blocked_count": 104.0,
+    "blocked_tiles": [
+      "0,0",
+      "0,1",
+      "0,10",
+      "0,11",
+      "0,12",
+      "0,13",
+      "0,14",
+      "0,15",
+      "0,2",
+      "0,3",
+      "0,4",
+      "0,5",
+      "0,6",
+      "0,7",
+      "0,8",
+      "0,9",
+      "1,0",
+      "1,1",
+      "1,14",
+      "1,15",
+      "10,0",
+      "10,15",
+      "11,0",
+      "11,15",
+      "12,0",
+      "12,1",
+      "12,13",
+      "12,14",
+      "12,15",
+      "12,2",
+      "13,0",
+      "13,1",
+      "13,13",
+      "13,14",
+      "13,15",
+      "13,2",
+      "14,0",
+      "14,15",
+      "15,0",
+      "15,15",
+      "16,0",
+      "16,15",
+      "17,0",
+      "17,15",
+      "18,0",
+      "18,15",
+      "19,0",
+      "19,15",
+      "2,0",
+      "2,15",
+      "20,0",
+      "20,15",
+      "21,0",
+      "21,15",
+      "22,0",
+      "22,15",
+      "23,0",
+      "23,15",
+      "24,0",
+      "24,15",
+      "25,0",
+      "25,15",
+      "26,0",
+      "26,15",
+      "27,0",
+      "27,1",
+      "27,14",
+      "27,15",
+      "28,0",
+      "28,15",
+      "29,0",
+      "29,15",
+      "3,0",
+      "3,15",
+      "30,0",
+      "30,15",
+      "31,0",
+      "31,1",
+      "31,10",
+      "31,11",
+      "31,12",
+      "31,13",
+      "31,14",
+      "31,15",
+      "31,2",
+      "31,3",
+      "31,4",
+      "31,5",
+      "31,6",
+      "31,7",
+      "31,8",
+      "31,9",
+      "4,0",
+      "4,15",
+      "5,0",
+      "5,15",
+      "6,0",
+      "6,15",
+      "7,0",
+      "7,15",
+      "8,0",
+      "8,15",
+      "9,0",
+      "9,15"
+    ],
+    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v2",
+    "erased_cells": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          1.0
+        ]
+      }
+    ],
+    "manual_shapes": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            15.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            0.0,
+            1.0,
+            16.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            16.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            3.0,
+            3.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            12.0,
+            3.0,
+            4.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000007",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000009",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000010",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14.0,
+            2.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000011",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13.0,
+            2.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000012",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000013",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12.0,
+            2.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000014",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000015",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000016",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000017",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000018",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000020",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ],
+    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+  },
+  "design": {
+    "design_size": [
+      32.0,
+      16.0
+    ],
+    "map_type": "boss_room",
+    "source_size": [
+      null,
+      null
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "custom_blank_layout",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1"
+  },
+  "ground": {
+    "default_fill_asset_id": "",
+    "ground_mode": "generated_painted_chunks",
+    "tile_overrides": {
+      "0,0": "mse.ground.stone_tomb_floor.04",
+      "0,1": "mse.ground.stone_tomb_floor.01",
+      "0,10": "mse.ground.stone_tomb_floor.05",
+      "0,11": "mse.ground.stone_tomb_floor.03",
+      "0,12": "mse.ground.stone_tomb_floor.06",
+      "0,13": "mse.ground.stone_tomb_floor.03",
+      "0,14": "mse.ground.stone_tomb_floor.04",
+      "0,15": "mse.ground.stone_tomb_floor.01",
+      "0,2": "mse.ground.stone_tomb_floor.05",
+      "0,3": "mse.ground.stone_tomb_floor.03",
+      "0,4": "mse.ground.stone_tomb_floor.04",
+      "0,5": "mse.ground.stone_tomb_floor.06",
+      "0,6": "mse.ground.stone_tomb_floor.06",
+      "0,7": "mse.ground.stone_tomb_floor.02",
+      "0,8": "mse.ground.stone_tomb_floor.03",
+      "0,9": "mse.ground.stone_tomb_floor.05",
+      "1,0": "mse.ground.stone_tomb_floor.01",
+      "1,1": "mse.ground.stone_tomb_floor.02",
+      "1,10": "mse.ground.stone_tomb_floor.05",
+      "1,11": "mse.ground.stone_tomb_floor.05",
+      "1,12": "mse.ground.stone_tomb_floor.02",
+      "1,13": "mse.ground.stone_tomb_floor.02",
+      "1,14": "mse.ground.stone_tomb_floor.03",
+      "1,15": "mse.ground.stone_tomb_floor.01",
+      "1,2": "mse.ground.stone_tomb_floor.01",
+      "1,3": "mse.ground.stone_tomb_floor.05",
+      "1,4": "mse.ground.stone_tomb_floor.06",
+      "1,5": "mse.ground.stone_tomb_floor.05",
+      "1,6": "mse.ground.stone_tomb_floor.01",
+      "1,7": "mse.ground.stone_tomb_floor.04",
+      "1,8": "mse.ground.stone_tomb_floor.04",
+      "1,9": "mse.ground.stone_tomb_floor.04",
+      "10,0": "mse.ground.stone_tomb_floor.01",
+      "10,1": "mse.ground.stone_tomb_floor.05",
+      "10,10": "mse.ground.stone_tomb_floor.03",
+      "10,11": "mse.ground.stone_tomb_floor.05",
+      "10,12": "mse.ground.stone_tomb_floor.04",
+      "10,13": "mse.ground.stone_tomb_floor.04",
+      "10,14": "mse.ground.stone_tomb_floor.05",
+      "10,15": "mse.ground.stone_tomb_floor.02",
+      "10,2": "mse.ground.stone_tomb_floor.05",
+      "10,3": "mse.ground.stone_tomb_floor.05",
+      "10,4": "mse.ground.stone_tomb_floor.05",
+      "10,5": "mse.ground.stone_tomb_floor.05",
+      "10,6": "mse.ground.stone_tomb_floor.01",
+      "10,7": "mse.ground.stone_tomb_floor.03",
+      "10,8": "mse.ground.stone_tomb_floor.03",
+      "10,9": "mse.ground.stone_tomb_floor.05",
+      "11,0": "mse.ground.stone_tomb_floor.01",
+      "11,1": "mse.ground.stone_tomb_floor.06",
+      "11,10": "mse.ground.stone_tomb_floor.05",
+      "11,11": "mse.ground.stone_tomb_floor.03",
+      "11,12": "mse.ground.stone_tomb_floor.06",
+      "11,13": "mse.ground.stone_tomb_floor.03",
+      "11,14": "mse.ground.stone_tomb_floor.04",
+      "11,15": "mse.ground.stone_tomb_floor.06",
+      "11,2": "mse.ground.stone_tomb_floor.01",
+      "11,3": "mse.ground.stone_tomb_floor.04",
+      "11,4": "mse.ground.stone_tomb_floor.01",
+      "11,5": "mse.ground.stone_tomb_floor.01",
+      "11,6": "mse.ground.stone_tomb_floor.02",
+      "11,7": "mse.ground.stone_tomb_floor.01",
+      "11,8": "mse.ground.stone_tomb_floor.05",
+      "11,9": "mse.ground.stone_tomb_floor.01",
+      "12,0": "mse.ground.stone_tomb_floor.03",
+      "12,1": "mse.ground.stone_tomb_floor.06",
+      "12,10": "mse.ground.stone_tomb_floor.03",
+      "12,11": "mse.ground.stone_tomb_floor.01",
+      "12,12": "mse.ground.stone_tomb_floor.02",
+      "12,13": "mse.ground.stone_tomb_floor.03",
+      "12,14": "mse.ground.stone_tomb_floor.04",
+      "12,15": "mse.ground.stone_tomb_floor.01",
+      "12,2": "mse.ground.stone_tomb_floor.02",
+      "12,3": "mse.ground.stone_tomb_floor.01",
+      "12,4": "mse.ground.stone_tomb_floor.03",
+      "12,5": "mse.ground.stone_tomb_floor.05",
+      "12,6": "mse.ground.stone_tomb_floor.01",
+      "12,7": "mse.ground.stone_tomb_floor.04",
+      "12,8": "mse.ground.stone_tomb_floor.03",
+      "12,9": "mse.ground.stone_tomb_floor.03",
+      "13,0": "mse.ground.stone_tomb_floor.03",
+      "13,1": "mse.ground.stone_tomb_floor.03",
+      "13,10": "mse.ground.stone_tomb_floor.01",
+      "13,11": "mse.ground.stone_tomb_floor.01",
+      "13,12": "mse.ground.stone_tomb_floor.04",
+      "13,13": "mse.ground.stone_tomb_floor.04",
+      "13,14": "mse.ground.stone_tomb_floor.05",
+      "13,15": "mse.ground.stone_tomb_floor.01",
+      "13,2": "mse.ground.stone_tomb_floor.06",
+      "13,3": "mse.ground.stone_tomb_floor.03",
+      "13,4": "mse.ground.stone_tomb_floor.01",
+      "13,5": "mse.ground.stone_tomb_floor.04",
+      "13,6": "mse.ground.stone_tomb_floor.06",
+      "13,7": "mse.ground.stone_tomb_floor.04",
+      "13,8": "mse.ground.stone_tomb_floor.03",
+      "13,9": "mse.ground.stone_tomb_floor.04",
+      "14,0": "mse.ground.stone_tomb_floor.04",
+      "14,1": "mse.ground.stone_tomb_floor.02",
+      "14,10": "mse.ground.stone_tomb_floor.06",
+      "14,11": "mse.ground.stone_tomb_floor.04",
+      "14,12": "mse.ground.stone_tomb_floor.04",
+      "14,13": "mse.ground.stone_tomb_floor.02",
+      "14,14": "mse.ground.stone_tomb_floor.01",
+      "14,15": "mse.ground.stone_tomb_floor.03",
+      "14,2": "mse.ground.stone_tomb_floor.02",
+      "14,3": "mse.ground.stone_tomb_floor.05",
+      "14,4": "mse.ground.stone_tomb_floor.05",
+      "14,5": "mse.ground.stone_tomb_floor.01",
+      "14,6": "mse.ground.stone_tomb_floor.03",
+      "14,7": "mse.ground.stone_tomb_floor.06",
+      "14,8": "mse.ground.stone_tomb_floor.05",
+      "14,9": "mse.ground.stone_tomb_floor.01",
+      "15,0": "mse.ground.stone_tomb_floor.03",
+      "15,1": "mse.ground.stone_tomb_floor.01",
+      "15,10": "mse.ground.stone_tomb_floor.02",
+      "15,11": "mse.ground.stone_tomb_floor.05",
+      "15,12": "mse.ground.stone_tomb_floor.01",
+      "15,13": "mse.ground.stone_tomb_floor.04",
+      "15,14": "mse.ground.stone_tomb_floor.01",
+      "15,15": "mse.ground.stone_tomb_floor.03",
+      "15,2": "mse.ground.stone_tomb_floor.06",
+      "15,3": "mse.ground.stone_tomb_floor.04",
+      "15,4": "mse.ground.stone_tomb_floor.02",
+      "15,5": "mse.ground.stone_tomb_floor.05",
+      "15,6": "mse.ground.stone_tomb_floor.01",
+      "15,7": "mse.ground.stone_tomb_floor.02",
+      "15,8": "mse.ground.stone_tomb_floor.02",
+      "15,9": "mse.ground.stone_tomb_floor.05",
+      "16,0": "mse.ground.stone_tomb_floor.06",
+      "16,1": "mse.ground.stone_tomb_floor.01",
+      "16,10": "mse.ground.stone_tomb_floor.01",
+      "16,11": "mse.ground.stone_tomb_floor.06",
+      "16,12": "mse.ground.stone_tomb_floor.02",
+      "16,13": "mse.ground.stone_tomb_floor.03",
+      "16,14": "mse.ground.stone_tomb_floor.05",
+      "16,15": "mse.ground.stone_tomb_floor.02",
+      "16,2": "mse.ground.stone_tomb_floor.02",
+      "16,3": "mse.ground.stone_tomb_floor.02",
+      "16,4": "mse.ground.stone_tomb_floor.05",
+      "16,5": "mse.ground.stone_tomb_floor.01",
+      "16,6": "mse.ground.stone_tomb_floor.05",
+      "16,7": "mse.ground.stone_tomb_floor.06",
+      "16,8": "mse.ground.stone_tomb_floor.03",
+      "16,9": "mse.ground.stone_tomb_floor.05",
+      "17,0": "mse.ground.stone_tomb_floor.01",
+      "17,1": "mse.ground.stone_tomb_floor.04",
+      "17,10": "mse.ground.stone_tomb_floor.02",
+      "17,11": "mse.ground.stone_tomb_floor.01",
+      "17,12": "mse.ground.stone_tomb_floor.05",
+      "17,13": "mse.ground.stone_tomb_floor.02",
+      "17,14": "mse.ground.stone_tomb_floor.02",
+      "17,15": "mse.ground.stone_tomb_floor.06",
+      "17,2": "mse.ground.stone_tomb_floor.04",
+      "17,3": "mse.ground.stone_tomb_floor.01",
+      "17,4": "mse.ground.stone_tomb_floor.02",
+      "17,5": "mse.ground.stone_tomb_floor.03",
+      "17,6": "mse.ground.stone_tomb_floor.01",
+      "17,7": "mse.ground.stone_tomb_floor.06",
+      "17,8": "mse.ground.stone_tomb_floor.04",
+      "17,9": "mse.ground.stone_tomb_floor.05",
+      "18,0": "mse.ground.stone_tomb_floor.02",
+      "18,1": "mse.ground.stone_tomb_floor.03",
+      "18,10": "mse.ground.stone_tomb_floor.01",
+      "18,11": "mse.ground.stone_tomb_floor.04",
+      "18,12": "mse.ground.stone_tomb_floor.04",
+      "18,13": "mse.ground.stone_tomb_floor.01",
+      "18,14": "mse.ground.stone_tomb_floor.02",
+      "18,15": "mse.ground.stone_tomb_floor.01",
+      "18,2": "mse.ground.stone_tomb_floor.04",
+      "18,3": "mse.ground.stone_tomb_floor.01",
+      "18,4": "mse.ground.stone_tomb_floor.03",
+      "18,5": "mse.ground.stone_tomb_floor.01",
+      "18,6": "mse.ground.stone_tomb_floor.01",
+      "18,7": "mse.ground.stone_tomb_floor.02",
+      "18,8": "mse.ground.stone_tomb_floor.06",
+      "18,9": "mse.ground.stone_tomb_floor.04",
+      "19,0": "mse.ground.stone_tomb_floor.02",
+      "19,1": "mse.ground.stone_tomb_floor.01",
+      "19,10": "mse.ground.stone_tomb_floor.01",
+      "19,11": "mse.ground.stone_tomb_floor.04",
+      "19,12": "mse.ground.stone_tomb_floor.04",
+      "19,13": "mse.ground.stone_tomb_floor.06",
+      "19,14": "mse.ground.stone_tomb_floor.06",
+      "19,15": "mse.ground.stone_tomb_floor.01",
+      "19,2": "mse.ground.stone_tomb_floor.05",
+      "19,3": "mse.ground.stone_tomb_floor.06",
+      "19,4": "mse.ground.stone_tomb_floor.06",
+      "19,5": "mse.ground.stone_tomb_floor.04",
+      "19,6": "mse.ground.stone_tomb_floor.03",
+      "19,7": "mse.ground.stone_tomb_floor.02",
+      "19,8": "mse.ground.stone_tomb_floor.04",
+      "19,9": "mse.ground.stone_tomb_floor.06",
+      "2,0": "mse.ground.stone_tomb_floor.03",
+      "2,1": "mse.ground.stone_tomb_floor.01",
+      "2,10": "mse.ground.stone_tomb_floor.06",
+      "2,11": "mse.ground.stone_tomb_floor.06",
+      "2,12": "mse.ground.stone_tomb_floor.05",
+      "2,13": "mse.ground.stone_tomb_floor.06",
+      "2,14": "mse.ground.stone_tomb_floor.01",
+      "2,15": "mse.ground.stone_tomb_floor.03",
+      "2,2": "mse.ground.stone_tomb_floor.06",
+      "2,3": "mse.ground.stone_tomb_floor.04",
+      "2,4": "mse.ground.stone_tomb_floor.03",
+      "2,5": "mse.ground.stone_tomb_floor.03",
+      "2,6": "mse.ground.stone_tomb_floor.06",
+      "2,7": "mse.ground.stone_tomb_floor.04",
+      "2,8": "mse.ground.stone_tomb_floor.03",
+      "2,9": "mse.ground.stone_tomb_floor.03",
+      "20,0": "mse.ground.stone_tomb_floor.03",
+      "20,1": "mse.ground.stone_tomb_floor.04",
+      "20,10": "mse.ground.stone_tomb_floor.06",
+      "20,11": "mse.ground.stone_tomb_floor.01",
+      "20,12": "mse.ground.stone_tomb_floor.04",
+      "20,13": "mse.ground.stone_tomb_floor.03",
+      "20,14": "mse.ground.stone_tomb_floor.05",
+      "20,15": "mse.ground.stone_tomb_floor.04",
+      "20,2": "mse.ground.stone_tomb_floor.04",
+      "20,3": "mse.ground.stone_tomb_floor.05",
+      "20,4": "mse.ground.stone_tomb_floor.05",
+      "20,5": "mse.ground.stone_tomb_floor.02",
+      "20,6": "mse.ground.stone_tomb_floor.05",
+      "20,7": "mse.ground.stone_tomb_floor.04",
+      "20,8": "mse.ground.stone_tomb_floor.01",
+      "20,9": "mse.ground.stone_tomb_floor.06",
+      "21,0": "mse.ground.stone_tomb_floor.02",
+      "21,1": "mse.ground.stone_tomb_floor.05",
+      "21,10": "mse.ground.stone_tomb_floor.06",
+      "21,11": "mse.ground.stone_tomb_floor.05",
+      "21,12": "mse.ground.stone_tomb_floor.06",
+      "21,13": "mse.ground.stone_tomb_floor.01",
+      "21,14": "mse.ground.stone_tomb_floor.06",
+      "21,15": "mse.ground.stone_tomb_floor.01",
+      "21,2": "mse.ground.stone_tomb_floor.04",
+      "21,3": "mse.ground.stone_tomb_floor.06",
+      "21,4": "mse.ground.stone_tomb_floor.03",
+      "21,5": "mse.ground.stone_tomb_floor.04",
+      "21,6": "mse.ground.stone_tomb_floor.02",
+      "21,7": "mse.ground.stone_tomb_floor.02",
+      "21,8": "mse.ground.stone_tomb_floor.01",
+      "21,9": "mse.ground.stone_tomb_floor.01",
+      "22,0": "mse.ground.stone_tomb_floor.03",
+      "22,1": "mse.ground.stone_tomb_floor.01",
+      "22,10": "mse.ground.stone_tomb_floor.06",
+      "22,11": "mse.ground.stone_tomb_floor.02",
+      "22,12": "mse.ground.stone_tomb_floor.06",
+      "22,13": "mse.ground.stone_tomb_floor.06",
+      "22,14": "mse.ground.stone_tomb_floor.04",
+      "22,15": "mse.ground.stone_tomb_floor.03",
+      "22,2": "mse.ground.stone_tomb_floor.05",
+      "22,3": "mse.ground.stone_tomb_floor.01",
+      "22,4": "mse.ground.stone_tomb_floor.01",
+      "22,5": "mse.ground.stone_tomb_floor.02",
+      "22,6": "mse.ground.stone_tomb_floor.04",
+      "22,7": "mse.ground.stone_tomb_floor.06",
+      "22,8": "mse.ground.stone_tomb_floor.02",
+      "22,9": "mse.ground.stone_tomb_floor.04",
+      "23,0": "mse.ground.stone_tomb_floor.03",
+      "23,1": "mse.ground.stone_tomb_floor.05",
+      "23,10": "mse.ground.stone_tomb_floor.06",
+      "23,11": "mse.ground.stone_tomb_floor.04",
+      "23,12": "mse.ground.stone_tomb_floor.02",
+      "23,13": "mse.ground.stone_tomb_floor.02",
+      "23,14": "mse.ground.stone_tomb_floor.02",
+      "23,15": "mse.ground.stone_tomb_floor.02",
+      "23,2": "mse.ground.stone_tomb_floor.05",
+      "23,3": "mse.ground.stone_tomb_floor.05",
+      "23,4": "mse.ground.stone_tomb_floor.03",
+      "23,5": "mse.ground.stone_tomb_floor.02",
+      "23,6": "mse.ground.stone_tomb_floor.04",
+      "23,7": "mse.ground.stone_tomb_floor.05",
+      "23,8": "mse.ground.stone_tomb_floor.01",
+      "23,9": "mse.ground.stone_tomb_floor.03",
+      "24,0": "mse.ground.stone_tomb_floor.04",
+      "24,1": "mse.ground.stone_tomb_floor.05",
+      "24,10": "mse.ground.stone_tomb_floor.06",
+      "24,11": "mse.ground.stone_tomb_floor.04",
+      "24,12": "mse.ground.stone_tomb_floor.04",
+      "24,13": "mse.ground.stone_tomb_floor.03",
+      "24,14": "mse.ground.stone_tomb_floor.03",
+      "24,15": "mse.ground.stone_tomb_floor.02",
+      "24,2": "mse.ground.stone_tomb_floor.02",
+      "24,3": "mse.ground.stone_tomb_floor.03",
+      "24,4": "mse.ground.stone_tomb_floor.05",
+      "24,5": "mse.ground.stone_tomb_floor.05",
+      "24,6": "mse.ground.stone_tomb_floor.02",
+      "24,7": "mse.ground.stone_tomb_floor.04",
+      "24,8": "mse.ground.stone_tomb_floor.06",
+      "24,9": "mse.ground.stone_tomb_floor.01",
+      "25,0": "mse.ground.stone_tomb_floor.02",
+      "25,1": "mse.ground.stone_tomb_floor.05",
+      "25,10": "mse.ground.stone_tomb_floor.04",
+      "25,11": "mse.ground.stone_tomb_floor.05",
+      "25,12": "mse.ground.stone_tomb_floor.01",
+      "25,13": "mse.ground.stone_tomb_floor.05",
+      "25,14": "mse.ground.stone_tomb_floor.02",
+      "25,15": "mse.ground.stone_tomb_floor.06",
+      "25,2": "mse.ground.stone_tomb_floor.04",
+      "25,3": "mse.ground.stone_tomb_floor.02",
+      "25,4": "mse.ground.stone_tomb_floor.01",
+      "25,5": "mse.ground.stone_tomb_floor.04",
+      "25,6": "mse.ground.stone_tomb_floor.06",
+      "25,7": "mse.ground.stone_tomb_floor.05",
+      "25,8": "mse.ground.stone_tomb_floor.02",
+      "25,9": "mse.ground.stone_tomb_floor.02",
+      "26,0": "mse.ground.stone_tomb_floor.04",
+      "26,1": "mse.ground.stone_tomb_floor.03",
+      "26,10": "mse.ground.stone_tomb_floor.06",
+      "26,11": "mse.ground.stone_tomb_floor.05",
+      "26,12": "mse.ground.stone_tomb_floor.05",
+      "26,13": "mse.ground.stone_tomb_floor.05",
+      "26,14": "mse.ground.stone_tomb_floor.04",
+      "26,15": "mse.ground.stone_tomb_floor.02",
+      "26,2": "mse.ground.stone_tomb_floor.02",
+      "26,3": "mse.ground.stone_tomb_floor.02",
+      "26,4": "mse.ground.stone_tomb_floor.06",
+      "26,5": "mse.ground.stone_tomb_floor.02",
+      "26,6": "mse.ground.stone_tomb_floor.06",
+      "26,7": "mse.ground.stone_tomb_floor.06",
+      "26,8": "mse.ground.stone_tomb_floor.02",
+      "26,9": "mse.ground.stone_tomb_floor.01",
+      "27,0": "mse.ground.stone_tomb_floor.03",
+      "27,1": "mse.ground.stone_tomb_floor.05",
+      "27,10": "mse.ground.stone_tomb_floor.01",
+      "27,11": "mse.ground.stone_tomb_floor.04",
+      "27,12": "mse.ground.stone_tomb_floor.04",
+      "27,13": "mse.ground.stone_tomb_floor.04",
+      "27,14": "mse.ground.stone_tomb_floor.03",
+      "27,15": "mse.ground.stone_tomb_floor.05",
+      "27,2": "mse.ground.stone_tomb_floor.01",
+      "27,3": "mse.ground.stone_tomb_floor.02",
+      "27,4": "mse.ground.stone_tomb_floor.01",
+      "27,5": "mse.ground.stone_tomb_floor.02",
+      "27,6": "mse.ground.stone_tomb_floor.01",
+      "27,7": "mse.ground.stone_tomb_floor.06",
+      "27,8": "mse.ground.stone_tomb_floor.06",
+      "27,9": "mse.ground.stone_tomb_floor.02",
+      "28,0": "mse.ground.stone_tomb_floor.05",
+      "28,1": "mse.ground.stone_tomb_floor.04",
+      "28,10": "mse.ground.stone_tomb_floor.04",
+      "28,11": "mse.ground.stone_tomb_floor.06",
+      "28,12": "mse.ground.stone_tomb_floor.06",
+      "28,13": "mse.ground.stone_tomb_floor.03",
+      "28,14": "mse.ground.stone_tomb_floor.06",
+      "28,15": "mse.ground.stone_tomb_floor.05",
+      "28,2": "mse.ground.stone_tomb_floor.02",
+      "28,3": "mse.ground.stone_tomb_floor.01",
+      "28,4": "mse.ground.stone_tomb_floor.03",
+      "28,5": "mse.ground.stone_tomb_floor.01",
+      "28,6": "mse.ground.stone_tomb_floor.04",
+      "28,7": "mse.ground.stone_tomb_floor.06",
+      "28,8": "mse.ground.stone_tomb_floor.01",
+      "28,9": "mse.ground.stone_tomb_floor.05",
+      "29,0": "mse.ground.stone_tomb_floor.04",
+      "29,1": "mse.ground.stone_tomb_floor.03",
+      "29,10": "mse.ground.stone_tomb_floor.02",
+      "29,11": "mse.ground.stone_tomb_floor.05",
+      "29,12": "mse.ground.stone_tomb_floor.02",
+      "29,13": "mse.ground.stone_tomb_floor.05",
+      "29,14": "mse.ground.stone_tomb_floor.01",
+      "29,15": "mse.ground.stone_tomb_floor.04",
+      "29,2": "mse.ground.stone_tomb_floor.05",
+      "29,3": "mse.ground.stone_tomb_floor.04",
+      "29,4": "mse.ground.stone_tomb_floor.06",
+      "29,5": "mse.ground.stone_tomb_floor.01",
+      "29,6": "mse.ground.stone_tomb_floor.01",
+      "29,7": "mse.ground.stone_tomb_floor.05",
+      "29,8": "mse.ground.stone_tomb_floor.02",
+      "29,9": "mse.ground.stone_tomb_floor.05",
+      "3,0": "mse.ground.stone_tomb_floor.01",
+      "3,1": "mse.ground.stone_tomb_floor.04",
+      "3,10": "mse.ground.stone_tomb_floor.06",
+      "3,11": "mse.ground.stone_tomb_floor.02",
+      "3,12": "mse.ground.stone_tomb_floor.06",
+      "3,13": "mse.ground.stone_tomb_floor.02",
+      "3,14": "mse.ground.stone_tomb_floor.02",
+      "3,15": "mse.ground.stone_tomb_floor.02",
+      "3,2": "mse.ground.stone_tomb_floor.05",
+      "3,3": "mse.ground.stone_tomb_floor.06",
+      "3,4": "mse.ground.stone_tomb_floor.04",
+      "3,5": "mse.ground.stone_tomb_floor.01",
+      "3,6": "mse.ground.stone_tomb_floor.04",
+      "3,7": "mse.ground.stone_tomb_floor.02",
+      "3,8": "mse.ground.stone_tomb_floor.06",
+      "3,9": "mse.ground.stone_tomb_floor.01",
+      "30,0": "mse.ground.stone_tomb_floor.02",
+      "30,1": "mse.ground.stone_tomb_floor.03",
+      "30,10": "mse.ground.stone_tomb_floor.01",
+      "30,11": "mse.ground.stone_tomb_floor.05",
+      "30,12": "mse.ground.stone_tomb_floor.01",
+      "30,13": "mse.ground.stone_tomb_floor.06",
+      "30,14": "mse.ground.stone_tomb_floor.05",
+      "30,15": "mse.ground.stone_tomb_floor.04",
+      "30,2": "mse.ground.stone_tomb_floor.05",
+      "30,3": "mse.ground.stone_tomb_floor.06",
+      "30,4": "mse.ground.stone_tomb_floor.03",
+      "30,5": "mse.ground.stone_tomb_floor.03",
+      "30,6": "mse.ground.stone_tomb_floor.01",
+      "30,7": "mse.ground.stone_tomb_floor.03",
+      "30,8": "mse.ground.stone_tomb_floor.06",
+      "30,9": "mse.ground.stone_tomb_floor.04",
+      "31,0": "mse.ground.stone_tomb_floor.03",
+      "31,1": "mse.ground.stone_tomb_floor.05",
+      "31,10": "mse.ground.stone_tomb_floor.05",
+      "31,11": "mse.ground.stone_tomb_floor.06",
+      "31,12": "mse.ground.stone_tomb_floor.06",
+      "31,13": "mse.ground.stone_tomb_floor.05",
+      "31,14": "mse.ground.stone_tomb_floor.06",
+      "31,15": "mse.ground.stone_tomb_floor.01",
+      "31,2": "mse.ground.stone_tomb_floor.05",
+      "31,3": "mse.ground.stone_tomb_floor.02",
+      "31,4": "mse.ground.stone_tomb_floor.01",
+      "31,5": "mse.ground.stone_tomb_floor.05",
+      "31,6": "mse.ground.stone_tomb_floor.06",
+      "31,7": "mse.ground.stone_tomb_floor.04",
+      "31,8": "mse.ground.stone_tomb_floor.03",
+      "31,9": "mse.ground.stone_tomb_floor.06",
+      "4,0": "mse.ground.stone_tomb_floor.04",
+      "4,1": "mse.ground.stone_tomb_floor.06",
+      "4,10": "mse.ground.stone_tomb_floor.03",
+      "4,11": "mse.ground.stone_tomb_floor.03",
+      "4,12": "mse.ground.stone_tomb_floor.03",
+      "4,13": "mse.ground.stone_tomb_floor.05",
+      "4,14": "mse.ground.stone_tomb_floor.06",
+      "4,15": "mse.ground.stone_tomb_floor.02",
+      "4,2": "mse.ground.stone_tomb_floor.01",
+      "4,3": "mse.ground.stone_tomb_floor.06",
+      "4,4": "mse.ground.stone_tomb_floor.01",
+      "4,5": "mse.ground.stone_tomb_floor.06",
+      "4,6": "mse.ground.stone_tomb_floor.02",
+      "4,7": "mse.ground.stone_tomb_floor.02",
+      "4,8": "mse.ground.stone_tomb_floor.04",
+      "4,9": "mse.ground.stone_tomb_floor.01",
+      "5,0": "mse.ground.stone_tomb_floor.05",
+      "5,1": "mse.ground.stone_tomb_floor.01",
+      "5,10": "mse.ground.stone_tomb_floor.04",
+      "5,11": "mse.ground.stone_tomb_floor.05",
+      "5,12": "mse.ground.stone_tomb_floor.06",
+      "5,13": "mse.ground.stone_tomb_floor.06",
+      "5,14": "mse.ground.stone_tomb_floor.03",
+      "5,15": "mse.ground.stone_tomb_floor.05",
+      "5,2": "mse.ground.stone_tomb_floor.05",
+      "5,3": "mse.ground.stone_tomb_floor.02",
+      "5,4": "mse.ground.stone_tomb_floor.06",
+      "5,5": "mse.ground.stone_tomb_floor.03",
+      "5,6": "mse.ground.stone_tomb_floor.03",
+      "5,7": "mse.ground.stone_tomb_floor.02",
+      "5,8": "mse.ground.stone_tomb_floor.02",
+      "5,9": "mse.ground.stone_tomb_floor.04",
+      "6,0": "mse.ground.stone_tomb_floor.04",
+      "6,1": "mse.ground.stone_tomb_floor.04",
+      "6,10": "mse.ground.stone_tomb_floor.02",
+      "6,11": "mse.ground.stone_tomb_floor.02",
+      "6,12": "mse.ground.stone_tomb_floor.01",
+      "6,13": "mse.ground.stone_tomb_floor.06",
+      "6,14": "mse.ground.stone_tomb_floor.03",
+      "6,15": "mse.ground.stone_tomb_floor.05",
+      "6,2": "mse.ground.stone_tomb_floor.01",
+      "6,3": "mse.ground.stone_tomb_floor.02",
+      "6,4": "mse.ground.stone_tomb_floor.05",
+      "6,5": "mse.ground.stone_tomb_floor.01",
+      "6,6": "mse.ground.stone_tomb_floor.06",
+      "6,7": "mse.ground.stone_tomb_floor.03",
+      "6,8": "mse.ground.stone_tomb_floor.01",
+      "6,9": "mse.ground.stone_tomb_floor.01",
+      "7,0": "mse.ground.stone_tomb_floor.02",
+      "7,1": "mse.ground.stone_tomb_floor.03",
+      "7,10": "mse.ground.stone_tomb_floor.02",
+      "7,11": "mse.ground.stone_tomb_floor.04",
+      "7,12": "mse.ground.stone_tomb_floor.06",
+      "7,13": "mse.ground.stone_tomb_floor.05",
+      "7,14": "mse.ground.stone_tomb_floor.02",
+      "7,15": "mse.ground.stone_tomb_floor.01",
+      "7,2": "mse.ground.stone_tomb_floor.03",
+      "7,3": "mse.ground.stone_tomb_floor.04",
+      "7,4": "mse.ground.stone_tomb_floor.01",
+      "7,5": "mse.ground.stone_tomb_floor.02",
+      "7,6": "mse.ground.stone_tomb_floor.02",
+      "7,7": "mse.ground.stone_tomb_floor.02",
+      "7,8": "mse.ground.stone_tomb_floor.03",
+      "7,9": "mse.ground.stone_tomb_floor.01",
+      "8,0": "mse.ground.stone_tomb_floor.06",
+      "8,1": "mse.ground.stone_tomb_floor.05",
+      "8,10": "mse.ground.stone_tomb_floor.06",
+      "8,11": "mse.ground.stone_tomb_floor.03",
+      "8,12": "mse.ground.stone_tomb_floor.04",
+      "8,13": "mse.ground.stone_tomb_floor.04",
+      "8,14": "mse.ground.stone_tomb_floor.01",
+      "8,15": "mse.ground.stone_tomb_floor.06",
+      "8,2": "mse.ground.stone_tomb_floor.06",
+      "8,3": "mse.ground.stone_tomb_floor.06",
+      "8,4": "mse.ground.stone_tomb_floor.05",
+      "8,5": "mse.ground.stone_tomb_floor.02",
+      "8,6": "mse.ground.stone_tomb_floor.02",
+      "8,7": "mse.ground.stone_tomb_floor.02",
+      "8,8": "mse.ground.stone_tomb_floor.06",
+      "8,9": "mse.ground.stone_tomb_floor.02",
+      "9,0": "mse.ground.stone_tomb_floor.02",
+      "9,1": "mse.ground.stone_tomb_floor.05",
+      "9,10": "mse.ground.stone_tomb_floor.04",
+      "9,11": "mse.ground.stone_tomb_floor.04",
+      "9,12": "mse.ground.stone_tomb_floor.01",
+      "9,13": "mse.ground.stone_tomb_floor.05",
+      "9,14": "mse.ground.stone_tomb_floor.04",
+      "9,15": "mse.ground.stone_tomb_floor.05",
+      "9,2": "mse.ground.stone_tomb_floor.05",
+      "9,3": "mse.ground.stone_tomb_floor.01",
+      "9,4": "mse.ground.stone_tomb_floor.05",
+      "9,5": "mse.ground.stone_tomb_floor.05",
+      "9,6": "mse.ground.stone_tomb_floor.02",
+      "9,7": "mse.ground.stone_tomb_floor.06",
+      "9,8": "mse.ground.stone_tomb_floor.02",
+      "9,9": "mse.ground.stone_tomb_floor.06"
+    }
+  },
+  "instances": [
+    {
+      "anchor_mode": "tile_center",
+      "anchor_px": [
+        320.0,
+        160.0
+      ],
+      "asset_id": "mse.ground_graffiti.10x10.07",
+      "collision_authority": "visual_only",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        6.0,
+        6.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        10.0,
+        10.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000025",
+      "instance_scale_level": -4.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": -1.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        6.0,
+        6.0
+      ],
+      "offset_px": [
+        0.0,
+        -64.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        320.0,
+        160.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.6000000238418579,
+        0.6000000238418579
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        6.0,
+        6.0
+      ],
+      "tile_anchor": [
+        6.0,
+        6.0
+      ],
+      "visual_footprint_tiles": [
+        6.0,
+        6.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        181.0,
+        388.0
+      ],
+      "asset_id": "user.abf0bff8b4111ffa",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000029",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 1.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        181.0,
+        388.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        13.0,
+        2.0
+      ],
+      "tile_anchor": [
+        13.0,
+        2.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        139.0,
+        373.0
+      ],
+      "asset_id": "user.e669572580d701f7",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000030",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        139.0,
+        373.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        12.0,
+        14.0
+      ],
+      "tile_anchor": [
+        12.0,
+        14.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        141.0,
+        520.0
+      ],
+      "asset_id": "user.720dc0f16ee411ec",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        5.0,
+        5.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000031",
+      "instance_scale_level": -8.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        141.0,
+        520.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.20000000000000015,
+        0.20000000000000015
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        27.0,
+        1.0
+      ],
+      "tile_anchor": [
+        27.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        141.0,
+        520.0
+      ],
+      "asset_id": "user.720dc0f16ee411ec",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        5.0,
+        5.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000032",
+      "instance_scale_level": -8.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        141.0,
+        520.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.20000000000000015,
+        0.20000000000000015
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        27.0,
+        14.0
+      ],
+      "tile_anchor": [
+        27.0,
+        14.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        141.0,
+        520.0
+      ],
+      "asset_id": "user.720dc0f16ee411ec",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        5.0,
+        5.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000033",
+      "instance_scale_level": -8.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        141.0,
+        520.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.20000000000000015,
+        0.20000000000000015
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        1.0
+      ],
+      "tile_anchor": [
+        1.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        141.0,
+        520.0
+      ],
+      "asset_id": "user.720dc0f16ee411ec",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        5.0,
+        5.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000034",
+      "instance_scale_level": -8.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        141.0,
+        520.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.20000000000000015,
+        0.20000000000000015
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        14.0
+      ],
+      "tile_anchor": [
+        1.0,
+        14.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000001",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        28.0,
+        0.0
+      ],
+      "tile_anchor": [
+        28.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000002",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        24.0,
+        0.0
+      ],
+      "tile_anchor": [
+        24.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000003",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        20.0,
+        0.0
+      ],
+      "tile_anchor": [
+        20.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000004",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        16.0,
+        0.0
+      ],
+      "tile_anchor": [
+        16.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000005",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        12.0,
+        0.0
+      ],
+      "tile_anchor": [
+        12.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000006",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        8.0,
+        0.0
+      ],
+      "tile_anchor": [
+        8.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000007",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        4.0,
+        0.0
+      ],
+      "tile_anchor": [
+        4.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000008",
+      "instance_scale_level": 0.0,
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000009",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        28.0,
+        15.0
+      ],
+      "tile_anchor": [
+        28.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000010",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        24.0,
+        15.0
+      ],
+      "tile_anchor": [
+        24.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000011",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        20.0,
+        15.0
+      ],
+      "tile_anchor": [
+        20.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000012",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        16.0,
+        15.0
+      ],
+      "tile_anchor": [
+        16.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000013",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        12.0,
+        15.0
+      ],
+      "tile_anchor": [
+        12.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000014",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        8.0,
+        15.0
+      ],
+      "tile_anchor": [
+        8.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000015",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        4.0,
+        15.0
+      ],
+      "tile_anchor": [
+        4.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        48.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000016",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        48.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        15.0
+      ],
+      "tile_anchor": [
+        0.0,
+        15.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000017",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        12.0
+      ],
+      "tile_anchor": [
+        0.0,
+        12.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000019",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        4.0
+      ],
+      "tile_anchor": [
+        0.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000020",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000021",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        31.0,
+        0.0
+      ],
+      "tile_anchor": [
+        31.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000022",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        31.0,
+        4.0
+      ],
+      "tile_anchor": [
+        31.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000023",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        31.0,
+        8.0
+      ],
+      "tile_anchor": [
+        31.0,
+        8.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000024",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        31.0,
+        12.0
+      ],
+      "tile_anchor": [
+        31.0,
+        12.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        144.0,
+        112.0
+      ],
+      "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000026",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        144.0,
+        112.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        8.0
+      ],
+      "tile_anchor": [
+        0.0,
+        8.0
+      ]
+    }
+  ],
+  "projection_contract_id": "world.ground_projection.iso_64x32.v1",
+  "runtime_schema_version": 2.0,
+  "semantics": {
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "hidden_confusion_hall",
+          "source_category_role": "boss",
+          "source_line": 103.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暗之双头血魔",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 235.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            1.0,
+            1.0,
+            359.0,
+            -13.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.hidden_confusion_hall.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.hidden_confusion_hall.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          6.0
+        ]
+      }
+    ],
+    "door_points": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_only": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "arrival_only",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "由石墓四层进入，单向只可进入",
+        "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
+        "kind": "map_exit",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "arrival_only_endpoint",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
+        "tile": [
+          27.0,
+          6.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": false
+      }
+    ],
+    "monster_spawn": [],
+    "npc_points": [],
+    "region_trigger": [],
+    "respawn_points": [],
+    "safe_area": []
+  },
+  "source": {
+    "candidate_binding": {
+      "authoring_sha256": "537f9f0fa5d1dc53668df3b71708374a963af3a7c1e55961804f049f22c369f7",
+      "contract_id": "mse.map.runtime.candidate_binding.v1",
+      "document_revision": 2.0,
+      "document_sha256": "746ad2b3dc1da906f592837bd46891a6c088a77a17c0e26f624daf7f5af7bfb9",
+      "ground_manifest_sha256": "4010b0c57479755bd1e89fc10cfd0cb859bc232d94208f1c16dd54add1c0f17f",
+      "ground_state_sha256": "58656da4fd83b6b143d5376ed2d3b25d4696d7d8523352ee93238634680ebf68",
+      "map_key": "hidden_confusion_hall",
+      "runtime_map_id": 918001.0
+    },
+    "content_layer": "personal_expansion",
+    "display_name": "困惑殿堂",
+    "editor_schema_version": 5.0,
+    "map_id": "hidden_confusion_hall",
+    "revision": 2.0,
+    "runtime_map_id": 918001.0
+  },
+  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+}

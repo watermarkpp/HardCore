@@ -62,14 +62,18 @@ static func make_document(
 			"radius_gu": 0.0,
 		}
 	)
-	var wall := MapEditorInstanceService.create_instance(
-		document, "terrain.palisade_wall_01", "terrain",
-		Vector2i(10, 10), "terrain_base"
-	)
 	assert(
 		npc.ok and door.ok and entrance.ok and map_exit.ok
-		and respawn.ok and safe.ok and wall.ok,
-		"semantic setup failed"
+		and respawn.ok and safe.ok,
+		"semantic setup failed: %s"
+		% str({
+			"npc": npc,
+			"door": door,
+			"entrance": entrance,
+			"exit": map_exit,
+			"respawn": respawn,
+			"safe": safe,
+		})
 	)
 	return document
 

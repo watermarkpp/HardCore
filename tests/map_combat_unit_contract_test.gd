@@ -1,6 +1,5 @@
 extends Node
 
-const RUNTIME_MAP_IDS := [4, 217, 218, 221, 268, 313, 314, 315, 406, 408, 1578]
 const EPSILON := 0.0001
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const MapEditorBuildRuntimeService := preload(
@@ -208,7 +207,7 @@ func _test_32_direction_projection_roundtrip() -> void:
 
 
 func _test_all_runtime_maps_use_formal_v2_contract() -> void:
-	for runtime_map_id: int in RUNTIME_MAP_IDS:
+	for runtime_map_id: int in MapEditorRuntimeBridge.released_map_ids():
 		var path := MapEditorRuntimeBridge.runtime_path(runtime_map_id)
 		var raw_before := _read_text(path)
 		assert(not raw_before.is_empty(), path)
@@ -263,7 +262,7 @@ func _assert_runtime_semantics_use_formal_units(runtime: Dictionary) -> void:
 
 func _test_runtime_bridge_gu_fields() -> void:
 	MapEditorRuntimeBridge._runtime_cache.clear()
-	for runtime_map_id: int in RUNTIME_MAP_IDS:
+	for runtime_map_id: int in MapEditorRuntimeBridge.released_map_ids():
 		_assert_runtime_bridge_output_units(runtime_map_id)
 	var runtime := MapEditorRuntimeBridge.load_map(MapEditorRuntimeBridge.BICH_MAP_ID)
 	assert(not runtime.is_empty())

@@ -1,5 +1,9 @@
 extends Node2D
 
+const BICH_RUNTIME_MAP_ID := 910001
+const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
+const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
+
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
@@ -911,6 +915,7 @@ func travel_to_map(map_id: int) -> void:
 
 func _request_map_travel(map_id: int) -> bool:
 	if not gameplay_input_is_enabled(): return false
+	map_id = GameData.service_runtime_map_id(map_id)
 	# FREEZE-P0.2: refuse travel before the transition when the target map has
 	# no formal projection profile; never load_zone into a half-broken world.
 	var travel_profile := _resolve_projection_profile_for_map(map_id)
@@ -1099,7 +1104,9 @@ func _begin_initial_world_bootstrap() -> void:
 		_world_bootstrap_coordinator.finish(false, "initial_travel_rejected")
 		_world_bootstrap_in_progress = false
 		return
-	var bootstrap_deadline := Time.get_ticks_msec() + 15000
+	var bootstrap_deadline := (
+		Time.get_ticks_msec() + INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC
+	)
 	while (
 		(_map_transition_in_progress
 			or _world_bootstrap_coordinator.stage not in [
@@ -1109,6 +1116,21 @@ func _begin_initial_world_bootstrap() -> void:
 		and Time.get_ticks_msec() < bootstrap_deadline
 	):
 		await get_tree().process_frame
+	if (
+		_map_transition_in_progress
+		or _world_bootstrap_coordinator.stage not in [
+			WorldBootstrapCoordinator.Stage.READY,
+			WorldBootstrapCoordinator.Stage.FAILED,
+		]
+	):
+		# A formal map may require substantially more resources than the legacy
+		# 11-map slice. Never release input onto a half-built world when the
+		# bounded bootstrap deadline is exhausted.
+		_active_map_transition_id = ""
+		_map_transition_in_progress = false
+		_world_bootstrap_coordinator.finish(false, "initial_bootstrap_timeout")
+		_world_bootstrap_in_progress = false
+		return
 	if _world_bootstrap_coordinator.stage == WorldBootstrapCoordinator.Stage.FAILED:
 		# Keep the input lock and Loading overlay; the bootstrap failed and the
 		# game must not accept gameplay on a half-built world.
@@ -1341,7 +1363,7 @@ func _bootstrap_slice_budget_ms() -> float:
 
 
 func _pipeline_arrival_position(map_id: int) -> Dictionary:
-	if map_id == 4:
+	if map_id == BICH_RUNTIME_MAP_ID:
 		return _resolve_bich_home()
 	return {
 		"valid": true,
@@ -1500,7 +1522,7 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 			var portal_screen_px: Vector2 = portal.get("position", Vector2.ZERO)
 			var interior_target_screen_px := (
 				_bich_home_position_px_if_valid()
-				if destination_map_id == 4
+				if destination_map_id == BICH_RUNTIME_MAP_ID
 				else Vector2.ZERO
 			)
 			var portal_ground_gu := (
@@ -1527,12 +1549,19 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 				portal_ground_gu + inward_direction_ground_gu * arrival_offset_gu
 			)
-	return _bich_home_position_px_if_valid() if destination_map_id == 4 else Vector2.ZERO
+	return (
+		_bich_home_position_px_if_valid()
+		if destination_map_id == BICH_RUNTIME_MAP_ID
+		else Vector2.ZERO
+	)
 
 
 func route_next_target(map_id: int) -> Dictionary:
 	var content := RegionContent.get_map_content(map_id)
-	if map_id == 221 and not content.get("bosses", []).is_empty():
+	if (
+		map_id == ORC_TOMB_F3_RUNTIME_MAP_ID
+		and not content.get("bosses", []).is_empty()
+	):
 		return {"position": content.get("bosses", [])[0].get("position", Vector2.ZERO), "label": "骷髅精灵Boss房"}
 	var portals: Array = content.get("portals", [])
 	if not portals.is_empty():
@@ -1635,7 +1664,11 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# -1, so STRICT_V2 absolute snapshots stay valid.
 		current_map_id = GameData.service_runtime_map_id(0)
 	background.set_zone_data(zone_name, current_map_data)
-	hud.set_zone_name("比奇营地 · 安全区" if current_map_id == 4 else zone_name)
+	hud.set_zone_name(
+		"比奇营地 · 安全区"
+		if current_map_id == BICH_RUNTIME_MAP_ID
+		else zone_name
+	)
 	if zone_name == "比奇城":
 		player.global_position = Vector2(0, 80)
 		_spawn_city_content()
@@ -1643,7 +1676,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		player.global_position = Vector2.ZERO
 		_spawn_outskirts_content()
 	else:
-		if current_map_id == 4:
+		if current_map_id == BICH_RUNTIME_MAP_ID:
 			var home := _resolve_bich_home()
 			if bool(home.get("valid", false)):
 				player.global_position = home.get(
@@ -1805,9 +1838,11 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 
 
 func _spawn_authored_map_content(content: Dictionary) -> void:
-	var camp_layout := _bich_camp_layout if current_map_id == 4 else {}
+	var camp_layout := (
+		_bich_camp_layout if current_map_id == BICH_RUNTIME_MAP_ID else {}
+	)
 	var camp_home := Vector2.ZERO
-	if current_map_id == 4:
+	if current_map_id == BICH_RUNTIME_MAP_ID:
 		var home := _resolve_bich_home()
 		if not bool(home.get("valid", false)):
 			_handle_home_resolution_failure(&"camp_spawn", home)
@@ -1828,7 +1863,7 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 				"spawnGroupId",
 				"map:%d:spawn:%d" % [current_map_id, authored_spawn_index]
 			))
-			if current_map_id == 4:
+			if current_map_id == BICH_RUNTIME_MAP_ID:
 				var copies := int(camp_layout.get("fieldSpawnCopies", 4))
 				var radii: Array = camp_layout.get("fieldSpawnRadii", [940, 1180, 1460, 1740])
 				for copy_index in range(copies):
@@ -1900,10 +1935,13 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 			"books": stock = _build_skill_book_stock(PlayerState.profession)
 		var npc_name := str(npc_data.get("name", "NPC"))
 		var npc_position: Vector2 = npc_data.get("position", Vector2.ZERO)
-		if current_map_id == 4 and camp_layout.get("npcSlots", {}).has(npc_name):
+		if (
+			current_map_id == BICH_RUNTIME_MAP_ID
+			and camp_layout.get("npcSlots", {}).has(npc_name)
+		):
 			npc_position = camp_home + GothicBichCampBuilderScript._vector(camp_layout.npcSlots[npc_name])
 		_spawn_npc(npc_position, npc_name, str(npc_data.get("kind", "shop")), stock, str(npc_data.get("stock", "")), int(npc_data.get("appearance", -1)))
-	if current_map_id == 4:
+	if current_map_id == BICH_RUNTIME_MAP_ID:
 		_spawn_npc(camp_home + GothicBichCampBuilderScript._vector(camp_layout.npcSlots.get("仓库管理员", [-520, 185])), "仓库管理员", "warehouse")
 	for portal: Variant in content.get("portals", []):
 		if portal is Dictionary:
@@ -1911,7 +1949,7 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 
 
 func _enforce_bich_safe_zone() -> void:
-	if current_map_id != 4:
+	if current_map_id != BICH_RUNTIME_MAP_ID:
 		return
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or not is_instance_valid(node):

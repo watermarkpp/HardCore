@@ -47,7 +47,7 @@ func _run() -> void:
 	}))
 	var field_ground_position_gu := Vector2(17.25, 8.5)
 	PlayerState.update_world_location(
-		217,
+		911001,
 		Vector2(321.5, -84.0),
 		field_ground_position_gu
 	)
@@ -150,7 +150,7 @@ func _run() -> void:
 	assert(bool(restored_runtime.toggles["warrior.fire_sword.auto_enabled"]))
 	assert(not restored_runtime.cooldowns.has("warrior.fire_sword.ready_remaining_ms"))
 	assert(
-		PlayerState.saved_map_id == 217
+		PlayerState.saved_map_id == 911001
 		and PlayerState.saved_position.is_equal_approx(Vector2(321.5, -84.0))
 	)
 	assert(
@@ -163,14 +163,14 @@ func _run() -> void:
 		Vector2(289, 618), Vector2i(700, 700)
 	)
 	var expected_home_ground_gu := Vector2(289, 618)
-	assert(PlayerState.save_safe_logout(4, expected_home, expected_home_ground_gu))
-	PlayerState.saved_map_id = 217
+	assert(PlayerState.save_safe_logout(910001, expected_home, expected_home_ground_gu))
+	PlayerState.saved_map_id = 911001
 	PlayerState.saved_position = Vector2.ZERO
 	PlayerState.saved_ground_position_gu = Vector2.ZERO
 	PlayerState.saved_ground_position_gu_valid = false
 	assert(PlayerState.select_character(first_id))
 	assert(
-		PlayerState.saved_map_id == 4
+		PlayerState.saved_map_id == 910001
 		and PlayerState.saved_position.is_equal_approx(expected_home)
 	)
 	assert(

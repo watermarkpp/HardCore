@@ -1,0 +1,4928 @@
+{
+  "build_sha256": "ceca893a61a0df860dcd5bb44bc0b60454498e15107093aa2320f297f360a973",
+  "collision": {
+    "blocked_count": 144.0,
+    "blocked_tiles": [
+      "0,0",
+      "0,1",
+      "0,10",
+      "0,11",
+      "0,12",
+      "0,13",
+      "0,14",
+      "0,15",
+      "0,16",
+      "0,17",
+      "0,18",
+      "0,19",
+      "0,2",
+      "0,20",
+      "0,21",
+      "0,22",
+      "0,23",
+      "0,24",
+      "0,25",
+      "0,26",
+      "0,27",
+      "0,28",
+      "0,29",
+      "0,3",
+      "0,30",
+      "0,31",
+      "0,4",
+      "0,5",
+      "0,6",
+      "0,7",
+      "0,8",
+      "0,9",
+      "1,0",
+      "1,31",
+      "10,0",
+      "10,31",
+      "11,0",
+      "11,31",
+      "12,0",
+      "12,11",
+      "12,12",
+      "12,13",
+      "12,14",
+      "12,31",
+      "13,0",
+      "13,11",
+      "13,12",
+      "13,13",
+      "13,14",
+      "13,31",
+      "14,0",
+      "14,11",
+      "14,12",
+      "14,13",
+      "14,14",
+      "14,31",
+      "15,0",
+      "15,11",
+      "15,12",
+      "15,13",
+      "15,14",
+      "15,31",
+      "16,0",
+      "16,11",
+      "16,12",
+      "16,13",
+      "16,14",
+      "16,31",
+      "17,0",
+      "17,31",
+      "18,0",
+      "18,31",
+      "19,0",
+      "19,31",
+      "2,0",
+      "2,31",
+      "20,0",
+      "20,31",
+      "21,0",
+      "21,31",
+      "22,0",
+      "22,31",
+      "23,0",
+      "23,31",
+      "24,0",
+      "24,31",
+      "25,0",
+      "25,31",
+      "26,0",
+      "26,31",
+      "27,0",
+      "27,31",
+      "28,0",
+      "28,31",
+      "29,0",
+      "29,31",
+      "3,0",
+      "3,31",
+      "30,0",
+      "30,31",
+      "31,0",
+      "31,1",
+      "31,10",
+      "31,11",
+      "31,12",
+      "31,13",
+      "31,14",
+      "31,15",
+      "31,16",
+      "31,17",
+      "31,18",
+      "31,19",
+      "31,2",
+      "31,20",
+      "31,21",
+      "31,22",
+      "31,23",
+      "31,24",
+      "31,25",
+      "31,26",
+      "31,27",
+      "31,28",
+      "31,29",
+      "31,3",
+      "31,30",
+      "31,31",
+      "31,4",
+      "31,5",
+      "31,6",
+      "31,7",
+      "31,8",
+      "31,9",
+      "4,0",
+      "4,31",
+      "5,0",
+      "5,31",
+      "6,0",
+      "6,31",
+      "7,0",
+      "7,31",
+      "8,0",
+      "8,31",
+      "9,0",
+      "9,31"
+    ],
+    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v2",
+    "erased_cells": [],
+    "manual_shapes": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            31.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12.0,
+            11.0,
+            5.0,
+            4.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ],
+    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+  },
+  "design": {
+    "design_size": [
+      32.0,
+      32.0
+    ],
+    "map_type": "boss_room",
+    "source_size": [
+      null,
+      null
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "custom_blank_layout",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1",
+    "wall_loops": [
+      {
+        "bounds": [
+          0.0,
+          0.0,
+          32.0,
+          32.0
+        ],
+        "collision_authority": "manual_by_user",
+        "corner_join_mode": "straight_overlap",
+        "corner_topology": "outer_corner",
+        "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+        "visual_render_contract": "native_2to1_straight_overlap_v1",
+        "wall_family_id": "chiyue_valley_rock_wall_u0"
+      }
+    ]
+  },
+  "ground": {
+    "default_fill_asset_id": "",
+    "ground_mode": "generated_painted_chunks",
+    "tile_overrides": {
+      "0,0": "mse.ground.chiyue_valley_floor.06",
+      "0,1": "mse.ground.chiyue_valley_floor.05",
+      "0,10": "mse.ground.chiyue_valley_floor.06",
+      "0,11": "mse.ground.chiyue_valley_floor.06",
+      "0,12": "mse.ground.chiyue_valley_floor.03",
+      "0,13": "mse.ground.chiyue_valley_floor.01",
+      "0,14": "mse.ground.chiyue_valley_floor.01",
+      "0,15": "mse.ground.chiyue_valley_floor.01",
+      "0,16": "mse.ground.chiyue_valley_floor.01",
+      "0,17": "mse.ground.chiyue_valley_floor.03",
+      "0,18": "mse.ground.chiyue_valley_floor.03",
+      "0,19": "mse.ground.chiyue_valley_floor.04",
+      "0,2": "mse.ground.chiyue_valley_floor.01",
+      "0,20": "mse.ground.chiyue_valley_floor.05",
+      "0,21": "mse.ground.chiyue_valley_floor.03",
+      "0,22": "mse.ground.chiyue_valley_floor.03",
+      "0,23": "mse.ground.chiyue_valley_floor.06",
+      "0,24": "mse.ground.chiyue_valley_floor.01",
+      "0,25": "mse.ground.chiyue_valley_floor.06",
+      "0,26": "mse.ground.chiyue_valley_floor.01",
+      "0,27": "mse.ground.chiyue_valley_floor.02",
+      "0,28": "mse.ground.chiyue_valley_floor.03",
+      "0,29": "mse.ground.chiyue_valley_floor.03",
+      "0,3": "mse.ground.chiyue_valley_floor.05",
+      "0,30": "mse.ground.chiyue_valley_floor.04",
+      "0,31": "mse.ground.chiyue_valley_floor.04",
+      "0,4": "mse.ground.chiyue_valley_floor.03",
+      "0,5": "mse.ground.chiyue_valley_floor.05",
+      "0,6": "mse.ground.chiyue_valley_floor.01",
+      "0,7": "mse.ground.chiyue_valley_floor.06",
+      "0,8": "mse.ground.chiyue_valley_floor.05",
+      "0,9": "mse.ground.chiyue_valley_floor.01",
+      "1,0": "mse.ground.chiyue_valley_floor.02",
+      "1,1": "mse.ground.chiyue_valley_floor.05",
+      "1,10": "mse.ground.chiyue_valley_floor.01",
+      "1,11": "mse.ground.chiyue_valley_floor.03",
+      "1,12": "mse.ground.chiyue_valley_floor.01",
+      "1,13": "mse.ground.chiyue_valley_floor.03",
+      "1,14": "mse.ground.chiyue_valley_floor.04",
+      "1,15": "mse.ground.chiyue_valley_floor.06",
+      "1,16": "mse.ground.chiyue_valley_floor.01",
+      "1,17": "mse.ground.chiyue_valley_floor.05",
+      "1,18": "mse.ground.chiyue_valley_floor.04",
+      "1,19": "mse.ground.chiyue_valley_floor.01",
+      "1,2": "mse.ground.chiyue_valley_floor.01",
+      "1,20": "mse.ground.chiyue_valley_floor.05",
+      "1,21": "mse.ground.chiyue_valley_floor.04",
+      "1,22": "mse.ground.chiyue_valley_floor.05",
+      "1,23": "mse.ground.chiyue_valley_floor.04",
+      "1,24": "mse.ground.chiyue_valley_floor.01",
+      "1,25": "mse.ground.chiyue_valley_floor.04",
+      "1,26": "mse.ground.chiyue_valley_floor.04",
+      "1,27": "mse.ground.chiyue_valley_floor.05",
+      "1,28": "mse.ground.chiyue_valley_floor.01",
+      "1,29": "mse.ground.chiyue_valley_floor.05",
+      "1,3": "mse.ground.chiyue_valley_floor.02",
+      "1,30": "mse.ground.chiyue_valley_floor.06",
+      "1,31": "mse.ground.chiyue_valley_floor.06",
+      "1,4": "mse.ground.chiyue_valley_floor.01",
+      "1,5": "mse.ground.chiyue_valley_floor.04",
+      "1,6": "mse.ground.chiyue_valley_floor.04",
+      "1,7": "mse.ground.chiyue_valley_floor.02",
+      "1,8": "mse.ground.chiyue_valley_floor.05",
+      "1,9": "mse.ground.chiyue_valley_floor.02",
+      "10,0": "mse.ground.chiyue_valley_floor.03",
+      "10,1": "mse.ground.chiyue_valley_floor.03",
+      "10,10": "mse.ground.chiyue_valley_floor.04",
+      "10,11": "mse.ground.chiyue_valley_floor.01",
+      "10,12": "mse.ground.chiyue_valley_floor.01",
+      "10,13": "mse.ground.chiyue_valley_floor.02",
+      "10,14": "mse.ground.chiyue_valley_floor.06",
+      "10,15": "mse.ground.chiyue_valley_floor.05",
+      "10,16": "mse.ground.chiyue_valley_floor.06",
+      "10,17": "mse.ground.chiyue_valley_floor.03",
+      "10,18": "mse.ground.chiyue_valley_floor.04",
+      "10,19": "mse.ground.chiyue_valley_floor.01",
+      "10,2": "mse.ground.chiyue_valley_floor.06",
+      "10,20": "mse.ground.chiyue_valley_floor.05",
+      "10,21": "mse.ground.chiyue_valley_floor.06",
+      "10,22": "mse.ground.chiyue_valley_floor.04",
+      "10,23": "mse.ground.chiyue_valley_floor.03",
+      "10,24": "mse.ground.chiyue_valley_floor.06",
+      "10,25": "mse.ground.chiyue_valley_floor.04",
+      "10,26": "mse.ground.chiyue_valley_floor.05",
+      "10,27": "mse.ground.chiyue_valley_floor.01",
+      "10,28": "mse.ground.chiyue_valley_floor.06",
+      "10,29": "mse.ground.chiyue_valley_floor.06",
+      "10,3": "mse.ground.chiyue_valley_floor.04",
+      "10,30": "mse.ground.chiyue_valley_floor.03",
+      "10,31": "mse.ground.chiyue_valley_floor.03",
+      "10,4": "mse.ground.chiyue_valley_floor.02",
+      "10,5": "mse.ground.chiyue_valley_floor.01",
+      "10,6": "mse.ground.chiyue_valley_floor.02",
+      "10,7": "mse.ground.chiyue_valley_floor.01",
+      "10,8": "mse.ground.chiyue_valley_floor.03",
+      "10,9": "mse.ground.chiyue_valley_floor.03",
+      "11,0": "mse.ground.chiyue_valley_floor.06",
+      "11,1": "mse.ground.chiyue_valley_floor.04",
+      "11,10": "mse.ground.chiyue_valley_floor.06",
+      "11,11": "mse.ground.chiyue_valley_floor.05",
+      "11,12": "mse.ground.chiyue_valley_floor.02",
+      "11,13": "mse.ground.chiyue_valley_floor.01",
+      "11,14": "mse.ground.chiyue_valley_floor.04",
+      "11,15": "mse.ground.chiyue_valley_floor.04",
+      "11,16": "mse.ground.chiyue_valley_floor.06",
+      "11,17": "mse.ground.chiyue_valley_floor.06",
+      "11,18": "mse.ground.chiyue_valley_floor.03",
+      "11,19": "mse.ground.chiyue_valley_floor.04",
+      "11,2": "mse.ground.chiyue_valley_floor.05",
+      "11,20": "mse.ground.chiyue_valley_floor.01",
+      "11,21": "mse.ground.chiyue_valley_floor.04",
+      "11,22": "mse.ground.chiyue_valley_floor.02",
+      "11,23": "mse.ground.chiyue_valley_floor.01",
+      "11,24": "mse.ground.chiyue_valley_floor.01",
+      "11,25": "mse.ground.chiyue_valley_floor.05",
+      "11,26": "mse.ground.chiyue_valley_floor.03",
+      "11,27": "mse.ground.chiyue_valley_floor.03",
+      "11,28": "mse.ground.chiyue_valley_floor.01",
+      "11,29": "mse.ground.chiyue_valley_floor.01",
+      "11,3": "mse.ground.chiyue_valley_floor.04",
+      "11,30": "mse.ground.chiyue_valley_floor.02",
+      "11,31": "mse.ground.chiyue_valley_floor.05",
+      "11,4": "mse.ground.chiyue_valley_floor.01",
+      "11,5": "mse.ground.chiyue_valley_floor.04",
+      "11,6": "mse.ground.chiyue_valley_floor.04",
+      "11,7": "mse.ground.chiyue_valley_floor.05",
+      "11,8": "mse.ground.chiyue_valley_floor.06",
+      "11,9": "mse.ground.chiyue_valley_floor.04",
+      "12,0": "mse.ground.chiyue_valley_floor.02",
+      "12,1": "mse.ground.chiyue_valley_floor.04",
+      "12,10": "mse.ground.chiyue_valley_floor.05",
+      "12,11": "mse.ground.chiyue_valley_floor.05",
+      "12,12": "mse.ground.chiyue_valley_floor.06",
+      "12,13": "mse.ground.chiyue_valley_floor.06",
+      "12,14": "mse.ground.chiyue_valley_floor.03",
+      "12,15": "mse.ground.chiyue_valley_floor.05",
+      "12,16": "mse.ground.chiyue_valley_floor.05",
+      "12,17": "mse.ground.chiyue_valley_floor.04",
+      "12,18": "mse.ground.chiyue_valley_floor.06",
+      "12,19": "mse.ground.chiyue_valley_floor.03",
+      "12,2": "mse.ground.chiyue_valley_floor.04",
+      "12,20": "mse.ground.chiyue_valley_floor.04",
+      "12,21": "mse.ground.chiyue_valley_floor.04",
+      "12,22": "mse.ground.chiyue_valley_floor.03",
+      "12,23": "mse.ground.chiyue_valley_floor.01",
+      "12,24": "mse.ground.chiyue_valley_floor.04",
+      "12,25": "mse.ground.chiyue_valley_floor.04",
+      "12,26": "mse.ground.chiyue_valley_floor.01",
+      "12,27": "mse.ground.chiyue_valley_floor.02",
+      "12,28": "mse.ground.chiyue_valley_floor.02",
+      "12,29": "mse.ground.chiyue_valley_floor.02",
+      "12,3": "mse.ground.chiyue_valley_floor.03",
+      "12,30": "mse.ground.chiyue_valley_floor.02",
+      "12,31": "mse.ground.chiyue_valley_floor.06",
+      "12,4": "mse.ground.chiyue_valley_floor.05",
+      "12,5": "mse.ground.chiyue_valley_floor.05",
+      "12,6": "mse.ground.chiyue_valley_floor.02",
+      "12,7": "mse.ground.chiyue_valley_floor.01",
+      "12,8": "mse.ground.chiyue_valley_floor.06",
+      "12,9": "mse.ground.chiyue_valley_floor.06",
+      "13,0": "mse.ground.chiyue_valley_floor.01",
+      "13,1": "mse.ground.chiyue_valley_floor.01",
+      "13,10": "mse.ground.chiyue_valley_floor.05",
+      "13,11": "mse.ground.chiyue_valley_floor.02",
+      "13,12": "mse.ground.chiyue_valley_floor.03",
+      "13,13": "mse.ground.chiyue_valley_floor.05",
+      "13,14": "mse.ground.chiyue_valley_floor.01",
+      "13,15": "mse.ground.chiyue_valley_floor.01",
+      "13,16": "mse.ground.chiyue_valley_floor.03",
+      "13,17": "mse.ground.chiyue_valley_floor.01",
+      "13,18": "mse.ground.chiyue_valley_floor.04",
+      "13,19": "mse.ground.chiyue_valley_floor.03",
+      "13,2": "mse.ground.chiyue_valley_floor.02",
+      "13,20": "mse.ground.chiyue_valley_floor.02",
+      "13,21": "mse.ground.chiyue_valley_floor.03",
+      "13,22": "mse.ground.chiyue_valley_floor.01",
+      "13,23": "mse.ground.chiyue_valley_floor.03",
+      "13,24": "mse.ground.chiyue_valley_floor.05",
+      "13,25": "mse.ground.chiyue_valley_floor.01",
+      "13,26": "mse.ground.chiyue_valley_floor.01",
+      "13,27": "mse.ground.chiyue_valley_floor.02",
+      "13,28": "mse.ground.chiyue_valley_floor.05",
+      "13,29": "mse.ground.chiyue_valley_floor.03",
+      "13,3": "mse.ground.chiyue_valley_floor.05",
+      "13,30": "mse.ground.chiyue_valley_floor.06",
+      "13,31": "mse.ground.chiyue_valley_floor.05",
+      "13,4": "mse.ground.chiyue_valley_floor.05",
+      "13,5": "mse.ground.chiyue_valley_floor.06",
+      "13,6": "mse.ground.chiyue_valley_floor.05",
+      "13,7": "mse.ground.chiyue_valley_floor.02",
+      "13,8": "mse.ground.chiyue_valley_floor.06",
+      "13,9": "mse.ground.chiyue_valley_floor.01",
+      "14,0": "mse.ground.chiyue_valley_floor.02",
+      "14,1": "mse.ground.chiyue_valley_floor.06",
+      "14,10": "mse.ground.chiyue_valley_floor.05",
+      "14,11": "mse.ground.chiyue_valley_floor.06",
+      "14,12": "mse.ground.chiyue_valley_floor.04",
+      "14,13": "mse.ground.chiyue_valley_floor.02",
+      "14,14": "mse.ground.chiyue_valley_floor.05",
+      "14,15": "mse.ground.chiyue_valley_floor.06",
+      "14,16": "mse.ground.chiyue_valley_floor.02",
+      "14,17": "mse.ground.chiyue_valley_floor.05",
+      "14,18": "mse.ground.chiyue_valley_floor.06",
+      "14,19": "mse.ground.chiyue_valley_floor.03",
+      "14,2": "mse.ground.chiyue_valley_floor.01",
+      "14,20": "mse.ground.chiyue_valley_floor.06",
+      "14,21": "mse.ground.chiyue_valley_floor.02",
+      "14,22": "mse.ground.chiyue_valley_floor.05",
+      "14,23": "mse.ground.chiyue_valley_floor.05",
+      "14,24": "mse.ground.chiyue_valley_floor.03",
+      "14,25": "mse.ground.chiyue_valley_floor.04",
+      "14,26": "mse.ground.chiyue_valley_floor.04",
+      "14,27": "mse.ground.chiyue_valley_floor.06",
+      "14,28": "mse.ground.chiyue_valley_floor.02",
+      "14,29": "mse.ground.chiyue_valley_floor.05",
+      "14,3": "mse.ground.chiyue_valley_floor.04",
+      "14,30": "mse.ground.chiyue_valley_floor.01",
+      "14,31": "mse.ground.chiyue_valley_floor.05",
+      "14,4": "mse.ground.chiyue_valley_floor.05",
+      "14,5": "mse.ground.chiyue_valley_floor.01",
+      "14,6": "mse.ground.chiyue_valley_floor.04",
+      "14,7": "mse.ground.chiyue_valley_floor.06",
+      "14,8": "mse.ground.chiyue_valley_floor.02",
+      "14,9": "mse.ground.chiyue_valley_floor.03",
+      "15,0": "mse.ground.chiyue_valley_floor.01",
+      "15,1": "mse.ground.chiyue_valley_floor.06",
+      "15,10": "mse.ground.chiyue_valley_floor.05",
+      "15,11": "mse.ground.chiyue_valley_floor.03",
+      "15,12": "mse.ground.chiyue_valley_floor.03",
+      "15,13": "mse.ground.chiyue_valley_floor.06",
+      "15,14": "mse.ground.chiyue_valley_floor.05",
+      "15,15": "mse.ground.chiyue_valley_floor.01",
+      "15,16": "mse.ground.chiyue_valley_floor.04",
+      "15,17": "mse.ground.chiyue_valley_floor.04",
+      "15,18": "mse.ground.chiyue_valley_floor.04",
+      "15,19": "mse.ground.chiyue_valley_floor.04",
+      "15,2": "mse.ground.chiyue_valley_floor.01",
+      "15,20": "mse.ground.chiyue_valley_floor.02",
+      "15,21": "mse.ground.chiyue_valley_floor.05",
+      "15,22": "mse.ground.chiyue_valley_floor.04",
+      "15,23": "mse.ground.chiyue_valley_floor.01",
+      "15,24": "mse.ground.chiyue_valley_floor.04",
+      "15,25": "mse.ground.chiyue_valley_floor.06",
+      "15,26": "mse.ground.chiyue_valley_floor.04",
+      "15,27": "mse.ground.chiyue_valley_floor.04",
+      "15,28": "mse.ground.chiyue_valley_floor.02",
+      "15,29": "mse.ground.chiyue_valley_floor.04",
+      "15,3": "mse.ground.chiyue_valley_floor.06",
+      "15,30": "mse.ground.chiyue_valley_floor.05",
+      "15,31": "mse.ground.chiyue_valley_floor.05",
+      "15,4": "mse.ground.chiyue_valley_floor.05",
+      "15,5": "mse.ground.chiyue_valley_floor.06",
+      "15,6": "mse.ground.chiyue_valley_floor.03",
+      "15,7": "mse.ground.chiyue_valley_floor.02",
+      "15,8": "mse.ground.chiyue_valley_floor.03",
+      "15,9": "mse.ground.chiyue_valley_floor.02",
+      "16,0": "mse.ground.chiyue_valley_floor.03",
+      "16,1": "mse.ground.chiyue_valley_floor.04",
+      "16,10": "mse.ground.chiyue_valley_floor.04",
+      "16,11": "mse.ground.chiyue_valley_floor.03",
+      "16,12": "mse.ground.chiyue_valley_floor.03",
+      "16,13": "mse.ground.chiyue_valley_floor.04",
+      "16,14": "mse.ground.chiyue_valley_floor.03",
+      "16,15": "mse.ground.chiyue_valley_floor.04",
+      "16,16": "mse.ground.chiyue_valley_floor.03",
+      "16,17": "mse.ground.chiyue_valley_floor.01",
+      "16,18": "mse.ground.chiyue_valley_floor.05",
+      "16,19": "mse.ground.chiyue_valley_floor.04",
+      "16,2": "mse.ground.chiyue_valley_floor.01",
+      "16,20": "mse.ground.chiyue_valley_floor.06",
+      "16,21": "mse.ground.chiyue_valley_floor.03",
+      "16,22": "mse.ground.chiyue_valley_floor.05",
+      "16,23": "mse.ground.chiyue_valley_floor.05",
+      "16,24": "mse.ground.chiyue_valley_floor.03",
+      "16,25": "mse.ground.chiyue_valley_floor.01",
+      "16,26": "mse.ground.chiyue_valley_floor.02",
+      "16,27": "mse.ground.chiyue_valley_floor.03",
+      "16,28": "mse.ground.chiyue_valley_floor.02",
+      "16,29": "mse.ground.chiyue_valley_floor.05",
+      "16,3": "mse.ground.chiyue_valley_floor.02",
+      "16,30": "mse.ground.chiyue_valley_floor.03",
+      "16,31": "mse.ground.chiyue_valley_floor.04",
+      "16,4": "mse.ground.chiyue_valley_floor.05",
+      "16,5": "mse.ground.chiyue_valley_floor.03",
+      "16,6": "mse.ground.chiyue_valley_floor.06",
+      "16,7": "mse.ground.chiyue_valley_floor.01",
+      "16,8": "mse.ground.chiyue_valley_floor.01",
+      "16,9": "mse.ground.chiyue_valley_floor.01",
+      "17,0": "mse.ground.chiyue_valley_floor.03",
+      "17,1": "mse.ground.chiyue_valley_floor.05",
+      "17,10": "mse.ground.chiyue_valley_floor.01",
+      "17,11": "mse.ground.chiyue_valley_floor.05",
+      "17,12": "mse.ground.chiyue_valley_floor.02",
+      "17,13": "mse.ground.chiyue_valley_floor.03",
+      "17,14": "mse.ground.chiyue_valley_floor.06",
+      "17,15": "mse.ground.chiyue_valley_floor.02",
+      "17,16": "mse.ground.chiyue_valley_floor.03",
+      "17,17": "mse.ground.chiyue_valley_floor.06",
+      "17,18": "mse.ground.chiyue_valley_floor.06",
+      "17,19": "mse.ground.chiyue_valley_floor.02",
+      "17,2": "mse.ground.chiyue_valley_floor.01",
+      "17,20": "mse.ground.chiyue_valley_floor.04",
+      "17,21": "mse.ground.chiyue_valley_floor.04",
+      "17,22": "mse.ground.chiyue_valley_floor.03",
+      "17,23": "mse.ground.chiyue_valley_floor.01",
+      "17,24": "mse.ground.chiyue_valley_floor.03",
+      "17,25": "mse.ground.chiyue_valley_floor.06",
+      "17,26": "mse.ground.chiyue_valley_floor.01",
+      "17,27": "mse.ground.chiyue_valley_floor.06",
+      "17,28": "mse.ground.chiyue_valley_floor.06",
+      "17,29": "mse.ground.chiyue_valley_floor.03",
+      "17,3": "mse.ground.chiyue_valley_floor.06",
+      "17,30": "mse.ground.chiyue_valley_floor.05",
+      "17,31": "mse.ground.chiyue_valley_floor.06",
+      "17,4": "mse.ground.chiyue_valley_floor.04",
+      "17,5": "mse.ground.chiyue_valley_floor.02",
+      "17,6": "mse.ground.chiyue_valley_floor.04",
+      "17,7": "mse.ground.chiyue_valley_floor.04",
+      "17,8": "mse.ground.chiyue_valley_floor.06",
+      "17,9": "mse.ground.chiyue_valley_floor.02",
+      "18,0": "mse.ground.chiyue_valley_floor.02",
+      "18,1": "mse.ground.chiyue_valley_floor.02",
+      "18,10": "mse.ground.chiyue_valley_floor.06",
+      "18,11": "mse.ground.chiyue_valley_floor.06",
+      "18,12": "mse.ground.chiyue_valley_floor.03",
+      "18,13": "mse.ground.chiyue_valley_floor.01",
+      "18,14": "mse.ground.chiyue_valley_floor.04",
+      "18,15": "mse.ground.chiyue_valley_floor.03",
+      "18,16": "mse.ground.chiyue_valley_floor.06",
+      "18,17": "mse.ground.chiyue_valley_floor.01",
+      "18,18": "mse.ground.chiyue_valley_floor.04",
+      "18,19": "mse.ground.chiyue_valley_floor.06",
+      "18,2": "mse.ground.chiyue_valley_floor.01",
+      "18,20": "mse.ground.chiyue_valley_floor.06",
+      "18,21": "mse.ground.chiyue_valley_floor.04",
+      "18,22": "mse.ground.chiyue_valley_floor.06",
+      "18,23": "mse.ground.chiyue_valley_floor.01",
+      "18,24": "mse.ground.chiyue_valley_floor.06",
+      "18,25": "mse.ground.chiyue_valley_floor.06",
+      "18,26": "mse.ground.chiyue_valley_floor.03",
+      "18,27": "mse.ground.chiyue_valley_floor.03",
+      "18,28": "mse.ground.chiyue_valley_floor.01",
+      "18,29": "mse.ground.chiyue_valley_floor.06",
+      "18,3": "mse.ground.chiyue_valley_floor.04",
+      "18,30": "mse.ground.chiyue_valley_floor.05",
+      "18,31": "mse.ground.chiyue_valley_floor.03",
+      "18,4": "mse.ground.chiyue_valley_floor.03",
+      "18,5": "mse.ground.chiyue_valley_floor.06",
+      "18,6": "mse.ground.chiyue_valley_floor.04",
+      "18,7": "mse.ground.chiyue_valley_floor.03",
+      "18,8": "mse.ground.chiyue_valley_floor.04",
+      "18,9": "mse.ground.chiyue_valley_floor.02",
+      "19,0": "mse.ground.chiyue_valley_floor.04",
+      "19,1": "mse.ground.chiyue_valley_floor.05",
+      "19,10": "mse.ground.chiyue_valley_floor.01",
+      "19,11": "mse.ground.chiyue_valley_floor.05",
+      "19,12": "mse.ground.chiyue_valley_floor.03",
+      "19,13": "mse.ground.chiyue_valley_floor.03",
+      "19,14": "mse.ground.chiyue_valley_floor.05",
+      "19,15": "mse.ground.chiyue_valley_floor.02",
+      "19,16": "mse.ground.chiyue_valley_floor.04",
+      "19,17": "mse.ground.chiyue_valley_floor.01",
+      "19,18": "mse.ground.chiyue_valley_floor.02",
+      "19,19": "mse.ground.chiyue_valley_floor.02",
+      "19,2": "mse.ground.chiyue_valley_floor.06",
+      "19,20": "mse.ground.chiyue_valley_floor.01",
+      "19,21": "mse.ground.chiyue_valley_floor.05",
+      "19,22": "mse.ground.chiyue_valley_floor.03",
+      "19,23": "mse.ground.chiyue_valley_floor.01",
+      "19,24": "mse.ground.chiyue_valley_floor.01",
+      "19,25": "mse.ground.chiyue_valley_floor.05",
+      "19,26": "mse.ground.chiyue_valley_floor.01",
+      "19,27": "mse.ground.chiyue_valley_floor.06",
+      "19,28": "mse.ground.chiyue_valley_floor.03",
+      "19,29": "mse.ground.chiyue_valley_floor.02",
+      "19,3": "mse.ground.chiyue_valley_floor.04",
+      "19,30": "mse.ground.chiyue_valley_floor.03",
+      "19,31": "mse.ground.chiyue_valley_floor.04",
+      "19,4": "mse.ground.chiyue_valley_floor.03",
+      "19,5": "mse.ground.chiyue_valley_floor.01",
+      "19,6": "mse.ground.chiyue_valley_floor.06",
+      "19,7": "mse.ground.chiyue_valley_floor.01",
+      "19,8": "mse.ground.chiyue_valley_floor.02",
+      "19,9": "mse.ground.chiyue_valley_floor.06",
+      "2,0": "mse.ground.chiyue_valley_floor.05",
+      "2,1": "mse.ground.chiyue_valley_floor.03",
+      "2,10": "mse.ground.chiyue_valley_floor.01",
+      "2,11": "mse.ground.chiyue_valley_floor.03",
+      "2,12": "mse.ground.chiyue_valley_floor.01",
+      "2,13": "mse.ground.chiyue_valley_floor.03",
+      "2,14": "mse.ground.chiyue_valley_floor.05",
+      "2,15": "mse.ground.chiyue_valley_floor.06",
+      "2,16": "mse.ground.chiyue_valley_floor.04",
+      "2,17": "mse.ground.chiyue_valley_floor.01",
+      "2,18": "mse.ground.chiyue_valley_floor.05",
+      "2,19": "mse.ground.chiyue_valley_floor.01",
+      "2,2": "mse.ground.chiyue_valley_floor.03",
+      "2,20": "mse.ground.chiyue_valley_floor.06",
+      "2,21": "mse.ground.chiyue_valley_floor.03",
+      "2,22": "mse.ground.chiyue_valley_floor.04",
+      "2,23": "mse.ground.chiyue_valley_floor.05",
+      "2,24": "mse.ground.chiyue_valley_floor.04",
+      "2,25": "mse.ground.chiyue_valley_floor.04",
+      "2,26": "mse.ground.chiyue_valley_floor.03",
+      "2,27": "mse.ground.chiyue_valley_floor.05",
+      "2,28": "mse.ground.chiyue_valley_floor.04",
+      "2,29": "mse.ground.chiyue_valley_floor.04",
+      "2,3": "mse.ground.chiyue_valley_floor.05",
+      "2,30": "mse.ground.chiyue_valley_floor.02",
+      "2,31": "mse.ground.chiyue_valley_floor.06",
+      "2,4": "mse.ground.chiyue_valley_floor.06",
+      "2,5": "mse.ground.chiyue_valley_floor.04",
+      "2,6": "mse.ground.chiyue_valley_floor.02",
+      "2,7": "mse.ground.chiyue_valley_floor.05",
+      "2,8": "mse.ground.chiyue_valley_floor.03",
+      "2,9": "mse.ground.chiyue_valley_floor.01",
+      "20,0": "mse.ground.chiyue_valley_floor.06",
+      "20,1": "mse.ground.chiyue_valley_floor.05",
+      "20,10": "mse.ground.chiyue_valley_floor.02",
+      "20,11": "mse.ground.chiyue_valley_floor.03",
+      "20,12": "mse.ground.chiyue_valley_floor.02",
+      "20,13": "mse.ground.chiyue_valley_floor.05",
+      "20,14": "mse.ground.chiyue_valley_floor.06",
+      "20,15": "mse.ground.chiyue_valley_floor.06",
+      "20,16": "mse.ground.chiyue_valley_floor.05",
+      "20,17": "mse.ground.chiyue_valley_floor.01",
+      "20,18": "mse.ground.chiyue_valley_floor.03",
+      "20,19": "mse.ground.chiyue_valley_floor.02",
+      "20,2": "mse.ground.chiyue_valley_floor.01",
+      "20,20": "mse.ground.chiyue_valley_floor.03",
+      "20,21": "mse.ground.chiyue_valley_floor.04",
+      "20,22": "mse.ground.chiyue_valley_floor.06",
+      "20,23": "mse.ground.chiyue_valley_floor.02",
+      "20,24": "mse.ground.chiyue_valley_floor.01",
+      "20,25": "mse.ground.chiyue_valley_floor.03",
+      "20,26": "mse.ground.chiyue_valley_floor.03",
+      "20,27": "mse.ground.chiyue_valley_floor.04",
+      "20,28": "mse.ground.chiyue_valley_floor.04",
+      "20,29": "mse.ground.chiyue_valley_floor.04",
+      "20,3": "mse.ground.chiyue_valley_floor.03",
+      "20,30": "mse.ground.chiyue_valley_floor.04",
+      "20,31": "mse.ground.chiyue_valley_floor.03",
+      "20,4": "mse.ground.chiyue_valley_floor.04",
+      "20,5": "mse.ground.chiyue_valley_floor.05",
+      "20,6": "mse.ground.chiyue_valley_floor.01",
+      "20,7": "mse.ground.chiyue_valley_floor.01",
+      "20,8": "mse.ground.chiyue_valley_floor.04",
+      "20,9": "mse.ground.chiyue_valley_floor.03",
+      "21,0": "mse.ground.chiyue_valley_floor.01",
+      "21,1": "mse.ground.chiyue_valley_floor.03",
+      "21,10": "mse.ground.chiyue_valley_floor.05",
+      "21,11": "mse.ground.chiyue_valley_floor.06",
+      "21,12": "mse.ground.chiyue_valley_floor.06",
+      "21,13": "mse.ground.chiyue_valley_floor.03",
+      "21,14": "mse.ground.chiyue_valley_floor.02",
+      "21,15": "mse.ground.chiyue_valley_floor.04",
+      "21,16": "mse.ground.chiyue_valley_floor.05",
+      "21,17": "mse.ground.chiyue_valley_floor.05",
+      "21,18": "mse.ground.chiyue_valley_floor.04",
+      "21,19": "mse.ground.chiyue_valley_floor.03",
+      "21,2": "mse.ground.chiyue_valley_floor.04",
+      "21,20": "mse.ground.chiyue_valley_floor.04",
+      "21,21": "mse.ground.chiyue_valley_floor.05",
+      "21,22": "mse.ground.chiyue_valley_floor.03",
+      "21,23": "mse.ground.chiyue_valley_floor.01",
+      "21,24": "mse.ground.chiyue_valley_floor.06",
+      "21,25": "mse.ground.chiyue_valley_floor.05",
+      "21,26": "mse.ground.chiyue_valley_floor.05",
+      "21,27": "mse.ground.chiyue_valley_floor.03",
+      "21,28": "mse.ground.chiyue_valley_floor.02",
+      "21,29": "mse.ground.chiyue_valley_floor.01",
+      "21,3": "mse.ground.chiyue_valley_floor.03",
+      "21,30": "mse.ground.chiyue_valley_floor.06",
+      "21,31": "mse.ground.chiyue_valley_floor.01",
+      "21,4": "mse.ground.chiyue_valley_floor.05",
+      "21,5": "mse.ground.chiyue_valley_floor.03",
+      "21,6": "mse.ground.chiyue_valley_floor.03",
+      "21,7": "mse.ground.chiyue_valley_floor.06",
+      "21,8": "mse.ground.chiyue_valley_floor.06",
+      "21,9": "mse.ground.chiyue_valley_floor.06",
+      "22,0": "mse.ground.chiyue_valley_floor.05",
+      "22,1": "mse.ground.chiyue_valley_floor.04",
+      "22,10": "mse.ground.chiyue_valley_floor.06",
+      "22,11": "mse.ground.chiyue_valley_floor.05",
+      "22,12": "mse.ground.chiyue_valley_floor.03",
+      "22,13": "mse.ground.chiyue_valley_floor.06",
+      "22,14": "mse.ground.chiyue_valley_floor.04",
+      "22,15": "mse.ground.chiyue_valley_floor.04",
+      "22,16": "mse.ground.chiyue_valley_floor.04",
+      "22,17": "mse.ground.chiyue_valley_floor.02",
+      "22,18": "mse.ground.chiyue_valley_floor.04",
+      "22,19": "mse.ground.chiyue_valley_floor.01",
+      "22,2": "mse.ground.chiyue_valley_floor.01",
+      "22,20": "mse.ground.chiyue_valley_floor.02",
+      "22,21": "mse.ground.chiyue_valley_floor.05",
+      "22,22": "mse.ground.chiyue_valley_floor.01",
+      "22,23": "mse.ground.chiyue_valley_floor.04",
+      "22,24": "mse.ground.chiyue_valley_floor.05",
+      "22,25": "mse.ground.chiyue_valley_floor.02",
+      "22,26": "mse.ground.chiyue_valley_floor.06",
+      "22,27": "mse.ground.chiyue_valley_floor.03",
+      "22,28": "mse.ground.chiyue_valley_floor.02",
+      "22,29": "mse.ground.chiyue_valley_floor.01",
+      "22,3": "mse.ground.chiyue_valley_floor.05",
+      "22,30": "mse.ground.chiyue_valley_floor.04",
+      "22,31": "mse.ground.chiyue_valley_floor.02",
+      "22,4": "mse.ground.chiyue_valley_floor.06",
+      "22,5": "mse.ground.chiyue_valley_floor.02",
+      "22,6": "mse.ground.chiyue_valley_floor.05",
+      "22,7": "mse.ground.chiyue_valley_floor.03",
+      "22,8": "mse.ground.chiyue_valley_floor.06",
+      "22,9": "mse.ground.chiyue_valley_floor.05",
+      "23,0": "mse.ground.chiyue_valley_floor.04",
+      "23,1": "mse.ground.chiyue_valley_floor.04",
+      "23,10": "mse.ground.chiyue_valley_floor.04",
+      "23,11": "mse.ground.chiyue_valley_floor.02",
+      "23,12": "mse.ground.chiyue_valley_floor.02",
+      "23,13": "mse.ground.chiyue_valley_floor.01",
+      "23,14": "mse.ground.chiyue_valley_floor.02",
+      "23,15": "mse.ground.chiyue_valley_floor.03",
+      "23,16": "mse.ground.chiyue_valley_floor.02",
+      "23,17": "mse.ground.chiyue_valley_floor.03",
+      "23,18": "mse.ground.chiyue_valley_floor.01",
+      "23,19": "mse.ground.chiyue_valley_floor.02",
+      "23,2": "mse.ground.chiyue_valley_floor.02",
+      "23,20": "mse.ground.chiyue_valley_floor.05",
+      "23,21": "mse.ground.chiyue_valley_floor.01",
+      "23,22": "mse.ground.chiyue_valley_floor.06",
+      "23,23": "mse.ground.chiyue_valley_floor.06",
+      "23,24": "mse.ground.chiyue_valley_floor.06",
+      "23,25": "mse.ground.chiyue_valley_floor.05",
+      "23,26": "mse.ground.chiyue_valley_floor.02",
+      "23,27": "mse.ground.chiyue_valley_floor.01",
+      "23,28": "mse.ground.chiyue_valley_floor.05",
+      "23,29": "mse.ground.chiyue_valley_floor.03",
+      "23,3": "mse.ground.chiyue_valley_floor.06",
+      "23,30": "mse.ground.chiyue_valley_floor.05",
+      "23,31": "mse.ground.chiyue_valley_floor.05",
+      "23,4": "mse.ground.chiyue_valley_floor.01",
+      "23,5": "mse.ground.chiyue_valley_floor.04",
+      "23,6": "mse.ground.chiyue_valley_floor.03",
+      "23,7": "mse.ground.chiyue_valley_floor.06",
+      "23,8": "mse.ground.chiyue_valley_floor.05",
+      "23,9": "mse.ground.chiyue_valley_floor.01",
+      "24,0": "mse.ground.chiyue_valley_floor.01",
+      "24,1": "mse.ground.chiyue_valley_floor.05",
+      "24,10": "mse.ground.chiyue_valley_floor.04",
+      "24,11": "mse.ground.chiyue_valley_floor.05",
+      "24,12": "mse.ground.chiyue_valley_floor.01",
+      "24,13": "mse.ground.chiyue_valley_floor.06",
+      "24,14": "mse.ground.chiyue_valley_floor.03",
+      "24,15": "mse.ground.chiyue_valley_floor.05",
+      "24,16": "mse.ground.chiyue_valley_floor.04",
+      "24,17": "mse.ground.chiyue_valley_floor.02",
+      "24,18": "mse.ground.chiyue_valley_floor.05",
+      "24,19": "mse.ground.chiyue_valley_floor.03",
+      "24,2": "mse.ground.chiyue_valley_floor.06",
+      "24,20": "mse.ground.chiyue_valley_floor.01",
+      "24,21": "mse.ground.chiyue_valley_floor.03",
+      "24,22": "mse.ground.chiyue_valley_floor.03",
+      "24,23": "mse.ground.chiyue_valley_floor.03",
+      "24,24": "mse.ground.chiyue_valley_floor.01",
+      "24,25": "mse.ground.chiyue_valley_floor.02",
+      "24,26": "mse.ground.chiyue_valley_floor.04",
+      "24,27": "mse.ground.chiyue_valley_floor.01",
+      "24,28": "mse.ground.chiyue_valley_floor.01",
+      "24,29": "mse.ground.chiyue_valley_floor.06",
+      "24,3": "mse.ground.chiyue_valley_floor.04",
+      "24,30": "mse.ground.chiyue_valley_floor.05",
+      "24,31": "mse.ground.chiyue_valley_floor.01",
+      "24,4": "mse.ground.chiyue_valley_floor.04",
+      "24,5": "mse.ground.chiyue_valley_floor.04",
+      "24,6": "mse.ground.chiyue_valley_floor.04",
+      "24,7": "mse.ground.chiyue_valley_floor.02",
+      "24,8": "mse.ground.chiyue_valley_floor.01",
+      "24,9": "mse.ground.chiyue_valley_floor.06",
+      "25,0": "mse.ground.chiyue_valley_floor.04",
+      "25,1": "mse.ground.chiyue_valley_floor.05",
+      "25,10": "mse.ground.chiyue_valley_floor.03",
+      "25,11": "mse.ground.chiyue_valley_floor.03",
+      "25,12": "mse.ground.chiyue_valley_floor.06",
+      "25,13": "mse.ground.chiyue_valley_floor.03",
+      "25,14": "mse.ground.chiyue_valley_floor.02",
+      "25,15": "mse.ground.chiyue_valley_floor.05",
+      "25,16": "mse.ground.chiyue_valley_floor.02",
+      "25,17": "mse.ground.chiyue_valley_floor.02",
+      "25,18": "mse.ground.chiyue_valley_floor.05",
+      "25,19": "mse.ground.chiyue_valley_floor.06",
+      "25,2": "mse.ground.chiyue_valley_floor.03",
+      "25,20": "mse.ground.chiyue_valley_floor.04",
+      "25,21": "mse.ground.chiyue_valley_floor.05",
+      "25,22": "mse.ground.chiyue_valley_floor.03",
+      "25,23": "mse.ground.chiyue_valley_floor.06",
+      "25,24": "mse.ground.chiyue_valley_floor.05",
+      "25,25": "mse.ground.chiyue_valley_floor.01",
+      "25,26": "mse.ground.chiyue_valley_floor.02",
+      "25,27": "mse.ground.chiyue_valley_floor.01",
+      "25,28": "mse.ground.chiyue_valley_floor.03",
+      "25,29": "mse.ground.chiyue_valley_floor.01",
+      "25,3": "mse.ground.chiyue_valley_floor.01",
+      "25,30": "mse.ground.chiyue_valley_floor.06",
+      "25,31": "mse.ground.chiyue_valley_floor.03",
+      "25,4": "mse.ground.chiyue_valley_floor.02",
+      "25,5": "mse.ground.chiyue_valley_floor.03",
+      "25,6": "mse.ground.chiyue_valley_floor.06",
+      "25,7": "mse.ground.chiyue_valley_floor.06",
+      "25,8": "mse.ground.chiyue_valley_floor.02",
+      "25,9": "mse.ground.chiyue_valley_floor.06",
+      "26,0": "mse.ground.chiyue_valley_floor.01",
+      "26,1": "mse.ground.chiyue_valley_floor.03",
+      "26,10": "mse.ground.chiyue_valley_floor.06",
+      "26,11": "mse.ground.chiyue_valley_floor.02",
+      "26,12": "mse.ground.chiyue_valley_floor.03",
+      "26,13": "mse.ground.chiyue_valley_floor.01",
+      "26,14": "mse.ground.chiyue_valley_floor.01",
+      "26,15": "mse.ground.chiyue_valley_floor.05",
+      "26,16": "mse.ground.chiyue_valley_floor.01",
+      "26,17": "mse.ground.chiyue_valley_floor.06",
+      "26,18": "mse.ground.chiyue_valley_floor.05",
+      "26,19": "mse.ground.chiyue_valley_floor.01",
+      "26,2": "mse.ground.chiyue_valley_floor.01",
+      "26,20": "mse.ground.chiyue_valley_floor.01",
+      "26,21": "mse.ground.chiyue_valley_floor.02",
+      "26,22": "mse.ground.chiyue_valley_floor.06",
+      "26,23": "mse.ground.chiyue_valley_floor.01",
+      "26,24": "mse.ground.chiyue_valley_floor.04",
+      "26,25": "mse.ground.chiyue_valley_floor.02",
+      "26,26": "mse.ground.chiyue_valley_floor.06",
+      "26,27": "mse.ground.chiyue_valley_floor.04",
+      "26,28": "mse.ground.chiyue_valley_floor.01",
+      "26,29": "mse.ground.chiyue_valley_floor.01",
+      "26,3": "mse.ground.chiyue_valley_floor.04",
+      "26,30": "mse.ground.chiyue_valley_floor.04",
+      "26,31": "mse.ground.chiyue_valley_floor.01",
+      "26,4": "mse.ground.chiyue_valley_floor.02",
+      "26,5": "mse.ground.chiyue_valley_floor.06",
+      "26,6": "mse.ground.chiyue_valley_floor.01",
+      "26,7": "mse.ground.chiyue_valley_floor.01",
+      "26,8": "mse.ground.chiyue_valley_floor.03",
+      "26,9": "mse.ground.chiyue_valley_floor.05",
+      "27,0": "mse.ground.chiyue_valley_floor.03",
+      "27,1": "mse.ground.chiyue_valley_floor.05",
+      "27,10": "mse.ground.chiyue_valley_floor.01",
+      "27,11": "mse.ground.chiyue_valley_floor.04",
+      "27,12": "mse.ground.chiyue_valley_floor.02",
+      "27,13": "mse.ground.chiyue_valley_floor.03",
+      "27,14": "mse.ground.chiyue_valley_floor.02",
+      "27,15": "mse.ground.chiyue_valley_floor.06",
+      "27,16": "mse.ground.chiyue_valley_floor.03",
+      "27,17": "mse.ground.chiyue_valley_floor.06",
+      "27,18": "mse.ground.chiyue_valley_floor.05",
+      "27,19": "mse.ground.chiyue_valley_floor.04",
+      "27,2": "mse.ground.chiyue_valley_floor.02",
+      "27,20": "mse.ground.chiyue_valley_floor.01",
+      "27,21": "mse.ground.chiyue_valley_floor.02",
+      "27,22": "mse.ground.chiyue_valley_floor.04",
+      "27,23": "mse.ground.chiyue_valley_floor.05",
+      "27,24": "mse.ground.chiyue_valley_floor.02",
+      "27,25": "mse.ground.chiyue_valley_floor.06",
+      "27,26": "mse.ground.chiyue_valley_floor.05",
+      "27,27": "mse.ground.chiyue_valley_floor.04",
+      "27,28": "mse.ground.chiyue_valley_floor.02",
+      "27,29": "mse.ground.chiyue_valley_floor.05",
+      "27,3": "mse.ground.chiyue_valley_floor.02",
+      "27,30": "mse.ground.chiyue_valley_floor.03",
+      "27,31": "mse.ground.chiyue_valley_floor.02",
+      "27,4": "mse.ground.chiyue_valley_floor.06",
+      "27,5": "mse.ground.chiyue_valley_floor.01",
+      "27,6": "mse.ground.chiyue_valley_floor.02",
+      "27,7": "mse.ground.chiyue_valley_floor.06",
+      "27,8": "mse.ground.chiyue_valley_floor.04",
+      "27,9": "mse.ground.chiyue_valley_floor.03",
+      "28,0": "mse.ground.chiyue_valley_floor.02",
+      "28,1": "mse.ground.chiyue_valley_floor.02",
+      "28,10": "mse.ground.chiyue_valley_floor.02",
+      "28,11": "mse.ground.chiyue_valley_floor.06",
+      "28,12": "mse.ground.chiyue_valley_floor.04",
+      "28,13": "mse.ground.chiyue_valley_floor.04",
+      "28,14": "mse.ground.chiyue_valley_floor.02",
+      "28,15": "mse.ground.chiyue_valley_floor.05",
+      "28,16": "mse.ground.chiyue_valley_floor.02",
+      "28,17": "mse.ground.chiyue_valley_floor.01",
+      "28,18": "mse.ground.chiyue_valley_floor.03",
+      "28,19": "mse.ground.chiyue_valley_floor.02",
+      "28,2": "mse.ground.chiyue_valley_floor.01",
+      "28,20": "mse.ground.chiyue_valley_floor.01",
+      "28,21": "mse.ground.chiyue_valley_floor.06",
+      "28,22": "mse.ground.chiyue_valley_floor.01",
+      "28,23": "mse.ground.chiyue_valley_floor.06",
+      "28,24": "mse.ground.chiyue_valley_floor.06",
+      "28,25": "mse.ground.chiyue_valley_floor.05",
+      "28,26": "mse.ground.chiyue_valley_floor.04",
+      "28,27": "mse.ground.chiyue_valley_floor.03",
+      "28,28": "mse.ground.chiyue_valley_floor.05",
+      "28,29": "mse.ground.chiyue_valley_floor.03",
+      "28,3": "mse.ground.chiyue_valley_floor.06",
+      "28,30": "mse.ground.chiyue_valley_floor.03",
+      "28,31": "mse.ground.chiyue_valley_floor.06",
+      "28,4": "mse.ground.chiyue_valley_floor.03",
+      "28,5": "mse.ground.chiyue_valley_floor.06",
+      "28,6": "mse.ground.chiyue_valley_floor.04",
+      "28,7": "mse.ground.chiyue_valley_floor.05",
+      "28,8": "mse.ground.chiyue_valley_floor.02",
+      "28,9": "mse.ground.chiyue_valley_floor.01",
+      "29,0": "mse.ground.chiyue_valley_floor.05",
+      "29,1": "mse.ground.chiyue_valley_floor.01",
+      "29,10": "mse.ground.chiyue_valley_floor.05",
+      "29,11": "mse.ground.chiyue_valley_floor.06",
+      "29,12": "mse.ground.chiyue_valley_floor.01",
+      "29,13": "mse.ground.chiyue_valley_floor.05",
+      "29,14": "mse.ground.chiyue_valley_floor.01",
+      "29,15": "mse.ground.chiyue_valley_floor.03",
+      "29,16": "mse.ground.chiyue_valley_floor.02",
+      "29,17": "mse.ground.chiyue_valley_floor.02",
+      "29,18": "mse.ground.chiyue_valley_floor.01",
+      "29,19": "mse.ground.chiyue_valley_floor.03",
+      "29,2": "mse.ground.chiyue_valley_floor.03",
+      "29,20": "mse.ground.chiyue_valley_floor.06",
+      "29,21": "mse.ground.chiyue_valley_floor.05",
+      "29,22": "mse.ground.chiyue_valley_floor.06",
+      "29,23": "mse.ground.chiyue_valley_floor.01",
+      "29,24": "mse.ground.chiyue_valley_floor.03",
+      "29,25": "mse.ground.chiyue_valley_floor.02",
+      "29,26": "mse.ground.chiyue_valley_floor.06",
+      "29,27": "mse.ground.chiyue_valley_floor.01",
+      "29,28": "mse.ground.chiyue_valley_floor.04",
+      "29,29": "mse.ground.chiyue_valley_floor.01",
+      "29,3": "mse.ground.chiyue_valley_floor.06",
+      "29,30": "mse.ground.chiyue_valley_floor.02",
+      "29,31": "mse.ground.chiyue_valley_floor.06",
+      "29,4": "mse.ground.chiyue_valley_floor.06",
+      "29,5": "mse.ground.chiyue_valley_floor.06",
+      "29,6": "mse.ground.chiyue_valley_floor.03",
+      "29,7": "mse.ground.chiyue_valley_floor.01",
+      "29,8": "mse.ground.chiyue_valley_floor.03",
+      "29,9": "mse.ground.chiyue_valley_floor.05",
+      "3,0": "mse.ground.chiyue_valley_floor.02",
+      "3,1": "mse.ground.chiyue_valley_floor.04",
+      "3,10": "mse.ground.chiyue_valley_floor.06",
+      "3,11": "mse.ground.chiyue_valley_floor.03",
+      "3,12": "mse.ground.chiyue_valley_floor.02",
+      "3,13": "mse.ground.chiyue_valley_floor.04",
+      "3,14": "mse.ground.chiyue_valley_floor.06",
+      "3,15": "mse.ground.chiyue_valley_floor.02",
+      "3,16": "mse.ground.chiyue_valley_floor.01",
+      "3,17": "mse.ground.chiyue_valley_floor.02",
+      "3,18": "mse.ground.chiyue_valley_floor.01",
+      "3,19": "mse.ground.chiyue_valley_floor.06",
+      "3,2": "mse.ground.chiyue_valley_floor.05",
+      "3,20": "mse.ground.chiyue_valley_floor.03",
+      "3,21": "mse.ground.chiyue_valley_floor.06",
+      "3,22": "mse.ground.chiyue_valley_floor.04",
+      "3,23": "mse.ground.chiyue_valley_floor.01",
+      "3,24": "mse.ground.chiyue_valley_floor.03",
+      "3,25": "mse.ground.chiyue_valley_floor.03",
+      "3,26": "mse.ground.chiyue_valley_floor.04",
+      "3,27": "mse.ground.chiyue_valley_floor.04",
+      "3,28": "mse.ground.chiyue_valley_floor.02",
+      "3,29": "mse.ground.chiyue_valley_floor.04",
+      "3,3": "mse.ground.chiyue_valley_floor.06",
+      "3,30": "mse.ground.chiyue_valley_floor.04",
+      "3,31": "mse.ground.chiyue_valley_floor.02",
+      "3,4": "mse.ground.chiyue_valley_floor.01",
+      "3,5": "mse.ground.chiyue_valley_floor.03",
+      "3,6": "mse.ground.chiyue_valley_floor.01",
+      "3,7": "mse.ground.chiyue_valley_floor.03",
+      "3,8": "mse.ground.chiyue_valley_floor.01",
+      "3,9": "mse.ground.chiyue_valley_floor.02",
+      "30,0": "mse.ground.chiyue_valley_floor.01",
+      "30,1": "mse.ground.chiyue_valley_floor.02",
+      "30,10": "mse.ground.chiyue_valley_floor.03",
+      "30,11": "mse.ground.chiyue_valley_floor.03",
+      "30,12": "mse.ground.chiyue_valley_floor.03",
+      "30,13": "mse.ground.chiyue_valley_floor.01",
+      "30,14": "mse.ground.chiyue_valley_floor.03",
+      "30,15": "mse.ground.chiyue_valley_floor.04",
+      "30,16": "mse.ground.chiyue_valley_floor.04",
+      "30,17": "mse.ground.chiyue_valley_floor.01",
+      "30,18": "mse.ground.chiyue_valley_floor.04",
+      "30,19": "mse.ground.chiyue_valley_floor.02",
+      "30,2": "mse.ground.chiyue_valley_floor.06",
+      "30,20": "mse.ground.chiyue_valley_floor.02",
+      "30,21": "mse.ground.chiyue_valley_floor.03",
+      "30,22": "mse.ground.chiyue_valley_floor.01",
+      "30,23": "mse.ground.chiyue_valley_floor.06",
+      "30,24": "mse.ground.chiyue_valley_floor.05",
+      "30,25": "mse.ground.chiyue_valley_floor.03",
+      "30,26": "mse.ground.chiyue_valley_floor.06",
+      "30,27": "mse.ground.chiyue_valley_floor.06",
+      "30,28": "mse.ground.chiyue_valley_floor.05",
+      "30,29": "mse.ground.chiyue_valley_floor.04",
+      "30,3": "mse.ground.chiyue_valley_floor.02",
+      "30,30": "mse.ground.chiyue_valley_floor.03",
+      "30,31": "mse.ground.chiyue_valley_floor.04",
+      "30,4": "mse.ground.chiyue_valley_floor.05",
+      "30,5": "mse.ground.chiyue_valley_floor.06",
+      "30,6": "mse.ground.chiyue_valley_floor.05",
+      "30,7": "mse.ground.chiyue_valley_floor.01",
+      "30,8": "mse.ground.chiyue_valley_floor.05",
+      "30,9": "mse.ground.chiyue_valley_floor.03",
+      "31,0": "mse.ground.chiyue_valley_floor.06",
+      "31,1": "mse.ground.chiyue_valley_floor.04",
+      "31,10": "mse.ground.chiyue_valley_floor.03",
+      "31,11": "mse.ground.chiyue_valley_floor.01",
+      "31,12": "mse.ground.chiyue_valley_floor.06",
+      "31,13": "mse.ground.chiyue_valley_floor.06",
+      "31,14": "mse.ground.chiyue_valley_floor.04",
+      "31,15": "mse.ground.chiyue_valley_floor.03",
+      "31,16": "mse.ground.chiyue_valley_floor.04",
+      "31,17": "mse.ground.chiyue_valley_floor.03",
+      "31,18": "mse.ground.chiyue_valley_floor.03",
+      "31,19": "mse.ground.chiyue_valley_floor.02",
+      "31,2": "mse.ground.chiyue_valley_floor.03",
+      "31,20": "mse.ground.chiyue_valley_floor.06",
+      "31,21": "mse.ground.chiyue_valley_floor.01",
+      "31,22": "mse.ground.chiyue_valley_floor.03",
+      "31,23": "mse.ground.chiyue_valley_floor.01",
+      "31,24": "mse.ground.chiyue_valley_floor.05",
+      "31,25": "mse.ground.chiyue_valley_floor.03",
+      "31,26": "mse.ground.chiyue_valley_floor.02",
+      "31,27": "mse.ground.chiyue_valley_floor.03",
+      "31,28": "mse.ground.chiyue_valley_floor.04",
+      "31,29": "mse.ground.chiyue_valley_floor.05",
+      "31,3": "mse.ground.chiyue_valley_floor.03",
+      "31,30": "mse.ground.chiyue_valley_floor.06",
+      "31,4": "mse.ground.chiyue_valley_floor.01",
+      "31,5": "mse.ground.chiyue_valley_floor.06",
+      "31,6": "mse.ground.chiyue_valley_floor.05",
+      "31,7": "mse.ground.chiyue_valley_floor.05",
+      "31,8": "mse.ground.chiyue_valley_floor.03",
+      "31,9": "mse.ground.chiyue_valley_floor.05",
+      "4,0": "mse.ground.chiyue_valley_floor.03",
+      "4,1": "mse.ground.chiyue_valley_floor.02",
+      "4,10": "mse.ground.chiyue_valley_floor.01",
+      "4,11": "mse.ground.chiyue_valley_floor.01",
+      "4,12": "mse.ground.chiyue_valley_floor.06",
+      "4,13": "mse.ground.chiyue_valley_floor.05",
+      "4,14": "mse.ground.chiyue_valley_floor.06",
+      "4,15": "mse.ground.chiyue_valley_floor.01",
+      "4,16": "mse.ground.chiyue_valley_floor.04",
+      "4,17": "mse.ground.chiyue_valley_floor.04",
+      "4,18": "mse.ground.chiyue_valley_floor.06",
+      "4,19": "mse.ground.chiyue_valley_floor.05",
+      "4,2": "mse.ground.chiyue_valley_floor.02",
+      "4,20": "mse.ground.chiyue_valley_floor.03",
+      "4,21": "mse.ground.chiyue_valley_floor.05",
+      "4,22": "mse.ground.chiyue_valley_floor.03",
+      "4,23": "mse.ground.chiyue_valley_floor.04",
+      "4,24": "mse.ground.chiyue_valley_floor.05",
+      "4,25": "mse.ground.chiyue_valley_floor.01",
+      "4,26": "mse.ground.chiyue_valley_floor.01",
+      "4,27": "mse.ground.chiyue_valley_floor.05",
+      "4,28": "mse.ground.chiyue_valley_floor.04",
+      "4,29": "mse.ground.chiyue_valley_floor.03",
+      "4,3": "mse.ground.chiyue_valley_floor.02",
+      "4,30": "mse.ground.chiyue_valley_floor.05",
+      "4,31": "mse.ground.chiyue_valley_floor.05",
+      "4,4": "mse.ground.chiyue_valley_floor.01",
+      "4,5": "mse.ground.chiyue_valley_floor.02",
+      "4,6": "mse.ground.chiyue_valley_floor.02",
+      "4,7": "mse.ground.chiyue_valley_floor.03",
+      "4,8": "mse.ground.chiyue_valley_floor.01",
+      "4,9": "mse.ground.chiyue_valley_floor.03",
+      "5,0": "mse.ground.chiyue_valley_floor.05",
+      "5,1": "mse.ground.chiyue_valley_floor.04",
+      "5,10": "mse.ground.chiyue_valley_floor.03",
+      "5,11": "mse.ground.chiyue_valley_floor.04",
+      "5,12": "mse.ground.chiyue_valley_floor.02",
+      "5,13": "mse.ground.chiyue_valley_floor.05",
+      "5,14": "mse.ground.chiyue_valley_floor.05",
+      "5,15": "mse.ground.chiyue_valley_floor.02",
+      "5,16": "mse.ground.chiyue_valley_floor.01",
+      "5,17": "mse.ground.chiyue_valley_floor.04",
+      "5,18": "mse.ground.chiyue_valley_floor.01",
+      "5,19": "mse.ground.chiyue_valley_floor.02",
+      "5,2": "mse.ground.chiyue_valley_floor.06",
+      "5,20": "mse.ground.chiyue_valley_floor.06",
+      "5,21": "mse.ground.chiyue_valley_floor.06",
+      "5,22": "mse.ground.chiyue_valley_floor.06",
+      "5,23": "mse.ground.chiyue_valley_floor.06",
+      "5,24": "mse.ground.chiyue_valley_floor.01",
+      "5,25": "mse.ground.chiyue_valley_floor.04",
+      "5,26": "mse.ground.chiyue_valley_floor.02",
+      "5,27": "mse.ground.chiyue_valley_floor.04",
+      "5,28": "mse.ground.chiyue_valley_floor.04",
+      "5,29": "mse.ground.chiyue_valley_floor.02",
+      "5,3": "mse.ground.chiyue_valley_floor.04",
+      "5,30": "mse.ground.chiyue_valley_floor.02",
+      "5,31": "mse.ground.chiyue_valley_floor.06",
+      "5,4": "mse.ground.chiyue_valley_floor.01",
+      "5,5": "mse.ground.chiyue_valley_floor.06",
+      "5,6": "mse.ground.chiyue_valley_floor.05",
+      "5,7": "mse.ground.chiyue_valley_floor.02",
+      "5,8": "mse.ground.chiyue_valley_floor.01",
+      "5,9": "mse.ground.chiyue_valley_floor.03",
+      "6,0": "mse.ground.chiyue_valley_floor.05",
+      "6,1": "mse.ground.chiyue_valley_floor.01",
+      "6,10": "mse.ground.chiyue_valley_floor.04",
+      "6,11": "mse.ground.chiyue_valley_floor.01",
+      "6,12": "mse.ground.chiyue_valley_floor.06",
+      "6,13": "mse.ground.chiyue_valley_floor.04",
+      "6,14": "mse.ground.chiyue_valley_floor.03",
+      "6,15": "mse.ground.chiyue_valley_floor.06",
+      "6,16": "mse.ground.chiyue_valley_floor.04",
+      "6,17": "mse.ground.chiyue_valley_floor.03",
+      "6,18": "mse.ground.chiyue_valley_floor.03",
+      "6,19": "mse.ground.chiyue_valley_floor.02",
+      "6,2": "mse.ground.chiyue_valley_floor.05",
+      "6,20": "mse.ground.chiyue_valley_floor.04",
+      "6,21": "mse.ground.chiyue_valley_floor.05",
+      "6,22": "mse.ground.chiyue_valley_floor.06",
+      "6,23": "mse.ground.chiyue_valley_floor.06",
+      "6,24": "mse.ground.chiyue_valley_floor.01",
+      "6,25": "mse.ground.chiyue_valley_floor.01",
+      "6,26": "mse.ground.chiyue_valley_floor.06",
+      "6,27": "mse.ground.chiyue_valley_floor.05",
+      "6,28": "mse.ground.chiyue_valley_floor.04",
+      "6,29": "mse.ground.chiyue_valley_floor.06",
+      "6,3": "mse.ground.chiyue_valley_floor.02",
+      "6,30": "mse.ground.chiyue_valley_floor.04",
+      "6,31": "mse.ground.chiyue_valley_floor.02",
+      "6,4": "mse.ground.chiyue_valley_floor.02",
+      "6,5": "mse.ground.chiyue_valley_floor.03",
+      "6,6": "mse.ground.chiyue_valley_floor.05",
+      "6,7": "mse.ground.chiyue_valley_floor.01",
+      "6,8": "mse.ground.chiyue_valley_floor.04",
+      "6,9": "mse.ground.chiyue_valley_floor.04",
+      "7,0": "mse.ground.chiyue_valley_floor.01",
+      "7,1": "mse.ground.chiyue_valley_floor.06",
+      "7,10": "mse.ground.chiyue_valley_floor.05",
+      "7,11": "mse.ground.chiyue_valley_floor.05",
+      "7,12": "mse.ground.chiyue_valley_floor.02",
+      "7,13": "mse.ground.chiyue_valley_floor.05",
+      "7,14": "mse.ground.chiyue_valley_floor.06",
+      "7,15": "mse.ground.chiyue_valley_floor.03",
+      "7,16": "mse.ground.chiyue_valley_floor.06",
+      "7,17": "mse.ground.chiyue_valley_floor.03",
+      "7,18": "mse.ground.chiyue_valley_floor.05",
+      "7,19": "mse.ground.chiyue_valley_floor.06",
+      "7,2": "mse.ground.chiyue_valley_floor.03",
+      "7,20": "mse.ground.chiyue_valley_floor.02",
+      "7,21": "mse.ground.chiyue_valley_floor.04",
+      "7,22": "mse.ground.chiyue_valley_floor.01",
+      "7,23": "mse.ground.chiyue_valley_floor.05",
+      "7,24": "mse.ground.chiyue_valley_floor.03",
+      "7,25": "mse.ground.chiyue_valley_floor.05",
+      "7,26": "mse.ground.chiyue_valley_floor.05",
+      "7,27": "mse.ground.chiyue_valley_floor.01",
+      "7,28": "mse.ground.chiyue_valley_floor.01",
+      "7,29": "mse.ground.chiyue_valley_floor.03",
+      "7,3": "mse.ground.chiyue_valley_floor.05",
+      "7,30": "mse.ground.chiyue_valley_floor.05",
+      "7,31": "mse.ground.chiyue_valley_floor.04",
+      "7,4": "mse.ground.chiyue_valley_floor.04",
+      "7,5": "mse.ground.chiyue_valley_floor.05",
+      "7,6": "mse.ground.chiyue_valley_floor.06",
+      "7,7": "mse.ground.chiyue_valley_floor.02",
+      "7,8": "mse.ground.chiyue_valley_floor.02",
+      "7,9": "mse.ground.chiyue_valley_floor.02",
+      "8,0": "mse.ground.chiyue_valley_floor.03",
+      "8,1": "mse.ground.chiyue_valley_floor.06",
+      "8,10": "mse.ground.chiyue_valley_floor.06",
+      "8,11": "mse.ground.chiyue_valley_floor.06",
+      "8,12": "mse.ground.chiyue_valley_floor.03",
+      "8,13": "mse.ground.chiyue_valley_floor.04",
+      "8,14": "mse.ground.chiyue_valley_floor.03",
+      "8,15": "mse.ground.chiyue_valley_floor.01",
+      "8,16": "mse.ground.chiyue_valley_floor.06",
+      "8,17": "mse.ground.chiyue_valley_floor.05",
+      "8,18": "mse.ground.chiyue_valley_floor.06",
+      "8,19": "mse.ground.chiyue_valley_floor.05",
+      "8,2": "mse.ground.chiyue_valley_floor.05",
+      "8,20": "mse.ground.chiyue_valley_floor.06",
+      "8,21": "mse.ground.chiyue_valley_floor.06",
+      "8,22": "mse.ground.chiyue_valley_floor.06",
+      "8,23": "mse.ground.chiyue_valley_floor.03",
+      "8,24": "mse.ground.chiyue_valley_floor.06",
+      "8,25": "mse.ground.chiyue_valley_floor.02",
+      "8,26": "mse.ground.chiyue_valley_floor.05",
+      "8,27": "mse.ground.chiyue_valley_floor.05",
+      "8,28": "mse.ground.chiyue_valley_floor.04",
+      "8,29": "mse.ground.chiyue_valley_floor.03",
+      "8,3": "mse.ground.chiyue_valley_floor.06",
+      "8,30": "mse.ground.chiyue_valley_floor.05",
+      "8,31": "mse.ground.chiyue_valley_floor.06",
+      "8,4": "mse.ground.chiyue_valley_floor.03",
+      "8,5": "mse.ground.chiyue_valley_floor.01",
+      "8,6": "mse.ground.chiyue_valley_floor.01",
+      "8,7": "mse.ground.chiyue_valley_floor.05",
+      "8,8": "mse.ground.chiyue_valley_floor.03",
+      "8,9": "mse.ground.chiyue_valley_floor.05",
+      "9,0": "mse.ground.chiyue_valley_floor.06",
+      "9,1": "mse.ground.chiyue_valley_floor.06",
+      "9,10": "mse.ground.chiyue_valley_floor.01",
+      "9,11": "mse.ground.chiyue_valley_floor.04",
+      "9,12": "mse.ground.chiyue_valley_floor.06",
+      "9,13": "mse.ground.chiyue_valley_floor.03",
+      "9,14": "mse.ground.chiyue_valley_floor.01",
+      "9,15": "mse.ground.chiyue_valley_floor.05",
+      "9,16": "mse.ground.chiyue_valley_floor.04",
+      "9,17": "mse.ground.chiyue_valley_floor.06",
+      "9,18": "mse.ground.chiyue_valley_floor.05",
+      "9,19": "mse.ground.chiyue_valley_floor.04",
+      "9,2": "mse.ground.chiyue_valley_floor.03",
+      "9,20": "mse.ground.chiyue_valley_floor.05",
+      "9,21": "mse.ground.chiyue_valley_floor.03",
+      "9,22": "mse.ground.chiyue_valley_floor.04",
+      "9,23": "mse.ground.chiyue_valley_floor.01",
+      "9,24": "mse.ground.chiyue_valley_floor.06",
+      "9,25": "mse.ground.chiyue_valley_floor.04",
+      "9,26": "mse.ground.chiyue_valley_floor.02",
+      "9,27": "mse.ground.chiyue_valley_floor.03",
+      "9,28": "mse.ground.chiyue_valley_floor.05",
+      "9,29": "mse.ground.chiyue_valley_floor.04",
+      "9,3": "mse.ground.chiyue_valley_floor.04",
+      "9,30": "mse.ground.chiyue_valley_floor.05",
+      "9,31": "mse.ground.chiyue_valley_floor.05",
+      "9,4": "mse.ground.chiyue_valley_floor.02",
+      "9,5": "mse.ground.chiyue_valley_floor.03",
+      "9,6": "mse.ground.chiyue_valley_floor.06",
+      "9,7": "mse.ground.chiyue_valley_floor.06",
+      "9,8": "mse.ground.chiyue_valley_floor.05",
+      "9,9": "mse.ground.chiyue_valley_floor.03"
+    }
+  },
+  "instances": [
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        141.0,
+        164.0
+      ],
+      "asset_id": "user.2cebc1463b240891",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000033",
+      "instance_scale_level": -5.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        141.0,
+        164.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.5000000000000001,
+        0.5000000000000001
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        1.0
+      ],
+      "tile_anchor": [
+        1.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        127.0,
+        221.0
+      ],
+      "asset_id": "user.e46ac879aee805eb",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000034",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        127.0,
+        221.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        14.0
+      ],
+      "tile_anchor": [
+        1.0,
+        14.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        115.0,
+        213.6666717529297
+      ],
+      "asset_id": "user.7b762f3109f73f4e",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000035",
+      "instance_scale_level": -7.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        115.0,
+        213.6666717529297
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.30000000000000016,
+        0.30000000000000016
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        15.0,
+        1.0
+      ],
+      "tile_anchor": [
+        15.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        131.0,
+        185.6666717529297
+      ],
+      "asset_id": "user.668ebcb115eefe75",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000036",
+      "instance_scale_level": -7.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        131.0,
+        185.6666717529297
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.30000000000000016,
+        0.30000000000000016
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        16.0,
+        1.0
+      ],
+      "tile_anchor": [
+        16.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        114.0,
+        192.6666717529297
+      ],
+      "asset_id": "user.370456dc670ece18",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000037",
+      "instance_scale_level": -7.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        114.0,
+        192.6666717529297
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.30000000000000016,
+        0.30000000000000016
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        3.0,
+        1.0
+      ],
+      "tile_anchor": [
+        3.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        130.0,
+        185.6666717529297
+      ],
+      "asset_id": "user.72e309ca30846ca3",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000038",
+      "instance_scale_level": -7.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        130.0,
+        185.6666717529297
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.30000000000000016,
+        0.30000000000000016
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        12.0
+      ],
+      "tile_anchor": [
+        1.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        117.0,
+        186.0
+      ],
+      "asset_id": "user.e5c2eb2715a15b17",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000039",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        117.0,
+        186.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        14.0,
+        1.0
+      ],
+      "tile_anchor": [
+        14.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        205.0
+      ],
+      "asset_id": "user.f2475acf9bddb307",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000040",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        128.0,
+        205.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        16.0
+      ],
+      "tile_anchor": [
+        1.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        134.0,
+        186.0
+      ],
+      "asset_id": "user.012d42c4d8832618",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000041",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        134.0,
+        186.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        4.0
+      ],
+      "tile_anchor": [
+        1.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "tile_center",
+      "anchor_px": [
+        96.0,
+        48.0
+      ],
+      "asset_id": "mse.ground_graffiti.3x3.03",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000042",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        96.0,
+        48.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        23.0,
+        23.0
+      ],
+      "tile_anchor": [
+        23.0,
+        23.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        110.76470947265624
+      ],
+      "asset_id": "chiyue_valley_ground_rock_pile_05",
+      "base_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000047",
+      "instance_scale_level": 7.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        64.0,
+        110.76470947265624
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.7000000000000006,
+        1.7000000000000006
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        13.0,
+        12.0
+      ],
+      "tile_anchor": [
+        13.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000017",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_00",
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000001",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_00",
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000018",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_01",
+      "tile": [
+        0.0,
+        4.0
+      ],
+      "tile_anchor": [
+        0.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000002",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_01",
+      "tile": [
+        4.0,
+        0.0
+      ],
+      "tile_anchor": [
+        4.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000019",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_02",
+      "tile": [
+        0.0,
+        8.0
+      ],
+      "tile_anchor": [
+        0.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000003",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_02",
+      "tile": [
+        8.0,
+        0.0
+      ],
+      "tile_anchor": [
+        8.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000020",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_03",
+      "tile": [
+        0.0,
+        12.0
+      ],
+      "tile_anchor": [
+        0.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000004",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_03",
+      "tile": [
+        12.0,
+        0.0
+      ],
+      "tile_anchor": [
+        12.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000021",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_04",
+      "tile": [
+        0.0,
+        16.0
+      ],
+      "tile_anchor": [
+        0.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000005",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_04",
+      "tile": [
+        16.0,
+        0.0
+      ],
+      "tile_anchor": [
+        16.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000022",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_05",
+      "tile": [
+        0.0,
+        20.0
+      ],
+      "tile_anchor": [
+        0.0,
+        20.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000006",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_05",
+      "tile": [
+        20.0,
+        0.0
+      ],
+      "tile_anchor": [
+        20.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000023",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_06",
+      "tile": [
+        0.0,
+        24.0
+      ],
+      "tile_anchor": [
+        0.0,
+        24.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000007",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_06",
+      "tile": [
+        24.0,
+        0.0
+      ],
+      "tile_anchor": [
+        24.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000024",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_07",
+      "tile": [
+        0.0,
+        28.0
+      ],
+      "tile_anchor": [
+        0.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000008",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_07",
+      "tile": [
+        28.0,
+        0.0
+      ],
+      "tile_anchor": [
+        28.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000009",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_00",
+      "tile": [
+        0.0,
+        31.0
+      ],
+      "tile_anchor": [
+        0.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000025",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_00",
+      "tile": [
+        31.0,
+        0.0
+      ],
+      "tile_anchor": [
+        31.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000010",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_01",
+      "tile": [
+        4.0,
+        31.0
+      ],
+      "tile_anchor": [
+        4.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000026",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_01",
+      "tile": [
+        31.0,
+        4.0
+      ],
+      "tile_anchor": [
+        31.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000011",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_02",
+      "tile": [
+        8.0,
+        31.0
+      ],
+      "tile_anchor": [
+        8.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000027",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_02",
+      "tile": [
+        31.0,
+        8.0
+      ],
+      "tile_anchor": [
+        31.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000012",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_03",
+      "tile": [
+        12.0,
+        31.0
+      ],
+      "tile_anchor": [
+        12.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000028",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_03",
+      "tile": [
+        31.0,
+        12.0
+      ],
+      "tile_anchor": [
+        31.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000013",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_04",
+      "tile": [
+        16.0,
+        31.0
+      ],
+      "tile_anchor": [
+        16.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000029",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_04",
+      "tile": [
+        31.0,
+        16.0
+      ],
+      "tile_anchor": [
+        31.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000014",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_05",
+      "tile": [
+        20.0,
+        31.0
+      ],
+      "tile_anchor": [
+        20.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000030",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_05",
+      "tile": [
+        31.0,
+        20.0
+      ],
+      "tile_anchor": [
+        31.0,
+        20.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000015",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_06",
+      "tile": [
+        24.0,
+        31.0
+      ],
+      "tile_anchor": [
+        24.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000031",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_06",
+      "tile": [
+        31.0,
+        24.0
+      ],
+      "tile_anchor": [
+        31.0,
+        24.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000016",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_07",
+      "tile": [
+        28.0,
+        31.0
+      ],
+      "tile_anchor": [
+        28.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000032",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_abyss_domain.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_07",
+      "tile": [
+        31.0,
+        28.0
+      ],
+      "tile_anchor": [
+        31.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    }
+  ],
+  "projection_contract_id": "world.ground_projection.iso_64x32.v1",
+  "runtime_schema_version": 2.0,
+  "semantics": {
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "hidden_abyss_domain",
+          "source_category_role": "boss",
+          "source_line": 178.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暗之双头金刚",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 236.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            831.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.hidden_abyss_domain.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.hidden_abyss_domain.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          7.0
+        ]
+      }
+    ],
+    "door_points": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_only": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "arrival_only",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "由沃玛森林进入，单向只可进入",
+        "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
+        "kind": "map_exit",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "arrival_only_endpoint",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
+        "tile": [
+          24.0,
+          24.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": false
+      }
+    ],
+    "monster_spawn": [],
+    "npc_points": [],
+    "region_trigger": [],
+    "respawn_points": [],
+    "safe_area": []
+  },
+  "source": {
+    "candidate_binding": {
+      "authoring_sha256": "8468811b6979d587f527cd0d539420b46447c6713b80e53214fd8108633f7d30",
+      "contract_id": "mse.map.runtime.candidate_binding.v1",
+      "document_revision": 2.0,
+      "document_sha256": "81b74951a2299b4abfdb60b29c2611f33a59a6df026fc0e2c301be14d9491c9d",
+      "ground_manifest_sha256": "d237dd76e3b6de34f1215342ed1b5f881bc1c330db1e12baedc738b1ae963a17",
+      "ground_state_sha256": "30f9f41feadd6f94c85e5432bab14c266c7fd10408c947a7e9454e80468b457f",
+      "map_key": "hidden_abyss_domain",
+      "runtime_map_id": 918005.0
+    },
+    "content_layer": "personal_expansion",
+    "display_name": "深渊魔域",
+    "editor_schema_version": 5.0,
+    "map_id": "hidden_abyss_domain",
+    "revision": 2.0,
+    "runtime_map_id": 918005.0
+  },
+  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+}

@@ -1,0 +1,6004 @@
+{
+  "build_sha256": "1a7d87fdc4db9225a2128a2093a3f1dcade2b4373b2eda7ae6506851d7e27508",
+  "collision": {
+    "blocked_count": 152.0,
+    "blocked_tiles": [
+      "0,0",
+      "0,1",
+      "0,10",
+      "0,11",
+      "0,12",
+      "0,13",
+      "0,14",
+      "0,15",
+      "0,16",
+      "0,17",
+      "0,18",
+      "0,19",
+      "0,2",
+      "0,20",
+      "0,21",
+      "0,22",
+      "0,23",
+      "0,24",
+      "0,25",
+      "0,26",
+      "0,27",
+      "0,28",
+      "0,29",
+      "0,3",
+      "0,30",
+      "0,31",
+      "0,4",
+      "0,5",
+      "0,6",
+      "0,7",
+      "0,8",
+      "0,9",
+      "1,0",
+      "1,1",
+      "1,13",
+      "1,14",
+      "1,15",
+      "1,30",
+      "1,31",
+      "10,0",
+      "10,31",
+      "11,0",
+      "11,31",
+      "12,0",
+      "12,1",
+      "12,2",
+      "12,29",
+      "12,30",
+      "12,31",
+      "13,0",
+      "13,1",
+      "13,2",
+      "13,29",
+      "13,30",
+      "13,31",
+      "14,0",
+      "14,1",
+      "14,2",
+      "14,29",
+      "14,30",
+      "14,31",
+      "15,0",
+      "15,31",
+      "16,0",
+      "16,31",
+      "17,0",
+      "17,31",
+      "18,0",
+      "18,31",
+      "19,0",
+      "19,31",
+      "2,0",
+      "2,13",
+      "2,14",
+      "2,15",
+      "2,31",
+      "20,0",
+      "20,31",
+      "21,0",
+      "21,31",
+      "22,0",
+      "22,31",
+      "23,0",
+      "23,31",
+      "24,0",
+      "24,31",
+      "25,0",
+      "25,31",
+      "26,0",
+      "26,31",
+      "27,0",
+      "27,31",
+      "28,0",
+      "28,31",
+      "29,0",
+      "29,13",
+      "29,14",
+      "29,15",
+      "29,31",
+      "3,0",
+      "3,31",
+      "30,0",
+      "30,1",
+      "30,13",
+      "30,14",
+      "30,15",
+      "30,30",
+      "30,31",
+      "31,0",
+      "31,1",
+      "31,10",
+      "31,11",
+      "31,12",
+      "31,13",
+      "31,14",
+      "31,15",
+      "31,16",
+      "31,17",
+      "31,18",
+      "31,19",
+      "31,2",
+      "31,20",
+      "31,21",
+      "31,22",
+      "31,23",
+      "31,24",
+      "31,25",
+      "31,26",
+      "31,27",
+      "31,28",
+      "31,29",
+      "31,3",
+      "31,30",
+      "31,31",
+      "31,4",
+      "31,5",
+      "31,6",
+      "31,7",
+      "31,8",
+      "31,9",
+      "4,0",
+      "4,31",
+      "5,0",
+      "5,31",
+      "6,0",
+      "6,31",
+      "7,0",
+      "7,31",
+      "8,0",
+      "8,31",
+      "9,0",
+      "9,31"
+    ],
+    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v2",
+    "erased_cells": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          13.0
+        ]
+      }
+    ],
+    "manual_shapes": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            31.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            32.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            13.0,
+            32.0,
+            3.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12.0,
+            0.0,
+            4.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000007",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000009",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            30.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000010",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            30.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ],
+    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+  },
+  "design": {
+    "design_size": [
+      32.0,
+      32.0
+    ],
+    "map_type": "boss_room",
+    "source_size": [
+      null,
+      null
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "custom_blank_layout",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1",
+    "wall_loops": [
+      {
+        "bounds": [
+          0.0,
+          0.0,
+          32.0,
+          32.0
+        ],
+        "collision_authority": "manual_by_user",
+        "corner_join_mode": "straight_overlap",
+        "corner_topology": "outer_corner",
+        "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+        "visual_render_contract": "native_2to1_straight_overlap_v1",
+        "wall_family_id": "wooma_temple_gothic_stone_u0"
+      }
+    ]
+  },
+  "ground": {
+    "default_fill_asset_id": "",
+    "ground_mode": "generated_painted_chunks",
+    "tile_overrides": {
+      "0,0": "mse.ground.user_gothic_floor.05",
+      "0,1": "mse.ground.user_gothic_floor.04",
+      "0,10": "mse.ground.user_gothic_floor.01",
+      "0,11": "mse.ground.user_gothic_floor.02",
+      "0,12": "mse.ground.user_gothic_floor.05",
+      "0,13": "mse.ground.user_gothic_floor.03",
+      "0,14": "mse.ground.user_gothic_floor.03",
+      "0,15": "mse.ground.user_gothic_floor.06",
+      "0,16": "mse.ground.user_gothic_floor.01",
+      "0,17": "mse.ground.user_gothic_floor.01",
+      "0,18": "mse.ground.user_gothic_floor.04",
+      "0,19": "mse.ground.user_gothic_floor.05",
+      "0,2": "mse.ground.user_gothic_floor.02",
+      "0,20": "mse.ground.user_gothic_floor.01",
+      "0,21": "mse.ground.user_gothic_floor.02",
+      "0,22": "mse.ground.user_gothic_floor.05",
+      "0,23": "mse.ground.user_gothic_floor.04",
+      "0,24": "mse.ground.user_gothic_floor.05",
+      "0,25": "mse.ground.user_gothic_floor.05",
+      "0,26": "mse.ground.user_gothic_floor.04",
+      "0,27": "mse.ground.user_gothic_floor.03",
+      "0,28": "mse.ground.user_gothic_floor.05",
+      "0,29": "mse.ground.user_gothic_floor.01",
+      "0,3": "mse.ground.user_gothic_floor.03",
+      "0,30": "mse.ground.user_gothic_floor.04",
+      "0,31": "mse.ground.user_gothic_floor.01",
+      "0,4": "mse.ground.user_gothic_floor.02",
+      "0,5": "mse.ground.user_gothic_floor.04",
+      "0,6": "mse.ground.user_gothic_floor.05",
+      "0,7": "mse.ground.user_gothic_floor.02",
+      "0,8": "mse.ground.user_gothic_floor.02",
+      "0,9": "mse.ground.user_gothic_floor.02",
+      "1,0": "mse.ground.user_gothic_floor.02",
+      "1,1": "mse.ground.user_gothic_floor.05",
+      "1,10": "mse.ground.user_gothic_floor.05",
+      "1,11": "mse.ground.user_gothic_floor.05",
+      "1,12": "mse.ground.user_gothic_floor.03",
+      "1,13": "mse.ground.user_gothic_floor.01",
+      "1,14": "mse.ground.user_gothic_floor.03",
+      "1,15": "mse.ground.user_gothic_floor.02",
+      "1,16": "mse.ground.user_gothic_floor.06",
+      "1,17": "mse.ground.user_gothic_floor.06",
+      "1,18": "mse.ground.user_gothic_floor.03",
+      "1,19": "mse.ground.user_gothic_floor.02",
+      "1,2": "mse.ground.user_gothic_floor.04",
+      "1,20": "mse.ground.user_gothic_floor.04",
+      "1,21": "mse.ground.user_gothic_floor.02",
+      "1,22": "mse.ground.user_gothic_floor.04",
+      "1,23": "mse.ground.user_gothic_floor.05",
+      "1,24": "mse.ground.user_gothic_floor.02",
+      "1,25": "mse.ground.user_gothic_floor.05",
+      "1,26": "mse.ground.user_gothic_floor.01",
+      "1,27": "mse.ground.user_gothic_floor.04",
+      "1,28": "mse.ground.user_gothic_floor.03",
+      "1,29": "mse.ground.user_gothic_floor.04",
+      "1,3": "mse.ground.user_gothic_floor.02",
+      "1,30": "mse.ground.user_gothic_floor.03",
+      "1,31": "mse.ground.user_gothic_floor.03",
+      "1,4": "mse.ground.user_gothic_floor.04",
+      "1,5": "mse.ground.user_gothic_floor.02",
+      "1,6": "mse.ground.user_gothic_floor.06",
+      "1,7": "mse.ground.user_gothic_floor.01",
+      "1,8": "mse.ground.user_gothic_floor.06",
+      "1,9": "mse.ground.user_gothic_floor.05",
+      "10,0": "mse.ground.user_gothic_floor.06",
+      "10,1": "mse.ground.user_gothic_floor.01",
+      "10,10": "mse.ground.user_gothic_floor.03",
+      "10,11": "mse.ground.user_gothic_floor.03",
+      "10,12": "mse.ground.user_gothic_floor.01",
+      "10,13": "mse.ground.user_gothic_floor.04",
+      "10,14": "mse.ground.user_gothic_floor.05",
+      "10,15": "mse.ground.user_gothic_floor.02",
+      "10,16": "mse.ground.user_gothic_floor.06",
+      "10,17": "mse.ground.user_gothic_floor.05",
+      "10,18": "mse.ground.user_gothic_floor.01",
+      "10,19": "mse.ground.user_gothic_floor.06",
+      "10,2": "mse.ground.user_gothic_floor.06",
+      "10,20": "mse.ground.user_gothic_floor.01",
+      "10,21": "mse.ground.user_gothic_floor.04",
+      "10,22": "mse.ground.user_gothic_floor.03",
+      "10,23": "mse.ground.user_gothic_floor.05",
+      "10,24": "mse.ground.user_gothic_floor.02",
+      "10,25": "mse.ground.user_gothic_floor.01",
+      "10,26": "mse.ground.user_gothic_floor.05",
+      "10,27": "mse.ground.user_gothic_floor.05",
+      "10,28": "mse.ground.user_gothic_floor.06",
+      "10,29": "mse.ground.user_gothic_floor.05",
+      "10,3": "mse.ground.user_gothic_floor.05",
+      "10,30": "mse.ground.user_gothic_floor.01",
+      "10,31": "mse.ground.user_gothic_floor.01",
+      "10,4": "mse.ground.user_gothic_floor.05",
+      "10,5": "mse.ground.user_gothic_floor.04",
+      "10,6": "mse.ground.user_gothic_floor.03",
+      "10,7": "mse.ground.user_gothic_floor.01",
+      "10,8": "mse.ground.user_gothic_floor.03",
+      "10,9": "mse.ground.user_gothic_floor.06",
+      "11,0": "mse.ground.user_gothic_floor.04",
+      "11,1": "mse.ground.user_gothic_floor.03",
+      "11,10": "mse.ground.user_gothic_floor.03",
+      "11,11": "mse.ground.user_gothic_floor.05",
+      "11,12": "mse.ground.user_gothic_floor.01",
+      "11,13": "mse.ground.user_gothic_floor.05",
+      "11,14": "mse.ground.user_gothic_floor.04",
+      "11,15": "mse.ground.user_gothic_floor.06",
+      "11,16": "mse.ground.user_gothic_floor.01",
+      "11,17": "mse.ground.user_gothic_floor.05",
+      "11,18": "mse.ground.user_gothic_floor.06",
+      "11,19": "mse.ground.user_gothic_floor.05",
+      "11,2": "mse.ground.user_gothic_floor.06",
+      "11,20": "mse.ground.user_gothic_floor.02",
+      "11,21": "mse.ground.user_gothic_floor.02",
+      "11,22": "mse.ground.user_gothic_floor.02",
+      "11,23": "mse.ground.user_gothic_floor.06",
+      "11,24": "mse.ground.user_gothic_floor.01",
+      "11,25": "mse.ground.user_gothic_floor.03",
+      "11,26": "mse.ground.user_gothic_floor.01",
+      "11,27": "mse.ground.user_gothic_floor.06",
+      "11,28": "mse.ground.user_gothic_floor.05",
+      "11,29": "mse.ground.user_gothic_floor.04",
+      "11,3": "mse.ground.user_gothic_floor.06",
+      "11,30": "mse.ground.user_gothic_floor.04",
+      "11,31": "mse.ground.user_gothic_floor.06",
+      "11,4": "mse.ground.user_gothic_floor.05",
+      "11,5": "mse.ground.user_gothic_floor.02",
+      "11,6": "mse.ground.user_gothic_floor.05",
+      "11,7": "mse.ground.user_gothic_floor.06",
+      "11,8": "mse.ground.user_gothic_floor.05",
+      "11,9": "mse.ground.user_gothic_floor.06",
+      "12,0": "mse.ground.user_gothic_floor.01",
+      "12,1": "mse.ground.user_gothic_floor.06",
+      "12,10": "mse.ground.user_gothic_floor.04",
+      "12,11": "mse.ground.user_gothic_floor.03",
+      "12,12": "mse.ground.user_gothic_floor.06",
+      "12,13": "mse.ground.user_gothic_floor.02",
+      "12,14": "mse.ground.user_gothic_floor.02",
+      "12,15": "mse.ground.user_gothic_floor.05",
+      "12,16": "mse.ground.user_gothic_floor.04",
+      "12,17": "mse.ground.user_gothic_floor.01",
+      "12,18": "mse.ground.user_gothic_floor.03",
+      "12,19": "mse.ground.user_gothic_floor.04",
+      "12,2": "mse.ground.user_gothic_floor.02",
+      "12,20": "mse.ground.user_gothic_floor.05",
+      "12,21": "mse.ground.user_gothic_floor.01",
+      "12,22": "mse.ground.user_gothic_floor.06",
+      "12,23": "mse.ground.user_gothic_floor.06",
+      "12,24": "mse.ground.user_gothic_floor.02",
+      "12,25": "mse.ground.user_gothic_floor.02",
+      "12,26": "mse.ground.user_gothic_floor.02",
+      "12,27": "mse.ground.user_gothic_floor.02",
+      "12,28": "mse.ground.user_gothic_floor.02",
+      "12,29": "mse.ground.user_gothic_floor.01",
+      "12,3": "mse.ground.user_gothic_floor.02",
+      "12,30": "mse.ground.user_gothic_floor.05",
+      "12,31": "mse.ground.user_gothic_floor.04",
+      "12,4": "mse.ground.user_gothic_floor.01",
+      "12,5": "mse.ground.user_gothic_floor.05",
+      "12,6": "mse.ground.user_gothic_floor.03",
+      "12,7": "mse.ground.user_gothic_floor.04",
+      "12,8": "mse.ground.user_gothic_floor.02",
+      "12,9": "mse.ground.user_gothic_floor.01",
+      "13,0": "mse.ground.user_gothic_floor.04",
+      "13,1": "mse.ground.user_gothic_floor.03",
+      "13,10": "mse.ground.user_gothic_floor.03",
+      "13,11": "mse.ground.user_gothic_floor.03",
+      "13,12": "mse.ground.user_gothic_floor.05",
+      "13,13": "mse.ground.user_gothic_floor.01",
+      "13,14": "mse.ground.user_gothic_floor.01",
+      "13,15": "mse.ground.user_gothic_floor.01",
+      "13,16": "mse.ground.user_gothic_floor.02",
+      "13,17": "mse.ground.user_gothic_floor.06",
+      "13,18": "mse.ground.user_gothic_floor.03",
+      "13,19": "mse.ground.user_gothic_floor.04",
+      "13,2": "mse.ground.user_gothic_floor.06",
+      "13,20": "mse.ground.user_gothic_floor.06",
+      "13,21": "mse.ground.user_gothic_floor.06",
+      "13,22": "mse.ground.user_gothic_floor.06",
+      "13,23": "mse.ground.user_gothic_floor.05",
+      "13,24": "mse.ground.user_gothic_floor.06",
+      "13,25": "mse.ground.user_gothic_floor.05",
+      "13,26": "mse.ground.user_gothic_floor.06",
+      "13,27": "mse.ground.user_gothic_floor.06",
+      "13,28": "mse.ground.user_gothic_floor.06",
+      "13,29": "mse.ground.user_gothic_floor.05",
+      "13,3": "mse.ground.user_gothic_floor.01",
+      "13,30": "mse.ground.user_gothic_floor.04",
+      "13,31": "mse.ground.user_gothic_floor.01",
+      "13,4": "mse.ground.user_gothic_floor.04",
+      "13,5": "mse.ground.user_gothic_floor.06",
+      "13,6": "mse.ground.user_gothic_floor.05",
+      "13,7": "mse.ground.user_gothic_floor.01",
+      "13,8": "mse.ground.user_gothic_floor.01",
+      "13,9": "mse.ground.user_gothic_floor.05",
+      "14,0": "mse.ground.user_gothic_floor.06",
+      "14,1": "mse.ground.user_gothic_floor.04",
+      "14,10": "mse.ground.user_gothic_floor.05",
+      "14,11": "mse.ground.user_gothic_floor.03",
+      "14,12": "mse.ground.user_gothic_floor.02",
+      "14,13": "mse.ground.user_gothic_floor.01",
+      "14,14": "mse.ground.user_gothic_floor.05",
+      "14,15": "mse.ground.user_gothic_floor.02",
+      "14,16": "mse.ground.user_gothic_floor.06",
+      "14,17": "mse.ground.user_gothic_floor.02",
+      "14,18": "mse.ground.user_gothic_floor.06",
+      "14,19": "mse.ground.user_gothic_floor.06",
+      "14,2": "mse.ground.user_gothic_floor.03",
+      "14,20": "mse.ground.user_gothic_floor.01",
+      "14,21": "mse.ground.user_gothic_floor.03",
+      "14,22": "mse.ground.user_gothic_floor.02",
+      "14,23": "mse.ground.user_gothic_floor.04",
+      "14,24": "mse.ground.user_gothic_floor.05",
+      "14,25": "mse.ground.user_gothic_floor.02",
+      "14,26": "mse.ground.user_gothic_floor.06",
+      "14,27": "mse.ground.user_gothic_floor.05",
+      "14,28": "mse.ground.user_gothic_floor.01",
+      "14,29": "mse.ground.user_gothic_floor.06",
+      "14,3": "mse.ground.user_gothic_floor.06",
+      "14,30": "mse.ground.user_gothic_floor.01",
+      "14,31": "mse.ground.user_gothic_floor.01",
+      "14,4": "mse.ground.user_gothic_floor.02",
+      "14,5": "mse.ground.user_gothic_floor.05",
+      "14,6": "mse.ground.user_gothic_floor.02",
+      "14,7": "mse.ground.user_gothic_floor.02",
+      "14,8": "mse.ground.user_gothic_floor.05",
+      "14,9": "mse.ground.user_gothic_floor.02",
+      "15,0": "mse.ground.user_gothic_floor.06",
+      "15,1": "mse.ground.user_gothic_floor.06",
+      "15,10": "mse.ground.user_gothic_floor.05",
+      "15,11": "mse.ground.user_gothic_floor.06",
+      "15,12": "mse.ground.user_gothic_floor.03",
+      "15,13": "mse.ground.user_gothic_floor.04",
+      "15,14": "mse.ground.user_gothic_floor.02",
+      "15,15": "mse.ground.user_gothic_floor.06",
+      "15,16": "mse.ground.user_gothic_floor.04",
+      "15,17": "mse.ground.user_gothic_floor.04",
+      "15,18": "mse.ground.user_gothic_floor.04",
+      "15,19": "mse.ground.user_gothic_floor.06",
+      "15,2": "mse.ground.user_gothic_floor.04",
+      "15,20": "mse.ground.user_gothic_floor.01",
+      "15,21": "mse.ground.user_gothic_floor.03",
+      "15,22": "mse.ground.user_gothic_floor.04",
+      "15,23": "mse.ground.user_gothic_floor.05",
+      "15,24": "mse.ground.user_gothic_floor.06",
+      "15,25": "mse.ground.user_gothic_floor.05",
+      "15,26": "mse.ground.user_gothic_floor.01",
+      "15,27": "mse.ground.user_gothic_floor.06",
+      "15,28": "mse.ground.user_gothic_floor.03",
+      "15,29": "mse.ground.user_gothic_floor.05",
+      "15,3": "mse.ground.user_gothic_floor.04",
+      "15,30": "mse.ground.user_gothic_floor.06",
+      "15,31": "mse.ground.user_gothic_floor.05",
+      "15,4": "mse.ground.user_gothic_floor.06",
+      "15,5": "mse.ground.user_gothic_floor.05",
+      "15,6": "mse.ground.user_gothic_floor.05",
+      "15,7": "mse.ground.user_gothic_floor.05",
+      "15,8": "mse.ground.user_gothic_floor.01",
+      "15,9": "mse.ground.user_gothic_floor.03",
+      "16,0": "mse.ground.user_gothic_floor.02",
+      "16,1": "mse.ground.user_gothic_floor.02",
+      "16,10": "mse.ground.user_gothic_floor.03",
+      "16,11": "mse.ground.user_gothic_floor.01",
+      "16,12": "mse.ground.user_gothic_floor.01",
+      "16,13": "mse.ground.user_gothic_floor.05",
+      "16,14": "mse.ground.user_gothic_floor.06",
+      "16,15": "mse.ground.user_gothic_floor.02",
+      "16,16": "mse.ground.user_gothic_floor.03",
+      "16,17": "mse.ground.user_gothic_floor.03",
+      "16,18": "mse.ground.user_gothic_floor.02",
+      "16,19": "mse.ground.user_gothic_floor.05",
+      "16,2": "mse.ground.user_gothic_floor.02",
+      "16,20": "mse.ground.user_gothic_floor.02",
+      "16,21": "mse.ground.user_gothic_floor.04",
+      "16,22": "mse.ground.user_gothic_floor.04",
+      "16,23": "mse.ground.user_gothic_floor.02",
+      "16,24": "mse.ground.user_gothic_floor.04",
+      "16,25": "mse.ground.user_gothic_floor.05",
+      "16,26": "mse.ground.user_gothic_floor.01",
+      "16,27": "mse.ground.user_gothic_floor.03",
+      "16,28": "mse.ground.user_gothic_floor.03",
+      "16,29": "mse.ground.user_gothic_floor.03",
+      "16,3": "mse.ground.user_gothic_floor.02",
+      "16,30": "mse.ground.user_gothic_floor.04",
+      "16,31": "mse.ground.user_gothic_floor.01",
+      "16,4": "mse.ground.user_gothic_floor.05",
+      "16,5": "mse.ground.user_gothic_floor.05",
+      "16,6": "mse.ground.user_gothic_floor.04",
+      "16,7": "mse.ground.user_gothic_floor.06",
+      "16,8": "mse.ground.user_gothic_floor.05",
+      "16,9": "mse.ground.user_gothic_floor.04",
+      "17,0": "mse.ground.user_gothic_floor.05",
+      "17,1": "mse.ground.user_gothic_floor.01",
+      "17,10": "mse.ground.user_gothic_floor.06",
+      "17,11": "mse.ground.user_gothic_floor.06",
+      "17,12": "mse.ground.user_gothic_floor.04",
+      "17,13": "mse.ground.user_gothic_floor.03",
+      "17,14": "mse.ground.user_gothic_floor.06",
+      "17,15": "mse.ground.user_gothic_floor.03",
+      "17,16": "mse.ground.user_gothic_floor.05",
+      "17,17": "mse.ground.user_gothic_floor.04",
+      "17,18": "mse.ground.user_gothic_floor.03",
+      "17,19": "mse.ground.user_gothic_floor.05",
+      "17,2": "mse.ground.user_gothic_floor.03",
+      "17,20": "mse.ground.user_gothic_floor.01",
+      "17,21": "mse.ground.user_gothic_floor.06",
+      "17,22": "mse.ground.user_gothic_floor.05",
+      "17,23": "mse.ground.user_gothic_floor.05",
+      "17,24": "mse.ground.user_gothic_floor.01",
+      "17,25": "mse.ground.user_gothic_floor.02",
+      "17,26": "mse.ground.user_gothic_floor.06",
+      "17,27": "mse.ground.user_gothic_floor.05",
+      "17,28": "mse.ground.user_gothic_floor.01",
+      "17,29": "mse.ground.user_gothic_floor.02",
+      "17,3": "mse.ground.user_gothic_floor.05",
+      "17,30": "mse.ground.user_gothic_floor.02",
+      "17,31": "mse.ground.user_gothic_floor.04",
+      "17,4": "mse.ground.user_gothic_floor.05",
+      "17,5": "mse.ground.user_gothic_floor.05",
+      "17,6": "mse.ground.user_gothic_floor.04",
+      "17,7": "mse.ground.user_gothic_floor.02",
+      "17,8": "mse.ground.user_gothic_floor.02",
+      "17,9": "mse.ground.user_gothic_floor.03",
+      "18,0": "mse.ground.user_gothic_floor.06",
+      "18,1": "mse.ground.user_gothic_floor.06",
+      "18,10": "mse.ground.user_gothic_floor.06",
+      "18,11": "mse.ground.user_gothic_floor.05",
+      "18,12": "mse.ground.user_gothic_floor.04",
+      "18,13": "mse.ground.user_gothic_floor.05",
+      "18,14": "mse.ground.user_gothic_floor.02",
+      "18,15": "mse.ground.user_gothic_floor.04",
+      "18,16": "mse.ground.user_gothic_floor.02",
+      "18,17": "mse.ground.user_gothic_floor.03",
+      "18,18": "mse.ground.user_gothic_floor.01",
+      "18,19": "mse.ground.user_gothic_floor.02",
+      "18,2": "mse.ground.user_gothic_floor.02",
+      "18,20": "mse.ground.user_gothic_floor.05",
+      "18,21": "mse.ground.user_gothic_floor.04",
+      "18,22": "mse.ground.user_gothic_floor.01",
+      "18,23": "mse.ground.user_gothic_floor.05",
+      "18,24": "mse.ground.user_gothic_floor.01",
+      "18,25": "mse.ground.user_gothic_floor.06",
+      "18,26": "mse.ground.user_gothic_floor.06",
+      "18,27": "mse.ground.user_gothic_floor.01",
+      "18,28": "mse.ground.user_gothic_floor.02",
+      "18,29": "mse.ground.user_gothic_floor.01",
+      "18,3": "mse.ground.user_gothic_floor.03",
+      "18,30": "mse.ground.user_gothic_floor.02",
+      "18,31": "mse.ground.user_gothic_floor.03",
+      "18,4": "mse.ground.user_gothic_floor.05",
+      "18,5": "mse.ground.user_gothic_floor.01",
+      "18,6": "mse.ground.user_gothic_floor.05",
+      "18,7": "mse.ground.user_gothic_floor.06",
+      "18,8": "mse.ground.user_gothic_floor.06",
+      "18,9": "mse.ground.user_gothic_floor.04",
+      "19,0": "mse.ground.user_gothic_floor.06",
+      "19,1": "mse.ground.user_gothic_floor.01",
+      "19,10": "mse.ground.user_gothic_floor.06",
+      "19,11": "mse.ground.user_gothic_floor.06",
+      "19,12": "mse.ground.user_gothic_floor.05",
+      "19,13": "mse.ground.user_gothic_floor.02",
+      "19,14": "mse.ground.user_gothic_floor.06",
+      "19,15": "mse.ground.user_gothic_floor.05",
+      "19,16": "mse.ground.user_gothic_floor.01",
+      "19,17": "mse.ground.user_gothic_floor.02",
+      "19,18": "mse.ground.user_gothic_floor.05",
+      "19,19": "mse.ground.user_gothic_floor.04",
+      "19,2": "mse.ground.user_gothic_floor.04",
+      "19,20": "mse.ground.user_gothic_floor.06",
+      "19,21": "mse.ground.user_gothic_floor.03",
+      "19,22": "mse.ground.user_gothic_floor.05",
+      "19,23": "mse.ground.user_gothic_floor.01",
+      "19,24": "mse.ground.user_gothic_floor.03",
+      "19,25": "mse.ground.user_gothic_floor.04",
+      "19,26": "mse.ground.user_gothic_floor.06",
+      "19,27": "mse.ground.user_gothic_floor.03",
+      "19,28": "mse.ground.user_gothic_floor.01",
+      "19,29": "mse.ground.user_gothic_floor.06",
+      "19,3": "mse.ground.user_gothic_floor.04",
+      "19,30": "mse.ground.user_gothic_floor.04",
+      "19,31": "mse.ground.user_gothic_floor.05",
+      "19,4": "mse.ground.user_gothic_floor.01",
+      "19,5": "mse.ground.user_gothic_floor.01",
+      "19,6": "mse.ground.user_gothic_floor.01",
+      "19,7": "mse.ground.user_gothic_floor.01",
+      "19,8": "mse.ground.user_gothic_floor.02",
+      "19,9": "mse.ground.user_gothic_floor.01",
+      "2,0": "mse.ground.user_gothic_floor.04",
+      "2,1": "mse.ground.user_gothic_floor.02",
+      "2,10": "mse.ground.user_gothic_floor.05",
+      "2,11": "mse.ground.user_gothic_floor.01",
+      "2,12": "mse.ground.user_gothic_floor.01",
+      "2,13": "mse.ground.user_gothic_floor.05",
+      "2,14": "mse.ground.user_gothic_floor.04",
+      "2,15": "mse.ground.user_gothic_floor.06",
+      "2,16": "mse.ground.user_gothic_floor.01",
+      "2,17": "mse.ground.user_gothic_floor.01",
+      "2,18": "mse.ground.user_gothic_floor.04",
+      "2,19": "mse.ground.user_gothic_floor.03",
+      "2,2": "mse.ground.user_gothic_floor.02",
+      "2,20": "mse.ground.user_gothic_floor.01",
+      "2,21": "mse.ground.user_gothic_floor.05",
+      "2,22": "mse.ground.user_gothic_floor.04",
+      "2,23": "mse.ground.user_gothic_floor.04",
+      "2,24": "mse.ground.user_gothic_floor.05",
+      "2,25": "mse.ground.user_gothic_floor.06",
+      "2,26": "mse.ground.user_gothic_floor.04",
+      "2,27": "mse.ground.user_gothic_floor.01",
+      "2,28": "mse.ground.user_gothic_floor.03",
+      "2,29": "mse.ground.user_gothic_floor.04",
+      "2,3": "mse.ground.user_gothic_floor.06",
+      "2,30": "mse.ground.user_gothic_floor.06",
+      "2,31": "mse.ground.user_gothic_floor.01",
+      "2,4": "mse.ground.user_gothic_floor.01",
+      "2,5": "mse.ground.user_gothic_floor.06",
+      "2,6": "mse.ground.user_gothic_floor.04",
+      "2,7": "mse.ground.user_gothic_floor.05",
+      "2,8": "mse.ground.user_gothic_floor.01",
+      "2,9": "mse.ground.user_gothic_floor.03",
+      "20,0": "mse.ground.user_gothic_floor.05",
+      "20,1": "mse.ground.user_gothic_floor.04",
+      "20,10": "mse.ground.user_gothic_floor.03",
+      "20,11": "mse.ground.user_gothic_floor.02",
+      "20,12": "mse.ground.user_gothic_floor.03",
+      "20,13": "mse.ground.user_gothic_floor.05",
+      "20,14": "mse.ground.user_gothic_floor.05",
+      "20,15": "mse.ground.user_gothic_floor.01",
+      "20,16": "mse.ground.user_gothic_floor.01",
+      "20,17": "mse.ground.user_gothic_floor.06",
+      "20,18": "mse.ground.user_gothic_floor.06",
+      "20,19": "mse.ground.user_gothic_floor.01",
+      "20,2": "mse.ground.user_gothic_floor.04",
+      "20,20": "mse.ground.user_gothic_floor.02",
+      "20,21": "mse.ground.user_gothic_floor.04",
+      "20,22": "mse.ground.user_gothic_floor.06",
+      "20,23": "mse.ground.user_gothic_floor.05",
+      "20,24": "mse.ground.user_gothic_floor.01",
+      "20,25": "mse.ground.user_gothic_floor.04",
+      "20,26": "mse.ground.user_gothic_floor.06",
+      "20,27": "mse.ground.user_gothic_floor.03",
+      "20,28": "mse.ground.user_gothic_floor.02",
+      "20,29": "mse.ground.user_gothic_floor.02",
+      "20,3": "mse.ground.user_gothic_floor.05",
+      "20,30": "mse.ground.user_gothic_floor.04",
+      "20,31": "mse.ground.user_gothic_floor.03",
+      "20,4": "mse.ground.user_gothic_floor.05",
+      "20,5": "mse.ground.user_gothic_floor.05",
+      "20,6": "mse.ground.user_gothic_floor.04",
+      "20,7": "mse.ground.user_gothic_floor.01",
+      "20,8": "mse.ground.user_gothic_floor.01",
+      "20,9": "mse.ground.user_gothic_floor.04",
+      "21,0": "mse.ground.user_gothic_floor.01",
+      "21,1": "mse.ground.user_gothic_floor.06",
+      "21,10": "mse.ground.user_gothic_floor.02",
+      "21,11": "mse.ground.user_gothic_floor.03",
+      "21,12": "mse.ground.user_gothic_floor.01",
+      "21,13": "mse.ground.user_gothic_floor.02",
+      "21,14": "mse.ground.user_gothic_floor.04",
+      "21,15": "mse.ground.user_gothic_floor.04",
+      "21,16": "mse.ground.user_gothic_floor.04",
+      "21,17": "mse.ground.user_gothic_floor.06",
+      "21,18": "mse.ground.user_gothic_floor.06",
+      "21,19": "mse.ground.user_gothic_floor.03",
+      "21,2": "mse.ground.user_gothic_floor.04",
+      "21,20": "mse.ground.user_gothic_floor.01",
+      "21,21": "mse.ground.user_gothic_floor.02",
+      "21,22": "mse.ground.user_gothic_floor.04",
+      "21,23": "mse.ground.user_gothic_floor.03",
+      "21,24": "mse.ground.user_gothic_floor.02",
+      "21,25": "mse.ground.user_gothic_floor.03",
+      "21,26": "mse.ground.user_gothic_floor.04",
+      "21,27": "mse.ground.user_gothic_floor.06",
+      "21,28": "mse.ground.user_gothic_floor.02",
+      "21,29": "mse.ground.user_gothic_floor.05",
+      "21,3": "mse.ground.user_gothic_floor.04",
+      "21,30": "mse.ground.user_gothic_floor.02",
+      "21,31": "mse.ground.user_gothic_floor.01",
+      "21,4": "mse.ground.user_gothic_floor.03",
+      "21,5": "mse.ground.user_gothic_floor.06",
+      "21,6": "mse.ground.user_gothic_floor.01",
+      "21,7": "mse.ground.user_gothic_floor.05",
+      "21,8": "mse.ground.user_gothic_floor.06",
+      "21,9": "mse.ground.user_gothic_floor.06",
+      "22,0": "mse.ground.user_gothic_floor.02",
+      "22,1": "mse.ground.user_gothic_floor.01",
+      "22,10": "mse.ground.user_gothic_floor.06",
+      "22,11": "mse.ground.user_gothic_floor.02",
+      "22,12": "mse.ground.user_gothic_floor.02",
+      "22,13": "mse.ground.user_gothic_floor.03",
+      "22,14": "mse.ground.user_gothic_floor.03",
+      "22,15": "mse.ground.user_gothic_floor.02",
+      "22,16": "mse.ground.user_gothic_floor.02",
+      "22,17": "mse.ground.user_gothic_floor.01",
+      "22,18": "mse.ground.user_gothic_floor.02",
+      "22,19": "mse.ground.user_gothic_floor.01",
+      "22,2": "mse.ground.user_gothic_floor.04",
+      "22,20": "mse.ground.user_gothic_floor.03",
+      "22,21": "mse.ground.user_gothic_floor.02",
+      "22,22": "mse.ground.user_gothic_floor.04",
+      "22,23": "mse.ground.user_gothic_floor.06",
+      "22,24": "mse.ground.user_gothic_floor.06",
+      "22,25": "mse.ground.user_gothic_floor.03",
+      "22,26": "mse.ground.user_gothic_floor.01",
+      "22,27": "mse.ground.user_gothic_floor.04",
+      "22,28": "mse.ground.user_gothic_floor.04",
+      "22,29": "mse.ground.user_gothic_floor.04",
+      "22,3": "mse.ground.user_gothic_floor.01",
+      "22,30": "mse.ground.user_gothic_floor.02",
+      "22,31": "mse.ground.user_gothic_floor.03",
+      "22,4": "mse.ground.user_gothic_floor.05",
+      "22,5": "mse.ground.user_gothic_floor.01",
+      "22,6": "mse.ground.user_gothic_floor.05",
+      "22,7": "mse.ground.user_gothic_floor.03",
+      "22,8": "mse.ground.user_gothic_floor.02",
+      "22,9": "mse.ground.user_gothic_floor.01",
+      "23,0": "mse.ground.user_gothic_floor.01",
+      "23,1": "mse.ground.user_gothic_floor.03",
+      "23,10": "mse.ground.user_gothic_floor.03",
+      "23,11": "mse.ground.user_gothic_floor.05",
+      "23,12": "mse.ground.user_gothic_floor.06",
+      "23,13": "mse.ground.user_gothic_floor.01",
+      "23,14": "mse.ground.user_gothic_floor.02",
+      "23,15": "mse.ground.user_gothic_floor.02",
+      "23,16": "mse.ground.user_gothic_floor.01",
+      "23,17": "mse.ground.user_gothic_floor.03",
+      "23,18": "mse.ground.user_gothic_floor.01",
+      "23,19": "mse.ground.user_gothic_floor.01",
+      "23,2": "mse.ground.user_gothic_floor.01",
+      "23,20": "mse.ground.user_gothic_floor.04",
+      "23,21": "mse.ground.user_gothic_floor.05",
+      "23,22": "mse.ground.user_gothic_floor.05",
+      "23,23": "mse.ground.user_gothic_floor.06",
+      "23,24": "mse.ground.user_gothic_floor.01",
+      "23,25": "mse.ground.user_gothic_floor.02",
+      "23,26": "mse.ground.user_gothic_floor.05",
+      "23,27": "mse.ground.user_gothic_floor.05",
+      "23,28": "mse.ground.user_gothic_floor.05",
+      "23,29": "mse.ground.user_gothic_floor.04",
+      "23,3": "mse.ground.user_gothic_floor.06",
+      "23,30": "mse.ground.user_gothic_floor.02",
+      "23,31": "mse.ground.user_gothic_floor.03",
+      "23,4": "mse.ground.user_gothic_floor.04",
+      "23,5": "mse.ground.user_gothic_floor.06",
+      "23,6": "mse.ground.user_gothic_floor.04",
+      "23,7": "mse.ground.user_gothic_floor.01",
+      "23,8": "mse.ground.user_gothic_floor.05",
+      "23,9": "mse.ground.user_gothic_floor.02",
+      "24,0": "mse.ground.user_gothic_floor.02",
+      "24,1": "mse.ground.user_gothic_floor.05",
+      "24,10": "mse.ground.user_gothic_floor.03",
+      "24,11": "mse.ground.user_gothic_floor.01",
+      "24,12": "mse.ground.user_gothic_floor.01",
+      "24,13": "mse.ground.user_gothic_floor.02",
+      "24,14": "mse.ground.user_gothic_floor.04",
+      "24,15": "mse.ground.user_gothic_floor.06",
+      "24,16": "mse.ground.user_gothic_floor.01",
+      "24,17": "mse.ground.user_gothic_floor.02",
+      "24,18": "mse.ground.user_gothic_floor.04",
+      "24,19": "mse.ground.user_gothic_floor.01",
+      "24,2": "mse.ground.user_gothic_floor.06",
+      "24,20": "mse.ground.user_gothic_floor.03",
+      "24,21": "mse.ground.user_gothic_floor.04",
+      "24,22": "mse.ground.user_gothic_floor.03",
+      "24,23": "mse.ground.user_gothic_floor.05",
+      "24,24": "mse.ground.user_gothic_floor.06",
+      "24,25": "mse.ground.user_gothic_floor.02",
+      "24,26": "mse.ground.user_gothic_floor.02",
+      "24,27": "mse.ground.user_gothic_floor.04",
+      "24,28": "mse.ground.user_gothic_floor.01",
+      "24,29": "mse.ground.user_gothic_floor.01",
+      "24,3": "mse.ground.user_gothic_floor.02",
+      "24,30": "mse.ground.user_gothic_floor.02",
+      "24,31": "mse.ground.user_gothic_floor.01",
+      "24,4": "mse.ground.user_gothic_floor.05",
+      "24,5": "mse.ground.user_gothic_floor.06",
+      "24,6": "mse.ground.user_gothic_floor.01",
+      "24,7": "mse.ground.user_gothic_floor.03",
+      "24,8": "mse.ground.user_gothic_floor.04",
+      "24,9": "mse.ground.user_gothic_floor.06",
+      "25,0": "mse.ground.user_gothic_floor.01",
+      "25,1": "mse.ground.user_gothic_floor.04",
+      "25,10": "mse.ground.user_gothic_floor.03",
+      "25,11": "mse.ground.user_gothic_floor.01",
+      "25,12": "mse.ground.user_gothic_floor.04",
+      "25,13": "mse.ground.user_gothic_floor.02",
+      "25,14": "mse.ground.user_gothic_floor.01",
+      "25,15": "mse.ground.user_gothic_floor.04",
+      "25,16": "mse.ground.user_gothic_floor.05",
+      "25,17": "mse.ground.user_gothic_floor.04",
+      "25,18": "mse.ground.user_gothic_floor.06",
+      "25,19": "mse.ground.user_gothic_floor.02",
+      "25,2": "mse.ground.user_gothic_floor.02",
+      "25,20": "mse.ground.user_gothic_floor.04",
+      "25,21": "mse.ground.user_gothic_floor.02",
+      "25,22": "mse.ground.user_gothic_floor.05",
+      "25,23": "mse.ground.user_gothic_floor.06",
+      "25,24": "mse.ground.user_gothic_floor.01",
+      "25,25": "mse.ground.user_gothic_floor.05",
+      "25,26": "mse.ground.user_gothic_floor.06",
+      "25,27": "mse.ground.user_gothic_floor.05",
+      "25,28": "mse.ground.user_gothic_floor.06",
+      "25,29": "mse.ground.user_gothic_floor.01",
+      "25,3": "mse.ground.user_gothic_floor.06",
+      "25,30": "mse.ground.user_gothic_floor.01",
+      "25,31": "mse.ground.user_gothic_floor.04",
+      "25,4": "mse.ground.user_gothic_floor.01",
+      "25,5": "mse.ground.user_gothic_floor.04",
+      "25,6": "mse.ground.user_gothic_floor.02",
+      "25,7": "mse.ground.user_gothic_floor.05",
+      "25,8": "mse.ground.user_gothic_floor.03",
+      "25,9": "mse.ground.user_gothic_floor.05",
+      "26,0": "mse.ground.user_gothic_floor.05",
+      "26,1": "mse.ground.user_gothic_floor.04",
+      "26,10": "mse.ground.user_gothic_floor.06",
+      "26,11": "mse.ground.user_gothic_floor.03",
+      "26,12": "mse.ground.user_gothic_floor.05",
+      "26,13": "mse.ground.user_gothic_floor.06",
+      "26,14": "mse.ground.user_gothic_floor.01",
+      "26,15": "mse.ground.user_gothic_floor.05",
+      "26,16": "mse.ground.user_gothic_floor.05",
+      "26,17": "mse.ground.user_gothic_floor.05",
+      "26,18": "mse.ground.user_gothic_floor.03",
+      "26,19": "mse.ground.user_gothic_floor.01",
+      "26,2": "mse.ground.user_gothic_floor.02",
+      "26,20": "mse.ground.user_gothic_floor.02",
+      "26,21": "mse.ground.user_gothic_floor.06",
+      "26,22": "mse.ground.user_gothic_floor.03",
+      "26,23": "mse.ground.user_gothic_floor.06",
+      "26,24": "mse.ground.user_gothic_floor.03",
+      "26,25": "mse.ground.user_gothic_floor.06",
+      "26,26": "mse.ground.user_gothic_floor.02",
+      "26,27": "mse.ground.user_gothic_floor.06",
+      "26,28": "mse.ground.user_gothic_floor.03",
+      "26,29": "mse.ground.user_gothic_floor.01",
+      "26,3": "mse.ground.user_gothic_floor.04",
+      "26,30": "mse.ground.user_gothic_floor.01",
+      "26,31": "mse.ground.user_gothic_floor.02",
+      "26,4": "mse.ground.user_gothic_floor.04",
+      "26,5": "mse.ground.user_gothic_floor.02",
+      "26,6": "mse.ground.user_gothic_floor.03",
+      "26,7": "mse.ground.user_gothic_floor.06",
+      "26,8": "mse.ground.user_gothic_floor.05",
+      "26,9": "mse.ground.user_gothic_floor.02",
+      "27,0": "mse.ground.user_gothic_floor.06",
+      "27,1": "mse.ground.user_gothic_floor.02",
+      "27,10": "mse.ground.user_gothic_floor.02",
+      "27,11": "mse.ground.user_gothic_floor.01",
+      "27,12": "mse.ground.user_gothic_floor.03",
+      "27,13": "mse.ground.user_gothic_floor.05",
+      "27,14": "mse.ground.user_gothic_floor.06",
+      "27,15": "mse.ground.user_gothic_floor.05",
+      "27,16": "mse.ground.user_gothic_floor.06",
+      "27,17": "mse.ground.user_gothic_floor.06",
+      "27,18": "mse.ground.user_gothic_floor.04",
+      "27,19": "mse.ground.user_gothic_floor.05",
+      "27,2": "mse.ground.user_gothic_floor.04",
+      "27,20": "mse.ground.user_gothic_floor.06",
+      "27,21": "mse.ground.user_gothic_floor.03",
+      "27,22": "mse.ground.user_gothic_floor.01",
+      "27,23": "mse.ground.user_gothic_floor.02",
+      "27,24": "mse.ground.user_gothic_floor.05",
+      "27,25": "mse.ground.user_gothic_floor.03",
+      "27,26": "mse.ground.user_gothic_floor.01",
+      "27,27": "mse.ground.user_gothic_floor.02",
+      "27,28": "mse.ground.user_gothic_floor.01",
+      "27,29": "mse.ground.user_gothic_floor.04",
+      "27,3": "mse.ground.user_gothic_floor.05",
+      "27,30": "mse.ground.user_gothic_floor.01",
+      "27,31": "mse.ground.user_gothic_floor.03",
+      "27,4": "mse.ground.user_gothic_floor.02",
+      "27,5": "mse.ground.user_gothic_floor.02",
+      "27,6": "mse.ground.user_gothic_floor.01",
+      "27,7": "mse.ground.user_gothic_floor.01",
+      "27,8": "mse.ground.user_gothic_floor.02",
+      "27,9": "mse.ground.user_gothic_floor.01",
+      "28,0": "mse.ground.user_gothic_floor.01",
+      "28,1": "mse.ground.user_gothic_floor.06",
+      "28,10": "mse.ground.user_gothic_floor.03",
+      "28,11": "mse.ground.user_gothic_floor.03",
+      "28,12": "mse.ground.user_gothic_floor.06",
+      "28,13": "mse.ground.user_gothic_floor.04",
+      "28,14": "mse.ground.user_gothic_floor.01",
+      "28,15": "mse.ground.user_gothic_floor.01",
+      "28,16": "mse.ground.user_gothic_floor.06",
+      "28,17": "mse.ground.user_gothic_floor.04",
+      "28,18": "mse.ground.user_gothic_floor.04",
+      "28,19": "mse.ground.user_gothic_floor.03",
+      "28,2": "mse.ground.user_gothic_floor.02",
+      "28,20": "mse.ground.user_gothic_floor.01",
+      "28,21": "mse.ground.user_gothic_floor.04",
+      "28,22": "mse.ground.user_gothic_floor.04",
+      "28,23": "mse.ground.user_gothic_floor.05",
+      "28,24": "mse.ground.user_gothic_floor.04",
+      "28,25": "mse.ground.user_gothic_floor.06",
+      "28,26": "mse.ground.user_gothic_floor.03",
+      "28,27": "mse.ground.user_gothic_floor.01",
+      "28,28": "mse.ground.user_gothic_floor.03",
+      "28,29": "mse.ground.user_gothic_floor.06",
+      "28,3": "mse.ground.user_gothic_floor.06",
+      "28,30": "mse.ground.user_gothic_floor.02",
+      "28,31": "mse.ground.user_gothic_floor.01",
+      "28,4": "mse.ground.user_gothic_floor.04",
+      "28,5": "mse.ground.user_gothic_floor.05",
+      "28,6": "mse.ground.user_gothic_floor.04",
+      "28,7": "mse.ground.user_gothic_floor.01",
+      "28,8": "mse.ground.user_gothic_floor.05",
+      "28,9": "mse.ground.user_gothic_floor.04",
+      "29,0": "mse.ground.user_gothic_floor.04",
+      "29,1": "mse.ground.user_gothic_floor.02",
+      "29,10": "mse.ground.user_gothic_floor.03",
+      "29,11": "mse.ground.user_gothic_floor.05",
+      "29,12": "mse.ground.user_gothic_floor.05",
+      "29,13": "mse.ground.user_gothic_floor.02",
+      "29,14": "mse.ground.user_gothic_floor.05",
+      "29,15": "mse.ground.user_gothic_floor.02",
+      "29,16": "mse.ground.user_gothic_floor.06",
+      "29,17": "mse.ground.user_gothic_floor.01",
+      "29,18": "mse.ground.user_gothic_floor.03",
+      "29,19": "mse.ground.user_gothic_floor.01",
+      "29,2": "mse.ground.user_gothic_floor.01",
+      "29,20": "mse.ground.user_gothic_floor.03",
+      "29,21": "mse.ground.user_gothic_floor.03",
+      "29,22": "mse.ground.user_gothic_floor.04",
+      "29,23": "mse.ground.user_gothic_floor.06",
+      "29,24": "mse.ground.user_gothic_floor.01",
+      "29,25": "mse.ground.user_gothic_floor.05",
+      "29,26": "mse.ground.user_gothic_floor.04",
+      "29,27": "mse.ground.user_gothic_floor.05",
+      "29,28": "mse.ground.user_gothic_floor.06",
+      "29,29": "mse.ground.user_gothic_floor.06",
+      "29,3": "mse.ground.user_gothic_floor.03",
+      "29,30": "mse.ground.user_gothic_floor.02",
+      "29,31": "mse.ground.user_gothic_floor.03",
+      "29,4": "mse.ground.user_gothic_floor.01",
+      "29,5": "mse.ground.user_gothic_floor.02",
+      "29,6": "mse.ground.user_gothic_floor.05",
+      "29,7": "mse.ground.user_gothic_floor.03",
+      "29,8": "mse.ground.user_gothic_floor.06",
+      "29,9": "mse.ground.user_gothic_floor.05",
+      "3,0": "mse.ground.user_gothic_floor.03",
+      "3,1": "mse.ground.user_gothic_floor.02",
+      "3,10": "mse.ground.user_gothic_floor.01",
+      "3,11": "mse.ground.user_gothic_floor.05",
+      "3,12": "mse.ground.user_gothic_floor.03",
+      "3,13": "mse.ground.user_gothic_floor.05",
+      "3,14": "mse.ground.user_gothic_floor.01",
+      "3,15": "mse.ground.user_gothic_floor.05",
+      "3,16": "mse.ground.user_gothic_floor.01",
+      "3,17": "mse.ground.user_gothic_floor.01",
+      "3,18": "mse.ground.user_gothic_floor.02",
+      "3,19": "mse.ground.user_gothic_floor.05",
+      "3,2": "mse.ground.user_gothic_floor.04",
+      "3,20": "mse.ground.user_gothic_floor.02",
+      "3,21": "mse.ground.user_gothic_floor.06",
+      "3,22": "mse.ground.user_gothic_floor.04",
+      "3,23": "mse.ground.user_gothic_floor.02",
+      "3,24": "mse.ground.user_gothic_floor.05",
+      "3,25": "mse.ground.user_gothic_floor.03",
+      "3,26": "mse.ground.user_gothic_floor.02",
+      "3,27": "mse.ground.user_gothic_floor.01",
+      "3,28": "mse.ground.user_gothic_floor.04",
+      "3,29": "mse.ground.user_gothic_floor.05",
+      "3,3": "mse.ground.user_gothic_floor.02",
+      "3,30": "mse.ground.user_gothic_floor.06",
+      "3,31": "mse.ground.user_gothic_floor.01",
+      "3,4": "mse.ground.user_gothic_floor.01",
+      "3,5": "mse.ground.user_gothic_floor.05",
+      "3,6": "mse.ground.user_gothic_floor.06",
+      "3,7": "mse.ground.user_gothic_floor.01",
+      "3,8": "mse.ground.user_gothic_floor.02",
+      "3,9": "mse.ground.user_gothic_floor.03",
+      "30,0": "mse.ground.user_gothic_floor.02",
+      "30,1": "mse.ground.user_gothic_floor.04",
+      "30,10": "mse.ground.user_gothic_floor.01",
+      "30,11": "mse.ground.user_gothic_floor.02",
+      "30,12": "mse.ground.user_gothic_floor.05",
+      "30,13": "mse.ground.user_gothic_floor.03",
+      "30,14": "mse.ground.user_gothic_floor.05",
+      "30,15": "mse.ground.user_gothic_floor.03",
+      "30,16": "mse.ground.user_gothic_floor.06",
+      "30,17": "mse.ground.user_gothic_floor.04",
+      "30,18": "mse.ground.user_gothic_floor.06",
+      "30,19": "mse.ground.user_gothic_floor.05",
+      "30,2": "mse.ground.user_gothic_floor.05",
+      "30,20": "mse.ground.user_gothic_floor.05",
+      "30,21": "mse.ground.user_gothic_floor.06",
+      "30,22": "mse.ground.user_gothic_floor.05",
+      "30,23": "mse.ground.user_gothic_floor.01",
+      "30,24": "mse.ground.user_gothic_floor.03",
+      "30,25": "mse.ground.user_gothic_floor.01",
+      "30,26": "mse.ground.user_gothic_floor.02",
+      "30,27": "mse.ground.user_gothic_floor.06",
+      "30,28": "mse.ground.user_gothic_floor.01",
+      "30,29": "mse.ground.user_gothic_floor.03",
+      "30,3": "mse.ground.user_gothic_floor.06",
+      "30,30": "mse.ground.user_gothic_floor.05",
+      "30,31": "mse.ground.user_gothic_floor.01",
+      "30,4": "mse.ground.user_gothic_floor.06",
+      "30,5": "mse.ground.user_gothic_floor.04",
+      "30,6": "mse.ground.user_gothic_floor.03",
+      "30,7": "mse.ground.user_gothic_floor.05",
+      "30,8": "mse.ground.user_gothic_floor.01",
+      "30,9": "mse.ground.user_gothic_floor.01",
+      "31,0": "mse.ground.user_gothic_floor.04",
+      "31,1": "mse.ground.user_gothic_floor.05",
+      "31,10": "mse.ground.user_gothic_floor.03",
+      "31,11": "mse.ground.user_gothic_floor.02",
+      "31,12": "mse.ground.user_gothic_floor.01",
+      "31,13": "mse.ground.user_gothic_floor.02",
+      "31,14": "mse.ground.user_gothic_floor.05",
+      "31,15": "mse.ground.user_gothic_floor.05",
+      "31,16": "mse.ground.user_gothic_floor.01",
+      "31,17": "mse.ground.user_gothic_floor.02",
+      "31,18": "mse.ground.user_gothic_floor.05",
+      "31,19": "mse.ground.user_gothic_floor.01",
+      "31,2": "mse.ground.user_gothic_floor.05",
+      "31,20": "mse.ground.user_gothic_floor.06",
+      "31,21": "mse.ground.user_gothic_floor.01",
+      "31,22": "mse.ground.user_gothic_floor.02",
+      "31,23": "mse.ground.user_gothic_floor.04",
+      "31,24": "mse.ground.user_gothic_floor.05",
+      "31,25": "mse.ground.user_gothic_floor.03",
+      "31,26": "mse.ground.user_gothic_floor.06",
+      "31,27": "mse.ground.user_gothic_floor.06",
+      "31,28": "mse.ground.user_gothic_floor.06",
+      "31,29": "mse.ground.user_gothic_floor.05",
+      "31,3": "mse.ground.user_gothic_floor.04",
+      "31,30": "mse.ground.user_gothic_floor.04",
+      "31,4": "mse.ground.user_gothic_floor.06",
+      "31,5": "mse.ground.user_gothic_floor.02",
+      "31,6": "mse.ground.user_gothic_floor.03",
+      "31,7": "mse.ground.user_gothic_floor.03",
+      "31,8": "mse.ground.user_gothic_floor.03",
+      "31,9": "mse.ground.user_gothic_floor.04",
+      "4,0": "mse.ground.user_gothic_floor.05",
+      "4,1": "mse.ground.user_gothic_floor.01",
+      "4,10": "mse.ground.user_gothic_floor.03",
+      "4,11": "mse.ground.user_gothic_floor.03",
+      "4,12": "mse.ground.user_gothic_floor.02",
+      "4,13": "mse.ground.user_gothic_floor.02",
+      "4,14": "mse.ground.user_gothic_floor.02",
+      "4,15": "mse.ground.user_gothic_floor.01",
+      "4,16": "mse.ground.user_gothic_floor.03",
+      "4,17": "mse.ground.user_gothic_floor.04",
+      "4,18": "mse.ground.user_gothic_floor.04",
+      "4,19": "mse.ground.user_gothic_floor.02",
+      "4,2": "mse.ground.user_gothic_floor.02",
+      "4,20": "mse.ground.user_gothic_floor.01",
+      "4,21": "mse.ground.user_gothic_floor.06",
+      "4,22": "mse.ground.user_gothic_floor.04",
+      "4,23": "mse.ground.user_gothic_floor.03",
+      "4,24": "mse.ground.user_gothic_floor.06",
+      "4,25": "mse.ground.user_gothic_floor.04",
+      "4,26": "mse.ground.user_gothic_floor.02",
+      "4,27": "mse.ground.user_gothic_floor.01",
+      "4,28": "mse.ground.user_gothic_floor.01",
+      "4,29": "mse.ground.user_gothic_floor.03",
+      "4,3": "mse.ground.user_gothic_floor.04",
+      "4,30": "mse.ground.user_gothic_floor.02",
+      "4,31": "mse.ground.user_gothic_floor.05",
+      "4,4": "mse.ground.user_gothic_floor.03",
+      "4,5": "mse.ground.user_gothic_floor.01",
+      "4,6": "mse.ground.user_gothic_floor.04",
+      "4,7": "mse.ground.user_gothic_floor.02",
+      "4,8": "mse.ground.user_gothic_floor.06",
+      "4,9": "mse.ground.user_gothic_floor.04",
+      "5,0": "mse.ground.user_gothic_floor.02",
+      "5,1": "mse.ground.user_gothic_floor.04",
+      "5,10": "mse.ground.user_gothic_floor.04",
+      "5,11": "mse.ground.user_gothic_floor.03",
+      "5,12": "mse.ground.user_gothic_floor.02",
+      "5,13": "mse.ground.user_gothic_floor.05",
+      "5,14": "mse.ground.user_gothic_floor.02",
+      "5,15": "mse.ground.user_gothic_floor.04",
+      "5,16": "mse.ground.user_gothic_floor.01",
+      "5,17": "mse.ground.user_gothic_floor.03",
+      "5,18": "mse.ground.user_gothic_floor.04",
+      "5,19": "mse.ground.user_gothic_floor.01",
+      "5,2": "mse.ground.user_gothic_floor.01",
+      "5,20": "mse.ground.user_gothic_floor.04",
+      "5,21": "mse.ground.user_gothic_floor.02",
+      "5,22": "mse.ground.user_gothic_floor.02",
+      "5,23": "mse.ground.user_gothic_floor.01",
+      "5,24": "mse.ground.user_gothic_floor.04",
+      "5,25": "mse.ground.user_gothic_floor.02",
+      "5,26": "mse.ground.user_gothic_floor.02",
+      "5,27": "mse.ground.user_gothic_floor.04",
+      "5,28": "mse.ground.user_gothic_floor.03",
+      "5,29": "mse.ground.user_gothic_floor.05",
+      "5,3": "mse.ground.user_gothic_floor.05",
+      "5,30": "mse.ground.user_gothic_floor.05",
+      "5,31": "mse.ground.user_gothic_floor.02",
+      "5,4": "mse.ground.user_gothic_floor.05",
+      "5,5": "mse.ground.user_gothic_floor.04",
+      "5,6": "mse.ground.user_gothic_floor.04",
+      "5,7": "mse.ground.user_gothic_floor.05",
+      "5,8": "mse.ground.user_gothic_floor.03",
+      "5,9": "mse.ground.user_gothic_floor.01",
+      "6,0": "mse.ground.user_gothic_floor.06",
+      "6,1": "mse.ground.user_gothic_floor.02",
+      "6,10": "mse.ground.user_gothic_floor.04",
+      "6,11": "mse.ground.user_gothic_floor.03",
+      "6,12": "mse.ground.user_gothic_floor.04",
+      "6,13": "mse.ground.user_gothic_floor.01",
+      "6,14": "mse.ground.user_gothic_floor.02",
+      "6,15": "mse.ground.user_gothic_floor.02",
+      "6,16": "mse.ground.user_gothic_floor.02",
+      "6,17": "mse.ground.user_gothic_floor.04",
+      "6,18": "mse.ground.user_gothic_floor.06",
+      "6,19": "mse.ground.user_gothic_floor.05",
+      "6,2": "mse.ground.user_gothic_floor.03",
+      "6,20": "mse.ground.user_gothic_floor.06",
+      "6,21": "mse.ground.user_gothic_floor.01",
+      "6,22": "mse.ground.user_gothic_floor.03",
+      "6,23": "mse.ground.user_gothic_floor.05",
+      "6,24": "mse.ground.user_gothic_floor.01",
+      "6,25": "mse.ground.user_gothic_floor.04",
+      "6,26": "mse.ground.user_gothic_floor.04",
+      "6,27": "mse.ground.user_gothic_floor.04",
+      "6,28": "mse.ground.user_gothic_floor.02",
+      "6,29": "mse.ground.user_gothic_floor.05",
+      "6,3": "mse.ground.user_gothic_floor.05",
+      "6,30": "mse.ground.user_gothic_floor.04",
+      "6,31": "mse.ground.user_gothic_floor.02",
+      "6,4": "mse.ground.user_gothic_floor.02",
+      "6,5": "mse.ground.user_gothic_floor.06",
+      "6,6": "mse.ground.user_gothic_floor.05",
+      "6,7": "mse.ground.user_gothic_floor.01",
+      "6,8": "mse.ground.user_gothic_floor.06",
+      "6,9": "mse.ground.user_gothic_floor.05",
+      "7,0": "mse.ground.user_gothic_floor.05",
+      "7,1": "mse.ground.user_gothic_floor.02",
+      "7,10": "mse.ground.user_gothic_floor.05",
+      "7,11": "mse.ground.user_gothic_floor.03",
+      "7,12": "mse.ground.user_gothic_floor.05",
+      "7,13": "mse.ground.user_gothic_floor.04",
+      "7,14": "mse.ground.user_gothic_floor.02",
+      "7,15": "mse.ground.user_gothic_floor.01",
+      "7,16": "mse.ground.user_gothic_floor.03",
+      "7,17": "mse.ground.user_gothic_floor.03",
+      "7,18": "mse.ground.user_gothic_floor.02",
+      "7,19": "mse.ground.user_gothic_floor.04",
+      "7,2": "mse.ground.user_gothic_floor.06",
+      "7,20": "mse.ground.user_gothic_floor.06",
+      "7,21": "mse.ground.user_gothic_floor.01",
+      "7,22": "mse.ground.user_gothic_floor.02",
+      "7,23": "mse.ground.user_gothic_floor.03",
+      "7,24": "mse.ground.user_gothic_floor.01",
+      "7,25": "mse.ground.user_gothic_floor.04",
+      "7,26": "mse.ground.user_gothic_floor.03",
+      "7,27": "mse.ground.user_gothic_floor.01",
+      "7,28": "mse.ground.user_gothic_floor.02",
+      "7,29": "mse.ground.user_gothic_floor.02",
+      "7,3": "mse.ground.user_gothic_floor.06",
+      "7,30": "mse.ground.user_gothic_floor.02",
+      "7,31": "mse.ground.user_gothic_floor.06",
+      "7,4": "mse.ground.user_gothic_floor.02",
+      "7,5": "mse.ground.user_gothic_floor.02",
+      "7,6": "mse.ground.user_gothic_floor.02",
+      "7,7": "mse.ground.user_gothic_floor.03",
+      "7,8": "mse.ground.user_gothic_floor.01",
+      "7,9": "mse.ground.user_gothic_floor.04",
+      "8,0": "mse.ground.user_gothic_floor.05",
+      "8,1": "mse.ground.user_gothic_floor.04",
+      "8,10": "mse.ground.user_gothic_floor.02",
+      "8,11": "mse.ground.user_gothic_floor.03",
+      "8,12": "mse.ground.user_gothic_floor.05",
+      "8,13": "mse.ground.user_gothic_floor.01",
+      "8,14": "mse.ground.user_gothic_floor.04",
+      "8,15": "mse.ground.user_gothic_floor.04",
+      "8,16": "mse.ground.user_gothic_floor.01",
+      "8,17": "mse.ground.user_gothic_floor.02",
+      "8,18": "mse.ground.user_gothic_floor.03",
+      "8,19": "mse.ground.user_gothic_floor.04",
+      "8,2": "mse.ground.user_gothic_floor.01",
+      "8,20": "mse.ground.user_gothic_floor.04",
+      "8,21": "mse.ground.user_gothic_floor.02",
+      "8,22": "mse.ground.user_gothic_floor.05",
+      "8,23": "mse.ground.user_gothic_floor.01",
+      "8,24": "mse.ground.user_gothic_floor.03",
+      "8,25": "mse.ground.user_gothic_floor.03",
+      "8,26": "mse.ground.user_gothic_floor.04",
+      "8,27": "mse.ground.user_gothic_floor.03",
+      "8,28": "mse.ground.user_gothic_floor.02",
+      "8,29": "mse.ground.user_gothic_floor.05",
+      "8,3": "mse.ground.user_gothic_floor.02",
+      "8,30": "mse.ground.user_gothic_floor.03",
+      "8,31": "mse.ground.user_gothic_floor.06",
+      "8,4": "mse.ground.user_gothic_floor.04",
+      "8,5": "mse.ground.user_gothic_floor.01",
+      "8,6": "mse.ground.user_gothic_floor.02",
+      "8,7": "mse.ground.user_gothic_floor.02",
+      "8,8": "mse.ground.user_gothic_floor.04",
+      "8,9": "mse.ground.user_gothic_floor.01",
+      "9,0": "mse.ground.user_gothic_floor.04",
+      "9,1": "mse.ground.user_gothic_floor.03",
+      "9,10": "mse.ground.user_gothic_floor.04",
+      "9,11": "mse.ground.user_gothic_floor.05",
+      "9,12": "mse.ground.user_gothic_floor.05",
+      "9,13": "mse.ground.user_gothic_floor.03",
+      "9,14": "mse.ground.user_gothic_floor.04",
+      "9,15": "mse.ground.user_gothic_floor.01",
+      "9,16": "mse.ground.user_gothic_floor.04",
+      "9,17": "mse.ground.user_gothic_floor.02",
+      "9,18": "mse.ground.user_gothic_floor.02",
+      "9,19": "mse.ground.user_gothic_floor.04",
+      "9,2": "mse.ground.user_gothic_floor.05",
+      "9,20": "mse.ground.user_gothic_floor.03",
+      "9,21": "mse.ground.user_gothic_floor.03",
+      "9,22": "mse.ground.user_gothic_floor.05",
+      "9,23": "mse.ground.user_gothic_floor.01",
+      "9,24": "mse.ground.user_gothic_floor.04",
+      "9,25": "mse.ground.user_gothic_floor.06",
+      "9,26": "mse.ground.user_gothic_floor.03",
+      "9,27": "mse.ground.user_gothic_floor.01",
+      "9,28": "mse.ground.user_gothic_floor.04",
+      "9,29": "mse.ground.user_gothic_floor.01",
+      "9,3": "mse.ground.user_gothic_floor.03",
+      "9,30": "mse.ground.user_gothic_floor.06",
+      "9,31": "mse.ground.user_gothic_floor.04",
+      "9,4": "mse.ground.user_gothic_floor.01",
+      "9,5": "mse.ground.user_gothic_floor.01",
+      "9,6": "mse.ground.user_gothic_floor.03",
+      "9,7": "mse.ground.user_gothic_floor.02",
+      "9,8": "mse.ground.user_gothic_floor.01",
+      "9,9": "mse.ground.user_gothic_floor.05"
+    }
+  },
+  "instances": [
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        181.0,
+        250.0
+      ],
+      "asset_id": "user.ea1b12b1c0e8c494",
+      "base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000034",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 1.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        181.0,
+        250.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        13.0,
+        1.0
+      ],
+      "tile_anchor": [
+        13.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        139.0,
+        329.0
+      ],
+      "asset_id": "user.2a497c7587545a48",
+      "base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000035",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        139.0,
+        329.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        13.0,
+        28.0
+      ],
+      "tile_anchor": [
+        13.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        137.0,
+        354.0
+      ],
+      "asset_id": "user.6b2dffcfdd0d208d",
+      "base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000036",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        137.0,
+        354.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        14.0
+      ],
+      "tile_anchor": [
+        1.0,
+        14.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        133.0,
+        353.0
+      ],
+      "asset_id": "user.d08a9a87bd323625",
+      "base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        4.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000037",
+      "instance_scale_level": -6.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        2.0,
+        2.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        133.0,
+        353.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.40000000000000013,
+        0.40000000000000013
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        28.0,
+        14.0
+      ],
+      "tile_anchor": [
+        28.0,
+        14.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        142.0,
+        525.0
+      ],
+      "asset_id": "user.9fb549fe32e9fe80",
+      "base_footprint_tiles": [
+        5.0,
+        5.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        5.0,
+        5.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000038",
+      "instance_scale_level": -8.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        142.0,
+        525.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.20000000000000015,
+        0.20000000000000015
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        1.0
+      ],
+      "tile_anchor": [
+        1.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "tile_center",
+      "anchor_px": [
+        96.0,
+        48.0
+      ],
+      "asset_id": "mse.ground_graffiti.3x3.03",
+      "base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000039",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        96.0,
+        48.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        23.0,
+        23.0
+      ],
+      "tile_anchor": [
+        23.0,
+        23.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000017",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_00",
+      "tile": [
+        0.0,
+        1.0
+      ],
+      "tile_anchor": [
+        0.0,
+        1.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000001",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_00",
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000018",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_01",
+      "tile": [
+        0.0,
+        4.0
+      ],
+      "tile_anchor": [
+        0.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000002",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_01",
+      "tile": [
+        4.0,
+        0.0
+      ],
+      "tile_anchor": [
+        4.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000019",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_02",
+      "tile": [
+        0.0,
+        8.0
+      ],
+      "tile_anchor": [
+        0.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000003",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_02",
+      "tile": [
+        8.0,
+        0.0
+      ],
+      "tile_anchor": [
+        8.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000020",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_03",
+      "tile": [
+        0.0,
+        12.0
+      ],
+      "tile_anchor": [
+        0.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000004",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_03",
+      "tile": [
+        12.0,
+        0.0
+      ],
+      "tile_anchor": [
+        12.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000021",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_04",
+      "tile": [
+        0.0,
+        16.0
+      ],
+      "tile_anchor": [
+        0.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000005",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_04",
+      "tile": [
+        16.0,
+        0.0
+      ],
+      "tile_anchor": [
+        16.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000022",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_05",
+      "tile": [
+        0.0,
+        20.0
+      ],
+      "tile_anchor": [
+        0.0,
+        20.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000006",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_05",
+      "tile": [
+        20.0,
+        0.0
+      ],
+      "tile_anchor": [
+        20.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000023",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_06",
+      "tile": [
+        0.0,
+        24.0
+      ],
+      "tile_anchor": [
+        0.0,
+        24.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000007",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_06",
+      "tile": [
+        24.0,
+        0.0
+      ],
+      "tile_anchor": [
+        24.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000024",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_x_07",
+      "tile": [
+        0.0,
+        27.0
+      ],
+      "tile_anchor": [
+        0.0,
+        27.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000008",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_min_y_07",
+      "tile": [
+        28.0,
+        0.0
+      ],
+      "tile_anchor": [
+        28.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000009",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_00",
+      "tile": [
+        0.0,
+        31.0
+      ],
+      "tile_anchor": [
+        0.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000025",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_00",
+      "tile": [
+        31.0,
+        0.0
+      ],
+      "tile_anchor": [
+        31.0,
+        0.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000010",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_01",
+      "tile": [
+        4.0,
+        31.0
+      ],
+      "tile_anchor": [
+        4.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000026",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_01",
+      "tile": [
+        31.0,
+        4.0
+      ],
+      "tile_anchor": [
+        31.0,
+        4.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000011",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_02",
+      "tile": [
+        8.0,
+        31.0
+      ],
+      "tile_anchor": [
+        8.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000027",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_02",
+      "tile": [
+        31.0,
+        8.0
+      ],
+      "tile_anchor": [
+        31.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000012",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_03",
+      "tile": [
+        12.0,
+        31.0
+      ],
+      "tile_anchor": [
+        12.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000028",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_03",
+      "tile": [
+        31.0,
+        12.0
+      ],
+      "tile_anchor": [
+        31.0,
+        12.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000013",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_04",
+      "tile": [
+        16.0,
+        31.0
+      ],
+      "tile_anchor": [
+        16.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000029",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_04",
+      "tile": [
+        31.0,
+        16.0
+      ],
+      "tile_anchor": [
+        31.0,
+        16.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v03",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000014",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_05",
+      "tile": [
+        20.0,
+        31.0
+      ],
+      "tile_anchor": [
+        20.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v03",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000030",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_05",
+      "tile": [
+        31.0,
+        20.0
+      ],
+      "tile_anchor": [
+        31.0,
+        20.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000015",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_06",
+      "tile": [
+        24.0,
+        31.0
+      ],
+      "tile_anchor": [
+        24.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000031",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_06",
+      "tile": [
+        31.0,
+        24.0
+      ],
+      "tile_anchor": [
+        31.0,
+        24.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000016",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_y_07",
+      "tile": [
+        28.0,
+        31.0
+      ],
+      "tile_anchor": [
+        28.0,
+        31.0
+      ],
+      "visual_footprint_tiles": [
+        4.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        184.0
+      ],
+      "asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "generated_by": "MapEditorWallLoopService",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000032",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        184.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "dungeon_wall_visual_structure",
+      "selectable": true,
+      "selection_locked": false,
+      "structure_id": "hidden_pincer_nest.closed_loop.0_0_32_32",
+      "structure_role": "edge_max_x_07",
+      "tile": [
+        31.0,
+        28.0
+      ],
+      "tile_anchor": [
+        31.0,
+        28.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        4.0
+      ]
+    }
+  ],
+  "projection_contract_id": "world.ground_projection.iso_64x32.v1",
+  "runtime_schema_version": 2.0,
+  "semantics": {
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "hidden_pincer_nest",
+          "source_category_role": "boss",
+          "source_line": 258.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暗之沃玛教主",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 239.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            823.0,
+            -1.0,
+            -2.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.hidden_pincer_nest.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.hidden_pincer_nest.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          13.0
+        ]
+      }
+    ],
+    "door_points": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_only": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "arrival_only",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "由白日门进去，单向只可进入",
+        "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
+        "kind": "map_exit",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "arrival_only_endpoint",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
+        "tile": [
+          24.0,
+          24.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": false
+      }
+    ],
+    "monster_spawn": [],
+    "npc_points": [],
+    "region_trigger": [],
+    "respawn_points": [],
+    "safe_area": []
+  },
+  "source": {
+    "candidate_binding": {
+      "authoring_sha256": "dfe46101d461e3f3b3c0609934d42248fc42956e8ae31ada1eaa6e2f843fe2ac",
+      "contract_id": "mse.map.runtime.candidate_binding.v1",
+      "document_revision": 2.0,
+      "document_sha256": "a8d47361c67347b88c0a4f03230ea9e85069bae196fa374adc73ee64740130b5",
+      "ground_manifest_sha256": "fff57b600552ff3aa2494fef346a2f54e896a8d9dcceb9f142e6d63eb2285799",
+      "ground_state_sha256": "7148b001840a21d7282e0c12970984e880775d9e9cc990f74958bc12abb47a95",
+      "map_key": "hidden_pincer_nest",
+      "runtime_map_id": 918006.0
+    },
+    "content_layer": "personal_expansion",
+    "display_name": "钳虫巢穴",
+    "editor_schema_version": 5.0,
+    "map_id": "hidden_pincer_nest",
+    "revision": 2.0,
+    "runtime_map_id": 918006.0
+  },
+  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+}
