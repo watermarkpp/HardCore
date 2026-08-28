@@ -264,15 +264,15 @@ func _test_loot_contract() -> void:
 
 
 func _test_overflow_telemetry_death_entry() -> void:
-	# Exercise the real GameRoot death callback with a disabled-drop monster:
+	# Exercise the real GameRoot death callback with an explicit NON_LOOT monster:
 	# no overflow means no telemetry aggregate and no diagnostic event.
 	LootRuntime.clear_overflow_telemetry()
 	var game := GameRootScript.new()
 	var enemy := EnemyActor.new()
 	enemy.global_position = Vector2.ZERO
 	enemy.set_meta("respawn_enabled", false)
-	var monster_data := GameData.get_monster_by_id(226).duplicate(true)
-	assert(int(monster_data.get("monster_id", -1)) == 226)
+	var monster_data := GameData.get_monster_by_id(145).duplicate(true)
+	assert(int(monster_data.get("monster_id", -1)) == 145)
 	game._on_enemy_died(enemy, monster_data)
 	assert(
 		LootRuntime.overflow_telemetry_snapshot().is_empty(),

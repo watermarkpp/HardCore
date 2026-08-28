@@ -39,6 +39,35 @@ const DPV2_DIRECT_BASELINE_PATH := (
 const DPV2_DIRECT_ITEM_MAPPING_PATH := (
 	"res://assets/data/drop/dpv2_21cq_item_mapping_v1.json"
 )
+const DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json"
+)
+
+# These are the user-frozen semantic decisions.  The formal semantic
+# authority remains the data source, while these exact IDs/counts prevent a
+# stale or substituted authority from silently changing the production set.
+const DPV2_DIRECT_FROZEN_SOURCE_COUNTS := {
+	79: 59, 81: 60, 83: 59, 85: 59, 87: 59,
+	226: 1, 227: 36, 228: 51, 229: 36, 230: 64,
+	231: 57, 232: 95, 233: 96, 234: 82,
+}
+const DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS := {
+	59: 0, 78: 0, 145: 74, 146: 78, 147: 71,
+	161: 0, 186: 0, 187: 0, 194: 0,
+}
+const DPV2_RUNTIME_DISABLED_IDS := {33: true, 183: true, 241: true}
+const DPV2_PROJECT_EXTENSION_ID := 225
+const DPV2_EXPLICIT_NON_LOOT_REASON_CODES := {
+	59: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+	78: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+	145: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+	146: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+	147: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+	161: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+	186: "TAMEABLE_CURRENT_EXEMPTION",
+	187: "TAMEABLE_CURRENT_EXEMPTION",
+	194: "GUARD_SCRIPT_CURRENT_EXEMPTION",
+}
 
 const ITEM_ALIASES := {
 	"布衣": "布衣(男)",
@@ -85,6 +114,7 @@ var item_runtime_authority: Dictionary = {}
 var dpv2_global_drop_rate_authority: Dictionary = {}
 var dpv2_direct_baseline_manifest: Dictionary = {}
 var dpv2_direct_baseline: Dictionary = {}
+var dpv2_monster_drop_semantic_authority: Dictionary = {}
 var dpv2_direct_baseline_loaded := false
 var maps: Array = []
 var monsters: Array = []
@@ -115,6 +145,7 @@ var _bich_quests_by_id: Dictionary = {}
 var _dpv2_global_scale_by_preset: Dictionary = {}
 var _dpv2_direct_profile_by_id: Dictionary = {}
 var _dpv2_direct_slot_by_uid: Dictionary = {}
+var _dpv2_semantic_by_id: Dictionary = {}
 var _dpv2_direct_item_by_id: Dictionary = {}
 var _dpv2_direct_item_by_source_label: Dictionary = {}
 var _dpv2_direct_item_by_name: Dictionary = {}
@@ -352,9 +383,11 @@ func _load_dpv2_direct_baseline() -> bool:
 	dpv2_direct_baseline_manifest = {}
 	dpv2_direct_baseline = {}
 	dpv2_global_drop_rate_authority = {}
+	dpv2_monster_drop_semantic_authority = {}
 	dpv2_direct_baseline_loaded = false
 	_dpv2_direct_profile_by_id.clear()
 	_dpv2_direct_slot_by_uid.clear()
+	_dpv2_semantic_by_id.clear()
 	_dpv2_direct_item_by_id.clear()
 	_dpv2_direct_item_by_source_label.clear()
 	_dpv2_direct_item_by_name.clear()
@@ -364,6 +397,7 @@ func _load_dpv2_direct_baseline() -> bool:
 		DPV2_DIRECT_BASELINE_PATH,
 		DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
 		DPV2_DIRECT_ITEM_MAPPING_PATH,
+		DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH,
 	]:
 		if not FileAccess.file_exists(path):
 			load_error = "dpv2_direct_authority_missing:%s" % path
@@ -381,11 +415,15 @@ func _load_dpv2_direct_baseline() -> bool:
 	var item_mapping_value: Variant = JSON.parse_string(
 		FileAccess.get_file_as_string(DPV2_DIRECT_ITEM_MAPPING_PATH)
 	)
+	var semantic_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH)
+	)
 	if (
 		not manifest_value is Dictionary
 		or not baseline_value is Dictionary
 		or not global_value is Dictionary
 		or not item_mapping_value is Dictionary
+		or not semantic_value is Dictionary
 	):
 		load_error = "dpv2_direct_authority_invalid_json"
 		return false
@@ -394,6 +432,7 @@ func _load_dpv2_direct_baseline() -> bool:
 	var baseline: Dictionary = baseline_value
 	var global_authority: Dictionary = global_value
 	var item_mapping: Dictionary = item_mapping_value
+	var semantic_authority: Dictionary = semantic_value
 	if (
 		str(manifest.get("schema", ""))
 			!= "hardcore.dpv2.direct_baseline_manifest.v2"
@@ -424,6 +463,8 @@ func _load_dpv2_direct_baseline() -> bool:
 	if str(global_authority.get("schema", "")) != "hardcore.dpv2.global_drop_rate_authority.v1":
 		load_error = "dpv2_direct_global_authority_contract_invalid"
 		return false
+	if not _validate_dpv2_semantic_authority(semantic_authority):
+		return false
 
 	var artifacts_value: Variant = manifest.get("artifacts", null)
 	if not artifacts_value is Dictionary:
@@ -434,6 +475,7 @@ func _load_dpv2_direct_baseline() -> bool:
 		"direct_baseline_authority": DPV2_DIRECT_BASELINE_PATH,
 		"global_drop_rate_authority": DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
 		"item_mapping": DPV2_DIRECT_ITEM_MAPPING_PATH,
+		"semantic_authority": DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH,
 	}
 	for raw_key: Variant in required_artifacts.keys():
 		var key := str(raw_key)
@@ -602,9 +644,12 @@ func _load_dpv2_direct_baseline() -> bool:
 	var summary: Dictionary = summary_value
 	if (
 		_dpv2_json_integer(summary.get("active_monsters", null)) != 156
-		or _dpv2_json_integer(summary.get("drop_enabled_monsters", null)) != 131
-		or _dpv2_json_integer(summary.get("non_loot_monsters", null)) != 25
-		or _dpv2_json_integer(summary.get("compiled_slots", null)) != 5995
+		or _dpv2_json_integer(summary.get("runtime_allowed_monsters", null)) != 153
+		or _dpv2_json_integer(summary.get("drop_enabled_monsters", null)) != 144
+		or _dpv2_json_integer(summary.get("explicit_non_loot_monsters", null)) != 9
+		or _dpv2_json_integer(summary.get("runtime_disabled_monsters", null)) != 3
+		or _dpv2_json_integer(summary.get("non_loot_monsters", null)) != 9
+		or _dpv2_json_integer(summary.get("compiled_slots", null)) != 6809
 	):
 		load_error = "dpv2_direct_baseline_summary_count_invalid"
 		return false
@@ -614,7 +659,7 @@ func _load_dpv2_direct_baseline() -> bool:
 		return false
 	var origin_counts: Dictionary = origin_counts_value
 	if (
-		_dpv2_json_integer(origin_counts.get("LEGACY_21CQ_MONITEMS", null)) != 5926
+		_dpv2_json_integer(origin_counts.get("LEGACY_21CQ_MONITEMS", null)) != 6740
 		or _dpv2_json_integer(origin_counts.get("PROJECT_EXTENSION", null)) != 69
 	):
 		load_error = "dpv2_direct_baseline_origin_counts_invalid"
@@ -714,6 +759,9 @@ func _load_dpv2_direct_baseline() -> bool:
 	var slot_uids: Dictionary = {}
 	var provenance_ids: Dictionary = {}
 	var enabled_profile_count := 0
+	var runtime_allowed_profile_count := 0
+	var explicit_non_loot_profile_count := 0
+	var runtime_disabled_profile_count := 0
 	var compiled_slot_count := 0
 	var origin_totals: Dictionary = {}
 	for raw_profile: Variant in profiles_value:
@@ -739,7 +787,35 @@ func _load_dpv2_direct_baseline() -> bool:
 		if not slots_value is Array:
 			load_error = "dpv2_direct_profile_slots_invalid"
 			return false
+		var profile_semantic_value: Variant = _dpv2_semantic_by_id.get(monster_id, null)
+		if not profile_semantic_value is Dictionary:
+			load_error = "dpv2_direct_profile_semantic_missing"
+			return false
+		var semantic_record: Dictionary = profile_semantic_value
+		var semantic_status := str(semantic_record.get("drop_semantic_state", ""))
+		var profile_runtime_allowed_value: Variant = profile.get("runtime_allowed", null)
+		if not profile_runtime_allowed_value is bool:
+			load_error = "dpv2_direct_profile_runtime_allowed_invalid"
+			return false
+		var profile_runtime_allowed := bool(profile_runtime_allowed_value)
+		if (
+			profile_runtime_allowed
+			!= bool(semantic_record.get("runtime_allowed", false))
+			or str(profile.get("semantic_status", "")) != semantic_status
+		):
+			load_error = "dpv2_direct_profile_semantic_mismatch"
+			return false
+		if profile_runtime_allowed:
+			runtime_allowed_profile_count += 1
+		if semantic_status == "EXPLICIT_NON_LOOT":
+			explicit_non_loot_profile_count += 1
+		elif semantic_status == "RUNTIME_DISABLED":
+			runtime_disabled_profile_count += 1
 		var drop_enabled := bool(profile.get("drop_enabled", false))
+		var expected_drop_enabled := semantic_status in ["DIRECT_21CQ", "PROJECT_EXTENSION"]
+		if drop_enabled != expected_drop_enabled:
+			load_error = "dpv2_direct_profile_drop_state_mismatch"
+			return false
 		if drop_enabled:
 			enabled_profile_count += 1
 			if str(profile.get("drop_profile_id", "")).is_empty():
@@ -821,9 +897,12 @@ func _load_dpv2_direct_baseline() -> bool:
 		_dpv2_direct_profile_by_id[monster_id] = profile.duplicate(true)
 	if (
 		profile_ids.size() != 156
-		or enabled_profile_count != 131
-		or compiled_slot_count != 5995
-		or origin_totals != {"LEGACY_21CQ_MONITEMS": 5926, "PROJECT_EXTENSION": 69}
+		or runtime_allowed_profile_count != 153
+		or enabled_profile_count != 144
+		or explicit_non_loot_profile_count != 9
+		or runtime_disabled_profile_count != 3
+		or compiled_slot_count != 6809
+		or origin_totals != {"LEGACY_21CQ_MONITEMS": 6740, "PROJECT_EXTENSION": 69}
 	):
 		load_error = "dpv2_direct_profile_closure_invalid"
 		return false
@@ -835,6 +914,7 @@ func _load_dpv2_direct_baseline() -> bool:
 	dpv2_direct_baseline_manifest = manifest
 	dpv2_direct_baseline = baseline
 	dpv2_global_drop_rate_authority = global_authority
+	dpv2_monster_drop_semantic_authority = semantic_authority
 	_dpv2_direct_item_by_id = identity_ids
 	_dpv2_direct_item_by_source_label = identity_by_source_label
 	_dpv2_direct_item_by_name = identity_by_name
@@ -851,6 +931,370 @@ func _load_dpv2_direct_baseline() -> bool:
 					denominator,
 				)
 	dpv2_direct_baseline_loaded = true
+	return true
+
+
+func _validate_dpv2_semantic_authority(authority: Dictionary) -> bool:
+	if (
+		str(authority.get("schema", ""))
+			!= "hardcore.dpv2.monster_drop_semantic_authority.v1"
+		or str(authority.get("authority_id", ""))
+			!= "dpv2.monster_drop_semantic.v1"
+		or str(authority.get("status", ""))
+			!= "SEMANTIC_AUTHORITY_COMPLETE"
+		or not bool(authority.get("production_active", false))
+		or str(authority.get("identity_key", "")) != "canonical_monster_id"
+	):
+		load_error = "dpv2_semantic_authority_contract_invalid"
+		return false
+	var policy_value: Variant = authority.get("policy", null)
+	if not policy_value is Dictionary:
+		load_error = "dpv2_semantic_authority_policy_invalid"
+		return false
+	var policy: Dictionary = policy_value
+	if (
+		str(policy.get("runtime_eligibility", ""))
+			!= "catalog_runtime_allowed_only"
+		or bool(policy.get("name_fallback", true))
+		or bool(policy.get("fuzzy_matching", true))
+		or not bool(policy.get("source_rows_retained_when_excluded", false))
+		or not bool(policy.get("excluded_rows_never_compiled", false))
+	):
+		load_error = "dpv2_semantic_authority_policy_invalid"
+		return false
+
+	var summary_value: Variant = authority.get("summary", null)
+	if not summary_value is Dictionary:
+		load_error = "dpv2_semantic_authority_summary_invalid"
+		return false
+	var summary: Dictionary = summary_value
+	var expected_summary := {
+		"canonical_monsters": 156,
+		"runtime_allowed": 153,
+		"drop_enabled": 144,
+		"explicit_non_loot": 9,
+		"runtime_disabled": 3,
+		"direct_21cq": 143,
+		"project_extension": 1,
+		"production_slots": 6809,
+	}
+	for raw_key: Variant in expected_summary.keys():
+		var key := str(raw_key)
+		if _dpv2_json_integer(summary.get(key, null)) != int(expected_summary[key]):
+			load_error = "dpv2_semantic_authority_summary_count_invalid"
+			return false
+	var source_accounting_value: Variant = summary.get(
+		"source_accounting",
+		null,
+	)
+	if not source_accounting_value is Dictionary:
+		load_error = "dpv2_semantic_authority_source_accounting_invalid"
+		return false
+	var source_accounting: Dictionary = source_accounting_value
+	var expected_source_accounting := {
+		"LEGACY_21CQ_COMPILED": 6740,
+		"PROJECT_EXTENSION_COMPILED": 69,
+		"EXPLICIT_NON_LOOT_EXCLUDED": 223,
+		"RETIRED_OUT_OF_RUNTIME": 2558,
+	}
+	for raw_key: Variant in expected_source_accounting.keys():
+		var key := str(raw_key)
+		if _dpv2_json_integer(source_accounting.get(key, null)) != int(expected_source_accounting[key]):
+			load_error = "dpv2_semantic_authority_source_accounting_invalid"
+			return false
+
+	# Validate the frozen decision lists as data, but also assert their exact
+	# user-approved IDs/counts so a stale authority cannot redefine production.
+	var frozen_value: Variant = authority.get("frozen_decisions", null)
+	if not frozen_value is Dictionary:
+		load_error = "dpv2_semantic_authority_frozen_decisions_invalid"
+		return false
+	var frozen: Dictionary = frozen_value
+	var direct_frozen_value: Variant = frozen.get("direct_21cq", null)
+	if not direct_frozen_value is Array:
+		load_error = "dpv2_semantic_authority_frozen_direct_invalid"
+		return false
+	var direct_frozen: Array = direct_frozen_value
+	if direct_frozen.size() != DPV2_DIRECT_FROZEN_SOURCE_COUNTS.size():
+		load_error = "dpv2_semantic_authority_frozen_direct_count_invalid"
+		return false
+	var seen_direct_frozen: Dictionary = {}
+	for raw_frozen: Variant in direct_frozen:
+		if not raw_frozen is Dictionary:
+			load_error = "dpv2_semantic_authority_frozen_direct_record_invalid"
+			return false
+		var frozen_record: Dictionary = raw_frozen
+		var frozen_id := _dpv2_json_integer(
+			frozen_record.get("canonical_monster_id", null)
+		)
+		var frozen_count := _dpv2_json_integer(
+			frozen_record.get("source_row_count", null)
+		)
+		if (
+			not DPV2_DIRECT_FROZEN_SOURCE_COUNTS.has(frozen_id)
+			or seen_direct_frozen.has(frozen_id)
+			or frozen_count != int(DPV2_DIRECT_FROZEN_SOURCE_COUNTS[frozen_id])
+		):
+			load_error = "dpv2_semantic_authority_frozen_direct_mismatch"
+			return false
+		seen_direct_frozen[frozen_id] = true
+	if seen_direct_frozen.size() != DPV2_DIRECT_FROZEN_SOURCE_COUNTS.size():
+		load_error = "dpv2_semantic_authority_frozen_direct_mismatch"
+		return false
+	var explicit_frozen_value: Variant = frozen.get("explicit_non_loot", null)
+	if not explicit_frozen_value is Array:
+		load_error = "dpv2_semantic_authority_frozen_explicit_invalid"
+		return false
+	var explicit_frozen: Array = explicit_frozen_value
+	if explicit_frozen.size() != DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS.size():
+		load_error = "dpv2_semantic_authority_frozen_explicit_count_invalid"
+		return false
+	var seen_explicit_frozen: Dictionary = {}
+	for raw_frozen: Variant in explicit_frozen:
+		if not raw_frozen is Dictionary:
+			load_error = "dpv2_semantic_authority_frozen_explicit_record_invalid"
+			return false
+		var frozen_record: Dictionary = raw_frozen
+		var frozen_id := _dpv2_json_integer(
+			frozen_record.get("canonical_monster_id", null)
+		)
+		var frozen_count := _dpv2_json_integer(
+			frozen_record.get("source_row_count", null)
+		)
+		if (
+			not DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS.has(frozen_id)
+			or seen_explicit_frozen.has(frozen_id)
+			or frozen_count != int(DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS[frozen_id])
+			or not bool(frozen_record.get("exemption_required", false))
+		):
+			load_error = "dpv2_semantic_authority_frozen_explicit_mismatch"
+			return false
+		seen_explicit_frozen[frozen_id] = true
+	if seen_explicit_frozen.size() != DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS.size():
+		load_error = "dpv2_semantic_authority_frozen_explicit_mismatch"
+		return false
+	var disabled_frozen_value: Variant = frozen.get("runtime_disabled", null)
+	if not disabled_frozen_value is Array:
+		load_error = "dpv2_semantic_authority_frozen_disabled_invalid"
+		return false
+	var seen_disabled_frozen: Dictionary = {}
+	for raw_id: Variant in disabled_frozen_value:
+		var disabled_id := _dpv2_json_integer(raw_id)
+		if not DPV2_RUNTIME_DISABLED_IDS.has(disabled_id) or seen_disabled_frozen.has(disabled_id):
+			load_error = "dpv2_semantic_authority_frozen_disabled_mismatch"
+			return false
+		seen_disabled_frozen[disabled_id] = true
+	if seen_disabled_frozen.size() != DPV2_RUNTIME_DISABLED_IDS.size():
+		load_error = "dpv2_semantic_authority_frozen_disabled_mismatch"
+		return false
+	var extension_value: Variant = frozen.get("project_extension", null)
+	if (
+		not extension_value is Dictionary
+		or _dpv2_json_integer((extension_value as Dictionary).get("canonical_monster_id", null))
+			!= DPV2_PROJECT_EXTENSION_ID
+		or _dpv2_json_integer((extension_value as Dictionary).get("source_row_count", null)) != 69
+	):
+		load_error = "dpv2_semantic_authority_frozen_extension_invalid"
+		return false
+
+	var records_value: Variant = authority.get("records", null)
+	if not records_value is Array or (records_value as Array).size() != 156:
+		load_error = "dpv2_semantic_authority_record_count_invalid"
+		return false
+	var records: Array = records_value
+	var seen_ids: Dictionary = {}
+	var runtime_allowed_count := 0
+	var direct_count := 0
+	var project_count := 0
+	var explicit_count := 0
+	var disabled_count := 0
+	var production_slot_count := 0
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary:
+			load_error = "dpv2_semantic_authority_record_invalid"
+			return false
+		var record: Dictionary = raw_record
+		var monster_id := _dpv2_json_integer(record.get("canonical_monster_id", null))
+		var canonical_entry: Variant = _monsters_by_id.get(monster_id, null)
+		if (
+			monster_id <= 0
+			or not canonical_entry is Dictionary
+			or seen_ids.has(monster_id)
+		):
+			load_error = "dpv2_semantic_authority_record_identity_invalid"
+			return false
+		seen_ids[monster_id] = true
+		var entry: Dictionary = canonical_entry
+		if str(record.get("canonical_monster_name", "")) != str(entry.get("canonical_name", "")):
+			load_error = "dpv2_semantic_authority_record_name_invalid"
+			return false
+		var runtime_allowed_value: Variant = record.get("runtime_allowed", null)
+		if not runtime_allowed_value is bool:
+			load_error = "dpv2_semantic_authority_runtime_allowed_invalid"
+			return false
+		var runtime_allowed := bool(runtime_allowed_value)
+		if runtime_allowed != bool(entry.get("runtime_allowed", false)):
+			load_error = "dpv2_semantic_authority_runtime_allowed_mismatch"
+			return false
+		if runtime_allowed:
+			runtime_allowed_count += 1
+		var status := str(record.get("semantic_status", ""))
+		var state := str(record.get("drop_semantic_state", ""))
+		if state.is_empty() or state != status:
+			load_error = "dpv2_semantic_authority_state_invalid"
+			return false
+		var expected_status := "DIRECT_21CQ"
+		if DPV2_RUNTIME_DISABLED_IDS.has(monster_id):
+			expected_status = "RUNTIME_DISABLED"
+		elif DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS.has(monster_id):
+			expected_status = "EXPLICIT_NON_LOOT"
+		elif monster_id == DPV2_PROJECT_EXTENSION_ID:
+			expected_status = "PROJECT_EXTENSION"
+		if status != expected_status:
+			load_error = "dpv2_semantic_authority_status_mismatch"
+			return false
+		var source_row_count := _dpv2_json_integer(record.get("source_row_count", null))
+		if source_row_count < 0:
+			load_error = "dpv2_semantic_authority_source_row_count_invalid"
+			return false
+		var expected_source_count := source_row_count
+		if DPV2_DIRECT_FROZEN_SOURCE_COUNTS.has(monster_id):
+			expected_source_count = int(DPV2_DIRECT_FROZEN_SOURCE_COUNTS[monster_id])
+		elif DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS.has(monster_id):
+			expected_source_count = int(DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS[monster_id])
+		elif monster_id == DPV2_PROJECT_EXTENSION_ID:
+			expected_source_count = 69
+		elif DPV2_RUNTIME_DISABLED_IDS.has(monster_id):
+			expected_source_count = 0
+		if source_row_count != expected_source_count:
+			load_error = "dpv2_semantic_authority_frozen_source_count_mismatch"
+			return false
+		var reason_code := str(record.get("reason_code", ""))
+		var expected_reason := "DIRECT_CATALOG_SOURCE_EXACT"
+		var expected_human_frozen := false
+		if DPV2_RUNTIME_DISABLED_IDS.has(monster_id):
+			expected_reason = "RUNTIME_DISABLED"
+			expected_human_frozen = true
+		elif DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS.has(monster_id):
+			expected_reason = str(DPV2_EXPLICIT_NON_LOOT_REASON_CODES[monster_id])
+			expected_human_frozen = true
+		elif monster_id == DPV2_PROJECT_EXTENSION_ID:
+			expected_reason = "PROJECT_EXTENSION"
+			expected_human_frozen = true
+		elif DPV2_DIRECT_FROZEN_SOURCE_COUNTS.has(monster_id):
+			expected_reason = "HUMAN_FROZEN_DIRECT_21CQ"
+			expected_human_frozen = true
+		var human_frozen_value: Variant = record.get("human_frozen", null)
+		if (
+			not human_frozen_value is bool
+			or bool(human_frozen_value) != expected_human_frozen
+		):
+			load_error = "dpv2_semantic_authority_decision_metadata_invalid"
+			return false
+		var reason_lower := reason_code.to_lower()
+		for forbidden_reason: String in [
+			"a0.7", "a07", "a0_7", "legacy" + "_role",
+			"drop" + "_role", "role" + "_factor",
+		]:
+			if reason_lower.contains(forbidden_reason):
+				load_error = "dpv2_semantic_authority_legacy_reason_forbidden"
+				return false
+		var evidence_value: Variant = record.get("evidence", null)
+		if not evidence_value is Dictionary or (evidence_value as Dictionary).is_empty():
+			load_error = "dpv2_semantic_authority_evidence_invalid"
+			return false
+		var evidence: Dictionary = evidence_value
+		var current_user_decision := str(evidence.get("current_user_decision", ""))
+		if (
+			not current_user_decision.begins_with("CURRENT_USER_DECISION:")
+			or current_user_decision.trim_prefix("CURRENT_USER_DECISION:").strip_edges().is_empty()
+			or str(evidence.get("catalog_path", "")) != "assets/data/runtime/canonical_monster_catalog.json"
+			or str(evidence.get("classification_path", "")).is_empty()
+			or str(evidence.get("source_row_path", "")).is_empty()
+		):
+			load_error = "dpv2_semantic_authority_evidence_path_invalid"
+			return false
+		var source_row_value: Variant = evidence.get("source_row", null)
+		var evidence_catalog_value: Variant = evidence.get("catalog", null)
+		if not source_row_value is Dictionary or not evidence_catalog_value is Dictionary:
+			load_error = "dpv2_semantic_authority_evidence_detail_invalid"
+			return false
+		var evidence_source_row: Dictionary = source_row_value
+		var evidence_catalog: Dictionary = evidence_catalog_value
+		if (
+			_dpv2_json_integer(evidence_source_row.get("count", null)) != source_row_count
+			or str(evidence_source_row.get("path", "")).is_empty()
+			or str(evidence_source_row.get("selector", "")).is_empty()
+			or not evidence_catalog.get("runtime_allowed", null) is bool
+			or bool(evidence_catalog.get("runtime_allowed", false)) != runtime_allowed
+			or str(evidence_catalog.get("runtime_allowed_path", "")).is_empty()
+		):
+			load_error = "dpv2_semantic_authority_evidence_detail_invalid"
+			return false
+		if DPV2_RUNTIME_DISABLED_IDS.has(monster_id):
+			var runtime_evidence_value: Variant = evidence.get("runtime_evidence", null)
+			if not runtime_evidence_value is Dictionary:
+				load_error = "dpv2_semantic_authority_runtime_evidence_missing"
+				return false
+			var runtime_evidence: Dictionary = runtime_evidence_value
+			for runtime_key: String in ["script_path", "effect_path", "runtime_path"]:
+				if str(runtime_evidence.get(runtime_key, "")).is_empty():
+					load_error = "dpv2_semantic_authority_runtime_evidence_invalid"
+					return false
+			if runtime_evidence.get("runtime_allowed", null) != false:
+				load_error = "dpv2_semantic_authority_runtime_evidence_invalid"
+				return false
+		if status == "EXPLICIT_NON_LOOT":
+			var exemption_value: Variant = record.get("exemption", null)
+			if not exemption_value is Dictionary:
+				load_error = "dpv2_semantic_authority_exemption_missing"
+				return false
+			var exemption: Dictionary = exemption_value
+			if (
+				not bool(exemption.get("required", false))
+				or str(exemption.get("kind", "")) != "EXPLICIT_NON_LOOT"
+				or str(exemption.get("reason_code", "")) != reason_code
+				or str(exemption.get("reason", "")).is_empty()
+			):
+				load_error = "dpv2_semantic_authority_exemption_invalid"
+				return false
+		else:
+			if record.get("exemption", null) != null:
+				load_error = "dpv2_semantic_authority_unexpected_exemption"
+				return false
+		var expected_drop_enabled := status in ["DIRECT_21CQ", "PROJECT_EXTENSION"]
+		if expected_drop_enabled:
+			direct_count += int(status == "DIRECT_21CQ")
+			project_count += int(status == "PROJECT_EXTENSION")
+			production_slot_count += source_row_count
+		elif status == "EXPLICIT_NON_LOOT":
+			explicit_count += 1
+		else:
+			disabled_count += 1
+		if (str(record.get("slot_policy", "")) == "COMPILE_DIRECT") != expected_drop_enabled:
+			load_error = "dpv2_semantic_authority_slot_policy_invalid"
+			return false
+		if expected_drop_enabled:
+			if str(record.get("drop_profile_id", "")).is_empty():
+				load_error = "dpv2_semantic_authority_profile_id_invalid"
+				return false
+		else:
+			if record.get("drop_profile_id", null) != null:
+				load_error = "dpv2_semantic_authority_profile_id_invalid"
+				return false
+		_dpv2_semantic_by_id[monster_id] = record.duplicate(true)
+	if (
+		seen_ids.size() != 156
+		or runtime_allowed_count != 153
+		or direct_count != 143
+		or project_count != 1
+		or explicit_count != 9
+		or disabled_count != 3
+		or production_slot_count != 6809
+	):
+		load_error = "dpv2_semantic_authority_record_summary_invalid"
+		return false
+	dpv2_monster_drop_semantic_authority = authority
 	return true
 
 
@@ -2024,8 +2468,21 @@ func dpv2_source_slot_gate() -> Dictionary:
 			"authority": "dpv2.direct_baseline.v2",
 			"available": false,
 			"compiled_slots": 0,
+			"logical_source_rows": 0,
+			"explicit_non_loot_source_rows": 0,
+			"retired_source_rows": 0,
+			"excluded_source_rows": 0,
 		}
 	var summary: Variant = dpv2_direct_baseline.get("summary", {})
+	var semantic_summary: Variant = dpv2_monster_drop_semantic_authority.get(
+		"summary",
+		{},
+	)
+	var semantic_accounting: Variant = (
+		semantic_summary.get("source_accounting", {})
+		if semantic_summary is Dictionary
+		else {}
+	)
 	var tracked_source: Variant = dpv2_direct_baseline_manifest.get(
 		"tracked_logical_source", {}
 	)
@@ -2037,6 +2494,11 @@ func dpv2_source_slot_gate() -> Dictionary:
 	var compiled_slots := 0
 	var enabled_monsters := 0
 	var non_loot_monsters := 0
+	var runtime_allowed_monsters := 0
+	var explicit_non_loot_monsters := 0
+	var runtime_disabled_monsters := 0
+	var explicit_non_loot_source_rows := 0
+	var retired_source_rows := 0
 	if summary is Dictionary:
 		compiled_slots = _dpv2_json_integer(
 			(summary as Dictionary).get("compiled_slots", 0)
@@ -2047,6 +2509,23 @@ func dpv2_source_slot_gate() -> Dictionary:
 		non_loot_monsters = _dpv2_json_integer(
 			(summary as Dictionary).get("non_loot_monsters", 0)
 		)
+	if semantic_summary is Dictionary:
+		runtime_allowed_monsters = _dpv2_json_integer(
+			(semantic_summary as Dictionary).get("runtime_allowed", 0)
+		)
+		explicit_non_loot_monsters = _dpv2_json_integer(
+			(semantic_summary as Dictionary).get("explicit_non_loot", 0)
+		)
+		runtime_disabled_monsters = _dpv2_json_integer(
+			(semantic_summary as Dictionary).get("runtime_disabled", 0)
+		)
+	if semantic_accounting is Dictionary:
+		explicit_non_loot_source_rows = _dpv2_json_integer(
+			(semantic_accounting as Dictionary).get("EXPLICIT_NON_LOOT_EXCLUDED", 0)
+		)
+		retired_source_rows = _dpv2_json_integer(
+			(semantic_accounting as Dictionary).get("RETIRED_OUT_OF_RUNTIME", 0)
+		)
 	return {
 		"authority": "dpv2.direct_baseline.v2",
 		"available": true,
@@ -2055,8 +2534,19 @@ func dpv2_source_slot_gate() -> Dictionary:
 		"compiled_slots": compiled_slots,
 		"canonical_source_slots": compiled_slots,
 		"drop_enabled_source_slots": compiled_slots,
-		"drop_disabled_source_slots": 0,
+		"drop_disabled_source_slots": explicit_non_loot_source_rows + retired_source_rows,
+		"explicit_non_loot_source_rows": explicit_non_loot_source_rows,
+		"retired_source_rows": retired_source_rows,
+		"excluded_source_rows": explicit_non_loot_source_rows + retired_source_rows,
+		"source_accounting": semantic_accounting.duplicate(true) if semantic_accounting is Dictionary else {},
+		"canonical_monster_profiles": _dpv2_json_integer(
+			(semantic_summary as Dictionary).get("canonical_monsters", 0)
+			if semantic_summary is Dictionary else 0
+		),
+		"runtime_allowed_monsters": runtime_allowed_monsters,
 		"drop_enabled_monsters": enabled_monsters,
+		"explicit_non_loot_monsters": explicit_non_loot_monsters,
+		"runtime_disabled_monsters": runtime_disabled_monsters,
 		"non_loot_monsters": non_loot_monsters,
 		"reward_resolved_enabled_slots": compiled_slots,
 		"probability_resolved_enabled_slots": compiled_slots,

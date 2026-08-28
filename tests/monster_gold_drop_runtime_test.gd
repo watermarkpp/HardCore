@@ -66,19 +66,39 @@ func _run() -> void:
 				break
 	assert(hit, "no deterministic seed produced the ID 19 gold roll")
 
-	# The NON_LOOT profile is not an RNG table, even though its historical source
-	# record contains a gold reward.
+	# ID 226 is a restored direct profile; its amount-bearing gold slot is part
+	# of the frozen 21CQ contract and must remain independent from item output.
 	var profile_226 := GameData.dpv2_direct_profile(226)
-	assert(not bool(profile_226.get("drop_enabled", true)), "ID 226 must be NON_LOOT")
-	assert((profile_226.get("slots", []) as Array).is_empty(), "ID 226 must have no direct slots")
+	assert(bool(profile_226.get("drop_enabled", false)), "ID 226 must be direct-enabled")
+	var slots_226: Array = profile_226.get("slots", [])
+	assert(slots_226.size() == 1, "ID 226 direct slot count drifted")
+	var gold_226: Dictionary = slots_226[0]
+	var gold_reward_226 := GameData.dpv2_direct_resolve_slot_reward(gold_226)
+	assert(bool(gold_reward_226.get("ok", false)), "ID 226 gold reward failed")
+	assert(str(gold_reward_226.get("kind", "")) == "gold")
+	assert(int(gold_reward_226.get("gold_amount", 0)) == 3000)
+	var probability_226 := GameData.dpv2_direct_slot_probability(
+		226,
+		str(gold_226.get("slot_uid", "")),
+	)
+	assert(bool(probability_226.get("ok", false)))
+	assert(int(probability_226.get("base_numerator", 0)) == 1)
+	assert(int(probability_226.get("base_denominator", 0)) == 2)
+
+	# The explicit NON_LOOT profile is not an RNG table, even though its
+	# historical source records are retained for audit.
+	var profile_145 := GameData.dpv2_direct_profile(145)
+	assert(bool(profile_145.get("runtime_allowed", false)))
+	assert(not bool(profile_145.get("drop_enabled", true)), "ID 145 must be NON_LOOT")
+	assert((profile_145.get("slots", []) as Array).is_empty(), "ID 145 must have no direct slots")
 	var rng_non_loot := RandomNumberGenerator.new()
-	rng_non_loot.seed = 226
-	var non_loot := LootRuntimeScript.new().roll_monster_drops(226, rng_non_loot)
+	rng_non_loot.seed = 145
+	var non_loot := LootRuntimeScript.new().roll_monster_drops(145, rng_non_loot)
 	assert(bool(non_loot.get("configured", false)))
 	assert(str(non_loot.get("reason", "")) == "drop_disabled")
 	assert((non_loot.get("gold_drops", []) as Array).is_empty())
 	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
 	assert((non_loot.get("attempts", []) as Array).is_empty())
 
-	print("MONSTER_GOLD_DROP_RUNTIME_PASS: direct_gold_19=30 direct_probability=1/4 non_loot_226=1")
+	print("MONSTER_GOLD_DROP_RUNTIME_PASS: direct_gold_19=30 direct_gold_226=3000 direct_probability=1/4 non_loot_145=1")
 	get_tree().quit(0)

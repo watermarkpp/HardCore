@@ -2,6 +2,12 @@ extends Node
 
 const SNAPSHOT_SCHEMA := "monster_drop_p1a_runtime_snapshot_v3"
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
+const SEMANTIC_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json"
+)
+const SOURCE_PROVENANCE_PATH := (
+	"res://assets/data/drop/dpv2_21cq_source_provenance_v1.json"
+)
 const CORRECTION_PATH := (
 	"res://assets/data/drop/dpv2_21cq_source_corrections_v1.json"
 )
@@ -11,15 +17,42 @@ const OUTPUT_PATH := "res://outputs/monster_drop_p1a/runtime_snapshot.json"
 # separate. Source rows are evidence; only compiled V2 slots can reach RNG.
 const EXPECTED_SOURCE_PROFILE_COUNT := 156
 const EXPECTED_SOURCE_ROW_COUNT := 7032
-const EXPECTED_ENABLED_SOURCE_ROW_COUNT := 5995
-const EXPECTED_NON_LOOT_SOURCE_ROW_COUNT := 1037
+const EXPECTED_LOGICAL_SOURCE_ROW_COUNT := 9590
+const EXPECTED_ENABLED_SOURCE_ROW_COUNT := 6809
+const EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT := 223
+const EXPECTED_RETIRED_SOURCE_ROW_COUNT := 2558
 const EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT := 1
 const EXPECTED_RUNTIME_PROFILE_COUNT := 156
-const EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT := 131
-const EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT := 25
-const EXPECTED_RUNTIME_SLOT_COUNT := 5995
-const EXPECTED_LEGACY_RUNTIME_SLOT_COUNT := 5926
+const EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT := 153
+const EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT := 144
+const EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT := 9
+const EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT := 3
+const EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT := 9
+const EXPECTED_RUNTIME_SLOT_COUNT := 6809
+const EXPECTED_LEGACY_RUNTIME_SLOT_COUNT := 6740
 const EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT := 69
+
+const EXPECTED_DIRECT_FROZEN_SOURCE_COUNTS := {
+	79: 59, 81: 60, 83: 59, 85: 59, 87: 59,
+	226: 1, 227: 36, 228: 51, 229: 36, 230: 64,
+	231: 57, 232: 95, 233: 96, 234: 82,
+}
+const EXPECTED_EXPLICIT_NON_LOOT_SOURCE_COUNTS := {
+	59: 0, 78: 0, 145: 74, 146: 78, 147: 71,
+	161: 0, 186: 0, 187: 0, 194: 0,
+}
+const EXPECTED_EXPLICIT_NON_LOOT_REASON_CODES := {
+	59: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+	78: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+	145: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+	146: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+	147: "SUMMON_OR_EVENT_COMBAT_ENTITY",
+	161: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
+	186: "TAMEABLE_CURRENT_EXEMPTION",
+	187: "TAMEABLE_CURRENT_EXEMPTION",
+	194: "GUARD_SCRIPT_CURRENT_EXEMPTION",
+}
+const EXPECTED_RUNTIME_DISABLED_IDS := [33, 183, 241]
 
 const EXPECTED_ANOMALY_SOURCE_PROFILE_ID := "drop.168"
 const EXPECTED_ANOMALY_MONSTER_ID := 168
@@ -59,6 +92,15 @@ func _run() -> void:
 		_fail(["canonical catalog is not a JSON object"])
 		return
 	var catalog: Dictionary = parsed_catalog
+	var semantic_authority: Dictionary = GameData.dpv2_monster_drop_semantic_authority
+	if semantic_authority.is_empty():
+		_fail(["semantic authority was not loaded: %s" % SEMANTIC_AUTHORITY_PATH])
+		return
+	var semantic_by_id := _build_semantic_index(semantic_authority, failures)
+	var logical_source_summary := _load_logical_source_summary(
+		semantic_authority,
+		failures,
+	)
 	var source_profiles_value: Variant = catalog.get("drop_profiles", null)
 	if not source_profiles_value is Dictionary:
 		_fail(["canonical catalog drop_profiles is not a Dictionary"])
@@ -82,6 +124,9 @@ func _run() -> void:
 	var disabled_source_row_count := 0
 	var runtime_enabled_profile_count := 0
 	var runtime_non_loot_profile_count := 0
+	var runtime_allowed_profile_count := 0
+	var runtime_explicit_non_loot_profile_count := 0
+	var runtime_disabled_profile_count := 0
 	var seen_canonical_ids: Dictionary = {}
 	var seen_runtime_profile_ids: Dictionary = {}
 	var seen_slot_uids: Dictionary = {}
@@ -134,6 +179,28 @@ func _run() -> void:
 				canonical_id
 			)
 			continue
+		var semantic_record_value: Variant = semantic_by_id.get(canonical_id, null)
+		if not semantic_record_value is Dictionary:
+			failures.append(
+				"semantic authority record unresolved for canonical monster ID %d" %
+				canonical_id
+			)
+			continue
+		var semantic_record: Dictionary = semantic_record_value
+		var semantic_status := str(semantic_record.get("drop_semantic_state", ""))
+		var expected_drop_enabled := semantic_status in [
+			"DIRECT_21CQ", "PROJECT_EXTENSION"
+		]
+		if (
+			bool(semantic_record.get("runtime_allowed", false))
+			!= bool(direct_profile.get("runtime_allowed", false))
+			or semantic_status != str(direct_profile.get("semantic_status", ""))
+			or expected_drop_enabled != bool(direct_profile.get("drop_enabled", false))
+		):
+			failures.append(
+				"semantic/direct profile state mismatch for canonical ID %d" %
+				canonical_id
+			)
 		var direct_profile_id_value: Variant = direct_profile.get(
 			"drop_profile_id",
 			null,
@@ -151,6 +218,15 @@ func _run() -> void:
 			)
 			continue
 		var entries: Array = entries_value
+		if entries.size() != int(semantic_record.get("source_row_count", -1)):
+			failures.append(
+				"semantic/source row count mismatch for canonical ID %d: source=%d semantic=%d" %
+				[
+					canonical_id,
+					entries.size(),
+					int(semantic_record.get("source_row_count", -1)),
+				]
+			)
 		var direct_slots_value: Variant = direct_profile.get("slots", [])
 		if not direct_slots_value is Array:
 			failures.append(
@@ -162,6 +238,16 @@ func _run() -> void:
 			"drop_enabled",
 			false
 		))
+		if runtime_drop_enabled != expected_drop_enabled:
+			failures.append(
+				"semantic drop state mismatch for canonical ID %d" % canonical_id
+			)
+		if bool(semantic_record.get("runtime_allowed", false)):
+			runtime_allowed_profile_count += 1
+		if semantic_status == "EXPLICIT_NON_LOOT":
+			runtime_explicit_non_loot_profile_count += 1
+		elif semantic_status == "RUNTIME_DISABLED":
+			runtime_disabled_profile_count += 1
 		if runtime_drop_enabled:
 			if not direct_profile_id.begins_with("dpv2.direct."):
 				failures.append(
@@ -186,7 +272,8 @@ func _run() -> void:
 					"NON_LOOT direct profile %d has a runtime profile ID: %s" %
 					[canonical_id, direct_profile_id]
 				)
-			runtime_non_loot_profile_count += 1
+			if semantic_status == "EXPLICIT_NON_LOOT":
+				runtime_non_loot_profile_count += 1
 			if not direct_slots.is_empty():
 				failures.append(
 					"NON_LOOT direct profile %s contains slots" %
@@ -204,6 +291,10 @@ func _run() -> void:
 			"runtime_baseline_origin": str(
 				direct_profile.get("baseline_origin", "")
 			),
+			"semantic_status": semantic_status,
+			"drop_semantic_state": semantic_status,
+			"runtime_allowed": bool(semantic_record.get("runtime_allowed", false)),
+			"reason_code": str(semantic_record.get("reason_code", "")),
 		})
 		compiled_profile_summaries.append({
 			"canonical_monster_id": canonical_id,
@@ -216,6 +307,11 @@ func _run() -> void:
 				direct_profile.get("baseline_origin", "")
 			),
 			"slot_count": direct_slots.size(),
+			"semantic_status": semantic_status,
+			"drop_semantic_state": semantic_status,
+			"runtime_allowed": bool(semantic_record.get("runtime_allowed", false)),
+			"source_entry_count": int(semantic_record.get("source_row_count", 0)),
+			"reason_code": str(semantic_record.get("reason_code", "")),
 		})
 
 		for ordinal_zero_based: int in range(entries.size()):
@@ -256,6 +352,10 @@ func _run() -> void:
 				runtime_drop_enabled,
 				failures
 			)
+			snapshot_row["semantic_status"] = semantic_status
+			snapshot_row["drop_semantic_state"] = semantic_status
+			snapshot_row["runtime_allowed"] = bool(semantic_record.get("runtime_allowed", false))
+			snapshot_row["reason_code"] = str(semantic_record.get("reason_code", ""))
 			source_rows.append(snapshot_row)
 			_bump(
 				source_rate_policy_counts,
@@ -321,6 +421,9 @@ func _run() -> void:
 		compiled_slots,
 		runtime_enabled_profile_count,
 		runtime_non_loot_profile_count,
+		runtime_allowed_profile_count,
+		runtime_explicit_non_loot_profile_count,
+		runtime_disabled_profile_count,
 		failures
 	)
 	_check_source_summary(
@@ -332,6 +435,11 @@ func _run() -> void:
 		source_rate_policy_counts,
 		source_status_counts,
 		failures
+	)
+	_check_semantic_summary(
+		semantic_authority,
+		semantic_by_id,
+		failures,
 	)
 	var correction_provenance := _load_correction_provenance(failures)
 	_check_correction_provenance(
@@ -353,16 +461,23 @@ func _run() -> void:
 	var source_summary := {
 		"profile_count": source_profiles.size(),
 		"row_count": source_rows.size(),
+		"logical_source_row_count": int(logical_source_summary.get("row_count", 0)),
 		"enabled_source_row_count": enabled_source_row_count,
 		"non_loot_disabled_source_row_count": disabled_source_row_count,
+		"explicit_non_loot_source_row_count": disabled_source_row_count,
+		"retired_source_row_count": int(logical_source_summary.get("disposition_counts", {}).get("RETIRED_OUT_OF_RUNTIME", 0)),
+		"semantic_source_accounting": logical_source_summary.get("disposition_counts", {}),
 		"malformed_source_provenance_count": malformed_source_rows.size(),
 		"rate_policy_counts": source_rate_policy_counts,
 		"slot_status_counts": source_status_counts,
 	}
 	var runtime_summary := {
 		"profile_count": seen_canonical_ids.size(),
+		"runtime_allowed_profile_count": runtime_allowed_profile_count,
 		"enabled_profile_count": runtime_enabled_profile_count,
 		"non_loot_profile_count": runtime_non_loot_profile_count,
+		"explicit_non_loot_profile_count": runtime_explicit_non_loot_profile_count,
+		"runtime_disabled_profile_count": runtime_disabled_profile_count,
 		"slot_count": compiled_slots.size(),
 		"baseline_origin_counts": origin_counts,
 		"reward_resolved_slot_count": compiled_slots.size(),
@@ -398,6 +513,8 @@ func _run() -> void:
 					)
 				),
 				"identity_key": "canonical_monster_id",
+				"semantic_authority_id": str(semantic_authority.get("authority_id", "")),
+				"semantic_authority_schema": str(semantic_authority.get("schema", "")),
 				"direct_profile_join": "canonical_monster_id_exact",
 				"source_profile_id_is_audit_only": true,
 				"fallback_forbidden": true,
@@ -417,6 +534,8 @@ func _run() -> void:
 		"direct_baseline_summary": (
 			GameData.dpv2_direct_baseline.get("summary", {})
 		),
+		"semantic_authority_summary": semantic_authority.get("summary", {}),
+		"logical_source_summary": logical_source_summary,
 		"source_summary": source_summary,
 		"compiled_runtime_summary": runtime_summary,
 		"summary": summary,
@@ -446,22 +565,218 @@ func _run() -> void:
 	output.close()
 	print(
 		("MONSTER_DROP_P1A_RUNTIME_EXPORT_PASS: "
-		+ "source_profiles=%d source_rows=%d enabled_source=%d "
-		+ "non_loot_source=%d malformed_provenance=%d "
-		+ "compiled_profiles=%d enabled_profiles=%d non_loot_profiles=%d "
+		+ "source_profiles=%d source_rows=%d logical_source_rows=%d "
+		+ "enabled_source=%d explicit_non_loot_source=%d retired_source=%d "
+		+ "malformed_provenance=%d compiled_profiles=%d runtime_allowed=%d "
+		+ "enabled_profiles=%d explicit_non_loot_profiles=%d runtime_disabled=%d "
 		+ "compiled_slots=%d") % [
 			source_summary.profile_count,
 			source_summary.row_count,
+			source_summary.logical_source_row_count,
 			source_summary.enabled_source_row_count,
 			source_summary.non_loot_disabled_source_row_count,
+			source_summary.retired_source_row_count,
 			source_summary.malformed_source_provenance_count,
 			runtime_summary.profile_count,
+			runtime_summary.runtime_allowed_profile_count,
 			runtime_summary.enabled_profile_count,
-			runtime_summary.non_loot_profile_count,
+			runtime_summary.explicit_non_loot_profile_count,
+			runtime_summary.runtime_disabled_profile_count,
 			runtime_summary.slot_count,
 		]
 	)
 	get_tree().quit(0)
+
+
+func _build_semantic_index(
+	authority: Dictionary,
+	failures: Array[String]
+) -> Dictionary:
+	var result: Dictionary = {}
+	var records_value: Variant = authority.get("records", null)
+	if not records_value is Array:
+		failures.append("semantic authority records is not an Array")
+		return result
+	for raw_record: Variant in records_value:
+		if not raw_record is Dictionary:
+			failures.append("semantic authority record is not a Dictionary")
+			continue
+		var record: Dictionary = raw_record
+		var monster_id := int(record.get("canonical_monster_id", -1))
+		if monster_id <= 0 or result.has(monster_id):
+			failures.append("semantic authority ID is invalid or duplicated: %d" % monster_id)
+			continue
+		result[monster_id] = record.duplicate(true)
+	if result.size() != EXPECTED_SOURCE_PROFILE_COUNT:
+		failures.append(
+			"semantic authority profile count mismatch: actual=%d expected=%d" %
+			[result.size(), EXPECTED_SOURCE_PROFILE_COUNT]
+		)
+	return result
+
+
+func _load_logical_source_summary(
+	authority: Dictionary,
+	failures: Array[String]
+) -> Dictionary:
+	if not FileAccess.file_exists(SOURCE_PROVENANCE_PATH):
+		failures.append("missing logical source provenance: %s" % SOURCE_PROVENANCE_PATH)
+		return {}
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(SOURCE_PROVENANCE_PATH)
+	)
+	if not parsed is Dictionary:
+		failures.append("logical source provenance is not a JSON object")
+		return {}
+	var provenance: Dictionary = parsed
+	if (
+		str(provenance.get("schema", ""))
+			!= "hardcore.dpv2.21cq_source_provenance.v1"
+		or str(provenance.get("authority_id", ""))
+			!= "dpv2.21cq.source_provenance.v1"
+		or str(provenance.get("status", ""))
+			!= "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE"
+	):
+		failures.append("logical source provenance contract is invalid")
+	var records_value: Variant = provenance.get("records", null)
+	if not records_value is Array:
+		failures.append("logical source provenance records is not an Array")
+		return {}
+	var records: Array = records_value
+	var disposition_counts: Dictionary = {}
+	var seen_provenance_ids: Dictionary = {}
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary:
+			failures.append("logical source provenance record is not a Dictionary")
+			continue
+		var record: Dictionary = raw_record
+		var provenance_id := str(record.get("source_provenance_id", ""))
+		var disposition := str(record.get("source_disposition", ""))
+		if provenance_id.is_empty() or seen_provenance_ids.has(provenance_id):
+			failures.append("logical source provenance identity is invalid: %s" % provenance_id)
+		else:
+			seen_provenance_ids[provenance_id] = true
+		if disposition.is_empty():
+			failures.append("logical source provenance disposition is empty")
+		else:
+			disposition_counts[disposition] = int(disposition_counts.get(disposition, 0)) + 1
+	var expected_accounting: Dictionary = {}
+	var semantic_summary_value: Variant = authority.get("summary", {})
+	if semantic_summary_value is Dictionary:
+		var accounting_value: Variant = (semantic_summary_value as Dictionary).get(
+			"source_accounting",
+			{},
+		)
+		if accounting_value is Dictionary:
+			for raw_key: Variant in (accounting_value as Dictionary).keys():
+				var key := str(raw_key)
+				if key in [
+					"LEGACY_21CQ_COMPILED",
+					"PROJECT_EXTENSION_COMPILED",
+					"EXPLICIT_NON_LOOT_EXCLUDED",
+					"RETIRED_OUT_OF_RUNTIME",
+				]:
+					expected_accounting[key] = int((accounting_value as Dictionary)[raw_key])
+	for raw_key: Variant in expected_accounting.keys():
+		var key := str(raw_key)
+		if int(disposition_counts.get(key, 0)) != int(expected_accounting[raw_key]):
+			failures.append(
+				"logical source disposition mismatch: %s actual=%d expected=%d" %
+				[key, int(disposition_counts.get(key, 0)), int(expected_accounting[raw_key])]
+			)
+	if records.size() != EXPECTED_LOGICAL_SOURCE_ROW_COUNT:
+		failures.append(
+			"logical source row count mismatch: actual=%d expected=%d" %
+			[records.size(), EXPECTED_LOGICAL_SOURCE_ROW_COUNT]
+		)
+	return {
+		"path": SOURCE_PROVENANCE_PATH,
+		"schema": str(provenance.get("schema", "")),
+		"row_count": records.size(),
+		"disposition_counts": disposition_counts,
+		"disposition_sum": records.size(),
+	}
+
+
+func _check_semantic_summary(
+	authority: Dictionary,
+	semantic_by_id: Dictionary,
+	failures: Array[String]
+) -> void:
+	var summary_value: Variant = authority.get("summary", null)
+	if not summary_value is Dictionary:
+		failures.append("semantic authority summary is not a Dictionary")
+		return
+	var summary: Dictionary = summary_value
+	for pair: Array in [
+		["canonical_monsters", EXPECTED_SOURCE_PROFILE_COUNT],
+		["runtime_allowed", EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT],
+		["drop_enabled", EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT],
+		["explicit_non_loot", EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT],
+		["runtime_disabled", EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT],
+		["direct_21cq", 143],
+		["project_extension", 1],
+		["production_slots", EXPECTED_RUNTIME_SLOT_COUNT],
+	]:
+		_expect_int(
+			"semantic summary %s" % str(pair[0]),
+			int(summary.get(pair[0], -1)),
+			int(pair[1]),
+			failures,
+		)
+	var accounting_value: Variant = summary.get("source_accounting", {})
+	var accounting: Dictionary = accounting_value if accounting_value is Dictionary else {}
+	for pair: Array in [
+		["LEGACY_21CQ_COMPILED", EXPECTED_LEGACY_RUNTIME_SLOT_COUNT],
+		["PROJECT_EXTENSION_COMPILED", EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT],
+		["EXPLICIT_NON_LOOT_EXCLUDED", EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT],
+		["RETIRED_OUT_OF_RUNTIME", EXPECTED_RETIRED_SOURCE_ROW_COUNT],
+	]:
+		_expect_int(
+			"semantic accounting %s" % str(pair[0]),
+			int(accounting.get(pair[0], -1)),
+			int(pair[1]),
+			failures,
+		)
+	if semantic_by_id.size() != EXPECTED_SOURCE_PROFILE_COUNT:
+		return
+	for raw_id: Variant in semantic_by_id.keys():
+		var monster_id := int(raw_id)
+		var record: Dictionary = semantic_by_id[raw_id]
+		var status := str(record.get("drop_semantic_state", ""))
+		var expected_status := "DIRECT_21CQ"
+		if monster_id in EXPECTED_RUNTIME_DISABLED_IDS:
+			expected_status = "RUNTIME_DISABLED"
+		elif EXPECTED_EXPLICIT_NON_LOOT_SOURCE_COUNTS.has(monster_id):
+			expected_status = "EXPLICIT_NON_LOOT"
+		elif monster_id == 225:
+			expected_status = "PROJECT_EXTENSION"
+		if status != expected_status or str(record.get("semantic_status", "")) != status:
+			failures.append("semantic status mismatch for canonical ID %d" % monster_id)
+		var evidence_value: Variant = record.get("evidence", null)
+		if str(record.get("reason_code", "")).is_empty() or not evidence_value is Dictionary or (evidence_value as Dictionary).is_empty():
+			failures.append("semantic evidence/reason missing for canonical ID %d" % monster_id)
+		if not record.get("human_frozen", null) is bool:
+			failures.append("semantic human_frozen type invalid for canonical ID %d" % monster_id)
+		var expected_count := int(record.get("source_row_count", -1))
+		if EXPECTED_DIRECT_FROZEN_SOURCE_COUNTS.has(monster_id):
+			expected_count = int(EXPECTED_DIRECT_FROZEN_SOURCE_COUNTS[monster_id])
+			if status != "DIRECT_21CQ" or str(record.get("reason_code", "")) != "HUMAN_FROZEN_DIRECT_21CQ" or record.get("human_frozen", false) != true:
+				failures.append("frozen direct decision metadata drifted for canonical ID %d" % monster_id)
+		elif EXPECTED_EXPLICIT_NON_LOOT_SOURCE_COUNTS.has(monster_id):
+			expected_count = int(EXPECTED_EXPLICIT_NON_LOOT_SOURCE_COUNTS[monster_id])
+			if str(record.get("reason_code", "")) != str(EXPECTED_EXPLICIT_NON_LOOT_REASON_CODES[monster_id]) or record.get("human_frozen", false) != true:
+				failures.append("explicit NON_LOOT decision metadata drifted for canonical ID %d" % monster_id)
+		elif monster_id in EXPECTED_RUNTIME_DISABLED_IDS:
+			expected_count = 0
+			if str(record.get("reason_code", "")) != "RUNTIME_DISABLED" or record.get("human_frozen", false) != true or record.get("runtime_allowed", true) != false:
+				failures.append("runtime-disabled decision metadata drifted for canonical ID %d" % monster_id)
+		elif monster_id == 225:
+			expected_count = 69
+			if str(record.get("reason_code", "")) != "PROJECT_EXTENSION" or record.get("human_frozen", false) != true:
+				failures.append("project extension decision metadata drifted for canonical ID %d" % monster_id)
+		if int(record.get("source_row_count", -1)) != expected_count:
+			failures.append("semantic source row count drifted for canonical ID %d" % monster_id)
 
 
 func _build_catalog_profile_index(
@@ -678,6 +993,9 @@ func _check_runtime_summary(
 	compiled_slots: Array,
 	runtime_enabled_profile_count: int,
 	runtime_non_loot_profile_count: int,
+	runtime_allowed_profile_count: int,
+	runtime_explicit_non_loot_profile_count: int,
+	runtime_disabled_profile_count: int,
 	failures: Array[String]
 ) -> void:
 	var baseline_summary_value: Variant = baseline.get("summary", {})
@@ -704,6 +1022,24 @@ func _check_runtime_summary(
 		failures
 	)
 	_expect_int(
+		"runtime allowed profile count",
+		int(summary.get("runtime_allowed_monsters", -1)),
+		EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"runtime explicit NON_LOOT profile count",
+		int(summary.get("explicit_non_loot_monsters", -1)),
+		EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"runtime disabled profile count",
+		int(summary.get("runtime_disabled_monsters", -1)),
+		EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
 		"runtime compiled slot count",
 		int(summary.get("compiled_slots", -1)),
 		EXPECTED_RUNTIME_SLOT_COUNT,
@@ -719,6 +1055,24 @@ func _check_runtime_summary(
 		"observed runtime NON_LOOT profile count",
 		runtime_non_loot_profile_count,
 		EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed runtime allowed profile count",
+		runtime_allowed_profile_count,
+		EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed runtime explicit NON_LOOT profile count",
+		runtime_explicit_non_loot_profile_count,
+		EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT,
+		failures
+	)
+	_expect_int(
+		"observed runtime disabled profile count",
+		runtime_disabled_profile_count,
+		EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT,
 		failures
 	)
 	_expect_int(
@@ -797,9 +1151,9 @@ func _check_source_summary(
 		failures
 	)
 	_expect_int(
-		"NON_LOOT source row count",
+		"explicit NON_LOOT source row count",
 		disabled_source_row_count,
-		EXPECTED_NON_LOOT_SOURCE_ROW_COUNT,
+		EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT,
 		failures
 	)
 	_expect_int(

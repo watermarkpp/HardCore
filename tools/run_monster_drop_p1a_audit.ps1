@@ -114,23 +114,31 @@ try {
     $expected = @{
         source_profiles = 156
         source_rows = 7032
-        enabled_source = 5995
-        non_loot_source = 1037
+        logical_source_rows = 9590
+        enabled_source = 6809
+        explicit_non_loot_source = 223
+        retired_source = 2558
         malformed_provenance = 1
         compiled_profiles = 156
-        enabled_profiles = 131
-        non_loot_profiles = 25
-        compiled_slots = 5995
-        rng_eligible = 5995
+        runtime_allowed = 153
+        enabled_profiles = 144
+        explicit_non_loot_profiles = 9
+        runtime_disabled = 3
+        compiled_slots = 6809
+        rng_eligible = 6809
     }
     if ([int]$source.profile_count -ne $expected.source_profiles -or
         [int]$source.row_count -ne $expected.source_rows -or
+        [int]$source.logical_source_row_count -ne $expected.logical_source_rows -or
         [int]$source.enabled_source_row_count -ne $expected.enabled_source -or
-        [int]$source.non_loot_disabled_source_row_count -ne $expected.non_loot_source -or
+        [int]$source.explicit_non_loot_source_row_count -ne $expected.explicit_non_loot_source -or
+        [int]$source.retired_source_row_count -ne $expected.retired_source -or
         [int]$source.malformed_source_provenance_count -ne $expected.malformed_provenance -or
         [int]$runtime.profile_count -ne $expected.compiled_profiles -or
+        [int]$runtime.runtime_allowed_profile_count -ne $expected.runtime_allowed -or
         [int]$runtime.enabled_profile_count -ne $expected.enabled_profiles -or
-        [int]$runtime.non_loot_profile_count -ne $expected.non_loot_profiles -or
+        [int]$runtime.explicit_non_loot_profile_count -ne $expected.explicit_non_loot_profiles -or
+        [int]$runtime.runtime_disabled_profile_count -ne $expected.runtime_disabled -or
         [int]$runtime.slot_count -ne $expected.compiled_slots -or
         [int]$runtime.rng_eligible_slot_count -ne $expected.rng_eligible) {
         throw 'fresh P1A dual-view metrics do not match the frozen contract'
@@ -138,9 +146,10 @@ try {
 
     Write-Host (
         'MONSTER_DROP_P1A_AUDIT_PASS: ' +
-        "source=156/7032/5995/1037/1 " +
-        "compiled=156/131/25/5995 origins=5926+69 " +
-        'reward=5995 probability=5995 rng=5995 deterministic=PASS blockers=0'
+        "logical_source=9590 source=156/7032/6809/223/1 " +
+        "semantic=6740+69+223+2558 " +
+        "compiled=156/153/144/9/3/6809 origins=6740+69 " +
+        'reward=6809 probability=6809 rng=6809 deterministic=PASS blockers=0'
     )
     Write-Host "SNAPSHOT_SHA256=$snapshotHash2"
     Write-Host "REPORT_DIR=$OutputDir"

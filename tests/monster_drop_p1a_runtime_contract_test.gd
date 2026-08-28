@@ -3,13 +3,18 @@ extends Node
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
 const EXPECTED_SOURCE_PROFILE_COUNT := 156
 const EXPECTED_SOURCE_ROW_COUNT := 7032
-const EXPECTED_ENABLED_SOURCE_ROW_COUNT := 5995
-const EXPECTED_NON_LOOT_SOURCE_ROW_COUNT := 1037
+const EXPECTED_LOGICAL_SOURCE_ROW_COUNT := 9590
+const EXPECTED_ENABLED_SOURCE_ROW_COUNT := 6809
+const EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT := 223
+const EXPECTED_RETIRED_SOURCE_ROW_COUNT := 2558
 const EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT := 1
 const EXPECTED_RUNTIME_PROFILE_COUNT := 156
-const EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT := 131
-const EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT := 25
-const EXPECTED_RUNTIME_SLOT_COUNT := 5995
+const EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT := 153
+const EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT := 144
+const EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT := 9
+const EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT := 9
+const EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT := 3
+const EXPECTED_RUNTIME_SLOT_COUNT := 6809
 
 
 func _ready() -> void:
@@ -29,8 +34,9 @@ func _run() -> void:
 	_test_direct_roll_and_non_loot_gate()
 	print(
 		"MONSTER_DROP_P1A_RUNTIME_CONTRACT_PASS: "
-		+ "source=156/7032/5995/1037/1 "
-		+ "compiled=156/131/25/5995 "
+		+ "logical_source=9590 source=156/7032/6809/223/1 "
+		+ "semantic=6740+69+223+2558 "
+		+ "compiled=156/153/144/9/3/6809 "
 		+ "direct_id_join=canonical_monster_id"
 	)
 	get_tree().quit(0)
@@ -137,7 +143,7 @@ func _test_dual_view_counts() -> void:
 
 	assert(source_rows == EXPECTED_SOURCE_ROW_COUNT)
 	assert(enabled_source_rows == EXPECTED_ENABLED_SOURCE_ROW_COUNT)
-	assert(disabled_source_rows == EXPECTED_NON_LOOT_SOURCE_ROW_COUNT)
+	assert(disabled_source_rows == EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT)
 	assert(
 		malformed_source_rows
 			== EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT
@@ -148,6 +154,7 @@ func _test_dual_view_counts() -> void:
 	assert(baseline_profiles.size() == EXPECTED_RUNTIME_PROFILE_COUNT)
 	var enabled_profiles := 0
 	var non_loot_profiles := 0
+	var runtime_disabled_profiles := 0
 	var compiled_slots := 0
 	var origin_counts := {}
 	for raw_profile: Variant in baseline_profiles:
@@ -156,7 +163,10 @@ func _test_dual_view_counts() -> void:
 		if bool(profile.get("drop_enabled", false)):
 			enabled_profiles += 1
 		else:
-			non_loot_profiles += 1
+			if str(profile.get("semantic_status", "")) == "RUNTIME_DISABLED":
+				runtime_disabled_profiles += 1
+			else:
+				non_loot_profiles += 1
 		var slots: Array = profile.get("slots", [])
 		compiled_slots += slots.size()
 		if bool(profile.get("drop_enabled", false)):
@@ -165,8 +175,9 @@ func _test_dual_view_counts() -> void:
 				+ slots.size()
 	assert(enabled_profiles == EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT)
 	assert(non_loot_profiles == EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT)
+	assert(runtime_disabled_profiles == EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT)
 	assert(compiled_slots == EXPECTED_RUNTIME_SLOT_COUNT)
-	assert(int(origin_counts.get("LEGACY_21CQ_MONITEMS", 0)) == 5926)
+	assert(int(origin_counts.get("LEGACY_21CQ_MONITEMS", 0)) == 6740)
 	assert(int(origin_counts.get("PROJECT_EXTENSION", 0)) == 69)
 
 
@@ -204,8 +215,8 @@ func _test_malformed_provenance_correction() -> void:
 func _test_direct_roll_and_non_loot_gate() -> void:
 	var service := LootRuntime
 	var non_loot_rng := RandomNumberGenerator.new()
-	non_loot_rng.seed = 226
-	var non_loot := service.roll_monster_drops(226, non_loot_rng)
+	non_loot_rng.seed = 145
+	var non_loot := service.roll_monster_drops(145, non_loot_rng)
 	assert(bool(non_loot.get("configured", false)))
 	assert(str(non_loot.get("reason", "")) == "drop_disabled")
 	assert(int(non_loot.get("rng_roll_count", -1)) == 0)

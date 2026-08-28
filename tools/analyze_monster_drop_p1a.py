@@ -3,9 +3,10 @@
 
 P1A has two intentionally separate views:
 
-* source_rows is the 156-profile/7032-row evidence corpus. Its chance token
-  is provenance, including the one malformed 1/00 row.
-* compiled_slots is the 156-profile/5995-slot V2 Runtime authority. Only
+* source_rows is the 156-profile/7032-row current semantic source view. Its
+  chance token is provenance, including the one malformed 1/00 row. The
+  logical source authority retains 9590 rows, including retired audit rows.
+* compiled_slots is the 156-profile/6809-slot V2 Runtime authority. Only
   these rows carry direct canonical identity and can reach independent RNG.
 
 This analyzer consumes the classifications exported by Godot. It does not
@@ -26,14 +27,19 @@ SNAPSHOT_SCHEMA = "monster_drop_p1a_runtime_snapshot_v3"
 
 EXPECTED_SOURCE_PROFILE_COUNT = 156
 EXPECTED_SOURCE_ROW_COUNT = 7032
-EXPECTED_ENABLED_SOURCE_ROW_COUNT = 5995
-EXPECTED_NON_LOOT_SOURCE_ROW_COUNT = 1037
+EXPECTED_LOGICAL_SOURCE_ROW_COUNT = 9590
+EXPECTED_ENABLED_SOURCE_ROW_COUNT = 6809
+EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT = 223
+EXPECTED_RETIRED_SOURCE_ROW_COUNT = 2558
 EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT = 1
 EXPECTED_RUNTIME_PROFILE_COUNT = 156
-EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT = 131
-EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT = 25
-EXPECTED_RUNTIME_SLOT_COUNT = 5995
-EXPECTED_LEGACY_RUNTIME_SLOT_COUNT = 5926
+EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT = 153
+EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT = 144
+EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT = 9
+EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT = 3
+EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT = 9
+EXPECTED_RUNTIME_SLOT_COUNT = 6809
+EXPECTED_LEGACY_RUNTIME_SLOT_COUNT = 6740
 EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT = 69
 
 EXPECTED_ANOMALY = {
@@ -246,6 +252,7 @@ def _recompute_summary(
     compiled_slots: list[dict[str, Any]] | None = None,
     source_profiles: list[dict[str, Any]] | None = None,
     compiled_profiles: list[dict[str, Any]] | None = None,
+    logical_source_summary: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if compiled_slots is None:
         compiled_slots = [
@@ -256,6 +263,30 @@ def _recompute_summary(
         source_profiles = []
     if compiled_profiles is None:
         compiled_profiles = []
+    if logical_source_summary is None:
+        logical_source_summary = {
+            "path": "",
+            "schema": "",
+            "row_count": len(source_rows),
+            "disposition_counts": {
+                "LEGACY_21CQ_COMPILED": sum(
+                    1 for row in source_rows
+                    if _as_bool(row.get("runtime_compiled", False))
+                    and row.get("baseline_origin") == "LEGACY_21CQ_MONITEMS"
+                ),
+                "PROJECT_EXTENSION_COMPILED": sum(
+                    1 for row in source_rows
+                    if _as_bool(row.get("runtime_compiled", False))
+                    and row.get("baseline_origin") == "PROJECT_EXTENSION"
+                ),
+                "EXPLICIT_NON_LOOT_EXCLUDED": sum(
+                    1 for row in source_rows
+                    if not _as_bool(row.get("runtime_compiled", False))
+                ),
+                "RETIRED_OUT_OF_RUNTIME": 0,
+            },
+            "disposition_sum": len(source_rows),
+        }
 
     rate_policy = [
         str(row.get("source_rate_policy", "<missing>"))
@@ -293,14 +324,33 @@ def _recompute_summary(
     source_summary = {
         "profile_count": len(source_profiles),
         "row_count": len(source_rows),
+        "logical_source_row_count": int(
+            logical_source_summary.get("row_count", len(source_rows))
+        ),
         "enabled_source_row_count": enabled_count,
         "non_loot_disabled_source_row_count": disabled_count,
+        "explicit_non_loot_source_row_count": disabled_count,
+        "retired_source_row_count": int(
+            logical_source_summary.get("disposition_counts", {}).get(
+                "RETIRED_OUT_OF_RUNTIME", 0
+            )
+        ),
+        "semantic_source_accounting": logical_source_summary.get(
+            "disposition_counts", {}
+        ),
         "malformed_source_provenance_count": malformed_count,
         "rate_policy_counts": _counter_dict(rate_policy),
         "slot_status_counts": _counter_dict(slot_status),
     }
     runtime_summary = {
         "profile_count": len(compiled_profiles),
+        "runtime_allowed_profile_count": sum(
+            1 for profile in compiled_profiles
+            if _as_bool(profile.get(
+                "runtime_allowed",
+                profile.get("drop_enabled", False),
+            ))
+        ),
         "enabled_profile_count": sum(
             1 for profile in compiled_profiles
             if _as_bool(profile.get("drop_enabled", False))
@@ -308,6 +358,24 @@ def _recompute_summary(
         "non_loot_profile_count": sum(
             1 for profile in compiled_profiles
             if not _as_bool(profile.get("drop_enabled", False))
+            and profile.get(
+                "drop_semantic_state",
+                profile.get("semantic_status"),
+            ) != "RUNTIME_DISABLED"
+        ),
+        "explicit_non_loot_profile_count": sum(
+            1 for profile in compiled_profiles
+            if profile.get(
+                "drop_semantic_state",
+                profile.get("semantic_status"),
+            ) == "EXPLICIT_NON_LOOT"
+        ),
+        "runtime_disabled_profile_count": sum(
+            1 for profile in compiled_profiles
+            if profile.get(
+                "drop_semantic_state",
+                profile.get("semantic_status"),
+            ) == "RUNTIME_DISABLED"
         ),
         "slot_count": len(compiled_slots),
         "baseline_origin_counts": origin_counts,
@@ -352,16 +420,22 @@ def _check_expected_counts(
     expected_source = {
         "profile_count": EXPECTED_SOURCE_PROFILE_COUNT,
         "row_count": EXPECTED_SOURCE_ROW_COUNT,
+        "logical_source_row_count": EXPECTED_LOGICAL_SOURCE_ROW_COUNT,
         "enabled_source_row_count": EXPECTED_ENABLED_SOURCE_ROW_COUNT,
-        "non_loot_disabled_source_row_count": EXPECTED_NON_LOOT_SOURCE_ROW_COUNT,
+        "non_loot_disabled_source_row_count": EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT,
+        "explicit_non_loot_source_row_count": EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT,
+        "retired_source_row_count": EXPECTED_RETIRED_SOURCE_ROW_COUNT,
         "malformed_source_provenance_count": (
             EXPECTED_MALFORMED_SOURCE_PROVENANCE_COUNT
         ),
     }
     expected_runtime = {
         "profile_count": EXPECTED_RUNTIME_PROFILE_COUNT,
+        "runtime_allowed_profile_count": EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT,
         "enabled_profile_count": EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
         "non_loot_profile_count": EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
+        "explicit_non_loot_profile_count": EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT,
+        "runtime_disabled_profile_count": EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT,
         "slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
         "reward_resolved_slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
         "probability_resolved_slot_count": EXPECTED_RUNTIME_SLOT_COUNT,
@@ -379,13 +453,20 @@ def _check_expected_counts(
                 f"compiled_runtime.{key}={runtime.get(key)!r} "
                 f"expected={expected}"
             )
+    if source.get("semantic_source_accounting") != {
+        "EXPLICIT_NON_LOOT_EXCLUDED": EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT,
+        "LEGACY_21CQ_COMPILED": EXPECTED_LEGACY_RUNTIME_SLOT_COUNT,
+        "PROJECT_EXTENSION_COMPILED": EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT,
+        "RETIRED_OUT_OF_RUNTIME": EXPECTED_RETIRED_SOURCE_ROW_COUNT,
+    }:
+        errors.append("source_corpus semantic source accounting drifted")
     if runtime.get("baseline_origin_counts") != {
         "LEGACY_21CQ_MONITEMS": EXPECTED_LEGACY_RUNTIME_SLOT_COUNT,
         "PROJECT_EXTENSION": EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT,
     }:
         errors.append(
             "compiled_runtime.baseline_origin_counts does not match frozen "
-            "5926/69 split"
+            "6740/69 split"
         )
     source_summary = snapshot.get("source_summary", {})
     if isinstance(source_summary, dict):
@@ -403,6 +484,20 @@ def _check_expected_counts(
                     f"compiled_runtime_summary.{key}={runtime_summary.get(key)!r} "
                     f"expected={expected}"
                 )
+    logical_summary = snapshot.get("logical_source_summary")
+    if isinstance(logical_summary, dict):
+        if logical_summary.get("row_count") != EXPECTED_LOGICAL_SOURCE_ROW_COUNT:
+            errors.append(
+                "logical_source_summary.row_count="
+                f"{logical_summary.get('row_count')!r} expected={EXPECTED_LOGICAL_SOURCE_ROW_COUNT}"
+            )
+        if logical_summary.get("disposition_counts") != {
+            "EXPLICIT_NON_LOOT_EXCLUDED": EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT,
+            "LEGACY_21CQ_COMPILED": EXPECTED_LEGACY_RUNTIME_SLOT_COUNT,
+            "PROJECT_EXTENSION_COMPILED": EXPECTED_EXTENSION_RUNTIME_SLOT_COUNT,
+            "RETIRED_OUT_OF_RUNTIME": EXPECTED_RETIRED_SOURCE_ROW_COUNT,
+        }:
+            errors.append("logical_source_summary disposition accounting drifted")
 
 
 def validate_snapshot(
@@ -437,6 +532,11 @@ def validate_snapshot(
         "source_profile_id_is_audit_only": True,
         "fallback_forbidden": True,
     }
+    if enforce_current_corpus:
+        expected_authority.update({
+            "semantic_authority_id": "dpv2.monster_drop_semantic.v1",
+            "semantic_authority_schema": "hardcore.dpv2.monster_drop_semantic_authority.v1",
+        })
     for key, expected in expected_authority.items():
         if runtime_authority.get(key) != expected:
             errors.append(
@@ -459,7 +559,25 @@ def validate_snapshot(
             "maximum_ground_slots": 9,
         }
         if enforce_current_corpus:
-            expected_gate["compiled_slots"] = EXPECTED_RUNTIME_SLOT_COUNT
+            expected_gate.update({
+                "compiled_slots": EXPECTED_RUNTIME_SLOT_COUNT,
+                "logical_source_rows": EXPECTED_LOGICAL_SOURCE_ROW_COUNT,
+                "drop_enabled_source_slots": EXPECTED_RUNTIME_SLOT_COUNT,
+                "drop_disabled_source_slots": (
+                    EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT
+                    + EXPECTED_RETIRED_SOURCE_ROW_COUNT
+                ),
+                "explicit_non_loot_source_rows": EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT,
+                "retired_source_rows": EXPECTED_RETIRED_SOURCE_ROW_COUNT,
+                "excluded_source_rows": (
+                    EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROW_COUNT
+                    + EXPECTED_RETIRED_SOURCE_ROW_COUNT
+                ),
+                "runtime_allowed_monsters": EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT,
+                "drop_enabled_monsters": EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
+                "explicit_non_loot_monsters": EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT,
+                "runtime_disabled_monsters": EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT,
+            })
         for key, expected in expected_gate.items():
             if gate.get(key) != expected:
                 errors.append(
@@ -522,11 +640,20 @@ def validate_snapshot(
             "source compiled rows and compiled_slots have different counts"
         )
 
+    logical_source_summary_value = snapshot.get("logical_source_summary")
+    logical_source_summary = (
+        logical_source_summary_value
+        if isinstance(logical_source_summary_value, dict)
+        else None
+    )
+    if enforce_current_corpus and logical_source_summary is None:
+        errors.append("logical_source_summary must be an object")
     observed = _recompute_summary(
         source_rows,
         compiled_slots,
         source_profiles,
         compiled_profiles,
+        logical_source_summary,
     )
     reported = snapshot.get("summary")
     if reported != observed:
@@ -580,7 +707,10 @@ def validate_snapshot(
     elif enforce_current_corpus:
         for key, expected in {
             "active_monsters": EXPECTED_RUNTIME_PROFILE_COUNT,
+            "runtime_allowed_monsters": EXPECTED_RUNTIME_ALLOWED_PROFILE_COUNT,
             "drop_enabled_monsters": EXPECTED_RUNTIME_ENABLED_PROFILE_COUNT,
+            "explicit_non_loot_monsters": EXPECTED_RUNTIME_EXPLICIT_NON_LOOT_PROFILE_COUNT,
+            "runtime_disabled_monsters": EXPECTED_RUNTIME_DISABLED_PROFILE_COUNT,
             "non_loot_monsters": EXPECTED_RUNTIME_NON_LOOT_PROFILE_COUNT,
             "compiled_slots": EXPECTED_RUNTIME_SLOT_COUNT,
         }.items():
@@ -614,6 +744,9 @@ def analyze_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
         compiled_slots,
         source_profiles,
         compiled_profiles,
+        snapshot.get("logical_source_summary")
+        if isinstance(snapshot.get("logical_source_summary"), dict)
+        else None,
     )
     malformed = [
         row for row in source_rows
@@ -729,7 +862,8 @@ def _markdown_report(analysis: dict[str, Any]) -> str:
         "",
         "The source corpus is retained for audit and provenance only. It is not "
         "a Runtime RNG table. The compiled V2 view is joined by exact "
-        "canonical_monster_id; source drop labels are audit metadata.",
+        "canonical_monster_id; source drop labels are audit metadata. The "
+        "logical source authority retains retired rows independently.",
         "",
         "| View | Profiles | Rows/slots | Enabled | NON_LOOT/disabled | RNG |",
         "|---|---:|---:|---:|---:|---:|",
@@ -739,20 +873,28 @@ def _markdown_report(analysis: dict[str, Any]) -> str:
             f"{source['non_loot_disabled_source_row_count']} | 0 |"
         ),
         (
+            f"| logical source authority | n/a | {source['logical_source_row_count']} | "
+            "6740+69 compiled | 223+2558 excluded | 0 |"
+        ),
+        (
             f"| compiled Runtime V2 | {runtime['profile_count']} | "
             f"{runtime['slot_count']} | {runtime['enabled_profile_count']} "
             f"profiles | {runtime['non_loot_profile_count']} profiles | "
             f"{runtime['rng_eligible_slot_count']} |"
         ),
         "",
-        "Source corpus fixed metrics: 156 profiles, 7032 rows, "
-        "5995 enabled-source rows, 1037 NON_LOOT disabled-source rows, "
-        "and 1 malformed source-provenance row.",
+        "Current semantic source metrics: 156 profiles, 7032 retained source "
+        "rows, 6809 compiled-source rows and 223 explicit NON_LOOT source "
+        "rows. The logical source authority contains 9590 rows: "
+        "6740 LEGACY_21CQ_COMPILED + 69 PROJECT_EXTENSION_COMPILED + "
+        "223 EXPLICIT_NON_LOOT_EXCLUDED + 2558 RETIRED_OUT_OF_RUNTIME; "
+        "1 malformed source-provenance row remains auditable.",
         "",
-        "Compiled Runtime fixed metrics: 156 profiles, 131 enabled profiles, "
-        "25 NON_LOOT profiles, 5995 V2 slots; 5926 "
+        "Compiled Runtime current production metrics: 156 profiles, 153 "
+        "runtime_allowed profiles, 144 enabled profiles, 9 explicit NON_LOOT "
+        "profiles and 3 runtime-disabled profiles; 6809 V2 slots; 6740 "
         "LEGACY_21CQ_MONITEMS slots plus 69 PROJECT_EXTENSION slots. "
-        "Reward, probability, eligibility, and RNG stages each close at 5995.",
+        "Reward, probability, eligibility, and RNG stages each close at 6809.",
         "",
         "## Direct probability and identity contract",
         "",
@@ -870,12 +1012,16 @@ def main() -> int:
         "P1A_ANALYZER_PASS: "
         f"source_profiles={source['profile_count']} "
         f"source_rows={source['row_count']} "
+        f"logical_source_rows={source['logical_source_row_count']} "
         f"enabled_source={source['enabled_source_row_count']} "
-        f"non_loot_source={source['non_loot_disabled_source_row_count']} "
+        f"explicit_non_loot_source={source['explicit_non_loot_source_row_count']} "
+        f"retired_source={source['retired_source_row_count']} "
         f"malformed_provenance={source['malformed_source_provenance_count']} "
         f"compiled_profiles={runtime['profile_count']} "
+        f"runtime_allowed={runtime['runtime_allowed_profile_count']} "
         f"enabled_profiles={runtime['enabled_profile_count']} "
-        f"non_loot_profiles={runtime['non_loot_profile_count']} "
+        f"explicit_non_loot_profiles={runtime['explicit_non_loot_profile_count']} "
+        f"runtime_disabled={runtime['runtime_disabled_profile_count']} "
         f"compiled_slots={runtime['slot_count']} "
         f"rng_eligible={runtime['rng_eligible_slot_count']}"
     )

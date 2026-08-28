@@ -18,7 +18,8 @@ func _run() -> void:
 	_test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback()
 	print(
 		"DPV2_DROP_RUNTIME_POLICY_PASS: direct_v2=1 profiles=156 "
-		+ "compiled_enabled_slots=5995 pre_overflow_rng=5995 ground_limit=9"
+		+ "runtime_allowed=153 enabled=144 explicit_non_loot=9 runtime_disabled=3 "
+		+ "compiled_enabled_slots=6809 pre_overflow_rng=6809 ground_limit=9"
 	)
 	get_tree().quit(0)
 
@@ -40,9 +41,15 @@ func _test_direct_authority_and_gate() -> void:
 	assert(int(policy.get("post_rng_ground_slot_limit", -1)) == 9)
 	var gate: Dictionary = GameData.dpv2_source_slot_gate()
 	assert(str(gate.get("authority", "")) == "dpv2.direct_baseline.v2")
-	assert(int(gate.get("compiled_slots", -1)) == 5995)
-	assert(int(gate.get("drop_enabled_source_slots", -1)) == 5995)
-	assert(int(gate.get("drop_disabled_source_slots", -1)) == 0)
+	assert(int(gate.get("compiled_slots", -1)) == 6809)
+	assert(int(gate.get("drop_enabled_source_slots", -1)) == 6809)
+	assert(int(gate.get("drop_disabled_source_slots", -1)) == 2781)
+	assert(int(gate.get("explicit_non_loot_source_rows", -1)) == 223)
+	assert(int(gate.get("retired_source_rows", -1)) == 2558)
+	assert(int(gate.get("runtime_allowed_monsters", -1)) == 153)
+	assert(int(gate.get("drop_enabled_monsters", -1)) == 144)
+	assert(int(gate.get("explicit_non_loot_monsters", -1)) == 9)
+	assert(int(gate.get("runtime_disabled_monsters", -1)) == 3)
 	assert(int(gate.get("maximum_ground_slots", -1)) == 9)
 
 
@@ -105,13 +112,13 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 func _test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback() -> void:
 	var service := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
-	var non_loot := service.roll_monster_drops(226, rng)
+	var non_loot := service.roll_monster_drops(145, rng)
 	assert(bool(non_loot.get("configured", false)))
 	assert(str(non_loot.get("reason", "")) == "drop_disabled")
 	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
 	var zero_slot := service.roll_monster_drops(33, rng)
 	assert(bool(zero_slot.get("configured", false)))
-	assert(str(zero_slot.get("reason", "")) == "")
+	assert(str(zero_slot.get("reason", "")) == "drop_disabled")
 	assert(int(zero_slot.get("source_entry_count", -1)) == 0)
 	assert(int(zero_slot.get("rng_roll_count", -1)) == 0)
 	var unknown := service.roll_monster_drops(999999, rng)

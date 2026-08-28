@@ -13,6 +13,7 @@ func _run() -> void:
 	assert(GameData.ensure_loaded(), "GameData failed: %s" % GameData.load_error)
 	assert(GameData.is_dpv2_direct_baseline_loaded())
 	_test_loader_contract()
+	_test_semantic_frozen_profiles()
 	_test_exact_id_profile_join()
 	_test_direct_identity_resolution()
 	_test_rational_probability()
@@ -21,7 +22,8 @@ func _run() -> void:
 	_test_fail_closed_without_direct_authority()
 	_test_protected_overflow_selection()
 	print(
-		"DPV2_21CQ_DIRECT_RUNTIME_PASS: profiles=156 slots=5995 "
+		"DPV2_21CQ_DIRECT_RUNTIME_PASS: profiles=156 runtime_allowed=153 "
+		+ "enabled=144 explicit_non_loot=9 runtime_disabled=3 slots=6809 "
 		+ "10x=1/20_to_1/2 clamp=1/1 "
 		+ "direct_id_rng=independent protected_first cap=9"
 	)
@@ -53,13 +55,67 @@ func _test_loader_contract() -> void:
 				"role", "role_factor", "factor",
 			]:
 				assert(not slot.has(forbidden), "%s in %s" % [forbidden, slot])
-	assert(total_slots == 5995)
 	var gate: Dictionary = GameData.dpv2_source_slot_gate()
 	assert(str(gate.get("authority", "")) == "dpv2.direct_baseline.v2")
 	assert(bool(gate.get("available", false)))
-	assert(int(gate.get("compiled_slots", -1)) == 5995)
+	assert(total_slots == 6809)
+	assert(int(gate.get("compiled_slots", -1)) == 6809)
+	assert(int(gate.get("logical_source_rows", -1)) == 9590)
+	assert(int(gate.get("drop_enabled_source_slots", -1)) == 6809)
+	assert(int(gate.get("explicit_non_loot_source_rows", -1)) == 223)
+	assert(int(gate.get("retired_source_rows", -1)) == 2558)
+	assert(int(gate.get("excluded_source_rows", -1)) == 2781)
+	assert(int(gate.get("runtime_allowed_monsters", -1)) == 153)
+	assert(int(gate.get("drop_enabled_monsters", -1)) == 144)
+	assert(int(gate.get("explicit_non_loot_monsters", -1)) == 9)
+	assert(int(gate.get("runtime_disabled_monsters", -1)) == 3)
 	assert(int(gate.get("maximum_ground_slots", -1)) == 9)
 	assert(bool(gate.get("all_enabled_resolved_slots_rng_before_overflow", false)))
+
+
+func _test_semantic_frozen_profiles() -> void:
+	var service := LootRuntimeScript.new()
+	var expected_direct := {
+		79: 59, 81: 60, 83: 59, 85: 59, 87: 59,
+		226: 1, 227: 36, 228: 51, 229: 36, 230: 64,
+		231: 57, 232: 95, 233: 96, 234: 82,
+	}
+	for raw_id: Variant in expected_direct.keys():
+		var monster_id := int(raw_id)
+		var profile := GameData.dpv2_direct_profile(monster_id)
+		assert(bool(profile.get("drop_enabled", false)), "frozen direct profile disabled: %d" % monster_id)
+		assert((profile.get("slots", []) as Array).size() == int(expected_direct[raw_id]))
+		var rng := RandomNumberGenerator.new()
+		rng.seed = monster_id
+		var roll := service.roll_monster_drops(monster_id, rng)
+		assert(bool(roll.get("configured", false)), "frozen direct roll not configured: %d" % monster_id)
+		assert(int(roll.get("source_entry_count", -1)) == int(expected_direct[raw_id]))
+	var gold_slots_226: Array = GameData.dpv2_direct_profile(226).get("slots", [])
+	assert(gold_slots_226.size() == 1)
+	var gold_226: Dictionary = gold_slots_226[0]
+	assert(int(gold_226.get("gold_amount", -1)) == 3000)
+	assert(str(GameData.dpv2_direct_resolve_slot_reward(gold_226).get("kind", "")) == "gold")
+
+	var semantic: Dictionary = GameData.dpv2_monster_drop_semantic_authority
+	var accounting: Dictionary = semantic.get("summary", {}).get("source_accounting", {})
+	assert(int(accounting.get("EXPLICIT_NON_LOOT_EXCLUDED", -1)) == 223)
+	var explicit_145 := GameData.dpv2_direct_profile(145)
+	assert(bool(explicit_145.get("runtime_allowed", false)))
+	assert(not bool(explicit_145.get("drop_enabled", true)))
+	assert((explicit_145.get("slots", []) as Array).is_empty())
+	var explicit_rng := RandomNumberGenerator.new()
+	var explicit_roll := service.roll_monster_drops(145, explicit_rng)
+	assert(bool(explicit_roll.get("configured", false)))
+	assert(str(explicit_roll.get("reason", "")) == "drop_disabled")
+	assert(int(explicit_roll.get("source_entry_count", -1)) == 0)
+	assert((explicit_roll.get("items", []) as Array).is_empty())
+	assert((explicit_roll.get("gold_drops", []) as Array).is_empty())
+
+	for monster_id: int in [33, 183, 241]:
+		var disabled := GameData.dpv2_direct_profile(monster_id)
+		assert(not bool(disabled.get("runtime_allowed", true)))
+		assert(not bool(disabled.get("drop_enabled", true)))
+		assert((disabled.get("slots", []) as Array).is_empty())
 
 
 func _test_exact_id_profile_join() -> void:
@@ -94,7 +150,7 @@ func _test_direct_identity_resolution() -> void:
 				resolved_items += 1
 				assert(int(reward.get("canonical_item_id", -1)) > 0)
 				assert(not str(reward.get("item_name", "")).is_empty())
-	assert(all_slots == 5995)
+	assert(all_slots == 6809)
 	assert(resolved_items > 0)
 	assert(resolved_gold > 0)
 	var rejected := GameData.dpv2_direct_resolve_slot_reward({
