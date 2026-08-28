@@ -1,0 +1,1914 @@
+{
+  "schema": "hardcore.dpv2.monster_drop_semantic_authority.v1",
+  "authority_id": "dpv2.monster_drop_semantic.v1",
+  "status": "SEMANTIC_AUTHORITY_COMPLETE",
+  "production_active": true,
+  "identity_key": "canonical_monster_id",
+  "source": {
+    "canonical_catalog": {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "sha256": "D552AB8C689BF22BFB101339E30519B03C88266B59ABE2D5B6BB2BD65B3A3E7A",
+      "hash_normalization": "lf_text",
+      "runtime_eligibility_field": "runtime_allowed"
+    },
+    "logical_drop_source": {
+      "path": "assets/data/canonical_monster_drop_source_v2.json",
+      "sha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+      "hash_normalization": "raw_bytes"
+    }
+  },
+  "policy": {
+    "identity_join": "stable_monster_id_exact",
+    "runtime_eligibility": "catalog_runtime_allowed_only",
+    "name_fallback": false,
+    "fuzzy_matching": false,
+    "source_rows_retained_when_excluded": true,
+    "excluded_rows_never_compiled": true
+  },
+  "frozen_decisions": {
+    "direct_21cq": [
+      {
+        "canonical_monster_id": 79,
+        "source_row_count": 59
+      },
+      {
+        "canonical_monster_id": 81,
+        "source_row_count": 60
+      },
+      {
+        "canonical_monster_id": 83,
+        "source_row_count": 59
+      },
+      {
+        "canonical_monster_id": 85,
+        "source_row_count": 59
+      },
+      {
+        "canonical_monster_id": 87,
+        "source_row_count": 59
+      },
+      {
+        "canonical_monster_id": 226,
+        "source_row_count": 1
+      },
+      {
+        "canonical_monster_id": 227,
+        "source_row_count": 36
+      },
+      {
+        "canonical_monster_id": 228,
+        "source_row_count": 51
+      },
+      {
+        "canonical_monster_id": 229,
+        "source_row_count": 36
+      },
+      {
+        "canonical_monster_id": 230,
+        "source_row_count": 64
+      },
+      {
+        "canonical_monster_id": 231,
+        "source_row_count": 57
+      },
+      {
+        "canonical_monster_id": 232,
+        "source_row_count": 95
+      },
+      {
+        "canonical_monster_id": 233,
+        "source_row_count": 96
+      },
+      {
+        "canonical_monster_id": 234,
+        "source_row_count": 82
+      }
+    ],
+    "explicit_non_loot": [
+      {
+        "canonical_monster_id": 59,
+        "source_row_count": 0,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 78,
+        "source_row_count": 0,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 145,
+        "source_row_count": 74,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 146,
+        "source_row_count": 78,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 147,
+        "source_row_count": 71,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 161,
+        "source_row_count": 0,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 186,
+        "source_row_count": 0,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 187,
+        "source_row_count": 0,
+        "exemption_required": true
+      },
+      {
+        "canonical_monster_id": 194,
+        "source_row_count": 0,
+        "exemption_required": true
+      }
+    ],
+    "runtime_disabled": [
+      33,
+      183,
+      241
+    ],
+    "project_extension": {
+      "canonical_monster_id": 225,
+      "source_row_count": 69
+    }
+  },
+  "summary": {
+    "canonical_monsters": 156,
+    "runtime_allowed": 153,
+    "drop_enabled": 144,
+    "explicit_non_loot": 9,
+    "runtime_disabled": 3,
+    "direct_21cq": 143,
+    "project_extension": 1,
+    "production_slots": 6809,
+    "source_accounting": {
+      "LEGACY_21CQ_COMPILED": 6740,
+      "PROJECT_EXTENSION_COMPILED": 69,
+      "EXPLICIT_NON_LOOT_EXCLUDED": 223,
+      "RETIRED_OUT_OF_RUNTIME": 2558
+    }
+  },
+  "records": [
+    {
+      "canonical_monster_id": 18,
+      "canonical_monster_name": "毒蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.18",
+      "source_row_count": 1,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 19,
+      "canonical_monster_name": "蛤蟆",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.19",
+      "source_row_count": 13,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 21,
+      "canonical_monster_name": "稻草人",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.21",
+      "source_row_count": 15,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 24,
+      "canonical_monster_name": "多钩猫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.24",
+      "source_row_count": 14,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 26,
+      "canonical_monster_name": "钉耙猫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.26",
+      "source_row_count": 13,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 28,
+      "canonical_monster_name": "森林雪人",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.28",
+      "source_row_count": 25,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 30,
+      "canonical_monster_name": "食人花",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.30",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 31,
+      "canonical_monster_name": "多钩猫王",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.31",
+      "source_row_count": 42,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 32,
+      "canonical_monster_name": "钉耙猫王",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.32",
+      "source_row_count": 42,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 33,
+      "canonical_monster_name": "雪人王",
+      "runtime_allowed": false,
+      "semantic_status": "RUNTIME_DISABLED",
+      "slot_policy": "RUNTIME_DISABLED_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "CANONICAL_CATALOG_RUNTIME_ALLOWED_FALSE",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 34,
+      "canonical_monster_name": "半兽人",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.34",
+      "source_row_count": 23,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 36,
+      "canonical_monster_name": "半兽战士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.36",
+      "source_row_count": 28,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 38,
+      "canonical_monster_name": "半兽勇士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.38",
+      "source_row_count": 63,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 39,
+      "canonical_monster_name": "半兽勇士1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.39",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 41,
+      "canonical_monster_name": "半兽勇士9",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.41",
+      "source_row_count": 50,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 42,
+      "canonical_monster_name": "半兽统领",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.42",
+      "source_row_count": 45,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 43,
+      "canonical_monster_name": "山洞蝙蝠",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.43",
+      "source_row_count": 7,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 45,
+      "canonical_monster_name": "蝎子",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.45",
+      "source_row_count": 1,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 46,
+      "canonical_monster_name": "洞蛆",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.46",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 47,
+      "canonical_monster_name": "骷髅",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.47",
+      "source_row_count": 34,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 50,
+      "canonical_monster_name": "掷斧骷髅",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.50",
+      "source_row_count": 34,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 52,
+      "canonical_monster_name": "骷髅战士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.52",
+      "source_row_count": 36,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 54,
+      "canonical_monster_name": "骷髅战将",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.54",
+      "source_row_count": 38,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 55,
+      "canonical_monster_name": "骷髅战将0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.55",
+      "source_row_count": 27,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 56,
+      "canonical_monster_name": "骷髅精灵",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.56",
+      "source_row_count": 96,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 57,
+      "canonical_monster_name": "骷髅精灵1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.57",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 59,
+      "canonical_monster_name": "骷髅精灵9",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 60,
+      "canonical_monster_name": "粪虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.60",
+      "source_row_count": 4,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 62,
+      "canonical_monster_name": "暗黑战士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.62",
+      "source_row_count": 48,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 64,
+      "canonical_monster_name": "沃玛战士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.64",
+      "source_row_count": 50,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 66,
+      "canonical_monster_name": "沃玛勇士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.66",
+      "source_row_count": 52,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 68,
+      "canonical_monster_name": "沃玛战将",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.68",
+      "source_row_count": 49,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 70,
+      "canonical_monster_name": "火焰沃玛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.70",
+      "source_row_count": 41,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 73,
+      "canonical_monster_name": "沃玛卫士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.73",
+      "source_row_count": 90,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 74,
+      "canonical_monster_name": "沃玛卫士1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.74",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 75,
+      "canonical_monster_name": "沃玛卫士2",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.75",
+      "source_row_count": 78,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 76,
+      "canonical_monster_name": "沃玛教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.76",
+      "source_row_count": 33,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 77,
+      "canonical_monster_name": "沃玛教主1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.77",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 78,
+      "canonical_monster_name": "沃玛教主9",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 79,
+      "canonical_monster_name": "僵尸1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.79",
+      "source_row_count": 59,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 81,
+      "canonical_monster_name": "僵尸2",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.81",
+      "source_row_count": 60,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 83,
+      "canonical_monster_name": "僵尸3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.83",
+      "source_row_count": 59,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 85,
+      "canonical_monster_name": "僵尸4",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.85",
+      "source_row_count": 59,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 87,
+      "canonical_monster_name": "僵尸5",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.87",
+      "source_row_count": 59,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 89,
+      "canonical_monster_name": "尸王",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.89",
+      "source_row_count": 8,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 90,
+      "canonical_monster_name": "尸王1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.90",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 91,
+      "canonical_monster_name": "尸王2",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.91",
+      "source_row_count": 8,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 92,
+      "canonical_monster_name": "红蛇",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.92",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 94,
+      "canonical_monster_name": "虎蛇",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.94",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 96,
+      "canonical_monster_name": "羊",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.96",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 97,
+      "canonical_monster_name": "猎鹰",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.97",
+      "source_row_count": 4,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 100,
+      "canonical_monster_name": "狼",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.100",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 101,
+      "canonical_monster_name": "盔甲虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.101",
+      "source_row_count": 33,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 103,
+      "canonical_monster_name": "威思而小虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.103",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 104,
+      "canonical_monster_name": "沙虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.104",
+      "source_row_count": 2,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 105,
+      "canonical_monster_name": "多角虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.105",
+      "source_row_count": 31,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 107,
+      "canonical_monster_name": "巨型多角虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.107",
+      "source_row_count": 53,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 110,
+      "canonical_monster_name": "蜈蚣",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.110",
+      "source_row_count": 24,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 112,
+      "canonical_monster_name": "黑色恶蛆",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.112",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 114,
+      "canonical_monster_name": "跳跳蜂",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.114",
+      "source_row_count": 49,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 116,
+      "canonical_monster_name": "巨型蠕虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.116",
+      "source_row_count": 47,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 118,
+      "canonical_monster_name": "钳虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.118",
+      "source_row_count": 48,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 120,
+      "canonical_monster_name": "邪恶钳虫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.120",
+      "source_row_count": 105,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 121,
+      "canonical_monster_name": "邪恶钳虫1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.121",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 122,
+      "canonical_monster_name": "邪恶钳虫2",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.122",
+      "source_row_count": 50,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 123,
+      "canonical_monster_name": "邪恶钳虫9",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.123",
+      "source_row_count": 112,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 124,
+      "canonical_monster_name": "触龙神",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.124",
+      "source_row_count": 115,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 126,
+      "canonical_monster_name": "角蝇",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.126",
+      "source_row_count": 9,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 127,
+      "canonical_monster_name": "蝙蝠",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.127",
+      "source_row_count": 5,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 128,
+      "canonical_monster_name": "楔蛾",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.128",
+      "source_row_count": 3,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 129,
+      "canonical_monster_name": "红野猪",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.129",
+      "source_row_count": 50,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 131,
+      "canonical_monster_name": "红野猪3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.131",
+      "source_row_count": 18,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 132,
+      "canonical_monster_name": "黑野猪",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.132",
+      "source_row_count": 50,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 133,
+      "canonical_monster_name": "黑野猪0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.133",
+      "source_row_count": 46,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 134,
+      "canonical_monster_name": "黑野猪3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.134",
+      "source_row_count": 18,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 135,
+      "canonical_monster_name": "白野猪",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.135",
+      "source_row_count": 126,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 136,
+      "canonical_monster_name": "白野猪0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.136",
+      "source_row_count": 91,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 137,
+      "canonical_monster_name": "白野猪1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.137",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 138,
+      "canonical_monster_name": "蝎蛇",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.138",
+      "source_row_count": 48,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 140,
+      "canonical_monster_name": "蝎蛇3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.140",
+      "source_row_count": 18,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 141,
+      "canonical_monster_name": "邪恶毒蛇",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.141",
+      "source_row_count": 96,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 142,
+      "canonical_monster_name": "邪恶毒蛇1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.142",
+      "source_row_count": 29,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 143,
+      "canonical_monster_name": "石墓尸王",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.143",
+      "source_row_count": 110,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 144,
+      "canonical_monster_name": "蜜蜂",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.144",
+      "source_row_count": 47,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 145,
+      "canonical_monster_name": "变异骷髅0",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 74,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 146,
+      "canonical_monster_name": "神兽0",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 78,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 147,
+      "canonical_monster_name": "神兽2",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 71,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 148,
+      "canonical_monster_name": "大老鼠",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.148",
+      "source_row_count": 55,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 150,
+      "canonical_monster_name": "祖玛弓箭手",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.150",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 152,
+      "canonical_monster_name": "祖玛弓箭手3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.152",
+      "source_row_count": 49,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 153,
+      "canonical_monster_name": "祖玛雕像",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.153",
+      "source_row_count": 56,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 155,
+      "canonical_monster_name": "祖玛雕像3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.155",
+      "source_row_count": 49,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 156,
+      "canonical_monster_name": "祖玛卫士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.156",
+      "source_row_count": 56,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 157,
+      "canonical_monster_name": "祖玛卫士0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.157",
+      "source_row_count": 52,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 158,
+      "canonical_monster_name": "祖玛卫士3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.158",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 159,
+      "canonical_monster_name": "祖玛卫士00",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.159",
+      "source_row_count": 103,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 160,
+      "canonical_monster_name": "祖玛教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.160",
+      "source_row_count": 72,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 161,
+      "canonical_monster_name": "祖玛教主9",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 162,
+      "canonical_monster_name": "双头血魔",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.162",
+      "source_row_count": 85,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 163,
+      "canonical_monster_name": "双头金刚",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.163",
+      "source_row_count": 85,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 164,
+      "canonical_monster_name": "血巨人",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.164",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 166,
+      "canonical_monster_name": "血僵尸",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.166",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 168,
+      "canonical_monster_name": "月魔蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.168",
+      "source_row_count": 52,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 170,
+      "canonical_monster_name": "黑锷蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.170",
+      "source_row_count": 17,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 172,
+      "canonical_monster_name": "钢牙蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.172",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 174,
+      "canonical_monster_name": "暴牙蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.174",
+      "source_row_count": 52,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 176,
+      "canonical_monster_name": "天狼蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.176",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 178,
+      "canonical_monster_name": "花吻蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.178",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 180,
+      "canonical_monster_name": "赤月恶魔",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.180",
+      "source_row_count": 83,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 182,
+      "canonical_monster_name": "幻影蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.182",
+      "source_row_count": 52,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 183,
+      "canonical_monster_name": "爆裂蜘蛛",
+      "runtime_allowed": false,
+      "semantic_status": "RUNTIME_DISABLED",
+      "slot_policy": "RUNTIME_DISABLED_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "CANONICAL_CATALOG_RUNTIME_ALLOWED_FALSE",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 185,
+      "canonical_monster_name": "剧毒蜘蛛",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.185",
+      "source_row_count": 3,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 186,
+      "canonical_monster_name": "鹰卫",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 187,
+      "canonical_monster_name": "虎卫",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 188,
+      "canonical_monster_name": "虹魔猪卫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.188",
+      "source_row_count": 90,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 189,
+      "canonical_monster_name": "虹魔猪卫0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.189",
+      "source_row_count": 57,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 190,
+      "canonical_monster_name": "虹魔猪卫9",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.190",
+      "source_row_count": 57,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 191,
+      "canonical_monster_name": "虹魔蝎卫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.191",
+      "source_row_count": 89,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 192,
+      "canonical_monster_name": "虹魔蝎卫0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.192",
+      "source_row_count": 56,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 193,
+      "canonical_monster_name": "虹魔教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.193",
+      "source_row_count": 85,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 194,
+      "canonical_monster_name": "恶魔弓箭手",
+      "runtime_allowed": true,
+      "semantic_status": "EXPLICIT_NON_LOOT",
+      "slot_policy": "EXPLICIT_NON_LOOT_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "EXPLICIT_NON_LOOT_FROZEN",
+      "exemption": {
+        "required": true,
+        "kind": "EXPLICIT_NON_LOOT",
+        "reason": "Human-frozen non-loot decision; source rows remain in the provenance ledger and are excluded from production slots."
+      }
+    },
+    {
+      "canonical_monster_id": 195,
+      "canonical_monster_name": "千年树妖",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.195",
+      "source_row_count": 95,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 196,
+      "canonical_monster_name": "恶灵僵尸",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.196",
+      "source_row_count": 22,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 198,
+      "canonical_monster_name": "恶灵尸王",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.198",
+      "source_row_count": 68,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 199,
+      "canonical_monster_name": "恶灵尸王0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.199",
+      "source_row_count": 72,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 200,
+      "canonical_monster_name": "骷髅锤兵",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.200",
+      "source_row_count": 42,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 202,
+      "canonical_monster_name": "骷髅长枪兵",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.202",
+      "source_row_count": 45,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 204,
+      "canonical_monster_name": "骷髅刀斧手",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.204",
+      "source_row_count": 39,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 206,
+      "canonical_monster_name": "骷髅弓箭手",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.206",
+      "source_row_count": 50,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 208,
+      "canonical_monster_name": "黄泉教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.208",
+      "source_row_count": 116,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 209,
+      "canonical_monster_name": "黄泉教主0",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.209",
+      "source_row_count": 107,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 210,
+      "canonical_monster_name": "牛头魔",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.210",
+      "source_row_count": 46,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 212,
+      "canonical_monster_name": "牛魔战士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.212",
+      "source_row_count": 34,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 214,
+      "canonical_monster_name": "牛魔斗士",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.214",
+      "source_row_count": 34,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 216,
+      "canonical_monster_name": "牛魔侍卫",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.216",
+      "source_row_count": 49,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 218,
+      "canonical_monster_name": "牛魔将军",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.218",
+      "source_row_count": 60,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 220,
+      "canonical_monster_name": "牛魔法师",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.220",
+      "source_row_count": 44,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 222,
+      "canonical_monster_name": "牛魔祭司",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.222",
+      "source_row_count": 57,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 224,
+      "canonical_monster_name": "牛魔王",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.224",
+      "source_row_count": 94,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 225,
+      "canonical_monster_name": "暗之牛魔王",
+      "runtime_allowed": true,
+      "semantic_status": "PROJECT_EXTENSION",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.225",
+      "source_row_count": 69,
+      "decision_basis": "PROJECT_EXTENSION_FROZEN",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 226,
+      "canonical_monster_name": "宝箱",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.226",
+      "source_row_count": 1,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 227,
+      "canonical_monster_name": "宝箱1",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.227",
+      "source_row_count": 36,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 228,
+      "canonical_monster_name": "宝箱2",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.228",
+      "source_row_count": 51,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 229,
+      "canonical_monster_name": "宝箱3",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.229",
+      "source_row_count": 36,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 230,
+      "canonical_monster_name": "宝箱4",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.230",
+      "source_row_count": 64,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 231,
+      "canonical_monster_name": "宝箱5",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.231",
+      "source_row_count": 57,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 232,
+      "canonical_monster_name": "宝箱6",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.232",
+      "source_row_count": 95,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 233,
+      "canonical_monster_name": "宝箱7",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.233",
+      "source_row_count": 96,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 234,
+      "canonical_monster_name": "宝箱8",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.234",
+      "source_row_count": 82,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 235,
+      "canonical_monster_name": "暗之双头血魔",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.235",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 236,
+      "canonical_monster_name": "暗之双头金刚",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.236",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 237,
+      "canonical_monster_name": "暗之黄泉教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.237",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 238,
+      "canonical_monster_name": "暗之骷髅精灵",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.238",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 239,
+      "canonical_monster_name": "暗之沃玛教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.239",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 240,
+      "canonical_monster_name": "暗之虹魔教主",
+      "runtime_allowed": true,
+      "semantic_status": "DIRECT_21CQ",
+      "slot_policy": "COMPILE_DIRECT",
+      "drop_profile_id": "dpv2.direct.240",
+      "source_row_count": 54,
+      "decision_basis": "ELIGIBLE_SOURCE_ID_DEFAULT",
+      "exemption": null
+    },
+    {
+      "canonical_monster_id": 241,
+      "canonical_monster_name": "飞火流星",
+      "runtime_allowed": false,
+      "semantic_status": "RUNTIME_DISABLED",
+      "slot_policy": "RUNTIME_DISABLED_EXCLUDED",
+      "drop_profile_id": null,
+      "source_row_count": 0,
+      "decision_basis": "CANONICAL_CATALOG_RUNTIME_ALLOWED_FALSE",
+      "exemption": null
+    }
+  ]
+}

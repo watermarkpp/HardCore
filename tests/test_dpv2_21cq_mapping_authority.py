@@ -24,16 +24,20 @@ class MappingAuthorityTests(unittest.TestCase):
     def test_monster_mapping_and_disposition_closure(self) -> None:
         summary = self.monsters["summary"]
         self.assertEqual(summary["source_monster_records"], 217)
-        self.assertEqual(summary["active_canonical_monsters"], 156)
-        self.assertEqual(summary["drop_enabled_monsters"], 131)
-        self.assertEqual(summary["non_loot_monsters"], 25)
+        self.assertEqual(summary["canonical_profiles"], 156)
+        self.assertEqual(summary["active_canonical_monsters"], 153)
+        self.assertEqual(summary["runtime_allowed_monsters"], 153)
+        self.assertEqual(summary["drop_enabled_monsters"], 144)
+        self.assertEqual(summary["explicit_non_loot_monsters"], 9)
+        self.assertEqual(summary["runtime_disabled_monsters"], 3)
+        self.assertEqual(summary["non_loot_monsters"], 9)
         self.assertEqual(summary["mapping_unresolved"], 0)
         self.assertEqual(
             summary["source_disposition_row_counts"],
             {
-                "LEGACY_21CQ_COMPILED": 5926,
+                "LEGACY_21CQ_COMPILED": 6740,
                 "PROJECT_EXTENSION_COMPILED": 69,
-                "NON_LOOT_EXCLUDED": 1037,
+                "EXPLICIT_NON_LOOT_EXCLUDED": 223,
                 "RETIRED_OUT_OF_RUNTIME": 2558,
             },
         )
@@ -48,13 +52,30 @@ class MappingAuthorityTests(unittest.TestCase):
         self.assertEqual(dark_cow["mapping_status"], "PROJECT_EXTENSION")
         self.assertEqual(dark_cow["baseline_origin"], "PROJECT_EXTENSION")
         self.assertEqual(dark_cow["source_row_count"], 69)
-        non_loot = [row for row in by_id.values() if row["mapping_status"] == "NON_LOOT"]
-        self.assertEqual(len(non_loot), 25)
+        non_loot = [
+            row for row in by_id.values()
+            if row["mapping_status"] == "EXPLICIT_NON_LOOT"
+        ]
+        self.assertEqual(len(non_loot), 9)
         self.assertTrue(
             all(
                 row["drop_enabled"] is False
                 and row["drop_profile_id"] is None
                 for row in non_loot
+            )
+        )
+        runtime_disabled = [
+            row for row in by_id.values()
+            if row["mapping_status"] == "RUNTIME_DISABLED"
+        ]
+        self.assertEqual(len(runtime_disabled), 3)
+        self.assertTrue(
+            all(
+                row["runtime_allowed"] is False
+                and row["drop_enabled"] is False
+                and row["drop_profile_id"] is None
+                and row["source_row_count"] == 0
+                for row in runtime_disabled
             )
         )
 

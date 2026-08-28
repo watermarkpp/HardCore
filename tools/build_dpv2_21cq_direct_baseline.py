@@ -14,6 +14,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 from typing import Any
 
@@ -39,13 +40,13 @@ GLOBAL_DROP_RATE_AUTHORITY_PATH = (
     ROOT / "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
 )
 PARITY_REPORT_PATH = ROOT / "docs/dpv2_21cq_x1_parity_report.md"
+SEMANTIC_AUTHORITY_PATH = (
+    ROOT / "assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json"
+)
 CANONICAL_CATALOG_PATH = (
     ROOT / "assets/data/runtime/canonical_monster_catalog.json"
 )
 VANILLA_MONSTERS_PATH = ROOT / "assets/data/vanilla_176/monsters.json"
-LEGACY_ROLE_PATH = (
-    ROOT / "assets/data/drop/dpv2_monster_role_authority_v1.json"
-)
 LEGACY_ITEM_POLICY_PATH = (
     ROOT / "assets/data/drop/dpv2_item_tier_authority_v1.json"
 )
@@ -66,6 +67,40 @@ EXPECTED_WORKBOOK_SHA256 = (
 EXPECTED_SOURCE_SHA256 = (
     "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013"
 )
+BASELINE_FREEZE_SHA = "c1cfe8cf809d5047344060e9fe3ea06a9b9799f8"
+BASELINE_FREEZE_SLOT_COUNT = 5995
+BASELINE_FREEZE_SLOT_SHA256 = (
+    "2D70FB2A279BA4E9EA471BDAFA2A777AA4B899BFA70A76A3FE8055BFA4941A14"
+)
+EXPECTED_RUNTIME_ALLOWED_IDS = 153
+EXPECTED_DROP_ENABLED_IDS = 144
+EXPECTED_EXPLICIT_NON_LOOT_IDS = frozenset(
+    {59, 78, 145, 146, 147, 161, 186, 187, 194}
+)
+EXPECTED_RUNTIME_DISABLED_IDS = frozenset({33, 183, 241})
+EXPECTED_PROJECT_EXTENSION_ID = 225
+EXPECTED_DIRECT_OVERRIDES = {
+    79: 59,
+    81: 60,
+    83: 59,
+    85: 59,
+    87: 59,
+    226: 1,
+    227: 36,
+    228: 51,
+    229: 36,
+    230: 64,
+    231: 57,
+    232: 95,
+    233: 96,
+    234: 82,
+}
+EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROWS = {
+    145: 74,
+    146: 78,
+    147: 71,
+}
+EXPECTED_RESTORED_SLOT_COUNT = sum(EXPECTED_DIRECT_OVERRIDES.values())
 CHANCE_RE = re.compile(r"^1/([1-9][0-9]*)$")
 
 
@@ -78,6 +113,109 @@ def load_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise DirectBaselineError(f"{path.relative_to(ROOT)} is not a JSON object")
     return value
+
+
+def canonical_json(value: Any) -> str:
+    """Encode JSON values deterministically for hashes and freeze checks."""
+
+    return json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def load_baseline_at_freeze() -> dict[str, Any]:
+    """Load the pre-R1 direct baseline from the immutable task base commit.
+
+    The working-tree baseline is replaced by the R1 compiled subset.  Reading
+    the old artifact from BASELINE_FREEZE_SHA keeps the preservation check
+    independent of that replacement and makes a later accidental slot edit
+    fail closed.
+    """
+
+    relative = DIRECT_BASELINE_PATH.relative_to(ROOT).as_posix()
+    try:
+        encoded = subprocess.check_output(
+            ["git", "show", f"{BASELINE_FREEZE_SHA}:{relative}"],
+            cwd=ROOT,
+            stderr=subprocess.STDOUT,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise DirectBaselineError(
+            f"cannot load baseline freeze {BASELINE_FREEZE_SHA}:{relative}"
+        ) from exc
+    try:
+        value = json.loads(encoded.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise DirectBaselineError("baseline freeze is not valid UTF-8 JSON") from exc
+    if not isinstance(value, dict):
+        raise DirectBaselineError("baseline freeze is not a JSON object")
+    return value
+
+
+def flatten_slots(baseline: dict[str, Any]) -> list[dict[str, Any]]:
+    profiles = baseline.get("profiles")
+    if not isinstance(profiles, list):
+        raise DirectBaselineError("baseline profiles are not an array")
+    slots: list[dict[str, Any]] = []
+    for profile in profiles:
+        if not isinstance(profile, dict) or not isinstance(profile.get("slots"), list):
+            raise DirectBaselineError("baseline profile slots are invalid")
+        for slot in profile["slots"]:
+            if not isinstance(slot, dict):
+                raise DirectBaselineError("baseline slot is not an object")
+            slots.append(slot)
+    return slots
+
+
+def slot_set_hash(slots: list[dict[str, Any]]) -> str:
+    ordered = sorted(slots, key=lambda row: str(row.get("slot_uid", "")))
+    return hashlib.sha256(canonical_json(ordered).encode("utf-8")).hexdigest().upper()
+
+
+def compare_existing_slots(
+    current_slots: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Compare all BASE_SHA slot records by UID and every persisted field."""
+
+    frozen = flatten_slots(load_baseline_at_freeze())
+    if len(frozen) != BASELINE_FREEZE_SLOT_COUNT:
+        raise DirectBaselineError(
+            f"baseline freeze slot count={len(frozen)} expected={BASELINE_FREEZE_SLOT_COUNT}"
+        )
+    frozen_hash = slot_set_hash(frozen)
+    if frozen_hash != BASELINE_FREEZE_SLOT_SHA256:
+        raise DirectBaselineError(
+            f"baseline freeze slot hash={frozen_hash} expected={BASELINE_FREEZE_SLOT_SHA256}"
+        )
+
+    frozen_by_uid = {str(row.get("slot_uid", "")): row for row in frozen}
+    current_by_uid = {str(row.get("slot_uid", "")): row for row in current_slots}
+    if len(frozen_by_uid) != len(frozen):
+        raise DirectBaselineError("baseline freeze contains duplicate slot UID")
+    if len(current_by_uid) != len(current_slots):
+        raise DirectBaselineError("compiled baseline contains duplicate slot UID")
+
+    missing = sorted(set(frozen_by_uid) - set(current_by_uid))
+    mismatched = sorted(
+        uid
+        for uid in frozen_by_uid.keys() & current_by_uid.keys()
+        if current_by_uid[uid] != frozen_by_uid[uid]
+    )
+    drift = len(missing) + len(mismatched)
+    if drift:
+        preview = ",".join((missing + mismatched)[:3])
+        raise DirectBaselineError(
+            f"existing BASE_SHA slot drift={drift} (first={preview})"
+        )
+    return {
+        "base_sha": BASELINE_FREEZE_SHA,
+        "base_slot_count": len(frozen),
+        "base_slot_sha256": frozen_hash,
+        "existing_slot_drift": drift,
+    }
 
 
 def sha256_raw(path: Path) -> str:
@@ -308,19 +446,248 @@ def pretty_json(value: dict[str, Any]) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
 
 
-def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
+def build_semantic_authority(audit: dict[str, Any]) -> dict[str, Any]:
+    """Build the independent monster drop semantic partition.
+
+    Runtime eligibility is read strictly from the canonical catalog's
+    ``runtime_allowed`` field.  The explicit decisions below only choose the
+    disposition of an otherwise eligible source identity; they never infer
+    probability from a second authority.
+    """
+
     catalog = load_json(CANONICAL_CATALOG_PATH)
-    entries_by_id = catalog.get("entries_by_id", {})
-    if not isinstance(entries_by_id, dict) or len(entries_by_id) != 156:
-        raise DirectBaselineError("canonical active monster catalog is not 156 rows")
-    role_seed = load_json(LEGACY_ROLE_PATH)
-    role_by_id = {
-        int(row["canonical_monster_id"]): row
-        for row in role_seed.get("monsters", [])
+    catalog_entries = catalog.get("entries")
+    if not isinstance(catalog_entries, list) or len(catalog_entries) != 156:
+        raise DirectBaselineError("canonical monster catalog is not 156 rows")
+    catalog_by_id: dict[int, dict[str, Any]] = {}
+    for raw in catalog_entries:
+        if not isinstance(raw, dict):
+            raise DirectBaselineError("canonical monster catalog row is not an object")
+        monster_id = int(raw.get("monster_id", -1))
+        if monster_id <= 0 or monster_id in catalog_by_id:
+            raise DirectBaselineError(f"invalid/duplicate canonical monster id: {monster_id}")
+        if type(raw.get("runtime_allowed")) is not bool:
+            raise DirectBaselineError(
+                f"catalog runtime_allowed is not boolean: monster={monster_id}"
+            )
+        catalog_by_id[monster_id] = raw
+
+    source_by_id = {
+        int(row["stable_monster_id"]): row
+        for row in audit["records"]
+    }
+    if set(source_by_id) & set(catalog_by_id) != set(catalog_by_id):
+        raise DirectBaselineError("catalog/source identity set is not closed")
+
+    expected_runtime_disabled = set(EXPECTED_RUNTIME_DISABLED_IDS)
+    actual_runtime_disabled = {
+        monster_id
+        for monster_id, row in catalog_by_id.items()
+        if row["runtime_allowed"] is False
+    }
+    if actual_runtime_disabled != expected_runtime_disabled:
+        raise DirectBaselineError(
+            "catalog runtime-disabled IDs drift: "
+            f"{sorted(actual_runtime_disabled)} != {sorted(expected_runtime_disabled)}"
+        )
+
+    expected_explicit = set(EXPECTED_EXPLICIT_NON_LOOT_IDS)
+    if EXPECTED_PROJECT_EXTENSION_ID in expected_explicit:
+        raise DirectBaselineError("project extension overlaps explicit non-loot")
+    if expected_runtime_disabled & expected_explicit:
+        raise DirectBaselineError("runtime-disabled overlaps explicit non-loot")
+    expected_direct = set(catalog_by_id) - expected_runtime_disabled - expected_explicit
+    expected_direct.discard(EXPECTED_PROJECT_EXTENSION_ID)
+    if len(expected_direct) != EXPECTED_DROP_ENABLED_IDS - 1:
+        raise DirectBaselineError("derived direct semantic count drift")
+
+    source_rows_by_id = {
+        monster_id: len(source_by_id[monster_id].get("rows", []))
+        for monster_id in catalog_by_id
+    }
+    if {
+        monster_id: source_rows_by_id[monster_id]
+        for monster_id in EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROWS
+    } != EXPECTED_EXPLICIT_NON_LOOT_SOURCE_ROWS:
+        raise DirectBaselineError("explicit non-loot source row counts drift")
+    if {
+        monster_id: source_rows_by_id[monster_id]
+        for monster_id in EXPECTED_DIRECT_OVERRIDES
+    } != EXPECTED_DIRECT_OVERRIDES:
+        raise DirectBaselineError("direct frozen source row counts drift")
+    if source_rows_by_id[EXPECTED_PROJECT_EXTENSION_ID] != 69:
+        raise DirectBaselineError("project extension source row count drift")
+    if sum(source_rows_by_id[monster_id] for monster_id in expected_explicit) != 223:
+        raise DirectBaselineError("explicit non-loot source row total drift")
+    if sum(source_rows_by_id.values()) != 7032:
+        raise DirectBaselineError("catalog source row total drift")
+
+    records: list[dict[str, Any]] = []
+    semantic_counts: Counter[str] = Counter()
+    for monster_id in sorted(catalog_by_id):
+        catalog_row = catalog_by_id[monster_id]
+        source_row = source_by_id[monster_id]
+        runtime_allowed = bool(catalog_row["runtime_allowed"])
+        if not runtime_allowed:
+            semantic_status = "RUNTIME_DISABLED"
+            slot_policy = "RUNTIME_DISABLED_EXCLUDED"
+            decision_basis = "CANONICAL_CATALOG_RUNTIME_ALLOWED_FALSE"
+            exemption: dict[str, Any] | None = None
+            profile_id: str | None = None
+        elif monster_id == EXPECTED_PROJECT_EXTENSION_ID:
+            semantic_status = "PROJECT_EXTENSION"
+            slot_policy = "COMPILE_DIRECT"
+            decision_basis = "PROJECT_EXTENSION_FROZEN"
+            exemption = None
+            profile_id = f"dpv2.direct.{monster_id}"
+        elif monster_id in expected_explicit:
+            semantic_status = "EXPLICIT_NON_LOOT"
+            slot_policy = "EXPLICIT_NON_LOOT_EXCLUDED"
+            decision_basis = "EXPLICIT_NON_LOOT_FROZEN"
+            exemption = {
+                "required": True,
+                "kind": "EXPLICIT_NON_LOOT",
+                "reason": (
+                    "Human-frozen non-loot decision; source rows remain in the "
+                    "provenance ledger and are excluded from production slots."
+                ),
+            }
+            profile_id = None
+        else:
+            semantic_status = "DIRECT_21CQ"
+            slot_policy = "COMPILE_DIRECT"
+            decision_basis = "ELIGIBLE_SOURCE_ID_DEFAULT"
+            exemption = None
+            profile_id = f"dpv2.direct.{monster_id}"
+
+        semantic_counts[semantic_status] += 1
+        records.append({
+            "canonical_monster_id": monster_id,
+            "canonical_monster_name": str(catalog_row.get("canonical_name", "")),
+            "runtime_allowed": runtime_allowed,
+            "semantic_status": semantic_status,
+            "slot_policy": slot_policy,
+            "drop_profile_id": profile_id,
+            "source_row_count": source_rows_by_id[monster_id],
+            "decision_basis": decision_basis,
+            "exemption": exemption,
+        })
+
+        if semantic_status == "RUNTIME_DISABLED" and source_rows_by_id[monster_id] != 0:
+            raise DirectBaselineError(
+                f"runtime-disabled monster has source rows: {monster_id}"
+            )
+
+    expected_semantics = {
+        "DIRECT_21CQ": 143,
+        "PROJECT_EXTENSION": 1,
+        "EXPLICIT_NON_LOOT": 9,
+        "RUNTIME_DISABLED": 3,
+    }
+    if dict(semantic_counts) != expected_semantics:
+        raise DirectBaselineError(
+            f"semantic partition drift: {dict(semantic_counts)} != {expected_semantics}"
+        )
+
+    accounting = {
+        "LEGACY_21CQ_COMPILED": 6740,
+        "PROJECT_EXTENSION_COMPILED": 69,
+        "EXPLICIT_NON_LOOT_EXCLUDED": 223,
+        "RETIRED_OUT_OF_RUNTIME": 2558,
+    }
+    if sum(accounting.values()) != EXPECTED_SOURCE_ROWS:
+        raise DirectBaselineError("semantic source accounting does not close")
+    return {
+        "schema": "hardcore.dpv2.monster_drop_semantic_authority.v1",
+        "authority_id": "dpv2.monster_drop_semantic.v1",
+        "status": "SEMANTIC_AUTHORITY_COMPLETE",
+        "production_active": True,
+        "identity_key": "canonical_monster_id",
+        "source": {
+            "canonical_catalog": {
+                "path": CANONICAL_CATALOG_PATH.relative_to(ROOT).as_posix(),
+                "sha256": sha256_lf(CANONICAL_CATALOG_PATH),
+                "hash_normalization": "lf_text",
+                "runtime_eligibility_field": "runtime_allowed",
+            },
+            "logical_drop_source": {
+                "path": SOURCE_PATH.relative_to(ROOT).as_posix(),
+                "sha256": sha256_raw(SOURCE_PATH),
+                "hash_normalization": "raw_bytes",
+            },
+        },
+        "policy": {
+            "identity_join": "stable_monster_id_exact",
+            "runtime_eligibility": "catalog_runtime_allowed_only",
+            "name_fallback": False,
+            "fuzzy_matching": False,
+            "source_rows_retained_when_excluded": True,
+            "excluded_rows_never_compiled": True,
+        },
+        "frozen_decisions": {
+            "direct_21cq": [
+                {"canonical_monster_id": monster_id, "source_row_count": count}
+                for monster_id, count in EXPECTED_DIRECT_OVERRIDES.items()
+            ],
+            "explicit_non_loot": [
+                {
+                    "canonical_monster_id": monster_id,
+                    "source_row_count": source_rows_by_id[monster_id],
+                    "exemption_required": True,
+                }
+                for monster_id in sorted(expected_explicit)
+            ],
+            "runtime_disabled": sorted(expected_runtime_disabled),
+            "project_extension": {
+                "canonical_monster_id": EXPECTED_PROJECT_EXTENSION_ID,
+                "source_row_count": source_rows_by_id[EXPECTED_PROJECT_EXTENSION_ID],
+            },
+        },
+        "summary": {
+            "canonical_monsters": len(records),
+            "runtime_allowed": sum(
+                int(row["runtime_allowed"]) for row in records
+            ),
+            "drop_enabled": sum(
+                int(row["semantic_status"] in {"DIRECT_21CQ", "PROJECT_EXTENSION"})
+                for row in records
+            ),
+            "explicit_non_loot": semantic_counts["EXPLICIT_NON_LOOT"],
+            "runtime_disabled": semantic_counts["RUNTIME_DISABLED"],
+            "direct_21cq": semantic_counts["DIRECT_21CQ"],
+            "project_extension": semantic_counts["PROJECT_EXTENSION"],
+            "production_slots": 6809,
+            "source_accounting": accounting,
+        },
+        "records": records,
+    }
+
+
+def build_monster_mapping(
+    audit: dict[str, Any],
+    semantic_authority: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    catalog = load_json(CANONICAL_CATALOG_PATH)
+    catalog_entries = catalog.get("entries")
+    if not isinstance(catalog_entries, list) or len(catalog_entries) != 156:
+        raise DirectBaselineError("canonical monster catalog is not 156 rows")
+    catalog_by_id = {
+        int(row["monster_id"]): row
+        for row in catalog_entries
         if isinstance(row, dict)
     }
-    if len(role_by_id) != 156:
-        raise DirectBaselineError("legacy NON_LOOT migration seed is not 156 rows")
+    if len(catalog_by_id) != 156:
+        raise DirectBaselineError("canonical monster catalog IDs are not unique")
+    if semantic_authority is None:
+        semantic_authority = build_semantic_authority(audit)
+    semantic_rows = semantic_authority.get("records", [])
+    semantic_by_id = {
+        int(row["canonical_monster_id"]): row
+        for row in semantic_rows
+        if isinstance(row, dict)
+    }
+    if set(semantic_by_id) != set(catalog_by_id):
+        raise DirectBaselineError("semantic authority/catalog ID mismatch")
     vanilla = load_json(VANILLA_MONSTERS_PATH)
     vanilla_by_id = {
         int(row["monsterId"]): row
@@ -331,7 +698,7 @@ def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
     records: list[dict[str, Any]] = []
     status_counts: Counter[str] = Counter()
     disposition_row_counts: Counter[str] = Counter()
-    active_count = enabled_count = non_loot_count = 0
+    active_count = enabled_count = non_loot_count = runtime_disabled_count = 0
     for source_record in audit["records"]:
         monster_id = int(source_record["stable_monster_id"])
         source_name = str(source_record["name"])
@@ -348,52 +715,74 @@ def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
                 f"{source_name!r} != {canonical_name!r}"
             )
 
-        runtime_active = str(monster_id) in entries_by_id
-        role_row = role_by_id.get(monster_id)
-        if runtime_active and not isinstance(role_row, dict):
+        catalog_row = catalog_by_id.get(monster_id)
+        semantic_row = semantic_by_id.get(monster_id)
+        runtime_active = isinstance(catalog_row, dict) and bool(
+            catalog_row.get("runtime_allowed") is True
+        )
+        if catalog_row is not None and not isinstance(semantic_row, dict):
             raise DirectBaselineError(
-                f"active monster_id={monster_id} missing frozen drop disposition"
+                f"catalog monster={monster_id} missing semantic disposition"
             )
-        if runtime_active:
-            active_count += 1
-            if monster_id == 225:
-                mapping_status = "PROJECT_EXTENSION"
-                baseline_origin = "PROJECT_EXTENSION"
-                drop_enabled = True
-                drop_profile_id: str | None = f"drop.{monster_id}"
-                source_disposition = "PROJECT_EXTENSION_COMPILED"
-            elif bool(role_row.get("drop_enabled", False)):
-                mapping_status = "EXACT"
-                baseline_origin = "LEGACY_21CQ_MONITEMS"
-                drop_enabled = True
-                drop_profile_id = f"drop.{monster_id}"
-                source_disposition = "LEGACY_21CQ_COMPILED"
-            else:
-                mapping_status = "NON_LOOT"
-                baseline_origin = "NON_LOOT"
-                drop_enabled = False
-                drop_profile_id = None
-                source_disposition = "NON_LOOT_EXCLUDED"
-                non_loot_count += 1
-            if drop_enabled:
-                enabled_count += 1
-        else:
-            mapping_status = "EXACT"
+        if catalog_row is None:
+            mapping_status = "RETIRED_OUT_OF_RUNTIME"
+            semantic_status = "RETIRED_OUT_OF_RUNTIME"
             baseline_origin = "LEGACY_21CQ_MONITEMS"
             drop_enabled = False
             drop_profile_id = None
             source_disposition = "RETIRED_OUT_OF_RUNTIME"
+        else:
+            active_count += int(runtime_active)
+            semantic_status = str(semantic_row["semantic_status"])
+            if semantic_status == "PROJECT_EXTENSION":
+                mapping_status = semantic_status
+                baseline_origin = "PROJECT_EXTENSION"
+                drop_enabled = True
+                drop_profile_id = f"drop.{monster_id}"
+                source_disposition = "PROJECT_EXTENSION_COMPILED"
+            elif semantic_status == "DIRECT_21CQ":
+                mapping_status = semantic_status
+                baseline_origin = "LEGACY_21CQ_MONITEMS"
+                drop_enabled = True
+                drop_profile_id = f"drop.{monster_id}"
+                source_disposition = "LEGACY_21CQ_COMPILED"
+            elif semantic_status == "EXPLICIT_NON_LOOT":
+                mapping_status = semantic_status
+                baseline_origin = "EXPLICIT_NON_LOOT"
+                drop_enabled = False
+                drop_profile_id = None
+                source_disposition = "EXPLICIT_NON_LOOT_EXCLUDED"
+                non_loot_count += 1
+            elif semantic_status == "RUNTIME_DISABLED":
+                mapping_status = semantic_status
+                baseline_origin = "RUNTIME_DISABLED"
+                drop_enabled = False
+                drop_profile_id = None
+                source_disposition = "RUNTIME_DISABLED"
+                runtime_disabled_count += 1
+            else:
+                raise DirectBaselineError(
+                    f"unknown semantic disposition: monster={monster_id}"
+                )
+            enabled_count += int(drop_enabled)
 
         status_counts[mapping_status] += 1
-        disposition_row_counts[source_disposition] += row_count
+        if row_count:
+            disposition_row_counts[source_disposition] += row_count
         records.append({
             "source_monster_id": monster_id,
             "source_monster_name": source_name,
             "canonical_monster_id": monster_id,
             "canonical_monster_name": canonical_name,
             "mapping_status": mapping_status,
+            "semantic_status": semantic_status,
             "mapping_basis": "STABLE_MONSTER_ID_EXACT",
             "runtime_active": runtime_active,
+            "runtime_allowed": (
+                bool(catalog_row.get("runtime_allowed"))
+                if isinstance(catalog_row, dict)
+                else False
+            ),
             "drop_enabled": drop_enabled,
             "drop_profile_id": drop_profile_id,
             "baseline_origin": baseline_origin,
@@ -403,11 +792,13 @@ def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
         })
 
     expected_dispositions = {
-        "LEGACY_21CQ_COMPILED": 5926,
+        "LEGACY_21CQ_COMPILED": 6740,
         "PROJECT_EXTENSION_COMPILED": 69,
-        "NON_LOOT_EXCLUDED": 1037,
+        "EXPLICIT_NON_LOOT_EXCLUDED": 223,
         "RETIRED_OUT_OF_RUNTIME": 2558,
     }
+    if runtime_disabled_count != len(EXPECTED_RUNTIME_DISABLED_IDS):
+        raise DirectBaselineError("runtime-disabled mapping count drift")
     if dict(disposition_row_counts) != expected_dispositions:
         raise DirectBaselineError(
             "monster source disposition drift: "
@@ -415,9 +806,9 @@ def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
         )
     if (
         len(records) != 217
-        or active_count != 156
-        or enabled_count != 131
-        or non_loot_count != 25
+        or active_count != EXPECTED_RUNTIME_ALLOWED_IDS
+        or enabled_count != EXPECTED_DROP_ENABLED_IDS
+        or non_loot_count != len(EXPECTED_EXPLICIT_NON_LOOT_IDS)
         or status_counts.get("UNRESOLVED", 0) != 0
     ):
         raise DirectBaselineError("monster mapping closure mismatch")
@@ -440,16 +831,17 @@ def build_monster_mapping(audit: dict[str, Any]) -> dict[str, Any]:
             "unresolved_blocks_cutover": True,
             "non_loot_has_null_profile": True,
             "project_extension_requires_direct_frozen_profile": True,
-        },
-        "migration_seed": {
-            "path": LEGACY_ROLE_PATH.relative_to(ROOT).as_posix(),
-            "sha256": sha256_raw(LEGACY_ROLE_PATH),
-            "role": "one_time_NON_LOOT_disposition_seed_not_probability_authority",
+            "runtime_disabled_has_no_profile": True,
+            "explicit_non_loot_requires_exemption": True,
         },
         "summary": {
             "source_monster_records": len(records),
+            "canonical_profiles": len(catalog_by_id),
             "active_canonical_monsters": active_count,
             "drop_enabled_monsters": enabled_count,
+            "runtime_allowed_monsters": active_count,
+            "explicit_non_loot_monsters": non_loot_count,
+            "runtime_disabled_monsters": runtime_disabled_count,
             "non_loot_monsters": non_loot_count,
             "mapping_status_counts": dict(sorted(status_counts.items())),
             "mapping_unresolved": status_counts.get("UNRESOLVED", 0),
@@ -830,6 +1222,7 @@ def build_provenance(
                 ),
                 "source_disposition": disposition,
                 "baseline_origin": baseline_origin,
+                "semantic_status": str(mapping.get("semantic_status", "")),
                 "correction_id": parsed["correction_id"],
                 "effective_base_numerator": int(parsed["base_numerator"]),
                 "effective_base_denominator": int(parsed["base_denominator"]),
@@ -878,10 +1271,6 @@ def build_direct_baseline(
     item_mapping: dict[str, Any],
     overflow: dict[str, Any],
 ) -> dict[str, Any]:
-    monster_by_id = {
-        int(row["source_monster_id"]): row
-        for row in monster_mapping["records"]
-    }
     item_by_label = {
         str(row["source_item_label"]): row
         for row in item_mapping["records"]
@@ -902,17 +1291,28 @@ def build_direct_baseline(
     for mapping in sorted(
         monster_mapping["records"], key=lambda row: int(row["canonical_monster_id"])
     ):
-        if not bool(mapping["runtime_active"]):
+        semantic_status = str(mapping.get("semantic_status", ""))
+        # Source-only identities do not have a canonical profile.  Runtime
+        # disabled identities do, but are represented as an empty profile so
+        # the 156-profile catalog closure remains explicit.
+        if semantic_status == "RETIRED_OUT_OF_RUNTIME":
             continue
         monster_id = int(mapping["canonical_monster_id"])
-        if not bool(mapping["drop_enabled"]):
+        drop_enabled = semantic_status in {"DIRECT_21CQ", "PROJECT_EXTENSION"}
+        if not drop_enabled:
             profiles.append({
                 "canonical_monster_id": monster_id,
                 "canonical_monster_name": str(mapping["canonical_monster_name"]),
                 "drop_enabled": False,
                 "drop_profile_id": None,
                 "reporting_label": "NON_LOOT",
-                "baseline_origin": "NON_LOOT",
+                "baseline_origin": (
+                    "EXPLICIT_NON_LOOT"
+                    if semantic_status == "EXPLICIT_NON_LOOT"
+                    else "RUNTIME_DISABLED"
+                ),
+                "runtime_allowed": bool(mapping.get("runtime_allowed", False)),
+                "semantic_status": semantic_status,
                 "slots": [],
             })
             continue
@@ -977,6 +1377,8 @@ def build_direct_baseline(
             "drop_profile_id": f"dpv2.direct.{monster_id}",
             "reporting_label": None,
             "baseline_origin": origin,
+            "runtime_allowed": bool(mapping.get("runtime_allowed", False)),
+            "semantic_status": semantic_status,
             "slots": slots,
         })
 
@@ -984,20 +1386,83 @@ def build_direct_baseline(
     slot_uids = [str(slot["slot_uid"]) for slot in slots]
     provenance_ids = [str(slot["source_provenance_id"]) for slot in slots]
     if len(profiles) != 156:
-        raise DirectBaselineError(f"active profile count={len(profiles)} expected=156")
-    if len(slots) != 5995:
-        raise DirectBaselineError(f"compiled slot count={len(slots)} expected=5995")
+        raise DirectBaselineError(f"profile count={len(profiles)} expected=156")
+    if len(slots) != 6809:
+        raise DirectBaselineError(f"compiled slot count={len(slots)} expected=6809")
     if len(slot_uids) != len(set(slot_uids)):
         raise DirectBaselineError("compiled slot UID collision")
     if len(provenance_ids) != len(set(provenance_ids)):
         raise DirectBaselineError("compiled provenance reference collision")
-    expected_origins = {"LEGACY_21CQ_MONITEMS": 5926, "PROJECT_EXTENSION": 69}
+    expected_origins = {"LEGACY_21CQ_MONITEMS": 6740, "PROJECT_EXTENSION": 69}
     if dict(origin_counts) != expected_origins:
         raise DirectBaselineError(f"compiled origin counts drift: {dict(origin_counts)}")
     if invalid_probability_count != 0:
         raise DirectBaselineError("invalid compiled probability")
+    source_probability_by_uid = {
+        _compiled_slot_uid(int(row["monster_id"]), str(row["slot_index"])): (
+            int(row["base_numerator"]),
+            int(row["base_denominator"]),
+        )
+        for row in compiled_source_rows
+    }
+    x1_probability_mismatch = sum(
+        1
+        for slot in slots
+        if (
+            int(slot["base_numerator"]),
+            int(slot["base_denominator"]),
+        ) != source_probability_by_uid.get(str(slot["slot_uid"]))
+    )
+    if x1_probability_mismatch:
+        raise DirectBaselineError(
+            f"x1 probability mismatch={x1_probability_mismatch}"
+        )
     exact_duplicate_rows = sum(
         value - 1 for value in exact_duplicate_counter.values() if value > 1
+    )
+    duplicate_slot_collapse = len(compiled_source_rows) - len(slot_uids)
+    if duplicate_slot_collapse != 0:
+        raise DirectBaselineError(
+            f"duplicate slot collapse={duplicate_slot_collapse}"
+        )
+    frozen = compare_existing_slots(slots)
+    frozen_uids = {
+        str(slot["slot_uid"])
+        for slot in flatten_slots(load_baseline_at_freeze())
+    }
+    restored_slots = [slot for slot in slots if str(slot["slot_uid"]) not in frozen_uids]
+    if len(restored_slots) != EXPECTED_RESTORED_SLOT_COUNT:
+        raise DirectBaselineError(
+            f"restored slot count={len(restored_slots)} "
+            f"expected={EXPECTED_RESTORED_SLOT_COUNT}"
+        )
+    restored_x1_probability_mismatch = sum(
+        1
+        for slot in restored_slots
+        if (
+            int(slot["base_numerator"]),
+            int(slot["base_denominator"]),
+        ) != source_probability_by_uid.get(str(slot["slot_uid"]))
+    )
+    if restored_x1_probability_mismatch:
+        raise DirectBaselineError(
+            "restored x1 probability mismatch="
+            f"{restored_x1_probability_mismatch}"
+        )
+    restored_exact_duplicate_counter: Counter[tuple[Any, ...]] = Counter()
+    for slot in restored_slots:
+        restored_exact_duplicate_counter[
+            (
+                slot.get("canonical_item_id"),
+                slot.get("gold_amount"),
+                slot["base_numerator"],
+                slot["base_denominator"],
+            )
+        ] += 1
+    restored_exact_duplicate_rows = sum(
+        value - 1
+        for value in restored_exact_duplicate_counter.values()
+        if value > 1
     )
     return {
         "schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
@@ -1021,25 +1486,47 @@ def build_direct_baseline(
         },
         "summary": {
             "active_monsters": len(profiles),
+            "runtime_allowed_monsters": sum(
+                int(profile.get("runtime_allowed") is True)
+                for profile in profiles
+            ),
             "drop_enabled_monsters": sum(
                 1 for profile in profiles if profile["drop_enabled"]
             ),
             "non_loot_monsters": sum(
-                1 for profile in profiles if not profile["drop_enabled"]
+                1
+                for profile in profiles
+                if profile.get("semantic_status") == "EXPLICIT_NON_LOOT"
+            ),
+            "explicit_non_loot_monsters": sum(
+                1
+                for profile in profiles
+                if profile.get("semantic_status") == "EXPLICIT_NON_LOOT"
+            ),
+            "runtime_disabled_monsters": sum(
+                1
+                for profile in profiles
+                if profile.get("semantic_status") == "RUNTIME_DISABLED"
             ),
             "compiled_slots": len(slots),
             "baseline_origin_counts": dict(origin_counts),
             "invalid_compiled_numerator_or_denominator": invalid_probability_count,
-            "x1_probability_mismatch": 0,
-            "duplicate_slot_collapse": 0,
+            "x1_probability_mismatch": x1_probability_mismatch,
+            "duplicate_slot_collapse": duplicate_slot_collapse,
+            "restored_existing_slots": len(restored_slots),
+            "restored_x1_probability_mismatch": restored_x1_probability_mismatch,
+            "restored_exact_duplicate_rows_beyond_first": restored_exact_duplicate_rows,
             "compiled_exact_duplicate_rows_beyond_first": exact_duplicate_rows,
+            "existing_slot_drift": frozen["existing_slot_drift"],
         },
+        "baseline_freeze": frozen,
         "profiles": profiles,
     }
 
 
 def build_manifest(rendered: dict[Path, str]) -> dict[str, Any]:
     required_generated = {
+        "semantic_authority": SEMANTIC_AUTHORITY_PATH,
         "monster_mapping": MONSTER_MAPPING_PATH,
         "item_mapping": ITEM_MAPPING_PATH,
         "overflow_authority": OVERFLOW_AUTHORITY_PATH,
@@ -1106,27 +1593,32 @@ def render_parity_report(
     item_mapping: dict[str, Any],
     provenance: dict[str, Any],
     baseline: dict[str, Any],
+    semantic_authority: dict[str, Any],
 ) -> str:
     monster = monster_mapping["summary"]
     item = item_mapping["summary"]
     summary = baseline["summary"]
     dispositions = provenance["summary"]["disposition_counts"]
-    return f"""# DPV2-21CQ-X1 Phase 3 x1 Side-by-Side Parity Report
+    semantic_summary = semantic_authority["summary"]
+    return f"""# DPV2-21CQ-X1-R1 Compiled-Subset Parity Report
 
-Status: `DATA_PARITY_PASS / CUTOVER_NOT_STARTED / PRODUCTION_STILL_V1`
+Status: `COMPILED_SUBSET_PARITY_PASS / PRODUCTION_CURRENT_V2_DIRECT_BASELINE`
 
 ## Result
 
-The V2 side-by-side artifact compiles direct per-slot x1 probabilities for all
-currently drop-enabled monsters. It does not activate the V2 loader or Runtime.
-Current Production remains on the existing V1 Tier/Role chain, and the tracked
-7032 source-slot catalog is unchanged.
+The direct baseline compiles the production subset of the tracked source: every
+eligible source identity uses direct per-slot x1 probabilities, while explicit
+non-loot rows remain in provenance and runtime-disabled identities remain empty.
+Current production is the V2 direct baseline; no Tier/Role calculation is part
+of this artifact, and the canonical 7032 source-slot catalog is unchanged.
 
 | Gate | Result |
 | --- | ---: |
 | active canonical monsters | {summary['active_monsters']} |
+| catalog runtime_allowed profiles | {summary['runtime_allowed_monsters']} |
 | drop-enabled monsters | {summary['drop_enabled_monsters']} |
-| explicit NON_LOOT monsters | {summary['non_loot_monsters']} |
+| explicit NON_LOOT monsters | {summary['explicit_non_loot_monsters']} |
+| runtime-disabled monsters | {summary['runtime_disabled_monsters']} |
 | compiled direct slots | {summary['compiled_slots']} |
 | LEGACY_21CQ_MONITEMS slots | {summary['baseline_origin_counts']['LEGACY_21CQ_MONITEMS']} |
 | PROJECT_EXTENSION slots | {summary['baseline_origin_counts']['PROJECT_EXTENSION']} |
@@ -1135,6 +1627,9 @@ Current Production remains on the existing V1 Tier/Role chain, and the tracked
 | invalid compiled numerator/denominator | {summary['invalid_compiled_numerator_or_denominator']} |
 | x1 probability mismatch | {summary['x1_probability_mismatch']} |
 | duplicate slot collapse | {summary['duplicate_slot_collapse']} |
+| restored exact independent slots | {summary['restored_existing_slots']} |
+| restored x1 probability mismatch | {summary['restored_x1_probability_mismatch']} |
+| existing BASE_SHA slot drift | {summary['existing_slot_drift']} |
 | preserved exact duplicate rows beyond first | {summary['compiled_exact_duplicate_rows_beyond_first']} |
 
 ## Full 9590-row disposition ledger
@@ -1143,7 +1638,7 @@ Current Production remains on the existing V1 Tier/Role chain, and the tracked
 | --- | ---: |
 | LEGACY_21CQ_COMPILED | {dispositions['LEGACY_21CQ_COMPILED']} |
 | PROJECT_EXTENSION_COMPILED | {dispositions['PROJECT_EXTENSION_COMPILED']} |
-| NON_LOOT_EXCLUDED | {dispositions['NON_LOOT_EXCLUDED']} |
+| EXPLICIT_NON_LOOT_EXCLUDED | {dispositions['EXPLICIT_NON_LOOT_EXCLUDED']} |
 | RETIRED_OUT_OF_RUNTIME | {dispositions['RETIRED_OUT_OF_RUNTIME']} |
 | total | {provenance['summary']['disposition_sum']} |
 
@@ -1172,8 +1667,10 @@ enter the explicit post-RNG nine-ground-slot retention policy. Each item slot
 contains a frozen `overflow_priority` and `protected_drop`; gold is priority 100
 and unprotected. These fields cannot alter probability.
 
-This phase provides data and tests only. Runtime activation, loader switching and
-the global scale implementation remain future cutover work.
+The semantic partition is independently frozen at {semantic_summary['canonical_monsters']}
+profiles / {semantic_summary['runtime_allowed']} runtime-allowed /
+{semantic_summary['drop_enabled']} drop-enabled / {semantic_summary['explicit_non_loot']}
+explicit non-loot / {semantic_summary['runtime_disabled']} runtime-disabled.
 """
 
 
@@ -1201,32 +1698,36 @@ def render_mapping_report(
             f"| {record['source_item_label']} | none | {evidence} |"
         )
     retired_only_table = "\n".join(retired_only_rows)
-    return f"""# DPV2-21CQ-X1 Phase 2 Mapping Report
+    return f"""# DPV2-21CQ-X1-R1 Semantic Mapping Report
 
-Status: `MAPPING_AUTHORITY_CLOSED / CUTOVER_NOT_STARTED / PRODUCTION_STILL_V1`
+Status: `SEMANTIC_CLOSURE_PASS / PRODUCTION_CURRENT_V2_DIRECT_BASELINE`
 
 ## Monster mapping
 
 | Metric | Count |
 | --- | ---: |
 | logical source monsters | {monster['source_monster_records']} |
-| active canonical monsters | {monster['active_canonical_monsters']} |
+| canonical profiles | {monster['canonical_profiles']} |
+| catalog runtime_allowed profiles | {monster['runtime_allowed_monsters']} |
 | drop-enabled active monsters | {monster['drop_enabled_monsters']} |
-| explicit NON_LOOT monsters | {monster['non_loot_monsters']} |
-| EXACT mappings | {monster['mapping_status_counts'].get('EXACT', 0)} |
-| EXPLICIT_ALIAS mappings | {monster['mapping_status_counts'].get('EXPLICIT_ALIAS', 0)} |
+| explicit NON_LOOT monsters | {monster['explicit_non_loot_monsters']} |
+| runtime-disabled monsters | {monster['runtime_disabled_monsters']} |
+| DIRECT_21CQ mappings | {monster['mapping_status_counts'].get('DIRECT_21CQ', 0)} |
 | PROJECT_EXTENSION mappings | {monster['mapping_status_counts'].get('PROJECT_EXTENSION', 0)} |
-| NON_LOOT mappings | {monster['mapping_status_counts'].get('NON_LOOT', 0)} |
+| EXPLICIT_NON_LOOT mappings | {monster['mapping_status_counts'].get('EXPLICIT_NON_LOOT', 0)} |
+| RUNTIME_DISABLED mappings | {monster['mapping_status_counts'].get('RUNTIME_DISABLED', 0)} |
+| retired source-only mappings | {monster['mapping_status_counts'].get('RETIRED_OUT_OF_RUNTIME', 0)} |
 | UNRESOLVED mappings | {monster['mapping_unresolved']} |
 
-All joins use the already-frozen stable `monster_id`. No name, suffix, map,
-class, Role or approximate matching is used. Monster 225 is explicitly
-`PROJECT_EXTENSION`; its 69 source-artifact rows are frozen as project-owned
-direct rules and are not represented as 21CQ legacy provenance.
+All joins use the stable `monster_id` and the canonical catalog's strict
+`runtime_allowed` field. No name, suffix, map, class or approximate matching is
+used. Monster 225 is explicitly `PROJECT_EXTENSION`; its 69 source-artifact
+rows are project-owned direct rules and are not represented as 21CQ provenance.
 
-The 25 existing NON_LOOT decisions are explicit and expose
-`drop_enabled=false, drop_profile_id=null`. Their 1037 logical source rows remain
-in the disposition ledger but are not compiled into V2 production slots.
+The nine explicit NON_LOOT decisions expose
+`drop_enabled=false, drop_profile_id=null`. Their 223 logical source rows remain
+in the disposition ledger but are not compiled into production slots. The three
+runtime-disabled catalog identities are also empty and cannot enter production.
 
 ## Source row disposition ledger
 
@@ -1234,7 +1735,7 @@ in the disposition ledger but are not compiled into V2 production slots.
 | --- | ---: |
 | LEGACY_21CQ_COMPILED | {monster['source_disposition_row_counts']['LEGACY_21CQ_COMPILED']} |
 | PROJECT_EXTENSION_COMPILED | {monster['source_disposition_row_counts']['PROJECT_EXTENSION_COMPILED']} |
-| NON_LOOT_EXCLUDED | {monster['source_disposition_row_counts']['NON_LOOT_EXCLUDED']} |
+| EXPLICIT_NON_LOOT_EXCLUDED | {monster['source_disposition_row_counts']['EXPLICIT_NON_LOOT_EXCLUDED']} |
 | RETIRED_OUT_OF_RUNTIME | {monster['source_disposition_row_counts']['RETIRED_OUT_OF_RUNTIME']} |
 | total | {monster['source_disposition_row_sum']} |
 
@@ -1283,8 +1784,13 @@ probability effect and apply only after all independent slot RNG draws.
 monster_mapping_unresolved = {monster['mapping_unresolved']}
 item_mapping_unresolved = {item['mapping_unresolved']}
 source_disposition_sum = {monster['source_disposition_row_sum']}
-CUTOVER = NOT_STARTED
-Production = V1
+canonical_profiles = {monster['canonical_profiles']}
+runtime_allowed = {monster['runtime_allowed_monsters']}
+drop_enabled = {monster['drop_enabled_monsters']}
+explicit_non_loot = {monster['explicit_non_loot_monsters']}
+runtime_disabled = {monster['runtime_disabled_monsters']}
+compiled_production_slots = 6809
+Production = V2_DIRECT_BASELINE
 ```
 """
 
@@ -1362,7 +1868,8 @@ drop probability was changed in this phase.
 
 def desired_outputs() -> dict[Path, str]:
     audit = parse_source()
-    monster_mapping = build_monster_mapping(audit)
+    semantic_authority = build_semantic_authority(audit)
+    monster_mapping = build_monster_mapping(audit, semantic_authority)
     item_mapping = build_item_mapping(audit, monster_mapping)
     overflow = build_overflow_authority(item_mapping)
     provenance = build_provenance(audit, monster_mapping)
@@ -1374,6 +1881,7 @@ def desired_outputs() -> dict[Path, str]:
     )
     outputs = {
         IMPORT_AUDIT_PATH: render_import_audit(audit),
+        SEMANTIC_AUTHORITY_PATH: pretty_json(semantic_authority),
         MONSTER_MAPPING_PATH: pretty_json(monster_mapping),
         ITEM_MAPPING_PATH: pretty_json(item_mapping),
         OVERFLOW_AUTHORITY_PATH: pretty_json(overflow),
@@ -1389,6 +1897,7 @@ def desired_outputs() -> dict[Path, str]:
             item_mapping,
             provenance,
             baseline,
+            semantic_authority,
         ),
     }
     outputs[MANIFEST_PATH] = pretty_json(build_manifest(outputs))
@@ -1418,7 +1927,8 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
         audit = parse_source()
         metrics = audit["metrics"]
-        monster_mapping = build_monster_mapping(audit)
+        semantic_authority = build_semantic_authority(audit)
+        monster_mapping = build_monster_mapping(audit, semantic_authority)
         item_mapping = build_item_mapping(audit, monster_mapping)
         baseline = build_direct_baseline(
             audit,

@@ -40,9 +40,12 @@ class DirectBaselineTests(unittest.TestCase):
         self.assertTrue(self.baseline["production_active"])
         self.assertEqual(self.baseline["production_runtime"], "V2_DIRECT_BASELINE")
         self.assertEqual(summary["active_monsters"], 156)
-        self.assertEqual(summary["drop_enabled_monsters"], 131)
-        self.assertEqual(summary["non_loot_monsters"], 25)
-        self.assertEqual(summary["compiled_slots"], 5995)
+        self.assertEqual(summary["runtime_allowed_monsters"], 153)
+        self.assertEqual(summary["drop_enabled_monsters"], 144)
+        self.assertEqual(summary["explicit_non_loot_monsters"], 9)
+        self.assertEqual(summary["runtime_disabled_monsters"], 3)
+        self.assertEqual(summary["non_loot_monsters"], 9)
+        self.assertEqual(summary["compiled_slots"], 6809)
         self.assertEqual(
             self.baseline["probability_policy"]["global_drop_rate_scale"], 1.0
         )
@@ -53,22 +56,36 @@ class DirectBaselineTests(unittest.TestCase):
         )
         self.assertEqual(
             summary["baseline_origin_counts"],
-            {"LEGACY_21CQ_MONITEMS": 5926, "PROJECT_EXTENSION": 69},
+            {"LEGACY_21CQ_MONITEMS": 6740, "PROJECT_EXTENSION": 69},
         )
 
     def test_non_loot_is_not_a_probability_role(self) -> None:
         non_loot = [
             profile
             for profile in self.baseline["profiles"]
-            if not profile["drop_enabled"]
+            if profile["semantic_status"] == "EXPLICIT_NON_LOOT"
         ]
-        self.assertEqual(len(non_loot), 25)
+        self.assertEqual(len(non_loot), 9)
         self.assertTrue(
             all(
                 profile["drop_profile_id"] is None
                 and profile["reporting_label"] == "NON_LOOT"
                 and profile["slots"] == []
                 for profile in non_loot
+            )
+        )
+        runtime_disabled = [
+            profile
+            for profile in self.baseline["profiles"]
+            if profile["semantic_status"] == "RUNTIME_DISABLED"
+        ]
+        self.assertEqual(len(runtime_disabled), 3)
+        self.assertTrue(
+            all(
+                profile["drop_enabled"] is False
+                and profile["drop_profile_id"] is None
+                and profile["slots"] == []
+                for profile in runtime_disabled
             )
         )
 
@@ -93,9 +110,9 @@ class DirectBaselineTests(unittest.TestCase):
                 self.assertGreater(slot["base_denominator"], 0)
                 slot_uids.append(slot["slot_uid"])
                 provenance_ids.append(slot["source_provenance_id"])
-        self.assertEqual(len(slot_uids), 5995)
-        self.assertEqual(len(set(slot_uids)), 5995)
-        self.assertEqual(len(set(provenance_ids)), 5995)
+        self.assertEqual(len(slot_uids), 6809)
+        self.assertEqual(len(set(slot_uids)), 6809)
+        self.assertEqual(len(set(provenance_ids)), 6809)
 
     def test_x1_values_match_every_effective_compiled_source_row(self) -> None:
         audit = builder.parse_source()
@@ -152,9 +169,9 @@ class DirectBaselineTests(unittest.TestCase):
         self.assertEqual(
             summary["disposition_counts"],
             {
-                "LEGACY_21CQ_COMPILED": 5926,
+                "LEGACY_21CQ_COMPILED": 6740,
                 "PROJECT_EXTENSION_COMPILED": 69,
-                "NON_LOOT_EXCLUDED": 1037,
+                "EXPLICIT_NON_LOOT_EXCLUDED": 223,
                 "RETIRED_OUT_OF_RUNTIME": 2558,
             },
         )

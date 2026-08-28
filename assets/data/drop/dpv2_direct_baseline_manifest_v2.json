@@ -19,9 +19,14 @@
     "physical_raw_monitems_files_in_git": 0
   },
   "artifacts": {
+    "semantic_authority": {
+      "path": "assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json",
+      "sha256": "D02BCA37DF94B959761139F2BFDA67E14D19B968F7907D0FB4E55C8C8240C674",
+      "hash_normalization": "lf_text"
+    },
     "monster_mapping": {
       "path": "assets/data/drop/dpv2_21cq_monster_mapping_v1.json",
-      "sha256": "D1308F6CC154828DA4E03B4F5839E8F385905F815B74D9F0A1BE90B489AC95E1",
+      "sha256": "499714F9B61CC56E5CE7550AB69B4E74883343017B3AD07B78EAC5F4630903E7",
       "hash_normalization": "lf_text"
     },
     "item_mapping": {
@@ -36,12 +41,12 @@
     },
     "source_provenance": {
       "path": "assets/data/drop/dpv2_21cq_source_provenance_v1.json",
-      "sha256": "5F2EAE1DED0C55B6D334E2CF645F94C0B12427FF355B295CC61C38B53CD6B222",
+      "sha256": "F48A033D5A33D80B795A838BE837AE84FA93469B6055FE012309ACC07082E347",
       "hash_normalization": "lf_text"
     },
     "direct_baseline_authority": {
       "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
-      "sha256": "B3C334F1BA2F5C3DF2A3B8B112FA22610A63544CBB36EFAF213B56EFBEAC8E02",
+      "sha256": "9E9225DF113BDC94ECDA071388DC5FCFA92ED34BF8028519B06F205E06FF4DD0",
       "hash_normalization": "lf_text"
     },
     "source_correction_authority": {

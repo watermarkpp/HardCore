@@ -1,37 +1,41 @@
-# DPV2-21CQ-X1 Phase 2 Mapping Report
+# DPV2-21CQ-X1-R1 Semantic Mapping Report
 
-Status: `MAPPING_AUTHORITY_CLOSED / CUTOVER_NOT_STARTED / PRODUCTION_STILL_V1`
+Status: `SEMANTIC_CLOSURE_PASS / PRODUCTION_CURRENT_V2_DIRECT_BASELINE`
 
 ## Monster mapping
 
 | Metric | Count |
 | --- | ---: |
 | logical source monsters | 217 |
-| active canonical monsters | 156 |
-| drop-enabled active monsters | 131 |
-| explicit NON_LOOT monsters | 25 |
-| EXACT mappings | 191 |
-| EXPLICIT_ALIAS mappings | 0 |
+| canonical profiles | 156 |
+| catalog runtime_allowed profiles | 153 |
+| drop-enabled active monsters | 144 |
+| explicit NON_LOOT monsters | 9 |
+| runtime-disabled monsters | 3 |
+| DIRECT_21CQ mappings | 143 |
 | PROJECT_EXTENSION mappings | 1 |
-| NON_LOOT mappings | 25 |
+| EXPLICIT_NON_LOOT mappings | 9 |
+| RUNTIME_DISABLED mappings | 3 |
+| retired source-only mappings | 61 |
 | UNRESOLVED mappings | 0 |
 
-All joins use the already-frozen stable `monster_id`. No name, suffix, map,
-class, Role or approximate matching is used. Monster 225 is explicitly
-`PROJECT_EXTENSION`; its 69 source-artifact rows are frozen as project-owned
-direct rules and are not represented as 21CQ legacy provenance.
+All joins use the stable `monster_id` and the canonical catalog's strict
+`runtime_allowed` field. No name, suffix, map, class or approximate matching is
+used. Monster 225 is explicitly `PROJECT_EXTENSION`; its 69 source-artifact
+rows are project-owned direct rules and are not represented as 21CQ provenance.
 
-The 25 existing NON_LOOT decisions are explicit and expose
-`drop_enabled=false, drop_profile_id=null`. Their 1037 logical source rows remain
-in the disposition ledger but are not compiled into V2 production slots.
+The nine explicit NON_LOOT decisions expose
+`drop_enabled=false, drop_profile_id=null`. Their 223 logical source rows remain
+in the disposition ledger but are not compiled into production slots. The three
+runtime-disabled catalog identities are also empty and cannot enter production.
 
 ## Source row disposition ledger
 
 | Disposition | Rows |
 | --- | ---: |
-| LEGACY_21CQ_COMPILED | 5926 |
+| LEGACY_21CQ_COMPILED | 6740 |
 | PROJECT_EXTENSION_COMPILED | 69 |
-| NON_LOOT_EXCLUDED | 1037 |
+| EXPLICIT_NON_LOOT_EXCLUDED | 223 |
 | RETIRED_OUT_OF_RUNTIME | 2558 |
 | total | 9590 |
 
@@ -84,6 +88,11 @@ probability effect and apply only after all independent slot RNG draws.
 monster_mapping_unresolved = 0
 item_mapping_unresolved = 0
 source_disposition_sum = 9590
-CUTOVER = NOT_STARTED
-Production = V1
+canonical_profiles = 156
+runtime_allowed = 153
+drop_enabled = 144
+explicit_non_loot = 9
+runtime_disabled = 3
+compiled_production_slots = 6809
+Production = V2_DIRECT_BASELINE
 ```

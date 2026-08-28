@@ -1,36 +1,42 @@
-# DPV2-21CQ-X1 Phase 3 x1 Side-by-Side Parity Report
+# DPV2-21CQ-X1-R1 Compiled-Subset Parity Report
 
-Status: `DATA_PARITY_PASS / CUTOVER_NOT_STARTED / PRODUCTION_STILL_V1`
+Status: `COMPILED_SUBSET_PARITY_PASS / PRODUCTION_CURRENT_V2_DIRECT_BASELINE`
 
 ## Result
 
-The V2 side-by-side artifact compiles direct per-slot x1 probabilities for all
-currently drop-enabled monsters. It does not activate the V2 loader or Runtime.
-Current Production remains on the existing V1 Tier/Role chain, and the tracked
-7032 source-slot catalog is unchanged.
+The direct baseline compiles the production subset of the tracked source: every
+eligible source identity uses direct per-slot x1 probabilities, while explicit
+non-loot rows remain in provenance and runtime-disabled identities remain empty.
+Current production is the V2 direct baseline; no Tier/Role calculation is part
+of this artifact, and the canonical 7032 source-slot catalog is unchanged.
 
 | Gate | Result |
 | --- | ---: |
 | active canonical monsters | 156 |
-| drop-enabled monsters | 131 |
-| explicit NON_LOOT monsters | 25 |
-| compiled direct slots | 5995 |
-| LEGACY_21CQ_MONITEMS slots | 5926 |
+| catalog runtime_allowed profiles | 153 |
+| drop-enabled monsters | 144 |
+| explicit NON_LOOT monsters | 9 |
+| runtime-disabled monsters | 3 |
+| compiled direct slots | 6809 |
+| LEGACY_21CQ_MONITEMS slots | 6740 |
 | PROJECT_EXTENSION slots | 69 |
 | monster mapping unresolved | 0 |
 | compiled item mapping unresolved | 0 |
 | invalid compiled numerator/denominator | 0 |
 | x1 probability mismatch | 0 |
 | duplicate slot collapse | 0 |
-| preserved exact duplicate rows beyond first | 993 |
+| restored exact independent slots | 814 |
+| restored x1 probability mismatch | 0 |
+| existing BASE_SHA slot drift | 0 |
+| preserved exact duplicate rows beyond first | 1138 |
 
 ## Full 9590-row disposition ledger
 
 | Disposition | Rows |
 | --- | ---: |
-| LEGACY_21CQ_COMPILED | 5926 |
+| LEGACY_21CQ_COMPILED | 6740 |
 | PROJECT_EXTENSION_COMPILED | 69 |
-| NON_LOOT_EXCLUDED | 1037 |
+| EXPLICIT_NON_LOOT_EXCLUDED | 223 |
 | RETIRED_OUT_OF_RUNTIME | 2558 |
 | total | 9590 |
 
@@ -59,5 +65,7 @@ enter the explicit post-RNG nine-ground-slot retention policy. Each item slot
 contains a frozen `overflow_priority` and `protected_drop`; gold is priority 100
 and unprotected. These fields cannot alter probability.
 
-This phase provides data and tests only. Runtime activation, loader switching and
-the global scale implementation remain future cutover work.
+The semantic partition is independently frozen at 156
+profiles / 153 runtime-allowed /
+144 drop-enabled / 9
+explicit non-loot / 3 runtime-disabled.
