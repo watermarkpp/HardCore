@@ -1654,8 +1654,43 @@ func _build_guard_band_node(payload: Dictionary) -> Node:
 		guard_bounds.end,
 		Vector2(guard_bounds.position.x, guard_bounds.end.y),
 	])
+	var is_bich_runtime := (
+		int(visual.get("runtime_map_id", -1))
+		== MapEditorRuntimeBridgeScript.BICH_MAP_ID
+	)
 	var shader := Shader.new()
-	shader.code = """
+	shader.code = ("""
+shader_type canvas_item;
+render_mode unshaded;
+uniform vec2 design_size = vec2(80.0, 80.0);
+uniform float fade_tiles = 10.0;
+varying vec2 map_position;
+void vertex() {
+	map_position = VERTEX;
+}
+void fragment() {
+	vec2 iso = vec2(
+		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
+		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
+	) + (design_size - vec2(1.0)) * 0.5;
+	vec2 outside_low = max(vec2(-0.5) - iso, vec2(0.0));
+	vec2 outside_high = max(
+		iso - (design_size - vec2(0.5)), vec2(0.0)
+	);
+	float outside_tiles = max(
+		max(outside_low.x, outside_low.y),
+		max(outside_high.x, outside_high.y)
+	);
+	if (outside_tiles <= 0.0001) {
+		discard;
+	}
+	float fade = smoothstep(0.0, max(fade_tiles, 0.001), outside_tiles);
+	vec3 near_skirt = vec3(0.050, 0.066, 0.033);
+	vec3 far_skirt = vec3(0.030, 0.046, 0.022);
+	vec3 color = mix(near_skirt, far_skirt, fade);
+	COLOR = vec4(color, mix(0.98, 0.94, fade));
+}
+""" if is_bich_runtime else """
 shader_type canvas_item;
 render_mode unshaded;
 uniform vec2 design_size = vec2(80.0, 80.0);
@@ -1692,6 +1727,7 @@ void fragment() {
 	COLOR = vec4(color, mix(1.0, 0.92, fade));
 }
 """
+)
 	var material := ShaderMaterial.new()
 	material.shader = shader
 	material.set_shader_parameter("design_size", Vector2(size))
