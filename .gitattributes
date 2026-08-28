@@ -1,5 +1,14 @@
 *.import text eol=lf
 
+# DPV2-SPB raw-byte authorities are frozen to their audited Windows CRLF
+# representation.  Keep clean worktrees and isolated Android build worktrees
+# byte-identical so the fail-closed runtime and final gate remain portable.
+assets/data/canonical_monster_drop_source_v2.json text eol=crlf
+assets/data/drop/dpv2_direct_baseline_v2.json text eol=lf
+assets/data/drop/dpv2_21cq_source_provenance_v1.json text eol=lf
+assets/data/drop/dpv2_single_player_item_boost_classification_v1.json text eol=crlf
+map_editor_workspace/**/*.editor.json text eol=crlf
+
 assets/data/vanilla_176/skill_source_package_v1_0_1/** binary
 assets/data/vanilla_176/skills_source_of_truth_v1.json binary
 assets/data/equipment_classic_avatar_head_patches.json -text
