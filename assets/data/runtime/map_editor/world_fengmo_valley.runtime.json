@@ -1,5 +1,5 @@
 {
-  "build_sha256": "c2517cf4b8d9b2e326a0285bfa1e895af12b6b9d1c8dfc5d7fb416793f8a2b93",
+  "build_sha256": "1640900b8f9b4de04c28dec3111d9452b0a5d7cbc0517e10582de546d8bddbab",
   "collision": {
     "blocked_count": 223.0,
     "blocked_tiles": [
@@ -4385,7 +4385,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -4466,7 +4466,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         4.0,
         3.0
@@ -4547,7 +4547,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         5.0,
         2.0
@@ -4628,7 +4628,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -4709,7 +4709,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         3.0,
         2.0
@@ -4790,7 +4790,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -4871,7 +4871,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -6242,10 +6242,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "692fb57de37543b02e8e8e264ebf9f62c0645ebf7df62f1c3d29c5a2600383a0",
+      "authoring_sha256": "3d706ce6d35fc319bebffc60679e37778ff7eba9f49a0c5a632bb8677c3131f0",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "7557bafbd17c0a8fa6882a914adda9707baeb48e7861420cca6ee6a48cf1e3ef",
+      "document_sha256": "248ea1501c62ab250a44e6bda0084a10baf581d855ebec688ceb1a020f88b117",
       "ground_manifest_sha256": "6adfcd470cbcaab3c7d205f20cc66b9abe7998742a4ebb28e7bc8497063a66c4",
       "ground_state_sha256": "c1bc25feb500cef141f569e62991d49722c602db3be1bc7142aebca54164238d",
       "map_key": "world_fengmo_valley",
