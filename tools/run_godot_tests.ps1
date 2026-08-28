@@ -85,6 +85,7 @@ $Suites = @{
 		'tests/monster_ground_unit_runtime_test.tscn',
 		'tests/monster_melee_contact_geometry_test.tscn',
 		'tests/monster_accuracy_runtime_test.tscn',
+		'tests/monster_anti_stealth_runtime_test.tscn',
 		'tests/monster_mfc1_attribute_timing_audit_test.tscn',
 		'tests/monster_movement_cadence_test.tscn',
 		'tests/monster_neighbor_step_policy_test.tscn',
