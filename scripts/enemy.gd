@@ -1002,6 +1002,7 @@ func _physics_process(delta: float) -> void:
 	if (
 		target.has_method("is_stealthed")
 		and target.is_stealthed()
+		and not anti_stealth
 		and distance_gu > MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
 	):
 		velocity = Vector2.ZERO
