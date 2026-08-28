@@ -225,10 +225,10 @@ var projection_rejection_reason := &""
 var reference_audit_mode := false
 ## FREEZE-P0.2R: projection profiles contain closures and must be reused during
 ## actor/location updates.  The key includes the map, audit context, and the
-## release-registry generation so a map switch, audit-mode switch, or registry
-## invalidation can never reuse a profile from the wrong authority context.
+## audit context so a map switch or audit-mode switch can never reuse a profile
+## from the wrong authority context. The production registry is immutable after
+## startup; test overrides create a fresh GameRoot instance.
 var _projection_profile_cache: Dictionary = {}
-var _projection_profile_cache_generation := -1
 var _projection_profile_cache_audit_mode := false
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
@@ -7791,18 +7791,12 @@ func _resolve_projection_profile_for_map(map_id: int) -> Dictionary:
 	## FREEZE-P0.2R: formal runtime profile in normal gameplay; reference
 	## profile only inside an explicit reference_audit_mode context (migration /
 	## import audit / test-dev preview). Never inferred from WorldContent.
-	var registry_generation := MapEditorRuntimeBridgeScript.registry_generation()
-	if (
-		_projection_profile_cache_generation != registry_generation
-		or _projection_profile_cache_audit_mode != reference_audit_mode
-	):
+	if _projection_profile_cache_audit_mode != reference_audit_mode:
 		_projection_profile_cache.clear()
-		_projection_profile_cache_generation = registry_generation
 		_projection_profile_cache_audit_mode = reference_audit_mode
-	var cache_key := "%d|%d|%d" % [
+	var cache_key := "%d|%d" % [
 		map_id,
 		1 if reference_audit_mode else 0,
-		registry_generation,
 	]
 	if _projection_profile_cache.has(cache_key):
 		return _projection_profile_cache[cache_key]
