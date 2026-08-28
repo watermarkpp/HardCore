@@ -1069,7 +1069,1216 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          66.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱8",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 234.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000004",
+        "spawn_rule": "ambient",
+        "tile": [
+          22.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱7",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 233.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000005",
+        "spawn_rule": "ambient",
+        "tile": [
+          40.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱6",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 232.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000006",
+        "spawn_rule": "ambient",
+        "tile": [
+          59.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 231.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000007",
+        "spawn_rule": "ambient",
+        "tile": [
+          1.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 230.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000008",
+        "spawn_rule": "ambient",
+        "tile": [
+          16.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 229.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000009",
+        "spawn_rule": "ambient",
+        "tile": [
+          15.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "宝箱2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 228.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000010",
+        "spawn_rule": "ambient",
+        "tile": [
+          37.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000011",
+        "spawn_rule": "ambient",
+        "tile": [
+          48.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000015",
+        "spawn_rule": "ambient",
+        "tile": [
+          69.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000016",
+        "spawn_rule": "ambient",
+        "tile": [
+          21.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000017",
+        "spawn_rule": "ambient",
+        "tile": [
+          4.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          60.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          49.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000030",
+        "spawn_rule": "ambient",
+        "tile": [
+          44.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000031",
+        "spawn_rule": "ambient",
+        "tile": [
+          61.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000032",
+        "spawn_rule": "ambient",
+        "tile": [
+          18.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f2",
+          "source_category_role": "ordinary",
+          "source_line": 272.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f2.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f2.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38.0,
+          19.0
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

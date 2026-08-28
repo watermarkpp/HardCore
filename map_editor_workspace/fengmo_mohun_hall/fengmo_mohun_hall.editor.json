@@ -89,7 +89,857 @@
   },
   "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "白野猪",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 135.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2536.0,
+            -46.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶毒蛇",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 141.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            78.0,
+            33.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          55.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000005",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000006",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          9.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000007",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000008",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "虹魔蝎卫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 191.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            64.0,
+            19.0,
+            1.0,
+            2536.0,
+            -7.0,
+            -62.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000009",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          49,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "白野猪",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 135.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2536.0,
+            -46.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000010",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          56,
+          37
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "白野猪",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 135.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2536.0,
+            -46.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000011",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "白野猪",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 135.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2536.0,
+            -46.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000012",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          28
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "白野猪",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 135.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2536.0,
+            -46.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000013",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "白野猪",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 135.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2536.0,
+            -46.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000014",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶毒蛇",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 141.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            78.0,
+            33.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000015",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          28
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶毒蛇",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 141.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            78.0,
+            33.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000016",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          54,
+          9
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶毒蛇",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 141.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            78.0,
+            33.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000017",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶毒蛇",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 141.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            78.0,
+            33.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000018",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48,
+          3
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "elite",
+          "source_line": 211.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶毒蛇",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 141.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            78.0,
+            33.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -4.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.boss_spawn.000019",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.boss_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33,
+          23
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -763,7 +1613,650 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          52,
+          3
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          36
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          53,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17,
+          24
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          53,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "fengmo_mohun_hall",
+          "source_category_role": "ordinary",
+          "source_line": 210.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蝎蛇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 138.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            39.0,
+            1.0,
+            2536.0,
+            -1.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.fengmo_mohun_hall.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.fengmo_mohun_hall.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35,
+          13
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

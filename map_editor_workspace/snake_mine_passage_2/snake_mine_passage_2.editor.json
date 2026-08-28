@@ -76,7 +76,186 @@
   },
   "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "elite",
+          "source_line": 54.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2002.0,
+            -48.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45,
+          44
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "elite",
+          "source_line": 54.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2002.0,
+            -48.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          21
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "elite",
+          "source_line": 54.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2002.0,
+            -48.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "elite",
+          "source_line": 54.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            45.0,
+            1.0,
+            1.0,
+            2002.0,
+            -48.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44,
+          18
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -859,7 +1038,1376 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 46.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            92.0,
+            16.0,
+            1.0,
+            2002.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          2
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            30.0,
+            24.0,
+            2002.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            42.0,
+            7.0,
+            1.0,
+            2002.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2002.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            19.0,
+            1.0,
+            2002.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          45
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 46.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            92.0,
+            16.0,
+            1.0,
+            2002.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          3
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 46.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            92.0,
+            16.0,
+            1.0,
+            2002.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 46.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            92.0,
+            16.0,
+            1.0,
+            2002.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12,
+          31
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42,
+          45
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44,
+          22
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          2
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          3
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            20.0,
+            2.0,
+            2002.0,
+            -47.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            30.0,
+            24.0,
+            2002.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11,
+          2
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            30.0,
+            24.0,
+            2002.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45,
+          26
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            30.0,
+            24.0,
+            2002.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            30.0,
+            24.0,
+            2002.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23,
+          43
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2002.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2002.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5,
+          6
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2002.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2002.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42,
+          26
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2002.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27,
+          46
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            19.0,
+            1.0,
+            2002.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18,
+          43
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            19.0,
+            1.0,
+            2002.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32,
+          31
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            19.0,
+            1.0,
+            2002.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            19.0,
+            1.0,
+            2002.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          5
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            19.0,
+            1.0,
+            2002.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47,
+          41
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_2",
+          "source_category_role": "ordinary",
+          "source_line": 53.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 46.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            92.0,
+            16.0,
+            1.0,
+            2002.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_2.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_2.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27,
+          43
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

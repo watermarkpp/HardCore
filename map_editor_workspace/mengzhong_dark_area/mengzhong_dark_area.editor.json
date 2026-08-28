@@ -83,7 +83,186 @@
   },
   "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          29
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5,
+          11
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23,
+          11
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -5157,7 +5336,1240 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          47
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          9
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          44
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          30
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12,
+          45
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23,
+          32
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          26
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          25
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25,
+          29
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          23
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          47
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          23
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_dark_area",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_dark_area.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.mengzhong_dark_area.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          16
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

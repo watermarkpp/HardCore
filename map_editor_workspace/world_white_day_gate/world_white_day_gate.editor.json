@@ -67,7 +67,272 @@
   },
   "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "elite",
+          "source_line": 231.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 31.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            29.0,
+            20.0,
+            20.0,
+            1602.0,
+            -20.0,
+            -27.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "elite",
+          "source_line": 231.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 32.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            7.0,
+            1.0,
+            1602.0,
+            -40.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "elite",
+          "source_line": 231.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽统领",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 42.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            6.0,
+            1.0,
+            1602.0,
+            -1.0,
+            -7.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "elite",
+          "source_line": 231.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 32.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            7.0,
+            1.0,
+            1602.0,
+            -40.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          20
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "elite",
+          "source_line": 231.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 31.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            29.0,
+            20.0,
+            20.0,
+            1602.0,
+            -20.0,
+            -27.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "elite",
+          "source_line": 231.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽统领",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 42.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            6.0,
+            1.0,
+            1602.0,
+            -1.0,
+            -7.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000006",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          11
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -459,7 +724,228 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "ordinary",
+          "source_line": 230.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            9.0,
+            1.0,
+            1602.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28,
+          3
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "ordinary",
+          "source_line": 230.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            30.0,
+            2.0,
+            1.0,
+            1602.0,
+            -46.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "ordinary",
+          "source_line": 230.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            2.0,
+            1.0,
+            1602.0,
+            -23.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          18
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "ordinary",
+          "source_line": 230.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            22.0,
+            6.0,
+            15.0,
+            1602.0,
+            -31.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_white_day_gate",
+          "source_category_role": "ordinary",
+          "source_line": 230.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "剧毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 185.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            19.0,
+            21.0,
+            3.0,
+            1602.0,
+            -23.0,
+            -44.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          40,
+          22
+        ]
+      }
+    ],
     "npc_points": [
       {
         "collision_policy": "profile",

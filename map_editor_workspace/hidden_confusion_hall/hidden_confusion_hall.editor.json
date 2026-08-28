@@ -67,7 +67,51 @@
   },
   "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "hidden_confusion_hall",
+          "source_category_role": "boss",
+          "source_line": 103.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暗之双头血魔",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 235.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            1.0,
+            1.0,
+            359.0,
+            -13.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.hidden_confusion_hall.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.hidden_confusion_hall.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
+          6
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,

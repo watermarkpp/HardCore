@@ -2715,7 +2715,1564 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            1844.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5,
+          6
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            7.0,
+            1.0,
+            1844.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          7
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          24
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18,
+          26
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          11
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2,
+          7
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          28
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          37
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34,
+          7
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            7.0,
+            1.0,
+            1844.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          7
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            7.0,
+            1.0,
+            1844.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17,
+          21
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            7.0,
+            1.0,
+            1844.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            7.0,
+            1.0,
+            1844.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          40,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            7.0,
+            1.0,
+            1844.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          40,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            1844.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            1844.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            1844.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            1844.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          11
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            46.0,
+            1.0,
+            1.0,
+            1844.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23,
+          26
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            43.0,
+            38.0,
+            23.0,
+            1844.0,
+            -24.0,
+            -24.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36,
+          30
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12,
+          8
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          29
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          18
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_valley_dungeon",
+          "source_category_role": "ordinary",
+          "source_line": 126.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            87.0,
+            41.0,
+            1.0,
+            1844.0,
+            -4.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_valley_dungeon.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_valley_dungeon.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          31
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {

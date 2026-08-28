@@ -67,7 +67,139 @@
   },
   "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "boss",
+          "source_line": 187.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "千年树妖",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 195.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            1.0,
+            1.0,
+            1496.0,
+            -1.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          5
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "elite",
+          "source_line": 186.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅精灵",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 56.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            58.0,
+            2.0,
+            1.0,
+            1496.0,
+            -46.0,
+            -21.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          2
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "elite",
+          "source_line": 186.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅精灵",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 56.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            58.0,
+            2.0,
+            1.0,
+            1496.0,
+            -46.0,
+            -21.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2,
+          11
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -1015,7 +1147,492 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            12.0,
+            1.0,
+            1496.0,
+            -14.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          17
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            1496.0,
+            -30.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 47.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            22.0,
+            21.0,
+            1496.0,
+            -21.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29,
+          19
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "掷斧骷髅",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 50.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            12.0,
+            6.0,
+            1496.0,
+            -6.0,
+            -16.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15,
+          8
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 52.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            21.0,
+            2.0,
+            10.0,
+            1496.0,
+            -27.0,
+            -10.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          19
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅战将",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 54.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            20.0,
+            20.0,
+            1.0,
+            1496.0,
+            -9.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            20.0,
+            14.0,
+            12.0,
+            1496.0,
+            -35.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            19.0,
+            6.0,
+            1.0,
+            1496.0,
+            -46.0,
+            -40.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35,
+          44
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            16.0,
+            18.0,
+            11.0,
+            1496.0,
+            -15.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            16.0,
+            4.0,
+            1.0,
+            1496.0,
+            -1.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            14.0,
+            27.0,
+            9.0,
+            1496.0,
+            -9.0,
+            -28.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27,
+          7
+        ]
+      }
+    ],
     "npc_points": [
       {
         "collision_policy": "profile",
