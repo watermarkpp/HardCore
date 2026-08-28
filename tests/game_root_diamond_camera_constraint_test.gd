@@ -15,6 +15,15 @@ func _ready() -> void:
 	assert(game.current_map_id == 910001, "camera fixture did not enter canonical Bich runtime")
 	var camera: Camera2D = game.get("_world_camera") as Camera2D
 	assert(camera != null and camera.name == "WorldCamera")
+	assert(camera.get_parent() == game, "WorldCamera must not be parented to Player")
+	var player_position_before_parent_probe: Vector2 = game.player.global_position
+	var camera_global_before_parent_probe: Vector2 = camera.global_position
+	game.player.global_position += Vector2(17.0, 11.0)
+	assert(
+		camera.global_position.is_equal_approx(camera_global_before_parent_probe),
+		"WorldCamera inherited Player motion before its explicit constraint update"
+	)
+	game.player.global_position = player_position_before_parent_probe
 	var runtime := MapEditorRuntimeBridge.load_map(game.current_map_id)
 	var raw_size: Array = runtime.design.design_size
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))

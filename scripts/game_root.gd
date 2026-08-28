@@ -365,7 +365,10 @@ func _ready() -> void:
 	_world_camera.position_smoothing_enabled = true
 	_world_camera.position_smoothing_speed = 7.0
 	_world_camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	player.add_child(_world_camera)
+	# The camera target is resolved explicitly in _process.  Keep it in the
+	# stable GameRoot coordinate domain so Player physics cannot implicitly move
+	# the camera between constraint updates and introduce a one-frame jitter.
+	add_child(_world_camera)
 
 	hud = GameHUD.new()
 	hud.movement_changed.connect(_on_gameplay_movement)
