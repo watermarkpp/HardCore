@@ -1,249 +1,37 @@
 {
-  "schema": "hardcore.dpv2.single_player_drop_boost.v1",
-  "authority_id": "dpv2.single_player_drop_boost.v1",
-  "status": "PRODUCTION_ENABLED",
-  "production": {
-    "enabled": true,
-    "boost_multiplier": {
-      "numerator": 25,
-      "denominator": 1
-    },
-    "auto_boost_ceiling": {
-      "numerator": 1,
-      "denominator": 20
-    },
-    "gold_amount_multiplier": {
-      "numerator": 10,
-      "denominator": 1
-    },
-    "required_global_drop_rate_preset": "1x",
-    "required_global_drop_rate_multiplier": {
-      "numerator": 1,
-      "denominator": 1
-    },
-    "disabled_mode": "SELECT_BASE_NUMERATOR_AND_DENOMINATOR"
-  },
-  "probability_contract": {
-    "arithmetic": "EXACT_POSITIVE_INTEGER_RATIONAL_GCD_REDUCED",
-    "formula": "if_bypass_or_base_gte_1_over_20_then_base_else_min(base_times_25,1_over_20)",
-    "runtime_float_authority_forbidden": true,
-    "base_mutation_forbidden": true,
-    "independent_slot_rng_preserved": true,
-    "overflow_occurs_after_all_rng": true,
-    "protected_drop_and_overflow_priority_do_not_affect_probability": true,
-    "missing_effective_record_runtime_result": "FAIL_CLOSED_SPB_EFFECTIVE_PROBABILITY_UNRESOLVED"
-  },
-  "reward_amount_contract": {
-    "gold_probability_policy": "BYPASS_GOLD_BASE_PROBABILITY",
-    "enabled_gold_amount": "base_gold_amount_times_10",
-    "disabled_gold_amount": "base_gold_amount",
-    "direct_baseline_gold_amount_mutation_forbidden": true,
-    "non_gold_reward_amount_overlay_forbidden": true
-  },
+  "schema": "hardcore.dpv2.single_player_item_boost_classification.v1",
+  "authority_id": "dpv2.single_player_item_boost_classification.v1",
+  "status": "PRODUCTION_CLASSIFICATION_AUTHORITY",
+  "production_active": true,
+  "identity_key": "canonical_item_id",
   "classification_contract": {
-    "production_authority": "dpv2.single_player_item_boost_classification.v1",
-    "runtime_classification": "EXACT_CANONICAL_IDS_HUMAN_FROZEN_IN_CURRENT_AUTHORITY",
-    "runtime_name_tier_or_fuzzy_inference_forbidden": true,
-    "build_time_source": "CURRENT_PRODUCTION_CLASSIFICATION_AUTHORITY_EXACT_IDS",
-    "precedence": [
-      "BYPASS_NEW_ARMOR_BOSS",
-      "BYPASS_GOLD",
-      "BYPASS_COMMON_RECOVERY",
-      "AUTO_BOOST_RARE_FUNCTIONAL_CONSUMABLE",
-      "AUTO_BOOST_EQUIPMENT",
+    "exact_id_only": true,
+    "name_or_type_inference_forbidden": true,
+    "unlisted_item_policy": "FAIL_CLOSED",
+    "classes": [
+      "EQUIPMENT",
+      "RARE_FUNCTIONAL_CONSUMABLE",
+      "COMMON_RECOVERY",
       "BYPASS_UNCLASSIFIED"
-    ],
-    "unclassified_default": "BYPASS_UNCLASSIFIED",
-    "monster_225_is_manual_boss_exclusion": false
+    ]
   },
-  "source_bindings": {
-    "base_sha": "98ea003b66915622b5c265602e54386f9213016c",
-    "source_sha256_raw": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
-    "direct_baseline_sha256_raw": "9E9225DF113BDC94ECDA071388DC5FCFA92ED34BF8028519B06F205E06FF4DD0",
-    "source_provenance_sha256_raw": "F48A033D5A33D80B795A838BE837AE84FA93469B6055FE012309ACC07082E347",
-    "direct_slot_count": 6809,
-    "direct_slot_ledger_sha256": "057F3664C2CE5376B2A937CB317E978769860AA1B3390D0EF038B512CD496B80",
-    "direct_slot_ledger_fields": [
-      "slot_uid",
-      "canonical_monster_id",
-      "canonical_item_id",
-      "gold_amount",
-      "base_numerator",
-      "base_denominator",
-      "source_provenance_id",
-      "protected_drop",
-      "overflow_priority",
-      "baseline_origin"
-    ],
-    "source_drift": 0,
-    "base_probability_drift": 0,
-    "slot_uid_drift": 0,
-    "reward_identity_drift": 0,
-    "provenance_drift": 0,
-    "protected_priority_origin_drift": 0,
-    "duplicate_slot_collapse": 0,
-    "item_boost_classification_path": "assets/data/drop/dpv2_single_player_item_boost_classification_v1.json",
-    "item_boost_classification_sha256_raw": "107CF67F4296041F66A0076D3D6FDD4B45E3EFB1F6E865477A051514F9E10E9C",
-    "global_drop_rate_path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
-    "global_drop_rate_sha256_raw": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0"
+  "summary": {
+    "canonical_items": 233,
+    "duplicate_canonical_item_ids": 0,
+    "classification_counts": {
+      "BYPASS_UNCLASSIFIED": 42,
+      "COMMON_RECOVERY": 10,
+      "EQUIPMENT": 167,
+      "RARE_FUNCTIONAL_CONSUMABLE": 14
+    },
+    "human_frozen_records": 233
   },
-  "common_recovery_items": [
-    {
-      "canonical_item_id": 920045,
-      "canonical_item_name": "金创药(小量)",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920044,
-      "canonical_item_name": "金创药(中量)",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920053,
-      "canonical_item_name": "魔法药(小量)",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920052,
-      "canonical_item_name": "魔法药(中量)",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920017,
-      "canonical_item_name": "超级金创药",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920042,
-      "canonical_item_name": "超级魔法药",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920001,
-      "canonical_item_name": "万年雪霜",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 910007,
-      "canonical_item_name": "疗伤药",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920014,
-      "canonical_item_name": "太阳水",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    },
-    {
-      "canonical_item_id": 920016,
-      "canonical_item_name": "强效太阳水",
-      "classification": "COMMON_RECOVERY",
-      "boost_policy": "BYPASS_COMMON_RECOVERY",
-      "reason_code": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
-      "evidence": [
-        "Human-frozen exact-ID common recovery probability-protection classification."
-      ],
-      "human_frozen": true
-    }
-  ],
-  "manual_boss_exclusions": [
-    {
-      "canonical_monster_id": 235,
-      "canonical_monster_name": "暗之双头血魔",
-      "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
-      "reason_code": "NEW_ARMOR_BOSS_MANUAL_LATER"
-    },
-    {
-      "canonical_monster_id": 236,
-      "canonical_monster_name": "暗之双头金刚",
-      "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
-      "reason_code": "NEW_ARMOR_BOSS_MANUAL_LATER"
-    },
-    {
-      "canonical_monster_id": 237,
-      "canonical_monster_name": "暗之黄泉教主",
-      "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
-      "reason_code": "NEW_ARMOR_BOSS_MANUAL_LATER"
-    },
-    {
-      "canonical_monster_id": 238,
-      "canonical_monster_name": "暗之骷髅精灵",
-      "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
-      "reason_code": "NEW_ARMOR_BOSS_MANUAL_LATER"
-    },
-    {
-      "canonical_monster_id": 239,
-      "canonical_monster_name": "暗之沃玛教主",
-      "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
-      "reason_code": "NEW_ARMOR_BOSS_MANUAL_LATER"
-    },
-    {
-      "canonical_monster_id": 240,
-      "canonical_monster_name": "暗之虹魔教主",
-      "boost_policy": "BYPASS_NEW_ARMOR_BOSS",
-      "reason_code": "NEW_ARMOR_BOSS_MANUAL_LATER"
-    }
-  ],
-  "auto_boost_items": [
+  "records": [
     {
       "canonical_item_id": 80,
-      "canonical_item_name": "木剑",
+      "canonical_item_name": "\u6728\u5251",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -251,10 +39,9 @@
     },
     {
       "canonical_item_id": 81,
-      "canonical_item_name": "匕首",
+      "canonical_item_name": "\u5315\u9996",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -262,10 +49,9 @@
     },
     {
       "canonical_item_id": 82,
-      "canonical_item_name": "乌木剑",
+      "canonical_item_name": "\u4e4c\u6728\u5251",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -273,10 +59,9 @@
     },
     {
       "canonical_item_id": 83,
-      "canonical_item_name": "青铜剑",
+      "canonical_item_name": "\u9752\u94dc\u5251",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -284,10 +69,9 @@
     },
     {
       "canonical_item_id": 84,
-      "canonical_item_name": "短剑",
+      "canonical_item_name": "\u77ed\u5251",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -295,10 +79,9 @@
     },
     {
       "canonical_item_id": 85,
-      "canonical_item_name": "铁剑",
+      "canonical_item_name": "\u94c1\u5251",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -306,10 +89,9 @@
     },
     {
       "canonical_item_id": 87,
-      "canonical_item_name": "青铜斧",
+      "canonical_item_name": "\u9752\u94dc\u65a7",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -317,10 +99,9 @@
     },
     {
       "canonical_item_id": 88,
-      "canonical_item_name": "罗刹",
+      "canonical_item_name": "\u7f57\u5239",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -328,10 +109,9 @@
     },
     {
       "canonical_item_id": 89,
-      "canonical_item_name": "八荒",
+      "canonical_item_name": "\u516b\u8352",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -339,10 +119,9 @@
     },
     {
       "canonical_item_id": 90,
-      "canonical_item_name": "海魂",
+      "canonical_item_name": "\u6d77\u9b42",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -350,10 +129,9 @@
     },
     {
       "canonical_item_id": 91,
-      "canonical_item_name": "半月",
+      "canonical_item_name": "\u534a\u6708",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -361,10 +139,9 @@
     },
     {
       "canonical_item_id": 92,
-      "canonical_item_name": "凌风",
+      "canonical_item_name": "\u51cc\u98ce",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -372,10 +149,9 @@
     },
     {
       "canonical_item_id": 93,
-      "canonical_item_name": "破魂",
+      "canonical_item_name": "\u7834\u9b42",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -383,10 +159,9 @@
     },
     {
       "canonical_item_id": 94,
-      "canonical_item_name": "斩马刀",
+      "canonical_item_name": "\u65a9\u9a6c\u5200",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -394,10 +169,9 @@
     },
     {
       "canonical_item_id": 95,
-      "canonical_item_name": "偃月",
+      "canonical_item_name": "\u5043\u6708",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -405,10 +179,9 @@
     },
     {
       "canonical_item_id": 96,
-      "canonical_item_name": "降魔",
+      "canonical_item_name": "\u964d\u9b54",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -416,10 +189,9 @@
     },
     {
       "canonical_item_id": 97,
-      "canonical_item_name": "修罗",
+      "canonical_item_name": "\u4fee\u7f57",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -427,10 +199,9 @@
     },
     {
       "canonical_item_id": 98,
-      "canonical_item_name": "凝霜",
+      "canonical_item_name": "\u51dd\u971c",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -438,10 +209,9 @@
     },
     {
       "canonical_item_id": 99,
-      "canonical_item_name": "炼狱",
+      "canonical_item_name": "\u70bc\u72f1",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -449,10 +219,9 @@
     },
     {
       "canonical_item_id": 100,
-      "canonical_item_name": "魔杖",
+      "canonical_item_name": "\u9b54\u6756",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -460,10 +229,9 @@
     },
     {
       "canonical_item_id": 101,
-      "canonical_item_name": "银蛇",
+      "canonical_item_name": "\u94f6\u86c7",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -471,10 +239,9 @@
     },
     {
       "canonical_item_id": 102,
-      "canonical_item_name": "井中月",
+      "canonical_item_name": "\u4e95\u4e2d\u6708",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -482,10 +249,9 @@
     },
     {
       "canonical_item_id": 104,
-      "canonical_item_name": "无极棍",
+      "canonical_item_name": "\u65e0\u6781\u68cd",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -493,10 +259,9 @@
     },
     {
       "canonical_item_id": 105,
-      "canonical_item_name": "裁决之杖",
+      "canonical_item_name": "\u88c1\u51b3\u4e4b\u6756",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -504,10 +269,9 @@
     },
     {
       "canonical_item_id": 106,
-      "canonical_item_name": "骨玉权杖",
+      "canonical_item_name": "\u9aa8\u7389\u6743\u6756",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -515,10 +279,9 @@
     },
     {
       "canonical_item_id": 107,
-      "canonical_item_name": "龙纹剑",
+      "canonical_item_name": "\u9f99\u7eb9\u5251",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -526,10 +289,9 @@
     },
     {
       "canonical_item_id": 108,
-      "canonical_item_name": "屠龙",
+      "canonical_item_name": "\u5c60\u9f99",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -537,10 +299,9 @@
     },
     {
       "canonical_item_id": 109,
-      "canonical_item_name": "嗜魂法杖",
+      "canonical_item_name": "\u55dc\u9b42\u6cd5\u6756",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -548,10 +309,9 @@
     },
     {
       "canonical_item_id": 113,
-      "canonical_item_name": "怒斩",
+      "canonical_item_name": "\u6012\u65a9",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -559,10 +319,9 @@
     },
     {
       "canonical_item_id": 114,
-      "canonical_item_name": "龙牙",
+      "canonical_item_name": "\u9f99\u7259",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -570,10 +329,9 @@
     },
     {
       "canonical_item_id": 115,
-      "canonical_item_name": "逍遥扇",
+      "canonical_item_name": "\u900d\u9065\u6247",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -581,10 +339,9 @@
     },
     {
       "canonical_item_id": 116,
-      "canonical_item_name": "布衣(男)",
+      "canonical_item_name": "\u5e03\u8863(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -592,10 +349,9 @@
     },
     {
       "canonical_item_id": 117,
-      "canonical_item_name": "布衣(女)",
+      "canonical_item_name": "\u5e03\u8863(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -603,10 +359,9 @@
     },
     {
       "canonical_item_id": 118,
-      "canonical_item_name": "轻型盔甲(男)",
+      "canonical_item_name": "\u8f7b\u578b\u76d4\u7532(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -614,10 +369,9 @@
     },
     {
       "canonical_item_id": 119,
-      "canonical_item_name": "轻型盔甲(女)",
+      "canonical_item_name": "\u8f7b\u578b\u76d4\u7532(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -625,10 +379,9 @@
     },
     {
       "canonical_item_id": 120,
-      "canonical_item_name": "中型盔甲(男)",
+      "canonical_item_name": "\u4e2d\u578b\u76d4\u7532(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -636,10 +389,9 @@
     },
     {
       "canonical_item_id": 121,
-      "canonical_item_name": "中型盔甲(女)",
+      "canonical_item_name": "\u4e2d\u578b\u76d4\u7532(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -647,10 +399,9 @@
     },
     {
       "canonical_item_id": 122,
-      "canonical_item_name": "重盔甲(男)",
+      "canonical_item_name": "\u91cd\u76d4\u7532(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -658,10 +409,9 @@
     },
     {
       "canonical_item_id": 123,
-      "canonical_item_name": "重盔甲(女)",
+      "canonical_item_name": "\u91cd\u76d4\u7532(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -669,10 +419,9 @@
     },
     {
       "canonical_item_id": 124,
-      "canonical_item_name": "魔法长袍(男)",
+      "canonical_item_name": "\u9b54\u6cd5\u957f\u888d(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -680,10 +429,9 @@
     },
     {
       "canonical_item_id": 125,
-      "canonical_item_name": "魔法长袍(女)",
+      "canonical_item_name": "\u9b54\u6cd5\u957f\u888d(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -691,10 +439,9 @@
     },
     {
       "canonical_item_id": 126,
-      "canonical_item_name": "灵魂战衣(男)",
+      "canonical_item_name": "\u7075\u9b42\u6218\u8863(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -702,10 +449,9 @@
     },
     {
       "canonical_item_id": 127,
-      "canonical_item_name": "灵魂战衣(女)",
+      "canonical_item_name": "\u7075\u9b42\u6218\u8863(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -713,10 +459,9 @@
     },
     {
       "canonical_item_id": 128,
-      "canonical_item_name": "战神盔甲(男)",
+      "canonical_item_name": "\u6218\u795e\u76d4\u7532(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -724,10 +469,9 @@
     },
     {
       "canonical_item_id": 129,
-      "canonical_item_name": "战神盔甲(女)",
+      "canonical_item_name": "\u6218\u795e\u76d4\u7532(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -735,10 +479,9 @@
     },
     {
       "canonical_item_id": 130,
-      "canonical_item_name": "恶魔长袍(男)",
+      "canonical_item_name": "\u6076\u9b54\u957f\u888d(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -746,10 +489,9 @@
     },
     {
       "canonical_item_id": 131,
-      "canonical_item_name": "恶魔长袍(女)",
+      "canonical_item_name": "\u6076\u9b54\u957f\u888d(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -757,10 +499,9 @@
     },
     {
       "canonical_item_id": 132,
-      "canonical_item_name": "幽灵战衣(男)",
+      "canonical_item_name": "\u5e7d\u7075\u6218\u8863(\u7537)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -768,10 +509,9 @@
     },
     {
       "canonical_item_id": 133,
-      "canonical_item_name": "幽灵战衣(女)",
+      "canonical_item_name": "\u5e7d\u7075\u6218\u8863(\u5973)",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -779,10 +519,9 @@
     },
     {
       "canonical_item_id": 140,
-      "canonical_item_name": "天魔神甲",
+      "canonical_item_name": "\u5929\u9b54\u795e\u7532",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -790,10 +529,9 @@
     },
     {
       "canonical_item_id": 141,
-      "canonical_item_name": "圣战宝甲",
+      "canonical_item_name": "\u5723\u6218\u5b9d\u7532",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -801,10 +539,9 @@
     },
     {
       "canonical_item_id": 142,
-      "canonical_item_name": "法神披风",
+      "canonical_item_name": "\u6cd5\u795e\u62ab\u98ce",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -812,10 +549,9 @@
     },
     {
       "canonical_item_id": 143,
-      "canonical_item_name": "霓裳羽衣",
+      "canonical_item_name": "\u9713\u88f3\u7fbd\u8863",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -823,10 +559,9 @@
     },
     {
       "canonical_item_id": 144,
-      "canonical_item_name": "天尊道袍",
+      "canonical_item_name": "\u5929\u5c0a\u9053\u888d",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -834,10 +569,9 @@
     },
     {
       "canonical_item_id": 145,
-      "canonical_item_name": "天师长袍",
+      "canonical_item_name": "\u5929\u5e08\u957f\u888d",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -845,10 +579,9 @@
     },
     {
       "canonical_item_id": 147,
-      "canonical_item_name": "青铜头盔",
+      "canonical_item_name": "\u9752\u94dc\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -856,10 +589,9 @@
     },
     {
       "canonical_item_id": 148,
-      "canonical_item_name": "魔法头盔",
+      "canonical_item_name": "\u9b54\u6cd5\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -867,10 +599,9 @@
     },
     {
       "canonical_item_id": 149,
-      "canonical_item_name": "道士头盔",
+      "canonical_item_name": "\u9053\u58eb\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -878,10 +609,9 @@
     },
     {
       "canonical_item_id": 150,
-      "canonical_item_name": "骷髅头盔",
+      "canonical_item_name": "\u9ab7\u9ac5\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -889,10 +619,9 @@
     },
     {
       "canonical_item_id": 151,
-      "canonical_item_name": "黑铁头盔",
+      "canonical_item_name": "\u9ed1\u94c1\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -900,10 +629,9 @@
     },
     {
       "canonical_item_id": 153,
-      "canonical_item_name": "金项链",
+      "canonical_item_name": "\u91d1\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -911,10 +639,9 @@
     },
     {
       "canonical_item_id": 154,
-      "canonical_item_name": "传统项链",
+      "canonical_item_name": "\u4f20\u7edf\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -922,10 +649,9 @@
     },
     {
       "canonical_item_id": 155,
-      "canonical_item_name": "白金项链",
+      "canonical_item_name": "\u767d\u91d1\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -933,10 +659,9 @@
     },
     {
       "canonical_item_id": 156,
-      "canonical_item_name": "黑色水晶项链",
+      "canonical_item_name": "\u9ed1\u8272\u6c34\u6676\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -944,10 +669,9 @@
     },
     {
       "canonical_item_id": 157,
-      "canonical_item_name": "黑檀项链",
+      "canonical_item_name": "\u9ed1\u6a80\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -955,10 +679,9 @@
     },
     {
       "canonical_item_id": 158,
-      "canonical_item_name": "黄色水晶项链",
+      "canonical_item_name": "\u9ec4\u8272\u6c34\u6676\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -966,10 +689,9 @@
     },
     {
       "canonical_item_id": 159,
-      "canonical_item_name": "白色虎齿项链",
+      "canonical_item_name": "\u767d\u8272\u864e\u9f7f\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -977,10 +699,9 @@
     },
     {
       "canonical_item_id": 160,
-      "canonical_item_name": "躲避手链",
+      "canonical_item_name": "\u8eb2\u907f\u624b\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -988,10 +709,9 @@
     },
     {
       "canonical_item_id": 161,
-      "canonical_item_name": "魔鬼项链",
+      "canonical_item_name": "\u9b54\u9b3c\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -999,10 +719,9 @@
     },
     {
       "canonical_item_id": 162,
-      "canonical_item_name": "琥珀项链",
+      "canonical_item_name": "\u7425\u73c0\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1010,10 +729,9 @@
     },
     {
       "canonical_item_id": 163,
-      "canonical_item_name": "凤凰明珠",
+      "canonical_item_name": "\u51e4\u51f0\u660e\u73e0",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1021,10 +739,9 @@
     },
     {
       "canonical_item_id": 164,
-      "canonical_item_name": "灯笼项链",
+      "canonical_item_name": "\u706f\u7b3c\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1032,10 +749,9 @@
     },
     {
       "canonical_item_id": 165,
-      "canonical_item_name": "蓝翡翠项链",
+      "canonical_item_name": "\u84dd\u7fe1\u7fe0\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1043,10 +759,9 @@
     },
     {
       "canonical_item_id": 166,
-      "canonical_item_name": "放大镜",
+      "canonical_item_name": "\u653e\u5927\u955c",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1054,10 +769,9 @@
     },
     {
       "canonical_item_id": 167,
-      "canonical_item_name": "竹笛",
+      "canonical_item_name": "\u7af9\u7b1b",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1065,10 +779,9 @@
     },
     {
       "canonical_item_id": 168,
-      "canonical_item_name": "幽灵项链",
+      "canonical_item_name": "\u5e7d\u7075\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1076,10 +789,9 @@
     },
     {
       "canonical_item_id": 169,
-      "canonical_item_name": "生命项链",
+      "canonical_item_name": "\u751f\u547d\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1087,10 +799,9 @@
     },
     {
       "canonical_item_id": 170,
-      "canonical_item_name": "天珠项链",
+      "canonical_item_name": "\u5929\u73e0\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1098,10 +809,9 @@
     },
     {
       "canonical_item_id": 171,
-      "canonical_item_name": "绿色项链",
+      "canonical_item_name": "\u7eff\u8272\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1109,10 +819,9 @@
     },
     {
       "canonical_item_id": 172,
-      "canonical_item_name": "恶魔铃铛",
+      "canonical_item_name": "\u6076\u9b54\u94c3\u94db",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1120,10 +829,9 @@
     },
     {
       "canonical_item_id": 173,
-      "canonical_item_name": "灵魂项链",
+      "canonical_item_name": "\u7075\u9b42\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1131,10 +839,9 @@
     },
     {
       "canonical_item_id": 174,
-      "canonical_item_name": "铁手镯",
+      "canonical_item_name": "\u94c1\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1142,10 +849,9 @@
     },
     {
       "canonical_item_id": 175,
-      "canonical_item_name": "小手镯",
+      "canonical_item_name": "\u5c0f\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1153,10 +859,9 @@
     },
     {
       "canonical_item_id": 176,
-      "canonical_item_name": "银手镯",
+      "canonical_item_name": "\u94f6\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1164,10 +869,9 @@
     },
     {
       "canonical_item_id": 177,
-      "canonical_item_name": "皮制手套",
+      "canonical_item_name": "\u76ae\u5236\u624b\u5957",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1175,10 +879,9 @@
     },
     {
       "canonical_item_id": 178,
-      "canonical_item_name": "钢手镯",
+      "canonical_item_name": "\u94a2\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1186,10 +889,9 @@
     },
     {
       "canonical_item_id": 179,
-      "canonical_item_name": "大手镯",
+      "canonical_item_name": "\u5927\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1197,10 +899,9 @@
     },
     {
       "canonical_item_id": 180,
-      "canonical_item_name": "夏普儿手镯",
+      "canonical_item_name": "\u590f\u666e\u513f\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1208,10 +909,9 @@
     },
     {
       "canonical_item_id": 181,
-      "canonical_item_name": "辟邪手镯",
+      "canonical_item_name": "\u8f9f\u90aa\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1219,10 +919,9 @@
     },
     {
       "canonical_item_id": 182,
-      "canonical_item_name": "坚固手套",
+      "canonical_item_name": "\u575a\u56fa\u624b\u5957",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1230,10 +929,9 @@
     },
     {
       "canonical_item_id": 183,
-      "canonical_item_name": "魔法手镯",
+      "canonical_item_name": "\u9b54\u6cd5\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1241,10 +939,9 @@
     },
     {
       "canonical_item_id": 184,
-      "canonical_item_name": "黑檀手镯",
+      "canonical_item_name": "\u9ed1\u6a80\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1252,10 +949,9 @@
     },
     {
       "canonical_item_id": 185,
-      "canonical_item_name": "道士手镯",
+      "canonical_item_name": "\u9053\u58eb\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1263,10 +959,9 @@
     },
     {
       "canonical_item_id": 186,
-      "canonical_item_name": "魔力手镯",
+      "canonical_item_name": "\u9b54\u529b\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1274,10 +969,9 @@
     },
     {
       "canonical_item_id": 187,
-      "canonical_item_name": "死神手套",
+      "canonical_item_name": "\u6b7b\u795e\u624b\u5957",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1285,10 +979,9 @@
     },
     {
       "canonical_item_id": 188,
-      "canonical_item_name": "金手镯",
+      "canonical_item_name": "\u91d1\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1296,10 +989,9 @@
     },
     {
       "canonical_item_id": 189,
-      "canonical_item_name": "幽灵手套",
+      "canonical_item_name": "\u5e7d\u7075\u624b\u5957",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1307,10 +999,9 @@
     },
     {
       "canonical_item_id": 190,
-      "canonical_item_name": "思贝儿手镯",
+      "canonical_item_name": "\u601d\u8d1d\u513f\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1318,10 +1009,9 @@
     },
     {
       "canonical_item_id": 191,
-      "canonical_item_name": "三眼手镯",
+      "canonical_item_name": "\u4e09\u773c\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1329,10 +1019,9 @@
     },
     {
       "canonical_item_id": 192,
-      "canonical_item_name": "阎罗手套",
+      "canonical_item_name": "\u960e\u7f57\u624b\u5957",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1340,10 +1029,9 @@
     },
     {
       "canonical_item_id": 193,
-      "canonical_item_name": "骑士手镯",
+      "canonical_item_name": "\u9a91\u58eb\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1351,10 +1039,9 @@
     },
     {
       "canonical_item_id": 194,
-      "canonical_item_name": "龙之手镯",
+      "canonical_item_name": "\u9f99\u4e4b\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1362,10 +1049,9 @@
     },
     {
       "canonical_item_id": 195,
-      "canonical_item_name": "心灵手镯",
+      "canonical_item_name": "\u5fc3\u7075\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1373,10 +1059,9 @@
     },
     {
       "canonical_item_id": 197,
-      "canonical_item_name": "古铜戒指",
+      "canonical_item_name": "\u53e4\u94dc\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1384,10 +1069,9 @@
     },
     {
       "canonical_item_id": 198,
-      "canonical_item_name": "六角戒指",
+      "canonical_item_name": "\u516d\u89d2\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1395,10 +1079,9 @@
     },
     {
       "canonical_item_id": 199,
-      "canonical_item_name": "玻璃戒指",
+      "canonical_item_name": "\u73bb\u7483\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1406,10 +1089,9 @@
     },
     {
       "canonical_item_id": 200,
-      "canonical_item_name": "牛角戒指",
+      "canonical_item_name": "\u725b\u89d2\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1417,10 +1099,9 @@
     },
     {
       "canonical_item_id": 201,
-      "canonical_item_name": "生铁戒指",
+      "canonical_item_name": "\u751f\u94c1\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1428,10 +1109,9 @@
     },
     {
       "canonical_item_id": 202,
-      "canonical_item_name": "蓝色水晶戒指",
+      "canonical_item_name": "\u84dd\u8272\u6c34\u6676\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1439,10 +1119,9 @@
     },
     {
       "canonical_item_id": 203,
-      "canonical_item_name": "黑色水晶戒指",
+      "canonical_item_name": "\u9ed1\u8272\u6c34\u6676\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1450,10 +1129,9 @@
     },
     {
       "canonical_item_id": 204,
-      "canonical_item_name": "蛇眼戒指",
+      "canonical_item_name": "\u86c7\u773c\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1461,10 +1139,9 @@
     },
     {
       "canonical_item_id": 205,
-      "canonical_item_name": "珍珠戒指",
+      "canonical_item_name": "\u73cd\u73e0\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1472,10 +1149,9 @@
     },
     {
       "canonical_item_id": 206,
-      "canonical_item_name": "金戒指",
+      "canonical_item_name": "\u91d1\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1483,10 +1159,9 @@
     },
     {
       "canonical_item_id": 207,
-      "canonical_item_name": "骷髅戒指",
+      "canonical_item_name": "\u9ab7\u9ac5\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1494,10 +1169,9 @@
     },
     {
       "canonical_item_id": 208,
-      "canonical_item_name": "魅力戒指",
+      "canonical_item_name": "\u9b45\u529b\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1505,10 +1179,9 @@
     },
     {
       "canonical_item_id": 209,
-      "canonical_item_name": "道德戒指",
+      "canonical_item_name": "\u9053\u5fb7\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1516,10 +1189,9 @@
     },
     {
       "canonical_item_id": 210,
-      "canonical_item_name": "珊瑚戒指",
+      "canonical_item_name": "\u73ca\u745a\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1527,10 +1199,9 @@
     },
     {
       "canonical_item_id": 211,
-      "canonical_item_name": "降妖除魔戒指",
+      "canonical_item_name": "\u964d\u5996\u9664\u9b54\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1538,10 +1209,9 @@
     },
     {
       "canonical_item_id": 212,
-      "canonical_item_name": "龙之戒指",
+      "canonical_item_name": "\u9f99\u4e4b\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1549,10 +1219,9 @@
     },
     {
       "canonical_item_id": 213,
-      "canonical_item_name": "红宝石戒指",
+      "canonical_item_name": "\u7ea2\u5b9d\u77f3\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1560,10 +1229,9 @@
     },
     {
       "canonical_item_id": 214,
-      "canonical_item_name": "铂金戒指",
+      "canonical_item_name": "\u94c2\u91d1\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1571,10 +1239,9 @@
     },
     {
       "canonical_item_id": 215,
-      "canonical_item_name": "力量戒指",
+      "canonical_item_name": "\u529b\u91cf\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1582,10 +1249,9 @@
     },
     {
       "canonical_item_id": 216,
-      "canonical_item_name": "紫碧螺",
+      "canonical_item_name": "\u7d2b\u78a7\u87ba",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1593,10 +1259,9 @@
     },
     {
       "canonical_item_id": 217,
-      "canonical_item_name": "泰坦戒指",
+      "canonical_item_name": "\u6cf0\u5766\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1604,10 +1269,9 @@
     },
     {
       "canonical_item_id": 218,
-      "canonical_item_name": "神秘头盔",
+      "canonical_item_name": "\u795e\u79d8\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1615,10 +1279,9 @@
     },
     {
       "canonical_item_id": 219,
-      "canonical_item_name": "神秘腰带",
+      "canonical_item_name": "\u795e\u79d8\u8170\u5e26",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1626,10 +1289,9 @@
     },
     {
       "canonical_item_id": 220,
-      "canonical_item_name": "神秘戒指",
+      "canonical_item_name": "\u795e\u79d8\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1637,10 +1299,9 @@
     },
     {
       "canonical_item_id": 221,
-      "canonical_item_name": "狂风项链",
+      "canonical_item_name": "\u72c2\u98ce\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1648,10 +1309,9 @@
     },
     {
       "canonical_item_id": 222,
-      "canonical_item_name": "狂风戒指",
+      "canonical_item_name": "\u72c2\u98ce\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1659,10 +1319,9 @@
     },
     {
       "canonical_item_id": 223,
-      "canonical_item_name": "祈祷之刃",
+      "canonical_item_name": "\u7948\u7977\u4e4b\u5203",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1670,10 +1329,9 @@
     },
     {
       "canonical_item_id": 224,
-      "canonical_item_name": "祈祷头盔",
+      "canonical_item_name": "\u7948\u7977\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1681,10 +1339,9 @@
     },
     {
       "canonical_item_id": 225,
-      "canonical_item_name": "祈祷项链",
+      "canonical_item_name": "\u7948\u7977\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1692,10 +1349,9 @@
     },
     {
       "canonical_item_id": 226,
-      "canonical_item_name": "祈祷手镯",
+      "canonical_item_name": "\u7948\u7977\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1703,10 +1359,9 @@
     },
     {
       "canonical_item_id": 227,
-      "canonical_item_name": "祈祷戒指",
+      "canonical_item_name": "\u7948\u7977\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1714,10 +1369,9 @@
     },
     {
       "canonical_item_id": 228,
-      "canonical_item_name": "记忆头盔",
+      "canonical_item_name": "\u8bb0\u5fc6\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1725,10 +1379,9 @@
     },
     {
       "canonical_item_id": 229,
-      "canonical_item_name": "记忆项链",
+      "canonical_item_name": "\u8bb0\u5fc6\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1736,10 +1389,9 @@
     },
     {
       "canonical_item_id": 230,
-      "canonical_item_name": "记忆手镯",
+      "canonical_item_name": "\u8bb0\u5fc6\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1747,10 +1399,9 @@
     },
     {
       "canonical_item_id": 231,
-      "canonical_item_name": "记忆戒指",
+      "canonical_item_name": "\u8bb0\u5fc6\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1758,10 +1409,9 @@
     },
     {
       "canonical_item_id": 232,
-      "canonical_item_name": "圣战头盔",
+      "canonical_item_name": "\u5723\u6218\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1769,10 +1419,9 @@
     },
     {
       "canonical_item_id": 233,
-      "canonical_item_name": "圣战项链",
+      "canonical_item_name": "\u5723\u6218\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1780,10 +1429,9 @@
     },
     {
       "canonical_item_id": 234,
-      "canonical_item_name": "圣战手镯",
+      "canonical_item_name": "\u5723\u6218\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1791,10 +1439,9 @@
     },
     {
       "canonical_item_id": 235,
-      "canonical_item_name": "圣战戒指",
+      "canonical_item_name": "\u5723\u6218\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1802,10 +1449,9 @@
     },
     {
       "canonical_item_id": 236,
-      "canonical_item_name": "法神头盔",
+      "canonical_item_name": "\u6cd5\u795e\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1813,10 +1459,9 @@
     },
     {
       "canonical_item_id": 237,
-      "canonical_item_name": "法神项链",
+      "canonical_item_name": "\u6cd5\u795e\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1824,10 +1469,9 @@
     },
     {
       "canonical_item_id": 238,
-      "canonical_item_name": "法神手镯",
+      "canonical_item_name": "\u6cd5\u795e\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1835,10 +1479,9 @@
     },
     {
       "canonical_item_id": 239,
-      "canonical_item_name": "法神戒指",
+      "canonical_item_name": "\u6cd5\u795e\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1846,10 +1489,9 @@
     },
     {
       "canonical_item_id": 240,
-      "canonical_item_name": "天尊头盔",
+      "canonical_item_name": "\u5929\u5c0a\u5934\u76d4",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1857,10 +1499,9 @@
     },
     {
       "canonical_item_id": 241,
-      "canonical_item_name": "天尊项链",
+      "canonical_item_name": "\u5929\u5c0a\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1868,10 +1509,9 @@
     },
     {
       "canonical_item_id": 242,
-      "canonical_item_name": "天尊手镯",
+      "canonical_item_name": "\u5929\u5c0a\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1879,10 +1519,9 @@
     },
     {
       "canonical_item_id": 243,
-      "canonical_item_name": "天尊戒指",
+      "canonical_item_name": "\u5929\u5c0a\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1890,10 +1529,9 @@
     },
     {
       "canonical_item_id": 244,
-      "canonical_item_name": "魔血戒指",
+      "canonical_item_name": "\u9b54\u8840\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1901,10 +1539,9 @@
     },
     {
       "canonical_item_id": 245,
-      "canonical_item_name": "魔血手镯",
+      "canonical_item_name": "\u9b54\u8840\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1912,10 +1549,9 @@
     },
     {
       "canonical_item_id": 246,
-      "canonical_item_name": "魔血项链",
+      "canonical_item_name": "\u9b54\u8840\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1923,10 +1559,9 @@
     },
     {
       "canonical_item_id": 247,
-      "canonical_item_name": "虹魔戒指",
+      "canonical_item_name": "\u8679\u9b54\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1934,10 +1569,9 @@
     },
     {
       "canonical_item_id": 248,
-      "canonical_item_name": "虹魔手镯",
+      "canonical_item_name": "\u8679\u9b54\u624b\u956f",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1945,10 +1579,9 @@
     },
     {
       "canonical_item_id": 249,
-      "canonical_item_name": "虹魔项链",
+      "canonical_item_name": "\u8679\u9b54\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1956,10 +1589,9 @@
     },
     {
       "canonical_item_id": 250,
-      "canonical_item_name": "技巧项链",
+      "canonical_item_name": "\u6280\u5de7\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1967,10 +1599,9 @@
     },
     {
       "canonical_item_id": 251,
-      "canonical_item_name": "探测项链",
+      "canonical_item_name": "\u63a2\u6d4b\u9879\u94fe",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1978,10 +1609,9 @@
     },
     {
       "canonical_item_id": 252,
-      "canonical_item_name": "麻痹戒指",
+      "canonical_item_name": "\u9ebb\u75f9\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -1989,10 +1619,9 @@
     },
     {
       "canonical_item_id": 253,
-      "canonical_item_name": "隐身戒指",
+      "canonical_item_name": "\u9690\u8eab\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2000,10 +1629,9 @@
     },
     {
       "canonical_item_id": 254,
-      "canonical_item_name": "传送戒指",
+      "canonical_item_name": "\u4f20\u9001\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2011,10 +1639,9 @@
     },
     {
       "canonical_item_id": 255,
-      "canonical_item_name": "防御戒指",
+      "canonical_item_name": "\u9632\u5fa1\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2022,10 +1649,9 @@
     },
     {
       "canonical_item_id": 256,
-      "canonical_item_name": "复活戒指",
+      "canonical_item_name": "\u590d\u6d3b\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2033,10 +1659,9 @@
     },
     {
       "canonical_item_id": 257,
-      "canonical_item_name": "护身戒指",
+      "canonical_item_name": "\u62a4\u8eab\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2044,10 +1669,9 @@
     },
     {
       "canonical_item_id": 258,
-      "canonical_item_name": "超负载戒指",
+      "canonical_item_name": "\u8d85\u8d1f\u8f7d\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2055,10 +1679,9 @@
     },
     {
       "canonical_item_id": 259,
-      "canonical_item_name": "火焰戒指",
+      "canonical_item_name": "\u706b\u7130\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2066,10 +1689,9 @@
     },
     {
       "canonical_item_id": 260,
-      "canonical_item_name": "求婚戒指",
+      "canonical_item_name": "\u6c42\u5a5a\u6212\u6307",
       "classification": "EQUIPMENT",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
       "evidence": [
         "Human-frozen exact-ID equipment AUTO boost classification."
       ],
@@ -2077,10 +1699,9 @@
     },
     {
       "canonical_item_id": 910001,
-      "canonical_item_name": "体力强效神水",
+      "canonical_item_name": "\u4f53\u529b\u5f3a\u6548\u795e\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2088,10 +1709,9 @@
     },
     {
       "canonical_item_id": 910002,
-      "canonical_item_name": "魔力强效神水",
+      "canonical_item_name": "\u9b54\u529b\u5f3a\u6548\u795e\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2099,10 +1719,9 @@
     },
     {
       "canonical_item_id": 910003,
-      "canonical_item_name": "疾风神水",
+      "canonical_item_name": "\u75be\u98ce\u795e\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2110,10 +1729,9 @@
     },
     {
       "canonical_item_id": 910004,
-      "canonical_item_name": "攻击神水",
+      "canonical_item_name": "\u653b\u51fb\u795e\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2121,10 +1739,9 @@
     },
     {
       "canonical_item_id": 910005,
-      "canonical_item_name": "魔力神水",
+      "canonical_item_name": "\u9b54\u529b\u795e\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2132,21 +1749,29 @@
     },
     {
       "canonical_item_id": 910006,
-      "canonical_item_name": "精神神水",
+      "canonical_item_name": "\u7cbe\u795e\u795e\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
       "human_frozen": true
     },
     {
+      "canonical_item_id": 910007,
+      "canonical_item_name": "\u7597\u4f24\u836f",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
       "canonical_item_id": 910008,
-      "canonical_item_name": "HP强化水",
+      "canonical_item_name": "HP\u5f3a\u5316\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2154,10 +1779,9 @@
     },
     {
       "canonical_item_id": 910009,
-      "canonical_item_name": "MP强化水",
+      "canonical_item_name": "MP\u5f3a\u5316\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2165,10 +1789,9 @@
     },
     {
       "canonical_item_id": 910010,
-      "canonical_item_name": "攻击力药水",
+      "canonical_item_name": "\u653b\u51fb\u529b\u836f\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2176,10 +1799,9 @@
     },
     {
       "canonical_item_id": 910011,
-      "canonical_item_name": "魔法力药水",
+      "canonical_item_name": "\u9b54\u6cd5\u529b\u836f\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2187,10 +1809,9 @@
     },
     {
       "canonical_item_id": 910012,
-      "canonical_item_name": "道术力药水",
+      "canonical_item_name": "\u9053\u672f\u529b\u836f\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
@@ -2198,72 +1819,543 @@
     },
     {
       "canonical_item_id": 910013,
-      "canonical_item_name": "疾风药水",
+      "canonical_item_name": "\u75be\u98ce\u836f\u6c34",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
       "human_frozen": true
     },
     {
+      "canonical_item_id": 920001,
+      "canonical_item_name": "\u4e07\u5e74\u96ea\u971c",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920002,
+      "canonical_item_name": "\u51b0\u5486\u54ee",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920003,
+      "canonical_item_name": "\u523a\u6740\u5251\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920004,
+      "canonical_item_name": "\u534a\u6708\u5f2f\u5200",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920005,
+      "canonical_item_name": "\u53ec\u5524\u795e\u517d",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920006,
+      "canonical_item_name": "\u53ec\u5524\u9ab7\u9ac5",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920007,
+      "canonical_item_name": "\u56de\u57ce\u5377",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; Return Scroll remains unboosted."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920008,
+      "canonical_item_name": "\u56f0\u9b54\u5492",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920009,
+      "canonical_item_name": "\u5723\u8a00\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920010,
+      "canonical_item_name": "\u5730\u72f1\u706b",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920011,
+      "canonical_item_name": "\u5730\u72f1\u96f7\u5149",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920012,
+      "canonical_item_name": "\u57fa\u672c\u5251\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920013,
+      "canonical_item_name": "\u5927\u706b\u7403",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920014,
+      "canonical_item_name": "\u592a\u9633\u6c34",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920015,
+      "canonical_item_name": "\u5e7d\u7075\u76fe",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920016,
+      "canonical_item_name": "\u5f3a\u6548\u592a\u9633\u6c34",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920017,
+      "canonical_item_name": "\u8d85\u7ea7\u91d1\u521b\u836f",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920018,
+      "canonical_item_name": "\u5fc3\u7075\u542f\u793a",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
       "canonical_item_id": 920019,
-      "canonical_item_name": "战神油",
+      "canonical_item_name": "\u6218\u795e\u6cb9",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "service item 707; useEffect=war_god_oil; functional oil; human-frozen AUTO boost decision."
       ],
       "human_frozen": true
     },
     {
+      "canonical_item_id": 920020,
+      "canonical_item_name": "\u6297\u62d2\u706b\u73af",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920021,
+      "canonical_item_name": "\u653b\u6740\u5251\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920022,
+      "canonical_item_name": "\u65bd\u6bd2\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920023,
+      "canonical_item_name": "\u6c83\u739b\u53f7\u89d2",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920024,
+      "canonical_item_name": "\u6cbb\u6108\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920025,
+      "canonical_item_name": "\u706b\u5899",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920026,
+      "canonical_item_name": "\u706b\u7403\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920027,
+      "canonical_item_name": "\u7075\u9b42\u706b\u7b26",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920028,
+      "canonical_item_name": "\u70c8\u706b\u5251\u6cd5",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920029,
+      "canonical_item_name": "\u7206\u88c2\u706b\u7130",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920030,
+      "canonical_item_name": "\u75be\u5149\u7535\u5f71",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920031,
+      "canonical_item_name": "\u77ac\u606f\u79fb\u52a8",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920032,
+      "canonical_item_name": "\u7956\u739b\u5934\u50cf",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
       "canonical_item_id": 920033,
-      "canonical_item_name": "祝福油",
+      "canonical_item_name": "\u795d\u798f\u6cb9",
       "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-      "boost_policy": "AUTO_BOOST",
-      "reason_code": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
       "evidence": [
         "Human-frozen exact-ID rare functional consumable AUTO boost classification."
       ],
       "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920034,
+      "canonical_item_name": "\u795e\u5723\u6218\u7532\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920035,
+      "canonical_item_name": "\u7cbe\u795e\u529b\u6218\u6cd5",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920036,
+      "canonical_item_name": "\u7fa4\u4f53\u6cbb\u7597\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920037,
+      "canonical_item_name": "\u8089",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920038,
+      "canonical_item_name": "\u86c6\u5375",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920039,
+      "canonical_item_name": "\u8718\u86db\u7259",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920040,
+      "canonical_item_name": "\u874e\u5c3e",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920041,
+      "canonical_item_name": "\u8bf1\u60d1\u4e4b\u5149",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920042,
+      "canonical_item_name": "\u8d85\u7ea7\u9b54\u6cd5\u836f",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920043,
+      "canonical_item_name": "\u91ce\u86ee\u51b2\u649e",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920044,
+      "canonical_item_name": "\u91d1\u521b\u836f(\u4e2d\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920045,
+      "canonical_item_name": "\u91d1\u521b\u836f(\u5c0f\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920046,
+      "canonical_item_name": "\u9690\u8eab\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920047,
+      "canonical_item_name": "\u96c6\u4f53\u9690\u8eab\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920048,
+      "canonical_item_name": "\u96f7\u7535\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920049,
+      "canonical_item_name": "\u98df\u4eba\u82b1\u53f6",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920050,
+      "canonical_item_name": "\u98df\u4eba\u82b1\u679c",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920051,
+      "canonical_item_name": "\u9b54\u6cd5\u76fe",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920052,
+      "canonical_item_name": "\u9b54\u6cd5\u836f(\u4e2d\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920053,
+      "canonical_item_name": "\u9b54\u6cd5\u836f(\u5c0f\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
     }
-  ],
-  "summary": {
-    "production_slots": 6809,
-    "equipment_item_ids": 167,
-    "rare_functional_consumable_item_ids": 14,
-    "auto_boost_item_ids": 181,
-    "overlapping_population_counts": {
-      "gold_slots": 134,
-      "common_recovery_slots": 1597,
-      "new_armor_boss_slots": 324,
-      "blessing_oil_slots": 22,
-      "equipment_candidate_slots": 4311,
-      "rare_consumable_candidate_slots": 277,
-      "unclassified_candidate_slots": 490
-    },
-    "effective_policy_counts": {
-      "AUTO_BOOST": 4546,
-      "BYPASS_COMMON_RECOVERY": 1357,
-      "BYPASS_GOLD": 128,
-      "BYPASS_NEW_ARMOR_BOSS": 324,
-      "BYPASS_UNCLASSIFIED": 454
-    },
-    "ceiling_applied_slots": 2203,
-    "disabled_counterfactual_mismatch": 0,
-    "gold_amount_multiplier": {
-      "numerator": 10,
-      "denominator": 1
-    },
-    "gold_amount_slots": 134,
-    "gold_amount_mismatch": 0,
-    "disabled_gold_amount_mismatch": 0,
-    "probability_decreases": 0,
-    "ceiling_violations": 0,
-    "boost_formula_mismatch": 0,
-    "bypass_probability_mismatch": 0,
-    "duplicate_slot_collapse": 0
-  }
+  ]
 }

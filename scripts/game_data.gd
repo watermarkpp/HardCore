@@ -39,6 +39,9 @@ const DPV2_DIRECT_BASELINE_PATH := (
 const DPV2_SINGLE_PLAYER_DROP_BOOST_PATH := (
 	"res://assets/data/drop/dpv2_single_player_drop_boost_v1.json"
 )
+const DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH := (
+	"res://assets/data/drop/dpv2_single_player_item_boost_classification_v1.json"
+)
 const DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH := (
 	"res://assets/data/drop/dpv2_single_player_effective_probability_v1.json"
 )
@@ -136,6 +139,7 @@ var dpv2_direct_baseline: Dictionary = {}
 var dpv2_monster_drop_semantic_authority: Dictionary = {}
 var dpv2_direct_baseline_loaded := false
 var dpv2_single_player_drop_boost: Dictionary = {}
+var dpv2_single_player_item_boost_classification: Dictionary = {}
 var dpv2_single_player_effective_probability: Dictionary = {}
 var dpv2_single_player_drop_boost_loaded := false
 var maps: Array = []
@@ -961,11 +965,13 @@ func _load_dpv2_direct_baseline() -> bool:
 
 func _load_dpv2_single_player_drop_boost() -> bool:
 	dpv2_single_player_drop_boost = {}
+	dpv2_single_player_item_boost_classification = {}
 	dpv2_single_player_effective_probability = {}
 	dpv2_single_player_drop_boost_loaded = false
 	_dpv2_spb_effective_by_uid.clear()
 	for path: String in [
 		DPV2_SINGLE_PLAYER_DROP_BOOST_PATH,
+		DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH,
 		DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH,
 	]:
 		if not FileAccess.file_exists(path):
@@ -974,14 +980,34 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	var authority_value: Variant = JSON.parse_string(
 		FileAccess.get_file_as_string(DPV2_SINGLE_PLAYER_DROP_BOOST_PATH)
 	)
+	var classification_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH)
+	)
 	var effective_value: Variant = JSON.parse_string(
 		FileAccess.get_file_as_string(DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH)
 	)
-	if not authority_value is Dictionary or not effective_value is Dictionary:
+	if (
+		not authority_value is Dictionary
+		or not classification_value is Dictionary
+		or not effective_value is Dictionary
+	):
 		load_error = "spb_effective_probability_authority_invalid_json"
 		return false
 	var authority: Dictionary = authority_value
+	var classification_authority: Dictionary = classification_value
 	var effective: Dictionary = effective_value
+	if (
+		str(classification_authority.get("schema", ""))
+			!= "hardcore.dpv2.single_player_item_boost_classification.v1"
+		or str(classification_authority.get("authority_id", ""))
+			!= "dpv2.single_player_item_boost_classification.v1"
+		or str(classification_authority.get("status", ""))
+			!= "PRODUCTION_CLASSIFICATION_AUTHORITY"
+		or not bool(classification_authority.get("production_active", false))
+		or str(classification_authority.get("identity_key", "")) != "canonical_item_id"
+	):
+		load_error = "spb_item_boost_classification_contract_invalid"
+		return false
 	if (
 		str(authority.get("schema", ""))
 			!= "hardcore.dpv2.single_player_drop_boost.v1"
@@ -1003,6 +1029,105 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 			!= "dpv2.direct_baseline.v2"
 	):
 		load_error = "spb_effective_probability_contract_invalid"
+		return false
+	var classification_records_value: Variant = classification_authority.get(
+		"records", null
+	)
+	if not classification_records_value is Array or classification_records_value.size() != 233:
+		load_error = "spb_item_boost_classification_cardinality_invalid"
+		return false
+	var expected_classification_counts := {
+		"EQUIPMENT": 167,
+		"RARE_FUNCTIONAL_CONSUMABLE": 14,
+		"COMMON_RECOVERY": 10,
+		"BYPASS_UNCLASSIFIED": 42,
+	}
+	var classification_counts: Dictionary = {}
+	var classification_by_id: Dictionary = {}
+	for raw_classification: Variant in classification_records_value:
+		if not raw_classification is Dictionary:
+			load_error = "spb_item_boost_classification_record_invalid"
+			return false
+		var classification_record: Dictionary = raw_classification
+		var item_id := _dpv2_json_integer(
+			classification_record.get("canonical_item_id", null)
+		)
+		var classification_name := str(classification_record.get("classification", ""))
+		var evidence_value: Variant = classification_record.get("evidence", null)
+		var human_frozen_value: Variant = classification_record.get("human_frozen", null)
+		if (
+			item_id <= 0
+			or classification_by_id.has(item_id)
+			or not expected_classification_counts.has(classification_name)
+			or str(classification_record.get("canonical_item_name", "")).is_empty()
+			or str(classification_record.get("reason", "")).is_empty()
+			or not evidence_value is Array
+			or evidence_value.is_empty()
+			or not human_frozen_value is bool
+			or not bool(human_frozen_value)
+		):
+			load_error = "spb_item_boost_classification_record_invalid"
+			return false
+		for evidence_entry: Variant in evidence_value:
+			if str(evidence_entry).is_empty():
+				load_error = "spb_item_boost_classification_evidence_invalid"
+				return false
+		classification_by_id[item_id] = classification_record
+		classification_counts[classification_name] = (
+			int(classification_counts.get(classification_name, 0)) + 1
+		)
+	var direct_item_ids: Dictionary = {}
+	for indexed_value: Variant in _dpv2_direct_slot_by_uid.values():
+		if not indexed_value is Dictionary:
+			continue
+		var indexed_slot_value: Variant = indexed_value.get("slot", null)
+		if indexed_slot_value is Dictionary and indexed_slot_value.has("canonical_item_id"):
+			direct_item_ids[_dpv2_json_integer(indexed_slot_value.canonical_item_id)] = true
+	if classification_by_id.size() != direct_item_ids.size():
+		load_error = "spb_item_boost_classification_identity_closure_invalid"
+		return false
+	for item_id: Variant in direct_item_ids:
+		if not classification_by_id.has(item_id):
+			load_error = "spb_item_boost_classification_identity_closure_invalid"
+			return false
+	for key: String in expected_classification_counts:
+		if int(classification_counts.get(key, 0)) != expected_classification_counts[key]:
+			load_error = "spb_item_boost_classification_count_invalid:%s" % key
+			return false
+	var classification_summary_value: Variant = classification_authority.get("summary", null)
+	if not classification_summary_value is Dictionary:
+		load_error = "spb_item_boost_classification_summary_invalid"
+		return false
+	var classification_summary: Dictionary = classification_summary_value
+	var declared_classification_counts: Variant = classification_summary.get(
+		"classification_counts", null
+	)
+	if (
+		_dpv2_json_integer(classification_summary.get("canonical_items", null)) != 233
+		or _dpv2_json_integer(
+			classification_summary.get("duplicate_canonical_item_ids", null)
+		) != 0
+		or _dpv2_json_integer(
+			classification_summary.get("human_frozen_records", null)
+		) != 233
+		or not declared_classification_counts is Dictionary
+	):
+		load_error = "spb_item_boost_classification_summary_invalid"
+		return false
+	for key: String in expected_classification_counts:
+		if (
+			_dpv2_json_integer(declared_classification_counts.get(key, null))
+				!= expected_classification_counts[key]
+		):
+			load_error = "spb_item_boost_classification_summary_count_invalid:%s" % key
+			return false
+	if (
+		str((classification_by_id.get(920019, {}) as Dictionary).get("classification", ""))
+			!= "RARE_FUNCTIONAL_CONSUMABLE"
+		or str((classification_by_id.get(920007, {}) as Dictionary).get("classification", ""))
+			!= "BYPASS_UNCLASSIFIED"
+	):
+		load_error = "spb_item_boost_classification_anchor_invalid"
 		return false
 	var production_value: Variant = authority.get("production", null)
 	if not production_value is Dictionary:
@@ -1036,6 +1161,15 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	):
 		load_error = "spb_production_contract_invalid"
 		return false
+	var classification_relative_path := (
+		DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH.trim_prefix("res://")
+	)
+	var classification_sha256 := _sha256_raw_file(
+		DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH
+	)
+	if classification_sha256.is_empty():
+		load_error = "spb_item_boost_classification_hash_unavailable"
+		return false
 	for document: Dictionary in [authority, effective]:
 		var bindings_value: Variant = document.get("source_bindings", null)
 		if not bindings_value is Dictionary:
@@ -1052,6 +1186,11 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 				!= DPV2_SPB_PROVENANCE_SHA256
 			or str(bindings.get("direct_slot_ledger_sha256", "")).to_upper()
 				!= DPV2_SPB_LEDGER_SHA256
+			or str(bindings.get("item_boost_classification_path", ""))
+				!= classification_relative_path
+			or str(
+				bindings.get("item_boost_classification_sha256_raw", "")
+			).to_upper() != classification_sha256
 			or _dpv2_json_integer(bindings.get("direct_slot_count", null)) != 6809
 			or _dpv2_json_integer(bindings.get("source_drift", null)) != 0
 			or _dpv2_json_integer(bindings.get("base_probability_drift", null)) != 0
@@ -1076,11 +1215,11 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	var authority_summary: Dictionary = authority_summary_value
 	var effective_summary: Dictionary = effective_summary_value
 	var expected_policy_counts := {
-		"AUTO_BOOST": 4537,
+		"AUTO_BOOST": 4546,
 		"BYPASS_COMMON_RECOVERY": 1357,
 		"BYPASS_GOLD": 128,
 		"BYPASS_NEW_ARMOR_BOSS": 324,
-		"BYPASS_UNCLASSIFIED": 463,
+		"BYPASS_UNCLASSIFIED": 454,
 	}
 	var expected_population_counts := {
 		"gold_slots": 134,
@@ -1088,8 +1227,8 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		"new_armor_boss_slots": 324,
 		"blessing_oil_slots": 22,
 		"equipment_candidate_slots": 4311,
-		"rare_consumable_candidate_slots": 268,
-		"unclassified_candidate_slots": 499,
+		"rare_consumable_candidate_slots": 277,
+		"unclassified_candidate_slots": 490,
 	}
 	for summary: Dictionary in [authority_summary, effective_summary]:
 		var policy_counts_value: Variant = summary.get("effective_policy_counts", null)
@@ -1133,8 +1272,8 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		or _dpv2_json_integer(authority_summary.get("equipment_item_ids", null)) != 167
 		or _dpv2_json_integer(
 			authority_summary.get("rare_functional_consumable_item_ids", null)
-		) != 13
-		or _dpv2_json_integer(authority_summary.get("auto_boost_item_ids", null)) != 180
+		) != 14
+		or _dpv2_json_integer(authority_summary.get("auto_boost_item_ids", null)) != 181
 		or _dpv2_json_integer(effective_summary.get("records", null)) != 6809
 		or _dpv2_json_integer(
 			effective_summary.get("disabled_counterfactual_records", null)
@@ -1269,6 +1408,7 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 			load_error = "spb_effective_probability_policy_closure_invalid:%s" % key
 			return false
 	dpv2_single_player_drop_boost = authority
+	dpv2_single_player_item_boost_classification = classification_authority
 	dpv2_single_player_effective_probability = effective
 	dpv2_single_player_drop_boost_loaded = true
 	return true
@@ -1660,6 +1800,19 @@ func _sha256_lf_file(path: String) -> String:
 	if context.start(HashingContext.HASH_SHA256) != OK:
 		return ""
 	context.update(text.to_utf8_buffer())
+	return context.finish().hex_encode().to_upper()
+
+
+func _sha256_raw_file(path: String) -> String:
+	if not FileAccess.file_exists(path):
+		return ""
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var context := HashingContext.new()
+	if context.start(HashingContext.HASH_SHA256) != OK:
+		return ""
+	context.update(file.get_buffer(file.get_length()))
 	return context.finish().hex_encode().to_upper()
 
 

@@ -23,8 +23,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
 BASELINE_PATH = ROOT / "assets/data/drop/dpv2_direct_baseline_v2.json"
 PROVENANCE_PATH = ROOT / "assets/data/drop/dpv2_21cq_source_provenance_v1.json"
-TIER_PATH = ROOT / "assets/data/drop/dpv2_item_tier_authority_v1.json"
-IDENTITY_PATH = ROOT / "assets/data/drop/dpv2_item_identity_authority_v1.json"
+CLASSIFICATION_PATH = (
+    ROOT
+    / "assets/data/drop/dpv2_single_player_item_boost_classification_v1.json"
+)
 GLOBAL_PATH = ROOT / "assets/data/drop/dpv2_global_drop_rate_authority_v1.json"
 AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_single_player_drop_boost_v1.json"
 EFFECTIVE_PATH = (
@@ -41,12 +43,6 @@ EXPECTED_BASELINE_SHA256 = (
 EXPECTED_PROVENANCE_SHA256 = (
     "F48A033D5A33D80B795A838BE837AE84FA93469B6055FE012309ACC07082E347"
 )
-EXPECTED_TIER_SHA256 = (
-    "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A"
-)
-EXPECTED_IDENTITY_SHA256 = (
-    "C2F2F7E2803C7E54C5C096726D14B0E6730CC517DC3D20EE33F0D45BB0E4761C"
-)
 EXPECTED_GLOBAL_SHA256 = (
     "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0"
 )
@@ -60,8 +56,21 @@ EXPECTED_OVERLAPPING_COUNTS = {
     "new_armor_boss_slots": 324,
     "blessing_oil_slots": 22,
     "equipment_candidate_slots": 4311,
-    "rare_consumable_candidate_slots": 268,
-    "unclassified_candidate_slots": 499,
+    "rare_consumable_candidate_slots": 277,
+    "unclassified_candidate_slots": 490,
+}
+EXPECTED_CLASSIFICATION_COUNTS = {
+    "EQUIPMENT": 167,
+    "RARE_FUNCTIONAL_CONSUMABLE": 14,
+    "COMMON_RECOVERY": 10,
+    "BYPASS_UNCLASSIFIED": 42,
+}
+EXPECTED_EFFECTIVE_POLICY_COUNTS = {
+    "AUTO_BOOST": 4546,
+    "BYPASS_COMMON_RECOVERY": 1357,
+    "BYPASS_GOLD": 128,
+    "BYPASS_NEW_ARMOR_BOSS": 324,
+    "BYPASS_UNCLASSIFIED": 454,
 }
 
 MULTIPLIER = (25, 1)
@@ -82,7 +91,6 @@ COMMON_RECOVERY_IDS = (
 NEW_ARMOR_BOSS_IDS = (235, 236, 237, 238, 239, 240)
 BLESSING_OIL_ID = 920033
 EXCLUDED_NON_BOSS_ID = 225
-EQUIPMENT_ITEM_TYPES = frozenset({"武器", "盔甲", "头盔", "项链", "手镯", "戒指"})
 LEDGER_FIELDS = (
     "slot_uid",
     "canonical_monster_id",
@@ -280,61 +288,111 @@ def _validate_immutable_inputs(
     }
 
 
-def _authority_item_records(
-    tier_records: list[dict[str, Any]],
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[int, dict[str, Any]]]:
+def _classification_records(
+    authority: dict[str, Any], baseline_item_ids: set[int]
+) -> tuple[
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+    dict[int, dict[str, Any]],
+]:
+    if (
+        authority.get("schema")
+        != "hardcore.dpv2.single_player_item_boost_classification.v1"
+        or authority.get("authority_id")
+        != "dpv2.single_player_item_boost_classification.v1"
+        or authority.get("status") != "PRODUCTION_CLASSIFICATION_AUTHORITY"
+        or authority.get("production_active") is not True
+        or authority.get("identity_key") != "canonical_item_id"
+    ):
+        raise BoostBuildError("item boost classification authority contract mismatch")
+    records = authority.get("records")
+    if not isinstance(records, list) or len(records) != 233:
+        raise BoostBuildError("item boost classification must contain 233 records")
     by_id: dict[int, dict[str, Any]] = {}
-    for row in tier_records:
+    counts: Counter[str] = Counter()
+    for row in records:
+        if not isinstance(row, dict):
+            raise BoostBuildError("item boost classification record is not an object")
         item_id = int(row.get("canonical_item_id", -1))
-        if item_id in by_id:
-            raise BoostBuildError(f"duplicate A07 canonical item ID {item_id}")
+        classification = str(row.get("classification", ""))
+        evidence = row.get("evidence")
+        if item_id <= 0 or item_id in by_id:
+            raise BoostBuildError(f"duplicate/invalid classified canonical item ID {item_id}")
+        if classification not in EXPECTED_CLASSIFICATION_COUNTS:
+            raise BoostBuildError(f"invalid item boost classification {item_id}")
+        if (
+            not str(row.get("canonical_item_name", ""))
+            or not str(row.get("reason", ""))
+            or not isinstance(evidence, list)
+            or not evidence
+            or any(not str(value) for value in evidence)
+            or row.get("human_frozen") is not True
+        ):
+            raise BoostBuildError(f"incomplete human-frozen classification {item_id}")
         by_id[item_id] = row
+        counts[classification] += 1
+    if set(by_id) != baseline_item_ids:
+        missing = sorted(baseline_item_ids - set(by_id))
+        extra = sorted(set(by_id) - baseline_item_ids)
+        raise BoostBuildError(
+            f"classification/direct exact identity mismatch missing={missing[:3]} "
+            f"extra={extra[:3]}"
+        )
+    if dict(counts) != EXPECTED_CLASSIFICATION_COUNTS:
+        raise BoostBuildError(f"item boost classification count drift={dict(counts)}")
+    common_ids = {
+        item_id
+        for item_id, row in by_id.items()
+        if row["classification"] == "COMMON_RECOVERY"
+    }
+    if common_ids != set(COMMON_RECOVERY_IDS):
+        raise BoostBuildError("common recovery exact-ID classification drift")
+    if (
+        by_id[BLESSING_OIL_ID]["classification"]
+        != "RARE_FUNCTIONAL_CONSUMABLE"
+        or by_id[920019]["classification"]
+        != "RARE_FUNCTIONAL_CONSUMABLE"
+        or by_id[920007]["classification"] != "BYPASS_UNCLASSIFIED"
+    ):
+        raise BoostBuildError("item boost classification semantic anchor drift")
+    summary = authority.get("summary", {})
+    if (
+        summary.get("canonical_items") != 233
+        or summary.get("duplicate_canonical_item_ids") != 0
+        or summary.get("human_frozen_records") != 233
+        or summary.get("classification_counts") != dict(sorted(counts.items()))
+    ):
+        raise BoostBuildError("item boost classification summary drift")
 
-    equipment: list[dict[str, Any]] = []
-    for item_id, row in sorted(by_id.items()):
-        if row.get("tier_status") != "RESOLVED":
-            raise BoostBuildError(f"A07 item {item_id} is not resolved")
-        if row.get("item_type") in EQUIPMENT_ITEM_TYPES:
-            equipment.append(
-                {
-                    "canonical_item_id": item_id,
-                    "canonical_item_name": row.get("canonical_name"),
-                    "a07_item_type": row.get("item_type"),
-                    "a07_tier": row.get("tier"),
-                    "classification": "EQUIPMENT",
-                    "boost_policy": "AUTO_BOOST",
-                    "reason_code": "A07_EXACT_EQUIPMENT_ID",
-                }
-            )
-    blessing = by_id.get(BLESSING_OIL_ID)
-    if blessing is None or blessing.get("tier") != "RARE_CONSUMABLE":
-        raise BoostBuildError("A07 blessing-oil rare-consumable identity drift")
-    rare = [
-        {
-            "canonical_item_id": item_id,
-            "canonical_item_name": row.get("canonical_name"),
-            "a07_item_type": row.get("item_type"),
-            "a07_tier": row.get("tier"),
-            "classification": "RARE_FUNCTIONAL_CONSUMABLE",
-            "boost_policy": "AUTO_BOOST",
-            "reason_code": (
-                "EXPLICIT_RARE_CONSUMABLE_BLESSING_OIL"
-                if item_id == BLESSING_OIL_ID
-                else "A07_EXACT_RARE_CONSUMABLE_ID"
-            ),
+    def project(row: dict[str, Any], policy: str) -> dict[str, Any]:
+        return {
+            "canonical_item_id": int(row["canonical_item_id"]),
+            "canonical_item_name": row["canonical_item_name"],
+            "classification": row["classification"],
+            "boost_policy": policy,
+            "reason_code": row["reason"],
+            "evidence": row["evidence"],
+            "human_frozen": True,
         }
-        for item_id, row in sorted(by_id.items())
-        if row.get("tier") == "RARE_CONSUMABLE"
+
+    equipment = [
+        project(row, "AUTO_BOOST")
+        for _item_id, row in sorted(by_id.items())
+        if row["classification"] == "EQUIPMENT"
     ]
-    if len(rare) != 13:
-        raise BoostBuildError(f"A07 rare-consumable identity count drift={len(rare)}")
-    return equipment, rare, by_id
+    rare = [
+        project(row, "AUTO_BOOST")
+        for _item_id, row in sorted(by_id.items())
+        if row["classification"] == "RARE_FUNCTIONAL_CONSUMABLE"
+    ]
+    common = [project(by_id[item_id], "BYPASS_COMMON_RECOVERY") for item_id in COMMON_RECOVERY_IDS]
+    return equipment, rare, common, by_id
 
 
 def classify_slot(
     row: dict[str, Any],
-    equipment_ids: frozenset[int],
-    rare_consumable_ids: frozenset[int],
+    classification_by_id: dict[int, dict[str, Any]],
 ) -> tuple[str, str]:
     monster_id = int(row["canonical_monster_id"])
     item_id = row.get("canonical_item_id")
@@ -347,42 +405,33 @@ def classify_slot(
             "BYPASS_GOLD",
             "GOLD_PROBABILITY_UNCHANGED_AMOUNT_X10_WHEN_ENABLED",
         )
-    if item_id in COMMON_RECOVERY_IDS:
-        return "BYPASS_COMMON_RECOVERY", "COMMON_RECOVERY_SUPPLY_UNCHANGED"
-    if item_id in rare_consumable_ids:
-        return (
-            "AUTO_BOOST",
-            "EXPLICIT_RARE_CONSUMABLE_BLESSING_OIL"
-            if item_id == BLESSING_OIL_ID
-            else "A07_EXACT_RARE_CONSUMABLE_ID",
-        )
-    if item_id in equipment_ids:
-        return "AUTO_BOOST", "A07_EXACT_EQUIPMENT_ID"
-    return "BYPASS_UNCLASSIFIED", "FAIL_SAFE_UNCLASSIFIED_BASE_PARITY"
+    classification = classification_by_id.get(int(item_id), {})
+    class_name = classification.get("classification")
+    reason = str(classification.get("reason", ""))
+    if class_name == "COMMON_RECOVERY":
+        return "BYPASS_COMMON_RECOVERY", reason
+    if class_name in {"RARE_FUNCTIONAL_CONSUMABLE", "EQUIPMENT"}:
+        return "AUTO_BOOST", reason
+    if class_name == "BYPASS_UNCLASSIFIED":
+        return "BYPASS_UNCLASSIFIED", reason
+    raise BoostBuildError(f"missing current classification for item {item_id}")
 
 
 def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
     baseline = load_json(BASELINE_PATH)
     slots = _flatten_slots(baseline)
     freeze = _validate_immutable_inputs(baseline, slots)
-    tier = load_json(TIER_PATH)
-    identity = load_json(IDENTITY_PATH)
+    classification_authority = load_json(CLASSIFICATION_PATH)
     global_authority = load_json(GLOBAL_PATH)
     for path, expected_hash in (
-        (TIER_PATH, EXPECTED_TIER_SHA256),
-        (IDENTITY_PATH, EXPECTED_IDENTITY_SHA256),
         (GLOBAL_PATH, EXPECTED_GLOBAL_SHA256),
     ):
         digest = raw_sha256(path)
         if digest != expected_hash:
             raise BoostBuildError(
-                f"classification authority drift: {path.relative_to(ROOT)}={digest} "
+                f"supporting authority drift: {path.relative_to(ROOT)}={digest} "
                 f"expected={expected_hash}"
             )
-    if tier.get("schema") != "hardcore.dpv2.item_tier_authority.v1":
-        raise BoostBuildError("A07 item-tier schema mismatch")
-    if identity.get("schema") != "hardcore.dpv2.item_identity_authority.v1":
-        raise BoostBuildError("A06 item-identity schema mismatch")
     if global_authority.get("active_preset") != "1x":
         raise BoostBuildError("SPB requires global drop rate preset 1x")
     active_preset = next(
@@ -396,45 +445,19 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
     if active_preset != {"preset": "1x", "numerator": 1, "denominator": 1}:
         raise BoostBuildError("global 1x preset is not exact 1/1")
 
-    tier_records = tier.get("records")
-    if not isinstance(tier_records, list):
-        raise BoostBuildError("A07 records are not an array")
-    equipment, rare, tier_by_id = _authority_item_records(tier_records)
-    equipment_ids = frozenset(row["canonical_item_id"] for row in equipment)
-    rare_consumable_ids = frozenset(row["canonical_item_id"] for row in rare)
     baseline_item_ids = {
         int(row["canonical_item_id"])
         for row in slots
         if "canonical_item_id" in row
     }
-    if baseline_item_ids != set(tier_by_id):
-        missing = sorted(baseline_item_ids - set(tier_by_id))
-        extra = sorted(set(tier_by_id) - baseline_item_ids)
-        raise BoostBuildError(
-            f"A07/direct item identity mismatch missing={missing[:3]} extra={extra[:3]}"
-        )
+    equipment, rare, common_records, classification_by_id = _classification_records(
+        classification_authority, baseline_item_ids
+    )
+    equipment_ids = frozenset(row["canonical_item_id"] for row in equipment)
+    rare_consumable_ids = frozenset(row["canonical_item_id"] for row in rare)
     if EXCLUDED_NON_BOSS_ID in NEW_ARMOR_BOSS_IDS:
         raise BoostBuildError("monster 225 must not be a new-armor boss exclusion")
 
-    identity_names = {
-        int(row["canonical_item_id"]): row.get("normalized_item_name")
-        for row in identity.get("records", [])
-    }
-    common_records = []
-    for item_id in COMMON_RECOVERY_IDS:
-        row = tier_by_id.get(item_id)
-        if row is None:
-            raise BoostBuildError(f"common recovery item missing A07 identity: {item_id}")
-        common_records.append(
-            {
-                "canonical_item_id": item_id,
-                "canonical_item_name": identity_names.get(item_id, row.get("canonical_name")),
-                "a07_item_type": row.get("item_type"),
-                "a07_tier": row.get("tier"),
-                "boost_policy": "BYPASS_COMMON_RECOVERY",
-                "reason_code": "COMMON_RECOVERY_SUPPLY_UNCHANGED",
-            }
-        )
     profiles_by_id = {
         int(row["canonical_monster_id"]): row for row in baseline["profiles"]
     }
@@ -472,8 +495,7 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             row.get("canonical_item_id") in rare_consumable_ids for row in slots
         ),
         # Candidate populations intentionally overlap the whole-boss bypass.
-        # This is the audit view: 439 books + 2 boss keys + 10 materials +
-        # 48 回城卷/战神油.  The effective policy bucket is smaller because
+        # This is the audit view. The effective policy bucket is smaller because
         # BYPASS_NEW_ARMOR_BOSS has the strongest precedence.
         "unclassified_candidate_slots": sum(
             "canonical_item_id" in row
@@ -501,7 +523,7 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
     disabled_gold_amount_mismatches = 0
     for row in slots:
         policy, classification_reason = classify_slot(
-            row, equipment_ids, rare_consumable_ids
+            row, classification_by_id
         )
         auto = policy == "AUTO_BOOST"
         base_numerator = int(row["base_numerator"])
@@ -584,13 +606,13 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
         )
     ):
         raise BoostBuildError("effective probability invariant mismatch")
+    if dict(policy_counts) != EXPECTED_EFFECTIVE_POLICY_COUNTS:
+        raise BoostBuildError(f"effective policy count drift={dict(policy_counts)}")
 
     source_bindings = {
         **freeze,
-        "a07_item_tier_path": TIER_PATH.relative_to(ROOT).as_posix(),
-        "a07_item_tier_sha256_raw": raw_sha256(TIER_PATH),
-        "a06_item_identity_path": IDENTITY_PATH.relative_to(ROOT).as_posix(),
-        "a06_item_identity_sha256_raw": raw_sha256(IDENTITY_PATH),
+        "item_boost_classification_path": CLASSIFICATION_PATH.relative_to(ROOT).as_posix(),
+        "item_boost_classification_sha256_raw": raw_sha256(CLASSIFICATION_PATH),
         "global_drop_rate_path": GLOBAL_PATH.relative_to(ROOT).as_posix(),
         "global_drop_rate_sha256_raw": raw_sha256(GLOBAL_PATH),
     }
@@ -628,9 +650,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "non_gold_reward_amount_overlay_forbidden": True,
         },
         "classification_contract": {
-            "runtime_classification": "EXACT_CANONICAL_IDS_FROZEN_IN_THIS_AUTHORITY",
+            "production_authority": "dpv2.single_player_item_boost_classification.v1",
+            "runtime_classification": "EXACT_CANONICAL_IDS_HUMAN_FROZEN_IN_CURRENT_AUTHORITY",
             "runtime_name_tier_or_fuzzy_inference_forbidden": True,
-            "build_time_equipment_source": "DPV2_A07_EXACT_ID_ITEM_TYPE_AND_TIER",
+            "build_time_source": "CURRENT_PRODUCTION_CLASSIFICATION_AUTHORITY_EXACT_IDS",
             "precedence": [
                 "BYPASS_NEW_ARMOR_BOSS",
                 "BYPASS_GOLD",

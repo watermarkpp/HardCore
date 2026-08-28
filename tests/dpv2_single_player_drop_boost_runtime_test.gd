@@ -23,8 +23,8 @@ func _run() -> void:
 	_test_overflow_contract_is_unchanged()
 	print(
 		"DPV2_SINGLE_PLAYER_DROP_BOOST_RUNTIME_PASS: records=6809 "
-		+ "auto=4537 common=1357 gold=128 boss=324 unclassified=463 "
-		+ "candidate_common=1597 candidate_gold=134 candidate_unclassified=499 "
+		+ "auto=4546 common=1357 gold=128 boss=324 unclassified=454 "
+		+ "candidate_common=1597 candidate_gold=134 candidate_unclassified=490 "
 		+ "ceiling=2203 disabled_mismatch=0 rng_before_overflow=1 ground_limit=9"
 	)
 	get_tree().quit(0)
@@ -32,8 +32,38 @@ func _run() -> void:
 
 func _test_authority_and_complete_ledger() -> void:
 	var authority: Dictionary = GameData.dpv2_single_player_drop_boost
+	var classification: Dictionary = GameData.dpv2_single_player_item_boost_classification
 	var effective: Dictionary = GameData.dpv2_single_player_effective_probability
 	assert(str(authority.get("schema", "")) == "hardcore.dpv2.single_player_drop_boost.v1")
+	assert(
+		str(classification.get("schema", ""))
+			== "hardcore.dpv2.single_player_item_boost_classification.v1"
+	)
+	assert(bool(classification.get("production_active", false)))
+	assert(str(classification.get("identity_key", "")) == "canonical_item_id")
+	var classification_records: Array = classification.get("records", [])
+	assert(classification_records.size() == 233)
+	var classification_counts: Dictionary = {}
+	var classified_ids: Dictionary = {}
+	for raw_classification: Variant in classification_records:
+		var classification_record: Dictionary = raw_classification
+		var item_id := int(classification_record.get("canonical_item_id", -1))
+		var classification_name := str(classification_record.get("classification", ""))
+		assert(item_id > 0 and not classified_ids.has(item_id))
+		assert(bool(classification_record.get("human_frozen", false)))
+		assert(not str(classification_record.get("reason", "")).is_empty())
+		assert(not (classification_record.get("evidence", []) as Array).is_empty())
+		classified_ids[item_id] = true
+		classification_counts[classification_name] = (
+			int(classification_counts.get(classification_name, 0)) + 1
+		)
+	assert(classified_ids.size() == 233)
+	assert(classification_counts == {
+		"EQUIPMENT": 167,
+		"RARE_FUNCTIONAL_CONSUMABLE": 14,
+		"COMMON_RECOVERY": 10,
+		"BYPASS_UNCLASSIFIED": 42,
+	})
 	assert(str(effective.get("schema", "")) == "hardcore.dpv2.single_player_effective_probability.v1")
 	var production: Dictionary = authority.get("production", {})
 	assert(bool(production.get("enabled", false)))
@@ -70,11 +100,11 @@ func _test_authority_and_complete_ledger() -> void:
 	assert(uids.size() == 6809)
 	var summary: Dictionary = effective.get("summary", {})
 	var expected_policy_counts := {
-		"AUTO_BOOST": 4537,
+		"AUTO_BOOST": 4546,
 		"BYPASS_COMMON_RECOVERY": 1357,
 		"BYPASS_GOLD": 128,
 		"BYPASS_NEW_ARMOR_BOSS": 324,
-		"BYPASS_UNCLASSIFIED": 463,
+		"BYPASS_UNCLASSIFIED": 454,
 	}
 	var policy_counts: Dictionary = summary.get("effective_policy_counts", {})
 	for key: String in expected_policy_counts:
@@ -115,7 +145,29 @@ func _test_real_slot_policies() -> void:
 	_assert_probability(19, "dpv2.direct.m19.slot_001", 1, 4, 1, 4, "BYPASS_GOLD")
 	_assert_probability(92, "dpv2.direct.m92.slot_001", 1, 6000, 1, 240, "AUTO_BOOST")
 	_assert_probability(43, "dpv2.direct.m43.slot_004", 1, 100, 1, 100, "BYPASS_UNCLASSIFIED")
-	_assert_probability(92, "dpv2.direct.m92.slot_002", 1, 6000, 1, 6000, "BYPASS_UNCLASSIFIED")
+	var war_god_oil_slots := [
+		[92, "dpv2.direct.m92.slot_002", 6000, 240],
+		[94, "dpv2.direct.m94.slot_002", 6000, 240],
+		[110, "dpv2.direct.m110.slot_023", 4800, 192],
+		[112, "dpv2.direct.m112.slot_003", 4800, 192],
+		[114, "dpv2.direct.m114.slot_004", 4800, 192],
+		[118, "dpv2.direct.m118.slot_003", 4800, 192],
+		[129, "dpv2.direct.m129.slot_005", 4800, 192],
+		[132, "dpv2.direct.m132.slot_005", 4800, 192],
+		[138, "dpv2.direct.m138.slot_003", 1800, 72],
+	]
+	for sample: Array in war_god_oil_slots:
+		_assert_probability(
+			int(sample[0]), str(sample[1]), 1, int(sample[2]), 1, int(sample[3]),
+			"AUTO_BOOST"
+		)
+		var matching_records: Array = GameData.dpv2_single_player_effective_probability.get("records", []).filter(
+			func(row: Variant) -> bool:
+				return row is Dictionary and str(row.get("slot_uid", "")) == str(sample[1])
+		)
+		assert(matching_records.size() == 1)
+		assert(int((matching_records[0] as Dictionary).get("canonical_item_id", -1)) == 920019)
+		assert(not bool((matching_records[0] as Dictionary).get("ceiling_applied", true)))
 	var boss_counts: Dictionary = {}
 	for raw_record: Variant in GameData.dpv2_single_player_effective_probability.get("records", []):
 		var record: Dictionary = raw_record

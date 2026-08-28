@@ -1,6 +1,6 @@
 # DPV2-SPB-1 Single-Player ×25 Drop Boost Report
 
-Status: `CLOSED`
+Status: `R1 CLOSED`
 
 Baseline commit: `98ea003b66915622b5c265602e54386f9213016c`
 
@@ -17,6 +17,12 @@ disabling SPB restores the frozen Direct Baseline Gold amount.
 
 The production RNG still rolls every resolved source slot independently before
 the existing protected/priority overflow selection and nine-ground-slot cap.
+
+R1 closes both external-audit blockers: the dedicated current Production
+Classification Authority now freezes all 233 canonical item IDs, and Warrior
+Oil (`920019`) is a rare functional consumable. The Builder, generated SPB
+artifacts, Runtime validation, tests, and final gate have zero dependency on
+the retired item-tier phase for Production AUTO eligibility.
 
 ## Production configuration
 
@@ -37,11 +43,11 @@ The mutually exclusive effective policy partition is:
 
 | Effective policy | Slots |
 | --- | ---: |
-| `AUTO_BOOST` | 4537 |
+| `AUTO_BOOST` | 4546 |
 | `BYPASS_COMMON_RECOVERY` | 1357 |
 | `BYPASS_GOLD` | 128 |
 | `BYPASS_NEW_ARMOR_BOSS` | 324 |
-| `BYPASS_UNCLASSIFIED` | 463 |
+| `BYPASS_UNCLASSIFIED` | 454 |
 | Total | 6809 |
 
 The full audit populations intentionally overlap the whole-Boss exclusion:
@@ -51,19 +57,27 @@ The full audit populations intentionally overlap the whole-Boss exclusion:
 | Common recovery | 1597 |
 | Gold | 134 |
 | New-armor Boss | 324 |
-| A07 equipment | 4311 |
-| A07 rare consumable | 268 |
-| Fail-safe unclassified candidate | 499 |
+| Equipment | 4311 |
+| Rare functional consumable | 277 |
+| Fail-safe unclassified candidate | 490 |
 | Blessing Oil (`920033`) | 22 |
 
-The 499 unclassified candidates are 439 skill-book slots, 2 Boss-key slots,
-10 material slots, and 48 Return Scroll/Warrior Oil slots. Boss precedence
-places 36 of those candidates into `BYPASS_NEW_ARMOR_BOSS`, leaving the 463
-effective unclassified slots shown above.
+The current authority freezes exactly four mutually exclusive item classes:
+167 `EQUIPMENT`, 14 `RARE_FUNCTIONAL_CONSUMABLE`, 10 `COMMON_RECOVERY`, and
+42 `BYPASS_UNCLASSIFIED`. All 233 records carry an exact canonical ID/name,
+reason, evidence, and `human_frozen=true`. Return Scroll (`920007`) remains a
+fail-safe bypass. Functional ring IDs `253`, `254`, and `260` remain explicit
+equipment AUTO IDs.
 
-A07 freezes 167 exact equipment IDs and 13 exact rare-consumable IDs into the
-SPB authority. Functional-special ring IDs `253`, `254`, and `260` remain
-equipment AUTO slots because their formal A07 item identity is `戒指`.
+Warrior Oil (`920019`, service 707, `useEffect=war_god_oil`) is explicitly
+human-frozen as `RARE_FUNCTIONAL_CONSUMABLE`. Its nine real Production slots
+are all `AUTO_BOOST` without ceiling application:
+
+| Slots | Base | SPB effective |
+| --- | ---: | ---: |
+| `m92.slot002`, `m94.slot002` | `1/6000` | `1/240` |
+| `m110.slot023`, `m112.slot003`, `m114.slot004`, `m118.slot003`, `m129.slot005`, `m132.slot005` | `1/4800` | `1/192` |
+| `m138.slot003` | `1/1800` | `1/72` |
 
 ## Formula and anchor
 
@@ -98,20 +112,22 @@ All 6809 slots, before and after the production SPB overlay:
 | --- | ---: | ---: |
 | `>= 1/20` | 2295 | 4939 |
 | `1/21–1/50` | 537 | 930 |
-| `1/51–1/100` | 789 | 335 |
-| `1/101–1/200` | 519 | 162 |
-| `1/201–1/500` | 1286 | 281 |
+| `1/51–1/100` | 789 | 336 |
+| `1/101–1/200` | 519 | 168 |
+| `1/201–1/500` | 1286 | 283 |
 | `1/501–1/1000` | 755 | 66 |
-| `1/1001–1/5000` | 531 | 66 |
-| `1/5001–1/10000` | 86 | 24 |
+| `1/1001–1/5000` | 531 | 59 |
+| `1/5001–1/10000` | 86 | 22 |
 | `< 1/10000` | 11 | 6 |
 | Total | 6809 | 6809 |
 
 ## Runtime fail-closed behavior
 
-GameData loads and validates both SPB authorities, validates all source/hash
-bindings, mirrors every immutable Direct Baseline field, checks the exact
-formula for all 6809 records, and builds a `slot_uid` index.
+GameData loads the current item Classification Authority plus both generated
+SPB authorities. It validates the 233/233 exact-ID closure, four class counts,
+human-frozen evidence, the actual classification-file SHA binding in both
+generated artifacts, every immutable Direct Baseline field, and the exact
+formula for all 6809 records before building the `slot_uid` index.
 
 Production rejects unresolved, missing, duplicate, mismatched, malformed, or
 wrong-monster SPB records. LootRuntime resolves all slots before the first RNG
@@ -167,7 +183,7 @@ Full immutable 6809-slot ledger SHA-256:
 
 - Existing R1 final gate: `DPV2_FINAL_GATE_PASS blocker_count=0`
 - SPB builder `--check`: PASS
-- SPB Python tests: `25 passed`
+- SPB Python tests: `28 passed`
 - SPB Godot runtime test: `1 passed`, `0 failed`, `engine_log_errors=0`
 - Existing Direct runtime regression tests remain PASS.
 - Fresh P1A, P1A audit, world integration, and engine-log acceptance are

@@ -17,6 +17,10 @@ AUTHORITY_PATH = ROOT / "assets/data/drop/dpv2_single_player_drop_boost_v1.json"
 EFFECTIVE_PATH = (
     ROOT / "assets/data/drop/dpv2_single_player_effective_probability_v1.json"
 )
+CLASSIFICATION_PATH = (
+    ROOT
+    / "assets/data/drop/dpv2_single_player_item_boost_classification_v1.json"
+)
 SPEC = importlib.util.spec_from_file_location("dpv2_spb_builder", TOOL_PATH)
 assert SPEC is not None and SPEC.loader is not None
 builder = importlib.util.module_from_spec(SPEC)
@@ -28,12 +32,13 @@ def load_json(path: Path) -> dict:
 
 
 @pytest.fixture(scope="module")
-def documents() -> tuple[dict, dict, dict, list[dict]]:
+def documents() -> tuple[dict, dict, dict, dict, list[dict]]:
     authority = load_json(AUTHORITY_PATH)
     effective = load_json(EFFECTIVE_PATH)
+    classification = load_json(CLASSIFICATION_PATH)
     baseline = load_json(builder.BASELINE_PATH)
     direct_slots = builder._flatten_slots(baseline)
-    return authority, effective, baseline, direct_slots
+    return authority, effective, classification, baseline, direct_slots
 
 
 @pytest.mark.parametrize(
@@ -84,7 +89,7 @@ def test_bypass_and_disabled_modes_select_exact_base() -> None:
 
 
 def test_authority_contract_and_exact_id_freeze(documents) -> None:
-    authority, _effective, _baseline, _slots = documents
+    authority, _effective, _classification, _baseline, _slots = documents
     assert authority["schema"] == "hardcore.dpv2.single_player_drop_boost.v1"
     assert authority["production"] == {
         "enabled": True,
@@ -105,18 +110,40 @@ def test_authority_contract_and_exact_id_freeze(documents) -> None:
         row["canonical_monster_id"] for row in authority["manual_boss_exclusions"]
     }
     auto_ids = [row["canonical_item_id"] for row in authority["auto_boost_items"]]
-    assert len(auto_ids) == len(set(auto_ids)) == 180
+    assert len(auto_ids) == len(set(auto_ids)) == 181
     assert builder.BLESSING_OIL_ID in auto_ids
+    assert 920019 in auto_ids
 
 
-def test_equipment_ids_are_frozen_from_a07_exact_identity(documents) -> None:
-    authority, _effective, _baseline, direct_slots = documents
-    tier = load_json(builder.TIER_PATH)
+def test_current_classification_authority_closes_all_233_exact_ids(documents) -> None:
+    authority, _effective, classification, _baseline, direct_slots = documents
+    assert classification["schema"] == (
+        "hardcore.dpv2.single_player_item_boost_classification.v1"
+    )
+    assert classification["authority_id"] == (
+        "dpv2.single_player_item_boost_classification.v1"
+    )
+    assert classification["production_active"] is True
+    assert classification["identity_key"] == "canonical_item_id"
+    records = classification["records"]
+    assert len(records) == 233
+    assert len({row["canonical_item_id"] for row in records}) == 233
+    assert all(
+        row["canonical_item_name"]
+        and row["reason"]
+        and row["evidence"]
+        and row["human_frozen"] is True
+        for row in records
+    )
+    counts = {
+        key: sum(row["classification"] == key for row in records)
+        for key in builder.EXPECTED_CLASSIFICATION_COUNTS
+    }
+    assert counts == builder.EXPECTED_CLASSIFICATION_COUNTS
     expected_equipment = {
         row["canonical_item_id"]
-        for row in tier["records"]
-        if row["tier_status"] == "RESOLVED"
-        and row["item_type"] in builder.EQUIPMENT_ITEM_TYPES
+        for row in records
+        if row["classification"] == "EQUIPMENT"
     }
     frozen_equipment = {
         row["canonical_item_id"]
@@ -129,11 +156,11 @@ def test_equipment_ids_are_frozen_from_a07_exact_identity(documents) -> None:
         row["canonical_item_id"]
         for row in direct_slots
         if "canonical_item_id" in row
-    } == {row["canonical_item_id"] for row in tier["records"]}
+    } == {row["canonical_item_id"] for row in records}
     expected_rare = {
         row["canonical_item_id"]
-        for row in tier["records"]
-        if row["tier_status"] == "RESOLVED" and row["tier"] == "RARE_CONSUMABLE"
+        for row in records
+        if row["classification"] == "RARE_FUNCTIONAL_CONSUMABLE"
     }
     frozen_rare = {
         row["canonical_item_id"]
@@ -141,14 +168,17 @@ def test_equipment_ids_are_frozen_from_a07_exact_identity(documents) -> None:
         if row["classification"] == "RARE_FUNCTIONAL_CONSUMABLE"
     }
     assert frozen_rare == expected_rare
-    assert len(frozen_rare) == 13
-    # A07 identifies these FUNCTIONAL_SPECIAL rows as rings, so they remain
-    # equipment AUTO_BOOST even though their tier name is not EQUIP_*.
+    assert len(frozen_rare) == 14
+    war_god_oil = next(row for row in records if row["canonical_item_id"] == 920019)
+    assert war_god_oil["classification"] == "RARE_FUNCTIONAL_CONSUMABLE"
+    assert any("useEffect=war_god_oil" in value for value in war_god_oil["evidence"])
+    return_scroll = next(row for row in records if row["canonical_item_id"] == 920007)
+    assert return_scroll["classification"] == "BYPASS_UNCLASSIFIED"
     assert {253, 254, 260}.issubset(frozen_equipment)
 
 
 def test_all_three_immutable_sources_match_raw_sha_and_base_sha(documents) -> None:
-    _authority, _effective, _baseline, direct_slots = documents
+    _authority, _effective, _classification, _baseline, direct_slots = documents
     expected = {
         builder.SOURCE_PATH: builder.EXPECTED_SOURCE_SHA256,
         builder.BASELINE_PATH: builder.EXPECTED_BASELINE_SHA256,
@@ -168,7 +198,7 @@ def test_all_three_immutable_sources_match_raw_sha_and_base_sha(documents) -> No
 
 
 def test_effective_ledger_is_complete_unique_and_mirrors_direct(documents) -> None:
-    _authority, effective, _baseline, direct_slots = documents
+    _authority, effective, _classification, _baseline, direct_slots = documents
     records = effective["records"]
     assert effective["schema"] == "hardcore.dpv2.single_player_effective_probability.v1"
     assert len(records) == len(direct_slots) == 6809
@@ -186,7 +216,7 @@ def test_effective_ledger_is_complete_unique_and_mirrors_direct(documents) -> No
 
 
 def test_all_formula_and_no_debuff_gates(documents) -> None:
-    _authority, effective, _baseline, _slots = documents
+    _authority, effective, _classification, _baseline, _slots = documents
     for row in effective["records"]:
         base = Fraction(row["base_numerator"], row["base_denominator"])
         actual = Fraction(row["effective_numerator"], row["effective_denominator"])
@@ -209,7 +239,7 @@ def test_all_formula_and_no_debuff_gates(documents) -> None:
 
 
 def test_disabled_counterfactual_parity_is_6809_of_6809(documents) -> None:
-    _authority, effective, _baseline, _slots = documents
+    _authority, effective, _classification, _baseline, _slots = documents
     mismatch = 0
     for row in effective["records"]:
         disabled = builder.effective_rational(
@@ -227,7 +257,7 @@ def test_disabled_counterfactual_parity_is_6809_of_6809(documents) -> None:
 
 
 def test_white_boar_judgement_anchor_is_real_production_slot(documents) -> None:
-    _authority, effective, _baseline, _slots = documents
+    _authority, effective, _classification, _baseline, _slots = documents
     row = next(
         row
         for row in effective["records"]
@@ -241,7 +271,7 @@ def test_white_boar_judgement_anchor_is_real_production_slot(documents) -> None:
 
 
 def test_common_recovery_gold_boss_and_blessing_populations(documents) -> None:
-    authority, effective, _baseline, _slots = documents
+    authority, effective, _classification, _baseline, _slots = documents
     records = effective["records"]
     common = [
         row
@@ -266,8 +296,8 @@ def test_common_recovery_gold_boss_and_blessing_populations(documents) -> None:
         "new_armor_boss_slots": 324,
         "blessing_oil_slots": 22,
         "equipment_candidate_slots": 4311,
-        "rare_consumable_candidate_slots": 268,
-        "unclassified_candidate_slots": 499,
+        "rare_consumable_candidate_slots": 277,
+        "unclassified_candidate_slots": 490,
     }
     assert all(
         Fraction(row["effective_numerator"], row["effective_denominator"])
@@ -297,31 +327,137 @@ def test_common_recovery_gold_boss_and_blessing_populations(documents) -> None:
     assert effective["summary"]["gold_amount_mismatch"] == 0
     assert effective["summary"]["disabled_gold_amount_mismatch"] == 0
     assert effective["summary"]["effective_policy_counts"] == {
-        "AUTO_BOOST": 4537,
+        "AUTO_BOOST": 4546,
         "BYPASS_COMMON_RECOVERY": 1357,
         "BYPASS_GOLD": 128,
         "BYPASS_NEW_ARMOR_BOSS": 324,
-        "BYPASS_UNCLASSIFIED": 463,
+        "BYPASS_UNCLASSIFIED": 454,
     }
 
 
 def test_unclassified_categories_fail_safe_and_named_examples_bypass(documents) -> None:
-    _authority, effective, _baseline, _slots = documents
+    _authority, effective, _classification, _baseline, _slots = documents
     records = effective["records"]
     unclassified = [
         row for row in records if row["boost_policy"] == "BYPASS_UNCLASSIFIED"
     ]
-    # Full audit candidate population is 499.  Whole-boss precedence removes
+    # Full audit candidate population is 490. Whole-boss precedence removes
     # 36 of those into BYPASS_NEW_ARMOR_BOSS in the effective policy partition.
-    assert len(unclassified) == 463
-    assert {920007, 920019}.issubset(
-        {row.get("canonical_item_id") for row in unclassified}
-    )
+    assert len(unclassified) == 454
+    assert 920007 in {row.get("canonical_item_id") for row in unclassified}
+    assert 920019 not in {row.get("canonical_item_id") for row in unclassified}
     assert all(
         (row["effective_numerator"], row["effective_denominator"])
         == builder.reduce_rational(row["base_numerator"], row["base_denominator"])
         for row in unclassified
     )
+
+
+def test_war_god_oil_all_nine_slots_are_exact_auto_boost(documents) -> None:
+    _authority, effective, _classification, _baseline, _slots = documents
+    actual = {
+        row["slot_uid"]: (
+            row["canonical_monster_id"],
+            row["base_numerator"],
+            row["base_denominator"],
+            row["effective_numerator"],
+            row["effective_denominator"],
+            row["boost_policy"],
+            row["ceiling_applied"],
+        )
+        for row in effective["records"]
+        if row.get("canonical_item_id") == 920019
+    }
+    expected = {
+        "dpv2.direct.m92.slot_002": (92, 1, 6000, 1, 240, "AUTO_BOOST", False),
+        "dpv2.direct.m94.slot_002": (94, 1, 6000, 1, 240, "AUTO_BOOST", False),
+        "dpv2.direct.m110.slot_023": (110, 1, 4800, 1, 192, "AUTO_BOOST", False),
+        "dpv2.direct.m112.slot_003": (112, 1, 4800, 1, 192, "AUTO_BOOST", False),
+        "dpv2.direct.m114.slot_004": (114, 1, 4800, 1, 192, "AUTO_BOOST", False),
+        "dpv2.direct.m118.slot_003": (118, 1, 4800, 1, 192, "AUTO_BOOST", False),
+        "dpv2.direct.m129.slot_005": (129, 1, 4800, 1, 192, "AUTO_BOOST", False),
+        "dpv2.direct.m132.slot_005": (132, 1, 4800, 1, 192, "AUTO_BOOST", False),
+        "dpv2.direct.m138.slot_003": (138, 1, 1800, 1, 72, "AUTO_BOOST", False),
+    }
+    assert actual == expected
+
+
+def test_effective_probability_distribution_matches_semantic_closure(documents) -> None:
+    _authority, effective, _classification, _baseline, _slots = documents
+    bands = {
+        ">=1/20": 0,
+        "1/21-1/50": 0,
+        "1/51-1/100": 0,
+        "1/101-1/200": 0,
+        "1/201-1/500": 0,
+        "1/501-1/1000": 0,
+        "1/1001-1/5000": 0,
+        "1/5001-1/10000": 0,
+        "<1/10000": 0,
+    }
+    for row in effective["records"]:
+        probability = Fraction(
+            row["effective_numerator"], row["effective_denominator"]
+        )
+        if probability >= Fraction(1, 20):
+            bands[">=1/20"] += 1
+        elif probability >= Fraction(1, 50):
+            bands["1/21-1/50"] += 1
+        elif probability >= Fraction(1, 100):
+            bands["1/51-1/100"] += 1
+        elif probability >= Fraction(1, 200):
+            bands["1/101-1/200"] += 1
+        elif probability >= Fraction(1, 500):
+            bands["1/201-1/500"] += 1
+        elif probability >= Fraction(1, 1000):
+            bands["1/501-1/1000"] += 1
+        elif probability >= Fraction(1, 5000):
+            bands["1/1001-1/5000"] += 1
+        elif probability >= Fraction(1, 10000):
+            bands["1/5001-1/10000"] += 1
+        else:
+            bands["<1/10000"] += 1
+    assert bands == {
+        ">=1/20": 4939,
+        "1/21-1/50": 930,
+        "1/51-1/100": 336,
+        "1/101-1/200": 168,
+        "1/201-1/500": 283,
+        "1/501-1/1000": 66,
+        "1/1001-1/5000": 59,
+        "1/5001-1/10000": 22,
+        "<1/10000": 6,
+    }
+
+
+def test_current_spb_targets_have_zero_retired_classification_dependency() -> None:
+    forbidden = [
+        "dpv2_item_" + "tier_authority_v1.json",
+        "TIER" + "_PATH",
+        "EXPECTED_TIER" + "_SHA256",
+        "A07" + "_EXACT",
+        "a07_item_" + "type",
+        "a07_" + "tier",
+        "a07_item_tier_" + "path",
+    ]
+    targets = [
+        TOOL_PATH,
+        ROOT / "tools/run_dpv2_spb_final_gate.ps1",
+        Path(__file__),
+        CLASSIFICATION_PATH,
+        AUTHORITY_PATH,
+        EFFECTIVE_PATH,
+        ROOT / "scripts/game_data.gd",
+        ROOT / "tests/dpv2_single_player_drop_boost_runtime_test.gd",
+        ROOT / "docs/drop/DPV2_SINGLE_PLAYER_DROP_BOOST_REPORT.md",
+    ]
+    matches = {
+        str(path.relative_to(ROOT)): token
+        for path in targets
+        for token in forbidden
+        if token in path.read_text(encoding="utf-8")
+    }
+    assert matches == {}
 
 
 def test_generated_documents_are_current() -> None:
