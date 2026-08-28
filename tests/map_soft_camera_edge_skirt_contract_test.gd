@@ -6,6 +6,9 @@ const CameraConstraint := preload(
 const CollisionGeometry := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
+const MapEditorRuntimeBridge := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
 
 const DEVICE_VIEWPORT_HALF := Vector2(1332.0, 600.0)
 const BASE_ZOOM := Vector2.ONE * 1.06
@@ -119,7 +122,10 @@ func _verify_continuous_edge_pressure() -> void:
 func _verify_runtime_skirt() -> void:
 	var background := WorldBackground.new()
 	add_child(background)
-	background.set_zone_data("比奇省", {"mapId": 4, "name": "比奇省"})
+	background.set_zone_data(
+		"比奇省",
+		{"mapId": MapEditorRuntimeBridge.BICH_MAP_ID, "name": "比奇省"}
+	)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var guard: Polygon2D
@@ -138,6 +144,20 @@ func _verify_runtime_skirt() -> void:
 			float(guard.get_meta("editor_runtime_guard_band_world", 0.0)),
 			GUARD_BAND_WORLD
 		)
+	)
+	var guard_material := guard.material as ShaderMaterial
+	assert(guard_material != null, "Bich guard band must use a shader material")
+	var guard_shader := guard_material.shader
+	assert(guard_shader != null, "Bich guard band shader missing")
+	assert(
+		not guard_shader.code.contains("sin(")
+		and not guard_shader.code.contains("terrain_hash")
+		and not guard_shader.code.contains("edge_mark"),
+		"Bich guard shader must not retain animated/hash variation or edge mark"
+	)
+	assert(
+		guard_shader.code.contains("discard"),
+		"Bich guard shader must discard the authored diamond interior"
 	)
 	var boundary := CollisionGeometry.map_inner_boundary_world(
 		Vector2i(80, 80)
