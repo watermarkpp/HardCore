@@ -1,5 +1,5 @@
 {
-  "build_sha256": "67012c7d0703104c137cc0e378993e4508adc060567bdbc5ce9e0d416d0f64d5",
+  "build_sha256": "5accafe70ff753cf4f6b2e0c3d2d854b30387d9f4fa00a51c610692172d013ff",
   "collision": {
     "blocked_count": 357.0,
     "blocked_tiles": [
@@ -4463,7 +4463,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -4544,7 +4544,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -4625,7 +4625,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -4706,7 +4706,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         1.0
@@ -4787,7 +4787,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -4868,7 +4868,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -4949,7 +4949,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -5030,7 +5030,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -5111,7 +5111,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -5192,7 +5192,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -5273,7 +5273,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -5354,7 +5354,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -5435,7 +5435,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -5516,7 +5516,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -5597,7 +5597,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -14406,10 +14406,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "2c0ead56118093bdd1d60a401f49775fb6f07d703b7bee250a512d8daffd7b3a",
+      "authoring_sha256": "bf46c99be0d46f531600f0a785ead63e86be0365f0ca7970a2e8d4069a3e55db",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "7fb90410d643a6be7e28ea0792474776c95d9d7be8ef507735ebcce9f84db5c8",
+      "document_sha256": "bf145db30e6c6eba3b152566db1e080e86fb66cf83db0fd2aa9e8b1d6cde5119",
       "ground_manifest_sha256": "42d8f02450d77a4eac0c3d6215608e9eee9030f734af5a1410ab4bcde70c0289",
       "ground_state_sha256": "46015eba00c622ebb653156d6f76f731b9946b1439624378162201d29d03e800",
       "map_key": "cangyue_bone_cave_f3",

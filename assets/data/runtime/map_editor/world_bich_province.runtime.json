@@ -1,5 +1,5 @@
 {
-  "build_sha256": "286705ba9e73f921abadaa7c5a120d08b9d30dd4e1ec1bd27c67a64905edbf42",
+  "build_sha256": "6a83db1df755189510887ea1e6c971c65651c46b65fb722fac53801448f84f7d",
   "collision": {
     "blocked_count": 501.0,
     "blocked_tiles": [
@@ -15689,7 +15689,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -15770,7 +15770,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         5.0,
         4.0
@@ -15851,7 +15851,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -15932,7 +15932,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         2.0,
         2.0
@@ -16013,7 +16013,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         3.0,
         2.0
@@ -16094,7 +16094,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -16175,7 +16175,7 @@
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
-      "occlusion": false,
+      "occlusion": true,
       "occupancy_footprint_tiles": [
         1.0,
         1.0
@@ -19009,10 +19009,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "22eecc83bf6a13f15320532b5dc6a2224fdb7086be1bdf18aa010d3a47705a3c",
+      "authoring_sha256": "fb0a3cb9e0e1942788a8b04ee0edecc79b3b7d3c3cb463379d354a047390608a",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 6.0,
-      "document_sha256": "c0733ca86e8caf7f9c9c09022a418d9b58a1c4913a6a1c3dc8add0604dcc67ed",
+      "document_sha256": "fbe4fd5cf27556aac08cf26cc9accfee999522e27f0e6b2581692857214710e9",
       "ground_manifest_sha256": "24b272b6711c690d79d69b8ffe32c3afa32e348893e280a39148ba96856c010e",
       "ground_state_sha256": "3e215b3ed3f09d237b9a4c5da39a75b74c9b8a7d620afb62423ee56a6de386c7",
       "map_key": "world_bich_province",
