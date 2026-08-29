@@ -2996,6 +2996,8 @@ func _can_use_background_ai() -> bool:
 		return false
 	if _pending_attack_time >= 0.0 or _area_attack_warning > 0.0 or _summon_warning > 0.0:
 		return false
+	if not is_instance_valid(target):
+		return true
 	var activation_distance_gu := maxf(
 		BACKGROUND_AI_MIN_DISTANCE_GU,
 		aggro_radius_gu + MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(256.0),

@@ -88,13 +88,25 @@ func _run() -> void:
 	EnemyActor._crowd_grid[stale_cell] = [null, enemies[0]]
 	enemies[0]._crowd_separation()
 
-	# Actors well outside both camera and aggro working sets only wake four times
-	# per second. Status/threat/alternate-target actors must never take this path.
+	# Actors without an active target only wake four times per second, even when
+	# near the player. The background decision tick still acquires the player,
+	# after which the existing close-target foreground path resumes next frame.
 	player.global_position = Vector2(50000, 50000)
 	var background_enemy: EnemyActor = enemies[1]
 	background_enemy.target = player
 	assert(background_enemy._can_use_background_ai(), "far idle actor did not enter background AI tier")
+	player.global_position = background_enemy.global_position + GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2(2.5, 0.0))
+	background_enemy.target = null
+	background_enemy._retarget_timer = 0.0
+	assert(background_enemy._can_use_background_ai(), "near untargeted ordinary actor did not enter background AI tier")
+	background_enemy._background_ai_timer = 0.0
+	background_enemy._physics_process(1.0 / 60.0)
+	assert(background_enemy.target == player, "background decision tick did not acquire the nearby player")
+	assert(not background_enemy._can_use_background_ai(), "near acquired player target did not resume foreground AI")
+	background_enemy.target = enemies[2]
+	assert(not background_enemy._can_use_background_ai(), "alternate-target actor was incorrectly background-throttled")
 	background_enemy._add_threat(player, 10.0)
+	background_enemy.target = null
 	assert(not background_enemy._can_use_background_ai(), "threatened actor was incorrectly background-throttled")
 	background_enemy._threat_table.clear()
 	print("MONSTER_CROWD_STAGE background")
@@ -135,7 +147,7 @@ func _spawn_groups(player: PlayerCharacter, id_offset: int, count := ENEMY_COUNT
 		)
 		var position: Vector2 = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(ground_position_gu)
 		var enemy := EnemyActor.new()
-		enemy.setup({"monsterId": -10000 - id_offset - index, "name": "crowd_perf_%d" % (id_offset + index), "hp": 10}, player, false)
+		enemy.setup({"monsterId": 18, "name": "crowd_perf_%d" % (id_offset + index), "hp": 10}, player, false)
 		enemy.global_position = position
 		enemy.set_meta("spawn_position", position)
 		add_child(enemy)
