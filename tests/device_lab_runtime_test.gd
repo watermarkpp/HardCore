@@ -261,6 +261,38 @@ func _test_bounded_snapshot() -> void:
 	root.add_child(camera)
 	var camera_snapshot := DeviceLabRuntimeScript.build_snapshot(root)
 	assert(camera_snapshot["scene"].get("camera_zoom", -1.0) == 1.25, "WorldCamera zoom missing from snapshot")
+	var enemy_nodes: Array[Node2D] = []
+	for index in range(DeviceLabRuntimeScript.MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN + 4):
+		var enemy := Node2D.new()
+		enemy.name = "TelemetryEnemy_%03d" % index
+		enemy.add_to_group("enemies")
+		root.add_child(enemy)
+		enemy_nodes.append(enemy)
+	var enemy_activity: Variant = DeviceLabRuntimeScript.build_snapshot(root).get("enemy_activity", null)
+	assert(enemy_activity is Dictionary, "enemy activity snapshot missing")
+	for field: String in [
+		"total",
+		"visible",
+		"within_1600_px",
+		"within_2000_px",
+		"visual_resources_active",
+		"background_ai_eligible",
+		"inspected",
+	]:
+		assert((enemy_activity as Dictionary).has(field), "enemy activity field missing: %s" % field)
+		var value: Variant = (enemy_activity as Dictionary).get(field)
+		assert(value is int or value is float, "enemy activity field is not numeric: %s" % field)
+		assert(float(value) >= 0.0, "enemy activity field is negative: %s" % field)
+	assert(int((enemy_activity as Dictionary).get("total", -1)) == enemy_nodes.size(), "enemy activity total mismatch")
+	assert(int((enemy_activity as Dictionary).get("inspected", -1)) <= DeviceLabRuntimeScript.MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN, "enemy activity scan exceeded bound")
+	assert(int((enemy_activity as Dictionary).get("visible", -1)) <= int((enemy_activity as Dictionary).get("inspected", -1)), "visible count exceeded inspected bound")
+	var enemy_diagnostics: Variant = (enemy_activity as Dictionary).get("enemy_diagnostics", null)
+	assert(enemy_diagnostics is Dictionary, "enemy diagnostics snapshot missing")
+	for field: String in DeviceLabRuntimeScript.ENEMY_DIAGNOSTIC_FIELDS:
+		assert((enemy_diagnostics as Dictionary).has(field), "enemy diagnostic field missing: %s" % field)
+		var value: Variant = (enemy_diagnostics as Dictionary).get(field)
+		assert(value is int or value is float, "enemy diagnostic field is not numeric: %s" % field)
+		assert(float(value) >= 0.0, "enemy diagnostic field is negative: %s" % field)
 	for control: Dictionary in snapshot["controls"] as Array:
 		assert(control.has("textHash") and control.has("runtime_text"), "control redaction fields missing")
 

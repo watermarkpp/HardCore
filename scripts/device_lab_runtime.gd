@@ -24,6 +24,7 @@ const MAX_SNAPSHOT_DEPTH := 12
 const MAX_SNAPSHOT_NODES := 1024
 const MAX_SNAPSHOT_CONTROLS := 320
 const MAX_SNAPSHOT_NODE2D := 320
+const MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN := 512
 const MAX_TEXT_HASH_BYTES := 16 * 1024
 const MAX_RESULT_BYTES := 4 * 1024 * 1024
 const MAX_OUTBOX_ENTRIES := 32
@@ -85,6 +86,17 @@ const PROFILE_SCRIPT_SUFFIXES := {
 	"system_menu": "/system_menu_panel.gd",
 	"warehouse": "/warehouse_panel.gd",
 }
+
+const ENEMY_DIAGNOSTIC_FIELDS := [
+	"crowd_grid_builds",
+	"crowd_grid_actor_scans",
+	"crowd_query_candidates",
+	"crowd_steering_evaluations",
+	"retarget_full_scans",
+	"background_ai_evaluations",
+	"physics_moves",
+	"environment_guard_checks",
+]
 
 var _game_root: Node
 var _poll_elapsed := 0.0
@@ -658,6 +670,7 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"scene": _scene_snapshot(root),
 		"map": _map_snapshot(root),
 		"player": _player_snapshot(root),
+		"enemy_activity": _enemy_activity_snapshot(root),
 		"controls": [],
 		"node2d": [],
 		"limits": {
@@ -709,6 +722,75 @@ static func _seconds_to_milliseconds(seconds: float) -> float:
 	if is_nan(seconds) or is_inf(seconds) or seconds < 0.0:
 		return 0.0
 	return seconds * 1000.0
+
+
+static func _enemy_activity_snapshot(root: Node) -> Dictionary:
+	var result := {
+		"total": 0,
+		"visible": 0,
+		"within_1600_px": 0,
+		"within_2000_px": 0,
+		"visual_resources_active": 0,
+		"background_ai_eligible": 0,
+		"inspected": 0,
+		"enemy_diagnostics": _enemy_diagnostics_snapshot(),
+	}
+	if root == null or not is_instance_valid(root) or root.get_tree() == null:
+		return result
+	var raw_player: Variant = root.get("player")
+	var player := raw_player as Node2D if raw_player is Node2D and is_instance_valid(raw_player) else null
+	var enemies: Array[Node] = root.get_tree().get_nodes_in_group("enemies")
+	result["total"] = enemies.size()
+	var inspected := mini(enemies.size(), MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN)
+	result["inspected"] = inspected
+	for index in range(inspected):
+		var raw_enemy: Variant = enemies[index]
+		if not raw_enemy is Node or not is_instance_valid(raw_enemy):
+			continue
+		var enemy := raw_enemy as Node
+		if enemy is CanvasItem and (enemy as CanvasItem).is_visible_in_tree():
+			result["visible"] = int(result["visible"]) + 1
+		if player != null and enemy is Node2D:
+			var distance_squared := (enemy as Node2D).global_position.distance_squared_to(player.global_position)
+			if distance_squared <= 1600.0 * 1600.0:
+				result["within_1600_px"] = int(result["within_1600_px"]) + 1
+			if distance_squared <= 2000.0 * 2000.0:
+				result["within_2000_px"] = int(result["within_2000_px"]) + 1
+		if not enemy is EnemyActor:
+			continue
+		var enemy_actor := enemy as EnemyActor
+		var visual: Variant = enemy_actor.get("visual")
+		if visual is Node and is_instance_valid(visual):
+			var active_resources: Variant = (visual as Node).get("active_resources")
+			if active_resources is Dictionary and not (active_resources as Dictionary).is_empty():
+				result["visual_resources_active"] = int(result["visual_resources_active"]) + 1
+		if enemy_actor.has_method("_can_use_background_ai") and bool(enemy_actor.call("_can_use_background_ai")):
+			result["background_ai_eligible"] = int(result["background_ai_eligible"]) + 1
+	return result
+
+
+static func _enemy_diagnostics_snapshot() -> Dictionary:
+	var result := {}
+	for field: String in ENEMY_DIAGNOSTIC_FIELDS:
+		result[field] = 0
+	var diagnostics: Variant = EnemyActor.performance_diagnostics()
+	if not diagnostics is Dictionary:
+		return result
+	var source := diagnostics as Dictionary
+	for field: String in ENEMY_DIAGNOSTIC_FIELDS:
+		result[field] = _non_negative_counter(source.get(field, 0))
+	return result
+
+
+static func _non_negative_counter(value: Variant) -> int:
+	if value is int:
+		return maxi(int(value), 0)
+	if value is float:
+		var numeric := float(value)
+		if is_nan(numeric) or is_inf(numeric):
+			return 0
+		return maxi(int(numeric), 0)
+	return 0
 
 
 static func _window_snapshot(root: Node) -> Dictionary:
