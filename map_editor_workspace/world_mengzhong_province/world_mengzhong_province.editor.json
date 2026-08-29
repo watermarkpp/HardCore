@@ -33,8 +33,10 @@
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 2.0,
+    "source_editor_schema_version": 4,
     "template_kind": "empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/world_mengzhong_province"
   },
   "ground": {
@@ -7332,14 +7334,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_mengzhong_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 910002,
+        "target_map_id": 910002.0,
         "target_map_key": "world_snake_valley",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -7374,14 +7376,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_mengzhong_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 913001,
+        "target_map_id": 913001.0,
         "target_map_key": "mengzhong_stone_tomb_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -7416,14 +7418,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_mengzhong_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 913101,
+        "target_map_id": 913101.0,
         "target_map_key": "mengzhong_zuma_temple_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -7458,14 +7460,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000004",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_mengzhong_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000003",
-        "target_map_id": 910007,
+        "target_map_id": 910007.0,
         "target_map_key": "world_cangyue_island",
         "target_portal_id": "map_exit_000003",
         "target_tile": [
@@ -7500,14 +7502,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000005",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_mengzhong_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 913201,
+        "target_map_id": 913201.0,
         "target_map_key": "mengzhong_death_valley_dungeon",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -7909,7 +7911,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7955,7 +7956,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8001,7 +8001,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8047,7 +8046,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8093,7 +8091,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8139,7 +8136,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8185,7 +8181,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8231,7 +8226,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8277,7 +8271,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8323,7 +8316,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8369,7 +8361,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8415,7 +8406,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8461,7 +8451,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8507,7 +8496,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8553,7 +8541,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8599,7 +8586,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8607,8 +8593,8 @@
         "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000024",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          30,
-          68
+          30.0,
+          68.0
         ]
       },
       {
@@ -8645,7 +8631,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8691,7 +8676,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8737,7 +8721,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8783,7 +8766,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8829,7 +8811,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8875,7 +8856,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8921,7 +8901,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8967,7 +8946,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -9013,7 +8991,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -9059,7 +9036,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -9105,7 +9081,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -9151,7 +9126,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -9197,7 +9171,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -9554,12 +9527,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          53.0,
-          41.0
+          53,
+          41
         ],
         "tile_anchor": [
-          53.0,
-          41.0
+          53,
+          41
         ],
         "visual_footprint_tiles": [
           9.0,
@@ -9631,12 +9604,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          53.0,
-          36.0
+          53,
+          36
         ],
         "tile_anchor": [
-          53.0,
-          36.0
+          53,
+          36
         ],
         "visual_footprint_tiles": [
           9.0,
@@ -9708,12 +9681,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          20.0
+          25,
+          20
         ],
         "tile_anchor": [
-          25.0,
-          20.0
+          25,
+          20
         ],
         "visual_footprint_tiles": [
           10.0,
@@ -9785,12 +9758,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          50.0
+          34,
+          50
         ],
         "tile_anchor": [
-          34.0,
-          50.0
+          34,
+          50
         ],
         "visual_footprint_tiles": [
           10.0,
@@ -9860,12 +9833,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          44.0
+          26,
+          44
         ],
         "tile_anchor": [
-          26.0,
-          44.0
+          26,
+          44
         ]
       },
       {
@@ -9931,12 +9904,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          24.0
+          35,
+          24
         ],
         "tile_anchor": [
-          35.0,
-          24.0
+          35,
+          24
         ]
       },
       {
@@ -10002,12 +9975,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          38.0
+          26,
+          38
         ],
         "tile_anchor": [
-          26.0,
-          38.0
+          26,
+          38
         ]
       },
       {
@@ -10073,12 +10046,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          24.0
+          40,
+          24
         ],
         "tile_anchor": [
-          40.0,
-          24.0
+          40,
+          24
         ]
       },
       {
@@ -10144,12 +10117,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45.0,
-          24.0
+          45,
+          24
         ],
         "tile_anchor": [
-          45.0,
-          24.0
+          45,
+          24
         ]
       },
       {
@@ -10215,12 +10188,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          72.0
+          26,
+          72
         ],
         "tile_anchor": [
-          26.0,
-          72.0
+          26,
+          72
         ]
       },
       {
@@ -10286,12 +10259,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          27.0
+          11,
+          27
         ],
         "tile_anchor": [
-          11.0,
-          27.0
+          11,
+          27
         ]
       },
       {
@@ -10304,8 +10277,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          5.0,
-          5.0
+          4.0,
+          4.0
         ],
         "collision_policy": "solid_footprint",
         "collision_policy_id": "",
@@ -10359,12 +10332,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          70.0,
-          42.0
+          70,
+          42
         ],
         "tile_anchor": [
-          70.0,
-          42.0
+          70,
+          42
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -10436,12 +10409,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          12.0
+          42,
+          12
         ],
         "tile_anchor": [
-          42.0,
-          12.0
+          42,
+          12
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10513,12 +10486,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          38.0,
-          2.0
+          38,
+          2
         ],
         "tile_anchor": [
-          38.0,
-          2.0
+          38,
+          2
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -10588,12 +10561,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          58.0,
-          74.0
+          58,
+          74
         ],
         "tile_anchor": [
-          58.0,
-          74.0
+          58,
+          74
         ]
       },
       {
@@ -10665,12 +10638,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          79.0
+          0,
+          79
         ],
         "tile_anchor": [
-          0.0,
-          79.0
+          0,
+          79
         ],
         "visual_footprint_tiles": [
           8.0,
@@ -10746,12 +10719,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           8.0,
@@ -10825,12 +10798,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          37.0,
-          81.0
+          37,
+          81
         ],
         "tile_anchor": [
-          37.0,
-          81.0
+          37,
+          81
         ],
         "visual_footprint_tiles": [
           7.0,
@@ -10906,12 +10879,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          78.0,
-          77.0
+          78,
+          77
         ],
         "tile_anchor": [
-          78.0,
-          77.0
+          78,
+          77
         ],
         "visual_footprint_tiles": [
           10.0,
@@ -10987,12 +10960,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28.0,
-          37.0
+          28,
+          37
         ],
         "tile_anchor": [
-          28.0,
-          37.0
+          28,
+          37
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11068,12 +11041,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          56.0
+          42,
+          56
         ],
         "tile_anchor": [
-          42.0,
-          56.0
+          42,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11149,12 +11122,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          55.0
+          43,
+          55
         ],
         "tile_anchor": [
-          43.0,
-          55.0
+          43,
+          55
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11230,12 +11203,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          39.0
+          40,
+          39
         ],
         "tile_anchor": [
-          40.0,
-          39.0
+          40,
+          39
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11311,12 +11284,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          56.0,
-          48.0
+          56,
+          48
         ],
         "tile_anchor": [
-          56.0,
-          48.0
+          56,
+          48
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11392,12 +11365,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45.0,
-          55.0
+          45,
+          55
         ],
         "tile_anchor": [
-          45.0,
-          55.0
+          45,
+          55
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11433,7 +11406,7 @@
         "content_layer": "personal_expansion",
         "display_name": "安全区",
         "kind": "safe_area",
-        "polygon_tiles": [
+        "polygon_ground_gu": [
           [
             23.0,
             25.0
@@ -11471,7 +11444,7 @@
             25.0
           ]
         ],
-        "radius_tiles": 0.0,
+        "radius_gu": 0.0,
         "return_anchor": false,
         "runtime_export": true,
         "semantic_id": "safe_area_000001",
@@ -11565,7 +11538,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           82.19999694824219,
-          97.60000610351562
+          97.60000610351563
         ],
         "asset_id": "cave_dungeon.rock_pillar_02",
         "collision_authority": "asset",
@@ -11612,7 +11585,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           82.19999694824219,
-          97.60000610351562
+          97.60000610351563
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -11642,10 +11615,10 @@
     "terrain_front": []
   },
   "legacy_map_id": "mengzhong_province",
-  "legacy_runtime_map_id": 478,
+  "legacy_runtime_map_id": 478.0,
   "map_id": "world_mengzhong_province",
-  "runtime_map_id": 910003,
-  "schema_version": 4.0,
+  "runtime_map_id": 910003.0,
+  "schema_version": 5,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "ok",
