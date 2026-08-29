@@ -1,5 +1,5 @@
 {
-  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "coordinate_contract_id": "isometric_cell_center_64x32_v2",
   "dirty_chunks": [],
   "map_id": "chiyue_valley_secret_passage_b",
   "operations_by_chunk": {
@@ -1803,9 +1803,7 @@
           0.0,
           125.0
         ]
-      }
-    ],
-    "c_0_2": [
+      },
       {
         "asset_id": "mse.ground.chiyue_valley_floor.03",
         "op": "paint_tile",
@@ -1815,19 +1813,125 @@
         ]
       },
       {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          13.0,
+          113.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          12.0,
+          114.0
+        ]
+      },
+      {
         "asset_id": "mse.ground.chiyue_valley_floor.04",
         "op": "paint_tile",
         "tile": [
-          15.0,
-          112.0
+          11.0,
+          115.0
         ]
       },
       {
         "asset_id": "mse.ground.chiyue_valley_floor.03",
         "op": "paint_tile",
         "tile": [
-          13.0,
-          113.0
+          10.0,
+          116.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          9.0,
+          117.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          8.0,
+          118.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          7.0,
+          119.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          6.0,
+          120.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          5.0,
+          121.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          4.0,
+          122.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          3.0,
+          123.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          2.0,
+          124.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          1.0,
+          125.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          0.0,
+          126.0
+        ]
+      }
+    ],
+    "c_0_2": [
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          15.0,
+          112.0
         ]
       },
       {
@@ -1852,14 +1956,6 @@
         "tile": [
           16.0,
           113.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          12.0,
-          114.0
         ]
       },
       {
@@ -1900,14 +1996,6 @@
         "tile": [
           17.0,
           114.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          11.0,
-          115.0
         ]
       },
       {
@@ -1964,14 +2052,6 @@
         "tile": [
           18.0,
           115.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          10.0,
-          116.0
         ]
       },
       {
@@ -2044,14 +2124,6 @@
         "tile": [
           19.0,
           116.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          9.0,
-          117.0
         ]
       },
       {
@@ -2140,14 +2212,6 @@
         "tile": [
           20.0,
           117.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          8.0,
-          118.0
         ]
       },
       {
@@ -2252,14 +2316,6 @@
         "tile": [
           21.0,
           118.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          7.0,
-          119.0
         ]
       },
       {
@@ -2380,14 +2436,6 @@
         "tile": [
           22.0,
           119.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          6.0,
-          120.0
         ]
       },
       {
@@ -2524,14 +2572,6 @@
         "tile": [
           23.0,
           120.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          5.0,
-          121.0
         ]
       },
       {
@@ -2684,14 +2724,6 @@
         "tile": [
           24.0,
           121.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          4.0,
-          122.0
         ]
       },
       {
@@ -2860,14 +2892,6 @@
         "tile": [
           25.0,
           122.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          3.0,
-          123.0
         ]
       },
       {
@@ -3052,14 +3076,6 @@
         "tile": [
           26.0,
           123.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          2.0,
-          124.0
         ]
       },
       {
@@ -3260,14 +3276,6 @@
         "tile": [
           27.0,
           124.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          1.0,
-          125.0
         ]
       },
       {
@@ -3484,14 +3492,6 @@
         "tile": [
           28.0,
           125.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          0.0,
-          126.0
         ]
       },
       {
@@ -11583,22 +11583,12 @@
           21.0,
           104.0
         ]
-      }
-    ],
-    "c_1_2": [
+      },
       {
         "asset_id": "mse.ground.chiyue_valley_floor.04",
         "op": "paint_tile",
         "tile": [
           26.0,
-          100.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
           100.0
         ]
       },
@@ -11607,38 +11597,6 @@
         "op": "paint_tile",
         "tile": [
           25.0,
-          101.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          101.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          101.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          101.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
           101.0
         ]
       },
@@ -11647,54 +11605,6 @@
         "op": "paint_tile",
         "tile": [
           24.0,
-          102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
           102.0
         ]
       },
@@ -11703,70 +11613,6 @@
         "op": "paint_tile",
         "tile": [
           23.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           103.0
         ]
       },
@@ -11775,78 +11621,6 @@
         "op": "paint_tile",
         "tile": [
           22.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          104.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           104.0
         ]
       },
@@ -11855,86 +11629,6 @@
         "op": "paint_tile",
         "tile": [
           21.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          105.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           105.0
         ]
       },
@@ -11943,94 +11637,6 @@
         "op": "paint_tile",
         "tile": [
           20.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          21.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          106.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           106.0
         ]
       },
@@ -12039,102 +11645,6 @@
         "op": "paint_tile",
         "tile": [
           19.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          20.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          21.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          107.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           107.0
         ]
       },
@@ -12143,110 +11653,6 @@
         "op": "paint_tile",
         "tile": [
           18.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          19.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          20.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          21.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          108.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           108.0
         ]
       },
@@ -12255,118 +11661,6 @@
         "op": "paint_tile",
         "tile": [
           17.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          18.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          19.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          20.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          21.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          109.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
           109.0
         ]
       },
@@ -12379,6 +11673,792 @@
         ]
       },
       {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          15.0,
+          111.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          96.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          97.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          98.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          99.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          100.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          101.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          104.0
+        ]
+      }
+    ],
+    "c_1_2": [
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          100.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          101.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          101.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          101.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          101.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          102.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          103.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          104.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          105.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          106.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          20.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          107.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          19.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          20.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          108.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          18.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          19.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          20.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          109.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          109.0
+        ]
+      },
+      {
         "asset_id": "mse.ground.chiyue_valley_floor.02",
         "op": "paint_tile",
         "tile": [
@@ -12496,14 +12576,6 @@
         "tile": [
           31.0,
           110.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          15.0,
-          111.0
         ]
       },
       {
@@ -13779,14 +13851,6 @@
         ]
       },
       {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          96.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.chiyue_valley_floor.06",
         "op": "paint_tile",
         "tile": [
@@ -13795,14 +13859,6 @@
         ]
       },
       {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          97.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.chiyue_valley_floor.04",
         "op": "paint_tile",
         "tile": [
@@ -13816,14 +13872,6 @@
         "tile": [
           31.0,
           97.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          98.0
         ]
       },
       {
@@ -13848,14 +13896,6 @@
         "tile": [
           31.0,
           98.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          99.0
         ]
       },
       {
@@ -13888,14 +13928,6 @@
         "tile": [
           31.0,
           99.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          100.0
         ]
       },
       {
@@ -13936,14 +13968,6 @@
         "tile": [
           31.0,
           100.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          101.0
         ]
       },
       {
@@ -13992,14 +14016,6 @@
         "tile": [
           31.0,
           101.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          102.0
         ]
       },
       {
@@ -14056,14 +14072,6 @@
         "tile": [
           31.0,
           102.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          103.0
         ]
       },
       {
@@ -14128,14 +14136,6 @@
         "tile": [
           31.0,
           103.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          104.0
         ]
       },
       {
@@ -16979,6 +16979,222 @@
           1.0,
           60.0
         ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          13.0,
+          49.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          12.0,
+          50.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          11.0,
+          51.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          10.0,
+          52.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          9.0,
+          53.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          8.0,
+          54.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          7.0,
+          55.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          6.0,
+          56.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          5.0,
+          57.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          4.0,
+          58.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          3.0,
+          59.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          2.0,
+          60.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          1.0,
+          61.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          0.0,
+          62.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          14.0,
+          48.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          13.0,
+          49.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          12.0,
+          50.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          11.0,
+          51.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          10.0,
+          52.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          9.0,
+          53.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          8.0,
+          54.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          7.0,
+          55.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          6.0,
+          56.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          5.0,
+          57.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          4.0,
+          58.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          3.0,
+          59.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          2.0,
+          60.0
+        ]
       }
     ],
     "c_2_1": [
@@ -16987,22 +17203,6 @@
         "op": "paint_tile",
         "tile": [
           13.0,
-          49.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          12.0,
-          50.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          13.0,
           50.0
         ]
       },
@@ -17028,14 +17228,6 @@
         "tile": [
           16.0,
           50.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          11.0,
-          51.0
         ]
       },
       {
@@ -17092,14 +17284,6 @@
         "tile": [
           18.0,
           51.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          10.0,
-          52.0
         ]
       },
       {
@@ -17172,14 +17356,6 @@
         "tile": [
           19.0,
           52.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          9.0,
-          53.0
         ]
       },
       {
@@ -17268,14 +17444,6 @@
         "tile": [
           20.0,
           53.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          8.0,
-          54.0
         ]
       },
       {
@@ -17380,14 +17548,6 @@
         "tile": [
           21.0,
           54.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          7.0,
-          55.0
         ]
       },
       {
@@ -17508,14 +17668,6 @@
         "tile": [
           22.0,
           55.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          6.0,
-          56.0
         ]
       },
       {
@@ -17652,14 +17804,6 @@
         "tile": [
           23.0,
           56.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          5.0,
-          57.0
         ]
       },
       {
@@ -17812,14 +17956,6 @@
         "tile": [
           24.0,
           57.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          4.0,
-          58.0
         ]
       },
       {
@@ -17988,14 +18124,6 @@
         "tile": [
           25.0,
           58.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          3.0,
-          59.0
         ]
       },
       {
@@ -18180,14 +18308,6 @@
         "tile": [
           26.0,
           59.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          2.0,
-          60.0
         ]
       },
       {
@@ -18388,14 +18508,6 @@
         "tile": [
           27.0,
           60.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          1.0,
-          61.0
         ]
       },
       {
@@ -18612,14 +18724,6 @@
         "tile": [
           28.0,
           61.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          0.0,
-          62.0
         ]
       },
       {
@@ -23319,27 +23423,11 @@
         ]
       },
       {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          14.0,
-          48.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.chiyue_valley_floor.02",
         "op": "paint_tile",
         "tile": [
           15.0,
           48.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          13.0,
-          49.0
         ]
       },
       {
@@ -23364,14 +23452,6 @@
         "tile": [
           16.0,
           49.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          12.0,
-          50.0
         ]
       },
       {
@@ -23412,14 +23492,6 @@
         "tile": [
           17.0,
           50.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          11.0,
-          51.0
         ]
       },
       {
@@ -23476,14 +23548,6 @@
         "tile": [
           18.0,
           51.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          10.0,
-          52.0
         ]
       },
       {
@@ -23556,14 +23620,6 @@
         "tile": [
           19.0,
           52.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          9.0,
-          53.0
         ]
       },
       {
@@ -23652,14 +23708,6 @@
         "tile": [
           20.0,
           53.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          8.0,
-          54.0
         ]
       },
       {
@@ -23764,14 +23812,6 @@
         "tile": [
           21.0,
           54.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          7.0,
-          55.0
         ]
       },
       {
@@ -23892,14 +23932,6 @@
         "tile": [
           22.0,
           55.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          6.0,
-          56.0
         ]
       },
       {
@@ -24036,14 +24068,6 @@
         "tile": [
           23.0,
           56.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          5.0,
-          57.0
         ]
       },
       {
@@ -24196,14 +24220,6 @@
         "tile": [
           24.0,
           57.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          4.0,
-          58.0
         ]
       },
       {
@@ -24372,14 +24388,6 @@
         "tile": [
           25.0,
           58.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          3.0,
-          59.0
         ]
       },
       {
@@ -24564,14 +24572,6 @@
         "tile": [
           26.0,
           59.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          2.0,
-          60.0
         ]
       },
       {
@@ -26653,9 +26653,7 @@
           31.0,
           73.0
         ]
-      }
-    ],
-    "c_2_2": [
+      },
       {
         "asset_id": "mse.ground.chiyue_valley_floor.04",
         "op": "paint_tile",
@@ -32553,6 +32551,134 @@
           15.0,
           46.0
         ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          33.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          34.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          35.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          36.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          37.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          38.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          39.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          40.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          41.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          20.0,
+          42.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          19.0,
+          43.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          18.0,
+          44.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          17.0,
+          45.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          16.0,
+          46.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.chiyue_valley_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          15.0,
+          47.0
+        ]
       }
     ],
     "c_3_1": [
@@ -32773,27 +32899,11 @@
         ]
       },
       {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          32.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.chiyue_valley_floor.01",
         "op": "paint_tile",
         "tile": [
           31.0,
           32.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          33.0
         ]
       },
       {
@@ -32810,14 +32920,6 @@
         "tile": [
           31.0,
           33.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          34.0
         ]
       },
       {
@@ -32842,14 +32944,6 @@
         "tile": [
           31.0,
           34.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          35.0
         ]
       },
       {
@@ -32882,14 +32976,6 @@
         "tile": [
           31.0,
           35.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          36.0
         ]
       },
       {
@@ -32930,14 +33016,6 @@
         "tile": [
           31.0,
           36.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          37.0
         ]
       },
       {
@@ -32986,14 +33064,6 @@
         "tile": [
           31.0,
           37.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          38.0
         ]
       },
       {
@@ -33050,14 +33120,6 @@
         "tile": [
           31.0,
           38.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          39.0
         ]
       },
       {
@@ -33122,14 +33184,6 @@
         "tile": [
           31.0,
           39.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          40.0
         ]
       },
       {
@@ -33202,14 +33256,6 @@
         "tile": [
           31.0,
           40.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          21.0,
-          41.0
         ]
       },
       {
@@ -33290,14 +33336,6 @@
         "tile": [
           31.0,
           41.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          20.0,
-          42.0
         ]
       },
       {
@@ -33386,14 +33424,6 @@
         "tile": [
           31.0,
           42.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          19.0,
-          43.0
         ]
       },
       {
@@ -33490,14 +33520,6 @@
         "tile": [
           31.0,
           43.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          18.0,
-          44.0
         ]
       },
       {
@@ -33602,14 +33624,6 @@
         "tile": [
           31.0,
           44.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          17.0,
-          45.0
         ]
       },
       {
@@ -33722,14 +33736,6 @@
         "tile": [
           31.0,
           45.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          16.0,
-          46.0
         ]
       },
       {
@@ -33850,14 +33856,6 @@
         "tile": [
           31.0,
           46.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.chiyue_valley_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          15.0,
-          47.0
         ]
       },
       {
@@ -42677,9 +42675,7 @@
           31.0,
           11.0
         ]
-      }
-    ],
-    "c_4_1": [
+      },
       {
         "asset_id": "mse.ground.chiyue_valley_floor.03",
         "op": "paint_tile",

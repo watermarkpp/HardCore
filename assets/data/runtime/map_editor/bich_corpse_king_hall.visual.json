@@ -8,25 +8,25 @@
   "chunks": [
     {
       "chunk_id": "c_0_0",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/679ea23e11542360914e153f50de89e01b72a8ef115510239ea247855e0ab2e7.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/13f6bd63c218bd1714fc3fc9ba0446a213b4fa1561f24f0f26c79207c5e509fd.png",
       "rect_px": [
         0.0,
         0.0,
         1024.0,
         960.0
       ],
-      "sha256": "679ea23e11542360914e153f50de89e01b72a8ef115510239ea247855e0ab2e7"
+      "sha256": "13f6bd63c218bd1714fc3fc9ba0446a213b4fa1561f24f0f26c79207c5e509fd"
     },
     {
       "chunk_id": "c_1_0",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/df5507638a9b55178a07cca8cc55accb8df570a36d415f879abf0d53a66761ee.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/a59edff41fe1ecfd6e2b255de3ddf4353342f7bd65a1a66c0c7b8e2f9bf9d66a.png",
       "rect_px": [
         1024.0,
         0.0,
         896.0,
         960.0
       ],
-      "sha256": "df5507638a9b55178a07cca8cc55accb8df570a36d415f879abf0d53a66761ee"
+      "sha256": "a59edff41fe1ecfd6e2b255de3ddf4353342f7bd65a1a66c0c7b8e2f9bf9d66a"
     }
   ],
   "coverage": {
@@ -39,9 +39,10 @@
     30,
     30
   ],
+  "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
   "ground_pixel_center": [
     960.0,
-    480.0
+    464.0
   ],
   "ground_pixel_size": [
     1920,
@@ -53,8 +54,8 @@
   "runtime_map_id": 911103,
   "schema_version": 1,
   "source_authority": "user_authored_baked_ground",
-  "source_editor_document_sha256": "02a3e30f3bbb650897af212b7da151fe178974d65fa13062452519d393729cd2",
-  "source_ground_manifest_sha256": "9465159575441d3de69a4d38a8021422e0435d2be6382e96621cc81b461a9027",
-  "source_ground_state_sha256": "bb064cf05da706294b9d5751d1279f818175fd4db2f935d086ea0676788036cd",
+  "source_editor_document_sha256": "e695cfc3aca4c6c0cd6c63fe5d6236f1804864591e0e7fb7f7a81a45db0c0866",
+  "source_ground_manifest_sha256": "f80d83e3dd3a451e390e28ab160f334edc59acbda9625efa86cafb3982d0b4a5",
+  "source_ground_state_sha256": "bb88f9fff5af9fd122aa2f471fbb0b69e44e084e8a093fcf65a59d819fdb7019",
   "visual_contract_id": "mse.map.runtime.visual.v1"
 }

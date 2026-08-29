@@ -9,6 +9,8 @@ const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 const RELEASE_REGISTRY_PATH := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
 const VISUAL_CONTRACT_ID := "mse.map.runtime.visual.v1"
 const FORMAL_GROUND_CHUNK_ROOT := "assets/data/runtime/map_editor/formal_ground_chunks/sha256/"
+const HALF_TILE_WIDTH_PX := 32.0
+const HALF_TILE_HEIGHT_PX := 16.0
 
 
 func _ready() -> void:
@@ -53,9 +55,16 @@ func _ready() -> void:
 			var visual_center := MapEditorCoordinate.grid_cell_to_screen_position_px(
 				Vector2(cell), design_size
 			)
+			var expected_center := _expected_world_for_tile(
+				Vector2(cell) + Vector2(0.5, 0.5), design_size
+			)
 			assert(
-				polygon_center.is_equal_approx(visual_center),
+				polygon_center.is_equal_approx(expected_center),
 				"%s collision cell shifted from visible cell %s" % [map_key, cell]
+			)
+			assert(
+				visual_center.is_equal_approx(expected_center),
+				"%s visible cell center shifted %s" % [map_key, cell]
 			)
 			assert(
 				CollisionGeometry.world_cell(visual_center, design_size) == cell,
@@ -86,10 +95,8 @@ func _ready() -> void:
 			var erased_world := CollisionGeometry.cell_center_world(
 				cell, design_size
 			)
-			# A last-row logical cell can have its center exactly on the packaged
-			# canvas edge (size - 0.5). That point is intentionally outside the
-			# visible-ground contract and must remain boundary-blocked even though
-			# the authored cell itself was erased.
+			# An erased authored cell remains outside the blocked-cell set. If its
+			# center is within the v2 ground canvas, the erase must remain effective.
 			if CollisionGeometry.visible_ground_contains_tile(
 				MapEditorCoordinate.screen_position_px_to_ground_position_gu(erased_world, design_size),
 				design_size
@@ -170,66 +177,64 @@ func _assert_ground_origin(
 	var ground_pixel_size := Vector2(
 		float(raw_pixel_size[0]), float(raw_pixel_size[1])
 	)
-	var expected_center := Vector2(
-		MapEditorCoordinate.ground_image_size(design_size)
-	) * 0.5
+	var expected_center := _expected_ground_pixel_center(design_size)
 	assert(
 		ground_center.is_equal_approx(expected_center),
 		"%s visual origin shifted: %s != %s"
 			% [map_key, ground_center, expected_center]
+	)
+	assert(
+		ground_pixel_size == Vector2(_expected_ground_pixel_size(design_size)),
+		"%s ground canvas size mismatch: %s != %s"
+			% [map_key, ground_pixel_size, _expected_ground_pixel_size(design_size)]
 	)
 	for cell: Vector2i in [Vector2i.ZERO, design_size - Vector2i.ONE]:
 		var ground_cell_center := (
 			MapEditorCoordinate.cell_center_to_ground_px(cell, design_size)
 			- ground_center
 		)
-		var world_cell_center := MapEditorCoordinate.grid_cell_to_screen_position_px(
-			cell, design_size
+		var expected_cell_center := _expected_world_for_tile(
+			Vector2(cell) + Vector2(0.5, 0.5), design_size
 		)
 		assert(
-			ground_cell_center.is_equal_approx(world_cell_center),
+			ground_cell_center.is_equal_approx(expected_cell_center),
 			"%s ground/world origin mismatch at %s" % [map_key, cell]
 		)
-	# A rectangular logical map is not necessarily square. Its top and bottom
-	# canvas vertices therefore have x=(height/2) and x=(width/2), respectively;
-	# using the canvas midpoint for both silently rejects non-square authored maps.
-	var visible_top_world := (
-		MapEditorCoordinate.tile_to_ground_px(
-			Vector2(-0.5, -0.5), design_size
-		) - ground_center
-	)
-	var visible_bottom_world := (
-		MapEditorCoordinate.tile_to_ground_px(
-			Vector2(design_size) - Vector2(0.5, 0.5), design_size
-		) - ground_center
-	)
+		assert(
+			MapEditorCoordinate.grid_cell_to_screen_position_px(
+				cell, design_size
+			).is_equal_approx(expected_cell_center),
+			"%s runtime cell center mismatch at %s" % [map_key, cell]
+		)
+	# v2 packages the complete authored cell union. The canvas top and bottom
+	# therefore use the logical vertices (0,0) and design_size.
+	var visible_top_world := _expected_world_for_tile(Vector2.ZERO, design_size)
+	var visible_bottom_world := _expected_world_for_tile(Vector2(design_size), design_size)
 	assert(
-		visible_top_world.is_equal_approx(MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-			Vector2(-0.5, -0.5), design_size
-		)),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			Vector2.ZERO, design_size
+		).is_equal_approx(visible_top_world),
 		"%s visible canvas top does not match physical boundary" % map_key
 	)
 	assert(
-		visible_bottom_world.is_equal_approx(MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-			Vector2(design_size) - Vector2(0.5, 0.5), design_size
-		)),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			Vector2(design_size), design_size
+		).is_equal_approx(visible_bottom_world),
 		"%s visible canvas bottom does not match physical boundary" % map_key
 	)
 	var background := WorldBackgroundScript.new()
 	var runtime_fill := background.editor_runtime_ground_boundary_world(
 		design_size
 	)
+	var expected_boundary_world := _expected_boundary_world(design_size)
 	assert(
-		runtime_fill == CollisionGeometry.map_inner_boundary_world(design_size),
-		"%s runtime base fill/guard diverged from chunk and collision edge"
+		runtime_fill == expected_boundary_world,
+		"%s runtime base fill/guard diverged from fixed v2 boundary"
 			% map_key
 	)
-	var old_shifted_top := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-		Vector2.ZERO, design_size
-	)
 	assert(
-		is_equal_approx(old_shifted_top.y - runtime_fill[0].y, 16.0),
-		"%s regression probe no longer measures the historical +16px shift"
+		visible_top_world.is_equal_approx(runtime_fill[0]),
+		"%s runtime boundary top diverges from v2 ground canvas edge"
 			% map_key
 	)
 	background.free()
@@ -243,32 +248,25 @@ func _assert_boundary_contract(
 		design_size
 	)
 	var expected := PackedVector2Array([
-		Vector2(-0.5, -0.5),
-		Vector2(float(design_size.x) - 0.5, -0.5),
-		Vector2(design_size) - Vector2(0.5, 0.5),
-		Vector2(-0.5, float(design_size.y) - 0.5),
+		Vector2.ZERO,
+		Vector2(float(design_size.x), 0.0),
+		Vector2(design_size),
+		Vector2(0.0, float(design_size.y)),
 	])
 	assert(tile_boundary == expected, "map %d visible edge mismatch" % runtime_map_id)
-	var top_vertex := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-		Vector2(-0.5, -0.5), design_size
-	)
-	var logical_top := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-		Vector2.ZERO, design_size
-	)
+	var expected_world_boundary := _expected_boundary_world(design_size)
+	var top_vertex := expected_world_boundary[0]
 	assert(
-		is_equal_approx(logical_top.y - top_vertex.y, 16.0),
-		"map %d half-cell boundary must remove collision_y=+16" % runtime_map_id
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			Vector2.ZERO, design_size
+		).is_equal_approx(top_vertex),
+		"map %d v2 boundary origin mismatch" % runtime_map_id
 	)
 	var empty_collision := {"blocked_tiles": []}
-	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
-		design_size
+	var visual_edge := _expected_world_for_tile(
+		Vector2(float(design_size.x) * 0.5, 0.0), design_size
 	)
-	var edge_direction := (
-		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-			Vector2(float(design_size.x) - 0.5, -0.5), design_size
-		) - top_vertex
-	)
+	var edge_direction := expected_world_boundary[1] - expected_world_boundary[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
 	var just_outside := visual_edge + outward * 0.5
 	assert(
@@ -285,11 +283,9 @@ func _assert_boundary_contract(
 			% runtime_map_id
 	)
 	var world_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
-	for index in expected.size():
+	for index in expected_world_boundary.size():
 		assert(
-			world_boundary[index].is_equal_approx(
-				MapEditorCoordinate.ground_position_gu_to_screen_position_px(expected[index], design_size)
-			),
+			world_boundary[index].is_equal_approx(expected_world_boundary[index]),
 			"map %d boundary world mismatch at %d" % [runtime_map_id, index]
 		)
 
@@ -401,8 +397,8 @@ func _assert_bich_runtime_physics() -> void:
 	var raw_size: Array = runtime.design.design_size
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var background := WorldBackgroundScript.new()
-	background.zone_data = {"mapId": 910001}
 	add_child(background)
+	background.set_zone_data("比奇省", {"mapId": 910001, "name": "比奇省"})
 	await get_tree().physics_frame
 	await get_tree().process_frame
 	assert(
@@ -432,9 +428,8 @@ func _assert_bich_runtime_physics() -> void:
 	)
 	assert(background._editor_runtime_blocks_world(blocked_center))
 	assert(not _physics_hits(blocked_center).is_empty())
-	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
-		design_size
+	var visual_edge := _expected_world_for_tile(
+		Vector2(float(design_size.x) * 0.5, 0.0), design_size
 	)
 	var visual_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
 	var edge_direction := visual_boundary[1] - visual_boundary[0]
@@ -482,6 +477,38 @@ func _assert_bich_runtime_physics() -> void:
 	assert(erased_checked == 12, "Bich erased collision coverage missing")
 	background.queue_free()
 	await get_tree().process_frame
+
+
+func _expected_ground_pixel_size(design_size: Vector2i) -> Vector2i:
+	return Vector2i(
+		(design_size.x + design_size.y) * int(HALF_TILE_WIDTH_PX),
+		(design_size.x + design_size.y) * int(HALF_TILE_HEIGHT_PX),
+	)
+
+
+func _expected_ground_pixel_center(design_size: Vector2i) -> Vector2:
+	return Vector2(
+		float(design_size.x + design_size.y) * HALF_TILE_WIDTH_PX * 0.5,
+		float(design_size.x + design_size.y - 2) * HALF_TILE_HEIGHT_PX * 0.5,
+	)
+
+
+func _expected_world_for_tile(tile: Vector2, design_size: Vector2i) -> Vector2:
+	var center_gu := (Vector2(design_size) - Vector2.ONE) * 0.5
+	var relative := tile - center_gu
+	return Vector2(
+		(relative.x - relative.y) * HALF_TILE_WIDTH_PX,
+		(relative.x + relative.y) * HALF_TILE_HEIGHT_PX,
+	)
+
+
+func _expected_boundary_world(design_size: Vector2i) -> PackedVector2Array:
+	return PackedVector2Array([
+		_expected_world_for_tile(Vector2.ZERO, design_size),
+		_expected_world_for_tile(Vector2(design_size.x, 0.0), design_size),
+		_expected_world_for_tile(Vector2(design_size), design_size),
+		_expected_world_for_tile(Vector2(0.0, design_size.y), design_size),
+	])
 
 
 func _published_runtime_maps() -> Dictionary:

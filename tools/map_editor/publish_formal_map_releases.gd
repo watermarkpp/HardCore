@@ -21,7 +21,7 @@ const EXPECTED_RUNTIME_MONSTER_SPAWNS := 1604
 const EXPECTED_RUNTIME_BOSS_SPAWNS := 276
 const VISUAL_CONTRACT_ID := "mse.map.runtime.visual.v1"
 const GROUND_CHUNK_STORE_CONTRACT_ID := "mse.map.runtime.ground_chunk_store.sha256.v1"
-const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v1"
+const GROUND_COORDINATE_CONTRACT_ID := MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
 const FORMAL_GROUND_CHUNK_ROOT := (
 	"res://assets/data/runtime/map_editor/formal_ground_chunks/sha256"
 )
@@ -294,10 +294,11 @@ func _publish_formal_visual(
 		"source_ground_manifest_sha256": manifest_sha,
 		"source_ground_state_sha256": state_sha,
 		"design_size": [design_size.x, design_size.y],
+		"ground_coordinate_contract_id": GROUND_COORDINATE_CONTRACT_ID,
 		"ground_pixel_size": [ground_pixel_size.x, ground_pixel_size.y],
 		"ground_pixel_center": [
-			float(ground_pixel_size.x) * 0.5,
-			float(ground_pixel_size.y) * 0.5,
+			MapEditorCoordinate.ground_pixel_center(design_size).x,
+			MapEditorCoordinate.ground_pixel_center(design_size).y,
 		],
 		"base_color": _base_color_for_map(map_key),
 		"guard_band_px": _guard_band_for_map(map_key),

@@ -3,20 +3,10 @@ extends Node2D
 const CollisionGeometry := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
-
-const PUBLISHED_RUNTIME_MAPS := {
-	4: "bich_province",
-	217: "orc_tomb_1",
-	218: "orc_tomb_2",
-	221: "orc_tomb_3",
-	268: "wooma_forest",
-	313: "wooma_temple_1",
-	314: "wooma_temple_2",
-	315: "wooma_temple_3",
-	406: "bich_mine_1",
-	408: "bich_mine_2",
-	1578: "corpse_king_hall",
-}
+const HALF_TILE_WIDTH_PX := 32.0
+const HALF_TILE_HEIGHT_PX := 16.0
+const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
+const EXPECTED_FORMAL_MAP_COUNT := 67
 
 
 func _ready() -> void:
@@ -24,9 +14,14 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	var formal_runtime_maps := _formal_runtime_maps()
+	assert(
+		formal_runtime_maps.size() == EXPECTED_FORMAL_MAP_COUNT,
+		"formal map identity count mismatch"
+	)
 	var checked := 0
-	for runtime_map_id: int in PUBLISHED_RUNTIME_MAPS:
-		var map_key := str(PUBLISHED_RUNTIME_MAPS[runtime_map_id])
+	for runtime_map_id: int in formal_runtime_maps:
+		var map_key := str(formal_runtime_maps[runtime_map_id])
 		var loaded := MapEditorRuntimeMapService.load_runtime(
 			"res://assets/data/runtime/map_editor/%s.runtime.json" % map_key
 		)
@@ -40,7 +35,7 @@ func _run() -> void:
 		_assert_canvas_edge(map_key, visual, design_size)
 		await _assert_physics_edge(runtime_map_id, design_size)
 		checked += 1
-	assert(checked == PUBLISHED_RUNTIME_MAPS.size())
+	assert(checked == EXPECTED_FORMAL_MAP_COUNT)
 	print(
 		"MAP_PUBLISHED_GROUND_BOUNDARY_PHYSICS_PASS "
 		+ "maps=%d feet_reach_visual_edge=true outside_ring=blocked"
@@ -62,14 +57,20 @@ func _assert_canvas_edge(
 	var pixel_size := Vector2(
 		float(raw_pixel_size[0]), float(raw_pixel_size[1])
 	)
-	var canvas_top_world := Vector2(center.x, 0.0) - center
-	var canvas_bottom_world := Vector2(center.x, pixel_size.y) - center
+	var expected_center := _expected_ground_pixel_center(design_size)
+	var expected_pixel_size := Vector2(_expected_ground_pixel_size(design_size))
+	assert(center.is_equal_approx(expected_center),
+		"%s v2 ground center mismatch: %s != %s" % [map_key, center, expected_center])
+	assert(pixel_size == expected_pixel_size,
+		"%s v2 ground size mismatch: %s != %s" % [map_key, pixel_size, expected_pixel_size])
+	var canvas_top_world := _expected_world_for_tile(Vector2.ZERO, design_size)
+	var canvas_bottom_world := _expected_world_for_tile(Vector2(design_size), design_size)
 	assert(canvas_top_world.is_equal_approx(
-		MapEditorCoordinate.ground_position_gu_to_screen_position_px(Vector2(-0.5, -0.5), design_size)
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(Vector2.ZERO, design_size)
 	), "%s top canvas edge mismatch" % map_key)
 	assert(canvas_bottom_world.is_equal_approx(
 		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-			Vector2(design_size) - Vector2(0.5, 0.5), design_size
+			Vector2(design_size), design_size
 		)
 	), "%s bottom canvas edge mismatch" % map_key)
 
@@ -93,12 +94,15 @@ func _assert_physics_edge(
 		body.add_child(collision)
 	add_child(body)
 	await get_tree().physics_frame
-	var tile_x := float(design_size.x) * 0.5 - 0.5
-	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-		Vector2(tile_x, -0.5), design_size
-	)
+	var tile_x := float(design_size.x) * 0.5
+	var visual_edge := _expected_world_for_tile(Vector2(tile_x, 0.0), design_size)
+	var expected_boundary := _expected_boundary_world(design_size)
 	var visual_polygon := CollisionGeometry.map_inner_boundary_world(design_size)
-	var edge_direction := visual_polygon[1] - visual_polygon[0]
+	assert(
+		visual_polygon == expected_boundary,
+		"map %d v2 physics boundary diverges from fixed edge" % runtime_map_id
+	)
+	var edge_direction := expected_boundary[1] - expected_boundary[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
 	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
 	var footprint := WorldSpatialRules.actor_footprint_polygon_px(clearance)
@@ -146,6 +150,38 @@ func _assert_physics_edge(
 	actor.queue_free()
 	body.queue_free()
 	await get_tree().process_frame
+
+
+func _expected_ground_pixel_size(design_size: Vector2i) -> Vector2i:
+	return Vector2i(
+		(design_size.x + design_size.y) * int(HALF_TILE_WIDTH_PX),
+		(design_size.x + design_size.y) * int(HALF_TILE_HEIGHT_PX),
+	)
+
+
+func _expected_ground_pixel_center(design_size: Vector2i) -> Vector2:
+	return Vector2(
+		float(design_size.x + design_size.y) * HALF_TILE_WIDTH_PX * 0.5,
+		float(design_size.x + design_size.y - 2) * HALF_TILE_HEIGHT_PX * 0.5,
+	)
+
+
+func _expected_world_for_tile(tile: Vector2, design_size: Vector2i) -> Vector2:
+	var center_gu := (Vector2(design_size) - Vector2.ONE) * 0.5
+	var relative := tile - center_gu
+	return Vector2(
+		(relative.x - relative.y) * HALF_TILE_WIDTH_PX,
+		(relative.x + relative.y) * HALF_TILE_HEIGHT_PX,
+	)
+
+
+func _expected_boundary_world(design_size: Vector2i) -> PackedVector2Array:
+	return PackedVector2Array([
+		_expected_world_for_tile(Vector2.ZERO, design_size),
+		_expected_world_for_tile(Vector2(design_size.x, 0.0), design_size),
+		_expected_world_for_tile(Vector2(design_size), design_size),
+		_expected_world_for_tile(Vector2(0.0, design_size.y), design_size),
+	])
 func _physics_hits(world_position: Vector2) -> Array[Dictionary]:
 	var query := PhysicsPointQueryParameters2D.new()
 	query.position = world_position
@@ -162,3 +198,24 @@ func _read_json(path: String) -> Dictionary:
 	file.close()
 	assert(parsed is Dictionary, "%s invalid" % path)
 	return parsed
+
+
+func _formal_runtime_maps() -> Dictionary:
+	var identity := _read_json(IDENTITY_PATH)
+	assert(
+		int(identity.get("formal_map_count", -1)) == EXPECTED_FORMAL_MAP_COUNT,
+		"formal identity registry count mismatch"
+	)
+	var maps: Array = identity.get("maps", [])
+	assert(maps.size() == EXPECTED_FORMAL_MAP_COUNT, "formal identity map list mismatch")
+	var result := {}
+	for raw_map: Variant in maps:
+		assert(raw_map is Dictionary, "formal identity entry is not an object")
+		var entry: Dictionary = raw_map
+		var runtime_map_id := int(entry.get("runtime_map_id", -1))
+		var map_key := str(entry.get("map_id", ""))
+		assert(runtime_map_id > 0, "formal identity runtime id missing")
+		assert(not map_key.is_empty(), "formal identity map key missing")
+		assert(not result.has(runtime_map_id), "duplicate formal runtime id")
+		result[runtime_map_id] = map_key
+	return result

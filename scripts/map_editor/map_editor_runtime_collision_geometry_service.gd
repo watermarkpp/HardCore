@@ -1,10 +1,10 @@
 class_name MapEditorRuntimeCollisionGeometryService
 extends RefCounted
 
-const CONTRACT_ID := "map_editor_runtime_collision_geometry_v2"
+const CONTRACT_ID := "map_editor_runtime_collision_geometry_v3"
 const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
-const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_ground_footprint_boundary_v3"
-const PLAYER_FOOT_BOUNDARY_CONTRACT_ID := "map_player_foot_inside_visible_ground_v1"
+const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_ground_footprint_boundary_v4"
+const PLAYER_FOOT_BOUNDARY_CONTRACT_ID := "map_player_foot_inside_visible_ground_v2"
 const ELLIPSE_SEGMENTS := 32
 const DEFAULT_BOUNDARY_MARGIN_GRID_STEPS := 8.0
 const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX := 18.0
@@ -15,11 +15,11 @@ const VISIBLE_BOUNDARY_EPSILON_PX := 0.01
 static func map_inner_boundary_tile_polygon(
 	design_size: Vector2i
 ) -> PackedVector2Array:
-	# Packaged ground canvases are centered on the authored tile centers. Their
-	# first/last visible half-diamonds therefore end at -0.5 and size - 0.5,
-	# rather than at the logical cell vertices used by interior blocked cells.
-	var minimum := Vector2(-0.5, -0.5)
-	var maximum := Vector2(design_size) - Vector2(0.5, 0.5)
+	# The v2 ground canvas contains the complete authored cell union.  Its
+	# visible edge is therefore the logical vertex ring [0, design_size], which
+	# is also the coordinate ring used by cell polygons and runtime actors.
+	var minimum := Vector2.ZERO
+	var maximum := Vector2(design_size)
 	return PackedVector2Array([
 		minimum,
 		Vector2(maximum.x, minimum.y),
@@ -33,10 +33,9 @@ static func map_outer_boundary_tile_polygon(
 	margin_grid_steps := DEFAULT_BOUNDARY_MARGIN_GRID_STEPS
 ) -> PackedVector2Array:
 	var margin := maxf(0.0, margin_grid_steps)
-	var minimum := Vector2(-0.5, -0.5) - Vector2.ONE * margin
+	var minimum := Vector2.ZERO - Vector2.ONE * margin
 	var maximum := (
-		Vector2(design_size) - Vector2(0.5, 0.5)
-		+ Vector2.ONE * margin
+		Vector2(design_size) + Vector2.ONE * margin
 	)
 	return PackedVector2Array([
 		minimum,
@@ -305,9 +304,9 @@ static func visible_ground_contains_tile(
 	design_size: Vector2i
 ) -> bool:
 	return (
-		tile.x >= -0.5 and tile.y >= -0.5
-		and tile.x < float(design_size.x) - 0.5
-		and tile.y < float(design_size.y) - 0.5
+		tile.x >= 0.0 and tile.y >= 0.0
+		and tile.x < float(design_size.x)
+		and tile.y < float(design_size.y)
 	)
 
 

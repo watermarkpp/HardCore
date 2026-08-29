@@ -1,5 +1,5 @@
 {
-  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "coordinate_contract_id": "isometric_cell_center_64x32_v2",
   "dirty_chunks": [],
   "map_id": "bich_orc_tomb_f3",
   "operations_by_chunk": {
@@ -14227,9 +14227,7 @@
           24.0,
           37.0
         ]
-      }
-    ],
-    "c_0_1": [
+      },
       {
         "asset_id": "user.70555d97ec3f69cc",
         "op": "paint_tile",
@@ -14239,19 +14237,77 @@
         ]
       },
       {
-        "asset_id": "user.70555d97ec3f69cc",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          35.0
-        ]
-      },
-      {
         "asset_id": "user.9ab574f121f8b541",
         "op": "paint_tile",
         "tile": [
           26.0,
           36.0
+        ]
+      },
+      {
+        "asset_id": "user.c5c2e2da52a39748",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          37.0
+        ]
+      },
+      {
+        "asset_id": "user.184ef6b47ee6739e",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          35.0
+        ]
+      },
+      {
+        "asset_id": "user.d709418564dc6f12",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          36.0
+        ]
+      },
+      {
+        "asset_id": "user.0daa7953d73ed16f",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          37.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          35.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          36.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          37.0
+        ]
+      }
+    ],
+    "c_0_1": [
+      {
+        "asset_id": "user.70555d97ec3f69cc",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          35.0
         ]
       },
       {
@@ -14279,14 +14335,6 @@
         ]
       },
       {
-        "asset_id": "user.c5c2e2da52a39748",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          37.0
-        ]
-      },
-      {
         "asset_id": "user.bb4be652358c5bc2",
         "op": "paint_tile",
         "tile": [
@@ -14327,27 +14375,11 @@
         ]
       },
       {
-        "asset_id": "user.184ef6b47ee6739e",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          35.0
-        ]
-      },
-      {
         "asset_id": "user.1327de4efa19009a",
         "op": "paint_tile",
         "tile": [
           28.0,
           35.0
-        ]
-      },
-      {
-        "asset_id": "user.d709418564dc6f12",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          36.0
         ]
       },
       {
@@ -14372,14 +14404,6 @@
         "tile": [
           29.0,
           36.0
-        ]
-      },
-      {
-        "asset_id": "user.0daa7953d73ed16f",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          37.0
         ]
       },
       {
@@ -14420,14 +14444,6 @@
         "tile": [
           30.0,
           37.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          35.0
         ]
       },
       {
@@ -14442,14 +14458,6 @@
         "asset_id": "mse.ground.stone_tomb_floor.05",
         "op": "paint_tile",
         "tile": [
-          26.0,
-          36.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.05",
-        "op": "paint_tile",
-        "tile": [
           27.0,
           36.0
         ]
@@ -14468,14 +14476,6 @@
         "tile": [
           29.0,
           36.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          37.0
         ]
       },
       {
@@ -34631,26 +34631,250 @@
           28.0,
           33.0
         ]
+      },
+      {
+        "asset_id": "user.c5c2e2da52a39748",
+        "op": "paint_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "asset_id": "user.bb4be652358c5bc2",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
+      },
+      {
+        "asset_id": "user.70555d97ec3f69cc",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "asset_id": "user.c5c2e2da52a39748",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          33.0
+        ]
+      },
+      {
+        "asset_id": "user.177d04adae934b94",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          34.0
+        ]
+      },
+      {
+        "asset_id": "user.d709418564dc6f12",
+        "op": "paint_tile",
+        "tile": [
+          34.0,
+          28.0
+        ]
+      },
+      {
+        "asset_id": "user.1327de4efa19009a",
+        "op": "paint_tile",
+        "tile": [
+          33.0,
+          29.0
+        ]
+      },
+      {
+        "asset_id": "user.0daa7953d73ed16f",
+        "op": "paint_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "asset_id": "user.184ef6b47ee6739e",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
+      },
+      {
+        "asset_id": "user.184ef6b47ee6739e",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "asset_id": "user.1327de4efa19009a",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          33.0
+        ]
+      },
+      {
+        "asset_id": "user.d709418564dc6f12",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          34.0
+        ]
+      },
+      {
+        "asset_id": "user.184ef6b47ee6739e",
+        "op": "paint_tile",
+        "tile": [
+          37.0,
+          25.0
+        ]
+      },
+      {
+        "asset_id": "user.1327de4efa19009a",
+        "op": "paint_tile",
+        "tile": [
+          36.0,
+          26.0
+        ]
+      },
+      {
+        "asset_id": "user.0daa7953d73ed16f",
+        "op": "paint_tile",
+        "tile": [
+          35.0,
+          27.0
+        ]
+      },
+      {
+        "asset_id": "user.184ef6b47ee6739e",
+        "op": "paint_tile",
+        "tile": [
+          34.0,
+          28.0
+        ]
+      },
+      {
+        "asset_id": "user.184ef6b47ee6739e",
+        "op": "paint_tile",
+        "tile": [
+          33.0,
+          29.0
+        ]
+      },
+      {
+        "asset_id": "user.d709418564dc6f12",
+        "op": "paint_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "asset_id": "user.1327de4efa19009a",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
+      },
+      {
+        "asset_id": "user.1327de4efa19009a",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          37.0,
+          25.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          36.0,
+          26.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          35.0,
+          27.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          34.0,
+          28.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          33.0,
+          29.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          33.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.stone_tomb_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          34.0
+        ]
       }
     ],
     "c_1_1": [
       {
-        "asset_id": "user.c5c2e2da52a39748",
-        "op": "paint_tile",
-        "tile": [
-          32.0,
-          30.0
-        ]
-      },
-      {
-        "asset_id": "user.bb4be652358c5bc2",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
-          31.0
-        ]
-      },
-      {
         "asset_id": "user.177d04adae934b94",
         "op": "paint_tile",
         "tile": [
@@ -34667,14 +34891,6 @@
         ]
       },
       {
-        "asset_id": "user.70555d97ec3f69cc",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          32.0
-        ]
-      },
-      {
         "asset_id": "user.bb4be652358c5bc2",
         "op": "paint_tile",
         "tile": [
@@ -34696,14 +34912,6 @@
         "tile": [
           33.0,
           32.0
-        ]
-      },
-      {
-        "asset_id": "user.c5c2e2da52a39748",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          33.0
         ]
       },
       {
@@ -34744,14 +34952,6 @@
         "tile": [
           34.0,
           33.0
-        ]
-      },
-      {
-        "asset_id": "user.177d04adae934b94",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          34.0
         ]
       },
       {
@@ -34883,35 +35083,11 @@
         ]
       },
       {
-        "asset_id": "user.d709418564dc6f12",
-        "op": "paint_tile",
-        "tile": [
-          34.0,
-          28.0
-        ]
-      },
-      {
-        "asset_id": "user.1327de4efa19009a",
-        "op": "paint_tile",
-        "tile": [
-          33.0,
-          29.0
-        ]
-      },
-      {
         "asset_id": "user.0daa7953d73ed16f",
         "op": "paint_tile",
         "tile": [
           34.0,
           29.0
-        ]
-      },
-      {
-        "asset_id": "user.0daa7953d73ed16f",
-        "op": "paint_tile",
-        "tile": [
-          32.0,
-          30.0
         ]
       },
       {
@@ -34928,14 +35104,6 @@
         "tile": [
           34.0,
           30.0
-        ]
-      },
-      {
-        "asset_id": "user.184ef6b47ee6739e",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
-          31.0
         ]
       },
       {
@@ -34960,14 +35128,6 @@
         "tile": [
           34.0,
           31.0
-        ]
-      },
-      {
-        "asset_id": "user.184ef6b47ee6739e",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          32.0
         ]
       },
       {
@@ -35008,14 +35168,6 @@
         "tile": [
           35.0,
           32.0
-        ]
-      },
-      {
-        "asset_id": "user.1327de4efa19009a",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          33.0
         ]
       },
       {
@@ -35064,14 +35216,6 @@
         "tile": [
           35.0,
           33.0
-        ]
-      },
-      {
-        "asset_id": "user.d709418564dc6f12",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          34.0
         ]
       },
       {
@@ -35275,35 +35419,11 @@
         ]
       },
       {
-        "asset_id": "user.184ef6b47ee6739e",
-        "op": "paint_tile",
-        "tile": [
-          37.0,
-          25.0
-        ]
-      },
-      {
-        "asset_id": "user.1327de4efa19009a",
-        "op": "paint_tile",
-        "tile": [
-          36.0,
-          26.0
-        ]
-      },
-      {
         "asset_id": "user.d709418564dc6f12",
         "op": "paint_tile",
         "tile": [
           37.0,
           26.0
-        ]
-      },
-      {
-        "asset_id": "user.0daa7953d73ed16f",
-        "op": "paint_tile",
-        "tile": [
-          35.0,
-          27.0
         ]
       },
       {
@@ -35323,14 +35443,6 @@
         ]
       },
       {
-        "asset_id": "user.184ef6b47ee6739e",
-        "op": "paint_tile",
-        "tile": [
-          34.0,
-          28.0
-        ]
-      },
-      {
         "asset_id": "user.1327de4efa19009a",
         "op": "paint_tile",
         "tile": [
@@ -35358,14 +35470,6 @@
         "asset_id": "user.184ef6b47ee6739e",
         "op": "paint_tile",
         "tile": [
-          33.0,
-          29.0
-        ]
-      },
-      {
-        "asset_id": "user.184ef6b47ee6739e",
-        "op": "paint_tile",
-        "tile": [
           34.0,
           29.0
         ]
@@ -35392,14 +35496,6 @@
         "tile": [
           37.0,
           29.0
-        ]
-      },
-      {
-        "asset_id": "user.d709418564dc6f12",
-        "op": "paint_tile",
-        "tile": [
-          32.0,
-          30.0
         ]
       },
       {
@@ -35440,14 +35536,6 @@
         "tile": [
           37.0,
           30.0
-        ]
-      },
-      {
-        "asset_id": "user.1327de4efa19009a",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
-          31.0
         ]
       },
       {
@@ -35496,14 +35584,6 @@
         "tile": [
           37.0,
           31.0
-        ]
-      },
-      {
-        "asset_id": "user.1327de4efa19009a",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          32.0
         ]
       },
       {
@@ -35864,22 +35944,6 @@
         "tile": [
           37.0,
           37.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          37.0,
-          25.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          36.0,
-          26.0
         ]
       },
       {
@@ -35891,14 +35955,6 @@
         ]
       },
       {
-        "asset_id": "mse.ground.stone_tomb_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          35.0,
-          27.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.stone_tomb_floor.05",
         "op": "paint_tile",
         "tile": [
@@ -35912,14 +35968,6 @@
         "tile": [
           37.0,
           27.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          34.0,
-          28.0
         ]
       },
       {
@@ -35944,14 +35992,6 @@
         "tile": [
           37.0,
           28.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          33.0,
-          29.0
         ]
       },
       {
@@ -35984,14 +36024,6 @@
         "tile": [
           37.0,
           29.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          32.0,
-          30.0
         ]
       },
       {
@@ -36032,14 +36064,6 @@
         "tile": [
           37.0,
           30.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
-          31.0
         ]
       },
       {
@@ -36088,14 +36112,6 @@
         "tile": [
           37.0,
           31.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          32.0
         ]
       },
       {
@@ -36152,14 +36168,6 @@
         "tile": [
           37.0,
           32.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          33.0
         ]
       },
       {
@@ -36224,14 +36232,6 @@
         "tile": [
           37.0,
           33.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.stone_tomb_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          34.0
         ]
       },
       {

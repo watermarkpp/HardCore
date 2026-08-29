@@ -1,5 +1,5 @@
 {
-  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "coordinate_contract_id": "isometric_cell_center_64x32_v2",
   "dirty_chunks": [],
   "map_id": "mengzhong_zuma_pavilion",
   "operations_by_chunk": {
@@ -1843,9 +1843,7 @@
           4.0,
           37.0
         ]
-      }
-    ],
-    "c_0_1": [
+      },
       {
         "asset_id": "mse.ground.user_gothic_floor.05",
         "op": "paint_tile",
@@ -1855,19 +1853,125 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.05",
+        "asset_id": "mse.ground.user_gothic_floor.04",
         "op": "paint_tile",
         "tile": [
-          15.0,
-          48.0
+          13.0,
+          49.0
         ]
       },
       {
         "asset_id": "mse.ground.user_gothic_floor.04",
         "op": "paint_tile",
         "tile": [
-          13.0,
-          49.0
+          12.0,
+          50.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          11.0,
+          51.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          10.0,
+          52.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          9.0,
+          53.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          8.0,
+          54.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          7.0,
+          55.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          6.0,
+          56.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          5.0,
+          57.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          4.0,
+          58.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          3.0,
+          59.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          2.0,
+          60.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          1.0,
+          61.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          0.0,
+          62.0
+        ]
+      }
+    ],
+    "c_0_1": [
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          15.0,
+          48.0
         ]
       },
       {
@@ -1892,14 +1996,6 @@
         "tile": [
           16.0,
           49.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          12.0,
-          50.0
         ]
       },
       {
@@ -1940,14 +2036,6 @@
         "tile": [
           17.0,
           50.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          11.0,
-          51.0
         ]
       },
       {
@@ -2004,14 +2092,6 @@
         "tile": [
           18.0,
           51.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          10.0,
-          52.0
         ]
       },
       {
@@ -2084,14 +2164,6 @@
         "tile": [
           19.0,
           52.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          9.0,
-          53.0
         ]
       },
       {
@@ -2180,14 +2252,6 @@
         "tile": [
           20.0,
           53.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          8.0,
-          54.0
         ]
       },
       {
@@ -2292,14 +2356,6 @@
         "tile": [
           21.0,
           54.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          7.0,
-          55.0
         ]
       },
       {
@@ -2420,14 +2476,6 @@
         "tile": [
           22.0,
           55.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          6.0,
-          56.0
         ]
       },
       {
@@ -2564,14 +2612,6 @@
         "tile": [
           23.0,
           56.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          5.0,
-          57.0
         ]
       },
       {
@@ -2724,14 +2764,6 @@
         "tile": [
           24.0,
           57.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          4.0,
-          58.0
         ]
       },
       {
@@ -2900,14 +2932,6 @@
         "tile": [
           25.0,
           58.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          3.0,
-          59.0
         ]
       },
       {
@@ -3092,14 +3116,6 @@
         "tile": [
           26.0,
           59.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          2.0,
-          60.0
         ]
       },
       {
@@ -3300,14 +3316,6 @@
         "tile": [
           27.0,
           60.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          1.0,
-          61.0
         ]
       },
       {
@@ -3524,14 +3532,6 @@
         "tile": [
           28.0,
           61.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          0.0,
-          62.0
         ]
       },
       {
@@ -12311,9 +12311,7 @@
           16.0,
           45.0
         ]
-      }
-    ],
-    "c_1_1": [
+      },
       {
         "asset_id": "mse.ground.user_gothic_floor.04",
         "op": "paint_tile",
@@ -12323,19 +12321,173 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.03",
+        "asset_id": "mse.ground.user_gothic_floor.04",
         "op": "paint_tile",
         "tile": [
-          21.0,
-          42.0
+          19.0,
+          43.0
         ]
       },
       {
         "asset_id": "mse.ground.user_gothic_floor.04",
         "op": "paint_tile",
         "tile": [
+          18.0,
+          44.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          17.0,
+          45.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          16.0,
+          46.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          15.0,
+          47.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          29.0,
+          33.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          28.0,
+          34.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          27.0,
+          35.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          26.0,
+          36.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          25.0,
+          37.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          24.0,
+          38.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          23.0,
+          39.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          22.0,
+          40.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          41.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          20.0,
+          42.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
           19.0,
           43.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          18.0,
+          44.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          17.0,
+          45.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          16.0,
+          46.0
+        ]
+      }
+    ],
+    "c_1_1": [
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          21.0,
+          42.0
         ]
       },
       {
@@ -12360,14 +12512,6 @@
         "tile": [
           22.0,
           43.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          18.0,
-          44.0
         ]
       },
       {
@@ -12400,14 +12544,6 @@
         "tile": [
           22.0,
           44.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          17.0,
-          45.0
         ]
       },
       {
@@ -12456,14 +12592,6 @@
         "tile": [
           23.0,
           45.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          16.0,
-          46.0
         ]
       },
       {
@@ -12528,14 +12656,6 @@
         "tile": [
           24.0,
           46.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          15.0,
-          47.0
         ]
       },
       {
@@ -13379,27 +13499,11 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          30.0,
-          32.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.user_gothic_floor.02",
         "op": "paint_tile",
         "tile": [
           31.0,
           32.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          29.0,
-          33.0
         ]
       },
       {
@@ -13424,14 +13528,6 @@
         "tile": [
           32.0,
           33.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          28.0,
-          34.0
         ]
       },
       {
@@ -13472,14 +13568,6 @@
         "tile": [
           33.0,
           34.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          27.0,
-          35.0
         ]
       },
       {
@@ -13536,14 +13624,6 @@
         "tile": [
           34.0,
           35.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          26.0,
-          36.0
         ]
       },
       {
@@ -13616,14 +13696,6 @@
         "tile": [
           35.0,
           36.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          25.0,
-          37.0
         ]
       },
       {
@@ -13712,14 +13784,6 @@
         "tile": [
           36.0,
           37.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          24.0,
-          38.0
         ]
       },
       {
@@ -13824,14 +13888,6 @@
         "tile": [
           37.0,
           38.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          23.0,
-          39.0
         ]
       },
       {
@@ -13952,14 +14008,6 @@
         "tile": [
           38.0,
           39.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          22.0,
-          40.0
         ]
       },
       {
@@ -14096,14 +14144,6 @@
         "tile": [
           39.0,
           40.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          21.0,
-          41.0
         ]
       },
       {
@@ -14256,14 +14296,6 @@
         "tile": [
           40.0,
           41.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          20.0,
-          42.0
         ]
       },
       {
@@ -14432,14 +14464,6 @@
         "tile": [
           41.0,
           42.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          19.0,
-          43.0
         ]
       },
       {
@@ -14624,14 +14648,6 @@
         "tile": [
           42.0,
           43.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          18.0,
-          44.0
         ]
       },
       {
@@ -14832,14 +14848,6 @@
         "tile": [
           43.0,
           44.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          17.0,
-          45.0
         ]
       },
       {
@@ -15056,14 +15064,6 @@
         "tile": [
           44.0,
           45.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          16.0,
-          46.0
         ]
       },
       {
@@ -32624,18 +32624,355 @@
           31.0,
           30.0
         ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          46.0,
+          16.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          45.0,
+          17.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          44.0,
+          18.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          43.0,
+          19.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          42.0,
+          20.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          41.0,
+          21.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          40.0,
+          22.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          39.0,
+          23.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          45.0,
+          17.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          44.0,
+          18.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          43.0,
+          19.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          42.0,
+          20.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          41.0,
+          21.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          40.0,
+          22.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          39.0,
+          23.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          38.0,
+          24.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          37.0,
+          25.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          36.0,
+          26.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          35.0,
+          27.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          34.0,
+          28.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          33.0,
+          29.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "op": "erase_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          45.0,
+          17.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          44.0,
+          18.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          43.0,
+          19.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          42.0,
+          20.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          41.0,
+          21.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          40.0,
+          22.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          39.0,
+          23.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          38.0,
+          24.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          37.0,
+          25.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          36.0,
+          26.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          35.0,
+          27.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          34.0,
+          28.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          33.0,
+          29.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          37.0,
+          25.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          36.0,
+          26.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          35.0,
+          27.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          34.0,
+          28.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          33.0,
+          29.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          32.0,
+          30.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          31.0,
+          31.0
+        ]
       }
     ],
     "c_2_1": [
       {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          46.0,
-          16.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.user_gothic_floor.06",
         "op": "paint_tile",
         "tile": [
@@ -32644,14 +32981,6 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          45.0,
-          17.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.user_gothic_floor.01",
         "op": "paint_tile",
         "tile": [
@@ -32673,14 +33002,6 @@
         "tile": [
           48.0,
           17.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          44.0,
-          18.0
         ]
       },
       {
@@ -32721,14 +33042,6 @@
         "tile": [
           49.0,
           18.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          43.0,
-          19.0
         ]
       },
       {
@@ -32785,14 +33098,6 @@
         "tile": [
           50.0,
           19.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          42.0,
-          20.0
         ]
       },
       {
@@ -32865,14 +33170,6 @@
         "tile": [
           51.0,
           20.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          41.0,
-          21.0
         ]
       },
       {
@@ -32961,14 +33258,6 @@
         "tile": [
           52.0,
           21.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          40.0,
-          22.0
         ]
       },
       {
@@ -33073,14 +33362,6 @@
         "tile": [
           53.0,
           22.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          39.0,
-          23.0
         ]
       },
       {
@@ -34991,20 +35272,6 @@
         "op": "erase_tile",
         "tile": [
           45.0,
-          17.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          44.0,
-          18.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          45.0,
           18.0
         ]
       },
@@ -35020,13 +35287,6 @@
         "tile": [
           47.0,
           18.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          43.0,
-          19.0
         ]
       },
       {
@@ -35062,13 +35322,6 @@
         "tile": [
           48.0,
           19.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          42.0,
-          20.0
         ]
       },
       {
@@ -35118,13 +35371,6 @@
         "tile": [
           49.0,
           20.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          41.0,
-          21.0
         ]
       },
       {
@@ -35188,13 +35434,6 @@
         "tile": [
           50.0,
           21.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          40.0,
-          22.0
         ]
       },
       {
@@ -35272,13 +35511,6 @@
         "tile": [
           51.0,
           22.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          39.0,
-          23.0
         ]
       },
       {
@@ -35370,13 +35602,6 @@
         "tile": [
           52.0,
           23.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          38.0,
-          24.0
         ]
       },
       {
@@ -35475,13 +35700,6 @@
         "tile": [
           52.0,
           24.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          37.0,
-          25.0
         ]
       },
       {
@@ -35594,13 +35812,6 @@
         "tile": [
           53.0,
           25.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          36.0,
-          26.0
         ]
       },
       {
@@ -35727,13 +35938,6 @@
         "tile": [
           54.0,
           26.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          35.0,
-          27.0
         ]
       },
       {
@@ -35874,13 +36078,6 @@
         "tile": [
           55.0,
           27.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          34.0,
-          28.0
         ]
       },
       {
@@ -36035,13 +36232,6 @@
         "tile": [
           56.0,
           28.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          33.0,
-          29.0
         ]
       },
       {
@@ -36203,13 +36393,6 @@
         "tile": [
           56.0,
           29.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          32.0,
-          30.0
         ]
       },
       {
@@ -36385,13 +36568,6 @@
         "tile": [
           57.0,
           30.0
-        ]
-      },
-      {
-        "op": "erase_tile",
-        "tile": [
-          31.0,
-          31.0
         ]
       },
       {
@@ -38166,22 +38342,6 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          45.0,
-          17.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          44.0,
-          18.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.user_gothic_floor.02",
         "op": "paint_tile",
         "tile": [
@@ -38203,14 +38363,6 @@
         "tile": [
           47.0,
           18.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          43.0,
-          19.0
         ]
       },
       {
@@ -38251,14 +38403,6 @@
         "tile": [
           48.0,
           19.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          42.0,
-          20.0
         ]
       },
       {
@@ -38315,14 +38459,6 @@
         "tile": [
           49.0,
           20.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          41.0,
-          21.0
         ]
       },
       {
@@ -38395,14 +38531,6 @@
         "tile": [
           50.0,
           21.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          40.0,
-          22.0
         ]
       },
       {
@@ -38491,14 +38619,6 @@
         "tile": [
           51.0,
           22.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          39.0,
-          23.0
         ]
       },
       {
@@ -38603,14 +38723,6 @@
         "tile": [
           52.0,
           23.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          38.0,
-          24.0
         ]
       },
       {
@@ -38723,14 +38835,6 @@
         "tile": [
           52.0,
           24.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          37.0,
-          25.0
         ]
       },
       {
@@ -38859,14 +38963,6 @@
         "tile": [
           53.0,
           25.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          36.0,
-          26.0
         ]
       },
       {
@@ -39011,14 +39107,6 @@
         "tile": [
           54.0,
           26.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          35.0,
-          27.0
         ]
       },
       {
@@ -39179,14 +39267,6 @@
         "tile": [
           55.0,
           27.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          34.0,
-          28.0
         ]
       },
       {
@@ -39363,14 +39443,6 @@
         "tile": [
           56.0,
           28.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          33.0,
-          29.0
         ]
       },
       {
@@ -39555,14 +39627,6 @@
         "tile": [
           56.0,
           29.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          32.0,
-          30.0
         ]
       },
       {
@@ -39763,14 +39827,6 @@
         "tile": [
           57.0,
           30.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
-          31.0
         ]
       },
       {
@@ -41798,22 +41854,6 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          37.0,
-          25.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          36.0,
-          26.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.user_gothic_floor.05",
         "op": "paint_tile",
         "tile": [
@@ -41827,14 +41867,6 @@
         "tile": [
           38.0,
           26.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          35.0,
-          27.0
         ]
       },
       {
@@ -41867,14 +41899,6 @@
         "tile": [
           39.0,
           27.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          34.0,
-          28.0
         ]
       },
       {
@@ -41923,14 +41947,6 @@
         "tile": [
           40.0,
           28.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          33.0,
-          29.0
         ]
       },
       {
@@ -41995,14 +42011,6 @@
         "tile": [
           41.0,
           29.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          32.0,
-          30.0
         ]
       },
       {
@@ -42083,14 +42091,6 @@
         "tile": [
           42.0,
           30.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          31.0,
-          31.0
         ]
       },
       {
@@ -48646,9 +48646,7 @@
           47.0,
           14.0
         ]
-      }
-    ],
-    "c_3_1": [
+      },
       {
         "asset_id": "mse.ground.user_gothic_floor.05",
         "op": "paint_tile",
@@ -48658,34 +48656,10 @@
         ]
       },
       {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
-          0.0
-        ]
-      },
-      {
         "asset_id": "mse.ground.user_gothic_floor.06",
         "op": "paint_tile",
         "tile": [
           61.0,
-          1.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          1.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           1.0
         ]
       },
@@ -48694,30 +48668,6 @@
         "op": "paint_tile",
         "tile": [
           60.0,
-          2.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          2.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          2.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           2.0
         ]
       },
@@ -48726,38 +48676,6 @@
         "op": "paint_tile",
         "tile": [
           59.0,
-          3.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          3.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          3.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          3.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           3.0
         ]
       },
@@ -48766,46 +48684,6 @@
         "op": "paint_tile",
         "tile": [
           58.0,
-          4.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          4.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          4.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          4.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          4.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           4.0
         ]
       },
@@ -48814,54 +48692,6 @@
         "op": "paint_tile",
         "tile": [
           57.0,
-          5.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          5.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          5.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          5.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          5.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          5.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           5.0
         ]
       },
@@ -48870,62 +48700,6 @@
         "op": "paint_tile",
         "tile": [
           56.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          6.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           6.0
         ]
       },
@@ -48934,70 +48708,6 @@
         "op": "paint_tile",
         "tile": [
           55.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          7.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           7.0
         ]
       },
@@ -49006,78 +48716,6 @@
         "op": "paint_tile",
         "tile": [
           54.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          55.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          8.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           8.0
         ]
       },
@@ -49086,86 +48724,6 @@
         "op": "paint_tile",
         "tile": [
           53.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          54.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          55.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          9.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           9.0
         ]
       },
@@ -49174,94 +48732,6 @@
         "op": "paint_tile",
         "tile": [
           52.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          53.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          54.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          55.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          10.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           10.0
         ]
       },
@@ -49270,102 +48740,6 @@
         "op": "paint_tile",
         "tile": [
           51.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          52.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          53.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          54.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          55.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          11.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           11.0
         ]
       },
@@ -49374,110 +48748,6 @@
         "op": "paint_tile",
         "tile": [
           50.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          51.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          52.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          53.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          54.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          55.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          12.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           12.0
         ]
       },
@@ -49486,118 +48756,6 @@
         "op": "paint_tile",
         "tile": [
           49.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          50.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.01",
-        "op": "paint_tile",
-        "tile": [
-          51.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.05",
-        "op": "paint_tile",
-        "tile": [
-          52.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          53.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          54.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          55.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.03",
-        "op": "paint_tile",
-        "tile": [
-          56.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          57.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.02",
-        "op": "paint_tile",
-        "tile": [
-          58.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          59.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          60.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          61.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          62.0,
-          13.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.04",
-        "op": "paint_tile",
-        "tile": [
-          63.0,
           13.0
         ]
       },
@@ -49610,6 +48768,856 @@
         ]
       },
       {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          47.0,
+          15.0
+        ]
+      }
+    ],
+    "c_3_1": [
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          0.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          1.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          1.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          2.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          2.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          2.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          3.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          3.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          3.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          3.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          4.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          4.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          4.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          4.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          4.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          5.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          5.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          5.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          5.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          5.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          5.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          6.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          7.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          55.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          8.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          54.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          55.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          9.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          53.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          54.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          55.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          10.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          52.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          53.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          54.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          55.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          11.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          51.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          52.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          53.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          54.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          55.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          12.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          50.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.01",
+        "op": "paint_tile",
+        "tile": [
+          51.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.05",
+        "op": "paint_tile",
+        "tile": [
+          52.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          53.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          54.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          55.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.03",
+        "op": "paint_tile",
+        "tile": [
+          56.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          57.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.02",
+        "op": "paint_tile",
+        "tile": [
+          58.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          59.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          60.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          61.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.06",
+        "op": "paint_tile",
+        "tile": [
+          62.0,
+          13.0
+        ]
+      },
+      {
+        "asset_id": "mse.ground.user_gothic_floor.04",
+        "op": "paint_tile",
+        "tile": [
+          63.0,
+          13.0
+        ]
+      },
+      {
         "asset_id": "mse.ground.user_gothic_floor.02",
         "op": "paint_tile",
         "tile": [
@@ -49727,14 +49735,6 @@
         "tile": [
           63.0,
           14.0
-        ]
-      },
-      {
-        "asset_id": "mse.ground.user_gothic_floor.06",
-        "op": "paint_tile",
-        "tile": [
-          47.0,
-          15.0
         ]
       },
       {

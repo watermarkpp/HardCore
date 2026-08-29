@@ -8,69 +8,69 @@
   "chunks": [
     {
       "chunk_id": "c_0_0",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/ad99212b59e07e12408512a18db23e5fadc13c5df27446d34290ae859592af96.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/ebf986b0f7e0d20f14e5a585a1a45beea14658e5ce28bbd06f20f8a6a158e2e9.png",
       "rect_px": [
         0.0,
         0.0,
         1024.0,
         1024.0
       ],
-      "sha256": "ad99212b59e07e12408512a18db23e5fadc13c5df27446d34290ae859592af96"
+      "sha256": "ebf986b0f7e0d20f14e5a585a1a45beea14658e5ce28bbd06f20f8a6a158e2e9"
     },
     {
       "chunk_id": "c_1_0",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/baf74597fc0b412022ad5ccca81c6925e721401a28cea98eb62ad0e7f6fb3002.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/d98b19eb6e4f92851c8b7bb02ccf0042c7f04e2eb7b700aeab57beb27c9e273c.png",
       "rect_px": [
         1024.0,
         0.0,
         1024.0,
         1024.0
       ],
-      "sha256": "baf74597fc0b412022ad5ccca81c6925e721401a28cea98eb62ad0e7f6fb3002"
+      "sha256": "d98b19eb6e4f92851c8b7bb02ccf0042c7f04e2eb7b700aeab57beb27c9e273c"
     },
     {
       "chunk_id": "c_2_0",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/60653d7fd5c67379408277732fe0b2bb4273dd5905006555b13b1b54c00eb39c.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/43cc6a9edf56efd5724df289924c74be4581bd4ede4c513cdbd97ac205fa0190.png",
       "rect_px": [
         2048.0,
         0.0,
         1024.0,
         1024.0
       ],
-      "sha256": "60653d7fd5c67379408277732fe0b2bb4273dd5905006555b13b1b54c00eb39c"
+      "sha256": "43cc6a9edf56efd5724df289924c74be4581bd4ede4c513cdbd97ac205fa0190"
     },
     {
       "chunk_id": "c_1_1",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/52d5ccb271ffbb381f93d19107c776bb1d046ff98fd808759d638c707270270f.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/9a546f5bf832b755daa6878cc696ade9396fc691c878f6f1b733965575be2e6e.png",
       "rect_px": [
         1024.0,
         1024.0,
         1024.0,
         768.0
       ],
-      "sha256": "52d5ccb271ffbb381f93d19107c776bb1d046ff98fd808759d638c707270270f"
+      "sha256": "9a546f5bf832b755daa6878cc696ade9396fc691c878f6f1b733965575be2e6e"
     },
     {
       "chunk_id": "c_2_1",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/7a7989d73f6d081179af55fee6d52bce24d5bedf6a2b5053338a6d43a769b747.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/7a966c4eee932b3ae9016091eebb64ffc3c4e5ad805478e925dd983bd91e8797.png",
       "rect_px": [
         2048.0,
         1024.0,
         1024.0,
         768.0
       ],
-      "sha256": "7a7989d73f6d081179af55fee6d52bce24d5bedf6a2b5053338a6d43a769b747"
+      "sha256": "7a966c4eee932b3ae9016091eebb64ffc3c4e5ad805478e925dd983bd91e8797"
     },
     {
       "chunk_id": "c_3_1",
-      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/2709923f69701ab8ab42c29d4bce984a4c4df6d7e8a796a42c3ed92d1de74a2d.png",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/5ecd4b8dfe2b29312ebd93252fe1c7fa895173bb25ab1aabee61e9d9780e8ee2.png",
       "rect_px": [
         3072.0,
         1024.0,
         512.0,
         768.0
       ],
-      "sha256": "2709923f69701ab8ab42c29d4bce984a4c4df6d7e8a796a42c3ed92d1de74a2d"
+      "sha256": "5ecd4b8dfe2b29312ebd93252fe1c7fa895173bb25ab1aabee61e9d9780e8ee2"
     }
   ],
   "coverage": {
@@ -83,9 +83,10 @@
     80,
     32
   ],
+  "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
   "ground_pixel_center": [
     1792.0,
-    896.0
+    880.0
   ],
   "ground_pixel_size": [
     3584,
@@ -97,8 +98,8 @@
   "runtime_map_id": 917001,
   "schema_version": 1,
   "source_authority": "user_authored_baked_ground",
-  "source_editor_document_sha256": "53cf9c973c3efc8fa7af865023d1ced77087923b42d7df6991ab88e658aa0a9d",
-  "source_ground_manifest_sha256": "8ce68f6f1b75f3d8a57156d453094195958e2a334f86952c599a47948185aad9",
-  "source_ground_state_sha256": "6def29790d5a69eec16566e9f15c81855e335fa4c6002dec796e591d29ab8d22",
+  "source_editor_document_sha256": "48ef05f1c00faa67a9eb5960d7db8c1ad98126e940cbe6e699aee76270deeb7e",
+  "source_ground_manifest_sha256": "c222b95c821bb7d164508b8be5ab2101322947cd84304aaa159c821f933bf429",
+  "source_ground_state_sha256": "a26ef65367a818f6488b759ede144bb4aee8d652affcd15695b47ab84ebc0e4f",
   "visual_contract_id": "mse.map.runtime.visual.v1"
 }

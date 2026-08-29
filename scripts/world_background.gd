@@ -503,10 +503,8 @@ func _draw() -> void:
 
 
 func editor_runtime_ground_boundary_world(size: Vector2i) -> PackedVector2Array:
-	# Ground chunks are rasterized around cell centres, so their visible diamond
-	# spans [-0.5, size - 0.5]. Keep base fill, guard calculations and hard
-	# collision on that one boundary. [0, size] is the same diamond shifted 16
-	# world pixels downward and creates the double edge visible on mobile.
+	# The v2 ground canvas contains the complete authored cell union. Keep the
+	# base fill and guard on the same logical [0, size] boundary as collision.
 	return RuntimeCollisionGeometryScript.map_inner_boundary_world(size)
 
 
@@ -1673,9 +1671,9 @@ void fragment() {
 		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
 		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
 	) + (design_size - vec2(1.0)) * 0.5;
-	vec2 outside_low = max(vec2(-0.5) - iso, vec2(0.0));
+	vec2 outside_low = max(-iso, vec2(0.0));
 	vec2 outside_high = max(
-		iso - (design_size - vec2(0.5)), vec2(0.0)
+		iso - design_size, vec2(0.0)
 	);
 	float outside_tiles = max(
 		max(outside_low.x, outside_low.y),
@@ -1709,9 +1707,9 @@ void fragment() {
 		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
 		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
 	) + (design_size - vec2(1.0)) * 0.5;
-	vec2 outside_low = max(vec2(-0.5) - iso, vec2(0.0));
+	vec2 outside_low = max(-iso, vec2(0.0));
 	vec2 outside_high = max(
-		iso - (design_size - vec2(0.5)), vec2(0.0)
+		iso - design_size, vec2(0.0)
 	);
 	float outside_tiles = max(
 		max(outside_low.x, outside_low.y),
