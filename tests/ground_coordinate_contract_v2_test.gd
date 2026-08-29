@@ -15,6 +15,7 @@ func _ready() -> void:
 	_assert_boundary()
 	_assert_cell_runtime_collision_alignment()
 	_assert_operation_repartition()
+	_assert_editor_save_reload_roundtrip()
 	print(
 		"GROUND_COORDINATE_CONTRACT_V2_PASS contract=%s origin=%s image=%s center=%s"
 		% [
@@ -81,3 +82,49 @@ func _assert_operation_repartition() -> void:
 	assert((operations["c_2_2"] as Array)[0] == retained_operation)
 	assert(GroundService.tile_overrides(state).has("0,62"))
 	assert(not GroundService.tile_overrides(state).has("79,79"))
+
+
+func _assert_editor_save_reload_roundtrip() -> void:
+	var document := MapEditorTypes.new_map(
+		"ground_v2_roundtrip",
+		990184,
+		"Ground V2 Roundtrip",
+		Vector2i(4, 4),
+	)
+	var test_root := "user://ground_v2_roundtrip_%s" % Time.get_ticks_usec()
+	document.editor_meta.workspace = test_root
+	var paint := GroundService.record_tile_paint(
+		document,
+		Vector2i(1, 1),
+		"ground.dark_grass.001",
+	)
+	assert(paint.ok, str(paint.get("errors", [])))
+	var save_path := test_root.path_join("ground_v2_roundtrip.editor.json")
+	var saved := MapEditorSaveService.save_document(document, save_path)
+	assert(saved.ok, str(saved.get("errors", [])))
+	var loaded := MapEditorLoadService.load_document(save_path, false)
+	assert(loaded.ok, str(loaded.get("errors", [])))
+	var reopened_document: Dictionary = loaded.document
+	var reopened := GroundService.initialize(reopened_document)
+	assert(reopened.ok, str(reopened.get("errors", [])))
+	assert(
+		reopened_document.ground.origin_px == [128.0, 0.0],
+		"editor reload restored the legacy half-cell origin",
+	)
+	assert(
+		reopened_document.ground.coordinate_contract_id
+		== Coordinate.GROUND_COORDINATE_CONTRACT_ID,
+	)
+	assert(
+		str(reopened.manifest.coordinate_contract_id)
+		== Coordinate.GROUND_COORDINATE_CONTRACT_ID,
+	)
+	assert(
+		str(reopened.state.coordinate_contract_id)
+		== Coordinate.GROUND_COORDINATE_CONTRACT_ID,
+	)
+	assert(
+		GroundService.tile_overrides(reopened.state).get("1,1", "")
+		== "ground.dark_grass.001",
+		"edited ground tile was lost across editor save/reload",
+	)

@@ -11,6 +11,9 @@ const GDSCRIPT_PUBLISHERS := [
 const PYTHON_PACKAGER := (
 	"res://tools/map_editor/package_bich_runtime_visuals.py"
 )
+const PYTHON_WORKSPACE_MIGRATOR := (
+	"res://tools/map_editor/resize_bich_workspace.py"
+)
 
 
 func _ready() -> void:
@@ -32,9 +35,12 @@ func _run() -> void:
 		assert(script is Script, "legacy publisher failed to compile: %s" % path)
 		_assert_gdscript_publisher_contract(path, _read_text(path))
 	_assert_python_packager_contract(_read_text(PYTHON_PACKAGER))
+	_assert_python_workspace_migrator_contract(
+		_read_text(PYTHON_WORKSPACE_MIGRATOR)
+	)
 	print(
 		"LEGACY_MAP_VISUAL_PUBLISHERS_GROUND_V2_CONTRACT_PASS "
-		+ "publishers=4 center_80x80=2560,1264"
+		+ "writers=5 center_80x80=2560,1264"
 	)
 	get_tree().quit(0)
 
@@ -89,6 +95,28 @@ func _assert_python_packager_contract(source: String) -> void:
 		assert(
 			not source.contains(forbidden),
 			"Python legacy vertical midpoint formula returned: %s" % forbidden,
+		)
+
+
+func _assert_python_workspace_migrator_contract(source: String) -> void:
+	for required: String in [
+		"GROUND_COORDINATE_CONTRACT_ID = \"isometric_cell_center_64x32_v2\"",
+		"document[\"ground\"][\"origin_px\"] = [NEW_SIZE[1] * 32, 0]",
+		"document[\"ground\"][\"tile_anchor_mode\"] = \"cell_center\"",
+		"document[\"ground\"][\"coordinate_contract_id\"] = GROUND_COORDINATE_CONTRACT_ID",
+		"\"coordinate_contract_id\": GROUND_COORDINATE_CONTRACT_ID",
+	]:
+		assert(
+			source.contains(required),
+			"Python workspace migrator v2 contract missing: %s" % required,
+		)
+	for forbidden: String in [
+		"document[\"ground\"][\"origin_px\"] = [NEW_SIZE[1] * 32, 16]",
+		"isometric_cell_center_64x32_v1",
+	]:
+		assert(
+			not source.contains(forbidden),
+			"Python workspace migrator legacy contract returned: %s" % forbidden,
 		)
 
 
