@@ -15,11 +15,13 @@ const MANIFEST_VERSION := 1
 var loaded_patch_id := ""
 var loaded_patch_sha256 := ""
 var load_error := ""
+var _load_attempted := false
 
 
-func _enter_tree() -> void:
-	if not OS.is_debug_build():
+func _init() -> void:
+	if _load_attempted or not OS.is_debug_build():
 		return
+	_load_attempted = true
 	_load_active_patch()
 
 
