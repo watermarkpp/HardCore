@@ -680,8 +680,8 @@ static func build_snapshot(root: Node) -> Dictionary:
 static func _performance_snapshot() -> Dictionary:
 	return {
 		"fps": _performance_value(Performance.TIME_FPS),
-		"process_ms": _performance_value(Performance.TIME_PROCESS),
-		"physics_process_ms": _performance_value(Performance.TIME_PHYSICS_PROCESS),
+		"process_ms": _performance_ms(Performance.TIME_PROCESS),
+		"physics_process_ms": _performance_ms(Performance.TIME_PHYSICS_PROCESS),
 		"node_count": _performance_value(Performance.OBJECT_NODE_COUNT),
 		"object_count": _performance_value(Performance.OBJECT_COUNT),
 		"resource_count": _performance_value(Performance.OBJECT_RESOURCE_COUNT),
@@ -699,6 +699,16 @@ static func _performance_value(monitor: int) -> float:
 	if is_nan(value) or is_inf(value) or value < 0.0:
 		return 0.0
 	return value
+
+
+static func _performance_ms(monitor: int) -> float:
+	return _seconds_to_milliseconds(_performance_value(monitor))
+
+
+static func _seconds_to_milliseconds(seconds: float) -> float:
+	if is_nan(seconds) or is_inf(seconds) or seconds < 0.0:
+		return 0.0
+	return seconds * 1000.0
 
 
 static func _window_snapshot(root: Node) -> Dictionary:

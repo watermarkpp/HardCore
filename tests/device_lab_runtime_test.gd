@@ -234,6 +234,8 @@ func _test_bounded_snapshot() -> void:
 	assert(snapshot.has("window") and snapshot.has("player") and snapshot.has("scene"), "snapshot summary fields missing")
 	var performance: Variant = snapshot.get("performance", null)
 	assert(performance is Dictionary, "performance snapshot missing")
+	assert(is_equal_approx(DeviceLabRuntimeScript._seconds_to_milliseconds(0.25), 250.0), "seconds-to-ms conversion is incorrect")
+	assert(DeviceLabRuntimeScript._seconds_to_milliseconds(-1.0) == 0.0, "negative seconds were not clamped")
 	var performance_fields := [
 		"fps",
 		"process_ms",
