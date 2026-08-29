@@ -23,7 +23,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	var inventory_button := hud.find_child("InventoryButton", true, false) as Button
 	assert(inventory_button != null, "正式 HUD 缺少背包入口")
-	assert(not hud.inventory_panel.visible, "正式 HUD 背包初始状态必须隐藏")
+	assert(hud.inventory_panel == null, "正式 HUD 背包必须保持首开惰性")
 	inventory_button.pressed.emit()
 	await get_tree().process_frame
 	var panel: InventoryPanel = hud.inventory_panel

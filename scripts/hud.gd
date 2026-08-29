@@ -14,6 +14,12 @@ const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
+const INVENTORY_PANEL_SCRIPT_PATH := "res://scripts/inventory_panel.gd"
+const SHOP_PANEL_SCRIPT_PATH := "res://scripts/shop_panel.gd"
+const SKILL_PANEL_SCRIPT_PATH := "res://scripts/skill_panel.gd"
+const QUEST_PANEL_SCRIPT_PATH := "res://scripts/quest_panel.gd"
+const MAP_PANEL_SCRIPT_PATH := "res://scripts/map_panel.gd"
+const WAREHOUSE_PANEL_SCRIPT_PATH := "res://scripts/warehouse_panel.gd"
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -132,12 +138,15 @@ var auto_target_button: Button
 var special_action_button: Button
 var attack_button: Button
 var warrior_state_label: Label
-var inventory_panel: InventoryPanel
-var shop_panel: ShopPanel
-var skill_panel: SkillPanel
-var quest_panel: QuestPanel
-var map_panel: MapPanel
-var warehouse_panel: WarehousePanel
+## Modal panels stay untyped here on purpose. Referencing their class_name in a
+## member declaration makes Godot pull every panel script into the main scene's
+## script dependency graph even though the panels are only opened on demand.
+var inventory_panel
+var shop_panel
+var skill_panel
+var quest_panel
+var map_panel
+var warehouse_panel
 var death_revival_panel
 var loot_feedback_layer
 var loading_transition_overlay
@@ -1345,7 +1354,12 @@ func _on_skill_input_cancelled(
 func _ensure_inventory_panel() -> void:
 	if is_instance_valid(inventory_panel):
 		return
-	inventory_panel = InventoryPanel.new()
+	var panel_script := load(INVENTORY_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	inventory_panel = panel_script.new()
+	if inventory_panel == null:
+		return
 	inventory_panel.hide()
 	add_child(inventory_panel)
 
@@ -1353,7 +1367,12 @@ func _ensure_inventory_panel() -> void:
 func _ensure_shop_panel() -> void:
 	if is_instance_valid(shop_panel):
 		return
-	shop_panel = ShopPanel.new()
+	var panel_script := load(SHOP_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	shop_panel = panel_script.new()
+	if shop_panel == null:
+		return
 	shop_panel.hide()
 	shop_panel.buy_quotes_requested.connect(
 		func(stock: Array) -> void: shop_buy_quotes_requested.emit(stock)
@@ -1373,7 +1392,12 @@ func _ensure_shop_panel() -> void:
 func _ensure_skill_panel() -> void:
 	if is_instance_valid(skill_panel):
 		return
-	skill_panel = SkillPanel.new()
+	var panel_script := load(SKILL_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	skill_panel = panel_script.new()
+	if skill_panel == null:
+		return
 	skill_panel.hide()
 	skill_panel.quick_slot_assignment_requested.connect(
 		func(request: Dictionary) -> void: skill_quick_slot_assignment_requested.emit(request)
@@ -1507,7 +1531,12 @@ func panel_prewarm_diagnostic() -> Dictionary:
 func _ensure_quest_panel() -> void:
 	if is_instance_valid(quest_panel):
 		return
-	quest_panel = QuestPanel.new()
+	var panel_script := load(QUEST_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	quest_panel = panel_script.new()
+	if quest_panel == null:
+		return
 	quest_panel.hide()
 	quest_panel.abandon_requested.connect(
 		func(quest_id: String) -> void: quest_abandon_requested.emit(quest_id)
@@ -1518,7 +1547,12 @@ func _ensure_quest_panel() -> void:
 func _ensure_map_panel() -> void:
 	if is_instance_valid(map_panel):
 		return
-	map_panel = MapPanel.new()
+	var panel_script := load(MAP_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	map_panel = panel_script.new()
+	if map_panel == null:
+		return
 	map_panel.hide()
 	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
 	map_panel.teleport_requested.connect(func(request: Dictionary) -> void: map_teleport_requested.emit(request))
@@ -1531,7 +1565,12 @@ func _ensure_map_panel() -> void:
 func _ensure_warehouse_panel() -> void:
 	if is_instance_valid(warehouse_panel):
 		return
-	warehouse_panel = WarehousePanel.new()
+	var panel_script := load(WAREHOUSE_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	warehouse_panel = panel_script.new()
+	if warehouse_panel == null:
+		return
 	warehouse_panel.hide()
 	warehouse_panel.warehouse_sort_requested.connect(
 		func() -> void: warehouse_sort_requested.emit()
