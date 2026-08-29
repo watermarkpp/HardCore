@@ -20,9 +20,9 @@ func _ready() -> void:
 	assert(v15_assets.size() == 174)
 	for raw: Dictionary in v15_assets:
 		var asset_id := str(raw.get("asset_id", ""))
-		assert(by_id.has(asset_id), "V1.5 asset missing from all_assets: %s" % asset_id)
-		var effective: Dictionary = by_id[asset_id]
-		assert(bool(effective.get("placeable", false)), "%s is not placeable" % asset_id)
+		assert(not by_id.has(asset_id), "legacy V1.5 asset leaked into all_assets: %s" % asset_id)
+		var effective := MapAssetCatalogService.find_asset(asset_id)
+		assert(not effective.is_empty(), "legacy V1.5 asset is no longer resolvable: %s" % asset_id)
 		assert(
 			bool(effective.get("resolved_from_tracked_staging", false)),
 			"%s did not resolve to its tracked staging image" % asset_id
@@ -36,7 +36,7 @@ func _ready() -> void:
 
 	print(
 		"MSE_MATERIAL_FOOTPRINT_CATALOG_VISIBILITY_PASS "
-		+ "catalog=%d v15=%d default_filter=all"
+		+ "formal_catalog=%d legacy_v15_hidden=%d default_filter=all"
 		% [assets.size(), v15_assets.size()]
 	)
 	get_tree().quit(0)
